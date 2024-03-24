@@ -25,18 +25,10 @@
  *   VComponentTmpPtr p;// VComponentTmpPtr is an instantiation of this template
  *   for (p=component.get_first_component; p!= 0; p=component.get_next_component) {
  *
- * (C) COPYRIGHT 2001, Critical Path
+ * SPDX-FileCopyrightText: 2001, Critical Path
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
  */
 
 #ifndef ICPTRHOLDER_CXX_H
@@ -106,13 +98,13 @@ public:
 
     T *operator->() const
     {
-        assert(ptr);
+        icalassert(ptr);
         return ptr;
     }
 
     T &operator*()
     {
-        assert(ptr);
+        icalassert(ptr);
         return *ptr;
     }
 

@@ -100,36 +100,10 @@
 #line 2 "vcc.y"
 
 /***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International
+SPDX-FileCopyrightText: 1996 Apple Computer, Inc., AT&T Corp., International
 Business Machines Corporation and Siemens Rolm Communications Inc.
 
-For purposes of this license notice, the term Licensors shall mean,
-collectively, Apple Computer, Inc., AT&T Corp., International
-Business Machines Corporation and Siemens Rolm Communications Inc.
-The term Licensor shall mean any of the Licensors.
-
-Subject to acceptance of the following conditions, permission is hereby
-granted by Licensors without the need for written agreement and without
-license or royalty fees, to use, copy, modify and distribute this
-software for any purpose.
-
-The above copyright notice and the following four paragraphs must be
-reproduced in all copies of this software and any software including
-this software.
-
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR
-MODIFICATIONS.
-
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGE.
-
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE.
+SPDX-License-Identifier: LicenseRef-APPLEMIT
 
 The software is provided with RESTRICTED RIGHTS.  Use, duplication, or
 disclosure by the government are subject to restrictions set forth in
@@ -146,7 +120,6 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
  * in a debugger. However, if a bug is found it should
  * be fixed in vcc.y and this file regenerated.
  */
-
 
 /* debugging utilities */
 #ifdef __DEBUG
@@ -191,7 +164,6 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #define yyrule mime_rule
 #define YYPREFIX "mime_"
 
-
 #ifndef _NO_LINE_FOLDING
 #define _SUPPORT_LINE_FOLDING 1
 #endif
@@ -220,7 +192,6 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #define MAXLEVEL        10      /* max # of nested objects parseable */
                                 /* (includes outermost) */
 
-
 /****  Global Variables  ****/
 int mime_lineNum, mime_numErrors; /* yyerror() can use these */
 static VObject* vObjList;
@@ -228,7 +199,6 @@ static VObject *curProp;
 static VObject *curObj;
 static VObject* ObjStack[MAXLEVEL];
 static int ObjStackTop;
-
 
 /* A helpful utility for the rest of the app. */
 #if defined(__CPLUSPLUS__)
@@ -579,9 +549,8 @@ static int pushVObject(const char *prop)
     return 1; /*TRUE*/
     }
 
-
 /* This pops the recently built vCard off the stack and returns it. */
-static VObject* popVObject()
+static VObject* popVObject(void)
     {
     VObject *oldObj;
     if (ObjStackTop < 0) {
@@ -593,7 +562,6 @@ static VObject* popVObject()
 
     return oldObj;
     }
-
 
 static void enterValues(const char *value)
     {
@@ -656,7 +624,6 @@ static void enterAttr(const char *s1, const char *s2)
     deleteStr(s1); deleteStr(s2);
     }
 
-
 #define MAX_LEX_LOOKAHEAD_0 32
 #define MAX_LEX_LOOKAHEAD 64
 #define MAX_LEX_MODE_STACK_SIZE 10
@@ -714,7 +681,7 @@ static int lexWithinMode(enum LexMode mode) {
     return 0;
     }
 
-static char lexGetc_()
+static char lexGetc_(void)
     {
     /* get next char from input, no buffering. */
     if (lexBuf.curPos == lexBuf.inputLen)
@@ -731,7 +698,7 @@ static char lexGetc_()
         }
     }
 
-static int lexGeta()
+static int lexGeta(void)
     {
     ++lexBuf.len;
     return (lexBuf.buf[lexBuf.getPtr] = lexGetc_());
@@ -743,15 +710,15 @@ static int lexGeta_(int i)
     return (lexBuf.buf[(lexBuf.getPtr+i)%MAX_LEX_LOOKAHEAD] = lexGetc_());
     }
 
-static void lexSkipLookahead() {
-    if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=EOF) {
+static void lexSkipLookahead(void) {
+    if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=((char) EOF)) {
         /* don't skip EOF. */
         lexBuf.getPtr = (lexBuf.getPtr + 1) % MAX_LEX_LOOKAHEAD;
         lexBuf.len--;
         }
     }
 
-static int lexLookahead() {
+static int lexLookahead(void) {
     int c = (lexBuf.len)?
         lexBuf.buf[lexBuf.getPtr]:
         lexGeta();
@@ -777,9 +744,9 @@ static int lexLookahead() {
     return c;
     }
 
-static int lexGetc() {
+static int lexGetc(void) {
     int c = lexLookahead();
-    if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=EOF) {
+    if (lexBuf.len > 0 && lexBuf.buf[lexBuf.getPtr]!=((char) EOF)) {
         /* EOF will remain in lookahead buffer */
         lexBuf.getPtr = (lexBuf.getPtr + 1) % MAX_LEX_LOOKAHEAD;
         lexBuf.len--;
@@ -787,14 +754,14 @@ static int lexGetc() {
     return c;
     }
 
-static void lexSkipLookaheadWord() {
+static void lexSkipLookaheadWord(void) {
     if (lexBuf.strsLen <= lexBuf.len) {
         lexBuf.len -= lexBuf.strsLen;
         lexBuf.getPtr = (lexBuf.getPtr + lexBuf.strsLen) % MAX_LEX_LOOKAHEAD;
         }
     }
 
-static void lexClearToken()
+static void lexClearToken(void)
     {
     lexBuf.strsLen = 0;
     }
@@ -812,11 +779,11 @@ static void lexAppendc(int c)
         }
     }
 
-static char* lexStr() {
+static char* lexStr(void) {
     return dupStr(lexBuf.strs,(size_t)lexBuf.strsLen+1);
     }
 
-static void lexSkipWhite() {
+static void lexSkipWhite(void) {
     int c = lexLookahead();
     while (c == ' ' || c == '\t') {
         lexSkipLookahead();
@@ -824,12 +791,12 @@ static void lexSkipWhite() {
         }
     }
 
-static char* lexGetWord() {
+static char* lexGetWord(void) {
     int c;
     lexSkipWhite();
     lexClearToken();
     c = lexLookahead();
-    while (c != EOF && !strchr("\t\n ;:=",c)) {
+    while (c != ((char) EOF) && !strchr("\t\n ;:=",c)) {
         lexAppendc(c);
         lexSkipLookahead();
         c = lexLookahead();
@@ -841,7 +808,7 @@ static char* lexGetWord() {
 static void lexPushLookaheadc(int c) {
     int putptr;
     /* can't putback EOF, because it never leaves lookahead buffer */
-    if (c == EOF) return;
+    if (((char) c) == ((char) EOF)) return;
     putptr = (int)lexBuf.getPtr - 1;
     if (putptr < 0) putptr += MAX_LEX_LOOKAHEAD;
     lexBuf.getPtr = (unsigned long)putptr;
@@ -849,7 +816,7 @@ static void lexPushLookaheadc(int c) {
     lexBuf.len += 1;
     }
 
-static char* lexLookaheadWord() {
+static char* lexLookaheadWord(void) {
     /* this function can lookahead word with max size of MAX_LEX_LOOKAHEAD_0
      /  and thing bigger than that will stop the lookahead and return 0;
      / leading white spaces are not recoverable.
@@ -863,7 +830,7 @@ static char* lexLookaheadWord() {
     while (len < (MAX_LEX_LOOKAHEAD_0)) {
         c = lexGetc();
         len++;
-        if (c == EOF || strchr("\t\n ;:=", c)) {
+        if (c == ((char) EOF) || strchr("\t\n ;:=", c)) {
             lexAppendc(0);
             /* restore lookahead buf. */
             lexBuf.len += len;
@@ -915,12 +882,12 @@ static void handleMoreRFC822LineBreak(int c) {
         }
     }
 
-static char* lexGet1Value() {
+static char* lexGet1Value(void) {
     int c;
     lexSkipWhite();
     c = lexLookahead();
     lexClearToken();
-    while (c != EOF && c != ';') {
+    while (c != ((char) EOF) && c != ';') {
         if (c == '\n') {
             int a;
             lexSkipLookahead();
@@ -942,10 +909,9 @@ static char* lexGet1Value() {
         }
     lexAppendc(0);
     handleMoreRFC822LineBreak(c);
-    return c==EOF?0:lexStr();
+    return c==((char) EOF)?0:lexStr();
     }
 #endif
-
 
 static int match_begin_name(int end) {
     char *n = lexLookaheadWord();
@@ -960,7 +926,6 @@ static int match_begin_name(int end) {
         }
     return 0;
     }
-
 
 #ifdef INCLUDEMFC
 void initLex(const char *inputstring, unsigned long inputlen, CFile *inputfile)
@@ -983,18 +948,22 @@ void initLex(const char *inputstring, unsigned long inputlen, FILE *inputfile)
     lexBuf.maxToken = MAXTOKEN;
     lexBuf.strs = (char*)malloc(MAXTOKEN);
     lexBuf.strsLen = 0;
-
     }
 
-static void finiLex() {
+static void finiLex(void) {
+    VObject* vobj, *topobj = 0;
+    while(vobj = popVObject(), vobj) {
+        topobj = vobj;
+    }
+    if(topobj)
+        cleanVObject(topobj);
     free(lexBuf.strs);
     }
-
 
 /* This parses and converts the base64 format for binary encoding into
  * a decoded buffer (allocated with new).  See RFC 1521.
  */
-static char * lexGetDataFromBase64()
+static char * lexGetDataFromBase64(void)
     {
     size_t bytesLen = 0, bytesMax = 0;
     int quadIx = 0, pad = 0;
@@ -1036,9 +1005,9 @@ static char * lexGetDataFromBase64()
                 else if (oldBytes) free(oldBytes);
                 /* error recovery: skip until 2 adjacent newlines. */
                 DBG_(("db: invalid character 0x%x '%c'\n", c,c));
-                if (c != EOF)  {
+                if (c != ((char) EOF))  {
                     c = lexGetc();
-                    while (c != EOF) {
+                    while (c != ((char) EOF)) {
                         if (c == '\n' && lexLookahead() == '\n') {
                             ++mime_lineNum;
                             break;
@@ -1116,7 +1085,7 @@ static int match_begin_end_name(int end) {
     return 0;
     }
 
-static char* lexGetQuotedPrintable()
+static char* lexGetQuotedPrintable(void)
     {
     char cur;
 
@@ -1173,7 +1142,7 @@ EndString:
     return lexStr();
     } /* LexQuotedPrintable */
 
-int yylex() {
+int yylex(void) {
 
     int lexmode = LEXMODE();
     if (lexmode == L_VALUES) {
@@ -1256,7 +1225,7 @@ int yylex() {
                     ++mime_lineNum;
                     continue;
                     }
-                case EOF: return 0;
+                case ((char) EOF): return 0;
                     break;
                 default: {
                     lexPushLookaheadc(c);
@@ -1286,21 +1255,23 @@ int yylex() {
     return 0;
     }
 
-
 /***************************************************************************/
 /***                                                    Public Functions                                                ****/
 /***************************************************************************/
 
-static VObject* Parse_MIMEHelper()
+static VObject* Parse_MIMEHelper(void)
     {
     ObjStackTop = -1;
     mime_numErrors = 0;
     mime_lineNum = 1;
     vObjList = 0;
     curObj = 0;
+    curProp = 0;
 
-    if (yyparse() != 0)
+    if (yyparse() != 0) {
+        finiLex();
         return 0;
+    }
 
     finiLex();
     return vObjList;
@@ -1311,7 +1282,6 @@ VObject* Parse_MIME(const char *input, unsigned long len)
     initLex(input, len, 0);
     return Parse_MIMEHelper();
     }
-
 
 #ifdef INCLUDEMFC
 
@@ -1360,7 +1330,6 @@ VObject* Parse_MIME_FromFileName(const char *fname)
     }
 
 #endif
-
 
 static MimeErrorHandler mimeErrorHandler;
 
@@ -1658,7 +1627,6 @@ case 23:
 #line 306 "vcc.y"
 	{
         enterAttr(yystack.l_mark[-2].str,yystack.l_mark[0].str);
-
         }
 break;
 case 25:

@@ -1,16 +1,8 @@
 /**
- (C) COPYRIGHT 2001, Critical Path
+ SPDX-FileCopyrightText: 2001, Critical Path
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
  */
 
 #ifdef HAVE_CONFIG_H
@@ -167,6 +159,7 @@ void test_cxx(void)
 
     int caughtException = 0;
     try {
+        icalerrno = ICAL_NO_ERROR;
         VComponent v = VComponent(string("HFHFHFHF"));
     } catch (icalerrorenum err) {
         if (err == ICAL_BADARG_ERROR) {

@@ -1,3 +1,10 @@
+/*======================================================================
+ FILE: testjni.java
+ CREATOR:
+ SPDX-FileCopyrightText: 2002, Critical Path
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+======================================================================*/
+
 package net.cp.jlibical;
 
 import java.lang.String;
@@ -317,7 +324,7 @@ public class testjni
                 VAlarm valarm = new VAlarm();
                 System.out.println("created valarm");
 
-                // 1. Create a ICAL_DURATION_PROPERTY using the TimePeriod.
+                // 1. Create an ICAL_DURATION_PROPERTY using the TimePeriod.
                 ICalDurationType duration = new ICalDurationType();
                 duration.setDays((long) 0);
                 duration.setHours((long) 0);
@@ -330,7 +337,7 @@ public class testjni
                 // AFTER the event or task start or due date, which is useless.
                 duration.setIs_neg(1);
 
-                // 2. Create a ICalTriggerType object and set the duration on it.
+                // 2. Create an ICalTriggerType object and set the duration on it.
                 ICalTriggerType trigger = new ICalTriggerType();
                 trigger.setDuration(duration);
                 System.out.println("set trigger to duration object");

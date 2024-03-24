@@ -10,10 +10,12 @@ passing -DCMAKE_INSTALL_PREFIX=/install/path to cmake.
 To build a debug version pass -DCMAKE_BUILD_TYPE=Debug to cmake.
 
 To build libical you will need:
+ - a C99-compliant C compiler (let us know if the build fails with your C compiler)
+ - a C11-compliant C compiler for libical-glib
+ - a C++11 compliant compiler for C++ bindings
  - CMake version 3.11.0 or higher
  - Perl
  - libicu (not required but strongly recommended)
- - a C compiler (let us know if the build fails with your C compiler)
 
 Building on Unix with gcc or clang:
 % mkdir build
@@ -87,6 +89,21 @@ Homebrew:
   catalog files can be found so the gtk entities are located, like so:
     export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
 
+== Building for Android ==
+
+% mkdir build
+% cd build
+$ export ANDROID_NDK=/path/to/android-ndk
+% cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
+        -DCMAKE_INSTALL_PREFIX=/install/path .. \
+        -DANDROID_ABI=[x86,x86_64,armeabi-v7a,arm64-v8a,...]
+        #see https://developer.android.com/ndk/guides/cmake for more options
+% make
+% make install
+
+For more information about building CMake projects on Android see
+https://developer.android.com/ndk/guides/cmake
+
 == Optional Dependencies ==
 * libicu "International Components for Unicode" development libraries.
   Highly recommended for RSCALE support.
@@ -109,6 +126,13 @@ Homebrew:
   need to have the GObject Introspection development package v0.6.7 or higher
   installed beforehand.
 
+  Requires the GObject Introspection development package:
+    Ubuntu: apt-get install gobject-introspection
+    Fedora: dnf install gobject-introspection
+    Mac: brew install gobject-introspection pygobject3
+    Windows: vcpkg install gobject-introspection (untested)
+    (see https://vcpkg.io/en/docs/users/buildsystems/cmake-integration.html)
+
 You can also force CMake to ignore any of the optional dependencies
 by passing the option -DCMAKE_DISABLE_FIND_PACKAGE_<PACKAGE>=True.
 For instance:
@@ -121,7 +145,15 @@ This C library can be built with bindings for these other languages:
   Turn this off by passing -DWITH_CXX_BINDINGS=False option to CMake.
   Don't mix ABI from C and C++ compilers.
 
-* There are Java, Perl, PHP and Python bindings but they are old and haven't
+* Python bindings are built using gobject-introspection, which is enabled
+  by passing -DGOBJECT_INTROSPECTION=True to CMake.
+
+  Requires the GObject Introspection development package (see above).
+
+  Don't forget to set (or append to, as needed) the GI_TYPELIB_PATH environment
+  variable to $PREFIX/lib/girepository-1.0 (or $PREFIX/lib64/girepository-1.0).
+
+* There are Java, Perl and PHP bindings but they are old and haven't
   been tested in a very long time.  Volunteers wanted.
 
 == Tweaking the Library Behavior ==

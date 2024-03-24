@@ -2,18 +2,10 @@
  FILE: icaltimezone.h
  CREATOR: Damon Chaplin 15 March 2001
 
- (C) COPYRIGHT 2001, Damon Chaplin <damon@ximian.com>
+ SPDX-FileCopyrightText: 2001, Damon Chaplin <damon@ximian.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 /**
  * @file icaltimezone.h
@@ -198,6 +190,9 @@ LIBICAL_ICAL_EXPORT void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 /*
  * @par Handling the default location the timezone files
  */
+
+/** Gets the directory to look for the zonefiles */
+LIBICAL_ICAL_EXPORT const char *get_zone_directory(void);
 
 /** Sets the directory to look for the zonefiles */
 LIBICAL_ICAL_EXPORT void set_zone_directory(const char *path);

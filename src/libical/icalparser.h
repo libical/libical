@@ -2,18 +2,9 @@
  FILE: icalparser.h
  CREATOR: eric 20 April 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
   The original code is icalparser.h
 ======================================================================*/
@@ -31,7 +22,7 @@
  * This file provides methods to parse iCalendar-formatted data
  * into the structures provided by this library.
  *
- * ### Usage
+ * @par Usage
  * Create a new parser via icalparser_new_parser(), then add lines one at
  * a time with icalparser_add_line(). icalparser_add_line() will return
  * non-zero when it has finished with a component.
@@ -73,18 +64,18 @@ typedef enum icalparser_state
 typedef char *(*icalparser_line_gen_func) (char *s, size_t size, void *d);
 
 /**
- * @brief Creates a new ::icalparser.
- * @return An ::icalparser object
+ * @brief Creates a new icalparser.
+ * @return An icalparser object
  *
  * @par Error handling
  * On error, it returns `NULL` and sets ::icalerrno to
  * ::ICAL_NEWFAILED_ERROR.
  *
  * @par Ownership
- * All ::icalparser objects created with this function need to be
+ * All icalparser objects created with this function need to be
  * freed using the icalparser_free() function.
  *
- * ### Usage
+ * @par Usage
  * ```c
  * // create new parser
  * icalparser *parser = icalparser_new();
@@ -98,7 +89,7 @@ typedef char *(*icalparser_line_gen_func) (char *s, size_t size, void *d);
 LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
 
 /**
- * @brief Adds a single line to be parsed by the ::icalparser.
+ * @brief Adds a single line to be parsed by the icalparser.
  * @param parser The parser to use
  * @param str A string representing a single line of RFC5545-formatted iCalendar data
  * @return When this was the last line of the component to be parsed,
@@ -112,15 +103,15 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
  * -   If @a line is `NULL`, it returns `NULL` and sets the @a parser's ::icalparser_state to
  *     ::ICALPARSER_ERROR.
  * -   For errors during parsing, the functions can set the ::icalparser_state to
- *     ::ICALPARSER_ERROR and/or return components of the type ::ICAL_XLICINVALID_COMPONENT,
- *     or components with properties of the type ::ICAL_XLICERROR_PROPERTY.
+ *     ::ICALPARSER_ERROR and/or return components of the type ICAL_XLICINVALID_COMPONENT,
+ *     or components with properties of the type ICAL_XLICERROR_PROPERTY.
  *
  * @par Ownership
  * Ownership of the @a str is transferred to libical upon calling this
- * method. The returned ::icalcomponent is owned by the caller and needs
+ * method. The returned icalcomponent is owned by the caller and needs
  * to be `free()`d with the appropriate method after it's no longer needed.
  *
- * ### Example
+ * @par Example
  * ```c
  * char* read_stream(char *s, size_t size, void *d)
  * {
@@ -159,9 +150,9 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_add_line(icalparser *parser, char *str);
 
 /**
- * @brief Cleans out an ::icalparser and returns whatever it has parsed so far.
- * @param parser The ::icalparser to clean
- * @return The parsed ::icalcomponent
+ * @brief Cleans out an icalparser and returns whatever it has parsed so far.
+ * @param parser The icalparser to clean
+ * @return The parsed icalcomponent
  *
  * @par Error handling
  * If @a parser is `NULL`, it returns `NULL` and sets ::icalerrno to
@@ -169,7 +160,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_add_line(icalparser *parser, char 
  * property into the affected components.
  *
  * @par Ownership
- * The returned ::icalcomponent is property of the caller and needs to be
+ * The returned icalcomponent is property of the caller and needs to be
  * free'd with icalcomponent_free() after use.
  *
  * This will parse components even if it hasn't encountered a proper
@@ -184,7 +175,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_clean(icalparser *parser);
  * @param parser The (valid, non-`NULL`) parser object
  * @return The current state of the icalparser, as an ::icalparser_state
  *
- * ### Example
+ * @par Example
  * ```c
  * icalparser *parser = icalparser_new();
  *
@@ -202,10 +193,10 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_clean(icalparser *parser);
 LIBICAL_ICAL_EXPORT icalparser_state icalparser_get_state(icalparser *parser);
 
 /**
- * @brief Frees an ::icalparser object.
- * @param parser The ::icalparser to be freed.
+ * @brief Frees an icalparser object.
+ * @param parser The icalparser to be freed.
  *
- * ### Example
+ * @par Example
  * ```c
  * icalparser *parser = icalparser_new();
  *
@@ -232,14 +223,14 @@ LIBICAL_ICAL_EXPORT void icalparser_free(icalparser *parser);
  * -   If data read by @a line_gen_func is `NULL`, it returns `NULL`
  *     and sets the @a parser's ::icalparser_state to ::ICALPARSER_ERROR.
  * -   For errors during parsing, the functions can set the ::icalparser_state to
- *     ::ICALPARSER_ERROR and/or return components of the type ::ICAL_XLICINVALID_COMPONENT,
- *     or components with properties of the type ::ICAL_XLICERROR_PROPERTY.
+ *     ::ICALPARSER_ERROR and/or return components of the type ICAL_XLICINVALID_COMPONENT,
+ *     or components with properties of the type ICAL_XLICERROR_PROPERTY.
  *
  * @par Ownership
- * The returned ::icalcomponent is owned by the caller of the function, and
+ * The returned icalcomponent is owned by the caller of the function, and
  * needs to be `free()`d with the appropriate method when no longer needed.
  *
- * ### Example
+ * @par Example
  * ```c
  * char* read_stream(char *s, size_t size, void *d)
  * {
@@ -278,24 +269,24 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse(icalparser *parser,
  * @param data The pointer which will be passed to the line_gen_func as argument `d`
  *
  * If you use any of the icalparser_parser() or icalparser_get_line() functions,
- * the @a line_gen_func that they expect has a third `void* d` argument. This function
+ * the @a line_gen_func that they expect has a third `void *d` argument. This function
  * sets what will be passed to your @a line_gen_function as such argument.
  */
 LIBICAL_ICAL_EXPORT void icalparser_set_gen_data(icalparser *parser, void *data);
 
 /**
- * @brief Parses a string and returns the parsed ::icalcomponent.
+ * @brief Parses a string and returns the parsed icalcomponent.
  * @param str The iCal formatted data to be parsed
- * @return An ::icalcomponent representing the iCalendar
+ * @return An icalcomponent representing the iCalendar
  *
  * @par Error handling
  * On error, returns `NULL` and sets ::icalerrno
  *
  * @par Ownership
- * The returned ::icalcomponent is owned by the caller of the function, and
+ * The returned icalcomponent is owned by the caller of the function, and
  * needs to be free'd with the appropriate functions after use.
  *
- * ### Example
+ * @par Example
  * ```c
  * char *ical_string;
  *
@@ -311,6 +302,31 @@ LIBICAL_ICAL_EXPORT void icalparser_set_gen_data(icalparser *parser, void *data)
  * ```
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
+
+/**
+ * @enum icalparser_ctrl
+ * @brief Defines how to handle invalid CONTROL characters in content lines
+ */
+enum icalparser_ctrl {
+    /** Keep CONTROL characters in content-line */
+    ICALPARSER_CTRL_KEEP,
+    /** Omit CONTROL characters from content-line */
+    ICALPARSER_CTRL_OMIT,
+    /** Insert a X-LIC-ERROR instead of content-line */
+    ICALPARSER_CTRL_ERROR
+};
+
+/**
+ * @brief Get the current parser setting how to handle CONTROL characters
+ * @return The current parser setting
+ */
+LIBICAL_ICAL_EXPORT enum icalparser_ctrl icalparser_get_ctrl(void);
+
+/**
+ * @brief Set the parser setting how to handle CONTROL characters
+ * @param ctrl The setting to use
+ */
+LIBICAL_ICAL_EXPORT void icalparser_set_ctrl(enum icalparser_ctrl ctrl);
 
 /***********************************************************************
  * Parser support functions

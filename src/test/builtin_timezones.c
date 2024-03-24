@@ -2,25 +2,17 @@
  FILE: builtin_timezones.c
  CREATOR: Milan Crha 26 November 2014
 
- (C) COPYRIGHT 2014 Milan Crha <mcrha@redhat.com>
+ SPDX-FileCopyrightText: 2014 Milan Crha <mcrha@redhat.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#ifdef HAVE_PTHREAD_H
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 #include <assert.h>
 #endif
@@ -29,7 +21,7 @@
 
 #include <stdio.h>
 
-#if defined(HAVE_PTHREAD_H) && defined(HAVE_PTHREAD) && defined(HAVE_PTHREAD_CREATE)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 
 #define N_THREADS 20
 
@@ -80,7 +72,7 @@ static void test_get_component_threadsafety(void)
 }
 #endif
 
-int main()
+int main(void)
 {
     icalarray *builtin_timezones;
     icaltimetype tt;
@@ -90,7 +82,7 @@ int main()
     set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
-#if defined(HAVE_PTHREAD_H) && defined(HAVE_PTHREAD) && defined(HAVE_PTHREAD_CREATE)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     test_get_component_threadsafety();
 #endif
 

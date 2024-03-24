@@ -2,18 +2,9 @@
  FILE: icalerror.c
  CREATOR: eric 16 May 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
   The original code is icalerror.c
 ======================================================================*/
@@ -23,6 +14,7 @@
 #endif
 
 #include "icalerror.h"
+#include "icalmemory.h"
 
 #include <stdlib.h>
 
@@ -30,7 +22,7 @@
 #include <execinfo.h>
 #endif
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 
 static pthread_key_t icalerrno_key;
@@ -38,7 +30,7 @@ static pthread_once_t icalerrno_key_once = PTHREAD_ONCE_INIT;
 
 static void icalerrno_destroy(void *buf)
 {
-    free(buf);
+    icalmemory_free_buffer(buf);
     pthread_setspecific(icalerrno_key, NULL);
 }
 
@@ -56,7 +48,7 @@ icalerrorenum *icalerrno_return(void)
     _errno = (icalerrorenum *) pthread_getspecific(icalerrno_key);
 
     if (!_errno) {
-        _errno = malloc(sizeof(icalerrorenum));
+        _errno = icalmemory_new_buffer(sizeof(icalerrorenum));
         *_errno = ICAL_NO_ERROR;
         pthread_setspecific(icalerrno_key, _errno);
     }
@@ -65,7 +57,7 @@ icalerrorenum *icalerrno_return(void)
 
 #else
 
-static icalerrorenum icalerrno_storage = ICAL_NO_ERROR;
+static ICAL_GLOBAL_VAR icalerrorenum icalerrno_storage = ICAL_NO_ERROR;
 
 icalerrorenum *icalerrno_return(void)
 {
@@ -74,7 +66,7 @@ icalerrorenum *icalerrno_return(void)
 
 #endif
 
-static int foo;
+static ICAL_GLOBAL_VAR int foo;
 
 void icalerror_stop_here(void)
 {
@@ -90,19 +82,19 @@ void icalerror_crash_here(void)
     *p = 1;
 
     /* cppcheck-suppress nullPointer */
-    assert(*p);
+    icalassert(*p);
 #endif
 }
 
-void icalerror_clear_errno()
+void icalerror_clear_errno(void)
 {
     icalerrno = ICAL_NO_ERROR;
 }
 
 #if ICAL_ERRORS_ARE_FATAL == 1
-static int icalerror_errors_are_fatal = 1;
+static ICAL_GLOBAL_VAR int icalerror_errors_are_fatal = 1;
 #else
-static int icalerror_errors_are_fatal = 0;
+static ICAL_GLOBAL_VAR int icalerror_errors_are_fatal = 0;
 #endif
 
 void icalerror_set_errors_are_fatal(int fatal)
@@ -110,7 +102,7 @@ void icalerror_set_errors_are_fatal(int fatal)
     icalerror_errors_are_fatal = (fatal != 0);
 }
 
-int icalerror_get_errors_are_fatal()
+int icalerror_get_errors_are_fatal(void)
 {
     return icalerror_errors_are_fatal;
 }
@@ -123,7 +115,7 @@ void icalerror_set_errno(icalerrorenum x)
         (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && icalerror_errors_are_fatal == 1)) {
         icalerror_warn(icalerror_strerror(x));
         ical_bt();
-        assert(0);
+        icalassert(0);
     }
 }
 
@@ -135,7 +127,7 @@ struct icalerror_state
     icalerrorstate state;
 };
 
-static struct icalerror_state error_state_map[] = {
+static ICAL_GLOBAL_VAR struct icalerror_state error_state_map[] = {
     {ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT},
     {ICAL_NEWFAILED_ERROR, ICAL_ERROR_DEFAULT},
     {ICAL_ALLOCATION_ERROR, ICAL_ERROR_DEFAULT},
@@ -272,11 +264,11 @@ void ical_bt(void)
     strings = backtrace_symbols(stack_frames, num);
     for (i = 0; i < num; i++) {
         if (strings != NULL) {
-            fprintf(stderr, "%s\n", strings[i]);
+            icalerrprintf("%s\n", strings[i]);
         } else {
-            fprintf(stderr, "%p\n", stack_frames[i]);
+            icalerrprintf("%p\n", stack_frames[i]);
         }
     }
-    free(strings);
+    free(strings); /* Not icalmemory_free_buffer(), allocated by backtrace_symbols() */
 #endif
 }

@@ -3,7 +3,7 @@
  * needs of the libical project. The original copyright notice is as follows:
  */
 /*
- *	Copyright (c) 1986-2000, Hiram Clawson 
+ *	Copyright (c) 1986-2000, Hiram Clawson
  *	All rights reserved.
  *
  *	Redistribution and use in source and binary forms, with or
@@ -22,7 +22,7 @@
  *		Neither name of The Museum of Hiram nor the names of
  *		its contributors may be used to endorse or promote products
  *		derived from this software without specific prior
- *		written permission. 
+ *		written permission.
  *
  *	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  *	CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -35,7 +35,7 @@
  *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
  *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- *	THE POSSIBILITY OF SUCH DAMAGE. 
+ *	THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*
  * The modifications made are licensed as follows (to distinguish between
@@ -44,21 +44,11 @@
  */
 /*======================================================================
 
-   (C) COPYRIGHT 2018, Markus Minichmayr
+   SPDX-FileCopyrightText: 2018, Markus Minichmayr
        https://tapkey.com
 
-   This library is free software; you can redistribute it and/or modify
-   it under the terms of either:
-
-      The LGPL as published by the Free Software Foundation, version
-      2.1, available at: http://www.gnu.org/licenses/lgpl-2.1.html
-
-   Or:
-
-      The Mozilla Public License Version 2.0. You may obtain a copy of
-      the License at http://www.mozilla.org/MPL/
+   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
   ========================================================================*/
-
 
 #include "astime.h"	/*	time structures	*/
 
@@ -81,8 +71,7 @@
  *
  */
 
-long caldat( date )
-struct ut_instant * date;
+long caldat( struct ut_instant * date )
 {
 	double frac;
 	long jd;
@@ -155,8 +144,7 @@ struct ut_instant * date;
  *	50 Year canon of solar eclipses: 1986-2035
  */
 
-double juldat( date )
-struct ut_instant * date;
+double juldat( struct ut_instant * date )
 {
 	double frac, gyr;
 	long iy0, im0;
@@ -202,8 +190,7 @@ struct ut_instant * date;
 	return( date->j_date );
 }	/*	end of	double juldat( date )	*/
 
-void caldat_int( date )
-struct ut_instant_int * date;
+void caldat_int( struct ut_instant_int * date )
 {
 	long jd;
 	long ka;
@@ -250,8 +237,7 @@ struct ut_instant_int * date;
 			+ date->day - 30;
 }
 
-void juldat_int( date )
-struct ut_instant_int * date;
+void juldat_int( struct ut_instant_int * date )
 {
 	long iy0, im0;
 	long ia, ib;

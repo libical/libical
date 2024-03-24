@@ -1,30 +1,21 @@
 #!/usr/bin/env python3
-#GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./comprehensive.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./comprehensive.py
 
 ###############################################################################
 #
-# Copyright (C) 2015 William Yu <williamyu@gnome.org>
+# SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 #
-# This library is free software; you can redistribute it and/or modify
-# it under the terms of either:
-#
-#   The LGPL as published by the Free Software Foundation, version
-#   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.txt
-#
-# Or:
-#
-#   The Mozilla Public License Version 2.0. You may obtain a copy of
-#   the License at https://www.mozilla.org/MPL/
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 #
 ###############################################################################
+
+''' Comprehensive testing for Python libical bindings '''
 
 import gi
-
 gi.require_version('ICalGLib', '3.0')
+from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
-from gi.repository import ICalGLib
-
-event_str1 = \
+eventStr1 = \
     "BEGIN:VEVENT\n"                                \
     "UID:event-uid-123\n"                           \
     "SUMMARY;LANGUAGE=en-US:parent\n"               \
@@ -39,7 +30,7 @@ event_str1 = \
     "LOCATION;LANGUAGE=en-US:Location\n"            \
     "END:VEVENT\n"
 
-event_str2 = \
+eventStr2 = \
     "BEGIN:VEVENT\n"                                \
     "UID:event-uid-123\n"                           \
     "SUMMARY;LANGUAGE=en-US:childEvent1\n"          \
@@ -54,7 +45,7 @@ event_str2 = \
     "LOCATION;LANGUAGE=en-US:Location\n"            \
     "END:VEVENT\n"
 
-event_str3 = \
+eventStr3 = \
     "BEGIN:VEVENT\n"                                \
     "UID:event-uid-123\n"                           \
     "SUMMARY;LANGUAGE=en-US:childEvent2\n"          \
@@ -69,7 +60,7 @@ event_str3 = \
     "LOCATION;LANGUAGE=en-US:Location\n"            \
     "END:VEVENT\n"
 
-event_str4 = \
+eventStr4 = \
     "BEGIN:VEVENT\n"                                \
     "UID:event-uid-123\n"                           \
     "SUMMARY;LANGUAGE=en-US:childEvent3\n"          \
@@ -84,7 +75,7 @@ event_str4 = \
     "LOCATION;LANGUAGE=en-US:Location\n"            \
     "END:VCALENDAR\n"
 
-event_str5 = \
+eventStr5 = \
     "BEGIN:VCALENDAR\n"                             \
     "UID:event-uid-123\n"                           \
     "SUMMARY;LANGUAGE=en-US:childCalendar1\n"       \
@@ -99,7 +90,7 @@ event_str5 = \
     "LOCATION;LANGUAGE=en-US:Location\n"            \
     "END:VCALENDAR\n"
 
-combined_string = \
+combinedString = \
     "BEGIN:VEVENT\r\n"                              \
     "UID:event-uid-123\r\n"                         \
     "SUMMARY;LANGUAGE=en-US:parent\r\n"             \
@@ -166,67 +157,69 @@ combined_string = \
     "END:VCALENDAR\r\n"                             \
     "END:VEVENT\r\n"
 
-def main():
-    #Test child component manipulation
-    parent = ICalGLib.Component.new_from_string(event_str1);
-    comp1 = ICalGLib.Component.new_from_string(event_str2);
-    comp2 = ICalGLib.Component.new_from_string(event_str3);
-    comp3 = ICalGLib.Component.new_from_string(event_str4);
-    comp4 = ICalGLib.Component.new_from_string(event_str5);
 
-    parent.add_component(comp1);
-    parent.add_component(comp2);
-    parent.add_component(comp3);
-    parent.add_component(comp4);
+def main():  # pylint: disable=too-many-locals
+    ''' Test child component manipulation '''
+    parent = ICalGLib.Component.new_from_string(eventStr1)
+    comp1 = ICalGLib.Component.new_from_string(eventStr2)
+    comp2 = ICalGLib.Component.new_from_string(eventStr3)
+    comp3 = ICalGLib.Component.new_from_string(eventStr4)
+    comp4 = ICalGLib.Component.new_from_string(eventStr5)
 
-    assert parent.as_ical_string() == combined_string;
+    parent.add_component(comp1)
+    parent.add_component(comp2)
+    parent.add_component(comp3)
+    parent.add_component(comp4)
 
-    count = parent.count_components(ICalGLib.ComponentKind.VEVENT_COMPONENT);
-    child_component = parent.get_first_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
+    assert parent.as_ical_string() == combinedString
+
+    count = parent.count_components(ICalGLib.ComponentKind.VEVENT_COMPONENT)
+    childComponent = parent.get_first_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
     for i in range(0, count):
-        if (child_component.get_summary() == "childEvent2"):
-            child_component.set_summary("childEventTwo");
+        if childComponent.get_summary() == "childEvent2":
+            childComponent.set_summary("childEventTwo")
 
-            start = ICalGLib.Time.new_from_string("20141115T211923");
-            end = ICalGLib.Time.new_from_string("20141115T221923");
-            child_component.set_dtstart(start);
-            child_component.set_dtend(end);
+            start = ICalGLib.Time.new_from_string("20141115T211923")
+            end = ICalGLib.Time.new_from_string("20141115T221923")
+            childComponent.set_dtstart(start)
+            childComponent.set_dtend(end)
 
-            child_component.set_dtstamp(start);
-            child_component.set_location("East Lansing, MI, US");
+            childComponent.set_dtstamp(start)
+            childComponent.set_location("East Lansing, MI, US")
 
-            child_component.set_relcalid("relcalid for childEventTwo");
-            recur_string = "RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5";
-            property = ICalGLib.Property.new_from_string(recur_string);
-            child_component.add_property(property);
-        if (i != count-1):
-            child_component = parent.get_next_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
+            childComponent.set_relcalid("relcalid for childEventTwo")
+            recurString = "RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5"
+            recurProperty = ICalGLib.Property.new_from_string(recurString)
+            childComponent.add_property(recurProperty)
+        if i != count-1:
+            childComponent = parent.get_next_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
 
-    modifiedCombinedString = parent.as_ical_string();
-    newParent = ICalGLib.Component.new_from_string(modifiedCombinedString);
+    modifiedCombinedString = parent.as_ical_string()
+    ICalGLib.Component.new_from_string(modifiedCombinedString)
 
-    count = parent.count_components(ICalGLib.ComponentKind.VEVENT_COMPONENT);
-    child_component = parent.get_first_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
+    count = parent.count_components(ICalGLib.ComponentKind.VEVENT_COMPONENT)
+    childComponent = parent.get_first_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
     for i in range(0, count):
-        if (child_component.get_summary() == "childEventTwo"):
-            child_component.set_summary("childEventTwo");
+        if childComponent.get_summary() == "childEventTwo":
+            childComponent.set_summary("childEventTwo")
 
-            dtstart = child_component.get_dtstart();
-            start_string = ICalGLib.Time.as_ical_string(dtstart);
-            assert(start_string == "20141115T211923");
-            dtend = child_component.get_dtend();
-            end_string = ICalGLib.Time.as_ical_string(dtend);
-            assert(end_string == "20141115T221923");
+            dtstart = childComponent.get_dtstart()
+            startString = ICalGLib.Time.as_ical_string(dtstart)
+            assert startString == "20141115T211923"
+            dtend = childComponent.get_dtend()
+            endString = ICalGLib.Time.as_ical_string(dtend)
+            assert endString == "20141115T221923"
 
-            timestamp = child_component.get_dtstamp();
-            assert(ICalGLib.Time.as_ical_string(timestamp) == "20141115T211923");
-            assert(child_component.get_location() == "East Lansing, MI, US");
-            assert(child_component.get_relcalid() == "relcalid for childEventTwo");
+            timestamp = childComponent.get_dtstamp()
+            assert ICalGLib.Time.as_ical_string(timestamp) == "20141115T211923"
+            assert childComponent.get_location() == "East Lansing, MI, US"
+            assert childComponent.get_relcalid() == "relcalid for childEventTwo"
 
-            recurProperty = child_component.get_first_property(ICalGLib.PropertyKind.RRULE_PROPERTY);
-            assert recurProperty.as_ical_string() == "RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5\r\n";
-        if (i != count-1):
-            child_component = parent.get_next_component(ICalGLib.ComponentKind.VEVENT_COMPONENT);
+            recurProperty = childComponent.get_first_property(ICalGLib.PropertyKind.RRULE_PROPERTY)
+            assert recurProperty.as_ical_string() == "RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5\r\n"
+        if i != count-1:
+            childComponent = parent.get_next_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
+
 
 if __name__ == "__main__":
     main()

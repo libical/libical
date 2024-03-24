@@ -13,11 +13,13 @@
 "URI","5018","(a)const char*","string","unitary",
 "UTC-OFFSET","5029","(a)int","integer","unitary",
 "QUERY","5001","(a)const char*","string","unitary",
+
 "#Non-standard multi-valued types",,,,
 "ATTACH","5003","(m)icalattach *","none","URI;BINARY",
 "DATE-TIME-DATE","5036","(m)struct icaltimetype","Time","DATE-TIME;DATE",
 "DATE-TIME-PERIOD","5015","(m)struct icaldatetimeperiodtype","none","DATE-TIME;DATE;PERIOD",
 "TRIGGER","5024","(m)struct icaltriggertype","string","DURATION;DATE-TIME",
+
 "#Non-standard property enumeration types",,,,
 "#METHOD:POLLSTATUS from draft-york-vpoll",,,,
 "METHOD","5030","(a)enum icalproperty_method","string","unitary","X=10500;PUBLISH;REQUEST;REPLY;ADD;CANCEL;REFRESH;COUNTER;DECLINECOUNTER;CREATE;READ;RESPONSE;MOVE;MODIFY;GENERATEUID;DELETE;POLLSTATUS;NONE=10599"
@@ -26,24 +28,37 @@
 "STATUS","5005","(a)enum icalproperty_status","string","unitary","X=10900;TENTATIVE;CONFIRMED;COMPLETED;NEEDS-ACTION;CANCELLED;IN-PROCESS;DRAFT;FINAL;SUBMITTED;PENDING;FAILED;DELETED;NONE=10999"
 "TRANSP","5006","(a)enum icalproperty_transp","string","unitary","X=11000;OPAQUE;OPAQUE-NOCONFLICT;TRANSPARENT;TRANSPARENT-NOCONFLICT;NONE=11099"
 "CLASS","5019","(m)enum icalproperty_class","string","unitary","X=10300;PUBLIC;PRIVATE;CONFIDENTIAL;NONE=10399"
+
 "#Other non-standard",,,,
 "REQUEST-STATUS","5009","(a)struct icalreqstattype","string","unitary"
 "GEO","5004","(m)struct icalgeotype","tuple","unitary",
 "STRING","5007","(a)const char*","string","unitary",
 "X","5022","(m)const char*","string","unitary",
+
 "#CAP enumeration types",,,,
 "CMD","5010","(a)enum icalproperty_cmd","string","unitary","X=10400;ABORT;CONTINUE;CREATE;DELETE;GENERATE-UID;GET-CAPABILITY;IDENTIFY;MODIFY;MOVE;REPLY;SEARCH;SET-LOCALE;NONE=10499"
 "QUERY-LEVEL","5012","(a)enum icalproperty_querylevel","string","unitary","X=10800;CAL-QL-1;CAL-QL-NONE;NONE=10899"
 "CAR-LEVEL","5016","(a)enum icalproperty_carlevel","string","unitary","X=10200;CAR-NONE;CAR-MIN;CAR-FULL-1;NONE=10299"
 "ANY","5000",,,,
 "NO","5031",,,,
+
 "#VAVAILABILITY types","RFC 7953 Section 3.2",,,
 "BUSYTYPE","5032","(a)enum icalproperty_busytype","string","unitary","X=10100;BUSY;BUSY-UNAVAILABLE;BUSY-TENTATIVE;NONE=10199"
+
 "#VPOLL types","draft-york-vpoll",,,
 "POLLMODE","5033","(a)enum icalproperty_pollmode","string","unitary","X=10700;BASIC;NONE=10799"
 "POLLCOMPLETION","5034","(a)enum icalproperty_pollcompletion","string","unitary","X=10600;SERVER;SERVER-SUBMIT;SERVER-CHOICE;CLIENT;NONE=10699"
+
 "#Task Extension types","draft-apthorp-ical-tasks",,,
 "TASKMODE","5035","(a)enum icalproperty_taskmode","string","unitary","X=11200;AUTOMATIC-COMPLETION;AUTOMATIC-FAILURE;AUTOMATIC-STATUS;NONE=11299"
+
+"#VALARM Extension types","RFC 9074 Section 8.1",,,
+"PROXIMITY","5039","(a)enum icalproperty_proximity","string","unitary","X=11300;ARRIVE;DEPART;CONNECT;DISCONNECT;NONE=11399"
+
+"#Event Publication Extension types","RFC 9073 Section 6",,,
+"PARTICIPANTTYPE","5037","(a)enum icalproperty_participanttype","string","unitary","X=11400;ACTIVE;INACTIVE;SPONSOR;CONTACT;BOOKING-CONTACT;EMERGENCY-CONTACT;PUBLICITY-CONTACT;PLANNER-CONTACT;PERFORMER;SPEAKER;NONE=11499"
+"RESOURCETYPE","5038","(a)enum icalproperty_resourcetype","string","unitary","X=11500;ROOM;PROJECTOR;REMOTE-CONFERENCE-AUDIO;REMOTE-CONFERENCE-VIDEO;NONE=11599"
+
 "#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"
 "# New Enum values for an existing icalvalue_kind should be inserted before the corresponding NONE value"
-"# New icalvalue_kind types should start their Enum value after the highest NONE value (currently 11299)"
+"# New icalvalue_kind types should start their Enum value after the highest NONE value (currently 11599)"

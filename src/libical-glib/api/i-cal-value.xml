@@ -1,17 +1,9 @@
 <!--
-  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+  SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
-  This library is free software: you can redistribute it and/or modify it
-  under the terms of version 2.1. of the GNU Lesser General Public License
-  as published by the Free Software Foundation.
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
-  for more details.
 
-  You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Value" native="icalvalue" destroy_func="icalvalue_free" includes="string.h">
     <method name="i_cal_value_new" corresponds="icalvalue_new" kind="constructor" since="1.0">
@@ -78,7 +70,7 @@ be cloned."/>
     </method>
     <method name="i_cal_value_encode_ical_string" corresponds="CUSTOM" since="1.0">
         <parameter type="const gchar *" name="szText" comment="A string"/>
-        <returns type="gchar *" annotation="allow-none, transfer full" comment="The encoded string. NULL if fail."/>
+        <returns type="gchar *" annotation="nullable, transfer full" comment="The encoded string. NULL if fail."/>
         <comment xml:space="preserve">Encodes a character string in ical format, escape certain characters, etc.</comment>
         <custom>    gchar *szEncText;
     gchar *buffer = NULL;
@@ -99,7 +91,7 @@ be cloned."/>
     </method>
     <method name="i_cal_value_decode_ical_string" corresponds="CUSTOM" since="1.0">
         <parameter type="const gchar *" name="szText" comment="A string"/>
-        <returns type="gchar *" annotation="allow-none, transfer full" comment="The decoded string. NULL if fail."/>
+        <returns type="gchar *" annotation="nullable, transfer full" comment="The decoded string. NULL if fail."/>
         <comment xml:space="preserve">Extracts the original character string encoded by the above function.</comment>
         <custom>    gchar *szDecText;
     gchar *buffer = NULL;

@@ -2,18 +2,9 @@
  FILE: stow.c
  CREATOR: eric 29 April 2000
 
- (C) COPYRIGHT 2000 Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000 Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Initial Developer of the Original Code is Eric Busboom
 ======================================================================*/
@@ -183,8 +174,8 @@ char *make_mime(const char *to, const char *from, const char *subject,
     uname(&uts);
 
     srand((unsigned int)(time(0) << getpid()));
-    snprintf(content_id, TMPSIZE_SMALL, "%d-%d@%s", (int)time(0), rand(), uts.nodename);
-    snprintf(boundary, TMPSIZE_SMALL, "%d-%d-%s", (int)time(0), rand(), uts.nodename);
+    snprintf(content_id, TMPSIZE_SMALL, "%ld-%d@%s", (long)time(0), rand(), uts.nodename);
+    snprintf(boundary, TMPSIZE_SMALL, "%ld-%d-%s", (long)time(0), rand(), uts.nodename);
 //krazy:cond=style
     snprintf(mime_part_1, TMPSIZE, "Content-ID: %s\n\
 Content-type: text/plain\n\
@@ -310,8 +301,8 @@ icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
                 icalproperty_clone(
                     icalcomponent_get_first_property(inner, ICAL_UID_PROPERTY)),
                 icalproperty_new_attendee(attendee),
-                0),
-            0);
+                (void *)0),
+            (void *)0);
 
     /* Convert errors into request-status properties and transfers
        them to the reply component */

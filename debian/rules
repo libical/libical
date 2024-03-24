@@ -70,7 +70,7 @@ build-python%/build-stamp: build-c build-python%/configure-stamp
 	# building the same ical lib more than once.
 	find "build-python$*/src" -maxdepth 1 -mindepth 1 | grep -v python$$ | xargs -r -t rm -rf
 	find "build-c/src" -maxdepth 1 -mindepth 1 | grep -v python$$ | xargs -r -t -I{} ln -s "../../{}" "build-python$*/src"
-	
+
 	$(MAKE) -C build-python$*/src/python pyexecdir=/usr/lib/pymodules/python$*
 
 	touch $@
@@ -78,7 +78,7 @@ build-python%/build-stamp: build-c build-python%/configure-stamp
 install-python%: build-python%/build-stamp
 	dh_testdir
 	dh_testroot
-#	dh_clean -k 
+#	dh_clean -k
 	dh_installdirs
 
 	# install with hack to move installed python libs to pymodule dir
@@ -139,7 +139,7 @@ clean-c:
 install-c: build-c
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
+	dh_clean -k
 	dh_installdirs
 
 	$(MAKE) -C build-c DESTDIR=$(CURDIR)/debian/tmp install
@@ -157,7 +157,7 @@ binary-arch: build install
 	dh_installexamples
 	dh_install -s --sourcedir=debian/tmp
 #	dh_installmenu
-#	dh_installdebconf	
+#	dh_installdebconf
 #	dh_installlogrotate
 #	dh_installemacsen
 #	dh_installpam
@@ -187,4 +187,4 @@ binary-arch: build install
 	dh_builddeb
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install 
+.PHONY: build clean binary-indep binary-arch binary install

@@ -2,20 +2,11 @@
  FILE: regression-storage.c
  CREATOR: eric 03 April 1999
 
- (C) COPYRIGHT 1999 Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
 
  DESCRIPTION:
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original author is Eric Busboom
  The original code is usecases.c
@@ -283,7 +274,7 @@ void test_fileset_extended(void)
    DB file), and keys for storage and retrieval.
 */
 
-void test_bdbset()
+void test_bdbset(void)
 {
     icalset *cout;
     int month = 0;
@@ -305,6 +296,8 @@ void test_bdbset()
 
     return;     // for now... TODO fix these broken tests..
 
+#pragma clang diagnostic push /* remove when/if we remove the proceeding return statement */
+#pragma clang diagnostic ignored "-Wunreachable-code"
     start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     end = start;
     end.hour++;
@@ -452,6 +445,7 @@ void test_bdbset()
         }
         icalset_free(cout);
     }
+#pragma clang diagnostic pop
 }
 
 #endif

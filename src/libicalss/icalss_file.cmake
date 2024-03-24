@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering.
 # It is required to make the combined header icalss.h properly.
 set(COMBINEDHEADERSICALSS

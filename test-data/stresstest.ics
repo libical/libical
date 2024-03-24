@@ -20,11 +20,11 @@ ATTENDEE;RSVP=TRUE;CUTYPE=INDIVIDUAL:Mailto:Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 CATEGORIES:ANNIVERSARY,PERSONAL,SPECIAL OCCASION;ANNIVERSARY,PERSONAL,SPECIAL OCCASION;ANNIVERSARY,PERSONAL,SPECIAL OCCASION;
 CATEGORIES;RSVP=TRUE;RSVP=FALSE:one,two
 CLASS:PUBLIC
-COMMENT:DELEGATE (ATTENDEE Mailto:E@example.com) DECLINED YOUR 
- DUKES forfeit the game 
- I'll send you my input by e-mail 
- May we bump this by an hour? I have a conflict 
- Mr. B cannot attend. It's raining. Lets cancel. 
+COMMENT:DELEGATE (ATTENDEE Mailto:E@example.com) DECLINED YOUR
+ DUKES forfeit the game
+ I'll send you my input by e-mail
+ May we bump this by an hour? I have a conflict
+ Mr. B cannot attend. It's raining. Lets cancel.
 Sorry, I cannot change this meeting time
 Sorry, I will be out of town at that time.
 This iCalendar file contains busy time information for

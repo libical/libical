@@ -1,17 +1,11 @@
 #!/usr/bin/env perl
 ################################################################################
-# (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+# SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 #
-# This library is free software; you can redistribute it and/or modify
-# it under the terms of either:
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 #
-#   The LGPL as published by the Free Software Foundation, version
-#   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.txt
 #
-# Or:
 #
-#   The Mozilla Public License Version 2.0. You may obtain a copy of
-#   the License at https://www.mozilla.org/MPL/
 ################################################################################
 
 use Getopt::Std;
@@ -47,8 +41,9 @@ if ($opt_i) {
 
 sub insert_code
 {
-  # First build the property restriction table
-  print "static const icalrestriction_property_record icalrestriction_property_records[] = {\n";
+  # First parse the restrictions file and make a hash of the restrictions
+  my @prop_restr = ();
+  my @comp_restr = ();
 
   while (<F>) {
 
@@ -67,17 +62,36 @@ sub insert_code
     }
     $restr =~ s/\s+$//;
 
-    if ($prop ne "NONE") {
-      print(
-"    \{ICAL_METHOD_${method}, ICAL_${targetcomp}_COMPONENT, ICAL_${prop}_PROPERTY, ICAL_RESTRICTION_${restr}, $sub},\n"
-      );
+    if ($prop eq "NONE") {
+      $prop = "NO";
+    }
+    if ($subcomp eq "NONE") {
+      $subcomp = "NO";
     }
 
+    my @value = ($restr, $sub);
+    $prop_restr{$method}{$targetcomp}{$prop}{$subcomp} = \@value;
   }
+
+  # Build the restriction table
+  print "static const icalrestriction_record icalrestriction_records[] = {\n";
+
+  for $method ( sort keys %prop_restr ) {
+    for $targetcomp ( sort keys %{ $prop_restr{$method} } ) {
+      for $prop ( sort keys %{ $prop_restr{$method}{$targetcomp} } ) {
+        for $subcomp ( sort keys %{ $prop_restr{$method}{$targetcomp}{$prop} } ) {
+          my ($restr, $sub) = @{$prop_restr{$method}{$targetcomp}{$prop}{$subcomp}};
+          print(
+"    \{ICAL_METHOD_${method}, ICAL_${targetcomp}_COMPONENT, ICAL_${prop}_PROPERTY, ICAL_${subcomp}_COMPONENT, ICAL_RESTRICTION_${restr}, $sub},\n"
+          );
+        }
+      }
+    }
+}
 
   # Print the terminating line
   print
-    "    {ICAL_METHOD_NONE, ICAL_NO_COMPONENT, ICAL_NO_PROPERTY, ICAL_RESTRICTION_NONE, NULL}\n";
+    "    {ICAL_METHOD_NONE, ICAL_NO_COMPONENT, ICAL_NO_PROPERTY, ICAL_NO_COMPONENT, ICAL_RESTRICTION_NONE, NULL}\n";
 
   print "};\n";
 

@@ -1,17 +1,9 @@
 <!--
-  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+  SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
-  This library is free software: you can redistribute it and/or modify it
-  under the terms of version 2.1. of the GNU Lesser General Public License
-  as published by the Free Software Foundation.
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
-  for more details.
 
-  You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="DerivedParameter">
     <enum name="ICalParameterKind" native_name="icalparameter_kind" default_native="I_CAL_NO_PARAMETER">
@@ -23,14 +15,19 @@
         <element name="ICAL_CUTYPE_PARAMETER"/>
         <element name="ICAL_DELEGATEDFROM_PARAMETER"/>
         <element name="ICAL_DELEGATEDTO_PARAMETER"/>
+        <element name="ICAL_DERIVED_PARAMETER"/>
         <element name="ICAL_DIR_PARAMETER"/>
+        <element name="ICAL_DISPLAY_PARAMETER"/>
+        <element name="ICAL_EMAIL_PARAMETER"/>
         <element name="ICAL_ENABLE_PARAMETER"/>
         <element name="ICAL_ENCODING_PARAMETER"/>
         <element name="ICAL_FBTYPE_PARAMETER"/>
+        <element name="ICAL_FEATURE_PARAMETER"/>
         <element name="ICAL_FILENAME_PARAMETER"/>
         <element name="ICAL_FMTTYPE_PARAMETER"/>
         <element name="ICAL_IANA_PARAMETER"/>
         <element name="ICAL_ID_PARAMETER"/>
+        <element name="ICAL_LABEL_PARAMETER"/>
         <element name="ICAL_LANGUAGE_PARAMETER"/>
         <element name="ICAL_LATENCY_PARAMETER"/>
         <element name="ICAL_LOCAL_PARAMETER"/>
@@ -39,7 +36,9 @@
         <element name="ICAL_MEMBER_PARAMETER"/>
         <element name="ICAL_MODIFIED_PARAMETER"/>
         <element name="ICAL_OPTIONS_PARAMETER"/>
+        <element name="ICAL_ORDER_PARAMETER"/>
         <element name="ICAL_PARTSTAT_PARAMETER"/>
+        <element name="ICAL_PATCHACTION_PARAMETER"/>
         <element name="ICAL_PUBLICCOMMENT_PARAMETER"/>
         <element name="ICAL_RANGE_PARAMETER"/>
         <element name="ICAL_REASON_PARAMETER"/>
@@ -52,6 +51,7 @@
         <element name="ICAL_SCHEDULEAGENT_PARAMETER"/>
         <element name="ICAL_SCHEDULEFORCESEND_PARAMETER"/>
         <element name="ICAL_SCHEDULESTATUS_PARAMETER"/>
+        <element name="ICAL_SCHEMA_PARAMETER"/>
         <element name="ICAL_SENTBY_PARAMETER"/>
         <element name="ICAL_SIZE_PARAMETER"/>
         <element name="ICAL_STAYINFORMED_PARAMETER"/>
@@ -78,6 +78,20 @@
         <element name="ICAL_CUTYPE_UNKNOWN"/>
         <element name="ICAL_CUTYPE_NONE"/>
     </enum>
+    <enum name="ICalParameterDerived" native_name="icalparameter_derived" default_native="I_CAL_DERIVED_NONE">
+        <element name="ICAL_DERIVED_X"/>
+        <element name="ICAL_DERIVED_TRUE"/>
+        <element name="ICAL_DERIVED_FALSE"/>
+        <element name="ICAL_DERIVED_NONE"/>
+    </enum>
+    <enum name="ICalParameterDisplay" native_name="icalparameter_display" default_native="I_CAL_DISPLAY_NONE">
+        <element name="ICAL_DISPLAY_X"/>
+        <element name="ICAL_DISPLAY_BADGE"/>
+        <element name="ICAL_DISPLAY_GRAPHIC"/>
+        <element name="ICAL_DISPLAY_FULLSIZE"/>
+        <element name="ICAL_DISPLAY_THUMBNAIL"/>
+        <element name="ICAL_DISPLAY_NONE"/>
+    </enum>
     <enum name="ICalParameterEnable" native_name="icalparameter_enable" default_native="I_CAL_ENABLE_NONE">
         <element name="ICAL_ENABLE_X"/>
         <element name="ICAL_ENABLE_TRUE"/>
@@ -98,6 +112,17 @@
         <element name="ICAL_FBTYPE_BUSYTENTATIVE"/>
         <element name="ICAL_FBTYPE_NONE"/>
     </enum>
+    <enum name="ICalParameterFeature" native_name="icalparameter_feature" default_native="I_CAL_FEATURE_NONE">
+        <element name="ICAL_FEATURE_X"/>
+        <element name="ICAL_FEATURE_AUDIO"/>
+        <element name="ICAL_FEATURE_CHAT"/>
+        <element name="ICAL_FEATURE_FEED"/>
+        <element name="ICAL_FEATURE_MODERATOR"/>
+        <element name="ICAL_FEATURE_PHONE"/>
+        <element name="ICAL_FEATURE_SCREEN"/>
+        <element name="ICAL_FEATURE_VIDEO"/>
+        <element name="ICAL_FEATURE_NONE"/>
+    </enum>
     <enum name="ICalParameterLocal" native_name="icalparameter_local" default_native="I_CAL_LOCAL_NONE">
         <element name="ICAL_LOCAL_X"/>
         <element name="ICAL_LOCAL_TRUE"/>
@@ -115,6 +140,14 @@
         <element name="ICAL_PARTSTAT_INPROCESS"/>
         <element name="ICAL_PARTSTAT_FAILED"/>
         <element name="ICAL_PARTSTAT_NONE"/>
+    </enum>
+    <enum name="ICalParameterPatchaction" native_name="icalparameter_patchaction" default_native="I_CAL_PATCHACTION_NONE">
+        <element name="ICAL_PATCHACTION_X"/>
+        <element name="ICAL_PATCHACTION_CREATE"/>
+        <element name="ICAL_PATCHACTION_BYNAME"/>
+        <element name="ICAL_PATCHACTION_BYVALUE"/>
+        <element name="ICAL_PATCHACTION_BYPARAM"/>
+        <element name="ICAL_PATCHACTION_NONE"/>
     </enum>
     <enum name="ICalParameterRange" native_name="icalparameter_range" default_native="I_CAL_RANGE_NONE">
         <element name="ICAL_RANGE_X"/>
@@ -134,6 +167,7 @@
         <element name="ICAL_RELTYPE_CHILD"/>
         <element name="ICAL_RELTYPE_SIBLING"/>
         <element name="ICAL_RELTYPE_POLL"/>
+        <element name="ICAL_RELTYPE_SNOOZE"/>
         <element name="ICAL_RELTYPE_NONE"/>
     </enum>
     <enum name="ICalParameterRequired" native_name="icalparameter_required" default_native="I_CAL_REQUIRED_NONE">
@@ -247,7 +281,7 @@
     </method>
     <method name="i_cal_parameter_get_altrep" corresponds="icalparameter_get_altrep" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_altrep" corresponds="icalparameter_set_altrep" kind="set" since="1.0">
@@ -262,7 +296,7 @@
     </method>
     <method name="i_cal_parameter_get_charset" corresponds="icalparameter_get_charset" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_charset" corresponds="icalparameter_set_charset" kind="set" since="1.0">
@@ -277,7 +311,7 @@
     </method>
     <method name="i_cal_parameter_get_cn" corresponds="icalparameter_get_cn" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_cn" corresponds="icalparameter_set_cn" kind="set" since="1.0">
@@ -292,7 +326,7 @@
     </method>
     <method name="i_cal_parameter_get_cutype" corresponds="icalparameter_get_cutype" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="ICalParameterCutype" annotation="allow-none" comment="The property of the @value" />
+        <returns type="ICalParameterCutype" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_cutype" corresponds="icalparameter_set_cutype" kind="set" since="1.0">
@@ -307,7 +341,7 @@
     </method>
     <method name="i_cal_parameter_get_delegatedfrom" corresponds="icalparameter_get_delegatedfrom" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_delegatedfrom" corresponds="icalparameter_set_delegatedfrom" kind="set" since="1.0">
@@ -322,13 +356,28 @@
     </method>
     <method name="i_cal_parameter_get_delegatedto" corresponds="icalparameter_get_delegatedto" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_delegatedto" corresponds="icalparameter_set_delegatedto" kind="set" since="1.0">
         <parameter type="ICalParameter *" name="value" comment="The #ICalParameter to be set"/>
         <parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
         <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_new_derived" corresponds="icalparameter_new_derived" kind="constructor" since="3.1">
+        <parameter type="ICalParameterDerived" name="v" comment="An initial value for the new #ICalParameter"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
+        <comment xml:space="preserve">Creates a new #ICalParameter of kind %I_CAL_DERIVED_PARAMETER holding value @v of type #ICalParameterDerived</comment>
+    </method>
+    <method name="i_cal_parameter_get_derived" corresponds="icalparameter_get_derived" kind="get" since="3.1">
+        <parameter type="const ICalParameter *" name="param" comment="An #ICalParameter to be queried"/>
+        <returns type="ICalParameterDerived" comment="The value of the @param of type #ICalParameterDerived"/>
+        <comment xml:space="preserve">Gets value of the @param of kind %I_CAL_DERIVED_PARAMETER</comment>
+    </method>
+    <method name="i_cal_parameter_set_derived" corresponds="icalparameter_set_derived" kind="set" since="3.1">
+        <parameter type="ICalParameter *" name="param" comment="An #ICalParameter"/>
+        <parameter type="ICalParameterDerived" name="v" comment="The value of type #ICalParameterDerived to be set"/>
+        <comment xml:space="preserve">Sets value @v to parameter @param of kind %I_CAL_DERIVED_PARAMETER</comment>
     </method>
     <method name="i_cal_parameter_new_dir" corresponds="icalparameter_new_dir" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The string used to create the new #ICalParameter"/>
@@ -337,12 +386,42 @@
     </method>
     <method name="i_cal_parameter_get_dir" corresponds="icalparameter_get_dir" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_dir" corresponds="icalparameter_set_dir" kind="set" since="1.0">
         <parameter type="ICalParameter *" name="value" comment="The #ICalParameter to be set"/>
         <parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_new_display" corresponds="icalparameter_new_display" kind="constructor" since="3.0.15">
+        <parameter type="ICalParameterDisplay" name="value" comment="The #ICalParameterDisplay value of the new #ICalParameter"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_get_display" corresponds="icalparameter_get_display" kind="get" since="3.0.15">
+        <parameter type="const ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
+        <returns type="ICalParameterDisplay" comment="The #ICalParameterDisplay value of the @param"/>
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_set_display" corresponds="icalparameter_set_display" kind="set" since="3.0.15">
+        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be set"/>
+        <parameter type="ICalParameterDisplay" name="value" comment="The #ICalParameterDisplay to set into the @param"/>
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_new_email" corresponds="icalparameter_new_email" kind="constructor" since="3.0.15">
+        <parameter type="const gchar *" name="value" comment="The string value of the new #ICalParameter"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_get_email" corresponds="icalparameter_get_email" kind="get" since="3.0.15">
+        <parameter type="const ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
+        <returns type="const gchar *" annotation="nullable" comment="The string value of the @param"/>
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_set_email" corresponds="icalparameter_set_email" kind="set" since="3.0.15">
+        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be set"/>
+        <parameter type="const gchar *" name="value" comment="The string value to set into the @param"/>
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_new_enable" corresponds="icalparameter_new_enable" kind="constructor" since="1.0">
@@ -390,6 +469,21 @@
         <parameter type="ICalParameterFbtype" name="v" comment="The type of #ICalParameter to be set in the @value"/>
         <comment xml:space="preserve"></comment>
     </method>
+    <method name="i_cal_parameter_new_feature" corresponds="icalparameter_new_feature" kind="constructor" since="3.0.15">
+        <parameter type="ICalParameterFeature" name="value" comment="The #ICalParameterFeature value of the new #ICalParameter"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_get_feature" corresponds="icalparameter_get_feature" kind="get" since="3.0.15">
+        <parameter type="const ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
+        <returns type="ICalParameterFeature" comment="The #ICalParameterFeature value of the @param"/>
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_set_feature" corresponds="icalparameter_set_feature" kind="set" since="3.0.15">
+        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be set"/>
+        <parameter type="ICalParameterFeature" name="value" comment="The #ICalParameterFeature to set into the @param"/>
+        <comment xml:space="preserve"></comment>
+    </method>
     <method name="i_cal_parameter_new_filename" corresponds="icalparameter_new_filename" kind="constructor" since="2.0">
         <parameter type="const gchar *" name="v" comment="The string used to create the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
@@ -397,7 +491,7 @@
     </method>
     <method name="i_cal_parameter_get_filename" corresponds="icalparameter_get_filename" kind="get" since="2.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_filename" corresponds="icalparameter_set_filename" kind="set" since="2.0">
@@ -412,7 +506,7 @@
     </method>
     <method name="i_cal_parameter_get_fmttype" corresponds="icalparameter_get_fmttype" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_fmttype" corresponds="icalparameter_set_fmttype" kind="set" since="1.0">
@@ -427,7 +521,7 @@
     </method>
     <method name="i_cal_parameter_get_iana" corresponds="icalparameter_get_iana" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_iana" corresponds="icalparameter_set_iana" kind="set" since="1.0">
@@ -442,12 +536,27 @@
     </method>
     <method name="i_cal_parameter_get_id" corresponds="icalparameter_get_id" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_id" corresponds="icalparameter_set_id" kind="set" since="1.0">
         <parameter type="ICalParameter *" name="value" comment="The #ICalParameter to be set"/>
         <parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_new_label" corresponds="icalparameter_new_label" kind="constructor" since="3.0.15">
+        <parameter type="const gchar *" name="value" comment="The string value of the new #ICalParameter"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_get_label" corresponds="icalparameter_get_label" kind="get" since="3.0.15">
+        <parameter type="const ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
+        <returns type="const gchar *" annotation="nullable" comment="The string value of the @param"/>
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_set_label" corresponds="icalparameter_set_label" kind="set" since="3.0.15">
+        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be set"/>
+        <parameter type="const gchar *" name="value" comment="The string value to set into the @param"/>
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_new_language" corresponds="icalparameter_new_language" kind="constructor" since="1.0">
@@ -457,7 +566,7 @@
     </method>
     <method name="i_cal_parameter_get_language" corresponds="icalparameter_get_language" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_language" corresponds="icalparameter_set_language" kind="set" since="1.0">
@@ -472,7 +581,7 @@
     </method>
     <method name="i_cal_parameter_get_latency" corresponds="icalparameter_get_latency" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_latency" corresponds="icalparameter_set_latency" kind="set" since="1.0">
@@ -502,7 +611,7 @@
     </method>
     <method name="i_cal_parameter_get_localize" corresponds="icalparameter_get_localize" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_localize" corresponds="icalparameter_set_localize" kind="set" since="1.0">
@@ -517,7 +626,7 @@
     </method>
     <method name="i_cal_parameter_get_managedid" corresponds="icalparameter_get_managedid" kind="get" since="2.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_managedid" corresponds="icalparameter_set_managedid" kind="set" since="2.0">
@@ -532,7 +641,7 @@
     </method>
     <method name="i_cal_parameter_get_member" corresponds="icalparameter_get_member" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_member" corresponds="icalparameter_set_member" kind="set" since="1.0">
@@ -547,7 +656,7 @@
     </method>
     <method name="i_cal_parameter_get_modified" corresponds="icalparameter_get_modified" kind="get" since="2.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_modified" corresponds="icalparameter_set_modified" kind="set" since="2.0">
@@ -562,13 +671,28 @@
     </method>
     <method name="i_cal_parameter_get_options" corresponds="icalparameter_get_options" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_options" corresponds="icalparameter_set_options" kind="set" since="1.0">
         <parameter type="ICalParameter *" name="value" comment="The #ICalParameter to be set"/>
         <parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
         <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_new_order" corresponds="icalparameter_new_order" kind="constructor" since="3.1">
+        <parameter type="gint" name="v" comment="An initial value for the new #ICalParameter"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
+        <comment xml:space="preserve">Creates a new #ICalParameter of kind %I_CAL_ORDER_PARAMETER holding value @v.</comment>
+    </method>
+    <method name="i_cal_parameter_get_order" corresponds="icalparameter_get_order" kind="get" since="3.1">
+        <parameter type="const ICalParameter *" name="param" comment="An #ICalParameter to be queried"/>
+        <returns type="gint" comment="The value of the @param" />
+        <comment xml:space="preserve">Gets value of the @param of kind %I_CAL_ORDER_PARAMETER</comment>
+    </method>
+    <method name="i_cal_parameter_set_order" corresponds="icalparameter_set_order" kind="set" since="3.1">
+        <parameter type="ICalParameter *" name="param" comment="An #ICalParameter"/>
+        <parameter type="gint" name="v" comment="The value to set"/>
+        <comment xml:space="preserve">Sets value @v to parameter @param of kind %I_CAL_ORDER_PARAMETER</comment>
     </method>
     <method name="i_cal_parameter_new_partstat" corresponds="icalparameter_new_partstat" kind="constructor" since="1.0">
         <parameter type="ICalParameterPartstat" name="v" comment="The type of #ICalParameter to be created"/>
@@ -585,6 +709,21 @@
         <parameter type="ICalParameterPartstat" name="v" comment="The type of #ICalParameter to be set in the @value"/>
         <comment xml:space="preserve"></comment>
     </method>
+    <method name="i_cal_parameter_new_patchaction" corresponds="icalparameter_new_patchaction" kind="constructor" since="3.0.15">
+        <parameter type="ICalParameterPatchaction" name="value" comment="The #ICalParameterPatchaction value of the new #ICalParameter"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_get_patchaction" corresponds="icalparameter_get_patchaction" kind="get" since="3.0.15">
+        <parameter type="const ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
+        <returns type="ICalParameterPatchaction" comment="The #ICalParameterPatchaction value of the @param"/>
+        <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_set_patchaction" corresponds="icalparameter_set_patchaction" kind="set" since="3.0.15">
+        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be set"/>
+        <parameter type="ICalParameterPatchaction" name="value" comment="The #ICalParameterPatchaction to set into the @param"/>
+        <comment xml:space="preserve"></comment>
+    </method>
     <method name="i_cal_parameter_new_publiccomment" corresponds="icalparameter_new_publiccomment" kind="constructor" since="2.0">
         <parameter type="const gchar *" name="v" comment="The string used to create the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
@@ -592,7 +731,7 @@
     </method>
     <method name="i_cal_parameter_get_publiccomment" corresponds="icalparameter_get_publiccomment" kind="get" since="2.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_publiccomment" corresponds="icalparameter_set_publiccomment" kind="set" since="2.0">
@@ -622,7 +761,7 @@
     </method>
     <method name="i_cal_parameter_get_reason" corresponds="icalparameter_get_reason" kind="get" since="2.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_reason" corresponds="icalparameter_set_reason" kind="set" since="2.0">
@@ -757,13 +896,28 @@
     </method>
     <method name="i_cal_parameter_get_schedulestatus" corresponds="icalparameter_get_schedulestatus" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_schedulestatus" corresponds="icalparameter_set_schedulestatus" kind="set" since="1.0">
         <parameter type="ICalParameter *" name="value" comment="The #ICalParameter to be set"/>
         <parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
         <comment xml:space="preserve"></comment>
+    </method>
+    <method name="i_cal_parameter_new_schema" corresponds="icalparameter_new_schema" kind="constructor" since="3.1">
+        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalParameter"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
+        <comment xml:space="preserve">Creates a new #ICalParameter of kind %I_CAL_SCHEMA_PARAMETER holding value @v.</comment>
+    </method>
+    <method name="i_cal_parameter_get_schema" corresponds="icalparameter_get_schema" kind="get" since="3.1">
+        <parameter type="const ICalParameter *" name="param" comment="An #ICalParameter to be queried"/>
+        <returns type="const gchar *" comment="The value of the @param" />
+        <comment xml:space="preserve">Gets value of the @param of kind %I_CAL_SCHEMA_PARAMETER</comment>
+    </method>
+    <method name="i_cal_parameter_set_schema" corresponds="icalparameter_set_schema" kind="set" since="3.1">
+        <parameter type="ICalParameter *" name="param" comment="An #ICalParameter"/>
+        <parameter type="const gchar *" name="v" comment="The value to set"/>
+        <comment xml:space="preserve">Sets value @v to parameter @param of kind %I_CAL_SCHEMA_PARAMETER</comment>
     </method>
     <method name="i_cal_parameter_new_sentby" corresponds="icalparameter_new_sentby" kind="constructor" since="1.0">
         <parameter type="const gchar *" name="v" comment="The string used to create the new #ICalParameter"/>
@@ -772,7 +926,7 @@
     </method>
     <method name="i_cal_parameter_get_sentby" corresponds="icalparameter_get_sentby" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_sentby" corresponds="icalparameter_set_sentby" kind="set" since="1.0">
@@ -787,7 +941,7 @@
     </method>
     <method name="i_cal_parameter_get_size" corresponds="icalparameter_get_size" kind="get" since="2.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_size" corresponds="icalparameter_set_size" kind="set" since="2.0">
@@ -832,7 +986,7 @@
     </method>
     <method name="i_cal_parameter_get_tzid" corresponds="icalparameter_get_tzid" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_tzid" corresponds="icalparameter_set_tzid" kind="set" since="1.0">
@@ -862,7 +1016,7 @@
     </method>
     <method name="i_cal_parameter_get_x" corresponds="icalparameter_get_x" kind="get" since="1.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
-        <returns type="const gchar *" annotation="allow-none" comment="The property of the @value" />
+        <returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_x" corresponds="icalparameter_set_x" kind="set" since="1.0">

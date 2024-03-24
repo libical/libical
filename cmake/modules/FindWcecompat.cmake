@@ -5,9 +5,11 @@
 #  WCECOMPAT_INCLUDE_DIR - Wcecompat include directory
 #  WCECOMPAT_LIBRARIES - Libraries needed to use Wcecompat
 #
-# Copyright (c) 2010, Andreas Holzammer, <andy@kdab.com>
+# SPDX-FileCopyrightText: 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+# Author: Andreas Holzammer, <andy@kdab.com>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 if(WCECOMPAT_INCLUDE_DIR AND WCECOMPAT_LIB_FOUND)
   set(Wcecompat_FIND_QUIETLY TRUE)

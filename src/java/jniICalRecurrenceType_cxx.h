@@ -2,18 +2,10 @@
  FILE: jniICalRecurrenceType_cxx.h
  CREATOR: structConverter
 
- (C) COPYRIGHT 2002, Critical Path
+ SPDX-FileCopyrightText: 2002, Critical Path
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 #ifndef _jni_ICalRecurrenceType_H_
 #define _jni_ICalRecurrenceType_H_
@@ -62,7 +54,6 @@ void jni_SetAll_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenc
 void jni_GetAll_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv* env, jobject thisICalRecurrenceType);
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalRecurrenceType_init__J(JNIEnv* env, jobject thisICalRecurrenceType, jlong data);
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalRecurrenceType_initFIDs(JNIEnv *env, jclass clazz);
-
 
 #ifdef __cplusplus
 }

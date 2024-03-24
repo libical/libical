@@ -1,4 +1,8 @@
-/* access_properties_and_parameters.c */
+/* access_properties_and_parameters.c
+
+  SPDX-FileCopyrightText: <eric@civicknowledge.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+*/
 
 #include <libical/ical.h>
 #include <stdlib.h>
@@ -47,7 +51,6 @@ void get_required_attendees(icalcomponent* event)
             printf("%s",attendee);
         }
     }
-
 }
 
 /* Here is a similar example. If an attendee has a PARTSTAT of
@@ -93,13 +96,12 @@ void update_attendees(icalcomponent* event)
                 icalparameter_new_partstat(ICAL_PARTSTAT_TENTATIVE)
                 );
         }
-
     }
 }
 
 /* Here are some examples of manipulating properties */
 
-void test_properties()
+void test_properties(void)
 {
     icalproperty *prop;
     icalparameter *param;
@@ -115,7 +117,7 @@ void test_properties()
         icalparameter_new_cn("A Common Name 2"),
         icalparameter_new_cn("A Common Name 3"),
         icalparameter_new_cn("A Common Name 4"),
-        0);
+        (void *)0);
 
     /* Iterate through all of the parameters in the property */
     for(param = icalproperty_get_first_parameter(prop,ICAL_ANY_PARAMETER);
@@ -146,5 +148,4 @@ void test_properties()
     /* Frees the original and the clone */
     icalproperty_free(clone);
     icalproperty_free(prop);
-
 }

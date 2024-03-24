@@ -1,18 +1,9 @@
 /*======================================================================
  FILE: regression-utils.c
 
- (C) COPYRIGHT 1999 Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original author is Eric Busboom
 ======================================================================*/
@@ -23,6 +14,9 @@
 
 #include "libical/ical.h"
 
+#include "test-malloc.h"
+#include "regression.h"
+
 #include <stdlib.h>
 
 int QUIET = 0;
@@ -30,12 +24,12 @@ int VERBOSE = 1;
 
 static char ictt_str[1024];
 
-const char *ical_timet_string(const time_t t)
+const char *ical_timet_string(const icaltime_t t)
 {
     struct tm tmp, stm;
 
     memset(&tmp, 0, sizeof(tmp));
-    if (gmtime_r(&t, &tmp)) {
+    if (icalgmtime_r(&t, &tmp)) {
         stm = tmp;
     } else {
         memset(&stm, 0, sizeof(stm));
@@ -68,10 +62,10 @@ const char *ictt_as_string(struct icaltimetype t)
 
 char *icaltime_as_ctime(struct icaltimetype t)
 {
-    time_t tt;
+    icaltime_t tt;
 
     tt = icaltime_as_timet(t);
-    snprintf(ictt_str, sizeof(ictt_str), "%s", ctime(&tt));
+    snprintf(ictt_str, sizeof(ictt_str), "%s", icalctime(&tt));
 
     return ictt_str;
 }
@@ -93,7 +87,7 @@ void die_on_errors_set(int val)
     die_on_errors = val;
 }
 
-void _ok(const char *test_name, int success, char *file, int linenum, const char *test)
+void _ok(const char *test_name, int success, const char *file, int linenum, const char *test)
 {
     testnumber++;
 
@@ -114,7 +108,7 @@ void _ok(const char *test_name, int success, char *file, int linenum, const char
     }
 }
 
-void _is(const char *test_name, const char *str1, const char *str2, char *file, int linenum)
+void _is(const char *test_name, const char *str1, const char *str2, const char *file, int linenum)
 {
     int diff;
 
@@ -135,7 +129,7 @@ void _is(const char *test_name, const char *str1, const char *str2, char *file, 
     }
 }
 
-void _int_is(char *test_name, int i1, int i2, char *file, int linenum)
+void _int_is(const char *test_name, int i1, int i2, const char *file, int linenum)
 {
     _ok(test_name, (i1 == i2), file, linenum, "");
 
@@ -196,12 +190,29 @@ int test_end(void)
             printf("%s%d/%d ", prefix, this_set, failed_tests[i].test);
         }
         printf("\n");
-
     } else {
         printf("\n        All Tests Successful.\n");
     }
 
     return failed;
+}
+
+/**
+  * Bring all memory that is allocated as side effect into a stable state, so we can calculate
+  * stable memory allocation statistics.
+  */
+static void cleanup_nondeterministic_memory(void)
+{
+    // icalerrno_return() allocates a buffer on it's first use per thread. Let's allocate it
+    // now, so it doesn't disturb our test statistics.
+    icalerrno_return();
+
+    // Built-in timezones are cached by libical. By freeing them, they don't influence our statistics.
+    icaltimezone_free_builtin_timezones();
+
+    // Memory that was added to the ring buffer is not required to be freed by the caller, so
+    // we free it here to keep our statistics clean.
+    icalmemory_free_ring();
 }
 
 void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int headeronly)
@@ -212,7 +223,29 @@ void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int h
         test_header(test_name, test_set);
 
     if (!headeronly && (do_test == 0 || do_test == test_set)) {
+
+        struct testmalloc_statistics mem_statistics;
+
+        // Clean up cached and other kind of non-deterministic memory.
+        cleanup_nondeterministic_memory();
+
+        // Now that we are in a stable state, reset the memory statistics and start counting.
+        testmalloc_reset();
+
+        // Run the test.
         (*test_fcn) ();
+
+        // Before getting the statistics, clean up any non-deterministic memory again, so it
+        // doesn't influence the statistics.
+        cleanup_nondeterministic_memory();
+
+        // Now we should get clean statistics.
+        testmalloc_get_statistics(&mem_statistics);
+
+        ok("no memory leaked",
+            (mem_statistics.mem_allocated_current == 0) &&
+            (mem_statistics.blocks_allocated == 0));
+
         if (!QUIET)
             printf("\n");
     }

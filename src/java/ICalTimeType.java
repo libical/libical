@@ -1,7 +1,8 @@
 /*======================================================================
  FILE: ICalTimeType.java
  CREATOR: structConverter 01/11/02
- (C) COPYRIGHT 2002, Critical Path
+ SPDX-FileCopyrightText: 2002, Critical Path
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
 package net.cp.jlibical;
@@ -132,4 +133,3 @@ public class ICalTimeType
     private int	is_date;
     private String	zone = new String();	//   Converted from char*
 }
-

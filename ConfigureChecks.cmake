@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 include(CheckIncludeFiles)
 check_include_files(byteswap.h HAVE_BYTESWAP_H)
 check_include_files(dirent.h HAVE_DIRENT_H)
@@ -64,17 +67,21 @@ endif()
 if(NOT DEFINED CMAKE_REQUIRED_LIBRARIES)
   set(CMAKE_REQUIRED_LIBRARIES "")
 endif()
-set(_SAVE_RQL ${CMAKE_REQUIRED_LIBRARIES})
-set(CMAKE_REQUIRED_LIBRARIES kernel32.lib)
-check_function_exists(GetNumberFormat HAVE_GETNUMBERFORMAT) #Windows <windows.h>
-set(CMAKE_REQUIRED_LIBRARIES ${_SAVE_RQL})
 
 include(CheckTypeSize)
 check_type_size(intptr_t SIZEOF_INTPTR_T)
 check_type_size(pid_t SIZEOF_PID_T)
 check_type_size(size_t SIZEOF_SIZE_T)
 check_type_size(ssize_t SIZEOF_SSIZE_T)
-check_type_size(time_t SIZEOF_TIME_T)
+if(WIN32 AND MSVC AND USE_32BIT_TIME_T)
+  set(_SAVE_RQD ${CMAKE_REQUIRED_DEFINITIONS})
+  set(CMAKE_REQUIRED_DEFINITIONS -D_USE_32BIT_TIME_T)
+  check_type_size(time_t SIZEOF_TIME_T)
+  set(CMAKE_REQUIRED_DEFINITIONS ${_SAVE_RQD})
+else()
+  check_type_size(time_t SIZEOF_TIME_T)
+endif()
+check_type_size(${ICAL_ICALTIME_T_TYPE} SIZEOF_ICALTIME_T)
 check_type_size(wint_t SIZEOF_WINT_T)
 
 include(FindThreads)

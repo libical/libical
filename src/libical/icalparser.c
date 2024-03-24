@@ -2,31 +2,11 @@
  FILE: icalparser.c
  CREATOR: eric 04 August 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
-
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
-
-  The Initial Developer of the Original Code is Eric Busboom
+ The Initial Developer of the Original Code is Eric Busboom
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -47,6 +27,8 @@
 #define MAXIMUM_ALLOWED_PARAMETERS 100
 #define MAXIMUM_ALLOWED_MULTIPLE_VALUES 500
 #define MAXIMUM_ALLOWED_ERRORS 100 // Limit the number of errors created by insert_error
+
+static enum icalparser_ctrl icalparser_ctrl_g = ICALPARSER_CTRL_KEEP;
 
 struct icalparser_impl
 {
@@ -102,7 +84,7 @@ icalparser *icalparser_new(void)
 {
     struct icalparser_impl *impl = 0;
 
-    if ((impl = (struct icalparser_impl *)malloc(sizeof(struct icalparser_impl))) == 0) {
+    if ((impl = (struct icalparser_impl *)icalmemory_new_buffer(sizeof(struct icalparser_impl))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -135,7 +117,7 @@ void icalparser_free(icalparser *parser)
 
     pvl_free(parser->components);
 
-    free(parser);
+    icalmemory_free_buffer(parser);
 }
 
 void icalparser_set_gen_data(icalparser *parser, void *data)
@@ -175,6 +157,10 @@ static char *parser_get_next_char(char c, char *str, int qm)
 /** Makes a new tmp buffer out of a substring. */
 static char *make_segment(char *start, char *end)
 {
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
     char *buf, *tmp;
     ptrdiff_t size = (ptrdiff_t)(end - start);
 
@@ -189,6 +175,9 @@ static char *make_segment(char *start, char *end)
     }
 
     return buf;
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 static char *parser_get_prop_name(char *line, char **end)
@@ -323,7 +312,7 @@ static char *parser_get_param_name_heap(char *line, char **end)
         *end = *end + 1;
         next = (**end == '"') ? *end : parser_get_next_char('"', *end, 0);
         if (next == 0) {
-            free(str);
+            icalmemory_free_buffer(str);
             *end = NULL;
             return 0;
         }
@@ -420,8 +409,8 @@ static char *parser_get_next_value(char *line, char **end, icalvalue_kind kind)
                 continue;
             }
         }
-        /* ignore all , for query value. select dtstart, dtend etc ... */
-        else if (kind == ICAL_QUERY_VALUE) {
+        /* ignore all commas for query and x values. select dtstart, dtend etc ... */
+        else if (kind == ICAL_QUERY_VALUE || kind == ICAL_X_VALUE) {
             if (next != 0) {
                 p = next + 1;
                 continue;
@@ -552,12 +541,12 @@ char *icalparser_get_line(icalparser *parser,
             if (parser->temp[0] == '\0') {
 
                 if (line[0] != '\0') {
-                    /* There is data in the output, so fall trhough and process it */
+                    /* There is data in the output, so fall through and process it */
                     break;
                 } else {
                     /* No data in output; return and signal that there
                        is no more input */
-                    free(line);
+                    icalmemory_free_buffer(line);
                     return 0;
                 }
             }
@@ -619,7 +608,7 @@ static void insert_error(icalparser *parser, icalcomponent *comp, const char *te
 
     icalcomponent_add_property(
         comp,
-        icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), 0));
+        icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), (void *)0));
 
     parser->error_count++;
 }
@@ -661,8 +650,8 @@ icalcomponent *icalparser_parse(icalparser *parser,
                 /* This is bad news... assert? */
             }
 
-            assert(parser->root_component == 0);
-            assert(pvl_count(parser->components) == 0);
+            icalassert(parser->root_component == 0);
+            icalassert(pvl_count(parser->components) == 0);
 
             if (root == 0) {
                 /* Just one component */
@@ -682,7 +671,7 @@ icalcomponent *icalparser_parse(icalparser *parser,
 
             } else {
                 /* Badness */
-                assert(0);
+                icalassert(0);
             }
 
             c = 0;
@@ -719,6 +708,47 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
     if (line_is_blank(line) == 1) {
         return 0;
+    }
+
+    if (icalparser_ctrl_g != ICALPARSER_CTRL_KEEP) {
+        static const unsigned char is_icalctrl[256] = {
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        };
+
+        char *c, *d;
+        for (c = d = line; *c; c++) {
+            if (!is_icalctrl[(unsigned char)*c]) {
+                *d++ = *c;
+            } else if (icalparser_ctrl_g == ICALPARSER_CTRL_OMIT) {
+                // omit CTRL character
+            } else {
+                icalcomponent *tail = pvl_data(pvl_tail(parser->components));
+                if (tail) {
+                    insert_error(
+                            parser, tail, line,
+                            "Content line contains invalid CONTROL characters",
+                            ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
+                }
+                parser->state = ICALPARSER_ERROR;
+                return 0;
+            }
+        }
+        *d = '\0';
     }
 
     /* Begin by getting the property name at the start of the line. The
@@ -820,7 +850,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 (void)icalparser_clean(parser); /* may reset parser->root_component */
             }
 
-            assert(pvl_count(parser->components) == 0);
+            icalassert(pvl_count(parser->components) == 0);
 
             parser->state = ICALPARSER_SUCCESS;
             rtrn = parser->root_component;
@@ -1247,7 +1277,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
     if (pvl_data(pvl_tail(parser->components)) == 0 && parser->level == 0) {
         /* HACK. Does this clause ever get executed? */
         parser->state = ICALPARSER_SUCCESS;
-        assert(0);
+        icalassert(0);
         return parser->root_component;
     } else {
         parser->state = ICALPARSER_IN_PROGRESS;
@@ -1341,7 +1371,14 @@ char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
         size = buf_size - 1;
     }
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
     strncpy(out, data->pos, size);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
     if(replace_cr) {
         *(out + size - 1) = '\n';
@@ -1365,6 +1402,9 @@ icalcomponent *icalparser_parse_string(const char *str)
     d.str = str;
 
     p = icalparser_new();
+    if (!p)
+        return NULL;
+
     icalparser_set_gen_data(p, &d);
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
@@ -1376,4 +1416,14 @@ icalcomponent *icalparser_parse_string(const char *str)
     icalparser_free(p);
 
     return c;
+}
+
+enum icalparser_ctrl icalparser_get_ctrl(void)
+{
+    return icalparser_ctrl_g;
+}
+
+void icalparser_set_ctrl(enum icalparser_ctrl ctrl)
+{
+    icalparser_ctrl_g = ctrl;
 }

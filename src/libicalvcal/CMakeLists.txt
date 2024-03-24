@@ -1,11 +1,14 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 add_definitions(-Dlibical_vcal_EXPORTS)
 
 include_directories(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_BINARY_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_BINARY_DIR}/src/libical
-  ${CMAKE_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_BINARY_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_BINARY_DIR}/src/libical
+  ${PROJECT_SOURCE_DIR}/src/libical
 )
 
 #these are generated sources, but we keep them in the repo
@@ -46,10 +49,12 @@ else()
     set_target_properties(icalvcal-static PROPERTIES OUTPUT_NAME "icalvcal")
   endif()
 endif()
-set_target_properties(icalvcal PROPERTIES
-  VERSION ${LIBICAL_LIB_VERSION_STRING}
-  SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-)
+if(NOT ANDROID)
+  set_target_properties(icalvcal PROPERTIES
+    VERSION ${LIBICAL_LIB_VERSION_STRING}
+    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+  )
+endif()
 set_target_properties(icalvcal PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   set_target_properties(icalvcal-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)

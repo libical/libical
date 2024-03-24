@@ -2,29 +2,9 @@
  FILE: sspm.c Parse Mime
  CREATOR: eric 25 June 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
-
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Initial Developer of the Original Code is Eric Busboom
 ======================================================================*/
@@ -34,6 +14,8 @@
 #endif
 
 #include "sspm.h"
+
+#include "icalmemory.h"
 
 #include <assert.h>
 #include <ctype.h>
@@ -81,7 +63,7 @@ struct mime_impl
 static void *sspm_make_multipart_part(struct mime_impl *impl, struct sspm_header *header);
 static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_header *parent_header);
 
-static struct major_content_type_map
+static const struct major_content_type_map
 {
     enum sspm_major_type type;
     const char *str;
@@ -99,7 +81,7 @@ static struct major_content_type_map
     {SSPM_UNKNOWN_MAJOR_TYPE, ""}
 };
 
-static struct minor_content_type_map
+static const struct minor_content_type_map
 {
     enum sspm_minor_type type;
     const char *str;
@@ -117,7 +99,7 @@ static struct minor_content_type_map
     {SSPM_UNKNOWN_MINOR_TYPE, ""}
 };
 
-static struct encoding_map
+static const struct encoding_map
 {
     enum sspm_encoding encoding;
     const char *str;
@@ -136,14 +118,14 @@ static char *sspm_strdup(const char *str)
 {
     char *s;
 
-    s = strdup(str);
+    s = icalmemory_strdup(str);
     return s;
 }
 
 static char *sspm_get_parameter(const char *line, const char *parameter)
 {
     char *p, *s, *q;
-    static char name[1024];
+    static ICAL_GLOBAL_VAR char name[1024];
 
     /* Find where the parameter name is in the line */
     p = strstr(line, parameter);
@@ -191,7 +173,7 @@ static char *sspm_get_parameter(const char *line, const char *parameter)
 
 static char *sspm_property_name(const char *line)
 {
-    static char name[1024];
+    static ICAL_GLOBAL_VAR char name[1024];
     char *c = strchr(line, ':');
 
     if (c != 0) {
@@ -205,7 +187,7 @@ static char *sspm_property_name(const char *line)
 
 static char *sspm_value(char *line)
 {
-    static char value[1024];
+    static ICAL_GLOBAL_VAR char value[1024];
 
     char *c, *s, *p;
 
@@ -270,7 +252,7 @@ static void sspm_default_free_part(void *part)
     _unused(part);
 }
 
-static struct sspm_action_map sspm_action_map[] = {
+static const struct sspm_action_map sspm_action_map[] = {
     {SSPM_UNKNOWN_MAJOR_TYPE, SSPM_UNKNOWN_MINOR_TYPE, sspm_default_new_part, sspm_default_add_line,
      sspm_default_end_part, sspm_default_free_part},
 };
@@ -397,7 +379,7 @@ static struct sspm_action_map get_action(struct mime_impl *impl,
             return sspm_action_map[i];
         }
     }
-    assert(i < len);    /*should return before now */
+    icalassert(i < len);    /*should return before now */
     return sspm_action_map[0];
 }
 
@@ -426,11 +408,11 @@ static enum sspm_major_type sspm_find_major_content_type(char *type)
     for (i = 0; major_content_type_map[i].type != SSPM_UNKNOWN_MAJOR_TYPE; i++) {
         if (strncmp(ltype, major_content_type_map[i].str,
                     strlen(major_content_type_map[i].str)) == 0) {
-            free(ltype);
+            icalmemory_free_buffer(ltype);
             return major_content_type_map[i].type;
         }
     }
-    free(ltype);
+    icalmemory_free_buffer(ltype);
     return major_content_type_map[i].type;      /* Should return SSPM_UNKNOWN_MINOR_TYPE */
 }
 
@@ -442,7 +424,7 @@ static enum sspm_minor_type sspm_find_minor_content_type(char *type)
     char *p = strchr(ltype, '/');
 
     if (p == 0) {
-        free(ltype);
+        icalmemory_free_buffer(ltype);
         return SSPM_UNKNOWN_MINOR_TYPE;
     }
 
@@ -450,12 +432,12 @@ static enum sspm_minor_type sspm_find_minor_content_type(char *type)
 
     for (i = 0; minor_content_type_map[i].type != SSPM_UNKNOWN_MINOR_TYPE; i++) {
         if (strncmp(p, minor_content_type_map[i].str, strlen(minor_content_type_map[i].str)) == 0) {
-            free(ltype);
+            icalmemory_free_buffer(ltype);
             return minor_content_type_map[i].type;
         }
     }
 
-    free(ltype);
+    icalmemory_free_buffer(ltype);
     return minor_content_type_map[i].type;      /* Should return SSPM_UNKNOWN_MINOR_TYPE */
 }
 
@@ -523,7 +505,7 @@ static void sspm_build_header(struct sspm_header *header, char *line)
             char *p = strchr(val, '/');
 
             if (header->minor_text != 0) {
-                free(header->minor_text);
+                icalmemory_free_buffer(header->minor_text);
             }
             if (p != 0) {
                 p++;    /* Skip the '/' */
@@ -536,7 +518,7 @@ static void sspm_build_header(struct sspm_header *header, char *line)
         }
         if (boundary != 0) {
             if (header->boundary != 0) {
-                free(header->boundary);
+                icalmemory_free_buffer(header->boundary);
             }
             header->boundary = sspm_strdup(boundary);
         }
@@ -559,7 +541,7 @@ static void sspm_build_header(struct sspm_header *header, char *line)
             header->encoding = SSPM_UNKNOWN_ENCODING;
         }
 
-        free(lencoding);
+        icalmemory_free_buffer(lencoding);
 
         header->def = 0;
 
@@ -567,13 +549,13 @@ static void sspm_build_header(struct sspm_header *header, char *line)
         char *cid = sspm_value(line);
 
         if (header->content_id != 0) {
-            free(header->content_id);
+            icalmemory_free_buffer(header->content_id);
         }
         header->content_id = sspm_strdup(cid);
         header->def = 0;
     }
-    free(val);
-    free(prop);
+    icalmemory_free_buffer(val);
+    icalmemory_free_buffer(prop);
 }
 
 static char *sspm_get_next_line(struct mime_impl *impl)
@@ -603,7 +585,7 @@ static void sspm_set_error(struct sspm_header *header, enum sspm_error error, ch
     header->error = error;
 
     if (header->error_text != 0) {
-        free(header->error_text);
+        icalmemory_free_buffer(header->error_text);
     }
 
     header->def = 0;
@@ -652,7 +634,7 @@ static void sspm_read_header(struct mime_impl *impl, struct sspm_header *header)
                 impl->state = IN_HEADER;
                 current_line++;
 
-                assert(strlen(buf) < TMP_BUF_SIZE);
+                icalassert(strlen(buf) < TMP_BUF_SIZE);
 
                 strncpy(header_lines[current_line], buf, TMP_BUF_SIZE);
                 header_lines[current_line][TMP_BUF_SIZE - 1] = '\0';
@@ -684,7 +666,7 @@ static void sspm_read_header(struct mime_impl *impl, struct sspm_header *header)
                     buf_start++;
                 }
 
-                assert(strlen(buf_start) + strlen(last_line) < TMP_BUF_SIZE);
+                icalassert(strlen(buf_start) + strlen(last_line) < TMP_BUF_SIZE);
 
                 strncat(last_line, buf_start, TMP_BUF_SIZE - strlen(last_line) - 1);
 
@@ -742,8 +724,8 @@ static void sspm_make_part(struct mime_impl *impl,
                 sspm_set_error(header, SSPM_UNEXPECTED_BOUNDARY_ERROR, line);
 
                 /* Read until the paired terminating boundary */
-                if ((boundary = (char *)malloc(strlen(line) + 5)) == 0) {
-                    fprintf(stderr, "Out of memory");
+                if ((boundary = (char *)icalmemory_new_buffer(strlen(line) + 5)) == 0) {
+                    icalerrprintf("Out of memory");
                     abort();
                 }
                 strcpy(boundary, line);
@@ -754,7 +736,7 @@ static void sspm_make_part(struct mime_impl *impl,
                         break;
                     }
                 }
-                free(boundary);
+                icalmemory_free_buffer(boundary);
 
                 break;
             }
@@ -780,8 +762,8 @@ static void sspm_make_part(struct mime_impl *impl,
                 sspm_set_error(parent_header, SSPM_WRONG_BOUNDARY_ERROR, msg);
 
                 /* Read until the paired terminating boundary */
-                if ((boundary = (char *)malloc(strlen(line) + 5)) == 0) {
-                    fprintf(stderr, "Out of memory");
+                if ((boundary = (char *)icalmemory_new_buffer(strlen(line) + 5)) == 0) {
+                    icalerrprintf("Out of memory");
                     abort();
                 }
                 strcpy(boundary, line);
@@ -791,7 +773,7 @@ static void sspm_make_part(struct mime_impl *impl,
                         break;
                     }
                 }
-                free(boundary);
+                icalmemory_free_buffer(boundary);
             }
         } else {
             char *data = 0;
@@ -799,8 +781,8 @@ static void sspm_make_part(struct mime_impl *impl,
 
             *size = strlen(line);
 
-            data = (char *)malloc(*size + 2);
-            assert(data != 0);
+            data = (char *)icalmemory_new_buffer(*size + 2);
+            icalassert(data != 0);
             if (header->encoding == SSPM_BASE64_ENCODING) {
                 rtrn = decode_base64(data, line, size);
             } else if (header->encoding == SSPM_QUOTED_PRINTABLE_ENCODING) {
@@ -811,14 +793,14 @@ static void sspm_make_part(struct mime_impl *impl,
                 strcpy(data, line);
             }
 
-            /* add a end-of-string after the data, just in case binary
+            /* add an end-of-string after the data, just in case binary
                data from decode64 gets passed to a string handling
                routine in add_line  */
             data[*size + 1] = '\0';
 
             action.add_line(part, header, data, *size);
 
-            free(data);
+            icalmemory_free_buffer(data);
         }
     }
 
@@ -867,7 +849,7 @@ static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_hea
         /* Error. Multipart headers must have a boundary */
 
         sspm_set_error(parent_header, SSPM_NO_BOUNDARY_ERROR, 0);
-        /* read all of the reamining lines */
+        /* read all of the remaining lines */
         while (sspm_get_next_line(impl) != 0) {
         }
 
@@ -880,7 +862,7 @@ static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_hea
         while ((line = sspm_get_next_line(impl)) != 0) {
             if (sspm_is_mime_boundary(line)) {
 
-                assert(parent_header != 0);
+                icalassert(parent_header != 0);
 
                 /* Check if it is the right boundary */
                 if (!sspm_is_mime_terminating_boundary(line) &&
@@ -899,8 +881,8 @@ static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_hea
                     sspm_set_error(parent_header, SSPM_WRONG_BOUNDARY_ERROR, msg);
 
                     /* Read until the paired terminating boundary */
-                    if ((boundary = (char *)malloc(strlen(line) + 5)) == 0) {
-                        fprintf(stderr, "Out of memory");
+                    if ((boundary = (char *)icalmemory_new_buffer(strlen(line) + 5)) == 0) {
+                        icalerrprintf("Out of memory");
                         abort();
                     }
                     strcpy(boundary, line);
@@ -910,7 +892,7 @@ static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_hea
                             break;
                         }
                     }
-                    free(boundary);
+                    icalmemory_free_buffer(boundary);
 
                     return 0;
                 }
@@ -1024,22 +1006,22 @@ int sspm_parse_mime(struct sspm_part *parts,
 static void sspm_free_header(struct sspm_header *header)
 {
     if (header->boundary != 0) {
-        free(header->boundary);
+        icalmemory_free_buffer(header->boundary);
     }
     if (header->minor_text != 0) {
-        free(header->minor_text);
+        icalmemory_free_buffer(header->minor_text);
     }
     if (header->charset != 0) {
-        free(header->charset);
+        icalmemory_free_buffer(header->charset);
     }
     if (header->filename != 0) {
-        free(header->filename);
+        icalmemory_free_buffer(header->filename);
     }
     if (header->content_id != 0) {
-        free(header->content_id);
+        icalmemory_free_buffer(header->content_id);
     }
     if (header->error_text != 0) {
-        free(header->error_text);
+        icalmemory_free_buffer(header->error_text);
     }
 }
 
@@ -1142,7 +1124,7 @@ char *decode_base64(char *dest, char *src, size_t *size)
             cc = -1;
         }
 
-        assert(cc < 64);
+        icalassert(cc < 64);
 
         /* If we've reached the end, fill the remaining slots in
            the bucket and do a final conversion */
@@ -1205,7 +1187,7 @@ static void sspm_append_hex(struct sspm_buffer *buf, char ch)
 {
     char tmp[4];
 
-    snprintf(tmp, sizeof(tmp), "=%02X", (unsigned int)ch);
+    snprintf(tmp, sizeof(tmp), "=%02X", (unsigned char)ch);
 
     sspm_append_string(buf, tmp);
 }
@@ -1226,7 +1208,7 @@ static void sspm_append_char(struct sspm_buffer *buf, char ch)
 
         buf->buf_size = (buf->buf_size) * 2 + final_length + 1;
 
-        new_buf = realloc(buf->buffer, buf->buf_size);
+        new_buf = icalmemory_resize_buffer(buf->buffer, buf->buf_size);
 
         new_pos = (void *)((size_t) new_buf + data_length);
 
@@ -1255,7 +1237,7 @@ void sspm_append_string(struct sspm_buffer *buf, const char *string)
 
         buf->buf_size = (buf->buf_size) * 2 + final_length;
 
-        new_buf = realloc(buf->buffer, buf->buf_size);
+        new_buf = icalmemory_resize_buffer(buf->buffer, buf->buf_size);
 
         new_pos = (void *)((size_t) new_buf + data_length);
 
@@ -1350,7 +1332,7 @@ static void sspm_write_base64(struct sspm_buffer *buf, char *inbuf, int size)
         break;
 
     default:
-        assert(0);
+        icalassert(0);
     }
 
     for (i = 0; i < 4; i++) {
@@ -1385,7 +1367,7 @@ static void sspm_encode_base64(struct sspm_buffer *buf, char *data, size_t size)
             inbuf[0] = inbuf[1] = inbuf[2] = 0;
         }
 
-        assert(lpos % 4 == 0);
+        icalassert(lpos % 4 == 0);
 
         if (lpos == 72) {
             sspm_append_string(buf, "\n");
@@ -1423,7 +1405,7 @@ static void sspm_write_header(struct sspm_buffer *buf, struct sspm_header *heade
     minor = sspm_minor_type_string(header->minor);
 
     if (header->minor == SSPM_UNKNOWN_MINOR_TYPE) {
-        assert(header->minor_text != 0);
+        icalassert(header->minor_text != 0);
         minor = header->minor_text;
     }
 
@@ -1471,7 +1453,7 @@ static void sspm_write_part(struct sspm_buffer *buf, struct sspm_part *part, int
     }
 
     if (part->header.encoding == SSPM_BASE64_ENCODING) {
-        assert(part->data_size != 0);
+        icalassert(part->data_size != 0);
         sspm_encode_base64(buf, part->data, part->data_size);
     } else if (part->header.encoding == SSPM_QUOTED_PRINTABLE_ENCODING) {
         sspm_encode_quoted_printable(buf, part->data);
@@ -1499,7 +1481,7 @@ static void sspm_write_multipart_part(struct sspm_buffer *buf,
 
     while (parts[*part_num].header.major != SSPM_NO_MAJOR_TYPE && level == parent_level + 1) {
 
-        assert(header->boundary != NULL);
+        icalassert(header->boundary != NULL);
         sspm_append_string(buf, header->boundary);
         sspm_append_char(buf, '\n');
 
@@ -1529,7 +1511,7 @@ int sspm_write_mime(struct sspm_part *parts, size_t num_parts,
 
     _unused(num_parts);
 
-    buf.buffer = malloc(4096);
+    buf.buffer = icalmemory_new_buffer(4096);
     buf.buffer[0] = '\0';
     buf.pos = buf.buffer;
     buf.buf_size = 10;

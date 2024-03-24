@@ -1,16 +1,7 @@
 /*
- * Copyright (C) 2015 William Yu <williamyu@gnome.org>
+ * SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
  *
- * This library is free software; you can redistribute it and/or modify
- * it under the terms of either:
- *
- *   The LGPL as published by the Free Software Foundation, version
- *   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
- *
- * Or:
- *
- *   The Mozilla Public License Version 2.0. You may obtain a copy of
- *   the License at https://www.mozilla.org/MPL/
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #include "generator.h"
@@ -1575,13 +1566,39 @@ gchar *get_translator_for_return(Ret *ret)
     return res;
 }
 
+static gboolean parameter_is_out(Parameter *para)
+{
+    GList *link;
+    for (link = para->annotations; link; link = g_list_next(link)) {
+        if (g_strcmp0(link->data, "out") == 0 ||
+            g_strcmp0(link->data, "inout") == 0 ||
+            g_str_has_prefix(link->data, "out ")) {
+              break;
+        }
+    }
+
+    return link != NULL;
+}
+
 static gboolean annotation_contains_nullable(GList *annotations) /* gchar * */
 {
     GList *link;
 
     for (link = annotations; link; link = g_list_next(link)) {
-        if (g_strcmp0(link->data, "allow-none") == 0 ||
-            g_strcmp0(link->data, "nullable") == 0) {
+        if (g_strcmp0(link->data, "nullable") == 0) {
+              break;
+        }
+    }
+
+    return link != NULL;
+}
+
+static gboolean annotation_contains_optional(GList *annotations) /* gchar * */
+{
+    GList *link;
+
+    for (link = annotations; link; link = g_list_next(link)) {
+        if (g_strcmp0(link->data, "optional") == 0) {
               break;
         }
     }
@@ -1873,7 +1890,7 @@ gchar *get_true_type(const gchar *type)
     return res;
 }
 
-static void initialize_default_value_table()
+static void initialize_default_value_table(void)
 {
     defaultValues = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
     (void)g_hash_table_insert(defaultValues, g_strdup("gboolean"), g_strdup("FALSE"));
@@ -2033,6 +2050,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
     gchar *defaultValue;
     gchar *retTrueType;
     guint namespace_len;
+    gboolean param_is_out;
 
     g_return_val_if_fail(method != NULL, NULL);
     g_return_val_if_fail(namespace != NULL && *namespace != '\0', NULL);
@@ -2095,7 +2113,10 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
                 (void)g_stpcpy(buffer + strlen(buffer), "\n");
             }
 
-            if (i != namespace_len && !annotation_contains_nullable(parameter->annotations)) {
+            param_is_out = parameter_is_out(parameter);
+            if (i != namespace_len && (
+                (!param_is_out && !annotation_contains_nullable(parameter->annotations)) ||
+                (param_is_out && !annotation_contains_optional(parameter->annotations)))) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
                 if (method->ret != NULL) {
                     (void)g_stpcpy(buffer + strlen(buffer), "g_return_val_if_fail (");
@@ -2136,6 +2157,54 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
     }
     g_free(buffer);
     return res;
+}
+
+static void generate_checks_file(const gchar *filename, GList *structures /* Structure * */)
+{
+    FILE *file;
+    GString *calls;
+    GList *link, *link2, *link3;
+
+    file = fopen(filename, "wt");
+    if (!file) {
+        g_warning("Failed to open '%s' for writing", filename);
+        return;
+    }
+
+    calls = g_string_new("");
+
+    fprintf(file, "#include \"libical-glib/libical-glib.h\"\n");
+
+    for (link = structures; link; link = g_list_next(link)) {
+        Structure *str = link->data;
+
+        for (link2 = str->enumerations; link2; link2 = g_list_next (link2)) {
+            Enumeration *enumeration = link2->data;
+            if (g_str_equal(enumeration->nativeName, "CUSTOM")) {
+                continue;
+            }
+            fprintf(file, "static void test_%s(%s value)\n", enumeration->name, enumeration->nativeName);
+            fprintf(file, "{\n"
+                          "    switch(value){\n");
+            for (link3 = enumeration->elements; link3; link3 = g_list_next (link3)) {
+                const gchar *nativeName = link3->data;
+                fprintf(file, "    case %s: break;\n", nativeName);
+            }
+            fprintf(file, "    }\n"
+                          "}\n");
+            g_string_append_printf(calls, "    test_%s((%s) %s);\n",
+                                   enumeration->name, enumeration->nativeName,
+                                   enumeration->defaultNative ? enumeration->defaultNative : "0");
+        }
+    }
+    fprintf(file, "int main(void)\n"
+                  "{\n"
+                  "%s"
+                  "    return 0;\n"
+                  "}\n", calls->str);
+    fclose(file);
+
+    (void)g_string_free(calls, TRUE);
 }
 
 static gint generate_library(const gchar *apis_dir)
@@ -2217,6 +2286,7 @@ static gint generate_library(const gchar *apis_dir)
             printf("The node cannot be parsed into a structure.\n");
             xmlFreeDoc(doc);
             res = 1;
+            structure_free(structure);
             goto out;
         }
 
@@ -2238,6 +2308,7 @@ static gint generate_library(const gchar *apis_dir)
                            structure->name);
                     xmlFreeDoc(doc);
                     res = 1;
+                    structure_free(structure);
                     goto out;
                 }
             }
@@ -2256,6 +2327,7 @@ static gint generate_library(const gchar *apis_dir)
                 printf("Please supply a default value for enum %s\n", enumeration->name);
                 xmlFreeDoc(doc);
                 res = 1;
+                structure_free(structure);
                 goto out;
             }
         }
@@ -2276,6 +2348,7 @@ static gint generate_library(const gchar *apis_dir)
         generate_header_and_source(structure, (char *)"");
     }
 
+    generate_checks_file("ical-glib-build-check.c", structures);
  out:
     g_dir_close(dir);
     g_hash_table_destroy(type2kind);

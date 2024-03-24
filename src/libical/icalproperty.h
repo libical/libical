@@ -2,18 +2,10 @@
  FILE: icalproperty.h
  CREATOR: eric 20 March 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifndef ICALPROPERTY_H
@@ -96,7 +88,7 @@ LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_name(icalproperty *pro
 /** @brief Removes the specified parameter reference from the property.
  *
  *  @param prop   A valid icalproperty.
- *  @param parameter   A reference to a specific icalparameter.
+ *  @param param  A reference to a specific icalparameter.
  *
  *  This function removes the specified parameter reference from the
  *  property.

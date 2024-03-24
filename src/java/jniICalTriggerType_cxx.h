@@ -2,18 +2,10 @@
  FILE: jniICalTriggerType_cxx.h
  CREATOR: structConverter
 
- (C) COPYRIGHT 2002, Critical Path
+ SPDX-FileCopyrightText: 2002, Critical Path
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifndef _jni_ICalTriggerType_H
@@ -22,7 +14,6 @@
 
 // I forgot how to do this using a typedef in c++!!!!
 #define ICalTriggerType icaltriggertype
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,7 +32,6 @@ void jni_SetAll_in_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_, J
 void jni_GetAll_from_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_, JNIEnv* env, jobject thisICalTriggerType);
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalTriggerType_init__J(JNIEnv* env, jobject thisICalTriggerType, jlong data);
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalTriggerType_initFIDs(JNIEnv *env, jclass clazz);
-
 
 #ifdef __cplusplus
 }

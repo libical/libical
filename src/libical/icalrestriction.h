@@ -2,18 +2,9 @@
   FILE: icalrestriction.h
   CREATOR: eric 24 April 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original code is icalrestriction.h
 
@@ -26,7 +17,7 @@
 
 /**
  * @file icalrestriction.h
- * @brief Functions to check if an ::icalcomponent meets the restrictions
+ * @brief Functions to check if an icalcomponent meets the restrictions
  *  imposed by the standard.
  */
 
@@ -76,7 +67,7 @@ typedef enum icalrestriction_kind
  * @param count The amount present that is to be checked against the restriction
  * @return 1 if the restriction is met, 0 if not
  *
- * ### Example
+ * @par Example
  * ```c
  * assert(icalrestriction_compare(ICALRESTRICTION_ONEPLUS, 5) == true);
  * assert(icalrestriction_compare(ICALRESTRICTION_NONE,    3) == false);
@@ -94,7 +85,7 @@ LIBICAL_ICAL_EXPORT int icalrestriction_compare(icalrestriction_kind restr, int 
  * Returns 0 and sets ::icalerrno if `NULL` is passed as @a comp, or if the
  * component is not a `VCALENDAR`.
  *
- * ### Example
+ * @par Example
  * ```c
  * icalcomponent *component = // ...
  *

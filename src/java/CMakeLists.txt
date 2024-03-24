@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
 ########### next target ###############
 
@@ -28,11 +30,12 @@ set(ical_jni_LIB_SRCS
 add_library(ical_jni ${LIBRARY_TYPE} ${ical_jni_LIB_SRCS})
 
 target_link_libraries(ical_jni ical_cxx)
-
-set_target_properties(ical_jni PROPERTIES
-  VERSION ${LIBICAL_LIB_VERSION_STRING}
-  SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-)
+if(NOT ANDROID)
+  set_target_properties(ical_jni PROPERTIES
+    VERSION ${LIBICAL_LIB_VERSION_STRING}
+    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+  )
+endif()
 install(
   TARGETS ical_jni
   EXPORT icalTargets

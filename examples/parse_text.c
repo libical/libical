@@ -1,6 +1,9 @@
 /* parse_text.c
 
- */
+  SPDX-FileCopyrightText: <eric@civicknowledge.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+*/
+
 #include <libical/ical.h>
 #include <stdlib.h>
 
@@ -43,7 +46,6 @@ void parse_text(char* argv[])
            completes a component, c will be non-zero */
         c = icalparser_add_line(parser,line);
 
-
         if (c != 0){
             char *temp = icalcomponent_as_ical_string_r(c);
             printf("%s", temp);
@@ -55,7 +57,6 @@ void parse_text(char* argv[])
         }
 
     } while ( line != 0);
-
 
     icalparser_free(parser);
 }

@@ -1,5 +1,8 @@
-# - try to find libxml
 #
+# SPDX-FileCopyrightText: Milan Crha <mcrha@redhat.com>
+# SPDX-License-Identifier: BSD-3-Clause
+#
+# - try to find libxml
 # Once done this will define
 #
 #  LIBXML_FOUND - system has libxml 2.0

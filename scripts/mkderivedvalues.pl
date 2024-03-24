@@ -1,17 +1,11 @@
 #!/usr/bin/perl
 ################################################################################
-# (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+# SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 #
-# This library is free software; you can redistribute it and/or modify
-# it under the terms of either:
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 #
-#   The LGPL as published by the Free Software Foundation, version
-#   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.txt
 #
-# Or:
 #
-#   The Mozilla Public License Version 2.0. You may obtain a copy of
-#   the License at https://www.mozilla.org/MPL/
 ################################################################################
 
 use lib '.';
@@ -226,7 +220,7 @@ $pointer_check_rv\
       if ($union_data eq 'string') {
 
         print
-"    if (impl->data.v_${union_data} != 0) {\n        free((void *)impl->data.v_${union_data});\n    }\n";
+"    if (impl->data.v_${union_data} != 0) {\n        icalmemory_free_buffer((void *)impl->data.v_${union_data});\n    }\n";
       }
 
       print "\

@@ -2,18 +2,10 @@
  FILE: regression.c
  CREATOR: eric 03 April 1999
 
- (C) COPYRIGHT 1999 Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
  ======================================================================*/
 #ifndef TEST_REGRESSION_H
 #define TEST_REGRESSION_H
@@ -52,7 +44,7 @@ extern "C"
     void test_bdbset(void);
 
 /* regression-utils.c */
-    const char *ical_timet_string(const time_t t);
+    const char *ical_timet_string(const icaltime_t t);
     const char *ictt_as_string(struct icaltimetype t);
     char *icaltime_as_ctime(struct icaltimetype t);
 
@@ -66,7 +58,7 @@ extern "C"
     void test_header(const char *title, int test_set);
     void test_start(int);
     int test_end(void);
-    void test_run(const char *test_name, void (*test_fcn) (), int do_test, int headeronly);
+    void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int headeronly);
 
 #ifdef  __cplusplus
 }

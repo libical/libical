@@ -1,0 +1,50 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+exclude: ^(zoneinfo/)
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.5.0
+  hooks:
+  - id: trailing-whitespace
+  - id: end-of-file-fixer
+  - id: check-added-large-files
+  - id: check-case-conflict
+  - id: check-yaml
+    args: [--allow-multiple-documents]
+    exclude: ^(.clang-tidy)
+  - id: check-json
+#- repo: https://github.com/pre-commit/mirrors-clang-format
+#  rev: v13.0.0
+#  hooks:
+#  - id: clang-format
+- repo: https://github.com/PyCQA/pylint
+  rev: v3.1.0
+  hooks:
+  - id: pylint
+    exclude: ^(.cmake-format.py)
+- repo: https://github.com/hhatto/autopep8
+  rev: v2.1.0
+  hooks:
+  - id: autopep8
+    exclude: ^(.cmake-format.py)
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.2.6
+  hooks:
+  - id: codespell
+- repo: https://github.com/cheshirekow/cmake-format-precommit
+  rev: v0.6.13
+  hooks:
+  - id: cmake-lint
+    exclude: (cmake/Toolchain-|.h.cmake|/Doxyfile.cmake)
+- repo: https://github.com/markdownlint/markdownlint
+  rev: v0.12.0
+  hooks:
+  - id: markdownlint
+    entry: mdl
+    language: ruby
+    files: \.(md|mdown|markdown)$
+- repo: https://github.com/fsfe/reuse-tool
+  rev: v3.0.1
+  hooks:
+  - id: reuse
+    args: [--suppress-deprecation]

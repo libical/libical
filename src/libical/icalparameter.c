@@ -2,18 +2,9 @@
  FILE: icalderivedparameters.{c,h}
  CREATOR: eric 09 May 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
   The original code is icalderivedparameters.{c,h}
 
@@ -36,7 +27,7 @@ LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparame
 {
     struct icalparameter_impl *v;
 
-    if ((v = (struct icalparameter_impl *)malloc(sizeof(struct icalparameter_impl))) == 0) {
+    if ((v = (struct icalparameter_impl *)icalmemory_new_buffer(sizeof(struct icalparameter_impl))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -67,18 +58,18 @@ void icalparameter_free(icalparameter *param)
     }
 
     if (param->string != 0) {
-        free((void *)param->string);
+        icalmemory_free_buffer((void *)param->string);
     }
 
     if (param->x_name != 0) {
-        free((void *)param->x_name);
+        icalmemory_free_buffer((void *)param->x_name);
     }
 
     memset(param, 0, sizeof(icalparameter));
 
     param->parent = 0;
     param->id[0] = 'X';
-    free(param);
+    icalmemory_free_buffer(param);
 }
 
 icalparameter *icalparameter_clone(const icalparameter *old)
@@ -141,7 +132,7 @@ icalparameter *icalparameter_new_from_string(const char *str)
 
     if (eq == 0) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(cpy);
+        icalmemory_free_buffer(cpy);
         return 0;
     }
 
@@ -153,7 +144,7 @@ icalparameter *icalparameter_new_from_string(const char *str)
 
     if (kind == ICAL_NO_PARAMETER) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(cpy);
+        icalmemory_free_buffer(cpy);
         return 0;
     }
 
@@ -165,7 +156,7 @@ icalparameter *icalparameter_new_from_string(const char *str)
         icalparameter_set_iana_name(param, cpy);
     }
 
-    free(cpy);
+    icalmemory_free_buffer(cpy);
 
     return param;
 }
@@ -232,11 +223,8 @@ static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
 
     /* Copy the parameter value */
     for (p = value; *p; p++) {
-        if (icalparameter_is_safe_char((unsigned char)*p, qm)) {
-            icalmemory_append_char(buf, buf_ptr, buf_size, *p);
-        } else {
-            /* Encode unsafe characters per RFC6868, otherwise replace with SP */
-            switch (*p) {
+        /* Encode unsafe characters per RFC6868, otherwise replace with SP */
+        switch (*p) {
             case '\n':
                 icalmemory_append_string(buf, buf_ptr, buf_size, "^n");
                 break;
@@ -250,9 +238,12 @@ static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
                 break;
 
             default:
-                icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
+                if (icalparameter_is_safe_char((unsigned char)*p, qm)) {
+                    icalmemory_append_char(buf, buf_ptr, buf_size, *p);
+                } else {
+                    icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
+                }
                 break;
-            }
         }
     }
 
@@ -297,7 +288,7 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
         if (param->kind == ICAL_NO_PARAMETER ||
             param->kind == ICAL_ANY_PARAMETER || kind_string == 0) {
             icalerror_set_errno(ICAL_BADARG_ERROR);
-            free(buf);
+            icalmemory_free_buffer(buf);
             return 0;
         }
 
@@ -315,7 +306,7 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
     } else {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        free(buf);
+        icalmemory_free_buffer(buf);
         return 0;
     }
 
@@ -352,7 +343,7 @@ void icalparameter_set_xname(icalparameter *param, const char *v)
     icalerror_check_arg_rv((v != 0), "v");
 
     if (param->x_name != 0) {
-        free((void *)param->x_name);
+        icalmemory_free_buffer((void *)param->x_name);
     }
 
     param->x_name = icalmemory_strdup(v);
@@ -375,7 +366,7 @@ void icalparameter_set_xvalue(icalparameter *param, const char *v)
     icalerror_check_arg_rv((v != 0), "v");
 
     if (param->string != 0) {
-        free((void *)param->string);
+        icalmemory_free_buffer((void *)param->string);
     }
 
     param->string = icalmemory_strdup(v);

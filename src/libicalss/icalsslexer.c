@@ -1,4 +1,7 @@
-
+/**
+  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+*/
 
 #define  YY_INT_ALIGNED short int
 
@@ -535,18 +538,12 @@ char *yytext_ptr;
  FILE: icalsslexer.l
  CREATOR: eric 8 Aug 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of either:
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
 
-  Or:
 
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -1959,7 +1956,7 @@ void ssfree (void * ptr )
 
 
 
-int sswrap()
+int sswrap(void)
 {
      return 1;
 }

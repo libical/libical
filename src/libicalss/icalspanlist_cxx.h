@@ -3,18 +3,9 @@
  * @author   Critical Path
  * @brief    C++ class wrapping the icalspanlist data structure
  *
- * (C) COPYRIGHT 2001, Critical Path
+ * SPDX-FileCopyrightText: 2001, Critical Path
  *
- * This library is free software; you can redistribute it and/or modify
- * it under the terms of either:
- *
- *   The LGPL as published by the Free Software Foundation, version
- *   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
- *
- * Or:
- *
- *   The Mozilla Public License Version 2.0. You may obtain a copy of
- *   the License at https://www.mozilla.org/MPL/
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifndef ICALSPANLIST_CXX_H
@@ -52,7 +43,7 @@ public:
     /** Constructs an ICalSpanList from an icalset */
     ICalSpanList(icalset *set, icaltimetype start, icaltimetype end);
 
-    /** Constructs an ICalSpanList from the VFREEBUSY chunk of a icalcomponent */
+    /** Constructs an ICalSpanList from the VFREEBUSY chunk of an icalcomponent */
     explicit ICalSpanList(icalcomponent *comp);
 
     /** Constructs an ICalSpanList from the VFREEBUSY chunk of a vcomponent */

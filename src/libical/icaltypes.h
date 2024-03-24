@@ -2,18 +2,10 @@
  FILE: icaltypes.h
  CREATOR: eric 20 March 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifndef ICALTYPES_H
@@ -30,10 +22,11 @@ struct icaldatetimeperiodtype
     struct icalperiodtype period;
 };
 
+#define ICAL_GEO_LEN 16
 struct icalgeotype
 {
-    double lat;
-    double lon;
+    char lat[ICAL_GEO_LEN];
+    char lon[ICAL_GEO_LEN];
 };
 
 struct icaltriggertype

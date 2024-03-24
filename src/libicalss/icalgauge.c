@@ -2,18 +2,9 @@
  FILE: icalgauge.c
  CREATOR: eric 23 December 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
@@ -206,7 +197,7 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
 
             rel = icalvalue_compare(icalproperty_get_value(p), icalproperty_get_value(targetprop));
 
-            /* Now see if the comparison is equavalent to the comparison
+            /* Now see if the comparison is equivalent to the comparison
                specified in the gauge */
 
             if (rel == compare) {

@@ -1,4 +1,20 @@
-include(GtkDoc)
+# SPDX-FileCopyrightText: Milan Crha <mcrha@redhat.com>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+option(ENABLE_GTK_DOC "Use gtk-doc to build documentation" True)
+
+if(NOT ENABLE_GTK_DOC)
+  return()
+endif()
+
+if(STATIC_ONLY)
+  message(FATAL_ERROR
+    "You are attempting to build the Gtk docs, "
+    "however that option is not supported when building static libraries only. "
+    "Please disable the static only option (-DSTATIC_ONLY=False) "
+    "if you really want to build the Gtk docs. Alternatively, you can "
+    "disable building Gtk docs (by passing -DENABLE_GTK_DOC=False to cmake).")
+endif()
 
 # To regenerate libical-glib-docs.xml.in from current sources use these steps:
 #   a) delete ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-docs.xml
@@ -15,9 +31,10 @@ include(GtkDoc)
 #      like the replacement of the "[Insert title here]" and the <bookinfo/> content
 
 if(ENABLE_GTK_DOC)
+  include(GtkDoc)
 
   set(SOURCEDIRS
-    ${CMAKE_BINARY_DIR}/src/libical-glib
+    ${PROJECT_BINARY_DIR}/src/libical-glib
   )
 
   set(DEPENDENCIES

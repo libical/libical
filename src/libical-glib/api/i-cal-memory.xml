@@ -1,17 +1,9 @@
 <!--
-  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+  SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
-  This library is free software: you can redistribute it and/or modify it
-  under the terms of version 2.1. of the GNU Lesser General Public License
-  as published by the Free Software Foundation.
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
-  for more details.
 
-  You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Memory">
     <method name="i_cal_memory_tmp_buffer" corresponds="icalmemory_tmp_buffer" since="1.0">
@@ -51,14 +43,14 @@
         <parameter type="gchar **" name="pos" annotation="array, element-type gchar, inout" comment="The position at which the new string to be appended"/>
         <parameter type="size_t *" name="buf_size" comment="The size of the buffer before appended"/>
         <parameter type="const gchar *" name="str" comment="The string to be allocated"/>
-        <comment xml:space="preserve">Appends the string to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_string has to resize a buffer on the ring, the ring will loose track of it an you will have memory problems.</comment>
+        <comment xml:space="preserve">Appends the string to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_string has to resize a buffer on the ring, the ring will loose track of it and you will have memory problems.</comment>
     </method>
     <method name="i_cal_memory_append_char" corresponds="icalmemory_append_char" since="1.0">
         <parameter type="gchar **" name="buf" annotation="array length=buf_size, element-type gchar, inout" comment="The buffer to be appended. It should not be the memory in ical."/>
         <parameter type="gchar **" name="pos" annotation="array, element-type gchar, inout" comment="The position at which the new string to be appended"/>
         <parameter type="size_t *" name="buf_size" comment="The size of the buffer before appended"/>
         <parameter type="gchar" name="ch" comment="The character to be allocated"/>
-        <comment xml:space="preserve">Append the character to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_string has to resize a buffer on the ring, the ring will loose track of it an you will have memory problems.</comment>
+        <comment xml:space="preserve">Append the character to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_string has to resize a buffer on the ring, the ring will loose track of it and you will have memory problems.</comment>
     </method>
     <method name="i_cal_memory_strdup" corresponds="icalmemory_strdup" since="1.0">
         <parameter type="const gchar *" name="s" comment="The string to be cloned"/>

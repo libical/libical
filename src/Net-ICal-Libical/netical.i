@@ -1,18 +1,9 @@
 /*======================================================================
   FILE: ical.i
 
-  (C) COPYRIGHT 1999 Eric Busboom <eric@civicknowledge.com>
+  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
-  Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
   The original author is Eric Busboom
 
@@ -197,7 +188,7 @@ struct icaltimetype icaltime_from_timet_with_zone(int v, int is_date, const char
    into a pointer */
 int icaltime_as_timet(struct icaltimetype);
 
-/* Returns a string represention of the time, in RFC2445 format. The
+/* Returns a string representation of the time, in RFC2445 format. The
    string is owned by libical */
 char* icaltime_as_ical_string(struct icaltimetype tt);
 

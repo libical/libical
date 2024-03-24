@@ -2,18 +2,10 @@
  FILE: icalenum.c
  CREATOR: eric 29 April 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -81,7 +73,8 @@ const char *icalenum_reqstat_desc(icalrequeststatus stat)
 {
     int i;
 
-    for (i = 0; request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
+    int len = (int)(sizeof(request_status_map) / sizeof(request_status_map[0]));
+    for (i = 0; i < len && request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
         if (request_status_map[i].kind == stat) {
             return request_status_map[i].str;
         }
@@ -104,7 +97,8 @@ char *icalenum_reqstat_code_r(icalrequeststatus stat)
     int i, major, minor;
     char tmpbuf[36];
 
-    for (i = 0; request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
+    int len = (int)(sizeof(request_status_map) / sizeof(request_status_map[0]));
+    for (i = 0; i < len && request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
         if (request_status_map[i].kind == stat) {
             major = request_status_map[i].major;
             minor = request_status_map[i].minor;
@@ -119,7 +113,8 @@ short icalenum_reqstat_major(icalrequeststatus stat)
 {
     int i;
 
-    for (i = 0; request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
+    int len = (int)(sizeof(request_status_map) / sizeof(request_status_map[0]));
+    for (i = 0; i < len && request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
         if (request_status_map[i].kind == stat) {
             return request_status_map[i].major;
         }
@@ -131,7 +126,8 @@ short icalenum_reqstat_minor(icalrequeststatus stat)
 {
     int i;
 
-    for (i = 0; request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
+    int len = (int)(sizeof(request_status_map) / sizeof(request_status_map[0]));
+    for (i = 0; i < len && request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
         if (request_status_map[i].kind == stat) {
             return request_status_map[i].minor;
         }
@@ -143,7 +139,8 @@ icalrequeststatus icalenum_num_to_reqstat(short major, short minor)
 {
     int i;
 
-    for (i = 0; request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
+    int len = (int)(sizeof(request_status_map) / sizeof(request_status_map[0]));
+    for (i = 0; i < len && request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
         if (request_status_map[i].major == major && request_status_map[i].minor == minor) {
             return request_status_map[i].kind;
         }

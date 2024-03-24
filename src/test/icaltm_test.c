@@ -1,18 +1,9 @@
 /*======================================================================
  FILE: icaltm_test.c
 
- Copyright (C) 2017 Red Hat, Inc. <www.redhat.com>
+ SPDX-FileCopyrightText: 2017 Red Hat, Inc. <www.redhat.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Initial Developer of the Original Code is Milan Crha
 ======================================================================*/
@@ -25,12 +16,23 @@
 
 #include <pthread.h>
 
+#if ICAL_SYNC_MODE != ICAL_SYNC_MODE_THREADLOCAL
 static icaltimezone *zone, *utc;
+#endif
 
-static void *test_tread()
+static void *test_tread(void *user_data)
 {
     struct icaltimetype itt;
     int ii;
+
+    _unused(user_data);
+
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_THREADLOCAL
+    // In thread-local mode all initialization must be done per thread, so we do it here, rather
+    // than in main().
+    icaltimezone *zone = icaltimezone_get_builtin_timezone("America/New_York");
+    icaltimezone *utc = icaltimezone_get_utc_timezone();
+#endif
 
     itt = icaltime_from_string("19710203T040506");
     itt.zone = zone;
@@ -42,13 +44,17 @@ static void *test_tread()
     return NULL;
 }
 
-int main()
+int main(void)
 {
     pthread_t thread[2];
     int ii;
 
+#if ICAL_SYNC_MODE != ICAL_SYNC_MODE_THREADLOCAL
+    // In thread-local mode all initialization must be done per thread.
+    // In all other modes we do the initialization of built in timezones here.
     zone = icaltimezone_get_builtin_timezone("America/New_York");
     utc = icaltimezone_get_utc_timezone();
+#endif
 
     for (ii = 0; ii < 2; ii++) {
         pthread_create(&thread[ii], NULL, test_tread, NULL);

@@ -1,5 +1,5 @@
-BEGIN:VEVENT 
-DESCRIPTION 
+BEGIN:VEVENT
+DESCRIPTION
  :Repeat every tuesday and wednesday starting Tue 2nd April 2002
 RRULE
  :FREQ=WEEKLY;INTERVAL=1;COUNT=6;BYDAY=TU,WE
@@ -12,15 +12,15 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Repeat every thursday starting Tue 2nd April 2002 
-RRULE 
- :FREQ=WEEKLY;INTERVAL=1;COUNT=6;BYDAY=TH 
-DTSTART 
- :20020402T114500 
-DTEND 
- :20020402T124500 
-X-EXPECT-NUMEVENTS: 6 
-END:VEVENT 
+ :Repeat every thursday starting Tue 2nd April 2002
+RRULE
+ :FREQ=WEEKLY;INTERVAL=1;COUNT=6;BYDAY=TH
+DTSTART
+ :20020402T114500
+DTEND
+ :20020402T124500
+X-EXPECT-NUMEVENTS: 6
+END:VEVENT
 
 
 BEGIN:VEVENT
@@ -37,7 +37,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Monday of week number 20 (where the default start of the week is Monday)\, 
+ :Monday of week number 20 (where the default start of the week is Monday)\,
  forever:
 DTSTART
  ;TZID=America/Los_Angeles
@@ -179,12 +179,12 @@ RRULE
  :FREQ=DAILY;COUNT=50;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR
 DTSTART
  :20020101T090000Z
-X-EXPECT-NUMEVENTS: 50 
+X-EXPECT-NUMEVENTS: 50
 END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Every Day in January\, but only in Tuesday\, Wednesday and Thursday 
+ :Every Day in January\, but only in Tuesday\, Wednesday and Thursday
 RRULE
  :FREQ=DAILY;UNTIL=20020120T090000Z;INTERVAL=1;BYDAY=TU,WE,TH
 DTSTART
@@ -260,7 +260,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Every other week on Monday\, Wednesday and Friday until December 
+ :Every other week on Monday\, Wednesday and Friday until December
  24\,1997\, but starting on Tuesday\, September 2\, 1997:
 DTSTART
  ;TZID=America/Los_Angeles
@@ -428,7 +428,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Monday of week number 20 (where the default start of the week is Monday)\, 
+ :Monday of week number 20 (where the default start of the week is Monday)\,
  forever:
 DTSTART
  ;TZID=America/Los_Angeles
@@ -485,7 +485,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :Every four years\, the first Tuesday after a Monday in November\, 
+ :Every four years\, the first Tuesday after a Monday in November\,
  forever (U.S. Presidential Election day):
 DTSTART
  ;TZID=America/Los_Angeles
@@ -497,7 +497,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :The 3rd instance into the month of one of Tuesday\, Wednesday or 
+ :The 3rd instance into the month of one of Tuesday\, Wednesday or
  Thursday\, for the next 3 months:
 DTSTART
  ;TZID=America/Los_Angeles
@@ -575,7 +575,7 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :An example where the days generated makes a difference because of 
+ :An example where the days generated makes a difference because of
  WKST:
 DTSTART
  ;TZID=America/Los_Angeles
@@ -587,8 +587,8 @@ END:VEVENT
 
 BEGIN:VEVENT
 DESCRIPTION
- :An example where the days generated makes a difference because of 
- WKST. Changing only WKST from MO to SU yields different results...  
+ :An example where the days generated makes a difference because of
+ WKST. Changing only WKST from MO to SU yields different results...
 DTSTART
  ;TZID=America/Los_Angeles
  :19970805T090000
@@ -649,4 +649,3 @@ END:VEVENT
 ;DTSTART:20020101T090000Z
 ;X-EXPECT-NUMEVENTS: 100
 ;END:VEVENT
-

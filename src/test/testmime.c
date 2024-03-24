@@ -2,18 +2,9 @@
  FILE:
  CREATOR: eric 25 June 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
-
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Initial Developer of the Original Code is Eric Busboom
 ======================================================================*/
@@ -29,7 +20,7 @@
 /*int sspm_parse_mime(struct sspm_part *parts,
                size_t max_parts,
                struct sspm_action_map *actions,
-               char* (*get_string)(char *s, size_t size, void* data),
+               char* (*get_string)(char *s, size_t size, void *data),
                void *get_string_data,
                struct sspm_header *first_header
     );
@@ -211,6 +202,7 @@ int main(int argc, char *argv[])
         } d;
 
         size = 0;
+        memset(array, 0, sizeof(array));
         for (i = 0; i < 1024 && !feof(f); ++i) {
             if (fgets(temp, 1024, f) != NULL) {
                 array[i] = strdup(temp);
@@ -298,7 +290,7 @@ int main(int argc, char *argv[])
     }
 
     if (opt.sleepy != 0) {
-        sleep((unsigned int)opt.sleepy);
+        (void)sleep((unsigned int)opt.sleepy);
     }
 
     if (opt.input_file != 0) {

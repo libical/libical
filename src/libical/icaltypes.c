@@ -2,18 +2,10 @@
  FILE: icaltypes.c
  CREATOR: eric 16 May 1999
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
  ======================================================================*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -25,12 +17,12 @@
 
 #define TMP_BUF_SIZE 1024
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 static pthread_mutex_t unk_token_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
-static ical_unknown_token_handling unknownTokenHandling = ICAL_TREAT_AS_ERROR;
+static ICAL_GLOBAL_VAR ical_unknown_token_handling unknownTokenHandling = ICAL_TREAT_AS_ERROR;
 
 int icaltriggertype_is_null_trigger(struct icaltriggertype tr)
 {
@@ -182,13 +174,13 @@ ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
 {
     ical_unknown_token_handling myHandling;
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_lock(&unk_token_mutex);
 #endif
 
     myHandling = unknownTokenHandling;
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_unlock(&unk_token_mutex);
 #endif
 
@@ -197,13 +189,13 @@ ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
 
 void ical_set_unknown_token_handling_setting(ical_unknown_token_handling newSetting)
 {
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_lock(&unk_token_mutex);
 #endif
 
     unknownTokenHandling = newSetting;
 
-#if defined(HAVE_PTHREAD)
+#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
     pthread_mutex_unlock(&unk_token_mutex);
 #endif
 }

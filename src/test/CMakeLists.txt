@@ -1,10 +1,13 @@
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
 include_directories(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_BINARY_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src/libical
-  ${CMAKE_BINARY_DIR}/src/libical
-  ${CMAKE_SOURCE_DIR}/src/libicalss
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_BINARY_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}/src/libical
+  ${PROJECT_SOURCE_DIR}/src/libicalss
 )
 
 if(ICU_FOUND)
@@ -17,29 +20,31 @@ endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
-set(TEST_DATADIR "\"${CMAKE_SOURCE_DIR}/test-data\"")
-add_definitions(-DTEST_DATADIR=${TEST_DATADIR} -DTEST_ZONEDIR="${CMAKE_SOURCE_DIR}/zoneinfo")
+set(TEST_DATADIR "\"${PROJECT_SOURCE_DIR}/test-data\"")
+add_definitions(-DTEST_DATADIR=${TEST_DATADIR} -DTEST_ZONEDIR="${PROJECT_SOURCE_DIR}/zoneinfo")
 
+# Set properties for the test
 macro(setprops _name)
   if(UNIX)
+    file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
     set_tests_properties(${_name} PROPERTIES
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+      WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/bin"
     )
   endif()
   if(WIN32)
-    set(tpath "${CMAKE_BINARY_DIR}/bin;%PATH%")
+    set(tpath "${PROJECT_BINARY_DIR}/bin;%PATH%")
     if(ICU_FOUND)
       set(tpath "${ICU_BINARY_DIR};${tpath}")
     endif()
     set_tests_properties(${_name} PROPERTIES
       ENVIRONMENT "PATH=${tpath}"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+      WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/bin"
     )
   endif()
   if(CYGWIN OR MSYS)
     set_tests_properties(${_name} PROPERTIES
-      ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${CMAKE_BINARY_DIR}/lib:$ENV{PATH}"
-      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+      ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${PROJECT_BINARY_DIR}/lib:$ENV{PATH}"
+      WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/lib"
     )
   endif()
 endmacro()
@@ -61,7 +66,9 @@ macro(buildme _name _srcs)
     target_link_libraries(${_name} ical_cxx icalss_cxx)
   endif()
 
-  target_link_libraries(${_name} ${CMAKE_THREAD_LIBS_INIT})
+  if(DEFINED CMAKE_THREAD_LIBS_INIT)
+    target_link_libraries(${_name} ${CMAKE_THREAD_LIBS_INIT})
+  endif()
   if(ICU_FOUND)
     target_link_libraries(${_name} ${ICU_LIBRARIES})
   endif()
@@ -70,6 +77,7 @@ macro(buildme _name _srcs)
   endif()
 endmacro()
 
+# Build the test and add the test, making sure the test properties are set
 macro(testme _name _srcs)
   buildme(${_name} "${_srcs}")
   add_test(NAME ${_name} COMMAND ${_name})
@@ -96,6 +104,8 @@ set(regression_SRCS
   regression-utils.c
   regression-recur.c
   regression-storage.c
+  test-malloc.c
+  test-malloc.h
 )
 if(WITH_CXX_BINDINGS)
   list(APPEND regression_SRCS regression-cxx.cpp)
@@ -107,11 +117,11 @@ testme(regression "${regression_SRCS}")
 set(parser_SRCS icaltestparser.c)
 buildme(parser "${parser_SRCS}")
 
-file(GLOB TEST_FILES ${CMAKE_SOURCE_DIR}/test-data/*.ics)
-foreach(TEST_FILE ${TEST_FILES})
-  get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
-  add_test(NAME parser-${TEST_NAME} COMMAND parser ${TEST_FILE})
-  setprops(parser-${TEST_NAME})
+file(GLOB TEST_FILES ${PROJECT_SOURCE_DIR}/test-data/*.ics)
+foreach(test_file ${TEST_FILES})
+  get_filename_component(test_name ${test_file} NAME_WE)
+  add_test(NAME parser-${test_name} COMMAND parser ${test_file})
+  setprops(parser-${test_name})
 endforeach()
 
 ########### next target ###############
@@ -177,11 +187,12 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS 3.14)
   set(CMAKE_COMPARE_FILES_IGNORE_EOL TRUE)
 endif()
 if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
-  if(NOT CYGWIN AND NOT USE_32BIT_TIME_T) #ignore_eol doesn't work on Cygwin. tests for years greater than 2037 will fail
+  #ignore_eol doesn't work on Cygwin. testing years greater than 2037 will fail
+  if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
     set(icalrecurtest_SRCS icalrecur_test.c)
     add_executable(icalrecurtest ${icalrecurtest_SRCS})
     target_link_libraries(icalrecurtest ical icalss icalvcal)
-    set(test_cmd "${CMAKE_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
+    set(test_cmd "${PROJECT_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
 
     #test rscale capable rrules
     set(test_args "-r")
@@ -196,9 +207,9 @@ if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
       COMMAND ${CMAKE_COMMAND}
       -D test_cmd=${test_cmd}
       -D test_args:string=${test_args}
-      -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
-      -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
-      -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
+      -D output_blessed=${PROJECT_SOURCE_DIR}/src/test/${reference_data}
+      -D output_test=${PROJECT_BINARY_DIR}/bin/test.out
+      -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
     )
     setprops(icalrecurtest-r)
 
@@ -209,10 +220,15 @@ if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
       COMMAND ${CMAKE_COMMAND}
       -D test_cmd=${test_cmd}
       -D test_args:string=${test_args}
-      -D output_blessed=${CMAKE_SOURCE_DIR}/src/test/${reference_data}
-      -D output_test=${CMAKE_BINARY_DIR}/bin/test.out
-      -P ${CMAKE_SOURCE_DIR}/cmake/run_test.cmake
+      -D output_blessed=${PROJECT_SOURCE_DIR}/src/test/${reference_data}
+      -D output_test=${PROJECT_BINARY_DIR}/bin/test.out
+      -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
     )
     setprops(icalrecurtest)
   endif()
 endif()
+
+########### next target ###############
+
+set(icalparser_ctrl_test_SRCS icalparser_ctrl_test.c)
+testme(parser_ctrl "${icalparser_ctrl_test_SRCS}")

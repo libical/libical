@@ -2,8 +2,8 @@
 
 /* Skeleton implementation for Bison's Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
+   SPDX-FileCopyrightText: 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -125,18 +125,12 @@
 /*  FILE: icalssyacc.y                                                     */
 /*  CREATOR: eric 08 Aug 2000                                              */
 /*                                                                         */
-/*  (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>             */
+/*  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>             */
 /*                                                                         */
 /* This program is free software; you can redistribute it and/or modify    */
-/* it under the terms of either:                                           */
 /*                                                                         */
-/*    The LGPL as published by the Free Software Foundation, version       */
-/*    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html         */
 /*                                                                         */
-/*  Or:                                                                    */
 /*                                                                         */
-/*    The Mozilla Public License Version 2.0. You may obtain a copy of     */
-/*    the License at https://www.mozilla.org/MPL/                           */
 /*                                                                         */
 /* The Original Code is eric. The Initial Developer of the Original        */
 /* Code is Eric Busboom                                                    */
@@ -1317,6 +1311,7 @@ yyparse ()
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
                   (unsigned long int) yystacksize));
 
+      /* coverity[OVERRUN] */
       if (yyss + yystacksize - 1 <= yyssp)
         YYABORT;
     }
@@ -1418,8 +1413,8 @@ yyreduce:
      users should not rely upon it.  Assigning to YYVAL
      unconditionally makes the parser a bit smaller, and it avoids a
      GCC warning that YYVAL may be used uninitialized.  */
+  /* coverity[uninit_use] */
   yyval = yyvsp[1-yylen];
-
 
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
@@ -1598,9 +1593,11 @@ yyerrorlab:
   /* Pacify compilers like GCC when the user code never invokes
      YYERROR and the label yyerrorlab therefore never appears in user
      code.  */
-  if (/*CONSTCOND*/ 0)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunreachable-code"
+    if (/*CONSTCOND*/ 0)
      goto yyerrorlab;
-
+#pragma clang diagnostic pop
   /* Do not reclaim the symbols of the rule which action triggered
      this YYERROR.  */
   YYPOPSTACK (yylen);
@@ -1850,7 +1847,7 @@ static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
         assert(0);
     }
 
-    pvl_push(impl->from,(void*)ckind);
+    pvl_push(impl->from,(void *)ckind);
 
 }
 

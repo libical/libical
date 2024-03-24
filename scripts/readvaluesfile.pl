@@ -1,16 +1,10 @@
 ################################################################################
-# (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+# SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 #
-# This library is free software; you can redistribute it and/or modify
-# it under the terms of either:
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 #
-#   The LGPL as published by the Free Software Foundation, version
-#   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.txt
 #
-# Or:
 #
-#   The Mozilla Public License Version 2.0. You may obtain a copy of
-#   the License at https://www.mozilla.org/MPL/
 ################################################################################
 
 sub read_values_file
@@ -18,10 +12,13 @@ sub read_values_file
 
   my $path = shift;
   my %h;
+  my @SEEN_ENUMS;
 
   open(F, $path) || die "Can't open values file $path";
 
+  my $line = 0;
   while (<F>) {
+    $line++;
 
     chop;
 
@@ -34,8 +31,16 @@ sub read_values_file
     @column = split(/,/, $_);
 
     my $value_name = $column[0];
-    my $enumConst  = $column[1];
-
+    if (exists($h{$value_name})) {
+      die "Previously defined value=$value_name line $line in $path";
+    }
+    my $enumConst = $column[1];
+    if ($enumConst !~ /FIXME/) {
+      if (grep(/^$enumConst$/, @SEEN)) {
+        die "Reusing kindEnum=$enumConst line $line in $path";
+      }
+      push(@SEEN, $enumConst);
+    }
     my $c_type_str = $column[2];
     my $c_autogen  = ($c_type_str =~ /\(a\)/);
 
@@ -79,11 +84,13 @@ sub read_properties_file
 
   my $path = shift;
   my %h;
+  my @SEEN;
 
   open(F, $path) || die "Can't open properties file $path";
 
+  my $line = 0;
   while (<F>) {
-
+    $line++;
     chop;
 
     s/#.*$//g;
@@ -95,8 +102,16 @@ sub read_properties_file
     @column = split(/,/, $_);
 
     my $property_name = $column[0];
-
-    my $enumConst     = $column[1];
+    if ($property_name && exists($h{$property_name})) {
+      die "Previously defined property=$property_name line $line in $path";
+    }
+    my $enumConst = $column[1];
+    if ($enumConst !~ /FIXME/) {
+      if (grep(/^$enumConst$/, @SEEN)) {
+        die "Reusing kindEnum=$enumConst line $line in $path";
+      }
+      push(@SEEN, $enumConst);
+    }
     my $lic_value     = $column[2];
     my $default_value = $column[3];
     my $flags         = $column[4];
@@ -124,10 +139,13 @@ sub read_parameters_file
 
   my $path = shift;
   my %h;
+  my @SEEN;
 
   open(F, $path) || die "Can't open parameters file $path";
 
+  my $line = 0;
   while (<F>) {
+    $line++;
 
     chop;
 
@@ -140,8 +158,16 @@ sub read_parameters_file
     @column = split(/\,/, $_);
 
     my $parameter_name = $column[0];
-
-    my $enumConst   = $column[1];
+    if (exists($h{$parameter_name})) {
+      die "Previously defined parameter=$parameter_name line $line in $path";
+    }
+    my $enumConst = $column[1];
+    if ($enumConst !~ /FIXME/) {
+      if (grep(/^$enumConst$/, @SEEN)) {
+        die "Reusing kindEnum=$enumConst line $line in $path";
+      }
+      push(@SEEN, $enumConst);
+    }
     my $data_type   = $column[2];
     my $enum_string = $column[3];
 

@@ -1,16 +1,8 @@
 /*
- * Copyright (C) 2015 William Yu <williamyu@gnome.org>
+ * SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
  *
- * This library is free software; you can redistribute it and/or modify
- * it under the terms of either:
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  *
- *   The LGPL as published by the Free Software Foundation, version
- *   2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
- *
- * Or:
- *
- *   The Mozilla Public License Version 2.0. You may obtain a copy of
- *   the License at https://www.mozilla.org/MPL/
  */
 
 #ifndef XML_PARSER_H
@@ -83,17 +75,17 @@ typedef struct Enumeration {
     gchar *comment;
 } Enumeration;
 
-Structure *structure_new();
+Structure *structure_new(void);
 void structure_free(Structure *structure);
-Method *method_new();
+Method *method_new(void);
 void method_free(Method *method);
-Parameter *parameter_new();
+Parameter *parameter_new(void);
 void parameter_free(Parameter *para);
-Ret *ret_new();
+Ret *ret_new(void);
 void ret_free(Ret *ret);
-Enumeration *enumeration_new();
+Enumeration *enumeration_new(void);
 void enumeration_free(Enumeration *enumeration);
-Declaration *declaration_new();
+Declaration *declaration_new(void);
 void declaration_free(Declaration *declaration);
 
 GList *get_list_from_string(const gchar *str);

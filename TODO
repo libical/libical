@@ -3,12 +3,12 @@ TODOs for libical
 -----------------
 fix Coverity Scan issues
 
-libical treats properties with multiple values incorrecty -- it always
+libical treats properties with multiple values incorrectly -- it always
 separates multiple values into multiple properties. This is not
 acceptable for CATEGORIES and RESOURCES.
 
 Some TEXT valued properties, like METHOD, have a limited set of valid
-values. The code should check that the values of these properites are
+values. The code should check that the values of these properties are
 valid. ( Although METHOD now uses enums, and is not really TEXT valued )
 
 Finish implementing values
@@ -16,7 +16,7 @@ Finish implementing values
 	content_type
 	language
 
-Check for buffer overflow on external input. 
+Check for buffer overflow on external input.
 
 Error Handling
 
@@ -38,4 +38,3 @@ rather than having a hard limit.
 
 in sspm.c, and unrecognized content-transfer-encoding values must
 force a content type of application/octet-stream.
-

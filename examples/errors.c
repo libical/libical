@@ -1,23 +1,25 @@
-/* errors.c */
+/* errors.c
+
+  SPDX-FileCopyrightText: <eric@civicknowledge.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+*/
 
 #include <libical/ical.h>
 
-void program_errors()
+void program_errors(void)
 {
     /*Most routines will set icalerrno on errors. This is an
       enumeration defined in icalerror.h */
 
     icalerror_clear_errno();
 
-    (void)icalcomponent_new(ICAL_VEVENT_COMPONENT);
+    icalcomponent *comp = icalcomponent_new(ICAL_VEVENT_COMPONENT);
 
     if (icalerrno != ICAL_NO_ERROR){
-
         fprintf(stderr,"Horrible libical error: %s\n",
                 icalerror_strerror(icalerrno));
-
     }
-
+    icalcomponent_free(comp);
 }
 
 void component_errors(icalcomponent *comp)
@@ -39,16 +41,12 @@ void component_errors(icalcomponent *comp)
         p != 0;
         p = icalcomponent_get_next_property(comp,ICAL_XLICERROR_PROPERTY))
     {
-
         printf("-- The error is %s:\n",icalproperty_get_xlicerror(p));
     }
-
-
 
     /* Check the component for iTIP compilance, and add more
        X-LIC-ERROR properties if it is non-compilant. */
     icalrestriction_check(comp);
-
 
     /* Count the new errors.  */
     if(errors != icalcomponent_count_errors(comp)){
@@ -61,7 +59,5 @@ void component_errors(icalcomponent *comp)
        properties in the reply. This following routine makes this
        conversion */
 
-
     icalcomponent_convert_errors(comp);
-
 }

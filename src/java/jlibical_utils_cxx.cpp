@@ -2,18 +2,10 @@
  FILE: jlibical_utils_cxx.cpp
  CREATOR: Srinivasa Boppana/George Norman
 
- (C) COPYRIGHT 2002, Critical Path
+ SPDX-FileCopyrightText: 2002, Critical Path
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifndef JLIBICAL_UTILS_CXX_H
@@ -106,8 +98,8 @@ void setCObjectPtr(JNIEnv *env, jobject surrogate, void* subject)
 }
 
 //-------------------------------------------------------
-// Return the pointer to the subject (as an VComponent*) from the given surrogate.
-// If the subject is not an VComponent type, or if the subject is NULL, then return NULL.
+// Return the pointer to the subject (as a VComponent*) from the given surrogate.
+// If the subject is not a VComponent type, or if the subject is NULL, then return NULL.
 //-------------------------------------------------------
 VComponent* getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType)
 {
@@ -414,7 +406,6 @@ jobject doCreateNewSurrogate(JNIEnv *env, jclass surrogateClass, jlong subject)
 
         return(result);
 }
-
 
 //-------------------------------------------------------
 // For the given cpErr, create a new Exception and send it to env.

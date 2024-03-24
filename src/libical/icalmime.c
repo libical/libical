@@ -2,18 +2,10 @@
  FILE: icalmime.c
  CREATOR: eric 26 July 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
 ======================================================================*/
@@ -49,7 +41,7 @@ static void *icalmime_text_new_part(void)
 
     struct text_part *impl;
 
-    if ((impl = (struct text_part *)malloc(sizeof(struct text_part))) == 0) {
+    if ((impl = (struct text_part *)icalmemory_new_buffer(sizeof(struct text_part))) == 0) {
         return 0;
     }
 
@@ -77,7 +69,7 @@ static void *icalmime_textcalendar_end_part(void *part)
     icalcomponent *c = icalparser_parse_string(impl->buf);
 
     icalmemory_free_buffer(impl->buf);
-    free(impl);
+    icalmemory_free_buffer(impl);
 
     return c;
 }
@@ -88,7 +80,7 @@ static void *icalmime_text_end_part_r(void *part)
     struct text_part *impl = (struct text_part *)part;
 
     buf = impl->buf;
-    free(impl);
+    icalmemory_free_buffer(impl);
 
     return buf;
 }
@@ -166,7 +158,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
     int i, last_level = 0;
     icalcomponent *root = 0, *parent = 0, *comp = 0, *last = 0;
 
-    if ((parts = (struct sspm_part *)malloc(NUM_PARTS * sizeof(struct sspm_part))) == 0) {
+    if ((parts = (struct sspm_part *)icalmemory_new_buffer(NUM_PARTS * sizeof(struct sspm_part))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -185,7 +177,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
         const char *minor = sspm_minor_type_string(parts[i].header.minor);
 
         if (parts[i].header.minor == SSPM_UNKNOWN_MINOR_TYPE) {
-            assert(parts[i].header.minor_text != 0);
+            icalassert(parts[i].header.minor_text != 0);
             minor = parts[i].header.minor_text;
         }
 
@@ -195,7 +187,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
 
         if (comp == 0) {
             /* HACK Handle Error */
-            assert(0);
+            icalassert(0);
         }
 
         if (parts[i].header.error != SSPM_NO_ERROR) {
@@ -234,7 +226,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_MIMEPARSEERROR);
             icalcomponent_add_property(
                  comp,
-                 icalproperty_vanew_xlicerror(temp, errParam, 0));
+                 icalproperty_vanew_xlicerror(temp, errParam, (void *)0));
             icalparameter_free(errParam);
         }
 
@@ -245,7 +237,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
             icalcomponent_add_property(
                 comp,
                 icalproperty_new_xlicmimecontenttype(mimeTypeCopy));
-            free(mimeTypeCopy);
+            icalmemory_free_buffer(mimeTypeCopy);
         }
 
         if (parts[i].header.encoding != SSPM_NO_ENCODING) {
@@ -288,7 +280,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
             icalcomponent_add_property(
                 comp,
                 icalproperty_new_description(descStr));
-            free(descStr);
+            icalmemory_free_buffer(descStr);
             parts[i].data = 0;
         }
 
@@ -322,16 +314,16 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
 
             icalcomponent_add_component(parent, comp);
         } else {
-            assert(0);
+            icalassert(0);
         }
 
         last = comp;
         last_level = parts[i].level;
-        assert(parts[i].data == 0);
+        icalassert(parts[i].data == 0);
     }
 
     sspm_free_parts(parts, NUM_PARTS);
-    free(parts);
+    icalmemory_free_buffer(parts);
 
     return root;
 }
@@ -342,7 +334,7 @@ int icalmime_test(char *(*get_string) (char *s, size_t size, void *d), void *dat
     struct sspm_part *parts;
     int i;
 
-    if ((parts = (struct sspm_part *)malloc(NUM_PARTS * sizeof(struct sspm_part))) == 0) {
+    if ((parts = (struct sspm_part *)icalmemory_new_buffer(NUM_PARTS * sizeof(struct sspm_part))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
@@ -363,7 +355,7 @@ int icalmime_test(char *(*get_string) (char *s, size_t size, void *d), void *dat
     sspm_write_mime(parts, NUM_PARTS, &out, "To: bob@bob.org");
 
     printf("%s\n", out);
-    free(out);
+    icalmemory_free_buffer(out);
 
     return 0;
 }

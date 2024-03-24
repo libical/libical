@@ -1,34 +1,8 @@
 /***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International
+SPDX-FileCopyrightText: 1996 Apple Computer, Inc., AT&T Corp., International
 Business Machines Corporation and Siemens Rolm Communications Inc.
 
-For purposes of this license notice, the term Licensors shall mean,
-collectively, Apple Computer, Inc., AT&T Corp., International
-Business Machines Corporation and Siemens Rolm Communications Inc.
-The term Licensor shall mean any of the Licensors.
-
-Subject to acceptance of the following conditions, permission is hereby
-granted by Licensors without the need for written agreement and without
-license or royalty fees, to use, copy, modify and distribute this
-software for any purpose.
-
-The above copyright notice and the following four paragraphs must be
-reproduced in all copies of this software and any software including
-this software.
-
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR
-MODIFICATIONS.
-
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGE.
-
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE.
+SPDX-License-Identifier: LicenseRef-APPLEMIT
 
 The software is provided with RESTRICTED RIGHTS.  Use, duplication, or
 disclosure by the government are subject to restrictions set forth in
@@ -83,8 +57,6 @@ struct StrItem {
     };
 
 const char** fieldedProp;
-
-
 
 /*----------------------------------------------------------------------
    The following functions involve with memory allocation:
@@ -144,7 +116,6 @@ void deleteStr(const char *p)
         free((void*)p);
 }
 
-
 static StrItem* newStrItem(const char *s, StrItem *next)
 {
     StrItem *p = (StrItem*)malloc(sizeof(StrItem));
@@ -159,7 +130,6 @@ static void deleteStrItem(StrItem *p)
     if (p)
         free((void*)p);
 }
-
 
 /*----------------------------------------------------------------------
   The following function provide accesses to VObject's value.
@@ -258,7 +228,6 @@ int vObjectValueType(VObject *o)
 {
     return (int)VALUE_TYPE(o);
 }
-
 
 /*----------------------------------------------------------------------
   The following functions can be used to build VObject.
@@ -456,8 +425,6 @@ VObject* addPropSizedValue(VObject *o, const char *p, const char *v,
 {
     return addPropSizedValue_(o,p,dupStr(v,size),size);
 }
-
-
 
 /*----------------------------------------------------------------------
   The following pretty print a VObject
@@ -682,7 +649,7 @@ void unUseStr(const char *s)
     }
 }
 
-void cleanStrTbl()
+void cleanStrTbl(void)
 {
     int i;
     for (i=0; i<STRTBLSIZE;i++) {
@@ -697,7 +664,6 @@ void cleanStrTbl()
         strTbl[i] = 0;
         }
 }
-
 
 struct PreDefProp {
     const char *name;
@@ -937,7 +903,6 @@ static const struct PreDefProp propNames[] = {
     { 0,0,0,0 }
     };
 
-
 static const struct PreDefProp* lookupPropInfo(const char* str)
 {
     /* brute force for now, could use a hash table here. */
@@ -951,7 +916,6 @@ static const struct PreDefProp* lookupPropInfo(const char* str)
     return 0;
 }
 
-
 const char* lookupProp_(const char* str)
 {
     int i;
@@ -964,7 +928,6 @@ const char* lookupProp_(const char* str)
             }
     return lookupStr(str);
 }
-
 
 const char* lookupProp(const char* str)
 {
@@ -980,7 +943,6 @@ const char* lookupProp(const char* str)
     fieldedProp = 0;
     return lookupStr(str);
 }
-
 
 /*----------------------------------------------------------------------
   APIs to Output text form.
@@ -1116,7 +1078,6 @@ static void initMemOFile(OFile *fp, char *s, int len)
     fp->fail = 0;
 }
 
-
 static int writeBase64(OFile *fp, unsigned char *s, long len)
 {
     long cur = 0;
@@ -1190,8 +1151,6 @@ static void writeQPString(OFile *fp, const char *s)
     }
 }
 
-
-
 static void writeVObject_(OFile *fp, VObject *o);
 
 static void writeValue(OFile *fp, VObject *o, unsigned long size,int quote)
@@ -1253,6 +1212,11 @@ static void writeAttrValue(OFile *fp, VObject *o)
 
 static void writeGroup(OFile *fp, VObject *o)
 {
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+
     char buf1[256];
     char buf2[256];
     strncpy(buf1,NAME_OF(o),sizeof(buf1)-1);
@@ -1266,6 +1230,10 @@ static void writeGroup(OFile *fp, VObject *o)
         strcpy(buf1,buf2);
         }
     appendsOFile(fp,buf1);
+
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 static int inList(const char **list, const char *s)

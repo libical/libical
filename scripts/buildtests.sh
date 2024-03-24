@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
+# SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
 #Exit if any undefined variable is used.
 set -u
@@ -28,18 +31,22 @@ HELP() {
   echo
   echo "Run build tests"
   echo "Options:"
-  echo " -m, --no-cmake-compat    Don't require CMake version compatibility"
-  echo " -k, --no-krazy           Don't run any Krazy tests"
-  echo " -c, --no-cppcheck        Don't run any cppcheck tests"
-  echo " -t, --no-tidy            Don't run any clang-tidy tests"
-  echo " -b, --no-scan            Don't run any scan-build tests"
-  echo " -s, --no-splint          Don't run any splint tests"
-  echo " -n, --no-ninja           Don't run any build tests with ninja"
-  echo " -l, --no-clang-build     Don't run any clang-build tests"
-  echo " -g, --no-gcc-build       Don't run any gcc-build tests"
-  echo " -a, --no-asan-build      Don't run any ASAN-build (sanitize-address) tests"
-  echo " -d, --no-tsan-build      Don't run any TSAN-build (sanitize-threads) tests"
-  echo " -u, --no-ubsan-build     Don't run any UBSAN-build (sanitize-undefined) tests"
+  echo " -m, --no-cmake-compat      Don't require CMake version compatibility"
+  echo " -k, --no-krazy             Don't run any Krazy tests"
+  echo " -c, --no-cppcheck          Don't run any cppcheck tests"
+  echo " -t, --no-tidy              Don't run any clang-tidy tests"
+  echo " -b, --no-scan              Don't run any scan-build tests"
+  echo " -s, --no-splint            Don't run any splint tests"
+  echo " -p, --no-codespell         Don't run any codespell tests"
+  echo " -n, --no-ninja             Don't run any build tests with ninja"
+  echo " -l, --no-clang-build       Don't run any clang-build tests"
+  echo " -g, --no-gcc-build         Don't run any gcc-build tests"
+  echo " -a, --no-asan-build        Don't run any ASAN-build (sanitize-address) tests"
+  echo " -d, --no-tsan-build        Don't run any TSAN-build (sanitize-threads) tests"
+  echo " -u, --no-ubsan-build       Don't run any UBSAN-build (sanitize-undefined) tests"
+  echo " -x, --no-memc-build        Don't run any MEMCONSIST-build (memory consistency) tests"
+  echo " -f, --no-fortify-build     Don't run the FORTIFY-build tests (gcc12)"
+  echo " -r, --no-threadlocal-build Don't run the THREADLOCAL-build tests"
   echo
 }
 
@@ -47,7 +54,11 @@ COMMAND_EXISTS () {
     command -v $1 >/dev/null 2>&1
     if ( test $? != 0 )
     then
-    echo "$1 is not in your PATH. Either install this program or skip the assocatied test"
+    echo "$1 is not in your PATH. Either install this program or skip the associated test"
+    if ( test "$2" )
+    then
+      echo "or disable this check by passing the $2 command-line option"
+    fi
     exit 1
   fi
 }
@@ -139,7 +150,12 @@ CONFIGURE() {
   mkdir -p $BDIR
   cd $BDIR
   rm -rf *
-  cmake --warn-uninitialized -Werror=dev .. $2 || exit 1
+  if ( test `echo $2 | grep -ci Ninja` -gt 0 )
+  then
+    cmake --warn-uninitialized -Werror=dev .. $2 || exit 1
+  else
+    cmake -G "Unix Makefiles" --warn-uninitialized -Werror=dev .. $2 || exit 1
+  fi
 }
 
 #function CLEAN:
@@ -192,6 +208,31 @@ GCC_BUILD() {
   echo "===== END GCC BUILD: $1 ======"
 }
 
+#function FORTIFY_BUILD:
+# runs a build test using gcc (v12 or higher) with fortify CFLAGS
+# $1 = the name of the test (which will have "-fortify" appended to it)
+# $2 = CMake options
+FORTIFY_BUILD() {
+  name="$1-fortify"
+  if ( test $runfortifybuild -ne 1 )
+  then
+    echo "===== FORTIFY BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  COMMAND_EXISTS "gcc"
+  gccVersion=`gcc -dumpversion`
+  if ( test `expr $gccVersion + 0` -lt 12 )
+  then
+    echo "Sorry, gcc must be version 12 or higher to support fortify. Exiting..."
+    exit 1
+  fi
+  echo "===== START FORTIFY BUILD: $1 ======"
+  SET_GCC
+  export CFLAGS="-Og -gdwarf-5 -fno-optimize-sibling-calls -Wall -W -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -D_FORTIFY_SOURCE=3 -fPIC -grecord-gcc-switches -fno-allow-store-data-races -fstack-protector-strong -fstack-clash-protection -fcf-protection=full --param=ssp-buffer-size=1"
+  BUILD "$name" "$2"
+  echo "===== END FORTIFY BUILD: $1 ======"
+}
+
 #function NINJA_GCC_BUILD:
 # runs a build test using gcc using the Ninja cmake generator
 # $1 = the name of the test (which will have "-ninjagcc" appended to it)
@@ -228,8 +269,24 @@ CLANG_BUILD() {
   echo "===== END CLANG BUILD: $1 ======"
 }
 
+#function MEMCONSIST_BUILD:
+# runs a gcc memory consistency build test
+# $1 = the name of the test (which will have "-mem" appended to it)
+# $2 = CMake options
+MEMCONSIST_BUILD() {
+  name="$1-mem"
+  if ( test $runmemcbuild -ne 1 )
+  then
+    echo "===== MEMCONSIST BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START MEMCONSIST BUILD: $1 ======"
+  BUILD "$name" "-DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True $2"
+  echo "===== END MEMCONSIST BUILD: $1 ======"
+}
+
 #function ASAN_BUILD:
-# runs an clang ASAN build test
+# runs a clang ASAN build test
 # $1 = the name of the test (which will have "-asan" appended to it)
 # $2 = CMake options
 ASAN_BUILD() {
@@ -240,13 +297,14 @@ ASAN_BUILD() {
     return
   fi
   echo "===== START ASAN BUILD: $1 ======"
-  SET_CLANG
-  BUILD "$name" "-DADDRESS_SANITIZER=True $2"
+  SET_GCC # I'm using ld.gold (vs ld.bfd), which doesn't play well with clang and asan=>use gcc
+  #SET_CLANG currently has linking problems using ld.gold
+  BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
 }
 
 #function TSAN_BUILD:
-# runs an clang TSAN build test
+# runs a clang TSAN build test
 # $1 = the name of the test (which will have "-tsan" appended to it)
 # $2 = CMake options
 TSAN_BUILD() {
@@ -258,12 +316,12 @@ TSAN_BUILD() {
   fi
   echo "===== START TSAN BUILD: $1 ======"
   SET_CLANG
-  BUILD "$name" "-DTHREAD_SANITIZER=True $2"
+  BUILD "$name" "-DLIBICAL_DEVMODE_THREAD_SANITIZER=True $2"
   echo "===== END TSAN BUILD: $1 ======"
 }
 
 #function UBSAN_BUILD:
-# runs an clang UBSAN build test
+# runs a clang UBSAN build test
 # $1 = the name of the test (which will have "-ubsan" appended to it)
 # $2 = CMake options
 UBSAN_BUILD() {
@@ -275,9 +333,27 @@ UBSAN_BUILD() {
   fi
   echo "===== START UBSAN BUILD: $1 ======"
   SET_CLANG
-  BUILD "$name" "-DUNDEFINED_SANITIZER=True $2"
+  BUILD "$name" "-DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True $2"
   echo "===== END UBSAN BUILD: $1 ======"
 }
+
+#function THREADLOCAL_BUILD() {
+# runs a THREADLOCAL test
+# $1 = the name of the test (which will have "-threadlocal" appended to it)
+# $2 = CMake options
+THREADLOCAL_BUILD() {
+  name="$1-threadlocal"
+  if ( test $runthreadlocalbuild -ne 1 )
+  then
+    echo "===== THREADLOCAL BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START THREADLOCAL BUILD: $1 ======"
+  SET_GCC
+  BUILD "$name" "-DLIBICAL_SYNCMODE_THREADLOCAL=True $2"
+  echo "===== END THREADLOCAL BUILD: $1 ======"
+}
+
 #function CPPCHECK
 # runs a cppcheck test, which means: configure, compile, link and run cppcheck
 # $1 = the name of the test (which will have "-cppcheck" appended to it)
@@ -289,7 +365,7 @@ CPPCHECK() {
     echo "===== CPPCHECK TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "cppcheck"
+  COMMAND_EXISTS "cppcheck" "-c"
   echo "===== START SETUP FOR CPPCHECK: $1 ======"
 
   #first build it
@@ -301,19 +377,17 @@ CPPCHECK() {
   echo "===== START CPPCHECK: $1 ======"
   cd $TOP
   cppcheck --quiet --language=c \
+           --std=c99 \
+           --library=posix \
            --force --error-exitcode=1 --inline-suppr \
            --enable=warning,performance,portability,information \
+           --disable=missingInclude \
            --template='{file}:{line},{severity},{id},{message}' \
-           -D sleep="" \
-           -D localtime_r="" \
-           -D gmtime_r="" \
-           -D size_t="unsigned long" \
+           --checkers-report=cppcheck-report.txt \
            -D bswap32="" \
            -D PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=0 \
+           -D MIN="" \
            -D _unused="(void)" \
-           -D _deprecated="(void)" \
-           -D F_OK=0 \
-           -D R_OK=0 \
            -U YYSTYPE \
            -U PVL_USE_MACROS \
            -I $BDIR \
@@ -323,15 +397,14 @@ CPPCHECK() {
            -I $TOP/src/libicalss \
            -I $TOP/src/libicalvcal \
            $TOP/src $BDIR/src/libical/icalderived* 2>&1 | \
-      grep -v 'Found a statement that begins with numeric constant' | \
-      grep -v 'cannot find all the include files' | \
+      grep -v 'will no longer implicitly enable' | \
       grep -v Net-ICal | \
       grep -v icalssyacc\.c  | \
       grep -v icalsslexer\.c | \
       grep -v vcc\.c | grep -v vcc\.y | \
       grep -v _cxx\. | tee cppcheck.out
   CPPCHECK_WARNINGS cppcheck.out
-  rm -f cppcheck.out
+  rm -f cppcheck.out cppcheck-report.txt
   CLEAN
   echo "===== END CPPCHECK: $1 ======"
 }
@@ -347,7 +420,7 @@ SPLINT() {
     echo "===== SPLINT TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "splint"
+  COMMAND_EXISTS "splint" "-s"
   echo "===== START SETUP FOR SPLINT: $1 ======"
 
   #first build it
@@ -370,6 +443,8 @@ SPLINT() {
   files="$files $BDIR/src/libical/*.c $BDIR/src/libical/*.h"
 
   splint $files \
+       -badflag \
+       -preproc \
        -weak -warnposix \
        -modobserver -initallelements -redef \
        -linelen 1000 \
@@ -431,7 +506,7 @@ CLANGTIDY() {
     echo "===== CLANG-TIDY TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "clang-tidy"
+  COMMAND_EXISTS "clang-tidy" "-t"
   echo "===== START CLANG-TIDY: $1 ====="
   cd $TOP
   SET_CLANG
@@ -452,7 +527,7 @@ CLANGSCAN() {
     echo "===== SCAN-BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "scan-build"
+  COMMAND_EXISTS "scan-build" "-b"
   echo "===== START SCAN-BUILD: $1 ====="
   cd $TOP
 
@@ -477,7 +552,7 @@ KRAZY() {
     echo "===== KRAZY TEST DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "krazy2all"
+  COMMAND_EXISTS "krazy2all" "-k"
   echo "===== START KRAZY ====="
   cd $TOP
   krazy2all 2>&1 | tee krazy.out
@@ -491,18 +566,42 @@ KRAZY() {
   echo "===== END KRAZY ======"
 }
 
+#function CODESPELL
+# runs a codespell test
+CODESPELL() {
+  if ( test $runcodespell -ne 1 )
+  then
+    echo "===== CODESPELL TEST DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  COMMAND_EXISTS "codespell"
+  echo "===== START CODESPELL ====="
+  cd $TOP
+  codespell --interactive=0 . 2>&1 | tee codespell.out
+  status=$?
+  if ( test $status -gt 0 )
+  then
+    echo "Codespell warnings encountered.  Exiting..."
+    exit 1
+  fi
+  rm -f codespell.out
+  echo "===== END CODESPELL ======"
+}
+
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hmkctbsnlgadu --long help,no-cmake-compat,no-krazy,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build -- "$@"`
-TEMP=`getopt hmkctbsnlgadu $*`
+#TEMP=`getopt -o hmkpctbsnlgaduxfr --long help,no-cmake-compat,no-krazy,no-codespell,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build,no-fortify-build,no-threadlocal-build -- "$@"`
+TEMP=`getopt hmkpctbsnlgaduxfr $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
 
 cmakecompat=1
 runkrazy=1
+runcodespell=1
 runcppcheck=1
 runtidy=1
+runsplint=1
 runscan=1
 runninja=1
 runclangbuild=1
@@ -510,22 +609,28 @@ rungccbuild=1
 runasanbuild=1
 runtsanbuild=1
 runubsanbuild=1
-runsplint=1
+runmemcbuild=1
+runfortifybuild=1
+runthreadlocalbuild=1
 while true; do
     case "$1" in
         -h|--help) HELP; exit 1;;
-        -m|--no-cmake-compat) cmakecompat=0;   shift;;
-        -k|--no-krazy)        runkrazy=0;      shift;;
-        -c|--no-cppcheck)     runcppcheck=0;   shift;;
-        -t|--no-tidy)         runtidy=0;       shift;;
-        -b|--no-scan)         runscan=0;       shift;;
-        -s|--no-splint)       runsplint=0;     shift;;
-        -n|--no-ninja)        runninja=0;      shift;;
-        -l|--no-clang-build)  runclangbuild=0; shift;;
-        -g|--no-gcc-build)    rungccbuild=0;   shift;;
-        -a|--no-asan-build)   runasanbuild=0;  shift;;
-        -d|--no-tsan-build)   runtsanbuild=0;  shift;;
-        -u|--no-ubsan-build)  runubsanbuild=0; shift;;
+        -m|--no-cmake-compat)   cmakecompat=0;            shift;;
+        -k|--no-krazy)          runkrazy=0;               shift;;
+        -p|--no-codespell)      runcodespell=0;           shift;;
+        -c|--no-cppcheck)       runcppcheck=0;            shift;;
+        -t|--no-tidy)           runtidy=0;                shift;;
+        -b|--no-scan)           runscan=0;                shift;;
+        -s|--no-splint)         runsplint=0;              shift;;
+        -n|--no-ninja)          runninja=0;               shift;;
+        -l|--no-clang-build)    runclangbuild=0;          shift;;
+        -g|--no-gcc-build)      rungccbuild=0;            shift;;
+        -a|--no-asan-build)     runasanbuild=0;           shift;;
+        -d|--no-tsan-build)     runtsanbuild=0;           shift;;
+        -u|--no-ubsan-build)    runubsanbuild=0;          shift;;
+        -x|--no-memc-build)     runmemcbuild=0;           shift;;
+        -f|--no-fortify-build)  runfortifybuild=0;        shift;;
+        -r|--no-threadlocal-build) runthreadlocalbuild=0; shift;;
         --) shift; break;;
         *)  echo "Internal error!"; exit 1;;
     esac
@@ -547,7 +652,7 @@ then
     exit 1
   fi
   # read the min required CMake version from the top-level CMake file
-  minCMakeVers=`grep -i cmake_minimum_required $TOP/CMakeLists.txt | grep VERSION | sed 's/^.*VERSION\s*//' | cut -d. -f1-2 | sed 's/\s*).*$//'`
+  minCMakeVers=`grep -i cmake_minimum_required $TOP/CMakeLists.txt | grep VERSION | sed 's/^.*VERSION\s*//' | cut -d. -f1-2 | sed 's/\s*).*$//' | awk '{print $NF}'`
   # adjust PATH
   X=`echo $minCMakeVers | cut -d. -f1`
   Y=`echo $minCMakeVers | cut -d. -f2`
@@ -571,6 +676,7 @@ then
   fi
 fi
 
+DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DNDEBUG=1"
 CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DUSE_BUILTIN_TZDATA=True"
@@ -579,6 +685,7 @@ GLIBOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=True -DUSE_BUILTIN_TZ
 
 #Static code checkers
 KRAZY
+CODESPELL
 SPLINT test2 "$CMAKEOPTS"
 SPLINT test2builtin "$TZCMAKEOPTS"
 CPPCHECK test2 "$CMAKEOPTS"
@@ -589,10 +696,13 @@ CLANGTIDY test2 "$CMAKEOPTS"
 CLANGTIDY test2builtin "$TZCMAKEOPTS"
 
 #GCC based build tests
-GCC_BUILD testgcc1 ""
+GCC_BUILD testgcc1 "$DEFCMAKEOPTS"
 GCC_BUILD testgcc2 "$CMAKEOPTS"
 GCC_BUILD testgcc3 "$UUCCMAKEOPTS"
-GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
+if (test "`uname -s`" = "Linux")
+then
+  GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
+fi
 GCC_BUILD testgcc4glib "$GLIBOPTS"
 GCC_BUILD testgccnocxx "$CMAKEOPTS -DWITH_CXX_BINDINGS=off"
 if (test "`uname -s`" = "Linux")
@@ -605,15 +715,20 @@ GCC_BUILD testgcc1builtin "-DUSE_BUILTIN_TZDATA=True"
 GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
 
 #Ninja build tests
-NINJA_GCC_BUILD testninjagcc1 ""
-NINJA_GCC_BUILD testninjagcc2 "-DSHARED_ONLY=True"
-NINJA_GCC_BUILD testninjagcc3 "-DSTATIC_ONLY=True -DICAL_GLIB=False"
+NINJA_GCC_BUILD testninjagcc1 "$DEFCMAKEOPTS"
+NINJA_GCC_BUILD testninjagcc2 "-DICAL_GLIB=True"
+NINJA_GCC_BUILD testninjagcc3 "-DICAL_GLIB=True -DICAL_GLIB_VAPI=ON -DGOBJECT_INTROSPECTION=True"
+NINJA_GCC_BUILD testninjagcc4 "-DSHARED_ONLY=True -DICAL_GLIB=False"
+NINJA_GCC_BUILD testninjagcc5 "-DSHARED_ONLY=True -DICAL_GLIB=True"
+NINJA_GCC_BUILD testninjagcc6 "-DSTATIC_ONLY=True -DICAL_GLIB=False"
+NINJA_GCC_BUILD testninjagcc7 "-DSTATIC_ONLY=True -DICAL_GLIB=True -DENABLE_GTK_DOC=False"
+NINJA_GCC_BUILD testninjagcc9 "-DSHARED_ONLY=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB_VAPI=ON"
 
-CLANG_BUILD testclang1 ""
+CLANG_BUILD testclang1 "$DEFCMAKEOPTS"
 CLANG_BUILD testclang2 "$CMAKEOPTS"
 CLANG_BUILD testclang3 "$UUCCMAKEOPTS"
-#broken with clang7 on Fedora29 CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
-#broken with clang7 on Fedora29 CLANG_BUILD testclang4glib "$GLIBOPTS"
+#not supported with clang yet CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
+CLANG_BUILD testclang4glib "$GLIBOPTS"
 if (test "`uname -s`" = "Linux")
 then
     echo "Temporarily disable cross-compile tests"
@@ -621,15 +736,23 @@ then
 #  CLANG_BUILD testclang2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 fi
 
+#Memory consistency check
+MEMCONSIST_BUILD test1memc ""
+MEMCONSIST_BUILD test2memc "$CMAKEOPTS"
+MEMCONSIST_BUILD test3memc "$TZCMAKEOPTS"
+MEMCONSIST_BUILD test4memc "$UUCCMAKEOPTS"
+#FIXME: the python test scripts for introspection need some love
+#MEMCONSIST_BUILD test5memc "$GLIBOPTS"
+
 #Address sanitizer
-ASAN_BUILD test1asan ""
+ASAN_BUILD test1asan "$DEFCMAKEOPTS"
 ASAN_BUILD test2asan "$CMAKEOPTS"
 ASAN_BUILD test3asan "$TZCMAKEOPTS"
 ASAN_BUILD test4asan "$UUCCMAKEOPTS"
 ASAN_BUILD test5asan "$GLIBOPTS"
 
 #Thread sanitizer
-TSAN_BUILD test1tsan ""
+TSAN_BUILD test1tsan "$DEFCMAKEOPTS"
 TSAN_BUILD test2tsan "$CMAKEOPTS"
 TSAN_BUILD test3tsan "$TZCMAKEOPTS"
 TSAN_BUILD test4tsan "$UUCCMAKEOPTS"
@@ -641,5 +764,18 @@ UBSAN_BUILD test2ubsan "$CMAKEOPTS"
 UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
 UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
 UBSAN_BUILD test5ubsan "$GLIBOPTS"
+
+#Fortify build
+FORTIFY_BUILD test1fortify "$DEFCMAKEOPTS"
+FORTIFY_BUILD test2fortify "$CMAKEOPTS"
+FORTIFY_BUILD test3fortify "$TZCMAKEOPTS"
+FORTIFY_BUILD test4fortify "$UUCCMAKEOPTS"
+FORTIFY_BUILD test5fortify "$GLIBOPTS"
+
+#Threadlocal
+THREADLOCAL_BUILD test1threadlocal "$DEFCMAKEOPTS"
+THREADLOCAL_BUILD test2threadlocal "$CMAKEOPTS"
+THREADLOCAL_BUILD test3threadlocal "$TZCMAKEOPTS"
+THREADLOCAL_BUILD test4threadlocal "$UUCCMAKEOPTS"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"

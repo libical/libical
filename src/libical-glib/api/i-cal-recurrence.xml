@@ -1,17 +1,9 @@
 <!--
-  Copyright (C) 2015 William Yu <williamyu@gnome.org>
+  SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
-  This library is free software: you can redistribute it and/or modify it
-  under the terms of version 2.1. of the GNU Lesser General Public License
-  as published by the Free Software Foundation.
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
-  for more details.
 
-  You should have received a copy of the GNU Lesser General Public License
-  along with this library. If not, see <https://www.gnu.org/licenses/>.
 -->
 <structure namespace="ICal" name="Recurrence" native="struct icalrecurrencetype" is_bare="true" default_native="i_cal_recurrence_new_default ()">
      <enum name="ICalRecurrenceFrequency" native_name="icalrecurrencetype_frequency" default_native="I_CAL_NO_RECURRENCE">
@@ -40,7 +32,9 @@
         <element name="ICAL_SKIP_OMIT"/>
         <element name="ICAL_SKIP_UNDEFINED"/>
 	</enum>
-    <enum name="ICalRecurrenceArrayMaxValues" native_name="enum icalrecurrence_array_max_values" default_native="I_CAL_RECURRENCE_ARRAY_MAX">
+    <!-- Mark "enum icalrecurrence_array_max_values" as "CUSTOM", to not have it checked
+         in build time due to the below reason. -->
+    <enum name="ICalRecurrenceArrayMaxValues" native_name="CUSTOM" default_native="I_CAL_RECURRENCE_ARRAY_MAX">
 	<element name="ICAL_RECURRENCE_ARRAY_MAX"/>
 	<!-- Skip this one, it confuses git generator (no name for the first,
 	     because it's all part of this one. Furthermore, this one is not
@@ -199,11 +193,18 @@
     <method name="i_cal_recurrence_get_by_second_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_second of #ICalRecurrence."/>
-        <comment>Gets the by_second array from #ICalRecurrence. The array size if I_CAL_BY_SECOND_SIZE.</comment>
+        <comment>Gets the by_second array from #ICalRecurrence. The array has a maximum size of I_CAL_BY_SECOND_SIZE.</comment>
         <custom>	GArray *array;
+	struct icalrecurrencetype *native_recurrence;
+	guint size;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
+	native_recurrence = (struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur);
 	array = g_array_new (FALSE, TRUE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_second, I_CAL_BY_SECOND_SIZE);
+	for (size = 0; size &lt; I_CAL_BY_SECOND_SIZE; size++) {
+		if (native_recurrence->by_second[size] == I_CAL_RECURRENCE_ARRAY_MAX)
+			break;
+	}
+	g_array_append_vals (array, native_recurrence->by_second, size);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_second_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -246,11 +247,18 @@
     <method name="i_cal_recurrence_get_by_minute_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_minute of #ICalRecurrence."/>
-        <comment>Gets the by_minute array from #ICalRecurrence. The array size is I_CAL_BY_MINUTE_SIZE.</comment>
+        <comment>Gets the by_minute array from #ICalRecurrence. The array has a maximum size of I_CAL_BY_MINUTE_SIZE.</comment>
         <custom>	GArray *array;
+	struct icalrecurrencetype *native_recurrence;
+	guint size;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
+	native_recurrence = (struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_minute, I_CAL_BY_MINUTE_SIZE);
+	for (size = 0; size &lt; I_CAL_BY_MINUTE_SIZE; size++) {
+		if (native_recurrence->by_minute[size] == I_CAL_RECURRENCE_ARRAY_MAX)
+			break;
+	}
+	g_array_append_vals (array, native_recurrence->by_minute, size);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_minute_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -293,11 +301,18 @@
     <method name="i_cal_recurrence_get_by_hour_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_hour of #ICalRecurrence."/>
-        <comment>Gets the by_hour array from #ICalRecurrence. The array size is I_CAL_BY_HOUR_SIZE.</comment>
+        <comment>Gets the by_hour array from #ICalRecurrence. The array has a maximum size of I_CAL_BY_HOUR_SIZE.</comment>
         <custom>	GArray *array;
+	struct icalrecurrencetype *native_recurrence;
+	guint size;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_hour, I_CAL_BY_HOUR_SIZE);
+	native_recurrence = (struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur);
+	for (size = 0; size &lt; I_CAL_BY_HOUR_SIZE; size++) {
+		if (native_recurrence->by_hour[size] == I_CAL_RECURRENCE_ARRAY_MAX)
+			break;
+	}
+	g_array_append_vals (array, native_recurrence->by_hour, size);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_hour_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -340,11 +355,18 @@
     <method name="i_cal_recurrence_get_by_day_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_day of #ICalRecurrence."/>
-        <comment>Gets the by_day array from #ICalRecurrence. The array size is I_CAL_BY_DAY_SIZE.</comment>
+        <comment>Gets the by_day array from #ICalRecurrence. The array has a maximum size of I_CAL_BY_DAY_SIZE.</comment>
         <custom>	GArray *array;
+	struct icalrecurrencetype *native_recurrence;
+	guint size;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_day, I_CAL_BY_DAY_SIZE);
+	native_recurrence = (struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur);
+	for (size = 0; size &lt; I_CAL_BY_DAY_SIZE; size++) {
+		if (native_recurrence->by_day[size] == I_CAL_RECURRENCE_ARRAY_MAX)
+			break;
+	}
+	g_array_append_vals (array, native_recurrence->by_day, size);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_day_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -387,11 +409,18 @@
     <method name="i_cal_recurrence_get_by_month_day_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_month_day of #ICalRecurrence."/>
-        <comment>Gets the by_month_day array from #ICalRecurrence. The array size is I_CAL_BY_MONTHDAY_SIZE.</comment>
+        <comment>Gets the by_month_day array from #ICalRecurrence. The array has a maximum size of I_CAL_BY_MONTHDAY_SIZE.</comment>
         <custom>	GArray *array;
+	struct icalrecurrencetype *native_recurrence;
+	guint size;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_month_day, I_CAL_BY_MONTHDAY_SIZE);
+	native_recurrence = (struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur);
+	for (size = 0; size &lt; I_CAL_BY_MONTHDAY_SIZE; size++) {
+		if (native_recurrence->by_month_day[size] == I_CAL_RECURRENCE_ARRAY_MAX)
+			break;
+	}
+	g_array_append_vals (array, native_recurrence->by_month_day, size);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_month_day_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -434,11 +463,18 @@
     <method name="i_cal_recurrence_get_by_year_day_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_year_day of #ICalRecurrence."/>
-        <comment>Gets the by_year_day array from #ICalRecurrence. The array size is I_CAL_BY_YEARDAY_SIZE.</comment>
+        <comment>Gets the by_year_day array from #ICalRecurrence. The array has a maximum size of I_CAL_BY_YEARDAY_SIZE.</comment>
         <custom>	GArray *array;
+	struct icalrecurrencetype *native_recurrence;
+	guint size;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_year_day, I_CAL_BY_YEARDAY_SIZE);
+	native_recurrence = (struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur);
+	for (size = 0; size &lt; I_CAL_BY_YEARDAY_SIZE; size++) {
+		if (native_recurrence->by_year_day[size] == I_CAL_RECURRENCE_ARRAY_MAX)
+			break;
+	}
+	g_array_append_vals (array, native_recurrence->by_year_day, size);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_year_day_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -481,11 +517,18 @@
     <method name="i_cal_recurrence_get_by_week_no_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_week_no of #ICalRecurrence."/>
-        <comment>Gets the by_week_no array from #ICalRecurrence. The array size is I_CAL_BY_WEEKNO_SIZE.</comment>
+        <comment>Gets the by_week_no array from #ICalRecurrence. The array has a maximum size of I_CAL_BY_WEEKNO_SIZE.</comment>
         <custom>	GArray *array;
+	struct icalrecurrencetype *native_recurrence;
+	guint size;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_week_no, I_CAL_BY_WEEKNO_SIZE);
+	native_recurrence = (struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur);
+	for (size = 0; size &lt; I_CAL_BY_WEEKNO_SIZE; size++) {
+		if (native_recurrence->by_week_no[size] == I_CAL_RECURRENCE_ARRAY_MAX)
+			break;
+	}
+	g_array_append_vals (array, native_recurrence->by_week_no, size);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_week_no_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -528,11 +571,18 @@
     <method name="i_cal_recurrence_get_by_month_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_month of #ICalRecurrence."/>
-        <comment>Gets the by_month array from #ICalRecurrence. The array size is I_CAL_BY_MONTH_SIZE.</comment>
+        <comment>Gets the by_month array from #ICalRecurrence. The array has a maximum size of I_CAL_BY_MONTH_SIZE.</comment>
         <custom>	GArray *array;
+	struct icalrecurrencetype *native_recurrence;
+	guint size;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_month, I_CAL_BY_MONTH_SIZE);
+	native_recurrence = (struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur);
+	for (size = 0; size &lt; I_CAL_BY_MONTH_SIZE; size++) {
+		if (native_recurrence->by_month[size] == I_CAL_RECURRENCE_ARRAY_MAX)
+			break;
+	}
+	g_array_append_vals (array, native_recurrence->by_month, size);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_month_array" corresponds="CUSTOM" kind="set" since="1.0">
@@ -575,11 +625,18 @@
     <method name="i_cal_recurrence_get_by_set_pos_array" corresponds="CUSTOM" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by_set_pos of #ICalRecurrence."/>
-        <comment>Gets the by_set_pos array from #ICalRecurrence. The array size is I_CAL_BY_SETPOS_SIZE.</comment>
+        <comment>Gets the by_set_pos array from #ICalRecurrence. The array has a maximum size of I_CAL_BY_SETPOS_SIZE.</comment>
         <custom>	GArray *array;
+	struct icalrecurrencetype *native_recurrence;
+	guint size;
 	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	array = g_array_new (FALSE, FALSE, sizeof (gshort));
-	g_array_append_vals (array, ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by_set_pos, I_CAL_BY_SETPOS_SIZE);
+	native_recurrence = (struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur);
+	for (size = 0; size &lt; I_CAL_BY_SETPOS_SIZE; size++) {
+		if (native_recurrence->by_set_pos[size] == I_CAL_RECURRENCE_ARRAY_MAX)
+			break;
+	}
+	g_array_append_vals (array, native_recurrence->by_set_pos, size);
 	return array;</custom>
     </method>
     <method name="i_cal_recurrence_set_by_set_pos_array" corresponds="CUSTOM" kind="set" since="1.0">

@@ -2,18 +2,10 @@
  FILE: icalmessage.c
  CREATOR: ebusboom 07 Nov 2000
 
- (C) COPYRIGHT 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
 
- This library is free software; you can redistribute it and/or modify
- it under the terms of either:
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-    The LGPL as published by the Free Software Foundation, version
-    2.1, available at: https://www.gnu.org/licenses/lgpl-2.1.html
-
- Or:
-
-    The Mozilla Public License Version 2.0. You may obtain a copy of
-    the License at https://www.mozilla.org/MPL/
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -22,7 +14,6 @@
 
 #include "icalmessage.h"
 #include "icalerror.h"
-#include "icalmemory.h"
 #include "icalversion.h"        /* for ICAL_PACKAGE, ICAL_VERSION */
 
 #include <ctype.h>
@@ -46,7 +37,7 @@ static char *lowercase(const char *str)
         return 0;
     }
 
-    n = icalmemory_strdup(str);
+    n = strdup(str);
 
     for (p = n; *p != 0; p++) {
         *p = tolower((int)*p);
@@ -115,8 +106,8 @@ static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
             icalcomponent_vanew(
                 ICAL_VEVENT_COMPONENT,
                 icalproperty_new_dtstamp(icaltime_from_timet_with_zone(time(0), 0, NULL)),
-                0),
-            0);
+                (void *)0),
+            (void *)0);
 
     icalcomponent *inner = icalmessage_get_inner(reply);
 
@@ -272,7 +263,7 @@ icalcomponent *icalmessage_new_delegate_request(icalcomponent *c,
     delegateeParam = icalparameter_new_delegatedfrom(icalproperty_get_attendee(attendee));
     icalcomponent_add_property(
         inner,
-        icalproperty_vanew_attendee(delegatee, delegateeParam, 0));
+        icalproperty_vanew_attendee(delegatee, delegateeParam, (void *)0));
     icalparameter_free(delegateeParam);
     return reply;
 }
