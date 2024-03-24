@@ -24,6 +24,7 @@ Version 3.1.0 (NOT RELEASED YET):
  * Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
  * icalparser_ctrl setting defines how to handle invalid CONTROL characters during parsing
+ * icaltimezone_set_tzid_prefix allows setting an empty tzid
  * New publicly available functions:
     + icalrecurrencetype_encode_day
     + icalrecurrencetype_encode_month
@@ -42,6 +43,7 @@ Version 3.1.0 (NOT RELEASED YET):
     + ical_get_invalid_rrule_handling_setting
     + icalparser_get_ctrl
     + icalparser_set_ctrl
+    + icaltimezone_tzid_prefix
  * Deprecated functions:
     + caldat (replaced by internal function icaldat_int())
     + juldat (replaced by internal function juldat_int())
