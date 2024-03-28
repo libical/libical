@@ -8,6 +8,10 @@ iCalendar specification (RFC2445).
 time zone information files used by several Unix C libraries, including
 glibc. See zic(8) and tzfile(5).)
 
+The vzic software is licensed according to the terms of the
+GNU General Public License version 2.0 or later (see LICENSE.txt).
+The timezone database files are publicly available data released by IANA.
+
 ## REQUIREMENTS
 
 You need the IANA (formerly known as Olson) timezone database files (tzdata),
