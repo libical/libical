@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2000-2001 Ximian, Inc.
+# SPDX-FileCopyrightText: 2003, Damon Chaplin <damon@ximian.com>
+#
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 #
 # You will need to set this to the directory that the Olson timezone data

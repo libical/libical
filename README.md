@@ -9,8 +9,8 @@ time zone information files used by several Unix C libraries, including
 glibc. See zic(8) and tzfile(5).)
 
 The vzic software is licensed according to the terms of the
-GNU General Public License version 2.0 or later (see LICENSE.txt).
-The timezone database files are publicly available data released by IANA.
+GNU General Public License version 2.0 or later (see LICENSES/GPL-2.0-or-later.txt).
+The IANA timezone database files are in the public domain.
 
 ## REQUIREMENTS
 

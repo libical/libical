@@ -1,0 +1,19 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: vzic
+Upstream-Contact: Allen Winter <winter@kde.org>
+Source: https://github.com/libical/vzic
+
+# misc documentation
+Files: ChangeLog README.md
+Copyright: vzic contributors
+License: GPL-2.0-or-later
+
+# tool configuration files
+Files: .cmake-format.py .codespellrc .gitignore .perltidyrc .pre-commit-config.yaml
+Copyright: vzic contributors
+License: GPL-2.0-or-later
+
+# IANA tzdata files (if any included)
+Files: tzdata20*/*
+Copyright: none
+License: LicenseRef-IANA-tzdata
