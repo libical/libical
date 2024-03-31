@@ -1,8 +1,12 @@
 Release Highlights
 ==================
 
-Version 3.0.18 (31 March 2024):
+Version 3.0.19 (UNRELEASED):
 ----------------------------
+ *
+
+Version 3.0.18 (31 March 2024):
+-------------------------------
  * Requires CMake v3.5.0 or higher
  * Escape ^ (U+005E) character in parameter values according to RFC 6868
  * New CMake option LIBICAL_BUILD_EXAMPLES to disable building the examples
