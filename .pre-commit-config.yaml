@@ -4,7 +4,7 @@
 ci:
     autoupdate_schedule: monthly
 
-exclude: ^(tzdata20.*/)
+exclude: ^(zoneinfo/|tzdata20.*/)
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.5.0
@@ -13,6 +13,10 @@ repos:
   - id: end-of-file-fixer
   - id: check-added-large-files
   - id: check-case-conflict
+- repo: https://github.com/perltidy/perltidy
+  rev: "20240202.02"
+  hooks:
+  - id: perltidy
 - repo: https://github.com/codespell-project/codespell
   rev: v2.2.6
   hooks:
