@@ -57,8 +57,8 @@ Version 3.1.0 (NOT RELEASED YET):
     + struct icaltimezonetype
     + struct icaltimezonephase
 
-Version 3.0.18 (UNRELEASED):
-----------------------------
+Version 3.0.18 (31 March 2024):
+-------------------------------
  * Requires CMake v3.5.0 or higher
  * Escape ^ (U+005E) character in parameter values according to RFC 6868
  * New CMake option LIBICAL_BUILD_EXAMPLES to disable building the examples
