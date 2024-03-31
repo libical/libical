@@ -1,14 +1,25 @@
 <map id="LibICal::VComponent" name="LibICal::VComponent">
-<area shape="rect" id="node1" title="A class wrapping the libical icalcomponent functions." alt="" coords="5,252,152,277"/>
-<area shape="rect" id="node2" href="$classLibICal_1_1VAgenda.html" title=" " alt="" coords="207,5,330,31"/>
-<area shape="rect" id="node3" href="$classLibICal_1_1VAlarm.html" title=" " alt="" coords="213,55,325,80"/>
-<area shape="rect" id="node4" href="$classLibICal_1_1VCalendar.html" title=" " alt="" coords="203,104,335,129"/>
-<area shape="rect" id="node5" href="$classLibICal_1_1VEvent.html" title=" " alt="" coords="211,153,326,179"/>
-<area shape="rect" id="node6" href="$classLibICal_1_1VFreeBusy.html" title=" " alt="" coords="201,203,337,228"/>
-<area shape="rect" id="node7" href="$classLibICal_1_1VJournal.html" title=" " alt="" coords="207,252,330,277"/>
-<area shape="rect" id="node8" href="$classLibICal_1_1VQuery.html" title=" " alt="" coords="211,301,326,327"/>
-<area shape="rect" id="node9" href="$classLibICal_1_1VTimezone.html" title=" " alt="" coords="200,351,337,376"/>
-<area shape="rect" id="node10" href="$classLibICal_1_1VToDo.html" title=" " alt="" coords="213,400,324,425"/>
-<area shape="rect" id="node11" href="$classLibICal_1_1XDaylight.html" title=" " alt="" coords="205,449,333,475"/>
-<area shape="rect" id="node12" href="$classLibICal_1_1XStandard.html" title=" " alt="" coords="203,499,335,524"/>
+<area shape="rect" id="Node000001" title="A class wrapping the libical icalcomponent functions." alt="" coords="5,259,152,285"/>
+<area shape="rect" id="Node000002" href="$classLibICal_1_1VAgenda.html" title=" " alt="" coords="207,5,329,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,244,99,200,123,146,155,91,175,65,198,42,216,30,219,35,201,46,179,68,160,94,127,149,104,202,90,245"/>
+<area shape="rect" id="Node000003" href="$classLibICal_1_1VAlarm.html" title=" " alt="" coords="212,56,324,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="89,244,130,170,161,129,198,93,218,81,220,85,201,97,165,132,135,173,94,247"/>
+<area shape="rect" id="Node000004" href="$classLibICal_1_1VCalendar.html" title=" " alt="" coords="202,107,334,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="96,245,139,194,167,167,198,143,220,132,223,136,201,148,171,171,143,198,100,248"/>
+<area shape="rect" id="Node000005" href="$classLibICal_1_1VEvent.html" title=" " alt="" coords="211,157,325,184"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="110,247,151,220,198,194,225,182,227,187,201,198,154,225,113,252"/>
+<area shape="rect" id="Node000006" href="$classLibICal_1_1VFreeBusy.html" title=" " alt="" coords="200,208,336,235"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="145,252,214,233,216,238,146,257"/>
+<area shape="rect" id="Node000007" href="$classLibICal_1_1VJournal.html" title=" " alt="" coords="207,259,329,285"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="167,269,207,269,207,275,167,275"/>
+<area shape="rect" id="Node000008" href="$classLibICal_1_1VQuery.html" title=" " alt="" coords="211,309,325,336"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="146,287,216,306,214,311,145,292"/>
+<area shape="rect" id="Node000009" href="$classLibICal_1_1VTimezone.html" title=" " alt="" coords="200,360,336,387"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="113,292,154,319,201,346,227,357,225,362,198,350,151,324,110,297"/>
+<area shape="rect" id="Node000010" href="$classLibICal_1_1VToDo.html" title=" " alt="" coords="213,411,323,437"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="100,296,143,346,171,373,201,396,223,408,220,412,198,401,167,377,139,350,96,299"/>
+<area shape="rect" id="Node000011" href="$classLibICal_1_1XDaylight.html" title=" " alt="" coords="204,461,332,488"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="94,297,135,371,165,412,201,447,220,459,218,463,198,451,161,415,130,374,89,300"/>
+<area shape="rect" id="Node000012" href="$classLibICal_1_1XStandard.html" title=" " alt="" coords="202,512,334,539"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="90,299,104,342,127,395,160,450,179,476,201,498,219,509,216,514,198,502,175,479,155,453,123,398,99,344,85,300"/>
 </map>

@@ -252,7 +252,7 @@ var searchData=
   ['icalrestriction_2eh_249',['icalrestriction.h',['../icalrestriction_8h.html',1,'']]],
   ['icalrestriction_5fcheck_250',['icalrestriction_check',['../icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57',1,'icalrestriction.h']]],
   ['icalrestriction_5fcompare_251',['icalrestriction_compare',['../icalrestriction_8h.html#acd3882ab8b58bf0e12cb9ed48234ce2d',1,'icalrestriction.h']]],
-  ['icalrestriction_5fkind_252',['icalrestriction_kind',['../icalrestriction_8h.html#ae380f8acbf3acc9650130ce17aa755f9',1,'icalrestriction_kind():&#160;icalrestriction.h'],['../icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1',1,'icalrestriction_kind():&#160;icalrestriction.h']]],
+  ['icalrestriction_5fkind_252',['icalrestriction_kind',['../icalrestriction_8h.html#ae380f8acbf3acc9650130ce17aa755f9',1,'icalrestriction_kind:&#160;icalrestriction.h'],['../icalrestriction_8h.html#ac6d836f345770d880b446d964f685db1',1,'icalrestriction_kind:&#160;icalrestriction.h']]],
   ['icalset_2eh_253',['icalset.h',['../icalset_8h.html',1,'']]],
   ['icalset_5fcommit_254',['icalset_commit',['../icalset_8h.html#a2c852ee9d1ddd570809482ba56fee0e6',1,'icalset.c']]],
   ['icalset_5ffetch_255',['icalset_fetch',['../icalset_8h.html#a98ebedc03e491568cf62830be8459921',1,'icalset.c']]],
@@ -357,5 +357,5 @@ var searchData=
   ['icptrholder_5fcxx_2eh_354',['icptrholder_cxx.h',['../icptrholder__cxx_8h.html',1,'']]],
   ['is_5fbusy_355',['is_busy',['../structicaltime__span.html#a8e328dae6c1e17b38a099071a4badbcf',1,'icaltime_span']]],
   ['is_5fdate_356',['is_date',['../structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96',1,'icaltimetype']]],
-  ['is_5fdaylight_357',['is_daylight',['../structicaltimetype.html#a8b90b6a7979294823e98a2dd3d7edd50',1,'icaltimetype::is_daylight()'],['../struct__icaltimezonechange.html#a37d811204cf5d7129767b12de5302e37',1,'_icaltimezonechange::is_daylight()']]]
+  ['is_5fdaylight_357',['is_daylight',['../structicaltimetype.html#a8b90b6a7979294823e98a2dd3d7edd50',1,'icaltimetype::is_daylight'],['../struct__icaltimezonechange.html#a37d811204cf5d7129767b12de5302e37',1,'_icaltimezonechange::is_daylight']]]
 ];

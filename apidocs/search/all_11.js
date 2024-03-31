@@ -12,10 +12,10 @@ var searchData=
   ['sspm_5fbuffer_9',['sspm_buffer',['../structsspm__buffer.html',1,'']]],
   ['sspm_5fheader_10',['sspm_header',['../structsspm__header.html',1,'']]],
   ['sspm_5fpart_11',['sspm_part',['../structsspm__part.html',1,'']]],
-  ['start_12',['start',['../structicaltime__span.html#a19e59ef16cc2e33748bbeead3040e0c8',1,'icaltime_span::start()'],['../structicalspanlist__impl.html#a2876fb86a056d43c55cff46dd340ed1d',1,'icalspanlist_impl::start()']]],
+  ['start_12',['start',['../structicaltime__span.html#a19e59ef16cc2e33748bbeead3040e0c8',1,'icaltime_span::start'],['../structicalspanlist__impl.html#a2876fb86a056d43c55cff46dd340ed1d',1,'icalspanlist_impl::start']]],
   ['string_5fto_5fkind_13',['string_to_kind',['../classLibICal_1_1VComponent.html#a78439d802b6d94686b0aada243532ec4',1,'LibICal::VComponent']]],
   ['strip_5ferrors_14',['strip_errors',['../classLibICal_1_1VComponent.html#abf328d7ef0ffcffa9099c57bfd092b30',1,'LibICal::VComponent']]],
   ['stritem_15',['StrItem',['../structStrItem.html',1,'']]],
   ['subdb_16',['subdb',['../structicalbdbset__options.html#a8ac46ba03ef7ab1b04a0374fd4fbc7d8',1,'icalbdbset_options']]],
-  ['super_17',['super',['../structicalbdbset__impl.html#a2a2bfa511d4dc9be7e9862ad111989a9',1,'icalbdbset_impl::super()'],['../structicaldirset__impl.html#a3591d5fa8040ff9edd3500d6d5713876',1,'icaldirset_impl::super()'],['../structicalfileset__impl.html#a9e5bca18c7edc4f71184c58ed03966a3',1,'icalfileset_impl::super()']]]
+  ['super_17',['super',['../structicalbdbset__impl.html#a2a2bfa511d4dc9be7e9862ad111989a9',1,'icalbdbset_impl::super'],['../structicaldirset__impl.html#a3591d5fa8040ff9edd3500d6d5713876',1,'icaldirset_impl::super'],['../structicalfileset__impl.html#a9e5bca18c7edc4f71184c58ed03966a3',1,'icalfileset_impl::super']]]
 ];
