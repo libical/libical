@@ -1,5 +1,8 @@
 #!/usr/bin/perl -w
 use Getopt::Long;
+use File::Basename qw( fileparse );
+use File::Path     qw( make_path );
+use File::Spec;
 
 #
 # Vzic - a program to convert Olson timezone database files into VZTIMEZONE
@@ -35,8 +38,8 @@ use Getopt::Long;
 #
 
 # Set these to the toplevel directories of the 2 sets of VTIMEZONE files.
-$MASTER_ZONEINFO_DIR = "/home/allen/projects/libical/libical/zoneinfo";
-$NEW_ZONEINFO_DIR    = "/home/allen/projects/libical/vzic/zoneinfo";
+$MASTER_ZONEINFO_DIR = $ENV{'VZIC_ZONEINFO_MASTER'};
+$NEW_ZONEINFO_DIR    = $ENV{'VZIC_ZONEINFO_NEW'};
 
 # Set this to 1 if you have version numbers in the TZID like libical.
 $LIBICAL_VERSIONING = 1;
@@ -76,9 +79,39 @@ foreach $new_file (`find -name "*.ics"`) {
 
   $copy_to_master = 0;
 
-  # If the ics file exists in the master copy we have to compare them,
-  # otherwise we can just copy the new file into the master directory.
-  if (-e $master_file) {
+  if (-l $new_file) {
+
+    # This is a symlink, copy it in any case.
+
+    if (!-e $master_file) {
+      print "Creating new symlinkg $new_file...\n";
+      $copy_to_master = 1;
+    } elsif (-l $master_file) {
+      my $src = readlink($master_file);
+      my $dst = readlink($new_file);
+
+      if ($src eq $dst) {
+        $copy_to_master = 0;
+
+        # print "Symlink $new_file unchanged: $src.\n"
+      } else {
+        print "Updating symlink $new_file to $src...\n";
+        $copy_to_master = 1;
+      }
+
+    } else {
+      print "Changing $new_file to symlink...\n";
+      $copy_to_master = 1;
+    }
+
+  } elsif (-l $master_file) {
+    $copy_to_master = 1;
+    print "Changing $new_file from symlink to real file...\n";
+
+  } elsif (-e $master_file) {
+
+    # If the ics file exists in the master copy we have to compare them,
+    # otherwise we can just copy the new file into the master directory.
     open(MASTERZONEFILE, "$master_file")
       || die "Can't open file: $master_file";
     undef $/;
@@ -89,12 +122,16 @@ foreach $new_file (`find -name "*.ics"`) {
     $new_contents_copy = $new_contents;
 
     # Strip the TZID from both contents.
-    $new_contents_copy =~ s/^TZID:\S+$//m;
+    $new_contents_copy =~ s/^TZID:\S+\r?$//m;
     $new_tzid = $&;
-    $master_contents =~ s/^TZID:\S+$//m;
+    $master_contents =~ s/^TZID:\S+\r?$//m;
     $master_tzid = $&;
 
-    #	print "Matched: $master_tzid\n";
+    # Strip LAST-MODIFIED
+    $new_contents_copy =~ s/^LAST-MODIFIED:\S+\r?$//m;
+    $master_contents   =~ s/^LAST-MODIFIED:\S+\r?$//m;
+
+    # print "Matched: $master_tzid\n";
 
     if ($new_contents_copy ne $master_contents) {
       print "$new_file has changed. Updating...\n";
@@ -122,15 +159,50 @@ foreach $new_file (`find -name "*.ics"`) {
   }
 
   if ($copy_to_master) {
-
-    #	print "Updating: $new_file\n";
-
     if ($DO_UPDATES) {
-      open(MASTERZONEFILE, ">$master_file")
-        || die "Can't create file: $master_file";
-      print MASTERZONEFILE $new_contents;
-      close(MASTERZONEFILE);
+
+      my ($filename, $directories) = fileparse $master_file;
+      if (!-d $directories) {
+        make_path $directories or die "Failed to create path: $directories";
+      }
+
+      if (-e $master_file) {
+
+        # delete old file so we don't have issues with symlinks
+        unlink($master_file);
+      }
+
+      if (-l $new_file) {
+        my $dst = readlink($new_file) || die "Can't read symlink $new_file.";
+
+        print "Creating symlink to $dst in $master_file.\n";
+        symlink $dst, $master_file || die "Can't create symlink $new_file.";
+      } else {
+        open(MASTERZONEFILE, ">$master_file")
+          || die "Can't create file: $master_file";
+        print MASTERZONEFILE $new_contents;
+        close(MASTERZONEFILE);
+      }
     }
   }
 
+}
+
+chdir $MASTER_ZONEINFO_DIR
+  || die "Can't cd to $MASTER_ZONEINFO_DIR";
+
+foreach $old_file (`find -name "*.ics"`) {
+
+  # Get rid of './' at start and whitespace at end.
+  $old_file =~ s/^\.\///;
+  $old_file =~ s/\s+$//;
+
+  $new_file = $NEW_ZONEINFO_DIR . "/$old_file";
+
+  # If the ics file exists in the master copy we have to compare them,
+  # otherwise we can just copy the new file into the master directory.
+  if (!-e $new_file) {
+    print "$old_file exists in the master but not the new zoneinfo. Deleting...\n";
+    unlink($old_file);
+  }
 }
