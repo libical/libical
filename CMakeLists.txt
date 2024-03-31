@@ -114,9 +114,13 @@
 # -DLIBICAL_SYNCMODE_THREADLOCAL=[true|false]
 #  Experimental: If set to true, global variables are marked as thread-local. This allows accessing
 #  libical from multiple threads without the need for synchronization. However, any global settings
-#  must be applied per thread.
+#  must be applied per thread. Note that in this mode, any global variables and cached data are
+#  allocated per thread, including the cache for the built-in timezone data. This can lead to a
+#  significant overhead in memory usage and initialization time. It's therefore recommended to limit
+#  the number of threads accessing the library when using this mode. Also note that the additional
+#  allocations might be detected as memory leaks by memory checkers.
 #  If set to false, the default synchronization mechanism is applied. That is, if the pthreads library
-#  is available, it will be used, otherwise no synchronization is applied.
+#  is available, it will be used; otherwise, no synchronization is applied.
 #  Default: false.
 
 cmake_minimum_required(VERSION 3.11.0) #first line, to shutup a cygwin warning
