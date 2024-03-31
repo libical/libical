@@ -45,8 +45,8 @@ $LIBICAL_VERSIONING = 1;
 $DO_UPDATES = 1;
 
 GetOptions(
-    'master-zoneinfo-dir=s' => \$MASTER_ZONEINFO_DIR,
-    'new-zoneinfo-dir=s'    => \$NEW_ZONEINFO_DIR,
+  'master-zoneinfo-dir=s' => \$MASTER_ZONEINFO_DIR,
+  'new-zoneinfo-dir=s'    => \$NEW_ZONEINFO_DIR,
 ) or die 'Invalid command-line arguments';
 
 # Save this so we can restore it later.
@@ -57,81 +57,80 @@ chdir $NEW_ZONEINFO_DIR
 
 foreach $new_file (`find -name "*.ics"`) {
 
-    # Get rid of './' at start and whitespace at end.
-    $new_file =~ s/^\.\///;
-    $new_file =~ s/\s+$//;
+  # Get rid of './' at start and whitespace at end.
+  $new_file =~ s/^\.\///;
+  $new_file =~ s/\s+$//;
 
-    #    print "File: $new_file\n";
+  #    print "File: $new_file\n";
 
-    open( NEWZONEFILE, "$new_file" )
-      || die "Can't open file: $NEW_ZONEINFO_DIR/$new_file";
+  open(NEWZONEFILE, "$new_file")
+    || die "Can't open file: $NEW_ZONEINFO_DIR/$new_file";
+  undef $/;
+  $new_contents = <NEWZONEFILE>;
+  $/            = $input_record_separator;
+  close(NEWZONEFILE);
+
+  $master_file = $MASTER_ZONEINFO_DIR . "/$new_file";
+
+  #    print "Master File: $master_file\n";
+
+  $copy_to_master = 0;
+
+  # If the ics file exists in the master copy we have to compare them,
+  # otherwise we can just copy the new file into the master directory.
+  if (-e $master_file) {
+    open(MASTERZONEFILE, "$master_file")
+      || die "Can't open file: $master_file";
     undef $/;
-    $new_contents = <NEWZONEFILE>;
-    $/            = $input_record_separator;
-    close(NEWZONEFILE);
+    $master_contents = <MASTERZONEFILE>;
+    $/               = $input_record_separator;
+    close(MASTERZONEFILE);
 
-    $master_file = $MASTER_ZONEINFO_DIR . "/$new_file";
+    $new_contents_copy = $new_contents;
 
-    #    print "Master File: $master_file\n";
+    # Strip the TZID from both contents.
+    $new_contents_copy =~ s/^TZID:\S+$//m;
+    $new_tzid = $&;
+    $master_contents =~ s/^TZID:\S+$//m;
+    $master_tzid = $&;
 
-    $copy_to_master = 0;
+    #	print "Matched: $master_tzid\n";
 
-    # If the ics file exists in the master copy we have to compare them,
-    # otherwise we can just copy the new file into the master directory.
-    if ( -e $master_file ) {
-        open( MASTERZONEFILE, "$master_file" )
-          || die "Can't open file: $master_file";
-        undef $/;
-        $master_contents = <MASTERZONEFILE>;
-        $/               = $input_record_separator;
-        close(MASTERZONEFILE);
+    if ($new_contents_copy ne $master_contents) {
+      print "$new_file has changed. Updating...\n";
+      $copy_to_master = 1;
 
-        $new_contents_copy = $new_contents;
+      if ($LIBICAL_VERSIONING) {
 
-        # Strip the TZID from both contents.
-        $new_contents_copy =~ s/^TZID:\S+$//m;
-        $new_tzid = $&;
-        $master_contents =~ s/^TZID:\S+$//m;
-        $master_tzid = $&;
+        # We bump the version number in the new file.
+        $master_tzid =~ m%_(\d+)/%;
+        $version_num = $1;
 
-        #	print "Matched: $master_tzid\n";
+        #		print "Version: $version_num\n";
 
-        if ( $new_contents_copy ne $master_contents ) {
-            print "$new_file has changed. Updating...\n";
-            $copy_to_master = 1;
+        $version_num++;
+        $new_tzid =~ s%_(\d+)/%_$version_num/%;
 
-            if ($LIBICAL_VERSIONING) {
-
-                # We bump the version number in the new file.
-                $master_tzid =~ m%_(\d+)/%;
-                $version_num = $1;
-
-                #		print "Version: $version_num\n";
-
-                $version_num++;
-                $new_tzid =~ s%_(\d+)/%_$version_num/%;
-
-                #		print "New TZID: $new_tzid\n";
-                $new_contents =~ s/^TZID:\S+$/$new_tzid/m;
-            }
-        }
-
-    }
-    else {
-        print "$new_file doesn't exist in master directory. Copying...\n";
-        $copy_to_master = 1;
+        #		print "New TZID: $new_tzid\n";
+        $new_contents =~ s/^TZID:\S+$/$new_tzid/m;
+      }
     }
 
-    if ($copy_to_master) {
+  } else {
+    print "$new_file doesn't exist in master directory. Copying...\n";
+    $copy_to_master = 1;
+  }
 
-        #	print "Updating: $new_file\n";
+  if ($copy_to_master) {
 
-        if ($DO_UPDATES) {
-            open( MASTERZONEFILE, ">$master_file" )
-              || die "Can't create file: $master_file";
-            print MASTERZONEFILE $new_contents;
-            close(MASTERZONEFILE);
-        }
+    #	print "Updating: $new_file\n";
+
+    if ($DO_UPDATES) {
+      open(MASTERZONEFILE, ">$master_file")
+        || die "Can't create file: $master_file";
+      print MASTERZONEFILE $new_contents;
+      close(MASTERZONEFILE);
     }
+  }
 
 }
