@@ -25,10 +25,10 @@ ssize_t vcardenumarray_find(vcardenumarray *array,
     return -1;
 }
 
-void vcardenumarray_append(vcardenumarray *array, vcardenumarray_element *new)
+void vcardenumarray_append(vcardenumarray *array, vcardenumarray_element *elem)
 {
     vcardenumarray_element copy = {
-        new->val, new->xvalue ? icalmemory_strdup(new->xvalue) : NULL
+        elem->val, elem->xvalue ? icalmemory_strdup(elem->xvalue) : NULL
     };
 
     icalarray_append(array, &copy);
