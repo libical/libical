@@ -87,7 +87,9 @@ void vcardvalue_set_geo(vcardvalue *value, struct vcardgeotype v)
         };
 
         vcardstrarray_append(geo.field[0], v.coords.lat);
-        vcardstrarray_append(geo.field[0], v.coords.lon);
+        vcardstrarray_append(geo.field[1], v.coords.lon);
+
+        value->kind = VCARD_STRUCTURED_VALUE;
         vcardvalue_set_structured(value, &geo);
     }
 }
