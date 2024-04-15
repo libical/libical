@@ -25,7 +25,7 @@ LIBICAL_VCARD_EXPORT ssize_t vcardenumarray_find(vcardenumarray *array,
                                                  vcardenumarray_element *needle);
 
 LIBICAL_VCARD_EXPORT void vcardenumarray_append(vcardenumarray *array,
-                                                vcardenumarray_element *new);
+                                                vcardenumarray_element *elem);
 
 LIBICAL_VCARD_EXPORT void vcardenumarray_add(vcardenumarray *array,
                                              vcardenumarray_element *add);

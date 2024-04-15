@@ -21,9 +21,9 @@ ssize_t vcardstrarray_find(vcardstrarray *array,
     return -1;
 }
 
-void vcardstrarray_append(vcardstrarray *array, const char *new)
+void vcardstrarray_append(vcardstrarray *array, const char *elem)
 {
-    char *copy = icalmemory_strdup(new);
+    char *copy = icalmemory_strdup(elem);
 
     icalarray_append(array, &copy);
 }
