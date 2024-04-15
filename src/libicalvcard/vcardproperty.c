@@ -308,7 +308,8 @@ static char *fold_property_line(char *text)
 /* Determine what VALUE parameter to include. The VALUE parameters
    are ignored in the normal parameter printing ( the block after
    this one, so we need to do it here */
-static const char *vcardproperty_get_value_kind(vcardproperty *prop)
+static const char *vcardproperty_get_value_kind(vcardproperty *prop,
+                                                vcardvalue *value)
 {
     const char *kind_string = NULL;
     vcardvalue_kind kind = VCARD_NO_VALUE;
@@ -320,9 +321,38 @@ static const char *vcardproperty_get_value_kind(vcardproperty *prop)
     }
 
     if (kind == VCARD_NO_VALUE && vcardproperty_isa(prop) != VCARD_X_PROPERTY) {
-        vcardvalue *value = vcardproperty_get_value(prop);
-
         kind = vcardvalue_isa(value);
+    }
+
+    /* Try to omit VERSION-dependent default VALUE kinds */
+    switch (vcardproperty_isa(prop)) {
+    case VCARD_GEO_PROPERTY:
+        /* v3 default: VALUE=STRUCTURED
+         * v4 default: VALUE=URL
+         */
+        if (kind != VCARD_X_VALUE) {
+            kind = VCARD_NO_VALUE;
+        }
+        break;
+
+    case VCARD_KEY_PROPERTY:
+    case VCARD_LOGO_PROPERTY:
+    case VCARD_PHOTO_PROPERTY:
+    case VCARD_SOUND_PROPERTY:
+        /* v3 default: VALUE=BINARY (ENCODING param is v3-specific)
+         * v4 default: VALUE=URL    (MEDIATYPE param, data: uri are v4-specific)
+         */
+        if (vcardproperty_get_first_parameter(prop, VCARD_ENCODING_PARAMETER) ||
+            (kind == VCARD_URI_VALUE &&
+             (vcardproperty_get_first_parameter(prop,
+                                                VCARD_MEDIATYPE_PARAMETER) ||
+              !strncmp("data:", vcardvalue_as_vcard_string(value), 5)))) {
+            kind = VCARD_NO_VALUE;
+        }
+        break;
+
+    default:
+        break;
     }
 
     if (kind != VCARD_NO_VALUE &&
@@ -388,7 +418,8 @@ char *vcardproperty_as_vcard_string_r(vcardproperty *prop)
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, property_name);
 
-    kind_string = vcardproperty_get_value_kind(prop);
+    value = vcardproperty_get_value(prop);
+    kind_string = vcardproperty_get_value_kind(prop, value);
     if (kind_string != 0) {
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, ";VALUE=");
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
@@ -422,8 +453,6 @@ char *vcardproperty_as_vcard_string_r(vcardproperty *prop)
     /* Append value */
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, ":");
-
-    value = vcardproperty_get_value(prop);
 
     if (value != 0) {
         char *str = vcardvalue_as_vcard_string_r(value);
