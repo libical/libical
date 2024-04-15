@@ -20,7 +20,7 @@ LIBICAL_VCARD_EXPORT ssize_t vcardstrarray_find(vcardstrarray *array,
                                                 const char *needle);
 
 LIBICAL_VCARD_EXPORT void vcardstrarray_append(vcardstrarray *array,
-                                               const char *new);
+                                               const char *elem);
 
 LIBICAL_VCARD_EXPORT void vcardstrarray_add(vcardstrarray *array,
                                             const char *add);
