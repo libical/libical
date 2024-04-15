@@ -9,13 +9,14 @@
 "NO","499","NO","NO"
 
 "#vCard Properties","RFC 6350 Section 6",
+"#PHOTO,LOGO,SOUND,KEY default VALUE types differ between v3 (BINARY) and v4 (URI)",
 "SOURCE","1","URI","URI"
 "KIND","2","KIND","KIND"
 "XML","3","TEXT","TEXT"
 "FN","4","TEXT","TEXT"
 "N","5","STRUCTURED","STRUCTURED",is_structured;is_multivalued
 "NICKNAME","6","TEXTLIST","TEXTLIST",is_multivalued
-"PHOTO","7","URI","URI"
+"PHOTO","7","URI","NO"
 "BDAY","8","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
 "ANNIVERSARY","9","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
 "GENDER","10","TEXTLIST","TEXTLIST",is_structured
@@ -25,10 +26,10 @@
 "IMPP","14","URI","URI"
 "LANG","15","LANGUAGE-TAG","LANGUAGE-TAG"
 "TZ","16","TZ","TZ"
-"GEO","17","GEO","GEO"
+"GEO","17","GEO","NO"
 "TITLE","18","TEXT","TEXT"
 "ROLE","19","TEXT","TEXT"
-"LOGO","20","URI","URI"
+"LOGO","20","URI","NO"
 "ORG","21","TEXTLIST","TEXTLIST",is_structured
 "MEMBER","22","URI","URI"
 "RELATED","23","URI","URI"
@@ -36,12 +37,12 @@
 "NOTE","25","TEXT","TEXT"
 "PRODID","26","TEXT","TEXT"
 "REV","27","TIMESTAMP","TIMESTAMP"
-"SOUND","28","URI","URI"
+"SOUND","28","URI","NO"
 "UID","29","URI","URI"
 "CLIENTPIDMAP","30","TEXTLIST","TEXTLIST",is_structured
 "URL","31","URI","URI"
 "VERSION","32","VERSION","VERSION"
-"KEY","33","URI","URI"
+"KEY","33","URI","NO"
 "FBURL","34","URI","URI"
 "CALADRURI","35","URI","URI"
 "CALURI","36","URI","URI"
@@ -69,10 +70,10 @@
 "#RDAP Extension Properties", "RFC 8605 Section 2",
 "CONTACT-URI","52","URI","URI"
 
-"#JSContact Conversion", "draft-ietf-calext-jscontact-vcard Section 3.2.1",
+"#JSContact Conversion", "RFC 9555 Section 3.2.1",
 "JSPROP","53","TEXT","TEXT"
 
-"#JSContact Extensions","draft-ietf-calext-vcard-jscontact-extensions",
+"#JSContact Extensions","RFC 9554",
 "CREATED","54","TIMESTAMP","TIMESTAMP"
 "LANGUAGE","55","TEXT","TEXT"
 "GRAMGENDER","56","GRAMGENDER","GRAMGENDER"
