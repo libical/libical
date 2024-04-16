@@ -1,8 +1,19 @@
+/*======================================================================
+ FILE: vcard_test_encode.c
+
+ CREATOR: Robert Stepanek 24 Aug 2022 <rsto@fastmailteam.com>
+
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (http://fastmail.com)
+
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+ ======================================================================*/
+
+#include "vcard.h"
+
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
-
-#include "vcard.h"
 
 #define assert_str_equals(want, have) \
 { \

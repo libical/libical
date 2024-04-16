@@ -1,7 +1,13 @@
 /*======================================================================
  FILE: vcardvalueimpl.h
 
-======================================================================*/
+ CREATOR: Ken Murchison 24 Aug 2022
+
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (http://fastmail.com)
+
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+ ======================================================================*/
 
 #ifndef VCARDVALUEIMPL_H
 #define VCARDVALUEIMPL_H
@@ -12,7 +18,7 @@
 
 struct vcardvalue_impl
 {
-    vcardvalue_kind kind;     /*this is the kind that is visible from the outside */
+    vcardvalue_kind kind;     /* the kind that is visible from the outside */
 
     char id[5];
     int size;
@@ -28,6 +34,9 @@ struct vcardvalue_impl
         /*char *v_adr; */          /* use v_structured field[0-6] */
         /*char *v_org; */          /* use v_structured field[0] only */
         /*char *v_categories; */   /* use v_structured field[0] only */
+
+        /*char *v_geo; */          /* use v_structured field[0-1] for v3
+                                    * use v_string for v4 (geo: uri) */
 
         const char *v_string;
         /*char *v_text; */         /* use v_string */
