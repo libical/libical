@@ -1,11 +1,11 @@
 add_definitions(-Dlibical_vcard_EXPORTS)
 
 include_directories(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_BINARY_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_BINARY_DIR}/src/libical
-  ${CMAKE_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_BINARY_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_BINARY_DIR}/src/libical
+  ${PROJECT_SOURCE_DIR}/src/libical
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
 )
@@ -14,149 +14,149 @@ if(ICU_FOUND)
   include_directories(${ICU_INCLUDE_DIRS})
 endif()
 
-set(ICALSCRIPTS ${CMAKE_SOURCE_DIR}/scripts/)
+set(ICALSCRIPTS ${PROJECT_SOURCE_DIR}/scripts/)
 set(BUILT_HEADERS) #list of derived headers we build
 set(BUILD_SOURCES) #list of derived implementations we build
 
 set(PROPERTYDEPS
   ${ICALSCRIPTS}/mkderivedproperties.pl
-  ${CMAKE_SOURCE_DIR}/design-data/vcard-properties.csv
-  ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv
+  ${PROJECT_SOURCE_DIR}/design-data/vcard-properties.csv
+  ${PROJECT_SOURCE_DIR}/design-data/vcard-value-types.csv
 )
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl -v
-      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.h.in
-      -h ${CMAKE_SOURCE_DIR}/design-data/vcard-properties.csv
-      ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv >
-      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h
+      -i ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.h.in
+      -h ${PROJECT_SOURCE_DIR}/design-data/vcard-properties.csv
+      ${PROJECT_SOURCE_DIR}/design-data/vcard-value-types.csv >
+      ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h
   DEPENDS
     ${PROPERTYDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.h.in
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.h.in
   COMMENT "Generate vcardderivedproperty.h"
 )
-list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h)
+list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h)
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.c
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.c
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl -v
-      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.c.in
-      -c ${CMAKE_SOURCE_DIR}/design-data/vcard-properties.csv
-      ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv >
-      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.c
+      -i ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.c.in
+      -c ${PROJECT_SOURCE_DIR}/design-data/vcard-properties.csv
+      ${PROJECT_SOURCE_DIR}/design-data/vcard-value-types.csv >
+      ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.c
   DEPENDS
     ${PROPERTYDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.c.in
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedproperty.c.in
   COMMENT "Generate vcardderivedproperty.c"
 )
-list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.c)
+list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.c)
 
 set(PARAMETERDEPS
   ${ICALSCRIPTS}/mkderivedparameters.pl
-  ${CMAKE_SOURCE_DIR}/design-data/vcard-parameters.csv
+  ${PROJECT_SOURCE_DIR}/design-data/vcard-parameters.csv
 )
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl -v
-      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.h.in
-      -h ${CMAKE_SOURCE_DIR}/design-data/vcard-parameters.csv >
-      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h
+      -i ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.h.in
+      -h ${PROJECT_SOURCE_DIR}/design-data/vcard-parameters.csv >
+      ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h
   DEPENDS
     ${PARAMETERDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.h.in
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.h.in
   COMMENT "Generate vcardderivedparameter.h"
 )
-list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h)
+list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h)
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl -v
-      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.c.in
-      -c ${CMAKE_SOURCE_DIR}/design-data/vcard-parameters.csv >
-      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c
+      -i ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.c.in
+      -c ${PROJECT_SOURCE_DIR}/design-data/vcard-parameters.csv >
+      ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c
   DEPENDS
     ${PARAMETERDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.c.in
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedparameter.c.in
   COMMENT "Generate vcardderivedparameter.c"
 )
-list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c)
+list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c)
 
 set(RESTRICTIONDEPS
   ${ICALSCRIPTS}/mkrestrictiontable.pl
-  ${CMAKE_SOURCE_DIR}/design-data/vcard-restrictions.csv
+  ${PROJECT_SOURCE_DIR}/design-data/vcard-restrictions.csv
 )
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardrestriction.c
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardrestriction.c
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkrestrictiontable.pl -v
-      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardrestriction.c.in
-      ${CMAKE_SOURCE_DIR}/design-data/vcard-restrictions.csv >
-      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardrestriction.c
+      -i ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardrestriction.c.in
+      ${PROJECT_SOURCE_DIR}/design-data/vcard-restrictions.csv >
+      ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardrestriction.c
   DEPENDS
     ${RESTRICTIONDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardrestriction.c.in
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardrestriction.c.in
   COMMENT "Generate vcardrestriction.c"
 )
-list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardrestriction.c)
+list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardrestriction.c)
 
 set(VALUEDEPS
   ${ICALSCRIPTS}mkderivedvalues.pl
-  ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv
+  ${PROJECT_SOURCE_DIR}/design-data/vcard-value-types.csv
 )
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -v
-      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.h.in
-      -h ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv >
-      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h
+      -i ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.h.in
+      -h ${PROJECT_SOURCE_DIR}/design-data/vcard-value-types.csv >
+      ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h
   DEPENDS
     ${VALUEDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.h.in
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.h.in
   COMMENT "Generate vcardderivedvalue.h"
 )
-list(APPEND BUILT_HEADERS ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h)
+list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h)
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -v
-      -i ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.c.in
-      -c ${CMAKE_SOURCE_DIR}/design-data/vcard-value-types.csv >
-      ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c
+      -i ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.c.in
+      -c ${PROJECT_SOURCE_DIR}/design-data/vcard-value-types.csv >
+      ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c
   DEPENDS
     ${VALUEDEPS}
-    ${CMAKE_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.c.in
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/vcardderivedvalue.c.in
   COMMENT "Generate vcardderivedvalue.c"
 )
-list(APPEND BUILT_SOURCES ${CMAKE_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c)
+list(APPEND BUILT_SOURCES ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c)
 
 if(WIN32)
-  set(TOPS "\"${CMAKE_SOURCE_DIR}\"")
-  set(TOPB "\"${CMAKE_BINARY_DIR}\"")
+  set(TOPS "\"${PROJECT_SOURCE_DIR}\"")
+  set(TOPB "\"${PROJECT_BINARY_DIR}\"")
 else()
-  set(TOPS "${CMAKE_SOURCE_DIR}")
-  set(TOPB "${CMAKE_BINARY_DIR}")
+  set(TOPS "${PROJECT_SOURCE_DIR}")
+  set(TOPB "${PROJECT_BINARY_DIR}")
 endif()
 
 add_custom_target(
   vcard-header ALL
-  DEPENDS ${CMAKE_BINARY_DIR}/src/libicalvcard/vcard.h
+  DEPENDS ${PROJECT_BINARY_DIR}/src/libicalvcard/vcard.h
   COMMENT "Target to generate the aggregate vcard.h header"
 )
 
@@ -189,12 +189,12 @@ set(icalvcard_LIB_SRCS
 
 add_custom_command(
   OUTPUT
-    ${CMAKE_BINARY_DIR}/src/libicalvcard/vcard.h
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcard.h
   COMMAND
     ${CMAKE_COMMAND}
       -DTOPS:FILEPATH=${TOPS}
       -DTOPB:FILEPATH=${TOPB}
-      -DVCARD_FILE_H_FILE:FILEPATH=${CMAKE_BINARY_DIR}/src/libicalvcard/vcard.h
+      -DVCARD_FILE_H_FILE:FILEPATH=${PROJECT_BINARY_DIR}/src/libicalvcard/vcard.h
       -P ${CMAKE_CURRENT_SOURCE_DIR}/vcard_file.cmake
   DEPENDS ${icalvcard_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/vcard_file.cmake
   COMMENT "Generate the aggregate vcard.h header"
@@ -252,7 +252,7 @@ endif()
 ########### install files ###############
 
 install(FILES
-  ${CMAKE_BINARY_DIR}/src/libicalvcard/vcard.h
+  ${PROJECT_BINARY_DIR}/src/libicalvcard/vcard.h
   ${BUILT_HEADERS}
   libical_vcard_export.h
   vcardtime.h
