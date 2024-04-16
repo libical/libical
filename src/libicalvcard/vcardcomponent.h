@@ -1,11 +1,13 @@
 /*======================================================================
  FILE: vcardcomponent.h
 
-======================================================================*/
+ CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
 
-/**
- *      @file vcardcomponent.h
- */
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (http://fastmail.com)
+
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+ ======================================================================*/
 
 #ifndef VCARDCOMPONENT_H
 #define VCARDCOMPONENT_H
