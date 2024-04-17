@@ -194,7 +194,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
     vcardproperty *p;
     vcardcomponent_kind kind = vcardcomponent_isa(impl);
 
-    const char *kind_string;
+    const char *kind_string = NULL;
 
     icalerror_check_arg_rz((impl != 0), "component");
     icalerror_check_arg_rz((kind != VCARD_NO_COMPONENT),

@@ -12,6 +12,10 @@
 #ifndef VCARDENUMARRAY_H
 #define VCARDENUMARRAY_H
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "libical_vcard_export.h"
 #include "icalarray.h"
 
