@@ -570,7 +570,8 @@ static int _parse_prop_name(struct vcardparser_state *state)
             name = buf_cstring(&state->buf);
             kind = vcardproperty_string_to_kind(name);
 
-            if (!(state->prop = vcardproperty_new(kind)))
+            state->prop = vcardproperty_new(kind);
+            if (!state->prop)
                 return PE_NAME_INVALID;
 
             if (kind == VCARD_X_PROPERTY)
@@ -647,7 +648,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
         vcardproperty_is_multivalued(prop_kind);
     int is_structured  = (state->value_kind == VCARD_STRUCTURED_VALUE);
     const char *text_sep = NULL;
-    vcardstructuredtype structured;
+    vcardstructuredtype structured = {};
     vcardstrarray *textlist = NULL;
     vcardvalue *value;
 

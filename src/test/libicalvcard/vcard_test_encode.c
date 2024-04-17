@@ -147,9 +147,11 @@ static void test_param_multivalued(void)
     vcardcomponent_free(card);
 }
 
-int main(int argc __attribute__((unused)),
-         char **argv __attribute((unused)))
+int main(int argc, char **argv)
 {
+    _unused(argc);
+    _unused(argv);
+
     test_prop_text();
     test_prop_structured();
     test_prop_multivalued();
