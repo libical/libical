@@ -197,7 +197,7 @@ char *vcardtime_as_vcard_string_r(const vcardtimetype t,
         need_time_designator = 1;
     }
     if (!vcardtime_is_date(t)) {
-        n = sprintf_time(t, need_time_designator, ptr, size);
+        (void)sprintf_time(t, need_time_designator, ptr, size);
     }
 
     return buf;
@@ -221,6 +221,7 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
     const char *month;
     size_t ndig;
     int nchar;
+    char *newstr;
 
     if (!str || !*str) {
         /* empty string */
@@ -289,7 +290,8 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
     strcat(fmt, "%4$n");
     sscanf(str, fmt, &t->year, &t->month, &t->day, &nchar);
 
-    return (str += nchar);
+    newstr = (char *)str + nchar;
+    return newstr;
 }
 
 static const char *sscanf_zone(const char *str, vcardtimetype *t)
@@ -297,6 +299,7 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
     char fmt[16] = "";  /* 3 numeric arguments by position + NUL */
     int offset_h = 0, offset_m = 0, nchar;
     size_t ndig;
+    char *newstr;
 
     if (!str || !*str) {
         /* empty string */
@@ -330,7 +333,8 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
 
     t->utcoffset = 60 * offset_h + ((offset_h < 0) ? -offset_m : offset_m);
 
-    return (str += nchar);
+    newstr = (char *)str + nchar;
+    return newstr;
 }
 
 static const char *sscanf_time(const char *str, vcardtimetype *t)
