@@ -1,14 +1,13 @@
 /*======================================================================
-  FILE: vcardparameter.h
+ FILE: vcardparameter.h
 
-======================================================================*/
+ CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
 
-/**
- * @file icalparameter.h
- *
- * Functions to work with ical parameter objects, which represent
- * parameters to property objects.
- */
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
+
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+ ======================================================================*/
 
 #ifndef VCARDPARAMETER_H
 #define VCARDPARAMETER_H

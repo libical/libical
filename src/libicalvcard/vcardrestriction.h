@@ -1,16 +1,16 @@
 /*======================================================================
-  FILE: vcardrestriction.h
+ FILE: vcardrestruction.h
 
-======================================================================*/
+ CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
+
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
+
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+ ======================================================================*/
 
 #ifndef VCARDRESTRICTION_H
 #define VCARDRESTRICTION_H
-
-/**
- * @file vcardrestriction.h
- * @brief Functions to check if an vcardcomponent meets the restrictions
- *  imposed by the standard.
- */
 
 #include "libical_vcard_export.h"
 #include "vcardcomponent.h"
@@ -87,4 +87,4 @@ LIBICAL_VCARD_EXPORT int vcardrestriction_compare(vcardrestriction_kind restr,
  */
 LIBICAL_VCARD_EXPORT int vcardrestriction_check(vcardcomponent *comp);
 
-#endif /* !VCARDRESTRICTION_H */
+#endif /* VCARDRESTRICTION_H */

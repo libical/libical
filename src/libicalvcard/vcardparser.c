@@ -1,7 +1,15 @@
-/* vcardparser.c : fast vCard parser
- *
- * Based mostly on work by Bron Gondwana <brong@fastmailteam.com>
- */
+/*======================================================================
+ FILE: vcardproperty.c
+
+ CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
+
+ CONTRIBUTOR: Bron Gondwana <brong@fastmailteam.com>
+
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
+
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+ ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
