@@ -23,6 +23,8 @@
 #include <string.h>
 #include <time.h>
 
+#define TIME_BUF_SIZE 21
+
 vcardtimetype vcardtime_null_datetime(void)
 {
     vcardtimetype t = { -1, -1, -1, -1, -1, -1, -1 };
@@ -195,7 +197,7 @@ static int sprintf_time(const vcardtimetype t, int need_designator,
 char *vcardtime_as_vcard_string_r(const vcardtimetype t,
                                   int need_time_designator)
 {
-    size_t size = 21;
+    size_t size = TIME_BUF_SIZE;
     char *ptr, *buf;
     int n;
 
@@ -229,7 +231,7 @@ const char *vcardtime_as_vcard_string(const vcardtimetype t,
 
 static const char *sscanf_date(const char *str, vcardtimetype *t)
 {
-    char fmt[21] = "";  /* 4 numeric arguments by position + NUL */
+    char fmt[TIME_BUF_SIZE] = "";  /* 4 numeric arguments by position + NUL */
     const char *month;
     size_t ndig;
     int nchar;
