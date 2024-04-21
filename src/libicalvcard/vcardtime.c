@@ -38,6 +38,7 @@ vcardtimetype vcardtime_current_utc_time(void)
     struct tm t;
     vcardtimetype tt;
 
+    memset(&t, 0, sizeof(struct tm));
     if (!icalgmtime_r(&now, &t)) {
         return vcardtime_null_datetime();
     }
