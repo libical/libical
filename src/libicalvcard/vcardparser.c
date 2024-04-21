@@ -710,11 +710,11 @@ static int _parse_prop_value(struct vcardparser_state *state)
         case ';':
             if (is_structured || (is_multivalued && strchr(text_sep, *state->p))) {
                 const char *str = buf_cstring(&state->buf);
-                char *dequot_str =
-                    vcardvalue_strdup_and_dequote_text(&str, text_sep);
+                char *dequot_str = vcardvalue_strdup_and_dequote_text(&str, text_sep);
+
                 vcardstrarray_append(textlist, dequot_str);
                 buf_reset(&state->buf);
-                free(dequot_str);
+                icalmemory_free_buffer(dequot_str);
 
                 if (*state->p == ';' && is_structured) {
                     textlist = vcardstrarray_new(2);
@@ -743,7 +743,7 @@ out:
             vcardvalue_strdup_and_dequote_text(&str, text_sep);
         vcardstrarray_append(textlist, dequot_str);
         buf_reset(&state->buf);
-        free(dequot_str);
+        icalmemory_free_buffer(dequot_str);
 
         if (is_structured)
             value = vcardvalue_new_structured(&structured);
