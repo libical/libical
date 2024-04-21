@@ -4237,6 +4237,7 @@ void test_vcal(void)
 
     vcal = Parse_MIME_FromFileName(file);
 
+    /* cppcheck-suppress unknownMacro */
     ok("Parsing " TEST_DATADIR "/user-cal.vcf", (vcal != 0));
 
     if (vcal) {

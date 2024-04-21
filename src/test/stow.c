@@ -593,7 +593,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
         }
 
         /* Find password entry for user */
-        while ((pw = getpwent()) != 0) {
+        while ((pw = getpwent()) != 0) { /* cppcheck-suppress getpwentCalled */
             if (strcmp(user, pw->pw_name) == 0) {
                 break;
             }
