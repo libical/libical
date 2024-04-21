@@ -3,7 +3,7 @@
 
  CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
 
- SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (http://fastmail.com)
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
 
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
@@ -200,6 +200,14 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
     icalerror_check_arg_rz((kind != VCARD_NO_COMPONENT),
                            "component kind is VCARD_NO_COMPONENT");
 
+    if (kind != VCARD_X_COMPONENT) {
+        kind_string = vcardcomponent_kind_to_string(kind);
+    } else {
+        kind_string = impl->x_name;
+    }
+
+    icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
+
     buf = icalmemory_new_buffer(buf_size);
     if (buf == NULL)
         return NULL;
@@ -207,14 +215,6 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
     buf_ptr = buf;
 
     if (kind != VCARD_XROOT_COMPONENT) {
-        if (kind != VCARD_X_COMPONENT) {
-            kind_string = vcardcomponent_kind_to_string(kind);
-        } else {
-            kind_string = impl->x_name;
-        }
-
-        icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
-
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, "BEGIN:");
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);

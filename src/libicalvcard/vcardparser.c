@@ -5,7 +5,7 @@
 
  CONTRIBUTOR: Bron Gondwana <brong@fastmailteam.com>
 
- SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (http://fastmail.com)
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
 
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 

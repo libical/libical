@@ -1,9 +1,9 @@
 /*======================================================================
  FILE: vcardtime.c
 
- CREATOR: Ken Murchison 24 Aug 2022
+ CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
 
- SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (http://fastmail.com)
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
 
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
@@ -15,12 +15,15 @@
 
 #include "vcardtime.h"
 #include "icalmemory.h"
+#include "icaltime.h"
 
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+#define TIME_BUF_SIZE 21
 
 vcardtimetype vcardtime_null_datetime(void)
 {
@@ -32,9 +35,20 @@ vcardtimetype vcardtime_null_datetime(void)
 vcardtimetype vcardtime_current_utc_time(void)
 {
     time_t now = time(0);
-    struct tm *t = gmtime(&now);
-    vcardtimetype tt = { t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
-                         t->tm_hour, t->tm_min, t->tm_sec, 0 };
+    struct tm t;
+    vcardtimetype tt;
+
+    if (!icalgmtime_r(&now, &t)) {
+        return vcardtime_null_datetime();
+    }
+
+    tt.year      = t.tm_year + 1900;
+    tt.month     = t.tm_mon  + 1;
+    tt.day       = t.tm_mday;
+    tt.hour      = t.tm_hour;
+    tt.minute    = t.tm_min;
+    tt.second    = t.tm_sec;
+    tt.utcoffset = 0;
 
     return tt;
 }
@@ -183,7 +197,7 @@ static int sprintf_time(const vcardtimetype t, int need_designator,
 char *vcardtime_as_vcard_string_r(const vcardtimetype t,
                                   int need_time_designator)
 {
-    size_t size = 21;
+    size_t size = TIME_BUF_SIZE;
     char *ptr, *buf;
     int n;
 
@@ -217,7 +231,7 @@ const char *vcardtime_as_vcard_string(const vcardtimetype t,
 
 static const char *sscanf_date(const char *str, vcardtimetype *t)
 {
-    char fmt[21] = "";  /* 4 numeric arguments by position + NUL */
+    char fmt[TIME_BUF_SIZE] = "";  /* 4 numeric arguments by position + NUL */
     const char *month;
     size_t ndig;
     int nchar;

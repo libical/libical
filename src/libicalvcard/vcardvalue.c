@@ -3,7 +3,7 @@
 
  CREATOR: Ken Murchison 24 Aug 2022
 
- SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (http://fastmail.com)
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
 
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
@@ -339,16 +339,23 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_UTCOFFSET_VALUE:
         {
-            const char *fmt = "%1[+-]%02u%02u%n";
+            /* "+" / "-" hh [ [":"] mm ] */
+            char fmt[25] = "%1$1[+-]%2$02u";
             char sign[2] = "";
-            unsigned hour, min;
-            int n, len = (int) strlen(str);
+            unsigned hour, min = 0;
+            int nargs= 2, nchar, len = (int) strlen(str);
 
-            if (len == 6) {
-                fmt = "%1[+-]%02u:%02u%n";
+            if (len > 3) {
+                nargs = 3;
+                if (len == 6) {
+                    strcat(fmt, ":");
+                }
+                strcat(fmt, "%3$02u");
             }
+            strcat(fmt, "%4$n");
 
-            if (3 == sscanf(str, fmt, sign, &hour, &min, &n) && n == len) {
+            if (nargs == sscanf(str, fmt, sign, &hour, &min, &nchar) &&
+                nchar == len) {
                 int utcoffset = (int)(hour * 3600 + min * 60);
 
                 if (*sign == '-') utcoffset = -utcoffset;
