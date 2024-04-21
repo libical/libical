@@ -207,7 +207,7 @@ char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
  * As such, \b, \f, \r are not allowed, not even escaped
  */
 static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_sz,
-                                         const char *unquoted_str, int is_param)
+                                          const char *unquoted_str, int is_param)
 {
     const char *p;
 
@@ -349,7 +349,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
             }
 
             if (3 == sscanf(str, fmt, sign, &hour, &min, &n) && n == len) {
-                int utcoffset = hour * 3600 + min * 60;
+                int utcoffset = (int)(hour * 3600 + min * 60);
 
                 if (*sign == '-') utcoffset = -utcoffset;
                 value = vcardvalue_new_utcoffset(utcoffset);
@@ -394,7 +394,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_STRUCTURED_VALUE:
         {
-            vcardstructuredtype st = { 0 };
+            vcardstructuredtype st = { 0, {0} };
             vcardstrarray *field = vcardstrarray_new(2);
 
             st.field[st.num_fields++] = field;
@@ -653,8 +653,8 @@ static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *b
             icalmemory_append_char(str, str_p, buf_sz, sep);
         }
 
-        vcardmemory_strdup_and_quote(str, str_p, buf_sz,
-                                    vcardstrarray_element_at(array, i), is_param);
+        (void)vcardmemory_strdup_and_quote(str, str_p, buf_sz,
+                                           vcardstrarray_element_at(array, i), is_param);
     }
 }
 
@@ -749,12 +749,13 @@ const char *vcardvalue_as_vcard_string(const vcardvalue *value)
 
 char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 {
+    int is_structured;
+
     if (value == 0) {
         return 0;
     }
 
-    int is_structured =
-        vcardproperty_is_structured(vcardproperty_isa(value->parent));
+    is_structured = vcardproperty_is_structured(vcardproperty_isa(value->parent));
 
     switch (value->kind) {
 

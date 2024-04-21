@@ -314,11 +314,10 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     } else if (param->data != 0) {
         char *intbuf = NULL;
         const char *str;
-
         if (param->value_kind == VCARD_INTEGER_VALUE) {
-            intbuf = icalmemory_tmp_buffer(21);
-
-            sprintf(intbuf, "%d", param->data);
+            #define VCARD_INTEGER_LENGTH 21
+            intbuf = icalmemory_tmp_buffer(VCARD_INTEGER_LENGTH);
+            snprintf(intbuf, VCARD_INTEGER_LENGTH-1, "%d", param->data);
             str = intbuf;
         }
         else {
