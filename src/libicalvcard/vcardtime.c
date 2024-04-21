@@ -15,6 +15,7 @@
 
 #include "vcardtime.h"
 #include "icalmemory.h"
+#include "icaltime.h"
 
 #include <limits.h>
 #include <stdio.h>
@@ -32,9 +33,20 @@ vcardtimetype vcardtime_null_datetime(void)
 vcardtimetype vcardtime_current_utc_time(void)
 {
     time_t now = time(0);
-    struct tm *t = gmtime(&now);
-    vcardtimetype tt = { t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
-                         t->tm_hour, t->tm_min, t->tm_sec, 0 };
+    struct tm t;
+    vcardtimetype tt;
+
+    if (!icalgmtime_r(&now, &t)) {
+        return vcardtime_null_datetime();
+    }
+
+    tt.year      = t.tm_year + 1900;
+    tt.month     = t.tm_mon  + 1;
+    tt.day       = t.tm_mday;
+    tt.hour      = t.tm_hour;
+    tt.minute    = t.tm_min;
+    tt.second    = t.tm_sec;
+    tt.utcoffset = 0;
 
     return tt;
 }
