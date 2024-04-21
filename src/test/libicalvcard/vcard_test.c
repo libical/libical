@@ -61,6 +61,7 @@ int main(int argc, const char **argv)
 
     if (card == NULL) {
         fprintf(stderr, "Failed to parse vCard\n");
+        close(fd);
         return -1;
     }
 
@@ -76,6 +77,7 @@ int main(int argc, const char **argv)
 
     if (card == NULL) {
         fprintf(stderr, "Failed to create vCard\n");
+        close(fd);
         return -1;
     }
 
@@ -178,5 +180,6 @@ int main(int argc, const char **argv)
 
     vcardcomponent_free(card);
 
+    close(fd);
     return 0;
 }
