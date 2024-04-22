@@ -52,13 +52,13 @@ int main(int argc, const char **argv)
 
     fstat(fd, &sbuf);
     data = malloc(sbuf.st_size+1);
+    memset(data, 0, sbuf.st_size+1);
 
     int r = read(fd, data, sbuf.st_size);
     if (r < 0) {
         fprintf(stderr, "Failed to read vCard\n");
         return -1;
     }
-    data[r+1] = '\0';
 
     vcardcomponent *card = vcardparser_parse_string(data);
     free(data);
