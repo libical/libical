@@ -648,7 +648,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
         vcardproperty_is_multivalued(prop_kind);
     int is_structured  = (state->value_kind == VCARD_STRUCTURED_VALUE);
     const char *text_sep = NULL;
-    vcardstructuredtype structured = {};
+    vcardstructuredtype structured = { 0 };
     vcardstrarray *textlist = NULL;
     vcardvalue *value;
 
