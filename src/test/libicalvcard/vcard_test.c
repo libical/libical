@@ -40,10 +40,10 @@ void strip_errors(vcardcomponent *comp)
 
 int main(int argc, const char **argv)
 {
-    const char *fname = argv[1];
+    int fd;
+    const char *fname;
     struct stat sbuf;
     size_t filesize;
-    int fd = open(fname, O_RDONLY);
     void *data = NULL;
 
     if (argc != 2) {
@@ -51,6 +51,12 @@ int main(int argc, const char **argv)
         exit(1);
     }
 
+    fname = argv[1];
+    fd = open(fname, O_RDONLY);
+    if (fd < 0) {
+        fprintf(stderr, "Error: unable to open %s\n", fname);
+        exit(1);
+    }
     fstat(fd, &sbuf);
     filesize = sbuf.st_size; //to make fortify compile happy
     data = malloc(filesize+1);
