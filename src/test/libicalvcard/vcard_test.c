@@ -56,6 +56,8 @@ int main(int argc, const char **argv)
     int r = read(fd, data, sbuf.st_size);
     if (r < 0) {
         fprintf(stderr, "Failed to read vCard\n");
+        free(data);
+        close(fd);
         return -1;
     }
     data[r+1] = '\0';
