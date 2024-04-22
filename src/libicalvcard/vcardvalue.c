@@ -626,7 +626,7 @@ static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value)
 static char *vcardvalue_text_as_vcard_string_r(const vcardvalue *value)
 {
     char *str = NULL;
-    char *str_p;
+    char *str_p = NULL;
     size_t buf_sz;
 
     return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
@@ -668,7 +668,7 @@ static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *b
 char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array, const char sep)
 {
     char *buf = NULL;
-    char *buf_ptr;
+    char *buf_ptr = NULL;
     size_t buf_size;
 
     _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size,
