@@ -227,6 +227,9 @@ static int vcardrestriction_check_component(vcardproperty_version version,
             valid = valid && compare;
         }
     }
+    else {
+        start_record = NULL;
+    }
 
     /* Now check the inner components */
 
