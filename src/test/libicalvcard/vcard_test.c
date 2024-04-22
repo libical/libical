@@ -42,8 +42,9 @@ int main(int argc, const char **argv)
 {
     const char *fname = argv[1];
     struct stat sbuf;
+    size_t filesize;
     int fd = open(fname, O_RDONLY);
-    char *data = NULL;
+    void *data = NULL;
 
     if (argc != 2) {
         fprintf(stderr, "Usage: %s fname\n", argv[0]);
@@ -51,11 +52,10 @@ int main(int argc, const char **argv)
     }
 
     fstat(fd, &sbuf);
-    data = malloc(sbuf.st_size+1);
-    memset(data, 0, sbuf.st_size+1);
-
-    int r = read(fd, data, sbuf.st_size);
-    if (r < 0) {
+    filesize = sbuf.st_size; //to make fortify compile happy
+    data = malloc(filesize+1);
+    memset(data, 0, filesize+1);
+    if (read(fd, data, filesize) < 0) {
         fprintf(stderr, "Failed to read vCard\n");
         free(data);
         close(fd);
