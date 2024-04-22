@@ -21,5 +21,7 @@ target_link_libraries(vcard_test_encode icalvcard)
 add_test(NAME vcard_construct
   COMMAND vcard_test ${CMAKE_SOURCE_DIR}/test-data/test.vcf
 )
+setprops(vcard_construct)
 
 add_test(NAME vcard_encode COMMAND vcard_test_encode)
+setprops(vcard_encode)
