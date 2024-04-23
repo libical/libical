@@ -340,22 +340,29 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
     case VCARD_UTCOFFSET_VALUE:
         {
             /* "+" / "-" hh [ [":"] mm ] */
-            char fmt[25] = "%1$1[+-]%2$02u";
             char sign[2] = "";
             unsigned hour, min = 0;
-            int nargs= 2, nchar, len = (int) strlen(str);
+            int nchar = 0, len = (int) strlen(str);
 
             if (len > 3) {
-                nargs = 3;
-                if (len == 6) {
-                    strcat(fmt, ":");
-                }
-                strcat(fmt, "%3$02u");
-            }
-            strcat(fmt, "%4$n");
+                const char *fmt;
 
-            if (nargs == sscanf(str, fmt, sign, &hour, &min, &nchar) &&
-                nchar == len) {
+                if (str[3] == ':') {
+                    fmt = "%1[+-]%02u:%02u%n";
+                }
+                else {
+                    fmt = "%1[+-]%02u%02u%n";
+                }
+
+                if (3 != sscanf(str, fmt, sign, &hour, &min, &nchar)) {
+                    nchar = 0;
+                }
+            }
+            else if (2 != sscanf(str, "%1[+-]%02u%n", sign, &hour, &nchar)) {
+                nchar = 0;
+            }
+
+            if (len && (len == nchar)) {
                 int utcoffset = (int)(hour * 3600 + min * 60);
 
                 if (*sign == '-') utcoffset = -utcoffset;

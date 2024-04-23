@@ -139,60 +139,111 @@ int vcardtime_is_valid_time(const struct vcardtimetype t)
 
 static int sprintf_date(const vcardtimetype t, char *buf, size_t size)
 {
-    /* 3 zero-padded numeric arguments by position + NUL */
-    char fmt[19] = "";
+    /*
+      date = year    [month  day]
+           / year "-" month
+           / "--"     month [day]
+           / "--"      "-"   day
+    */
+    const char *fmt;
 
     if (t.year != -1) {
-        strcat(fmt, "%04d");
-
-        if (t.month != -1) {
-            strcat(fmt, (t.day != -1) ? "%02d%02d" : "-%02d");
+        if (t.month == -1) {
+            fmt = "%04d";
         }
+        else if (t.day == -1) {
+            fmt = "%04d-%02d";
+        }
+        else {
+            fmt = "%04d%02d%02d";
+        }
+
+        return snprintf(buf, size, fmt, t.year, t.month, t.day);
+    }
+    else if (t.month != -1) {
+        if (t.day == -1) {
+            fmt = "--%02d";
+        }
+        else {
+            fmt = "--%02d%02d";
+        }
+
+        return snprintf(buf, size, fmt, t.month, t.day);
     }
     else {
-        strcat(fmt, "--");
-
-        strcat(fmt, (t.month != -1) ? "%2$02d" : "-");
-
-        if (t.day != -1) {
-            strcat(fmt, "%3$02d");
-        }
+        return snprintf(buf, size, "---%02d", t.day);
     }
-
-    return snprintf(buf, size, fmt, t.year, t.month, t.day);
 }
 
 static int sprintf_time(const vcardtimetype t, int need_designator,
                       char *buf, size_t size)
 {
-    /* "T" + sign + 5 zero-padded numeric arguments by position + NUL */
-    char fmt[33] = "";
+    /*
+      time = ["T"] hour [minute [second]] [zone]
+           / ["T"]  "-"  minute [second]
+           / ["T"]  "-"   "-"    second
+    */
+    const char *fmt;
 
     if (need_designator) {
-        strcat(fmt, "T");
+        strncat(buf, "T", size);
+        buf++;
+        size--;
     }
 
     if (t.hour != -1) {
-        strcat(fmt, "%02d");
+        /* hour [minute [second]] [zone] */
+        int n;
 
-        if (t.minute != -1) {
-            strcat(fmt, (t.second != -1) ? "%02d%02d" : "%02d");
+        if (t.minute == -1) {
+            /* hour */
+            fmt = "%02d";
         }
+        else if (t.second == -1) {
+            /* hour minute */
+            fmt = "%02d%02d";
+        }
+        else {
+            /* hour minute second */
+            fmt = "%02d%02d%02d";
+        }
+
+        n = snprintf(buf, size, fmt, t.hour, t.minute, t.second);
 
         if (t.utcoffset != -1) {
-            strcat(fmt, (t.utcoffset == 0) ? "Z" : "%4$+03d%5$02d");
+            /* zone = "Z" / ( sign hour minute ) */
+            buf += n;
+            size -= n;
+
+            if (t.utcoffset == 0) {
+                strncpy(buf, "Z", size);
+                n++;
+            }
+            else {
+                n += snprintf(buf, size, "%+03d%02d",
+                              t.utcoffset / 60, abs(t.utcoffset % 60));
+            }
         }
+
+        return n;
+    }
+    else if (t.minute != -1) {
+        /* "-"  minute [second] */
+        if (t.second == -1) {
+            /* "-" minute */
+            fmt = "-%02d";
+        }
+        else {
+            /* "-" minute second */
+            fmt = "-%02d%02d";
+        }
+
+        return snprintf(buf, size, fmt, t.minute, t.second);
     }
     else {
-        strcat(fmt, (t.minute != -1) ? "-%2$02d" : "--");
-
-        if (t.second != -1) {
-            strcat(fmt, "%3$02d");
-        }
+        /* "-" "-" second */
+        return snprintf(buf, size, "--%02d", t.second);
     }
-
-    return snprintf(buf, size, fmt, t.hour, t.minute, t.second,
-                    t.utcoffset / 60, abs(t.utcoffset % 60));
 }
 
 char *vcardtime_as_vcard_string_r(const vcardtimetype t,
@@ -232,10 +283,15 @@ const char *vcardtime_as_vcard_string(const vcardtimetype t,
 
 static const char *sscanf_date(const char *str, vcardtimetype *t)
 {
-    char fmt[TIME_BUF_SIZE] = "";  /* 4 numeric arguments by position + NUL */
+    /*
+      date = year    [month  day]
+           / year "-" month
+           / "--"     month [day]
+           / "--"      "-"   day
+    */
     const char *month;
     size_t ndig;
-    int nchar;
+    int nchar = 0;
     char *newstr;
 
     if (!str || !*str) {
@@ -246,64 +302,56 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
         month = str + 2;
 
         if (*month == '-') {
-            /* "--" "-" day */
             ndig = num_digits(month+1);
 
             if (ndig == 2) {
-                strcpy(fmt, "---%3$2u");
+                sscanf(str, "---%2u%n", &t->day, &nchar);
             }
         }
         else {
-            /* "--"  month [day] */
             ndig = num_digits(month);
 
             if (ndig == 4) {
-                /* month day */
-                strcpy(fmt, "--%2$2u%3$2u");
+                sscanf(str, "--%2u%2u%n", &t->month, &t->day, &nchar);
             }
             else if (ndig == 2) {
-                /* month */
-                strcpy(fmt, "--%2$2u");
+                sscanf(str, "--%2u%n", &t->month, &nchar);
             }
         }
     }
     else {
-        /* year [ ("-" month) / (month day)] */
         ndig = num_digits(str);
 
         if (ndig == 8) {
-            /* year month day */
-            strcpy(fmt, "%1$4u%2$2u%3$2u");
+            sscanf(str, "%4u%2u%2u%n", &t->year, &t->month, &t->day, &nchar);
         }
         else if (ndig == 4) {
             month = str + 4;
 
             if (!*month) {
-                /* year */
-                strcpy(fmt, "%1$4u");
+                sscanf(str, "%4u%n", &t->year, &nchar);
             }
             else if (*month == '-') {
-                /* year "-" month [ "-" day ] */
                 ndig = num_digits(++month);
 
                 if (ndig == 2) {
-                    strcpy(fmt, "%1$4u-%2$2u");
-
                     if (month[2] == '-') {
-                        strcat(fmt, "-%3$2u");
+                        sscanf(str, "%4u-%2u-%2u%n",
+                               &t->year, &t->month, &t->day, &nchar);
+                    }
+                    else {
+                        sscanf(str, "%4u-%2u%n",
+                               &t->year, &t->month, &nchar);
                     }
                 }
             }
         }
     }
 
-    if (!*fmt) {
+    if (!nchar) {
         /* invalid time */
         return NULL;
     }
-
-    strcat(fmt, "%4$n");
-    sscanf(str, fmt, &t->year, &t->month, &t->day, &nchar);
 
     newstr = (char *)str + nchar;
     return newstr;
@@ -311,42 +359,41 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
 
 static const char *sscanf_zone(const char *str, vcardtimetype *t)
 {
-    char fmt[16] = "";  /* 3 numeric arguments by position + NUL */
-    int offset_h = 0, offset_m = 0, nchar;
+    /*
+      zone = "Z"
+           / ( "+" / "-" ) hour [minute]
+    */
+    unsigned offset_h = 0, offset_m = 0;
+    char sign[2] = "";
     size_t ndig;
     char *newstr;
+    int nchar = 0;
 
     if (!str || !*str) {
         /* empty string */
         return NULL;
     }
     else if (*str == 'Z') {
-        /* zone = utc-designator */
-        strcpy(fmt, "Z");
+        nchar = 1;
     }
     else if (strchr("+-", *str)) {
-        /* zone = utc-offset = sign hour [minute] */
         ndig = num_digits(str+1);
 
         if (ndig == 4) {
-            /* sign hour minute */
-            strcpy(fmt, "%1$3d%2$2u");
+            sscanf(str, "%1[+-]%2u%2u%n", sign, &offset_h, &offset_m, &nchar);
         }
         else if (ndig == 2) {
-            /* sign hour */
-            strcpy(fmt, "%1$3d");
+            sscanf(str, "%1[+-]%2u%n", sign, &offset_h, &nchar);
         }
     }
 
-    if (!*fmt) {
+    if (!nchar) {
         /* invalid zone */
         return NULL;
     }
 
-    strcat(fmt, "%3$n");
-    sscanf(str, fmt, &offset_h, &offset_m, &nchar);
-
-    t->utcoffset = 60 * offset_h + ((offset_h < 0) ? -offset_m : offset_m);
+    t->utcoffset = 60 * offset_h + offset_m;
+    if (*sign == '-') t->utcoffset = -t->utcoffset;
 
     newstr = (char *)str + nchar;
     return newstr;
@@ -354,10 +401,15 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
 
 static const char *sscanf_time(const char *str, vcardtimetype *t)
 {
-    char fmt[27] = "";  /* "%1$2u:%2$2u:%3$2u.%4$u%5$n" + NUL */
+    /*
+      time = hour [ ":" minute ":" second   [ "." secfrac ] ]
+           / hour [     minute    [second]] [zone]
+           /  "-"       minute    [second]
+           /  "-"         "-"      second
+    */
     unsigned secfrac;
     size_t ndig;
-    int nchar;
+    int nchar = 0;
 
     if (!str || !*str) {
         /* empty string */
@@ -365,62 +417,56 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
     }
     else if (*str == '-') {
         if (str[1] == '-') {
-            /* "-" "-" second */
             ndig = num_digits(str+2);
 
             if (ndig == 2) {
-                strcpy(fmt, "--%3$2u");
+                sscanf(str, "--%2u%n", &t->second, &nchar);
             }
         }
         else {
-            /* "-"  minute [second] */
             ndig = num_digits(str+1);
 
             if (ndig == 4) {
-                /* minute second */
-                strcpy(fmt, "-%2$2u%3$2u");
+                sscanf(str, "-%2u%2u%n", &t->minute, &t->second, &nchar);
             }
             else if (ndig == 2) {
-                /* minute */
-                strcpy(fmt, "-%2$2u");
+                sscanf(str, "-%2u%n", &t->minute, &nchar);
                 t->second = 0;
             }
         }
     }
     else {
-        /* hour [minute [second]] [zone] */
         ndig = num_digits(str);
 
         if (ndig == 6) {
-            /* hour minute second */
-            strcpy(fmt, "%1$2u%2$2u%3$2u");
+            sscanf(str, "%2u%2u%2u%n", &t->hour, &t->minute, &t->second, &nchar);
         }
         else if (ndig == 4) {
-            /* hour minute */
-            strcpy(fmt, "%1$2u%2$2u");
+            sscanf(str, "%2u%2u%n", &t->hour, &t->minute, &nchar);
             t->second = 0;
         }
         else if (ndig == 2) {
-            /* hour [ ":" minute ":" second [ "." secfrac ] ] */
-            strcpy(fmt, "%1$2u");
-
             if (str[2] == ':') {
-                strcat(fmt, ":%2$2u:%3$2u");
-
                 if (str[8] == '.') {
-                    strcat(fmt, ".%4$u");
+                    sscanf(str, "%2u:%2u:%2u.%u%n",
+                           &t->hour, &t->minute, &t->second, &secfrac, &nchar);
                 }
+                else {
+                    sscanf(str, "%2u:%2u:%2u%n",
+                           &t->hour, &t->minute, &t->second, &nchar);
+                }
+            }
+            else {
+                sscanf(str, "%2u%n", &t->hour, &nchar);
             }
         }
     }
 
-    if (!*fmt) {
+    if (!nchar) {
         /* invalid time */
         return NULL;
     }
 
-    strcat(fmt, "%5$n");
-    sscanf(str, fmt, &t->hour, &t->minute, &t->second, &secfrac, &nchar);
     str += nchar;
 
     if (t->hour != -1 && *str) {
