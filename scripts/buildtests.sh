@@ -466,9 +466,11 @@ SPLINT() {
        -DLIBICAL_ICAL_EXPORT=extern \
        -DLIBICAL_ICALSS_EXPORT=extern \
        -DLIBICAL_VCAL_EXPORT=extern \
+       -DLIBICAL_VCARD_EXPORT=extern \
        -DLIBICAL_ICAL_NO_EXPORT="" \
        -DLIBICAL_ICALSS_NO_EXPORT="" \
        -DLIBICAL_VCAL_NO_EXPORT="" \
+       -DLIBICAL_VCARD_NO_EXPORT="" \
        -DENOENT=1 -DENOMEM=1 -DEINVAL=1 -DSIGALRM=1 \
        `pkg-config glib-2.0 --cflags` \
        `pkg-config libxml-2.0 --cflags` \
@@ -476,11 +478,13 @@ SPLINT() {
        -I $BDIR/src \
        -I $BDIR/src/libical \
        -I $BDIR/src/libicalss \
+       -I $BDIR/src/libicalvcard \
        -I $TOP \
        -I $TOP/src \
        -I $TOP/src/libical \
        -I $TOP/src/libicalss \
        -I $TOP/src/libicalvcal \
+       -I $TOP/src/libicalvcard \
        -I $TOP/src/libical-glib | \
   grep -v '[[:space:]]Location[[:space:]]unknown[[:space:]]' | \
   grep -v '[[:space:]]Code[[:space:]]cannot[[:space:]]be[[:space:]]parsed.' | \
