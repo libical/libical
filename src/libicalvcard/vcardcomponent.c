@@ -338,11 +338,13 @@ int vcardcomponent_count_properties(vcardcomponent *comp,
                 vcardparameter *param =
                     vcardproperty_get_first_parameter(prop,
                                                       VCARD_ALTID_PARAMETER);
-                const char *altid = param ? vcardparameter_get_altid(param) : "";
+                if (param) {
+                    const char *altid =vcardparameter_get_altid(param);
 
-                if (vcardstrarray_find(altids, altid) != -1) continue;
+                    if (vcardstrarray_find(altids, altid) != -1) continue;
 
-                vcardstrarray_append(altids, altid);
+                    vcardstrarray_append(altids, altid);
+                }
             }
             count++;
         }
