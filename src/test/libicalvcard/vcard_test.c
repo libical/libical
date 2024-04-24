@@ -15,6 +15,7 @@
 
 #include "vcard.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -25,6 +26,14 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+
+#define assert_str_equals(want, have) \
+{ \
+    const char *_w = (want); \
+    const char *_h = (have); \
+    int _v = strcmp(_w, _h); \
+    if (_v) { fprintf(stderr, "line %d: string mismatch\n want=%s\n have=%s\n", __LINE__, _w, _h); assert(0); } \
+}
 
 void strip_errors(vcardcomponent *comp)
 {
@@ -38,48 +47,90 @@ void strip_errors(vcardcomponent *comp)
     }
 }
 
-int main(int argc, const char **argv)
+static void test_parse_file(const char *fname)
 {
-    int fd;
-    const char *fname;
+    int fd, r;
     struct stat sbuf;
     size_t filesize;
     void *data = NULL;
+    vcardcomponent *card;
+    const char *want =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:Simon Perreault\r\n"
+        "N:Perreault;Simon;;;ing. jr,M.Sc.\r\n"
+        "BDAY;VALUE=DATE:--0203\r\n"
+        "BDAY;VALUE=DATE:--0203\r\n"
+        "ANNIVERSARY;VALUE=TIMESTAMP:20090808T143000-0500\r\n"
+        "GENDER:M;manly\r\n"
+        "ADR;TYPE=WORK:;Suite D2-630;2875 Laurier;Quebec;QC;G1V 2M2;Canada\r\n"
+        "TEL;VALUE=URI;TYPE=WORK,TEXT,VOICE,CELL,VIDEO,bar,foo:tel:\r\n"
+        " +1-418-262-6501\r\n"
+        "TEL;VALUE=URI:tel:+1-418-656-9254;ext=102\r\n"
+        "EMAIL;TYPE=WORK:simon.perreault@viagenie.ca\r\n"
+        "LANG;PREF=2:en\r\n"
+        "LANG;PREF=1:fr\r\n"
+        "TZ;VALUE=TEXT:-0500\r\n"
+        "GEO;TYPE=WORK:geo:46.772673,-71.282945\r\n"
+        "ORG;TYPE=WORK:Viagenie;Foo\r\n"
+        "CATEGORIES:bar,foo\r\n"
+        "NOTE;LANGUAGE=en;PID=1.0,3:Test vCard\r\n"
+        "URL;TYPE=HOME:http://nomis80.org\r\n"
+        "KEY;VALUE=URI;TYPE=WORK:http://www.viagenie.ca/simon.perreault/simon.asc\r\n"
+        "X-LIC-ERROR;X-LIC-ERRORTYPE=RESTRICTION-CHECK:Failed restrictions for \r\n"
+        " BDAY property. Expected zero or one instances of the property and got 2\r\n"
+        "END:VCARD\r\n"
+        "BEGIN:VCARD\r\n"
+        "FN:Mickey Mouse\r\n"
+        "X-LIC-ERROR;X-LIC-ERRORTYPE=RESTRICTION-CHECK:Failed restrictions for N \r\n"
+        " property. Expected 1 instances of the property and got 0\r\n"
+        "X-LIC-ERROR;X-LIC-ERRORTYPE=RESTRICTION-CHECK:Failed restrictions for \r\n"
+        " VERSION property. Expected 1 instances of the property and got 0\r\n"
+        "END:VCARD\r\n";
 
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s fname\n", argv[0]);
-        exit(1);
-    }
-
-    fname = argv[1];
     fd = open(fname, O_RDONLY);
     if (fd < 0) {
         fprintf(stderr, "Error: unable to open %s\n", fname);
-        exit(1);
+        assert(0);
     }
     fstat(fd, &sbuf);
     filesize = sbuf.st_size; //to make fortify compile happy
     data = malloc(filesize+1);
     memset(data, 0, filesize+1);
-    if (read(fd, data, filesize) < 0) {
+
+    r = read(fd, data, filesize);
+    close(fd);
+
+    if (r < 0) {
         fprintf(stderr, "Failed to read vCard\n");
         free(data);
-        close(fd);
-        return -1;
+        assert(0);
     }
 
-    vcardcomponent *card = vcardparser_parse_string(data);
+    card = vcardparser_parse_string(data);
     free(data);
 
     if (card == NULL) {
         fprintf(stderr, "Failed to parse vCard\n");
-        return -1;
+        assert(0);
     }
 
     vcardrestriction_check(card);
     vcardcomponent_normalize(card);
-    printf("%s\n", vcardcomponent_as_vcard_string(card));
+    assert_str_equals(want, vcardcomponent_as_vcard_string(card));
     vcardcomponent_free(card);
+}
+
+static vcardcomponent *test_comp_vanew(void)
+{
+    vcardcomponent *card;
+    const char *want =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "X-LIC-ERROR;X-LIC-ERRORTYPE=RESTRICTION-CHECK:Failed restrictions for FN \r\n"
+        " property. Expected one or more instances of the property and got 0\r\n"
+        "END:VCARD\r\n";
+
 
     card = vcardcomponent_vanew(VCARD_VCARD_COMPONENT,
                                 vcardproperty_new_version(VCARD_VERSION_40),
@@ -88,12 +139,30 @@ int main(int argc, const char **argv)
 
     if (card == NULL) {
         fprintf(stderr, "Failed to create vCard\n");
-        return -1;
+        assert(0);
     }
 
     vcardrestriction_check(card);
-    printf("\n%s\n", vcardcomponent_as_vcard_string(card));
+    vcardcomponent_normalize(card);
+    assert_str_equals(want, vcardcomponent_as_vcard_string(card));
     strip_errors(card);
+
+    return card;
+}
+
+static void test_add_props(vcardcomponent *card)
+{
+    const char *want =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:Mickey Mouse\r\n"
+        "N:Mouse;Mickey;;;;;\r\n"
+        "BDAY;VALUE=DATE:19281118\r\n"
+        "ADR:;;123 Main Street,Disney World;Orlando;FL;32836;USA;;;;;;;;;;;\r\n"
+        "CATEGORIES:aaa,zzz\r\n"
+        "group1.NOTE;LANGUAGE=en;PID=1,3;SORT-AS=bar,foo;TYPE=WORK:Test vCard\r\n"
+//        "REV:20240424T143248Z\r\n"
+        "END:VCARD\r\n";
 
     /* Create and add NOTE property */
     vcardstrarray *sa = vcardstrarray_new(10);
@@ -171,22 +240,58 @@ int main(int argc, const char **argv)
     t.day = 18;
     prop = vcardproperty_new_bday(t);
     vcardcomponent_add_property(card, prop);
-
+#if 0 // Can't easily compare
     /* Create and add REV property */
     t = vcardtime_current_utc_time();
     prop = vcardproperty_new_rev(t);
     vcardcomponent_add_property(card, prop);
-
+#endif
     vcardrestriction_check(card);
     vcardcomponent_normalize(card);
-    printf("\n%s\n", vcardcomponent_as_vcard_string(card));
+    assert_str_equals(want, vcardcomponent_as_vcard_string(card));
+}
+
+static void test_n_restriction(vcardcomponent *card)
+{
+    vcardproperty *prop;
+    const char *want =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:Mickey Mouse\r\n"
+        "BDAY;VALUE=DATE:19281118\r\n"
+        "ADR:;;123 Main Street,Disney World;Orlando;FL;32836;USA;;;;;;;;;;;\r\n"
+        "CATEGORIES:aaa,zzz\r\n"
+        "group1.NOTE;LANGUAGE=en;PID=1,3;SORT-AS=bar,foo;TYPE=WORK:Test vCard\r\n"
+        "X-LIC-ERROR;X-LIC-ERRORTYPE=RESTRICTION-CHECK:Failed restrictions for N \r\n"
+        " property. Expected 1 instances of the property and got 0\r\n"
+        "END:VCARD\r\n";
 
     /* Change VERSION from 4.0 to 3.0 */
     prop = vcardcomponent_get_first_property(card, VCARD_VERSION_PROPERTY);
     vcardproperty_set_version(prop, VCARD_VERSION_30);
 
+    /* Remove N property */
+    prop = vcardcomponent_get_first_property(card, VCARD_N_PROPERTY);
+    vcardcomponent_remove_property(card, prop);
+    vcardproperty_free(prop);
+
     vcardrestriction_check(card);
-    printf("\n%s\n", vcardcomponent_as_vcard_string(card));
+    assert_str_equals(want, vcardcomponent_as_vcard_string(card));
+}
+
+int main(int argc, const char **argv)
+{
+    vcardcomponent *card;
+
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s fname\n", argv[0]);
+        exit(1);
+    }
+
+    test_parse_file(argv[1]);
+    card = test_comp_vanew();
+    test_add_props(card);
+    test_n_restriction(card);
 
     vcardcomponent_free(card);
 

@@ -103,7 +103,7 @@ static int _check_restriction(vcardcomponent *comp,
     if (restr == VCARD_RESTRICTION_ONEEXCLUSIVE ||
         restr == VCARD_RESTRICTION_ONEMUTUAL) {
 
-        /* First treat is as a 0/1 restriction */
+        /* First treat it as a 0/1 restriction */
         restr = VCARD_RESTRICTION_ZEROORONE;
     }
 
@@ -157,10 +157,10 @@ static int _check_restriction(vcardcomponent *comp,
     return compare;
 }
 
-static int vcardrestriction_check_component(vcardproperty_version version,
-                                            vcardcomponent *comp)
+static int vcardrestriction_check_component(vcardcomponent *comp)
 {
     vcardcomponent_kind comp_kind, inner_kind;
+    vcardproperty_version version;
     vcardproperty_kind prop_kind;
     const vcardrestriction_record *start_record;
     vcardproperty *version_prop = NULL;
@@ -204,10 +204,10 @@ static int vcardrestriction_check_component(vcardproperty_version version,
 
     /* Check all of the properties in this component */
 
-    start_record = vcardrestriction_get_restriction(NULL, version, comp_kind,
-                                                   VCARD_ANY_PROPERTY,
-                                                   VCARD_NO_COMPONENT);
-
+    start_record = vcardrestriction_get_restriction(NULL, VCARD_VERSION_NONE,
+                                                    comp_kind,
+                                                    VCARD_ANY_PROPERTY,
+                                                    VCARD_NO_COMPONENT);
     if (start_record != &null_restriction_record) {
 
         for (prop_kind = VCARD_ANY_PROPERTY + 1;
@@ -227,14 +227,11 @@ static int vcardrestriction_check_component(vcardproperty_version version,
             valid = valid && compare;
         }
     }
-    else {
-        start_record = NULL;
-    }
 
     /* Now check the inner components */
 
-    start_record = vcardrestriction_get_restriction(start_record,
-                                                    version, comp_kind,
+    start_record = vcardrestriction_get_restriction(NULL, VCARD_VERSION_NONE,
+                                                    comp_kind,
                                                     VCARD_NO_PROPERTY,
                                                     VCARD_ANY_COMPONENT);
 
@@ -259,7 +256,7 @@ static int vcardrestriction_check_component(vcardproperty_version version,
          inner_comp != 0;
          inner_comp = vcardcomponent_get_next_component(comp, VCARD_ANY_COMPONENT)) {
 
-        compare = vcardrestriction_check_component(version, inner_comp);
+        compare = vcardrestriction_check_component(inner_comp);
 
         valid = valid && compare;
     }
@@ -276,13 +273,13 @@ int vcardrestriction_check(vcardcomponent *outer_comp)
 
     comp_kind = vcardcomponent_isa(outer_comp);
 
-    if (comp_kind != VCARD_VCARD_COMPONENT && comp_kind != VCARD_XROOT_COMPONENT) {
+    if (comp_kind != VCARD_VCARD_COMPONENT &&
+        comp_kind != VCARD_XROOT_COMPONENT) {
         icalerror_set_errno(ICAL_BADARG_ERROR);
         return 0;
     }
 
-    /* Check the VCALENDAR wrapper */
-    valid = vcardrestriction_check_component(VCARD_VERSION_NONE, outer_comp);
+    valid = vcardrestriction_check_component(outer_comp);
 
     return valid;
 }
@@ -302,7 +299,8 @@ static const vcardrestriction_record *vcardrestriction_get_restriction(
 
     for (rec = start; rec && rec->restriction != VCARD_RESTRICTION_NONE; rec++) {
 
-        if (version == rec->version &&
+        if ((version == VCARD_VERSION_NONE ||
+             rec->version == VCARD_VERSION_NONE || version == rec->version) &&
             (component == VCARD_ANY_COMPONENT ||
              (component == rec->component &&
               (property == VCARD_ANY_PROPERTY || property == rec->property) &&

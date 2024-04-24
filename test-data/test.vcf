@@ -3,6 +3,7 @@ VERSION: 4.0
 FN:Simon Perreault
 N:Perreault;Simon;;;ing. jr,M.Sc.
 BDAY:--0203
+BDAY:--0203
 ANNIVERSARY:20090808T1430-0500
 GENDER:M;manly
 LANG;PREF=1:fr
@@ -23,6 +24,5 @@ CATEGORIES:foo,bar
 END:VCARD
 
 BEGIN:VCARD
-VERSION:5.0
 FN:Mickey Mouse
 END:VCARD
