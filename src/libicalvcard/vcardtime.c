@@ -158,6 +158,7 @@ static int sprintf_date(const vcardtimetype t, char *buf, size_t size)
             fmt = "%04d%02d%02d";
         }
 
+        /* cppcheck-suppress wrongPrintfScanfArgNum */
         return snprintf(buf, size, fmt, t.year, t.month, t.day);
     }
     else if (t.month != -1) {
@@ -168,6 +169,7 @@ static int sprintf_date(const vcardtimetype t, char *buf, size_t size)
             fmt = "--%02d%02d";
         }
 
+        /* cppcheck-suppress wrongPrintfScanfArgNum */
         return snprintf(buf, size, fmt, t.month, t.day);
     }
     else {
@@ -208,6 +210,7 @@ static int sprintf_time(const vcardtimetype t, int need_designator,
             fmt = "%02d%02d%02d";
         }
 
+        /* cppcheck-suppress wrongPrintfScanfArgNum */
         n = snprintf(buf, size, fmt, t.hour, t.minute, t.second);
 
         if (t.utcoffset != -1) {
@@ -238,6 +241,7 @@ static int sprintf_time(const vcardtimetype t, int need_designator,
             fmt = "-%02d%02d";
         }
 
+        /* cppcheck-suppress wrongPrintfScanfArgNum */
         return snprintf(buf, size, fmt, t.minute, t.second);
     }
     else {
