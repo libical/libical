@@ -1,13 +1,13 @@
 include(CTest)
 
 include_directories(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_BINARY_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src/libical
-  ${CMAKE_BINARY_DIR}/src/libical
-  ${CMAKE_SOURCE_DIR}/src/libicalvcard
-  ${CMAKE_BINARY_DIR}/src/libicalvcard
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_BINARY_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}/src/libical
+  ${PROJECT_SOURCE_DIR}/src/libicalvcard
+  ${PROJECT_BINARY_DIR}/src/libicalvcard
 )
 
 add_executable(vcard_test vcard_test.c)
@@ -19,7 +19,7 @@ add_dependencies(vcard_test_encode icalvcard)
 target_link_libraries(vcard_test_encode icalvcard)
 
 add_test(NAME vcard_construct
-  COMMAND vcard_test ${CMAKE_SOURCE_DIR}/test-data/test.vcf
+  COMMAND vcard_test ${PROJECT_SOURCE_DIR}/test-data/test.vcf
 )
 setprops(vcard_construct)
 
