@@ -282,13 +282,15 @@ static void test_n_restriction(vcardcomponent *card)
 int main(int argc, const char **argv)
 {
     vcardcomponent *card;
+    const char *file;
 
     if (argc != 2) {
-        fprintf(stderr, "Usage: %s fname\n", argv[0]);
-        exit(1);
+        file = TEST_DATADIR "/test.vcf";
+    } else {
+        file = argv[1];
     }
 
-    test_parse_file(argv[1]);
+    test_parse_file(file);
     card = test_comp_vanew();
     test_add_props(card);
     test_n_restriction(card);

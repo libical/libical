@@ -28,9 +28,7 @@ add_executable(vcard_test_encode vcard_test_encode.c)
 add_dependencies(vcard_test_encode icalvcard)
 target_link_libraries(vcard_test_encode icalvcard)
 
-add_test(NAME vcard_construct
-  COMMAND vcard_test ${PROJECT_SOURCE_DIR}/test-data/test.vcf
-)
+add_test(NAME vcard_construct COMMAND vcard_test)
 setprops(vcard_construct)
 
 add_test(NAME vcard_encode COMMAND vcard_test_encode)
