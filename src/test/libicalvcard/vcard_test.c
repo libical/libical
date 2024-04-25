@@ -159,9 +159,9 @@ static void test_add_props(vcardcomponent *card)
         "N:Mouse;Mickey;;;;;\r\n"
         "BDAY;VALUE=DATE:19281118\r\n"
         "ADR:;;123 Main Street,Disney World;Orlando;FL;32836;USA;;;;;;;;;;;\r\n"
+        "TZ;VALUE=UTC-OFFSET:-0230\r\n"
         "CATEGORIES:aaa,zzz\r\n"
         "group1.NOTE;LANGUAGE=en;PID=1,3;SORT-AS=bar,foo;TYPE=WORK:Test vCard\r\n"
-//        "REV:20240424T143248Z\r\n"
         "END:VCARD\r\n";
 
     /* Create and add NOTE property */
@@ -240,12 +240,12 @@ static void test_add_props(vcardcomponent *card)
     t.day = 18;
     prop = vcardproperty_new_bday(t);
     vcardcomponent_add_property(card, prop);
-#if 0 // Can't easily compare
-    /* Create and add REV property */
-    t = vcardtime_current_utc_time();
-    prop = vcardproperty_new_rev(t);
+
+    /* Create and add TZ property */
+    vcardtztype tz = { .utcoffset = -9000 };
+    prop = vcardproperty_new_tz(tz);
     vcardcomponent_add_property(card, prop);
-#endif
+
     vcardrestriction_check(card);
     vcardcomponent_normalize(card);
     assert_str_equals(want, vcardcomponent_as_vcard_string(card));
@@ -260,6 +260,7 @@ static void test_n_restriction(vcardcomponent *card)
         "FN:Mickey Mouse\r\n"
         "BDAY;VALUE=DATE:19281118\r\n"
         "ADR:;;123 Main Street,Disney World;Orlando;FL;32836;USA;;;;;;;;;;;\r\n"
+        "TZ;VALUE=UTC-OFFSET:-0230\r\n"
         "CATEGORIES:aaa,zzz\r\n"
         "group1.NOTE;LANGUAGE=en;PID=1,3;SORT-AS=bar,foo;TYPE=WORK:Test vCard\r\n"
         "X-LIC-ERROR;X-LIC-ERRORTYPE=RESTRICTION-CHECK:Failed restrictions for N \r\n"
