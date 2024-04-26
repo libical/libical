@@ -72,6 +72,9 @@
 /* Define to 1 if you have the `_fstat64' function. */
 #cmakedefine HAVE__FSTAT64 1
 
+/* Define to 1 if you have the `fstat' function. */
+#cmakedefine HAVE_FSTAT 1
+
 /* Define to 1 if you have the `strcasecmp' function. */
 #cmakedefine HAVE_STRCASECMP 1
 
