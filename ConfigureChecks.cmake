@@ -20,6 +20,7 @@ if(WIN32 AND MSVC)
   check_function_exists(_open HAVE__OPEN) #Windows <io.h>
   check_function_exists(_snprintf HAVE__SNPRINTF) #Windows <stdio.h>
   check_function_exists(_stat HAVE__STAT) #Windows <sys/types.h>,<sys/stat.h>
+  check_function_exists(_fstat64 HAVE__FSTAT64) #Windows <sys/types.h>,<sys/stat.h>
   check_function_exists(_strdup HAVE__STRDUP) #Windows <string.h>
   check_function_exists(_stricmp HAVE__STRICMP) #Windows <string.h>
   check_function_exists(_strnicmp HAVE__STRNICMP) #Windows <string.h>
@@ -38,6 +39,7 @@ else()
   check_function_exists(nanosleep HAVE_NANOSLEEP) #Unix <time.h>
   check_function_exists(signal HAVE_SIGNAL) #Unix <signal.h>
   check_function_exists(stat HAVE_STAT) #Unix <sys/stat.h>,<sys/types.h>,<unistd.h>
+  check_function_exists(fstat HAVE_FSTAT) #Unix <sys/stat.h>,<sys/types.h>,<unistd.h>
   check_function_exists(strdup HAVE_STRDUP) #Unix <string.h>
   check_function_exists(strcasecmp HAVE_STRCASECMP) #Unix <strings.h>
   check_function_exists(strncasecmp HAVE_STRNCASECMP) #Unix <strings.h>
