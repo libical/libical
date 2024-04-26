@@ -50,7 +50,11 @@ void strip_errors(vcardcomponent *comp)
 static void test_parse_file(const char *fname)
 {
     int fd, r;
+#if defined(HAVE__FSTAT64)
+    struct _stat64 sbuf;
+#else
     struct stat sbuf;
+#endif
     size_t filesize;
     void *data = NULL;
     vcardcomponent *card;
