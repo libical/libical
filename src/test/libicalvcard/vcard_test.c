@@ -49,6 +49,7 @@ void strip_errors(vcardcomponent *comp)
 
 static void test_parse_file(const char *fname)
 {
+    FILE *fp;
     int fd, r;
 #if defined(HAVE__FSTAT64)
     struct _stat64 sbuf;
@@ -92,18 +93,19 @@ static void test_parse_file(const char *fname)
         " VERSION property. Expected 1 instances of the property and got 0\r\n"
         "END:VCARD\r\n";
 
-    fd = open(fname, O_RDONLY);
-    if (fd < 0) {
+    fp = fopen(fname, "rb"); //on Windows, must open in binary mode
+    if (fp == (FILE *)NULL) {
         fprintf(stderr, "Error: unable to open %s\n", fname);
         assert(0);
     }
+    fd = fileno(fp);
     fstat(fd, &sbuf);
     filesize = sbuf.st_size; //to make fortify compile happy
     data = malloc(filesize+1);
     memset(data, 0, filesize+1);
 
     r = read(fd, data, filesize);
-    close(fd);
+    fclose(fp);
 
     if (r < 0) {
         fprintf(stderr, "Failed to read vCard\n");
