@@ -13,6 +13,10 @@
 #include <config.h>
 #endif
 
+#if defined(NDEBUG)
+#undef NDEBUG
+#endif
+
 #include "vcard.h"
 
 #include <assert.h>
@@ -59,6 +63,7 @@ static void test_parse_file(const char *fname)
     size_t filesize;
     void *data = NULL;
     vcardcomponent *card;
+//krazy:cond=insecurenet
     const char *want =
         "BEGIN:VCARD\r\n"
         "VERSION:4.0\r\n"
@@ -92,7 +97,7 @@ static void test_parse_file(const char *fname)
         "X-LIC-ERROR;X-LIC-ERRORTYPE=RESTRICTION-CHECK:Failed restrictions for \r\n"
         " VERSION property. Expected 1 instances of the property and got 0\r\n"
         "END:VCARD\r\n";
-
+//krazy:endcond=insecurenet
     fp = fopen(fname, "rb"); //on Windows, must open in binary mode
     if (fp == (FILE *)NULL) {
         fprintf(stderr, "Error: unable to open %s\n", fname);
