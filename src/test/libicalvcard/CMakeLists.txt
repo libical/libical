@@ -18,6 +18,7 @@ include_directories(
   ${PROJECT_BINARY_DIR}/src/libicalvcard
 )
 
+# Build the test and add the test, making sure the test properties are set
 macro(vctestme _name _srcs)
   add_executable(${_name} ${_srcs})
   add_dependencies(${_name} icalvcard)
