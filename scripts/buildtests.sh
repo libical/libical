@@ -37,7 +37,7 @@ HELP() {
   echo " -t, --no-tidy              Don't run any clang-tidy tests"
   echo " -b, --no-scan              Don't run any scan-build tests"
   echo " -s, --no-splint            Don't run any splint tests"
-  echo " -p, --no-codespell         Don't run any codespell tests"
+  echo " -p, --no-precommit         Don't run pre-commit test"
   echo " -n, --no-ninja             Don't run any build tests with ninja"
   echo " -l, --no-clang-build       Don't run any clang-build tests"
   echo " -g, --no-gcc-build         Don't run any gcc-build tests"
@@ -572,31 +572,31 @@ KRAZY() {
   echo "===== END KRAZY ======"
 }
 
-#function CODESPELL
-# runs a codespell test
-CODESPELL() {
-  if ( test $runcodespell -ne 1 )
+#function PRECOMMIT
+# run pre-commit
+PRECOMMIT() {
+  if ( test $runprecommit -ne 1 )
   then
-    echo "===== CODESPELL TEST DISABLED DUE TO COMMAND LINE OPTION ====="
+    echo "===== PRECOMMIT DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "codespell"
-  echo "===== START CODESPELL ====="
+  COMMAND_EXISTS "pre-commit"
+  echo "===== START PRECOMMIT ====="
   cd $TOP
-  codespell --interactive=0 . 2>&1 | tee codespell.out
+  pre-commit run --all-files 2>&1 | tee precommit.out
   status=$?
   if ( test $status -gt 0 )
   then
-    echo "Codespell warnings encountered.  Exiting..."
+    echo "pre-commit issues encountered.  Exiting..."
     exit 1
   fi
-  rm -f codespell.out
-  echo "===== END CODESPELL ======"
+  rm -f precommit.out
+  echo "===== END PRECOMMIT ======"
 }
 
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hmkpctbsnlgaduxfr --long help,no-cmake-compat,no-krazy,no-codespell,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build,no-fortify-build,no-threadlocal-build -- "$@"`
+#TEMP=`getopt -o hmkpctbsnlgaduxfr --long help,no-cmake-compat,no-krazy,no-precommit,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build,no-fortify-build,no-threadlocal-build -- "$@"`
 TEMP=`getopt hmkpctbsnlgaduxfr $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
@@ -604,7 +604,7 @@ eval set -- "$TEMP"
 
 cmakecompat=1
 runkrazy=1
-runcodespell=1
+runprecommit=1
 runcppcheck=1
 runtidy=1
 runsplint=1
@@ -623,7 +623,7 @@ while true; do
         -h|--help) HELP; exit 1;;
         -m|--no-cmake-compat)   cmakecompat=0;            shift;;
         -k|--no-krazy)          runkrazy=0;               shift;;
-        -p|--no-codespell)      runcodespell=0;           shift;;
+        -p|--no-precommit)      runprecommit=0;           shift;;
         -c|--no-cppcheck)       runcppcheck=0;            shift;;
         -t|--no-tidy)           runtidy=0;                shift;;
         -b|--no-scan)           runscan=0;                shift;;
@@ -696,7 +696,7 @@ GLIBOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=True -DUSE_BUILTIN_TZ
 
 #Static code checkers
 KRAZY
-CODESPELL
+PRECOMMIT
 SPLINT test2 "$CMAKEOPTS"
 SPLINT test2builtin "$TZCMAKEOPTS"
 CPPCHECK test2 "$CMAKEOPTS"
