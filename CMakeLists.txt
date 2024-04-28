@@ -437,6 +437,10 @@ include(ConfigureChecks.cmake)
 add_definitions(-DHAVE_CONFIG_H)
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
+if(NDEBUG)
+  add_definitions(-DNDEBUG)
+endif()
+
 set(INSTALL_TARGETS_DEFAULT_ARGS
   RUNTIME DESTINATION ${BIN_INSTALL_DIR}
   LIBRARY DESTINATION ${LIB_INSTALL_DIR}
