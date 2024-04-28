@@ -177,6 +177,7 @@ static char *make_segment(char *start, char *end)
 #if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
 #endif
     char *buf, *tmp;
     ptrdiff_t size = (ptrdiff_t)(end - start);
@@ -1373,6 +1374,7 @@ char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
 #if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
 #endif
     strncpy(out, data->pos, size);
 #if defined(__GNUC__) && !defined(__clang__)
