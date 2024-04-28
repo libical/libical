@@ -152,9 +152,16 @@ CONFIGURE() {
   rm -rf *
   if ( test `echo $2 | grep -ci Ninja` -gt 0 )
   then
-    cmake --warn-uninitialized -Werror=dev .. $2 || exit 1
+    cmake --warn-uninitialized -Werror=dev .. $2 2>&1 | tee cmake.out || exit 1
   else
-    cmake -G "Unix Makefiles" --warn-uninitialized -Werror=dev .. $2 || exit 1
+    cmake -G "Unix Makefiles" --warn-uninitialized -Werror=dev .. $2 2>&1 | tee cmake.out || exit 1
+  fi
+  numWarnings=`grep -ic "cmake warning" cmake.out`
+  rm -f cmake.out
+  if ( test $numWarnings -gt 0 )
+  then
+     echo "cmake warnings encountered"
+     exit 1
   fi
 }
 
