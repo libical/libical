@@ -28,21 +28,18 @@ endif()
 #   e) compare the changes in the file and return back what should be left,
 #      like the replacement of the "[Insert title here]" and the <bookinfo/> content
 
-if(ENABLE_GTK_DOC)
-  include(GtkDoc)
+include(GtkDoc)
 
-  set(SOURCEDIRS
-    ${PROJECT_BINARY_DIR}/src/libical-glib
-  )
+set(SOURCEDIRS
+  ${PROJECT_BINARY_DIR}/src/libical-glib
+)
 
-  set(DEPENDENCIES
-    ical-glib
-  )
+set(DEPENDENCIES
+  ical-glib
+)
 
-  set(IGNORE_HEADERS
-    libical-glib-private.h
-  )
+set(IGNORE_HEADERS
+  libical-glib-private.h
+)
 
-  add_gtkdoc(libical-glib libical-glib "LIBICAL_GLIB_DISABLE_DEPRECATED" SOURCEDIRS DEPENDENCIES IGNORE_HEADERS)
-
-endif()
+add_gtkdoc(libical-glib libical-glib "LIBICAL_GLIB_DISABLE_DEPRECATED" SOURCEDIRS DEPENDENCIES IGNORE_HEADERS)

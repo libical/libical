@@ -504,6 +504,9 @@ if(ICAL_GLIB)
       "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required). "
       "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
   endif()
+else()
+  #to quiet a warning about unused manually-specified variables
+  set(ENABLE_GTK_DOC False)
 endif()
 
 #
