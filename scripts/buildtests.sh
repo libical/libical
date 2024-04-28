@@ -63,6 +63,14 @@ COMMAND_EXISTS () {
   fi
 }
 
+#function SET_NINJA
+# set cmake generator to ninja
+SET_NINJA() {
+  export CMAKE_GENERATOR=Ninja
+}
+UNSET_NINJA() {
+  unset CMAKE_GENERATOR
+}
 
 #function SET_GCC
 # setup compiling with gcc
@@ -150,14 +158,8 @@ CONFIGURE() {
   mkdir -p $BDIR
   cd $BDIR
   rm -rf *
-  if ( test `echo $2 | grep -ci Ninja` -gt 0 )
-  then
-    cmake --warn-uninitialized -Werror=dev .. $2 2>&1 | tee cmake.out || exit 1
-  else
-    cmake -G "Unix Makefiles" --warn-uninitialized -Werror=dev .. $2 2>&1 | tee cmake.out || exit 1
-  fi
+  cmake --warn-uninitialized -Werror=dev .. $2 2>&1 | tee cmake.out || exit 1
   numWarnings=`grep -ic "cmake warning" cmake.out`
-  rm -f cmake.out
   if ( test $numWarnings -gt 0 )
   then
      echo "cmake warnings encountered"
@@ -179,12 +181,7 @@ CLEAN() {
 BUILD() {
   cd $TOP
   CONFIGURE "$1" "$2"
-  MAKE=make
-  if ( test `echo $2 | grep -ci Ninja` -gt 0 )
-  then
-    MAKE=ninja
-  fi
-  $MAKE 2>&1 | tee make.out || exit 1
+  cmake --build . 2>&1 | tee make.out || exit 1
   COMPILE_WARNINGS make.out
 
   if (test "`uname -s`" = "Darwin")
@@ -193,7 +190,7 @@ BUILD() {
   else
     export LD_LIBRARY_PATH=$BDIR/lib
   fi
-  $MAKE test 2>&1 | tee make-test.out || exit 1
+  ctest . 2>&1 | tee make-test.out || exit 1
   CLEAN
 }
 
@@ -254,7 +251,9 @@ NINJA_GCC_BUILD() {
   COMMAND_EXISTS "gcc"
   echo "===== START NINJA_GCC BUILD: $1 ======"
   SET_GCC
-  BUILD "$name" "$2 -G Ninja"
+  SET_NINJA
+  BUILD "$name" "$2"
+  UNSET_NINJA
   echo "===== END NINJA_GCC BUILD: $1 ======"
 }
 
@@ -682,6 +681,9 @@ then
     exit 1
   fi
 fi
+
+#use non-Ninja cmake generator by-default
+UNSET_NINJA
 
 DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DNDEBUG=1"
 CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False"
