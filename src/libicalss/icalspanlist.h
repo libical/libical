@@ -31,9 +31,7 @@ typedef struct icalspanlist_impl icalspanlist;
  * return a spanlist that contains the free/busy times.
  * @p Start and @p end should be in UTC.
  */
-LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_new(icalset *set,
-                                                     struct icaltimetype start,
-                                                     struct icaltimetype end);
+LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct icaltimetype end);
 
 /** @brief Destructor.
  *  @param sl A valid icalspanlist
@@ -50,8 +48,7 @@ LIBICAL_ICALSS_EXPORT void icalspanlist_free(icalspanlist *sl);
  *  Given a spanlist and a time, finds the next period of time
  *  that is free.
  */
-LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl,
-                                                                        struct icaltimetype t);
+LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icaltimetype t);
 
 /** @brief (Debug) print out spanlist to STDOUT.
  *  @param sl A valid icalspanlist.
@@ -72,8 +69,7 @@ LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist *sl);
  * An attendee parameter is required, and organizer parameter is
  * optional.
  */
-LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
-                                                               const char *organizer,
+LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl, const char *organizer,
                                                                const char *attendee);
 
 /** @brief Returns an hour-by-hour array of free/busy times over a

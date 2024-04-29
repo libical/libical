@@ -39,42 +39,38 @@ typedef enum icalset_kind
     ICAL_BDB_SET
 } icalset_kind;
 
-typedef struct icalsetiter
-{
-    icalcompiter iter;  /* icalcomponent_kind, pvl_elem iter */
+typedef struct icalsetiter {
+    icalcompiter iter; /* icalcomponent_kind, pvl_elem iter */
     icalgauge *gauge;
-    icalrecur_iterator *ritr;   /*the last iterator */
-    icalcomponent *last_component;      /*the pending recurring component to be processed  */
-    const char *tzid;   /* the calendar's timezone id */
+    icalrecur_iterator *ritr;      /*the last iterator */
+    icalcomponent *last_component; /*the pending recurring component to be processed  */
+    const char *tzid;              /* the calendar's timezone id */
 } icalsetiter;
 
-struct icalset_impl
-{
+struct icalset_impl {
     icalset_kind kind;
     size_t size;
     char *dsn;
-    icalset *(*init) (icalset *set, const char *dsn, void *options);
-    void (*free) (icalset *set);
-    const char *(*path) (icalset *set);
-    void (*mark) (icalset *set);
-    icalerrorenum(*commit) (icalset *set);
-    icalerrorenum(*add_component) (icalset *set, icalcomponent *comp);
-    icalerrorenum(*remove_component) (icalset *set, icalcomponent *comp);
-    int (*count_components) (icalset *set, icalcomponent_kind kind);
-    icalerrorenum(*select) (icalset *set, icalgauge *gauge);
-    void (*clear) (icalset *set);
-    icalcomponent *(*fetch) (icalset *set, icalcomponent_kind kind, const char *uid);
-    icalcomponent *(*fetch_match) (icalset *set, icalcomponent *comp);
-    int (*has_uid) (icalset *set, const char *uid);
-    icalerrorenum(*modify) (icalset *set, icalcomponent *old, icalcomponent *newc);
-    icalcomponent *(*get_current_component) (icalset *set);
-    icalcomponent *(*get_first_component) (icalset *set);
-    icalcomponent *(*get_next_component) (icalset *set);
-    icalsetiter(*icalset_begin_component) (icalset *set,
-                                           icalcomponent_kind kind, icalgauge *gauge,
-                                           const char *tzid);
-    icalcomponent *(*icalsetiter_to_next) (icalset *set, icalsetiter *i);
-    icalcomponent *(*icalsetiter_to_prior) (icalset *set, icalsetiter *i);
+    icalset *(*init)(icalset *set, const char *dsn, void *options);
+    void (*free)(icalset *set);
+    const char *(*path)(icalset *set);
+    void (*mark)(icalset *set);
+    icalerrorenum (*commit)(icalset *set);
+    icalerrorenum (*add_component)(icalset *set, icalcomponent *comp);
+    icalerrorenum (*remove_component)(icalset *set, icalcomponent *comp);
+    int (*count_components)(icalset *set, icalcomponent_kind kind);
+    icalerrorenum (*select)(icalset *set, icalgauge *gauge);
+    void (*clear)(icalset *set);
+    icalcomponent *(*fetch)(icalset *set, icalcomponent_kind kind, const char *uid);
+    icalcomponent *(*fetch_match)(icalset *set, icalcomponent *comp);
+    int (*has_uid)(icalset *set, const char *uid);
+    icalerrorenum (*modify)(icalset *set, icalcomponent *old, icalcomponent *newc);
+    icalcomponent *(*get_current_component)(icalset *set);
+    icalcomponent *(*get_first_component)(icalset *set);
+    icalcomponent *(*get_next_component)(icalset *set);
+    icalsetiter (*icalset_begin_component)(icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid);
+    icalcomponent *(*icalsetiter_to_next)(icalset *set, icalsetiter *i);
+    icalcomponent *(*icalsetiter_to_prior)(icalset *set, icalsetiter *i);
 };
 
 /** @brief Registers a new derived class */
@@ -135,8 +131,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch_match(icalset *set, icalcompo
 
 /** Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */
-LIBICAL_ICALSS_EXPORT icalerrorenum icalset_modify(icalset *set,
-                                                   icalcomponent *oldc, icalcomponent *newc);
+LIBICAL_ICALSS_EXPORT icalerrorenum icalset_modify(icalset *set, icalcomponent *oldc, icalcomponent *newc);
 
 /** Iterates through the components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
@@ -150,9 +145,8 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalset_get_next_component(icalset *set);
 /** External Iterator with gauge - for thread safety */
 LIBICAL_ICALSS_EXPORT extern icalsetiter icalsetiter_null;
 
-LIBICAL_ICALSS_EXPORT icalsetiter icalset_begin_component(icalset *set,
-                                                          icalcomponent_kind kind,
-                                                          icalgauge *gauge, const char *tzid);
+LIBICAL_ICALSS_EXPORT icalsetiter icalset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge,
+                                                          const char *tzid);
 
 /** Default _next, _prior, _deref for subclasses that use single cluster */
 LIBICAL_ICALSS_EXPORT icalcomponent *icalsetiter_next(icalsetiter *i);

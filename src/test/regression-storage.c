@@ -25,8 +25,7 @@
 #define OUTPUT_FILE "filesetout.ics"
 
 /* define sample calendar struct */
-struct calendar
-{
+struct calendar {
     int ID;
     size_t total_size;
 
@@ -43,7 +42,6 @@ struct calendar
 
     size_t title_size;
     char *title;
-
 };
 
 int vcalendar_init(struct calendar **cal, const char *vcalendar, const char *title);
@@ -193,8 +191,8 @@ void test_fileset_extended(void)
     ok("Opening output file", (cout != 0));
     assert(cout != 0);
 
-    for (iter = icalfileset_begin_component(cout, ICAL_ANY_COMPONENT, 0, NULL);
-         icalsetiter_deref(&iter) != 0; icalsetiter_next(&iter)) {
+    for (iter = icalfileset_begin_component(cout, ICAL_ANY_COMPONENT, 0, NULL); icalsetiter_deref(&iter) != 0;
+         icalsetiter_next(&iter)) {
         icalcomponent *event;
         icalproperty *dtstart, *dtend;
 
@@ -207,8 +205,7 @@ void test_fileset_extended(void)
         dtend = icalcomponent_get_first_property(event, ICAL_DTEND_PROPERTY);
 
         if (VERBOSE) {
-            printf("%d %s %s\n", count, icalproperty_as_ical_string(dtstart),
-                   icalproperty_as_ical_string(dtend));
+            printf("%d %s %s\n", count, icalproperty_as_ical_string(dtstart), icalproperty_as_ical_string(dtend));
         }
     }
 
@@ -242,9 +239,7 @@ void test_fileset_extended(void)
     assert(cout != 0);
     count = 0;
 
-    for (itr = icalfileset_get_first_component(cout);
-         itr != 0; itr = icalfileset_get_next_component(cout)) {
-
+    for (itr = icalfileset_get_first_component(cout); itr != 0; itr = icalfileset_get_next_component(cout)) {
         icalcomponent *event;
         icalproperty *dtstart, *dtend;
 
@@ -255,8 +250,7 @@ void test_fileset_extended(void)
         dtstart = icalcomponent_get_first_property(event, ICAL_DTSTART_PROPERTY);
         dtend = icalcomponent_get_first_property(event, ICAL_DTEND_PROPERTY);
 
-        printf("%d %s %s\n", count, icalproperty_as_ical_string(dtstart),
-               icalproperty_as_ical_string(dtend));
+        printf("%d %s %s\n", count, icalproperty_as_ical_string(dtstart), icalproperty_as_ical_string(dtend));
     }
 
     icalset_free(cout);
@@ -280,21 +274,21 @@ void test_bdbset(void)
     int month = 0;
     int count = 0;
 
-/*    int num_components=0;*/
-/*    int szdata_len=0;*/
-/*    int ret=0;*/
-/*    char *subdb, *szdata, *szpacked_data;*/
-/*    char uid[255];*/
+    /*    int num_components=0;*/
+    /*    int szdata_len=0;*/
+    /*    int ret=0;*/
+    /*    char *subdb, *szdata, *szpacked_data;*/
+    /*    char uid[255];*/
     struct icaltimetype start, end;
     icalcomponent *c, *clone, *itr;
     DBT key, data;
 
-/*    DBC *dbcp;*/
+    /*    DBC *dbcp;*/
 
-/*    struct calendar *cal;*/
-/*    int cal_size;*/
+    /*    struct calendar *cal;*/
+    /*    int cal_size;*/
 
-    return;     // for now... TODO fix these broken tests..
+    return; // for now... TODO fix these broken tests..
 
 #pragma clang diagnostic push /* remove when/if we remove the proceeding return statement */
 #pragma clang diagnostic ignored "-Wunreachable-code"
@@ -385,9 +379,7 @@ void test_bdbset(void)
     /* Print them out */
 
     for (month = 1, count = 0; month < 10; month++) {
-        for (itr = icalbdbset_get_first_component(cout);
-             itr != 0; itr = icalbdbset_get_next_component(cout)) {
-
+        for (itr = icalbdbset_get_first_component(cout); itr != 0; itr = icalbdbset_get_next_component(cout)) {
             icalcomponent *event;
             icalproperty *dtstart, *dtend;
 
@@ -398,8 +390,7 @@ void test_bdbset(void)
             dtstart = icalcomponent_get_first_property(event, ICAL_DTSTART_PROPERTY);
             dtend = icalcomponent_get_first_property(event, ICAL_DTEND_PROPERTY);
 
-            printf("%d %s %s\n", count, icalproperty_as_ical_string(dtstart),
-                   icalproperty_as_ical_string(dtend));
+            printf("%d %s %s\n", count, icalproperty_as_ical_string(dtstart), icalproperty_as_ical_string(dtend));
         }
         icalset_free(cout);
     }
@@ -414,9 +405,7 @@ void test_bdbset(void)
      */
     /* Remove all of them */
     for (month = 1; month < 10; month++) {
-        for (itr = icalbdbset_get_first_component(cout);
-             itr != 0; itr = icalbdbset_get_next_component(cout)) {
-
+        for (itr = icalbdbset_get_first_component(cout); itr != 0; itr = icalbdbset_get_next_component(cout)) {
             (void)icalbdbset_remove_component(cout, itr);
         }
 
@@ -427,9 +416,7 @@ void test_bdbset(void)
     /* Print them out again */
 
     for (month = 1, count = 0; month < 10; month++) {
-        for (itr = icalbdbset_get_first_component(cout);
-             itr != 0; itr = icalbdbset_get_next_component(cout)) {
-
+        for (itr = icalbdbset_get_first_component(cout); itr != 0; itr = icalbdbset_get_next_component(cout)) {
             icalcomponent *event;
             icalproperty *dtstart, *dtend;
 
@@ -440,8 +427,7 @@ void test_bdbset(void)
             dtstart = icalcomponent_get_first_property(event, ICAL_DTSTART_PROPERTY);
             dtend = icalcomponent_get_first_property(event, ICAL_DTEND_PROPERTY);
 
-            printf("%d %s %s\n", count, icalproperty_as_ical_string(dtstart),
-                   icalproperty_as_ical_string(dtend));
+            printf("%d %s %s\n", count, icalproperty_as_ical_string(dtstart), icalproperty_as_ical_string(dtend));
         }
         icalset_free(cout);
     }
@@ -519,7 +505,7 @@ int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
     snprintf(title, sizeof(title), "title_%s", icalcomponent_get_uid(cl));
 
     skey->data = strdup(title);
-    skey->size = (u_int32_t) strlen(skey->data);
+    skey->size = (u_int32_t)strlen(skey->data);
     return (0);
 }
 
@@ -644,14 +630,12 @@ void test_dirset_extended(void)
     icalerror_clear_errno();
 
     for (i = 1; i < NUMCOMP + 1; i++) {
-
         /*rtime.start.month = i%12; */
         rtime.start.month = i;
         rtime.end = rtime.start;
         rtime.end.hour++;
 
-        for (itr = icalfileset_get_first_component(cluster);
-             itr != 0; itr = icalfileset_get_next_component(cluster)) {
+        for (itr = icalfileset_get_first_component(cluster); itr != 0; itr = icalfileset_get_next_component(cluster)) {
             icalcomponent *inner;
             icalproperty *p;
 
@@ -711,18 +695,16 @@ void test_dirset_extended(void)
         }
     }
 
-    gauge = icalgauge_new_from_sql(
-                "SELECT * FROM VEVENT WHERE "
-                "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
-                "VEVENT.SUMMARY = 'Bastille Day Party'",
-                0);
+    gauge = icalgauge_new_from_sql("SELECT * FROM VEVENT WHERE "
+                                   "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
+                                   "VEVENT.SUMMARY = 'Bastille Day Party'",
+                                   0);
 
     ok("Creating complex Gauge", (gauge != 0));
 
     (void)icaldirset_select(s, gauge);
 
     for (c = icaldirset_get_first_component(s); c != 0; c = icaldirset_get_next_component(s)) {
-
         printf("Got one! (%d)\n", count++);
 
         printf("%s", icalcomponent_as_ical_string(c));
@@ -734,10 +716,7 @@ void test_dirset_extended(void)
 
     icalset_free(s2);
 
-    for (c = icaldirset_get_first_component(s);
-         c != 0;
-         c = icaldirset_get_next_component(s)) {
-
+    for (c = icaldirset_get_first_component(s); c != 0; c = icaldirset_get_next_component(s)) {
         printf("%s", icalcomponent_as_ical_string(c));
     }
 

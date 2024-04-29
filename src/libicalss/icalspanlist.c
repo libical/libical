@@ -17,11 +17,10 @@
 
 #include <stdlib.h>
 
-struct icalspanlist_impl
-{
-    pvl_list spans;             /**< list of icaltime_span data **/
-    struct icaltimetype start;  /**< start time of span **/
-    struct icaltimetype end;    /**< end time of span **/
+struct icalspanlist_impl {
+    pvl_list spans;            /**< list of icaltime_span data **/
+    struct icaltimetype start; /**< start time of span **/
+    struct icaltimetype end;   /**< end time of span **/
 };
 
 /** @brief Internal comparison function for two spans
@@ -43,7 +42,7 @@ static int compare_span(void *a, void *b)
         return 0;
     } else if (span_a->start < span_b->start) {
         return -1;
-    } else {    /*if(span_a->start > span->b.start) */
+    } else { /*if(span_a->start > span->b.start) */
         return 1;
     }
 }
@@ -62,19 +61,19 @@ static int compare_span(void *a, void *b)
 static void icalspanlist_new_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
 {
     icaltime_span *s;
-    icalspanlist *sl = (icalspanlist *) data;
+    icalspanlist *sl = (icalspanlist *)data;
 
     _unused(comp);
 
     if (span->is_busy == 0)
         return;
 
-    if ((s = (icaltime_span *) malloc(sizeof(icaltime_span))) == 0) {
+    if ((s = (icaltime_span *)malloc(sizeof(icaltime_span))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return;
     }
 
-  /* copy span data into allocated memory.. **/
+    /* copy span data into allocated memory.. **/
     *s = *span;
     pvl_insert_ordered(sl->spans, compare_span, (void *)s);
 }
@@ -103,10 +102,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     /* Gets a list of spans of busy time from the events in the set
        and order the spans based on the start time */
 
-    for (c = icalset_get_first_component(set);
-         c != 0;
-         c = icalset_get_next_component(set)) {
-
+    for (c = icalset_get_first_component(set); c != 0; c = icalset_get_next_component(set)) {
         kind = icalcomponent_isa(c);
         inner = icalcomponent_get_inner(c);
 
@@ -164,7 +160,6 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
         last_span = (struct icaltime_span *)pvl_data(pvl_tail(sl->spans));
 
         if (last_span != 0) {
-
             if ((freetime = (struct icaltime_span *)malloc(sizeof(struct icaltime_span))) == 0) {
                 icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                 icalspanlist_free(sl);
@@ -260,7 +255,6 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
             continue;
 
         if (s->is_busy == 0 && s->start >= rangett && (rangett < s->end || s->end == s->start)) {
-
             if (rangett < s->start) {
                 period.start = icaltime_from_timet_with_zone(s->start, 0, NULL);
             } else {
@@ -292,11 +286,11 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     if (!delta_t)
         delta_t = 3600;
 
-  /* calculate the start and end time as icaltime_t **/
+    /* calculate the start and end time as icaltime_t **/
     sl_start = icaltime_as_timet_with_zone(sl->start, icaltimezone_get_utc_timezone());
     sl_end = icaltime_as_timet_with_zone(sl->end, icaltimezone_get_utc_timezone());
 
-  /* insure that the time period falls on a time boundary divisible
+    /* insure that the time period falls on a time boundary divisible
       by delta_t */
 
     sl_start /= delta_t;
@@ -305,10 +299,10 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     sl_end /= delta_t;
     sl_end *= delta_t;
 
-  /* find the duration of this spanlist **/
+    /* find the duration of this spanlist **/
     spanduration_secs = sl_end - sl_start;
 
-  /* malloc our matrix, add one extra slot for a final -1 **/
+    /* malloc our matrix, add one extra slot for a final -1 **/
     matrix_slots = spanduration_secs / delta_t + 1;
 
     matrix = (int *)malloc((size_t)(sizeof(int) * matrix_slots));
@@ -340,8 +334,7 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     return matrix;
 }
 
-icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
-                                         const char *organizer, const char *attendee)
+icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl, const char *organizer, const char *attendee)
 {
     icalcomponent *comp;
     icalproperty *p;
@@ -375,7 +368,6 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
         struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
 
         if (s && s->is_busy == 1) {
-
             period.start = icaltime_from_timet_with_zone(s->start, 0, utc_zone);
             period.end = icaltime_from_timet_with_zone(s->end, 0, utc_zone);
             period.duration = icaldurationtype_null_duration();
@@ -403,17 +395,16 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
     if (!inner)
         return NULL;
 
-    if ((sl = (icalspanlist *) malloc(sizeof(icalspanlist))) == 0) {
+    if ((sl = (icalspanlist *)malloc(sizeof(icalspanlist))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
     sl->spans = pvl_newlist();
 
     /* cycle through each FREEBUSY property, adding to the spanlist */
-    for (prop = icalcomponent_get_first_property(inner, ICAL_FREEBUSY_PROPERTY);
-         prop != NULL;
+    for (prop = icalcomponent_get_first_property(inner, ICAL_FREEBUSY_PROPERTY); prop != NULL;
          prop = icalcomponent_get_next_property(inner, ICAL_FREEBUSY_PROPERTY)) {
-        icaltime_span *s = (icaltime_span *) malloc(sizeof(icaltime_span));
+        icaltime_span *s = (icaltime_span *)malloc(sizeof(icaltime_span));
         icalparameter *param;
         struct icalperiodtype period;
         icalparameter_fbtype fbtype;
@@ -443,6 +434,6 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
 
         pvl_insert_ordered(sl->spans, compare_span, (void *)s);
     }
-  /** @todo calculate start/end limits.. fill in holes? **/
+    /** @todo calculate start/end limits.. fill in holes? **/
     return sl;
 }

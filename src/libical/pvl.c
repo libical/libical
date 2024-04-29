@@ -55,13 +55,12 @@ static ICAL_GLOBAL_VAR int pvl_list_count = 0;
 
   */
 
-typedef struct pvl_list_t
-{
-    int MAGIC;                          /**< Magic Identifier */
-    struct pvl_elem_t *head;            /**< Head of list */
-    struct pvl_elem_t *tail;            /**< Tail of list */
-    int count;                          /**< Number of items in the list */
-    struct pvl_elem_t *p;               /**< Pointer used for iterators */
+typedef struct pvl_list_t {
+    int MAGIC;               /**< Magic Identifier */
+    struct pvl_elem_t *head; /**< Head of list */
+    struct pvl_elem_t *tail; /**< Tail of list */
+    int count;               /**< Number of items in the list */
+    struct pvl_elem_t *p;    /**< Pointer used for iterators */
 } pvl_list_t;
 
 /**
@@ -130,7 +129,7 @@ pvl_elem pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
     E->next = next;
     E->prior = prior;
 
-    return (pvl_elem) E;
+    return (pvl_elem)E;
 }
 
 /**
@@ -247,13 +246,13 @@ void pvl_insert_ordered(pvl_list L, pvl_comparef f, void *d)
 
     /* smaller than head, add to head */
 
-    if (((*f) (d, L->head->d)) <= 0) {
+    if (((*f)(d, L->head->d)) <= 0) {
         pvl_unshift(L, d);
         return;
     }
 
     /* larger than tail, add to tail */
-    if ((*f) (d, L->tail->d) >= 0) {
+    if ((*f)(d, L->tail->d) >= 0) {
         pvl_push(L, d);
         return;
     }
@@ -261,7 +260,7 @@ void pvl_insert_ordered(pvl_list L, pvl_comparef f, void *d)
     /* Search for the first element that is smaller, and add before it */
 
     for (P = L->head; P != 0; P = P->next) {
-        if ((*f) (P->d, d) >= 0) {
+        if ((*f)(P->d, d) >= 0) {
             pvl_insert_before(L, P, d);
             return;
         }
@@ -402,7 +401,7 @@ pvl_elem pvl_find(pvl_list l, pvl_findf f, void *v)
     pvl_elem e;
 
     for (e = pvl_head(l); e != 0; e = pvl_next(e)) {
-        if ((*f) (((struct pvl_elem_t *)e)->d, v) == 1) {
+        if ((*f)(((struct pvl_elem_t *)e)->d, v) == 1) {
             /* Save this elem for a call to find_next */
             ((struct pvl_list_t *)l)->p = e;
             return e;
@@ -428,7 +427,7 @@ pvl_elem pvl_find_next(pvl_list l, pvl_findf f, void *v)
     pvl_elem e;
 
     for (e = pvl_head(l); e != 0; e = pvl_next(e)) {
-        if ((*f) (((struct pvl_elem_t *)e)->d, v) == 1) {
+        if ((*f)(((struct pvl_elem_t *)e)->d, v) == 1) {
             /* Save this elem for a call to find_next */
             ((struct pvl_list_t *)l)->p = e;
             return e;
@@ -478,7 +477,7 @@ pvl_elem pvl_next(pvl_elem E)
         return 0;
     }
 
-    return (pvl_elem) E->next;
+    return (pvl_elem)E->next;
 }
 
 /**
@@ -487,7 +486,7 @@ pvl_elem pvl_next(pvl_elem E)
 
 pvl_elem pvl_prior(pvl_elem E)
 {
-    return (pvl_elem) E->prior;
+    return (pvl_elem)E->prior;
 }
 
 /**
@@ -496,7 +495,7 @@ pvl_elem pvl_prior(pvl_elem E)
 
 pvl_elem pvl_head(pvl_list L)
 {
-    return (pvl_elem) L->head;
+    return (pvl_elem)L->head;
 }
 
 /**
@@ -504,7 +503,7 @@ pvl_elem pvl_head(pvl_list L)
  */
 pvl_elem pvl_tail(pvl_list L)
 {
-    return (pvl_elem) L->tail;
+    return (pvl_elem)L->tail;
 }
 
 #if !defined(PVL_USE_MACROS)
@@ -532,6 +531,6 @@ void pvl_apply(pvl_list l, pvl_applyf f, void *v)
     pvl_elem e;
 
     for (e = pvl_head(l); e != 0; e = pvl_next(e)) {
-        (*f) (((struct pvl_elem_t *)e)->d, v);
+        (*f)(((struct pvl_elem_t *)e)->d, v);
     }
 }

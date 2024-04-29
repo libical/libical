@@ -26,7 +26,7 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
 {
     icalarray *array;
 
-    array = (icalarray *) icalmemory_new_buffer(sizeof(icalarray));
+    array = (icalarray *)icalmemory_new_buffer(sizeof(icalarray));
     if (!array) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return NULL;
@@ -66,8 +66,7 @@ icalarray *icalarray_copy(icalarray *originalarray)
         for (chunk = 0; chunk < chunks; chunk++) {
             array->chunks[chunk] = icalarray_alloc_chunk(array);
             if (array->chunks[chunk]) {
-                memcpy(array->chunks[chunk], originalarray->chunks[chunk],
-                       array->increment_size * array->element_size);
+                memcpy(array->chunks[chunk], originalarray->chunks[chunk], array->increment_size * array->element_size);
 
                 array->space_allocated += array->increment_size;
             } else {
@@ -130,8 +129,7 @@ void *icalarray_element_at(icalarray *array, size_t position)
 void icalarray_remove_element_at(icalarray *array, size_t position)
 {
     while (position < array->num_elements - 1) {
-        memmove(icalarray_element_at(array, position),
-                icalarray_element_at(array, position + 1), array->element_size);
+        memmove(icalarray_element_at(array, position), icalarray_element_at(array, position + 1), array->element_size);
         position++;
     }
 
@@ -143,7 +141,8 @@ struct _icalarray_sort_context {
     int (*compare)(const void *, const void *);
 };
 
-static int icalarray_fcompare(const void *context, size_t i, size_t j) {
+static int icalarray_fcompare(const void *context, size_t i, size_t j)
+{
     struct _icalarray_sort_context *sort_context = (struct _icalarray_sort_context *)context;
     void *pI = icalarray_element_at(sort_context->array, i);
     void *pJ = icalarray_element_at(sort_context->array, j);
@@ -151,7 +150,8 @@ static int icalarray_fcompare(const void *context, size_t i, size_t j) {
     return sort_context->compare(pI, pJ);
 }
 
-static void icalarray_fswap(void *context, size_t i, size_t j) {
+static void icalarray_fswap(void *context, size_t i, size_t j)
+{
     struct _icalarray_sort_context *sort_context = (struct _icalarray_sort_context *)context;
     void *pI = icalarray_element_at(sort_context->array, i);
     void *pJ = icalarray_element_at(sort_context->array, j);
@@ -159,7 +159,7 @@ static void icalarray_fswap(void *context, size_t i, size_t j) {
     qsort_gen_memswap(pI, pJ, sort_context->array->element_size);
 }
 
-void icalarray_sort(icalarray *array, int (*compare) (const void *, const void *))
+void icalarray_sort(icalarray *array, int (*compare)(const void *, const void *))
 {
     struct _icalarray_sort_context sort_context;
     sort_context.array = array;

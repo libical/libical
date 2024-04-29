@@ -45,12 +45,12 @@ icalparameter *icalparameter_new(icalparameter_kind kind)
 {
     struct icalparameter_impl *v = icalparameter_new_impl(kind);
 
-    return (icalparameter *) v;
+    return (icalparameter *)v;
 }
 
 void icalparameter_free(icalparameter *param)
 {
-/*  Comment out the following as it always triggers, even when parameter is non-zero
+    /*  Comment out the following as it always triggers, even when parameter is non-zero
     icalerror_check_arg_rv((parameter==0),"parameter");*/
 
     if (param->parent != 0) {
@@ -184,33 +184,28 @@ char *icalparameter_as_ical_string(icalparameter *param)
  */
 static int icalparameter_is_safe_char(unsigned char character, int quoted)
 {
-    if (character == ' ' || character == '\t' || character == '!' ||
-        (character >= 0x80 && character <= 0xF8)) {
+    if (character == ' ' || character == '\t' || character == '!' || (character >= 0x80 && character <= 0xF8)) {
         return 1;
     }
 
     if (quoted && character >= 0x23 && character <= 0x7e) {
         return 1;
-    }
-    else if (!quoted &&
-             ((character >= 0x23 && character <= 0x2b) ||
-              (character >= 0x2d && character <= 0x39) ||
-              (character >= 0x3c && character <= 0x7e))) {
+    } else if (!quoted && ((character >= 0x23 && character <= 0x2b) || (character >= 0x2d && character <= 0x39) ||
+                           (character >= 0x3c && character <= 0x7e))) {
         return 1;
     }
 
     return 0;
 }
 
- /**
+/**
  * Appends the parameter value to the buffer, encoding per RFC 6868
  * and filtering out those characters not permitted by the specifications
  *
  * paramtext    = *SAFE-CHAR
  * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
  */
-static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
-                                               size_t *buf_size, const char *value)
+static void icalparameter_append_encoded_value(char **buf, char **buf_ptr, size_t *buf_size, const char *value)
 {
     int qm = 0;
     const char *p;
@@ -225,25 +220,25 @@ static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
     for (p = value; *p; p++) {
         /* Encode unsafe characters per RFC6868, otherwise replace with SP */
         switch (*p) {
-            case '\n':
-                icalmemory_append_string(buf, buf_ptr, buf_size, "^n");
-                break;
+        case '\n':
+            icalmemory_append_string(buf, buf_ptr, buf_size, "^n");
+            break;
 
-            case '^':
-                icalmemory_append_string(buf, buf_ptr, buf_size, "^^");
-                break;
+        case '^':
+            icalmemory_append_string(buf, buf_ptr, buf_size, "^^");
+            break;
 
-            case '"':
-                icalmemory_append_string(buf, buf_ptr, buf_size, "^'");
-                break;
+        case '"':
+            icalmemory_append_string(buf, buf_ptr, buf_size, "^'");
+            break;
 
-            default:
-                if (icalparameter_is_safe_char((unsigned char)*p, qm)) {
-                    icalmemory_append_char(buf, buf_ptr, buf_size, *p);
-                } else {
-                    icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
-                }
-                break;
+        default:
+            if (icalparameter_is_safe_char((unsigned char)*p, qm)) {
+                icalmemory_append_char(buf, buf_ptr, buf_size, *p);
+            } else {
+                icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
+            }
+            break;
         }
     }
 
@@ -282,11 +277,9 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
     } else if (param->kind == ICAL_IANA_PARAMETER) {
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, icalparameter_get_iana_name(param));
     } else {
-
         kind_string = icalparameter_kind_to_string(param->kind);
 
-        if (param->kind == ICAL_NO_PARAMETER ||
-            param->kind == ICAL_ANY_PARAMETER || kind_string == 0) {
+        if (param->kind == ICAL_NO_PARAMETER || param->kind == ICAL_ANY_PARAMETER || kind_string == 0) {
             icalerror_set_errno(ICAL_BADARG_ERROR);
             icalmemory_free_buffer(buf);
             return 0;

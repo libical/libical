@@ -15,8 +15,7 @@
 #include "libical_ical_export.h"
 #include "icptrholder_cxx.h"
 
-extern "C"
-{
+extern "C" {
 #include "icalerror.h"
 #include "icalparameter.h"
 }
@@ -43,10 +42,7 @@ public:
     explicit ICalParameter(const icalparameter_kind &kind);
     ICalParameter(const icalparameter_kind &kind, const std::string &str);
 
-    operator  icalparameter *()
-    {
-        return imp;
-    }
+    operator icalparameter *() { return imp; }
 
     void detach();
 
@@ -164,6 +160,6 @@ private:
     icalparameter *imp;
 };
 
-}       // namespace LibICal
+} // namespace LibICal
 
 #endif

@@ -14,10 +14,10 @@
 #else
 #if defined(_MSC_VER) || defined(__CYGWIN__)
 #if defined(libical_icalss_EXPORTS)
-       /* We are building this library */
+/* We are building this library */
 #define LIBICAL_ICALSS_EXPORT __declspec(dllexport)
 #else
-       /* We are using this library */
+/* We are using this library */
 #define LIBICAL_ICALSS_EXPORT __declspec(dllimport)
 #endif
 #define LIBICAL_ICALSS_NO_EXPORT

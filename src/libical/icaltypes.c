@@ -73,7 +73,6 @@ struct icaltriggertype icaltriggertype_from_string(const char *str)
     tr.time = icaltime_from_string(str);
 
     if (icaltime_is_null_time(tr.time)) {
-
         tr.duration = icaldurationtype_from_string(str);
 
         if (icaldurationtype_is_bad_duration(tr.duration)) {
@@ -85,7 +84,7 @@ struct icaltriggertype icaltriggertype_from_string(const char *str)
     icalerror_set_errno(e);
     return tr;
 
-  error:
+error:
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     return tr;
@@ -122,7 +121,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
     p1 = strchr(str, ';');
 
     if (p1 == 0) {
-/*    icalerror_set_errno(ICAL_BADARG_ERROR);*/
+        /*    icalerror_set_errno(ICAL_BADARG_ERROR);*/
         return stat;
     }
 
@@ -163,8 +162,8 @@ char *icalreqstattype_as_string_r(struct icalreqstattype stat)
                  icalenum_reqstat_minor(stat.code), stat.desc, stat.debug);
 
     } else {
-        snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s", icalenum_reqstat_major(stat.code),
-                 icalenum_reqstat_minor(stat.code), stat.desc);
+        snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s", icalenum_reqstat_major(stat.code), icalenum_reqstat_minor(stat.code),
+                 stat.desc);
     }
 
     return temp;

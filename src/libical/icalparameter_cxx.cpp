@@ -12,11 +12,13 @@
 #include "icalparameter_cxx.h"
 using namespace LibICal;
 
-ICalParameter::ICalParameter() : imp(icalparameter_new(ICAL_ANY_PARAMETER))
+ICalParameter::ICalParameter()
+    : imp(icalparameter_new(ICAL_ANY_PARAMETER))
 {
 }
 
-ICalParameter::ICalParameter(const ICalParameter &v) : imp(icalparameter_clone(v.imp))
+ICalParameter::ICalParameter(const ICalParameter &v)
+    : imp(icalparameter_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -52,7 +54,8 @@ ICalParameter::~ICalParameter()
     }
 }
 
-ICalParameter::ICalParameter(icalparameter *v) : imp(v)
+ICalParameter::ICalParameter(icalparameter *v)
+    : imp(v)
 {
 }
 
@@ -74,7 +77,8 @@ ICalParameter::ICalParameter(const icalparameter_kind &kind, const std::string &
     }
 }
 
-ICalParameter::ICalParameter(const icalparameter_kind &kind) : imp(icalparameter_new(kind))
+ICalParameter::ICalParameter(const icalparameter_kind &kind)
+    : imp(icalparameter_new(kind))
 {
     if (imp == NULL) {
         throw icalerrno;

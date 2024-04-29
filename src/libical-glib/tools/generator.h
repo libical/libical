@@ -83,4 +83,4 @@ void generate_header_and_source(Structure *structure, gchar *dir);
 void generate_header_header_declaration(FILE *out, Structure *structure);
 void generate_header_header_file(GList *structures);
 
-#endif  /* GENERATOR_H */
+#endif /* GENERATOR_H */

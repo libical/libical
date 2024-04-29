@@ -70,8 +70,7 @@ LIBICAL_ICAL_EXPORT icalarray *icaltimezone_get_builtin_timezones(void);
 LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_get_builtin_timezone(const char *location);
 
 /** @brief Returns a single builtin timezone, given its offset from UTC. */
-LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset,
-                                                                                const char *tzname);
+LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset, const char *tzname);
 
 /** @brief Returns a single builtin timezone, given its TZID. */
 LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid);
@@ -119,8 +118,7 @@ LIBICAL_ICAL_EXPORT const char *icaltimezone_get_display_name(icaltimezone *zone
  * Converting times between timezones.
  */
 
-LIBICAL_ICAL_EXPORT void icaltimezone_convert_time(struct icaltimetype *tt,
-                                                   icaltimezone *from_zone,
+LIBICAL_ICAL_EXPORT void icaltimezone_convert_time(struct icaltimetype *tt, icaltimezone *from_zone,
                                                    icaltimezone *to_zone);
 
 /*
@@ -134,8 +132,7 @@ LIBICAL_ICAL_EXPORT void icaltimezone_convert_time(struct icaltimetype *tt,
  * time.  The is_daylight flag is set to 1 if the time is in
  * daylight-savings time.
  */
-LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset(icaltimezone *zone,
-                                                    struct icaltimetype *tt, int *is_daylight);
+LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int *is_daylight);
 
 /** @brief Calculates the UTC offset of a given UTC time in the given timezone.
  *
@@ -143,8 +140,7 @@ LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset(icaltimezone *zone,
  * time.  The @p is_daylight flag is set to 1 if the time is in
  * daylight-savings time.
  */
-LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
-                                                                struct icaltimetype *tt,
+LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone, struct icaltimetype *tt,
                                                                 int *is_daylight);
 
 /*
@@ -152,16 +148,14 @@ LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zo
  */
 LIBICAL_ICAL_EXPORT icalarray *icaltimezone_array_new(void);
 
-LIBICAL_ICAL_EXPORT void icaltimezone_array_append_from_vtimezone(icalarray *timezones,
-                                                                  icalcomponent *child);
+LIBICAL_ICAL_EXPORT void icaltimezone_array_append_from_vtimezone(icalarray *timezones, icalcomponent *child);
 
 LIBICAL_ICAL_EXPORT void icaltimezone_array_free(icalarray *timezones);
 
 /*
  * By request (issue #112) make vtimezone functions public
  */
-LIBICAL_ICAL_EXPORT void icaltimezone_expand_vtimezone(icalcomponent *comp,
-                                                       int end_year, icalarray *changes);
+LIBICAL_ICAL_EXPORT void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray *changes);
 
 /** @brief Gets the LOCATION or X-LIC-LOCATION property from a VTIMEZONE. */
 LIBICAL_ICAL_EXPORT char *icaltimezone_get_location_from_vtimezone(icalcomponent *component);
@@ -182,9 +176,7 @@ LIBICAL_ICAL_EXPORT char *icaltimezone_get_tznames_from_vtimezone(icalcomponent 
  * then the DTSTART of RRULEs will be adjusted to occur after the start time.
  * @since 3.0.6
  */
-LIBICAL_ICAL_EXPORT void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
-                                                         icaltimetype start,
-                                                         icaltimetype end,
+LIBICAL_ICAL_EXPORT void icaltimezone_truncate_vtimezone(icalcomponent *vtz, icaltimetype start, icaltimetype end,
                                                          int ms_compatible);
 
 /*

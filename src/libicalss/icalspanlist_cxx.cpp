@@ -17,12 +17,14 @@
 
 using namespace LibICal;
 
-ICalSpanList::ICalSpanList() : data(0)
+ICalSpanList::ICalSpanList()
+    : data(0)
 {
     throw icalerrno;
 }
 
-ICalSpanList::ICalSpanList(const ICalSpanList &v) : data(v.data)
+ICalSpanList::ICalSpanList(const ICalSpanList &v)
+    : data(v.data)
 {
     if (data == NULL) {
         throw icalerrno;
@@ -46,7 +48,8 @@ ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end)
     @param comp  A valid icalcomponent with a VFREEBUSY section
 */
 
-ICalSpanList::ICalSpanList(icalcomponent *comp) : data(icalspanlist_from_vfreebusy(comp))
+ICalSpanList::ICalSpanList(icalcomponent *comp)
+    : data(icalspanlist_from_vfreebusy(comp))
 {
     if (data == NULL) {
         throw icalerrno;
@@ -86,7 +89,7 @@ ICalSpanList::~ICalSpanList()
 VComponent *ICalSpanList::get_vfreebusy(const char *organizer, const char *attendee)
 {
     icalcomponent *comp;
-    VComponent    *vcomp;
+    VComponent *vcomp;
 
     comp = icalspanlist_as_vfreebusy(data, organizer, attendee);
     if (comp == NULL) {

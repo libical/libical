@@ -33,9 +33,9 @@ END:VCALENDAR";
 
 void test_cxx(void)
 {
-    ICalProperty *summProp  = new ICalProperty(ICAL_SUMMARY_PROPERTY);
+    ICalProperty *summProp = new ICalProperty(ICAL_SUMMARY_PROPERTY);
     ICalProperty *startProp = new ICalProperty(ICAL_DTSTART_PROPERTY);
-    ICalProperty *endProp   = new ICalProperty(ICAL_DTEND_PROPERTY);
+    ICalProperty *endProp = new ICalProperty(ICAL_DTEND_PROPERTY);
     ICalProperty *locationProp = new ICalProperty(ICAL_LOCATION_PROPERTY);
     ICalProperty *descProp = new ICalProperty(ICAL_DESCRIPTION_PROPERTY);
 
@@ -48,9 +48,8 @@ void test_cxx(void)
     struct icaltimetype starttime = icaltime_from_string("20011221T180000Z"); // UTC time ends in Z
     struct icaltimetype endtime = icaltime_from_string("20020101T080000Z");   // UTC time ends in Z
 
-    summProp->set_summary(
-        string("jon said: change dir to c:\\rest\\test\\nest to get the file "
-               "called <foo.dat>\nthis should be in the next line."));
+    summProp->set_summary(string("jon said: change dir to c:\\rest\\test\\nest to get the file "
+                                 "called <foo.dat>\nthis should be in the next line."));
     startProp->set_dtstart(starttime);
     endProp->set_dtend(endtime);
     locationProp->set_location(string("SF, California; Seattle, Washington"));
@@ -68,21 +67,15 @@ void test_cxx(void)
     vEvent->add_property(descProp);
 
     //
-    str_is("vEvent->get_summary()",
-           vEvent->get_summary().c_str(),
+    str_is("vEvent->get_summary()", vEvent->get_summary().c_str(),
            "jon said: change dir to c:\\rest\\test\\nest to get the file "
            "called <foo.dat>\nthis should be in the next line.");
 
-    str_is("vEvent->get_dtstart()",
-           icaltime_as_ical_string(vEvent->get_dtstart()),
-           "20011221T180000Z");
+    str_is("vEvent->get_dtstart()", icaltime_as_ical_string(vEvent->get_dtstart()), "20011221T180000Z");
 
-    str_is("vEvent->get_dtend()",
-           icaltime_as_ical_string(vEvent->get_dtend()),
-           "20020101T080000Z");
+    str_is("vEvent->get_dtend()", icaltime_as_ical_string(vEvent->get_dtend()), "20020101T080000Z");
 
-    ok("vEvent->as_ical_string()",
-       (vEvent->as_ical_string().c_str() != 0));
+    ok("vEvent->as_ical_string()", (vEvent->as_ical_string().c_str() != 0));
 
     if (VERBOSE != 0) {
         printf("Summary: %s\n", vEvent->get_summary().c_str());
@@ -113,9 +106,7 @@ void test_cxx(void)
 
     VEvent *sub_ic = dynamic_cast<VEvent *>(ic.get_first_component(ICAL_VEVENT_COMPONENT));
     if (sub_ic != NULL) {
-        int_is("Getting VEvent subcomponent",
-               sub_ic->isa(),
-               ICAL_VEVENT_COMPONENT);
+        int_is("Getting VEvent subcomponent", sub_ic->isa(), ICAL_VEVENT_COMPONENT);
         while (sub_ic != NULL) {
             if (VERBOSE != 0) {
                 printf("subcomponent: %s\n", sub_ic->as_ical_string().c_str());
@@ -161,7 +152,8 @@ void test_cxx(void)
     try {
         icalerrno = ICAL_NO_ERROR;
         VComponent v = VComponent(string("HFHFHFHF"));
-    } catch (icalerrorenum err) {
+    }
+    catch (icalerrorenum err) {
         if (err == ICAL_BADARG_ERROR) {
             caughtException = 1;
         }

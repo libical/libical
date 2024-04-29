@@ -18,47 +18,44 @@
 namespace LibICal
 {
 
-    class VComponent;
+class VComponent;
 
-    class LIBICAL_ICALSS_EXPORT ICalBDBSet
-    {
-      public:
+class LIBICAL_ICALSS_EXPORT ICalBDBSet
+{
+public:
+    ICalBDBSet();
+    ICalBDBSet(const ICalBDBSet &);
+    ICalBDBSet(const std::string &path, int flags);
+    ICalBDBSet operator=(const ICalBDBSet &);
+    ~ICalBDBSet();
 
-        ICalBDBSet();
-        ICalBDBSet(const ICalBDBSet &);
-        ICalBDBSet(const std::string &path, int flags);
-        ICalBDBSet operator=(const ICalBDBSet &);
-        ~ICalBDBSet();
+public:
+    void free();
+    std::string path();
 
-      public:
+    icalerrorenum add_component(VComponent *child);
+    icalerrorenum remove_component(VComponent *child);
+    int count_components(icalcomponent_kind kind);
 
-        void free();
-        std::string path();
+    // Restrict the component returned by icalbdbset_first, _next to those
+    // that pass the gauge. _clear removes the gauge
+    icalerrorenum select(icalgauge *gauge);
+    void clear();
 
-        icalerrorenum add_component(VComponent *child);
-        icalerrorenum remove_component(VComponent *child);
-        int count_components(icalcomponent_kind kind);
+    // Get and search for a component by uid
+    VComponent *fetch(std::string &uid);
+    VComponent *fetch_match(icalcomponent *c);
+    int has_uid(std::string &uid);
 
-        // Restrict the component returned by icalbdbset_first, _next to those
-        // that pass the gauge. _clear removes the gauge
-        icalerrorenum select(icalgauge *gauge);
-        void clear();
+    // Iterate through components. If a gauge has been defined, these
+    // will skip over components that do not pass the gauge
+    VComponent *get_current_component();
+    VComponent *get_first_component();
+    VComponent *get_next_component();
 
-        // Get and search for a component by uid
-        VComponent *fetch(std::string &uid);
-        VComponent *fetch_match(icalcomponent *c);
-        int has_uid(std::string &uid);
+    VComponent *get_component();
+};
 
-        // Iterate through components. If a gauge has been defined, these
-        // will skip over components that do not pass the gauge
-        VComponent *get_current_component();
-        VComponent *get_first_component();
-        VComponent *get_next_component();
-
-        VComponent *get_component();
-
-    };
-
-}       // namespace LibICal
+} // namespace LibICal
 
 #endif

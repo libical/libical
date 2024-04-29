@@ -26,8 +26,7 @@
  * @brief A struct representing an icalarray object
  */
 typedef struct _icalarray icalarray;
-struct _icalarray
-{
+struct _icalarray {
     size_t element_size;
     size_t increment_size;
     size_t num_elements;
@@ -285,7 +284,6 @@ LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray *array, size_t position
  * }
  * ```
  */
-LIBICAL_ICAL_EXPORT void icalarray_sort(icalarray *array,
-                                        int (*compare) (const void *, const void *));
+LIBICAL_ICAL_EXPORT void icalarray_sort(icalarray *array, int (*compare)(const void *, const void *));
 
 #endif /* ICALARRAY_H */

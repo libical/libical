@@ -36,7 +36,8 @@
 
 #include <cassert>
 
-template < class T > class ICPointerHolder
+template<class T>
+class ICPointerHolder
 {
 public:
     ICPointerHolder()
@@ -56,15 +57,12 @@ public:
         // We need to transfer ownership of ptr to this object by setting
         // ip's ptr to null. Otherwise, ptr will de deleted twice.
         // const ugliness requires us to do the const_cast.
-        ICPointerHolder *ipp = const_cast < ICPointerHolder * >(&ip);
+        ICPointerHolder *ipp = const_cast<ICPointerHolder *>(&ip);
 
         ipp->ptr = 0;
     };
 
-    ~ICPointerHolder()
-    {
-        release();
-    }
+    ~ICPointerHolder() { release(); }
 
     ICPointerHolder &operator=(T *p)
     {
@@ -76,25 +74,16 @@ public:
     ICPointerHolder &operator=(ICPointerHolder &p)
     {
         this->release();
-        ptr = p.ptr;    // this transfer ownership of the pointer
-        p.ptr = 0;      // set it to null so the pointer won't get delete twice.
+        ptr = p.ptr; // this transfer ownership of the pointer
+        p.ptr = 0;   // set it to null so the pointer won't get delete twice.
         return *this;
     }
 
-    bool operator!=(T *p)
-    {
-        return (ptr != p);
-    }
+    bool operator!=(T *p) { return (ptr != p); }
 
-    bool operator==(T *p)
-    {
-        return (ptr == p);
-    }
+    bool operator==(T *p) { return (ptr == p); }
 
-    operator  T *() const
-    {
-        return ptr;
-    }
+    operator T *() const { return ptr; }
 
     T *operator->() const
     {

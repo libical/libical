@@ -49,21 +49,13 @@
 #if !defined(HAVE_BYTESWAP_H) && !defined(HAVE_SYS_ENDIAN_H) && !defined(HAVE_ENDIAN_H)
 #define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8) & 0xff)
 
-#define bswap_32(x) \
-(((x) << 24) & 0xff000000) | \
-(((x) << 8) & 0xff0000)    | \
-(((x) >> 8) & 0xff00)      | \
-(((x) >> 24) & 0xff)
+#define bswap_32(x) (((x) << 24) & 0xff000000) | (((x) << 8) & 0xff0000) | (((x) >> 8) & 0xff00) | (((x) >> 24) & 0xff)
 
-#define bswap_64(x) \
-((((x) & 0xff00000000000000ull) >> 56) | \
-(((x) & 0x00ff000000000000ull) >> 40)  | \
-(((x) & 0x0000ff0000000000ull) >> 24)  | \
-(((x) & 0x000000ff00000000ull) >> 8)   | \
-(((x) & 0x00000000ff000000ull) << 8)   | \
-(((x) & 0x0000000000ff0000ull) << 24)  | \
-(((x) & 0x000000000000ff00ull) << 40)  | \
-(((x) & 0x00000000000000ffull) << 56))
+#define bswap_64(x)                                                                                                    \
+    ((((x) & 0xff00000000000000ull) >> 56) | (((x) & 0x00ff000000000000ull) >> 40) |                                   \
+     (((x) & 0x0000ff0000000000ull) >> 24) | (((x) & 0x000000ff00000000ull) >> 8) |                                    \
+     (((x) & 0x00000000ff000000ull) << 8) | (((x) & 0x0000000000ff0000ull) << 24) |                                    \
+     (((x) & 0x000000000000ff00ull) << 40) | (((x) & 0x00000000000000ffull) << 56))
 #endif
 #include <io.h>
 #endif
@@ -75,8 +67,7 @@
 #endif
 
 //@cond PRIVATE
-typedef struct
-{
+typedef struct {
     char magic[4];
     char version;
     char unused[15];
@@ -92,21 +83,16 @@ typedef struct
 static ICAL_GLOBAL_VAR char s_zoneinfopath[MAXPATHLEN] = {0};
 
 /* A few well-known locations for system zoneinfo; can be overridden with TZDIR environment */
-static const char *s_zoneinfo_search_paths[] = {
-    "/usr/share/zoneinfo",
-    "/usr/lib/zoneinfo",
-    "/etc/zoneinfo",
-    "/usr/share/lib/zoneinfo"
-};
+static const char *s_zoneinfo_search_paths[] = {"/usr/share/zoneinfo", "/usr/lib/zoneinfo", "/etc/zoneinfo",
+                                                "/usr/share/lib/zoneinfo"};
 
-#define EFREAD(buf,size,num,fs) \
-if (fread(buf, size, num, fs) < num  && ferror(fs)) {  \
-    icalerror_set_errno(ICAL_FILE_ERROR);              \
-    goto error;                                        \
-}
+#define EFREAD(buf, size, num, fs)                                                                                     \
+    if (fread(buf, size, num, fs) < num && ferror(fs)) {                                                               \
+        icalerror_set_errno(ICAL_FILE_ERROR);                                                                          \
+        goto error;                                                                                                    \
+    }
 
-typedef struct
-{
+typedef struct {
     long int gmtoff;
     unsigned char isdst;
     unsigned int abbr;
@@ -116,8 +102,7 @@ typedef struct
 
 } ttinfo;
 
-typedef struct
-{
+typedef struct {
     icaltime_t transition;
     long int change;
 } leap;
@@ -199,8 +184,8 @@ static void set_zoneinfopath(void)
     const char *env_tzdir = getenv("TZDIR");
     if (env_tzdir != NULL) {
         snprintf(file_path, MAXPATHLEN, "%s/%s", env_tzdir, fname);
-        if (!access (file_path, F_OK|R_OK)) {
-            strncpy(s_zoneinfopath, env_tzdir, MAXPATHLEN-1);
+        if (!access(file_path, F_OK | R_OK)) {
+            strncpy(s_zoneinfopath, env_tzdir, MAXPATHLEN - 1);
             return;
         }
     }
@@ -210,7 +195,7 @@ static void set_zoneinfopath(void)
     for (i = 0; i < num_zi_search_paths; i++) {
         snprintf(file_path, MAXPATHLEN, "%s/%s", s_zoneinfo_search_paths[i], fname);
         if (!access(file_path, F_OK | R_OK)) {
-            strncpy(s_zoneinfopath, s_zoneinfo_search_paths[i], MAXPATHLEN-1);
+            strncpy(s_zoneinfopath, s_zoneinfo_search_paths[i], MAXPATHLEN - 1);
             break;
         }
     }
@@ -221,7 +206,7 @@ void icaltzutil_set_zone_directory(const char *zonepath)
     if ((zonepath == NULL) || (zonepath[0] == '\0')) {
         memset(s_zoneinfopath, 0, MAXPATHLEN);
     } else {
-        strncpy(s_zoneinfopath, zonepath, MAXPATHLEN-1);
+        strncpy(s_zoneinfopath, zonepath, MAXPATHLEN - 1);
     }
 }
 
@@ -236,17 +221,17 @@ const char *icaltzutil_get_zone_directory(void)
 
 static int calculate_pos(icaltimetype icaltime)
 {
-   static const int r_pos[] = {1, 2, 3, -2, -1};
-   int pos;
+    static const int r_pos[] = {1, 2, 3, -2, -1};
+    int pos;
 
-   pos = (icaltime.day - 1) / 7;
+    pos = (icaltime.day - 1) / 7;
 
-   /* Check if pos 3 is the last occurrence of the week day in the month */
-   if (pos == 3 && ((icaltime.day + 7) > icaltime_days_in_month(icaltime.month, icaltime.year))) {
-       pos = 4;
-   }
+    /* Check if pos 3 is the last occurrence of the week day in the month */
+    if (pos == 3 && ((icaltime.day + 7) > icaltime_days_in_month(icaltime.month, icaltime.year))) {
+        pos = 4;
+    }
 
-   return r_pos[pos];
+    return r_pos[pos];
 }
 
 static char *parse_posix_zone(char *p, ttinfo *type)
@@ -262,7 +247,7 @@ static char *parse_posix_zone(char *p, ttinfo *type)
         size = strcspn(p, "-+0123456789,\n");
     }
 
-    type->zname = (char *) icalmemory_new_buffer(size + 1);
+    type->zname = (char *)icalmemory_new_buffer(size + 1);
     strncpy(type->zname, p, size);
     type->zname[size] = '\0';
     p += size;
@@ -276,7 +261,7 @@ static char *parse_posix_zone(char *p, ttinfo *type)
     }
 
     /* Zone offset: hh[:mm[:ss]] */
-    type->gmtoff = strtol(p, &p, 10) * -3600;  /* sign of offset is reversed */
+    type->gmtoff = strtol(p, &p, 10) * -3600; /* sign of offset is reversed */
     if (*p == ':') {
         type->gmtoff += strtol(++p, &p, 10) * 60;
     }
@@ -288,8 +273,7 @@ static char *parse_posix_zone(char *p, ttinfo *type)
 
 #define nth_weekday(week, day) (icalrecurrencetype_encode_day(day, week))
 
-static char *parse_posix_rule(char *p,
-                              struct icalrecurrencetype *recur, icaltimetype *t)
+static char *parse_posix_rule(char *p, struct icalrecurrencetype *recur, icaltimetype *t)
 {
     int month = 0, monthday = 0, week = 0, day;
 
@@ -326,12 +310,14 @@ static char *parse_posix_rule(char *p,
 
     /* Parse time */
     *t = icaltime_null_time();
-    t->hour = 2;  /* default is 02:00 */
+    t->hour = 2; /* default is 02:00 */
 
     if (*p == '/') {
         t->hour = strtol(++p, &p, 10);
-        if (*p == ':') t->minute = strtol(++p, &p, 10);
-        if (*p == ':') t->second = strtol(++p, &p, 10);
+        if (*p == ':')
+            t->minute = strtol(++p, &p, 10);
+        if (*p == ':')
+            t->second = strtol(++p, &p, 10);
     }
 
     /* Do adjustments for extended TZ strings */
@@ -451,18 +437,30 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     icalproperty *icalprop;
     icaltimetype icaltime;
 
-    struct zone_context standard =
-        { ICAL_XSTANDARD_COMPONENT, NULL, LONG_MIN, LONG_MIN,
-          ICALTIMETYPE_INITIALIZER, ICALTIMETYPE_INITIALIZER,
-          NULL, NULL, NULL, 0,
-          ICALRECURRENCETYPE_INITIALIZER, ICALRECURRENCETYPE_INITIALIZER
-        };
-    struct zone_context daylight =
-        { ICAL_XDAYLIGHT_COMPONENT, NULL, LONG_MIN, LONG_MIN,
-          ICALTIMETYPE_INITIALIZER, ICALTIMETYPE_INITIALIZER,
-          NULL, NULL, NULL, 0,
-          ICALRECURRENCETYPE_INITIALIZER, ICALRECURRENCETYPE_INITIALIZER
-        };
+    struct zone_context standard = {ICAL_XSTANDARD_COMPONENT,
+                                    NULL,
+                                    LONG_MIN,
+                                    LONG_MIN,
+                                    ICALTIMETYPE_INITIALIZER,
+                                    ICALTIMETYPE_INITIALIZER,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    0,
+                                    ICALRECURRENCETYPE_INITIALIZER,
+                                    ICALRECURRENCETYPE_INITIALIZER};
+    struct zone_context daylight = {ICAL_XDAYLIGHT_COMPONENT,
+                                    NULL,
+                                    LONG_MIN,
+                                    LONG_MIN,
+                                    ICALTIMETYPE_INITIALIZER,
+                                    ICALTIMETYPE_INITIALIZER,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    0,
+                                    ICALRECURRENCETYPE_INITIALIZER,
+                                    ICALRECURRENCETYPE_INITIALIZER};
     struct zone_context *zone;
 
     if (icaltimezone_get_builtin_tzdata()) {
@@ -515,8 +513,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     num_types = (size_t)decode(header.typecnt);
 
     if (trans_size == 8) {
-        size_t skip = num_trans * 5 + num_types * 6 +
-            num_chars + num_leaps * 8 + num_isstd + num_isgmt;
+        size_t skip = num_trans * 5 + num_types * 6 + num_chars + num_leaps * 8 + num_isstd + num_isgmt;
 
         /* skip version 1 data block */
         if (fseek(f, (long)skip, SEEK_CUR) != 0) {
@@ -540,7 +537,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
 
     /* read data block */
-    transitions = icalmemory_new_buffer((num_trans+1) * sizeof(icaltime_t));  // +1 for TZ string
+    transitions = icalmemory_new_buffer((num_trans + 1) * sizeof(icaltime_t)); // +1 for TZ string
     if (transitions == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -550,7 +547,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
     }
-    trans_idx = icalmemory_new_buffer((num_trans+1) * sizeof(int));  // +1 for TZ string
+    trans_idx = icalmemory_new_buffer((num_trans + 1) * sizeof(int)); // +1 for TZ string
     if (trans_idx == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -566,16 +563,16 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         for (i = 0; i < num_trans; i++) {
             trans_idx[i] = fgetc(f);
             if (trans_size == 8) {
-                transitions[i] = (icaltime_t) decode64(r_trans);
+                transitions[i] = (icaltime_t)decode64(r_trans);
             } else {
-                transitions[i] = (icaltime_t) decode(r_trans);
+                transitions[i] = (icaltime_t)decode(r_trans);
             }
             r_trans += trans_size;
         }
         r_trans = temp;
     }
 
-    types = icalmemory_new_buffer((num_types+2) * sizeof(ttinfo));  // +2 for TZ string
+    types = icalmemory_new_buffer((num_types + 2) * sizeof(ttinfo)); // +2 for TZ string
     if (types == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -647,11 +644,9 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
 
     /* Read the footer */
-    if (trans_size == 8 &&
-        (footer[0] = (char)fgetc(f)) == '\n' &&
-        fgets(footer+1, (int)sizeof(footer)-1, f) &&
-        footer[strlen(footer)-1] == '\n') {
-        tzstr = footer+1;
+    if (trans_size == 8 && (footer[0] = (char)fgetc(f)) == '\n' && fgets(footer + 1, (int)sizeof(footer) - 1, f) &&
+        footer[strlen(footer) - 1] == '\n') {
+        tzstr = footer + 1;
     }
     if (tzstr) {
         /* Parse the TZ string:
@@ -669,7 +664,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         } else {
             /* Parse DST zone */
             dst_type->isdst = 1;
-            dst_type->gmtoff = std_type->gmtoff + 3600;  /* default is +1hr */
+            dst_type->gmtoff = std_type->gmtoff + 3600; /* default is +1hr */
             p = parse_posix_zone(p, dst_type);
 
             if (*p != ',') {
@@ -690,34 +685,30 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     /* Trailing junk, so ignore the TZ string */
                     tzstr = NULL;
                 } else {
-                    struct icaltimetype last_trans =
-                        icaltime_from_timet_with_zone(transitions[num_trans-1],
-                                                      0, NULL);
+                    struct icaltimetype last_trans = icaltime_from_timet_with_zone(transitions[num_trans - 1], 0, NULL);
                     icalrecur_iterator *iter;
 
-                    if (types[trans_idx[num_trans-1]].isdst) {
+                    if (types[trans_idx[num_trans - 1]].isdst) {
                         /* Add next dst->std transition */
-                        std_trans.year  = last_trans.year;
+                        std_trans.year = last_trans.year;
                         std_trans.month = last_trans.month;
-                        std_trans.day   = last_trans.day;
-                        iter = icalrecur_iterator_new(standard.final_recur,
-                                                      std_trans);
+                        std_trans.day = last_trans.day;
+                        iter = icalrecur_iterator_new(standard.final_recur, std_trans);
                         std_trans = icalrecur_iterator_next(iter);
                         icaltime_adjust(&std_trans, 0, 0, 0, -dst_type->gmtoff);
                         transitions[num_trans] = icaltime_as_timet(std_trans);
-                        trans_idx[num_trans++] = (int) num_types-2;
+                        trans_idx[num_trans++] = (int)num_types - 2;
                         icalrecur_iterator_free(iter);
                     } else {
                         /* Add next std->dst transition */
-                        dst_trans.year  = last_trans.year;
+                        dst_trans.year = last_trans.year;
                         dst_trans.month = last_trans.month;
-                        dst_trans.day   = last_trans.day;
-                        iter = icalrecur_iterator_new(daylight.final_recur,
-                                                      dst_trans);
+                        dst_trans.day = last_trans.day;
+                        iter = icalrecur_iterator_new(daylight.final_recur, dst_trans);
                         dst_trans = icalrecur_iterator_next(iter);
                         icaltime_adjust(&dst_trans, 0, 0, 0, -std_type->gmtoff);
                         transitions[num_trans] = icaltime_as_timet(dst_trans);
-                        trans_idx[num_trans++] = (int) num_types-1;
+                        trans_idx[num_trans++] = (int)num_types - 1;
                         icalrecur_iterator_free(iter);
                     }
                 }
@@ -744,7 +735,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     icalproperty_set_x_name(icalprop, "X-LIC-LOCATION");
     icalcomponent_add_property(tz_comp, icalprop);
 
-    idx = 0;  // time type 0 is always time prior to first transition
+    idx = 0; // time type 0 is always time prior to first transition
 
     for (i = 0; i < num_trans; i++) {
         int by_day = 0;
@@ -776,27 +767,21 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             int rdate = 0;
 
             // Check if the zone name or either of the offsets have changed
-            if (types[prev_idx].gmtoff != zone->gmtoff_from ||
-                types[idx].gmtoff      != zone->gmtoff_to   ||
-                (types[idx].zname != NULL &&
-                 strcmp(types[idx].zname, zone->name))) {
-
+            if (types[prev_idx].gmtoff != zone->gmtoff_from || types[idx].gmtoff != zone->gmtoff_to ||
+                (types[idx].zname != NULL && strcmp(types[idx].zname, zone->name))) {
                 zone->rdate_comp = NULL;
                 terminate = 1;
             }
             // Check if most of the recurrence pattern is the same
-            else if (icaltime.year   == zone->time.year + 1 &&
-                     icaltime.month  == zone->time.month    &&
-                     icaltime.hour   == zone->time.hour     &&
-                     icaltime.minute == zone->time.minute   &&
+            else if (icaltime.year == zone->time.year + 1 && icaltime.month == zone->time.month &&
+                     icaltime.hour == zone->time.hour && icaltime.minute == zone->time.minute &&
                      icaltime.second == zone->time.second) {
-
                 if (by_day == zone->recur.by_day[0]) {
                     // Same nth weekday of the month - continue
                 } else if (dow == icalrecurrencetype_day_day_of_week(zone->recur.by_day[0])) {
                     // Same weekday in the month
                     if (icaltime.day >= zone->recur.by_month_day[0] + 7 ||
-                        icaltime.day + 7 <= zone->recur.by_month_day[zone->num_monthdays-1]) {
+                        icaltime.day + 7 <= zone->recur.by_month_day[zone->num_monthdays - 1]) {
                         // Don't allow two month days with the same weekday -
                         // possible RDATE
                         rdate = terminate = 1;
@@ -809,10 +794,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                             }
                         }
                         if (icaltime.day < zone->recur.by_month_day[j]) {
-                            memmove(&zone->recur.by_month_day[j+1],
-                                    &zone->recur.by_month_day[j],
-                                    (zone->num_monthdays - j) *
-                                    sizeof(zone->recur.by_month_day[0]));
+                            memmove(&zone->recur.by_month_day[j + 1], &zone->recur.by_month_day[j],
+                                    (zone->num_monthdays - j) * sizeof(zone->recur.by_month_day[0]));
                             zone->recur.by_month_day[j] = icaltime.day;
                             zone->num_monthdays++;
                         }
@@ -840,10 +823,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     if (zone->rdate_comp) {
                         // Add an RDATE to the previous component
                         // Remove the current RRULE component
-                        struct icaldatetimeperiodtype dtp =
-                            { zone->time,
-                              ICALPERIODTYPE_INITIALIZER
-                            };
+                        struct icaldatetimeperiodtype dtp = {zone->time, ICALPERIODTYPE_INITIALIZER};
 
                         icalprop = icalproperty_new_rdate(dtp);
                         icalcomponent_add_property(zone->rdate_comp, icalprop);
@@ -876,14 +856,10 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             zone->num_monthdays = 1;
             zone->rrule_prop = icalproperty_new_rrule(zone->recur);
 
-            zone->rrule_comp =
-                icalcomponent_vanew(zone->kind,
-                                    icalproperty_new_tzname(zone->name),
-                                    icalproperty_new_tzoffsetfrom(zone->gmtoff_from),
-                                    icalproperty_new_tzoffsetto(zone->gmtoff_to),
-                                    icalproperty_new_dtstart(zone->time),
-                                    zone->rrule_prop,
-                                    (void *)0);
+            zone->rrule_comp = icalcomponent_vanew(zone->kind, icalproperty_new_tzname(zone->name),
+                                                   icalproperty_new_tzoffsetfrom(zone->gmtoff_from),
+                                                   icalproperty_new_tzoffsetto(zone->gmtoff_to),
+                                                   icalproperty_new_dtstart(zone->time), zone->rrule_prop, (void *)0);
             icalcomponent_add_component(tz_comp, zone->rrule_comp);
         }
     }
@@ -902,7 +878,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         }
     }
 
-  error:
+error:
     if (f)
         fclose(f);
 

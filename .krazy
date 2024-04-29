@@ -4,7 +4,6 @@ EXCLUDE dpointer
 
 EXTRA copyright-reuse,license-reuse
 EXTRA crud,camelcase
-EXTRA style
 
 #Skip foo_export.h
 SKIP libical_.*_export\.h
@@ -29,7 +28,6 @@ SKIP /src/libicalvcal/vobject\.
 #Skip contributed files
 SKIP /src/libical/astime\.h
 SKIP /src/libical/caldate\.c
-SKIP /cmake/Kitware/
 SKIP /cmake/modules/GObjectIntrospectionMacros\.cmake|/cmake/modules/FindGObjectIntrospection\.cmake
 SKIP /doc/Doxyfile\.cmake
 SKIP /cmake/Toolchain-QNX|/cmake/modules/FindBerkeleyDB.cmake|/uninstall.cmake.in

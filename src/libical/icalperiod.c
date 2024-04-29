@@ -60,7 +60,6 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 
     if (icaltime_is_null_time(p.end)) {
-
         p.duration = icaldurationtype_from_string(end);
 
         if (icaldurationtype_as_int(p.duration) == 0)
@@ -73,7 +72,7 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
 
     return p;
 
-  error:
+error:
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 
     if (s) {
@@ -134,8 +133,8 @@ struct icalperiodtype icalperiodtype_null_period(void)
 
 int icalperiodtype_is_null_period(struct icalperiodtype p)
 {
-    if (icaltime_is_null_time(p.start) &&
-        icaltime_is_null_time(p.end) && icaldurationtype_is_null_duration(p.duration)) {
+    if (icaltime_is_null_time(p.start) && icaltime_is_null_time(p.end) &&
+        icaldurationtype_is_null_duration(p.duration)) {
         return 1;
     } else {
         return 0;
@@ -144,8 +143,7 @@ int icalperiodtype_is_null_period(struct icalperiodtype p)
 
 int icalperiodtype_is_valid_period(struct icalperiodtype p)
 {
-    if (icaltime_is_valid_time(p.start) &&
-        (icaltime_is_valid_time(p.end) || icaltime_is_null_time(p.end))) {
+    if (icaltime_is_valid_time(p.start) && (icaltime_is_valid_time(p.end) || icaltime_is_null_time(p.end))) {
         return 1;
     }
 

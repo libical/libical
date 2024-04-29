@@ -22,7 +22,7 @@
 #include "icaltz-util.h"
 
 #include <ctype.h>
-#include <stddef.h>     /* for ptrdiff_t */
+#include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
 #include <limits.h>
 
@@ -47,58 +47,55 @@ static pthread_mutex_t changes_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
 /** This is the toplevel directory where the timezone data is installed in. */
-#define ZONEINFO_DIRECTORY      PACKAGE_DATA_DIR "/zoneinfo"
+#define ZONEINFO_DIRECTORY PACKAGE_DATA_DIR "/zoneinfo"
 
 /** The prefix we use to uniquely identify TZIDs.
     It must begin and end with forward slashes.
  */
 #define BUILTIN_TZID_PREFIX_LEN 256
-#define BUILTIN_TZID_PREFIX     "/freeassociation.sourceforge.net/"
+#define BUILTIN_TZID_PREFIX "/freeassociation.sourceforge.net/"
 
 /* Known prefixes from the old versions of libical */
 static const struct _compat_tzids {
     const char *tzid;
     int slashes;
-} glob_compat_tzids[] = {
-    { "/freeassociation.sourceforge.net/Tzfile/", 3 },
-    { "/freeassociation.sourceforge.net/", 2 },
-    { "/citadel.org/", 3 }, /* Full TZID for this can be: "/citadel.org/20190914_1/" */
-    { NULL, -1 }
-};
+} glob_compat_tzids[] = {{"/freeassociation.sourceforge.net/Tzfile/", 3},
+                         {"/freeassociation.sourceforge.net/", 2},
+                         {"/citadel.org/", 3}, /* Full TZID for this can be: "/citadel.org/20190914_1/" */
+                         {NULL, -1}};
 
 /* The prefix to be used for tzid's generated from system tzdata */
 static ICAL_GLOBAL_VAR char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
 
 /** This is the filename of the file containing the city names and
     coordinates of all the builtin timezones. */
-#define ZONES_TAB_FILENAME      "zones.tab"
+#define ZONES_TAB_FILENAME "zones.tab"
 
 /** This is the number of years of extra coverage we do when expanding
     the timezone changes. */
-#define ICALTIMEZONE_EXTRA_COVERAGE     5
+#define ICALTIMEZONE_EXTRA_COVERAGE 5
 
 #if (SIZEOF_ICALTIME_T > 4)
 /** Arbitrarily go up to 1000th anniversary of Gregorian calendar, since
     64-bit icaltime_t values get us up to the tm_year limit of 2+ billion years. */
-#define ICALTIMEZONE_MAX_YEAR           2582
+#define ICALTIMEZONE_MAX_YEAR 2582
 #else
 /** This is the maximum year we will expand to, since 32-bit icaltime_t values
     only go up to the start of 2038. */
-#define ICALTIMEZONE_MAX_YEAR           2037
+#define ICALTIMEZONE_MAX_YEAR 2037
 #endif
 
 typedef struct _icaltimezonechange icaltimezonechange;
 
-struct _icaltimezonechange
-{
+struct _icaltimezonechange {
     int utc_offset;
     /**< The offset to add to UTC to get local time, in seconds. */
 
     int prev_utc_offset;
     /**< The offset to add to UTC, before this change, in seconds. */
 
-    int year;                   /**< Actual year, e.g. 2001. */
-    int month;                  /**< 1 (Jan) to 12 (Dec). */
+    int year;  /**< Actual year, e.g. 2001. */
+    int month; /**< 1 (Jan) to 12 (Dec). */
     int day;
     int hour;
     int minute;
@@ -115,7 +112,7 @@ struct _icaltimezonechange
 static ICAL_GLOBAL_VAR icalarray *builtin_timezones = NULL;
 
 /** This is the special UTC timezone, which isn't in builtin_timezones. */
-static ICAL_GLOBAL_VAR icaltimezone utc_timezone = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+static ICAL_GLOBAL_VAR icaltimezone utc_timezone = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static ICAL_GLOBAL_VAR char *zone_files_directory = NULL;
 
@@ -131,8 +128,7 @@ static int icaltimezone_compare_change_fn(const void *elem1, const void *elem2);
 
 static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonechange *change);
 
-static void icaltimezone_adjust_change(icaltimezonechange *tt,
-                                       int days, int hours, int minutes, int seconds);
+static void icaltimezone_adjust_change(icaltimezonechange *tt, int days, int hours, int minutes, int seconds);
 
 static void icaltimezone_init(icaltimezone *zone);
 
@@ -143,15 +139,15 @@ static void icaltimezone_init(icaltimezone *zone);
  */
 static int icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcomponent *component)
 #if defined(THREAD_SANITIZER)
-__attribute__((no_sanitize("thread")))
+    __attribute__((no_sanitize("thread")))
 #endif
-;
+    ;
 
 static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 #if defined(THREAD_SANITIZER)
-__attribute__((no_sanitize("thread")))
+    __attribute__((no_sanitize("thread")))
 #endif
-;
+    ;
 
 static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year);
 
@@ -195,7 +191,7 @@ static void icaltimezone_changes_unlock(void)
 const char *icaltimezone_tzid_prefix(void)
 {
     if (s_ical_tzid_prefix[0] == '\0') {
-        strncpy(s_ical_tzid_prefix, BUILTIN_TZID_PREFIX, BUILTIN_TZID_PREFIX_LEN-1);
+        strncpy(s_ical_tzid_prefix, BUILTIN_TZID_PREFIX, BUILTIN_TZID_PREFIX_LEN - 1);
     }
     return s_ical_tzid_prefix;
 }
@@ -204,7 +200,7 @@ icaltimezone *icaltimezone_new(void)
 {
     icaltimezone *zone;
 
-    zone = (icaltimezone *) icalmemory_new_buffer(sizeof(icaltimezone));
+    zone = (icaltimezone *)icalmemory_new_buffer(sizeof(icaltimezone));
     if (!zone) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return NULL;
@@ -219,7 +215,7 @@ icaltimezone *icaltimezone_copy(icaltimezone *originalzone)
 {
     icaltimezone *zone;
 
-    zone = (icaltimezone *) icalmemory_new_buffer(sizeof(icaltimezone));
+    zone = (icaltimezone *)icalmemory_new_buffer(sizeof(icaltimezone));
     if (!zone) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return NULL;
@@ -425,14 +421,12 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 
             if (current_tzname) {
                 if (type == ICAL_XSTANDARD_COMPONENT) {
-                    if (!standard_tzname ||
-                        icaltime_compare(current_max_date, standard_max_date) > 0) {
+                    if (!standard_tzname || icaltime_compare(current_max_date, standard_max_date) > 0) {
                         standard_max_date = current_max_date;
                         standard_tzname = current_tzname;
                     }
                 } else {
-                    if (!daylight_tzname ||
-                        icaltime_compare(current_max_date, daylight_max_date) > 0) {
+                    if (!daylight_tzname || icaltime_compare(current_max_date, daylight_max_date) > 0) {
                         daylight_max_date = current_max_date;
                         daylight_tzname = current_tzname;
                     }
@@ -786,8 +780,7 @@ static int icaltimezone_compare_change_fn(const void *elem1, const void *elem2)
     return retval;
 }
 
-void icaltimezone_convert_time(struct icaltimetype *tt,
-                               icaltimezone *from_zone, icaltimezone *to_zone)
+void icaltimezone_convert_time(struct icaltimetype *tt, icaltimezone *from_zone, icaltimezone *to_zone)
 {
     int utc_offset, is_daylight;
 
@@ -898,7 +891,7 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
            for this time so we return the prev UTC offset. */
         if (change_num == 0 && step < 0) {
             if (is_daylight) {
-                *is_daylight = ! tmp_change.is_daylight;
+                *is_daylight = !tmp_change.is_daylight;
             }
 
             icaltimezone_changes_unlock();
@@ -945,8 +938,7 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
             }
 #endif
 
-            if (zone_change->is_daylight != want_daylight &&
-                prev_zone_change->is_daylight == want_daylight) {
+            if (zone_change->is_daylight != want_daylight && prev_zone_change->is_daylight == want_daylight) {
                 zone_change = prev_zone_change;
             }
         }
@@ -964,8 +956,7 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
     return utc_offset_change;
 }
 
-int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
-                                            struct icaltimetype *tt, int *is_daylight)
+int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone, struct icaltimetype *tt, int *is_daylight)
 {
     icaltimezonechange *zone_change, tt_change, tmp_change;
     size_t change_num, change_num_to_use;
@@ -1038,7 +1029,7 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
            for this time so we return the prev UTC offset. */
         if (change_num == 0 && step < 0) {
             if (is_daylight) {
-                *is_daylight = ! tmp_change.is_daylight;
+                *is_daylight = !tmp_change.is_daylight;
             }
 
             icaltimezone_changes_unlock();
@@ -1075,7 +1066,7 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
  *
  * Hold icaltimezone_changes_lock(); before calling this function.
 */
-static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonechange * change)
+static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonechange *change)
 {
     icaltimezonechange *zone_change;
     size_t lower, middle, upper;
@@ -1106,8 +1097,7 @@ static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonech
  * NOTE: This function is exactly the same as icaltime_adjust() except
  * for the type of the first parameter.
  */
-static void icaltimezone_adjust_change(icaltimezonechange *tt,
-                                       int days, int hours, int minutes, int seconds)
+static void icaltimezone_adjust_change(icaltimezonechange *tt, int days, int hours, int minutes, int seconds)
 {
     int second, minute, hour, day;
     int minutes_overflow, hours_overflow, days_overflow;
@@ -1248,13 +1238,13 @@ static const char *skip_slashes(const char *text, int n_slashes)
     const char *pp;
     int num_slashes = 0;
 
-    if(!text)
+    if (!text)
         return NULL;
 
     for (pp = text; *pp; pp++) {
-        if(*pp == '/') {
+        if (*pp == '/') {
             num_slashes++;
-            if(num_slashes == n_slashes)
+            if (num_slashes == n_slashes)
                 return pp + 1;
         }
     }
@@ -1278,8 +1268,7 @@ const char *icaltimezone_get_display_name(icaltimezone *zone)
            we get back in the iTIP replies is the TZID. So we see if
            this is one of our TZIDs and if so we jump to the city name
            at the end of it. */
-        if (display_name &&
-            !strncmp(display_name, tzid_prefix, strlen(tzid_prefix))) {
+        if (display_name && !strncmp(display_name, tzid_prefix, strlen(tzid_prefix))) {
             /* Skip past our prefix */
             display_name += strlen(tzid_prefix);
         }
@@ -1484,9 +1473,9 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
         int ii;
 
         for (ii = 0; glob_compat_tzids[ii].tzid; ii++) {
-            if(strncmp(tzid, glob_compat_tzids[ii].tzid, strlen(glob_compat_tzids[ii].tzid)) == 0) {
+            if (strncmp(tzid, glob_compat_tzids[ii].tzid, strlen(glob_compat_tzids[ii].tzid)) == 0) {
                 p = skip_slashes(tzid, glob_compat_tzids[ii].slashes);
-                if(p) {
+                if (p) {
                     zone = icaltimezone_get_builtin_timezone(p);
                     /* Do not recheck the TZID matches exactly, it does not, because
                        fallbacking with the compatibility timezone prefix here. */
@@ -1504,8 +1493,7 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
 
     /* Special-case "/freeassociation.sourceforge.net/Tzfile/"
        because it shares prefix with BUILTIN_TZID_PREFIX */
-    if (strcmp(tzid_prefix, BUILTIN_TZID_PREFIX) == 0 &&
-        strncmp(p, "Tzfile/", 7) == 0) {
+    if (strcmp(tzid_prefix, BUILTIN_TZID_PREFIX) == 0 && strncmp(p, "Tzfile/", 7) == 0) {
         p += 7;
         compat = 1;
     }
@@ -1577,12 +1565,9 @@ static int parse_coord(char *coord, int len, int *degrees, int *minutes, int *se
     return 0;
 }
 
-static int fetch_lat_long_from_string(const char *str,
-                                      int *latitude_degrees, int *latitude_minutes,
-                                      int *latitude_seconds,
-                                      int *longitude_degrees, int *longitude_minutes,
-                                      int *longitude_seconds,
-                                      char *location)
+static int fetch_lat_long_from_string(const char *str, int *latitude_degrees, int *latitude_minutes,
+                                      int *latitude_seconds, int *longitude_degrees, int *longitude_minutes,
+                                      int *longitude_seconds, char *location)
 {
     size_t len;
     char *sptr, *lat, *lon, *loc, *temp;
@@ -1596,7 +1581,7 @@ static int fetch_lat_long_from_string(const char *str,
     while (*sptr != '\t' && *sptr != '\0') {
         sptr++;
     }
-    len = (ptrdiff_t) (sptr - temp);
+    len = (ptrdiff_t)(sptr - temp);
     lat = (char *)icalmemory_new_buffer(len + 1);
     memset(lat, '\0', len + 1);
     strncpy(lat, temp, len);
@@ -1633,12 +1618,8 @@ static int fetch_lat_long_from_string(const char *str,
         lon++;
     }
 
-    if (parse_coord(lat, (int)(lon - lat),
-                    latitude_degrees,
-                    latitude_minutes,
-                    latitude_seconds) == 1 ||
-        parse_coord(lon, (int)strlen(lon),
-                    longitude_degrees, longitude_minutes, longitude_seconds) == 1) {
+    if (parse_coord(lat, (int)(lon - lat), latitude_degrees, latitude_minutes, latitude_seconds) == 1 ||
+        parse_coord(lon, (int)strlen(lon), longitude_degrees, longitude_minutes, longitude_seconds) == 1) {
         icalmemory_free_buffer(lat);
         return 1;
     }
@@ -1663,8 +1644,8 @@ static void icaltimezone_parse_zone_tab(void)
     const char *zonedir, *zonetab;
     char *filename;
     FILE *fp;
-    char buf[1024];     /* Used to store each line of zones.tab as it is read. */
-    char location[1024];        /* Stores the city name when parsing buf. */
+    char buf[1024];      /* Used to store each line of zones.tab as it is read. */
+    char location[1024]; /* Stores the city name when parsing buf. */
     size_t filename_len;
     int latitude_degrees = 0, latitude_minutes = 0, latitude_seconds = 0;
     int longitude_degrees = 0, longitude_minutes = 0, longitude_seconds = 0;
@@ -1689,7 +1670,7 @@ static void icaltimezone_parse_zone_tab(void)
 
     icalerror_assert(filename_len > 0, "Unable to locate a zoneinfo dir");
     if (filename_len == 0) {
-        icalerror_set_errno(ICAL_INTERNAL_ERROR);\
+        icalerror_set_errno(ICAL_INTERNAL_ERROR);
         return;
     }
 
@@ -1721,7 +1702,7 @@ static void icaltimezone_parse_zone_tab(void)
                 latitude_degrees = longitude_degrees = 360;
                 latitude_minutes = longitude_minutes = 0;
                 latitude_seconds = longitude_seconds = 0;
-                if (sscanf(buf, "%1000s", location) != 1) {     /*limit location to 1000chars */
+                if (sscanf(buf, "%1000s", location) != 1) { /*limit location to 1000chars */
                     /*increase as needed */
                     /*see location and buf declarations */
                     icalerrprintf("Invalid timezone description line: %s\n", buf);
@@ -1730,19 +1711,15 @@ static void icaltimezone_parse_zone_tab(void)
             } else if (sscanf(buf, "%4d%2d%2d %4d%2d%2d %1000s", /*limit location to 1000chars */
                               /*increase as needed */
                               /*see location and buf declarations */
-                              &latitude_degrees, &latitude_minutes,
-                              &latitude_seconds,
-                              &longitude_degrees, &longitude_minutes,
-                              &longitude_seconds, location) != 7) {
+                              &latitude_degrees, &latitude_minutes, &latitude_seconds, &longitude_degrees,
+                              &longitude_minutes, &longitude_seconds, location) != 7) {
                 icalerrprintf("Invalid timezone description line: %s\n", buf);
                 continue;
             }
         } else {
             /* coverity[tainted_data] */
-            if (fetch_lat_long_from_string(buf, &latitude_degrees, &latitude_minutes,
-                                           &latitude_seconds,
-                                           &longitude_degrees, &longitude_minutes,
-                                           &longitude_seconds, location)) {
+            if (fetch_lat_long_from_string(buf, &latitude_degrees, &latitude_minutes, &latitude_seconds,
+                                           &longitude_degrees, &longitude_minutes, &longitude_seconds, location)) {
                 icalerrprintf("Invalid timezone description line: %s\n", buf);
                 continue;
             }
@@ -1752,27 +1729,17 @@ static void icaltimezone_parse_zone_tab(void)
         zone.location = icalmemory_strdup(location);
 
         if (latitude_degrees >= 0) {
-            zone.latitude =
-                (double)latitude_degrees +
-                (double)latitude_minutes / 60 +
-                (double)latitude_seconds / 3600;
+            zone.latitude = (double)latitude_degrees + (double)latitude_minutes / 60 + (double)latitude_seconds / 3600;
         } else {
-            zone.latitude =
-                (double)latitude_degrees -
-                (double)latitude_minutes / 60 -
-                (double)latitude_seconds / 3600;
+            zone.latitude = (double)latitude_degrees - (double)latitude_minutes / 60 - (double)latitude_seconds / 3600;
         }
 
         if (longitude_degrees >= 0) {
             zone.longitude =
-                (double)longitude_degrees +
-                (double)longitude_minutes / 60 +
-                (double)longitude_seconds / 3600;
+                (double)longitude_degrees + (double)longitude_minutes / 60 + (double)longitude_seconds / 3600;
         } else {
             zone.longitude =
-                (double)longitude_degrees -
-                (double)longitude_minutes / 60 -
-                (double)longitude_seconds / 3600;
+                (double)longitude_degrees - (double)longitude_minutes / 60 - (double)longitude_seconds / 3600;
         }
 
         icalarray_append(builtin_timezones, &zone);
@@ -1795,7 +1762,7 @@ void icaltimezone_release_zone_tab(void)
 
     builtin_timezones = NULL;
     for (i = 0; i < mybuiltin_timezones->num_elements; i++) {
-        icalmemory_free_buffer(((icaltimezone *) icalarray_element_at(mybuiltin_timezones, i))->location);
+        icalmemory_free_buffer(((icaltimezone *)icalarray_element_at(mybuiltin_timezones, i))->location);
     }
     icalarray_free(mybuiltin_timezones);
 }
@@ -1866,14 +1833,14 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 
             /* Ensure expected TZID */
             prop = icalcomponent_get_first_property(subcomp, ICAL_TZID_PROPERTY);
-            if(prop) {
+            if (prop) {
                 char *new_tzid;
                 size_t new_tzid_len;
                 const char *tzid_prefix = icaltimezone_tzid_prefix();
 
                 new_tzid_len = strlen(tzid_prefix) + strlen(zone->location) + 1;
                 new_tzid = (char *)icalmemory_new_buffer(sizeof(char) * (new_tzid_len + 1));
-                if(new_tzid) {
+                if (new_tzid) {
                     snprintf(new_tzid, new_tzid_len, "%s%s", tzid_prefix, zone->location);
                     icalproperty_set_tzid(prop, new_tzid);
                     icalmemory_free_buffer(new_tzid);
@@ -1890,8 +1857,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
             if (prop)
                 icalproperty_set_location(prop, zone->location);
 
-            for (prop = icalcomponent_get_first_property(subcomp, ICAL_X_PROPERTY);
-                 prop;
+            for (prop = icalcomponent_get_first_property(subcomp, ICAL_X_PROPERTY); prop;
                  prop = icalcomponent_get_next_property(subcomp, ICAL_X_PROPERTY)) {
                 const char *name;
 
@@ -1918,7 +1884,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
         icalcomponent_free(comp);
     }
 
-  out:
+out:
     icaltimezone_builtin_unlock();
     return;
 }
@@ -1926,7 +1892,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 /** @brief Callback used from icalparser_parse() */
 static char *icaltimezone_load_get_line_fn(char *s, size_t size, void *data)
 {
-    return fgets(s, (int)size, (FILE *) data);
+    return fgets(s, (int)size, (FILE *)data);
 }
 
 /*
@@ -1935,9 +1901,8 @@ static char *icaltimezone_load_get_line_fn(char *s, size_t size, void *data)
 
 int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
 {
-    static const char months[][4] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    };
+    static const char months[][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     icaltimezonechange *zone_change;
     size_t change_num;
     char buffer[8];
@@ -1957,9 +1922,7 @@ int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
         if (zone_change->year > max_year)
             break;
 
-        fprintf(fp, "%s\t%2i %s %04i\t%2i:%02i:%02i",
-                zone->location,
-                zone_change->day, months[zone_change->month - 1],
+        fprintf(fp, "%s\t%2i %s %04i\t%2i:%02i:%02i", zone->location, zone_change->day, months[zone_change->month - 1],
                 zone_change->year, zone_change->hour, zone_change->minute, zone_change->second);
 
         /* Wall Clock Time offset from UTC. */
@@ -1995,8 +1958,7 @@ static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size)
        hours, and daylight saving shouldn't change it by more than a few hours.
        (The maximum offset is 15 hours 56 minutes at present.) */
     if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60) {
-        icalerrprintf("Warning: Strange timezone offset: H:%i M:%i S:%i\n",
-                hours, minutes, seconds);
+        icalerrprintf("Warning: Strange timezone offset: H:%i M:%i S:%i\n", hours, minutes, seconds);
     }
 #if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
@@ -2047,13 +2009,10 @@ static const char *get_zone_directory_builtin(void)
 /*wince supports only unicode*/
 #if !defined(_WIN32_WCE)
     /* Convert to system codepage */
-    if (!WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, sizeof(buffer),
-                             NULL, &used_default) || used_default) {
+    if (!WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, sizeof(buffer), NULL, &used_default) || used_default) {
         /* Failed, try 8.3 format */
-        if (!GetShortPathNameW(wbuffer, wbuffer,
-                               sizeof(wbuffer) / sizeof(wbuffer[0])) ||
-            !WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, sizeof(buffer),
-                                 NULL, &used_default) || used_default) {
+        if (!GetShortPathNameW(wbuffer, wbuffer, sizeof(wbuffer) / sizeof(wbuffer[0])) ||
+            !WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, sizeof(buffer), NULL, &used_default) || used_default) {
             return ZONEINFO_DIRECTORY;
         }
     }
@@ -2178,7 +2137,7 @@ void free_zone_directory(void)
 void icaltimezone_set_tzid_prefix(const char *new_prefix)
 {
     if (new_prefix) {
-        strncpy(s_ical_tzid_prefix, new_prefix, BUILTIN_TZID_PREFIX_LEN-1);
+        strncpy(s_ical_tzid_prefix, new_prefix, BUILTIN_TZID_PREFIX_LEN - 1);
     }
 }
 
@@ -2199,8 +2158,7 @@ struct observance {
     int offset_to;
 };
 
-static void check_tombstone(struct observance *tombstone,
-                            struct observance *obs)
+static void check_tombstone(struct observance *tombstone, struct observance *obs)
 {
     if (icaltime_compare(obs->onset, tombstone->onset) > 0) {
         /* onset is closer to cutoff than existing tombstone */
@@ -2217,13 +2175,10 @@ struct rdate {
 
 static int rdate_compare(const void *rdate1, const void *rdate2)
 {
-    return icaltime_compare(((struct rdate *) rdate1)->date.time,
-                            ((struct rdate *) rdate2)->date.time);
+    return icaltime_compare(((struct rdate *)rdate1)->date.time, ((struct rdate *)rdate2)->date.time);
 }
 
-void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
-                                     icaltimetype start, icaltimetype end,
-                                     int ms_compatible)
+void icaltimezone_truncate_vtimezone(icalcomponent *vtz, icaltimetype start, icaltimetype end, int ms_compatible)
 {
     icalcomponent *comp, *nextc, *tomb_std = NULL, *tomb_day = NULL;
     icalproperty *prop, *proleptic_prop = NULL;
@@ -2237,8 +2192,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
     }
 
     /* See if we have a proleptic tzname in VTIMEZONE */
-    for (prop = icalcomponent_get_first_property(vtz, ICAL_X_PROPERTY);
-         prop;
+    for (prop = icalcomponent_get_first_property(vtz, ICAL_X_PROPERTY); prop;
          prop = icalcomponent_get_next_property(vtz, ICAL_X_PROPERTY)) {
         if (!strcmp("X-PROLEPTIC-TZNAME", icalproperty_get_x_name(prop))) {
             proleptic_prop = prop;
@@ -2247,17 +2201,13 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
     }
 
     memset(&tombstone, 0, sizeof(struct observance));
-    tombstone.name = icalmemory_tmp_copy(proleptic_prop ?
-                                         icalproperty_get_x(proleptic_prop) :
-                                         "LMT");
-    if (!proleptic_prop ||
-        !icalproperty_get_parameter_as_string(proleptic_prop, "X-NO-BIG-BANG")) {
-      tombstone.onset.year = -1;
+    tombstone.name = icalmemory_tmp_copy(proleptic_prop ? icalproperty_get_x(proleptic_prop) : "LMT");
+    if (!proleptic_prop || !icalproperty_get_parameter_as_string(proleptic_prop, "X-NO-BIG-BANG")) {
+        tombstone.onset.year = -1;
     }
 
     /* Process each VTMEZONE STANDARD/DAYLIGHT subcomponent */
-    for (comp = icalcomponent_get_first_component(vtz, ICAL_ANY_COMPONENT);
-         comp; comp = nextc) {
+    for (comp = icalcomponent_get_first_component(vtz, ICAL_ANY_COMPONENT); comp; comp = nextc) {
         icalproperty *dtstart_prop = NULL, *rrule_prop = NULL;
         icalarray *rdates = icalarray_new(sizeof(struct rdate), 10);
         icaltimetype dtstart;
@@ -2270,14 +2220,11 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
         memset(&obs, 0, sizeof(struct observance));
         obs.offset_from = obs.offset_to = INT_MAX;
-        obs.onset.is_daylight =
-            (icalcomponent_isa(comp) == ICAL_XDAYLIGHT_COMPONENT);
+        obs.onset.is_daylight = (icalcomponent_isa(comp) == ICAL_XDAYLIGHT_COMPONENT);
 
         /* Grab the properties that we require to expand recurrences */
-        for (prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
-             prop;
+        for (prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY); prop;
              prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY)) {
-
             switch (icalproperty_isa(prop)) {
             case ICAL_TZNAME_PROPERTY:
                 obs.name = icalproperty_get_tzname(prop);
@@ -2319,8 +2266,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         }
 
         /* We MUST have DTSTART, TZNAME, TZOFFSETFROM, and TZOFFSETTO */
-        if (!dtstart_prop || !obs.name ||
-            obs.offset_from == INT_MAX || obs.offset_to == INT_MAX) {
+        if (!dtstart_prop || !obs.name || obs.offset_from == INT_MAX || obs.offset_to == INT_MAX) {
             icalarray_free(rdates);
             continue;
         }
@@ -2375,8 +2321,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 icalproperty_free(rrule_prop);
             } else {
                 /* RRULE ends on/after our window open */
-                if (need_tzuntil &&
-                    (eternal || icaltime_compare(rrule.until, end) >= 0)) {
+                if (need_tzuntil && (eternal || icaltime_compare(rrule.until, end) >= 0)) {
                     /* RRULE ends after our window close - need to adjust it */
                     trunc_until = 1;
                 }
@@ -2392,9 +2337,9 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 if (trunc_dtstart) {
                     /* Bump RRULE start to 1 year prior to our window open */
                     icaltimetype newstart = dtstart;
-                    newstart.year  = start.year - 1;
+                    newstart.year = start.year - 1;
                     newstart.month = start.month;
-                    newstart.day   = start.day;
+                    newstart.day = start.day;
                     (void)icaltime_normalize(newstart);
                     icalrecur_iterator_set_start(ritr, newstart);
                 }
@@ -2411,8 +2356,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
                     /* Adjust observance to UTC */
                     icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
-                    (void)icaltime_set_timezone(&obs.onset,
-                                                icaltimezone_get_utc_timezone());
+                    (void)icaltime_set_timezone(&obs.onset, icaltimezone_get_utc_timezone());
 
                     if (trunc_until && icaltime_compare(obs.onset, end) >= 0) {
                         /* Observance is on/after window close */
@@ -2455,8 +2399,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                             need_tomb = 0;
                             trunc_dtstart = 0;
                             if (proleptic_prop) {
-                                icalcomponent_remove_property(vtz,
-                                                              proleptic_prop);
+                                icalcomponent_remove_property(vtz, proleptic_prop);
                                 icalproperty_free(proleptic_prop);
                                 proleptic_prop = NULL;
                             }
@@ -2466,7 +2409,8 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                         }
                     } else {
                         /* Observance is on/after our window open */
-                        if (r == 0) need_tomb = 0;
+                        if (r == 0)
+                            need_tomb = 0;
 
                         if (trunc_dtstart) {
                             /* Make this observance the new DTSTART */
@@ -2503,9 +2447,9 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                         if (ydiff > 1) {
                             /* Bump RRULE to restart at 1 year prior to our window close */
                             icaltimetype newstart = recur;
-                            newstart.year  = end.year - 1;
+                            newstart.year = end.year - 1;
                             newstart.month = end.month;
-                            newstart.day   = end.day;
+                            newstart.day = end.day;
                             (void)icaltime_normalize(newstart);
                             icalrecur_iterator_set_start(ritr, newstart);
                         }
@@ -2525,7 +2469,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
             /* RDATEs with a DATE value inherit the time from the DTSTART. */
             if (icaltime_is_date(rdate->date.time)) {
-                rdate->date.time.hour   = dtstart.hour;
+                rdate->date.time.hour = dtstart.hour;
                 rdate->date.time.minute = dtstart.minute;
                 rdate->date.time.second = dtstart.second;
             }
@@ -2563,12 +2507,12 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 icalproperty_free(rdate->prop);
             } else {
                 /* RDATE is on/after our window open */
-                if (r == 0) need_tomb = 0;
+                if (r == 0)
+                    need_tomb = 0;
 
                 if (trunc_dtstart) {
                     /* Make this RDATE the new DTSTART */
-                    icalproperty_set_dtstart(dtstart_prop,
-                                             rdate->date.time);
+                    icalproperty_set_dtstart(dtstart_prop, rdate->date.time);
                     trunc_dtstart = 0;
 
                     icalcomponent_remove_property(comp, rdate->prop);
@@ -2587,8 +2531,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                     tomb_day = comp;
                     comp = NULL;
                 }
-            }
-            else if (!tomb_std) {
+            } else if (!tomb_std) {
                 tomb_std = comp;
                 comp = NULL;
             }
@@ -2616,9 +2559,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         }
 
         /* Set property values on our tombstone */
-        for (prop = icalcomponent_get_first_property(tomb, ICAL_ANY_PROPERTY);
-             prop; prop = nextp) {
-
+        for (prop = icalcomponent_get_first_property(tomb, ICAL_ANY_PROPERTY); prop; prop = nextp) {
             nextp = icalcomponent_get_next_property(tomb, ICAL_ANY_PROPERTY);
 
             switch (icalproperty_isa(prop)) {

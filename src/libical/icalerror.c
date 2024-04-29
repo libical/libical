@@ -45,7 +45,7 @@ icalerrorenum *icalerrno_return(void)
 
     pthread_once(&icalerrno_key_once, icalerrno_key_alloc);
 
-    _errno = (icalerrorenum *) pthread_getspecific(icalerrno_key);
+    _errno = (icalerrorenum *)pthread_getspecific(icalerrno_key);
 
     if (!_errno) {
         _errno = icalmemory_new_buffer(sizeof(icalerrorenum));
@@ -70,7 +70,7 @@ static ICAL_GLOBAL_VAR int foo;
 
 void icalerror_stop_here(void)
 {
-    foo++;      /* Keep optimizers from removing routine */
+    foo++; /* Keep optimizers from removing routine */
 }
 
 void icalerror_crash_here(void)
@@ -121,29 +121,26 @@ void icalerror_set_errno(icalerrorenum x)
 
 #endif
 
-struct icalerror_state
-{
+struct icalerror_state {
     icalerrorenum error;
     icalerrorstate state;
 };
 
-static ICAL_GLOBAL_VAR struct icalerror_state error_state_map[] = {
-    {ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_NEWFAILED_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_ALLOCATION_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_PARSE_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_INTERNAL_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_FILE_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_USAGE_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_UNIMPLEMENTED_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_UNKNOWN_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_NO_ERROR, ICAL_ERROR_DEFAULT}
+static ICAL_GLOBAL_VAR struct icalerror_state error_state_map[] = {{ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_NEWFAILED_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_ALLOCATION_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_PARSE_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_INTERNAL_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_FILE_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_USAGE_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_UNIMPLEMENTED_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_UNKNOWN_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_NO_ERROR, ICAL_ERROR_DEFAULT}
 
 };
 
-struct icalerror_string_map
-{
+struct icalerror_string_map {
     const char *str;
     icalerrorenum error;
     char name[160];
@@ -151,8 +148,7 @@ struct icalerror_string_map
 
 static const struct icalerror_string_map string_map[] = {
     {"BADARG", ICAL_BADARG_ERROR, "BADARG: Bad argument to function"},
-    {"NEWFAILED", ICAL_NEWFAILED_ERROR,
-     "NEWFAILED: Failed to create a new object via a *_new() routine"},
+    {"NEWFAILED", ICAL_NEWFAILED_ERROR, "NEWFAILED: Failed to create a new object via a *_new() routine"},
     {"ALLOCATION", ICAL_ALLOCATION_ERROR, "ALLOCATION: Failed to allocate new memory"},
     {"MALFORMEDDATA", ICAL_MALFORMEDDATA_ERROR,
      "MALFORMEDDATA: An input string was not correctly formed or a component has "
@@ -161,16 +157,12 @@ static const struct icalerror_string_map string_map[] = {
     {"INTERNAL", ICAL_INTERNAL_ERROR,
      "INTERNAL: Random internal error. This indicates an error in the library code, "
      "not an error in use"},
-    {"FILE", ICAL_FILE_ERROR,
-     "FILE: An operation on a file failed. Check errno for more detail."},
-    {"USAGE", ICAL_USAGE_ERROR,
-     "USAGE: Failed to propertyl sequence calls to a set of interfaces"},
-    {"UNIMPLEMENTED", ICAL_UNIMPLEMENTED_ERROR,
-     "UNIMPLEMENTED: This feature has not been implemented"},
+    {"FILE", ICAL_FILE_ERROR, "FILE: An operation on a file failed. Check errno for more detail."},
+    {"USAGE", ICAL_USAGE_ERROR, "USAGE: Failed to propertyl sequence calls to a set of interfaces"},
+    {"UNIMPLEMENTED", ICAL_UNIMPLEMENTED_ERROR, "UNIMPLEMENTED: This feature has not been implemented"},
     {"NO", ICAL_NO_ERROR, "NO: No error"},
     {"UNKNOWN", ICAL_UNKNOWN_ERROR,
-     "UNKNOWN: Unknown error type -- icalerror_strerror() was probably given bad input"}
-};
+     "UNKNOWN: Unknown error type -- icalerror_strerror() was probably given bad input"}};
 
 icalerrorenum icalerror_error_from_string(const char *str)
 {
@@ -248,7 +240,7 @@ const char *icalerror_strerror(icalerrorenum e)
         }
     }
 
-    return string_map[i].name;  /* Return string for ICAL_UNKNOWN_ERROR */
+    return string_map[i].name; /* Return string for ICAL_UNKNOWN_ERROR */
 }
 
 void ical_bt(void)

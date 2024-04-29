@@ -35,17 +35,13 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b);
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/
-static icalbdbset_options icalbdbset_options_default =
-    {
-      ICALBDB_EVENTS, DB_BTREE, 0644, 0, NULL, NULL
-    };
+static icalbdbset_options icalbdbset_options_default = {ICALBDB_EVENTS, DB_BTREE, 0644, 0, NULL, NULL};
 
 static DB_ENV *ICAL_DB_ENV = 0;
 
 /** Initialize the db environment */
 
-int icalbdbset_init_dbenv(char *db_env_dir,
-                          void (*logDbFunc) (const DB_ENV *, const char *, const char *))
+int icalbdbset_init_dbenv(char *db_env_dir, void (*logDbFunc)(const DB_ENV *, const char *, const char *))
 {
     int ret;
     u_int32_t flags;
@@ -73,8 +69,7 @@ int icalbdbset_init_dbenv(char *db_env_dir,
         return ret;
     }
 
-    flags = (u_int32_t) (DB_INIT_LOCK | DB_INIT_TXN | DB_CREATE | DB_THREAD |
-                         DB_RECOVER | DB_INIT_LOG | DB_INIT_MPOOL);
+    flags = (u_int32_t)(DB_INIT_LOCK | DB_INIT_TXN | DB_CREATE | DB_THREAD | DB_RECOVER | DB_INIT_LOG | DB_INIT_MPOOL);
 #if defined(_WIN32) //krazy:exclude=cpp
     ret = ICAL_DB_ENV->open(ICAL_DB_ENV, db_env_dir, flags, 0 /*ignored on Windows*/);
 #else
@@ -156,7 +151,7 @@ DB_ENV *icalbdbset_get_env(void)
  */
 
 /* This populates a cluster with the entire contents of a database */
-static icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc) (const DBT *dbt))
+static icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc)(const DBT *dbt))
 {
     DB *dbp;
     DBC *dbcp;
@@ -197,11 +192,11 @@ static icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc) (
 
     key.flags = DB_DBT_USERMEM;
     key.data = keystore;
-    key.ulen = (u_int32_t) sizeof(keystore);
+    key.ulen = (u_int32_t)sizeof(keystore);
 
     data.flags = DB_DBT_USERMEM;
     data.data = datastore;
-    data.ulen = (u_int32_t) sizeof(datastore);
+    data.ulen = (u_int32_t)sizeof(datastore);
 
     /* fetch the key/data pair */
     while (1) {
@@ -217,7 +212,7 @@ static icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc) (
             data.ulen = data.ulen + 1024;
         } else if (ret == DB_LOCK_DEADLOCK) {
             /*char *foo = db_strerror(ret); */
-            abort();    /* should retry in case of DB_LOCK_DEADLOCK */
+            abort(); /* should retry in case of DB_LOCK_DEADLOCK */
         } else if (ret) {
             /*char *foo = db_strerror(ret); */
             /* some other weird-ass error  */
@@ -248,7 +243,7 @@ static icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc) (
     }
 
     if (dbcp->c_close(dbcp) != 0) {
-        abort();        /* should retry in case of DB_LOCK_DEADLOCK */
+        abort(); /* should retry in case of DB_LOCK_DEADLOCK */
     }
 
     if (tid->commit(tid, 0) != 0) {
@@ -257,15 +252,15 @@ static icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc) (
 
     return ICAL_NO_ERROR;
 
-  err2:
+err2:
     if (more_mem) {
         free(more_mem);
     }
     dbcp->c_close(dbcp);
-    abort();    /* should retry in case of DB_LOCK_DEADLOCK */
+    abort(); /* should retry in case of DB_LOCK_DEADLOCK */
     return ICAL_INTERNAL_ERROR;
 
-  err1:
+err1:
     dbp->err(dbp, ret, "cursor index");
     abort();
     return ICAL_FILE_ERROR;
@@ -273,14 +268,14 @@ static icalerrorenum icalbdbset_read_database(icalbdbset *bset, char *(*pfunc) (
 
 icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
 {
-    icalbdbset *bset = (icalbdbset *) set;
-    icalbdbset_options *options = (icalbdbset_options *) options_in;
+    icalbdbset *bset = (icalbdbset *)set;
+    icalbdbset_options *options = (icalbdbset_options *)options_in;
     DB *cal_db;
     const char *subdb_name = NULL;
 
     _unused(dsn);
 
-    if (options == (icalbdbset_options *) NULL) {
+    if (options == (icalbdbset_options *)NULL) {
         options = &icalbdbset_options_default;
     }
 
@@ -299,8 +294,7 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
         break;
     }
 
-    cal_db = icalbdbset_bdb_open(set->dsn,
-                                 subdb_name, options->dbtype, options->mode, options->flag);
+    cal_db = icalbdbset_bdb_open(set->dsn, subdb_name, options->dbtype, options->mode, options->flag);
     if (cal_db == NULL) {
         return NULL;
     }
@@ -314,7 +308,7 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
         return NULL;
     }
 
-    return (icalset *) bset;
+    return (icalset *)bset;
 }
 
 /** open a database and return a reference to it.  Used only for
@@ -322,8 +316,7 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
     flag = set_flag() DUP | DUP_SORT
  */
 
-icalset *icalbdbset_new(const char *database_filename, icalbdbset_subdb_type subdb_type, int dbtype,
-                        u_int32_t flag)
+icalset *icalbdbset_new(const char *database_filename, icalbdbset_subdb_type subdb_type, int dbtype, u_int32_t flag)
 {
     icalbdbset_options options = icalbdbset_options_default;
 
@@ -343,8 +336,7 @@ icalset *icalbdbset_new(const char *database_filename, icalbdbset_subdb_type sub
  */
 
 DB *icalbdbset_bdb_open_secondary(DB *dbp, const char *database, const char *sub_database,
-                                  int (*callback) (DB *db, const DBT *dbt1, const DBT *dbt2,
-                                                   DBT *dbt3), int type)
+                                  int (*callback)(DB *db, const DBT *dbt1, const DBT *dbt2, DBT *dbt3), int type)
 {
     int ret;
     u_int32_t flags;
@@ -366,13 +358,13 @@ DB *icalbdbset_bdb_open_secondary(DB *dbp, const char *database, const char *sub
         return NULL;
     }
 
-    if ((ret = sdbp->set_flags(sdbp, (u_int32_t) (DB_DUP | DB_DUPSORT))) != 0) {
+    if ((ret = sdbp->set_flags(sdbp, (u_int32_t)(DB_DUP | DB_DUPSORT))) != 0) {
         ICAL_DB_ENV->err(ICAL_DB_ENV, ret, "set_flags error for secondary index: %s", sub_database);
         return NULL;
     }
 
-    flags = (u_int32_t) (DB_CREATE | DB_THREAD);
-    ret = sdbp->open(sdbp, NULL, database, sub_database, type, (u_int32_t) flags, 0644);
+    flags = (u_int32_t)(DB_CREATE | DB_THREAD);
+    ret = sdbp->open(sdbp, NULL, database, sub_database, type, (u_int32_t)flags, 0644);
     if (ret != 0) {
         ICAL_DB_ENV->err(ICAL_DB_ENV, ret, "failed to open secondary index: %s", sub_database);
         if (ret == DB_RUNRECOVERY) {
@@ -398,7 +390,7 @@ DB *icalbdbset_bdb_open(const char *path, const char *subdb, int dbtype, int mod
     u_int32_t flags;
 
     /* Initialize the correct set of db subsystems (see capdb.c) */
-    flags = (u_int32_t) (DB_CREATE | DB_THREAD);
+    flags = (u_int32_t)(DB_CREATE | DB_THREAD);
 
     /* should just abort here instead of opening an env in the current dir..  */
     if (!ICAL_DB_ENV) {
@@ -435,7 +427,7 @@ DB *icalbdbset_bdb_open(const char *path, const char *subdb, int dbtype, int mod
 }
 
 /* icalbdbset_parse_data -- parses using pfunc to unpack data. */
-char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc) (const DBT *dbt))
+char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc)(const DBT *dbt))
 {
     char *ret;
 
@@ -451,7 +443,7 @@ char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc) (const DBT *dbt))
 /* XXX add more to this */
 void icalbdbset_free(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rv((bset != 0), "bset");
 
@@ -482,7 +474,7 @@ void icalbdbset_free(icalset *set)
 }
 
 /* return cursor is in rdbcp */
-int icalbdbset_acquire_cursor(DB *dbp, DB_TXN *tid, DBC ** rdbcp)
+int icalbdbset_acquire_cursor(DB *dbp, DB_TXN *tid, DBC **rdbcp)
 {
     int ret = 0;
 
@@ -493,7 +485,7 @@ int icalbdbset_acquire_cursor(DB *dbp, DB_TXN *tid, DBC ** rdbcp)
 
     return ICAL_NO_ERROR;
 
-  err1:
+err1:
     return ICAL_FILE_ERROR;
 }
 
@@ -526,7 +518,6 @@ int icalbdbset_delete(DB *dbp, DBT *key)
     int retry = 0;
 
     while ((retry < MAX_RETRY) && !done) {
-
         if ((ret = ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, NULL, &tid, 0)) != 0) {
             if (ret == DB_LOCK_DEADLOCK) {
                 retry++;
@@ -565,7 +556,7 @@ int icalbdbset_delete(DB *dbp, DBT *key)
             }
         }
 
-        done = 1;       /* all is well */
+        done = 1; /* all is well */
     }
 
     if (!done) {
@@ -579,7 +570,7 @@ int icalbdbset_delete(DB *dbp, DBT *key)
 
 int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method)
 {
-    key->flags |= DB_DBT_MALLOC;        /* change these to DB_DBT_USERMEM */
+    key->flags |= DB_DBT_MALLOC; /* change these to DB_DBT_USERMEM */
     data->flags |= DB_DBT_MALLOC;
 
     /* fetch the key/data pair */
@@ -589,7 +580,7 @@ int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method)
 
     return ICAL_NO_ERROR;
 
-  err1:
+err1:
     return ICAL_FILE_ERROR;
 }
 
@@ -597,7 +588,7 @@ int icalbdbset_cput(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method)
 {
     _unused(access_method);
 
-    key->flags |= DB_DBT_MALLOC;        /* change these to DB_DBT_USERMEM */
+    key->flags |= DB_DBT_MALLOC; /* change these to DB_DBT_USERMEM */
     data->flags |= DB_DBT_MALLOC;
 
     /* fetch the key/data pair */
@@ -607,7 +598,7 @@ int icalbdbset_cput(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method)
 
     return ICAL_NO_ERROR;
 
-  err1:
+err1:
     return ICAL_FILE_ERROR;
 }
 
@@ -619,7 +610,6 @@ int icalbdbset_put(DB *dbp, DBT *key, DBT *data, u_int32_t access_method)
     int done = 0;
 
     while ((retry < MAX_RETRY) && !done) {
-
         if ((ret = ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, NULL, &tid, 0)) != 0) {
             if (ret == DB_LOCK_DEADLOCK) {
                 retry++;
@@ -656,7 +646,7 @@ int icalbdbset_put(DB *dbp, DBT *key, DBT *data, u_int32_t access_method)
             }
         }
 
-        done = 1;       /* all is well */
+        done = 1; /* all is well */
     }
 
     if (!done) {
@@ -685,7 +675,7 @@ const char *icalbdbset_path(icalset *set)
 
 const char *icalbdbset_subdb(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -709,7 +699,7 @@ icalerrorenum icalbdbset_commit(icalset *set)
     char datastore[1024];
     char *more_mem = NULL;
     DB_TXN *tid = NULL;
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
     int bad_uid_counter = 0;
     int retry = 0, done = 0, completed = 0, deadlocked = 0;
 
@@ -727,11 +717,11 @@ icalerrorenum icalbdbset_commit(icalset *set)
 
     key.flags = DB_DBT_USERMEM;
     key.data = keystore;
-    key.ulen = (u_int32_t) sizeof(keystore);
+    key.ulen = (u_int32_t)sizeof(keystore);
 
     data.flags = DB_DBT_USERMEM;
     data.data = datastore;
-    data.ulen = (u_int32_t) sizeof(datastore);
+    data.ulen = (u_int32_t)sizeof(datastore);
 
     if (!ICAL_DB_ENV) {
         if (icalbdbset_init_dbenv(NULL, NULL) != 0) {
@@ -740,7 +730,6 @@ icalerrorenum icalbdbset_commit(icalset *set)
     }
 
     while ((retry < MAX_RETRY) && !done) {
-
         if ((ret = ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, NULL, &tid, 0)) != 0) {
             if (ret == DB_LOCK_DEADLOCK) {
                 retry++;
@@ -802,7 +791,7 @@ icalerrorenum icalbdbset_commit(icalset *set)
                         abort();
                     }
                 }
-            } else {    /* some other non-fatal error */
+            } else { /* some other non-fatal error */
                 dbcp->c_close(dbcp);
                 tid->abort(tid);
                 if (more_mem) {
@@ -822,14 +811,12 @@ icalerrorenum icalbdbset_commit(icalset *set)
             dbcp->c_close(dbcp);
             tid->abort(tid);
             retry++;
-            continue;   /* next retry */
+            continue; /* next retry */
         }
 
         deadlocked = 0;
-        for (c = icalcomponent_get_first_component(bset->cluster, ICAL_ANY_COMPONENT);
-             c != 0 && !deadlocked;
+        for (c = icalcomponent_get_first_component(bset->cluster, ICAL_ANY_COMPONENT); c != 0 && !deadlocked;
              c = icalcomponent_get_next_component(bset->cluster, ICAL_ANY_COMPONENT)) {
-
             memset(&key, 0, sizeof(key));
             memset(&data, 0, sizeof(data));
 
@@ -837,7 +824,7 @@ icalerrorenum icalbdbset_commit(icalset *set)
             if (icalcomponent_isa(c) != ICAL_VAGENDA_COMPONENT) {
                 char *uidstr = (char *)icalcomponent_get_uid(c);
 
-                if (!uidstr) {  /* this shouldn't happen */
+                if (!uidstr) { /* this shouldn't happen */
                     /* no uid string, we need to add one */
                     snprintf(uidbuf, 256, "baduid%d-%d", getpid(), bad_uid_counter++);
                     key.data = uidbuf;
@@ -855,11 +842,11 @@ icalerrorenum icalbdbset_commit(icalset *set)
                     key.data = relcalid;
                 }
             }
-            key.size = (u_int32_t) strlen(key.data);
+            key.size = (u_int32_t)strlen(key.data);
 
             str = icalcomponent_as_ical_string_r(c);
             data.data = str;
-            data.size = (u_int32_t) strlen(str);
+            data.size = (u_int32_t)strlen(str);
 
             if ((ret = dbcp->c_put(dbcp, &key, &data, DB_KEYLAST)) != 0) {
                 if (ret == DB_LOCK_DEADLOCK) {
@@ -919,7 +906,7 @@ icalerrorenum icalbdbset_commit(icalset *set)
 
 void icalbdbset_mark(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rv((bset != 0), "bset");
 
@@ -928,7 +915,7 @@ void icalbdbset_mark(icalset *set)
 
 icalcomponent *icalbdbset_get_component(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -939,7 +926,7 @@ icalcomponent *icalbdbset_get_component(icalset *set)
 
 icalerrorenum icalbdbset_add_component(icalset *set, icalcomponent *child)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_re((bset != 0), "bset", ICAL_BADARG_ERROR);
     icalerror_check_arg_re((child != 0), "child", ICAL_BADARG_ERROR);
@@ -953,7 +940,7 @@ icalerrorenum icalbdbset_add_component(icalset *set, icalcomponent *child)
 
 icalerrorenum icalbdbset_remove_component(icalset *set, icalcomponent *child)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_re((bset != 0), "bset", ICAL_BADARG_ERROR);
     icalerror_check_arg_re((child != 0), "child", ICAL_BADARG_ERROR);
@@ -974,7 +961,7 @@ int icalbdbset_count_components(icalset *set, icalcomponent_kind kind)
         return -1;
     }
 
-    bset = (icalbdbset *) set;
+    bset = (icalbdbset *)set;
     return icalcomponent_count_components(bset->cluster, kind);
 }
 
@@ -982,7 +969,7 @@ int icalbdbset_count_components(icalset *set, icalcomponent_kind kind)
 
 icalerrorenum icalbdbset_select(icalset *set, icalgauge *gauge)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_re((bset != 0), "bset", ICAL_BADARG_ERROR);
     icalerror_check_arg_re(gauge != 0, "gauge", ICAL_BADARG_ERROR);
@@ -996,7 +983,7 @@ icalerrorenum icalbdbset_select(icalset *set, icalgauge *gauge)
 
 void icalbdbset_clear(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rv((bset != 0), "bset");
 
@@ -1006,13 +993,11 @@ void icalbdbset_clear(icalset *set)
 icalcomponent *icalbdbset_fetch(icalset *set, icalcomponent_kind kind, const char *uid)
 {
     icalcompiter i;
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
-    for (i = icalcomponent_begin_component(bset->cluster, kind);
-         icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
-
+    for (i = icalcomponent_begin_component(bset->cluster, kind); icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
         icalcomponent *this = icalcompiter_deref(&i);
         icalproperty *p = NULL;
         const char *this_uid = NULL;
@@ -1048,14 +1033,13 @@ int icalbdbset_has_uid(icalset *store, const char *uid)
 {
     _unused(store);
     _unused(uid);
-    assert(0);  /* HACK, not implemented */
+    assert(0); /* HACK, not implemented */
     return 0;
 }
 
 /******* support routines for icalbdbset_fetch_match *********/
 
-struct icalbdbset_id
-{
+struct icalbdbset_id {
     char *uid;
     char *recurrence_id;
     int sequence;
@@ -1131,23 +1115,20 @@ static int _compare_ids(const char *compid, const char *matchid)
 
 icalcomponent *icalbdbset_fetch_match(icalset *set, icalcomponent *comp)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
     icalcompiter i;
     struct icalbdbset_id comp_id, match_id;
 
     icalerror_check_arg_rz((bset != 0), "bset");
     comp_id = icalbdbset_get_id(comp);
 
-    for (i = icalcomponent_begin_component(bset->cluster, ICAL_ANY_COMPONENT);
-         icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
-
+    for (i = icalcomponent_begin_component(bset->cluster, ICAL_ANY_COMPONENT); icalcompiter_deref(&i) != 0;
+         icalcompiter_next(&i)) {
         icalcomponent *match = icalcompiter_deref(&i);
 
         match_id = icalbdbset_get_id(match);
 
-        if (_compare_ids(comp_id.uid, match_id.uid) &&
-            _compare_ids(comp_id.recurrence_id, match_id.recurrence_id)) {
-
+        if (_compare_ids(comp_id.uid, match_id.uid) && _compare_ids(comp_id.recurrence_id, match_id.recurrence_id)) {
             /* HACK. What to do with SEQUENCE? */
 
             icalbdbset_id_free(&match_id);
@@ -1167,14 +1148,14 @@ icalerrorenum icalbdbset_modify(icalset *set, icalcomponent *old, icalcomponent 
     _unused(set);
     _unused(old);
     _unused(newc);
-    assert(0);  /* HACK, not implemented */
+    assert(0); /* HACK, not implemented */
     return ICAL_NO_ERROR;
 }
 
 /* caller is responsible to cal icalbdbset_free_cluster first */
 icalerrorenum icalbdbset_set_cluster(icalset *set, icalcomponent *cluster)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -1184,7 +1165,7 @@ icalerrorenum icalbdbset_set_cluster(icalset *set, icalcomponent *cluster)
 
 icalerrorenum icalbdbset_free_cluster(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -1196,7 +1177,7 @@ icalerrorenum icalbdbset_free_cluster(icalset *set)
 
 icalcomponent *icalbdbset_get_cluster(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -1206,7 +1187,7 @@ icalcomponent *icalbdbset_get_cluster(icalset *set)
 /** Iterate through components. */
 icalcomponent *icalbdbset_get_current_component(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -1215,7 +1196,7 @@ icalcomponent *icalbdbset_get_current_component(icalset *set)
 
 icalcomponent *icalbdbset_get_first_component(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
     icalcomponent *c = 0;
 
     icalerror_check_arg_rz((bset != 0), "bset");
@@ -1236,8 +1217,7 @@ icalcomponent *icalbdbset_get_first_component(icalset *set)
     return 0;
 }
 
-icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
-                                       icalgauge *gauge, const char *tzid)
+icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid)
 {
     icalsetiter itr = icalsetiter_null;
     icalcomponent *comp = NULL;
@@ -1251,7 +1231,7 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
     int orig_time_was_utc = 0;
 
     icalerror_check_arg_re((set != 0), "set", icalsetiter_null);
-    bset = (icalbdbset *) set;
+    bset = (icalbdbset *)set;
 
     itr.gauge = gauge;
     itr.tzid = tzid;
@@ -1266,14 +1246,12 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
 
     /* if there is a gauge, the first matched component is returned */
     while (comp != 0) {
-
         /* check if it is a recurring component and with gauge expand, if so
          * we need to add recurrence-id property to the given component */
         rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
         g = icalgauge_get_expand(gauge);
 
         if (rrule != 0 && g == 1) {
-
             /* it is a recurring event */
 
             u_zone = icaltimezone_get_builtin_timezone(itr.tzid);
@@ -1352,12 +1330,12 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
         /* if it is a recurring but no matched occurrence has been found OR
          * it is not a recurring and no matched component has been found,
          * read the next component to find out */
-      getNextComp:
+    getNextComp:
         if ((rrule != NULL && itr.last_component == NULL) || (rrule == NULL)) {
             (void)icalcompiter_next(&citr);
             comp = icalcompiter_deref(&citr);
         }
-    }   /* while */
+    } /* while */
 
     /* no matched component has found */
     return icalsetiter_null;
@@ -1473,7 +1451,6 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
     _unused(set);
 
     do {
-
         /* no pending occurrence, read the next component */
         if (i->last_component == NULL) {
             comp = icalcompiter_next(&(i->iter));
@@ -1497,7 +1474,6 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
 
         /* a recurring component with expand query */
         if (rrule != 0 && g == 1) {
-
             u_zone = icaltimezone_get_builtin_timezone(i->tzid);
 
             /* use UTC, if that's all we have. */
@@ -1571,12 +1547,12 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
     } while (comp != 0);
 
     /* coverity[dead_error_line] */
-    return NULL;        /*unreachable */
+    return NULL; /*unreachable */
 }
 
 icalcomponent *icalbdbset_get_next_component(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *) set;
+    icalbdbset *bset = (icalbdbset *)set;
     icalcomponent *c = 0;
 
     icalerror_check_arg_rz((bset != 0), "bset");
@@ -1592,7 +1568,7 @@ icalcomponent *icalbdbset_get_next_component(icalset *set)
     return 0;
 }
 
-int icalbdbset_begin_transaction(DB_TXN *parent_tid, DB_TXN ** tid)
+int icalbdbset_begin_transaction(DB_TXN *parent_tid, DB_TXN **tid)
 {
     return ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, parent_tid, tid, 0);
 }

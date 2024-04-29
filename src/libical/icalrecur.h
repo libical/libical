@@ -129,19 +129,18 @@ LIBICAL_ICAL_EXPORT icalrecurrencetype_weekday icalrecur_string_to_weekday(const
  *
  * The maximums below are based on lunisolar leap years (13 months)
  */
-#define ICAL_BY_SECOND_SIZE     62      /* 0 to 60 */
-#define ICAL_BY_MINUTE_SIZE     61      /* 0 to 59 */
-#define ICAL_BY_HOUR_SIZE       25      /* 0 to 23 */
-#define ICAL_BY_MONTH_SIZE      14      /* 1 to 13 */
-#define ICAL_BY_MONTHDAY_SIZE   32      /* 1 to 31 */
-#define ICAL_BY_WEEKNO_SIZE     56      /* 1 to 55 */
-#define ICAL_BY_YEARDAY_SIZE    386     /* 1 to 385 */
-#define ICAL_BY_SETPOS_SIZE     ICAL_BY_YEARDAY_SIZE          /* 1 to N */
-#define ICAL_BY_DAY_SIZE        7*(ICAL_BY_WEEKNO_SIZE-1)+1   /* 1 to N */
+#define ICAL_BY_SECOND_SIZE 62                             /* 0 to 60 */
+#define ICAL_BY_MINUTE_SIZE 61                             /* 0 to 59 */
+#define ICAL_BY_HOUR_SIZE 25                               /* 0 to 23 */
+#define ICAL_BY_MONTH_SIZE 14                              /* 1 to 13 */
+#define ICAL_BY_MONTHDAY_SIZE 32                           /* 1 to 31 */
+#define ICAL_BY_WEEKNO_SIZE 56                             /* 1 to 55 */
+#define ICAL_BY_YEARDAY_SIZE 386                           /* 1 to 385 */
+#define ICAL_BY_SETPOS_SIZE ICAL_BY_YEARDAY_SIZE           /* 1 to N */
+#define ICAL_BY_DAY_SIZE 7 * (ICAL_BY_WEEKNO_SIZE - 1) + 1 /* 1 to N */
 
 /** Main struct for holding digested recurrence rules */
-struct icalrecurrencetype
-{
+struct icalrecurrencetype {
     icalrecurrencetype_frequency freq;
 
     /* until and count are mutually exclusive. */
@@ -164,7 +163,7 @@ struct icalrecurrencetype
     short by_second[ICAL_BY_SECOND_SIZE];
     short by_minute[ICAL_BY_MINUTE_SIZE];
     short by_hour[ICAL_BY_HOUR_SIZE];
-    short by_day[ICAL_BY_DAY_SIZE];             /**< @brief Encoded value
+    short by_day[ICAL_BY_DAY_SIZE]; /**< @brief Encoded value
         *
         * The 'day' element of the by_day array is encoded to allow
         * representation of both the day of the week ( Monday, Tuesday), but
@@ -177,7 +176,7 @@ struct icalrecurrencetype
     short by_month_day[ICAL_BY_MONTHDAY_SIZE];
     short by_year_day[ICAL_BY_YEARDAY_SIZE];
     short by_week_no[ICAL_BY_WEEKNO_SIZE];
-    short by_month[ICAL_BY_MONTH_SIZE];         /**< @brief Encoded value
+    short by_month[ICAL_BY_MONTH_SIZE]; /**< @brief Encoded value
         *
         * The 'month' element of the by_month array is encoded to allow
         * representation of the "L" leap suffix (RFC 7529).
@@ -192,24 +191,25 @@ struct icalrecurrencetype
     icalrecurrencetype_skip skip;
 };
 
-#define ICALRECURRENCETYPE_INITIALIZER {                    \
-    ICAL_NO_RECURRENCE,                  /* freq         */ \
-    ICALTIMETYPE_INITIALIZER,            /* until        */ \
-    0,                                   /* count        */ \
-    1,                                   /* interval     */ \
-    ICAL_MONDAY_WEEKDAY,                 /* week_start   */ \
-    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_second    */ \
-    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_minute    */ \
-    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_hour      */ \
-    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_day       */ \
-    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_month_day */ \
-    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_year_day  */ \
-    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_week_no   */ \
-    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_month     */ \
-    { ICAL_RECURRENCE_ARRAY_MAX_BYTE },  /* by_set_pos   */ \
-    NULL,                                /* rscale       */ \
-    ICAL_SKIP_OMIT                       /* skip         */ \
-}
+#define ICALRECURRENCETYPE_INITIALIZER                                                                                 \
+    {                                                                                                                  \
+        ICAL_NO_RECURRENCE,                   /* freq         */                                                       \
+            ICALTIMETYPE_INITIALIZER,         /* until        */                                                       \
+            0,                                /* count        */                                                       \
+            1,                                /* interval     */                                                       \
+            ICAL_MONDAY_WEEKDAY,              /* week_start   */                                                       \
+            {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_second    */                                                       \
+            {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_minute    */                                                       \
+            {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_hour      */                                                       \
+            {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_day       */                                                       \
+            {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_month_day */                                                       \
+            {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_year_day  */                                                       \
+            {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_week_no   */                                                       \
+            {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_month     */                                                       \
+            {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_set_pos   */                                                       \
+            NULL,                             /* rscale       */                                                       \
+            ICAL_SKIP_OMIT                    /* skip         */                                                       \
+    }
 
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_rscale_is_supported(void);
 
@@ -251,8 +251,7 @@ LIBICAL_ICAL_EXPORT int icalrecurrencetype_day_position(short day);
  *  and icalrecurrencetype_day_position() to split the encoded value back into the parts.
  * @since 3.1
  */
-LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_day(enum icalrecurrencetype_weekday weekday,
-                                                        int position);
+LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_day(enum icalrecurrencetype_weekday weekday, int position);
 
 /*
  * Routines to decode the 'month' element of the by_month array
@@ -304,14 +303,12 @@ LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurr
  * NOTE: CAN NOT be used with RRULEs that contain COUNT.
  * @since 3.0
  */
-LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_start(icalrecur_iterator *impl,
-                                                     struct icaltimetype start);
+LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_start(icalrecur_iterator *impl, struct icaltimetype start);
 
 /** Set the date-time at which the iterator will stop at the latest.
  *  Values equal to or greater than end will not be returned by the iterator.
 */
-LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_end(icalrecur_iterator *impl,
-                                                   struct icaltimetype end);
+LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_end(icalrecur_iterator *impl, struct icaltimetype end);
 
 /**
  * Sets the date-times over which the iterator will run,
@@ -330,8 +327,7 @@ LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_end(icalrecur_iterator *impl,
  * NOTE: CAN NOT be used with RRULEs that contain COUNT.
  * @since 3.1
  */
-LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_range(icalrecur_iterator *impl,
-                                                     struct icaltimetype from,
+LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_range(icalrecur_iterator *impl, struct icaltimetype from,
                                                      struct icaltimetype to);
 
 /**
@@ -358,8 +354,7 @@ LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator *);
  * are calculated in local time. You will have to convert the results
  * back into local time before using them.
  */
-LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(const char *rule, icaltime_t start,
-                                                    int count, icaltime_t *array);
+LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(const char *rule, icaltime_t start, int count, icaltime_t *array);
 
 /* ical_invalid_rrule_handling :
  *    How should the ICAL library handle RRULEs with invalid BYxxx part combos?
@@ -372,7 +367,6 @@ typedef enum ical_invalid_rrule_handling
 
 LIBICAL_ICAL_EXPORT ical_invalid_rrule_handling ical_get_invalid_rrule_handling_setting(void);
 
-LIBICAL_ICAL_EXPORT void ical_set_invalid_rrule_handling_setting(
-    ical_invalid_rrule_handling newSetting);
+LIBICAL_ICAL_EXPORT void ical_set_invalid_rrule_handling_setting(ical_invalid_rrule_handling newSetting);
 
 #endif /* ICALRECUR_H */

@@ -55,8 +55,7 @@
 static const int days_in_year_passed_month[2][13] = {
     /* jan feb mar  apr  may  jun  jul  aug  sep  oct  nov  dec */
     {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365},
-    {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366}
-};
+    {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366}};
 
 static int icaltime_leap_days(int y1, int y2)
 {
@@ -104,12 +103,12 @@ static icaltime_t make_time(struct tm *tm, int tzm)
     icaltime_t tim;
     int febs;
 
-    static const int days[] = { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 };
+    static const int days[] = {-1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364};
 
     /* check that month specification within range */
 
     if (tm->tm_mon < 0 || tm->tm_mon > 11)
-        return ((icaltime_t) - 1);
+        return ((icaltime_t)-1);
 
     if (tm->tm_year < 2)
         return ((icaltime_t)-1);
@@ -118,16 +117,16 @@ static icaltime_t make_time(struct tm *tm, int tzm)
     /* check that year specification within range */
 
     if (tm->tm_year > 138)
-        return ((icaltime_t) - 1);
+        return ((icaltime_t)-1);
 
     /* check for upper bound of Jan 17, 2038 (to avoid possibility of
        32-bit arithmetic overflow) */
 
     if (tm->tm_year == 138) {
         if (tm->tm_mon > 0) {
-            return ((icaltime_t) - 1);
+            return ((icaltime_t)-1);
         } else if (tm->tm_mday > 17) {
-            return ((icaltime_t) - 1);
+            return ((icaltime_t)-1);
         }
     }
 #else
@@ -143,7 +142,7 @@ static icaltime_t make_time(struct tm *tm, int tzm)
      *  (number of leap days to subtract)
      */
 
-    tim = (icaltime_t) ((tm->tm_year - 70) * 365 + ((tm->tm_year - 1) / 4) - 17);
+    tim = (icaltime_t)((tm->tm_year - 70) * 365 + ((tm->tm_year - 1) / 4) - 17);
 
     /* adjust: no leap days every 100 years, except every 400 years. */
 
@@ -185,8 +184,7 @@ static icaltime_t make_time(struct tm *tm, int tzm)
     return (tim);
 }
 
-struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const int is_date,
-                                                  const icaltimezone *zone)
+struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const int is_date, const icaltimezone *zone)
 {
     struct icaltimetype tt;
     struct tm t;
@@ -197,7 +195,7 @@ struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const int
     /* Convert the icaltime_t to a struct tm in UTC time. We can trust gmtime for this. */
     memset(&t, 0, sizeof(struct tm));
     if (!icalgmtime_r(&tm, &t))
-        return is_date ? icaltime_null_date () : icaltime_null_time ();
+        return is_date ? icaltime_null_date() : icaltime_null_time();
 
     tt.year = t.tm_year + 1900;
     tt.month = t.tm_mon + 1;
@@ -210,7 +208,7 @@ struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const int
     tt.zone = (zone == NULL) ? NULL : utc_zone;
 
     /* Use our timezone functions to convert to the required timezone. */
-    icaltimezone_convert_time(&tt, utc_zone, (icaltimezone *) zone);
+    icaltimezone_convert_time(&tt, utc_zone, (icaltimezone *)zone);
 
     tt.is_date = is_date;
 
@@ -285,7 +283,7 @@ icaltime_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icalt
     local_tt.is_date = 0;
 
     /* Use our timezone functions to convert to UTC. */
-    icaltimezone_convert_time(&local_tt, (icaltimezone *) zone, utc_zone);
+    icaltimezone_convert_time(&local_tt, (icaltimezone *)zone, utc_zone);
 
     /* Copy the icaltimetype to a struct tm. */
     memset(&stm, 0, sizeof(struct tm));
@@ -353,15 +351,15 @@ struct icaltimetype icaltime_from_string(const char *str)
 
     if ((size == 15) || (size == 19)) { /* floating time with/without separators */
         tt.is_date = 0;
-    } else if ((size == 16) || (size == 20)) {  /* UTC time, ends in 'Z' */
-        if ((str[size-1] != 'Z'))
+    } else if ((size == 16) || (size == 20)) { /* UTC time, ends in 'Z' */
+        if ((str[size - 1] != 'Z'))
             goto FAIL;
 
         tt.zone = icaltimezone_get_utc_timezone();
         tt.is_date = 0;
-    } else if ((size == 8) || (size == 10)) {   /* A DATE */
+    } else if ((size == 8) || (size == 10)) { /* A DATE */
         tt.is_date = 1;
-    } else {    /* error */
+    } else { /* error */
         goto FAIL;
     }
 
@@ -369,8 +367,7 @@ struct icaltimetype icaltime_from_string(const char *str)
         if (size == 10) {
             char dsep1, dsep2;
 
-            if (sscanf(str, "%04d%c%02d%c%02d",
-                       &tt.year, &dsep1, &tt.month, &dsep2, &tt.day) < 5) {
+            if (sscanf(str, "%04d%c%02d%c%02d", &tt.year, &dsep1, &tt.month, &dsep2, &tt.day) < 5) {
                 goto FAIL;
             }
 
@@ -384,24 +381,20 @@ struct icaltimetype icaltime_from_string(const char *str)
         if (size > 16) {
             char dsep1, dsep2, tsep, tsep1, tsep2;
 
-            if (sscanf(str, "%04d%c%02d%c%02d%c%02d%c%02d%c%02d",
-                       &tt.year, &dsep1, &tt.month, &dsep2, &tt.day, &tsep,
+            if (sscanf(str, "%04d%c%02d%c%02d%c%02d%c%02d%c%02d", &tt.year, &dsep1, &tt.month, &dsep2, &tt.day, &tsep,
                        &tt.hour, &tsep1, &tt.minute, &tsep2, &tt.second) < 11) {
                 goto FAIL;
             }
 
-            if ((tsep != 'T') ||
-                (dsep1 != '-') || (dsep2 != '-') ||
-                (tsep1 != ':') || (tsep2 != ':')) {
+            if ((tsep != 'T') || (dsep1 != '-') || (dsep2 != '-') || (tsep1 != ':') || (tsep2 != ':')) {
                 goto FAIL;
             }
 
         } else {
             char tsep;
 
-            if (sscanf(str, "%04d%02d%02d%c%02d%02d%02d",
-                       &tt.year, &tt.month, &tt.day, &tsep,
-                       &tt.hour, &tt.minute, &tt.second) < 7) {
+            if (sscanf(str, "%04d%02d%02d%c%02d%02d%02d", &tt.year, &tt.month, &tt.day, &tsep, &tt.hour, &tt.minute,
+                       &tt.second) < 7) {
                 goto FAIL;
             }
 
@@ -413,7 +406,7 @@ struct icaltimetype icaltime_from_string(const char *str)
 
     return tt;
 
-  FAIL:
+FAIL:
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     return icaltime_null_time();
 }
@@ -436,13 +429,13 @@ int icaltime_days_in_year(const int year)
     }
 }
 
-static const int _days_in_month[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+static const int _days_in_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 int icaltime_days_in_month(const int month, const int year)
 {
     int days;
 
-/* The old code aborting if it was passed a parameter like BYMONTH=0
+    /* The old code aborting if it was passed a parameter like BYMONTH=0
  * Unfortunately it's not practical right now to pass an error all
  * the way up the stack, so instead of aborting we're going to apply
  * the GIGO principle and simply return '30 days' if we get an
@@ -646,7 +639,7 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
     if (a.is_date && b.is_date) {
         return 0;
 
-    /* else, if only one is a date (and we already know the date part is equal),
+        /* else, if only one is a date (and we already know the date part is equal),
        then the other is greater */
     } else if (b.is_date) {
         return 1;
@@ -669,8 +662,7 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
     return 0;
 }
 
-int icaltime_compare_date_only(const struct icaltimetype a_in,
-                               const struct icaltimetype b_in)
+int icaltime_compare_date_only(const struct icaltimetype a_in, const struct icaltimetype b_in)
 {
     struct icaltimetype a, b;
     icaltimezone *tz = icaltimezone_get_utc_timezone();
@@ -699,9 +691,7 @@ int icaltime_compare_date_only(const struct icaltimetype a_in,
     return 0;
 }
 
-int icaltime_compare_date_only_tz(const struct icaltimetype a_in,
-                                  const struct icaltimetype b_in,
-                                  icaltimezone *tz)
+int icaltime_compare_date_only_tz(const struct icaltimetype a_in, const struct icaltimetype b_in, icaltimezone *tz)
 {
     struct icaltimetype a, b;
 
@@ -736,9 +726,7 @@ struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
                                            struct icaltimetype t2)
 */
 
-void icaltime_adjust(struct icaltimetype *tt,
-                     const int days, const int hours,
-                     const int minutes, const int seconds)
+void icaltime_adjust(struct icaltimetype *tt, const int days, const int hours, const int minutes, const int seconds)
 {
     int second, minute, hour, day;
     int minutes_overflow, hours_overflow, days_overflow = 0, years_overflow;
@@ -775,7 +763,7 @@ void icaltime_adjust(struct icaltimetype *tt,
         days_overflow--;
     }
 
-  IS_DATE:
+IS_DATE:
     /* Normalize the month. We do this before handling the day since we may
        need to know what month it is to get the number of days in it.
        Note that months are 1 to 12, so we have to be a bit careful. */
@@ -836,7 +824,7 @@ struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt, icalt
 
     /* If it's a floating time we don't want to adjust the time */
     if (tt.zone != NULL) {
-        icaltimezone *from_zone = (icaltimezone *) tt.zone;
+        icaltimezone *from_zone = (icaltimezone *)tt.zone;
 
         if (!from_zone) {
             from_zone = icaltimezone_get_utc_timezone();
@@ -858,7 +846,7 @@ const icaltimezone *icaltime_get_timezone(const struct icaltimetype t)
 const char *icaltime_get_tzid(const struct icaltimetype t)
 {
     if (t.zone != NULL) {
-        return icaltimezone_get_tzid((icaltimezone *) t.zone);
+        return icaltimezone_get_tzid((icaltimezone *)t.zone);
     } else {
         return NULL;
     }
@@ -886,9 +874,7 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
 
     span.is_busy = is_busy;
 
-    span.start = icaltime_as_timet_with_zone(dtstart,
-                                             dtstart.zone ? dtstart.
-                                             zone : icaltimezone_get_utc_timezone());
+    span.start = icaltime_as_timet_with_zone(dtstart, dtstart.zone ? dtstart.zone : icaltimezone_get_utc_timezone());
 
     if (icaltime_is_null_time(dtend)) {
         if (!icaltime_is_date(dtstart)) {
@@ -901,9 +887,7 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
         }
     }
 
-    span.end = icaltime_as_timet_with_zone(dtend,
-                                           dtend.zone ? dtend.
-                                           zone : icaltimezone_get_utc_timezone());
+    span.end = icaltime_as_timet_with_zone(dtend, dtend.zone ? dtend.zone : icaltimezone_get_utc_timezone());
 
     if (icaltime_is_date(dtstart)) {
         /* no time specified, go until the end of the day.. */

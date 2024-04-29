@@ -50,8 +50,7 @@ static void attach_data_free(char *data, void *free_fn_data)
     icalmemory_free_buffer(data);
 }
 
-icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn,
-                                     void *free_fn_data)
+icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn, void *free_fn_data)
 {
     icalattach *attach;
 
@@ -74,7 +73,7 @@ icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free
 
     attach->refcount = 1;
     attach->is_url = 0;
-    attach->u.data.data = (char *) data;
+    attach->u.data.data = (char *)data;
     attach->u.data.free_fn = free_fn;
     attach->u.data.free_fn_data = free_fn_data;
 
@@ -102,7 +101,7 @@ void icalattach_unref(icalattach *attach)
     if (attach->is_url) {
         icalmemory_free_buffer(attach->u.url.url);
     } else if (attach->u.data.free_fn) {
-        (* attach->u.data.free_fn) (attach->u.data.data, attach->u.data.free_fn_data);
+        (*attach->u.data.free_fn)(attach->u.data.data, attach->u.data.free_fn_data);
     }
 
     icalmemory_free_buffer(attach);

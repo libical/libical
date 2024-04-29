@@ -35,26 +35,22 @@ const char *ical_timet_string(const icaltime_t t)
         memset(&stm, 0, sizeof(stm));
     }
 
-    snprintf(ictt_str, sizeof(ictt_str),
-             "%02d-%02d-%02d %02d:%02d:%02d Z",
-             stm.tm_year + 1900, stm.tm_mon + 1, stm.tm_mday, stm.tm_hour, stm.tm_min, stm.tm_sec);
+    snprintf(ictt_str, sizeof(ictt_str), "%02d-%02d-%02d %02d:%02d:%02d Z", stm.tm_year + 1900, stm.tm_mon + 1,
+             stm.tm_mday, stm.tm_hour, stm.tm_min, stm.tm_sec);
 
     return ictt_str;
 }
 
 const char *ictt_as_string(struct icaltimetype t)
 {
-    const char *zone = icaltimezone_get_tzid((icaltimezone *) t.zone);
+    const char *zone = icaltimezone_get_tzid((icaltimezone *)t.zone);
 
     if (icaltime_is_utc(t)) {
-        snprintf(ictt_str, sizeof(ictt_str),
-                 "%02d-%02d-%02d %02d:%02d:%02d Z UTC",
-                 t.year, t.month, t.day, t.hour, t.minute, t.second);
+        snprintf(ictt_str, sizeof(ictt_str), "%02d-%02d-%02d %02d:%02d:%02d Z UTC", t.year, t.month, t.day, t.hour,
+                 t.minute, t.second);
     } else {
-        snprintf(ictt_str, sizeof(ictt_str),
-                 "%02d-%02d-%02d %02d:%02d:%02d %s",
-                 t.year, t.month, t.day, t.hour, t.minute, t.second,
-                 zone == NULL ? "(floating)" : zone);
+        snprintf(ictt_str, sizeof(ictt_str), "%02d-%02d-%02d %02d:%02d:%02d %s", t.year, t.month, t.day, t.hour,
+                 t.minute, t.second, zone == NULL ? "(floating)" : zone);
     }
 
     return ictt_str;
@@ -76,8 +72,7 @@ static int testnumber = 0;
 static int failed = 0;
 static int current_set = 0;
 
-static struct failed_tests
-{
+static struct failed_tests {
     int set;
     int test;
 } failed_tests[1024];
@@ -215,7 +210,7 @@ static void cleanup_nondeterministic_memory(void)
     icalmemory_free_ring();
 }
 
-void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int headeronly)
+void test_run(const char *test_name, void (*test_fcn)(void), int do_test, int headeronly)
 {
     static int test_set = 1;
 
@@ -223,7 +218,6 @@ void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int h
         test_header(test_name, test_set);
 
     if (!headeronly && (do_test == 0 || do_test == test_set)) {
-
         struct testmalloc_statistics mem_statistics;
 
         // Clean up cached and other kind of non-deterministic memory.
@@ -233,7 +227,7 @@ void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int h
         testmalloc_reset();
 
         // Run the test.
-        (*test_fcn) ();
+        (*test_fcn)();
 
         // Before getting the statistics, clean up any non-deterministic memory again, so it
         // doesn't influence the statistics.
@@ -242,9 +236,7 @@ void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int h
         // Now we should get clean statistics.
         testmalloc_get_statistics(&mem_statistics);
 
-        ok("no memory leaked",
-            (mem_statistics.mem_allocated_current == 0) &&
-            (mem_statistics.blocks_allocated == 0));
+        ok("no memory leaked", (mem_statistics.mem_allocated_current == 0) && (mem_statistics.blocks_allocated == 0));
 
         if (!QUIET)
             printf("\n");
