@@ -319,7 +319,6 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
         }
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
-        icalmemory_free_buffer(intbuf);
 
     } else if (param->values != 0) {
         size_t i;
