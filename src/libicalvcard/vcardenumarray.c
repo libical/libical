@@ -23,7 +23,7 @@ ssize_t vcardenumarray_find(vcardenumarray *array,
 {
     size_t i;
 
-    for (i = 0; i < array->num_elements; i++) {
+    for (i = 0; array && i < array->num_elements; i++) {
         vcardenumarray_element *e = icalarray_element_at(array, i);
         if (!!e->xvalue == !!needle->xvalue &&
             ((e->xvalue && !strcmp(e->xvalue, needle->xvalue)) ||
