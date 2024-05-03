@@ -17,8 +17,8 @@ set(COMBINEDHEADERSVCARD
   ${TOPS}/src/libicalvcard/vcardrestriction.h
 )
 
-file(WRITE  ${VCARD_FILE_H_FILE} "#ifndef LIBICALVCARD_ICAL_H\n")
-file(APPEND ${VCARD_FILE_H_FILE} "#define LIBICALVCARD_ICAL_H\n")
+file(WRITE  ${VCARD_FILE_H_FILE} "#ifndef LIBICAL_VCARD_H\n")
+file(APPEND ${VCARD_FILE_H_FILE} "#define LIBICAL_VCARD_H\n")
 file(APPEND ${VCARD_FILE_H_FILE} "#ifndef S_SPLINT_S\n")
 file(APPEND ${VCARD_FILE_H_FILE} "#ifdef __cplusplus\n")
 file(APPEND ${VCARD_FILE_H_FILE} "extern \"C\" {\n")
