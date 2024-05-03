@@ -82,20 +82,38 @@ vcardvalue *vcardvalue_new_geo(struct vcardgeotype v)
 
 void vcardvalue_set_geo(vcardvalue *value, struct vcardgeotype v)
 {
+    struct vcardvalue_impl *impl;
+
     icalerror_check_arg_rv((value != 0), "value");
 
+    impl = (struct vcardvalue_impl *)value;
+
     if (v.uri) {
-        value->kind = VCARD_URI_VALUE;
+        for (int i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
+            vcardstrarray *array = impl->data.v_structured.field[i];
+            if (array) {
+                vcardstrarray_free(array);
+                impl->data.v_structured.field[i] = 0;
+            }
+        }
+        impl->data.v_structured.num_fields = 0;
+
+        impl->kind = VCARD_URI_VALUE;
         vcardvalue_set_uri(value, v.uri);
     } else {
         vcardstructuredtype geo = {
             2,  { vcardstrarray_new(1), vcardstrarray_new(1) }
         };
 
+        if (impl->data.v_string != 0) {
+            icalmemory_free_buffer((void *)impl->data.v_string);
+            impl->data.v_string = 0;
+        }
+
         vcardstrarray_append(geo.field[0], v.coords.lat);
         vcardstrarray_append(geo.field[1], v.coords.lon);
 
-        value->kind = VCARD_STRUCTURED_VALUE;
+        impl->kind = VCARD_STRUCTURED_VALUE;
         vcardvalue_set_structured(value, &geo);
     }
 }
