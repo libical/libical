@@ -11,6 +11,7 @@
 #ifndef ICALDERIVEDPROPERTY_H
 #define ICALDERIVEDPROPERTY_H
 
+#include "libical_sentinel.h"
 #include "icalparameter.h"
 #include "icalderivedvalue.h"
 #include "icalrecur.h"
