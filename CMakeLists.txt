@@ -791,6 +791,7 @@ if(ENABLE_LTO_BUILD)
 endif()
 
 libical_option(LIBICAL_BUILD_TESTING "Build tests." True)
+libical_option(LIBICAL_BUILD_EXAMPLES "Build examples." True)
 
 ################# build subdirs ########################
 
