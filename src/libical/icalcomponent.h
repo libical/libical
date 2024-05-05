@@ -16,6 +16,7 @@
 #define ICALCOMPONENT_H
 
 #include "libical_deprecated.h"
+#include "libical_sentinel.h"
 #include "libical_ical_export.h"
 #include "icalenums.h"  /* Defines icalcomponent_kind */
 #include "icalproperty.h"
@@ -51,7 +52,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_from_string(const char *str
  *
  * Make sure to pass NULL (not 0) as the final argument!
  */
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...);
+LIBICAL_ICAL_EXPORT LIBICAL_SENTINEL icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...);
 
 /** @brief Constructor
  */

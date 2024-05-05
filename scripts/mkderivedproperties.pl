@@ -302,7 +302,7 @@ LIBICAL_ICAL_EXPORT void icalproperty_set_${lc}(icalproperty *prop, $type v);\
 LIBICAL_ICAL_EXPORT $type icalproperty_get_${lc}(const icalproperty *prop);";
 
       if ($include_vanew) {
-        print "\nLIBICAL_ICAL_EXPORT icalproperty *icalproperty_vanew_${lc}($type v, ...);\n";
+        print "\nLIBICAL_ICAL_EXPORT LIBICAL_SENTINEL icalproperty *icalproperty_vanew_${lc}($type v, ...);\n";
       }
 
     }

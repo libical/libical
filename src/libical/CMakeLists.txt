@@ -432,6 +432,7 @@ install(FILES
   icaltypes.h
   icalvalue.h
   libical_deprecated.h
+  libical_sentinel.h
   libical_ical_export.h
   pvl.h
   sspm.h
