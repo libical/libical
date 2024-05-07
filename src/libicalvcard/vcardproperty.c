@@ -322,6 +322,11 @@ static const char *vcardproperty_get_value_kind(vcardproperty *prop,
     vcardvalue_kind kind = VCARD_NO_VALUE;
     vcardparameter *val_param =
         vcardproperty_get_first_parameter(prop, VCARD_VALUE_PARAMETER);
+    vcardproperty_version version = vcardcomponent_get_version(prop->parent);
+
+    if (version == VCARD_VERSION_NONE) {
+        version = VCARD_VERSION_30;
+    }
 
     if (val_param) {
         kind = vcardparameter_value_to_value_kind(vcardparameter_get_value(val_param));
@@ -346,14 +351,55 @@ static const char *vcardproperty_get_value_kind(vcardproperty *prop,
     case VCARD_LOGO_PROPERTY:
     case VCARD_PHOTO_PROPERTY:
     case VCARD_SOUND_PROPERTY:
-        /* v3 default: VALUE=BINARY (ENCODING param is v3-specific)
-         * v4 default: VALUE=URL    (MEDIATYPE param, data: uri are v4-specific)
+        /* v3 default: VALUE=BINARY (ENCODING=b parameter)
+         * v4 default: VALUE=URL
          */
-        if (vcardproperty_get_first_parameter(prop, VCARD_ENCODING_PARAMETER) ||
-            (kind == VCARD_URI_VALUE &&
-             (vcardproperty_get_first_parameter(prop,
-                                                VCARD_MEDIATYPE_PARAMETER) ||
-              !strncmp("data:", vcardvalue_as_vcard_string(value), 5)))) {
+        if (version == VCARD_VERSION_40 ||
+            vcardproperty_get_first_parameter(prop, VCARD_ENCODING_PARAMETER)) {
+            kind = VCARD_NO_VALUE;
+        }
+        break;
+
+
+    case VCARD_ANNIVERSARY_PROPERTY:
+    case VCARD_BDAY_PROPERTY:
+    case VCARD_DEATHDATE_PROPERTY:
+        /* TIME is v4 specific.
+         * All other types are self-evident.
+         */
+        if (version == VCARD_VERSION_40 &&
+            (kind == VCARD_TIME_VALUE || kind == VCARD_DATEANDORTIME_VALUE)) {
+            kind = VCARD_NO_VALUE;
+        }
+        else if (kind == VCARD_DATE_VALUE || kind == VCARD_DATETIME_VALUE) {
+            kind = VCARD_NO_VALUE;
+        }
+        break;
+
+    case VCARD_TZ_PROPERTY:
+        /* v3 default: VALUE=UTCOFFSET
+         * v4 default: VALUE=TEXT
+         */
+        if (version == VCARD_VERSION_40) {
+            if (kind == VCARD_TEXT_VALUE) {
+                kind = VCARD_NO_VALUE;
+            }
+        }
+        else if (kind == VCARD_UTCOFFSET_VALUE) {
+            kind = VCARD_NO_VALUE;
+        }
+        break;
+
+    case VCARD_UID_PROPERTY:
+        /* v3 default: VALUE=TEXT
+         * v4 default: VALUE=URI
+         */
+        if (version == VCARD_VERSION_40) {
+            if (kind == VCARD_URI_VALUE) {
+                kind = VCARD_NO_VALUE;
+            }
+        }
+        else {
             kind = VCARD_NO_VALUE;
         }
         break;
