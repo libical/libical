@@ -178,4 +178,7 @@ LIBICAL_VCARD_EXPORT void vcardproperty_normalize(vcardproperty *prop);
 LIBICAL_VCARD_EXPORT int vcardproperty_is_structured(vcardproperty_kind pkind);
 LIBICAL_VCARD_EXPORT int vcardproperty_is_multivalued(vcardproperty_kind pkind);
 
+LIBICAL_VCARD_EXPORT void vcardproperty_add_type_parameter(vcardproperty *prop,
+                                                           vcardenumarray_element *type);
+
 #endif /*VCARDPROPERTY_H */

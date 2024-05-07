@@ -69,8 +69,8 @@ static void test_parse_file(const char *fname)
         "VERSION:4.0\r\n"
         "FN:Simon Perreault\r\n"
         "N:Perreault;Simon;;;ing. jr,M.Sc.\r\n"
-        "BDAY;VALUE=DATE:--0203\r\n"
-        "BDAY;VALUE=DATE:--0203\r\n"
+        "BDAY:--0203\r\n"
+        "BDAY:0000\r\n"
         "ANNIVERSARY;VALUE=TIMESTAMP:20090808T143000-0500\r\n"
         "GENDER:M;manly\r\n"
         "ADR;TYPE=WORK:;Suite D2-630;2875 Laurier;Quebec;QC;G1V 2M2;Canada\r\n"
@@ -80,13 +80,13 @@ static void test_parse_file(const char *fname)
         "EMAIL;TYPE=WORK:simon.perreault@viagenie.ca\r\n"
         "LANG;PREF=2:en\r\n"
         "LANG;PREF=1:fr\r\n"
-        "TZ;VALUE=TEXT:-0500\r\n"
+        "TZ;VALUE=UTC-OFFSET:-05\r\n"
         "GEO;TYPE=WORK:geo:46.772673,-71.282945\r\n"
         "ORG;TYPE=WORK:Viagenie;Foo\r\n"
         "CATEGORIES:bar,foo\r\n"
         "NOTE;LANGUAGE=en;PID=1.0,3:Test vCard\r\n"
         "URL;TYPE=HOME:http://nomis80.org\r\n"
-        "KEY;VALUE=URI;TYPE=WORK:http://www.viagenie.ca/simon.perreault/simon.asc\r\n"
+        "KEY;TYPE=WORK:http://www.viagenie.ca/simon.perreault/simon.asc\r\n"
         "X-LIC-ERROR;X-LIC-ERRORTYPE=RESTRICTION-CHECK:Failed restrictions for \r\n"
         " BDAY property. Expected zero or one instances of the property and got 2\r\n"
         "END:VCARD\r\n"
@@ -168,11 +168,18 @@ static void test_add_props(vcardcomponent *card)
         "VERSION:4.0\r\n"
         "FN:Mickey Mouse\r\n"
         "N:Mouse;Mickey;;;;;\r\n"
-        "BDAY;VALUE=DATE:19281118\r\n"
+        "PHOTO:data:image/jpeg;base64,ABCDEF\r\n"
+        "BDAY:--1118T03\r\n"
         "ADR:;;123 Main Street,Disney World;Orlando;FL;32836;USA;;;;;;;;;;;\r\n"
+        "TEL;VALUE=URI:tel:+1-888-555-1212\r\n"
+        "LANG;PREF=1:en\r\n"
+        "LANG;PREF=2:fr\r\n"
         "TZ;VALUE=UTC-OFFSET:-0230\r\n"
+        "GEO:geo:46.772673,-71.282945\r\n"
+        "LOGO;MEDIATYPE=image/png:https://example.com/logo.png\r\n"
         "CATEGORIES:aaa,zzz\r\n"
         "group1.NOTE;LANGUAGE=en;PID=1,3;SORT-AS=bar,foo;TYPE=WORK:Test vCard\r\n"
+        "UID;VALUE=TEXT:foo-bar\r\n"
         "END:VCARD\r\n";
 
     /* Create and add NOTE property */
@@ -246,15 +253,53 @@ static void test_add_props(vcardcomponent *card)
 
     /* Create and add BDAY property */
     vcardtimetype t = vcardtime_null_date();
-    t.year = 1928;
     t.month = 11;
     t.day = 18;
+    t.hour = 3;
     prop = vcardproperty_new_bday(t);
     vcardcomponent_add_property(card, prop);
 
     /* Create and add TZ property */
     vcardtztype tz = { .utcoffset = -9000 };
     prop = vcardproperty_new_tz(tz);
+    vcardcomponent_add_property(card, prop);
+
+    /* Create and add GEO property */
+    vcardgeotype geo = { .uri = "geo:46.772673,-71.282945" };
+    prop = vcardproperty_new_geo(geo);
+    vcardcomponent_add_property(card, prop);
+
+    /* Create and add PHOTO property */
+    prop = vcardproperty_new_photo("data:image/jpeg;base64,ABCDEF");
+    vcardcomponent_add_property(card, prop);
+
+    /* Create and add LOGO property */
+    prop = vcardproperty_vanew_logo("https://example.com/logo.png",
+                                    vcardparameter_new_mediatype("image/png"),
+                                    0);
+    vcardcomponent_add_property(card, prop);
+
+    /* Create and add UID property */
+    prop = vcardproperty_vanew_uid("foo-bar",
+                                   vcardparameter_new_value(VCARD_VALUE_TEXT),
+                                   0);
+    vcardcomponent_add_property(card, prop);
+
+    /* Create and add TEL property */
+    prop = vcardproperty_vanew_tel("tel:+1-888-555-1212",
+                                   vcardparameter_new_value(VCARD_VALUE_URI),
+                                   0);
+    vcardcomponent_add_property(card, prop);
+
+    /* Create and add LANG properties */
+    prop = vcardproperty_vanew_lang("fr",
+                                    vcardparameter_new_pref(2),
+                                    0);
+    vcardcomponent_add_property(card, prop);
+
+    prop = vcardproperty_vanew_lang("en",
+                                   vcardparameter_new_pref(1),
+                                   0);
     vcardcomponent_add_property(card, prop);
 
     vcardrestriction_check(card);
@@ -269,25 +314,56 @@ static void test_n_restriction(vcardcomponent *card)
         "BEGIN:VCARD\r\n"
         "VERSION:3.0\r\n"
         "FN:Mickey Mouse\r\n"
-        "BDAY;VALUE=DATE:19281118\r\n"
+        "PHOTO;ENCODING=B;TYPE=JPEG:ABCDEF\r\n"
+        "BDAY:00001118T030000\r\n"
         "ADR:;;123 Main Street,Disney World;Orlando;FL;32836;USA;;;;;;;;;;;\r\n"
-        "TZ;VALUE=UTC-OFFSET:-0230\r\n"
+        "TEL:+1-888-555-1212\r\n"
+        "LANG;PREF=1;TYPE=PREF:en\r\n"
+        "LANG;PREF=2:fr\r\n"
+        "TZ:-02:30\r\n"
+        "GEO:46.772673;-71.282945\r\n"
+        "LOGO;VALUE=URI;TYPE=PNG:https://example.com/logo.png\r\n"
         "CATEGORIES:aaa,zzz\r\n"
         "group1.NOTE;LANGUAGE=en;PID=1,3;SORT-AS=bar,foo;TYPE=WORK:Test vCard\r\n"
+        "UID:foo-bar\r\n"
         "X-LIC-ERROR;X-LIC-ERRORTYPE=RESTRICTION-CHECK:Failed restrictions for N \r\n"
         " property. Expected 1 instances of the property and got 0\r\n"
         "END:VCARD\r\n";
-
-    /* Change VERSION from 4.0 to 3.0 */
-    prop = vcardcomponent_get_first_property(card, VCARD_VERSION_PROPERTY);
-    vcardproperty_set_version(prop, VCARD_VERSION_30);
 
     /* Remove N property */
     prop = vcardcomponent_get_first_property(card, VCARD_N_PROPERTY);
     vcardcomponent_remove_property(card, prop);
     vcardproperty_free(prop);
 
+    vcardcomponent_transform(card, VCARD_VERSION_30);
+
     vcardrestriction_check(card);
+    assert_str_equals(want, vcardcomponent_as_vcard_string(card));
+    strip_errors(card);
+}
+
+static void test_v3_to_v4(vcardcomponent *card)
+{
+    const char *want =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:Mickey Mouse\r\n"
+        "PHOTO:data:image/jpeg;base64,ABCDEF\r\n"
+        "BDAY:--1118T03\r\n"
+        "ADR:;;123 Main Street,Disney World;Orlando;FL;32836;USA;;;;;;;;;;;\r\n"
+        "TEL:+1-888-555-1212\r\n"
+        "LANG;PREF=1:en\r\n"
+        "LANG;PREF=2:fr\r\n"
+        "TZ;VALUE=UTC-OFFSET:-0230\r\n"
+        "GEO:geo:46.772673,-71.282945\r\n"
+        "LOGO;MEDIATYPE=image/png:https://example.com/logo.png\r\n"
+        "CATEGORIES:aaa,zzz\r\n"
+        "group1.NOTE;LANGUAGE=en;PID=1,3;SORT-AS=bar,foo;TYPE=WORK:Test vCard\r\n"
+        "UID;VALUE=TEXT:foo-bar\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent_transform(card, VCARD_VERSION_40);
+
     assert_str_equals(want, vcardcomponent_as_vcard_string(card));
 }
 
@@ -306,6 +382,7 @@ int main(int argc, const char **argv)
     card = test_comp_vanew();
     test_add_props(card);
     test_n_restriction(card);
+    test_v3_to_v4(card);
 
     vcardcomponent_free(card);
 

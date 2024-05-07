@@ -164,6 +164,9 @@ LIBICAL_VCARD_EXPORT void vcardcomponent_convert_errors(vcardcomponent *card);
  */
 LIBICAL_VCARD_EXPORT void vcardcomponent_normalize(vcardcomponent *card);
 
+LIBICAL_VCARD_EXPORT void vcardcomponent_transform(vcardcomponent *impl,
+                                                   vcardproperty_version version);
+
 /******************** Convenience routines **********************/
 
 LIBICAL_VCARD_EXPORT enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *card);
