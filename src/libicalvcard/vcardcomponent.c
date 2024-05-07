@@ -942,7 +942,7 @@ static void comp_to_v4(vcardcomponent *impl)
                         buf_ptr = mediatype + size;
                         icalmemory_append_string(&mediatype, &buf_ptr,
                                                  &size, type->xvalue);
-                        for (char *c = mediatype; (*c = tolower(*c)); c++);
+                        for (char *c = mediatype; (*c = (char) tolower(*c)); c++);
 
                         /* Remove this TYPE */
                         vcardenumarray_remove_element_at(types, i);
@@ -1070,7 +1070,7 @@ static void comp_to_v3(vcardcomponent *impl)
             if ((subtype = strchr(mediatype, '/'))) {
                 /* Copy and uppercase the subtype */
                 subtype = icalmemory_strdup(subtype + 1);
-                for (char *c = subtype; (*c = toupper(*c)); c++);
+                for (char *c = subtype; (*c = (char) toupper(*c)); c++);
 
                 /* Add TYPE parameter */
                 vcardenumarray_element type = { .xvalue = subtype };
@@ -1123,8 +1123,7 @@ static void comp_to_v3(vcardcomponent *impl)
                 base64 = strstr(mediatype, ";base64,");
 
                 if (base64) {
-                    vcardparameter *param =
-                        vcardparameter_new_encoding(VCARD_ENCODING_B);
+                    param = vcardparameter_new_encoding(VCARD_ENCODING_B);
                     vcardproperty_add_parameter(prop, param);
 
                     *base64 = '\0';
@@ -1136,7 +1135,7 @@ static void comp_to_v3(vcardcomponent *impl)
 
                 if ((subtype = strchr(mediatype, '/'))) {
                     /* Copy and uppercase the subtype */
-                    for (char *c = ++subtype; (*c = toupper(*c)); c++);
+                    for (char *c = ++subtype; (*c = (char) toupper(*c)); c++);
 
                     /* Add TYPE parameter */
                     vcardenumarray_element type = { .xvalue = subtype };
