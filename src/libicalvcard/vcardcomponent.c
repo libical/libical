@@ -67,6 +67,7 @@ static vcardcomponent *vcardcomponent_new_impl(vcardcomponent_kind kind)
     strcpy(comp->id, "comp");
 
     comp->kind = kind;
+    comp->version = VCARD_VERSION_NONE;
     comp->properties = pvl_newlist();
     comp->components = pvl_newlist();
 
@@ -284,6 +285,10 @@ void vcardcomponent_add_property(vcardcomponent *comp, vcardproperty *property)
     vcardproperty_set_parent(property, comp);
 
     pvl_push(comp->properties, property);
+
+    if (vcardproperty_isa(property) == VCARD_VERSION_PROPERTY) {
+        comp->version = vcardproperty_get_version(property);
+    }
 }
 
 void vcardcomponent_remove_property(vcardcomponent *comp, vcardproperty *property)
@@ -301,6 +306,10 @@ void vcardcomponent_remove_property(vcardcomponent *comp, vcardproperty *propert
         return;
     }
 #endif
+
+    if (vcardproperty_isa(property) == VCARD_VERSION_PROPERTY) {
+        comp->version = VCARD_VERSION_NONE;
+    }
 
     for (itr = pvl_head(comp->properties); itr != 0; itr = next_itr) {
         next_itr = pvl_next(itr);
@@ -838,17 +847,20 @@ void vcardcomponent_normalize(vcardcomponent *comp)
 
 enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *card)
 {
-    vcardproperty *prop;
-
     icalerror_check_arg_rz(card != 0, "card");
 
-    prop = vcardcomponent_get_first_property(card, VCARD_VERSION_PROPERTY);
+    if (card->version == VCARD_VERSION_NONE) {
+        vcardproperty *prop =
+            vcardcomponent_get_first_property(card, VCARD_VERSION_PROPERTY);
 
-    if (prop == 0) {
-        return 0;
+        if (prop == 0) {
+            return VCARD_VERSION_NONE;
+        }
+
+        card->version = vcardproperty_get_version(prop);
     }
 
-    return vcardproperty_get_version(prop);
+    return card->version;
 }
 
 const char *vcardcomponent_get_uid(vcardcomponent *card)
