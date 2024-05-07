@@ -71,7 +71,7 @@ struct vcardparser_state {
     const char *base;
     const char *itemstart;
     const char *p;
-    const vcardproperty *version;
+    vcardproperty *version;
 
     /* current items */
     vcardcomponent *root;
@@ -555,6 +555,7 @@ static int _parse_prop_name(struct vcardparser_state *state)
     const char *name;
     char *group = NULL;
     vcardproperty_kind kind;
+    vcardproperty_version version = VCARD_VERSION_NONE;
     int r = 0;
 
     NOTESTART();
@@ -580,21 +581,37 @@ static int _parse_prop_name(struct vcardparser_state *state)
             if (group)
                 vcardproperty_set_group(state->prop, group);
 
+            if (state->version)
+                version = vcardproperty_get_version(state->version);
+
             /* set default value kind */
-            if (kind == VCARD_GEO_PROPERTY) {
-                if (vcardproperty_get_version(state->version) == VCARD_VERSION_40) {
-                    state->value_kind = VCARD_URI_VALUE;
-                } else {
-                    state->value_kind = VCARD_STRUCTURED_VALUE;
-                }
-            } else if (kind == VCARD_TZ_PROPERTY) {
-                if (vcardproperty_get_version(state->version) == VCARD_VERSION_40) {
-                    state->value_kind = VCARD_TEXT_VALUE;
-                } else {
-                    state->value_kind = VCARD_UTCOFFSET_VALUE;
-                }
-            } else {
+            switch (kind) {
+            case VCARD_GEO_PROPERTY:
+                state->value_kind = version == VCARD_VERSION_40 ?
+                    VCARD_URI_VALUE : VCARD_STRUCTURED_VALUE;
+                break;
+
+            case VCARD_KEY_PROPERTY:
+            case VCARD_LOGO_PROPERTY:
+            case VCARD_PHOTO_PROPERTY:
+            case VCARD_SOUND_PROPERTY:
+                state->value_kind = version == VCARD_VERSION_40 ?
+                    VCARD_URI_VALUE : VCARD_TEXT_VALUE;
+                break;
+
+            case VCARD_TZ_PROPERTY:
+                state->value_kind = version == VCARD_VERSION_40 ?
+                    VCARD_TEXT_VALUE : VCARD_UTCOFFSET_VALUE;
+                break;
+
+            case VCARD_UID_PROPERTY:
+                state->value_kind = version == VCARD_VERSION_40 ?
+                    VCARD_URI_VALUE : VCARD_TEXT_VALUE;
+                break;
+
+            default:
                 state->value_kind = vcardproperty_kind_to_value_kind(kind);
+                break;
             }
 
             buf_reset(&state->buf);
