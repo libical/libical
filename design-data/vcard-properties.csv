@@ -9,14 +9,13 @@
 "NO","499","NO","NO"
 
 "#vCard Properties","RFC 6350 Section 6",
-"#PHOTO,LOGO,SOUND,KEY default VALUE types differ between v3 (BINARY) and v4 (URI)",
 "SOURCE","1","URI","URI"
 "KIND","2","KIND","KIND"
 "XML","3","TEXT","TEXT"
 "FN","4","TEXT","TEXT"
 "N","5","STRUCTURED","STRUCTURED",is_structured;is_multivalued
 "NICKNAME","6","TEXTLIST","TEXTLIST",is_multivalued
-"PHOTO","7","URI","NO"
+"PHOTO","7","URI","NO",# default VALUE types: v3 = base64-encoded TEXT, v4 = URI
 "BDAY","8","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
 "ANNIVERSARY","9","DATE-AND-OR-TIME","DATE-AND-OR-TIME"
 "GENDER","10","TEXTLIST","TEXTLIST",is_structured
@@ -26,10 +25,10 @@
 "IMPP","14","URI","URI"
 "LANG","15","LANGUAGE-TAG","LANGUAGE-TAG"
 "TZ","16","TZ","TZ"
-"GEO","17","GEO","NO"
+"GEO","17","GEO","NO",# default VALUE types: v3 = STRUCTURED, v4 = URI
 "TITLE","18","TEXT","TEXT"
 "ROLE","19","TEXT","TEXT"
-"LOGO","20","URI","NO"
+"LOGO","20","URI","NO",# default VALUE types: v3 = base64-encoded TEXT, v4 = URI
 "ORG","21","TEXTLIST","TEXTLIST",is_structured
 "MEMBER","22","URI","URI"
 "RELATED","23","URI","URI"
@@ -37,12 +36,12 @@
 "NOTE","25","TEXT","TEXT"
 "PRODID","26","TEXT","TEXT"
 "REV","27","TIMESTAMP","TIMESTAMP"
-"SOUND","28","URI","NO"
-"UID","29","URI","URI"
+"SOUND","28","URI","NO",# default VALUE types: v3 = base64-encoded TEXT, v4 = URI
+"UID","29","URI","NO",# default VALUE types: v3 = TEXT, v4 = URI
 "CLIENTPIDMAP","30","TEXTLIST","TEXTLIST",is_structured
 "URL","31","URI","URI"
 "VERSION","32","VERSION","VERSION"
-"KEY","33","URI","NO"
+"KEY","33","URI","NO",# default VALUE types: v3 = base64-encoded TEXT, v4 = URI
 "FBURL","34","URI","URI"
 "CALADRURI","35","URI","URI"
 "CALURI","36","URI","URI"
