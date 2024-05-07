@@ -3,7 +3,7 @@ VERSION: 4.0
 FN:Simon Perreault
 N:Perreault;Simon;;;ing. jr,M.Sc.
 BDAY:--0203
-BDAY:--0203
+BDAY:0000
 ANNIVERSARY:20090808T1430-0500
 GENDER:M;manly
 LANG;PREF=1:fr
@@ -15,8 +15,8 @@ TEL;VALUE=URI;TYPE=voice;PREF=100:tel:+1-418-656-9254;ext=102
 TEL;VALUE=URI;TYPE="work,cell,foo,voice,bar,video,text":tel:+1-418-262-6501
 EMAIL;TYPE=WORK:simon.perreault@viagenie.ca
 GEO;TYPE=WORK:geo:46.772673,-71.282945
-KEY;TYPE=WORK:http://www.viagenie.ca/simon.perreault/simon.asc
-TZ:-0500
+KEY;VALUE=URI;TYPE=WORK:http://www.viagenie.ca/simon.perreault/simon.asc
+TZ;VALUE=UTC-OFFSET:-0500
 
 URL;TYPE=HOME:http://nomis80.org
 NOTE;LANGUAGE=en;PID=3,1.0:Test vCard
