@@ -146,7 +146,7 @@ static vcardcomponent *test_comp_vanew(void)
     card = vcardcomponent_vanew(VCARD_VCARD_COMPONENT,
                                 vcardproperty_new_version(VCARD_VERSION_40),
                                 vcardproperty_new_kind(VCARD_KIND_INDIVIDUAL),
-                                0);
+                                (void *) 0);
 
     if (card == NULL) {
         fprintf(stderr, "Failed to create vCard\n");
@@ -194,7 +194,7 @@ static void test_add_props(vcardcomponent *card)
         vcardproperty_vanew_note("Test vCard",
                                  vcardparameter_new_language("en"),
                                  vcardparameter_new_pid(sa),
-                                 0);
+                                 (void *) 0);
     vcardcomponent_add_property(card, prop);
     vcardproperty_set_group(prop, "group1");
 
@@ -276,30 +276,30 @@ static void test_add_props(vcardcomponent *card)
     /* Create and add LOGO property */
     prop = vcardproperty_vanew_logo("https://example.com/logo.png",
                                     vcardparameter_new_mediatype("image/png"),
-                                    0);
+                                    (void *) 0);
     vcardcomponent_add_property(card, prop);
 
     /* Create and add UID property */
     prop = vcardproperty_vanew_uid("foo-bar",
                                    vcardparameter_new_value(VCARD_VALUE_TEXT),
-                                   0);
+                                   (void *) 0);
     vcardcomponent_add_property(card, prop);
 
     /* Create and add TEL property */
     prop = vcardproperty_vanew_tel("tel:+1-888-555-1212",
                                    vcardparameter_new_value(VCARD_VALUE_URI),
-                                   0);
+                                   (void *) 0);
     vcardcomponent_add_property(card, prop);
 
     /* Create and add LANG properties */
     prop = vcardproperty_vanew_lang("fr",
                                     vcardparameter_new_pref(2),
-                                    0);
+                                    (void *) 0);
     vcardcomponent_add_property(card, prop);
 
     prop = vcardproperty_vanew_lang("en",
-                                   vcardparameter_new_pref(1),
-                                   0);
+                                    vcardparameter_new_pref(1),
+                                    (void *) 0);
     vcardcomponent_add_property(card, prop);
 
     vcardrestriction_check(card);

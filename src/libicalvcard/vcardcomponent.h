@@ -12,6 +12,7 @@
 #ifndef VCARDCOMPONENT_H
 #define VCARDCOMPONENT_H
 
+#include "libical_sentinel.h"
 #include "libical_vcard_export.h"
 #include "vcardproperty.h"
 #include "pvl.h"
@@ -45,7 +46,7 @@ LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_new_from_string(const char *
 
 /** @brief Constructor
  */
-LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_vanew(vcardcomponent_kind kind, ...);
+LIBICAL_VCARD_EXPORT LIBICAL_SENTINEL vcardcomponent *vcardcomponent_vanew(vcardcomponent_kind kind, ...);
 
 /*** @brief Destructor
  */

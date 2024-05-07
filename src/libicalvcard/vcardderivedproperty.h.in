@@ -12,6 +12,7 @@
 #ifndef VCARDDERIVEDPROPERTY_H
 #define VCARDDERIVEDPROPERTY_H
 
+#include "libical_sentinel.h"
 #include "vcardderivedvalue.h"
 #include "vcardparameter.h"
 

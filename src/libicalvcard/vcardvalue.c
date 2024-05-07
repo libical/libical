@@ -313,7 +313,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                          "Could not parse %s as a %s property",
                          str, vcardvalue_kind_to_string(kind));
                 errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = vcardproperty_vanew_xlicerror(temp, errParam, 0);
+                *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *) 0);
                 vcardparameter_free(errParam);
             }
             break;
@@ -377,7 +377,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                          "Could not parse %s as a %s property",
                          str, vcardvalue_kind_to_string(kind));
                 errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = vcardproperty_vanew_xlicerror(temp, errParam, 0);
+                *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *) 0);
                 vcardparameter_free(errParam);
             }
             break;
@@ -478,7 +478,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                 snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
 
                 errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = vcardproperty_vanew_xlicerror(temp, errParam, 0);
+                *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *) 0);
                 vcardparameter_free(errParam);
             }
 
@@ -497,7 +497,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         snprintf(temp, TMP_BUF_SIZE, "Failed to parse value: \'%s\'", str);
 
         errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-        *error = vcardproperty_vanew_xlicerror(temp, errParam, 0);
+        *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *) 0);
         vcardparameter_free(errParam);
     }
 

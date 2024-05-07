@@ -132,7 +132,7 @@ static int _check_restriction(vcardcomponent *comp,
                  kind, type, restr_string_map[restr], type, count);
         errParam =
             vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_RESTRICTIONCHECK);
-        errProp = vcardproperty_vanew_xlicerror(temp, errParam, 0);
+        errProp = vcardproperty_vanew_xlicerror(temp, errParam, (void *) 0);
         vcardcomponent_add_property(comp, errProp);
         vcardproperty_free(errProp);
     }
@@ -147,7 +147,7 @@ static int _check_restriction(vcardcomponent *comp,
 
         errParam =
             vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_RESTRICTIONCHECK);
-        errProp = vcardproperty_vanew_xlicerror(funcr, errParam, 0);
+        errProp = vcardproperty_vanew_xlicerror(funcr, errParam, (void *) 0);
         vcardcomponent_add_property(comp, errProp);
         vcardproperty_free(errProp);
 
@@ -195,7 +195,7 @@ static int vcardrestriction_check_component(vcardcomponent *comp)
 
         errParam =
             vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_RESTRICTIONCHECK);
-        errProp = vcardproperty_vanew_xlicerror(errStr, errParam, 0);
+        errProp = vcardproperty_vanew_xlicerror(errStr, errParam, (void *) 0);
         vcardcomponent_add_property(comp, errProp);
         vcardproperty_free(errProp);
 
