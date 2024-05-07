@@ -990,7 +990,7 @@ static void comp_to_v4(vcardcomponent *impl)
             else if (mediatype) {
                 param = vcardparameter_new_mediatype(mediatype);
                 vcardproperty_add_parameter(prop, param);
-                                            
+
                 icalmemory_free_buffer(mediatype);
             }
             break;
@@ -1214,7 +1214,8 @@ static void comp_to_v3(vcardcomponent *impl)
     }
 }
 
-void vcardcomponent_transform(vcardcomponent *impl, vcardproperty_version version)
+void vcardcomponent_transform(vcardcomponent *impl,
+                              vcardproperty_version version)
 {
     pvl_elem itr;
     vcardcomponent *c;
