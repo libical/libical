@@ -42,12 +42,13 @@ LIBICAL_VCARD_EXPORT int vcardtime_is_utc(const vcardtimetype t);
 LIBICAL_VCARD_EXPORT int vcardtime_is_leap_year(const int year);
 LIBICAL_VCARD_EXPORT int vcardtime_is_valid_time(const struct vcardtimetype t);
 
+#define VCARDTIME_BARE_TIME (0x1) /* 'T' not needed for TIME */
+#define VCARDTIME_AS_V4     (0x2) /* allow partial date and/or time */
+
 LIBICAL_VCARD_EXPORT const char *vcardtime_as_vcard_string(const vcardtimetype t,
-                                                           /* 1 for DATEANDORTIME */
-                                                           int need_time_designator);
+                                                           unsigned flags);
 LIBICAL_VCARD_EXPORT char *vcardtime_as_vcard_string_r(const vcardtimetype t,
-                                                       /* 1 for DATEANDORTIME */
-                                                       int need_time_designator);
+                                                       unsigned flags);
 
 LIBICAL_VCARD_EXPORT vcardtimetype vcardtime_from_string(const char *str,
                                                          int is_bare_time);

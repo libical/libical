@@ -359,7 +359,7 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
         vcardparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, str);
         icalmemory_free_buffer(str);
     } else if (vcardtime_is_valid_time(param->date)) {
-        const char *str = vcardtime_as_vcard_string(param->date, 1);
+        const char *str = vcardtime_as_vcard_string(param->date, 0);
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
 
