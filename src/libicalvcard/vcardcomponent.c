@@ -1067,10 +1067,13 @@ static void comp_to_v3(vcardcomponent *impl)
                                                   VCARD_MEDIATYPE_PARAMETER);
         if (param) {
             mediatype = vcardparameter_get_mediatype(param);
-            if ((subtype = strchr(mediatype, '/'))) {
+            subtype = strchr(mediatype, '/');
+            if (subtype) {
                 /* Copy and uppercase the subtype */
+                char *c;
+
                 subtype = icalmemory_strdup(subtype + 1);
-                for (char *c = subtype; (*c = (char) toupper(*c)); c++);
+                for (c = subtype; (*c = (char) toupper(*c)); c++);
 
                 /* Add TYPE parameter */
                 vcardenumarray_element type = { .xvalue = subtype };
@@ -1129,13 +1132,19 @@ static void comp_to_v3(vcardcomponent *impl)
                     *base64 = '\0';
                     data = base64 + 8;
                 }
-                else if ((data = strchr(mediatype, ','))) {
-                    *data++ = '\0';
+                else {
+                    data = strchr(mediatype, ',');
+                    if (data) {
+                        *data++ = '\0';
+                    }
                 }
 
-                if ((subtype = strchr(mediatype, '/'))) {
+                subtype = strchr(mediatype, '/');
+                if (subtype) {
                     /* Copy and uppercase the subtype */
-                    for (char *c = ++subtype; (*c = (char) toupper(*c)); c++);
+                    char *c;
+
+                    for (c = ++subtype; (*c = (char) toupper(*c)); c++);
 
                     /* Add TYPE parameter */
                     vcardenumarray_element type = { .xvalue = subtype };
