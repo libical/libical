@@ -13,6 +13,8 @@
 #include <config.h>
 #endif
 
+#include "vcardcomponent.h"
+#include "vcardproperty.h"
 #include "vcardvalue.h"
 #include "vcardvalueimpl.h"
 #include "icalerror.h"
@@ -597,15 +599,18 @@ static char *vcardvalue_int_as_vcard_string_r(const vcardvalue *value)
     return str;
 }
 
-static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value)
+static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value,
+                                                    vcardproperty_version version)
 {
     int data, h, m, s;
     char sign;
     char *str;
+    size_t size = 10;
+    const char *fmt;
 
     icalerror_check_arg_rz((value != 0), "value");
 
-    str = (char *)icalmemory_new_buffer(9);
+    str = (char *)icalmemory_new_buffer(size);
     data = vcardvalue_get_utcoffset(value);
 
     if (abs(data) == data) {
@@ -622,10 +627,25 @@ static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value)
     m = MIN(abs(m), 59);
     s = MIN(abs(s), 59);
     if (s != 0) {
-        snprintf(str, 9, "%c%02d%02d%02d", sign, h, m, s);
-    } else {
-        snprintf(str, 9, "%c%02d%02d", sign, h, m);
+        if (version == VCARD_VERSION_40) {
+            fmt = "%c%02d%02d%02d";
+        }
+        else {
+            fmt = "%c%02d:%02d:%02d";
+        }
+    } else if (version == VCARD_VERSION_40) {
+        if (m != 0) {
+            fmt = "%c%02d%02d";
+        }
+        else {
+            fmt = "%c%02d";
+        }
     }
+    else {
+        fmt = "%c%02d:%02d";
+    }
+
+    snprintf(str, size, fmt, sign, h, m, s);
 
     return str;
 }
@@ -763,12 +783,24 @@ const char *vcardvalue_as_vcard_string(const vcardvalue *value)
 
 char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 {
+    vcardproperty_version version = VCARD_VERSION_NONE;
+    int is_structured;
+    unsigned flags = 0;
+
     if (value == 0) {
         return 0;
     }
 
-    int is_structured =
-        vcardproperty_is_structured(vcardproperty_isa(value->parent));
+    if (value->parent) {
+        vcardcomponent *comp = vcardproperty_get_parent(value->parent);
+        if (comp) version = vcardcomponent_get_version(comp);
+    }
+
+    if (version == VCARD_VERSION_NONE) {
+        version = VCARD_VERSION_30;
+    }
+
+    is_structured = vcardproperty_is_structured(vcardproperty_isa(value->parent));
 
     switch (value->kind) {
 
@@ -779,7 +811,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
         return vcardvalue_int_as_vcard_string_r(value);
 
     case VCARD_UTCOFFSET_VALUE:
-        return vcardvalue_utcoffset_as_vcard_string_r(value);
+        return vcardvalue_utcoffset_as_vcard_string_r(value, version);
 
     case VCARD_TEXT_VALUE:
         return vcardvalue_text_as_vcard_string_r(value);
@@ -795,14 +827,20 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
     case VCARD_LANGUAGETAG_VALUE:
         return vcardvalue_string_as_vcard_string_r(value);
 
-    case VCARD_DATE_VALUE:
     case VCARD_TIME_VALUE:
-        return vcardtime_as_vcard_string_r(value->data.v_time, 0);
+        flags |= VCARDTIME_BARE_TIME;
 
+        /* FALLTHRU */
+
+    case VCARD_DATE_VALUE:
     case VCARD_DATETIME_VALUE:
     case VCARD_DATEANDORTIME_VALUE:
     case VCARD_TIMESTAMP_VALUE:
-        return vcardtime_as_vcard_string_r(value->data.v_time, 1);
+        if (version == VCARD_VERSION_40) {
+            flags |= VCARDTIME_AS_V4;
+        }
+
+        return vcardtime_as_vcard_string_r(value->data.v_time, flags);
 
     case VCARD_FLOAT_VALUE:
         return vcardvalue_float_as_vcard_string_r(value);
@@ -810,7 +848,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
     case VCARD_KIND_VALUE:
     case VCARD_VERSION_VALUE:
     case VCARD_GRAMGENDER_VALUE:
-    if (value->x_value != 0) {
+        if (value->x_value != 0) {
             return icalmemory_strdup(value->x_value);
         }
 

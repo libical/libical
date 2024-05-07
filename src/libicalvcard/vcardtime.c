@@ -137,7 +137,8 @@ int vcardtime_is_valid_time(const struct vcardtimetype t)
     return 1;
 }
 
-static int sprintf_date(const vcardtimetype t, char *buf, size_t size)
+static int sprintf_date(const vcardtimetype t, unsigned flags,
+                        char *buf, size_t size)
 {
     /*
       date = year    [month  day]
@@ -147,7 +148,14 @@ static int sprintf_date(const vcardtimetype t, char *buf, size_t size)
     */
     const char *fmt;
 
-    if (t.year != -1) {
+    if (!(flags & VCARDTIME_AS_V4)) {
+        /* cppcheck-suppress wrongPrintfScanfArgNum */
+        return snprintf(buf, size, "%04d%02d%02d",
+                        t.year  == -1 ? 0 : t.year,
+                        t.month == -1 ? 1 : t.month,
+                        t.day   == -1 ? 1 : t.day);
+    }
+    else if (t.year != -1) {
         if (t.month == -1) {
             fmt = "%04d";
         }
@@ -177,8 +185,8 @@ static int sprintf_date(const vcardtimetype t, char *buf, size_t size)
     }
 }
 
-static int sprintf_time(const vcardtimetype t, int need_designator,
-                      char *buf, size_t size)
+static int sprintf_time(const vcardtimetype t, unsigned flags,
+                        char *buf, size_t size)
 {
     /*
       time = ["T"] hour [minute [second]] [zone]
@@ -186,17 +194,23 @@ static int sprintf_time(const vcardtimetype t, int need_designator,
            / ["T"]  "-"   "-"    second
     */
     const char *fmt;
+    int n;
 
-    if (need_designator) {
+    if (!(flags & VCARDTIME_BARE_TIME)) {
         strncat(buf, "T", size);
         buf++;
         size--;
     }
 
-    if (t.hour != -1) {
+    if (!(flags & VCARDTIME_AS_V4)) {
+        /* cppcheck-suppress wrongPrintfScanfArgNum */
+        n = snprintf(buf, size, "%02d%02d%02d",
+                     t.hour   == -1 ? 0 : t.hour,
+                     t.minute == -1 ? 0 : t.minute,
+                     t.second == -1 ? 0 : t.second);
+    }
+    else if (t.hour != -1) {
         /* hour [minute [second]] [zone] */
-        int n;
-
         if (t.minute == -1) {
             /* hour */
             fmt = "%02d";
@@ -212,23 +226,6 @@ static int sprintf_time(const vcardtimetype t, int need_designator,
 
         /* cppcheck-suppress wrongPrintfScanfArgNum */
         n = snprintf(buf, size, fmt, t.hour, t.minute, t.second);
-
-        if (t.utcoffset != -1) {
-            /* zone = "Z" / ( sign hour minute ) */
-            buf += n;
-            size -= n;
-
-            if (t.utcoffset == 0) {
-                strncpy(buf, "Z", size);
-                n++;
-            }
-            else {
-                n += snprintf(buf, size, "%+03d%02d",
-                              t.utcoffset / 60, abs(t.utcoffset % 60));
-            }
-        }
-
-        return n;
     }
     else if (t.minute != -1) {
         /* "-"  minute [second] */
@@ -248,10 +245,26 @@ static int sprintf_time(const vcardtimetype t, int need_designator,
         /* "-" "-" second */
         return snprintf(buf, size, "--%02d", t.second);
     }
+
+    if (t.utcoffset != -1) {
+        /* zone = "Z" / ( sign hour minute ) */
+        buf += n;
+        size -= n;
+
+        if (t.utcoffset == 0) {
+            strncpy(buf, "Z", size);
+            n++;
+        }
+        else {
+            n += snprintf(buf, size, "%+03d%02d",
+                          t.utcoffset / 60, abs(t.utcoffset % 60));
+        }
+    }
+
+    return n;
 }
 
-char *vcardtime_as_vcard_string_r(const vcardtimetype t,
-                                  int need_time_designator)
+char *vcardtime_as_vcard_string_r(const vcardtimetype t, unsigned flags)
 {
     size_t size = TIME_BUF_SIZE;
     char *ptr, *buf;
@@ -259,26 +272,23 @@ char *vcardtime_as_vcard_string_r(const vcardtimetype t,
 
     ptr = buf = icalmemory_new_buffer(size);
 
-    if (!vcardtime_is_time(t)) {
-        n = sprintf_date(t, ptr, size);
+    if (!(flags & VCARDTIME_AS_V4) || !vcardtime_is_time(t)) {
+        n = sprintf_date(t, flags, ptr, size);
         ptr += n;
         size -= n;
-
-        need_time_designator = 1;
     }
     if (!vcardtime_is_date(t)) {
-        (void)sprintf_time(t, need_time_designator, ptr, size);
+        (void)sprintf_time(t, flags, ptr, size);
     }
 
     return buf;
 }
 
-const char *vcardtime_as_vcard_string(const vcardtimetype t,
-                                      int need_time_designator)
+const char *vcardtime_as_vcard_string(const vcardtimetype t, unsigned flags)
 {
     char *buf;
 
-    buf = vcardtime_as_vcard_string_r(t, need_time_designator);
+    buf = vcardtime_as_vcard_string_r(t, flags);
     icalmemory_add_tmp_buffer(buf);
     return buf;
 }
