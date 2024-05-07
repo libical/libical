@@ -925,6 +925,8 @@ static void comp_to_v4(vcardcomponent *impl)
 
                     if (type->xvalue) {
                         /* Copy and lowercase the mediatype */
+                        char *c;
+
                         switch (pkind) {
                         case VCARD_LOGO_PROPERTY:
                         case VCARD_PHOTO_PROPERTY:
@@ -942,7 +944,9 @@ static void comp_to_v4(vcardcomponent *impl)
                         buf_ptr = mediatype + size;
                         icalmemory_append_string(&mediatype, &buf_ptr,
                                                  &size, type->xvalue);
-                        for (char *c = mediatype; (*c = (char) tolower(*c)); c++);
+                        for (c = mediatype; *c; c++) {
+                            *c = (char) tolower(*c);
+                        }
 
                         /* Remove this TYPE */
                         vcardenumarray_remove_element_at(types, i);
@@ -1073,7 +1077,9 @@ static void comp_to_v3(vcardcomponent *impl)
                 char *c;
 
                 subtype = icalmemory_strdup(subtype + 1);
-                for (c = subtype; (*c = (char) toupper(*c)); c++);
+                for (c = subtype; *c; c++) {
+                    *c = (char) toupper(*c);
+                }
 
                 /* Add TYPE parameter */
                 vcardenumarray_element type = { .xvalue = subtype };
@@ -1144,7 +1150,9 @@ static void comp_to_v3(vcardcomponent *impl)
                     /* Copy and uppercase the subtype */
                     char *c;
 
-                    for (c = ++subtype; (*c = (char) toupper(*c)); c++);
+                    for (c = ++subtype; *c; c++) {
+                        *c = (char) toupper(*c);
+                    }
 
                     /* Add TYPE parameter */
                     vcardenumarray_element type = { .xvalue = subtype };
