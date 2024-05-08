@@ -26,7 +26,7 @@ jobs:
         run: cmake --build build
         shell: cmd
       - name: Test project
-        run: cd build && ctest --test-dir .
+        run: cd build && ctest -VV
         shell: cmd
 
   build-ubuntu:

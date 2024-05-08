@@ -71,6 +71,12 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 /* Define to 1 if you have the `_stat' function. */
 #cmakedefine HAVE__STAT 1
 
+/* Define to 1 if you have the `_fstat64' function. */
+#cmakedefine HAVE__FSTAT64 1
+
+/* Define to 1 if you have the `fstat' function. */
+#cmakedefine HAVE_FSTAT 1
+
 /* Define to 1 if you have the `strcasecmp' function. */
 #cmakedefine HAVE_STRCASECMP 1
 
@@ -213,9 +219,7 @@ typedef unsigned long size_t;
 /* Typedef ssize_t if needed */
 #cmakedefine HAVE_SIZEOF_SSIZE_T
 #if !defined(HAVE_SIZEOF_SSIZE_T)
-#if !defined(HAVE_BDB) && !defined(_WIN32)
 typedef long ssize_t;
-#endif
 #endif
 
 /* Typedef pid_t if needed */
@@ -313,6 +317,17 @@ typedef unsigned int wint_t;
 #else
 #if !defined(HAVE_STAT)
 #error "No function to get status info on a file available"
+#endif
+#endif
+#include <sys/types.h>
+#include <sys/stat.h>
+
+/* fstat: function to get status info on a file descriptor */
+#if defined(HAVE__FSTAT64)
+#define fstat _fstat64
+#else
+#if !defined(HAVE_FSTAT)
+#error "No function to get status info on a file descriptor available"
 #endif
 #endif
 #include <sys/types.h>

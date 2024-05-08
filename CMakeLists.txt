@@ -231,6 +231,7 @@ if(STATIC_ONLY)
     -DLIBICAL_ICAL_STATIC_DEFINE
     -DLIBICAL_ICALSS_STATIC_DEFINE
     -DLIBICAL_VCAL_STATIC_DEFINE
+    -DLIBICAL_VCARD_STATIC_DEFINE
   )
 endif()
 
@@ -571,6 +572,8 @@ else()
   #to quiet a warning about unused manually-specified variables
   set(ENABLE_GTK_DOC False)
 endif()
+
+libical_option(ICAL_VCARD "Build vCard support" True)
 
 #
 # Compiler settings
