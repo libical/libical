@@ -37,7 +37,7 @@ LIBICAL_VCARD_EXPORT void vcardstrarray_add(vcardstrarray *array,
                                             const char *add);
 
 LIBICAL_VCARD_EXPORT void vcardstrarray_remove_element_at(vcardstrarray *array,
-                                                          size_t position);
+                                                          ssize_t position);
 
 LIBICAL_VCARD_EXPORT void vcardstrarray_remove(vcardstrarray *array,
                                                const char *del);

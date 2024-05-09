@@ -51,12 +51,12 @@ void vcardenumarray_add(vcardenumarray *array, vcardenumarray_element *add)
 }
 
 void vcardenumarray_remove_element_at(vcardenumarray *array,
-                                      size_t position)
+                                      ssize_t position)
 {
-    vcardenumarray_element *del = icalarray_element_at(array, position);
+    vcardenumarray_element *del = icalarray_element_at(array, (size_t)position);
 
     if (del->xvalue) icalmemory_free_buffer((char *) del->xvalue);
-    icalarray_remove_element_at(array, position);
+    icalarray_remove_element_at(array, (size_t)position);
 }
 
 void vcardenumarray_remove(vcardenumarray *array, vcardenumarray_element *del)
@@ -69,7 +69,7 @@ void vcardenumarray_remove(vcardenumarray *array, vcardenumarray_element *del)
 void vcardenumarray_free(vcardenumarray *array)
 {
     while (array->num_elements)
-        vcardenumarray_remove_element_at(array, array->num_elements-1);
+        vcardenumarray_remove_element_at(array, (ssize_t)(array->num_elements-1));
     icalarray_free(array);
 }
 
