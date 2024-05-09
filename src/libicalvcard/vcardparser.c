@@ -164,7 +164,7 @@ static void buf_vprintf(struct buf *buf, const char *fmt, va_list args)
     va_copy(ap, args);
 
     size = buf->alloc - buf->len;
-    n = vsnprintf(buf->s + buf->len, size, fmt, args);
+    n = (size_t)vsnprintf(buf->s + buf->len, size, fmt, args);
 
     if (n >= size) {
         /* Grow the buffer and try again */
@@ -172,7 +172,7 @@ static void buf_vprintf(struct buf *buf, const char *fmt, va_list args)
         buf->alloc += size;
         buf->s = icalmemory_resize_buffer(buf->s, buf->alloc);
 
-        n = vsnprintf(buf->s + buf->len, size, fmt, ap);
+        n = (size_t)vsnprintf(buf->s + buf->len, size, fmt, ap);
     }
     va_end(ap);
 
@@ -621,9 +621,9 @@ static int _parse_prop_name(struct vcardparser_state *state)
 
         case '.':
             if (group) {
-                char *tmp =
-                    icalmemory_tmp_buffer(strlen(group) + buf_len(&state->buf) + 2);
-                sprintf(tmp, "%s.%s", group, buf_cstring(&state->buf));
+                size_t tmpLen = strlen(group) + buf_len(&state->buf) + 2;
+                char *tmp = icalmemory_tmp_buffer(tmpLen);
+                snprintf(tmp, tmpLen-1, "%s.%s", group, buf_cstring(&state->buf));
                 group = tmp;
                 r = PE_PROP_MULTIGROUP;
             }
@@ -665,7 +665,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
         vcardproperty_is_multivalued(prop_kind);
     int is_structured  = (state->value_kind == VCARD_STRUCTURED_VALUE);
     const char *text_sep = NULL;
-    vcardstructuredtype structured = { 0 };
+    vcardstructuredtype structured = {0, {0} };
     vcardstrarray *textlist = NULL;
     vcardvalue *value;
 

@@ -42,7 +42,7 @@ LIBICAL_VCARD_EXPORT void vcardenumarray_add(vcardenumarray *array,
                                              vcardenumarray_element *add);
 
 LIBICAL_VCARD_EXPORT void vcardenumarray_remove_element_at(vcardenumarray *array,
-                                                           size_t position);
+                                                           ssize_t position);
 LIBICAL_VCARD_EXPORT void vcardenumarray_remove(vcardenumarray *array,
                                                 vcardenumarray_element *del);
 

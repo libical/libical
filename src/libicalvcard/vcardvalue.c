@@ -13,10 +13,10 @@
 #include <config.h>
 #endif
 
-#include "vcardcomponent.h"
-#include "vcardproperty.h"
 #include "vcardvalue.h"
 #include "vcardvalueimpl.h"
+#include "vcardcomponent.h"
+#include "vcardproperty.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 
@@ -410,7 +410,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     case VCARD_STRUCTURED_VALUE:
         {
-            vcardstructuredtype st = { 0 };
+            vcardstructuredtype st = { 0, {0} };
             vcardstrarray *field = vcardstrarray_new(2);
 
             st.field[st.num_fields++] = field;
@@ -687,8 +687,8 @@ static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *b
             icalmemory_append_char(str, str_p, buf_sz, sep);
         }
 
-        vcardmemory_strdup_and_quote(str, str_p, buf_sz,
-                                    vcardstrarray_element_at(array, i), is_param);
+        (void)vcardmemory_strdup_and_quote(str, str_p, buf_sz,
+                                           vcardstrarray_element_at(array, i), is_param);
     }
 }
 

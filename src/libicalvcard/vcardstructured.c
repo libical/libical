@@ -39,7 +39,8 @@ vcardstructuredtype *vcardstructured_new(void)
 vcardstructuredtype *vcardstructured_from_string(const char *s)
 {
     vcardstructuredtype *st = vcardstructured_new();
-    size_t len = 0, alloc = 100;
+    ptrdiff_t len = 0;
+    size_t alloc = 100;
     char *pos, *buf = icalmemory_new_buffer(alloc);
     vcardstrarray *field = vcardstrarray_new(2);
 
@@ -65,7 +66,7 @@ vcardstructuredtype *vcardstructured_from_string(const char *s)
 
         default:
             icalmemory_append_char(&buf, &pos, &alloc, *s);
-            len = pos - buf;
+            len = (ptrdiff_t)(pos - buf);
             break;
         }
     }

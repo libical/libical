@@ -863,7 +863,7 @@ static void comp_to_v4(vcardcomponent *impl)
         /* Remove TYPE=PREF and replace with PREF=1 (if no existing (PREF=) */
         param = vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER);
         if (param) {
-            vcardenumarray_element pref = { .val = VCARD_TYPE_PREF };
+            vcardenumarray_element pref = {VCARD_TYPE_PREF, NULL};
             ssize_t i;
 
             types = vcardparameter_get_type(param);
@@ -898,7 +898,7 @@ static void comp_to_v4(vcardcomponent *impl)
                     int n = snprintf(buf, size, "geo:%s,%s",
                                      geo.coords.lat, geo.coords.lon);
 
-                    size = n + 1;
+                    size = (size_t)(n + 1);
                     buf = icalmemory_new_buffer(size);
                     snprintf(buf, size, "geo:%s,%s",
                              geo.coords.lat, geo.coords.lon);
@@ -914,12 +914,14 @@ static void comp_to_v4(vcardcomponent *impl)
         case VCARD_LOGO_PROPERTY:
         case VCARD_PHOTO_PROPERTY:
         case VCARD_SOUND_PROPERTY:
+        {
+            size_t i;
             if (types) {
                 /* Replace TYPE=subtype with MEDIATYPE or data:<mediatype>
                  *
                  * XXX  We assume that the first VCARD_TYPE_X is the subtype
                  */
-                for (size_t i = 0; i < vcardenumarray_size(types); i++) {
+                for (i = 0; i < vcardenumarray_size(types); i++) {
                     const vcardenumarray_element *type =
                         vcardenumarray_element_at(types, i);
 
@@ -949,7 +951,7 @@ static void comp_to_v4(vcardcomponent *impl)
                         }
 
                         /* Remove this TYPE */
-                        vcardenumarray_remove_element_at(types, i);
+                        vcardenumarray_remove_element_at(types, (ssize_t)i);
                         if (!vcardenumarray_size(types)) {
                             vcardproperty_remove_parameter_by_ref(prop, param);
                         }
@@ -994,6 +996,7 @@ static void comp_to_v4(vcardcomponent *impl)
                 icalmemory_free_buffer(mediatype);
             }
             break;
+        }
 
         case VCARD_UID_PROPERTY:
             if (vkind == VCARD_TEXT_VALUE) {
@@ -1034,6 +1037,7 @@ struct pref_prop {
 static void comp_to_v3(vcardcomponent *impl)
 {
     struct pref_prop *pref_props[VCARD_NO_PROPERTY] = { 0 };
+    vcardenumarray_element type;
     vcardproperty_kind pkind;
     pvl_elem itr;
 
@@ -1082,7 +1086,8 @@ static void comp_to_v3(vcardcomponent *impl)
                 }
 
                 /* Add TYPE parameter */
-                vcardenumarray_element type = { .xvalue = subtype };
+                type.val = VCARD_TYPE_NONE;
+                type.xvalue = subtype;
                 vcardproperty_add_type_parameter(prop, &type);
 
                 icalmemory_free_buffer(subtype);
@@ -1155,7 +1160,8 @@ static void comp_to_v3(vcardcomponent *impl)
                     }
 
                     /* Add TYPE parameter */
-                    vcardenumarray_element type = { .xvalue = subtype };
+                    type.val = VCARD_VERSION_NONE;
+                    type.xvalue = subtype;
                     vcardproperty_add_type_parameter(prop, &type);
                 }
 
@@ -1206,7 +1212,8 @@ static void comp_to_v3(vcardcomponent *impl)
         struct pref_prop *pp = pref_props[pkind];
 
         if (pp) {
-            vcardenumarray_element type = { .val = VCARD_TYPE_PREF };
+            type.val = VCARD_TYPE_PREF;
+            type.xvalue = NULL;
 
             vcardproperty_add_type_parameter(pp->prop, &type);
             icalmemory_free_buffer(pp);
