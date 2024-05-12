@@ -31,13 +31,16 @@
 #include <unistd.h>
 #endif
 
-#define assert_str_equals(want, have) \
-{ \
-    const char *_w = (want); \
-    const char *_h = (have); \
-    int _v = strcmp(_w, _h); \
-    if (_v) { fprintf(stderr, "line %d: string mismatch\n want=%s\n have=%s\n", __LINE__, _w, _h); assert(0); } \
-}
+#define assert_str_equals(want, have)                                                            \
+    {                                                                                            \
+        const char *_w = (want);                                                                 \
+        const char *_h = (have);                                                                 \
+        int _v = strcmp(_w, _h);                                                                 \
+        if (_v) {                                                                                \
+            fprintf(stderr, "line %d: string mismatch\n want=%s\n have=%s\n", __LINE__, _w, _h); \
+            assert(0);                                                                           \
+        }                                                                                        \
+    }
 
 void strip_errors(vcardcomponent *comp)
 {
@@ -63,7 +66,7 @@ static void test_parse_file(const char *fname)
     size_t filesize;
     void *data = NULL;
     vcardcomponent *card;
-//krazy:cond=insecurenet
+    //krazy:cond=insecurenet
     const char *want =
         "BEGIN:VCARD\r\n"
         "VERSION:4.0\r\n"
@@ -97,7 +100,7 @@ static void test_parse_file(const char *fname)
         "X-LIC-ERROR;X-LIC-ERRORTYPE=RESTRICTION-CHECK:Failed restrictions for \r\n"
         " VERSION property. Expected 1 instances of the property and got 0\r\n"
         "END:VCARD\r\n";
-//krazy:endcond=insecurenet
+    //krazy:endcond=insecurenet
     fp = fopen(fname, "rb"); //on Windows, must open in binary mode
     if (fp == (FILE *)NULL) {
         fprintf(stderr, "Error: unable to open %s\n", fname);
@@ -106,8 +109,8 @@ static void test_parse_file(const char *fname)
     fd = fileno(fp);
     fstat(fd, &sbuf);
     filesize = sbuf.st_size; //to make fortify compile happy
-    data = malloc(filesize+1);
-    memset(data, 0, filesize+1);
+    data = malloc(filesize + 1);
+    memset(data, 0, filesize + 1);
 
     r = read(fd, data, filesize);
     fclose(fp);
@@ -142,11 +145,10 @@ static vcardcomponent *test_comp_vanew(void)
         " property. Expected one or more instances of the property and got 0\r\n"
         "END:VCARD\r\n";
 
-
     card = vcardcomponent_vanew(VCARD_VCARD_COMPONENT,
                                 vcardproperty_new_version(VCARD_VERSION_40),
                                 vcardproperty_new_kind(VCARD_KIND_INDIVIDUAL),
-                                (void *) 0);
+                                (void *)0);
 
     if (card == NULL) {
         fprintf(stderr, "Failed to create vCard\n");
@@ -194,12 +196,12 @@ static void test_add_props(vcardcomponent *card)
         vcardproperty_vanew_note("Test vCard",
                                  vcardparameter_new_language("en"),
                                  vcardparameter_new_pid(sa),
-                                 (void *) 0);
+                                 (void *)0);
     vcardcomponent_add_property(card, prop);
     vcardproperty_set_group(prop, "group1");
 
     vcardparameter *param = vcardparameter_new(VCARD_TYPE_PARAMETER);
-    vcardenumarray_element e = { VCARD_TYPE_WORK, NULL };
+    vcardenumarray_element e = {VCARD_TYPE_WORK, NULL};
     vcardparameter_add_type(param, &e);
     vcardproperty_add_parameter(prop, param);
 
@@ -213,7 +215,7 @@ static void test_add_props(vcardcomponent *card)
     vcardcomponent_add_property(card, prop);
 
     /* Create and add N property */
-    vcardstructuredtype name = { VCARD_NUM_N_FIELDS, { 0 } };
+    vcardstructuredtype name = {VCARD_NUM_N_FIELDS, {0}};
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "Mouse");
     name.field[VCARD_N_FAMILY] = sa;
@@ -224,7 +226,7 @@ static void test_add_props(vcardcomponent *card)
     vcardcomponent_add_property(card, prop);
 
     /* Create and add ADR property */
-    vcardstructuredtype address = { VCARD_NUM_ADR_FIELDS, { 0 } };
+    vcardstructuredtype address = {VCARD_NUM_ADR_FIELDS, {0}};
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "123 Main Street");
     vcardstrarray_append(sa, "Disney World");
@@ -260,12 +262,12 @@ static void test_add_props(vcardcomponent *card)
     vcardcomponent_add_property(card, prop);
 
     /* Create and add TZ property */
-    vcardtztype tz = { .utcoffset = -9000 };
+    vcardtztype tz = {.utcoffset = -9000};
     prop = vcardproperty_new_tz(tz);
     vcardcomponent_add_property(card, prop);
 
     /* Create and add GEO property */
-    vcardgeotype geo = { .uri = "geo:46.772673,-71.282945" };
+    vcardgeotype geo = {.uri = "geo:46.772673,-71.282945"};
     prop = vcardproperty_new_geo(geo);
     vcardcomponent_add_property(card, prop);
 
@@ -276,30 +278,30 @@ static void test_add_props(vcardcomponent *card)
     /* Create and add LOGO property */
     prop = vcardproperty_vanew_logo("https://example.com/logo.png",
                                     vcardparameter_new_mediatype("image/png"),
-                                    (void *) 0);
+                                    (void *)0);
     vcardcomponent_add_property(card, prop);
 
     /* Create and add UID property */
     prop = vcardproperty_vanew_uid("foo-bar",
                                    vcardparameter_new_value(VCARD_VALUE_TEXT),
-                                   (void *) 0);
+                                   (void *)0);
     vcardcomponent_add_property(card, prop);
 
     /* Create and add TEL property */
     prop = vcardproperty_vanew_tel("tel:+1-888-555-1212",
                                    vcardparameter_new_value(VCARD_VALUE_URI),
-                                   (void *) 0);
+                                   (void *)0);
     vcardcomponent_add_property(card, prop);
 
     /* Create and add LANG properties */
     prop = vcardproperty_vanew_lang("fr",
                                     vcardparameter_new_pref(2),
-                                    (void *) 0);
+                                    (void *)0);
     vcardcomponent_add_property(card, prop);
 
     prop = vcardproperty_vanew_lang("en",
                                     vcardparameter_new_pref(1),
-                                    (void *) 0);
+                                    (void *)0);
     vcardcomponent_add_property(card, prop);
 
     vcardrestriction_check(card);

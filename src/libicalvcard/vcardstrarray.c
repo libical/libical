@@ -25,7 +25,7 @@ ssize_t vcardstrarray_find(vcardstrarray *array,
 
     for (i = 0; i < array->num_elements; i++) {
         if (!strcmp(needle, vcardstrarray_element_at(array, i))) {
-            return (ssize_t) i;
+            return (ssize_t)i;
         }
     }
 
@@ -49,7 +49,8 @@ void vcardstrarray_remove_element_at(vcardstrarray *array, ssize_t position)
 {
     char **del = icalarray_element_at(array, (size_t)position);
 
-    if (del && *del) icalmemory_free_buffer(*del);
+    if (del && *del)
+        icalmemory_free_buffer(*del);
     icalarray_remove_element_at(array, (size_t)position);
 }
 
@@ -57,13 +58,14 @@ void vcardstrarray_remove(vcardstrarray *array, const char *del)
 {
     ssize_t position = vcardstrarray_find(array, del);
 
-    if (position >= 0) vcardstrarray_remove_element_at(array, position);
+    if (position >= 0)
+        vcardstrarray_remove_element_at(array, position);
 }
 
 void vcardstrarray_free(vcardstrarray *array)
 {
     while (array->num_elements)
-        vcardstrarray_remove_element_at(array, (ssize_t)(array->num_elements-1));
+        vcardstrarray_remove_element_at(array, (ssize_t)(array->num_elements - 1));
     icalarray_free(array);
 }
 
@@ -74,5 +76,5 @@ static int strpcmp(const char **a, const char **b)
 
 void vcardstrarray_sort(vcardstrarray *array)
 {
-    icalarray_sort(array, (int (*)(const void *, const void *)) &strpcmp);
+    icalarray_sort(array, (int (*)(const void *, const void *)) & strpcmp);
 }

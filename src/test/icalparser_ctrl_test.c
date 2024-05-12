@@ -62,20 +62,20 @@ int main(int argc, char *argv[])
 
     // Assert icalparser_ctrl settings
     static const char *data = ""
-        "BEGIN:VCALENDAR\r\n"
-        "VERSION:2.0\r\n"
-        "PRODID:-//ACME/DesktopCalendar//E\r\n"
-        "CALSCALE:GREGORIAN\r\n"
-        "BEGIN:VEVENT\r\n"
-        "DTSTART:20160929T010000Z\r\n"
-        "DURATION:PT1H\r\n"
-        "UID:40d6fe3c-6a51-489e-823e-3ea22f427a3e\r\n"
-        "CREATED:20150928T125212Z\r\n"
-        "LAST-MODIFIED:20150928T132434Z\r\n"
-        "SUMMARY:test\r\n"
-        "DESCRIPTION:ct\x15rl\r\n" // this contains a CTRL char
-        "END:VEVENT\r\n"
-        "END:VCALENDAR\r\n";
+                              "BEGIN:VCALENDAR\r\n"
+                              "VERSION:2.0\r\n"
+                              "PRODID:-//ACME/DesktopCalendar//E\r\n"
+                              "CALSCALE:GREGORIAN\r\n"
+                              "BEGIN:VEVENT\r\n"
+                              "DTSTART:20160929T010000Z\r\n"
+                              "DURATION:PT1H\r\n"
+                              "UID:40d6fe3c-6a51-489e-823e-3ea22f427a3e\r\n"
+                              "CREATED:20150928T125212Z\r\n"
+                              "LAST-MODIFIED:20150928T132434Z\r\n"
+                              "SUMMARY:test\r\n"
+                              "DESCRIPTION:ct\x15rl\r\n" // this contains a CTRL char
+                              "END:VEVENT\r\n"
+                              "END:VCALENDAR\r\n";
 
     assert_ctrl(ICALPARSER_CTRL_KEEP, data, "ct\x15rl", 0);
     assert_ctrl(ICALPARSER_CTRL_OMIT, data, "ctrl", 0);

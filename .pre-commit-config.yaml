@@ -13,10 +13,11 @@ repos:
     args: [--allow-multiple-documents]
     exclude: ^(.clang-tidy)
   - id: check-json
-#- repo: https://github.com/pre-commit/mirrors-clang-format
-#  rev: v13.0.0
-#  hooks:
-#  - id: clang-format
+- repo: https://github.com/pre-commit/mirrors-clang-format
+  rev: v18.1.4
+  hooks:
+  - id: clang-format
+    exclude: ^(src/java/|src/Net-ICal-Libical|src/libical/astime.h|src/libical/caldate.c|src/libicalvcal/port.h|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
 - repo: https://github.com/PyCQA/pylint
   rev: v3.1.0
   hooks:

@@ -103,8 +103,8 @@ int main(void)
     builtin_timezones = icaltimezone_get_builtin_timezones();
     printf("got %lu zones\n", (unsigned long)builtin_timezones->num_elements);
     if (builtin_timezones->num_elements == 0) {
-      printf("YIKES. Try running from the build/bin directory\n");
-      return(1);
+        printf("YIKES. Try running from the build/bin directory\n");
+        return (1);
     }
 
     for (zz = -1; zz < (int)builtin_timezones->num_elements; zz++) {

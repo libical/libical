@@ -11,9 +11,9 @@
 #include <config.h>
 #endif
 
-#include <stdio.h>      /* for printf */
+#include <stdio.h> /* for printf */
 #include <errno.h>
-#include <string.h>     /* For strerror */
+#include <string.h> /* For strerror */
 
 #include <libical/ical.h>
 #include <libicalss/icalss.h>
@@ -72,7 +72,7 @@ void test_classify(void)
 
     /* Open up the two storage files, one for the incoming components,
        one for the calendar */
-    icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
     icalset *incoming = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/incoming.ics", &options);
     icalset *cal = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/calendar.ics", &options);
     icalset *f = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/classify.ics", &options);
@@ -98,7 +98,6 @@ void test_classify(void)
     /* Iterate through all of the incoming components */
     for (c = icalset_get_first_component(incoming); c != 0;
          c = icalset_get_next_component(incoming)) {
-
         icalproperty_xlicclass class;
         icalcomponent *match = 0;
         const char *this_uid;
@@ -161,7 +160,7 @@ void test_classify(void)
                    "Incoming:      %s\n"
                    "Matched:       %s\n"
                    "Classification: %s\n\n",
-            i, this_note, get_note(match), icalproperty_enum_to_string(class));
+                   i, this_note, get_note(match), icalproperty_enum_to_string(class));
         }
     }
 

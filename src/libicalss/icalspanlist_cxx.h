@@ -13,8 +13,7 @@
 
 #include "libical_icalss_export.h"
 
-extern "C"
-{
+extern "C" {
 #include "icalcomponent.h"
 #include "icalspanlist.h"
 #include "icaltime.h"
@@ -58,13 +57,13 @@ public:
     ICalSpanList &operator=(const ICalSpanList &);
 
     /** Returns the base data when casting */
-    operator  icalspanlist *()
+    operator icalspanlist *()
     {
         return data;
     }
 
     /** Returns a vector of the number of events over delta t */
-    std::vector < int >as_vector(int delta_t);
+    std::vector<int> as_vector(int delta_t);
 
     /** Dumps the spanlist to STDOUT */
     void dump();
@@ -73,6 +72,6 @@ private:
     icalspanlist *data;
 };
 
-}       // namespace LibICal;
+} // namespace LibICal;
 
 #endif

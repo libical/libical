@@ -56,7 +56,7 @@ int main(void)
         if (!zone_location)
             continue;
 
-        /*
+            /*
          * select this location for glibc: needs support for TZ=<location>
          * which is not POSIX
          */
@@ -89,7 +89,7 @@ int main(void)
             icallocaltime_r(&curr_time, &curr_tm);
             /* determine date/time with libical */
             curr_tt = icaltime_from_timet_with_zone(curr_time, 0, utc_zone);
-            curr_tt.zone = utc_zone;    /* workaround: icaltime_from_timet_with_zone()
+            curr_tt.zone = utc_zone; /* workaround: icaltime_from_timet_with_zone()
                                            should do this, but doesn't! */
             curr_tt = icaltime_convert_to_zone(curr_tt, zone);
 
@@ -114,21 +114,20 @@ int main(void)
                     "%s: day %03d: %s: %04d-%02d-%02d %02d:%02d:%02d UTC = "
                     "libc %04d-%02d-%02d %02d:%02d:%02d dst %d",
                     icaltimezone_get_location(zone), day,
-                    verbose ? (curr_failed ? "failed" : "okay") : (curr_failed ? "first failed" :
-                                                                   "okay again"),
+                    verbose ? (curr_failed ? "failed" : "okay") : (curr_failed ? "first failed" : "okay again"),
                     utc_tm.tm_year + 1900, utc_tm.tm_mon + 1, utc_tm.tm_mday, utc_tm.tm_hour,
                     utc_tm.tm_min, utc_tm.tm_sec, curr_tm.tm_year + 1900, curr_tm.tm_mon + 1,
                     curr_tm.tm_mday, curr_tm.tm_hour, curr_tm.tm_min, curr_tm.tm_sec,
                     curr_tm.tm_isdst);
                 if (curr_failed) {
                     printf(" != libical %04d-%02d-%02d %02d:%02d:%02d dst %d",
-                        curr_tt.year,
-                        curr_tt.month,
-                        curr_tt.day,
-                        curr_tt.hour,
-                        curr_tt.minute,
-                        curr_tt.second,
-                        curr_tt.is_daylight);
+                           curr_tt.year,
+                           curr_tt.month,
+                           curr_tt.day,
+                           curr_tt.hour,
+                           curr_tt.minute,
+                           curr_tt.second,
+                           curr_tt.is_daylight);
                     ret = 1;
                 }
                 printf("\n");

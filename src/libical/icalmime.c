@@ -28,8 +28,7 @@
 /* These *_part routines are called by the MIME parser via the
    local_action_map */
 
-struct text_part
-{
+struct text_part {
     char *buf;
     char *buf_pos;
     size_t buf_size;
@@ -141,10 +140,9 @@ static const struct sspm_action_map icalmime_local_action_map[] = {
      icalmime_attachment_add_line, icalmime_attachment_end_part, icalmime_attachment_free_part},
     {SSPM_IMAGE_MAJOR_TYPE, SSPM_CALENDAR_MINOR_TYPE, icalmime_attachment_new_part,
      icalmime_attachment_add_line, icalmime_attachment_end_part, icalmime_attachment_free_part},
-    {SSPM_UNKNOWN_MAJOR_TYPE, SSPM_UNKNOWN_MINOR_TYPE, NULL, NULL, NULL, NULL}
-};
+    {SSPM_UNKNOWN_MAJOR_TYPE, SSPM_UNKNOWN_MINOR_TYPE, NULL, NULL, NULL, NULL}};
 
-#define NUM_PARTS 100   /* HACK. Hard Limit */
+#define NUM_PARTS 100 /* HACK. Hard Limit */
 
 struct sspm_part *icalmime_make_part(icalcomponent *comp)
 {
@@ -152,7 +150,7 @@ struct sspm_part *icalmime_make_part(icalcomponent *comp)
     return 0;
 }
 
-icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d), void *data)
+icalcomponent *icalmime_parse(char *(*get_string)(char *s, size_t size, void *d), void *data)
 {
     struct sspm_part *parts;
     int i, last_level = 0;
@@ -165,13 +163,12 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
 
     memset(parts, 0, NUM_PARTS * sizeof(struct sspm_part));
 
-    sspm_parse_mime(parts, NUM_PARTS, /* Max parts */
+    sspm_parse_mime(parts, NUM_PARTS,          /* Max parts */
                     icalmime_local_action_map, /* Actions */
-                    get_string, data, /* data for get_string */
-                    0/* First header */);
+                    get_string, data,          /* data for get_string */
+                    0 /* First header */);
 
     for (i = 0; i < NUM_PARTS && parts[i].header.major != SSPM_NO_MAJOR_TYPE; i++) {
-
         char mimetype[TMP_BUF_SIZE];
         const char *major = sspm_major_type_string(parts[i].header.major);
         const char *minor = sspm_minor_type_string(parts[i].header.minor);
@@ -225,14 +222,13 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
 
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_MIMEPARSEERROR);
             icalcomponent_add_property(
-                 comp,
-                 icalproperty_vanew_xlicerror(temp, errParam, (void *)0));
+                comp,
+                icalproperty_vanew_xlicerror(temp, errParam, (void *)0));
             icalparameter_free(errParam);
         }
 
         if (parts[i].header.major != SSPM_NO_MAJOR_TYPE &&
             parts[i].header.major != SSPM_UNKNOWN_MAJOR_TYPE) {
-
             char *mimeTypeCopy = icalmemory_strdup(mimetype);
             icalcomponent_add_property(
                 comp,
@@ -241,7 +237,6 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
         }
 
         if (parts[i].header.encoding != SSPM_NO_ENCODING) {
-
             icalcomponent_add_property(
                 comp,
                 icalproperty_new_xlicmimeencoding(sspm_encoding_string(parts[i].header.encoding)));
@@ -268,13 +263,11 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
         /* Add iCal components as children of the component */
         if (parts[i].header.major == SSPM_TEXT_MAJOR_TYPE &&
             parts[i].header.minor == SSPM_CALENDAR_MINOR_TYPE && parts[i].data != 0) {
-
-            icalcomponent_add_component(comp, (icalcomponent *) parts[i].data);
+            icalcomponent_add_component(comp, (icalcomponent *)parts[i].data);
             parts[i].data = 0;
 
         } else if (parts[i].header.major == SSPM_TEXT_MAJOR_TYPE &&
                    parts[i].header.minor != SSPM_CALENDAR_MINOR_TYPE && parts[i].data != 0) {
-
             /* Add other text components as "DESCRIPTION" properties */
             char *descStr = icalmemory_strdup((char *)parts[i].data);
             icalcomponent_add_property(
@@ -298,17 +291,14 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
             icalcomponent_add_component(parent, comp);
 
         } else if (parts[i].level == last_level && last_level == 0 && root == 0) {
-
             root = comp;
             parent = comp;
 
         } else if (parts[i].level > last_level) {
-
             parent = last;
             icalcomponent_add_component(parent, comp);
 
         } else if (parts[i].level < last_level) {
-
             if (parent)
                 parent = icalcomponent_get_parent(parent);
 
@@ -328,7 +318,7 @@ icalcomponent *icalmime_parse(char *(*get_string) (char *s, size_t size, void *d
     return root;
 }
 
-int icalmime_test(char *(*get_string) (char *s, size_t size, void *d), void *data)
+int icalmime_test(char *(*get_string)(char *s, size_t size, void *d), void *data)
 {
     char *out;
     struct sspm_part *parts;
@@ -341,14 +331,14 @@ int icalmime_test(char *(*get_string) (char *s, size_t size, void *d), void *dat
 
     memset(parts, 0, NUM_PARTS * sizeof(struct sspm_part));
 
-    sspm_parse_mime(parts, NUM_PARTS, /* Max parts */
+    sspm_parse_mime(parts, NUM_PARTS,          /* Max parts */
                     icalmime_local_action_map, /* Actions */
-                    get_string, data, /* data for get_string */
-                    0/* First header */);
+                    get_string, data,          /* data for get_string */
+                    0 /* First header */);
 
     for (i = 0; i < NUM_PARTS && parts[i].header.major != SSPM_NO_MAJOR_TYPE; i++) {
         if (parts[i].header.minor == SSPM_CALENDAR_MINOR_TYPE) {
-            parts[i].data = icalcomponent_as_ical_string_r((icalcomponent *) parts[i].data);
+            parts[i].data = icalcomponent_as_ical_string_r((icalcomponent *)parts[i].data);
         }
     }
 

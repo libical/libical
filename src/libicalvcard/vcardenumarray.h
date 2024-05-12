@@ -24,11 +24,11 @@ typedef struct {
     const char *xvalue;
 } vcardenumarray_element;
 
-#define vcardenumarray_new(increment_size)                          \
+#define vcardenumarray_new(increment_size) \
     icalarray_new(sizeof(vcardenumarray_element), increment_size)
 
-#define vcardenumarray_element_at(array, position)                      \
-    ((const vcardenumarray_element *) icalarray_element_at(array, position))
+#define vcardenumarray_element_at(array, position) \
+    ((const vcardenumarray_element *)icalarray_element_at(array, position))
 
 #define vcardenumarray_size(array) ((array)->num_elements)
 

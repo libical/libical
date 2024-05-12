@@ -64,6 +64,6 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_next_component(icalcluster 
  * @deprecated use icalcluster_clone() instead
  */
 LIBICAL_ICALSS_EXPORT LIBICAL_DEPRECATED(icalcluster *icalcluster_new_clone(
-                                             const icalcluster *cluster));
+    const icalcluster *cluster));
 
 #endif /* !ICALCLUSTER_H */

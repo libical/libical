@@ -68,36 +68,32 @@ struct icaldurationtype icaldurationtype_from_string(const char *str)
         p = str[i];
 
         switch (p) {
-        case '+':
-            {
-                if (i != 0 || begin_flag == 1) {
-                  goto error;
-                }
-                break;
+        case '+': {
+            if (i != 0 || begin_flag == 1) {
+                goto error;
             }
-        case '-':
-            {
-                if (i != 0 || begin_flag == 1) {
-                    goto error;
-                }
-                d.is_neg = 1;
-                break;
+            break;
+        }
+        case '-': {
+            if (i != 0 || begin_flag == 1) {
+                goto error;
             }
+            d.is_neg = 1;
+            break;
+        }
 
-        case 'P':
-            {
-                if (i != 0 && i != 1) {
-                    goto error;
-                }
-                begin_flag = 1;
-                break;
+        case 'P': {
+            if (i != 0 && i != 1) {
+                goto error;
             }
+            begin_flag = 1;
+            break;
+        }
 
-        case 'T':
-            {
-                time_flag = 1;
-                break;
-            }
+        case 'T': {
+            time_flag = 1;
+            break;
+        }
 
         case '0':
         case '1':
@@ -108,82 +104,75 @@ struct icaldurationtype icaldurationtype_from_string(const char *str)
         case '6':
         case '7':
         case '8':
-        case '9':
-            {
-                /* HACK.
+        case '9': {
+            /* HACK.
                    Skip any more digits if the last one read has not been assigned */
-                if (digits != -1) {
-                    break;
-                }
-
-                if (begin_flag == 0) {
-                    goto error;
-                }
-                /* Get all of the digits, not one at a time */
-                scan_size = sscanf(&str[i], "%10d", &digits);   /*limit to 10digits.
-                                                                  increase as needed */
-                if (scan_size == 0) {
-                    goto error;
-                }
+            if (digits != -1) {
                 break;
             }
 
-        case 'H':
-            {
-                if (time_flag == 0 || d.hours != 0 || digits == -1) {
-                    goto error;
-                }
-                d.hours = (unsigned int)digits;
-                digits = -1;
-                break;
-            }
-        case 'M':
-            {
-                if (time_flag == 0 || d.minutes != 0 || digits == -1) {
-                    goto error;
-                }
-                d.minutes = (unsigned int)digits;
-                digits = -1;
-                break;
-            }
-        case 'S':
-            {
-                if (time_flag == 0 || d.seconds != 0 || digits == -1) {
-                    goto error;
-                }
-                d.seconds = (unsigned int)digits;
-                digits = -1;
-                break;
-            }
-        case 'W':
-            {
-                if (time_flag == 1 || date_flag == 1 || d.weeks != 0 || digits == -1) {
-                    goto error;
-                }
-                d.weeks = (unsigned int)digits;
-                digits = -1;
-                break;
-            }
-        case 'D':
-            {
-                if (time_flag == 1 || d.days != 0 || digits == -1) {
-                    goto error;
-                }
-                date_flag = 1;
-                d.days = (unsigned int)digits;
-                digits = -1;
-                break;
-            }
-        default:
-            {
+            if (begin_flag == 0) {
                 goto error;
             }
+            /* Get all of the digits, not one at a time */
+            scan_size = sscanf(&str[i], "%10d", &digits); /*limit to 10digits.
+                                                                  increase as needed */
+            if (scan_size == 0) {
+                goto error;
+            }
+            break;
+        }
+
+        case 'H': {
+            if (time_flag == 0 || d.hours != 0 || digits == -1) {
+                goto error;
+            }
+            d.hours = (unsigned int)digits;
+            digits = -1;
+            break;
+        }
+        case 'M': {
+            if (time_flag == 0 || d.minutes != 0 || digits == -1) {
+                goto error;
+            }
+            d.minutes = (unsigned int)digits;
+            digits = -1;
+            break;
+        }
+        case 'S': {
+            if (time_flag == 0 || d.seconds != 0 || digits == -1) {
+                goto error;
+            }
+            d.seconds = (unsigned int)digits;
+            digits = -1;
+            break;
+        }
+        case 'W': {
+            if (time_flag == 1 || date_flag == 1 || d.weeks != 0 || digits == -1) {
+                goto error;
+            }
+            d.weeks = (unsigned int)digits;
+            digits = -1;
+            break;
+        }
+        case 'D': {
+            if (time_flag == 1 || d.days != 0 || digits == -1) {
+                goto error;
+            }
+            date_flag = 1;
+            d.days = (unsigned int)digits;
+            digits = -1;
+            break;
+        }
+        default: {
+            goto error;
+        }
         }
     }
 
     return d;
 
-  error:
+error:
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     return icaldurationtype_bad_duration();
 }
@@ -221,7 +210,6 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
     seconds = icaldurationtype_as_int(d);
 
     if (seconds != 0) {
-
         if (d.is_neg == 1) {
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, '-');
         }
@@ -237,7 +225,6 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
         }
 
         if (d.hours != 0 || d.minutes != 0 || d.seconds != 0) {
-
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, "T");
 
             if (d.hours != 0) {
@@ -263,8 +250,8 @@ int icaldurationtype_as_int(struct icaldurationtype dur)
                   60 * (dur.minutes +
                         60 * (dur.hours +
                               24 * (dur.days +
-                                    7 * dur.weeks))))
-                 * (dur.is_neg == 1 ? -1 : 1));
+                                    7 * dur.weeks)))) *
+                 (dur.is_neg == 1 ? -1 : 1));
 }
 
 struct icaldurationtype icaldurationtype_null_duration(void)

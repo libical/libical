@@ -18,13 +18,18 @@
 typedef struct icalbdbset_impl icalbdbset;
 
 enum icalbdbset_subdb_type
-{ ICALBDB_CALENDARS, ICALBDB_EVENTS, ICALBDB_TODOS, ICALBDB_REMINDERS };
+{
+    ICALBDB_CALENDARS,
+    ICALBDB_EVENTS,
+    ICALBDB_TODOS,
+    ICALBDB_REMINDERS
+};
 typedef enum icalbdbset_subdb_type icalbdbset_subdb_type;
 
 /** sets up the db environment, should be done in parent thread.. */
 LIBICAL_ICALSS_EXPORT int icalbdbset_init_dbenv(char *db_env_dir,
-                                                void (*logDbFunc) (const DB_ENV *,
-                                                                   const char *, const char *));
+                                                void (*logDbFunc)(const DB_ENV *,
+                                                                  const char *, const char *));
 
 LIBICAL_ICALSS_EXPORT icalset *icalbdbset_init(icalset *set, const char *dsn, void *options);
 
@@ -43,17 +48,18 @@ LIBICAL_ICALSS_EXPORT icalset *icalbdbset_new(const char *database_filename,
 LIBICAL_ICALSS_EXPORT DB *icalbdbset_bdb_open_secondary(DB *dbp,
                                                         const char *subdb,
                                                         const char *sindex,
-                                                        int (*callback) (DB *db,
-                                                                         const DBT *dbt1,
-                                                                         const DBT *dbt2,
-                                                                         DBT *dbt3), int type);
+                                                        int (*callback)(DB *db,
+                                                                        const DBT *dbt1,
+                                                                        const DBT *dbt2,
+                                                                        DBT *dbt3),
+                                                        int type);
 
-LIBICAL_ICALSS_EXPORT char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc) (const DBT *dbt));
+LIBICAL_ICALSS_EXPORT char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc)(const DBT *dbt));
 
 LIBICAL_ICALSS_EXPORT void icalbdbset_free(icalset *set);
 
 /* cursor operations */
-LIBICAL_ICALSS_EXPORT int icalbdbset_acquire_cursor(DB *dbp, DB_TXN *tid, DBC ** rdbcp);
+LIBICAL_ICALSS_EXPORT int icalbdbset_acquire_cursor(DB *dbp, DB_TXN *tid, DBC **rdbcp);
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data,
                                           u_int32_t access_method);
@@ -132,7 +138,7 @@ LIBICAL_ICALSS_EXPORT icalsetiter icalbdbset_begin_component(icalset *set,
                                                              icalgauge *gauge, const char *tzid);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *
-                                                                                    itr);
+                                                                                        itr);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i);
 
@@ -145,7 +151,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_get_component(icalset *set);
 
 LIBICAL_ICALSS_EXPORT DB_ENV *icalbdbset_get_env(void);
 
-LIBICAL_ICALSS_EXPORT int icalbdbset_begin_transaction(DB_TXN *parent_id, DB_TXN ** txnid);
+LIBICAL_ICALSS_EXPORT int icalbdbset_begin_transaction(DB_TXN *parent_id, DB_TXN **txnid);
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_commit_transaction(DB_TXN *txnid);
 
@@ -153,17 +159,16 @@ LIBICAL_ICALSS_EXPORT DB *icalbdbset_bdb_open(const char *path,
                                               const char *subdb,
                                               int type, int mode, u_int32_t flag);
 
-typedef struct icalbdbset_options
-{
-    icalbdbset_subdb_type subdb;     /**< the subdatabase to open */
-    int dbtype;                      /**< db_open type: DB_HASH | DB_BTREE */
-    int mode;                        /**< file mode */
-    u_int32_t flag;                  /**< DB->set_flags(): DB_DUP | DB_DUPSORT */
-    char *(*pfunc) (const DBT *dbt);
-                                    /**< parsing function */
-    int (*callback) (DB *db,
-                            /**< callback for secondary db open */
-                     const DBT *dbt1, const DBT *dbt2, DBT *dbt3);
+typedef struct icalbdbset_options {
+    icalbdbset_subdb_type subdb; /**< the subdatabase to open */
+    int dbtype;                  /**< db_open type: DB_HASH | DB_BTREE */
+    int mode;                    /**< file mode */
+    u_int32_t flag;              /**< DB->set_flags(): DB_DUP | DB_DUPSORT */
+    char *(*pfunc)(const DBT *dbt);
+    /**< parsing function */
+    int (*callback)(DB *db,
+                    /**< callback for secondary db open */
+                    const DBT *dbt1, const DBT *dbt2, DBT *dbt3);
 } icalbdbset_options;
 
 #endif /* !ICALBDBSET_H */

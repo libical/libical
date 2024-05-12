@@ -57,7 +57,7 @@ typedef enum icalrestriction_kind
     ICAL_RESTRICTION_ONEMUTUAL, /* 7 */
 
     /** Unknown. */
-    ICAL_RESTRICTION_UNKNOWN    /* 8 */
+    ICAL_RESTRICTION_UNKNOWN /* 8 */
 } icalrestriction_kind;
 
 /**

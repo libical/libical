@@ -16,9 +16,8 @@
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icaldirset*/
 
-struct icalbdbset_impl
-{
-    icalset super;        /**< parent class */
+struct icalbdbset_impl {
+    icalset super; /**< parent class */
     const char *path;
     const char *subdb;
     const char *sindex;

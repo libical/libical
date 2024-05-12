@@ -13,8 +13,7 @@
 #include "libical_ical_export.h"
 #include "icptrholder_cxx.h"
 
-extern "C"
-{
+extern "C" {
 #include "icalerror.h"
 #include "icalvalue.h"
 }
@@ -36,7 +35,7 @@ public:
     explicit ICalValue(const icalvalue_kind &kind);
     ICalValue(const icalvalue_kind &kind, const std::string &str);
 
-    operator  icalvalue *()
+    operator icalvalue *()
     {
         return imp;
     }
@@ -157,6 +156,6 @@ private:
 
 } // namespace LibICal
 
-typedef ICPointerHolder < LibICal::ICalValue > ICalValueTmpPtr;
+typedef ICPointerHolder<LibICal::ICalValue> ICalValueTmpPtr;
 
 #endif

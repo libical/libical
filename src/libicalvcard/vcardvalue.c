@@ -51,7 +51,7 @@ LIBICAL_VCARD_EXPORT struct vcardvalue_impl *vcardvalue_new_impl(vcardvalue_kind
 
 vcardvalue *vcardvalue_new(vcardvalue_kind kind)
 {
-    return (vcardvalue *) vcardvalue_new_impl(kind);
+    return (vcardvalue *)vcardvalue_new_impl(kind);
 }
 
 vcardvalue *vcardvalue_clone(const vcardvalue *old)
@@ -71,41 +71,38 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
     switch (new->kind) {
     case VCARD_TEXT_VALUE:
     case VCARD_URI_VALUE:
-    case VCARD_LANGUAGETAG_VALUE:
-        {
-            if (old->data.v_string != 0) {
-                new->data.v_string = icalmemory_strdup(old->data.v_string);
+    case VCARD_LANGUAGETAG_VALUE: {
+        if (old->data.v_string != 0) {
+            new->data.v_string = icalmemory_strdup(old->data.v_string);
 
-                if (new->data.v_string == 0) {
-                    new->parent = 0;
-                    vcardvalue_free(new);
-                    return 0;
-                }
+            if (new->data.v_string == 0) {
+                new->parent = 0;
+                vcardvalue_free(new);
+                return 0;
             }
-            break;
         }
-    case VCARD_X_VALUE:
-        {
-            if (old->x_value != 0) {
-                new->x_value = icalmemory_strdup(old->x_value);
+        break;
+    }
+    case VCARD_X_VALUE: {
+        if (old->x_value != 0) {
+            new->x_value = icalmemory_strdup(old->x_value);
 
-                if (new->x_value == 0) {
-                    new->parent = 0;
-                    vcardvalue_free(new);
-                    return 0;
-                }
+            if (new->x_value == 0) {
+                new->parent = 0;
+                vcardvalue_free(new);
+                return 0;
             }
-
-            break;
         }
 
-    default:
-        {
-            /* all of the other types are stored as values, not
+        break;
+    }
+
+    default: {
+        /* all of the other types are stored as values, not
                pointers, so we can just copy the whole structure. */
 
-            new->data = old->data;
-        }
+        new->data = old->data;
+    }
     }
 
     return new;
@@ -129,58 +126,49 @@ char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
        reading past the end of the source string if the last character
        is a backslash. */
     for (p = *str; !wroteNull && *p != 0; p++) {
-
         if (*p == '\\') {
             p++;
             switch (*p) {
-            case 0:
-                {
-                    wroteNull = 1;      //stops iteration so p isn't incremented past the end of str
-                    *pout = '\0';
-                    break;
-                }
+            case 0: {
+                wroteNull = 1; //stops iteration so p isn't incremented past the end of str
+                *pout = '\0';
+                break;
+            }
             case 'n':
-            case 'N':
-                {
-                    *pout = '\n';
-                    break;
-                }
+            case 'N': {
+                *pout = '\n';
+                break;
+            }
             case 't':
-            case 'T':
-                {
-                    *pout = '\t';
-                    break;
-                }
+            case 'T': {
+                *pout = '\t';
+                break;
+            }
             case 'r':
-            case 'R':
-                {
-                    *pout = '\r';
-                    break;
-                }
+            case 'R': {
+                *pout = '\r';
+                break;
+            }
             case 'b':
-            case 'B':
-                {
-                    *pout = '\b';
-                    break;
-                }
+            case 'B': {
+                *pout = '\b';
+                break;
+            }
             case 'f':
-            case 'F':
-                {
-                    *pout = '\f';
-                    break;
-                }
+            case 'F': {
+                *pout = '\f';
+                break;
+            }
             case ';':
             case ',':
             case '"':
-            case '\\':
-                {
-                    *pout = *p;
-                    break;
-                }
-            default:
-                {
-                    *pout = ' ';
-                }
+            case '\\': {
+                *pout = *p;
+                break;
+            }
+            default: {
+                *pout = ' ';
+            }
             }
         } else if (sep && strchr(sep, *p)) {
             break;
@@ -209,7 +197,7 @@ char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
  * As such, \b, \f, \r are not allowed, not even escaped
  */
 static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_sz,
-                                         const char *unquoted_str, int is_param)
+                                          const char *unquoted_str, int is_param)
 {
     const char *p;
 
@@ -224,7 +212,6 @@ static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_
     }
 
     for (p = unquoted_str; *p != 0; p++) {
-
         switch (*p) {
         case '\b':
         case '\f':
@@ -272,7 +259,6 @@ static vcardvalue *vcardvalue_new_enum(vcardvalue_kind kind, int x_type, const c
     struct vcardvalue_impl *value;
 
     if (e != 0 && vcardproperty_enum_belongs_to_property(vcardproperty_value_kind_to_kind(kind), e)) {
-
         value = vcardvalue_new_impl(kind);
         value->data.v_enum = e;
     } else {
@@ -287,7 +273,7 @@ static vcardvalue *vcardvalue_new_enum(vcardvalue_kind kind, int x_type, const c
 
 static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                                                          const char *str,
-                                                         vcardproperty ** error)
+                                                         vcardproperty **error)
 {
     struct vcardvalue_impl *value = 0;
 
@@ -298,26 +284,24 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
     }
 
     switch (kind) {
+    case VCARD_BOOLEAN_VALUE: {
+        if (!strcmp(str, "TRUE")) {
+            value = vcardvalue_new_boolean(1);
+        } else if (!strcmp(str, "FALSE")) {
+            value = vcardvalue_new_boolean(0);
+        } else if (error != 0) {
+            char temp[TMP_BUF_SIZE];
+            vcardparameter *errParam;
 
-    case VCARD_BOOLEAN_VALUE:
-        {
-            if (!strcmp(str, "TRUE")) {
-                value = vcardvalue_new_boolean(1);
-            } else if (!strcmp(str, "FALSE")) {
-                value = vcardvalue_new_boolean(0);
-            } else if (error != 0) {
-                char temp[TMP_BUF_SIZE];
-                vcardparameter *errParam;
-
-                snprintf(temp, sizeof(temp),
-                         "Could not parse %s as a %s property",
-                         str, vcardvalue_kind_to_string(kind));
-                errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *) 0);
-                vcardparameter_free(errParam);
-            }
-            break;
+            snprintf(temp, sizeof(temp),
+                     "Could not parse %s as a %s property",
+                     str, vcardvalue_kind_to_string(kind));
+            errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
+            *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
+            vcardparameter_free(errParam);
         }
+        break;
+    }
 
     case VCARD_VERSION_VALUE:
         value = vcardvalue_new_enum(kind, (int)VCARD_VERSION_X, str);
@@ -339,99 +323,94 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         value = vcardvalue_new_float((float)atof(str));
         break;
 
-    case VCARD_UTCOFFSET_VALUE:
-        {
-            /* "+" / "-" hh [ [":"] mm ] */
-            char sign[2] = "";
-            unsigned hour, min = 0;
-            int nchar = 0, len = (int) strlen(str);
+    case VCARD_UTCOFFSET_VALUE: {
+        /* "+" / "-" hh [ [":"] mm ] */
+        char sign[2] = "";
+        unsigned hour, min = 0;
+        int nchar = 0, len = (int)strlen(str);
 
-            if (len > 3) {
-                const char *fmt;
+        if (len > 3) {
+            const char *fmt;
 
-                if (str[3] == ':') {
-                    fmt = "%1[+-]%02u:%02u%n";
-                }
-                else {
-                    fmt = "%1[+-]%02u%02u%n";
-                }
-
-                if (3 != sscanf(str, fmt, sign, &hour, &min, &nchar)) {
-                    nchar = 0;
-                }
+            if (str[3] == ':') {
+                fmt = "%1[+-]%02u:%02u%n";
+            } else {
+                fmt = "%1[+-]%02u%02u%n";
             }
-            else if (2 != sscanf(str, "%1[+-]%02u%n", sign, &hour, &nchar)) {
+
+            if (3 != sscanf(str, fmt, sign, &hour, &min, &nchar)) {
                 nchar = 0;
             }
-
-            if (len && (len == nchar)) {
-                int utcoffset = (int)(hour * 3600 + min * 60);
-
-                if (*sign == '-') utcoffset = -utcoffset;
-                value = vcardvalue_new_utcoffset(utcoffset);
-            } else if (error != 0) {
-                char temp[TMP_BUF_SIZE];
-                vcardparameter *errParam;
-
-                snprintf(temp, sizeof(temp),
-                         "Could not parse %s as a %s property",
-                         str, vcardvalue_kind_to_string(kind));
-                errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *) 0);
-                vcardparameter_free(errParam);
-            }
-            break;
+        } else if (2 != sscanf(str, "%1[+-]%02u%n", sign, &hour, &nchar)) {
+            nchar = 0;
         }
 
-    case VCARD_TEXT_VALUE:
-        {
-            char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, NULL);
+        if (len && (len == nchar)) {
+            int utcoffset = (int)(hour * 3600 + min * 60);
 
-            value = vcardvalue_new_text(dequoted_str);
+            if (*sign == '-')
+                utcoffset = -utcoffset;
+            value = vcardvalue_new_utcoffset(utcoffset);
+        } else if (error != 0) {
+            char temp[TMP_BUF_SIZE];
+            vcardparameter *errParam;
+
+            snprintf(temp, sizeof(temp),
+                     "Could not parse %s as a %s property",
+                     str, vcardvalue_kind_to_string(kind));
+            errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
+            *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
+            vcardparameter_free(errParam);
+        }
+        break;
+    }
+
+    case VCARD_TEXT_VALUE: {
+        char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, NULL);
+
+        value = vcardvalue_new_text(dequoted_str);
+        icalmemory_free_buffer(dequoted_str);
+        break;
+    }
+
+    case VCARD_TEXTLIST_VALUE: {
+        vcardstrarray *array = vcardstrarray_new(2);
+
+        do {
+            char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",");
+
+            vcardstrarray_append(array, dequoted_str);
             icalmemory_free_buffer(dequoted_str);
-            break;
-        }
 
-    case VCARD_TEXTLIST_VALUE:
-        {
-            vcardstrarray *array = vcardstrarray_new(2);
+        } while (*str++ != '\0');
 
-            do {
-                char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",");
+        value = vcardvalue_new_textlist(array);
+        break;
+    }
 
-                vcardstrarray_append(array, dequoted_str);
-                icalmemory_free_buffer(dequoted_str);
+    case VCARD_STRUCTURED_VALUE: {
+        vcardstructuredtype st = {0, {0}};
+        vcardstrarray *field = vcardstrarray_new(2);
 
-            } while (*str++ != '\0');
+        st.field[st.num_fields++] = field;
 
-            value = vcardvalue_new_textlist(array);
-            break;
-        }
+        do {
+            char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",;");
 
-    case VCARD_STRUCTURED_VALUE:
-        {
-            vcardstructuredtype st = { 0, {0} };
-            vcardstrarray *field = vcardstrarray_new(2);
+            vcardstrarray_append(field, dequoted_str);
+            icalmemory_free_buffer(dequoted_str);
 
-            st.field[st.num_fields++] = field;
+            if (*str == ';') {
+                /* end of field */
+                field = vcardstrarray_new(2);
+                st.field[st.num_fields++] = field;
+            }
 
-            do {
-                char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",;");
+        } while (*str++ != '\0');
 
-                vcardstrarray_append(field, dequoted_str);
-                icalmemory_free_buffer(dequoted_str);
-
-                if (*str == ';') {
-                    /* end of field */
-                    field = vcardstrarray_new(2);
-                    st.field[st.num_fields++] = field;
-                }
-
-            } while (*str++ != '\0');
-
-            value = vcardvalue_new_structured(&st);
-            break;
-        }
+        value = vcardvalue_new_structured(&st);
+        break;
+    }
 
     case VCARD_URI_VALUE:
         value = vcardvalue_new_uri(str);
@@ -441,53 +420,48 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
     case VCARD_TIME_VALUE:
     case VCARD_DATETIME_VALUE:
     case VCARD_DATEANDORTIME_VALUE:
-    case VCARD_TIMESTAMP_VALUE:
-        {
-            struct vcardtimetype tt;
+    case VCARD_TIMESTAMP_VALUE: {
+        struct vcardtimetype tt;
 
-            tt = vcardtime_from_string(str, kind == VCARD_TIME_VALUE);
-            if (!vcardtime_is_null_datetime(tt)) {
-                value = vcardvalue_new_impl(kind);
-                value->data.v_time = tt;
+        tt = vcardtime_from_string(str, kind == VCARD_TIME_VALUE);
+        if (!vcardtime_is_null_datetime(tt)) {
+            value = vcardvalue_new_impl(kind);
+            value->data.v_time = tt;
 
-                vcardvalue_reset_kind(value);
-            }
-            break;
+            vcardvalue_reset_kind(value);
         }
+        break;
+    }
 
     case VCARD_LANGUAGETAG_VALUE:
         value = vcardvalue_new_languagetag(str);
         break;
 
-    case VCARD_X_VALUE:
-        {
-            char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, NULL);
+    case VCARD_X_VALUE: {
+        char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, NULL);
 
-            value = vcardvalue_new_x(dequoted_str);
-            icalmemory_free_buffer(dequoted_str);
+        value = vcardvalue_new_x(dequoted_str);
+        icalmemory_free_buffer(dequoted_str);
+    } break;
+
+    default: {
+        char temp[TMP_BUF_SIZE];
+        vcardparameter *errParam;
+
+        if (error != 0) {
+            snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
+
+            errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
+            *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
+            vcardparameter_free(errParam);
         }
-        break;
 
-    default:
-        {
-            char temp[TMP_BUF_SIZE];
-            vcardparameter *errParam;
-
-            if (error != 0) {
-
-                snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
-
-                errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-                *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *) 0);
-                vcardparameter_free(errParam);
-            }
-
-            snprintf(temp, TMP_BUF_SIZE,
-                     "vcardvalue_new_from_string got an unknown value type (%s) for \'%s\'",
-                     vcardvalue_kind_to_string(kind), str);
-            icalerror_warn(temp);
-            value = 0;
-        }
+        snprintf(temp, TMP_BUF_SIZE,
+                 "vcardvalue_new_from_string got an unknown value type (%s) for \'%s\'",
+                 vcardvalue_kind_to_string(kind), str);
+        icalerror_warn(temp);
+        value = 0;
+    }
     }
 
     if (error != 0 && *error == 0 && value == 0) {
@@ -497,7 +471,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         snprintf(temp, TMP_BUF_SIZE, "Failed to parse value: \'%s\'", str);
 
         errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
-        *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *) 0);
+        *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
         vcardparameter_free(errParam);
     }
 
@@ -506,7 +480,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
 vcardvalue *vcardvalue_new_from_string(vcardvalue_kind kind, const char *str)
 {
-    return vcardvalue_new_from_string_with_error(kind, str, (vcardproperty **) 0);
+    return vcardvalue_new_from_string_with_error(kind, str, (vcardproperty **)0);
 }
 
 void vcardvalue_free(vcardvalue *v)
@@ -524,30 +498,28 @@ void vcardvalue_free(vcardvalue *v)
     switch (v->kind) {
     case VCARD_TEXT_VALUE:
     case VCARD_URI_VALUE:
-    case VCARD_LANGUAGETAG_VALUE:
-        {
-            if (v->data.v_string != 0) {
-                icalmemory_free_buffer((void *)v->data.v_string);
-                v->data.v_string = 0;
-            }
-            break;
+    case VCARD_LANGUAGETAG_VALUE: {
+        if (v->data.v_string != 0) {
+            icalmemory_free_buffer((void *)v->data.v_string);
+            v->data.v_string = 0;
         }
+        break;
+    }
 
     case VCARD_TEXTLIST_VALUE:
-    case VCARD_STRUCTURED_VALUE:
-        {
-            int i;
-            for (i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
-                vcardstrarray *array = v->data.v_structured.field[i];
-                if (array) vcardstrarray_free(array);
-            }
-            break;
+    case VCARD_STRUCTURED_VALUE: {
+        int i;
+        for (i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
+            vcardstrarray *array = v->data.v_structured.field[i];
+            if (array)
+                vcardstrarray_free(array);
         }
+        break;
+    }
 
-    default:
-        {
-            /* Nothing to do */
-        }
+    default: {
+        /* Nothing to do */
+    }
     }
 
     v->kind = VCARD_NO_VALUE;
@@ -582,7 +554,7 @@ static char *vcardvalue_boolean_as_vcard_string_r(const vcardvalue *value)
     return str;
 }
 
-#define MAX_INT_DIGITS 12       /* Enough for 2^32 + sign */
+#define MAX_INT_DIGITS 12 /* Enough for 2^32 + sign */
 
 static char *vcardvalue_int_as_vcard_string_r(const vcardvalue *value)
 {
@@ -629,19 +601,16 @@ static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value,
     if (s != 0) {
         if (version == VCARD_VERSION_40) {
             fmt = "%c%02d%02d%02d";
-        }
-        else {
+        } else {
             fmt = "%c%02d:%02d:%02d";
         }
     } else if (version == VCARD_VERSION_40) {
         if (m != 0) {
             fmt = "%c%02d%02d";
-        }
-        else {
+        } else {
             fmt = "%c%02d";
         }
-    }
-    else {
+    } else {
         fmt = "%c%02d:%02d";
     }
 
@@ -657,7 +626,7 @@ static char *vcardvalue_text_as_vcard_string_r(const vcardvalue *value)
     size_t buf_sz;
 
     return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
-                                       value->data.v_string, 0);
+                                        value->data.v_string, 0);
 }
 
 static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
@@ -683,7 +652,7 @@ static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *b
 
     for (i = 0; i < vcardstrarray_size(array); i++) {
         if (i) {
-            *str_p -= 1;  // backup to \0
+            *str_p -= 1; // backup to \0
             icalmemory_append_char(str, str_p, buf_sz, sep);
         }
 
@@ -699,7 +668,7 @@ char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array, const char sep
     size_t buf_size;
 
     _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size,
-                                     (vcardstrarray *) array, sep, 0);
+                                     (vcardstrarray *)array, sep, 0);
 
     return buf;
 }
@@ -717,7 +686,7 @@ char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, int is_par
         vcardstrarray *array = s->field[i];
 
         if (i) {
-            buf_ptr -= 1;  // backup to \0
+            buf_ptr -= 1; // backup to \0
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
         }
 
@@ -793,7 +762,8 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     if (value->parent) {
         vcardcomponent *comp = vcardproperty_get_parent(value->parent);
-        if (comp) version = vcardcomponent_get_version(comp);
+        if (comp)
+            version = vcardcomponent_get_version(comp);
     }
 
     if (version == VCARD_VERSION_NONE) {
@@ -803,7 +773,6 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
     is_structured = vcardproperty_is_structured(vcardproperty_isa(value->parent));
 
     switch (value->kind) {
-
     case VCARD_BOOLEAN_VALUE:
         return vcardvalue_boolean_as_vcard_string_r(value);
 
@@ -861,16 +830,15 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
             size_t buf_sz;
 
             return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
-                                               value->x_value, 0);
+                                                value->x_value, 0);
         }
 
         /* FALLTHRU */
 
     case VCARD_NO_VALUE:
-    default:
-        {
-            return 0;
-        }
+    default: {
+        return 0;
+    }
     }
 }
 
@@ -1079,7 +1047,6 @@ vcardparameter_xliccomparetype vcardvalue_compare(const vcardvalue *a, const vca
 void vcardvalue_reset_kind(vcardvalue *value)
 {
     switch (value->kind) {
-
     case VCARD_DATE_VALUE:
     case VCARD_TIME_VALUE:
     case VCARD_DATETIME_VALUE:
@@ -1087,14 +1054,11 @@ void vcardvalue_reset_kind(vcardvalue *value)
     case VCARD_TIMESTAMP_VALUE:
         if (vcardtime_is_timestamp(value->data.v_time)) {
             value->kind = VCARD_TIMESTAMP_VALUE;
-        }
-        else if (vcardtime_is_time(value->data.v_time)) {
+        } else if (vcardtime_is_time(value->data.v_time)) {
             value->kind = VCARD_TIME_VALUE;
-        }
-        else if (vcardtime_is_date(value->data.v_time)) {
+        } else if (vcardtime_is_date(value->data.v_time)) {
             value->kind = VCARD_DATE_VALUE;
-        }
-        else {
+        } else {
             value->kind = VCARD_DATETIME_VALUE;
         }
         break;

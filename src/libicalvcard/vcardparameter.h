@@ -138,7 +138,7 @@ LIBICAL_VCARD_EXPORT vcardparameter *vcardparameter_new_from_string(const char *
  * ```
  */
 LIBICAL_VCARD_EXPORT vcardparameter *vcardparameter_new_from_value_string(vcardparameter_kind kind,
-                                                                       const char *value);
+                                                                          const char *value);
 
 LIBICAL_VCARD_EXPORT void vcardparameter_set_value_from_string(vcardparameter *param,
                                                                const char *val);

@@ -19,7 +19,7 @@
 #include "icalerror.h"
 #include "icalvalue.h"
 
-#include <stddef.h>     /* for ptrdiff_t */
+#include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
 
 extern int ssparse(void);
@@ -83,7 +83,6 @@ void icalgauge_free(icalgauge *gauge)
 
     if (gauge->where) {
         while ((w = pvl_pop(gauge->where)) != 0) {
-
             if (w->value != 0) {
                 free(w->value);
             }
@@ -165,11 +164,10 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
     for (p = icalcomponent_get_first_property(gauge, ICAL_ANY_PROPERTY);
          p != 0;
          p = icalcomponent_get_next_property(gauge, ICAL_ANY_PROPERTY)) {
-
         icalproperty *targetprop;
         icalparameter *compareparam;
         icalparameter_xliccomparetype compare;
-        icalparameter_xliccomparetype rel;   /* The relationship between the gauge
+        icalparameter_xliccomparetype rel; /* The relationship between the gauge
                                                 and target values. */
 
         /* Extract the comparison type from the gauge. If there is no
@@ -191,7 +189,6 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
         targetprop = icalcomponent_get_first_property(comp, icalproperty_isa(p));
 
         if (targetprop != 0) {
-
             /* Compare the values of the gauge property and the target
                property */
 
@@ -226,7 +223,6 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
     for (subgauge = icalcomponent_get_first_component(gauge, ICAL_ANY_COMPONENT);
          subgauge != 0;
          subgauge = icalcomponent_get_next_component(gauge, ICAL_ANY_COMPONENT)) {
-
         gaugekind = icalcomponent_isa(subgauge);
 
         if (gaugekind == ICAL_ANY_COMPONENT) {
@@ -341,7 +337,6 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
         rrule = icalcomponent_get_first_property(sub_comp, ICAL_RRULE_PROPERTY);
 
         if (gauge->expand && rrule) {
-
             if (w->prop == ICAL_DTSTART_PROPERTY ||
                 w->prop == ICAL_DTEND_PROPERTY || w->prop == ICAL_DUE_PROPERTY) {
                 /** needs to use recurrence-id to do comparison */
@@ -371,12 +366,12 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
                 icalproperty *p =
                     icalcomponent_get_first_property(sub_comp, ICAL_RECURRENCEID_PROPERTY);
                 prop_value = icalproperty_get_value(p);
-            } else {  /* prop value from this component */
+            } else { /* prop value from this component */
                 prop_value = icalproperty_get_value(prop);
             }
 
             /* coverity[mixed_enums] */
-            relation = (icalgaugecompare) icalvalue_compare(prop_value, v);
+            relation = (icalgaugecompare)icalvalue_compare(prop_value, v);
 
             if (relation == w->compare) {
                 local_pass++;
@@ -411,7 +406,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 
         icalvalue_free(v);
 
-    }/**** check next one in where clause ****/
+    } /**** check next one in where clause ****/
 
     return last_clause;
 }

@@ -32,9 +32,9 @@
 #include "icalerror.h"
 #include "icalvalue.h"
 #include "icaltimezone.h"
-#include "icalversion.h"        /* for ICAL_PACKAGE */
+#include "icalversion.h" /* for ICAL_PACKAGE */
 
-#include <stddef.h>     /* for ptrdiff_t */
+#include <stddef.h> /* for ptrdiff_t */
 
 enum datatype
 {
@@ -46,7 +46,7 @@ enum datatype
 };
 
 /* The indices must match between the strings and the codes. */
-static const char weekdays[][3] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
+static const char weekdays[][3] = {"SU", "MO", "TU", "WE", "TH", "FR", "SA"};
 
 static const int weekday_codes[] = {
     ICAL_SUNDAY_WEEKDAY,
@@ -55,15 +55,13 @@ static const int weekday_codes[] = {
     ICAL_WEDNESDAY_WEEKDAY,
     ICAL_THURSDAY_WEEKDAY,
     ICAL_FRIDAY_WEEKDAY,
-    ICAL_SATURDAY_WEEKDAY
-};
+    ICAL_SATURDAY_WEEKDAY};
 
-struct conversion_table_struct
-{
+struct conversion_table_struct {
     const char *vcalname;
     enum datatype type;
-    void *(*conversion_func) (int icaltype, VObject *o, icalcomponent *comp,
-                              icalvcal_defaults *defaults);
+    void *(*conversion_func)(int icaltype, VObject *o, icalcomponent *comp,
+                             icalvcal_defaults *defaults);
     int icaltype;
 };
 
@@ -128,7 +126,7 @@ static void convert_floating_time_to_utc(struct icaltimetype *itt)
     /* Now convert back to a struct tm, but with a UTC time. */
     memset(&utc_tm, 0, sizeof(struct tm));
     if (!icalgmtime_r(&t, &utc_tm)) {
-        *itt = itt->is_date ? icaltime_null_date () : icaltime_null_time ();
+        *itt = itt->is_date ? icaltime_null_date() : icaltime_null_time();
         return;
     }
 
@@ -161,7 +159,7 @@ icalcomponent *icalvcal_convert_with_defaults(VObject *object, icalvcal_defaults
     /* The root object must be a VCALENDAR */
     if (*name == 0 || strcmp(name, VCCalProp) != 0) {
         icalcomponent_free(container);
-        return 0;       /* HACK. Should return an error */
+        return 0; /* HACK. Should return an error */
     }
 #if 0
     /* Just for testing. */
@@ -208,7 +206,7 @@ icalcomponent *icalvcal_convert(VObject *object)
 
 static void *comp(int icaltype, VObject *o, icalcomponent *comp, icalvcal_defaults *defaults)
 {
-    icalcomponent_kind kind = (icalcomponent_kind) icaltype;
+    icalcomponent_kind kind = (icalcomponent_kind)icaltype;
     icalcomponent *c = icalcomponent_new(kind);
 
     _unused(o);
@@ -551,7 +549,7 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
 static void *alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
                         icalvcal_defaults *defaults)
 {
-/*    icalcomponent_kind kind = (icalcomponent_kind)icaltype; */
+    /*    icalcomponent_kind kind = (icalcomponent_kind)icaltype; */
     int is_valid_alarm;
     icalcomponent *c = icalcomponent_new(ICAL_VALARM_COMPONENT);
 
@@ -630,7 +628,7 @@ static void *sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
 static void *multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
                               icalvcal_defaults *defaults)
 {
-    icalproperty_kind kind = (icalproperty_kind) icaltype;
+    icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop = NULL;
     icalvalue *value;
     icalvalue_kind value_kind;
@@ -722,7 +720,7 @@ static void *status_prop(int icaltype, VObject *object, icalcomponent *comp,
 static void *utc_datetime_prop(int icaltype, VObject *object, icalcomponent *comp,
                                icalvcal_defaults *defaults)
 {
-    icalproperty_kind kind = (icalproperty_kind) icaltype;
+    icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop;
     icalvalue *value;
     const char *s;
@@ -821,7 +819,7 @@ static const char *rrule_parse_duration(const char *s, struct icalrecurrencetype
             e++;
 
         /* Check it is a suitable length. */
-        len = (ptrdiff_t) (e - s);
+        len = (ptrdiff_t)(e - s);
         if (len != 8 && len != 15 && len != 16) {
             *error_message = "Invalid End Date";
             return NULL;
@@ -967,7 +965,7 @@ static const char *rrule_parse_monthly_positions(const char *s,
                                                  const char **error_message)
 {
     int occurrences[ICAL_BY_DAY_SIZE];
-    int found_weekdays[7] = { 0, 0, 0, 0, 0, 0, 0 };
+    int found_weekdays[7] = {0, 0, 0, 0, 0, 0, 0};
     int i, num_positions, elems, month_position, day;
     int num_weekdays, only_weekday = 0;
     const char *e;
@@ -1060,7 +1058,8 @@ static const char *rrule_parse_monthly_positions(const char *s,
                 if (found_weekdays[day]) {
                     recur->by_day[elems] =
                         (abs(month_position) * 8 +
-                         weekday_codes[day]) * ((month_position < 0) ? -1 : 1);
+                         weekday_codes[day]) *
+                        ((month_position < 0) ? -1 : 1);
                     elems++;
                     if (elems == ICAL_BY_DAY_SIZE)
                         break;
@@ -1255,13 +1254,13 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 
 void *dc_prop(int icaltype, VObject *object, icalcomponent *comp, icalvcal_defaults *defaults)
 {
-    icalproperty_kind kind = (icalproperty_kind) icaltype;
+    icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop;
     icalvalue *value;
     icalvalue_kind value_kind;
     const char *s;
 
-/*/,*t=0; */
+    /*/,*t=0; */
     int free_string;
 
     _unused(comp);
@@ -1297,7 +1296,7 @@ static const struct conversion_table_struct conversion_table[] = {
     {VCMAlarmProp, DT_COMPONENT, alarm_comp, ICAL_XEMAILALARM_COMPONENT},
     {VCPAlarmProp, DT_COMPONENT, alarm_comp, ICAL_XPROCEDUREALARM_COMPONENT},
 
-/* These can all be converted directly by parsing the string into a libical
+    /* These can all be converted directly by parsing the string into a libical
    value. */
     {VCClassProp, DT_PROPERTY, dc_prop, ICAL_CLASS_PROPERTY},
     {VCDescriptionProp, DT_PROPERTY, dc_prop, ICAL_DESCRIPTION_PROPERTY},
@@ -1311,13 +1310,13 @@ static const struct conversion_table_struct conversion_table[] = {
     {VCURLProp, DT_PROPERTY, dc_prop, ICAL_URL_PROPERTY},
     {VCPriorityProp, DT_PROPERTY, dc_prop, ICAL_PRIORITY_PROPERTY},
 
-/* These can contain multiple values, which are separated in ';' in vCalendar
+    /* These can contain multiple values, which are separated in ';' in vCalendar
    but ',' in iCalendar. */
     {VCCategoriesProp, DT_PROPERTY, multivalued_prop, ICAL_CATEGORIES_PROPERTY},
     {VCRDateProp, DT_PROPERTY, multivalued_prop, ICAL_RDATE_PROPERTY},
     {VCExpDateProp, DT_PROPERTY, multivalued_prop, ICAL_EXDATE_PROPERTY},
 
-/* These can be in floating time in vCalendar, but must be in UTC in iCalendar.
+    /* These can be in floating time in vCalendar, but must be in UTC in iCalendar.
  */
     {VCDCreatedProp, DT_PROPERTY, utc_datetime_prop, ICAL_CREATED_PROPERTY},
     {VCLastModifiedProp, DT_PROPERTY, utc_datetime_prop, ICAL_LASTMODIFIED_PROPERTY},
@@ -1333,17 +1332,17 @@ static const struct conversion_table_struct conversion_table[] = {
     {VCEncodingProp, DT_UNSUPPORTED, parameter, ICAL_ENCODING_PARAMETER},
     {VCRoleProp, DT_UNSUPPORTED, parameter, ICAL_ROLE_PARAMETER},
 
-/* We don't want the old VERSION or PRODID properties copied across as they
+    /* We don't want the old VERSION or PRODID properties copied across as they
    are now incorrect. New VERSION & PRODID properties are added instead. */
     {VCVersionProp, DT_IGNORE, NULL, 0},
     {VCProdIdProp, DT_IGNORE, NULL, 0},
 
-/* We ignore DAYLIGHT and TZ properties of the toplevel object, since we can't
+    /* We ignore DAYLIGHT and TZ properties of the toplevel object, since we can't
    really do much with them. */
     {VCDayLightProp, DT_IGNORE, NULL, 0},
     {VCTimeZoneProp, DT_IGNORE, NULL, 0},
 
-/* These are all alarm properties. We handle these when the alarm component
+    /* These are all alarm properties. We handle these when the alarm component
    is created, so we ignore them when doing the automatic conversions.
    "TYPE" is used in AALARM, but doesn't seem to have a name in vobject.h. */
     {"TYPE", DT_IGNORE, NULL, 0},
@@ -1465,8 +1464,7 @@ static const struct conversion_table_struct conversion_table[] = {
     {VCWorkProp, DT_UNSUPPORTED, NULL, 0},
     {VCX400Prop, DT_UNSUPPORTED, NULL, 0},
     {VCX509Prop, DT_UNSUPPORTED, NULL, 0},
-    {0, 0, NULL, 0}
-};
+    {0, 0, NULL, 0}};
 
 static void icalvcal_traverse_objects(VObject *object,
                                       icalcomponent *last_comp,
@@ -1495,11 +1493,10 @@ static void icalvcal_traverse_objects(VObject *object,
     /* Did not find the object. It may be an X-property, or an unknown
        property */
     if (conversion_table[i].vcalname == 0) {
-
         /* Handle X properties */
         if (strncmp(name, "X-", 2) == 0) {
-            icalproperty *prop = (icalproperty *) dc_prop(ICAL_X_PROPERTY, object,
-                                                          last_comp, defaults);
+            icalproperty *prop = (icalproperty *)dc_prop(ICAL_X_PROPERTY, object,
+                                                         last_comp, defaults);
 
             icalproperty_set_x_name(prop, name);
             icalcomponent_add_property(last_comp, prop);
@@ -1508,15 +1505,12 @@ static void icalvcal_traverse_objects(VObject *object,
         }
 
     } else {
-
         /* The vCal property is in the table, and it is not an X
            property, so try to convert it to an iCal component,
            property or parameter. */
 
         switch (conversion_table[i].type) {
-
-        case DT_COMPONENT:
-        {
+        case DT_COMPONENT: {
             subc =
                 (icalcomponent *)(conversion_table[i].conversion_func(
                     conversion_table[i].icaltype, object, last_comp, defaults));
@@ -1527,29 +1521,25 @@ static void icalvcal_traverse_objects(VObject *object,
             break;
         }
 
-        case DT_PROPERTY:
-        {
+        case DT_PROPERTY: {
             if (vObjectValueType(object) && conversion_table[i].conversion_func != NULL) {
+                icalproperty *prop =
+                    (icalproperty *)(conversion_table[i].conversion_func(
+                        conversion_table[i].icaltype, object, last_comp, defaults));
 
-              icalproperty *prop =
-                  (icalproperty *)(conversion_table[i].conversion_func(
-                      conversion_table[i].icaltype, object, last_comp, defaults));
+                if (prop)
+                    icalcomponent_add_property(last_comp, prop);
 
-              if (prop)
-                  icalcomponent_add_property(last_comp, prop);
-
-              last_prop = prop;
+                last_prop = prop;
             }
             break;
         }
 
-        case DT_PARAMETER:
-        {
+        case DT_PARAMETER: {
             break;
         }
 
-        case DT_UNSUPPORTED:
-        {
+        case DT_UNSUPPORTED: {
             /* If the property is listed as DT_UNSUPPORTED, insert a
                X_LIC_ERROR property to note this fact. */
 
@@ -1570,8 +1560,7 @@ static void icalvcal_traverse_objects(VObject *object,
             break;
         }
 
-        case DT_IGNORE:
-        {
+        case DT_IGNORE: {
             /* Do Nothing. */
             break;
         }
