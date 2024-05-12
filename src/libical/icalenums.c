@@ -26,7 +26,7 @@ static const struct
 } request_status_map[] = {
     {ICAL_2_0_SUCCESS_STATUS, 2, 0, "Success."},
     {ICAL_2_1_FALLBACK_STATUS, 2, 1,
-        "Success but fallback taken  on one or more property  values."},
+     "Success but fallback taken  on one or more property  values."},
     {ICAL_2_2_IGPROP_STATUS, 2, 2, "Success, invalid property ignored."},
     {ICAL_2_3_IGPARAM_STATUS, 2, 3, "Success, invalid property parameter ignored."},
     {ICAL_2_4_IGXPROP_STATUS, 2, 4, "Success, unknown non-standard property ignored."},
@@ -34,12 +34,12 @@ static const struct
     {ICAL_2_6_IGCOMP_STATUS, 2, 6, "Success, invalid calendar component ignored."},
     {ICAL_2_7_FORWARD_STATUS, 2, 7, "Success, request forwarded to Calendar User."},
     {ICAL_2_8_ONEEVENT_STATUS, 2, 8,
-        "Success, repeating event ignored. Scheduled as a  single component."},
+     "Success, repeating event ignored. Scheduled as a  single component."},
     {ICAL_2_9_TRUNC_STATUS, 2, 9, "Success, truncated end date time to date boundary."},
     {ICAL_2_10_ONETODO_STATUS, 2, 10,
-        "Success, repeating VTODO ignored. Scheduled as a  single VTODO."},
+     "Success, repeating VTODO ignored. Scheduled as a  single VTODO."},
     {ICAL_2_11_TRUNCRRULE_STATUS, 2, 11,
-        "Success, unbounded RRULE clipped at some finite  number of instances  "},
+     "Success, unbounded RRULE clipped at some finite  number of instances  "},
     {ICAL_3_0_INVPROPNAME_STATUS, 3, 0, "Invalid property name."},
     {ICAL_3_1_INVPROPVAL_STATUS, 3, 1, "Invalid property value."},
     {ICAL_3_2_INVPARAM_STATUS, 3, 2, "Invalid property parameter."},
@@ -66,8 +66,7 @@ static const struct
     {ICAL_5_3_NOSCHED_STATUS, 5, 3, "No scheduling support for  user."},
     {ICAL_6_1_CONTAINER_NOT_FOUND, 6, 1, "Container not found."},
     {ICAL_9_0_UNRECOGNIZED_COMMAND, 9, 0, "An unrecognized command was received."},
-    {ICAL_UNKNOWN_STATUS, 0, 0, "Error: Unknown request status"}
-};
+    {ICAL_UNKNOWN_STATUS, 0, 0, "Error: Unknown request status"}};
 
 const char *icalenum_reqstat_desc(icalrequeststatus stat)
 {

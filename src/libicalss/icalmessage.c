@@ -14,7 +14,7 @@
 
 #include "icalmessage.h"
 #include "icalerror.h"
-#include "icalversion.h"        /* for ICAL_PACKAGE, ICAL_VERSION */
+#include "icalversion.h" /* for ICAL_PACKAGE, ICAL_VERSION */
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -55,7 +55,6 @@ static icalproperty *icalmessage_find_attendee(icalcomponent *comp, const char *
     for (p = icalcomponent_get_first_property(inner, ICAL_ATTENDEE_PROPERTY);
          p != 0;
          p = icalcomponent_get_next_property(inner, ICAL_ATTENDEE_PROPERTY)) {
-
         char *lattendee;
 
         lattendee = lowercase(icalproperty_get_attendee(p));
@@ -292,7 +291,7 @@ icalcomponent *icalmessage_new_error_reply(icalcomponent *c,
         rs.debug = debug;
 
         icalcomponent_add_property(inner, icalproperty_new_requeststatus(rs));
-    } else {    /*  code == ICAL_UNKNOWN_STATUS */
+    } else { /*  code == ICAL_UNKNOWN_STATUS */
 
         /* Copy all of the request status properties */
         icalproperty *p;

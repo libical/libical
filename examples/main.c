@@ -11,7 +11,7 @@ int main(void)
     return 1;
 }
 
-void do_something(icalcomponent* comp)
+void do_something(icalcomponent *comp)
 {
-    (void)comp;/*unused*/
+    (void)comp; /*unused*/
 }

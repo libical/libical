@@ -15,8 +15,7 @@
 #include "libical_ical_export.h"
 #include "icptrholder_cxx.h"
 
-extern "C"
-{
+extern "C" {
 #include "icalerror.h"
 #include "icalproperty.h"
 }
@@ -42,7 +41,7 @@ public:
     explicit ICalProperty(icalproperty_kind kind);
     ICalProperty(icalproperty_kind kind, std::string str);
 
-    operator  icalproperty *()
+    operator icalproperty *()
     {
         return imp;
     }
@@ -373,8 +372,8 @@ private:
     /**< The actual C based icalproperty */
 };
 
-}       // namespace LibICal
+} // namespace LibICal
 
-typedef ICPointerHolder < LibICal::ICalProperty > ICalPropertyTmpPtr;
+typedef ICPointerHolder<LibICal::ICalProperty> ICalPropertyTmpPtr;
 
 #endif /* ICalProperty_H */

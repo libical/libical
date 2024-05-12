@@ -23,8 +23,7 @@
 #include <unicode/ucal.h>
 #endif
 
-struct recur
-{
+struct recur {
     const char *dtstart;
     const char *rrule;
     const char *start_at;
@@ -397,8 +396,7 @@ const struct recur rfc5545[] = {
      "FREQ=HOURLY;UNTIL=20210303T000000Z",
      "20210302T100000"},
 
-    {NULL, NULL, NULL}
-};
+    {NULL, NULL, NULL}};
 
 const struct recur rscale[] = {
 
@@ -573,8 +571,7 @@ const struct recur rscale[] = {
      "RSCALE=GREGORIAN;FREQ=YEARLY;BYYEARDAY=-366;SKIP=BACKWARD;COUNT=9",
      NULL},
 
-    {NULL, NULL, NULL}
-};
+    {NULL, NULL, NULL}};
 
 int main(int argc, char *argv[])
 {
@@ -614,7 +611,8 @@ int main(int argc, char *argv[])
 
         fprintf(fp, "\nRRULE:%s\n", r->rrule);
         fprintf(fp, "DTSTART:%s\n", r->dtstart);
-        if (r->start_at) fprintf(fp, "START-AT:%s\n", r->start_at);
+        if (r->start_at)
+            fprintf(fp, "START-AT:%s\n", r->start_at);
         fprintf(fp, "INSTANCES:");
 
         if (verbose) {
@@ -639,7 +637,6 @@ int main(int argc, char *argv[])
             for (next = icalrecur_iterator_next(ritr);
                  !icaltime_is_null_time(next);
                  next = icalrecur_iterator_next(ritr)) {
-
                 fprintf(fp, "%s%s", sep, icaltime_as_ical_string(next));
                 sep = ",";
             }
@@ -654,7 +651,6 @@ int main(int argc, char *argv[])
             for (next = icalrecur_iterator_prev(ritr);
                  !icaltime_is_null_time(next);
                  next = icalrecur_iterator_prev(ritr)) {
-
                 fprintf(fp, "%s%s", sep, icaltime_as_ical_string(next));
                 sep = ",";
             }

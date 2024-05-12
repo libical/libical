@@ -13,9 +13,9 @@
 
 #include "libical_deprecated.h"
 #include "libical_ical_export.h"
-#include "icalderivedproperty.h"        /* To get icalproperty_kind enumerations */
+#include "icalderivedproperty.h" /* To get icalproperty_kind enumerations */
 
-#include <stdarg.h>     /* for va_... */
+#include <stdarg.h> /* for va_... */
 
 /** @file icalproperty.h */
 

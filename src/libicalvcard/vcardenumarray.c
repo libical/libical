@@ -28,7 +28,7 @@ ssize_t vcardenumarray_find(vcardenumarray *array,
         if (!!e->xvalue == !!needle->xvalue &&
             ((e->xvalue && !strcmp(e->xvalue, needle->xvalue)) ||
              (!e->xvalue && (e->val == needle->val)))) {
-            return (ssize_t) i;
+            return (ssize_t)i;
         }
     }
 
@@ -38,8 +38,7 @@ ssize_t vcardenumarray_find(vcardenumarray *array,
 void vcardenumarray_append(vcardenumarray *array, vcardenumarray_element *elem)
 {
     vcardenumarray_element copy = {
-        elem->val, elem->xvalue ? icalmemory_strdup(elem->xvalue) : NULL
-    };
+        elem->val, elem->xvalue ? icalmemory_strdup(elem->xvalue) : NULL};
 
     icalarray_append(array, &copy);
 }
@@ -55,7 +54,8 @@ void vcardenumarray_remove_element_at(vcardenumarray *array,
 {
     vcardenumarray_element *del = icalarray_element_at(array, (size_t)position);
 
-    if (del->xvalue) icalmemory_free_buffer((char *) del->xvalue);
+    if (del->xvalue)
+        icalmemory_free_buffer((char *)del->xvalue);
     icalarray_remove_element_at(array, (size_t)position);
 }
 
@@ -63,13 +63,14 @@ void vcardenumarray_remove(vcardenumarray *array, vcardenumarray_element *del)
 {
     ssize_t position = vcardenumarray_find(array, del);
 
-    if (position >= 0) vcardenumarray_remove_element_at(array, position);
+    if (position >= 0)
+        vcardenumarray_remove_element_at(array, position);
 }
 
 void vcardenumarray_free(vcardenumarray *array)
 {
     while (array->num_elements)
-        vcardenumarray_remove_element_at(array, (ssize_t)(array->num_elements-1));
+        vcardenumarray_remove_element_at(array, (ssize_t)(array->num_elements - 1));
     icalarray_free(array);
 }
 
@@ -77,18 +78,18 @@ static int enumcmp(const vcardenumarray_element *a, const vcardenumarray_element
 {
     /* Sort X- values alphabetically, but last */
     if (a->xvalue) {
-        if (b->xvalue) return strcmp(a->xvalue, b->xvalue);
-        else return 1;
-    }
-    else if (b->xvalue) {
+        if (b->xvalue)
+            return strcmp(a->xvalue, b->xvalue);
+        else
+            return 1;
+    } else if (b->xvalue) {
         return -1;
-    }
-    else {
+    } else {
         return a->val - b->val;
     }
 }
 
 void vcardenumarray_sort(vcardenumarray *array)
 {
-    icalarray_sort(array, (int (*)(const void *, const void *)) &enumcmp);
+    icalarray_sort(array, (int (*)(const void *, const void *)) & enumcmp);
 }

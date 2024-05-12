@@ -44,9 +44,17 @@ void qsort_gen_memswap(void *m1, void *m2, size_t size)
 #define T 7
 
 /* Macros for handling the QSort stack */
-#define PREPARE_STACK size_t stack[STACKSIZE]; size_t* stackptr = stack
-#define PUSH(base, limit) stackptr[0] = base; stackptr[1] = limit; stackptr += 2
-#define POP(base, limit) stackptr -= 2; base = stackptr[0]; limit = stackptr[1]
+#define PREPARE_STACK        \
+    size_t stack[STACKSIZE]; \
+    size_t *stackptr = stack
+#define PUSH(base, limit) \
+    stackptr[0] = base;   \
+    stackptr[1] = limit;  \
+    stackptr += 2
+#define POP(base, limit) \
+    stackptr -= 2;       \
+    base = stackptr[0];  \
+    limit = stackptr[1]
 /* TODO: Stack usage is log2(nmemb) (minus what T shaves off the worst case).
          Worst-case nmemb is platform dependent and should probably be
          configured.
@@ -54,13 +62,13 @@ void qsort_gen_memswap(void *m1, void *m2, size_t size)
 #define STACKSIZE 64
 
 void qsort_gen(void *list, size_t nitems,
-               int(*compar)(const void *, size_t, size_t),
-               void(*swapr)(void *, size_t, size_t))
+               int (*compar)(const void *, size_t, size_t),
+               void (*swapr)(void *, size_t, size_t))
 {
     size_t i;
     size_t j;
-    size_t base_          = 0;
-    size_t limit          = nitems;
+    size_t base_ = 0;
+    size_t limit = nitems;
     PREPARE_STACK;
 
     for (;;) {
@@ -88,11 +96,11 @@ void qsort_gen(void *list, size_t nitems,
             for (;;) {
                 do {
                     /* move i right until *i >= pivot */
-                    i ++;
+                    i++;
                 } while (compar(list, i, base_) < 0);
                 do {
                     /* move j left until *j <= pivot */
-                    j --;
+                    j--;
                 } while (compar(list, j, base_) > 0);
                 if (i > j) {
                     /* break loop if pointers crossed */
@@ -116,7 +124,7 @@ void qsort_gen(void *list, size_t nitems,
         } else {
             /* insertion sort for less than T elements */
             for (j = base_, i = j + 1; i < limit; j = i, i++) {
-                for (; compar(list, j, j + 1) > 0; j --) {
+                for (; compar(list, j, j + 1) > 0; j--) {
                     swapr(list, j, j + 1);
                     if (j == base_) {
                         break;

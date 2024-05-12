@@ -15,8 +15,7 @@
 #include "libical_ical_export.h"
 #include "icptrholder_cxx.h"
 
-extern "C"
-{
+extern "C" {
 #include "icalerror.h"
 #include "icalcomponent.h"
 }
@@ -213,7 +212,7 @@ private:
     icalcomponent *imp;
 };
 
-class LIBICAL_ICAL_EXPORT VCalendar: public VComponent
+class LIBICAL_ICAL_EXPORT VCalendar : public VComponent
 {
 public:
     VCalendar();
@@ -225,7 +224,7 @@ public:
     explicit VCalendar(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VEvent: public VComponent
+class LIBICAL_ICAL_EXPORT VEvent : public VComponent
 {
 public:
     VEvent();
@@ -237,7 +236,7 @@ public:
     explicit VEvent(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VToDo: public VComponent
+class LIBICAL_ICAL_EXPORT VToDo : public VComponent
 {
 public:
     VToDo();
@@ -249,7 +248,7 @@ public:
     explicit VToDo(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VAgenda: public VComponent
+class LIBICAL_ICAL_EXPORT VAgenda : public VComponent
 {
 public:
     VAgenda();
@@ -261,7 +260,7 @@ public:
     explicit VAgenda(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VQuery: public VComponent
+class LIBICAL_ICAL_EXPORT VQuery : public VComponent
 {
 public:
     VQuery();
@@ -273,7 +272,7 @@ public:
     explicit VQuery(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VJournal: public VComponent
+class LIBICAL_ICAL_EXPORT VJournal : public VComponent
 {
 public:
     VJournal();
@@ -285,7 +284,7 @@ public:
     explicit VJournal(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VAlarm: public VComponent
+class LIBICAL_ICAL_EXPORT VAlarm : public VComponent
 {
 public:
     VAlarm();
@@ -304,7 +303,7 @@ public:
     icalrequeststatus getTriggerTime(VComponent &c, struct icaltriggertype *tr);
 };
 
-class LIBICAL_ICAL_EXPORT VFreeBusy: public VComponent
+class LIBICAL_ICAL_EXPORT VFreeBusy : public VComponent
 {
 public:
     VFreeBusy();
@@ -316,7 +315,7 @@ public:
     explicit VFreeBusy(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VTimezone: public VComponent
+class LIBICAL_ICAL_EXPORT VTimezone : public VComponent
 {
 public:
     VTimezone();
@@ -328,7 +327,7 @@ public:
     explicit VTimezone(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT XStandard: public VComponent
+class LIBICAL_ICAL_EXPORT XStandard : public VComponent
 {
 public:
     XStandard();
@@ -340,7 +339,7 @@ public:
     explicit XStandard(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT XDaylight: public VComponent
+class LIBICAL_ICAL_EXPORT XDaylight : public VComponent
 {
 public:
     XDaylight();
@@ -354,6 +353,6 @@ public:
 
 } // namespace LibICal;
 
-typedef ICPointerHolder < LibICal::VComponent > VComponentTmpPtr;
+typedef ICPointerHolder<LibICal::VComponent> VComponentTmpPtr;
 
 #endif /* ICAL_VCOMPONENT_H */

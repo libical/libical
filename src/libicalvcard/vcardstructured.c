@@ -25,7 +25,7 @@ vcardstructuredtype *vcardstructured_new(void)
 {
     vcardstructuredtype *s;
 
-    s = (vcardstructuredtype *) icalmemory_new_buffer(sizeof(vcardstructuredtype));
+    s = (vcardstructuredtype *)icalmemory_new_buffer(sizeof(vcardstructuredtype));
     if (!s) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return NULL;
@@ -85,6 +85,7 @@ void vcardstructured_free(vcardstructuredtype *s)
     unsigned i;
 
     for (i = 0; i < s->num_fields; i++)
-        if (s->field[i]) vcardstrarray_free(s->field[i]);
+        if (s->field[i])
+            vcardstrarray_free(s->field[i]);
     icalmemory_free_buffer((void *)s);
 }

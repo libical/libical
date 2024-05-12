@@ -35,8 +35,7 @@ const char *major_type_string[] = {
     "MULTIPART",
     "MESSAGE",
     "UNKNOWN",
-    "NO"
-};
+    "NO"};
 
 const char *minor_type_string[] = {
     "ANY",
@@ -49,12 +48,11 @@ const char *minor_type_string[] = {
     "ALTERNATIVE",
     "PARALLEL",
     "UNKNOWN",
-    "NO"
-};
+    "NO"};
 
 char *read_stream(char *s, size_t size, void *d)
 {
-    char *c = fgets(s, (int)size, (FILE *) d);
+    char *c = fgets(s, (int)size, (FILE *)d);
 
     return c;
 }
@@ -71,8 +69,7 @@ int main(int argc, char *argv[])
     int errflg = 0;
     char *program_name;
 
-    struct options
-    {
+    struct options {
         int normal;
         int stress;
         int base64;
@@ -91,68 +88,68 @@ int main(int argc, char *argv[])
 
     while ((c = getopt(argc, argv, "nsbqi:S:c:")) != -1) {
         switch (c) {
-        case 'i':{
-                /* Input comes from named file */
-                if (opt.input_file) {
-                    free(opt.input_file);
-                }
-                opt.input_file = strdup(optarg);
-                break;
+        case 'i': {
+            /* Input comes from named file */
+            if (opt.input_file) {
+                free(opt.input_file);
             }
-        case 'n':{
-                /* Normal */
+            opt.input_file = strdup(optarg);
+            break;
+        }
+        case 'n': {
+            /* Normal */
 
-                if (opt.stress + opt.base64 + opt.qp != 0) {
-                    fprintf(stderr, "%s: Use only one of  n,s,b and q\n", program_name);
-                }
-                opt.normal = 1;
-                break;
+            if (opt.stress + opt.base64 + opt.qp != 0) {
+                fprintf(stderr, "%s: Use only one of  n,s,b and q\n", program_name);
             }
-        case 's':{
-                /* Stress-test */
-                if (opt.base64 + opt.normal + opt.qp != 0) {
-                    fprintf(stderr, "%s: Use only one of  n,s,b and q\n", program_name);
-                }
-                opt.stress = 1;
-                break;
+            opt.normal = 1;
+            break;
+        }
+        case 's': {
+            /* Stress-test */
+            if (opt.base64 + opt.normal + opt.qp != 0) {
+                fprintf(stderr, "%s: Use only one of  n,s,b and q\n", program_name);
             }
-        case 'b':{
-                /* test base64 decoding */
-                if (opt.stress + opt.normal + opt.qp != 0) {
-                    fprintf(stderr, "%s: Use only one of  n,s,b and q\n", program_name);
-                }
-                opt.base64 = 1;
-                break;
+            opt.stress = 1;
+            break;
+        }
+        case 'b': {
+            /* test base64 decoding */
+            if (opt.stress + opt.normal + opt.qp != 0) {
+                fprintf(stderr, "%s: Use only one of  n,s,b and q\n", program_name);
             }
-        case 'q':{
-                /* test quoted-printable decoding */
-                if (opt.stress + opt.base64 + opt.normal != 0) {
-                    fprintf(stderr, "%s: Use only one of  n,s,b and q\n", program_name);
-                }
-                opt.qp = 1;
-                break;
+            opt.base64 = 1;
+            break;
+        }
+        case 'q': {
+            /* test quoted-printable decoding */
+            if (opt.stress + opt.base64 + opt.normal != 0) {
+                fprintf(stderr, "%s: Use only one of  n,s,b and q\n", program_name);
             }
-        case 'S':{
-                /* sleep at end of run */
-                opt.sleepy = atoi(optarg);
-                break;
-            }
+            opt.qp = 1;
+            break;
+        }
+        case 'S': {
+            /* sleep at end of run */
+            opt.sleepy = atoi(optarg);
+            break;
+        }
 
-        case 'c':{
-                /* number of iterations of stress test */
-                opt.count = atoi(optarg);
-                break;
-            }
+        case 'c': {
+            /* number of iterations of stress test */
+            opt.count = atoi(optarg);
+            break;
+        }
 
-        case ':':{
-                /* Option given without an operand */
-                fprintf(stderr, "%s: Option -%c requires an operand\n", program_name, optopt);
-                errflg++;
-                break;
-            }
-        case '?':{
-                errflg++;
-            }
+        case ':': {
+            /* Option given without an operand */
+            fprintf(stderr, "%s: Option -%c requires an operand\n", program_name, optopt);
+            errflg++;
+            break;
+        }
+        case '?': {
+            errflg++;
+        }
         }
     }
 
@@ -195,8 +192,7 @@ int main(int argc, char *argv[])
         unsigned int last, non_rand, rand_lines, r;
         size_t size;
         icalcomponent *c;
-        struct slg_data
-        {
+        struct slg_data {
             char *pos;
             char *str;
         } d;
@@ -218,7 +214,6 @@ int main(int argc, char *argv[])
         assert(buf != 0);
 
         for (j = 0; j < (unsigned int)opt.count; j++) {
-
             srand(j);
             memset(buf, 0, size * 2);
             /* First insert some non-randomized lines */

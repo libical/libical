@@ -100,4 +100,4 @@ gboolean parse_enumeration(xmlNode *node, Enumeration *enumeration);
 gboolean parse_custom(xmlNode *node, Method *method);
 gboolean parse_declaration(xmlNode *node, Declaration *declaration);
 
-#endif  /* XML_PARSER_H */
+#endif /* XML_PARSER_H */

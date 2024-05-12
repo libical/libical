@@ -20,8 +20,8 @@
 typedef enum vcardcomponent_kind
 {
     VCARD_NO_COMPONENT,
-    VCARD_ANY_COMPONENT,      /* Used to select all components */
-    VCARD_XROOT_COMPONENT,    /* Used as container for multiple vCards */
+    VCARD_ANY_COMPONENT,   /* Used to select all components */
+    VCARD_XROOT_COMPONENT, /* Used as container for multiple vCards */
     VCARD_VCARD_COMPONENT,
     VCARD_X_COMPONENT,
     VCARD_NUM_COMPONENT_TYPES /* MUST be last (unless we can put NO_COMP last) */
@@ -62,7 +62,6 @@ LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_isa(const vcardcomponent
 
 LIBICAL_VCARD_EXPORT int vcardcomponent_isa_component(void *component);
 
-
 /***** Working with Properties *****/
 
 LIBICAL_VCARD_EXPORT void vcardcomponent_add_property(vcardcomponent *card,
@@ -80,10 +79,10 @@ LIBICAL_VCARD_EXPORT int vcardcomponent_count_properties(vcardcomponent *card,
 LIBICAL_VCARD_EXPORT void vcardcomponent_add_component(vcardcomponent *parent, vcardcomponent *child);
 
 LIBICAL_VCARD_EXPORT void vcardcomponent_remove_component(vcardcomponent *parent,
-                                                        vcardcomponent *child);
+                                                          vcardcomponent *child);
 
 LIBICAL_VCARD_EXPORT int vcardcomponent_count_components(vcardcomponent *component,
-                                                       vcardcomponent_kind kind);
+                                                         vcardcomponent_kind kind);
 
 /* Kind conversion routines */
 
@@ -98,7 +97,7 @@ LIBICAL_VCARD_EXPORT const char *vcardcomponent_kind_to_string(vcardcomponent_ki
  *  comp_to_merge will no longer exist after calling this function.
  */
 LIBICAL_VCARD_EXPORT void vcardcomponent_merge_component(vcardcomponent *comp,
-                                                       vcardcomponent *comp_to_merge);
+                                                         vcardcomponent *comp_to_merge);
 
 /* Iteration Routines. There are two forms of iterators, internal and
 external. The internal ones came first, and are almost completely
@@ -109,9 +108,9 @@ removes components from the container.*/
 LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_current_component(vcardcomponent *component);
 
 LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_first_component(vcardcomponent *component,
-                                                                     vcardcomponent_kind kind);
+                                                                        vcardcomponent_kind kind);
 LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_next_component(vcardcomponent *component,
-                                                                    vcardcomponent_kind kind);
+                                                                       vcardcomponent_kind kind);
 
 /**
  * @brief Sets the parent vcard for the specified vcardproperty @p property.
@@ -138,7 +137,7 @@ LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_next_property(vcardcompon
  *  comp_to_merge will no longer exist after calling this function.
  */
 LIBICAL_VCARD_EXPORT void vcardcomponent_merge_card(vcardcomponent *card,
-                                           vcardcomponent *card_to_merge);
+                                                    vcardcomponent *card_to_merge);
 
 /***** Working with embedded error properties *****/
 

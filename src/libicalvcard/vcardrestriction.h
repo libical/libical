@@ -48,7 +48,7 @@ typedef enum vcardrestriction_kind
     VCARD_RESTRICTION_ONEMUTUAL, /* 7 */
 
     /** Unknown. */
-    VCARD_RESTRICTION_UNKNOWN    /* 8 */
+    VCARD_RESTRICTION_UNKNOWN /* 8 */
 } vcardrestriction_kind;
 
 /**

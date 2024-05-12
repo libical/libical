@@ -23,7 +23,7 @@ int *icallangbind_new_array(int size)
 {
     int *p = (int *)icalmemory_new_buffer(size * sizeof(int));
 
-    return p;   /* Caller handles failures */
+    return p; /* Caller handles failures */
 }
 
 void icallangbind_free_array(int *array)
@@ -68,7 +68,6 @@ icalproperty *icallangbind_get_first_property(icalcomponent *c, const char *prop
     if (kind == ICAL_X_PROPERTY) {
         for (p = icalcomponent_get_first_property(c, kind);
              p != 0; p = icalcomponent_get_next_property(c, kind)) {
-
             if (strcmp(icalproperty_get_x_name(p), prop) == 0) {
                 return p;
             }
@@ -94,7 +93,6 @@ icalproperty *icallangbind_get_next_property(icalcomponent *c, const char *prop)
     if (kind == ICAL_X_PROPERTY) {
         for (p = icalcomponent_get_next_property(c, kind);
              p != 0; p = icalcomponent_get_next_property(c, kind)) {
-
             if (strcmp(icalproperty_get_x_name(p), prop) == 0) {
                 return p;
             }
@@ -176,47 +174,45 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
 
     if (value) {
         switch (icalvalue_isa(value)) {
-
         case ICAL_ATTACH_VALUE:
         case ICAL_BINARY_VALUE:
-        case ICAL_NO_VALUE:{
-                icalerror_set_errno(ICAL_INTERNAL_ERROR);
+        case ICAL_NO_VALUE: {
+            icalerror_set_errno(ICAL_INTERNAL_ERROR);
+            break;
+        }
+
+        default: {
+            char *str = icalvalue_as_ical_string_r(value);
+            char *copy = (char *)icalmemory_new_buffer(strlen(str) + 1);
+
+            const char *i;
+            char *j;
+
+            if (copy == 0) {
+                icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                 break;
             }
+            /* Remove any newlines */
 
-        default:
-            {
-                char *str = icalvalue_as_ical_string_r(value);
-                char *copy = (char *)icalmemory_new_buffer(strlen(str) + 1);
-
-                const char *i;
-                char *j;
-
-                if (copy == 0) {
-                    icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-                    break;
+            for (j = copy, i = str; *i != 0; j++, i++) {
+                if (*i == '\n') {
+                    i++;
                 }
-                /* Remove any newlines */
-
-                for (j = copy, i = str; *i != 0; j++, i++) {
-                    if (*i == '\n') {
-                        i++;
-                    }
-                    *j = *i;
-                }
-
-                *j = 0;
-
-                APPENDS(", 'value'");
-                APPENDS(sep);
-                APPENDC('\'');
-                APPENDS(copy);
-                APPENDC('\'');
-
-                icalmemory_free_buffer(copy);
-                icalmemory_free_buffer(str);
-                break;
+                *j = *i;
             }
+
+            *j = 0;
+
+            APPENDS(", 'value'");
+            APPENDS(sep);
+            APPENDC('\'');
+            APPENDS(copy);
+            APPENDC('\'');
+
+            icalmemory_free_buffer(copy);
+            icalmemory_free_buffer(str);
+            break;
+        }
         }
     }
 
@@ -224,7 +220,6 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
 
     for (param = icalproperty_get_first_parameter(prop, ICAL_ANY_PARAMETER);
          param != 0; param = icalproperty_get_next_parameter(prop, ICAL_ANY_PARAMETER)) {
-
         char *copy = icalparameter_as_ical_string_r(param);
         char *v;
 

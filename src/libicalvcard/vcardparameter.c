@@ -44,12 +44,12 @@ vcardparameter *vcardparameter_new(vcardparameter_kind kind)
 {
     struct vcardparameter_impl *v = vcardparameter_new_impl(kind);
 
-    return (vcardparameter *) v;
+    return (vcardparameter *)v;
 }
 
 void vcardparameter_free(vcardparameter *param)
 {
-/*  Comment out the following as it always triggers, even when parameter is non-zero
+    /*  Comment out the following as it always triggers, even when parameter is non-zero
     icalerror_check_arg_rv((parameter==0),"parameter");*/
 
     if (param->parent != 0) {
@@ -58,14 +58,12 @@ void vcardparameter_free(vcardparameter *param)
 
     if (param->string != 0) {
         icalmemory_free_buffer((void *)param->string);
-    }
-    else if (param->values != 0) {
+    } else if (param->values != 0) {
         if (param->value_kind == VCARD_TEXT_VALUE)
             vcardstrarray_free(param->values);
         else
             vcardenumarray_free(param->values);
-    }
-    else if (param->structured != 0) {
+    } else if (param->structured != 0) {
         vcardstructured_free(param->structured);
     }
 
@@ -199,17 +197,16 @@ static int vcardparameter_is_safe_char(unsigned char character, int quoted)
 
     if (quoted && character >= 0x23 && character <= 0x7e) {
         return 1;
-    }
-    else if (!quoted &&
-             ((character >= 0x23 && character <= 0x39) ||
-              (character >= 0x3c && character <= 0x7e))) {
+    } else if (!quoted &&
+               ((character >= 0x23 && character <= 0x39) ||
+                (character >= 0x3c && character <= 0x7e))) {
         return 1;
     }
 
     return 0;
 }
 
- /**
+/**
  * Appends the parameter value to the buffer, encoding per RFC 6868
  * and filtering out those characters not permitted by the specifications
  *
@@ -217,7 +214,7 @@ static int vcardparameter_is_safe_char(unsigned char character, int quoted)
  * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
  */
 static void vcardparameter_append_encoded_value(char **buf, char **buf_ptr,
-                                               size_t *buf_size, const char *value)
+                                                size_t *buf_size, const char *value)
 {
     int qm = 0;
     const char *p;
@@ -232,26 +229,25 @@ static void vcardparameter_append_encoded_value(char **buf, char **buf_ptr,
     for (p = value; *p; p++) {
         /* Encode unsafe characters per RFC6868, otherwise replace with SP */
         switch (*p) {
-            case '\n':
-                icalmemory_append_string(buf, buf_ptr, buf_size, "^n");
-                break;
+        case '\n':
+            icalmemory_append_string(buf, buf_ptr, buf_size, "^n");
+            break;
 
-            case '^':
-                icalmemory_append_string(buf, buf_ptr, buf_size, "^^");
-                break;
+        case '^':
+            icalmemory_append_string(buf, buf_ptr, buf_size, "^^");
+            break;
 
-            case '"':
-                icalmemory_append_string(buf, buf_ptr, buf_size, "^'");
-                break;
+        case '"':
+            icalmemory_append_string(buf, buf_ptr, buf_size, "^'");
+            break;
 
-            default:
-                if (vcardparameter_is_safe_char((unsigned char)*p, qm)) {
-                    icalmemory_append_char(buf, buf_ptr, buf_size, *p);
-                }
-                else {
-                    icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
-                }
-                break;
+        default:
+            if (vcardparameter_is_safe_char((unsigned char)*p, qm)) {
+                icalmemory_append_char(buf, buf_ptr, buf_size, *p);
+            } else {
+                icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
+            }
+            break;
         }
     }
 
@@ -292,7 +288,6 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
         icalmemory_append_string(&buf, &buf_ptr,
                                  &buf_size, vcardparameter_get_iana_name(param));
     } else {
-
         kind_string = vcardparameter_kind_to_string(param->kind);
 
         if (param->kind == VCARD_NO_PARAMETER ||
@@ -316,13 +311,12 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
         const char *str;
 
         if (param->value_kind == VCARD_INTEGER_VALUE) {
-            #define VCARD_INTEGER_LENGTH 21
+#define VCARD_INTEGER_LENGTH 21
             intbuf = icalmemory_tmp_buffer(VCARD_INTEGER_LENGTH);
-            snprintf(intbuf, VCARD_INTEGER_LENGTH-1, "%d", param->data);
+            snprintf(intbuf, VCARD_INTEGER_LENGTH - 1, "%d", param->data);
 
             str = intbuf;
-        }
-        else {
+        } else {
             str = vcardparameter_enum_to_string(param->data);
         }
 
@@ -339,9 +333,8 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
                 const char *str = vcardstrarray_element_at(param->values, i);
 
                 vcardparameter_append_encoded_value(&buf, &buf_ptr,
-                        &buf_size, str);
-            }
-            else {
+                                                    &buf_size, str);
+            } else {
                 const vcardenumarray_element *elem =
                     vcardenumarray_element_at(param->values, i);
                 if (elem->xvalue != 0) {

@@ -33,9 +33,9 @@ END:VCALENDAR";
 
 void test_cxx(void)
 {
-    ICalProperty *summProp  = new ICalProperty(ICAL_SUMMARY_PROPERTY);
+    ICalProperty *summProp = new ICalProperty(ICAL_SUMMARY_PROPERTY);
     ICalProperty *startProp = new ICalProperty(ICAL_DTSTART_PROPERTY);
-    ICalProperty *endProp   = new ICalProperty(ICAL_DTEND_PROPERTY);
+    ICalProperty *endProp = new ICalProperty(ICAL_DTEND_PROPERTY);
     ICalProperty *locationProp = new ICalProperty(ICAL_LOCATION_PROPERTY);
     ICalProperty *descProp = new ICalProperty(ICAL_DESCRIPTION_PROPERTY);
 
@@ -161,7 +161,8 @@ void test_cxx(void)
     try {
         icalerrno = ICAL_NO_ERROR;
         VComponent v = VComponent(string("HFHFHFHF"));
-    } catch (icalerrorenum err) {
+    }
+    catch (icalerrorenum err) {
         if (err == ICAL_BADARG_ERROR) {
             caughtException = 1;
         }

@@ -19,11 +19,11 @@
 
 typedef icalarray vcardstrarray;
 
-#define vcardstrarray_new(increment_size)           \
+#define vcardstrarray_new(increment_size) \
     icalarray_new(sizeof(char *), increment_size)
 
-#define vcardstrarray_element_at(array, position)               \
-    *((const char **) icalarray_element_at(array, position))
+#define vcardstrarray_element_at(array, position) \
+    *((const char **)icalarray_element_at(array, position))
 
 #define vcardstrarray_size(array) ((array)->num_elements)
 

@@ -34,8 +34,7 @@ typedef enum icalgaugelogic
     ICALGAUGELOGIC_OR
 } icalgaugelogic;
 
-struct icalgauge_where
-{
+struct icalgauge_where {
     icalgaugelogic logic;
     icalcomponent_kind comp;
     icalproperty_kind prop;
@@ -43,11 +42,10 @@ struct icalgauge_where
     char *value;
 };
 
-struct icalgauge_impl
-{
-    pvl_list select;     /**< Of icalgaugecompare, using only prop and comp fields*/
-    pvl_list from;       /**< List of component_kinds, as integers */
-    pvl_list where;      /**< List of icalgaugecompare */
+struct icalgauge_impl {
+    pvl_list select; /**< Of icalgaugecompare, using only prop and comp fields*/
+    pvl_list from;   /**< List of component_kinds, as integers */
+    pvl_list where;  /**< List of icalgaugecompare */
     int expand;
 };
 

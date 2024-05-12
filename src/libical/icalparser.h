@@ -61,7 +61,7 @@ typedef enum icalparser_state
     ICALPARSER_IN_PROGRESS
 } icalparser_state;
 
-typedef char *(*icalparser_line_gen_func) (char *s, size_t size, void *d);
+typedef char *(*icalparser_line_gen_func)(char *s, size_t size, void *d);
 
 /**
  * @brief Creates a new icalparser.
@@ -307,7 +307,8 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
  * @enum icalparser_ctrl
  * @brief Defines how to handle invalid CONTROL characters in content lines
  */
-enum icalparser_ctrl {
+enum icalparser_ctrl
+{
     /** Keep CONTROL characters in content-line */
     ICALPARSER_CTRL_KEEP,
     /** Omit CONTROL characters from content-line */

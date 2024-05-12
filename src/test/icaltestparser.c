@@ -64,7 +64,7 @@ extern int yydebug;
 
 char *read_stream(char *s, size_t size, void *d)
 {
-    char *c = fgets(s, (int)size, (FILE *) d);
+    char *c = fgets(s, (int)size, (FILE *)d);
 
     return c;
 }
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
         return 0;
     }
     stream = fopen(argv[1], "r");
-    if (stream == (FILE *) NULL) {
+    if (stream == (FILE *)NULL) {
         fprintf(stderr, "Cannot open file \"%s\" for reading\n", argv[1]);
         return 1;
     }
@@ -89,7 +89,6 @@ int main(int argc, char *argv[])
     icalparser_set_gen_data(parser, stream);
 
     do {
-
         line = icalparser_get_line(parser, read_stream);
 
         c = icalparser_add_line(parser, line);

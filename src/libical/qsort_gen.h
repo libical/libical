@@ -31,8 +31,8 @@
  * the elements to be compared.
  */
 void qsort_gen(void *list, size_t nitems,
-               int(*compar)(const void *, size_t, size_t),
-               void(*swapr)(void *, size_t, size_t));
+               int (*compar)(const void *, size_t, size_t),
+               void (*swapr)(void *, size_t, size_t));
 
 /**
  * @brief Swaps two arbitrary blocks of memory.

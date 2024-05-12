@@ -14,11 +14,13 @@
 #include "icalvalue_cxx.h"
 using namespace LibICal;
 
-ICalValue::ICalValue() : imp(icalvalue_new(ICAL_ANY_VALUE))
+ICalValue::ICalValue()
+    : imp(icalvalue_new(ICAL_ANY_VALUE))
 {
 }
 
-ICalValue::ICalValue(const ICalValue &v) : imp(icalvalue_clone(v.imp))
+ICalValue::ICalValue(const ICalValue &v)
+    : imp(icalvalue_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -54,11 +56,13 @@ ICalValue::~ICalValue()
     }
 }
 
-ICalValue::ICalValue(icalvalue *v) : imp(v)
+ICalValue::ICalValue(icalvalue *v)
+    : imp(v)
 {
 }
 
-ICalValue::ICalValue(const icalvalue_kind &kind) : imp(icalvalue_new(kind))
+ICalValue::ICalValue(const icalvalue_kind &kind)
+    : imp(icalvalue_new(kind))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -188,7 +192,8 @@ void ICalValue::set_caladdress(const std::string &v)
 }
 
 /* PERIOD */
-struct icalperiodtype ICalValue::get_period() const {
+struct icalperiodtype ICalValue::get_period() const
+{
     return icalvalue_get_period(imp);
 }
 
@@ -231,7 +236,8 @@ void ICalValue::set_text(const std::string &v)
 }
 
 /* DURATION */
-struct icaldurationtype ICalValue::get_duration() const {
+struct icaldurationtype ICalValue::get_duration() const
+{
     return icalvalue_get_duration(imp);
 }
 
@@ -329,7 +335,8 @@ void ICalValue::set_transp(const enum icalproperty_transp &v)
 }
 
 /* DATE-TIME */
-struct icaltimetype ICalValue::get_datetime() const {
+struct icaltimetype ICalValue::get_datetime() const
+{
     return icalvalue_get_datetime(imp);
 }
 
@@ -339,7 +346,8 @@ void ICalValue::set_datetime(const struct icaltimetype &v)
 }
 
 /* GEO */
-struct icalgeotype ICalValue::get_geo() const {
+struct icalgeotype ICalValue::get_geo() const
+{
     return icalvalue_get_geo(imp);
 }
 
@@ -349,7 +357,8 @@ void ICalValue::set_geo(const struct icalgeotype &v)
 }
 
 /* DATE */
-struct icaltimetype ICalValue::get_date() const {
+struct icaltimetype ICalValue::get_date() const
+{
     return icalvalue_get_date(imp);
 }
 
