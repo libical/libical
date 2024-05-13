@@ -66,8 +66,7 @@ struct buf {
 };
 #define BUF_INITIALIZER \
     {                   \
-        NULL, 0, 0      \
-    }
+        NULL, 0, 0}
 
 struct vcardparser_state {
     struct buf buf;
