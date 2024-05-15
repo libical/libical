@@ -1085,7 +1085,7 @@ icalarray *icalrecurrencetype_rscale_supported_calendars(void)
 
     calendars = icalarray_new(sizeof(const char **), 20);
 
-    en = ucal_getKeywordValuesForLocale("calendar", NULL, false, &status);
+    en = ucal_getKeywordValuesForLocale("calendar", "", false, &status);
     while ((cal = uenum_next(en, NULL, &status))) {
         cal = icalmemory_tmp_copy(cal);
         icalarray_append(calendars, &cal);
@@ -1486,7 +1486,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
         }
 
         /* Check if specified calendar is supported */
-        en = ucal_getKeywordValuesForLocale("calendar", NULL, false, &status);
+        en = ucal_getKeywordValuesForLocale("calendar", "", false, &status);
         while ((cal = uenum_next(en, NULL, &status))) {
             if (!strcmp(cal, rule.rscale)) {
                 is_hebrew = !strcmp(rule.rscale, "hebrew");
