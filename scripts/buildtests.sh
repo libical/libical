@@ -160,7 +160,8 @@ CONFIGURE() {
   rm -rf *
   cmake --warn-uninitialized -Werror=dev .. $2 2>&1 | tee cmake.out || exit 1
   numWarnings=`grep -ic "cmake warning" cmake.out`
-  if ( test $numWarnings -gt 0 )
+  numDeprecates=`grep -ic "cmake deprecat" cmake.out`
+  if ( test $numWarnings -gt 0 -o $numDeprecates -gt 0 )
   then
      echo "cmake warnings encountered"
      exit 1
