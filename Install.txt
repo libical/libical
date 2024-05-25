@@ -17,6 +17,10 @@ To build libical you will need:
  - Perl
  - libicu (not required but strongly recommended)
 
+If you have vcpkg available and want to build the dependencies as part
+of the project you can also tell CMake the vcpkg toolchain file with:
+"-DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake"
+
 Building on Unix with gcc or clang:
 % mkdir build
 % cd build
