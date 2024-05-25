@@ -15,6 +15,10 @@ To build libical you will need:
  - libicu (not required but strongly recommended)
  - a C compiler (let us know if the build fails with your C compiler)
 
+If you have vcpkg available and want to build the dependencies as part
+of the project you can also tell CMake the vcpkg toolchain file with:
+"-DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake"
+
 Building on Unix with gcc or clang:
 % mkdir build
 % cd build

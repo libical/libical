@@ -205,7 +205,8 @@ typedef unsigned int inptr_t;
 /* Typedef size_t if needed */
 #cmakedefine HAVE_SIZEOF_SIZE_T
 #if !defined(HAVE_SIZEOF_SIZE_T)
-typedef unsigned long size_t;
+#include <stdint.h>
+typedef uint64_t size_t;
 #endif
 
 /* Typedef ssize_t if needed */

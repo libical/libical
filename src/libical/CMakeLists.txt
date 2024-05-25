@@ -271,6 +271,11 @@ target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
 
 if(ICU_FOUND)
   target_link_libraries(ical ${ICU_LIBRARIES})
+  if(VCPKG_MANIFEST_MODE)
+    if(NOT APPLE AND NOT WIN32)
+      target_link_libraries(ical "m;stdc++")
+    endif()
+  endif()
 endif()
 
 if(WINCE)

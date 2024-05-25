@@ -209,7 +209,7 @@ if(NOT "$ENV{ICU_ROOT}")
     set(ICU_ROOT "/usr/local/opt/icu4c")
   endif()
 endif()
-find_package(ICU COMPONENTS uc i18n)
+find_package(ICU COMPONENTS uc i18n data)
 set_package_properties(ICU PROPERTIES
   TYPE RECOMMENDED
   PURPOSE "For RSCALE (RFC7529) support"
