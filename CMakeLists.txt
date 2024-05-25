@@ -251,7 +251,7 @@ if(DEFINED ICU_ROOT) #to make --warn-uninitialized happy
     endif()
   endif()
 endif()
-find_package(ICU COMPONENTS uc i18n)
+find_package(ICU COMPONENTS uc i18n data)
 set_package_properties(
   ICU PROPERTIES
   TYPE RECOMMENDED
