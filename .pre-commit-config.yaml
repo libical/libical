@@ -19,17 +19,17 @@ repos:
   - id: clang-format
     exclude: ^(src/java/|src/Net-ICal-Libical|src/libical/astime.h|src/libical/caldate.c|src/libicalvcal/port.h|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
 - repo: https://github.com/PyCQA/pylint
-  rev: v3.1.0
+  rev: v3.2.2
   hooks:
   - id: pylint
     exclude: ^(.cmake-format.py)
 - repo: https://github.com/hhatto/autopep8
-  rev: v2.1.0
+  rev: v2.1.1
   hooks:
   - id: autopep8
     exclude: ^(.cmake-format.py)
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.6
+  rev: v2.3.0
   hooks:
   - id: codespell
 - repo: https://github.com/cheshirekow/cmake-format-precommit
