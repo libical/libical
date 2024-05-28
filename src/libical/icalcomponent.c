@@ -2484,6 +2484,15 @@ static int prop_compare(void *a, void *b)
     return r;
 }
 
+static inline int compare_nullptr(const void *a, const void *b)
+{
+    if (!a == !b)
+        return 0;
+
+    // non-NULL sorts before NULL
+    return a ? -1 : 1;
+}
+
 static int comp_compare(void *a, void *b)
 {
     icalcomponent *c1 = (icalcomponent *)a;
@@ -2517,17 +2526,25 @@ static int comp_compare(void *a, void *b)
                                                           ICAL_TRIGGER_PROPERTY);
                     p2 = icalcomponent_get_first_property(c2,
                                                           ICAL_TRIGGER_PROPERTY);
-                    r = strcmp(icalproperty_get_value_as_string(p1),
-                               icalproperty_get_value_as_string(p2));
-
-                    if (r == 0) {
-                        p1 = icalcomponent_get_first_property(c1,
-                                                              ICAL_ACTION_PROPERTY);
-                        p2 = icalcomponent_get_first_property(c2,
-                                                              ICAL_ACTION_PROPERTY);
+                    if (p1 && p2) {
                         r = strcmp(icalproperty_get_value_as_string(p1),
                                    icalproperty_get_value_as_string(p2));
+                        if (r == 0) {
+                            p1 = icalcomponent_get_first_property(c1,
+                                                                  ICAL_ACTION_PROPERTY);
+                            p2 = icalcomponent_get_first_property(c2,
+                                                                  ICAL_ACTION_PROPERTY);
+                            if (p1 && p2) {
+                                r = strcmp(icalproperty_get_value_as_string(p1),
+                                           icalproperty_get_value_as_string(p2));
+                            } else {
+                                r = compare_nullptr(p1, p2);
+                            }
+                        }
+                    } else {
+                        r = compare_nullptr(p1, p2);
                     }
+
                     break;
 
                 case ICAL_VTIMEZONE_COMPONENT:
@@ -2535,8 +2552,12 @@ static int comp_compare(void *a, void *b)
                                                           ICAL_TZID_PROPERTY);
                     p2 = icalcomponent_get_first_property(c2,
                                                           ICAL_TZID_PROPERTY);
-                    r = strcmp(icalproperty_get_value_as_string(p1),
-                               icalproperty_get_value_as_string(p2));
+                    if (p1 && p2) {
+                        r = strcmp(icalproperty_get_value_as_string(p1),
+                                   icalproperty_get_value_as_string(p2));
+                    } else {
+                        r = compare_nullptr(p1, p2);
+                    }
                     break;
 
                 case ICAL_XSTANDARD_COMPONENT:
@@ -2545,8 +2566,13 @@ static int comp_compare(void *a, void *b)
                                                           ICAL_DTSTART_PROPERTY);
                     p2 = icalcomponent_get_first_property(c2,
                                                           ICAL_DTSTART_PROPERTY);
-                    r = strcmp(icalproperty_get_value_as_string(p1),
-                               icalproperty_get_value_as_string(p2));
+
+                    if (p1 && p2) {
+                        r = strcmp(icalproperty_get_value_as_string(p1),
+                                   icalproperty_get_value_as_string(p2));
+                    } else {
+                        r = compare_nullptr(p1, p2);
+                    }
                     break;
 
                 case ICAL_VVOTER_COMPONENT:
@@ -2554,8 +2580,13 @@ static int comp_compare(void *a, void *b)
                                                           ICAL_VOTER_PROPERTY);
                     p2 = icalcomponent_get_first_property(c2,
                                                           ICAL_VOTER_PROPERTY);
-                    r = strcmp(icalproperty_get_value_as_string(p1),
-                               icalproperty_get_value_as_string(p2));
+
+                    if (p1 && p2) {
+                        r = strcmp(icalproperty_get_value_as_string(p1),
+                                   icalproperty_get_value_as_string(p2));
+                    } else {
+                        r = compare_nullptr(p1, p2);
+                    }
                     break;
 
                 case ICAL_XVOTE_COMPONENT:
@@ -2563,8 +2594,13 @@ static int comp_compare(void *a, void *b)
                                                           ICAL_POLLITEMID_PROPERTY);
                     p2 = icalcomponent_get_first_property(c2,
                                                           ICAL_POLLITEMID_PROPERTY);
-                    r = strcmp(icalproperty_get_value_as_string(p1),
-                               icalproperty_get_value_as_string(p2));
+
+                    if (p1 && p2) {
+                        r = strcmp(icalproperty_get_value_as_string(p1),
+                                   icalproperty_get_value_as_string(p2));
+                    } else {
+                        r = compare_nullptr(p1, p2);
+                    }
                     break;
 
                 default:
