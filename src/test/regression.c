@@ -4913,6 +4913,141 @@ void test_icalcomponent_normalize(void)
     str_is("Normalized components match", calStr1, calStr2);
 }
 
+void test_icalcomponent_normalize_missing_mandatory_props(void)
+{
+    // This test asserts that normalize does not crash when comparing
+    // components which do not have mandatory properties set. If one
+    // component has the property set and the other does not, then
+    // the component having the property sorts first.
+
+    struct testcase {
+        const char *calStr;
+        const char *expect;
+    } tests[] = {{.calStr =
+                      "BEGIN:VEVENT\r\n"
+                      "BEGIN:VALARM\r\n"
+                      // no ACTION
+                      // no TRIGGER
+                      "END:VALARM\r\n"
+                      "BEGIN:VALARM\r\n"
+                      "ACTION:DISPLAY\r\n"
+                      "TRIGGER:PT0S\r\n"
+                      "END:VALARM\r\n"
+                      "END:VEVENT\r\n",
+                  .expect =
+                      "BEGIN:VEVENT\r\n"
+                      "BEGIN:VALARM\r\n"
+                      "ACTION:DISPLAY\r\n"
+                      "TRIGGER:PT0S\r\n"
+                      "END:VALARM\r\n"
+                      "BEGIN:VALARM\r\n"
+                      // no ACTION
+                      // no TRIGGER
+                      "END:VALARM\r\n"
+                      "END:VEVENT\r\n"},
+                 {.calStr =
+                      "BEGIN:VEVENT\r\n"
+                      "BEGIN:VALARM\r\n"
+                      // no ACTION
+                      "TRIGGER:PT0S\r\n"
+                      "END:VALARM\r\n"
+                      "BEGIN:VALARM\r\n"
+                      "ACTION:DISPLAY\r\n"
+                      "TRIGGER:PT0S\r\n"
+                      "END:VALARM\r\n"
+                      "END:VEVENT\r\n",
+                  .expect =
+                      "BEGIN:VEVENT\r\n"
+                      "BEGIN:VALARM\r\n"
+                      "ACTION:DISPLAY\r\n"
+                      "TRIGGER:PT0S\r\n"
+                      "END:VALARM\r\n"
+                      "BEGIN:VALARM\r\n"
+                      // no ACTION
+                      "TRIGGER:PT0S\r\n"
+                      "END:VALARM\r\n"
+                      "END:VEVENT\r\n"},
+                 {
+                     .calStr =
+                         "BEGIN:VCALENDAR\r\n"
+                         "BEGIN:VTIMEZONE\r\n"
+                         // no TZID
+                         "BEGIN:STANDARD\r\n"
+                         "DTSTART:16010101T000000\r\n"
+                         "TZOFFSETFROM:-0200\r\n"
+                         "TZOFFSETTO:-0200\r\n"
+                         "END:STANDARD\r\n"
+                         "END:VTIMEZONE\r\n"
+                         "BEGIN:VTIMEZONE\r\n"
+                         "TZID:/test\r\n"
+                         "BEGIN:STANDARD\r\n"
+                         "DTSTART:16010101T000000\r\n"
+                         "TZOFFSETFROM:-0200\r\n"
+                         "TZOFFSETTO:-0200\r\n"
+                         "END:STANDARD\r\n"
+                         "END:VTIMEZONE\r\n"
+                         "END:VCALENDAR\r\n",
+                     .expect =
+                         "BEGIN:VCALENDAR\r\n"
+                         "BEGIN:VTIMEZONE\r\n"
+                         "TZID:/test\r\n"
+                         "BEGIN:STANDARD\r\n"
+                         "DTSTART:16010101T000000\r\n"
+                         "TZOFFSETFROM:-0200\r\n"
+                         "TZOFFSETTO:-0200\r\n"
+                         "END:STANDARD\r\n"
+                         "END:VTIMEZONE\r\n"
+                         "BEGIN:VTIMEZONE\r\n"
+                         // no TZID
+                         "BEGIN:STANDARD\r\n"
+                         "DTSTART:16010101T000000\r\n"
+                         "TZOFFSETFROM:-0200\r\n"
+                         "TZOFFSETTO:-0200\r\n"
+                         "END:STANDARD\r\n"
+                         "END:VTIMEZONE\r\n"
+                         "END:VCALENDAR\r\n",
+                 },
+                 {.calStr =
+                      "BEGIN:VTIMEZONE\r\n"
+                      "BEGIN:STANDARD\r\n"
+                      // no DTSTART
+                      "TZOFFSETFROM:-0200\r\n"
+                      "TZOFFSETTO:-0200\r\n"
+                      "END:STANDARD\r\n"
+                      "BEGIN:STANDARD\r\n"
+                      "DTSTART:16010101T000000\r\n"
+                      "TZOFFSETFROM:-0200\r\n"
+                      "TZOFFSETTO:-0200\r\n"
+                      "END:STANDARD\r\n"
+                      "END:VTIMEZONE\r\n",
+                  .expect =
+                      "BEGIN:VTIMEZONE\r\n"
+                      "BEGIN:STANDARD\r\n"
+                      "DTSTART:16010101T000000\r\n"
+                      "TZOFFSETFROM:-0200\r\n"
+                      "TZOFFSETTO:-0200\r\n"
+                      "END:STANDARD\r\n"
+                      "BEGIN:STANDARD\r\n"
+                      // no DTSTART
+                      "TZOFFSETFROM:-0200\r\n"
+                      "TZOFFSETTO:-0200\r\n"
+                      "END:STANDARD\r\n"
+                      "END:VTIMEZONE\r\n"},
+                 {NULL, NULL}};
+
+    for (const struct testcase *tc = tests; tc->calStr; tc++) {
+        icalcomponent *ical = icalcomponent_new_from_string(tc->calStr);
+        icalcomponent_normalize(ical);
+        const char *s = icalcomponent_as_ical_string(ical);
+        icalcomponent_free(ical);
+
+        if (VERBOSE) {
+            printf("iCal:\n%s\n\n", s);
+        }
+        str_is("Normalized component matches", s, tc->expect);
+    }
+}
+
 static void test_builtin_compat_tzid(void)
 {
     struct _cases {
@@ -5592,6 +5727,7 @@ int main(int argc, char *argv[])
     test_run("Test icalarray_sort", test_icalarray_sort, do_test, do_header);
 
     test_run("Test icalcomponent_normalize", test_icalcomponent_normalize, do_test, do_header);
+    test_run("Test icalcomponent_normalize_missing_mandatory_props", test_icalcomponent_normalize_missing_mandatory_props, do_test, do_header);
     test_run("Test builtin compat TZID", test_builtin_compat_tzid, do_test, do_header);
     test_run("Test VCC vCard parse", test_vcc_vcard_parse, do_test, do_header);
     test_run("Test implicit DTEND and DURATION for VEVENT and VTODO", test_implicit_dtend_duration, do_test, do_header);
