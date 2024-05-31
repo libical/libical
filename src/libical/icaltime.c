@@ -273,8 +273,8 @@ icaltime_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icalt
 
     utc_zone = icaltimezone_get_utc_timezone();
 
-    /* If the time is the special null time, return 0. */
-    if (icaltime_is_null_time(tt)) {
+    /* Return 0 if the time is the special null time or a bad time */
+    if (icaltime_is_null_time(tt) || !icaltime_is_valid_time(tt)) {
         return 0;
     }
 
