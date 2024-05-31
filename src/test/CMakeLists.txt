@@ -228,3 +228,4 @@ testme(parser_ctrl "${icalparser_ctrl_test_SRCS}")
 
 testme(icalcomponent_fuzz icalcomponent_fuzz.c)
 testme(icalcomponent_fuzz2 icalcomponent_fuzz2.c)
+testme(icaltime_fuzz icaltime_fuzz.c)
