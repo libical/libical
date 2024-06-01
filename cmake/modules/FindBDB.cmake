@@ -9,7 +9,8 @@
 #  BDB_LIBRARY        - Library to link against for the Berkeley DB
 #
 
-set_package_properties(BDB PROPERTIES
+set_package_properties(
+  BDB PROPERTIES
   DESCRIPTION "Berkeley DB storage"
   URL "https://www.oracle.com/database/berkeley-db"
 )

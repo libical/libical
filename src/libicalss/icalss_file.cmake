@@ -4,15 +4,15 @@
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering.
 # It is required to make the combined header icalss.h properly.
 set(COMBINEDHEADERSICALSS
-  ${TOPS}/src/libicalss/icalgauge.h
-  ${TOPS}/src/libicalss/icalset.h
-  ${TOPS}/src/libicalss/icalcluster.h
-  ${TOPS}/src/libicalss/icalfileset.h
-  ${TOPS}/src/libicalss/icaldirset.h
-  ${TOPS}/src/libicalss/icalcalendar.h
-  ${TOPS}/src/libicalss/icalclassify.h
-  ${TOPS}/src/libicalss/icalspanlist.h
-  ${TOPS}/src/libicalss/icalmessage.h
+    ${TOPS}/src/libicalss/icalgauge.h
+    ${TOPS}/src/libicalss/icalset.h
+    ${TOPS}/src/libicalss/icalcluster.h
+    ${TOPS}/src/libicalss/icalfileset.h
+    ${TOPS}/src/libicalss/icaldirset.h
+    ${TOPS}/src/libicalss/icalcalendar.h
+    ${TOPS}/src/libicalss/icalclassify.h
+    ${TOPS}/src/libicalss/icalspanlist.h
+    ${TOPS}/src/libicalss/icalmessage.h
 )
 if(BDB_FOUND)
   list(APPEND COMBINEDHEADERSICALSS ${TOPS}/src/libicalss/icalbdbset.h)
@@ -30,7 +30,7 @@ foreach(_current_FILE ${COMBINEDHEADERSICALSS})
   foreach(_currentLINE ${_lines})
     string(REGEX REPLACE "#include \"ical.*\\.h\"" "" _currentLINE "${_currentLINE}")
     string(REGEX REPLACE "#include \"config.*\\.h\"" "" _currentLINE "${_currentLINE}")
-    string(REGEX REPLACE "#include \"pvl\\.h\"" "" _currentLINE "${_currentLINE}" )
+    string(REGEX REPLACE "#include \"pvl\\.h\"" "" _currentLINE "${_currentLINE}")
     if(NOT "${_currentLINE}" STREQUAL "")
       file(APPEND ${ICAL_FILE_H_FILE} "${_currentLINE}\n")
     endif()

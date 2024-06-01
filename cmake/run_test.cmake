@@ -38,7 +38,8 @@ execute_process(
 )
 
 if(test_not_successful)
-  message(SEND_ERROR
-    "Output does not match for ${output_blessed} and ${output_test}: ${err} : shell output: ${test_not_successful}!"
+  message(
+    SEND_ERROR
+      "Output does not match for ${output_blessed} and ${output_test}: ${err} : shell output: ${test_not_successful}!"
   )
 endif()

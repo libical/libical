@@ -9,7 +9,8 @@
 #  GLIB_CFLAGS
 #  GLIB_LIBRARIES
 
-set_package_properties(GLib PROPERTIES
+set_package_properties(
+  GLib PROPERTIES
   DESCRIPTION "A library of handy utility functions"
   URL "https://www.gtk.org"
 )
@@ -29,7 +30,4 @@ if(PKG_CONFIG_FOUND)
   endif()
 endif()
 
-mark_as_advanced(
-  GLIB_CFLAGS
-  GLIB_LIBRARIES
-)
+mark_as_advanced(GLIB_CFLAGS GLIB_LIBRARIES)

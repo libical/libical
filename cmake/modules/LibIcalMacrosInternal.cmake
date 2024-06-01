@@ -18,7 +18,10 @@ function(libical_deprecated_option deprecated_option option description)
   set(extra_option_arguments ${ARGN})
   if(${deprecated_option})
     message(WARNING "${deprecated_option} is deprecated. Use ${option} instead")
-    set(${option} ${deprecated_option} CACHE BOOL "${description}")
+    set(${option}
+        ${deprecated_option}
+        CACHE BOOL "${description}"
+    )
   endif()
   libical_option(${option} "${description}" ${extra_option_arguments})
 endfunction()
@@ -27,7 +30,10 @@ endfunction()
 function(libical_append_if condition value)
   if(${condition})
     foreach(variable ${ARGN})
-      set(${variable} "${${variable}} ${value}" PARENT_SCOPE)
+      set(${variable}
+          "${${variable}} ${value}"
+          PARENT_SCOPE
+      )
     endforeach()
   endif()
 endfunction()

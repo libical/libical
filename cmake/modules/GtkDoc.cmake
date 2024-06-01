@@ -27,7 +27,12 @@ find_program(GTKDOC_MKDB gtkdoc-mkdb)
 find_program(GTKDOC_MKHTML gtkdoc-mkhtml)
 find_program(GTKDOC_FIXXREF gtkdoc-fixxref)
 
-if(NOT (GTKDOC_SCAN AND GTKDOC_MKDB AND GTKDOC_MKHTML AND GTKDOC_FIXXREF))
+if(NOT
+   (GTKDOC_SCAN
+    AND GTKDOC_MKDB
+    AND GTKDOC_MKHTML
+    AND GTKDOC_FIXXREF)
+)
   message(FATAL_ERROR "Cannot find all gtk-doc binaries, install them or use -DENABLE_GTK_DOC=OFF  instead")
   return()
 endif()
@@ -41,11 +46,18 @@ if(NOT TARGET gtkdoc-rebuild-sgmls)
 endif()
 
 # cmake-lint: disable=R0912,R0915
-macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ignoreheadersvar)
+macro(
+  add_gtkdoc
+  _module
+  _namespace
+  _deprecated_guards
+  _srcdirsvar
+  _depsvar
+  _ignoreheadersvar
+)
   configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/${_module}-docs.sgml.in
-    ${CMAKE_CURRENT_BINARY_DIR}/${_module}-docs.sgml
-    @ONLY)
+    ${CMAKE_CURRENT_SOURCE_DIR}/${_module}-docs.sgml.in ${CMAKE_CURRENT_BINARY_DIR}/${_module}-docs.sgml @ONLY
+  )
 
   set(OUTPUT_DOCDIR ${SHARE_INSTALL_DIR}/gtk-doc/html/${_module})
 
@@ -59,9 +71,8 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
 
   if(APPLE)
     if(NOT DEFINED ENV{XML_CATALOG_FILES})
-      message(FATAL_ERROR
-        "On OSX, please run \'export XML_CATALOG_FILES=/usr/local/etc/xml/catalog\' first; "
-        "else the gtk entities cannot be located."
+      message(FATAL_ERROR "On OSX, please run \'export XML_CATALOG_FILES=/usr/local/etc/xml/catalog\' first; "
+                          "else the gtk entities cannot be located."
       )
     endif()
   endif()
@@ -76,9 +87,10 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
     if(TARGET ${opt})
       set(_target_type)
       get_target_property(_target_type ${opt} TYPE)
-      if((_target_type STREQUAL "STATIC_LIBRARY") OR
-        (_target_type STREQUAL "SHARED_LIBRARY") OR
-        (_target_type STREQUAL "MODULE_LIBRARY"))
+      if((_target_type STREQUAL "STATIC_LIBRARY")
+         OR (_target_type STREQUAL "SHARED_LIBRARY")
+         OR (_target_type STREQUAL "MODULE_LIBRARY")
+      )
         set(_compile_options)
         set(_link_libraries)
 
@@ -116,9 +128,10 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
     if(TARGET ${opt})
       set(_target_type)
       get_target_property(_target_type ${opt} TYPE)
-      if((_target_type STREQUAL "STATIC_LIBRARY") OR
-        (_target_type STREQUAL "SHARED_LIBRARY") OR
-        (_target_type STREQUAL "MODULE_LIBRARY"))
+      if((_target_type STREQUAL "STATIC_LIBRARY")
+         OR (_target_type STREQUAL "SHARED_LIBRARY")
+         OR (_target_type STREQUAL "MODULE_LIBRARY")
+      )
         set(_output_name "")
         get_target_property(_output_name ${opt} OUTPUT_NAME)
         if(NOT _output_name)
@@ -160,57 +173,34 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
   endif()
   set(_scangobj_prefix ${CMAKE_COMMAND} -E env "${ld_lib_path}")
 
-#  if(NOT (_scangobj_cflags STREQUAL ""))
-#    set(_scangobj_cflags --cflags "${_scangobj_cflags}")
-#  endif()
+  #  if(NOT (_scangobj_cflags STREQUAL ""))
+  #    set(_scangobj_cflags --cflags "${_scangobj_cflags}")
+  #  endif()
 
-#  if(NOT (_scangobj_ldflags STREQUAL ""))
-#    set(_scangobj_ldflags "--ldflags ${_scangobj_ldflags}")
-#  endif()
+  #  if(NOT (_scangobj_ldflags STREQUAL ""))
+  #    set(_scangobj_ldflags "--ldflags ${_scangobj_ldflags}")
+  #  endif()
 
-  add_custom_command(OUTPUT html/index.html
-    COMMAND ${GTKDOC_SCAN}
-      --module=${_module}
-      --deprecated-guards="${_deprecated_guards}"
-      --ignore-headers="${${_ignoreheadersvar}}"
-      --rebuild-sections
-      --rebuild-types
-      ${_srcdirs}
-
+  add_custom_command(
+    OUTPUT html/index.html
+    COMMAND ${GTKDOC_SCAN} --module=${_module} --deprecated-guards="${_deprecated_guards}"
+            --ignore-headers="${${_ignoreheadersvar}}" --rebuild-sections --rebuild-types ${_srcdirs}
     COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}" ${_scangobj_prefix} ${GTKDOC_SCANGOBJ}
-      --module=${_module}
-      --cflags=${_scangobj_cflags}
-      --ldflags=${_scangobj_ldflags}
-
-    COMMAND ${GTKDOC_MKDB}
-      --module=${_module}
-      --name-space=${_namespace}
-      --main-sgml-file="${CMAKE_CURRENT_BINARY_DIR}/${_module}-docs.sgml"
-      --sgml-mode
-      --output-format=xml
-      ${_srcdirs}
-
+            --module=${_module} --cflags=${_scangobj_cflags} --ldflags=${_scangobj_ldflags}
+    COMMAND
+      ${GTKDOC_MKDB} --module=${_module} --name-space=${_namespace}
+      --main-sgml-file="${CMAKE_CURRENT_BINARY_DIR}/${_module}-docs.sgml" --sgml-mode --output-format=xml ${_srcdirs}
     COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/html"
-
-    COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}/html"
-      ${GTKDOC_MKHTML}
-      --path=..
-      ${_module}
-      ../${_module}-docs.sgml
-
-    COMMAND ${GTKDOC_FIXXREF}
-      --module=${_module}
-      --module-dir=html
-      --extra-dir=..
-      --html-dir="${OUTPUT_DOCDIR}"
-
+    COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}/html" ${GTKDOC_MKHTML} --path=.. ${_module}
+            ../${_module}-docs.sgml
+    COMMAND ${GTKDOC_FIXXREF} --module=${_module} --module-dir=html --extra-dir=.. --html-dir="${OUTPUT_DOCDIR}"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${_module}-docs.sgml"
-      ${_filedeps}
+    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${_module}-docs.sgml" ${_filedeps}
     COMMENT "Generating ${_module} documentation"
   )
 
-  add_custom_target(gtkdoc-${_module}
+  add_custom_target(
+    gtkdoc-${_module}
     DEPENDS html/index.html
     COMMENT "Target for running gtkdoc for module"
   )
@@ -221,50 +211,29 @@ macro(add_gtkdoc _module _namespace _deprecated_guards _srcdirsvar _depsvar _ign
 
   add_dependencies(gtkdocs gtkdoc-${_module})
 
-  install(
-    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html/
-    DESTINATION ${OUTPUT_DOCDIR}
-  )
+  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html/ DESTINATION ${OUTPUT_DOCDIR})
 
   # ***************************************
   # sgml.in file rebuild, unconditional
   # ***************************************
-  add_custom_target(gtkdoc-rebuild-${_module}-sgml
+  add_custom_target(
+    gtkdoc-rebuild-${_module}-sgml
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/tmp"
     COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/tmp"
-
-    COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}/tmp"
-      ${GTKDOC_SCAN}
-      --module=${_module}
-      --deprecated-guards="${_deprecated_guards}"
-      --ignore-headers="${${_ignoreheadersvar}}"
-      --rebuild-sections
-      --rebuild-types
-      ${_srcdirs}
-
-    COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}"
-      ${_scangobj_prefix}
-      ${GTKDOC_SCANGOBJ}
-      --module=${_module}
-      ${_scangobj_cflags}
-      ${_scangobj_ldflags}
-
-    COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}/tmp"
-      ${GTKDOC_MKDB}
-      --module=${_module}
-      --name-space=${_namespace}
-      --main-sgml-file="${CMAKE_CURRENT_BINARY_DIR}/tmp/${_module}-docs.sgml"
-      --sgml-mode
-      --output-format=xml
-      ${_srcdirs}
-
-    COMMAND ${CMAKE_COMMAND} -E rename
-      ${CMAKE_CURRENT_BINARY_DIR}/tmp/${_module}-docs.sgml
-      ${CMAKE_CURRENT_SOURCE_DIR}/${_module}-docs.sgml.in
-
-    COMMAND ${CMAKE_COMMAND} -E echo
-      "File '${CMAKE_CURRENT_SOURCE_DIR}/${_module}-docs.sgml.in' overwritten, "
-      "make sure to replace generated strings with proper content before committing."
+    COMMAND
+      ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}/tmp" ${GTKDOC_SCAN} --module=${_module}
+      --deprecated-guards="${_deprecated_guards}" --ignore-headers="${${_ignoreheadersvar}}" --rebuild-sections
+      --rebuild-types ${_srcdirs}
+    COMMAND ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}" ${_scangobj_prefix} ${GTKDOC_SCANGOBJ}
+            --module=${_module} ${_scangobj_cflags} ${_scangobj_ldflags}
+    COMMAND
+      ${CMAKE_COMMAND} -E chdir "${CMAKE_CURRENT_BINARY_DIR}/tmp" ${GTKDOC_MKDB} --module=${_module}
+      --name-space=${_namespace} --main-sgml-file="${CMAKE_CURRENT_BINARY_DIR}/tmp/${_module}-docs.sgml" --sgml-mode
+      --output-format=xml ${_srcdirs}
+    COMMAND ${CMAKE_COMMAND} -E rename ${CMAKE_CURRENT_BINARY_DIR}/tmp/${_module}-docs.sgml
+            ${CMAKE_CURRENT_SOURCE_DIR}/${_module}-docs.sgml.in
+    COMMAND ${CMAKE_COMMAND} -E echo "File '${CMAKE_CURRENT_SOURCE_DIR}/${_module}-docs.sgml.in' overwritten, "
+            "make sure to replace generated strings with proper content before committing."
     COMMENT "Target to rebuild the sgml for the specified module"
   )
 

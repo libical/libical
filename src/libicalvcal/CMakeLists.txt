@@ -17,18 +17,21 @@ set(icalvcal_LIB_DEVSRCS vcc.c)
 ########### next target ###############
 
 set(icalvcal_LIB_SRCS
-  libical_vcal_export.h
-  icalvcal.h
-  icalvcal.c
-  vcc.h
-  vobject.h
-  vobject.c
-  vcaltmp.h
-  vcaltmp.c
-  ${icalvcal_LIB_DEVSRCS}
+    libical_vcal_export.h
+    icalvcal.h
+    icalvcal.c
+    vcc.h
+    vobject.h
+    vobject.c
+    vcaltmp.h
+    vcaltmp.c
+    ${icalvcal_LIB_DEVSRCS}
 )
 
-add_library(icalvcal ${LIBRARY_TYPE} ${icalvcal_LIB_SRCS})
+add_library(
+  icalvcal
+  ${LIBRARY_TYPE} ${icalvcal_LIB_SRCS}
+)
 add_dependencies(icalvcal ical-header)
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})
@@ -37,7 +40,9 @@ elseif(STATIC_ONLY)
   add_library(icalvcal-static ALIAS icalvcal)
 endif()
 
-target_link_libraries(icalvcal ical)
+target_link_libraries(
+  icalvcal ical
+)
 
 if(MSVC)
   set_target_properties(icalvcal PROPERTIES PREFIX "lib")
@@ -50,9 +55,8 @@ else()
   endif()
 endif()
 if(NOT ANDROID)
-  set_target_properties(icalvcal PROPERTIES
-    VERSION ${LIBICAL_LIB_VERSION_STRING}
-    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+  set_target_properties(
+    icalvcal PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
   )
 endif()
 set_target_properties(icalvcal PROPERTIES CLEAN_DIRECT_OUTPUT 1)
@@ -75,12 +79,11 @@ endif()
 
 ########### install files ###############
 
-install(FILES
-  icalvcal.h
-  vcaltmp.h
-  vcc.h
-  vobject.h
-  libical_vcal_export.h
-  DESTINATION
-  ${INCLUDE_INSTALL_DIR}/libical
+install(
+  FILES icalvcal.h
+        vcaltmp.h
+        vcc.h
+        vobject.h
+        libical_vcal_export.h
+  DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
