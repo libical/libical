@@ -2444,7 +2444,7 @@ static int comp_compare(void *a, void *b)
     int r = k1 - k2;
 
     if (r == 0) {
-        if (k1 == ICAL_X_COMPONENT) {
+        if (k1 == ICAL_X_COMPONENT && (c1->x_name && c2->x_name)) {
             r = strcmp(c1->x_name, c2->x_name);
         }
 
