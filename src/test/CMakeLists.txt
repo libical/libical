@@ -27,24 +27,19 @@ add_definitions(-DTEST_DATADIR=${TEST_DATADIR} -DTEST_ZONEDIR="${PROJECT_SOURCE_
 macro(setprops _name)
   if(UNIX)
     file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
-    set_tests_properties(${_name} PROPERTIES
-      WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/bin"
-    )
+    set_tests_properties(${_name} PROPERTIES WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
   endif()
   if(WIN32)
     set(tpath "${PROJECT_BINARY_DIR}/bin;%PATH%")
     if(ICU_FOUND)
       set(tpath "${ICU_BINARY_DIR};${tpath}")
     endif()
-    set_tests_properties(${_name} PROPERTIES
-      ENVIRONMENT "PATH=${tpath}"
-      WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/bin"
-    )
+    set_tests_properties(${_name} PROPERTIES ENVIRONMENT "PATH=${tpath}" WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
   endif()
   if(CYGWIN OR MSYS)
-    set_tests_properties(${_name} PROPERTIES
-      ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${PROJECT_BINARY_DIR}/lib:$ENV{PATH}"
-      WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/lib"
+    set_tests_properties(
+      ${_name} PROPERTIES ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${PROJECT_BINARY_DIR}/lib:$ENV{PATH}"
+                          WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/lib"
     )
   endif()
 endmacro()
@@ -102,15 +97,15 @@ buildme(copycluster "${copycluster_SRCS}")
 ########### next target ###############
 
 set(regression_SRCS
-  regression.c
-  regression.h
-  regression-component.c
-  regression-classify.c
-  regression-utils.c
-  regression-recur.c
-  regression-storage.c
-  test-malloc.c
-  test-malloc.h
+    regression.c
+    regression.h
+    regression-component.c
+    regression-classify.c
+    regression-utils.c
+    regression-recur.c
+    regression-storage.c
+    test-malloc.c
+    test-malloc.h
 )
 if(WITH_CXX_BINDINGS)
   list(APPEND regression_SRCS regression-cxx.cpp)
@@ -202,26 +197,24 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
   else()
     set(reference_data "icalrecur_withouticu_test.out")
   endif()
-  add_test(NAME icalrecurtest-r
-    COMMAND ${CMAKE_COMMAND}
-    -D test_cmd=${test_cmd}
-    -D test_args:string=${test_args}
-    -D output_blessed=${PROJECT_SOURCE_DIR}/src/test/${reference_data}
-    -D output_test=${PROJECT_BINARY_DIR}/bin/test.out
-    -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
+  add_test(
+    NAME icalrecurtest-r
+    COMMAND
+      ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -D
+      output_blessed=${PROJECT_SOURCE_DIR}/src/test/${reference_data} -D output_test=${PROJECT_BINARY_DIR}/bin/test.out
+      -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
   )
   setprops(icalrecurtest-r)
 
   #test non-rscale rrules
   set(test_args "")
   set(reference_data "icalrecur_test.out")
-  add_test(NAME icalrecurtest
-    COMMAND ${CMAKE_COMMAND}
-    -D test_cmd=${test_cmd}
-    -D test_args:string=${test_args}
-    -D output_blessed=${PROJECT_SOURCE_DIR}/src/test/${reference_data}
-    -D output_test=${PROJECT_BINARY_DIR}/bin/test.out
-    -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
+  add_test(
+    NAME icalrecurtest
+    COMMAND
+      ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -D
+      output_blessed=${PROJECT_SOURCE_DIR}/src/test/${reference_data} -D output_test=${PROJECT_BINARY_DIR}/bin/test.out
+      -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
   )
   setprops(icalrecurtest)
 endif()

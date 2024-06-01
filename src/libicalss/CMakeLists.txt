@@ -34,34 +34,36 @@ add_custom_target(
 set(icalss_LIB_DEVSRCS icalsslexer.c icalssyacc.c)
 
 set(icalss_LIB_SRCS
-  libical_icalss_export.h
-  icalcalendar.c
-  icalcalendar.h
-  icalclassify.c
-  icalclassify.h
-  icalcluster.c
-  icalcluster.h
-  icalclusterimpl.h
-  icalgauge.c
-  icalgauge.h
-  icalgaugeimpl.h
-  icaldirset.c
-  icaldirset.h
-  icaldirsetimpl.h
-  icalfileset.c
-  icalfileset.h
-  icalfilesetimpl.h
-  icalset.c
-  icalset.h
-  icalssyacc.h
-  icalspanlist.c
-  icalspanlist.h
-  icalmessage.c
-  icalmessage.h
-  ${icalss_LIB_DEVSRCS}
+    libical_icalss_export.h
+    icalcalendar.c
+    icalcalendar.h
+    icalclassify.c
+    icalclassify.h
+    icalcluster.c
+    icalcluster.h
+    icalclusterimpl.h
+    icalgauge.c
+    icalgauge.h
+    icalgaugeimpl.h
+    icaldirset.c
+    icaldirset.h
+    icaldirsetimpl.h
+    icalfileset.c
+    icalfileset.h
+    icalfilesetimpl.h
+    icalset.c
+    icalset.h
+    icalssyacc.h
+    icalspanlist.c
+    icalspanlist.h
+    icalmessage.c
+    icalmessage.h
+    ${icalss_LIB_DEVSRCS}
 )
 if(BDB_FOUND)
-  list(APPEND icalss_LIB_SRCS
+  list(
+    APPEND
+    icalss_LIB_SRCS
     icalbdbset.c
     icalbdbset.h
     icalbdbsetimpl.h
@@ -69,20 +71,19 @@ if(BDB_FOUND)
 endif()
 
 add_custom_command(
-  OUTPUT
-    ${PROJECT_BINARY_DIR}/src/libicalss/icalss.h
+  OUTPUT ${PROJECT_BINARY_DIR}/src/libicalss/icalss.h
   COMMAND
-  ${CMAKE_COMMAND}
-    -DTOPS:FILEPATH=${TOPS}
-    -DTOPB:FILEPATH=${TOPB}
-    -DICAL_FILE_H_FILE:FILEPATH=${PROJECT_BINARY_DIR}/src/libicalss/icalss.h
-    -DBDB_FOUND=${BDB_FOUND}
-    -P ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
+    ${CMAKE_COMMAND} -DTOPS:FILEPATH=${TOPS} -DTOPB:FILEPATH=${TOPB}
+    -DICAL_FILE_H_FILE:FILEPATH=${PROJECT_BINARY_DIR}/src/libicalss/icalss.h -DBDB_FOUND=${BDB_FOUND} -P
+    ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   DEPENDS ${icalss_LIB_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/icalss_file.cmake
   COMMENT "Generate the aggregate libicalss header"
 )
 
-add_library(icalss ${LIBRARY_TYPE} ${icalss_LIB_SRCS})
+add_library(
+  icalss
+  ${LIBRARY_TYPE} ${icalss_LIB_SRCS}
+)
 add_dependencies(icalss ical-header icalss-header)
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(icalss-static STATIC ${icalss_LIB_SRCS})
@@ -91,7 +92,9 @@ elseif(STATIC_ONLY)
   add_library(icalss-static ALIAS icalss)
 endif()
 
-target_link_libraries(icalss ical)
+target_link_libraries(
+  icalss ical
+)
 if(BDB_FOUND)
   target_link_libraries(icalss ${BDB_LIBRARY})
 endif()
@@ -107,10 +110,7 @@ else()
   endif()
 endif()
 if(NOT ANDROID)
-  set_target_properties(icalss PROPERTIES
-    VERSION ${LIBICAL_LIB_VERSION_STRING}
-    SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
-  )
+  set_target_properties(icalss PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION})
 endif()
 set_target_properties(icalss PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
@@ -133,14 +133,9 @@ endif()
 ########### next target ###############
 
 if(WITH_CXX_BINDINGS)
-  set(icalsscxx_LIB_SRCS
-    icalspanlist_cxx.cpp
-    icalspanlist_cxx.h
-  )
+  set(icalsscxx_LIB_SRCS icalspanlist_cxx.cpp icalspanlist_cxx.h)
   if(BDB_FOUND)
-    list(APPEND icalsscxx_LIB_SRCS
-      icalbdbset_cxx.h
-    )
+    list(APPEND icalsscxx_LIB_SRCS icalbdbset_cxx.h)
   endif()
   add_library(icalss_cxx ${LIBRARY_TYPE} ${icalsscxx_LIB_SRCS})
   add_dependencies(icalss_cxx ical-header icalss-header)
@@ -167,9 +162,8 @@ if(WITH_CXX_BINDINGS)
     endif()
   endif()
   if(NOT ANDROID)
-    set_target_properties(icalss_cxx PROPERTIES
-      VERSION ${LIBICAL_LIB_VERSION_STRING}
-      SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
+    set_target_properties(
+      icalss_cxx PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
     )
   endif()
   set_target_properties(icalss_cxx PROPERTIES CLEAN_DIRECT_OUTPUT 1)
@@ -193,36 +187,28 @@ endif()
 
 ########### install files ###############
 
-install(FILES
-  ${PROJECT_BINARY_DIR}/src/libicalss/icalss.h
-  icalcalendar.h
-  icalclassify.h
-  icalcluster.h
-  icaldirset.h
-  icaldirsetimpl.h
-  icalfileset.h
-  icalfilesetimpl.h
-  icalgauge.h
-  icalgaugeimpl.h
-  icalmessage.h
-  icalset.h
-  icalspanlist.h
-  icalssyacc.h
-  libical_icalss_export.h
-  DESTINATION
-  ${INCLUDE_INSTALL_DIR}/libical
+install(
+  FILES ${PROJECT_BINARY_DIR}/src/libicalss/icalss.h
+        icalcalendar.h
+        icalclassify.h
+        icalcluster.h
+        icaldirset.h
+        icaldirsetimpl.h
+        icalfileset.h
+        icalfilesetimpl.h
+        icalgauge.h
+        icalgaugeimpl.h
+        icalmessage.h
+        icalset.h
+        icalspanlist.h
+        icalssyacc.h
+        libical_icalss_export.h
+  DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
 
 if(WITH_CXX_BINDINGS)
-  install(FILES
-    icalspanlist_cxx.h
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR}/libical
-  )
+  install(FILES icalspanlist_cxx.h DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
   if(BDB_FOUND)
-    install(FILES icalbdbset_cxx.h
-      DESTINATION
-      ${INCLUDE_INSTALL_DIR}/libical
-    )
+    install(FILES icalbdbset_cxx.h DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
   endif()
 endif()

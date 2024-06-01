@@ -75,7 +75,10 @@ check_type_size(intptr_t SIZEOF_INTPTR_T)
 check_type_size(pid_t SIZEOF_PID_T)
 check_type_size(size_t SIZEOF_SIZE_T)
 check_type_size(ssize_t SIZEOF_SSIZE_T)
-if(WIN32 AND MSVC AND USE_32BIT_TIME_T)
+if(WIN32
+   AND MSVC
+   AND USE_32BIT_TIME_T
+)
   set(_SAVE_RQD ${CMAKE_REQUIRED_DEFINITIONS})
   set(CMAKE_REQUIRED_DEFINITIONS -D_USE_32BIT_TIME_T)
   check_type_size(time_t SIZEOF_TIME_T)

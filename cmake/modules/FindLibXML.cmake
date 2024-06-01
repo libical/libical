@@ -24,7 +24,4 @@ if(PKG_CONFIG_FOUND)
   endif()
 endif()
 
-mark_as_advanced(
-  LIBXML_CFLAGS
-  LIBXML_LIBRARIES
-)
+mark_as_advanced(LIBXML_CFLAGS LIBXML_LIBRARIES)
