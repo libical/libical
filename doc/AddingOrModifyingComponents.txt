@@ -18,5 +18,5 @@ function icalvalue_as_ical_string() in icalvalue.c
 function icalvalue_new_from_string_with_error() in icalvalue.c
 
 When you are done, if you changed any files in the design-data
-directory, regnerate derived datatypes in src/libical with "make
+directory, regenerate derived datatypes in src/libical with "make
 derived" or "make icalvalue"

@@ -43,7 +43,7 @@ void component_errors(icalcomponent *comp)
         printf("-- The error is %s:\n", icalproperty_get_xlicerror(p));
     }
 
-    /* Check the component for iTIP compilance, and add more
+    /* Check the component for iTIP compliance, and add more
        X-LIC-ERROR properties if it is non-compilant. */
     icalrestriction_check(comp);
 
