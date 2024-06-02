@@ -87,6 +87,10 @@
 # ## DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!!
 ## Special CMake Options for Developers
 #
+# -DLIBICAL_BUILD_TESTING_BIGFUZZ=[true|false]
+#  Set to build the big fuzzer tests
+#  Default=false
+#
 # -DLIBICAL_DEVMODE_ABI_DUMPER=[true|false]
 #  Build for the abi-dumper (requires gcc)
 #  Default=false
