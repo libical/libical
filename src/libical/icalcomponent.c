@@ -2628,6 +2628,10 @@ void icalcomponent_normalize(icalcomponent *comp)
     icalproperty *prop;
     icalcomponent *sub;
 
+    icalerror_check_arg(comp != 0, "comp");
+    if (!comp)
+        return;
+
     /* Normalize properties into sorted list */
     while ((prop = pvl_pop(comp->properties)) != 0) {
         int nparams, remove = 0;
