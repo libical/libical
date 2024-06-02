@@ -2623,14 +2623,17 @@ static int comp_compare(void *a, void *b)
 
 void icalcomponent_normalize(icalcomponent *comp)
 {
-    pvl_list sorted_props = pvl_newlist();
-    pvl_list sorted_comps = pvl_newlist();
     icalproperty *prop;
     icalcomponent *sub;
+    pvl_list sorted_props;
+    pvl_list sorted_comps;
 
     icalerror_check_arg(comp != 0, "comp");
     if (!comp)
         return;
+
+    sorted_props = pvl_newlist();
+    sorted_comps = pvl_newlist();
 
     /* Normalize properties into sorted list */
     while ((prop = pvl_pop(comp->properties)) != 0) {
