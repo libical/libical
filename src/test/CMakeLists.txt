@@ -226,6 +226,26 @@ testme(parser_ctrl "${icalparser_ctrl_test_SRCS}")
 
 ############# fuzzer tests ############
 
-testme(icalcomponent_fuzz icalcomponent_fuzz.c)
+testme(icalcomponent_fuzz1 icalcomponent_fuzz1.c)
 testme(icalcomponent_fuzz2 icalcomponent_fuzz2.c)
+
 testme(icaltime_fuzz icaltime_fuzz.c)
+
+option(LIBICAL_BUILD_TESTING_BIGFUZZ "Build big fuzzer tests." False)
+if(LIBICAL_BUILD_TESTING_BIGFUZZ)
+  foreach(
+    fuzztest
+    52787
+    56171
+    56539
+    69341
+    69344
+    usban
+  )
+    add_test(NAME fuzz1test${fuzztest} COMMAND icalcomponent_fuzz1 "${PROJECT_SOURCE_DIR}/test-data/fuzz${fuzztest}")
+    setprops(fuzz1test${fuzztest})
+
+    add_test(NAME fuzz2test${fuzztest} COMMAND icalcomponent_fuzz2 "${PROJECT_SOURCE_DIR}/test-data/fuzz${fuzztest}")
+    setprops(fuzz2test${fuzztest})
+  endforeach()
+endif()

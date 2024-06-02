@@ -32,6 +32,9 @@ SKIP /cmake/modules/GObjectIntrospectionMacros\.cmake|/cmake/modules/FindGObject
 SKIP /doc/Doxyfile\.cmake
 SKIP /cmake/Toolchain-iOS.cmake|/cmake/Toolchain-QNX65.cmake|/cmake/Toolchain-QNX66.cmake|/cmake/Toolchain-android.cmake|/cmake/modules/FindBerkeleyDB.cmake
 
+#Skip test-data
+SKIP /test-data/
+
 #Skip zoneinfo
 SKIP /zoneinfo/
 

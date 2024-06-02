@@ -73,6 +73,10 @@
 
 ## Special CMake Options for Developers
 #
+# -DLIBICAL_BUILD_TESTING_BIGFUZZ=[true|false]
+#  Set to build the big fuzzer tests
+#  Default=false
+#
 # -DABI_DUMPER=[true|false]
 #  Build for the abi-dumper (requires gcc)
 #  Default=false
