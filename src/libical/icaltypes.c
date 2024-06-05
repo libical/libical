@@ -101,7 +101,7 @@ struct icaltriggertype icaltriggertype_from_string(const char *str)
 
 struct icalreqstattype icalreqstattype_from_string(const char *str)
 {
-    const char *p1, *p2;
+    const char *s, *p1, *p2;
     struct icalreqstattype stat;
     short major = 0, minor = 0;
 
@@ -110,6 +110,16 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
     stat.code = ICAL_UNKNOWN_STATUS;
     stat.debug = 0;
     stat.desc = 0;
+
+    // Don't allow (fuzzer) garbage chars anywhere in the reqstat string
+    s = str;
+    while (*s && isprint((unsigned char)*s)) {
+        ++s;
+    }
+    if (*s != '\0') {
+        // garbage encountered. return the empty stat
+        return stat;
+    }
 
     /* Get the status numbers */
 
