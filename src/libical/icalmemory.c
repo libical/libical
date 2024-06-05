@@ -233,7 +233,7 @@ char *icalmemory_tmp_copy(const char *str)
 {
     char *b;
 
-    if (!str)
+    if (!str || str[0] == '\0')
         return NULL;
 
     b = icalmemory_tmp_buffer(strlen(str) + 1);
