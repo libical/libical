@@ -12,7 +12,7 @@
 #define LIBICAL_VCAL_EXPORT
 #define LIBICAL_VCAL_NO_EXPORT
 #else
-#if defined(_MSC_VER) || defined(__CYGWIN__)
+#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__)
 #if defined(libical_vcal_EXPORTS)
 /* We are building this library */
 #define LIBICAL_VCAL_EXPORT __declspec(dllexport)
