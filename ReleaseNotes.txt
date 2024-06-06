@@ -4,6 +4,7 @@ Release Highlights
 Version 3.0.19 (UNRELEASED):
 ----------------------------
  * Fix for changes to the libicu 75 API
+ * Add vcpkg manifest-mode support
 
 Version 3.0.18 (31 March 2024):
 -------------------------------
