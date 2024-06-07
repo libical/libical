@@ -8,6 +8,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src/libical
   ${PROJECT_BINARY_DIR}/src/libical
   ${PROJECT_SOURCE_DIR}/src/libicalss
+  ${PROJECT_SOURCE_DIR}/src/libicalvcal
 )
 
 if(ICU_FOUND)
@@ -223,6 +224,10 @@ endif()
 
 set(icalparser_ctrl_test_SRCS icalparser_ctrl_test.c)
 testme(parser_ctrl "${icalparser_ctrl_test_SRCS}")
+
+########### next target ###############
+
+testme(vcf_leak vcf_leak.cpp)
 
 ############# fuzzer tests ############
 
