@@ -227,7 +227,9 @@ testme(parser_ctrl "${icalparser_ctrl_test_SRCS}")
 
 ########### next target ###############
 
-testme(vcf_leak vcf_leak.cpp)
+if(WITH_CXX_BINDINGS)
+  testme(vcf_leak vcf_leak.cpp)
+endif()
 
 ############# fuzzer tests ############
 
