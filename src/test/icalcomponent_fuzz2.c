@@ -48,7 +48,11 @@ int main(int argc, char *argv[])
     }
 
     fd = fileno(fp);
-    fstat(fd, &sbuf);
+    if (fstat(fd, &sbuf) != 0) {
+        fprintf(stderr, "Error: unable to fstat %s\n", fname);
+        fclose(fp);
+        assert(0);
+    }
     filesize = sbuf.st_size; //to make fortify compile happy
     data = malloc(filesize + 1);
     memset(data, 0, filesize + 1);
