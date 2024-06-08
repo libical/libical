@@ -566,7 +566,6 @@ void vcardcomponent_strip_errors(vcardcomponent *comp)
         if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
             vcardcomponent_remove_property(comp, p);
             vcardproperty_free(p);
-            p = NULL;
         }
     }
 }

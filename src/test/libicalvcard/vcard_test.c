@@ -107,7 +107,10 @@ static void test_parse_file(const char *fname)
         assert(0);
     }
     fd = fileno(fp);
-    fstat(fd, &sbuf);
+    if (fstat(fd, &sbuf) != 0) {
+        fprintf(stderr, "Error: unable to stat %s\n", fname);
+        assert(0);
+    }
     filesize = sbuf.st_size; //to make fortify compile happy
     data = malloc(filesize + 1);
     memset(data, 0, filesize + 1);
