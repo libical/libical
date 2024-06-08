@@ -16,8 +16,9 @@
 #define ICALCOMPONENT_H
 
 #include "libical_deprecated.h"
+#include "libical_sentinel.h"
 #include "libical_ical_export.h"
-#include "icalenums.h"  /* Defines icalcomponent_kind */
+#include "icalenums.h" /* Defines icalcomponent_kind */
 #include "icalproperty.h"
 #include "pvl.h"
 
@@ -25,8 +26,7 @@ typedef struct icalcomponent_impl icalcomponent;
 
 /* This is exposed so that callers will not have to allocate and
    deallocate iterators. Pretend that you can't see it. */
-typedef struct icalcompiter
-{
+typedef struct icalcompiter {
     icalcomponent_kind kind;
     pvl_elem iter;
 
@@ -51,7 +51,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_from_string(const char *str
  *
  * Make sure to pass NULL (not 0) as the final argument!
  */
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...);
+LIBICAL_ICAL_EXPORT LIBICAL_SENTINEL icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...);
 
 /** @brief Constructor
  */
@@ -87,7 +87,7 @@ LIBICAL_ICAL_EXPORT char *icalcomponent_get_component_name_r(const icalcomponent
  * @deprecated Use icalcomponent_clone() instead
  */
 LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalcomponent *icalcomponent_new_clone(
-                                           icalcomponent *component));
+    icalcomponent *component));
 
 /***** Working with Properties *****/
 
@@ -162,11 +162,11 @@ LIBICAL_ICAL_EXPORT icalcompiter icalcomponent_begin_component(icalcomponent *co
 LIBICAL_ICAL_EXPORT icalcompiter icalcomponent_end_component(icalcomponent *component,
                                                              icalcomponent_kind kind);
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_next(icalcompiter * i);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_next(icalcompiter *i);
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_prior(icalcompiter * i);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_prior(icalcompiter *i);
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter * i);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter *i);
 
 /***** Working with embedded error properties *****/
 
@@ -410,8 +410,8 @@ LIBICAL_ICAL_EXPORT enum icalproperty_status icalcomponent_get_status(icalcompon
  *  component, and any subcomponents.
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_foreach_tzid(icalcomponent *comp,
-                                                    void (*callback) (icalparameter *param,
-                                                                      void *data),
+                                                    void (*callback)(icalparameter *param,
+                                                                     void *data),
                                                     void *callback_data);
 
 /** @brief Returns the icaltimezone in the component corresponding to the
@@ -467,9 +467,10 @@ LIBICAL_ICAL_EXPORT int icalproperty_recurrence_is_excluded(icalcomponent *comp,
 LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                           struct icaltimetype start,
                                                           struct icaltimetype end,
-                                                          void (*callback) (icalcomponent *comp,
-                                                                            struct icaltime_span *
-                                                                            span, void *data),
+                                                          void (*callback)(icalcomponent *comp,
+                                                                           struct icaltime_span *
+                                                                               span,
+                                                                           void *data),
                                                           void *callback_data);
 
 /**
@@ -489,8 +490,8 @@ LIBICAL_ICAL_EXPORT void icalcomponent_normalize(icalcomponent *comp);
  * @since 3.0.5
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalproperty_get_datetime_with_component(
-                                                                          icalproperty *prop,
-                                                                          icalcomponent *comp);
+    icalproperty *prop,
+    icalcomponent *comp);
 /*************** Type Specific routines ***************/
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vcalendar(void);

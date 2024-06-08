@@ -326,18 +326,18 @@ calendar =
             icalproperty_vanew_organizer(
                 "mrbig@host.com",
                 icalparameter_new_role(ICAL_ROLE_CHAIR),
-                NULL),
+                (void *)0),
             icalproperty_vanew_attendee(
                 "employee-A@host.com",
                 icalparameter_new_role(
                     ICAL_ROLE_REQPARTICIPANT),
                 icalparameter_new_rsvp(1),
                 icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
-                NULL),
+                (void *)0),
             icalproperty_new_location(
                "1CP Conference Room 4350"),
-            NULL),
-        NULL);
+            (void *)0),
+        (void *)0);
 ```
 
 This form is similar to the constructor form, except that the constructors

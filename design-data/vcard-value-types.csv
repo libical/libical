@@ -1,0 +1,36 @@
+"#Name","C vcardvalue_kind Enum","C type& gen flag","Python","Component Values","Enum Values"
+"ANY","5000",,,,
+"NO","5099",,,,
+
+"#Standard property value data types","RFC 6350 Section 4",,,
+"#Non-standard property enumeration types",,,,
+"TEXT","5001","(a)const char*","string","unitary",
+"URI","5002","(a)const char*","string","unitary",
+"DATE","5003","(a)vcardtimetype","Time","unitary",
+"TIME","5004","(a)vcardtimetype","Time","unitary",
+"DATE-TIME","5005","(a)vcardtimetype","Time","unitary",
+"DATE-AND-OR-TIME","5006","(a)vcardtimetype","Time","unitary",
+"TIMESTAMP","5007","(a)vcardtimetype","Time","unitary",
+"BOOLEAN","5008","(a)int","integer","unitary",
+"INTEGER","5009","(a)int","integer","unitary",
+"FLOAT","5010","(a)float","float","unitary",
+"UTC-OFFSET","5011","(a)int","integer","unitary",
+"LANGUAGE-TAG","5012","(a)const char*","string","unitary",
+"X","5013","(m)const char*","string","unitary",
+"TEXTLIST","5016","(a)vcardstrarray*","array","unitary",
+"STRUCTURED","5017","(m)vcardstructuredtype*","structured","unitary",
+"TZ","5020","(m)vcardtztype","structured","unitary",
+"GEO","5021","(m)vcardgeotype","structured","unitary",
+
+"#Non-standard property enumeration types",,,,
+"#KIND:APPLICATION from RFC 6473",,,,
+"#KIND:DEVICE from RFC 6869",,,,
+"KIND","5014","(a)enum vcardproperty_kindenum","string","unitary","X=10000;INDIVIDUAL;GROUP;ORG;LOCATION;APPLICATION;DEVICE;NONE=10099"
+"VERSION","5015","(a)enum vcardproperty_version","string","unitary","X=10100;2.1;3.0;4.0;NONE=10199"
+
+"#JSContact Extensions","RFC 9554",,,,
+"GRAMGENDER","5018","(a)enum vcardproperty_gramgender","string","unitary","X=10200;ANIMATE;COMMON;FEMININE;INANIMATE;MASCULINE;NEUTER;NONE=10299"
+
+"#NOTE for updaters.  Preserve the vcardvalue_kind Enum values and property Enum values to aid forward compatibility"
+"# New Enum values for an existing vcardvalue_kind should be inserted before the corresponding NONE value"
+"# New vcardvalue_kind types should start their Enum value after the highest NONE value (currently 10399)"

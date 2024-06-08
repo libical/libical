@@ -51,7 +51,7 @@ static ICAL_GLOBAL_VAR buffer_ring *global_buffer_ring = 0;
  *
  * Get rid of this buffer ring.
  */
-static void icalmemory_free_ring_byval(buffer_ring * br)
+static void icalmemory_free_ring_byval(buffer_ring *br)
 {
     int i;
 
@@ -72,7 +72,7 @@ static pthread_once_t ring_key_once = PTHREAD_ONCE_INIT;
 static void ring_destroy(void *buf)
 {
     if (buf)
-        icalmemory_free_ring_byval((buffer_ring *) buf);
+        icalmemory_free_ring_byval((buffer_ring *)buf);
 
     pthread_setspecific(ring_key, NULL);
 }
@@ -105,7 +105,7 @@ static buffer_ring *buffer_ring_new(void)
     buffer_ring *br;
     int i;
 
-    br = (buffer_ring *) icalmemory_new_buffer(sizeof(buffer_ring));
+    br = (buffer_ring *)icalmemory_new_buffer(sizeof(buffer_ring));
     if (!br)
         return NULL;
 
@@ -255,7 +255,7 @@ char *icalmemory_strdup(const char *s)
         return NULL;
 
     l = (strlen(s) + 1) * sizeof(char);
-    res = (char *) icalmemory_new_buffer(l);
+    res = (char *)icalmemory_new_buffer(l);
     if (res == NULL)
         return NULL;
 
@@ -299,7 +299,8 @@ void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc,
 
 void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f *f_malloc,
                                     icalmemory_realloc_f *f_realloc,
-                                    icalmemory_free_f *f_free) {
+                                    icalmemory_free_f *f_free)
+{
     if (f_malloc) {
         *f_malloc = global_icalmem_malloc;
     }
@@ -384,11 +385,10 @@ void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const ch
 #endif
 
     string_length = strlen(string);
-    data_length = (size_t) * pos - (size_t) * buf;
+    data_length = (size_t)*pos - (size_t)*buf;
     final_length = data_length + string_length;
 
-    if (final_length >= (size_t) * buf_size) {
-
+    if (final_length >= (size_t)*buf_size) {
         *buf_size = (*buf_size) * 2 + final_length;
 
         new_buf = icalmemory_resize_buffer(*buf, *buf_size);
@@ -397,7 +397,7 @@ void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const ch
             return;
         }
 
-        new_pos = (void *)((size_t) new_buf + data_length);
+        new_pos = (void *)((size_t)new_buf + data_length);
 
         *pos = new_pos;
         *buf = new_buf;
@@ -424,12 +424,11 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
     icalerror_check_arg_rv((*buf_size != 0), "*buf_size");
 #endif
 
-    data_length = (size_t) * pos - (size_t) * buf;
+    data_length = (size_t)*pos - (size_t)*buf;
 
     final_length = data_length + 2;
 
-    if (final_length > (size_t) * buf_size) {
-
+    if (final_length > (size_t)*buf_size) {
         *buf_size = (*buf_size) * 2 + final_length + 1;
 
         new_buf = icalmemory_resize_buffer(*buf, *buf_size);
@@ -438,7 +437,7 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
             return;
         }
 
-        new_pos = (void *)((size_t) new_buf + data_length);
+        new_pos = (void *)((size_t)new_buf + data_length);
 
         *pos = new_pos;
         *buf = new_buf;

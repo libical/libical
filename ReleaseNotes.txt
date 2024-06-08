@@ -5,7 +5,7 @@ Version 3.1.0 (NOT RELEASED YET):
 --------------------------------
  * REUSE compliant licensing
  * Requires MSVC 2013 or higher (when building on Windows with MSVC)
- * Requires CMake v3.11.0 or higher
+ * Requires CMake v3.19.0 or higher
  * For the C++ bindings, requires a C++11 compliant compiler
  * The old src/python code is removed in favor of the glib-introspection generated
    Python bindings. Requires building with -DGOBJECT_INTROSPECTION=ON
@@ -57,11 +57,13 @@ Version 3.1.0 (NOT RELEASED YET):
     + struct icaltimezonetype
     + struct icaltimezonephase
 
-Version 3.0.18 (UNRELEASED):
-----------------------------
+Version 3.0.18 (31 March 2024):
+-------------------------------
  * Requires CMake v3.5.0 or higher
  * Escape ^ (U+005E) character in parameter values according to RFC 6868
  * New CMake option LIBICAL_BUILD_EXAMPLES to disable building the examples
+ * Should be able to use the project as a submodule
+ * Built-in timezones updated to tzdata2024a
 
 Version 3.0.17 (14 October 2023):
 ---------------------------------

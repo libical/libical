@@ -8,12 +8,14 @@ if(NOT ENABLE_GTK_DOC)
 endif()
 
 if(STATIC_ONLY)
-  message(FATAL_ERROR
-    "You are attempting to build the Gtk docs, "
-    "however that option is not supported when building static libraries only. "
-    "Please disable the static only option (-DSTATIC_ONLY=False) "
-    "if you really want to build the Gtk docs. Alternatively, you can "
-    "disable building Gtk docs (by passing -DENABLE_GTK_DOC=False to cmake).")
+  message(
+    FATAL_ERROR
+      "You are attempting to build the Gtk docs, "
+      "however that option is not supported when building static libraries only. "
+      "Please disable the static only option (-DSTATIC_ONLY=False) "
+      "if you really want to build the Gtk docs. Alternatively, you can "
+      "disable building Gtk docs (by passing -DENABLE_GTK_DOC=False to cmake)."
+  )
 endif()
 
 # To regenerate libical-glib-docs.xml.in from current sources use these steps:
@@ -30,21 +32,19 @@ endif()
 #   e) compare the changes in the file and return back what should be left,
 #      like the replacement of the "[Insert title here]" and the <bookinfo/> content
 
-if(ENABLE_GTK_DOC)
-  include(GtkDoc)
+include(GtkDoc)
 
-  set(SOURCEDIRS
-    ${CMAKE_BINARY_DIR}/src/libical-glib
-  )
+set(SOURCEDIRS ${PROJECT_BINARY_DIR}/src/libical-glib)
 
-  set(DEPENDENCIES
-    ical-glib
-  )
+set(DEPENDENCIES ical-glib)
 
-  set(IGNORE_HEADERS
-    libical-glib-private.h
-  )
+set(IGNORE_HEADERS libical-glib-private.h)
 
-  add_gtkdoc(libical-glib libical-glib "LIBICAL_GLIB_DISABLE_DEPRECATED" SOURCEDIRS DEPENDENCIES IGNORE_HEADERS)
-
-endif()
+add_gtkdoc(
+  libical-glib
+  libical-glib
+  "LIBICAL_GLIB_DISABLE_DEPRECATED"
+  SOURCEDIRS
+  DEPENDENCIES
+  IGNORE_HEADERS
+)

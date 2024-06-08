@@ -34,10 +34,10 @@ struct testmalloc_hdrlayout {
     int data;
 };
 
-#define TESTMALLOC_HDR_SIZE ((size_t) &((struct testmalloc_hdrlayout*) 0)->data)
+#define TESTMALLOC_HDR_SIZE ((size_t) & ((struct testmalloc_hdrlayout *)0)->data)
 
-void *test_malloc(size_t size) {
-
+void *test_malloc(size_t size)
+{
     void *block;
     struct testmalloc_hdr *hdr;
 
@@ -68,11 +68,11 @@ void *test_malloc(size_t size) {
         global_testmalloc_remaining_attempts--;
     }
 
-    return (void*) &((struct testmalloc_hdrlayout *) hdr)->data;
+    return (void *)&((struct testmalloc_hdrlayout *)hdr)->data;
 }
 
-void *test_realloc(void *p, size_t size) {
-
+void *test_realloc(void *p, size_t size)
+{
     struct testmalloc_hdr *hdr;
     size_t old_size;
 
@@ -87,7 +87,7 @@ void *test_realloc(void *p, size_t size) {
         return NULL;
     }
 
-    hdr = (struct testmalloc_hdr *) (((uint8_t *) p) - TESTMALLOC_HDR_SIZE);
+    hdr = (struct testmalloc_hdr *)(((uint8_t *)p) - TESTMALLOC_HDR_SIZE);
     if (hdr->magic_no != TESTMALLOC_MAGIC_NO) {
         global_testmalloc_statistics.realloc_failed_cnt++;
         return NULL;
@@ -115,11 +115,11 @@ void *test_realloc(void *p, size_t size) {
         global_testmalloc_remaining_attempts--;
     }
 
-    return (void *) &((struct testmalloc_hdrlayout *)hdr)->data;
+    return (void *)&((struct testmalloc_hdrlayout *)hdr)->data;
 }
 
-void test_free(void *p) {
-
+void test_free(void *p)
+{
     struct testmalloc_hdr *hdr;
     size_t old_size;
 
@@ -129,12 +129,11 @@ void test_free(void *p) {
 
     global_testmalloc_statistics.free_cnt++;
 
-    hdr = (struct testmalloc_hdr *) (((uint8_t *) p) - TESTMALLOC_HDR_SIZE);
+    hdr = (struct testmalloc_hdr *)(((uint8_t *)p) - TESTMALLOC_HDR_SIZE);
 
     // The main objective of this check is to ensure, that only memory, that has been allocated via icalmemory is freed
     // via icalmemory_free(). A side objective is to make sure, the block of memory hasn't been corrupted.
     if (hdr->magic_no != TESTMALLOC_MAGIC_NO) {
-
         // If we end up here, then probably either of the following happened:
         // * The calling code tries to free a block of memory via icalmemory_free() that has been allocated outside of
         //   icalmemory, e.g. via malloc().
@@ -159,19 +158,21 @@ void test_free(void *p) {
     global_testmalloc_statistics.blocks_allocated--;
 }
 
-void testmalloc_reset(void) {
+void testmalloc_reset(void)
+{
     memset(&global_testmalloc_statistics, 0, sizeof(global_testmalloc_statistics));
     global_testmalloc_remaining_attempts = -1;
 }
 
 /** Sets the maximum number of malloc or realloc attempts that will succeed. If
 * the number is negative, no limit will be applied. */
-void testmalloc_set_max_successful_allocs(int n) {
+void testmalloc_set_max_successful_allocs(int n)
+{
     global_testmalloc_remaining_attempts = n;
 }
 
-void testmalloc_get_statistics(struct testmalloc_statistics *statistics) {
-
+void testmalloc_get_statistics(struct testmalloc_statistics *statistics)
+{
     if (statistics) {
         *statistics = global_testmalloc_statistics;
     }

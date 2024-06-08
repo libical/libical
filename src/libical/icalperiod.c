@@ -60,7 +60,6 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 
     if (icaltime_is_null_time(p.end)) {
-
         p.duration = icaldurationtype_from_string(end);
 
         if (icaldurationtype_as_int(p.duration) == 0)
@@ -73,7 +72,7 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
 
     return p;
 
-  error:
+error:
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 
     if (s) {

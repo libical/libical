@@ -78,7 +78,7 @@ void test_recur_file(void)
     icaltime_t tt;
     const char *file;
     int num_recurs_found = 0;
-    icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
 
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 
@@ -90,7 +90,7 @@ void test_recur_file(void)
         file = TEST_DATADIR "/recur.txt";
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
-    alarm(15);  /* to get file lock */
+    alarm(15); /* to get file lock */
 #endif
     cin = icalset_new(ICAL_FILE_SET, file, &options);
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)

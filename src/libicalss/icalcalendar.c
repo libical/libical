@@ -26,8 +26,7 @@
 #define PROP_FILE "properties.ics"
 #define FBLIST_FILE "freebusy.ics"
 
-struct icalcalendar_impl
-{
+struct icalcalendar_impl {
     char *dir;
     icalset *freebusy;
     icalset *properties;
@@ -65,7 +64,6 @@ static icalerrorenum icalcalendar_create(struct icalcalendar_impl *impl)
     r = stat(path, &sbuf);
 
     if (r != 0 && errno == ENOENT) {
-
         if (mkdir(path, 0777) != 0) {
             icalerror_set_errno(ICAL_FILE_ERROR);
             return ICAL_FILE_ERROR;

@@ -49,7 +49,7 @@ with section("format"):
 
   # If a positional argument group contains more than this many arguments, then
   # force it to a vertical layout.
-  max_pargs_hwrap = 6
+  max_pargs_hwrap = 4
 
   # If a cmdline positional group consumes more than this many lines without
   # nesting, then invalidate the layout (and nest)
@@ -63,7 +63,7 @@ with section("format"):
 
   # If a statement is wrapped to more than one line, than dangle the closing
   # parenthesis on its own line.
-  dangle_parens = False
+  dangle_parens = True
 
   # If the trailing parenthesis must be 'dangled' on its on line, then align it
   # to this reference: `prefix`: the start of the statement,  `prefix-indent`:
@@ -94,7 +94,7 @@ with section("format"):
   keyword_case = 'upper'
 
   # A list of command names which should always be wrapped
-  always_wrap = []
+  always_wrap = ["add_executable", "add_library", "target_link_libraries", "target_include_directories", "install", "add_custom_target", "configure_file", "configure_package_config_file"]
 
   # If true, the argument lists which are known to be sortable will be sorted
   # lexicographicall
@@ -102,7 +102,7 @@ with section("format"):
 
   # If true, the parsers may infer whether or not an argument list is sortable
   # (without annotation).
-  autosort = False
+  autosort = True
 
   # By default, if cmake-format cannot successfully fit everything into the
   # desired linewidth it will apply the last, most agressive attempt that it
@@ -156,7 +156,7 @@ with section("markup"):
   canonicalize_hashrulers = True
 
   # enable comment markup parsing and reflow
-  enable_markup = True
+  enable_markup = False
 
 # ----------------------------
 # Options affecting the linter
@@ -174,7 +174,7 @@ with section("lint"):
 
   # regular expression pattern describing valid names for variables with global
   # (cache) scope
-  global_var_pattern = '[A-Z][0-9A-Z_]+'
+  global_var_pattern = '[A-Za-z][0-9A-Za-z_]+'
 
   # regular expression pattern describing valid names for variables with global
   # scope (but internal semantic)
@@ -182,7 +182,7 @@ with section("lint"):
 
   # regular expression pattern describing valid names for variables with local
   # scope
-  local_var_pattern = '[a-z][a-z0-9_]+'
+  local_var_pattern = '[A-Za-z][A-Za-z0-9_]+'
 
   # regular expression pattern describing valid names for privatedirectory
   # variables
@@ -213,7 +213,7 @@ with section("lint"):
   max_branches = 15
   max_arguments = 10
   max_localvars = 15
-  max_statements = 50
+  max_statements = 100
 
 # -------------------------------
 # Options affecting file encoding

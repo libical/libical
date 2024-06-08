@@ -37,7 +37,7 @@ HELP() {
   echo " -t, --no-tidy              Don't run any clang-tidy tests"
   echo " -b, --no-scan              Don't run any scan-build tests"
   echo " -s, --no-splint            Don't run any splint tests"
-  echo " -p, --no-codespell         Don't run any codespell tests"
+  echo " -p, --no-precommit         Don't run pre-commit test"
   echo " -n, --no-ninja             Don't run any build tests with ninja"
   echo " -l, --no-clang-build       Don't run any clang-build tests"
   echo " -g, --no-gcc-build         Don't run any gcc-build tests"
@@ -63,6 +63,14 @@ COMMAND_EXISTS () {
   fi
 }
 
+#function SET_NINJA
+# set cmake generator to ninja
+SET_NINJA() {
+  export CMAKE_GENERATOR=Ninja
+}
+UNSET_NINJA() {
+  unset CMAKE_GENERATOR
+}
 
 #function SET_GCC
 # setup compiling with gcc
@@ -150,11 +158,13 @@ CONFIGURE() {
   mkdir -p $BDIR
   cd $BDIR
   rm -rf *
-  if ( test `echo $2 | grep -ci Ninja` -gt 0 )
+  cmake --warn-uninitialized -Werror=dev .. $2 2>&1 | tee cmake.out || exit 1
+  numWarnings=`grep -ic "cmake warning" cmake.out`
+  numDeprecates=`grep -ic "cmake deprecat" cmake.out`
+  if ( test $numWarnings -gt 0 -o $numDeprecates -gt 0 )
   then
-    cmake --warn-uninitialized -Werror=dev .. $2 || exit 1
-  else
-    cmake -G "Unix Makefiles" --warn-uninitialized -Werror=dev .. $2 || exit 1
+     echo "cmake warnings encountered"
+     exit 1
   fi
 }
 
@@ -172,12 +182,7 @@ CLEAN() {
 BUILD() {
   cd $TOP
   CONFIGURE "$1" "$2"
-  MAKE=make
-  if ( test `echo $2 | grep -ci Ninja` -gt 0 )
-  then
-    MAKE=ninja
-  fi
-  $MAKE 2>&1 | tee make.out || exit 1
+  cmake --build . 2>&1 | tee make.out || exit 1
   COMPILE_WARNINGS make.out
 
   if (test "`uname -s`" = "Darwin")
@@ -186,7 +191,7 @@ BUILD() {
   else
     export LD_LIBRARY_PATH=$BDIR/lib
   fi
-  $MAKE test 2>&1 | tee make-test.out || exit 1
+  ctest . 2>&1 | tee make-test.out || exit 1
   CLEAN
 }
 
@@ -247,7 +252,9 @@ NINJA_GCC_BUILD() {
   COMMAND_EXISTS "gcc"
   echo "===== START NINJA_GCC BUILD: $1 ======"
   SET_GCC
-  BUILD "$name" "$2 -G Ninja"
+  SET_NINJA
+  BUILD "$name" "$2"
+  UNSET_NINJA
   echo "===== END NINJA_GCC BUILD: $1 ======"
 }
 
@@ -297,7 +304,8 @@ ASAN_BUILD() {
     return
   fi
   echo "===== START ASAN BUILD: $1 ======"
-  SET_CLANG
+  SET_GCC # I'm using ld.gold (vs ld.bfd), which doesn't play well with clang and asan=>use gcc
+  #SET_CLANG currently has linking problems using ld.gold
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
 }
@@ -376,24 +384,17 @@ CPPCHECK() {
   echo "===== START CPPCHECK: $1 ======"
   cd $TOP
   cppcheck --quiet --language=c \
+           --std=c99 \
+           --library=posix \
            --force --error-exitcode=1 --inline-suppr \
            --enable=warning,performance,portability,information \
            --disable=missingInclude \
            --template='{file}:{line},{severity},{id},{message}' \
-           -D sleep="" \
-           -D localtime_r="" \
-           -D gmtime_r="" \
-           -D size_t="unsigned long" \
+           --checkers-report=cppcheck-report.txt \
            -D bswap32="" \
            -D PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=0 \
            -D MIN="" \
            -D _unused="(void)" \
-           -D _deprecated="(void)" \
-           -D ICALMEMORY_DEFAULT_FREE="free" \
-           -D ICALMEMORY_DEFAULT_MALLOC="malloc" \
-           -D ICALMEMORY_DEFAULT_REALLOC="realloc" \
-           -D F_OK=0 \
-           -D R_OK=0 \
            -U YYSTYPE \
            -U PVL_USE_MACROS \
            -I $BDIR \
@@ -410,7 +411,7 @@ CPPCHECK() {
       grep -v vcc\.c | grep -v vcc\.y | \
       grep -v _cxx\. | tee cppcheck.out
   CPPCHECK_WARNINGS cppcheck.out
-  rm -f cppcheck.out
+  rm -f cppcheck.out cppcheck-report.txt
   CLEAN
   echo "===== END CPPCHECK: $1 ======"
 }
@@ -472,9 +473,11 @@ SPLINT() {
        -DLIBICAL_ICAL_EXPORT=extern \
        -DLIBICAL_ICALSS_EXPORT=extern \
        -DLIBICAL_VCAL_EXPORT=extern \
+       -DLIBICAL_VCARD_EXPORT=extern \
        -DLIBICAL_ICAL_NO_EXPORT="" \
        -DLIBICAL_ICALSS_NO_EXPORT="" \
        -DLIBICAL_VCAL_NO_EXPORT="" \
+       -DLIBICAL_VCARD_NO_EXPORT="" \
        -DENOENT=1 -DENOMEM=1 -DEINVAL=1 -DSIGALRM=1 \
        `pkg-config glib-2.0 --cflags` \
        `pkg-config libxml-2.0 --cflags` \
@@ -482,11 +485,13 @@ SPLINT() {
        -I $BDIR/src \
        -I $BDIR/src/libical \
        -I $BDIR/src/libicalss \
+       -I $BDIR/src/libicalvcard \
        -I $TOP \
        -I $TOP/src \
        -I $TOP/src/libical \
        -I $TOP/src/libicalss \
        -I $TOP/src/libicalvcal \
+       -I $TOP/src/libicalvcard \
        -I $TOP/src/libical-glib | \
   grep -v '[[:space:]]Location[[:space:]]unknown[[:space:]]' | \
   grep -v '[[:space:]]Code[[:space:]]cannot[[:space:]]be[[:space:]]parsed.' | \
@@ -572,31 +577,31 @@ KRAZY() {
   echo "===== END KRAZY ======"
 }
 
-#function CODESPELL
-# runs a codespell test
-CODESPELL() {
-  if ( test $runcodespell -ne 1 )
+#function PRECOMMIT
+# run pre-commit
+PRECOMMIT() {
+  if ( test $runprecommit -ne 1 )
   then
-    echo "===== CODESPELL TEST DISABLED DUE TO COMMAND LINE OPTION ====="
+    echo "===== PRECOMMIT DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "codespell"
-  echo "===== START CODESPELL ====="
+  COMMAND_EXISTS "pre-commit"
+  echo "===== START PRECOMMIT ====="
   cd $TOP
-  codespell --interactive=0 . 2>&1 | tee codespell.out
+  pre-commit run --all-files 2>&1 | tee precommit.out
   status=$?
   if ( test $status -gt 0 )
   then
-    echo "Codespell warnings encountered.  Exiting..."
+    echo "pre-commit issues encountered.  Exiting..."
     exit 1
   fi
-  rm -f codespell.out
-  echo "===== END CODESPELL ======"
+  rm -f precommit.out
+  echo "===== END PRECOMMIT ======"
 }
 
 ##### END FUNCTIONS #####
 
-#TEMP=`getopt -o hmkpctbsnlgaduxfr --long help,no-cmake-compat,no-krazy,no-codespell,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build,no-fortify-build,no-threadlocal-build -- "$@"`
+#TEMP=`getopt -o hmkpctbsnlgaduxfr --long help,no-cmake-compat,no-krazy,no-precommit,no-cppcheck,no-tidy,no-scan,no-splint,no-ninja,no-clang-build,no-gcc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-memc-build,no-fortify-build,no-threadlocal-build -- "$@"`
 TEMP=`getopt hmkpctbsnlgaduxfr $*`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 # Note the quotes around `$TEMP': they are essential!
@@ -604,7 +609,7 @@ eval set -- "$TEMP"
 
 cmakecompat=1
 runkrazy=1
-runcodespell=1
+runprecommit=1
 runcppcheck=1
 runtidy=1
 runsplint=1
@@ -623,7 +628,7 @@ while true; do
         -h|--help) HELP; exit 1;;
         -m|--no-cmake-compat)   cmakecompat=0;            shift;;
         -k|--no-krazy)          runkrazy=0;               shift;;
-        -p|--no-codespell)      runcodespell=0;           shift;;
+        -p|--no-precommit)      runprecommit=0;           shift;;
         -c|--no-cppcheck)       runcppcheck=0;            shift;;
         -t|--no-tidy)           runtidy=0;                shift;;
         -b|--no-scan)           runscan=0;                shift;;
@@ -682,16 +687,22 @@ then
   fi
 fi
 
+#use non-Ninja cmake generator by-default
+UNSET_NINJA
+
 DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DNDEBUG=1"
 CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DUSE_BUILTIN_TZDATA=True"
 LTOCMAKEOPTS="$CMAKEOPTS -DENABLE_LTO_BUILD=True"
-GLIBOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=True -DUSE_BUILTIN_TZDATA=OFF -DICAL_GLIB_VAPI=ON"
+#Building with vapi inconsistently fails on Fedora. no idea why
+#GLIBOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=True -DUSE_BUILTIN_TZDATA=OFF -DICAL_GLIB_VAPI=ON"
+GLIBOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=True -DUSE_BUILTIN_TZDATA=OFF -DICAL_GLIB_VAPI=OFF"
+FUZZOPTS="-DLIBICAL_BUILD_TESTING_BIGFUZZ=True"
 
 #Static code checkers
+PRECOMMIT
 KRAZY
-CODESPELL
 SPLINT test2 "$CMAKEOPTS"
 SPLINT test2builtin "$TZCMAKEOPTS"
 CPPCHECK test2 "$CMAKEOPTS"
@@ -749,6 +760,7 @@ MEMCONSIST_BUILD test3memc "$TZCMAKEOPTS"
 MEMCONSIST_BUILD test4memc "$UUCCMAKEOPTS"
 #FIXME: the python test scripts for introspection need some love
 #MEMCONSIST_BUILD test5memc "$GLIBOPTS"
+MEMCONSIST_BUILD test6memc "$FUZZOPTS"
 
 #Address sanitizer
 ASAN_BUILD test1asan "$DEFCMAKEOPTS"
@@ -756,6 +768,7 @@ ASAN_BUILD test2asan "$CMAKEOPTS"
 ASAN_BUILD test3asan "$TZCMAKEOPTS"
 ASAN_BUILD test4asan "$UUCCMAKEOPTS"
 ASAN_BUILD test5asan "$GLIBOPTS"
+ASAN_BUILD test6asan "$FUZZOPTS"
 
 #Thread sanitizer
 TSAN_BUILD test1tsan "$DEFCMAKEOPTS"
@@ -763,13 +776,15 @@ TSAN_BUILD test2tsan "$CMAKEOPTS"
 TSAN_BUILD test3tsan "$TZCMAKEOPTS"
 TSAN_BUILD test4tsan "$UUCCMAKEOPTS"
 TSAN_BUILD test5tsan "$GLIBOPTS"
+TSAN_BUILD test6tsan "$FUZZOPTS"
 
 #Undefined sanitizer
-UBSAN_BUILD test1ubsan ""
+UBSAN_BUILD test1ubsan "$DEFCMAKEOPTS"
 UBSAN_BUILD test2ubsan "$CMAKEOPTS"
 UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
 UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
 UBSAN_BUILD test5ubsan "$GLIBOPTS"
+UBSAN_BUILD test6ubsan "$FUZZOPTS"
 
 #Fortify build
 FORTIFY_BUILD test1fortify "$DEFCMAKEOPTS"
@@ -777,6 +792,7 @@ FORTIFY_BUILD test2fortify "$CMAKEOPTS"
 FORTIFY_BUILD test3fortify "$TZCMAKEOPTS"
 FORTIFY_BUILD test4fortify "$UUCCMAKEOPTS"
 FORTIFY_BUILD test5fortify "$GLIBOPTS"
+FORTIFY_BUILD test6fortify "$FUZZOPTS"
 
 #Threadlocal
 THREADLOCAL_BUILD test1threadlocal "$DEFCMAKEOPTS"
@@ -784,5 +800,6 @@ THREADLOCAL_BUILD test2threadlocal "$CMAKEOPTS"
 THREADLOCAL_BUILD test3threadlocal "$TZCMAKEOPTS"
 THREADLOCAL_BUILD test4threadlocal "$UUCCMAKEOPTS"
 THREADLOCAL_BUILD test5threadlocal "$GLIBOPTS"
+THREADLOCAL_BUILD test6threadlocal "$FUZZOPTS"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"

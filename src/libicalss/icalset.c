@@ -66,8 +66,7 @@ static icalset icalset_dirset_init = {
     icaldirset_get_next_component,
     icaldirset_begin_component,
     icaldirsetiter_to_next,
-    icaldirsetiter_to_prior
-};
+    icaldirsetiter_to_prior};
 
 static icalset icalset_fileset_init = {
     ICAL_FILE_SET,
@@ -92,8 +91,7 @@ static icalset icalset_fileset_init = {
     icalfileset_get_next_component,
     icalfileset_begin_component,
     icalfilesetiter_to_next,
-    NULL
-};
+    NULL};
 
 #if defined(HAVE_BDB)
 static icalset icalset_bdbset_init = {
@@ -119,15 +117,14 @@ static icalset icalset_bdbset_init = {
     icalbdbset_get_next_component,
     icalbdbset_begin_component,
     icalbdbsetiter_to_next,
-    NULL
-};
+    NULL};
 #endif
 
 #if defined(_DLOPEN_TEST)
 static int icalset_init_done = 0;
 static pvl_list icalset_kinds = 0;
 
-typedef icalset *(*fptr) (void);
+typedef icalset *(*fptr)(void);
 
 /**
  * Try to load the file and register any icalset found within.
@@ -153,7 +150,7 @@ static int load(const char *file)
         return 0;
     }
 
-    while ((icalset_init_ptr = ((inith) ())) != 0) {
+    while ((icalset_init_ptr = ((inith)())) != 0) {
         pvl_push(icalset_kinds, &icalset_init_ptr);
     }
 
@@ -447,8 +444,7 @@ icalcomponent *icalset_get_next_component(icalset *set)
     return set->get_next_component(set);
 }
 
-icalsetiter icalsetiter_null = { {ICAL_NO_COMPONENT, 0}
-, 0, 0, 0, 0 };
+icalsetiter icalsetiter_null = {{ICAL_NO_COMPONENT, 0}, 0, 0, 0, 0};
 
 icalsetiter icalset_begin_component(icalset *set,
                                     icalcomponent_kind kind, icalgauge *gauge, const char *tzid)

@@ -43,7 +43,7 @@ typedef struct icalattach_impl icalattach;
  * This function type is used to free the data from an ::icalattach object created
  * with icalattach_new_from_data(). It is currently not used
  */
-typedef void (*icalattach_free_fn_t) (char *data, void *user_data);
+typedef void (*icalattach_free_fn_t)(char *data, void *user_data);
 
 /**
  * @brief Creates new icalattach object from a URL.

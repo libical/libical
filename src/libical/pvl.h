@@ -22,12 +22,11 @@ typedef struct pvl_elem_t *pvl_elem;
  * blocks work
  */
 
-typedef struct pvl_elem_t
-{
-    int MAGIC;                          /**< Magic Identifier */
-    void *d;                            /**< Pointer to data user is storing */
-    struct pvl_elem_t *next;            /**< Next element */
-    struct pvl_elem_t *prior;           /**< Prior element */
+typedef struct pvl_elem_t {
+    int MAGIC;                /**< Magic Identifier */
+    void *d;                  /**< Pointer to data user is storing */
+    struct pvl_elem_t *next;  /**< Next element */
+    struct pvl_elem_t *prior; /**< Prior element */
 } pvl_elem_t;
 
 /* Create new lists or elements */
@@ -52,7 +51,7 @@ LIBICAL_ICAL_EXPORT void *pvl_pop(pvl_list l);
 LIBICAL_ICAL_EXPORT pvl_elem pvl_tail(pvl_list);
 
 /* Insert elements in random places */
-typedef int (*pvl_comparef) (void *a, void *b); /* a, b are of the data type */
+typedef int (*pvl_comparef)(void *a, void *b); /* a, b are of the data type */
 
 LIBICAL_ICAL_EXPORT void pvl_insert_ordered(pvl_list l, pvl_comparef f, void *d);
 
@@ -61,9 +60,9 @@ LIBICAL_ICAL_EXPORT void pvl_insert_after(pvl_list l, pvl_elem e, void *d);
 LIBICAL_ICAL_EXPORT void pvl_insert_before(pvl_list l, pvl_elem e, void *d);
 
 /* Remove an element, or clear the entire list */
-LIBICAL_ICAL_EXPORT void *pvl_remove(pvl_list, pvl_elem);       /* Remove element, return data */
+LIBICAL_ICAL_EXPORT void *pvl_remove(pvl_list, pvl_elem); /* Remove element, return data */
 
-LIBICAL_ICAL_EXPORT void pvl_clear(pvl_list);   /* Remove all elements, de-allocate all data */
+LIBICAL_ICAL_EXPORT void pvl_clear(pvl_list); /* Remove all elements, de-allocate all data */
 
 LIBICAL_ICAL_EXPORT int pvl_count(pvl_list);
 
@@ -76,11 +75,11 @@ LIBICAL_ICAL_EXPORT pvl_elem pvl_prior(pvl_elem e);
 #if !defined(PVL_USE_MACROS)
 LIBICAL_ICAL_EXPORT void *pvl_data(pvl_elem);
 #else
-#define pvl_data(x) x==0 ? 0 : ((struct pvl_elem_t *)x)->d;
+#define pvl_data(x) x == 0 ? 0 : ((struct pvl_elem_t *)x)->d;
 #endif
 
 /* Find an element for which a function returns true */
-typedef int (*pvl_findf) (void *a, void *b);    /*a is list elem, b is other data */
+typedef int (*pvl_findf)(void *a, void *b); /*a is list elem, b is other data */
 
 LIBICAL_ICAL_EXPORT pvl_elem pvl_find(pvl_list l, pvl_findf f, void *v);
 
@@ -90,7 +89,7 @@ LIBICAL_ICAL_EXPORT pvl_elem pvl_find_next(pvl_list l, pvl_findf f, void *v);
  * Pass each element in the list to a function
  * a is list elem, b is other data
  */
-typedef void (*pvl_applyf) (void *a, void *b);
+typedef void (*pvl_applyf)(void *a, void *b);
 
 LIBICAL_ICAL_EXPORT void pvl_apply(pvl_list l, pvl_applyf f, void *v);
 

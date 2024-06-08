@@ -24,8 +24,7 @@
 /**
  * @brief A struct representing a duration
  */
-struct icaldurationtype
-{
+struct icaldurationtype {
     int is_neg;
     unsigned int days;
     unsigned int weeks;
@@ -34,7 +33,9 @@ struct icaldurationtype
     unsigned int seconds;
 };
 
-#define ICALDURATIONTYPE_INITIALIZER { 0, 0, 0, 0, 0, 0 }
+#define ICALDURATIONTYPE_INITIALIZER \
+    {                                \
+        0, 0, 0, 0, 0, 0}
 
 /**
  * @brief Creates a new ::icaldurationtype from a duration in seconds.

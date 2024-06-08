@@ -1,0 +1,58 @@
+"#Name ","C vcardparameter_kind Enum","C Type","Enumeration Values",Parameter Flags
+"ANY","0",,
+"NO","99",,
+
+"#Standard property parameters","RFC 6350 Section 5",,,
+"LANGUAGE","1","const char*",
+"VALUE","2","vcardparameter_value","X=20000;TEXT;URI;DATE;TIME;DATE-TIME;DATE-AND-OR-TIME;TIMESTAMP;BOOLEAN;INTEGER;FLOAT;UTC-OFFSET;LANGUAGE-TAG;NONE=20099"
+"PREF","3","int",
+"ALTID","4","const char*",
+"PID","5","const char*",,is_multivalued
+"#TYPE=PREF from RFC 2426",,,,
+"#TYPE=MAIN-NUMBER from RFC 7852",,,,
+"#TYPE=BILLING,DELIVERY from 9554",,,,
+"TYPE","6","vcardparameter_type","X=20100;WORK;HOME;TEXT;VOICE;FAX;CELL;VIDEO;PAGER;TEXTPHONE;CONTACT;ACQUAINTANCE;FRIEND;MET;CO-WORKER;COLLEAGUE;CO-RESIDENT;NEIGHBOR;CHILD;PARENT;SIBLING;SPOUSE;KIN;MUSE;CRUSH;DATE;SWEETHEART;ME;AGENT;EMERGENCY;PREF;MAIN-NUMBER;BILLING;DELIVERY;NONE=20199",is_multivalued
+"MEDIATYPE","7","const char*",
+"CALSCALE","8","vcardparameter_calscale","X=20200;GREGORIAN;NONE=20299"
+"SORT-AS","9","const char*",,is_multivalued
+"GEO","10","const char*",
+"TZ","11","const char*",
+"X","12","const char*",
+"LABEL","22","const char*",
+
+"#In practice any unknown parameter that is not an xparam is treated as an ianaparam"
+"IANA","13","const char*",
+
+"#libical Internal Parameters"
+"X-LIC-ERRORTYPE","14","vcardparameter_xlicerrortype","X=20300;COMPONENT-PARSE-ERROR;PROPERTY-PARSE-ERROR;PARAMETER-NAME-PARSE-ERROR;PARAMETER-VALUE-PARSE-ERROR;VALUE-PARSE-ERROR;RESTRICTION-CHECK;NONE=20399"
+"X-LIC-COMPARETYPE","15","vcardparameter_xliccomparetype","X=20400;EQUAL;NOTEQUAL;LESS;GREATER;LESSEQUAL;GREATEREQUAL;REGEX;ISNULL;ISNOTNULL;NONE=20499"
+
+"#Deprecated property parameters","RFC 2425/2426",,,
+"ENCODING","16","vcardparameter_encoding","X=20500;B;NONE=20599"
+"CONTEXT","17","const char*",
+
+"#Open Mobile Alliance Extensions","RFC 6715 Section 3",,,
+"INDEX","18","int"
+"LEVEL","19","vcardparameter_level","X=20600;BEGINNER;AVERAGE;EXPERT;HIGH;MEDIUM;LOW;NONE=20699"
+
+"#RDAP Extensions","RFC 8605 Section 3.1",,,
+"CC","20","const char*"
+
+"#JSContact Conversion", "RFC 9555 Section 3.2.2",
+"JSPTR","21","const char*"
+
+"#JSContact Extensions","RFC 9554",,,
+"AUTHOR","23","const char*"
+"AUTHOR-NAME","24","const char*"
+"CREATED","25","vcardtimetype"
+"DERIVED","26","vcardparameter_derived","X=20700;TRUE;FALSE;NONE=20799"
+"JSCOMPS","27","vcardstructuredtype*",,is_structured
+"PROP-ID","28","const char*"
+"SERVICE-TYPE","29","const char*"
+"USERNAME","30","const char*"
+"PHONETIC","31","vcardparameter_phonetic","X=20800;IPA;PINY;JYUT;SCRIPT;NONE=20899"
+"SCRIPT","32","const char*"
+
+"#NOTE for updaters.  Preserve the vcardparameter_kind Enum values to aid forward compatibility"
+"# New Enum values for an existing vcardparameter_kind should be inserted before the corresponding NONE value"
+"# New vcardparamter_kind types should start their Enum value after the highest NONE value (currently 20899)"

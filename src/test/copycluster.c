@@ -86,7 +86,6 @@ int main(int c, char *argv[])
 
     for (itr = icalset_get_first_component(clusterin);
          itr != 0; itr = icalset_get_next_component(clusterin)) {
-
         icalerror_set_error_state(ICAL_BADARG_ERROR, ICAL_ERROR_NONFATAL);
         icalrestriction_check(itr);
         icalerror_set_error_state(ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT);

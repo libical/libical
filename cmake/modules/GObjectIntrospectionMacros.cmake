@@ -28,24 +28,24 @@ macro(gir_add_introspections introspections_girs)
     if(DEFINED ${_gir_name}_NAMESPACE)
       set(_gir_namespace "${${_gir_name}_NAMESPACE}")
     endif()
-    if (_gir_namespace STREQUAL "")
+    if(_gir_namespace STREQUAL "")
       string(REGEX REPLACE "([^-]+)-.*" "\\1" _gir_namespace "${gir}")
-    endif ()
+    endif()
 
     set(_gir_version "")
     if(DEFINED ${_gir_name}_VERSION)
       set(_gir_version "${${_gir_name}_VERSION}")
     endif()
-    if (_gir_version STREQUAL "")
+    if(_gir_version STREQUAL "")
       string(REGEX REPLACE ".*-([^-]+).gir" "\\1" _gir_version "${gir}")
-    endif ()
+    endif()
 
     # _PROGRAM is an optional variable which needs its own --program argument
     set(_gir_program "")
     if(DEFINED ${_gir_name}_PROGRAM)
       set(_gir_program "${${_gir_name}_PROGRAM}")
     endif()
-    if (NOT _gir_program STREQUAL "")
+    if(NOT _gir_program STREQUAL "")
       set(_gir_program "--program=${_gir_program}")
     endif()
 
@@ -73,19 +73,10 @@ macro(gir_add_introspections introspections_girs)
 
     add_custom_command(
       OUTPUT ${gir}
-      COMMAND ${GObjectIntrospection_SCANNER}
-        ${GObjectIntrospection_SCANNER_ARGS}
-        --namespace=${_gir_namespace}
-        --nsversion=${_gir_version}
-        ${_gir_libtool}
-        ${_gir_program}
-        ${_gir_libraries}
-        ${_gir_packages}
-        ${_gir_includes}
-        ${_gir_scannerflags}
-        ${${_gir_name}_CFLAGS}
-        ${_gir_files}
-        --output ${CMAKE_CURRENT_BINARY_DIR}/${gir}
+      COMMAND
+        ${GObjectIntrospection_SCANNER} ${GObjectIntrospection_SCANNER_ARGS} --namespace=${_gir_namespace}
+        --nsversion=${_gir_version} ${_gir_libtool} ${_gir_program} ${_gir_libraries} ${_gir_packages} ${_gir_includes}
+        ${_gir_scannerflags} ${${_gir_name}_CFLAGS} ${_gir_files} --output ${CMAKE_CURRENT_BINARY_DIR}/${gir}
         --accept-unprefixed
       DEPENDS ${_gir_files} ${${_gir_name}_LIBS}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -98,10 +89,8 @@ macro(gir_add_introspections introspections_girs)
     string(REPLACE ".gir" ".typelib" _typelib "${gir}")
     add_custom_command(
       OUTPUT ${_typelib}
-      COMMAND ${GObjectIntrospection_COMPILER}
-        --includedir=.
-        ${CMAKE_CURRENT_BINARY_DIR}/${gir}
-        -o ${CMAKE_CURRENT_BINARY_DIR}/${_typelib}
+      COMMAND ${GObjectIntrospection_COMPILER} --includedir=. ${CMAKE_CURRENT_BINARY_DIR}/${gir} -o
+              ${CMAKE_CURRENT_BINARY_DIR}/${_typelib}
       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${gir}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Run the gobject introspection compiler"
@@ -111,13 +100,13 @@ macro(gir_add_introspections introspections_girs)
 
   endforeach()
 
-  add_custom_target(gir-girs-${_gir_name}
-    ALL
+  add_custom_target(
+    gir-girs-${_gir_name} ALL
     DEPENDS ${_gir_girs}
     COMMENT "Target for the gobject introspection compiler"
   )
-  add_custom_target(gir-typelibs-${_gir_name}
-    ALL
+  add_custom_target(
+    gir-typelibs-${_gir_name} ALL
     DEPENDS ${_gir_typelibs}
     COMMENT "Target for the gobject introspection typelibs"
   )

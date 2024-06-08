@@ -17,8 +17,7 @@
 
 #include "icalproperty.h"
 
-struct icalparameter_impl
-{
+struct icalparameter_impl {
     icalparameter_kind kind;
     char id[5];
     int size;

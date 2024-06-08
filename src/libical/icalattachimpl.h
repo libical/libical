@@ -14,13 +14,11 @@
 #include "icalattach.h"
 
 /* Private structure for ATTACH values */
-struct icalattach_impl
-{
+struct icalattach_impl {
     /* Reference count */
     int refcount;
 
-    union
-    {
+    union {
         /* URL attachment data */
         struct
         {
@@ -37,7 +35,7 @@ struct icalattach_impl
     } u;
 
     /* TRUE if URL, FALSE if inline data */
-    unsigned int is_url:1;
+    unsigned int is_url : 1;
 };
 
 #endif

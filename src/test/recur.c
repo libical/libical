@@ -82,7 +82,6 @@ int main(int argc, char *argv[])
 
     for (itr = icalfileset_get_first_component(cin);
          itr != 0; itr = icalfileset_get_next_component(cin)) {
-
         struct icaltimetype start;
         struct icaltimetype end = icaltime_today();
 

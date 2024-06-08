@@ -3,6 +3,7 @@
 +0090200 +0384200 Africa/Addis_Ababa
 +0364700 +0030300 Africa/Algiers
 +0152000 +0385300 Africa/Asmara
+-0011700 +0364900 Africa/Asmera
 +0123900 -0080000 Africa/Bamako
 +0042200 +0183500 Africa/Bangui
 +0132800 -0163900 Africa/Banjul
@@ -47,6 +48,7 @@
 +0122200 -0013100 Africa/Ouagadougou
 +0062900 +0023700 Africa/Porto-Novo
 +0002000 +0064400 Africa/Sao_Tome
++0051900 -0040200 Africa/Timbuktu
 +0325400 +0131100 Africa/Tripoli
 +0364800 +0101100 Africa/Tunis
 -0223400 +0170600 Africa/Windhoek
@@ -57,6 +59,7 @@
 -0071200 -0481200 America/Araguaina
 -0343600 -0582700 America/Argentina/Buenos_Aires
 -0282800 -0654700 America/Argentina/Catamarca
+-0282800 -0654700 America/Argentina/ComodRivadavia
 -0312400 -0641100 America/Argentina/Cordoba
 -0241100 -0651800 America/Argentina/Jujuy
 -0292600 -0665100 America/Argentina/La_Rioja
@@ -70,6 +73,7 @@
 +0123000 -0695800 America/Aruba
 -0251600 -0574000 America/Asuncion
 +0484531 -0913718 America/Atikokan
++0515248 -1763929 America/Atka
 -0125900 -0383100 America/Bahia
 +0204800 -1051500 America/Bahia_Banderas
 +0130600 -0593700 America/Barbados
@@ -79,15 +83,19 @@
 +0024900 -0604000 America/Boa_Vista
 +0043600 -0740500 America/Bogota
 +0433649 -1161209 America/Boise
+-0343600 -0582700 America/Buenos_Aires
 +0690650 -1050310 America/Cambridge_Bay
 -0202700 -0543700 America/Campo_Grande
 +0210500 -0864600 America/Cancun
 +0103000 -0665600 America/Caracas
+-0282800 -0654700 America/Catamarca
 +0045600 -0522000 America/Cayenne
 +0191800 -0812300 America/Cayman
 +0415100 -0873900 America/Chicago
 +0283800 -1060500 America/Chihuahua
 +0314400 -1062900 America/Ciudad_Juarez
++0085800 -0793200 America/Coral_Harbour
+-0312400 -0641100 America/Cordoba
 +0095600 -0840500 America/Costa_Rica
 +0490600 -1163100 America/Creston
 -0153500 -0560500 America/Cuiaba
@@ -101,7 +109,9 @@
 +0533300 -1132800 America/Edmonton
 -0064000 -0695200 America/Eirunepe
 +0134200 -0891200 America/El_Salvador
++0323200 -1170100 America/Ensenada
 +0584800 -1224200 America/Fort_Nelson
++0394606 -0860929 America/Fort_Wayne
 -0034300 -0383000 America/Fortaleza
 +0461200 -0595700 America/Glace_Bay
 +0641100 -0514400 America/Godthab
@@ -123,16 +133,20 @@
 +0384452 -0850402 America/Indiana/Vevay
 +0384038 -0873143 America/Indiana/Vincennes
 +0410305 -0863611 America/Indiana/Winamac
++0394606 -0860929 America/Indianapolis
 +0682059 -1334300 America/Inuvik
 +0634400 -0682800 America/Iqaluit
 +0175805 -0764736 America/Jamaica
+-0241100 -0651800 America/Jujuy
 +0581807 -1342511 America/Juneau
 +0381515 -0854534 America/Kentucky/Louisville
 +0364947 -0845057 America/Kentucky/Monticello
++0411745 -0863730 America/Knox_IN
 +0120903 -0681636 America/Kralendijk
 -0163000 -0680900 America/La_Paz
 -0120300 -0770300 America/Lima
 +0340308 -1181434 America/Los_Angeles
++0381515 -0854534 America/Louisville
 +0180305 -0630250 America/Lower_Princes
 -0094000 -0354300 America/Maceio
 +0120900 -0861700 America/Managua
@@ -141,6 +155,7 @@
 +0143600 -0610500 America/Martinique
 +0255000 -0973000 America/Matamoros
 +0231300 -1062500 America/Mazatlan
+-0325300 -0684900 America/Mendoza
 +0450628 -0873651 America/Menominee
 +0205800 -0893700 America/Merida
 +0550737 -1313435 America/Metlakatla
@@ -167,6 +182,7 @@
 +0332654 -1120424 America/Phoenix
 +0183200 -0722000 America/Port-au-Prince
 +0103900 -0613100 America/Port_of_Spain
+-0095800 -0674800 America/Porto_Acre
 -0084600 -0635400 America/Porto_Velho
 +0182806 -0660622 America/Puerto_Rico
 -0530900 -0705500 America/Punta_Arenas
@@ -176,6 +192,7 @@
 +0502400 -1043900 America/Regina
 +0744144 -0944945 America/Resolute
 -0095800 -0674800 America/Rio_Branco
+-0095800 -0674800 America/Rosario
 +0301800 -1145200 America/Santa_Isabel
 -0022600 -0545200 America/Santarem
 -0332700 -0704000 America/Santiago
@@ -198,6 +215,7 @@
 +0433900 -0792300 America/Toronto
 +0182700 -0643700 America/Tortola
 +0491600 -1230700 America/Vancouver
++0182806 -0660622 America/Virgin
 +0604300 -1350300 America/Whitehorse
 +0495300 -0970900 America/Winnipeg
 +0593249 -1394338 America/Yakutat
@@ -222,6 +240,7 @@
 +0443100 +0501600 Asia/Aqtau
 +0501700 +0571000 Asia/Aqtobe
 +0375700 +0582300 Asia/Ashgabat
++0375700 +0582300 Asia/Ashkhabad
 +0470700 +0515600 Asia/Atyrau
 +0332100 +0442500 Asia/Baghdad
 +0262300 +0503500 Asia/Bahrain
@@ -235,7 +254,9 @@
 +0520300 +1132800 Asia/Chita
 +0480400 +1143000 Asia/Choibalsan
 +0293400 +1063500 Asia/Chongqing
++0311400 +1212800 Asia/Chungking
 +0065600 +0795100 Asia/Colombo
++0234300 +0902500 Asia/Dacca
 +0333000 +0361800 Asia/Damascus
 +0234300 +0902500 Asia/Dhaka
 -0083300 +1253500 Asia/Dili

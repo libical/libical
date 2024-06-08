@@ -4,15 +4,7 @@ EXCLUDE dpointer
 
 EXTRA copyright-reuse,license-reuse
 EXTRA crud,camelcase
-EXTRA style
-
-#Skip foo_export.h
-SKIP libical_.*_export\.h
-#Skip installed macro headers
-SKIP libical_deprecated\.h
-
-#Skip examples
-SKIP /examples/
+#EXTRA style
 
 #For now skip java
 SKIP /java/
@@ -33,6 +25,9 @@ SKIP /cmake/Kitware/
 SKIP /cmake/modules/GObjectIntrospectionMacros\.cmake|/cmake/modules/FindGObjectIntrospection\.cmake
 SKIP /doc/Doxyfile\.cmake
 SKIP /cmake/Toolchain-QNX|/cmake/modules/FindBerkeleyDB.cmake|/uninstall.cmake.in
+
+#Skip test-data
+SKIP /test-data/
 
 #Skip zoneinfo
 SKIP /zoneinfo/

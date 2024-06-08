@@ -45,7 +45,7 @@ icalerrorenum *icalerrno_return(void)
 
     pthread_once(&icalerrno_key_once, icalerrno_key_alloc);
 
-    _errno = (icalerrorenum *) pthread_getspecific(icalerrno_key);
+    _errno = (icalerrorenum *)pthread_getspecific(icalerrno_key);
 
     if (!_errno) {
         _errno = icalmemory_new_buffer(sizeof(icalerrorenum));
@@ -70,7 +70,7 @@ static ICAL_GLOBAL_VAR int foo;
 
 void icalerror_stop_here(void)
 {
-    foo++;      /* Keep optimizers from removing routine */
+    foo++; /* Keep optimizers from removing routine */
 }
 
 void icalerror_crash_here(void)
@@ -121,8 +121,7 @@ void icalerror_set_errno(icalerrorenum x)
 
 #endif
 
-struct icalerror_state
-{
+struct icalerror_state {
     icalerrorenum error;
     icalerrorstate state;
 };
@@ -142,8 +141,7 @@ static ICAL_GLOBAL_VAR struct icalerror_state error_state_map[] = {
 
 };
 
-struct icalerror_string_map
-{
+struct icalerror_string_map {
     const char *str;
     icalerrorenum error;
     char name[160];
@@ -169,8 +167,7 @@ static const struct icalerror_string_map string_map[] = {
      "UNIMPLEMENTED: This feature has not been implemented"},
     {"NO", ICAL_NO_ERROR, "NO: No error"},
     {"UNKNOWN", ICAL_UNKNOWN_ERROR,
-     "UNKNOWN: Unknown error type -- icalerror_strerror() was probably given bad input"}
-};
+     "UNKNOWN: Unknown error type -- icalerror_strerror() was probably given bad input"}};
 
 icalerrorenum icalerror_error_from_string(const char *str)
 {
@@ -248,7 +245,7 @@ const char *icalerror_strerror(icalerrorenum e)
         }
     }
 
-    return string_map[i].name;  /* Return string for ICAL_UNKNOWN_ERROR */
+    return string_map[i].name; /* Return string for ICAL_UNKNOWN_ERROR */
 }
 
 void ical_bt(void)

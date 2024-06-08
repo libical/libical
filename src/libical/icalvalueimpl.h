@@ -15,44 +15,42 @@
 
 #include "icalproperty.h"
 
-struct icalvalue_impl
-{
-    icalvalue_kind kind;        /*this is the kind that is visible from the outside */
+struct icalvalue_impl {
+    icalvalue_kind kind; /*this is the kind that is visible from the outside */
 
     char id[5];
     int size;
     icalproperty *parent;
     char *x_value;
 
-    union data
-    {
+    union data {
         icalattach *v_attach;
-        /* void *v_binary; *//* use v_attach */
+        /* void *v_binary; */ /* use v_attach */
 
         const char *v_string;
-        /*char *v_text; */      /* use v_string */
-        /*char *v_caladdress; *//* use v_string */
-        /*char *v_query; */     /* use v_string */
-        /*char *v_uri; */       /* use v_string */
+        /*char *v_text; */       /* use v_string */
+        /*char *v_caladdress; */ /* use v_string */
+        /*char *v_query; */      /* use v_string */
+        /*char *v_uri; */        /* use v_string */
 
         float v_float;
 
         int v_int;
-        /*int v_boolean; */  /* use v_int */
-        /*int v_integer; */  /* use v_int */
-        /*int v_utcoffset; *//* use v_int */
+        /*int v_boolean; */   /* use v_int */
+        /*int v_integer; */   /* use v_int */
+        /*int v_utcoffset; */ /* use v_int */
 
         struct icaldurationtype v_duration;
 
         struct icalperiodtype v_period;
-        /*struct icalperiodtype v_datetimeperiod; *//* use v_time/v_period */
+        /*struct icalperiodtype v_datetimeperiod; */ /* use v_time/v_period */
 
         struct icalgeotype v_geo;
 
         struct icaltimetype v_time;
-        /*struct icaltimetype v_date; */        /* use v_time */
-        /*struct icaltimetype v_datetime; */    /* use v_time */
-        /*struct icaltimetype v_datetimedate; *//* use v_time */
+        /*struct icaltimetype v_date; */         /* use v_time */
+        /*struct icaltimetype v_datetime; */     /* use v_time */
+        /*struct icaltimetype v_datetimedate; */ /* use v_time */
 
         struct icalreqstattype v_requeststatus;
 
@@ -62,7 +60,7 @@ struct icalvalue_impl
            a reference */
         struct icalrecurrencetype *v_recur;
 
-        /*struct icaltriggertype v_trigger; *//* use v_time/v_duration */
+        /*struct icaltriggertype v_trigger; */ /* use v_time/v_duration */
 
         int v_enum;
         /* v_enum takes care of several enumerated types including:

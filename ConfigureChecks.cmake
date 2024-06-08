@@ -23,6 +23,7 @@ if(WIN32 AND MSVC)
   check_function_exists(_open HAVE__OPEN) #Windows <io.h>
   check_function_exists(_snprintf HAVE__SNPRINTF) #Windows <stdio.h>
   check_function_exists(_stat HAVE__STAT) #Windows <sys/types.h>,<sys/stat.h>
+  check_function_exists(_fstat64 HAVE__FSTAT64) #Windows <sys/types.h>,<sys/stat.h>
   check_function_exists(_strdup HAVE__STRDUP) #Windows <string.h>
   check_function_exists(_stricmp HAVE__STRICMP) #Windows <string.h>
   check_function_exists(_strnicmp HAVE__STRNICMP) #Windows <string.h>
@@ -41,6 +42,7 @@ else()
   check_function_exists(nanosleep HAVE_NANOSLEEP) #Unix <time.h>
   check_function_exists(signal HAVE_SIGNAL) #Unix <signal.h>
   check_function_exists(stat HAVE_STAT) #Unix <sys/stat.h>,<sys/types.h>,<unistd.h>
+  check_function_exists(fstat HAVE_FSTAT) #Unix <sys/stat.h>,<sys/types.h>,<unistd.h>
   check_function_exists(strdup HAVE_STRDUP) #Unix <string.h>
   check_function_exists(strcasecmp HAVE_STRCASECMP) #Unix <strings.h>
   check_function_exists(strncasecmp HAVE_STRNCASECMP) #Unix <strings.h>
@@ -67,23 +69,16 @@ endif()
 if(NOT DEFINED CMAKE_REQUIRED_LIBRARIES)
   set(CMAKE_REQUIRED_LIBRARIES "")
 endif()
-#GetNumberFormat is not implemented on wine correctly
-#(see https://forum.winehq.org/viewtopic.php?t=27809) which results in
-#error when building. That means if linux user has installed wine,
-#the build of libical will fail.
-if(WIN32)
-  set(_SAVE_RQL ${CMAKE_REQUIRED_LIBRARIES})
-  set(CMAKE_REQUIRED_LIBRARIES kernel32.lib)
-  check_function_exists(GetNumberFormat HAVE_GETNUMBERFORMAT) #Windows <windows.h>
-  set(CMAKE_REQUIRED_LIBRARIES ${_SAVE_RQL})
-endif()
 
 include(CheckTypeSize)
 check_type_size(intptr_t SIZEOF_INTPTR_T)
 check_type_size(pid_t SIZEOF_PID_T)
 check_type_size(size_t SIZEOF_SIZE_T)
 check_type_size(ssize_t SIZEOF_SSIZE_T)
-if(WIN32 AND MSVC AND USE_32BIT_TIME_T)
+if(WIN32
+   AND MSVC
+   AND USE_32BIT_TIME_T
+)
   set(_SAVE_RQD ${CMAKE_REQUIRED_DEFINITIONS})
   set(CMAKE_REQUIRED_DEFINITIONS -D_USE_32BIT_TIME_T)
   check_type_size(time_t SIZEOF_TIME_T)

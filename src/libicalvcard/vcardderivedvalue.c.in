@@ -1,0 +1,274 @@
+/*======================================================================
+ FILE: vcardderivedvalue.c
+
+ CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
+
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
+
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+ ======================================================================*/
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "vcardderivedvalue.h"
+#include "vcardvalue.h"
+#include "vcardvalueimpl.h"
+#include "icalerror.h"
+#include "icalmemory.h"
+
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct vcardvalue_impl *vcardvalue_new_impl(vcardvalue_kind kind);
+
+/* This map associates each of the value types with its string
+   representation */
+struct vcardvalue_kind_map
+{
+    vcardvalue_kind kind;
+    char name[20];
+};
+
+<insert_code_here>
+
+vcardvalue *vcardvalue_new_structured(vcardstructuredtype *v)
+{
+    struct vcardvalue_impl *impl;
+    icalerror_check_arg_rz((v != 0), "v");
+
+    impl = vcardvalue_new_impl(VCARD_STRUCTURED_VALUE);
+    vcardvalue_set_structured((vcardvalue *)impl, v);
+    return (vcardvalue*)impl;
+}
+
+void vcardvalue_set_structured(vcardvalue *value, vcardstructuredtype *v)
+{
+    struct vcardvalue_impl *impl;
+    unsigned i;
+
+    icalerror_check_arg_rv((value != 0), "value");
+    icalerror_check_arg_rv((v != 0), "v");
+
+    icalerror_check_value_type(value, VCARD_STRUCTURED_VALUE);
+    impl = (struct vcardvalue_impl *)value;
+
+    impl->data.v_structured.num_fields = v->num_fields;
+    for (i = 0; i < v->num_fields; i++) {
+        impl->data.v_structured.field[i] = v->field[i];
+    }
+
+    vcardvalue_reset_kind(impl);
+}
+
+vcardstructuredtype *vcardvalue_get_structured(const vcardvalue *value)
+{
+    icalerror_check_arg((value != 0), "value");
+    icalerror_check_value_type(value, VCARD_STRUCTURED_VALUE);
+    return &((struct vcardvalue_impl *)value)->data.v_structured;
+}
+
+vcardvalue *vcardvalue_new_geo(struct vcardgeotype v)
+{
+    struct vcardvalue_impl *impl = vcardvalue_new_impl(VCARD_GEO_VALUE);
+
+    vcardvalue_set_geo((vcardvalue *) impl, v);
+
+    return (vcardvalue *) impl;
+}
+
+void vcardvalue_set_geo(vcardvalue *value, struct vcardgeotype v)
+{
+    struct vcardvalue_impl *impl;
+
+    icalerror_check_arg_rv((value != 0), "value");
+
+    impl = (struct vcardvalue_impl *)value;
+
+    if (v.uri) {
+        for (int i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
+            vcardstrarray *array = impl->data.v_structured.field[i];
+            if (array) {
+                vcardstrarray_free(array);
+                impl->data.v_structured.field[i] = 0;
+            }
+        }
+        impl->data.v_structured.num_fields = 0;
+
+        impl->kind = VCARD_URI_VALUE;
+        vcardvalue_set_uri(value, v.uri);
+    } else {
+        vcardstructuredtype geo = {
+            2,  { vcardstrarray_new(1), vcardstrarray_new(1) }
+        };
+
+        if (impl->data.v_string != 0) {
+            icalmemory_free_buffer((void *)impl->data.v_string);
+            impl->data.v_string = 0;
+        }
+
+        vcardstrarray_append(geo.field[0], v.coords.lat);
+        vcardstrarray_append(geo.field[1], v.coords.lon);
+
+        impl->kind = VCARD_STRUCTURED_VALUE;
+        vcardvalue_set_structured(value, &geo);
+    }
+}
+
+struct vcardgeotype vcardvalue_get_geo(const vcardvalue *impl)
+{
+    struct vcardgeotype geo = { 0 };
+
+    icalerror_check_arg_rx((impl != 0), "value", geo);
+
+    if (impl->kind == VCARD_URI_VALUE) {
+        geo.uri = impl->data.v_string;
+    } else if (impl->kind == VCARD_STRUCTURED_VALUE) {
+        geo.coords.lat =
+            vcardstrarray_element_at(impl->data.v_structured.field[0], 0);
+        geo.coords.lon =
+            vcardstrarray_element_at(impl->data.v_structured.field[1], 0);
+    } else {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+    }
+
+    return geo;
+}
+
+vcardvalue *vcardvalue_new_tz(struct vcardtztype v)
+{
+    struct vcardvalue_impl *impl = vcardvalue_new_impl(VCARD_TZ_VALUE);
+
+    vcardvalue_set_tz((vcardvalue *) impl, v);
+
+    return (vcardvalue *) impl;
+}
+
+void vcardvalue_set_tz(vcardvalue *value, struct vcardtztype v)
+{
+    icalerror_check_arg_rv((value != 0), "value");
+
+    if (v.tzid) {
+        value->kind = VCARD_TEXT_VALUE;
+        vcardvalue_set_text(value, v.tzid);
+    } else if (v.uri) {
+        value->kind = VCARD_URI_VALUE;
+        vcardvalue_set_uri(value, v.uri);
+    } else {
+        value->kind = VCARD_UTCOFFSET_VALUE;
+        vcardvalue_set_utcoffset(value, v.utcoffset);
+    }
+}
+
+struct vcardtztype vcardvalue_get_tz(const vcardvalue *impl)
+{
+    struct vcardtztype tz = { 0 };
+
+    icalerror_check_arg_rx((impl != 0), "value", tz);
+
+    if (impl->kind == VCARD_TEXT_VALUE) {
+        tz.tzid = impl->data.v_string;
+    } else if (impl->kind == VCARD_URI_VALUE) {
+        tz.uri = impl->data.v_string;
+    } else if (impl->kind == VCARD_UTCOFFSET_VALUE) {
+        tz.utcoffset = impl->data.v_int;
+    } else {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+    }
+
+    return tz;
+}
+
+int vcardvalue_kind_is_valid(const vcardvalue_kind kind)
+{
+    int i = 0;
+    int num_values = (int)(sizeof(value_map) / sizeof(value_map[0]));
+
+    if (kind == VCARD_ANY_VALUE) {
+        return 0;
+    }
+
+    num_values--;
+    do {
+        if (value_map[i].kind == kind) {
+            return 1;
+        }
+    } while (i++ < num_values);
+
+    return 0;
+}
+
+const char *vcardvalue_kind_to_string(const vcardvalue_kind kind)
+{
+    int i, num_values;
+
+    num_values = (int)(sizeof(value_map) / sizeof(value_map[0]));
+    for (i = 0; i < num_values; i++) {
+        if (value_map[i].kind == kind) {
+            return value_map[i].name;
+        }
+    }
+
+    return 0;
+}
+
+vcardvalue_kind vcardvalue_string_to_kind(const char *str)
+{
+    int i, num_values;
+
+    if (str == 0) {
+        return VCARD_NO_VALUE;
+    }
+
+    num_values = (int)(sizeof(value_map) / sizeof(value_map[0]));
+    for (i = 0; i < num_values; i++) {
+        if (strcasecmp(value_map[i].name, str) == 0) {
+            return value_map[i].kind;
+        }
+    }
+
+    return VCARD_NO_VALUE;
+}
+
+vcardvalue *vcardvalue_new_x(const char *v)
+{
+    struct vcardvalue_impl *impl;
+
+    icalerror_check_arg_rz((v != 0), "v");
+
+    impl = vcardvalue_new_impl(VCARD_X_VALUE);
+
+    vcardvalue_set_x((vcardvalue *) impl, v);
+    return (vcardvalue *) impl;
+}
+
+void vcardvalue_set_x(vcardvalue *impl, const char *v)
+{
+    icalerror_check_arg_rv((impl != 0), "value");
+    icalerror_check_arg_rv((v != 0), "v");
+
+    if (impl->x_value != 0) {
+        icalmemory_free_buffer((void *)impl->x_value);
+    }
+
+    impl->x_value = icalmemory_strdup(v);
+
+    if (impl->x_value == 0) {
+        errno = ENOMEM;
+    }
+}
+
+const char *vcardvalue_get_x(const vcardvalue *value)
+{
+    icalerror_check_arg_rz((value != 0), "value");
+    icalerror_check_value_type(value, VCARD_X_VALUE);
+    return value->x_value;
+}
+
+/* The remaining interfaces are 'new', 'set' and 'get' for each of the value
+   types */
+
+/* Everything below this line is machine generated. Do not edit. */

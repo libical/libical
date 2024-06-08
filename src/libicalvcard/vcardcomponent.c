@@ -1,0 +1,1286 @@
+/*======================================================================
+ FILE: vcardcomponent.c
+
+ CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
+
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
+
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+ ======================================================================*/
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "vcardcomponent.h"
+#include "vcardparser.h"
+#include "vcardproperty_p.h"
+#include "vcardrestriction.h"
+#include "vcardvalue.h"
+#include "icalerror.h"
+#include "icalmemory.h"
+
+#include <assert.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <ctype.h>
+
+struct vcardcomponent_impl {
+    char id[5];
+    vcardcomponent_kind kind;
+    vcardproperty_version version;
+    char *x_name;
+    pvl_list properties;
+    pvl_elem property_iterator;
+    pvl_list components;
+    pvl_elem component_iterator;
+    struct vcardcomponent_impl *parent;
+};
+
+static void vcardcomponent_add_children(vcardcomponent *impl, va_list args)
+{
+    void *vp;
+
+    while ((vp = va_arg(args, void *)) != 0) {
+        icalassert(vcardproperty_isa_property(vp) != 0);
+
+        vcardcomponent_add_property(impl, (vcardproperty *)vp);
+    }
+}
+
+static vcardcomponent *vcardcomponent_new_impl(vcardcomponent_kind kind)
+{
+    vcardcomponent *comp;
+
+    if (!vcardcomponent_kind_is_valid(kind)) {
+        return NULL;
+    }
+
+    if ((comp = (vcardcomponent *)icalmemory_new_buffer(sizeof(vcardcomponent))) == 0) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return 0;
+    }
+
+    memset(comp, 0, sizeof(vcardcomponent));
+
+    strcpy(comp->id, "comp");
+
+    comp->kind = kind;
+    comp->version = VCARD_VERSION_NONE;
+    comp->properties = pvl_newlist();
+    comp->components = pvl_newlist();
+
+    return comp;
+}
+
+vcardcomponent *vcardcomponent_new(vcardcomponent_kind kind)
+{
+    return vcardcomponent_new_impl(kind);
+}
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wvarargs"
+vcardcomponent *vcardcomponent_vanew(vcardcomponent_kind kind, ...)
+{
+    va_list args;
+
+    vcardcomponent *impl = vcardcomponent_new_impl(kind);
+
+    if (impl == 0) {
+        return 0;
+    }
+
+    va_start(args, kind);
+    vcardcomponent_add_children(impl, args);
+    va_end(args);
+
+    return impl;
+}
+#pragma clang diagnostic pop
+
+vcardcomponent *vcardcomponent_new_from_string(const char *str)
+{
+    return vcardparser_parse_string(str);
+}
+
+vcardcomponent *vcardcomponent_clone(const vcardcomponent *old)
+{
+    vcardcomponent *new;
+    vcardproperty *p;
+    pvl_elem itr;
+
+    icalerror_check_arg_rz((old != 0), "component");
+
+    new = vcardcomponent_new_impl(old->kind);
+
+    if (new == 0) {
+        return 0;
+    }
+
+    for (itr = pvl_head(old->properties); itr != 0; itr = pvl_next(itr)) {
+        p = (vcardproperty *)pvl_data(itr);
+        vcardcomponent_add_property(new, vcardproperty_clone(p));
+    }
+
+    return new;
+}
+
+void vcardcomponent_free(vcardcomponent *c)
+{
+    vcardproperty *prop;
+    vcardcomponent *comp;
+
+    icalerror_check_arg_rv((c != 0), "component");
+
+    if (c != 0) {
+        if (c->parent != 0) {
+            return;
+        }
+
+        if (c->properties != 0) {
+            while ((prop = pvl_pop(c->properties)) != 0) {
+                vcardproperty_set_parent(prop, 0);
+                vcardproperty_free(prop);
+            }
+            pvl_free(c->properties);
+        }
+
+        while ((comp = pvl_data(pvl_head(c->components))) != 0) {
+            vcardcomponent_remove_component(c, comp);
+            vcardcomponent_free(comp);
+        }
+
+        pvl_free(c->components);
+
+        if (c->x_name != 0) {
+            icalmemory_free_buffer(c->x_name);
+        }
+
+        c->kind = VCARD_NO_COMPONENT;
+        c->properties = 0;
+        c->property_iterator = 0;
+        c->components = 0;
+        c->component_iterator = 0;
+        c->x_name = 0;
+        c->id[0] = 'X';
+
+        icalmemory_free_buffer(c);
+    }
+}
+
+char *vcardcomponent_as_vcard_string(vcardcomponent *impl)
+{
+    char *buf;
+
+    buf = vcardcomponent_as_vcard_string_r(impl);
+    if (buf) {
+        icalmemory_add_tmp_buffer(buf);
+    }
+    return buf;
+}
+
+char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
+{
+    char *buf;
+    char *tmp_buf;
+    size_t buf_size = 1024;
+    char *buf_ptr = 0;
+    pvl_elem itr;
+
+    /* RFC6350 explicitly says that the newline is *ALWAYS* a \r\n (CRLF)!!!! */
+    const char newline[] = "\r\n";
+
+    vcardcomponent *c;
+    vcardproperty *p;
+    vcardcomponent_kind kind = vcardcomponent_isa(impl);
+
+    const char *kind_string = NULL;
+
+    icalerror_check_arg_rz((impl != 0), "component");
+    icalerror_check_arg_rz((kind != VCARD_NO_COMPONENT),
+                           "component kind is VCARD_NO_COMPONENT");
+
+    if (kind != VCARD_X_COMPONENT) {
+        kind_string = vcardcomponent_kind_to_string(kind);
+    } else {
+        kind_string = impl->x_name;
+    }
+
+    icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
+
+    buf = icalmemory_new_buffer(buf_size);
+    if (buf == NULL)
+        return NULL;
+
+    buf_ptr = buf;
+
+    if (kind != VCARD_XROOT_COMPONENT) {
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, "BEGIN:");
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
+
+        for (itr = pvl_head(impl->properties); itr != 0; itr = pvl_next(itr)) {
+            p = (vcardproperty *)pvl_data(itr);
+
+            icalerror_assert((p != 0), "Got a null property");
+            tmp_buf = vcardproperty_as_vcard_string_r(p);
+
+            icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
+            icalmemory_free_buffer(tmp_buf);
+        }
+    }
+
+    for (itr = pvl_head(impl->components); itr != 0; itr = pvl_next(itr)) {
+        c = (vcardcomponent *)pvl_data(itr);
+
+        tmp_buf = vcardcomponent_as_vcard_string_r(c);
+        if (tmp_buf != NULL) {
+            icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
+            icalmemory_free_buffer(tmp_buf);
+        }
+    }
+
+    if (kind != VCARD_XROOT_COMPONENT) {
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:");
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
+    }
+
+    return buf;
+}
+
+int vcardcomponent_is_valid(vcardcomponent *component)
+{
+    return ((strcmp(component->id, "comp") == 0) &&
+            (component->kind != VCARD_NO_COMPONENT));
+}
+
+vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component)
+{
+    icalerror_check_arg_rx((component != 0), "component", VCARD_NO_COMPONENT);
+
+    return component->kind;
+}
+
+int vcardcomponent_isa_component(void *component)
+{
+    vcardcomponent *impl = component;
+
+    icalerror_check_arg_rz((component != 0), "component");
+
+    return (strcmp(impl->id, "comp") == 0);
+}
+
+void vcardcomponent_add_property(vcardcomponent *comp, vcardproperty *property)
+{
+    icalerror_check_arg_rv((comp != 0), "component");
+    icalerror_check_arg_rv((property != 0), "property");
+
+    icalerror_assert((!vcardproperty_get_parent(property)),
+                     "The property has already been added to a vcard. "
+                     "Remove the property with vcardcomponent_remove_property "
+                     "before calling vcardcomponent_add_property");
+
+    vcardproperty_set_parent(property, comp);
+
+    pvl_push(comp->properties, property);
+
+    if (vcardproperty_isa(property) == VCARD_VERSION_PROPERTY) {
+        comp->version = vcardproperty_get_version(property);
+    }
+}
+
+void vcardcomponent_remove_property(vcardcomponent *comp, vcardproperty *property)
+{
+    pvl_elem itr, next_itr;
+
+    icalerror_check_arg_rv((comp != 0), "component");
+    icalerror_check_arg_rv((property != 0), "property");
+
+#if defined(ICAL_REMOVE_NONMEMBER_CARD_IS_ERROR)
+    icalerror_assert((vcardproperty_get_parent(property)),
+                     "The property is not a member of a card");
+#else
+    if (vcardproperty_get_parent(property) == 0) {
+        return;
+    }
+#endif
+
+    if (vcardproperty_isa(property) == VCARD_VERSION_PROPERTY) {
+        comp->version = VCARD_VERSION_NONE;
+    }
+
+    for (itr = pvl_head(comp->properties); itr != 0; itr = next_itr) {
+        next_itr = pvl_next(itr);
+
+        if (pvl_data(itr) == (void *)property) {
+            if (comp->property_iterator == itr) {
+                comp->property_iterator = pvl_next(itr);
+            }
+
+            (void)pvl_remove(comp->properties, itr);
+            vcardproperty_set_parent(property, 0);
+        }
+    }
+}
+
+int vcardcomponent_count_properties(vcardcomponent *comp,
+                                    vcardproperty_kind kind,
+                                    int ignore_alts)
+{
+    int count = 0;
+    pvl_elem itr;
+    vcardstrarray *altids = NULL;
+
+    icalerror_check_arg_rz((comp != 0), "component");
+
+    if (ignore_alts)
+        altids = vcardstrarray_new(2);
+
+    for (itr = pvl_head(comp->properties); itr != 0; itr = pvl_next(itr)) {
+        vcardproperty *prop = (vcardproperty *)pvl_data(itr);
+
+        if (kind == VCARD_ANY_PROPERTY || kind == vcardproperty_isa(prop)) {
+            if (ignore_alts) {
+                /* Like-properties having the same ALTID only get counted once */
+                vcardparameter *param =
+                    vcardproperty_get_first_parameter(prop,
+                                                      VCARD_ALTID_PARAMETER);
+                if (param) {
+                    const char *altid = vcardparameter_get_altid(param);
+
+                    if (vcardstrarray_find(altids, altid) != -1)
+                        continue;
+
+                    vcardstrarray_append(altids, altid);
+                }
+            }
+            count++;
+        }
+    }
+
+    if (ignore_alts)
+        vcardstrarray_free(altids);
+
+    return count;
+}
+
+vcardproperty *vcardcomponent_get_current_property(vcardcomponent *comp)
+{
+    icalerror_check_arg_rz((comp != 0), "card");
+
+    if (comp->property_iterator == 0) {
+        return 0;
+    }
+
+    return (vcardproperty *)pvl_data(comp->property_iterator);
+}
+
+vcardproperty *vcardcomponent_get_first_property(vcardcomponent *c,
+                                                 vcardproperty_kind kind)
+{
+    icalerror_check_arg_rz((c != 0), "card");
+
+    for (c->property_iterator = pvl_head(c->properties);
+         c->property_iterator != 0;
+         c->property_iterator = pvl_next(c->property_iterator)) {
+        vcardproperty *p = (vcardproperty *)pvl_data(c->property_iterator);
+
+        if (vcardproperty_isa(p) == kind || kind == VCARD_ANY_PROPERTY) {
+            return p;
+        }
+    }
+    return 0;
+}
+
+vcardproperty *vcardcomponent_get_next_property(vcardcomponent *c,
+                                                vcardproperty_kind kind)
+{
+    icalerror_check_arg_rz((c != 0), "card");
+
+    if (c->property_iterator == 0) {
+        return 0;
+    }
+
+    for (c->property_iterator = pvl_next(c->property_iterator);
+         c->property_iterator != 0;
+         c->property_iterator = pvl_next(c->property_iterator)) {
+        vcardproperty *p = (vcardproperty *)pvl_data(c->property_iterator);
+
+        if (vcardproperty_isa(p) == kind || kind == VCARD_ANY_PROPERTY) {
+            return p;
+        }
+    }
+
+    return 0;
+}
+
+vcardproperty **vcardcomponent_get_properties(vcardcomponent *comp,
+                                              vcardproperty_kind kind);
+
+void vcardcomponent_add_component(vcardcomponent *parent, vcardcomponent *child)
+{
+    icalerror_check_arg_rv((parent != 0), "parent");
+    icalerror_check_arg_rv((child != 0), "child");
+
+    if (child->parent != 0) {
+        icalerror_set_errno(ICAL_USAGE_ERROR);
+    }
+
+    child->parent = parent;
+
+    pvl_push(parent->components, child);
+}
+
+void vcardcomponent_remove_component(vcardcomponent *parent,
+                                     vcardcomponent *child)
+{
+    pvl_elem itr, next_itr;
+
+    icalerror_check_arg_rv((parent != 0), "parent");
+    icalerror_check_arg_rv((child != 0), "child");
+
+    for (itr = pvl_head(parent->components); itr != 0; itr = next_itr) {
+        next_itr = pvl_next(itr);
+
+        if (pvl_data(itr) == (void *)child) {
+            if (parent->component_iterator == itr) {
+                /* Don't let the current iterator become invalid */
+
+                /* HACK. The semantics for this are troubling. */
+                parent->component_iterator = pvl_next(parent->component_iterator);
+            }
+            (void)pvl_remove(parent->components, itr);
+            child->parent = 0;
+            break;
+        }
+    }
+}
+
+int vcardcomponent_count_components(vcardcomponent *component,
+                                    vcardcomponent_kind kind)
+{
+    int count = 0;
+    pvl_elem itr;
+
+    icalerror_check_arg_rz((component != 0), "component");
+
+    for (itr = pvl_head(component->components); itr != 0; itr = pvl_next(itr)) {
+        if (kind == VCARD_ANY_COMPONENT ||
+            kind == vcardcomponent_isa((vcardcomponent *)pvl_data(itr))) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
+vcardcomponent *vcardcomponent_get_current_component(vcardcomponent *component)
+{
+    icalerror_check_arg_rz((component != 0), "component");
+
+    if (component->component_iterator == 0) {
+        return 0;
+    }
+
+    return (vcardcomponent *)pvl_data(component->component_iterator);
+}
+
+vcardcomponent *vcardcomponent_get_first_component(vcardcomponent *c,
+                                                   vcardcomponent_kind kind)
+{
+    icalerror_check_arg_rz((c != 0), "component");
+
+    for (c->component_iterator = pvl_head(c->components);
+         c->component_iterator != 0;
+         c->component_iterator = pvl_next(c->component_iterator)) {
+        vcardcomponent *p = (vcardcomponent *)pvl_data(c->component_iterator);
+
+        if (vcardcomponent_isa(p) == kind || kind == VCARD_ANY_COMPONENT) {
+            return p;
+        }
+    }
+
+    return 0;
+}
+
+vcardcomponent *vcardcomponent_get_next_component(vcardcomponent *c,
+                                                  vcardcomponent_kind kind)
+{
+    icalerror_check_arg_rz((c != 0), "component");
+
+    if (c->component_iterator == 0) {
+        return 0;
+    }
+
+    for (c->component_iterator = pvl_next(c->component_iterator);
+         c->component_iterator != 0;
+         c->component_iterator = pvl_next(c->component_iterator)) {
+        vcardcomponent *p = (vcardcomponent *)pvl_data(c->component_iterator);
+
+        if (vcardcomponent_isa(p) == kind || kind == VCARD_ANY_COMPONENT) {
+            return p;
+        }
+    }
+
+    return 0;
+}
+
+int vcardcomponent_check_restrictions(vcardcomponent *comp)
+{
+    icalerror_check_arg_rz(comp != 0, "comp");
+    return vcardrestriction_check(comp);
+}
+
+int vcardcomponent_count_errors(vcardcomponent *comp)
+{
+    int errors = 0;
+    vcardproperty *p;
+    pvl_elem itr;
+
+    icalerror_check_arg_rz((comp != 0), "card");
+
+    for (itr = pvl_head(comp->properties); itr != 0; itr = pvl_next(itr)) {
+        p = (vcardproperty *)pvl_data(itr);
+
+        if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
+            errors++;
+        }
+    }
+
+    return errors;
+}
+
+void vcardcomponent_strip_errors(vcardcomponent *comp)
+{
+    vcardproperty *p;
+    pvl_elem itr, next_itr;
+
+    icalerror_check_arg_rv((comp != 0), "comp");
+
+    for (itr = pvl_head(comp->properties); itr != 0; itr = next_itr) {
+        p = (vcardproperty *)pvl_data(itr);
+        next_itr = pvl_next(itr);
+
+        if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
+            vcardcomponent_remove_property(comp, p);
+            vcardproperty_free(p);
+            p = NULL;
+        }
+    }
+}
+#if 0
+/* Hack. This will change the state of the iterators */
+void vcardcomponent_convert_errors(vcardcomponent *comp)
+{
+    vcardproperty *p, *next_p;
+    vcardcomponent *c;
+
+    for (p = vcardcomponent_get_first_property(card, VCARD_ANY_PROPERTY); p != 0; p = next_p) {
+
+        next_p = vcardcomponent_get_next_property(card, VCARD_ANY_PROPERTY);
+
+        if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
+            struct icalreqstattype rst;
+            icalparameter *param =
+                vcardproperty_get_first_parameter(p, VCARD_XLICERRORTYPE_PARAMETER);
+
+            rst.code = ICAL_UNKNOWN_STATUS;
+            rst.desc = 0;
+
+            switch (vcardparameter_get_xlicerrortype(param)) {
+
+            case ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR:{
+                    rst.code = ICAL_3_2_INVPARAM_STATUS;
+                    break;
+                }
+            case ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR:{
+                    rst.code = ICAL_3_3_INVPARAMVAL_STATUS;
+                    break;
+                }
+            case ICAL_XLICERRORTYPE_PROPERTYPARSEERROR:{
+                    rst.code = ICAL_3_0_INVPROPNAME_STATUS;
+                    break;
+                }
+            case ICAL_XLICERRORTYPE_VALUEPARSEERROR:{
+                    rst.code = ICAL_3_1_INVPROPVAL_STATUS;
+                    break;
+                }
+            case ICAL_XLICERRORTYPE_CARDPARSEERROR:{
+                    rst.code = ICAL_3_4_INVCOMP_STATUS;
+                    break;
+                }
+
+            default:{
+                    break;
+                }
+            }
+            if (rst.code != ICAL_UNKNOWN_STATUS) {
+
+                rst.debug = vcardproperty_get_xlicerror(p);
+                vcardcomponent_add_property(card, vcardproperty_new_requeststatus(rst));
+
+                vcardcomponent_remove_property(card, p);
+                vcardproperty_free(p);
+                p = NULL;
+            }
+        }
+    }
+
+    for (c = vcardcomponent_get_first_card(card, ICAL_ANY_CARD);
+         c != 0; c = vcardcomponent_get_next_card(card, ICAL_ANY_CARD)) {
+
+        vcardcomponent_convert_errors(c);
+    }
+}
+#endif
+struct vcardcomponent_kind_map {
+    vcardcomponent_kind kind;
+    char name[20];
+};
+
+static const struct vcardcomponent_kind_map component_map[] = {
+    {VCARD_XROOT_COMPONENT, "XROOT"},
+    {VCARD_VCARD_COMPONENT, "VCARD"},
+
+    /* End of list */
+    {VCARD_NO_COMPONENT, ""},
+};
+
+int vcardcomponent_kind_is_valid(const vcardcomponent_kind kind)
+{
+    int i = 0;
+
+    do {
+        if (component_map[i].kind == kind) {
+            return 1;
+        }
+    } while (component_map[i++].kind != VCARD_NO_COMPONENT);
+
+    return 0;
+}
+
+const char *vcardcomponent_kind_to_string(vcardcomponent_kind kind)
+{
+    int i;
+
+    for (i = 0; component_map[i].kind != VCARD_NO_COMPONENT; i++) {
+        if (component_map[i].kind == kind) {
+            return component_map[i].name;
+        }
+    }
+
+    return 0;
+}
+
+vcardcomponent_kind vcardcomponent_string_to_kind(const char *string)
+{
+    int i;
+
+    if (string == 0) {
+        return VCARD_NO_COMPONENT;
+    }
+
+    for (i = 0; component_map[i].kind != VCARD_NO_COMPONENT; i++) {
+        if (strncasecmp(string, component_map[i].name, strlen(component_map[i].name)) == 0) {
+            return component_map[i].kind;
+        }
+    }
+
+    return VCARD_NO_COMPONENT;
+}
+
+static int strcmpsafe(const char *a, const char *b)
+{
+    return strcmp((a == NULL ? "" : a),
+                  (b == NULL ? "" : b));
+}
+
+static int prop_compare(void *a, void *b)
+{
+    vcardproperty *p1 = (vcardproperty *)a;
+    vcardproperty *p2 = (vcardproperty *)b;
+    vcardproperty_kind k1 = vcardproperty_isa(p1);
+    vcardproperty_kind k2 = vcardproperty_isa(p2);
+    int r = k1 - k2;
+
+    if (r == 0) {
+        if (k1 == VCARD_X_PROPERTY) {
+            r = strcmp(vcardproperty_get_x_name(p1),
+                       vcardproperty_get_x_name(p2));
+        }
+
+        if (r == 0) {
+            r = strcmpsafe(vcardproperty_get_value_as_string(p1),
+                           vcardproperty_get_value_as_string(p2));
+        }
+    }
+    /* Always sort VERSION first */
+    else if (k1 == VCARD_VERSION_PROPERTY) {
+        r = -1;
+    } else if (k2 == VCARD_VERSION_PROPERTY) {
+        r = 1;
+    }
+
+    return r;
+}
+
+static int prop_kind_compare(vcardproperty_kind kind,
+                             vcardcomponent *c1, vcardcomponent *c2)
+{
+    vcardproperty *p1 = vcardcomponent_get_first_property(c1, kind);
+    vcardproperty *p2 = vcardcomponent_get_first_property(c2, kind);
+
+    if (p1 && p2) {
+        return strcmpsafe(vcardproperty_get_value_as_string(p1),
+                          vcardproperty_get_value_as_string(p2));
+    } else if (p1)
+        return -1;
+    else if (p2)
+        return 1;
+
+    return 0;
+}
+
+static int comp_compare(void *a, void *b)
+{
+    vcardcomponent *c1 = (vcardcomponent *)a;
+    vcardcomponent *c2 = (vcardcomponent *)b;
+    vcardcomponent_kind k1 = vcardcomponent_isa(c1);
+    vcardcomponent_kind k2 = vcardcomponent_isa(c2);
+    int r = k1 - k2;
+
+    if (r == 0) {
+        int i;
+
+        if (k1 == VCARD_VCARD_COMPONENT) {
+            vcardproperty_kind prop_kinds[] = {
+                VCARD_VERSION_PROPERTY,
+                VCARD_N_PROPERTY,
+                VCARD_FN_PROPERTY,
+                VCARD_NICKNAME_PROPERTY,
+                VCARD_ORG_PROPERTY,
+                /* XXX  What else should we compare? */
+                VCARD_NO_PROPERTY};
+
+            for (i = 0; r == 0 && prop_kinds[i] != VCARD_NO_PROPERTY; i++) {
+                r = prop_kind_compare(prop_kinds[i], c1, c2);
+            }
+        } else {
+            r = strcmp(c1->x_name, c2->x_name);
+        }
+
+        if (r == 0) {
+            r = prop_kind_compare(VCARD_UID_PROPERTY, c1, c2);
+
+            if (r == 0) {
+                /* XXX  Anything else to compare? */
+            }
+        }
+    }
+
+    return r;
+}
+
+void vcardcomponent_normalize(vcardcomponent *comp)
+{
+    pvl_list sorted_props = pvl_newlist();
+    pvl_list sorted_comps = pvl_newlist();
+    vcardproperty *prop;
+    vcardcomponent *sub;
+
+    /* Normalize properties into sorted list */
+    while ((prop = pvl_pop(comp->properties)) != 0) {
+        int nparams, remove = 0;
+
+        vcardproperty_normalize(prop);
+
+        nparams = vcardproperty_count_parameters(prop);
+
+        /* Remove unparameterized properties having default values */
+        if (nparams == 0) {
+            switch (vcardproperty_isa(prop)) {
+            case VCARD_KIND_PROPERTY:
+                if (vcardproperty_get_kind(prop) == VCARD_KIND_INDIVIDUAL) {
+                    remove = 1;
+                }
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        if (remove) {
+            vcardproperty_set_parent(prop, 0); // MUST NOT have a parent to free
+            vcardproperty_free(prop);
+        } else {
+            pvl_insert_ordered(sorted_props, prop_compare, prop);
+        }
+    }
+
+    pvl_free(comp->properties);
+    comp->properties = sorted_props;
+
+    /* Normalize sub-components into sorted list */
+    while ((sub = pvl_pop(comp->components)) != 0) {
+        vcardcomponent_normalize(sub);
+        pvl_insert_ordered(sorted_comps, comp_compare, sub);
+    }
+
+    pvl_free(comp->components);
+    comp->components = sorted_comps;
+}
+
+static void comp_to_v4(vcardcomponent *impl)
+{
+    pvl_elem itr;
+
+    for (itr = pvl_head(impl->properties); itr != 0; itr = pvl_next(itr)) {
+        vcardproperty *prop = (vcardproperty *)pvl_data(itr);
+        vcardproperty_kind pkind = vcardproperty_isa(prop);
+        vcardvalue *value = vcardproperty_get_value(prop);
+        vcardvalue_kind vkind = vcardvalue_isa(value);
+        vcardparameter *param;
+        vcardenumarray *types = NULL;
+        char *mediatype = NULL, *buf = NULL, *buf_ptr;
+        const char *data;
+        size_t size = 0;
+
+        /* Remove TYPE=PREF and replace with PREF=1 (if no existing (PREF=) */
+        param = vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER);
+        if (param) {
+            vcardenumarray_element pref = {VCARD_TYPE_PREF, NULL};
+            ssize_t i;
+
+            types = vcardparameter_get_type(param);
+            i = vcardenumarray_find(types, &pref);
+            if (i >= 0) {
+                vcardenumarray_remove_element_at(types, i);
+                if (!vcardenumarray_size(types)) {
+                    vcardproperty_remove_parameter_by_ref(prop, param);
+                    types = NULL;
+                }
+
+                param = vcardproperty_get_first_parameter(prop,
+                                                          VCARD_PREF_PARAMETER);
+                if (!param) {
+                    param = vcardparameter_new_pref(1);
+                    vcardproperty_add_parameter(prop, param);
+                }
+            }
+        }
+
+        switch (pkind) {
+        case VCARD_VERSION_PROPERTY:
+            vcardproperty_set_version(prop, VCARD_VERSION_40);
+            break;
+
+        case VCARD_GEO_PROPERTY:
+            if (vkind != VCARD_X_VALUE) {
+                vcardgeotype geo = vcardvalue_get_geo(value);
+
+                if (!geo.uri) {
+                    /* Convert STRUCTURED value kind to geo: URI */
+                    int n = snprintf(buf, size, "geo:%s,%s",
+                                     geo.coords.lat, geo.coords.lon);
+
+                    size = (size_t)(n + 1);
+                    buf = icalmemory_new_buffer(size);
+                    snprintf(buf, size, "geo:%s,%s",
+                             geo.coords.lat, geo.coords.lon);
+
+                    geo.uri = buf;
+                    geo.coords.lat = geo.coords.lon = NULL;
+                    vcardvalue_set_geo(value, geo);
+                }
+            }
+            break;
+
+        case VCARD_KEY_PROPERTY:
+        case VCARD_LOGO_PROPERTY:
+        case VCARD_PHOTO_PROPERTY:
+        case VCARD_SOUND_PROPERTY: {
+            size_t i;
+            if (types) {
+                /* Replace TYPE=subtype with MEDIATYPE or data:<mediatype>
+                 *
+                 * XXX  We assume that the first VCARD_TYPE_X is the subtype
+                 */
+                for (i = 0; i < vcardenumarray_size(types); i++) {
+                    const vcardenumarray_element *type =
+                        vcardenumarray_element_at(types, i);
+
+                    if (type->xvalue) {
+                        /* Copy and lowercase the mediatype */
+                        char *c;
+
+                        switch (pkind) {
+                        case VCARD_LOGO_PROPERTY:
+                        case VCARD_PHOTO_PROPERTY:
+                            mediatype = icalmemory_strdup("image/");
+                            break;
+                        case VCARD_SOUND_PROPERTY:
+                            mediatype = icalmemory_strdup("audio/");
+                            break;
+                        default:
+                            mediatype = icalmemory_strdup("application/");
+                            break;
+                        }
+
+                        size = strlen(mediatype);
+                        buf_ptr = mediatype + size;
+                        icalmemory_append_string(&mediatype, &buf_ptr,
+                                                 &size, type->xvalue);
+                        for (c = mediatype; *c; c++) {
+                            *c = (char)tolower(*c);
+                        }
+
+                        /* Remove this TYPE */
+                        vcardenumarray_remove_element_at(types, (ssize_t)i);
+                        if (!vcardenumarray_size(types)) {
+                            vcardproperty_remove_parameter_by_ref(prop, param);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            data = vcardvalue_get_uri(value);
+            if (data && !strchr(data, ':')) {
+                /* Convert base64-encoded TEXT value kind to data: URI */
+                size += strlen(data) + 7; // "data:," + NUL
+
+                param = vcardproperty_get_first_parameter(prop,
+                                                          VCARD_ENCODING_PARAMETER);
+                if (param) {
+                    size += 7; // ";base64
+                }
+
+                buf = icalmemory_new_buffer(size);
+                buf_ptr = buf;
+
+                icalmemory_append_string(&buf, &buf_ptr, &size, "data:");
+                if (mediatype) {
+                    icalmemory_append_string(&buf, &buf_ptr, &size, mediatype);
+                    icalmemory_free_buffer(mediatype);
+                }
+                if (param) {
+                    icalmemory_append_string(&buf, &buf_ptr, &size, ";base64");
+                    vcardproperty_remove_parameter_by_ref(prop, param);
+                }
+                icalmemory_append_char(&buf, &buf_ptr, &size, ',');
+                icalmemory_append_string(&buf, &buf_ptr, &size, data);
+
+                value->kind = VCARD_URI_VALUE;
+                vcardvalue_set_uri(value, buf);
+            } else if (mediatype) {
+                param = vcardparameter_new_mediatype(mediatype);
+                vcardproperty_add_parameter(prop, param);
+
+                icalmemory_free_buffer(mediatype);
+            }
+            break;
+        }
+
+        case VCARD_UID_PROPERTY:
+            if (vkind == VCARD_TEXT_VALUE) {
+                unsigned t_low, t_mid, t_high, clock, node;
+
+                /* Does it look like a RFC 4122 UUID? */
+                data = vcardvalue_get_text(value);
+                if (data && strlen(data) == 36 &&
+                    sscanf(data, "%8X-%4X-%4X-%4X-%12X",
+                           &t_low, &t_mid, &t_high, &clock, &node) == 5) {
+                    /* Convert TEXT value kind to urn:uuid: URI */
+                    size = strlen(data) + 10; // "urn:uuid:" + NUL
+                    buf = icalmemory_new_buffer(size);
+                    buf_ptr = buf;
+
+                    icalmemory_append_string(&buf, &buf_ptr, &size, "urn:uuid:");
+                    icalmemory_append_string(&buf, &buf_ptr, &size, data);
+
+                    value->kind = VCARD_URI_VALUE;
+                    vcardvalue_set_uri(value, buf);
+                }
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        if (buf)
+            icalmemory_free_buffer(buf);
+    }
+}
+
+struct pref_prop {
+    vcardproperty *prop;
+    int level;
+};
+
+static void comp_to_v3(vcardcomponent *impl)
+{
+    struct pref_prop *pref_props[VCARD_NO_PROPERTY] = {0};
+    vcardenumarray_element type;
+    vcardproperty_kind pkind;
+    pvl_elem itr;
+
+    for (itr = pvl_head(impl->properties); itr != 0; itr = pvl_next(itr)) {
+        vcardproperty *prop = (vcardproperty *)pvl_data(itr);
+        vcardparameter *val_param =
+            vcardproperty_get_first_parameter(prop, VCARD_VALUE_PARAMETER);
+        vcardvalue *value = vcardproperty_get_value(prop);
+        vcardvalue_kind vkind = vcardvalue_isa(value);
+        vcardparameter *param;
+        char *subtype = NULL, *buf = NULL;
+        const char *mediatype, *uri;
+
+        /* Find prop with lowest PREF= for each set of like properties */
+        pkind = vcardproperty_isa(prop);
+        param = vcardproperty_get_first_parameter(prop, VCARD_PREF_PARAMETER);
+        if (param && pkind != VCARD_X_PROPERTY) {
+            int level = vcardparameter_get_pref(param);
+            struct pref_prop *pp = pref_props[pkind];
+
+            if (!pp) {
+                pp = icalmemory_new_buffer(sizeof(struct pref_prop));
+                pp->prop = prop;
+                pp->level = level;
+                pref_props[pkind] = pp;
+            } else if (level < pp->level) {
+                pp->prop = prop;
+                pp->level = level;
+            }
+        }
+
+        /* Replace MEDIATYPE with TYPE=<subtype> */
+        param = vcardproperty_get_first_parameter(prop,
+                                                  VCARD_MEDIATYPE_PARAMETER);
+        if (param) {
+            mediatype = vcardparameter_get_mediatype(param);
+            subtype = strchr(mediatype, '/');
+            if (subtype) {
+                /* Copy and uppercase the subtype */
+                char *c;
+
+                subtype = icalmemory_strdup(subtype + 1);
+                for (c = subtype; *c; c++) {
+                    *c = (char)toupper(*c);
+                }
+
+                /* Add TYPE parameter */
+                type.val = VCARD_TYPE_NONE;
+                type.xvalue = subtype;
+                vcardproperty_add_type_parameter(prop, &type);
+
+                icalmemory_free_buffer(subtype);
+            }
+
+            vcardproperty_remove_parameter_by_ref(prop, param);
+        }
+
+        switch (pkind) {
+        case VCARD_VERSION_PROPERTY:
+            vcardproperty_set_version(prop, VCARD_VERSION_30);
+            break;
+
+        case VCARD_GEO_PROPERTY:
+            if (vkind != VCARD_X_VALUE) {
+                vcardgeotype geo = vcardvalue_get_geo(value);
+
+                if (geo.uri && !strncmp(geo.uri, "geo:", 4)) {
+                    /* Convert geo: URI to STRUCTURED value kind */
+                    char *lon;
+
+                    buf = icalmemory_strdup(geo.uri);
+                    geo.uri = NULL;
+                    geo.coords.lat = buf + 4;
+                    lon = strchr(buf + 4, ',');
+                    if (lon) {
+                        *lon++ = '\0';
+                        geo.coords.lon = lon;
+                    }
+
+                    vcardvalue_set_geo(value, geo);
+                }
+            }
+            break;
+
+        case VCARD_KEY_PROPERTY:
+        case VCARD_LOGO_PROPERTY:
+        case VCARD_PHOTO_PROPERTY:
+        case VCARD_SOUND_PROPERTY:
+            uri = vcardvalue_get_uri(value);
+            if (uri && !strncmp("data:", uri, 5)) {
+                /* Convert data: URI to base64-encoded TEXT value kind */
+                char *base64, *data = NULL;
+
+                buf = icalmemory_strdup(uri);
+                mediatype = buf + 5;
+                base64 = strstr(mediatype, ";base64,");
+
+                if (base64) {
+                    param = vcardparameter_new_encoding(VCARD_ENCODING_B);
+                    vcardproperty_add_parameter(prop, param);
+
+                    *base64 = '\0';
+                    data = base64 + 8;
+                } else {
+                    data = strchr(mediatype, ',');
+                    if (data) {
+                        *data++ = '\0';
+                    }
+                }
+
+                subtype = strchr(mediatype, '/');
+                if (subtype) {
+                    /* Copy and uppercase the subtype */
+                    char *c;
+
+                    for (c = ++subtype; *c; c++) {
+                        *c = (char)toupper(*c);
+                    }
+
+                    /* Add TYPE parameter */
+                    type.val = VCARD_VERSION_NONE;
+                    type.xvalue = subtype;
+                    vcardproperty_add_type_parameter(prop, &type);
+                }
+
+                value->kind = VCARD_TEXT_VALUE;
+                vcardvalue_set_text(value, data ? data : "");
+            }
+            break;
+
+        case VCARD_TEL_PROPERTY:
+            uri = vcardvalue_get_uri(value);
+            if (uri && !strncmp(uri, "tel:", 4)) {
+                /* Convert tel: URI to TEXT value kind */
+                buf = icalmemory_strdup(uri + 4);
+
+                value->kind = VCARD_TEXT_VALUE;
+                vcardvalue_set_text(value, buf);
+
+                if (val_param) {
+                    vcardproperty_remove_parameter_by_ref(prop, val_param);
+                }
+            }
+            break;
+
+        case VCARD_UID_PROPERTY:
+            uri = vcardvalue_get_uri(value);
+            if (uri && !strncmp(uri, "urn:uuid:", 9)) {
+                /* Convert urn:uuid: URI to TEXT value kind */
+                buf = icalmemory_strdup(uri + 9);
+
+                value->kind = VCARD_TEXT_VALUE;
+                vcardvalue_set_text(value, buf);
+
+                if (val_param) {
+                    vcardproperty_remove_parameter_by_ref(prop, val_param);
+                }
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        if (buf)
+            icalmemory_free_buffer(buf);
+    }
+
+    /* Add TYPE=PREF for each most preferred property */
+    for (pkind = 0; pkind < VCARD_NO_PROPERTY; pkind++) {
+        struct pref_prop *pp = pref_props[pkind];
+
+        if (pp) {
+            type.val = VCARD_TYPE_PREF;
+            type.xvalue = NULL;
+
+            vcardproperty_add_type_parameter(pp->prop, &type);
+            icalmemory_free_buffer(pp);
+        }
+    }
+}
+
+void vcardcomponent_transform(vcardcomponent *impl,
+                              vcardproperty_version version)
+{
+    pvl_elem itr;
+    vcardcomponent *c;
+    vcardcomponent_kind kind = vcardcomponent_isa(impl);
+
+    icalerror_check_arg_rv((impl != 0), "component");
+    icalerror_check_arg_rv((kind != VCARD_NO_COMPONENT),
+                           "component kind is VCARD_NO_COMPONENT");
+
+    if (kind == VCARD_VCARD_COMPONENT) {
+        if (version == VCARD_VERSION_40) {
+            comp_to_v4(impl);
+        } else {
+            comp_to_v3(impl);
+        }
+
+        impl->version = version;
+    }
+
+    for (itr = pvl_head(impl->components); itr != 0; itr = pvl_next(itr)) {
+        c = (vcardcomponent *)pvl_data(itr);
+
+        vcardcomponent_transform(c, version);
+    }
+}
+
+/******************** Convenience routines **********************/
+
+enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *card)
+{
+    icalerror_check_arg_rz(card != 0, "card");
+
+    if (card->version == VCARD_VERSION_NONE) {
+        vcardproperty *prop =
+            vcardcomponent_get_first_property(card, VCARD_VERSION_PROPERTY);
+
+        if (prop == 0) {
+            return VCARD_VERSION_NONE;
+        }
+
+        card->version = vcardproperty_get_version(prop);
+    }
+
+    return card->version;
+}
+
+const char *vcardcomponent_get_uid(vcardcomponent *card)
+{
+    vcardproperty *prop;
+
+    icalerror_check_arg_rz(card != 0, "card");
+
+    prop = vcardcomponent_get_first_property(card, VCARD_UID_PROPERTY);
+
+    if (prop == 0) {
+        return 0;
+    }
+
+    return vcardproperty_get_uid(prop);
+}
+
+const char *vcardcomponent_get_fn(vcardcomponent *card)
+{
+    vcardproperty *prop;
+
+    icalerror_check_arg_rz(card != 0, "card");
+
+    prop = vcardcomponent_get_first_property(card, VCARD_FN_PROPERTY);
+
+    if (prop == 0) {
+        return 0;
+    }
+
+    return vcardproperty_get_fn(prop);
+}

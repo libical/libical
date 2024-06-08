@@ -24,7 +24,7 @@ static GSList *get_attachments(ICalComponent *comp)
     for (prop = i_cal_component_get_first_property(comp, I_CAL_ATTACH_PROPERTY);
          prop;
          g_object_unref(prop),
-         prop = i_cal_component_get_next_property(comp, I_CAL_ATTACH_PROPERTY)) {
+        prop = i_cal_component_get_next_property(comp, I_CAL_ATTACH_PROPERTY)) {
         attaches = g_slist_prepend(attaches, i_cal_property_get_attach(prop));
     }
 
@@ -39,7 +39,7 @@ static void remove_all_attachments(ICalComponent *comp)
     for (prop = i_cal_component_get_first_property(comp, I_CAL_ATTACH_PROPERTY);
          prop;
          g_object_unref(prop),
-         prop = i_cal_component_get_next_property(comp, I_CAL_ATTACH_PROPERTY)) {
+        prop = i_cal_component_get_next_property(comp, I_CAL_ATTACH_PROPERTY)) {
         to_remove = g_slist_prepend(to_remove, g_object_ref(prop));
     }
 
@@ -56,16 +56,16 @@ static void set_attachments(ICalComponent *comp, GSList *attaches)
 {
     GSList *link;
 
-    remove_all_attachments (comp);
+    remove_all_attachments(comp);
 
-    for (link = attaches; link; link = g_slist_next (link)) {
+    for (link = attaches; link; link = g_slist_next(link)) {
         ICalAttach *attach = link->data;
 
-        i_cal_component_take_property(comp, i_cal_property_new_attach (attach));
+        i_cal_component_take_property(comp, i_cal_property_new_attach(attach));
     }
 }
 
-int main (void)
+int main(void)
 {
     ICalComponent *comp;
     GSList *attaches;
@@ -75,8 +75,7 @@ int main (void)
         "UID:123\r\n"
         "ATTACH:file:///tmp/f1.txt\r\n"
         "ATTACH:file:///tmp/f2.txt\r\n"
-        "END:VEVENT\r\n"
-    );
+        "END:VEVENT\r\n");
 
     attaches = get_attachments(comp);
     printf("%s: 1st: has %d attachments\n", __FUNCTION__, g_slist_length(attaches));

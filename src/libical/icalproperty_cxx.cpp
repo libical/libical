@@ -14,11 +14,13 @@
 #include "icalvalue_cxx.h"
 using namespace LibICal;
 
-ICalProperty::ICalProperty() : imp(icalproperty_new(ICAL_ANY_PROPERTY))
+ICalProperty::ICalProperty()
+    : imp(icalproperty_new(ICAL_ANY_PROPERTY))
 {
 }
 
-ICalProperty::ICalProperty(const ICalProperty &v) : imp(icalproperty_clone(v.imp))
+ICalProperty::ICalProperty(const ICalProperty &v)
+    : imp(icalproperty_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -54,7 +56,8 @@ ICalProperty::~ICalProperty()
     }
 }
 
-ICalProperty::ICalProperty(icalproperty *v) : imp(v)
+ICalProperty::ICalProperty(icalproperty *v)
+    : imp(v)
 {
 }
 
@@ -86,8 +89,8 @@ int ICalProperty::isa_property(void *property)
 int ICalProperty::operator==(ICalProperty &rhs)
 {
     icalparameter_xliccomparetype result;
-    ICalValue  *thisPropValue = this->get_value();
-    ICalValue  *rhsPropValue  = rhs.get_value();
+    ICalValue *thisPropValue = this->get_value();
+    ICalValue *rhsPropValue = rhs.get_value();
     result = icalvalue_compare(static_cast<icalvalue *>(*thisPropValue),
                                static_cast<icalvalue *>(*rhsPropValue));
     delete thisPropValue;
@@ -322,7 +325,8 @@ void ICalProperty::set_completed(const struct icaltimetype &val)
     icalproperty_set_completed(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_completed() const {
+struct icaltimetype ICalProperty::get_completed() const
+{
     return icalproperty_get_completed(imp);
 }
 
@@ -343,7 +347,8 @@ void ICalProperty::set_created(const struct icaltimetype &val)
     icalproperty_set_created(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_created() const {
+struct icaltimetype ICalProperty::get_created() const
+{
     return icalproperty_get_created(imp);
 }
 
@@ -364,7 +369,8 @@ void ICalProperty::set_dtend(const struct icaltimetype &val)
     icalproperty_set_dtend(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_dtend() const {
+struct icaltimetype ICalProperty::get_dtend() const
+{
     return icalproperty_get_dtend(imp);
 }
 
@@ -374,7 +380,8 @@ void ICalProperty::set_dtstamp(const struct icaltimetype &val)
     icalproperty_set_dtstamp(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_dtstamp() const {
+struct icaltimetype ICalProperty::get_dtstamp() const
+{
     return icalproperty_get_dtstamp(imp);
 }
 
@@ -384,7 +391,8 @@ void ICalProperty::set_dtstart(const struct icaltimetype &val)
     icalproperty_set_dtstart(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_dtstart() const {
+struct icaltimetype ICalProperty::get_dtstart() const
+{
     return icalproperty_get_dtstart(imp);
 }
 
@@ -394,7 +402,8 @@ void ICalProperty::set_due(const struct icaltimetype &val)
     icalproperty_set_due(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_due() const {
+struct icaltimetype ICalProperty::get_due() const
+{
     return icalproperty_get_due(imp);
 }
 
@@ -404,7 +413,8 @@ void ICalProperty::set_duration(const struct icaldurationtype &val)
     icalproperty_set_duration(imp, val);
 }
 
-struct icaldurationtype ICalProperty::get_duration() const {
+struct icaldurationtype ICalProperty::get_duration() const
+{
     return icalproperty_get_duration(imp);
 }
 
@@ -414,7 +424,8 @@ void ICalProperty::set_exdate(const struct icaltimetype &val)
     icalproperty_set_exdate(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_exdate() const {
+struct icaltimetype ICalProperty::get_exdate() const
+{
     return icalproperty_get_exdate(imp);
 }
 
@@ -435,7 +446,8 @@ void ICalProperty::set_exrule(const struct icalrecurrencetype &val)
     icalproperty_set_exrule(imp, val);
 }
 
-struct icalrecurrencetype ICalProperty::get_exrule() const {
+struct icalrecurrencetype ICalProperty::get_exrule() const
+{
     return icalproperty_get_exrule(imp);
 }
 
@@ -445,7 +457,8 @@ void ICalProperty::set_freebusy(const struct icalperiodtype &val)
     icalproperty_set_freebusy(imp, val);
 }
 
-struct icalperiodtype ICalProperty::get_freebusy() const {
+struct icalperiodtype ICalProperty::get_freebusy() const
+{
     return icalproperty_get_freebusy(imp);
 }
 
@@ -455,7 +468,8 @@ void ICalProperty::set_geo(const struct icalgeotype &val)
     icalproperty_set_geo(imp, val);
 }
 
-struct icalgeotype ICalProperty::get_geo() const {
+struct icalgeotype ICalProperty::get_geo() const
+{
     return icalproperty_get_geo(imp);
 }
 
@@ -465,7 +479,8 @@ void ICalProperty::set_lastmodified(const struct icaltimetype &val)
     icalproperty_set_lastmodified(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_lastmodified() const {
+struct icaltimetype ICalProperty::get_lastmodified() const
+{
     return icalproperty_get_lastmodified(imp);
 }
 
@@ -596,7 +611,8 @@ void ICalProperty::set_rdate(const struct icaldatetimeperiodtype &val)
     icalproperty_set_rdate(imp, val);
 }
 
-struct icaldatetimeperiodtype ICalProperty::get_rdate() const {
+struct icaldatetimeperiodtype ICalProperty::get_rdate() const
+{
     return icalproperty_get_rdate(imp);
 }
 
@@ -606,7 +622,8 @@ void ICalProperty::set_recurrenceid(const struct icaltimetype &val)
     icalproperty_set_recurrenceid(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_recurrenceid() const {
+struct icaltimetype ICalProperty::get_recurrenceid() const
+{
     return icalproperty_get_recurrenceid(imp);
 }
 
@@ -674,7 +691,8 @@ void ICalProperty::set_rrule(const struct icalrecurrencetype &val)
     icalproperty_set_rrule(imp, val);
 }
 
-struct icalrecurrencetype ICalProperty::get_rrule() const {
+struct icalrecurrencetype ICalProperty::get_rrule() const
+{
     return icalproperty_get_rrule(imp);
 }
 
@@ -750,7 +768,8 @@ void ICalProperty::set_trigger(const struct icaltriggertype &val)
     icalproperty_set_trigger(imp, val);
 }
 
-struct icaltriggertype ICalProperty::get_trigger() const {
+struct icaltriggertype ICalProperty::get_trigger() const
+{
     return icalproperty_get_trigger(imp);
 }
 

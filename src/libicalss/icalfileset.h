@@ -89,7 +89,7 @@ LIBICAL_ICALSS_EXPORT icalsetiter icalfileset_begin_component(icalset *set,
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *iter);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *
-                                                                                     itr);
+                                                                                         itr);
 
 /** Returns a reference to the internal component. **You probably should
    not be using this.** */
@@ -102,12 +102,11 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_component(icalset *cluster)
  * These options should be passed to the icalset_new() function
  */
 
-typedef struct icalfileset_options
-{
-    int flags;                /**< flags for open() O_RDONLY, etc  */
-    int mode;                 /**< file mode */
-    int safe_saves;           /**< to lock or not */
-    icalcluster *cluster;     /**< use this cluster to initialize data */
+typedef struct icalfileset_options {
+    int flags;            /**< flags for open() O_RDONLY, etc  */
+    int mode;             /**< file mode */
+    int safe_saves;       /**< to lock or not */
+    icalcluster *cluster; /**< use this cluster to initialize data */
 } icalfileset_options;
 
 extern icalfileset_options icalfileset_options_default;

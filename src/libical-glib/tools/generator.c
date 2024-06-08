@@ -17,11 +17,11 @@ static FILE *open_file(const gchar *dir, const gchar *filename)
 
     path = g_build_filename(dir, filename, NULL);
     if (path) {
-      tmpl = fopen(path, "rb");
-      if (!tmpl)
-          fprintf(stderr, "generator: Failed to open %s: %s\n", path, strerror(errno));
+        tmpl = fopen(path, "rb");
+        if (!tmpl)
+            fprintf(stderr, "generator: Failed to open %s: %s\n", path, strerror(errno));
 
-      g_free(path);
+        g_free(path);
     }
     return tmpl;
 }
@@ -292,7 +292,7 @@ gchar *get_lower_train_from_lower_snake(const gchar *lowerSnake)
     guint len;
 
     g_return_val_if_fail(lowerSnake != NULL && *lowerSnake != '\0', NULL);
-    len =  (guint)strlen(lowerSnake);
+    len = (guint)strlen(lowerSnake);
 
     ret = g_strdup(lowerSnake);
     for (i = 0; i < len; i++) {
@@ -1094,7 +1094,7 @@ void generate_forward_declarations_header_file(GList *structures)
 
     typeNames = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
 
-    for (link = structures; link; link = g_list_next (link)) {
+    for (link = structures; link; link = g_list_next(link)) {
         Structure *structure = link->data;
 
         if (!structure)
@@ -1107,7 +1107,7 @@ void generate_forward_declarations_header_file(GList *structures)
                 typeKind = g_hash_table_lookup(type2kind, typeName);
                 if (g_strcmp0(typeKind, "std") == 0 &&
                     !g_hash_table_contains(typeNames, typeName)) {
-                    (void)g_hash_table_insert(typeNames, g_strdup (typeName), (gchar *) "std");
+                    (void)g_hash_table_insert(typeNames, g_strdup(typeName), (gchar *)"std");
                 }
             }
         }
@@ -1149,7 +1149,7 @@ void generate_forward_declarations_header_file(GList *structures)
                 write_str(out, "I_CAL_FORWARD_DECLARATIONS");
             } else {
                 fprintf(stderr, "The string '%s' is not recognized, please check the %s\n",
-                       buffer, FORWARD_DECLARATIONS_HEADER);
+                        buffer, FORWARD_DECLARATIONS_HEADER);
                 fflush(stderr);
                 break;
             }
@@ -1361,7 +1361,8 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                         val = NULL;
                     } else {
                         printf("The string %s is not recognized in conditional, "
-                               "please check the template\n", var);
+                               "please check the template\n",
+                               var);
                         g_free(expression);
                         g_free(var);
                         return;
@@ -1426,7 +1427,7 @@ static gboolean is_enum_type(const gchar *type)
         structureKind = g_hash_table_lookup(type2kind, trueType);
         res = g_strcmp0(structureKind, "enum") == 0;
     }
-    g_free (trueType);
+    g_free(trueType);
 
     return res;
 }
@@ -1465,7 +1466,7 @@ gchar *get_translator_for_parameter(Parameter *para)
                 for (link = structure->enumerations; link; link = g_list_next(link)) {
                     Enumeration *enumeration = link->data;
 
-                    if (g_strcmp0 (trueType, enumeration->name) == 0) {
+                    if (g_strcmp0(trueType, enumeration->name) == 0) {
                         if (!enumeration->nativeName) {
                             g_printerr("Missing 'native_name' for enum %s\n", enumeration->name);
                             break;
@@ -1543,7 +1544,7 @@ gchar *get_translator_for_return(Ret *ret)
                 for (link = structure->enumerations; link; link = g_list_next(link)) {
                     Enumeration *enumeration = link->data;
 
-                    if (g_strcmp0 (trueType, enumeration->name) == 0) {
+                    if (g_strcmp0(trueType, enumeration->name) == 0) {
                         if (!enumeration->nativeName) {
                             g_printerr("Missing 'native_name' for enum %s\n", enumeration->name);
                             break;
@@ -1573,7 +1574,7 @@ static gboolean parameter_is_out(Parameter *para)
         if (g_strcmp0(link->data, "out") == 0 ||
             g_strcmp0(link->data, "inout") == 0 ||
             g_str_has_prefix(link->data, "out ")) {
-              break;
+            break;
         }
     }
 
@@ -1586,7 +1587,7 @@ static gboolean annotation_contains_nullable(GList *annotations) /* gchar * */
 
     for (link = annotations; link; link = g_list_next(link)) {
         if (g_strcmp0(link->data, "nullable") == 0) {
-              break;
+            break;
         }
     }
 
@@ -1599,7 +1600,7 @@ static gboolean annotation_contains_optional(GList *annotations) /* gchar * */
 
     for (link = annotations; link; link = g_list_next(link)) {
         if (g_strcmp0(link->data, "optional") == 0) {
-              break;
+            break;
         }
     }
 
@@ -1650,7 +1651,7 @@ gchar *get_inline_parameter(Parameter *para)
             (void)g_stpcpy(buffer + strlen(buffer), "):NULL)");
         }
 
-        g_free (translator);
+        g_free(translator);
     }
 
     ret = g_new(gchar, strlen(buffer) + 1);
@@ -1870,7 +1871,8 @@ gchar *get_true_type(const gchar *type)
     type_len = (guint)strlen(type);
     end = type_len - 1;
 
-    for (i = 0; i < const_prefix_len && i < type_len && const_prefix[i] == type[i]; i++);
+    for (i = 0; i < const_prefix_len && i < type_len && const_prefix[i] == type[i]; i++)
+        ;
 
     if (i == const_prefix_len) {
         start = i + 1;
@@ -2067,7 +2069,8 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
             trueType = get_true_type(parameter->type);
             for (i = 0;
                  i < namespace_len && trueType[i] && namespace[i] == trueType[i];
-                 i++);
+                 i++)
+                ;
 
             if (i == namespace_len) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
@@ -2114,9 +2117,8 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
             }
 
             param_is_out = parameter_is_out(parameter);
-            if (i != namespace_len && (
-                (!param_is_out && !annotation_contains_nullable(parameter->annotations)) ||
-                (param_is_out && !annotation_contains_optional(parameter->annotations)))) {
+            if (i != namespace_len && ((!param_is_out && !annotation_contains_nullable(parameter->annotations)) ||
+                                       (param_is_out && !annotation_contains_optional(parameter->annotations)))) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
                 if (method->ret != NULL) {
                     (void)g_stpcpy(buffer + strlen(buffer), "g_return_val_if_fail (");
@@ -2128,7 +2130,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
                     } else if (method->ret->type[strlen(method->ret->type) - 1] == '*') {
                         defaultValue = g_strdup("NULL");
                     } else if (g_hash_table_contains(defaultValues,
-                                   (retTrueType = get_true_type(method->ret->type)))) {
+                                                     (retTrueType = get_true_type(method->ret->type)))) {
                         defaultValue =
                             g_strdup(g_hash_table_lookup(defaultValues, retTrueType));
                         g_free(retTrueType);
@@ -2178,7 +2180,7 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
     for (link = structures; link; link = g_list_next(link)) {
         Structure *str = link->data;
 
-        for (link2 = str->enumerations; link2; link2 = g_list_next (link2)) {
+        for (link2 = str->enumerations; link2; link2 = g_list_next(link2)) {
             Enumeration *enumeration = link2->data;
             if (g_str_equal(enumeration->nativeName, "CUSTOM")) {
                 continue;
@@ -2186,7 +2188,7 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
             fprintf(file, "static void test_%s(%s value)\n", enumeration->name, enumeration->nativeName);
             fprintf(file, "{\n"
                           "    switch(value){\n");
-            for (link3 = enumeration->elements; link3; link3 = g_list_next (link3)) {
+            for (link3 = enumeration->elements; link3; link3 = g_list_next(link3)) {
                 const gchar *nativeName = link3->data;
                 fprintf(file, "    case %s: break;\n", nativeName);
             }
@@ -2201,7 +2203,8 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
                   "{\n"
                   "%s"
                   "    return 0;\n"
-                  "}\n", calls->str);
+                  "}\n",
+            calls->str);
     fclose(file);
 
     (void)g_string_free(calls, TRUE);
@@ -2255,7 +2258,7 @@ static gint generate_library(const gchar *apis_dir)
     }
     filenames = g_list_sort(filenames, (GCompareFunc)g_strcmp0);
     for (iter_filenames = g_list_first(filenames); iter_filenames != NULL;
-        iter_filenames = g_list_next(iter_filenames)) {
+         iter_filenames = g_list_next(iter_filenames)) {
         filename = iter_filenames->data;
         len = (gint)strlen(filename);
 
@@ -2349,7 +2352,7 @@ static gint generate_library(const gchar *apis_dir)
     }
 
     generate_checks_file("ical-glib-build-check.c", structures);
- out:
+out:
     g_dir_close(dir);
     g_hash_table_destroy(type2kind);
     g_hash_table_destroy(type2structure);
@@ -2423,7 +2426,7 @@ void generate_header_header_file(GList *structures)
         if (c == '$') {
             if ((c = fgetc(in)) != '{' && c != '^') {
                 printf("The following char is not {");
-                g_free (buffer);
+                g_free(buffer);
                 fclose(in);
                 fclose(out);
                 return;
@@ -2451,7 +2454,7 @@ void generate_header_header_file(GList *structures)
                 printf("The string %s is not recognized, please check the header-header-template\n",
                        buffer);
                 fflush(NULL);
-                g_free (buffer);
+                g_free(buffer);
                 fclose(in);
                 fclose(out);
                 return;

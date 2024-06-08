@@ -113,9 +113,8 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icaldirsetiter_to_next(icalset *set, icalse
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icaldirsetiter_to_prior(icalset *set, icalsetiter *i);
 
-typedef struct icaldirset_options
-{
-    int flags;            /**< flags corresponding to the open() system call O_RDWR, etc. */
+typedef struct icaldirset_options {
+    int flags; /**< flags corresponding to the open() system call O_RDWR, etc. */
 } icaldirset_options;
 
 #endif /* !ICALDIRSET_H */

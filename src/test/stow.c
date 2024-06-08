@@ -43,8 +43,7 @@ enum options
     ERRORS_TO_ORGANIZER
 };
 
-struct options_struct
-{
+struct options_struct {
     enum options storage;
     enum options input_type;
     enum options input_source;
@@ -72,7 +71,6 @@ enum file_type test_file(char *path)
 
     /* Check if the path already exists and if it is a directory */
     if (stat(path, &sbuf) != 0) {
-
         /* A file by the given name does not exist, or there was
            another error */
         if (errno == ENOENT) {
@@ -176,17 +174,19 @@ char *make_mime(const char *to, const char *from, const char *subject,
     srand((unsigned int)(time(0) << getpid()));
     snprintf(content_id, TMPSIZE_SMALL, "%ld-%d@%s", (long)time(0), rand(), uts.nodename);
     snprintf(boundary, TMPSIZE_SMALL, "%ld-%d-%s", (long)time(0), rand(), uts.nodename);
-//krazy:cond=style
+    //krazy:cond=style
     snprintf(mime_part_1, TMPSIZE, "Content-ID: %s\n\
 Content-type: text/plain\n\
 Content-Description: Text description of error message\n\n\
-%s\n\n--%s", content_id, text_message, boundary);
+%s\n\n--%s",
+             content_id, text_message, boundary);
 
     if (method != 0) {
         snprintf(mime_part_2, TMPSIZE, "Content-ID: %s\n\
 Content-type: text/calendar; method=%s\n\
 Content-Description: iCal component reply\n\n\
-%s\n\n--%s--", content_id, method, ical_message, boundary);
+%s\n\n--%s--",
+                 content_id, method, ical_message, boundary);
     }
 
     snprintf(m, mess_size, "To: %s\n\
@@ -200,8 +200,9 @@ Content-Type:  multipart/mixed; boundary=\"%s\"\n\
 \n\
 --%s\n\
 %s\n\
-", to, from, subject, content_id, boundary, boundary, mime_part_1);
-//krazy:endcond=style
+",
+             to, from, subject, content_id, boundary, boundary, mime_part_1);
+    //krazy:endcond=style
     if (ical_message != 0 && method != 0) {
         strcat(m, mime_part_2);
     } else {
@@ -227,7 +228,7 @@ void return_failure(icalcomponent *comp, char *message, struct options_struct *o
     org_addr = strchr(organizer, ':');
 
     if (org_addr != 0) {
-        org_addr++;     /* Skip the ';' */
+        org_addr++; /* Skip the ';' */
     } else {
         org_addr = organizer;
     }
@@ -301,8 +302,8 @@ icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
                 icalproperty_clone(
                     icalcomponent_get_first_property(inner, ICAL_UID_PROPERTY)),
                 icalproperty_new_attendee(attendee),
-                0),
-            0);
+                (void *)0),
+            (void *)0);
 
     /* Convert errors into request-status properties and transfers
        them to the reply component */
@@ -374,7 +375,6 @@ char *check_component(icalcomponent *comp, icalproperty **return_status,
        to fake exceptions */
 
     do {
-
         /* Check that we actually got a component */
         if (comp == 0) {
             strcpy(static_component_error_str, "Did not find a component");
@@ -415,13 +415,11 @@ char *check_component(icalcomponent *comp, icalproperty **return_status,
 
         for (p = icalcomponent_get_first_property(inner, ICAL_ATTENDEE_PROPERTY);
              p != 0; p = icalcomponent_get_next_property(inner, ICAL_ATTENDEE_PROPERTY)) {
-
             found_attendee += check_attendee(p, opt);
         }
 
         for (p = icalcomponent_get_first_property(inner, ICAL_ORGANIZER_PROPERTY);
              p != 0; p = icalcomponent_get_next_property(inner, ICAL_ORGANIZER_PROPERTY)) {
-
             found_attendee += check_attendee(p, opt);
         }
 
@@ -462,7 +460,7 @@ char *check_component(icalcomponent *comp, icalproperty **return_status,
 void usage(const char *message)
 {
     _unused(message);
-//krazy:cond=style
+    //krazy:cond=style
     fprintf(stderr, "Usage: %s [-emdcn] [-i inputfile] [-o outputfile] [-u calid]\n", program_name);
     fprintf(stderr, "-e\tInput data is encapsulated in a MIME Message \n\
 -m\tInput is raw iCal \n\
@@ -472,7 +470,7 @@ void usage(const char *message)
 -u\tSet the calid to store the data to\n\
 -n\tSend errors to stdout instead of organizer\n\
 ");
-//krazy:endcond=style
+    //krazy:endcond=style
 }
 
 void get_options(int argc, char *argv[], struct options_struct *opt)
@@ -495,76 +493,75 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
 
     while ((c = getopt(argc, argv, "nemu:o:d:b:c:i:")) != -1) {
         switch (c) {
-        case 'e':{
-                /* Input data is MIME encapsulated */
-                opt->input_type = INPUT_IS_MIME;
-                break;
+        case 'e': {
+            /* Input data is MIME encapsulated */
+            opt->input_type = INPUT_IS_MIME;
+            break;
+        }
+        case 'm': {
+            /* Input is iCal. Default */
+            opt->input_type = INPUT_IS_ICAL;
+            break;
+        }
+        case 'i': {
+            /* Input comes from named file */
+            opt->input_source = INPUT_FROM_FILE;
+            if (opt->input_file) {
+                free(opt->input_file);
             }
-        case 'm':{
-                /* Input is iCal. Default */
-                opt->input_type = INPUT_IS_ICAL;
-                break;
+            opt->input_file = strdup(optarg);
+            break;
+        }
+        case 'o': {
+            /* Output goes to named file. Default */
+            if (opt->output_file) {
+                free(opt->output_file);
             }
-        case 'i':{
-                /* Input comes from named file */
-                opt->input_source = INPUT_FROM_FILE;
-                if (opt->input_file) {
-                    free(opt->input_file);
-                }
-                opt->input_file = strdup(optarg);
-                break;
-            }
-        case 'o':{
-                /* Output goes to named file. Default */
-                if (opt->output_file) {
-                    free(opt->output_file);
-                }
-                opt->output_file = strdup(optarg);
-                opt->storage = STORE_IN_FILE;
-                break;
-            }
-        case 'd':{
-                /* Output goes to database */
-                fprintf(stderr, "%s: option -d is unimplemented\n", program_name);
-                opt->storage = STORE_IN_DB;
-                errflg++;
-                break;
-            }
-        case 'c':{
-
-                break;
-            }
-        case 'u':{
-                /* Set the calid for the output database or
+            opt->output_file = strdup(optarg);
+            opt->storage = STORE_IN_FILE;
+            break;
+        }
+        case 'd': {
+            /* Output goes to database */
+            fprintf(stderr, "%s: option -d is unimplemented\n", program_name);
+            opt->storage = STORE_IN_DB;
+            errflg++;
+            break;
+        }
+        case 'c': {
+            break;
+        }
+        case 'u': {
+            /* Set the calid for the output database or
                    file. Default is user name of user running
                    program */
-                free(opt->calid);
-                opt->calid = strdup(optarg);
-                break;
-            }
+            free(opt->calid);
+            opt->calid = strdup(optarg);
+            break;
+        }
 
-        case 'n':{
-                /* Dump error to stdout. Default is to
+        case 'n': {
+            /* Dump error to stdout. Default is to
                    send error to the organizer specified
                    in the iCal data */
-                opt->errors = ERRORS_TO_STDOUT;
-                break;
-            }
+            opt->errors = ERRORS_TO_STDOUT;
+            break;
+        }
 
-        case ':':{
-                /* Option given without an operand */
-                fprintf(stderr, "%s: Option -%c requires an operand\n", program_name, optopt);
-                errflg++;
-                break;
-            }
-        case '?':{
-                errflg++;
-            }
+        case ':': {
+            /* Option given without an operand */
+            fprintf(stderr, "%s: Option -%c requires an operand\n", program_name, optopt);
+            errflg++;
+            break;
+        }
+        case '?': {
+            errflg++;
+        }
         }
 
         if (errflg > 0) {
             byebye(1, opt);
-         }
+        }
     }
 
     if (opt->calid == 0) {
@@ -593,7 +590,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
         }
 
         /* Find password entry for user */
-        while ((pw = getpwent()) != 0) {
+        while ((pw = getpwent()) != 0) { /* cppcheck-suppress getpwentCalled */
             if (strcmp(user, pw->pw_name) == 0) {
                 break;
             }
@@ -640,7 +637,6 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
 
             errno = 0;
             if (type == NO_FILE) {
-
                 if (mkdir(facspath, 0775) != 0) {
                     fprintf(stderr,
                             "%s: Failed to create calendar directory %s: %s\n",
@@ -708,7 +704,7 @@ void store_component(icalcomponent *comp, struct options_struct *opt)
 
 char *read_stream(char *s, size_t size, void *d)
 {
-    char *c = fgets(s, (int)size, (FILE *) d);
+    char *c = fgets(s, (int)size, (FILE *)d);
 
     return c;
 }
@@ -764,7 +760,6 @@ icalcomponent *find_vcalendar(icalcomponent *comp)
 
     for (c = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
          c != 0; c = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
-
         if (icalcomponent_isa(c) == ICAL_VCALENDAR_COMPONENT) {
             icalcomponent_remove_component(comp, c);
             return c;
@@ -844,7 +839,6 @@ int main(int argc, char *argv[])
     /* If the component had any fatal errors, return an error message
        to the organizer */
     if ((component_error_str = check_component(comp, &return_status, &opt)) != 0) {
-
         reply = make_reply(comp, return_status, &opt);
 
         return_failure(reply, component_error_str, &opt);
@@ -859,5 +853,5 @@ int main(int argc, char *argv[])
 
     byebye(0, &opt);
 
-    return(0); //to avoid -Werror=return-type
+    return (0); //to avoid -Werror=return-type
 }
