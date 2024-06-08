@@ -165,7 +165,6 @@ static int vcardrestriction_check_component(vcardcomponent *comp)
     const vcardrestriction_record *start_record;
     vcardproperty *version_prop = NULL;
     vcardcomponent *inner_comp;
-    const char *errStr = NULL;
     int count;
     int compare;
     int valid = 1;
@@ -187,19 +186,6 @@ static int vcardrestriction_check_component(vcardcomponent *comp)
         version = VCARD_VERSION_NONE;
     } else {
         version = vcardproperty_get_version(version_prop);
-    }
-
-    if (errStr != NULL) {
-        vcardproperty *errProp;
-        vcardparameter *errParam;
-
-        errParam =
-            vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_RESTRICTIONCHECK);
-        errProp = vcardproperty_vanew_xlicerror(errStr, errParam, (void *) 0);
-        vcardcomponent_add_property(comp, errProp);
-        vcardproperty_free(errProp);
-
-        valid = 0;
     }
 
     /* Check all of the properties in this component */
