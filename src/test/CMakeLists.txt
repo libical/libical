@@ -179,6 +179,10 @@ if(NOT WIN32 OR CMAKE_COMPARE_FILES_IGNORE_EOL)
     set(icalrecurtest_SRCS icalrecur_test.c)
     add_executable(icalrecurtest ${icalrecurtest_SRCS})
     target_link_libraries(icalrecurtest ical icalss icalvcal)
+    if(WITH_CXX_BINDINGS)
+      # https://github.com/libical/libical/pull/656
+      set_property(TARGET icalrecurtest PROPERTY LINKER_LANGUAGE CXX)
+    endif()
     set(test_cmd "${PROJECT_BINARY_DIR}/bin/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
 
     if(ICU_FOUND)
