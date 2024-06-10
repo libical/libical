@@ -187,7 +187,10 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
   set(icalrecurtest_SRCS icalrecur_test.c)
   add_executable(icalrecurtest ${icalrecurtest_SRCS})
   target_link_libraries(icalrecurtest ical icalss icalvcal)
-  set_property(TARGET icalrecurtest PROPERTY LINKER_LANGUAGE CXX)
+  if(WITH_CXX_BINDINGS)
+    # https://github.com/libical/libical/pull/656
+    set_property(TARGET icalrecurtest PROPERTY LINKER_LANGUAGE CXX)
+  endif()
   set(test_cmd "${PROJECT_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
 
   #test rscale capable rrules
