@@ -966,7 +966,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     }
                     if (pvalue_heap) {
                         icalmemory_free_buffer(pvalue_heap);
-                        /* coverirty */
+                        /* coverity[uninit_use] */
                         pvalue_heap = 0;
                     }
                     continue;
@@ -1075,7 +1075,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 }
                 if (pvalue_heap) {
                     icalmemory_free_buffer(pvalue_heap);
-                    /* coverity[uninit_use] */
                     pvalue_heap = 0;
                 }
                 icalmemory_free_buffer(str);
