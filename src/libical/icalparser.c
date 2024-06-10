@@ -966,6 +966,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     }
                     if (pvalue_heap) {
                         icalmemory_free_buffer(pvalue_heap);
+                        /* coverirty */
+                        pvalue_heap = 0;
                     }
                     continue;
                 }
@@ -1031,6 +1033,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                                                  pvalue_stack, sizeof(pvalue_stack))) {
                     if (pvalue_heap) {
                         icalmemory_free_buffer(pvalue_heap);
+                        /* coverity[uninit_use] */
+                        pvalue_heap = 0;
                     }
                     if (name_heap) {
                         icalmemory_free_buffer(name_heap);
@@ -1071,6 +1075,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 }
                 if (pvalue_heap) {
                     icalmemory_free_buffer(pvalue_heap);
+                    /* coverity[uninit_use] */
                     pvalue_heap = 0;
                 }
                 icalmemory_free_buffer(str);
