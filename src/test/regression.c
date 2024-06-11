@@ -683,6 +683,29 @@ void test_component_foreach(void)
 
     icalcomponent_free(calendar);
 
+    calStr =
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART;20180220T020000Z\n"
+        "DURATION:PT4H\n"
+        "RDATE;20180221T020000Z,20180222T020000Z\n"
+        "RDATE;VALUE=PERIOD:20180223T020000Z/20180223T030000Z,\n"
+        " 20180224T020000Z/PT2H\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
+    calendar = icalparser_parse_string(calStr);
+    event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+    t_start = icaltime_from_string("20180219T000000Z");
+    t_end = icaltime_from_string("20180225T000000Z");
+
+    foundExpectedCnt = 0;
+    icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &foundExpectedCnt);
+    ok("Exactly five instances were returned for an event with RDATEs.", foundExpectedCnt == 5);
+
+    icalcomponent_free(calendar);
+
     for (i = 0; i < 3; i++) {
 
         /* Add one week with every run, so the first run will address the

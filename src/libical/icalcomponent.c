@@ -905,27 +905,40 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 
         struct icaldatetimeperiodtype rdate_period =
             icalproperty_get_rdate(rdate);
+        struct icaltimetype rdate_start = rdate_period.time;
+        time_t rdate_duration = 0;
 
         /* RDATES can specify raw datetimes, periods, or dates.
-            we only support raw datetimes for now..
+            we only support raw datetimes and periods for now.
 
             @todo Add support for other types */
 
-        if (icaltime_is_null_time(rdate_period.time))
-            continue;
+        if (icaltime_is_null_time(rdate_start)) {
+            rdate_start = rdate_period.period.start;
+
+            if (icaltime_is_null_time(rdate_period.period.end)) {
+                rdate_duration =
+                    (time_t)icaldurationtype_as_int(rdate_period.period.duration);
+            } else {
+                recurspan.end =
+                    icaltime_as_timet_with_zone(rdate_period.period.end,
+                                                rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
+            }
+        } else {
+            rdate_duration = dtduration;
+        }
 
         recurspan.start =
-            icaltime_as_timet_with_zone(rdate_period.time,
-                                        rdate_period.time.zone ?
-                                        rdate_period.time.zone :
-                                        icaltimezone_get_utc_timezone());
-        recurspan.end = recurspan.start + dtduration;
+            icaltime_as_timet_with_zone(rdate_start,
+                                        rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
+        if (rdate_duration)
+            recurspan.end = recurspan.start + rdate_duration;
 
         /* save the iterator ICK! */
         property_iterator = comp->property_iterator;
 
         if (!icalproperty_recurrence_is_excluded(comp,
-                                                 &dtstart, &rdate_period.time)) {
+                                                 &dtstart, &rdate_start)) {
             /* call callback action */
             if (icaltime_span_overlaps(&recurspan, &limit_span))
                 (*callback) (comp, &recurspan, callback_data);
