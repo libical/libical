@@ -1617,7 +1617,7 @@ static int fetch_lat_long_from_string(const char *str,
             sptr++;
         }
         loc = ++sptr;
-        while (!isspace(*sptr) && (*sptr != '\0')) {
+        while (!isspace((int)*sptr) && (*sptr != '\0')) {
             sptr++;
         }
         len = (ptrdiff_t)(sptr - loc);

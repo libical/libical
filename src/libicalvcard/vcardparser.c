@@ -153,7 +153,7 @@ static void buf_trim(struct buf *buf)
     const char *s = buf_cstring(buf);
 
     for (buf->len = 0; *s; s++) {
-        if (isspace(*s))
+        if (isspace((int)*s))
             continue;
         buf->s[buf->len++] = *s;
     }
