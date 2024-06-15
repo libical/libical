@@ -13,11 +13,7 @@
 #include "libical_ical_export.h"
 #include "icalcomponent.h"
 
-#if defined(sun) && defined(__SVR4)
-#define ZONES_TAB_SYSTEM_FILENAME "tab/zone_sun.tab"
-#else
 #define ZONES_TAB_SYSTEM_FILENAME "zone.tab"
-#endif
 
 /**
  * Returns the fullpath to the system zoneinfo directory (where zone.tab lives).
