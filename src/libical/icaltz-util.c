@@ -20,10 +20,6 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#if defined(sun) && defined(__SVR4)
-#include <sys/types.h>
-#include <sys/byteorder.h>
-#else
 #if defined(HAVE_BYTESWAP_H)
 #include <byteswap.h>
 #endif
@@ -36,7 +32,6 @@
 #define bswap_32 bswap32
 #else
 #define bswap_32 swap32
-#endif
 #endif
 #endif
 #endif
@@ -124,19 +119,10 @@ typedef struct
 
 static int decode(const void *ptr)
 {
-#if defined(sun) && defined(__SVR4)
-    if (sizeof(int) == 4) {
-#if defined(_BIG_ENDIAN)
-        return *(const int *)ptr;
-#else
-        return BSWAP_32(*(const int *)ptr);
-#endif
-#else
     if ((BYTE_ORDER == BIG_ENDIAN) && sizeof(int) == 4) {
         return *(const int *)ptr;
     } else if (BYTE_ORDER == LITTLE_ENDIAN && sizeof(int) == 4) {
         return (int)bswap_32(*(const unsigned int *)ptr);
-#endif
     } else {
         const unsigned char *p = ptr;
         int result = *p & (1 << (CHAR_BIT - 1)) ? ~0 : 0;
@@ -153,19 +139,11 @@ static int decode(const void *ptr)
 
 static long long int decode64(const void *ptr)
 {
-#if defined(sun) && defined(__SVR4)
-#if defined(_BIG_ENDIAN)
-    return *(const long long int *)ptr;
-#else
-    return BSWAP_64(*(const long long int *)ptr);
-#endif
-#else
     if ((BYTE_ORDER == BIG_ENDIAN)) {
         return *(const long long int *)ptr;
     } else {
         return (const long long int)bswap_64(*(const unsigned long long int *)ptr);
     }
-#endif
 }
 
 static char *zname_from_stridx(char *str, size_t idx)

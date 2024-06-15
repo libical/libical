@@ -1610,22 +1610,6 @@ static int fetch_lat_long_from_string(const char *str,
     strncpy(location, loc, len);
     location[len] = '\0';
 
-#if defined(sun) && defined(__SVR4)
-    /* Handle EET, MET and WET in zone_sun.tab. */
-    if (!strcmp(location, "Europe/")) {
-        while ((*sptr != '\t') && (*sptr != '\0')) {
-            sptr++;
-        }
-        loc = ++sptr;
-        while (!isspace((int)*sptr) && (*sptr != '\0')) {
-            sptr++;
-        }
-        len = (ptrdiff_t)(sptr - loc);
-        strncpy(location, loc, len);
-        location[len] = '\0';
-    }
-#endif
-
     lon = lat + 1;
     while (*lon != '\0' && *lon != '+' && *lon != '-') {
         lon++;
