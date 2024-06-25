@@ -241,6 +241,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     69341
     69344
     69527
+    69888
     usban
   )
     add_test(NAME fuzz1test${fuzztest} COMMAND icalcomponent_fuzz1 "${PROJECT_SOURCE_DIR}/test-data/fuzz${fuzztest}")

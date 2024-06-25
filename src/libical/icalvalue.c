@@ -258,10 +258,12 @@ static char *icalmemory_strdup_and_dequote(const char *str)
  */
 static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unquoted_str)
 {
+    static const size_t MAX_ITERATIONS = (1024 * 1024 * 10); // should be plenty. to avoid timeouts when fuzzy testing
     char *str;
     char *str_p;
     const char *p;
     size_t buf_sz;
+    size_t cnt = 0; //track iterations
 
     buf_sz = strlen(unquoted_str) + 1;
 
@@ -271,8 +273,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
         return 0;
     }
 
-    for (p = unquoted_str; *p != 0; p++) {
-
+    for (p = unquoted_str; *p != 0 && cnt < MAX_ITERATIONS; p++, cnt++) {
         switch (*p) {
         case '\n':{
                 icalmemory_append_string(&str, &str_p, &buf_sz, "\\n");
