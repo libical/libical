@@ -384,7 +384,7 @@ CPPCHECK() {
   echo "===== START CPPCHECK: $1 ======"
   cd $TOP
   cppcheck --quiet --language=c \
-           --std=c99 \
+           --std=c11 \
            --library=posix \
            --force --error-exitcode=1 --inline-suppr \
            --enable=warning,performance,portability,information \
