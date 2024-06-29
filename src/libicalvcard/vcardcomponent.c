@@ -29,7 +29,7 @@
 struct vcardcomponent_impl {
     char id[5];
     vcardcomponent_kind kind;
-    vcardproperty_version version;
+    vcardproperty *versionp;
     char *x_name;
     pvl_list properties;
     pvl_elem property_iterator;
@@ -67,7 +67,6 @@ static vcardcomponent *vcardcomponent_new_impl(vcardcomponent_kind kind)
     strcpy(comp->id, "comp");
 
     comp->kind = kind;
-    comp->version = VCARD_VERSION_NONE;
     comp->properties = pvl_newlist();
     comp->components = pvl_newlist();
 
@@ -287,7 +286,7 @@ void vcardcomponent_add_property(vcardcomponent *comp, vcardproperty *property)
     pvl_push(comp->properties, property);
 
     if (vcardproperty_isa(property) == VCARD_VERSION_PROPERTY) {
-        comp->version = vcardproperty_get_version(property);
+        comp->versionp = property;
     }
 }
 
@@ -308,7 +307,7 @@ void vcardcomponent_remove_property(vcardcomponent *comp, vcardproperty *propert
 #endif
 
     if (vcardproperty_isa(property) == VCARD_VERSION_PROPERTY) {
-        comp->version = VCARD_VERSION_NONE;
+        comp->versionp = 0;
     }
 
     for (itr = pvl_head(comp->properties); itr != 0; itr = next_itr) {
@@ -1223,8 +1222,6 @@ void vcardcomponent_transform(vcardcomponent *impl,
         } else {
             comp_to_v3(impl);
         }
-
-        impl->version = version;
     }
 
     for (itr = pvl_head(impl->components); itr != 0; itr = pvl_next(itr)) {
@@ -1240,18 +1237,16 @@ enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *card)
 {
     icalerror_check_arg_rz(card != 0, "card");
 
-    if (card->version == VCARD_VERSION_NONE) {
-        vcardproperty *prop =
+    if (card->versionp == 0) {
+        card->versionp =
             vcardcomponent_get_first_property(card, VCARD_VERSION_PROPERTY);
 
-        if (prop == 0) {
+        if (card->versionp == 0) {
             return VCARD_VERSION_NONE;
         }
-
-        card->version = vcardproperty_get_version(prop);
     }
 
-    return card->version;
+    return vcardproperty_get_version(card->versionp);
 }
 
 const char *vcardcomponent_get_uid(vcardcomponent *card)
