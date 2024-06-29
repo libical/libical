@@ -117,7 +117,7 @@ int vcardtime_is_valid_time(const struct vcardtimetype t)
         return 0;
 
     case -1:
-        if (t.year != 1 && t.day != 1)
+        if (t.year != -1 && t.day != -1)
             return 0;
 
         days = 31;
