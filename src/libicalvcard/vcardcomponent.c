@@ -876,6 +876,28 @@ static void comp_to_v4(vcardcomponent *impl)
             vcardproperty_set_version(prop, VCARD_VERSION_40);
             break;
 
+        case VCARD_BDAY_PROPERTY:
+        case VCARD_DEATHDATE_PROPERTY:
+        case VCARD_ANNIVERSARY_PROPERTY:
+            for (param = vcardproperty_get_first_parameter(prop,
+                                                           VCARD_X_PARAMETER);
+                 param;
+                 param = vcardproperty_get_next_parameter(prop,
+                                                          VCARD_X_PARAMETER)) {
+                const char *name = vcardparameter_get_xname(param);
+
+                /* This appears in the wild for v3 date with missing year */
+                if (name && !strcasecmp(name, "X-APPLE-OMIT-YEAR")) {
+                    vcardtimetype dt = vcardproperty_get_bday(prop);
+
+                    dt.year = -1;
+                    vcardproperty_set_bday(prop, dt);
+                    vcardproperty_remove_parameter_by_ref(prop, param);
+                    break;
+                }
+            }
+            break;
+
         case VCARD_GEO_PROPERTY:
             if (vkind != VCARD_X_VALUE) {
                 vcardgeotype geo = vcardvalue_get_geo(value);
@@ -1085,6 +1107,31 @@ static void comp_to_v3(vcardcomponent *impl)
         case VCARD_VERSION_PROPERTY:
             vcardproperty_set_version(prop, VCARD_VERSION_30);
             break;
+
+        case VCARD_BDAY_PROPERTY:
+        case VCARD_DEATHDATE_PROPERTY:
+        case VCARD_ANNIVERSARY_PROPERTY: {
+            vcardtimetype dt = vcardproperty_get_bday(prop);
+
+            if (dt.year == -1) {
+                /* This appears in the wild for v3 date with missing year */
+                dt.year = 1604;
+                vcardproperty_set_parameter_from_string(prop,
+                                                        "X-APPLE-OMIT-YEAR",
+                                                        "1604");
+            }
+            if (dt.hour != -1) {
+                if (dt.second == -1) {
+                    dt.second = 0;
+                    if (dt.minute == -1) {
+                        dt.minute = 0;
+                    }
+                }
+            }
+
+            vcardproperty_set_bday(prop, dt);
+            break;
+        }
 
         case VCARD_GEO_PROPERTY:
             if (vkind != VCARD_X_VALUE) {
