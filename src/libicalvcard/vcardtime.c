@@ -77,7 +77,8 @@ int vcardtime_is_datetime(const vcardtimetype t)
 int vcardtime_is_timestamp(const vcardtimetype t)
 {
     return (t.year != -1 && t.month != -1 && t.day != -1 &&
-            t.hour != -1 && t.minute != -1 && t.second != -1);
+            t.hour != -1 && t.minute != -1 && t.second != -1 &&
+            t.utcoffset != -1);
 }
 
 int vcardtime_is_utc(const vcardtimetype t)
