@@ -90,6 +90,69 @@ int vcardrestriction_compare(vcardrestriction_kind restr, int count)
     return compare_map[restr][count];
 }
 
+/* Special case routines */
+
+#define TMP_BUF_SIZE 1024
+
+static const char *vcardrestriction_validate_datetime_value(
+    const vcardrestriction_record *rec,
+    vcardcomponent *comp, vcardproperty *prop)
+{
+    vcardtimetype t = vcardproperty_get_bday(prop);
+    static char buf[TMP_BUF_SIZE];
+
+    if (vcardtime_is_null_datetime(t))
+        return 0;
+
+    if (comp && vcardcomponent_get_version(comp) != VCARD_VERSION_40) {
+        unsigned missing_time_parts =
+            (t.hour < 0) + (t.minute < 0) + (t.second < 0);
+
+        if (t.year < 0 || t.month < 0 || t.day < 0 ||
+            (missing_time_parts && missing_time_parts != 3)) {
+
+            snprintf(buf, TMP_BUF_SIZE,
+                     "Failed restrictions for %s property. "
+                     "The value must be a full date or date-time",
+                     vcardproperty_kind_to_string(rec->property));
+            return buf;
+        }
+    }
+
+    if (!vcardtime_is_valid_time(t)) {
+        snprintf(buf, TMP_BUF_SIZE,
+                 "Failed restrictions for %s property. "
+                 "The value is an invalid date-and-or-time",
+                 vcardproperty_kind_to_string(rec->property));
+        return buf;
+    }
+
+    return 0;
+}
+
+static const char *vcardrestriction_validate_timestamp_value(
+    const vcardrestriction_record *rec,
+    vcardcomponent *comp, vcardproperty *prop)
+{
+    _unused(comp);
+
+    vcardtimetype t = vcardproperty_get_rev(prop);
+    static char buf[TMP_BUF_SIZE];
+
+    if (vcardtime_is_null_datetime(t))
+        return 0;
+
+    if (!vcardtime_is_timestamp(t) || !vcardtime_is_valid_time(t)) {
+        snprintf(buf, TMP_BUF_SIZE,
+                 "Failed restrictions for %s property. "
+                 "The value is an invalid timestamp",
+                 vcardproperty_kind_to_string(rec->property));
+        return buf;
+    }
+
+    return 0;
+}
+
 static int _check_restriction(vcardcomponent *comp,
                               const vcardrestriction_record *record,
                               int count, vcardproperty *prop)
@@ -112,7 +175,6 @@ static int _check_restriction(vcardcomponent *comp,
     assert(compare != -1);
 
     if (compare == 0) {
-#define TMP_BUF_SIZE 1024
         char temp[TMP_BUF_SIZE];
         vcardproperty *errProp;
         vcardparameter *errParam;
