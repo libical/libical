@@ -57,6 +57,11 @@ Version 3.1.0 (NOT RELEASED YET):
     + struct icaltimezonetype
     + struct icaltimezonephase
 
+Version 3.0.19 (UNRELEASED):
+----------------------------
+ * Fix for changes to the libicu 75 API
+ * Add vcpkg manifest-mode support
+
 Version 3.0.18 (31 March 2024):
 -------------------------------
  * Requires CMake v3.5.0 or higher
@@ -161,8 +166,8 @@ Version 3.0.7 (15 December 2019):
  * Fix a multithreading race condition
  * More fuzzification fixes
 
-Version 3.0.6 (14 Sept 2019):
------------------------------
+Version 3.0.6 (14 Sep 2019):
+----------------------------
  * Handle both COUNT and UNTIL in RRULEs
  * Fix RRULE BYDAY with INTERVAL=2 conflict
  * Various fuzzification fixes
