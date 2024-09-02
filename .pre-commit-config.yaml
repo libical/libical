@@ -22,7 +22,7 @@ repos:
   - id: clang-format
     exclude: ^(src/java/|src/Net-ICal-Libical|src/libical/astime.h|src/libical/caldate.c|src/libicalvcal/port.h|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
 - repo: https://github.com/PyCQA/pylint
-  rev: v3.2.4
+  rev: v3.2.7
   hooks:
   - id: pylint
     exclude: ^(.cmake-format.py)
@@ -50,7 +50,7 @@ repos:
     language: ruby
     files: \.(md|mdown|markdown)$
 - repo: https://github.com/fsfe/reuse-tool
-  rev: v3.1.0a1
+  rev: v4.0.3
   hooks:
   - id: reuse
     args: [--suppress-deprecation]
