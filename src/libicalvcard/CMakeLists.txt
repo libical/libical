@@ -180,12 +180,6 @@ target_link_libraries(
 )
 
 if(MSVC)
-  target_compile_options(icalvcard PRIVATE /W4 /WX)
-else()
-  target_compile_options(icalvcard PRIVATE -Wall -Wextra -Werror)
-endif()
-
-if(MSVC)
   set_target_properties(icalvcard PROPERTIES PREFIX "lib")
   if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
     set_target_properties(icalvcard-static PROPERTIES PREFIX "lib")

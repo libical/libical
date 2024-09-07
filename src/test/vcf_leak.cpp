@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     }
 
     using vcardptr = std::unique_ptr<VObject, decltype(&cleanVObject)>;
-    vcardptr ptr(Parse_MIME((char *)content.c_str(), content.size()), cleanVObject);
+    vcardptr ptr(Parse_MIME((char *)content.c_str(), static_cast<unsigned long>(content.size())), cleanVObject);
 
     return 0;
 }

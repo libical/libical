@@ -428,7 +428,11 @@ typedef unsigned int wint_t;
 /* read - system function to read from a file descriptor */
 #if defined(HAVE__READ)
 #include <io.h>
+#if defined(__cplusplus)
 #define read _read
+#else
+#define read(a, b, c) _read((a), (b), (unsigned)(c))
+#endif
 #else
 #if !defined(HAVE_READ)
 #error "No read from file descriptor system function available"
@@ -442,7 +446,11 @@ typedef unsigned int wint_t;
 /* write - system function to write to a file descriptor */
 #if defined(HAVE__WRITE)
 #include <io.h>
+#if defined(__cplusplus)
 #define write _write
+#else
+#define write(a, b, c) _write((a), (b), (unsigned int)(c))
+#endif
 #else
 #if !defined(HAVE_WRITE)
 #error "No write to file descriptor system function available"

@@ -375,7 +375,7 @@ static int simple_str_to_doublestr(const char *from, char *result, int result_le
         ++cur;
     }
     end = cur;
-    len = end - start;
+    len = (int)(ptrdiff_t)(end - start);
     if (len + 1 >= result_len) {
         /* huh hoh, number is too big. truncate it */
         len = result_len - 1;
