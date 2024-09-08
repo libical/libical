@@ -604,10 +604,11 @@ if(DEFINED CMAKE_C_COMPILER_ID)
 endif()
 if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   set(CMAKE_C_FLAGS
-      "${CMAKE_C_FLAGS} -fvisibility=hidden \
-    -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
-    -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type \
-    -Wold-style-definition -Wstrict-prototypes"
+      "${CMAKE_C_FLAGS} \
+      -Werror -fvisibility=hidden \
+      -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
+      -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Wreturn-type \
+      -Wold-style-definition -Wstrict-prototypes"
   )
   libical_add_cflag(-Wunused-but-set-variable UNUSED_BUT_SET)
   libical_add_cflag(-Wlogical-op LOGICAL_OP)
@@ -635,9 +636,10 @@ if(DEFINED CMAKE_CXX_COMPILER_ID)
 endif()
 if(CMAKE_CXX_COMPILER_IS_GCC OR CMAKE_CXX_COMPILER_IS_CLANG)
   set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -fvisibility=hidden \
-    -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wunused \
-    -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Werror=return-type"
+      "${CMAKE_CXX_FLAGS} -Werror \
+      -fvisibility=hidden \
+      -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wunused \
+      -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Wreturn-type"
   )
   libical_add_cxxflag(-Wunused-but-set-variable UNUSED_BUT_SET)
   libical_add_cxxflag(-Wlogical-op LOGICAL_OP)

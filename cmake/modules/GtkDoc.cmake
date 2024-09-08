@@ -79,7 +79,7 @@ macro(
 
   set(_scangobj_deps)
   set(_scangobj_cflags_list)
-  set(_scangobj_cflags "")
+  set(_scangobj_cflags "-Wno-error=unused-parameter")
   set(_scangobj_ldflags "")
   set(_scangobj_ld_lib_dirs "")
 
@@ -121,7 +121,7 @@ macro(
   endif()
 
   foreach(opt IN LISTS _scangobj_cflags_list)
-    set(_scangobj_cflags "${_scangobj_cflags} ${opt}")
+    set(_scangobj_cflags "${opt} ${_scangobj_cflags}")
   endforeach()
 
   foreach(opt IN LISTS _scangobj_deps)
