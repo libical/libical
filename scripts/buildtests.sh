@@ -297,6 +297,7 @@ MEMCONSIST_BUILD() {
 # $1 = the name of the test (which will have "-asan" appended to it)
 # $2 = CMake options
 ASAN_BUILD() {
+  export ASAN_OPTIONS=verify_asan_link_order=0 #seems to be needed with different ld on Fedora (like gold)
   name="$1-asan"
   if ( test $runasanbuild -ne 1 )
   then
