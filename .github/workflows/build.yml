@@ -55,7 +55,7 @@ jobs:
         configuration:
           - Debug
           - Release
-    runs-on: macos-12
+    runs-on: [macos-12, macos-14]
     env:
       XML_CATALOG_FILES: /usr/local/etc/xml/catalog
     steps:
