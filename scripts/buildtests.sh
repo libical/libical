@@ -54,8 +54,9 @@ COMMAND_EXISTS () {
     command -v $1 >/dev/null 2>&1
     if ( test $? != 0 )
     then
-    echo "$1 is not in your PATH. Either install this program or skip the associated test"
-    if ( test "$2" )
+      echo "$1 is not in your PATH. Either install this program or skip the associated test"
+    fi
+    if ( test $# -gt 1 )
     then
       echo "or disable this check by passing the $2 command-line option"
     fi
@@ -586,7 +587,7 @@ PRECOMMIT() {
     echo "===== PRECOMMIT DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
-  COMMAND_EXISTS "pre-commit"
+  COMMAND_EXISTS "pre-commit" "-p"
   echo "===== START PRECOMMIT ====="
   cd $TOP
   pre-commit run --all-files 2>&1 | tee precommit.out
