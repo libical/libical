@@ -55,12 +55,11 @@ COMMAND_EXISTS () {
     if ( test $? != 0 )
     then
       echo "$1 is not in your PATH. Either install this program or skip the associated test"
-    fi
-    if ( test $# -gt 1 )
-    then
-      echo "or disable this check by passing the $2 command-line option"
-    fi
-    exit 1
+      if ( test $# -gt 1 )
+      then
+        echo "or disable this check by passing the $2 command-line option"
+      fi
+      exit 1
   fi
 }
 
