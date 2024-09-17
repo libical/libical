@@ -61,13 +61,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        run: brew install pkg-config ninja gtk-doc glib libxml2 icu4c berkeley-db docbook docbook-xsl
+        run: brew install pkg-config ninja gtk-doc glib libxml2 icu4c berkeley-db docbook docbook-xsl gobject-introspection vala pygobject3 gtk4
       - name: Configure project
         run: |
           export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
           export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
           mkdir build
-          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=False -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_BUILD_TESTING=True -DENABLE_GTK_DOC=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=False -DICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True
+          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=False -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_BUILD_TESTING=True -DENABLE_GTK_DOC=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB_VAPI=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True
       - name: Build project
         run: cmake --build build
       - name: Test project
