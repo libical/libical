@@ -34,20 +34,24 @@ if(PYTHON3)
       set(GI_TYPELIB_PATH_STR "${GI_TYPELIB_PATH_STR}:$ENV{GI_TYPELIB_PATH}")
     endif()
   endif()
-  set(LD_LIBRARY_PATH_STR "${LIBRARY_OUTPUT_PATH}")
+  set(LIBRARY_PATH_STR "${LIBRARY_OUTPUT_PATH}")
   if(DEFINED LD_LIBRARY_PATH)
     if($ENV{LD_LIBRARY_PATH})
-      set(LD_LIBRARY_PATH_STR "${LD_LIBRARY_PATH_STR}:$ENV{LD_LIBRARY_PATH}")
+      set(LIBRARY_PATH_STR "${LIBRARY_PATH_STR}:$ENV{LD_LIBRARY_PATH}")
+    endif()
+  endif()
+  if(DEFINED DYLD_LIBRARY_PATH)
+    if($ENV{DYLD_LIBRARY_PATH})
+      set(LIBRARY_PATH_STR "${LIBRARY_PATH_STR}:$ENV{DYLD_LIBRARY_PATH}")
     endif()
   endif()
 
-  list(
-    APPEND
-    test_env
-    "GI_TYPELIB_PATH=${GI_TYPELIB_PATH_STR}"
-    "LD_LIBRARY_PATH=${LD_LIBRARY_PATH_STR}"
-    "ZONEINFO_DIRECTORY=${PROJECT_SOURCE_DIR}/zoneinfo"
-  )
+  list(APPEND test_env "GI_TYPELIB_PATH=${GI_TYPELIB_PATH_STR}" "ZONEINFO_DIRECTORY=${PROJECT_SOURCE_DIR}/zoneinfo")
+  if(APPLE)
+    list(APPEND test_env "DYLD_LIBRARY_PATH=${LIBRARY_PATH_STR}")
+  elseif(NOT MSVC) #then UNIX-like
+    list(APPEND test_env "LD_LIBRARY_PATH=${LIBRARY_PATH_STR}")
+  endif()
 
   foreach(test_file IN LISTS TEST_FILES)
     string(REPLACE ".py" "" test_name ${test_file})
