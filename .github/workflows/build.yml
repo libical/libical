@@ -55,13 +55,13 @@ jobs:
         configuration:
           - Debug
           - Release
-    runs-on: macos-12
+    runs-on: macos-14
     env:
       XML_CATALOG_FILES: /usr/local/etc/xml/catalog
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        run: brew install pkg-config ninja gtk-doc glib libxml2 icu4c berkeley-db docbook docbook-xsl
+        run: brew install pkg-config ninja gtk-doc glib libxml2 libxslt icu4c berkeley-db docbook docbook-xsl
       - name: Configure project
         run: |
           export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
