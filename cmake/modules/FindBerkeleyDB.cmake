@@ -48,13 +48,13 @@ elseif(CMAKE_SYSTEM_NAME MATCHES ".*[wW]indows.*")
   endforeach()
 else()
   # Paths for anything other than Windows
-  # Cellar/berkeley-db is for macOS from homebrew installation
+  # /usr/local/opt/berkeley-db is for macOS from homebrew installation
   list(
     APPEND
     _BERKELEYDB_PATHS
     "/usr"
     "/usr/local"
-    "/usr/local/Cellar/berkeley-db"
+    "/usr/local/opt/berkeley-db"
     "/opt"
     "/opt/local"
   )
