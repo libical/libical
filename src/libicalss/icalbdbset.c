@@ -1616,6 +1616,9 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b, size_t *locp)
 static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
 #endif
 {
+#if DB_VERSION_MAJOR > 5
+    _unused(locp);
+#endif
     /*
      * Returns:
      * < 0 if a < b
@@ -1627,8 +1630,5 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
     char *bc = (char *)b->data;
 
     _unused(dbp);
-#if DB_VERSION_MAJOR > 5
-    locp = NULL;
-#endif
     return strncmp(ac, bc, a->size);
 }
