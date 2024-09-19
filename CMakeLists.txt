@@ -127,7 +127,7 @@
 #  is available, it will be used; otherwise, no synchronization is applied.
 #  Default: false.
 
-cmake_minimum_required(VERSION 3.19.0)
+cmake_minimum_required(VERSION 3.20.0)
 project(libical C) #CXX is optional for the bindings
 
 cmake_policy(SET CMP0003 NEW)

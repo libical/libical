@@ -13,7 +13,7 @@ To build libical you will need:
  - a C99-compliant C compiler (let us know if the build fails with your C compiler)
  - a C11-compliant C compiler for libical-glib
  - a C++11 compliant compiler for C++ bindings
- - CMake version 3.11.0 or higher
+ - CMake version 3.20.0 or higher
  - Perl
  - libicu (not required but strongly recommended)
 
