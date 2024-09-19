@@ -121,7 +121,7 @@ CHECK_WARNINGS() {
 # print warnings found in the compile-stage output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='\(i-cal-object\.c\|libical-glib-scan\.c\|no[[:space:]]link[[:space:]]for:\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|G_ADD_PRIVATE\|g_type_class_add_private.*is[[:space:]]deprecated\|g-ir-scanner:\|/gobject/gtype\.h\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|const[[:space:]]DBT\|-Llib\)'
+  whitelist='\(i-cal-object\.c\|libical-glib-scan\.c\|no[[:space:]]link[[:space:]]for:\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|G_ADD_PRIVATE\|g_type_class_add_private.*is[[:space:]]deprecated\|g-ir-scanner:\|/gobject/gtype\.h\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|const[[:space:]]DBT\)'
   CHECK_WARNINGS $1 "warning:" "$whitelist"
 }
 
