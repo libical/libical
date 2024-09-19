@@ -238,18 +238,12 @@ endif()
 # libicu is highly recommended for RSCALE support
 #  libicu can be found at http://www.icu-project.org
 #  RSCALE info at http://tools.ietf.org/html/rfc7529
-if(DEFINED ICU_BASE) #to make --warn-uninitialized happy
-  if(NOT "$ENV{ICU_BASE}" STREQUAL "") #support the old ICU_BASE env
-    set(ICU_ROOT $ENV{ICU_BASE})
-  endif()
+if(DEFINED ENV{ICU_BASE}) # keep backwards compatibility for ICU_BASE
+  set(ICU_ROOT $ENV{ICU_BASE})
 endif()
-if(DEFINED ICU_ROOT) #to make --warn-uninitialized happy
-  if(NOT "$ENV{ICU_ROOT}")
-    #Use the homebrew version. MacOS provided ICU doesn't provide development files
-    if(APPLE)
-      set(ICU_ROOT "/usr/local/opt/icu4c")
-    endif()
-  endif()
+if(NOT DEFINED ENV{ICU_ROOT} AND APPLE)
+  #Use the homebrew version. MacOS provided ICU doesn't provide development files
+  set(ICU_ROOT "/usr/local/opt/icu4c")
 endif()
 find_package(ICU COMPONENTS uc i18n data)
 set_package_properties(
