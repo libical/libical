@@ -152,6 +152,7 @@ if(HAVE_INTROSPECTION)
   set(_includes "-L${LIBRARY_OUTPUT_PATH}")
   set(ICal_${LIB_VERSION}_gir_CFLAGS ${_includes})
   set(ICal_${LIB_VERSION}_gir_LIBS ical)
+  set(ICal_${LIB_VERSION}_gir_FILES "") # quiet ERROR message in GObjectIntrospectionMacros.cmake
 
   list(APPEND GObjectIntrospection_GIRS ICal-${LIBICAL_GIR_VERSION_STRING}.gir)
 
