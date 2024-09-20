@@ -670,6 +670,13 @@ endif()
 
 libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY "(Developer-only) Build with memory consistency functions." False)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
+  if(ENABLE_GTK_DOC)
+    message(
+      FATAL_ERROR
+        "Memory consistency combined with libical-glib documentation generation is incompatible at this time.\n"
+        "Please disable either the LIBICAL_DEVMODE_MEMORY_CONSISTENCY or ENABLE_GTK_DOC CMake options."
+    )
+  endif()
   set(CMAKE_BUILD_TYPE "Debug")
   add_definitions(-DMEMORY_CONSISTENCY)
 endif()
