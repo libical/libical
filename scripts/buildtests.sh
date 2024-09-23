@@ -297,7 +297,6 @@ MEMCONSIST_BUILD() {
 # $1 = the name of the test (which will have "-asan" appended to it)
 # $2 = CMake options
 ASAN_BUILD() {
-  export ASAN_OPTIONS=verify_asan_link_order=0 #seems to be needed with different ld on Fedora (like gold)
   name="$1-asan"
   if ( test $runasanbuild -ne 1 )
   then
@@ -307,6 +306,7 @@ ASAN_BUILD() {
   echo "===== START ASAN BUILD: $1 ======"
   SET_GCC # I'm using ld.gold (vs ld.bfd), which doesn't play well with clang and asan=>use gcc
   #SET_CLANG currently has linking problems using ld.gold
+  export ASAN_OPTIONS=verify_asan_link_order=0 #seems to be needed with different ld on Fedora (like gold)
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
 }
@@ -341,7 +341,12 @@ UBSAN_BUILD() {
   fi
   echo "===== START UBSAN BUILD: $1 ======"
   SET_CLANG
+  ulimit -S -t 120 # oss-fuzz uses 60 seconds which is too low for us
+  ulimit -S -m 2621440 # oss-fuzz uses 2560Mb
+  UBSAN_OPTIONS=allocator_release_to_os_interval_ms=500:halt_on_error=1:handle_abort=2:handle_segv=2:handle_sigbus=2:handle_sigfpe=2:handle_sigill=2:print_stacktrace=1:print_summary=1:print_suppressions=0:silence_unsigned_overflow=1:strip_path_prefix=/workspace/:symbolize=0:use_sigaltstack=1
   BUILD "$name" "-DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True $2"
+  ulimit -S -t unlimited
+  unlimt -S -m unlimited
   echo "===== END UBSAN BUILD: $1 ======"
 }
 
