@@ -587,7 +587,7 @@ struct icaltimetype icaltime_null_date(void)
 
 int icaltime_is_valid_time(const struct icaltimetype t)
 {
-    if (t.year < 0 || t.year > 3000 ||
+    if (t.year < 0 || t.year > 9999 ||
         t.month < 0 || t.month > 12 ||
         t.day < 0 || t.day > 31 ||
         t.is_date > 1 || t.is_date < 0) {
