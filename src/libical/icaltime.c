@@ -606,7 +606,10 @@ struct icaltimetype icaltime_null_date(void)
 
 int icaltime_is_valid_time(const struct icaltimetype t)
 {
-    if (t.year < 0 || t.year > 3000 || t.is_date > 1 || t.is_date < 0) {
+    if (t.year < 0 || t.year > 3000 ||
+        t.month < 0 || t.month > 12 ||
+        t.day < 0 || t.day > 31 ||
+        t.is_date > 1 || t.is_date < 0) {
         return 0;
     } else {
         return 1;
