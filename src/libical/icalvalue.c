@@ -239,7 +239,11 @@ static char *icalmemory_strdup_and_dequote(const char *str)
  */
 static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unquoted_str)
 {
-    static const size_t MAX_ITERATIONS = (1024 * 1024 * 10); // should be plenty. to avoid timeouts when fuzzy testing
+    /* oss-fuzz sets the cpu timeout at 60 seconds.
+     * In order to meet that requirement we'd need to set MAX_ITERATIONS to (1024 * 128) approximately.
+     * We don't feel safe setting MAX_ITERATIONS that low.
+     */
+    static const size_t MAX_ITERATIONS = (1024 * 1024 * 10); // should be plenty, but not low enough to avoid timeouts when fuzzy testing
     char *str;
     char *str_p;
     const char *p;
