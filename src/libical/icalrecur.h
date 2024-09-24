@@ -18,7 +18,7 @@ How to use:
 
 @code
         icalproperty rrule;
-        struct icalrecurrencetype recur;
+        struct icalrecurrencetype *recur;
         struct icaltimetype dtstart;
 
         rrule = icalcomponent_get_first_property(comp,ICAL_RRULE_PROPERTY);
@@ -29,7 +29,7 @@ How to use:
 Or, just make them up:
 
 @code
-        recur = icalrecurrencetype_from_string("FREQ=YEARLY;BYDAY=SU,WE");
+        recur = icalrecurrencetype_new_from_string("FREQ=YEARLY;BYDAY=SU,WE");
         dtstart = icaltime_from_string("19970101T123000")
 @endcode
 
@@ -37,7 +37,7 @@ Or, just make them up:
 
 @code
         icalrecur_iterator *ritr;
-        ritr = icalrecur_iterator_new(recur,start);
+        ritr = icalrecur_iterator_new(recur, start);
 @endcode
 
 3) Iterator over the occurrences
@@ -53,6 +53,14 @@ Or, just make them up:
 Note that the time returned by icalrecur_iterator_next is in
 whatever timezone that dtstart is in.
 
+4) Deallocate a rule
+
+@code
+        icalrecurrencetype_unref(recur);
+@endcode
+
+The icalrecurrencetype object is reference counted. It will automatically be deallocated when the
+reference count goes to zero.
 */
 
 #ifndef ICALRECUR_H
@@ -141,6 +149,9 @@ LIBICAL_ICAL_EXPORT icalrecurrencetype_weekday icalrecur_string_to_weekday(const
 
 /** Main struct for holding digested recurrence rules */
 struct icalrecurrencetype {
+    /* Reference count */
+    int refcount;
+
     icalrecurrencetype_frequency freq;
 
     /* until and count are mutually exclusive. */
@@ -191,31 +202,17 @@ struct icalrecurrencetype {
     icalrecurrencetype_skip skip;
 };
 
-#define ICALRECURRENCETYPE_INITIALIZER                       \
-    {                                                        \
-        ICAL_NO_RECURRENCE,               /* freq         */ \
-        ICALTIMETYPE_INITIALIZER,         /* until        */ \
-        0,                                /* count        */ \
-        1,                                /* interval     */ \
-        ICAL_MONDAY_WEEKDAY,              /* week_start   */ \
-        {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_second    */ \
-        {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_minute    */ \
-        {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_hour      */ \
-        {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_day       */ \
-        {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_month_day */ \
-        {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_year_day  */ \
-        {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_week_no   */ \
-        {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_month     */ \
-        {ICAL_RECURRENCE_ARRAY_MAX_BYTE}, /* by_set_pos   */ \
-        NULL,                             /* rscale       */ \
-        ICAL_SKIP_OMIT                    /* skip         */ \
-    }
+LIBICAL_ICAL_EXPORT struct icalrecurrencetype *icalrecurrencetype_new(void);
+
+LIBICAL_ICAL_EXPORT void icalrecurrencetype_ref(struct icalrecurrencetype *recur);
+
+LIBICAL_ICAL_EXPORT void icalrecurrencetype_unref(struct icalrecurrencetype *recur);
 
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_rscale_is_supported(void);
 
 LIBICAL_ICAL_EXPORT icalarray *icalrecurrencetype_rscale_supported_calendars(void);
 
-LIBICAL_ICAL_EXPORT void icalrecurrencetype_clear(struct icalrecurrencetype *r);
+LIBICAL_ICAL_EXPORT struct icalrecurrencetype *icalrecurrencetype_clone(struct icalrecurrencetype *r);
 
 /*
  * Routines to decode the day values of the by_day array
@@ -281,7 +278,7 @@ LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_month(int month, int is_leap
  */
 
 /** Convert between strings and recurrencetype structures. */
-LIBICAL_ICAL_EXPORT struct icalrecurrencetype icalrecurrencetype_from_string(const char *str);
+LIBICAL_ICAL_EXPORT struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str);
 
 LIBICAL_ICAL_EXPORT char *icalrecurrencetype_as_string(struct icalrecurrencetype *recur);
 
@@ -294,7 +291,7 @@ LIBICAL_ICAL_EXPORT char *icalrecurrencetype_as_string_r(struct icalrecurrencety
 typedef struct icalrecur_iterator_impl icalrecur_iterator;
 
 /** Creates a new recurrence rule iterator, starting at DTSTART. */
-LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype rule,
+LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype *rule,
                                                                struct icaltimetype dtstart);
 
 /**

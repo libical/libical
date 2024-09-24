@@ -124,52 +124,50 @@ const char *icalvalue_get_x(const icalvalue *value)
 }
 
 /* Recur is a special case, so it is not auto generated. */
-icalvalue *icalvalue_new_recur(struct icalrecurrencetype v)
+icalvalue *icalvalue_new_recur(struct icalrecurrencetype *recur)
 {
-    struct icalvalue_impl *impl = icalvalue_new_impl(ICAL_RECUR_VALUE);
+    struct icalvalue_impl *impl;
 
-    icalvalue_set_recur((icalvalue *) impl, v);
+    icalerror_check_arg_rz((recur != NULL), "recur");
 
+    impl = icalvalue_new_impl(ICAL_RECUR_VALUE);
+    if (!impl) {
+        errno = ENOMEM;
+        return NULL;
+    }
+
+    icalvalue_set_recur((icalvalue *) impl, recur);
     return (icalvalue *) impl;
 }
 
-void icalvalue_set_recur(icalvalue *impl, struct icalrecurrencetype v)
+void icalvalue_set_recur(icalvalue *value, struct icalrecurrencetype *recur)
 {
-    icalerror_check_arg_rv((impl != 0), "value");
+    struct icalvalue_impl *impl;
+
+    icalerror_check_arg_rv((value != NULL), "value");
+    icalerror_check_value_type(value, ICAL_RECUR_VALUE);
+    icalerror_check_arg_rv((recur != NULL), "recur");
     /* don't allow both count and until */
-    icalerror_check_arg_rv(v.count == 0 || icaltime_is_null_time(v.until),
+    icalerror_check_arg_rv(recur->count == 0 || icaltime_is_null_time(recur->until),
                            "recurrencetype");
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
 
-    if (impl->data.v_recur != 0) {
-        icalmemory_free_buffer(impl->data.v_recur->rscale);
-        icalmemory_free_buffer(impl->data.v_recur);
-        impl->data.v_recur = 0;
-    }
+    impl = (struct icalvalue_impl *)value;
 
-    impl->data.v_recur = icalmemory_new_buffer(sizeof(struct icalrecurrencetype));
+    icalrecurrencetype_ref(recur);
 
-    if (impl->data.v_recur == 0) {
-        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-        return;
-    } else {
-        memcpy(impl->data.v_recur, &v, sizeof(struct icalrecurrencetype));
+    if (impl->data.v_recur)
+        icalrecurrencetype_unref(impl->data.v_recur);
 
-        if (v.rscale) impl->data.v_recur->rscale = icalmemory_strdup(v.rscale);
-    }
+    impl->data.v_recur = recur;
 }
 
-struct icalrecurrencetype icalvalue_get_recur(const icalvalue *value)
+struct icalrecurrencetype *icalvalue_get_recur(const icalvalue *value)
 {
-    struct icalrecurrencetype rt;
-
-    icalrecurrencetype_clear(&rt);
-
-    icalerror_check_arg_rx((value != 0), "value", rt);
-    icalerror_check_arg_rx((value->data.v_recur != 0), "value", rt);
+    icalerror_check_arg_rz((value != NULL), "value");
     icalerror_check_value_type(value, ICAL_RECUR_VALUE);
 
-    return *(value->data.v_recur);
+    return value->data.v_recur;
 }
 
 icalvalue *icalvalue_new_trigger(struct icaltriggertype v)
