@@ -670,12 +670,6 @@ endif()
 
 libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY "(Developer-only) Build with memory consistency functions." False)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
-  if(GOBJECT_INTROSPECTION)
-    message(
-      FATAL_ERROR "Memory consistency combined with GObject Introspection is incompatible at this time.\n"
-                  "Please disable either the LIBICAL_DEVMODE_MEMORY_CONSISTENCY or GOBJECT_INTROSPECTION CMake options."
-    )
-  endif()
   set(CMAKE_BUILD_TYPE "Debug")
   add_definitions(-DMEMORY_CONSISTENCY)
 endif()

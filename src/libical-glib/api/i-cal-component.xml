@@ -32,7 +32,7 @@
     </method>
     <method name="i_cal_component_as_ical_string" corresponds="icalcomponent_as_ical_string_r" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be converted"/>
-        <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalComponent."/>
+        <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalComponent." translator="i_cal_memory_str_to_glib"/>
         <comment xml:space="preserve">Converts a #ICalComponent to a string.</comment>
     </method>
     <method name="i_cal_component_is_valid" corresponds="icalcomponent_is_valid" since="1.0">

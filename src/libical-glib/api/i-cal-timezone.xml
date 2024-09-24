@@ -164,12 +164,12 @@
     </method>
     <method name="i_cal_timezone_get_location_from_vtimezone" corresponds="icaltimezone_get_location_from_vtimezone" kind="get" since="2.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be queried"/>
-        <returns type="gchar *" comment="The location of vtimezone."/>
+        <returns type="gchar *" annotation="transfer full, nullable" comment="The location of vtimezone." translator="i_cal_memory_str_to_glib"/>
         <comment xml:space="preserve">Gets the location of the vtimezone in component.</comment>
     </method>
     <method name="i_cal_timezone_get_tznames_from_vtimezone" corresponds="icaltimezone_get_tznames_from_vtimezone" kind="get" since="2.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be queried"/>
-        <returns type="gchar *" comment="The name of vtimezone."/>
+        <returns type="gchar *" annotation="transfer full, nullable" comment="The name of vtimezone." translator="i_cal_memory_str_to_glib"/>
         <comment xml:space="preserve">Gets the name of the vtimezone in component.</comment>
     </method>
     <method name="i_cal_timezone_get_zone_directory" corresponds="get_zone_directory" kind="others" since="3.0.17">

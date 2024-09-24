@@ -107,7 +107,7 @@
     </method>
     <method name="i_cal_duration_as_ical_string" corresponds="icaldurationtype_as_ical_string_r" kind="others" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>
-        <returns type="gchar *" annotation="transfer full" comment="The duration in string" />
+        <returns type="gchar *" annotation="transfer full" comment="The duration in string" translator="i_cal_memory_str_to_glib"/>
         <comment xml:space="preserve">Converts the #ICalDuration to the representation in string</comment>
     </method>
     <method name="i_cal_duration_new_null_duration" corresponds="icaldurationtype_null_duration" kind="constructor" since="1.0">
