@@ -56,7 +56,7 @@ int main(void)
         if (!zone_location)
             continue;
 
-            /*
+        /*
          * select this location for glibc: needs support for TZ=<location>
          * which is not POSIX
          */

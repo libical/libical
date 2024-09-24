@@ -91,5 +91,5 @@ static int enumcmp(const vcardenumarray_element *a, const vcardenumarray_element
 
 void vcardenumarray_sort(vcardenumarray *array)
 {
-    icalarray_sort(array, (int (*)(const void *, const void *)) & enumcmp);
+    icalarray_sort(array, (int (*)(const void *, const void *))&enumcmp);
 }

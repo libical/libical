@@ -2919,7 +2919,7 @@ static short daymask_find_next_bit(icalrecur_iterator *impl)
         days_index += BITS_PER_LONG - startBitIndex % BITS_PER_LONG;
 
         // Are there more empty words following? Skip them.
-        maxWordIdx = (unsigned short)(LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE)) - 1;
+        maxWordIdx = (unsigned short)(LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE))-1;
         while (days_index < ICAL_YEARDAYS_MASK_SIZE && wordIdx < maxWordIdx) {
             wordIdx++;
             v = days[wordIdx];
