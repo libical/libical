@@ -75,33 +75,6 @@ static int icaltime_leap_days(int y1, int y2)
 }
 
 /*
- * Code adapted from Python 2.4.1 sources (Lib/calendar.py).
- */
-static time_t icaltime_timegm(const struct tm *tm)
-{
-    int year;
-    time_t days;
-    time_t hours;
-    time_t minutes;
-    time_t seconds;
-
-    year = 1900 + tm->tm_year;
-    days = (time_t)(365 * (year - 1970) + icaltime_leap_days(1970, year));
-    days += days_in_year_passed_month[0][tm->tm_mon];
-
-    if (tm->tm_mon > 1 && icaltime_is_leap_year(year))
-        ++days;
-
-    days += tm->tm_mday - 1;
-    hours = days * 24 + tm->tm_hour;
-    minutes = hours * 60 + tm->tm_min;
-    seconds = minutes * 60 + tm->tm_sec;
-
-    return seconds;
-}
-
-/*
- *  Function to convert a struct tm time specification
  *  to an ANSI time_t using the specified time zone.
  *  This is different from the standard mktime() function
  *  in that we don't want the automatic adjustments for
@@ -127,7 +100,7 @@ static time_t make_time(const struct tm *tm, int tzm)
     /* check that year specification within range */
 
     if (tm->tm_year > 138)
-        return ((time_t) - 1);
+        return ((icaltime_t)-1);
 
     /* check for upper bound of Jan 17, 2038 (to avoid possibility of 32-bit arithmetic overflow) */
     if (tm->tm_year == 138) {
@@ -190,6 +163,38 @@ static time_t make_time(const struct tm *tm, int tzm)
     /* return number of seconds since start of the epoch */
 
     return (tim);
+}
+
+/*
+ * Code adapted from Python 2.4.1 sources (Lib/calendar.py).
+ */
+static time_t icaltime_timegm(const struct tm *tm)
+{
+    int year;
+    time_t days;
+    time_t hours;
+    time_t minutes;
+    time_t seconds;
+
+    /* Validate the tm structure by passing it through make_time() */
+    if (make_time(tm, 0) < 0) {
+        /* we have some invalid data in the tm struct */
+        return 0;
+    }
+
+    year = 1900 + tm->tm_year;
+    days = (time_t)(365 * (year - 1970) + icaltime_leap_days(1970, year));
+    days += days_in_year_passed_month[0][tm->tm_mon];
+
+    if (tm->tm_mon > 1 && icaltime_is_leap_year(year))
+        ++days;
+
+    days += tm->tm_mday - 1;
+    hours = days * 24 + tm->tm_hour;
+    minutes = hours * 60 + tm->tm_min;
+    seconds = minutes * 60 + tm->tm_sec;
+
+    return seconds;
 }
 
 struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const int is_date,
