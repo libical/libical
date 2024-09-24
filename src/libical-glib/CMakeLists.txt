@@ -163,7 +163,7 @@ else()
 endif()
 
 # GObject Introspection
-if(HAVE_INTROSPECTION)
+if(GOBJECT_INTROSPECTION)
   # extract only file names without path for introspection
   foreach(file IN LISTS LIBICAL_GLIB_SOURCES)
     string(REPLACE "${CMAKE_CURRENT_BINARY_DIR}/" "" plain_file ${file})
