@@ -79,7 +79,7 @@
     </method>
     <method name="i_cal_period_as_ical_string" corresponds="icalperiodtype_as_ical_string_r" since="1.0">
         <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be translated"/>
-        <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalPeriod."/>
+        <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalPeriod." translator="i_cal_memory_str_to_glib"/>
         <comment xml:space="preserve">Translates #ICalPeriod to string.</comment>
     </method>
     <method name="i_cal_period_new_null_period" corresponds="icalperiodtype_null_period" kind="constructor" since="1.0">

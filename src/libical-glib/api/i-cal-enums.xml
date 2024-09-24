@@ -109,7 +109,7 @@
     </method>
     <method name="i_cal_request_status_code" corresponds="icalenum_reqstat_code_r" since="1.0">
         <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be queried"/>
-        <returns type="gchar *" annotation="transfer full" comment="The code for a request status" />
+        <returns type="gchar *" annotation="transfer full" comment="The code for a request status" translator="i_cal_memory_str_to_glib"/>
         <comment xml:space="preserve">Returns the code for a request status.</comment>
     </method>
 </structure>

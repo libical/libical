@@ -68,9 +68,13 @@ typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user
         <parameter type="gpointer" name="user_data" annotation="closure" comment="The data given to @func"/>
         <returns type="gchar *" annotation="transfer full" comment="A single iCal content line."/>
         <comment xml:space="preserve">Given a line generator function, returns a single iCal content line.</comment>
-        <custom>	g_return_val_if_fail (parser != NULL &amp;&amp; func != NULL, NULL);
+        <custom>gchar *line, *linecopy;
+    g_return_val_if_fail (parser != NULL &amp;&amp; func != NULL, NULL);
 
 	icalparser_set_gen_data ((icalparser *)i_cal_object_get_native ((ICalObject *)parser), user_data);
-	return icalparser_get_line ((icalparser *)i_cal_object_get_native ((ICalObject *)parser), func);</custom>
+	line = icalparser_get_line ((icalparser *)i_cal_object_get_native ((ICalObject *)parser), func);
+	linecopy = g_strdup(line);
+	i_cal_memory_free_buffer(line);
+	return linecopy;</custom>
     </method>
 </structure>
