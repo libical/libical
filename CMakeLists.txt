@@ -192,7 +192,7 @@ if(WITH_CXX_BINDINGS)
   if(CMAKE_CXX_COMPILER)
     add_definitions(-DWITH_CXX_BINDINGS)
   else()
-    message(STATUS "Warning: Building the C++ bindings is not possible since a C++ compiler could not be found. "
+    message(STATUS "Building the C++ bindings is not possible since a C++ compiler could not be found. "
                    "Turning-off C++ bindings."
     )
     set(WITH_CXX_BINDINGS False)
@@ -693,14 +693,14 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
   endif()
   if(GOBJECT_INTROSPECTION)
-    message(STATUS "Warning: Building the address sanitizer with GObject Introspection is is not supported. "
-                   "Turning-off GObject Introspection."
+    message(WARNING "Building the address sanitizer with GObject Introspection is not supported. "
+                    "Turning-off GObject Introspection."
     )
     set(HAVE_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
-    message(STATUS "Warning: Building the address sanitizer with the GObject interface is not supported. "
-                   "Turning-off the GObject interface."
+    message(WARNING "Building the address sanitizer with the GObject interface is not supported. "
+                    "Turning-off the GObject interface build."
     )
     set(ICAL_GLIB False)
   endif()
@@ -718,14 +718,14 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     message(FATAL_ERROR "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")
   endif()
   if(GOBJECT_INTROSPECTION)
-    message(STATUS "Warning: Building the thread sanitizer with GObject Introspection is is not supported. "
-                   "Turning-off GObject Introspection."
+    message(WARNING "Building the thread sanitizer with GObject Introspection is not supported. "
+                    "Turning-off GObject Introspection."
     )
     set(HAVE_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
-    message(STATUS "Warning: Building the thread sanitizer with the GObject interface is not supported. "
-                   "Turning-off the GObject interface."
+    message(WARNING "Building the thread sanitizer with the GObject interface is not supported. "
+                    "Turning-off the GObject build."
     )
     set(ICAL_GLIB False)
   endif()
@@ -743,14 +743,14 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
     message(FATAL_ERROR "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
   endif()
   if(GOBJECT_INTROSPECTION)
-    message(STATUS "Warning: Building the undefined sanitizer with GObject Introspection is is not supported. "
-                   "Turning-off GObject Introspection."
+    message(WARNING "Building the undefined sanitizer with GObject Introspection is not supported. "
+                    "Turning-off GObject Introspection."
     )
     set(HAVE_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
-    message(STATUS "Warning: Building the undefined sanitizer with the GObject interface is not supported. "
-                   "Turning-off the GObject interface."
+    message(WARNNG "Building the undefined sanitizer with the GObject interface is not supported. "
+            "Turning-off the GObject build."
     )
     set(ICAL_GLIB False)
   endif()
