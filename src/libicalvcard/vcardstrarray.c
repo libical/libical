@@ -76,5 +76,5 @@ static int strpcmp(const char **a, const char **b)
 
 void vcardstrarray_sort(vcardstrarray *array)
 {
-    icalarray_sort(array, (int (*)(const void *, const void *)) & strpcmp);
+    icalarray_sort(array, (int (*)(const void *, const void *))&strpcmp);
 }

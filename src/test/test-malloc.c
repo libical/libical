@@ -34,7 +34,7 @@ struct testmalloc_hdrlayout {
     int data;
 };
 
-#define TESTMALLOC_HDR_SIZE ((size_t) & ((struct testmalloc_hdrlayout *)0)->data)
+#define TESTMALLOC_HDR_SIZE ((size_t)&((struct testmalloc_hdrlayout *)0)->data)
 
 void *test_malloc(size_t size)
 {
