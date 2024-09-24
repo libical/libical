@@ -230,6 +230,7 @@ testme(icalcomponent_fuzz1 icalcomponent_fuzz1.c)
 testme(icalcomponent_fuzz2 icalcomponent_fuzz2.c)
 
 testme(icaltime_fuzz icaltime_fuzz.c)
+testme(icalcomponent_timefuzz icalcomponent_timefuzz.c)
 
 option(LIBICAL_BUILD_TESTING_BIGFUZZ "Build big fuzzer tests." False)
 if(LIBICAL_BUILD_TESTING_BIGFUZZ)

@@ -108,7 +108,7 @@ static time_t icaltime_timegm(const struct tm *tm)
  *  local daylight savings time applied to the result.
  *  This function expects well-formed input.
  */
-static time_t make_time(struct tm *tm, int tzm)
+static time_t make_time(const struct tm *tm, int tzm)
 {
     time_t tim;
     int febs;
@@ -129,9 +129,7 @@ static time_t make_time(struct tm *tm, int tzm)
     if (tm->tm_year > 138)
         return ((time_t) - 1);
 
-    /* check for upper bound of Jan 17, 2038 (to avoid possibility of
-       32-bit arithmetic overflow) */
-
+    /* check for upper bound of Jan 17, 2038 (to avoid possibility of 32-bit arithmetic overflow) */
     if (tm->tm_year == 138) {
         if (tm->tm_mon > 0) {
             return ((time_t) - 1);

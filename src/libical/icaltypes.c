@@ -29,6 +29,7 @@
 #include <pthread.h>
 static pthread_mutex_t unk_token_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
+#include <ctype.h>
 
 static ical_unknown_token_handling unknownTokenHandling = ICAL_TREAT_AS_ERROR;
 
