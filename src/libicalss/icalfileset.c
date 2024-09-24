@@ -732,7 +732,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
     icalfileset *fset;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
-    struct icalrecurrencetype recur;
+    struct icalrecurrencetype *recur;
     int g = 0;
 
     _unused(tzid);
@@ -755,10 +755,10 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
         /* check if it is a recurring component and with gauge expand, if so
            we need to add recurrence-id property to the given component */
         rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+        recur = rrule ? icalproperty_get_rrule(rrule) : NULL;
         g = icalgauge_get_expand(gauge);
 
-        if (rrule != 0 && g == 1) {
-            recur = icalproperty_get_rrule(rrule);
+        if (recur != 0 && g == 1) {
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
                 dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
                 if (dtstart) {
@@ -816,7 +816,7 @@ icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *itr)
     icalcomponent *comp = NULL;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
-    struct icalrecurrencetype recur;
+    struct icalrecurrencetype *recur;
 
     start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     comp = itr->last_component;
@@ -826,8 +826,11 @@ icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *itr)
     }
 
     rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+    recur = rrule ? icalproperty_get_rrule(rrule) : NULL;
 
-    recur = icalproperty_get_rrule(rrule);
+    if (recur == NULL) {
+        return NULL;
+    }
 
     if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
         dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
@@ -879,7 +882,7 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
     icalcomponent *c = NULL;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
-    struct icalrecurrencetype recur;
+    struct icalrecurrencetype *recur;
     int g = 0;
 
     _unused(set);
@@ -898,12 +901,11 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
         }
 
         rrule = icalcomponent_get_first_property(c, ICAL_RRULE_PROPERTY);
+        recur = rrule ? icalproperty_get_rrule(rrule) : NULL;
         g = icalgauge_get_expand(i->gauge);
 
         /* a recurring component with expand query */
-        if (rrule != 0 && g == 1) {
-            recur = icalproperty_get_rrule(rrule);
-
+        if (recur != 0 && g == 1) {
             if (icalcomponent_isa(c) == ICAL_VEVENT_COMPONENT) {
                 dtstart = icalcomponent_get_first_property(c, ICAL_DTSTART_PROPERTY);
                 if (dtstart) {

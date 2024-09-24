@@ -176,8 +176,8 @@ public:
     int get_expand() const;
 
     /* EXRULE */
-    void set_exrule(const struct icalrecurrencetype &val);
-    struct icalrecurrencetype get_exrule() const;
+    void set_exrule(struct icalrecurrencetype *val);
+    struct icalrecurrencetype *get_exrule() const;
 
     /* FREEBUSY */
     void set_freebusy(const struct icalperiodtype &val);
@@ -268,8 +268,8 @@ public:
     std::string get_resources() const;
 
     /* RRULE */
-    void set_rrule(const struct icalrecurrencetype &val);
-    struct icalrecurrencetype get_rrule() const;
+    void set_rrule(struct icalrecurrencetype *val);
+    struct icalrecurrencetype *get_rrule() const;
 
     /* SCOPE */
     void set_scope(const std::string &val);

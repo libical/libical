@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     struct icaltimetype next;
     icalcomponent *itr;
     icalproperty *desc, *dtstart, *rrule;
-    struct icalrecurrencetype recur;
+    struct icalrecurrencetype *recur;
     icalrecur_iterator *ritr;
     icaltime_t tt;
     const char *file;

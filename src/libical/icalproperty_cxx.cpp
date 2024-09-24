@@ -441,12 +441,12 @@ int ICalProperty::get_expand() const
 }
 
 /* EXRULE */
-void ICalProperty::set_exrule(const struct icalrecurrencetype &val)
+void ICalProperty::set_exrule(struct icalrecurrencetype *val)
 {
     icalproperty_set_exrule(imp, val);
 }
 
-struct icalrecurrencetype ICalProperty::get_exrule() const
+struct icalrecurrencetype *ICalProperty::get_exrule() const
 {
     return icalproperty_get_exrule(imp);
 }
@@ -686,12 +686,12 @@ std::string ICalProperty::get_resources() const
 }
 
 /* RRULE */
-void ICalProperty::set_rrule(const struct icalrecurrencetype &val)
+void ICalProperty::set_rrule(struct icalrecurrencetype *val)
 {
     icalproperty_set_rrule(imp, val);
 }
 
-struct icalrecurrencetype ICalProperty::get_rrule() const
+struct icalrecurrencetype *ICalProperty::get_rrule() const
 {
     return icalproperty_get_rrule(imp);
 }

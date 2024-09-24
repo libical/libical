@@ -1178,7 +1178,7 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
     const char *s, *p, *parsestat, *error_message;
     const char *property_name;
     int free_string;
-    struct icalrecurrencetype recur;
+    struct icalrecurrencetype *recur;
 
     _unused(icaltype);
     _unused(comp);
@@ -1188,46 +1188,48 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 
     property_name = vObjectName(object);
 
-    icalrecurrencetype_clear(&recur);
+    recur = icalrecurrencetype_new();
 
     error_message = NULL;
     parsestat = NULL;
-    if (*s == 'D') {
+    if (!recur) {
+        error_message = "Out of memory";
+    } else if (*s == 'D') {
         /* The DAILY RRULE only has an interval and duration (COUNT/UNTIL). */
-        recur.freq = ICAL_DAILY_RECURRENCE;
-        p = rrule_parse_interval(s + 1, &recur, &error_message);
-        parsestat = rrule_parse_duration(p, &recur, &error_message);
+        recur->freq = ICAL_DAILY_RECURRENCE;
+        p = rrule_parse_interval(s + 1, recur, &error_message);
+        parsestat = rrule_parse_duration(p, recur, &error_message);
     } else if (*s == 'W') {
         /* The WEEKLY RRULE has weekday modifiers - MO TU WE. */
-        recur.freq = ICAL_WEEKLY_RECURRENCE;
-        p = rrule_parse_interval(s + 1, &recur, &error_message);
-        p = rrule_parse_weekly_days(p, &recur, &error_message);
-        parsestat = rrule_parse_duration(p, &recur, &error_message);
+        recur->freq = ICAL_WEEKLY_RECURRENCE;
+        p = rrule_parse_interval(s + 1, recur, &error_message);
+        p = rrule_parse_weekly_days(p, recur, &error_message);
+        parsestat = rrule_parse_duration(p, recur, &error_message);
     } else if (*s == 'M' && *(s + 1) == 'D') {
         /* The MONTHLY By Day RRULE has day number modifiers - 1 1- LD. */
-        recur.freq = ICAL_MONTHLY_RECURRENCE;
-        p = rrule_parse_interval(s + 2, &recur, &error_message);
-        p = rrule_parse_monthly_days(p, &recur, &error_message);
-        parsestat = rrule_parse_duration(p, &recur, &error_message);
+        recur->freq = ICAL_MONTHLY_RECURRENCE;
+        p = rrule_parse_interval(s + 2, recur, &error_message);
+        p = rrule_parse_monthly_days(p, recur, &error_message);
+        parsestat = rrule_parse_duration(p, recur, &error_message);
     } else if (*s == 'M' && *(s + 1) == 'P') {
         /* The MONTHLY By Position RRULE has position modifiers - 1 2- and
            weekday modifiers - MO TU. */
-        recur.freq = ICAL_MONTHLY_RECURRENCE;
-        p = rrule_parse_interval(s + 2, &recur, &error_message);
-        p = rrule_parse_monthly_positions(p, &recur, &error_message);
-        parsestat = rrule_parse_duration(p, &recur, &error_message);
+        recur->freq = ICAL_MONTHLY_RECURRENCE;
+        p = rrule_parse_interval(s + 2, recur, &error_message);
+        p = rrule_parse_monthly_positions(p, recur, &error_message);
+        parsestat = rrule_parse_duration(p, recur, &error_message);
     } else if (*s == 'Y' && *(s + 1) == 'M') {
         /* The YEARLY By Month RRULE has month modifiers - 1 3 12. */
-        recur.freq = ICAL_YEARLY_RECURRENCE;
-        p = rrule_parse_interval(s + 2, &recur, &error_message);
-        p = rrule_parse_yearly_months(p, &recur, &error_message);
-        parsestat = rrule_parse_duration(p, &recur, &error_message);
+        recur->freq = ICAL_YEARLY_RECURRENCE;
+        p = rrule_parse_interval(s + 2, recur, &error_message);
+        p = rrule_parse_yearly_months(p, recur, &error_message);
+        parsestat = rrule_parse_duration(p, recur, &error_message);
     } else if (*s == 'Y' && *(s + 1) == 'D') {
         /* The YEARLY By Day RRULE has day number modifiers - 100 200. */
-        recur.freq = ICAL_YEARLY_RECURRENCE;
-        p = rrule_parse_interval(s + 2, &recur, &error_message);
-        p = rrule_parse_yearly_days(p, &recur, &error_message);
-        parsestat = rrule_parse_duration(p, &recur, &error_message);
+        recur->freq = ICAL_YEARLY_RECURRENCE;
+        p = rrule_parse_interval(s + 2, recur, &error_message);
+        p = rrule_parse_yearly_days(p, recur, &error_message);
+        parsestat = rrule_parse_duration(p, recur, &error_message);
     }
 
     if (!parsestat) {
@@ -1245,6 +1247,8 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 
     if (free_string)
         deleteStr(s);
+
+    icalrecurrencetype_unref(recur);
 
     return (void *)prop;
 }

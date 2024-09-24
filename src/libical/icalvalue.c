@@ -116,8 +116,7 @@ icalvalue *icalvalue_clone(const icalvalue *old)
     }
     case ICAL_RECUR_VALUE: {
         if (old->data.v_recur != 0) {
-            icalvalue_set_recur(new, *(old->data.v_recur));
-
+            new->data.v_recur = icalrecurrencetype_clone(old->data.v_recur);
             if (new->data.v_recur == 0) {
                 icalvalue_free(new);
                 return 0;
@@ -602,13 +601,13 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
     } break;
 
     case ICAL_RECUR_VALUE: {
-        struct icalrecurrencetype rt;
+        struct icalrecurrencetype *rt;
 
-        rt = icalrecurrencetype_from_string(str);
-        if (rt.freq != ICAL_NO_RECURRENCE) {
+        rt = icalrecurrencetype_new_from_string(str);
+        if (rt) {
             value = icalvalue_new_recur(rt);
+            icalrecurrencetype_unref(rt);
         }
-        icalmemory_free_buffer(rt.rscale);
         break;
     }
 
@@ -765,9 +764,8 @@ void icalvalue_free(icalvalue *v)
     }
     case ICAL_RECUR_VALUE: {
         if (v->data.v_recur != 0) {
-            icalmemory_free_buffer(v->data.v_recur->rscale);
-            icalmemory_free_buffer((void *)v->data.v_recur);
-            v->data.v_recur = 0;
+            icalrecurrencetype_unref(v->data.v_recur);
+            v->data.v_recur = NULL;
         }
         break;
     }

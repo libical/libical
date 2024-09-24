@@ -8,7 +8,7 @@
 "FLOAT","5013","(a)float","float","unitary",
 "INTEGER","5017","(a)int","integer","unitary",
 "PERIOD","5014","(a)struct icalperiodtype","Period","unitary",
-"RECUR","5026","(m)struct icalrecurrencetype","RecurrenceSet","unitary",
+"RECUR","5026","(m)struct icalrecurrencetype *","RecurrenceSet","unitary",
 "TEXT","5008","(a)const char*","string","unitary",
 "URI","5018","(a)const char*","string","unitary",
 "UTC-OFFSET","5029","(a)int","integer","unitary",

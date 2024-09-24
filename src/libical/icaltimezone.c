@@ -539,7 +539,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
     icaltimezonechange change;
     icalproperty *prop;
     struct icaltimetype dtstart, occ;
-    struct icalrecurrencetype rrule;
+    struct icalrecurrencetype *rrule;
     icalrecur_iterator *rrule_iterator;
     struct icaldatetimeperiodtype rdate;
     int found_dtstart = 0, found_tzoffsetto = 0, found_tzoffsetfrom = 0;
@@ -669,70 +669,75 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
             break;
         case ICAL_RRULE_PROPERTY:
             rrule = icalproperty_get_rrule(prop);
+            if (rrule)
+                rrule = icalrecurrencetype_clone(rrule);
 
-            /* If the rrule UNTIL value is set and is in UTC, we convert it to
-               a local time, since the recurrence code has no way to convert
-               it itself. */
-            if (!icaltime_is_null_time(rrule.until) && icaltime_is_utc(rrule.until)) {
+            if (rrule) {
+                /* If the rrule UNTIL value is set and is in UTC, we convert it to
+                a local time, since the recurrence code has no way to convert
+                it itself. */
+                if (!icaltime_is_null_time(rrule->until) && icaltime_is_utc(rrule->until)) {
 #if 0
-                printf("  Found RRULE UNTIL in UTC.\n");
+                    printf("  Found RRULE UNTIL in UTC.\n");
 #endif
 
-                /* To convert from UTC to a local time, we use the TZOFFSETFROM
-                   since that is the offset from UTC that will be in effect
-                   when each of the RRULE occurrences happens. */
-                icaltime_adjust(&rrule.until, 0, 0, 0, change.prev_utc_offset);
-                rrule.until.zone = NULL;
-            }
-
-            /* Add the dtstart to changes, otherwise some oddly-defined VTIMEZONE
-               components can cause the first year to get skipped. */
-            change.year = dtstart.year;
-            change.month = dtstart.month;
-            change.day = dtstart.day;
-            change.hour = dtstart.hour;
-            change.minute = dtstart.minute;
-            change.second = dtstart.second;
-
-#if 0
-            printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
-                   change.year, change.month, change.day,
-                   change.hour, change.minute, change.second);
-#endif
-
-            icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
-
-            icalarray_append(changes, &change);
-
-            rrule_iterator = icalrecur_iterator_new(rrule, dtstart);
-            for (; rrule_iterator;) {
-                occ = icalrecur_iterator_next(rrule_iterator);
-                /* Skip dtstart since we just added it */
-                if (icaltime_compare(dtstart, occ) == 0) {
-                    continue;
+                    /* To convert from UTC to a local time, we use the TZOFFSETFROM
+                    since that is the offset from UTC that will be in effect
+                    when each of the RRULE occurrences happens. */
+                    icaltime_adjust(&rrule->until, 0, 0, 0, change.prev_utc_offset);
+                    rrule->until.zone = NULL;
                 }
-                if (occ.year > end_year || icaltime_is_null_time(occ)) {
-                    break;
-                }
-                change.year = occ.year;
-                change.month = occ.month;
-                change.day = occ.day;
-                change.hour = occ.hour;
-                change.minute = occ.minute;
-                change.second = occ.second;
+
+                /* Add the dtstart to changes, otherwise some oddly-defined VTIMEZONE
+                components can cause the first year to get skipped. */
+                change.year = dtstart.year;
+                change.month = dtstart.month;
+                change.day = dtstart.day;
+                change.hour = dtstart.hour;
+                change.minute = dtstart.minute;
+                change.second = dtstart.second;
 
 #if 0
                 printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
-                       change.year, change.month, change.day,
-                       change.hour, change.minute, change.second);
+                    change.year, change.month, change.day,
+                    change.hour, change.minute, change.second);
 #endif
 
                 icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
 
                 icalarray_append(changes, &change);
-            }
 
-            icalrecur_iterator_free(rrule_iterator);
+                rrule_iterator = icalrecur_iterator_new(rrule, dtstart);
+                for (; rrule_iterator;) {
+                    occ = icalrecur_iterator_next(rrule_iterator);
+                    /* Skip dtstart since we just added it */
+                    if (icaltime_compare(dtstart, occ) == 0) {
+                        continue;
+                    }
+                    if (occ.year > end_year || icaltime_is_null_time(occ)) {
+                        break;
+                    }
+                    change.year = occ.year;
+                    change.month = occ.month;
+                    change.day = occ.day;
+                    change.hour = occ.hour;
+                    change.minute = occ.minute;
+                    change.second = occ.second;
+
+#if 0
+                    printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
+                        change.year, change.month, change.day,
+                        change.hour, change.minute, change.second);
+#endif
+
+                    icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
+
+                    icalarray_append(changes, &change);
+                }
+
+                icalrecur_iterator_free(rrule_iterator);
+                icalrecurrencetype_unref(rrule);
+            }
             break;
         default:
             break;
@@ -2336,164 +2341,166 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         }
 
         if (rrule_prop) {
-            struct icalrecurrencetype rrule = icalproperty_get_rrule(rrule_prop);
-            unsigned eternal = (unsigned)icaltime_is_null_time(rrule.until);
-            icalrecur_iterator *ritr = NULL;
-            unsigned trunc_until = 0;
+            struct icalrecurrencetype *rrule = icalproperty_get_rrule(rrule_prop);
+            if (rrule) {
+                unsigned eternal = (unsigned)icaltime_is_null_time(rrule->until);
+                icalrecur_iterator *ritr = NULL;
+                unsigned trunc_until = 0;
 
-            /* Check RRULE duration */
-            if (!eternal && icaltime_compare(rrule.until, start) < 0) {
-                /* RRULE ends prior to our window open -
-                   check UNTIL vs tombstone */
-                obs.onset = rrule.until;
-                if (need_tomb) {
-                    check_tombstone(&tombstone, &obs);
-                }
-
-                /* Remove RRULE */
-                icalcomponent_remove_property(comp, rrule_prop);
-                icalproperty_free(rrule_prop);
-            } else {
-                /* RRULE ends on/after our window open */
-                if (need_tzuntil &&
-                    (eternal || icaltime_compare(rrule.until, end) >= 0)) {
-                    /* RRULE ends after our window close - need to adjust it */
-                    trunc_until = 1;
-                }
-
-                if (!eternal) {
-                    /* Adjust UNTIL to local time (for iterator) */
-                    icaltime_adjust(&rrule.until, 0, 0, 0, obs.offset_from);
-                    (void)icaltime_set_timezone(&rrule.until, NULL);
-                }
-
-                ritr = icalrecur_iterator_new(rrule, dtstart);
-
-                if (trunc_dtstart) {
-                    /* Bump RRULE start to 1 year prior to our window open */
-                    icaltimetype newstart = dtstart;
-                    newstart.year = start.year - 1;
-                    newstart.month = start.month;
-                    newstart.day = start.day;
-                    (void)icaltime_normalize(newstart);
-                    icalrecur_iterator_set_start(ritr, newstart);
-                }
-            }
-
-            /* Process any RRULE observances within our window */
-            if (ritr) {
-                icaltimetype recur, prev_onset;
-
-                while (!icaltime_is_null_time(recur = icalrecur_iterator_next(ritr))) {
-                    unsigned ydiff;
-
-                    obs.onset = recur;
-
-                    /* Adjust observance to UTC */
-                    icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
-                    (void)icaltime_set_timezone(&obs.onset,
-                                                icaltimezone_get_utc_timezone());
-
-                    if (trunc_until && icaltime_compare(obs.onset, end) >= 0) {
-                        /* Observance is on/after window close */
-
-                        /* Check if DSTART is within 1yr of prev onset */
-                        ydiff = (unsigned)(prev_onset.year - dtstart.year);
-                        if (ydiff <= 1) {
-                            /* Remove RRULE */
-                            icalcomponent_remove_property(comp, rrule_prop);
-                            icalproperty_free(rrule_prop);
-
-                            if (ydiff) {
-                                /* Add previous onset as RDATE */
-                                struct icaldatetimeperiodtype rdate;
-                                rdate.time = prev_onset;
-                                rdate.period = icalperiodtype_null_period();
-
-                                prop = icalproperty_new_rdate(rdate);
-                                icalcomponent_add_property(comp, prop);
-                            }
-                        } else {
-                            /* Set UNTIL to previous onset */
-                            rrule.until = prev_onset;
-                            icalproperty_set_rrule(rrule_prop, rrule);
-                        }
-
-                        /* We're done */
-                        break;
+                /* Check RRULE duration */
+                if (!eternal && icaltime_compare(rrule->until, start) < 0) {
+                    /* RRULE ends prior to our window open -
+                    check UNTIL vs tombstone */
+                    obs.onset = rrule->until;
+                    if (need_tomb) {
+                        check_tombstone(&tombstone, &obs);
                     }
 
-                    /* Check observance vs our window open */
-                    r = icaltime_compare(obs.onset, start);
-                    if (r < 0) {
-                        /* Observance is prior to our window open -
-                           check it vs tombstone */
-                        if (ms_compatible) {
-                            /* XXX  We don't want to move DTSTART of the RRULE
-                               as Outlook/Exchange doesn't appear to like
-                               truncating the frontend of RRULEs */
-                            need_tomb = 0;
-                            trunc_dtstart = 0;
-                            if (proleptic_prop) {
-                                icalcomponent_remove_property(vtz,
-                                                              proleptic_prop);
-                                icalproperty_free(proleptic_prop);
-                                proleptic_prop = NULL;
-                            }
-                        }
-                        if (need_tomb) {
-                            check_tombstone(&tombstone, &obs);
-                        }
-                    } else {
-                        /* Observance is on/after our window open */
-                        if (r == 0)
-                            need_tomb = 0;
+                    /* Remove RRULE */
+                    icalcomponent_remove_property(comp, rrule_prop);
+                    icalproperty_free(rrule_prop);
+                } else {
+                    /* RRULE ends on/after our window open */
+                    if (need_tzuntil &&
+                        (eternal || icaltime_compare(rrule->until, end) >= 0)) {
+                        /* RRULE ends after our window close - need to adjust it */
+                        trunc_until = 1;
+                    }
 
-                        if (trunc_dtstart) {
-                            /* Make this observance the new DTSTART */
-                            icalproperty_set_dtstart(dtstart_prop, recur);
-                            dtstart = obs.onset;
-                            trunc_dtstart = 0;
+                    if (!eternal) {
+                        /* Adjust UNTIL to local time (for iterator) */
+                        icaltime_adjust(&rrule->until, 0, 0, 0, obs.offset_from);
+                        (void)icaltime_set_timezone(&rrule->until, NULL);
+                    }
 
-                            /* Check if new DSTART is within 1yr of UNTIL */
-                            ydiff = (unsigned)(rrule.until.year - recur.year);
-                            if (!trunc_until && ydiff <= 1) {
+                    ritr = icalrecur_iterator_new(rrule, dtstart);
+
+                    if (trunc_dtstart) {
+                        /* Bump RRULE start to 1 year prior to our window open */
+                        icaltimetype newstart = dtstart;
+                        newstart.year = start.year - 1;
+                        newstart.month = start.month;
+                        newstart.day = start.day;
+                        (void)icaltime_normalize(newstart);
+                        icalrecur_iterator_set_start(ritr, newstart);
+                    }
+                }
+
+                /* Process any RRULE observances within our window */
+                if (ritr) {
+                    icaltimetype recur, prev_onset;
+
+                    while (!icaltime_is_null_time(recur = icalrecur_iterator_next(ritr))) {
+                        unsigned ydiff;
+
+                        obs.onset = recur;
+
+                        /* Adjust observance to UTC */
+                        icaltime_adjust(&obs.onset, 0, 0, 0, -obs.offset_from);
+                        (void)icaltime_set_timezone(&obs.onset,
+                                                    icaltimezone_get_utc_timezone());
+
+                        if (trunc_until && icaltime_compare(obs.onset, end) >= 0) {
+                            /* Observance is on/after window close */
+
+                            /* Check if DSTART is within 1yr of prev onset */
+                            ydiff = (unsigned)(prev_onset.year - dtstart.year);
+                            if (ydiff <= 1) {
                                 /* Remove RRULE */
                                 icalcomponent_remove_property(comp, rrule_prop);
                                 icalproperty_free(rrule_prop);
 
                                 if (ydiff) {
-                                    /* Add UNTIL as RDATE */
+                                    /* Add previous onset as RDATE */
                                     struct icaldatetimeperiodtype rdate;
-                                    rdate.time = rrule.until;
+                                    rdate.time = prev_onset;
                                     rdate.period = icalperiodtype_null_period();
 
                                     prop = icalproperty_new_rdate(rdate);
                                     icalcomponent_add_property(comp, prop);
                                 }
+                            } else {
+                                /* Set UNTIL to previous onset */
+                                rrule->until = prev_onset;
+                                icalproperty_set_rrule(rrule_prop, rrule);
                             }
-                        }
 
-                        if (!trunc_until) {
                             /* We're done */
                             break;
                         }
 
-                        /* Check if observance is outside 1yr of window close */
-                        ydiff = (unsigned)(end.year - recur.year);
-                        if (ydiff > 1) {
-                            /* Bump RRULE to restart at 1 year prior to our window close */
-                            icaltimetype newstart = recur;
-                            newstart.year = end.year - 1;
-                            newstart.month = end.month;
-                            newstart.day = end.day;
-                            (void)icaltime_normalize(newstart);
-                            icalrecur_iterator_set_start(ritr, newstart);
+                        /* Check observance vs our window open */
+                        r = icaltime_compare(obs.onset, start);
+                        if (r < 0) {
+                            /* Observance is prior to our window open -
+                            check it vs tombstone */
+                            if (ms_compatible) {
+                                /* XXX  We don't want to move DTSTART of the RRULE
+                                as Outlook/Exchange doesn't appear to like
+                                truncating the frontend of RRULEs */
+                                need_tomb = 0;
+                                trunc_dtstart = 0;
+                                if (proleptic_prop) {
+                                    icalcomponent_remove_property(vtz,
+                                                                  proleptic_prop);
+                                    icalproperty_free(proleptic_prop);
+                                    proleptic_prop = NULL;
+                                }
+                            }
+                            if (need_tomb) {
+                                check_tombstone(&tombstone, &obs);
+                            }
+                        } else {
+                            /* Observance is on/after our window open */
+                            if (r == 0)
+                                need_tomb = 0;
+
+                            if (trunc_dtstart) {
+                                /* Make this observance the new DTSTART */
+                                icalproperty_set_dtstart(dtstart_prop, recur);
+                                dtstart = obs.onset;
+                                trunc_dtstart = 0;
+
+                                /* Check if new DSTART is within 1yr of UNTIL */
+                                ydiff = (unsigned)(rrule->until.year - recur.year);
+                                if (!trunc_until && ydiff <= 1) {
+                                    /* Remove RRULE */
+                                    icalcomponent_remove_property(comp, rrule_prop);
+                                    icalproperty_free(rrule_prop);
+
+                                    if (ydiff) {
+                                        /* Add UNTIL as RDATE */
+                                        struct icaldatetimeperiodtype rdate;
+                                        rdate.time = rrule->until;
+                                        rdate.period = icalperiodtype_null_period();
+
+                                        prop = icalproperty_new_rdate(rdate);
+                                        icalcomponent_add_property(comp, prop);
+                                    }
+                                }
+                            }
+
+                            if (!trunc_until) {
+                                /* We're done */
+                                break;
+                            }
+
+                            /* Check if observance is outside 1yr of window close */
+                            ydiff = (unsigned)(end.year - recur.year);
+                            if (ydiff > 1) {
+                                /* Bump RRULE to restart at 1 year prior to our window close */
+                                icaltimetype newstart = recur;
+                                newstart.year = end.year - 1;
+                                newstart.month = end.month;
+                                newstart.day = end.day;
+                                (void)icaltime_normalize(newstart);
+                                icalrecur_iterator_set_start(ritr, newstart);
+                            }
                         }
+                        prev_onset = obs.onset;
                     }
-                    prev_onset = obs.onset;
+                    icalrecur_iterator_free(ritr);
                 }
-                icalrecur_iterator_free(ritr);
             }
         }
 
