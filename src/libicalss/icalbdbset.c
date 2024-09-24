@@ -1237,7 +1237,7 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
     icalbdbset *bset;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
-    struct icalrecurrencetype recur;
+    struct icalrecurrencetype *recur;
     icaltimezone *u_zone;
     int g = 0;
     int orig_time_was_utc = 0;
@@ -1261,9 +1261,10 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
         /* check if it is a recurring component and with gauge expand, if so
          * we need to add recurrence-id property to the given component */
         rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+        recur = rrule ? icalproperty_get_rrule(rrule) : NULL;
         g = icalgauge_get_expand(gauge);
 
-        if (rrule != 0 && g == 1) {
+        if (recur != 0 && g == 1) {
             /* it is a recurring event */
 
             u_zone = icaltimezone_get_builtin_timezone(itr.tzid);
@@ -1273,7 +1274,6 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
                 u_zone = icaltimezone_get_utc_timezone();
             }
 
-            recur = icalproperty_get_rrule(rrule);
             start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
@@ -1358,7 +1358,7 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
     icalcomponent *comp = NULL;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
-    struct icalrecurrencetype recur;
+    struct icalrecurrencetype *recur;
     icaltimezone *u_zone;
     int orig_time_was_utc = 0;
 
@@ -1369,8 +1369,9 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
     }
 
     rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+    recur = rrule ? icalproperty_get_rrule(rrule) : NULL;
     /* if there is no RRULE, simply return to the caller */
-    if (rrule == NULL) {
+    if (recur == NULL) {
         return NULL;
     }
 
@@ -1381,7 +1382,6 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
         u_zone = icaltimezone_get_utc_timezone();
     }
 
-    recur = icalproperty_get_rrule(rrule);
     start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
     if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
@@ -1455,7 +1455,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
     icalcomponent *comp = NULL;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
-    struct icalrecurrencetype recur;
+    struct icalrecurrencetype *recur;
     icaltimezone *u_zone;
     int g = 0;
     int orig_time_was_utc = 0;
@@ -1482,10 +1482,11 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
         /* finding the next matched component and return it to the caller */
 
         rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
+        recur = rrule ? icalproperty_get_rrule(rrule) : NULL;
         g = icalgauge_get_expand(i->gauge);
 
         /* a recurring component with expand query */
-        if (rrule != 0 && g == 1) {
+        if (recur != 0 && g == 1) {
             u_zone = icaltimezone_get_builtin_timezone(i->tzid);
 
             /* use UTC, if that's all we have. */
@@ -1493,7 +1494,6 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
                 u_zone = icaltimezone_get_utc_timezone();
             }
 
-            recur = icalproperty_get_rrule(rrule);
             start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {

@@ -5,7 +5,7 @@
 
 
 -->
-<structure namespace="ICal" name="Recurrence" native="struct icalrecurrencetype" is_bare="true" default_native="i_cal_recurrence_new_default ()">
+<structure namespace="ICal" name="Recurrence" native="struct icalrecurrencetype" default_native="i_cal_recurrence_new_default ()" destroy_func="icalrecurrencetype_unref">
      <enum name="ICalRecurrenceFrequency" native_name="icalrecurrencetype_frequency" default_native="I_CAL_NO_RECURRENCE">
         <element name="ICAL_SECONDLY_RECURRENCE"/>
         <element name="ICAL_MINUTELY_RECURRENCE"/>
@@ -63,19 +63,13 @@
 	<comment xml:space="preserve">Gets an array of calendars supporting rscale (currently always return NULL).</comment>
     </method>
     <method name="i_cal_recurrence_new_default" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
-        <returns type="struct icalrecurrencetype" comment="The default value."/>
-        <custom>	struct icalrecurrencetype ret;
-	icalrecurrencetype_clear (&amp;ret);
-	return ret;</custom>
+        <returns type="struct icalrecurrencetype *" comment="The default value."/>
+        <custom>	return icalrecurrencetype_new();</custom>
     </method>
     <method name="i_cal_recurrence_new" corresponds="CUSTOM" kind="constructor" since="1.0">
         <returns type="ICalRecurrence *" annotation="transfer full" comment="The newly created #ICalRecurrence." />
         <comment xml:space="preserve">Creates a new #ICalRecurrence.</comment>
-        <custom>	return i_cal_recurrence_new_full(i_cal_recurrence_new_default());</custom>
-    </method>
-    <method name="i_cal_recurrence_clear" corresponds="icalrecurrencetype_clear" since="1.0">
-        <parameter type="ICalRecurrence *" name="r" native_op="POINTER" comment="The #ICalRecurrence to be reset"/>
-        <comment xml:space="preserve">Resets an #ICalRecurrence.</comment>
+        <custom>	return i_cal_recurrence_new_full(i_cal_recurrence_new_default(), NULL);</custom>
     </method>
     <method name="i_cal_recurrence_day_day_of_week" corresponds="icalrecurrencetype_day_day_of_week" since="1.0">
         <parameter type="gshort" name="day" comment="The encoded day which represents the day of the week and Nth day of the week"/>
@@ -109,7 +103,7 @@
         <returns type="gshort" comment="Encoded @month and @is_leap"/>
         <comment xml:space="preserve">Encodes the @month and the @is_leap flag into a single value, which can be split by i_cal_recurrence_month_is_leap() and i_cal_recurrence_month_month().</comment>
     </method>
-    <method name="i_cal_recurrence_new_from_string" corresponds="icalrecurrencetype_from_string" since="1.0">
+    <method name="i_cal_recurrence_new_from_string" corresponds="icalrecurrencetype_new_from_string" since="1.0">
         <parameter type="const gchar *" name="str" comment="The string representation of the #ICalRecurrence"/>
         <returns type="ICalRecurrence *" annotation="transfer full" comment="The #ICalRecurrence converted from @str."/>
         <comment xml:space="preserve">Converts a string to a #ICalRecurrence.</comment>

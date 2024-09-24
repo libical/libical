@@ -22,9 +22,9 @@ LIBICAL_ICAL_EXPORT void icalvalue_set_x(icalvalue *value, const char *v);
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_x(const char *v);
 LIBICAL_ICAL_EXPORT const char *icalvalue_get_x(const icalvalue *value);
 
-LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_recur(struct icalrecurrencetype v);
-LIBICAL_ICAL_EXPORT void icalvalue_set_recur(icalvalue *value, struct icalrecurrencetype v);
-LIBICAL_ICAL_EXPORT struct icalrecurrencetype icalvalue_get_recur(const icalvalue *value);
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_recur(struct icalrecurrencetype *recur);
+LIBICAL_ICAL_EXPORT void icalvalue_set_recur(icalvalue *value, struct icalrecurrencetype *recur);
+LIBICAL_ICAL_EXPORT struct icalrecurrencetype *icalvalue_get_recur(const icalvalue *value);
 
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_trigger(struct icaltriggertype v);
 LIBICAL_ICAL_EXPORT void icalvalue_set_trigger(icalvalue *value, struct icaltriggertype v);

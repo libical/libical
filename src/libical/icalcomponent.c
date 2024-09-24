@@ -755,32 +755,34 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
     /** Now test against the EXRULEs **/
     for (exrule = icalcomponent_get_first_property(comp, ICAL_EXRULE_PROPERTY);
          exrule != NULL; exrule = icalcomponent_get_next_property(comp, ICAL_EXRULE_PROPERTY)) {
-        struct icalrecurrencetype recur = icalproperty_get_exrule(exrule);
-        icalrecur_iterator *exrule_itr = icalrecur_iterator_new(recur, *dtstart);
-        struct icaltimetype exrule_time;
+        struct icalrecurrencetype *recur = icalproperty_get_exrule(exrule);
+        if (recur) {
+            icalrecur_iterator *exrule_itr = icalrecur_iterator_new(recur, *dtstart);
+            struct icaltimetype exrule_time;
 
-        while (exrule_itr) {
-            int result;
+            while (exrule_itr) {
+                int result;
 
-            exrule_time = icalrecur_iterator_next(exrule_itr);
+                exrule_time = icalrecur_iterator_next(exrule_itr);
 
-            if (icaltime_is_null_time(exrule_time))
-                break;
+                if (icaltime_is_null_time(exrule_time))
+                    break;
 
-            result = icaltime_compare(*recurtime, exrule_time);
-            if (result == 0) {
-                icalrecur_iterator_free(exrule_itr);
-                comp->property_iterator = property_iterator;
-                return 1;
-                /** MATCH **/
+                result = icaltime_compare(*recurtime, exrule_time);
+                if (result == 0) {
+                    icalrecur_iterator_free(exrule_itr);
+                    comp->property_iterator = property_iterator;
+                    return 1;
+                    /** MATCH **/
+                }
+                if (result == 1)
+                    break;
+                /** exrule_time > recurtime **/
             }
-            if (result == 1)
-                break;
-            /** exrule_time > recurtime **/
-        }
 
-        if (exrule_itr)
-            icalrecur_iterator_free(exrule_itr);
+            if (exrule_itr)
+                icalrecur_iterator_free(exrule_itr);
+        }
     }
     comp->property_iterator = property_iterator;
 
@@ -908,47 +910,49 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     /* Now cycle through the rrule entries */
     for (; rrule != NULL;
          rrule = icalcomponent_get_next_property(comp, ICAL_RRULE_PROPERTY)) {
-        struct icalrecurrencetype recur = icalproperty_get_rrule(rrule);
-        icalrecur_iterator *rrule_itr = icalrecur_iterator_new(recur, dtstart);
-        struct icaltimetype rrule_time;
+        struct icalrecurrencetype *recur = icalproperty_get_rrule(rrule);
+        if (recur) {
+            icalrecur_iterator *rrule_itr = icalrecur_iterator_new(recur, dtstart);
+            struct icaltimetype rrule_time;
 
-        if (!rrule_itr)
-            continue;
+            if (!rrule_itr)
+                continue;
 
-        if (recur.count == 0) {
-            icaltimetype mystart = start;
+            if (recur->count == 0) {
+                icaltimetype mystart = start;
 
-            /* make sure we include any recurrence that ends in timespan */
-            icaltime_adjust(&mystart, 0, 0, 0, -(int)(long)dtduration);
-            icalrecur_iterator_set_start(rrule_itr, mystart);
-        }
-
-        for (rrule_time = icalrecur_iterator_next(rrule_itr);
-             !icaltime_is_null_time(rrule_time);
-             rrule_time = icalrecur_iterator_next(rrule_itr)) {
-            /* if we have iterated past end time,
-               then no need to check any further */
-            if (icaltime_compare(rrule_time, end) > 0)
-                break;
-
-            recurspan.start =
-                icaltime_as_timet_with_zone(rrule_time,
-                                            rrule_time.zone ? rrule_time.zone : icaltimezone_get_utc_timezone());
-            recurspan.end = recurspan.start + dtduration;
-
-            /* save the iterator ICK! */
-            property_iterator = comp->property_iterator;
-
-            if (!icalproperty_recurrence_is_excluded(comp,
-                                                     &dtstart, &rrule_time)) {
-                /* call callback action */
-                if (icaltime_span_overlaps(&recurspan, &limit_span))
-                    (*callback)(comp, &recurspan, callback_data);
+                /* make sure we include any recurrence that ends in timespan */
+                icaltime_adjust(&mystart, 0, 0, 0, -(int)(long)dtduration);
+                icalrecur_iterator_set_start(rrule_itr, mystart);
             }
-            comp->property_iterator = property_iterator;
-        } /* end of iteration over a specific RRULE */
 
-        icalrecur_iterator_free(rrule_itr);
+            for (rrule_time = icalrecur_iterator_next(rrule_itr);
+                 !icaltime_is_null_time(rrule_time);
+                 rrule_time = icalrecur_iterator_next(rrule_itr)) {
+                /* if we have iterated past end time,
+                then no need to check any further */
+                if (icaltime_compare(rrule_time, end) > 0)
+                    break;
+
+                recurspan.start =
+                    icaltime_as_timet_with_zone(rrule_time,
+                                                rrule_time.zone ? rrule_time.zone : icaltimezone_get_utc_timezone());
+                recurspan.end = recurspan.start + dtduration;
+
+                /* save the iterator ICK! */
+                property_iterator = comp->property_iterator;
+
+                if (!icalproperty_recurrence_is_excluded(comp,
+                                                         &dtstart, &rrule_time)) {
+                    /* call callback action */
+                    if (icaltime_span_overlaps(&recurspan, &limit_span))
+                        (*callback)(comp, &recurspan, callback_data);
+                }
+                comp->property_iterator = property_iterator;
+            } /* end of iteration over a specific RRULE */
+
+            icalrecur_iterator_free(rrule_itr);
+        }
     } /* end of RRULE loop */
 
     /* Now process RDATE entries */

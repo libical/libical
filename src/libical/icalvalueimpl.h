@@ -54,10 +54,6 @@ struct icalvalue_impl {
 
         struct icalreqstattype v_requeststatus;
 
-        /* struct icalrecurrencetype was once included
-           directly ( not referenced ) in this union, but it
-           contributes 2000 bytes to every value, so now it is
-           a reference */
         struct icalrecurrencetype *v_recur;
 
         /*struct icaltriggertype v_trigger; */ /* use v_time/v_duration */
