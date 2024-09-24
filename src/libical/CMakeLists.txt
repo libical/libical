@@ -131,7 +131,7 @@ add_custom_target(
 )
 
 # GObject Introspection
-if(HAVE_INTROSPECTION)
+if(GOBJECT_INTROSPECTION)
   include(GObjectIntrospectionMacros)
   set(GObjectIntrospection_GIRS)
 

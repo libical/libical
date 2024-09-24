@@ -469,7 +469,6 @@ if(GOBJECT_INTROSPECTION)
     PURPOSE "Needed in order to build the GObject introspection \"typelib\" files."
   )
   if(GObjectIntrospection_FOUND)
-    set(HAVE_INTROSPECTION TRUE)
     if(STATIC_ONLY)
       message(
         FATAL_ERROR
@@ -690,7 +689,7 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
     message(WARNING "Building the address sanitizer with GObject Introspection is not supported. "
                     "Turning-off GObject Introspection."
     )
-    set(HAVE_INTROSPECTION False)
+    set(GOBJECT_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
     message(WARNING "Building the address sanitizer with the GObject interface is not supported. "
@@ -715,7 +714,7 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     message(WARNING "Building the thread sanitizer with GObject Introspection is not supported. "
                     "Turning-off GObject Introspection."
     )
-    set(HAVE_INTROSPECTION False)
+    set(GOBJECT_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
     message(WARNING "Building the thread sanitizer with the GObject interface is not supported. "
@@ -740,7 +739,7 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
     message(WARNING "Building the undefined sanitizer with GObject Introspection is not supported. "
                     "Turning-off GObject Introspection."
     )
-    set(HAVE_INTROSPECTION False)
+    set(GOBJECT_INTROSPECTION False)
   endif()
   if(ICAL_GLIB)
     message(WARNNG "Building the undefined sanitizer with the GObject interface is not supported. "
