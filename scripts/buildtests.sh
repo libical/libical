@@ -764,8 +764,7 @@ MEMCONSIST_BUILD test1memc ""
 MEMCONSIST_BUILD test2memc "$CMAKEOPTS"
 MEMCONSIST_BUILD test3memc "$TZCMAKEOPTS"
 MEMCONSIST_BUILD test4memc "$UUCCMAKEOPTS"
-#FIXME: the python test scripts for introspection need some love
-#MEMCONSIST_BUILD test5memc "$GLIBOPTS"
+MEMCONSIST_BUILD test5memc "$GLIBOPTS"
 MEMCONSIST_BUILD test6memc "$FUZZOPTS"
 
 #Address sanitizer
@@ -773,24 +772,24 @@ ASAN_BUILD test1asan "$DEFCMAKEOPTS"
 ASAN_BUILD test2asan "$CMAKEOPTS"
 ASAN_BUILD test3asan "$TZCMAKEOPTS"
 ASAN_BUILD test4asan "$UUCCMAKEOPTS"
-#ASAN_BUILD test5asan "$GLIBOPTS" # not supported
-ASAN_BUILD test6asan "$FUZZOPTS -DICAL_GLIB=False"
+ASAN_BUILD test5asan "$GLIBOPTS"
+ASAN_BUILD test6asan "$FUZZOPTS"
 
 #Thread sanitizer
 TSAN_BUILD test1tsan "$DEFCMAKEOPTS"
 TSAN_BUILD test2tsan "$CMAKEOPTS"
 TSAN_BUILD test3tsan "$TZCMAKEOPTS"
 TSAN_BUILD test4tsan "$UUCCMAKEOPTS"
-#TSAN_BUILD test5tsan "$GLIBOPTS" # not supported
-TSAN_BUILD test6tsan "$FUZZOPTS -DICAL_GLIB=False"
+TSAN_BUILD test5tsan "$GLIBOPTS"
+TSAN_BUILD test6tsan "$FUZZOPTS"
 
 #Undefined sanitizer
 UBSAN_BUILD test1ubsan "$DEFCMAKEOPTS"
 UBSAN_BUILD test2ubsan "$CMAKEOPTS"
 UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
 UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
-#UBSAN_BUILD test5ubsan "$GLIBOPTS" # not supported
-UBSAN_BUILD test6ubsan "$FUZZOPTS -DICAL_GLIB=False"
+UBSAN_BUILD test5ubsan "$GLIBOPTS"
+UBSAN_BUILD test6ubsan "$FUZZOPTS"
 
 #Fortify build
 FORTIFY_BUILD test1fortify "$DEFCMAKEOPTS"
