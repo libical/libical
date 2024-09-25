@@ -691,12 +691,6 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
     )
     set(GOBJECT_INTROSPECTION False)
   endif()
-  if(ICAL_GLIB)
-    message(WARNING "Building the address sanitizer with the GObject interface is not supported. "
-                    "Turning-off the GObject interface build."
-    )
-    set(ICAL_GLIB False)
-  endif()
 endif()
 
 libical_deprecated_option(
@@ -716,12 +710,6 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     )
     set(GOBJECT_INTROSPECTION False)
   endif()
-  if(ICAL_GLIB)
-    message(WARNING "Building the thread sanitizer with the GObject interface is not supported. "
-                    "Turning-off the GObject build."
-    )
-    set(ICAL_GLIB False)
-  endif()
 endif()
 
 libical_deprecated_option(
@@ -740,12 +728,6 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
                     "Turning-off GObject Introspection."
     )
     set(GOBJECT_INTROSPECTION False)
-  endif()
-  if(ICAL_GLIB)
-    message(WARNNG "Building the undefined sanitizer with the GObject interface is not supported. "
-            "Turning-off the GObject build."
-    )
-    set(ICAL_GLIB False)
   endif()
 endif()
 
