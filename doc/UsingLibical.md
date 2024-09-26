@@ -754,6 +754,18 @@ void icalvalue_set_datetime(
     struct icaltimetype v);
 ```
 
+Some complex value types, such as `ATTACH` and `RECUR`, are passed by reference 
+rather than by value. For example, when using `icalvalue_get_recur()`, you 
+receive a reference to the internal state of the value object. Conversely, when 
+setting these values, the value object retains a reference to the original 
+object instead of creating a copy.
+
+**Caution:** Manipulating this referenced object will also modify the owning 
+value object.
+
+Be mindful of the memory management for these objects, which is managed through 
+reference counting. For more details, refer to the **Memory Management** section.
+
 When working with an extension property or value (and `X-PROPERTY` or
 a property that has the parameter `VALUE=x-name`), the value type is
 always a string. To get and set the value, use:
@@ -1228,7 +1240,10 @@ library. Here is a summary of the memory rules.
 2. If you got the memory from a routine with "clone" or "new" in it, you
    must call the corresponding `*_free()` routine to free the memory,
    for example use `icalcomponent_free()` to free objects created with
-   `icalcomponent_new()` or `icalcomponent_clone()`
+   `icalcomponent_new()` or `icalcomponent_clone()`. The only exception
+   to this rule are objects that implement reference counting (i.e.
+   `icalattach` and `icalrecurrencetype`), which are deallocated via
+   `*_unref()` functions. Learn more in the next section.
 
 3. If the function name has "add" in it, the caller is transferring
    control of the memory to the routine, for example the function
@@ -1249,6 +1264,28 @@ library. Here is a summary of the memory rules.
    For example, `icalcomponent_as_ical_string_r()` does the same thing as
    `icalcomponent_as_ical_string()`, except you now have control of the
    string buffer it returns.
+
+#### 5.5.1 Reference Counting
+Some special types are managed using reference counting, in particular:
+- `icalattach`
+- `struct icalrecurrencetype`
+
+Just as any other object they are allocated using any of the `*_new*()` functions, e.g.
+- `icalrecurrencetype_new_from_string()`
+- `icalattach_new_from_data()`
+
+When an object is returned by one of these constructor functions, its reference counter is set to 1.
+
+The reference counter can be modified using:
+- `*_ref()` – to increase the counter.
+- `*_unref()` – to decrease the counter.
+
+The object is automatically deallocated when the reference counter reaches 0. No explicit `*_free()` functions exist for
+these types.
+
+When such objects are passed to functions as arguments, it is the task of the function being called to manage the
+reference counter, not of the caller. If a pointer to an object is returned by a function other than the constructor
+functions, it is the task of the calling function rather than of the returning function to manage the reference counter.
 
 ### 5.6 Error Handling
 
