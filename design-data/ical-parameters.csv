@@ -15,7 +15,8 @@
 "PARTSTAT","20","icalparameter_partstat","X=20600;NEEDS-ACTION;ACCEPTED;DECLINED;TENTATIVE;DELEGATED;COMPLETED;INPROCESS;FAILED;NONE=20699"
 "RANGE","21","icalparameter_range","X=20700;THISANDPRIOR;THISANDFUTURE;NONE=20799"
 "RELATED","22","icalparameter_related","X=20800;START;END;NONE=20899"
-"#RELTYPE:SNOOZE from RFC9073",,,
+"#RELTYPE:SNOOZE from RFC9074",,,
+"#RELTYPE:POLL from draft-ietc-calext-vpoll",,,
 "RELTYPE","23","icalparameter_reltype","X=20900;PARENT;CHILD;SIBLING;POLL;SNOOZE;NONE=20999"
 "ROLE","24","icalparameter_role","X=21100;CHAIR;REQ-PARTICIPANT;OPT-PARTICIPANT;NON-PARTICIPANT;NONE=21199"
 "RSVP","25","icalparameter_rsvp","X=21200;TRUE;FALSE;NONE=21299"
@@ -48,13 +49,13 @@
 "IANA","33","const char*",
 "ANY","0",,
 
-"#VPOLL Parameters","draft-york-vpoll","PUBLIC-COMMENT and RESPONSE are deprecated"
+"#VPOLL Parameters","draft-ietf-calext-vpoll","PUBLIC-COMMENT and RESPONSE are deprecated"
 "PUBLIC-COMMENT","37","const char*",
 "RESPONSE","38","int",
 "REQUIRED","43","icalparameter_required","X=21000;TRUE;FALSE;NONE=21099"
 "STAY-INFORMED","39","icalparameter_stayinformed","X=21500;TRUE;FALSE;NONE=21599"
 
-"#CalDAV Managed Attachment Parameters","draft-ietf-calext-caldav-attachments"
+"#CalDAV Managed Attachment Parameters","RFC 8601 Section 4"
 "MANAGED-ID","40","const char*",
 "SIZE","41","const char*",
 "FILENAME","42","const char*",

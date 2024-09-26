@@ -115,14 +115,14 @@
 "ANY","0","NO","NO"
 "NO","100","NO","NO"
 
-"#VALARM Extension Properties", "RFC 9073 Sections 6.1, 8.1",
+"#VALARM Extension Properties", "RFC 9074 Sections 6.1, 8.1",
 "ACKNOWLEDGED","1","DATE-TIME","DATE-TIME"
 "PROXIMITY","126","PROXIMITY","PROXIMITY"
 
 "#VAVAILABILITY Properties","RFC 7953 Section 3.2",
 "BUSYTYPE","101","BUSYTYPE","BUSYTYPE"
 
-"#VPOLL Properties","draft-york-vpoll",
+"#VPOLL Properties","draft-ietc-calext-vpoll","VOTER is deprecated"
 "ACCEPT-RESPONSE","102","TEXT,"TEXT",is_multivalued
 "POLL-COMPLETION","110","POLLCOMPLETION,"POLLCOMPLETION"
 "POLL-ITEM-ID","103","INTEGER,"INTEGER"
