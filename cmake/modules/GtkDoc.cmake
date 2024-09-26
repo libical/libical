@@ -54,6 +54,7 @@ macro(
   _srcdirsvar
   _depsvar
   _ignoreheadersvar
+  _extra_ldflags
 )
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/${_module}-docs.sgml.in ${CMAKE_CURRENT_BINARY_DIR}/${_module}-docs.sgml @ONLY
@@ -80,7 +81,7 @@ macro(
   set(_scangobj_deps)
   set(_scangobj_cflags_list)
   set(_scangobj_cflags "-Wno-error=unused-parameter")
-  set(_scangobj_ldflags "")
+  set(_scangobj_ldflags "${_extra_ldflags}")
   set(_scangobj_ld_lib_dirs "")
 
   # LIB_INSTALL_DIR might be a relative path, (eg. "lib")

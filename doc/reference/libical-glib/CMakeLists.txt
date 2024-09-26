@@ -40,6 +40,17 @@ set(DEPENDENCIES ical-glib)
 
 set(IGNORE_HEADERS libical-glib-private.h)
 
+set(extra_ldflags "")
+if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
+  if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
+    set(extra_ldflags "-fsanitize=address -g")
+  elseif(LIBICAL_DEVMODE_THREAD_SANITIZER)
+    set(extra_ldflags "-fsanitize=thread -O1 -g")
+  elseif(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
+    set(extra_ldflags "-fsanitize=undefined -O1 -g")
+  endif()
+endif()
+
 add_gtkdoc(
   libical-glib
   libical-glib
@@ -47,4 +58,5 @@ add_gtkdoc(
   SOURCEDIRS
   DEPENDENCIES
   IGNORE_HEADERS
+  "${extra_ldflags}"
 )
