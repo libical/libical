@@ -126,6 +126,7 @@
 	    <element name="ICAL_PARTICIPANTTYPE_PLANNERCONTACT"/>
 	    <element name="ICAL_PARTICIPANTTYPE_PERFORMER"/>
 	    <element name="ICAL_PARTICIPANTTYPE_SPEAKER"/>
+	    <element name="ICAL_PARTICIPANTTYPE_VOTER"/>
 	    <element name="ICAL_PARTICIPANTTYPE_NONE"/>
 	</enum>
 	<enum name="ICalPropertyPollcompletion" native_name="icalproperty_pollcompletion" default_native="I_CAL_POLLCOMPLETION_NONE">

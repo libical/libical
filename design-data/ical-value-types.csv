@@ -21,7 +21,7 @@
 "TRIGGER","5024","(m)struct icaltriggertype","string","DURATION;DATE-TIME",
 
 "#Non-standard property enumeration types",,,,
-"#METHOD:POLLSTATUS from draft-york-vpoll",,,,
+"#METHOD:POLLSTATUS from draft-ietf-calext-vpoll",,,,
 "METHOD","5030","(a)enum icalproperty_method","string","unitary","X=10500;PUBLISH;REQUEST;REPLY;ADD;CANCEL;REFRESH;COUNTER;DECLINECOUNTER;CREATE;READ;RESPONSE;MOVE;MODIFY;GENERATEUID;DELETE;POLLSTATUS;NONE=10599"
 "X-LIC-CLASS","5025","(a)enum icalproperty_xlicclass","string","unitary","X=11100;PUBLISH-NEW;PUBLISH-UPDATE;PUBLISH-FREEBUSY;REQUEST-NEW;REQUEST-UPDATE;REQUEST-RESCHEDULE;REQUEST-DELEGATE;REQUEST-NEW-ORGANIZER;REQUEST-FORWARD;REQUEST-STATUS;REQUEST-FREEBUSY;REPLY-ACCEPT;REPLY-DECLINE;REPLY-DELEGATE;REPLY-CRASHER-ACCEPT;REPLY-CRASHER-DECLINE;ADD-INSTANCE;CANCEL-EVENT;CANCEL-INSTANCE;CANCEL-ALL;REFRESH;COUNTER;DECLINECOUNTER;MALFORMED;OBSOLETE;MISSEQUENCED;UNKNOWN;NONE=11199"
 "ACTION","5027","(a)enum icalproperty_action","string","unitary","X=10000;AUDIO;DISPLAY;EMAIL;PROCEDURE;NONE=10099"
@@ -45,7 +45,7 @@
 "#VAVAILABILITY types","RFC 7953 Section 3.2",,,
 "BUSYTYPE","5032","(a)enum icalproperty_busytype","string","unitary","X=10100;BUSY;BUSY-UNAVAILABLE;BUSY-TENTATIVE;NONE=10199"
 
-"#VPOLL types","draft-york-vpoll",,,
+"#VPOLL types","draft-ietf-calext-vpoll",,,
 "POLLMODE","5033","(a)enum icalproperty_pollmode","string","unitary","X=10700;BASIC;NONE=10799"
 "POLLCOMPLETION","5034","(a)enum icalproperty_pollcompletion","string","unitary","X=10600;SERVER;SERVER-SUBMIT;SERVER-CHOICE;CLIENT;NONE=10699"
 
@@ -56,7 +56,8 @@
 "PROXIMITY","5039","(a)enum icalproperty_proximity","string","unitary","X=11300;ARRIVE;DEPART;CONNECT;DISCONNECT;NONE=11399"
 
 "#Event Publication Extension types","RFC 9073 Section 6",,,
-"PARTICIPANTTYPE","5037","(a)enum icalproperty_participanttype","string","unitary","X=11400;ACTIVE;INACTIVE;SPONSOR;CONTACT;BOOKING-CONTACT;EMERGENCY-CONTACT;PUBLICITY-CONTACT;PLANNER-CONTACT;PERFORMER;SPEAKER;NONE=11499"
+"#VOTER from draft-ietc-calext-vpoll",,,
+"PARTICIPANTTYPE","5037","(a)enum icalproperty_participanttype","string","unitary","X=11400;ACTIVE;INACTIVE;SPONSOR;CONTACT;BOOKING-CONTACT;EMERGENCY-CONTACT;PUBLICITY-CONTACT;PLANNER-CONTACT;PERFORMER;SPEAKER;VOTER;NONE=11499"
 "RESOURCETYPE","5038","(a)enum icalproperty_resourcetype","string","unitary","X=11500;ROOM;PROJECTOR;REMOTE-CONFERENCE-AUDIO;REMOTE-CONFERENCE-VIDEO;NONE=11599"
 
 "#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"
