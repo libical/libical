@@ -11,7 +11,7 @@ and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.
 
-Libical implements multiple [RFC calendar standards](@ref rfcs).
+Libical implements multiple [RFC calendar standards](rfcs.md).
 
 This documentation assumes that you are familiar with the iCalendar
 standards [RFC5545][] and [RFC5546][]. These specifications are available
