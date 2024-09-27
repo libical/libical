@@ -84,10 +84,14 @@ else()
   set(ical-glib-src-generator_EXE ical-glib-src-generator)
 endif()
 
-add_custom_command (
-  OUTPUT ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
+add_custom_target(
+  ical-glib-header
   COMMAND ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
   DEPENDS ${ical-glib-src-generator_EXE} ${xml_files}
+  BYPRODUCTS ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
+             ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
+             ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c
+  COMMENT "Generate the libical-glib-private.h headers"
 )
 
 configure_file(
@@ -116,8 +120,11 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src/libical
 )
 
-add_library(ical-glib ${LIBRARY_TYPE} ${LIBICAL_GLIB_SOURCES})
-add_dependencies(ical-glib ical-header)
+add_library(
+  ical-glib
+  ${LIBRARY_TYPE} ${LIBICAL_GLIB_SOURCES}
+)
+add_dependencies(ical-glib ical-header ical-glib-header)
 target_compile_options(ical-glib PRIVATE ${GLIB_CFLAGS})
 target_compile_definitions(ical-glib PRIVATE -DG_LOG_DOMAIN="libical-glib" -DLIBICAL_GLIB_COMPILATION)
 target_link_libraries(ical-glib PRIVATE ical ${GLIB_LIBRARIES})
