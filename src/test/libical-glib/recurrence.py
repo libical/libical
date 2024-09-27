@@ -49,9 +49,8 @@ recurrence = ICalGLib.Recurrence.new_from_string(string)
 assert recurrence.to_string() == "FREQ=DAILY;COUNT=10"
 
 recurrence.set_by_second(0, 1)
-recurrence.set_by_second(1, ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX)
 assert recurrence.get_by_second(0) == 1
-assert recurrence.get_by_second(1) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_second(1) == 0x7FFF
 array = recurrence.get_by_second_array()
 assert array[0] == 1
 assert len(array) == 1
@@ -60,16 +59,16 @@ assert len(array) == 2
 recurrence.set_by_second_array(array)
 assert recurrence.get_by_second(0) == 100
 assert recurrence.get_by_second(1) == 101
-assert recurrence.get_by_second(2) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_second(2) == 0x7FFF
 array = recurrence.get_by_second_array()
 assert array[0] == 100
 assert array[1] == 101
 assert len(array) == 2
 
 recurrence.set_by_minute(0, 2)
-recurrence.set_by_minute(1, ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX)
+recurrence.resize_by_minute_array(1)
 assert recurrence.get_by_minute(0) == 2
-assert recurrence.get_by_minute(1) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_minute(1) == 0x7FFF
 array = recurrence.get_by_minute_array()
 assert array[0] == 2
 assert len(array) == 1
@@ -78,16 +77,16 @@ assert len(array) == 2
 recurrence.set_by_minute_array(array)
 assert recurrence.get_by_minute(0) == 200
 assert recurrence.get_by_minute(1) == 201
-assert recurrence.get_by_minute(2) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_minute(2) == 0x7FFF
 array = recurrence.get_by_minute_array()
 assert array[0] == 200
 assert array[1] == 201
 assert len(array) == 2
 
 recurrence.set_by_hour(0, 3)
-recurrence.set_by_hour(1, ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX)
+recurrence.resize_by_hour_array(1)
 assert recurrence.get_by_hour(0) == 3
-assert recurrence.get_by_hour(1) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_hour(1) == 0x7FFF
 array = recurrence.get_by_hour_array()
 assert array[0] == 3
 assert len(array) == 1
@@ -96,16 +95,16 @@ assert len(array) == 2
 recurrence.set_by_hour_array(array)
 assert recurrence.get_by_hour(0) == 300
 assert recurrence.get_by_hour(1) == 301
-assert recurrence.get_by_hour(2) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_hour(2) == 0x7FFF
 array = recurrence.get_by_hour_array()
 assert array[0] == 300
 assert array[1] == 301
 assert len(array) == 2
 
 recurrence.set_by_day(0, 4)
-recurrence.set_by_day(1, ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX)
+recurrence.resize_by_day_array(1)
 assert recurrence.get_by_day(0) == 4
-assert recurrence.get_by_day(1) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_day(1) == 0x7FFF
 array = recurrence.get_by_day_array()
 assert array[0] == 4
 assert len(array) == 1
@@ -114,16 +113,16 @@ assert len(array) == 2
 recurrence.set_by_day_array(array)
 assert recurrence.get_by_day(0) == 400
 assert recurrence.get_by_day(1) == 401
-assert recurrence.get_by_day(2) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_day(2) == 0x7FFF
 array = recurrence.get_by_day_array()
 assert array[0] == 400
 assert array[1] == 401
 assert len(array) == 2
 
 recurrence.set_by_month_day(0, 5)
-recurrence.set_by_month_day(1, ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX)
+recurrence.resize_by_month_day_array(1)
 assert recurrence.get_by_month_day(0) == 5
-assert recurrence.get_by_month_day(1) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_month_day(1) == 0x7FFF
 array = recurrence.get_by_month_day_array()
 assert array[0] == 5
 assert len(array) == 1
@@ -132,16 +131,16 @@ assert len(array) == 2
 recurrence.set_by_month_day_array(array)
 assert recurrence.get_by_month_day(0) == 500
 assert recurrence.get_by_month_day(1) == 501
-assert recurrence.get_by_month_day(2) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_month_day(2) == 0x7FFF
 array = recurrence.get_by_month_day_array()
 assert array[0] == 500
 assert array[1] == 501
 assert len(array) == 2
 
 recurrence.set_by_year_day(0, 6)
-recurrence.set_by_year_day(1, ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX)
+recurrence.resize_by_year_day_array(1)
 assert recurrence.get_by_year_day(0) == 6
-assert recurrence.get_by_year_day(1) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_year_day(1) == 0x7FFF
 array = recurrence.get_by_year_day_array()
 assert array[0] == 6
 assert len(array) == 1
@@ -150,16 +149,16 @@ assert len(array) == 2
 recurrence.set_by_year_day_array(array)
 assert recurrence.get_by_year_day(0) == 600
 assert recurrence.get_by_year_day(1) == 601
-assert recurrence.get_by_year_day(2) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_year_day(2) == 0x7FFF
 array = recurrence.get_by_year_day_array()
 assert array[0] == 600
 assert array[1] == 601
 assert len(array) == 2
 
 recurrence.set_by_week_no(0, 7)
-recurrence.set_by_week_no(1, ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX)
+recurrence.resize_by_week_no_array(1)
 assert recurrence.get_by_week_no(0) == 7
-assert recurrence.get_by_week_no(1) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_week_no(1) == 0x7FFF
 array = recurrence.get_by_week_no_array()
 assert array[0] == 7
 assert len(array) == 1
@@ -168,16 +167,16 @@ assert len(array) == 2
 recurrence.set_by_week_no_array(array)
 assert recurrence.get_by_week_no(0) == 700
 assert recurrence.get_by_week_no(1) == 701
-assert recurrence.get_by_week_no(2) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_week_no(2) == 0x7FFF
 array = recurrence.get_by_week_no_array()
 assert array[0] == 700
 assert array[1] == 701
 assert len(array) == 2
 
 recurrence.set_by_month(0, 8)
-recurrence.set_by_month(1, ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX)
+recurrence.resize_by_month_array(1)
 assert recurrence.get_by_month(0) == 8
-assert recurrence.get_by_month(1) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_month(1) == 0x7FFF
 array = recurrence.get_by_month_array()
 assert array[0] == 8
 assert len(array) == 1
@@ -186,16 +185,16 @@ assert len(array) == 2
 recurrence.set_by_month_array(array)
 assert recurrence.get_by_month(0) == 800
 assert recurrence.get_by_month(1) == 801
-assert recurrence.get_by_month(2) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_month(2) == 0x7FFF
 array = recurrence.get_by_month_array()
 assert array[0] == 800
 assert array[1] == 801
 assert len(array) == 2
 
 recurrence.set_by_set_pos(0, 9)
-recurrence.set_by_set_pos(1, ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX)
+recurrence.resize_by_set_pos_array(1)
 assert recurrence.get_by_set_pos(0) == 9
-assert recurrence.get_by_set_pos(1) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_set_pos(1) == 0x7FFF
 array = recurrence.get_by_set_pos_array()
 assert array[0] == 9
 assert len(array) == 1
@@ -204,7 +203,7 @@ assert len(array) == 2
 recurrence.set_by_set_pos_array(array)
 assert recurrence.get_by_set_pos(0) == 900
 assert recurrence.get_by_set_pos(1) == 901
-assert recurrence.get_by_set_pos(2) == ICalGLib.RecurrenceArrayMaxValues.RECURRENCE_ARRAY_MAX
+assert recurrence.get_by_set_pos(2) == 0x7FFF
 array = recurrence.get_by_set_pos_array()
 assert array[0] == 900
 assert array[1] == 901
