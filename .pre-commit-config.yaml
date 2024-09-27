@@ -46,12 +46,10 @@ repos:
     exclude: (cmake/Toolchain-|.h.cmake|/Doxyfile.cmake)
   - id: cmake-format
     exclude: (cmake/Toolchain-|.h.cmake|/Doxyfile.cmake)
-- repo: https://github.com/markdownlint/markdownlint
+- repo: https://github.com/DavidAnson/markdownlint-cli2
   rev: v0.12.0
   hooks:
-  - id: markdownlint
-    entry: mdl
-    language: ruby
+  - id: markdownlint-cli2
     files: \.(md|mdown|markdown)$
 - repo: https://github.com/scop/pre-commit-shfmt
   rev: v3.8.0-1
