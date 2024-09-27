@@ -109,12 +109,6 @@ typedef enum icalrecurrencetype_skip
     ICAL_SKIP_UNDEFINED
 } icalrecurrencetype_skip;
 
-enum icalrecurrence_array_max_values
-{
-    ICAL_RECURRENCE_ARRAY_MAX = 0x7f7f,
-    ICAL_RECURRENCE_ARRAY_MAX_BYTE = 0x7f
-};
-
 /*
  * Recurrence enumerations conversion routines.
  */
@@ -147,6 +141,12 @@ LIBICAL_ICAL_EXPORT icalrecurrencetype_weekday icalrecur_string_to_weekday(const
 #define ICAL_BY_SETPOS_SIZE ICAL_BY_YEARDAY_SIZE           /* 1 to N */
 #define ICAL_BY_DAY_SIZE 7 * (ICAL_BY_WEEKNO_SIZE - 1) + 1 /* 1 to N */
 
+typedef struct
+{
+    short *data;
+    short size;
+} icalrecurrence_by_data;
+
 /** Main struct for holding digested recurrence rules */
 struct icalrecurrencetype {
     /* Reference count */
@@ -166,15 +166,13 @@ struct icalrecurrencetype {
      * assume that the list of values will not be larger than the
      * range of the value -- that is, the client will not name a
      * value more than once.
-
-     * Each of the lists is terminated with the value
-     * ICAL_RECURRENCE_ARRAY_MAX unless the list is full.
      */
 
-    short by_second[ICAL_BY_SECOND_SIZE];
-    short by_minute[ICAL_BY_MINUTE_SIZE];
-    short by_hour[ICAL_BY_HOUR_SIZE];
-    short by_day[ICAL_BY_DAY_SIZE]; /**< @brief Encoded value
+
+    icalrecurrence_by_data by_second;
+    icalrecurrence_by_data by_minute;
+    icalrecurrence_by_data by_hour;
+    icalrecurrence_by_data by_day; /**< @brief Encoded value
         *
         * The 'day' element of the by_day array is encoded to allow
         * representation of both the day of the week ( Monday, Tuesday), but
@@ -184,10 +182,10 @@ struct icalrecurrencetype {
         * These values are decoded by icalrecurrencetype_day_day_of_week() and
         * icalrecurrencetype_day_position().
         */
-    short by_month_day[ICAL_BY_MONTHDAY_SIZE];
-    short by_year_day[ICAL_BY_YEARDAY_SIZE];
-    short by_week_no[ICAL_BY_WEEKNO_SIZE];
-    short by_month[ICAL_BY_MONTH_SIZE]; /**< @brief Encoded value
+    icalrecurrence_by_data by_month_day;
+    icalrecurrence_by_data by_year_day;
+    icalrecurrence_by_data by_week_no;
+    icalrecurrence_by_data by_month; /**< @brief Encoded value
         *
         * The 'month' element of the by_month array is encoded to allow
         * representation of the "L" leap suffix (RFC 7529).
@@ -195,24 +193,47 @@ struct icalrecurrencetype {
         * These values are decoded by icalrecurrencetype_month_is_leap()
         * and icalrecurrencetype_month_month().
         */
-    short by_set_pos[ICAL_BY_SETPOS_SIZE];
+    icalrecurrence_by_data by_set_pos;
 
     /* For RSCALE extension (RFC 7529) */
     char *rscale;
     icalrecurrencetype_skip skip;
 };
 
+/**
+ * @brief Allocates and initalizes a new instance of icalrecurrencetype. The new instance
+ * is returned with a refcount of 1.
+ * @return A pointer to the new instance, of NULL if allocation failed.
+ */
 LIBICAL_ICAL_EXPORT struct icalrecurrencetype *icalrecurrencetype_new(void);
 
+/**
+ * @brief Increases the reference counter by 1.
+ */
 LIBICAL_ICAL_EXPORT void icalrecurrencetype_ref(struct icalrecurrencetype *recur);
 
+/**
+ * @brief Decreases the reference counter by 1. If it goes to 0, the instance
+ * and all referenced memory (i.e. rscale and 'by' arrays) are deallocated.
+ */
 LIBICAL_ICAL_EXPORT void icalrecurrencetype_unref(struct icalrecurrencetype *recur);
 
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_rscale_is_supported(void);
 
 LIBICAL_ICAL_EXPORT icalarray *icalrecurrencetype_rscale_supported_calendars(void);
 
+/**
+ * @brief Creates a deep copy of the given recurrence rule. The new instance
+ * is returned with a refcount of 1.
+ */
 LIBICAL_ICAL_EXPORT struct icalrecurrencetype *icalrecurrencetype_clone(struct icalrecurrencetype *r);
+
+/**
+ * @brief Resizes the buffer backing the 'by' array to the specified size, if different.
+ * Frees the buffer if the new size is 0.
+ * @return 1 on success, 0 on failure.
+ */
+LIBICAL_ICAL_EXPORT int icalrecur_resize_by(icalrecurrence_by_data *by, short size);
 
 /*
  * Routines to decode the day values of the by_day array

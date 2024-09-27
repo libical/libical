@@ -873,6 +873,10 @@ static const char *rrule_parse_weekly_days(const char *s,
     if (*error_message)
         return NULL;
 
+    if (!icalrecur_resize_by(&recur->by_day, ICAL_BY_DAY_SIZE)) {
+        return NULL;
+    }
+
     for (i = 0; i < ICAL_BY_DAY_SIZE; i++) {
         const char *e = s;
         int found_day, day;
@@ -893,7 +897,7 @@ static const char *rrule_parse_weekly_days(const char *s,
             break;
 
         /* cppcheck-suppress arrayIndexOutOfBounds; since 'day' can't be >6 */
-        recur->by_day[i] = weekday_codes[day];
+        recur->by_day.data[i] = weekday_codes[day];
 
         s = e;
         /* Skip any whitespace. */
@@ -901,9 +905,9 @@ static const char *rrule_parse_weekly_days(const char *s,
             s++;
     }
 
-    /* Terminate the array, if it isn't full. */
-    if (i < ICAL_BY_DAY_SIZE)
-        recur->by_day[i] = ICAL_RECURRENCE_ARRAY_MAX;
+    if (!icalrecur_resize_by(&recur->by_day, i)) {
+        return NULL;
+    }
 
     return s;
 }
@@ -917,6 +921,10 @@ static const char *rrule_parse_monthly_days(const char *s,
     /* If we've already found an error, just return. */
     if (*error_message)
         return NULL;
+
+    if (!icalrecur_resize_by(&recur->by_month_day, ICAL_BY_MONTHDAY_SIZE)) {
+        return NULL;
+    }
 
     for (i = 0; i < ICAL_BY_MONTHDAY_SIZE; i++) {
         const char *e;
@@ -945,7 +953,7 @@ static const char *rrule_parse_monthly_days(const char *s,
         if (*e != ' ' && *e != '\t' && *e != '\0')
             break;
 
-        recur->by_month_day[i] = month_day;
+        recur->by_month_day.data[i] = month_day;
 
         s = e;
         /* Skip any whitespace. */
@@ -953,11 +961,23 @@ static const char *rrule_parse_monthly_days(const char *s,
             s++;
     }
 
-    /* Terminate the array, if it isn't full. */
-    if (i < ICAL_BY_MONTHDAY_SIZE)
-        recur->by_month_day[i] = ICAL_RECURRENCE_ARRAY_MAX;
+    if (!icalrecur_resize_by(&recur->by_month_day, i)) {
+        return NULL;
+    }
 
     return s;
+}
+
+static int icalrecur_set_single_by(icalrecurrence_by_data *by, short value) {
+
+    if (!icalrecur_resize_by(by, 1)) {
+        return 0;
+    }
+
+    by->data[0] = value;
+    by->size = 1;
+
+    return 1;
 }
 
 static const char *rrule_parse_monthly_positions(const char *s,
@@ -1044,11 +1064,13 @@ static const char *rrule_parse_monthly_positions(const char *s,
         }
     }
     if (num_positions == 1 && num_weekdays == 1) {
-        recur->by_day[0] = weekday_codes[only_weekday];
-        recur->by_day[1] = ICAL_RECURRENCE_ARRAY_MAX;
+        if (!icalrecur_set_single_by(&recur->by_day, weekday_codes[only_weekday])) {
+            return NULL;
+        }
 
-        recur->by_set_pos[0] = occurrences[0];
-        recur->by_set_pos[1] = ICAL_RECURRENCE_ARRAY_MAX;
+        if (!icalrecur_set_single_by(&recur->by_set_pos, occurrences[0])) {
+            return NULL;
+        }
     } else {
         elems = 0;
         for (i = 0; i < num_positions; i++) {
@@ -1056,11 +1078,16 @@ static const char *rrule_parse_monthly_positions(const char *s,
 
             for (day = 0; day < 7; day++) {
                 if (found_weekdays[day]) {
-                    recur->by_day[elems] =
+
+                    if (!icalrecur_resize_by(&recur->by_day, elems + 1)) {
+                        return NULL;
+                    }
+
+                    recur->by_day.data[elems] =
                         (abs(month_position) * 8 +
                          weekday_codes[day]) *
                         ((month_position < 0) ? -1 : 1);
-                    elems++;
+
                     if (elems == ICAL_BY_DAY_SIZE)
                         break;
                 }
@@ -1069,10 +1096,6 @@ static const char *rrule_parse_monthly_positions(const char *s,
             if (elems == ICAL_BY_DAY_SIZE)
                 break;
         }
-
-        /* Terminate the array, if it isn't full. */
-        if (elems < ICAL_BY_DAY_SIZE)
-            recur->by_day[elems] = ICAL_RECURRENCE_ARRAY_MAX;
     }
 
     return s;
@@ -1088,6 +1111,10 @@ static const char *rrule_parse_yearly_months(const char *s,
     if (*error_message)
         return NULL;
 
+    if (!icalrecur_resize_by(&recur->by_month, ICAL_BY_MONTH_SIZE)) {
+        return NULL;
+    }
+
     for (i = 0; i < ICAL_BY_MONTH_SIZE; i++) {
         const char *e;
         int month;
@@ -1102,7 +1129,7 @@ static const char *rrule_parse_yearly_months(const char *s,
         if (*e != ' ' && *e != '\t' && *e != '\0')
             break;
 
-        recur->by_month[i] = month;
+        recur->by_month.data[i] = month;
 
         s = e;
         /* Skip any whitespace. */
@@ -1110,9 +1137,9 @@ static const char *rrule_parse_yearly_months(const char *s,
             s++;
     }
 
-    /* Terminate the array, if it isn't full. */
-    if (i < ICAL_BY_MONTH_SIZE)
-        recur->by_month[i] = ICAL_RECURRENCE_ARRAY_MAX;
+    if (!icalrecur_resize_by(&recur->by_month, i)) {
+        return NULL;
+    }
 
     return s;
 }
@@ -1126,6 +1153,10 @@ static const char *rrule_parse_yearly_days(const char *s,
     /* If we've already found an error, just return. */
     if (*error_message)
         return NULL;
+
+    if (!icalrecur_resize_by(&recur->by_year_day, ICAL_BY_YEARDAY_SIZE)) {
+        return NULL;
+    }
 
     for (i = 0; i < ICAL_BY_YEARDAY_SIZE; i++) {
         char *e;
@@ -1141,7 +1172,7 @@ static const char *rrule_parse_yearly_days(const char *s,
         if (*e != ' ' && *e != '\t' && *e != '\0')
             break;
 
-        recur->by_year_day[i] = year_day;
+        recur->by_year_day.data[i] = year_day;
 
         s = e;
         /* Skip any whitespace. */
@@ -1149,9 +1180,9 @@ static const char *rrule_parse_yearly_days(const char *s,
             s++;
     }
 
-    /* Terminate the array, if it isn't full. */
-    if (i < ICAL_BY_YEARDAY_SIZE)
-        recur->by_year_day[i] = ICAL_RECURRENCE_ARRAY_MAX;
+    if (!icalrecur_resize_by(&recur->by[ICAL_BY_YEAR_DAY], i)) {
+        return NULL;
+    }
 
     return s;
 }
