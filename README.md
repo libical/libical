@@ -17,21 +17,9 @@ and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.
 
-## RFCs {#rfcs}
+## RFCs
 
-Libical implements [RFC5545][], [RFC5546][], [RFC7529][];
-the CalDav scheduling extensions in [RFC6638][];
-iCalendar extensions in [RFC7986][], [RFC9073][], [RFC9074][];
-plus the iCalendar iMIP protocol in [RFC6047][].
-
-[RFC5545]: https://tools.ietf.org/html/rfc5545
-[RFC5546]: https://tools.ietf.org/html/rfc5546
-[RFC7529]: https://tools.ietf.org/html/rfc7529
-[RFC6638]: https://tools.ietf.org/html/rfc6638
-[RFC6047]: https://tools.ietf.org/html/rfc6047
-[RFC7986]: https://tools.ietf.org/html/rfc7986
-[RFC9073]: https://tools.ietf.org/html/rfc9073
-[RFC9074]: https://tools.ietf.org/html/rfc9074
+See [RFC calendar standards](doc/rfcs.md) for list of RFCs supported by this library.
 
 ## License
 
