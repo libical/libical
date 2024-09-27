@@ -14,10 +14,12 @@ store their calendar data and arrange meetings with other users.
 Libical implements multiple [RFC calendar standards](@ref rfcs).
 
 This documentation assumes that you are familiar with the iCalendar
-standards RFC5545 and RFC5546. These specifications are available
+standards [RFC5545][] and [RFC5546][]. These specifications are available
 at the [IETF Tools][] website:
 
 [IETF Tools]: https://tools.ietf.org/
+[RFC5545]: https://tools.ietf.org/html/rfc5545
+[RFC5546]: https://tools.ietf.org/html/rfc5546
 
 ### 1.1 The libical project
 
@@ -1210,9 +1212,9 @@ DTSTART <= '20000106T120000Z'");
 There are several other routines in the icalset interface, but they
 not fully implemented yet.
 
-<a id="memory"></a>
 #### 5.5 Memory Management
 
+<a id="memory"></a>
 Libical relies heavily on dynamic allocation for both the core objects
 and for the strings used to hold values. Some of this memory the library
 caller owns and must free, and some of the memory is managed by the
@@ -1230,7 +1232,7 @@ library. Here is a summary of the memory rules.
 
 3. If the function name has "add" in it, the caller is transferring
    control of the memory to the routine, for example the function
-   ` icalproperty_add_parameter()`
+   `icalproperty_add_parameter()`
 
 4. If the function name has "remove" in it, the caller passes in
    a pointer to an object and after the call returns, the caller owns
