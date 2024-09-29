@@ -178,38 +178,23 @@ struct icalrecurrencetype {
 
     icalrecurrencetype_weekday week_start;
 
-    /* The BY* parameters can each take a list of values. Here I
-     * assume that the list of values will not be larger than the
-     * range of the value -- that is, the client will not name a
-     * value more than once.
-     */
-
-
-    icalrecurrence_by_data by_second;
-    icalrecurrence_by_data by_minute;
-    icalrecurrence_by_data by_hour;
-    icalrecurrence_by_data by_day; /**< @brief Encoded value
-        *
-        * The 'day' element of the by_day array is encoded to allow
-        * representation of both the day of the week ( Monday, Tuesday), but
-        * also the Nth day of the week (first Tuesday of the month, last
-        * Thursday of the year).
-        *
-        * These values are decoded by icalrecurrencetype_day_day_of_week() and
-        * icalrecurrencetype_day_position().
-        */
-    icalrecurrence_by_data by_month_day;
-    icalrecurrence_by_data by_year_day;
-    icalrecurrence_by_data by_week_no;
-    icalrecurrence_by_data by_month; /**< @brief Encoded value
-        *
-        * The 'month' element of the by_month array is encoded to allow
-        * representation of the "L" leap suffix (RFC 7529).
-        *
-        * These values are decoded by icalrecurrencetype_month_is_leap()
-        * and icalrecurrencetype_month_month().
-        */
-    icalrecurrence_by_data by_set_pos;
+    /**< @brief Encoded value
+    *
+    * The 'day' element of the ICAL_BY_DAY array is encoded to allow
+    * representation of both the day of the week ( Monday, Tuesday), but
+    * also the Nth day of the week (first Tuesday of the month, last
+    * Thursday of the year).
+    *
+    * These values are decoded by icalrecurrencetype_day_day_of_week() and
+    * icalrecurrencetype_day_position().
+    *
+    * The 'month' element of the ICAL_BY_MONTH array is encoded to allow
+    * representation of the "L" leap suffix (RFC 7529).
+    *
+    * These values are decoded by icalrecurrencetype_month_is_leap()
+    * and icalrecurrencetype_month_month().
+    */
+    icalrecurrence_by_data by[ICAL_BY_NUM_PARTS];
 
     /* For RSCALE extension (RFC 7529) */
     char *rscale;
@@ -217,7 +202,7 @@ struct icalrecurrencetype {
 };
 
 /**
- * @brief Allocates and initalizes a new instance of icalrecurrencetype. The new instance
+ * @brief Allocates and initializes a new instance of icalrecurrencetype. The new instance
  * is returned with a refcount of 1.
  * @return A pointer to the new instance, of NULL if allocation failed.
  */
@@ -252,7 +237,7 @@ LIBICAL_ICAL_EXPORT struct icalrecurrencetype *icalrecurrencetype_clone(struct i
 LIBICAL_ICAL_EXPORT int icalrecur_resize_by(icalrecurrence_by_data *by, short size);
 
 /*
- * Routines to decode the day values of the by_day array
+ * Routines to decode the day values of the by[ICAL_BY_DAY] array
  */
 
 /** @brief Decodes a day to a weekday.
@@ -281,7 +266,7 @@ LIBICAL_ICAL_EXPORT enum icalrecurrencetype_weekday icalrecurrencetype_day_day_o
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_day_position(short day);
 
 /** Encodes the @p weekday and @p position into a form, which can be stored
- *  to icalrecurrencetype::by_day array. Use icalrecurrencetype_day_day_of_week()
+ *  to icalrecurrencetype::by[ICAL_BY_DAY] array. Use icalrecurrencetype_day_day_of_week()
  *  and icalrecurrencetype_day_position() to split the encoded value back into the parts.
  * @since 3.1
  */
@@ -289,11 +274,11 @@ LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_day(enum icalrecurrencetype_
                                                         int position);
 
 /*
- * Routines to decode the 'month' element of the by_month array
+ * Routines to decode the 'month' element of the by[ICAL_BY_MONTH] array
  */
 
 /**
- * The @p month element of the by_month array is encoded to allow
+ * The @p month element of the by[ICAL_BY_MONTH] array is encoded to allow
  * representation of the "L" leap suffix (RFC 7529).
  * These routines decode the month values.
  *
@@ -304,7 +289,7 @@ LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_is_leap(short month);
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_month(short month);
 
 /** Encodes the @p month and the @p is_leap into a form, which can be stored
- *  to icalrecurrencetype::by_month array. Use icalrecurrencetype_month_is_leap()
+ *  to icalrecurrencetype::by[ICAL_BY_MONTH] array. Use icalrecurrencetype_month_is_leap()
  *  and icalrecurrencetype_month_month() to split the encoded value back into the parts
  *  @since 3.1
  */

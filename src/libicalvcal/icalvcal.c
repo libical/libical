@@ -873,7 +873,7 @@ static const char *rrule_parse_weekly_days(const char *s,
     if (*error_message)
         return NULL;
 
-    if (!icalrecur_resize_by(&recur->by_day, ICAL_BY_DAY_SIZE)) {
+    if (!icalrecur_resize_by(&recur->by[ICAL_BY_DAY], ICAL_BY_DAY_SIZE)) {
         return NULL;
     }
 
@@ -897,7 +897,7 @@ static const char *rrule_parse_weekly_days(const char *s,
             break;
 
         /* cppcheck-suppress arrayIndexOutOfBounds; since 'day' can't be >6 */
-        recur->by_day.data[i] = weekday_codes[day];
+        recur->by[ICAL_BY_DAY].data[i] = weekday_codes[day];
 
         s = e;
         /* Skip any whitespace. */
@@ -905,7 +905,7 @@ static const char *rrule_parse_weekly_days(const char *s,
             s++;
     }
 
-    if (!icalrecur_resize_by(&recur->by_day, i)) {
+    if (!icalrecur_resize_by(&recur->by[ICAL_BY_DAY], i)) {
         return NULL;
     }
 
@@ -922,7 +922,7 @@ static const char *rrule_parse_monthly_days(const char *s,
     if (*error_message)
         return NULL;
 
-    if (!icalrecur_resize_by(&recur->by_month_day, ICAL_BY_MONTHDAY_SIZE)) {
+    if (!icalrecur_resize_by(&recur->by[ICAL_BY_MONTH_DAY], ICAL_BY_MONTHDAY_SIZE)) {
         return NULL;
     }
 
@@ -953,7 +953,7 @@ static const char *rrule_parse_monthly_days(const char *s,
         if (*e != ' ' && *e != '\t' && *e != '\0')
             break;
 
-        recur->by_month_day.data[i] = month_day;
+        recur->by[ICAL_BY_MONTH_DAY].data[i] = month_day;
 
         s = e;
         /* Skip any whitespace. */
@@ -961,15 +961,15 @@ static const char *rrule_parse_monthly_days(const char *s,
             s++;
     }
 
-    if (!icalrecur_resize_by(&recur->by_month_day, i)) {
+    if (!icalrecur_resize_by(&recur->by[ICAL_BY_MONTH_DAY], i)) {
         return NULL;
     }
 
     return s;
 }
 
-static int icalrecur_set_single_by(icalrecurrence_by_data *by, short value) {
-
+static int icalrecur_set_single_by(icalrecurrence_by_data *by, short value)
+{
     if (!icalrecur_resize_by(by, 1)) {
         return 0;
     }
@@ -1053,7 +1053,7 @@ static const char *rrule_parse_monthly_positions(const char *s,
             s++;
     }
 
-    /* Now merge them together into the recur->by_day array. If there is a
+    /* Now merge them together into the recur->by[ICAL_BY_DAY] array. If there is a
        single position & weekday we output something like
        'BYDAY=TU;BYSETPOS=2', so Outlook will understand it. */
     num_weekdays = 0;
@@ -1064,11 +1064,11 @@ static const char *rrule_parse_monthly_positions(const char *s,
         }
     }
     if (num_positions == 1 && num_weekdays == 1) {
-        if (!icalrecur_set_single_by(&recur->by_day, weekday_codes[only_weekday])) {
+        if (!icalrecur_set_single_by(&recur->by[ICAL_BY_DAY], weekday_codes[only_weekday])) {
             return NULL;
         }
 
-        if (!icalrecur_set_single_by(&recur->by_set_pos, occurrences[0])) {
+        if (!icalrecur_set_single_by(&recur->by[ICAL_BY_SET_POS], occurrences[0])) {
             return NULL;
         }
     } else {
@@ -1078,12 +1078,11 @@ static const char *rrule_parse_monthly_positions(const char *s,
 
             for (day = 0; day < 7; day++) {
                 if (found_weekdays[day]) {
-
-                    if (!icalrecur_resize_by(&recur->by_day, elems + 1)) {
+                    if (!icalrecur_resize_by(&recur->by[ICAL_BY_DAY], elems + 1)) {
                         return NULL;
                     }
 
-                    recur->by_day.data[elems] =
+                    recur->by[ICAL_BY_DAY].data[elems] =
                         (abs(month_position) * 8 +
                          weekday_codes[day]) *
                         ((month_position < 0) ? -1 : 1);
@@ -1111,7 +1110,7 @@ static const char *rrule_parse_yearly_months(const char *s,
     if (*error_message)
         return NULL;
 
-    if (!icalrecur_resize_by(&recur->by_month, ICAL_BY_MONTH_SIZE)) {
+    if (!icalrecur_resize_by(&recur->by[ICAL_BY_MONTH], ICAL_BY_MONTH_SIZE)) {
         return NULL;
     }
 
@@ -1129,7 +1128,7 @@ static const char *rrule_parse_yearly_months(const char *s,
         if (*e != ' ' && *e != '\t' && *e != '\0')
             break;
 
-        recur->by_month.data[i] = month;
+        recur->by[ICAL_BY_MONTH].data[i] = month;
 
         s = e;
         /* Skip any whitespace. */
@@ -1137,7 +1136,7 @@ static const char *rrule_parse_yearly_months(const char *s,
             s++;
     }
 
-    if (!icalrecur_resize_by(&recur->by_month, i)) {
+    if (!icalrecur_resize_by(&recur->by[ICAL_BY_MONTH], i)) {
         return NULL;
     }
 
@@ -1154,7 +1153,7 @@ static const char *rrule_parse_yearly_days(const char *s,
     if (*error_message)
         return NULL;
 
-    if (!icalrecur_resize_by(&recur->by_year_day, ICAL_BY_YEARDAY_SIZE)) {
+    if (!icalrecur_resize_by(&recur->by[ICAL_BY_YEAR_DAY], ICAL_BY_YEARDAY_SIZE)) {
         return NULL;
     }
 
@@ -1172,7 +1171,7 @@ static const char *rrule_parse_yearly_days(const char *s,
         if (*e != ' ' && *e != '\t' && *e != '\0')
             break;
 
-        recur->by_year_day.data[i] = year_day;
+        recur->by[ICAL_BY_YEAR_DAY].data[i] = year_day;
 
         s = e;
         /* Skip any whitespace. */
