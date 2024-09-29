@@ -104,6 +104,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
 
     // Don't allow (fuzzer) garbage chars anywhere in the reqstat string
     s = str;
+    /* cppcheck-suppress nullPointerRedundantCheck */
     while (*s && isprint((unsigned char)*s)) {
         ++s;
     }

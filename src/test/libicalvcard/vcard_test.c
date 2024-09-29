@@ -125,6 +125,7 @@ static void test_parse_file(const char *fname)
     }
 
     card = vcardparser_parse_string(data);
+    /* cppcheck-suppress doubleFree */
     free(data);
 
     if (card == NULL) {

@@ -207,6 +207,7 @@ static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_
         *str_p = *str = (char *)icalmemory_new_buffer(*buf_sz);
     }
 
+    /* cppcheck-suppress uninitvar */
     if (*str_p == 0) {
         return 0;
     }
