@@ -848,8 +848,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
             // Create a recurrence rule for the current set of changes
 
-            if (zone->recur)
-            {
+            if (zone->recur) {
                 icalrecurrencetype_unref(zone->recur);
             }
 
@@ -866,8 +865,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             zone->num_monthdays = 1;
 
             struct icalrecurrencetype *clone = icalrecurrencetype_clone(zone->recur);
-            if (!clone)
-            {
+            if (!clone) {
                 icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                 break;
             }
