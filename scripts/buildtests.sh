@@ -46,7 +46,16 @@ HELP() {
   echo " -d, --no-tsan-build        Don't run any TSAN-build (sanitize-threads) tests"
   echo " -u, --no-ubsan-build       Don't run any UBSAN-build (sanitize-undefined) tests"
   echo " -r, --no-threadlocal-build Don't run the THREADLOCAL-build tests"
+  echo " -R, --reverse              Reverse polarity on the options"
   echo
+}
+
+REVERSE() {
+  if [[ $1 -eq 1 && $reverse -eq 0 ]] || [[ $reverse -eq 1 && $1 -eq 0 ]]; then
+    echo "go"
+  else
+    echo
+  fi
 }
 
 COMMAND_EXISTS() {
@@ -202,7 +211,7 @@ BUILD() {
 # $2 = CMake options
 GCC_BUILD() {
   name="$1-gcc"
-  if (test $rungccbuild -ne 1); then
+  if (test -z "$(REVERSE $rungccbuild)"); then
     echo "===== GCC BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -219,7 +228,7 @@ GCC_BUILD() {
 # $2 = CMake options
 FORTIFY_BUILD() {
   name="$1-fortify"
-  if (test $runfortifybuild -ne 1); then
+  if (test -z "$(REVERSE $runfortifybuild)"); then
     echo "===== FORTIFY BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -243,7 +252,7 @@ FORTIFY_BUILD() {
 # $2 = CMake options
 NINJA_GCC_BUILD() {
   name="$1-ninjagcc"
-  if (test $runninja -ne 1); then
+  if (test -z "$(REVERSE $runninja)"); then
     echo "===== NINJA_GCC BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -262,7 +271,7 @@ NINJA_GCC_BUILD() {
 # $2 = CMake options
 CLANG_BUILD() {
   name="$1-clang"
-  if (test $runclangbuild -ne 1); then
+  if (test -z "$(REVERSE $runclangbuild)"); then
     echo "===== CLANG BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -279,7 +288,7 @@ CLANG_BUILD() {
 # $2 = CMake options
 MEMCONSIST_BUILD() {
   name="$1-mem"
-  if (test $runmemcbuild -ne 1); then
+  if (test -z "$(REVERSE $runmemcbuild)"); then
     echo "===== MEMCONSIST BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -294,7 +303,7 @@ MEMCONSIST_BUILD() {
 # $2 = CMake options
 ASAN_BUILD() {
   name="$1-asan"
-  if (test $runasanbuild -ne 1); then
+  if (test -z "$(REVERSE $runasanbuild)"); then
     echo "===== ASAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -312,7 +321,7 @@ ASAN_BUILD() {
 # $2 = CMake options
 TSAN_BUILD() {
   name="$1-tsan"
-  if (test $runtsanbuild -ne 1); then
+  if (test -z "$(REVERSE $runtsanbuild)"); then
     echo "===== TSAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -328,7 +337,7 @@ TSAN_BUILD() {
 # $2 = CMake options
 UBSAN_BUILD() {
   name="$1-ubsan"
-  if (test $runubsanbuild -ne 1); then
+  if (test -z "$(REVERSE $runubsanbuild)"); then
     echo "===== UBSAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -349,7 +358,7 @@ UBSAN_BUILD() {
 # $2 = CMake options
 THREADLOCAL_BUILD() {
   name="$1-threadlocal"
-  if (test $runthreadlocalbuild -ne 1); then
+  if (test -z "$(REVERSE $runthreadlocalbuild)"); then
     echo "===== THREADLOCAL BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -365,7 +374,7 @@ THREADLOCAL_BUILD() {
 # $2 = CMake options
 CPPCHECK() {
   name="$1-cppcheck"
-  if (test $runcppcheck -ne 1); then
+  if (test -z "$(REVERSE $runcppcheck)"); then
     echo "===== CPPCHECK TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -406,6 +415,7 @@ CPPCHECK() {
     -I "$TOP/src/libicalvcard" \
     -I "$TOP/src/libical-glib" \
     "$TOP/src" "$BDIR"/src/libical/icalderived* 2>&1 |
+    grep -v 'is invalid C code' |
     grep -v 'check-level=exhaustive' |
     grep -v 'will no longer implicitly enable' |
     grep -v Net-ICal |
@@ -425,7 +435,7 @@ CPPCHECK() {
 # $2 = CMake options
 SPLINT() {
   name="$1-splint"
-  if (test $runsplint -ne 1); then
+  if (test -z "$(REVERSE $runsplint)"); then
     echo "===== SPLINT TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -518,7 +528,7 @@ SPLINT() {
 # $1 = the name of the test (which will have "-tidy" appended)
 # $2 = CMake options
 CLANGTIDY() {
-  if (test $runtidy -ne 1); then
+  if (test -z "$(REVERSE $runtidy)"); then
     echo "===== CLANG-TIDY TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -538,7 +548,7 @@ CLANGTIDY() {
 # $1 = the name of the test (which will have "-scan" appended)
 # $2 = CMake options
 CLANGSCAN() {
-  if (test $runscan -ne 1); then
+  if (test -z "$(REVERSE $runscan)"); then
     echo "===== SCAN-BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -562,7 +572,7 @@ CLANGSCAN() {
 #function KRAZY
 # runs a krazy2 test
 KRAZY() {
-  if (test $runkrazy -ne 1); then
+  if (test -z "$(REVERSE $runkrazy)"); then
     echo "===== KRAZY TEST DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -582,7 +592,7 @@ KRAZY() {
 #function PRECOMMIT
 # run pre-commit
 PRECOMMIT() {
-  if (test $runprecommit -ne 1); then
+  if (test -z "$(REVERSE $runprecommit)"); then
     echo "===== PRECOMMIT DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -601,9 +611,10 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hmpksbtcgnlfxadur" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-fortify-build,no-memc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-threadlocal-build" -- "$@")
+options=$(getopt -o "hmpksbtcgnlfxadurR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-fortify-build,no-memc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-threadlocal-build,reverse" -- "$@")
 eval set -- "$options"
 
+reverse=0
 cmakecompat=1
 runkrazy=1
 runprecommit=1
@@ -690,6 +701,10 @@ while true; do
     runthreadlocalbuild=0
     shift
     ;;
+  -R | --reverse)
+    reverse=1
+    shift
+    ;;
   --)
     shift
     break
@@ -709,7 +724,7 @@ TOP=$(pwd)
 BDIR=""
 
 #use minimum cmake version unless the --no-cmake-compat option is specified
-if (test $cmakecompat -eq 1); then
+if (test ! -z "$(REVERSE $cmakecompat)"); then
   if (test ! -e "$TOP/CMakeLists.txt"); then
     echo "Unable to locate the project top-level CMakeLists.txt.  Fix me"
     exit 1
