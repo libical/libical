@@ -265,7 +265,8 @@ static char *parse_posix_zone(char *p, ttinfo *type)
 
 #define nth_weekday(week, day) (icalrecurrencetype_encode_day(day, week))
 
-static int icalrecur_set_first_by(icalrecurrence_by_data *by, short value) {
+static int icalrecur_set_single_by(icalrecurrence_by_data *by, short value)
+{
     if ((by->size != 1) && !icalrecur_resize_by(by, 1)) {
         return 0;
     }
@@ -273,7 +274,6 @@ static int icalrecur_set_first_by(icalrecurrence_by_data *by, short value) {
     by->data[0] = value;
     return 1;
 }
-
 
 static char *parse_posix_rule(char *p,
                               struct icalrecurrencetype *recur, icaltimetype *t)
@@ -352,24 +352,24 @@ static char *parse_posix_rule(char *p,
     int error = 0;
 
     if (month) {
-        error |= !icalrecur_set_first_by(&recur->by_day, nth_weekday(week, (day % 7) + 1));
-        error |= !icalrecur_set_first_by(&recur->by_month, month);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_DAY], nth_weekday(week, (day % 7) + 1));
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH], month);
 
         if (monthday) {
-            error |= !icalrecur_resize_by(&recur->by_month_day, 7);
+            error |= !icalrecur_resize_by(&recur->by[ICAL_BY_MONTH_DAY], 7);
             unsigned i;
             for (i = 0; i < 7; i++) {
-                recur->by_month_day.data[i] = monthday++;
+                recur->by[ICAL_BY_MONTH_DAY].data[i] = monthday++;
             }
         }
     } else if (day > 1000) {
-        error |= !icalrecur_set_first_by(&recur->by_year_day, day - 1000);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_YEAR_DAY], day - 1000);
     } else {
         /* Convert day-of-non-leap-year into month/day */
         icaltimetype t = icaltime_from_day_of_year(day, 1 /* non-leap */);
 
-        error |= !icalrecur_set_first_by(&recur->by_month, t.month);
-        error |= !icalrecur_set_first_by(&recur->by_month_day, t.day);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH], t.month);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH_DAY], t.day);
     }
 
     if (error)
@@ -405,8 +405,8 @@ static void terminate_rrule(struct zone_context *zone)
         zone->recur->until.zone = icaltimezone_get_utc_timezone();
 
         // Remove BYMONTHDAY if BYDAY week != 0
-        if ((zone->recur->by_day.size >= 1) && icalrecurrencetype_day_position(zone->recur->by_day.data[0])) {
-            icalrecur_resize_by(&zone->recur->by_day, 0);
+        if ((zone->recur->by[ICAL_BY_DAY].size >= 1) && icalrecurrencetype_day_position(zone->recur->by[ICAL_BY_DAY].data[0])) {
+            icalrecur_resize_by(&zone->recur->by[ICAL_BY_MONTH_DAY], 0);
         }
 
         icalproperty_set_rrule(zone->rrule_prop, zone->recur);
@@ -685,7 +685,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
                 /* Parse dst->std rule */
                 p = parse_posix_rule(++p, /* skip ',' */
-                                    standard.final_recur, &std_trans);
+                                     standard.final_recur, &std_trans);
 
                 if (!p) {
                     goto error;
@@ -794,13 +794,11 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                      icaltime.hour == zone->time.hour &&
                      icaltime.minute == zone->time.minute &&
                      icaltime.second == zone->time.second) {
-                if ((zone->recur->by_day.size >= 1) && (by_day == zone->recur->by_day.data[0])) {
+                if ((zone->recur->by[ICAL_BY_DAY].size >= 1) && (by_day == zone->recur->by[ICAL_BY_DAY].data[0])) {
                     // Same nth weekday of the month - continue
-                } else if ((zone->recur->by_day.size >= 1) && (dow == icalrecurrencetype_day_day_of_week(zone->recur->by_day.data[0]))) {
+                } else if ((zone->recur->by[ICAL_BY_DAY].size >= 1) && (dow == icalrecurrencetype_day_day_of_week(zone->recur->by[ICAL_BY_DAY].data[0]))) {
                     // Same weekday in the month
-                    if (((zone->recur->by_month_day.size >= 1) && (icaltime.day >= zone->recur->by_month_day.data[0] + 7))
-                        || (zone->recur->by_month_day.size <= zone->num_monthdays - 1)
-                        || (icaltime.day + 7 <= zone->recur->by_month_day.data[zone->num_monthdays - 1])) {
+                    if (((zone->recur->by[ICAL_BY_MONTH_DAY].size >= 1) && (icaltime.day >= zone->recur->by[ICAL_BY_MONTH_DAY].data[0] + 7)) || (zone->recur->by[ICAL_BY_MONTH_DAY].size <= zone->num_monthdays - 1) || (icaltime.day + 7 <= zone->recur->by[ICAL_BY_MONTH_DAY].data[zone->num_monthdays - 1])) {
                         // Don't allow two month days with the same weekday -
                         // possible RDATE
                         rdate = terminate = 1;
@@ -808,44 +806,42 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         // Insert day of month into the array
                         int j;
 
-                        if (zone->num_monthdays != zone->recur->by_month_day.size) {
+                        if (zone->num_monthdays != zone->recur->by[ICAL_BY_MONTH_DAY].size) {
                             icalerror_set_errno(ICAL_INTERNAL_ERROR);
                             break;
                         }
 
-                        for (j = 0; j < zone->recur->by_month_day.size; j++) {
-                            if (icaltime.day <= zone->recur->by_month_day.data[j]) {
+                        for (j = 0; j < zone->recur->by[ICAL_BY_MONTH_DAY].size; j++) {
+                            if (icaltime.day <= zone->recur->by[ICAL_BY_MONTH_DAY].data[j]) {
                                 break;
                             }
                         }
 
-                        if ((j >= zone->num_monthdays) || (icaltime.day < zone->recur->by_month_day.data[j])) {
-                            if (!icalrecur_resize_by(&zone->recur->by_month_day, zone->num_monthdays + 1)) {
+                        if ((j >= zone->num_monthdays) || (icaltime.day < zone->recur->by[ICAL_BY_MONTH_DAY].data[j])) {
+                            if (!icalrecur_resize_by(&zone->recur->by[ICAL_BY_MONTH_DAY], zone->num_monthdays + 1)) {
                                 icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                                 break;
                             }
 
                             if (zone->num_monthdays > j) {
-                                memmove(&zone->recur->by_month_day.data[j + 1],
-                                        &zone->recur->by_month_day.data[j],
+                                memmove(&zone->recur->by[ICAL_BY_MONTH_DAY].data[j + 1],
+                                        &zone->recur->by[ICAL_BY_MONTH_DAY].data[j],
                                         (zone->num_monthdays - j) *
-                                            sizeof(zone->recur->by_month_day.data[0]));
+                                            sizeof(zone->recur->by[ICAL_BY_MONTH_DAY].data[0]));
                             }
 
-                            zone->recur->by_month_day.data[j] = icaltime.day;
+                            zone->recur->by[ICAL_BY_MONTH_DAY].data[j] = icaltime.day;
                             zone->num_monthdays++;
                         }
 
                         // Remove week number from BYDAY
-                        if (!icalrecur_set_first_by(&zone->recur->by_day, nth_weekday(0, dow))) {
-                            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-                            break;
-                        }
+                        // zone->recur->by[ICAL_BY_DAY].size cannot be < 1 here
+                        zone->recur->by[ICAL_BY_DAY].data[0] = nth_weekday(0, dow);
                     }
-                } else if ((zone->recur->by_month_day.size >= 1) && (icaltime.day == zone->recur->by_month_day.data[0])) {
+                } else if ((zone->recur->by[ICAL_BY_MONTH_DAY].size >= 1) && (icaltime.day == zone->recur->by[ICAL_BY_MONTH_DAY].data[0])) {
                     // Same day of the month - remove BYDAY
-                    if (zone->recur->by_day.data) {
-                        icalrecur_free_by(&zone->recur->by_day);
+                    if (zone->recur->by[ICAL_BY_DAY].data) {
+                        icalrecur_resize_by(&zone->recur->by[ICAL_BY_DAY], 0);
                     }
                 } else {
                     // Different BYDAY and BYMONTHDAY - possible RDATE
@@ -894,7 +890,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             // Create a recurrence rule for the current set of changes
 
             if (zone->recur) {
-            icalrecurrencetype_unref(zone->recur);
+                icalrecurrencetype_unref(zone->recur);
             }
 
             zone->recur = icalrecurrencetype_new();
@@ -904,9 +900,9 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             }
 
             zone->recur->freq = ICAL_YEARLY_RECURRENCE;
-            error |= !icalrecur_set_first_by(&zone->recur->by_day, by_day);
-            error |= !icalrecur_set_first_by(&zone->recur->by_month, icaltime.month);
-            error |= !icalrecur_set_first_by(&zone->recur->by_month_day, icaltime.day);
+            error |= !icalrecur_set_single_by(&zone->recur->by[ICAL_BY_DAY], by_day);
+            error |= !icalrecur_set_single_by(&zone->recur->by[ICAL_BY_MONTH], icaltime.month);
+            error |= !icalrecur_set_single_by(&zone->recur->by[ICAL_BY_MONTH_DAY], icaltime.day);
             if (error) {
                 icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                 break;
