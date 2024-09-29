@@ -1248,7 +1248,8 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
     if (free_string)
         deleteStr(s);
 
-    icalrecurrencetype_unref(recur);
+    if (recur)
+        icalrecurrencetype_unref(recur);
 
     return (void *)prop;
 }
