@@ -25,6 +25,7 @@ SKIP /cmake/Kitware/
 SKIP /cmake/modules/GObjectIntrospectionMacros\.cmake|/cmake/modules/FindGObjectIntrospection\.cmake
 SKIP /doc/Doxyfile\.cmake
 SKIP /cmake/Toolchain-QNX|/cmake/modules/FindBerkeleyDB.cmake|/uninstall.cmake.in
+SKIP .markdownlint.json
 
 #Skip test-data
 SKIP /test-data/
