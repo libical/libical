@@ -394,6 +394,8 @@ static void terminate_rrule(struct zone_context *zone)
         }
 
         icalproperty_set_rrule(zone->rrule_prop, zone->recur);
+        icalrecurrencetype_unref(zone->recur);
+        zone->recur = NULL;
 
         zone->rdate_comp = zone->rrule_comp = NULL;
     } else {
@@ -845,7 +847,12 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             zone->prev_time = icaltime;
 
             // Create a recurrence rule for the current set of changes
-            icalrecurrencetype_unref(zone->recur);
+
+            if (zone->recur)
+            {
+                icalrecurrencetype_unref(zone->recur);
+            }
+
             zone->recur = icalrecurrencetype_new();
             if (!zone->recur) {
                 icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -857,7 +864,21 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             zone->recur->by_month[0] = icaltime.month;
             zone->recur->by_month_day[0] = icaltime.day;
             zone->num_monthdays = 1;
-            zone->rrule_prop = icalproperty_new_rrule(zone->recur);
+
+            struct icalrecurrencetype *clone = icalrecurrencetype_clone(zone->recur);
+            if (!clone)
+            {
+                icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+                break;
+            }
+
+            zone->rrule_prop = icalproperty_new_rrule(clone);
+            icalrecurrencetype_unref(clone);
+
+            if (!zone->rrule_prop) {
+                icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+                break;
+            }
 
             zone->rrule_comp =
                 icalcomponent_vanew(zone->kind,
