@@ -109,6 +109,22 @@ typedef enum icalrecurrencetype_skip
     ICAL_SKIP_UNDEFINED
 } icalrecurrencetype_skip;
 
+typedef enum icalrecurrencetype_byrule
+{
+    ICAL_BYRULE_NO_CONTRACTION = -1,
+    ICAL_BY_MONTH = 0,
+    ICAL_BY_WEEK_NO = 1,
+    ICAL_BY_YEAR_DAY = 2,
+    ICAL_BY_MONTH_DAY = 3,
+    ICAL_BY_DAY = 4,
+    ICAL_BY_HOUR = 5,
+    ICAL_BY_MINUTE = 6,
+    ICAL_BY_SECOND = 7,
+    ICAL_BY_SET_POS = 8,
+
+    ICAL_BY_NUM_PARTS = 9
+} icalrecurrencetype_byrule;
+
 /*
  * Recurrence enumerations conversion routines.
  */
