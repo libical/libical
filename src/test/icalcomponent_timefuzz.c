@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
     memset(data, 0, filesize + 1);
 
     r = read(fd, data, filesize);
+    /* cppcheck-suppress doubleFree */
     fclose(fp);
 
     if (r < 0) {
@@ -67,6 +68,7 @@ int main(int argc, char *argv[])
     }
 
     comp = icalcomponent_new_from_string(data);
+    /* cppcheck-suppress doubleFree */
     free(data);
 
     if (comp != NULL) {

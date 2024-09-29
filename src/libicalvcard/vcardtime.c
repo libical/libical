@@ -154,7 +154,6 @@ static int sprintf_date(const vcardtimetype t, unsigned flags,
     const char *fmt;
 
     if (!(flags & VCARDTIME_AS_V4)) {
-        /* cppcheck-suppress wrongPrintfScanfArgNum */
         return snprintf(buf, size, "%04d%02d%02d",
                         t.year == -1 ? 0 : t.year,
                         t.month == -1 ? 1 : t.month,
@@ -202,7 +201,6 @@ static int sprintf_time(const vcardtimetype t, unsigned flags,
     }
 
     if (!(flags & VCARDTIME_AS_V4)) {
-        /* cppcheck-suppress wrongPrintfScanfArgNum */
         n = snprintf(buf, size, "%02d%02d%02d",
                      t.hour == -1 ? 0 : t.hour,
                      t.minute == -1 ? 0 : t.minute,
