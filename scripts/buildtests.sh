@@ -166,7 +166,8 @@ CONFIGURE() {
   rm -rf "$BDIR"
   mkdir "$BDIR"
   cd "$BDIR" || exit 1
-  cmake --warn-uninitialized -Werror=dev .. "$2" 2>&1 | tee cmake.out || exit 1
+  # shellcheck disable=SC2086
+  cmake --warn-uninitialized -Werror=dev .. $2 2>&1 | tee cmake.out || exit 1
   declare -i numWarnings
   declare -i numDeprecates
   set +e
@@ -243,6 +244,7 @@ FORTIFY_BUILD() {
   SET_GCC
   export CFLAGS="-Og -gdwarf-5 -fno-optimize-sibling-calls -Wall -W -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -D_FORTIFY_SOURCE=3 -fPIC -grecord-gcc-switches -fno-allow-store-data-races -fstack-protector-strong -fstack-clash-protection -fcf-protection=full --param=ssp-buffer-size=1"
   BUILD "$name" "$2"
+  unset CFLAGS
   echo "===== END FORTIFY BUILD: $1 ======"
 }
 
@@ -345,8 +347,10 @@ UBSAN_BUILD() {
   SET_CLANG
   ulimit -S -t 120     # oss-fuzz uses 60 seconds which is too low for us
   ulimit -S -m 2621440 # oss-fuzz uses 2560Mb
-  export UBSAN_OPTIONS=allocator_release_to_os_interval_ms=500:halt_on_error=1:handle_abort=2:handle_segv=2:handle_sigbus=2:handle_sigfpe=2:handle_sigill=2:print_stacktrace=1:print_summary=1:print_suppressions=0:silence_unsigned_overflow=1:strip_path_prefix=/workspace/:symbolize=0:use_sigaltstack=1
+  export UBSAN_OPTIONS=allocator_release_to_os_interval_ms=500:halt_on_error=1:handle_abort=2:handle_segv=2:handle_sigbus=2:handle_sigfpe=2:handle_sigill=2:print_stacktrace=1:print_summary=1:print_suppressions=0:silence_unsigned_overflow=1:symbolize=1:use_sigaltstack=1
+  export CFLAGS="-g -fno-omit-frame-pointer"
   BUILD "$name" "-DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True $2"
+  unset CFLAGS
   ulimit -S -t unlimited
   unlimt -S -m unlimited
   echo "===== END UBSAN BUILD: $1 ======"
