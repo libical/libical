@@ -86,9 +86,7 @@ if(ICAL_GLIB AND GOBJECT_INTROSPECTION)
 endif()
 
 ########## libicalvcard tests #########
-if(ICAL_VCARD)
-  add_subdirectory(libicalvcard)
-endif()
+add_subdirectory(libicalvcard)
 
 ########### next target ###############
 
