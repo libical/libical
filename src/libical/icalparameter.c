@@ -298,7 +298,7 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
 
     if (param->kind == ICAL_GAP_PARAMETER) {
         char *str = icaldurationtype_as_ical_string_r(param->duration);
-        
+
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
         icalmemory_free_buffer(str);
     } else if (param->string != 0) {
