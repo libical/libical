@@ -25,6 +25,7 @@
 	    <element name="ICAL_FLOAT_VALUE"/>
 	    <element name="ICAL_GEO_VALUE"/>
 	    <element name="ICAL_INTEGER_VALUE"/>
+	    <element name="ICAL_LINK_VALUE"/>
 	    <element name="ICAL_METHOD_VALUE"/>
 	    <element name="ICAL_PARTICIPANTTYPE_VALUE"/>
 	    <element name="ICAL_PERIOD_VALUE"/>
@@ -35,6 +36,7 @@
 	    <element name="ICAL_QUERY_VALUE"/>
 	    <element name="ICAL_QUERYLEVEL_VALUE"/>
 	    <element name="ICAL_RECUR_VALUE"/>
+	    <element name="ICAL_RELATEDTO_VALUE"/>
 	    <element name="ICAL_REQUESTSTATUS_VALUE"/>
 	    <element name="ICAL_STATUS_VALUE"/>
 	    <element name="ICAL_STRING_VALUE"/>
@@ -42,8 +44,10 @@
 	    <element name="ICAL_TEXT_VALUE"/>
 	    <element name="ICAL_TRANSP_VALUE"/>
 	    <element name="ICAL_TRIGGER_VALUE"/>
+	    <element name="ICAL_UID_VALUE"/>
 	    <element name="ICAL_URI_VALUE"/>
 	    <element name="ICAL_UTCOFFSET_VALUE"/>
+	    <element name="ICAL_XMLREFERENCE_VALUE"/>
 	    <element name="ICAL_X_VALUE"/>
 	    <element name="ICAL_XLICCLASS_VALUE"/>
 	    <element name="ICAL_NO_VALUE"/>

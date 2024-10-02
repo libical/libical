@@ -5605,6 +5605,105 @@ void test_attendees(void)
     icalcomponent_free(comp);
 }
 
+static void verify_comp_relations(icalcomponent *comp)
+{
+    icalproperty *prop;
+
+#define get_param(_kind, _suffix) icalparameter_get_##_suffix(icalproperty_get_first_parameter(prop, _kind))
+
+    prop = icalcomponent_get_first_property(comp, ICAL_CONCEPT_PROPERTY);
+	// serialized property SHOULD NOT have VALUE=URI (the default)
+    str_is("concept", icalproperty_as_ical_string(prop),
+		   "CONCEPT:https://example.com/event-types/arts/music\r\n");
+
+    prop = icalcomponent_get_first_property(comp, ICAL_LINK_PROPERTY);
+    str_is("link-value", icalproperty_get_link(prop),
+		   "https://example.com/xmlDocs/bidFramework.xml#xpointer(descendant::CostStruc/range-to(following::CostStrucEND[1]))");
+    str_is("link-linkrel", get_param(ICAL_LINKREL_PARAMETER, linkrel),
+		   "https://example.com/linkrel/costStructure");
+    str_is("link-label", get_param(ICAL_LABEL_PARAMETER, label), "Bid");
+    ok("link-value-type", get_param(ICAL_VALUE_PARAMETER, value) == ICAL_VALUE_XMLREFERENCE);
+
+    prop = icalcomponent_get_first_property(comp, ICAL_RELATEDTO_PROPERTY);
+	str_is("relto-1-value", icalproperty_get_relatedto(prop),
+		   "https://example.com/caldav/user/jb/cal/19960401-080045-4000F192713.ics");
+	str_is("relto-1-gap",
+		   icaldurationtype_as_ical_string(get_param(ICAL_GAP_PARAMETER, gap)),
+		   "PT5M");
+    ok("relto-1-value-type", get_param(ICAL_VALUE_PARAMETER, value) == ICAL_VALUE_URI);
+    ok("relto-1-reltype", get_param(ICAL_RELTYPE_PARAMETER, reltype) == ICAL_RELTYPE_STARTTOFINISH);
+
+    prop = icalcomponent_get_next_property(comp, ICAL_RELATEDTO_PROPERTY);
+	str_is("relto-2-value", icalproperty_get_relatedto(prop), "foo;bar");
+    ok("relto-2-value-type", get_param(ICAL_VALUE_PARAMETER, value) == ICAL_VALUE_UID);
+	// serialized property value should be escaped
+    str_is("relto-2", icalproperty_as_ical_string(prop),
+		   "RELATED-TO;VALUE=UID:foo\\;bar\r\n");
+
+    prop = icalcomponent_get_next_property(comp, ICAL_RELATEDTO_PROPERTY);
+	// serialized property SHOULD NOT have VALUE=TEXT (the default)
+    str_is("relto-3", icalproperty_as_ical_string(prop),
+		   "RELATED-TO:19960401-080045-4000F192713-0052@example.com\r\n");
+
+    prop = icalcomponent_get_first_property(comp, ICAL_REFID_PROPERTY);
+	str_is("refid-value", icalproperty_get_refid(prop), "1,2");
+	// serialized property SHOULD NOT have VALUE=TEXT (the default)
+    str_is("refid", icalproperty_as_ical_string(prop), "REFID:1\\,2\r\n");
+
+#undef get_param
+}
+
+void test_ical_relationships(void)
+{
+    icalcomponent *comp, *clone;
+    const char *str;
+
+    comp = icalcomponent_vanew(
+		ICAL_VEVENT_COMPONENT,
+		icalproperty_vanew_concept("https://example.com/event-types/arts/music",
+								   icalparameter_new_value(ICAL_VALUE_URI),
+								   (void *)0),
+		icalproperty_vanew_link("https://example.com/xmlDocs/bidFramework.xml#xpointer(descendant::CostStruc/range-to(following::CostStrucEND[1]))",
+								icalparameter_new_value(ICAL_VALUE_XMLREFERENCE),
+								icalparameter_new_label("Bid"),
+								icalparameter_new_linkrel("https://example.com/linkrel/costStructure"),
+								(void *)0),
+		icalproperty_vanew_relatedto("https://example.com/caldav/user/jb/cal/19960401-080045-4000F192713.ics",
+									 icalparameter_new_value(ICAL_VALUE_URI),
+									 icalparameter_new_reltype(ICAL_RELTYPE_STARTTOFINISH),
+									 icalparameter_new_gap(
+										 icaldurationtype_from_string("+PT05M")),
+									 (void *)0),
+		icalproperty_vanew_relatedto("foo;bar",
+									 icalparameter_new_value(ICAL_VALUE_UID),
+									 (void *)0),
+		icalproperty_vanew_relatedto("19960401-080045-4000F192713-0052@example.com",
+									 icalparameter_new_value(ICAL_VALUE_TEXT),
+									 (void *)0),
+		icalproperty_vanew_refid("1,2",
+								 icalparameter_new_value(ICAL_VALUE_TEXT),
+								 (void *)0),
+		(void *)0
+	);
+
+	verify_comp_relations(comp);
+
+    str = icalcomponent_as_ical_string(comp);
+    icalcomponent_free(comp);
+    comp = icalcomponent_new_from_string(str);
+	verify_comp_relations(comp);
+
+    clone = icalcomponent_new_clone(comp);
+	verify_comp_relations(clone);
+	icalcomponent_free(comp);
+
+	str = icalcomponent_as_ical_string(clone);
+	comp = icalcomponent_new_from_string(str);
+	verify_comp_relations(comp);
+    icalcomponent_free(clone);
+    icalcomponent_free(comp);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -5770,6 +5869,7 @@ int main(int argc, char *argv[])
     test_run("Test commas in x-property", test_comma_in_xproperty, do_test, do_header);
     test_run("Test icalcomponent_vanew with lastmodified property", test_icalcomponent_with_lastmodified, do_test, do_header);
     test_run("Test attendees", test_attendees, do_test, do_header);
+    test_run("Test iCalendar Relationships", test_ical_relationships, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

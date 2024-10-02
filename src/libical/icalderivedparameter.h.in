@@ -12,6 +12,7 @@
 #define ICALDERIVEDPARAMETER_H
 
 #include "libical_ical_export.h"
+#include "icalduration.h"
 
 typedef struct icalparameter_impl icalparameter;
 

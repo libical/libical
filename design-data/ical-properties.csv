@@ -34,7 +34,7 @@
 "CONTACT","18","TEXT","TEXT"
 "ORGANIZER","52","CAL-ADDRESS","CAL-ADDRESS"
 "RECURRENCE-ID","66","DATE-TIME-DATE","DATE-TIME"
-"RELATED-TO","67","TEXT","TEXT"
+"RELATED-TO","67","RELATED-TO","TEXT"
 "URL","88","URI","URI"
 "UID","87","TEXT","TEXT"
 "EXDATE","35","DATE-TIME-DATE","DATE-TIME",is_multivalued
@@ -163,5 +163,10 @@
 "CALENDAR-ADDRESS","130","CAL-ADDRESS","CAL-ADDRESS"
 "STYLED-DESCRIPTION","131","TEXT","NO"
 "STRUCTURED-DATA","132","ATTACH","NO",is_structured
+
+"#iCalendar Relationships Properties","RFC 9253 Section 8",
+"CONCEPT","133","URI","URI"
+"LINK","134","LINK","NO"
+"REFID","135","TEXT","TEXT"
 
 "#NOTE for updaters.  Preserve the icalproperty_kind Enum values to aid forward compatibility"

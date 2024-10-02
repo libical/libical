@@ -81,6 +81,14 @@ LIBICAL_ICAL_EXPORT const char *icalvalue_get_binary(const icalvalue *value);
 
 LIBICAL_ICAL_EXPORT void icalvalue_reset_kind(icalvalue *value);
 
+#define icalvalue_new_link icalvalue_new_uri
+#define icalvalue_set_link icalvalue_set_uri
+#define icalvalue_get_link icalvalue_get_uri
+
+#define icalvalue_new_relatedto icalvalue_new_text
+#define icalvalue_set_relatedto icalvalue_set_text
+#define icalvalue_get_relatedto icalvalue_get_text
+
 <insert_code_here>
 
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_class(enum icalproperty_class v);

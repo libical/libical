@@ -26,6 +26,7 @@ struct icalparameter_impl {
     icalproperty *parent;
 
     int data;
+    struct icaldurationtype duration;
 };
 
 #endif /*ICALPARAMETER_IMPL */

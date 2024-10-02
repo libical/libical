@@ -73,9 +73,11 @@ sub insert_code
     TEXTLIST       => 'structured.field[0]',
     TIME           => 'time',
     TIMESTAMP      => 'time',
+    UID            => 'string',
     URI            => 'string',
     UTCOFFSET      => 'int',
     QUERY          => 'string',
+    XMLREFERENCE   => 'string',
     X              => 'string'
   );
 

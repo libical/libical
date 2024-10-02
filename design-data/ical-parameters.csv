@@ -11,18 +11,20 @@
 "FMTTYPE","12","const char*",
 "LANGUAGE","14","const char*",
 "MEMBER","18","const char*",
-"#PARTSTAT:FAILED from draft-apthorp-ical-tasks",,,
+"#PARTSTAT=FAILED from draft-apthorp-ical-tasks",,,
 "PARTSTAT","20","icalparameter_partstat","X=20600;NEEDS-ACTION;ACCEPTED;DECLINED;TENTATIVE;DELEGATED;COMPLETED;INPROCESS;FAILED;NONE=20699"
 "RANGE","21","icalparameter_range","X=20700;THISANDPRIOR;THISANDFUTURE;NONE=20799"
 "RELATED","22","icalparameter_related","X=20800;START;END;NONE=20899"
-"#RELTYPE:SNOOZE from RFC9074",,,
-"#RELTYPE:POLL from draft-ietc-calext-vpoll",,,
-"RELTYPE","23","icalparameter_reltype","X=20900;PARENT;CHILD;SIBLING;POLL;SNOOZE;NONE=20999"
+"#RELTYPE=SNOOZE from RFC9074",,,
+"#RELTYPE=POLL from draft-ietc-calext-vpoll",,,
+"#RELTYPE=CONCEPT through STARTTOSTART from RFC9253, Section 5",,,
+"RELTYPE","23","icalparameter_reltype","X=20900;PARENT;CHILD;SIBLING;POLL;SNOOZE;CONCEPT;DEPENDS-ON;FINISHTOFINISH;FINISHTOSTART;FIRST;NEXT;REFID;STARTTOFINISH;STARTTOSTART;NONE=20999"
 "ROLE","24","icalparameter_role","X=21100;CHAIR;REQ-PARTICIPANT;OPT-PARTICIPANT;NON-PARTICIPANT;NONE=21199"
 "RSVP","25","icalparameter_rsvp","X=21200;TRUE;FALSE;NONE=21299"
 "SENT-BY","26","const char*",
 "TZID","27","const char*",
-"VALUE","28","icalparameter_value","X=21600;BINARY;BOOLEAN;DATE;DURATION;FLOAT;INTEGER;PERIOD;RECUR;TEXT;URI;ERROR;DATE-TIME;UTC-OFFSET;CAL-ADDRESS;NONE=21699"
+"#VALUE=UID and XML-REFERENCE from RFC9253, Section 7",,,
+"VALUE","28","icalparameter_value","X=21600;BINARY;BOOLEAN;DATE;DURATION;FLOAT;INTEGER;PERIOD;RECUR;TEXT;URI;ERROR;DATE-TIME;UTC-OFFSET;CAL-ADDRESS;UID;XML-REFERENCE;NONE=21699"
 "X","29","const char*",
 
 "#libical Internal Properties"
@@ -78,6 +80,10 @@
 "ORDER","52","int",
 "SCHEMA","53","const char*",
 "DERIVED","54","icalparameter_derived","X=22300;TRUE;FALSE;NONE=22399"
+
+"#iCalendar Relationships Parameters","RFC 9253 Section 6"
+"GAP","55","struct icaldurationtype",
+"LINKREL","56,"const char*",
 
 "#NOTE for updaters.  Preserve the icalparameter_kind Enum values to aid forward compatibility"
 "# New Enum values for an existing icalparameter_kind should be inserted before the corresponding NONE value"
