@@ -82,22 +82,22 @@ vcardproperty *vcardproperty_new(vcardproperty_kind kind)
 
 vcardproperty *vcardproperty_clone(const vcardproperty *old)
 {
-    vcardproperty *new;
+    vcardproperty *clone;
     pvl_elem p;
 
     icalerror_check_arg_rz((old != 0), "old");
-    new = vcardproperty_new_impl(old->kind);
-    icalerror_check_arg_rz((new != 0), "new");
+    clone = vcardproperty_new_impl(old->kind);
+    icalerror_check_arg_rz((clone != 0), "clone");
 
     if (old->value != 0) {
-        new->value = vcardvalue_clone(old->value);
+        clone->value = vcardvalue_clone(old->value);
     }
 
     if (old->x_name != 0) {
-        new->x_name = icalmemory_strdup(old->x_name);
+        clone->x_name = icalmemory_strdup(old->x_name);
 
-        if (new->x_name == 0) {
-            vcardproperty_free(new);
+        if (clone->x_name == 0) {
+            vcardproperty_free(clone);
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             return 0;
         }
@@ -107,15 +107,15 @@ vcardproperty *vcardproperty_clone(const vcardproperty *old)
         vcardparameter *param = vcardparameter_clone(pvl_data(p));
 
         if (param == 0) {
-            vcardproperty_free(new);
+            vcardproperty_free(clone);
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             return 0;
         }
 
-        pvl_push(new->parameters, param);
+        pvl_push(clone->parameters, param);
     }
 
-    return new;
+    return clone;
 }
 
 vcardproperty *vcardproperty_new_clone(vcardproperty *old)

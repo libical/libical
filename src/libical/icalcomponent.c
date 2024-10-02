@@ -129,30 +129,30 @@ icalcomponent *icalcomponent_new_from_string(const char *str)
 
 icalcomponent *icalcomponent_clone(const icalcomponent *old)
 {
-    icalcomponent *new;
+    icalcomponent *clone;
     icalproperty *p;
     icalcomponent *c;
     pvl_elem itr;
 
     icalerror_check_arg_rz((old != 0), "component");
 
-    new = icalcomponent_new_impl(old->kind);
+    clone = icalcomponent_new_impl(old->kind);
 
-    if (new == 0) {
+    if (clone == 0) {
         return 0;
     }
 
     for (itr = pvl_head(old->properties); itr != 0; itr = pvl_next(itr)) {
         p = (icalproperty *)pvl_data(itr);
-        icalcomponent_add_property(new, icalproperty_clone(p));
+        icalcomponent_add_property(clone, icalproperty_clone(p));
     }
 
     for (itr = pvl_head(old->components); itr != 0; itr = pvl_next(itr)) {
         c = (icalcomponent *)pvl_data(itr);
-        icalcomponent_add_component(new, icalcomponent_clone(c));
+        icalcomponent_add_component(clone, icalcomponent_clone(c));
     }
 
-    return new;
+    return clone;
 }
 
 icalcomponent *icalcomponent_new_clone(icalcomponent *old)

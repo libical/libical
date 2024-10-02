@@ -105,24 +105,24 @@ vcardcomponent *vcardcomponent_new_from_string(const char *str)
 
 vcardcomponent *vcardcomponent_clone(const vcardcomponent *old)
 {
-    vcardcomponent *new;
+    vcardcomponent *clone;
     vcardproperty *p;
     pvl_elem itr;
 
     icalerror_check_arg_rz((old != 0), "component");
 
-    new = vcardcomponent_new_impl(old->kind);
+    clone = vcardcomponent_new_impl(old->kind);
 
-    if (new == 0) {
+    if (clone == 0) {
         return 0;
     }
 
     for (itr = pvl_head(old->properties); itr != 0; itr = pvl_next(itr)) {
         p = (vcardproperty *)pvl_data(itr);
-        vcardcomponent_add_property(new, vcardproperty_clone(p));
+        vcardcomponent_add_property(clone, vcardproperty_clone(p));
     }
 
-    return new;
+    return clone;
 }
 
 void vcardcomponent_free(vcardcomponent *c)
@@ -1239,7 +1239,7 @@ static void comp_to_v3(vcardcomponent *impl)
     }
 
     /* Add TYPE=PREF for each most preferred property */
-    for (pkind = 0; pkind < VCARD_NO_PROPERTY; pkind++) {
+    for (pkind = 0; pkind < VCARD_NO_PROPERTY; ++pkind) {
         struct pref_prop *pp = pref_props[pkind];
 
         if (pp) {
