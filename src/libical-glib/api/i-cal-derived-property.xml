@@ -30,6 +30,7 @@
         <element name="ICAL_COMPLETED_PROPERTY"/>
         <element name="ICAL_COMPONENTS_PROPERTY"/>
         <element name="ICAL_CONFERENCE_PROPERTY"/>
+        <element name="ICAL_CONCEPT_PROPERTY"/>
         <element name="ICAL_CONTACT_PROPERTY"/>
         <element name="ICAL_CREATED_PROPERTY"/>
         <element name="ICAL_CSID_PROPERTY"/>
@@ -57,6 +58,7 @@
         <element name="ICAL_IMAGE_PROPERTY"/>
         <element name="ICAL_ITIPVERSION_PROPERTY"/>
         <element name="ICAL_LASTMODIFIED_PROPERTY"/>
+        <element name="ICAL_LINK_PROPERTY"/>
         <element name="ICAL_LOCATION_PROPERTY"/>
         <element name="ICAL_LOCATIONTYPE_PROPERTY"/>
         <element name="ICAL_MAXCOMPONENTSIZE_PROPERTY"/>
@@ -95,6 +97,7 @@
         <element name="ICAL_RECURLIMIT_PROPERTY"/>
         <element name="ICAL_RECURRENCEID_PROPERTY"/>
         <element name="ICAL_REFRESHINTERVAL_PROPERTY"/>
+        <element name="ICAL_REFID_PROPERTY"/>
         <element name="ICAL_RELATEDTO_PROPERTY"/>
         <element name="ICAL_RELCALID_PROPERTY"/>
         <element name="ICAL_REPEAT_PROPERTY"/>

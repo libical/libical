@@ -60,6 +60,12 @@
 "PARTICIPANTTYPE","5037","(a)enum icalproperty_participanttype","string","unitary","X=11400;ACTIVE;INACTIVE;SPONSOR;CONTACT;BOOKING-CONTACT;EMERGENCY-CONTACT;PUBLICITY-CONTACT;PLANNER-CONTACT;PERFORMER;SPEAKER;VOTER;NONE=11499"
 "RESOURCETYPE","5038","(a)enum icalproperty_resourcetype","string","unitary","X=11500;ROOM;PROJECTOR;REMOTE-CONFERENCE-AUDIO;REMOTE-CONFERENCE-VIDEO;NONE=11599"
 
+"#iCalendar Relationships Value Data Types","RFC 9253 Section 7",,,
+"UID","5040","(a)const char*","string","unitary",
+"XML-REFERENCE","5041","(a)const char*","string","unitary",
+"LINK","5042","(m)const char*","string","UID;URI;XML-REFERENCE",
+"RELATED-TO","5043","(m)const char*","string","TEXT;UID;URI",
+
 "#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"
 "# New Enum values for an existing icalvalue_kind should be inserted before the corresponding NONE value"
 "# New icalvalue_kind types should start their Enum value after the highest NONE value (currently 11599)"

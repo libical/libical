@@ -25,11 +25,13 @@
         <element name="ICAL_FEATURE_PARAMETER"/>
         <element name="ICAL_FILENAME_PARAMETER"/>
         <element name="ICAL_FMTTYPE_PARAMETER"/>
+        <element name="ICAL_GAP_PARAMETER"/>
         <element name="ICAL_IANA_PARAMETER"/>
         <element name="ICAL_ID_PARAMETER"/>
         <element name="ICAL_LABEL_PARAMETER"/>
         <element name="ICAL_LANGUAGE_PARAMETER"/>
         <element name="ICAL_LATENCY_PARAMETER"/>
+        <element name="ICAL_LINKREL_PARAMETER"/>
         <element name="ICAL_LOCAL_PARAMETER"/>
         <element name="ICAL_LOCALIZE_PARAMETER"/>
         <element name="ICAL_MANAGEDID_PARAMETER"/>
@@ -168,6 +170,15 @@
         <element name="ICAL_RELTYPE_SIBLING"/>
         <element name="ICAL_RELTYPE_POLL"/>
         <element name="ICAL_RELTYPE_SNOOZE"/>
+        <element name="ICAL_RELTYPE_CONCEPT"/>
+        <element name="ICAL_RELTYPE_DEPENDSON"/>
+        <element name="ICAL_RELTYPE_FINISHTOFINISH"/>
+        <element name="ICAL_RELTYPE_FINISHTOSTART"/>
+        <element name="ICAL_RELTYPE_FIRST"/>
+        <element name="ICAL_RELTYPE_NEXT"/>
+        <element name="ICAL_RELTYPE_REFID"/>
+        <element name="ICAL_RELTYPE_STARTTOFINISH"/>
+        <element name="ICAL_RELTYPE_STARTTOSTART"/>
         <element name="ICAL_RELTYPE_NONE"/>
     </enum>
     <enum name="ICalParameterRequired" native_name="icalparameter_required" default_native="I_CAL_REQUIRED_NONE">
@@ -231,6 +242,8 @@
         <element name="ICAL_VALUE_DATETIME"/>
         <element name="ICAL_VALUE_UTCOFFSET"/>
         <element name="ICAL_VALUE_CALADDRESS"/>
+        <element name="ICAL_VALUE_UID"/>
+        <element name="ICAL_VALUE_XMLREFERENCE"/>
         <element name="ICAL_VALUE_NONE"/>
     </enum>
     <enum name="ICalParameterXliccomparetype" native_name="icalparameter_xliccomparetype" default_native="I_CAL_XLICCOMPARETYPE_NONE">

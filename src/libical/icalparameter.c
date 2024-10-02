@@ -296,7 +296,12 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "=");
 
-    if (param->string != 0) {
+    if (param->kind == ICAL_GAP_PARAMETER) {
+        char *str = icaldurationtype_as_ical_string_r(param->duration);
+        
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+        icalmemory_free_buffer(str);
+    } else if (param->string != 0) {
         icalparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, param->string);
     } else if (param->data != 0) {
         const char *str = icalparameter_enum_to_string(param->data);

@@ -952,6 +952,12 @@ void icalproperty_normalize(icalproperty *prop)
                 }
                 break;
 
+            case ICAL_RELATEDTO_PROPERTY:
+                if (icalparameter_get_value(param) == ICAL_VALUE_TEXT) {
+                    remove = 1;
+                }
+                break;
+
             default:
                 break;
             }

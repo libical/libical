@@ -330,6 +330,14 @@ sub insert_code
 
         $set_code = "((struct ${lcprefix}parameter_impl *)param)->date = v;";
 
+    } elsif ($type =~ /struct icaldurationtype/) {
+
+        $xrange = "    if (param != 0) {\n       return param->duration;\n    } else {\n       return icaldurationtype_null_duration();\n    }";
+        $charorenum =
+            "    icalerror_check_arg((param != 0), \"param\");\n$xrange";
+
+        $set_code = "((struct ${lcprefix}parameter_impl *)param)->duration = v;";
+
     } elsif ($type =~ /vcardstructuredtype/) {
 
         $type =~ s/vcardstructuredtype\*/vcardstructuredtype \*/;

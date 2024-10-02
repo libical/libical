@@ -85,6 +85,8 @@ icalvalue *icalvalue_clone(const icalvalue *old)
     case ICAL_STRING_VALUE:
     case ICAL_TEXT_VALUE:
     case ICAL_CALADDRESS_VALUE:
+    case ICAL_UID_VALUE:
+    case ICAL_XMLREFERENCE_VALUE:
     case ICAL_URI_VALUE: {
         if (old->data.v_string != 0) {
             new->data.v_string = icalmemory_strdup(old->data.v_string);
@@ -683,6 +685,18 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         break;
     }
 
+    case ICAL_UID_VALUE: {
+        char *dequoted_str = icalmemory_strdup_and_dequote(str);
+
+        value = icalvalue_new_uid(dequoted_str);
+        icalmemory_free_buffer(dequoted_str);
+        break;
+    }
+
+    case ICAL_XMLREFERENCE_VALUE:
+        value = icalvalue_new_xmlreference(str);
+        break;
+
     case ICAL_X_VALUE: {
         char *dequoted_str = icalmemory_strdup_and_dequote(str);
 
@@ -756,6 +770,8 @@ void icalvalue_free(icalvalue *v)
     case ICAL_URI_VALUE:
     case ICAL_STRING_VALUE:
     case ICAL_QUERY_VALUE: {
+    case ICAL_UID_VALUE:
+    case ICAL_XMLREFERENCE_VALUE:
         if (v->data.v_string != 0) {
             icalmemory_free_buffer((void *)v->data.v_string);
             v->data.v_string = 0;
@@ -1147,6 +1163,7 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
         return icalvalue_utcoffset_as_ical_string_r(value);
 
     case ICAL_TEXT_VALUE:
+    case ICAL_UID_VALUE:
         return icalvalue_text_as_ical_string_r(value);
 
     case ICAL_QUERY_VALUE:
@@ -1155,6 +1172,7 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
     case ICAL_STRING_VALUE:
     case ICAL_URI_VALUE:
     case ICAL_CALADDRESS_VALUE:
+    case ICAL_XMLREFERENCE_VALUE:
         return icalvalue_string_as_ical_string_r(value);
 
     case ICAL_DATE_VALUE:
@@ -1338,6 +1356,8 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
     case ICAL_DATETIME_VALUE:
     case ICAL_DATETIMEPERIOD_VALUE:
     case ICAL_QUERY_VALUE:
+    case ICAL_UID_VALUE:
+    case ICAL_XMLREFERENCE_VALUE:
     case ICAL_RECUR_VALUE: {
         int r;
         char *temp1, *temp2;
