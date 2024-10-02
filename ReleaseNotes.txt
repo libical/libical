@@ -17,6 +17,7 @@ Version 3.1.0 (NOT RELEASED YET):
  * draft-ietf-calext-valarm-extensions-07 (RFC 9074) support added
  * libical-glib API is considered stable; no longer need to define LIBICAL_GLIB_UNSTABLE_API=1
    before including <libical-glib/libical-glib.h>
+ * icalrecurrencetype now handled by reference rather than by value throughout the library.
  * Allow previous recurrence iteration
  * Improved performance of recurrence iterators
  * GEO property has arbitrary precision (values are internally stored as strings, not doubles)
@@ -34,6 +35,11 @@ Version 3.1.0 (NOT RELEASED YET):
     + icalvalue_clone
     + icalcluster_clone
     + icalrecur_iterator_prev
+    + icalrecurrencetype_new
+    + icalrecurrencetype_ref
+    + icalrecurrencetype_unref
+    + icalrecurrencetype_clone
+    + icalrecurrencetype_from_string
     + icalcomponent_set_x_name
     + icalcomponent_get_x_name
     + icalcomponent_get_component_name
@@ -42,6 +48,11 @@ Version 3.1.0 (NOT RELEASED YET):
     + ical_get_invalid_rrule_handling_setting
     + icalparser_get_ctrl
     + icalparser_set_ctrl
+ * Functions with changed Signature
+    + icalrecur_iterator_new
+    + icalvalue_new_recur
+    + icalvalue_get_recur
+    + icalvalue_set_recur
  * Deprecated functions:
     + caldat (replaced by internal function icaldat_int())
     + juldat (replaced by internal function juldat_int())
@@ -52,6 +63,7 @@ Version 3.1.0 (NOT RELEASED YET):
     + icalcluster_new_clone
  * No longer publicly available functions:
     + icaltzutil_fetch_timezone
+    + icalrecurrencetype_clear
  * Removed unused declarations:
     (were in the public headers but not used at all)
     + struct icaltimezonetype
