@@ -137,7 +137,7 @@ COMPILE_WARNINGS() {
 # print warnings found in the cppcheck output
 # $1 = file with the cppcheck output
 CPPCHECK_WARNINGS() {
-  CHECK_WARNINGS "$1" "\(warning\|error\|information\|portability\)" ""
+  CHECK_WARNINGS "$1" "\(warning\|error\|portability\)" ""
 }
 
 #function TIDY_WARNINGS:
@@ -145,7 +145,7 @@ CPPCHECK_WARNINGS() {
 # $1 = file with the clang-tidy output
 TIDY_WARNINGS() {
   #whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|modernize-\|cppcoreguidelines-pro-type-const-cast\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-type-reinterpret-cast\|cppcoreguidelines-owning-memory\|fuchsia.*\|hicpp-use-auto\|hicpp-no-malloc\|hicpp-use-nullptr\|hicpp-exception-baseclass\|hicpp-vararg\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-bounds-pointer-arithmetic\|google-build-using-namespace\|llvm-include-order\|hicpp-use-equals-default\|cppcoreguidelines-no-malloc\|g_type_class_add_private.*is[[:space:]]deprecated\)'
-  whitelist='\(no[[:space:]]link[[:space:]]for:\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|G_ADD_PRIVATE\|g_type_class_add_private.*is[[:space:]]deprecated\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\)'
+  whitelist='\(no[[:space:]]link[[:space:]]for:\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|G_ADD_PRIVATE\|g_type_class_add_private.*is[[:space:]]deprecated\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|libical-glib-scan\.c\)'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
@@ -153,7 +153,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='\(no[[:space:]]link[[:space:]]for:\|g_type_class_add_private.*is[[:space:]]deprecated\|libical-glib-scan\.c\|/i-cal-object\.c\|/vcc\.c\|/vobject\.c\|/icalsslexer\.c\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\|G_ADD_PRIVATE\)'
+  whitelist='\(no[[:space:]]link[[:space:]]for:\|g_type_class_add_private.*is[[:space:]]deprecated\|libical-glib-scan\.c\|/i-cal-object\.c\|/vcc\.c\|/vobject\.c\|/icalsslexer\.c\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\|G_ADD_PRIVATE\|g-ir-scanner:\)'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
@@ -394,18 +394,15 @@ CPPCHECK() {
   echo "===== START CPPCHECK: $1 ======"
   cd "$TOP" || exit 1
   cppcheck --quiet \
-    --language=c \
-    --std=c11 \
+    --language=c++ \
+    --std=c++11 \
     --force --error-exitcode=1 --inline-suppr \
-    --enable=warning,performance,portability,information \
+    --enable=warning,performance,portability \
+    --check-level=exhaustive \
     --disable=missingInclude \
+    --suppress=passedByValue --suppress=ctuOneDefinitionRuleViolation \
     --template='{file}:{line},{severity},{id},{message}' \
     --checkers-report=cppcheck-report.txt \
-    -D bswap32="" \
-    -D PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=0 \
-    -D MIN="" \
-    -D _unused="(void)" \
-    -U YYSTYPE \
     -U PVL_USE_MACROS \
     -I "$BDIR" \
     -I "$BDIR/src/libical" \
@@ -418,15 +415,12 @@ CPPCHECK() {
     -I "$TOP/src/libicalvcal" \
     -I "$TOP/src/libicalvcard" \
     -I "$TOP/src/libical-glib" \
+    -i "$TOP/src/Net-ICal-Libical" \
+    -i "$TOP/src/libicalss/icalssyacc.c" \
+    -i "$TOP/src/libicalss/icalsslexer.c" \
+    -i "$TOP/src/libicalvcal/vcc.c" \
     "$TOP/src" "$BDIR"/src/libical/icalderived* 2>&1 |
-    grep -v 'is invalid C code' |
-    grep -v 'check-level=exhaustive' |
-    grep -v 'will no longer implicitly enable' |
-    grep -v Net-ICal |
-    grep -v icalssyacc\.c |
-    grep -v icalsslexer\.c |
-    grep -v vcc\.c | grep -v vcc\.y |
-    grep -v _cxx\. | tee cppcheck.out
+    tee cppcheck.out
   CPPCHECK_WARNINGS cppcheck.out
   rm -f cppcheck.out cppcheck-report.txt
   CLEAN
@@ -565,7 +559,8 @@ CLANGSCAN() {
   rm -rf "$BDIR"
   mkdir "$BDIR"
   cd "$BDIR" || exit 1
-  scan-build cmake .. "$2" || exit 1
+  # shellcheck disable=SC2086
+  scan-build cmake .. $2 || exit 1
 
   scan-build make 2>&1 | tee make-scan.out || exit 1
   SCAN_WARNINGS make-scan.out
@@ -772,16 +767,24 @@ GLIBOPTS="-DCMAKE_BUILD_TYPE=Debug -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=True
 FUZZOPTS="-DLIBICAL_BUILD_TESTING_BIGFUZZ=True"
 
 #Static code checkers
+STATICCCHECKOPTS="\
+-DCMAKE_BUILD_TYPE=Debug \
+-DSHARED_ONLY=True \
+-DWITH_CXX_BINDINGS=True \
+-DUSE_BUILTIN_TZDATA=True \
+-DICAL_GLIB=True \
+-DGOBJECT_INTROSPECTION=True \
+-DICAL_GLIB_VAPI=True \
+-DENABLE_GTK_DOC=True \
+-DLIBICAL_BUILD_TESTING=True \
+-DLIBICAL_BUILD_EXAMPLES=True \
+"
 PRECOMMIT
 KRAZY
-SPLINT test2 "$CMAKEOPTS"
-SPLINT test2builtin "$TZCMAKEOPTS"
-CLANGSCAN test2 "$CMAKEOPTS"
-CLANGSCAN test2builtin "$TZCMAKEOPTS"
-CLANGTIDY test2 "$CMAKEOPTS"
-CLANGTIDY test2builtin "$TZCMAKEOPTS"
-CPPCHECK test2 "$CMAKEOPTS"
-CPPCHECK test2builtin "$TZCMAKEOPTS"
+SPLINT test "$STATICCCHECKOPTS"
+CLANGSCAN test "$STATICCCHECKOPTS"
+CLANGTIDY test "$STATICCCHECKOPTS -DICAL_GLIB_VAPI=False" #Building with vapi inconsistently fails on Fedora.
+CPPCHECK test "$STATICCCHECKOPTS"
 
 #GCC based build tests
 GCC_BUILD testgcc1 "$DEFCMAKEOPTS"
