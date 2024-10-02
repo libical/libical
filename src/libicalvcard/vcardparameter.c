@@ -80,37 +80,37 @@ void vcardparameter_free(vcardparameter *param)
 
 vcardparameter *vcardparameter_clone(const vcardparameter *old)
 {
-    struct vcardparameter_impl *new;
+    struct vcardparameter_impl *clone;
 
     icalerror_check_arg_rz((old != 0), "param");
 
-    new = vcardparameter_new_impl(old->kind);
+    clone = vcardparameter_new_impl(old->kind);
 
-    if (new == 0) {
+    if (clone == 0) {
         return 0;
     }
 
-    memcpy(new, old, sizeof(struct vcardparameter_impl));
+    memcpy(clone, old, sizeof(struct vcardparameter_impl));
 
     if (old->string != 0) {
-        new->string = icalmemory_strdup(old->string);
-        if (new->string == 0) {
-            new->parent = 0;
-            vcardparameter_free(new);
+        clone->string = icalmemory_strdup(old->string);
+        if (clone->string == 0) {
+            clone->parent = 0;
+            vcardparameter_free(clone);
             return 0;
         }
     }
 
     if (old->x_name != 0) {
-        new->x_name = icalmemory_strdup(old->x_name);
-        if (new->x_name == 0) {
-            new->parent = 0;
-            vcardparameter_free(new);
+        clone->x_name = icalmemory_strdup(old->x_name);
+        if (clone->x_name == 0) {
+            clone->parent = 0;
+            vcardparameter_free(clone);
             return 0;
         }
     }
 
-    return new;
+    return clone;
 }
 
 vcardparameter *vcardparameter_new_clone(vcardparameter *old)

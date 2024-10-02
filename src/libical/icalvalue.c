@@ -56,28 +56,28 @@ icalvalue *icalvalue_new(icalvalue_kind kind)
 
 icalvalue *icalvalue_clone(const icalvalue *old)
 {
-    struct icalvalue_impl *new;
+    struct icalvalue_impl *clone;
 
-    new = icalvalue_new_impl(old->kind);
+    clone = icalvalue_new_impl(old->kind);
 
-    if (new == 0) {
+    if (clone == 0) {
         return 0;
     }
 
-    strcpy(new->id, old->id);
-    new->kind = old->kind;
-    new->size = old->size;
+    strcpy(clone->id, old->id);
+    clone->kind = old->kind;
+    clone->size = old->size;
 
-    switch (new->kind) {
+    switch (clone->kind) {
     case ICAL_ATTACH_VALUE:
     case ICAL_BINARY_VALUE: {
         /* Hmm.  We just ref the attach value, which may not be the right
              * thing to do.  We cannot quite copy the data, anyways, since we
              * don't know how long it is.
              */
-        new->data.v_attach = old->data.v_attach;
-        if (new->data.v_attach)
-            icalattach_ref(new->data.v_attach);
+        clone->data.v_attach = old->data.v_attach;
+        if (clone->data.v_attach)
+            icalattach_ref(clone->data.v_attach);
 
         break;
     }
@@ -89,27 +89,27 @@ icalvalue *icalvalue_clone(const icalvalue *old)
     case ICAL_XMLREFERENCE_VALUE:
     case ICAL_URI_VALUE: {
         if (old->data.v_string != 0) {
-            new->data.v_string = icalmemory_strdup(old->data.v_string);
+            clone->data.v_string = icalmemory_strdup(old->data.v_string);
 
-            if (new->data.v_string == 0) {
-                new->parent = 0;
-                icalvalue_free(new);
+            if (clone->data.v_string == 0) {
+                clone->parent = 0;
+                icalvalue_free(clone);
                 return 0;
             }
         }
         break;
     }
     case ICAL_ACTION_VALUE: {
-        new->data = old->data;
+        clone->data = old->data;
 
         if (old->data.v_enum == ICAL_ACTION_X) {
             //preserve the custom action string
             if (old->x_value != 0) {
-                new->x_value = icalmemory_strdup(old->x_value);
+                clone->x_value = icalmemory_strdup(old->x_value);
 
-                if (new->x_value == 0) {
-                    new->parent = 0;
-                    icalvalue_free(new);
+                if (clone->x_value == 0) {
+                    clone->parent = 0;
+                    icalvalue_free(clone);
                     return 0;
                 }
             }
@@ -118,9 +118,9 @@ icalvalue *icalvalue_clone(const icalvalue *old)
     }
     case ICAL_RECUR_VALUE: {
         if (old->data.v_recur != 0) {
-            new->data.v_recur = icalrecurrencetype_clone(old->data.v_recur);
-            if (new->data.v_recur == 0) {
-                icalvalue_free(new);
+            clone->data.v_recur = icalrecurrencetype_clone(old->data.v_recur);
+            if (clone->data.v_recur == 0) {
+                icalvalue_free(clone);
                 return 0;
             }
         }
@@ -129,11 +129,11 @@ icalvalue *icalvalue_clone(const icalvalue *old)
 
     case ICAL_X_VALUE: {
         if (old->x_value != 0) {
-            new->x_value = icalmemory_strdup(old->x_value);
+            clone->x_value = icalmemory_strdup(old->x_value);
 
-            if (new->x_value == 0) {
-                new->parent = 0;
-                icalvalue_free(new);
+            if (clone->x_value == 0) {
+                clone->parent = 0;
+                icalvalue_free(clone);
                 return 0;
             }
         }
@@ -145,11 +145,11 @@ icalvalue *icalvalue_clone(const icalvalue *old)
         /* all of the other types are stored as values, not
                pointers, so we can just copy the whole structure. */
 
-        new->data = old->data;
+        clone->data = old->data;
     }
     }
 
-    return new;
+    return clone;
 }
 
 icalvalue *icalvalue_new_clone(const icalvalue *old)

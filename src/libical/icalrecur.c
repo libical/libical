@@ -809,7 +809,7 @@ struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
         } else if (strncasecmp(name, "BY", 2) == 0) {
             r = -1;
 
-            for (byrule = 0; byrule < NUM_BY_PARTS; byrule++) {
+            for (byrule = 0; byrule < NUM_BY_PARTS; ++byrule) {
                 if (strcasecmp(name + 2, recur_map[byrule].str + 2) == 0) {
                     if (byrule == BY_DAY) {
                         r = icalrecur_add_bydayrules(&parser, value);
@@ -842,7 +842,7 @@ struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
         }
     }
 
-    for (byrule = 0; byrule < NUM_BY_PARTS; byrule++) {
+    for (byrule = 0; byrule < NUM_BY_PARTS; ++byrule) {
         short *array = (short *)(recur_map[byrule].offset + (size_t)parser.rt);
 
         if (array[0] != ICAL_RECURRENCE_ARRAY_MAX &&
@@ -2090,7 +2090,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype *rule,
 
     /* Check if the recurrence rule is legal */
 
-    for (byrule = 0; byrule < NUM_BY_PARTS; byrule++) {
+    for (byrule = 0; byrule < NUM_BY_PARTS; ++byrule) {
         if (expand_map[freq].map[byrule] == ILLEGAL &&
             has_by_data(impl, byrule)) {
             ical_invalid_rrule_handling rruleHandlingSetting =

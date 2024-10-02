@@ -56,28 +56,28 @@ vcardvalue *vcardvalue_new(vcardvalue_kind kind)
 
 vcardvalue *vcardvalue_clone(const vcardvalue *old)
 {
-    struct vcardvalue_impl *new;
+    struct vcardvalue_impl *clone;
 
-    new = vcardvalue_new_impl(old->kind);
+    clone = vcardvalue_new_impl(old->kind);
 
-    if (new == 0) {
+    if (clone == 0) {
         return 0;
     }
 
-    strcpy(new->id, old->id);
-    new->kind = old->kind;
-    new->size = old->size;
+    strcpy(clone->id, old->id);
+    clone->kind = old->kind;
+    clone->size = old->size;
 
-    switch (new->kind) {
+    switch (clone->kind) {
     case VCARD_TEXT_VALUE:
     case VCARD_URI_VALUE:
     case VCARD_LANGUAGETAG_VALUE: {
         if (old->data.v_string != 0) {
-            new->data.v_string = icalmemory_strdup(old->data.v_string);
+            clone->data.v_string = icalmemory_strdup(old->data.v_string);
 
-            if (new->data.v_string == 0) {
-                new->parent = 0;
-                vcardvalue_free(new);
+            if (clone->data.v_string == 0) {
+                clone->parent = 0;
+                vcardvalue_free(clone);
                 return 0;
             }
         }
@@ -85,11 +85,11 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
     }
     case VCARD_X_VALUE: {
         if (old->x_value != 0) {
-            new->x_value = icalmemory_strdup(old->x_value);
+            clone->x_value = icalmemory_strdup(old->x_value);
 
-            if (new->x_value == 0) {
-                new->parent = 0;
-                vcardvalue_free(new);
+            if (clone->x_value == 0) {
+                clone->parent = 0;
+                vcardvalue_free(clone);
                 return 0;
             }
         }
@@ -101,11 +101,11 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
         /* all of the other types are stored as values, not
                pointers, so we can just copy the whole structure. */
 
-        new->data = old->data;
+        clone->data = old->data;
     }
     }
 
-    return new;
+    return clone;
 }
 
 char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
