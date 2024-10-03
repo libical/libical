@@ -19,7 +19,7 @@ store their calendar data and arrange meetings with other users.
 
 ## RFCs
 
-See [RFC calendar standards](doc/rfcs.md) for list of RFCs supported by this library.
+See [RFC calendar standards](docs/rfcs.md) for list of RFCs supported by this library.
 
 ## License
 
@@ -44,8 +44,8 @@ See the top-level [Install.txt](Install.txt) file.
 
 Documentation is hosted at <https://libical.github.io/libical/apidocs/>.
 
-For a conceptual overview of the library, see [Using Libical](doc/UsingLibical.md).
-There is other rudimentary, unfinished documentation in the `doc/` directory of the
+For a conceptual overview of the library, see [Using Libical](docs/UsingLibical.md).
+There is other rudimentary, unfinished documentation in the `docs/` directory of the
 source distribution, annotated examples in `examples/` and the test code in `src/test/`.
 
 ## Acknowledgments

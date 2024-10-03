@@ -4,7 +4,7 @@ Upstream-Contact: Allen Winter <winter@kde.org>
 Source: https://github.com/libical/libical
 
 #misc documentation
-Files: AUTHORS Install.txt README.md ReleaseNotes.txt TEST THANKS TODO doc/AddingOrModifyingComponents.txt doc/UsingLibical.md examples/access-usecases.txt src/Net-ICal-Libical/README.txt src/php/README.txt src/Net-ICal-Libical/MANIFEST src/Net-ICal-Libical/netical_wrap.doc
+Files: AUTHORS Install.txt README.md ReleaseNotes.txt TEST THANKS TODO docs/AddingOrModifyingComponents.txt docs/UsingLibical.md examples/access-usecases.txt src/Net-ICal-Libical/README.txt src/php/README.txt src/Net-ICal-Libical/MANIFEST src/Net-ICal-Libical/netical_wrap.doc
 Copyright: Copyright Contributors to the libical project
 License: LGPL-2.1-only OR MPL-2.0
 
@@ -14,7 +14,7 @@ Copyright: Copyright Contributors to the libical project
 License: BSD-3-Clause
 
 #other not-easy-to-comment source files
-Files: src/libical-glib/ICalGLib.metadata.in src/libical-glib/tools/header-structure-boilerplate-template src/libical-glib/tools/source-structure-boilerplate-template doc/reference/libical-glib/libical-glib-docs.sgml.in src/Net-ICal-Libical/netical_wrap.c src/libical/qsort_gen.c
+Files: src/libical-glib/ICalGLib.metadata.in src/libical-glib/tools/header-structure-boilerplate-template src/libical-glib/tools/source-structure-boilerplate-template docs/reference/libical-glib/libical-glib-docs.sgml.in src/Net-ICal-Libical/netical_wrap.c src/libical/qsort_gen.c
 Copyright: Copyright Contributors to the libical project
 License: LGPL-2.1-only OR MPL-2.0
 
