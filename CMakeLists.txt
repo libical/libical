@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 #
 # Pass the following variables to cmake to control the build:
-# (See doc/UsingLibical.md for more information)
+# (See docs/UsingLibical.md for more information)
 #
 # -DWITH_CXX_BINDINGS=[true|false]
 #  Build the C++ bindings.
@@ -776,7 +776,7 @@ endif()
 
 libical_option(ICAL_BUILD_DOCS "Build documentation" True)
 if(ICAL_BUILD_DOCS)
-  add_subdirectory(doc) # needs to go last, for the build source files
+  add_subdirectory(docs) # needs to go last, for the build source files
 endif()
 
 ########### create and install pkg-config file #########
