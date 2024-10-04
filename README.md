@@ -74,13 +74,10 @@ In no particular order:
 
 ## Get Involved
 
-Subscribe to our mailing lists:
+Watch the github project at <https://github.com/libical/libical>
 
-For developer discussions
-  <https://lists.infradead.org/mailman/listinfo/libical-devel>
-
-For general discussions about libical and related projects
-  <https://lists.infradead.org/mailman/listinfo/libical-interest>
+Follow discussions and announcements at
+  <https://github.com/libical/libical/discussions>
 
 Report bugs to our issue tracker at
   <https://github.com/libical/libical/issues>

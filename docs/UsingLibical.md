@@ -47,13 +47,11 @@ Also look in `src/test/` for additional annotated examples.
 
 ## 2 Building the Library
 
-Libical uses autoconf to generate makefiles. It should build with no
-adjustments on Linux, FreeBSD and Solaris under `gcc`. Some versions
-have been successfully built on MacOS, Solaris, UnixWare, And
-Tru64 UNIX without `gcc`, but you may run into problems with a particular
-later version.
+Libical uses CMake to generate makefiles. It should build with no adjustments on Linux,
+MacOS and Windows using `gcc`, `clang` and Microsoft Visual.  Please report build problems
+to the [Libical issue tracker](https://github.com/libical/libical/issues).
 
-For a more complete guide to building the library, see the `README` file
+For a more complete guide to building the library, see the `Install.txt` file
 in the distribution.
 
 ## 3 Structure
