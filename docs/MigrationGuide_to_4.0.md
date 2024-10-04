@@ -35,12 +35,10 @@ The following functions have been added:
 
 * `icalrecurrencetype_clear()` has been removed.
 
-### Migrating from 3.0 to 4.0
+#### Migrating from 3.0 to 4.0
 
 Instead of allocating `icalrecurrencetype` on the stack, use one of the constructor functions and
 take care of deallocation.
-
-#### Objects allocated on the stack
 
 Code like this in libical 3.0:
 
@@ -95,8 +93,8 @@ changes to this in libical 4.0:
 
 #### Modified methods
 
-* The following methods now take arguments of type `struct icalrecurrencetype *` rather than
-  `const struct icalrecurrencetype &`:
+* The following methods now take arguments of type `struct icalrecurrencetype *` rather than `const
+  struct icalrecurrencetype &`:
   * `ICalValue.set_recur()`
   * `ICalProperty.set_exrule()`
   * `ICalProperty.set_rrule()`
@@ -106,3 +104,70 @@ changes to this in libical 4.0:
   * `ICalValue.get_recur()`
   * `ICalProperty.get_exrule()`
   * `ICalProperty.get_rrule()`
+
+## `icalrecurrencetype.by_xxx` static arrays replaced by dynamically allocated ones
+
+I.e. memory `short by_hour[ICAL_BY_DAY_SIZE]` etc. are replaced by
+
+```c
+typedef struct
+{
+  short *data;
+  short size;
+} icalrecurrence_by_data;
+
+struct icalrecurrencetype {
+  ...
+  icalrecurrence_by_data by[ICAL_BY_NUM_PARTS];
+}
+```
+
+Memory is allocated in the required size using the new `icalrecur_resize_by()` function. It is
+automatically freed together with the containing `icalrecurrencetype`. As the size of the array is
+stored explicitly, no termination of the array with special value `ICAL_RECURRENCE_ARRAY_MAX` is
+required anymore.
+
+### Migrating `icalrecurrencetype.by_xxx` static arrays usage from 3.0 to 4.0
+
+Code like this in libical 3.0:
+
+```C
+    icalrecurrencetype recur;
+    ...
+    recur.by_hour[0] = 12;
+    recur.by_hour[1] = ICAL_RECURRENCE_ARRAY_MAX;
+```
+
+changes to something like this in libical 4.0:
+
+```C
+    icalrecurrencetype *recur;
+    ...
+    if (!icalrecur_resize_by(&recur->by[ICAL_BY_HOUR], 1)) {
+      // allocation failed
+      // error handling
+    } else {
+      recur.by[ICAL_BY_HOUR].data[0] = 12;
+    }
+```
+
+## GLib/Python bindings - changed `ICalGLib.Recurrence.*_by_*` methods
+
+`i_cal_recurrence_*_by_xxx*` methods have been replaced by more generic versions that take the 'by'
+type (day, month, ...) as a parameter.
+
+### Migrating `ICalGLib.Recurrence.*_by_*` methods from 3.0 to 4.0
+
+Code like this in libical 3.0:
+
+```python
+recurrence.set_by_second(0,
+  recurrence.get_by_second(0) + 1)
+```
+
+changes to something like this in libical 4.0:
+
+```python
+recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0,
+  recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) + 1)
+```

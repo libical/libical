@@ -21,6 +21,9 @@ Version 3.1.0 (NOT RELEASED YET):
  * libical-glib API is considered stable; no longer need to define LIBICAL_GLIB_UNSTABLE_API=1
    before including <libical-glib/libical-glib.h>
  * icalrecurrencetype now handled by reference rather than by value throughout the library.
+ * icalrecur_iterator_new() now keeps a reference to the passed rule, so that mustn't be modified as long as the iterator is in use.
+ * icalrecurrencetype.by_xxx static arrays replaced by dynamically allocated ones.
+ * GLib/Python bindings: `i_cal_recurrence_*_by_xxx*` methods have been replaced by more generic versions that take the 'by' type (day, month, ...) as a parameter.
  * Allow previous recurrence iteration
  * Improved performance of recurrence iterators
  * GEO property has arbitrary precision (values are internally stored as strings, not doubles)
@@ -38,6 +41,7 @@ Version 3.1.0 (NOT RELEASED YET):
     + icalvalue_clone
     + icalcluster_clone
     + icalrecur_iterator_prev
+    + icalrecur_resize_by
     + icalrecurrencetype_new
     + icalrecurrencetype_ref
     + icalrecurrencetype_unref
