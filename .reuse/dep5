@@ -4,7 +4,7 @@ Upstream-Contact: Allen Winter <winter@kde.org>
 Source: https://github.com/libical/libical
 
 #misc documentation
-Files: AUTHORS Install.txt README.md ReleaseNotes.txt TEST THANKS TODO docs/AddingOrModifyingComponents.txt docs/UsingLibical.md examples/access-usecases.txt src/Net-ICal-Libical/README.txt src/php/README.txt src/Net-ICal-Libical/MANIFEST src/Net-ICal-Libical/netical_wrap.doc
+Files: AUTHORS Install.txt README.md ReleaseNotes.txt THANKS TODO docs/AddingOrModifyingComponents.txt docs/UsingLibical.md examples/access-usecases.txt src/Net-ICal-Libical/README.txt src/php/README.txt src/Net-ICal-Libical/MANIFEST src/Net-ICal-Libical/netical_wrap.doc
 Copyright: Copyright Contributors to the libical project
 License: LGPL-2.1-only OR MPL-2.0
 
