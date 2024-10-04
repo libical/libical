@@ -32,8 +32,3 @@ License: LGPL-2.1-only OR MPL-2.0
 Files: test-data/* src/test/*.out src/test/*.ics src/Net-ICal-Libical/test-data/*
 Copyright: Copyright Contributors to the libical project
 License: LGPL-2.1-only OR MPL-2.0
-
-#debian packaging
-Files: debian/*
-Copyright: Copyright Contributors to the libical project
-License: LGPL-2.1-only OR MPL-2.0
