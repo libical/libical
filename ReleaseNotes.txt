@@ -52,6 +52,14 @@ Version 3.1.0 (NOT RELEASED YET):
     + icalparser_get_ctrl
     + icalparser_set_ctrl
  * Functions with changed Signature
+    + icalproperty_new_rrule()
+    + icalproperty_get_rrule()
+    + icalproperty_set_rrule()
+    + icalproperty_vanew_rrule()
+    + icalproperty_new_exrule()
+    + icalproperty_get_exrule()
+    + icalproperty_set_exrule()
+    + icalproperty_vanew_exrule()
     + icalrecur_iterator_new
     + icalvalue_new_recur
     + icalvalue_get_recur

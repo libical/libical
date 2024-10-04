@@ -14,12 +14,20 @@ applied that takes care of deallocating an instance as soon as the reference cou
    which returns a `struct icalrecurrencetype *` rather than a `struct icalrecurrencetype`.
 * The following functions now take arguments of type `struct icalrecurrencetype *` rather than
   `struct icalrecurrencetype`:
+  * `icalproperty_new_rrule()`
+  * `icalproperty_set_rrule()`
+  * `icalproperty_vanew_rrule()`
+  * `icalproperty_new_exrule()`
+  * `icalproperty_set_exrule()`
+  * `icalproperty_vanew_exrule()`
   * `icalrecur_iterator_new()`
   * `icalvalue_new_recur()`
   * `icalvalue_set_recur()`
 
-* The following functions now returns a value of type `struct icalrecurrencetype *` rather than
+* The following functions now return a value of type `struct icalrecurrencetype *` rather than
   `struct icalrecurrencetype`:
+  * `icalproperty_get_rrule()`
+  * `icalproperty_get_exrule()`
   * `icalvalue_get_recur()`
 
 #### New functions
