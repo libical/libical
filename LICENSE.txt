@@ -17,3 +17,11 @@ Libical is distributed under both the LGPL and the MPL. The MPL
 notice, reproduced below, covers the use of either of the licenses.
 
 ----------------------------------------------------------------------
+
+     The Original Code is libical.
+
+     The Initial Developer of the Original Code is Eric Busboom
+
+     All Rights Reserved.
+
+     Contributor(s): See individual source files.
