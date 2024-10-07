@@ -2729,6 +2729,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
                 }
 
                 /* Set start and end of ISO week-numbering year */
+                set_day_of_year(impl, 1);
                 doy_offset += get_start_of_week(impl) - 1;
                 last_day = (7 * weeks_in_year(year)) - doy_offset - 1;
 
