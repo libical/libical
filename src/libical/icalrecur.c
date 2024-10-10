@@ -683,6 +683,8 @@ struct icalrecurrencetype *icalrecurrencetype_clone(struct icalrecurrencetype *r
 
     memcpy(res, recur, sizeof(*res));
 
+    res->refcount = 1;
+
     if (res->rscale) {
         res->rscale = icalmemory_strdup(res->rscale);
         if (!res->rscale) {
