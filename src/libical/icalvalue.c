@@ -501,11 +501,22 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
     case ICAL_BUSYTYPE_VALUE:
         value = icalvalue_new_enum(kind, ICAL_BUSYTYPE_X, str);
         break;
+    case ICAL_PROXIMITY_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_PROXIMITY_X, str);
+        break;
     case ICAL_POLLMODE_VALUE:
         value = icalvalue_new_enum(kind, ICAL_POLLMODE_X, str);
         break;
     case ICAL_POLLCOMPLETION_VALUE:
         value = icalvalue_new_enum(kind, ICAL_POLLCOMPLETION_X, str);
+        break;
+
+    case ICAL_PARTICIPANTTYPE_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_PARTICIPANTTYPE_X, str);
+        break;
+
+    case ICAL_RESOURCETYPE_VALUE:
+        value = icalvalue_new_enum(kind, ICAL_RESOURCETYPE_X, str);
         break;
 
     case ICAL_INTEGER_VALUE:
@@ -1211,8 +1222,11 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
     case ICAL_TRANSP_VALUE:
     case ICAL_CLASS_VALUE:
     case ICAL_BUSYTYPE_VALUE:
+    case ICAL_PROXIMITY_VALUE:
     case ICAL_POLLMODE_VALUE:
     case ICAL_POLLCOMPLETION_VALUE:
+    case ICAL_PARTICIPANTTYPE_VALUE:
+    case ICAL_RESOURCETYPE_VALUE:
         if (value->x_value != 0) {
             return icalmemory_strdup(value->x_value);
         }

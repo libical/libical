@@ -57,8 +57,8 @@
 
 "#Event Publication Extension types","RFC 9073 Section 6",,,
 "#VOTER from draft-ietc-calext-vpoll",,,
-"PARTICIPANTTYPE","5037","(a)enum icalproperty_participanttype","string","unitary","X=11400;ACTIVE;INACTIVE;SPONSOR;CONTACT;BOOKING-CONTACT;EMERGENCY-CONTACT;PUBLICITY-CONTACT;PLANNER-CONTACT;PERFORMER;SPEAKER;VOTER;NONE=11499"
-"RESOURCETYPE","5038","(a)enum icalproperty_resourcetype","string","unitary","X=11500;ROOM;PROJECTOR;REMOTE-CONFERENCE-AUDIO;REMOTE-CONFERENCE-VIDEO;NONE=11599"
+"PARTICIPANT-TYPE","5037","(a)enum icalproperty_participanttype","string","unitary","X=11400;ACTIVE;INACTIVE;SPONSOR;CONTACT;BOOKING-CONTACT;EMERGENCY-CONTACT;PUBLICITY-CONTACT;PLANNER-CONTACT;PERFORMER;SPEAKER;VOTER;NONE=11499"
+"RESOURCE-TYPE","5038","(a)enum icalproperty_resourcetype","string","unitary","X=11500;ROOM;PROJECTOR;REMOTE-CONFERENCE-AUDIO;REMOTE-CONFERENCE-VIDEO;NONE=11599"
 
 "#iCalendar Relationships Value Data Types","RFC 9253 Section 7",,,
 "UID","5040","(a)const char*","string","unitary",
