@@ -410,6 +410,11 @@ const struct recur rfc5545[] = {
      "FREQ=YEARLY;BYWEEKNO=6;BYDAY=TU;WKST=TH;UNTIL=20210612T000000Z",
      NULL},
 
+    /* time-related BY* should be ignored if DTSTART is date-only */
+    {"20241018",
+     "FREQ=DAILY;BYMINUTE=1,2,3,4;INTERVAL=2;COUNT=3",
+     NULL},
+
     {NULL, NULL, NULL}
 };
 
