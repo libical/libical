@@ -182,6 +182,7 @@ int icalrecurrencetype_rscale_is_supported(void)
 
 /****************** Forward declarations ******************/
 static void icalrecurrencetype_clear(struct icalrecurrencetype *recur);
+static short daymask_find_next_bit(unsigned long *days, short start_idx);
 
 /****************** Enumeration Routines ******************/
 
@@ -1128,14 +1129,44 @@ static void daysmask_clearall(unsigned long mask[])
            sizeof(unsigned long) * LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE));
 }
 
-static void daysmask_setbit(unsigned long mask[], short n, int v)
+static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilDayExcl, int v)
+{
+    int fromBitIdx = fromDayIncl + ICAL_YEARDAYS_MASK_OFFSET;
+    int untilBitIdx = untilDayExcl + ICAL_YEARDAYS_MASK_OFFSET;
+
+    for (int word_idx = fromBitIdx / BITS_PER_LONG;
+         word_idx < (int)((untilBitIdx + BITS_PER_LONG - 1) / BITS_PER_LONG);
+         word_idx++) {
+        int lowerBitIdxIncl = (fromBitIdx <= (int)(word_idx * BITS_PER_LONG)) ? 0 : (fromBitIdx - (int)(word_idx * BITS_PER_LONG));
+        int upperBitIdxExcl = (untilBitIdx >= (int)((word_idx + 1) * BITS_PER_LONG)) ? (int)BITS_PER_LONG : (int)(untilBitIdx - (int)(word_idx * BITS_PER_LONG));
+
+        unsigned long mask = (unsigned long)-1;
+        if (lowerBitIdxIncl > 0)
+            mask &= ((unsigned long)-1) << lowerBitIdxIncl;
+        if (upperBitIdxExcl < (int)BITS_PER_LONG)
+            mask &= ((unsigned long)-1) >> (BITS_PER_LONG - upperBitIdxExcl);
+
+        if (v)
+            days[word_idx] |= mask;
+        else
+            days[word_idx] &= ~mask;
+    }
+}
+
+static int daysmask_setbit(unsigned long mask[], short n, int v)
 {
     n += ICAL_YEARDAYS_MASK_OFFSET;
-    if (v) {
-        mask[n / BITS_PER_LONG] |= (1UL << (n % BITS_PER_LONG));
-    } else {
-        mask[n / BITS_PER_LONG] &= ~(1UL << (n % BITS_PER_LONG));
+    int prev = (mask[n / BITS_PER_LONG] & (1UL << (n % BITS_PER_LONG))) ? 1 : 0;
+
+    if (v != prev) {
+        if (v) {
+            mask[n / BITS_PER_LONG] |= (1UL << (n % BITS_PER_LONG));
+        } else {
+            mask[n / BITS_PER_LONG] &= ~(1UL << (n % BITS_PER_LONG));
+        }
     }
+
+    return prev;
 }
 
 static unsigned long daysmask_getbit(unsigned long mask[], short n)
@@ -2562,9 +2593,10 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
     /* Try to calculate each of the occurrences. */
     unsigned long bydays[LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE)];
     int i, set_pos_total = 0;
-    short doy;
 
-    daysmask_clearall(bydays);
+    memcpy(bydays, impl->days, sizeof(bydays));
+
+    daysmask_set_range(impl->days, doy_offset + 1, doy_offset + last_day + 1, 0);
 
     for (i = 0; i < impl->bydata[ICAL_BY_DAY].by.size; i++) {
         /* This is 1 (Sun) to 7 (Sat). */
@@ -2632,32 +2664,20 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
             }
 
             if (valid) {
-                daysmask_setbit(bydays, day + doy_offset, 1);
+                int new_val = is_limiting
+                                  /* "Filter" the year days bitmask with the bydays bitmask */
+                                  ? daysmask_getbit(bydays, day + doy_offset)
+                                  /* Add each BYDAY to the year days bitmask */
+                                  : 1;
+
+                if (!daysmask_setbit(impl->days, day + doy_offset, new_val) && new_val) {
+                    set_pos_total++;
+                    if (day + doy_offset < impl->days_index)
+                        impl->days_index = day + doy_offset;
+                }
             }
 
         } while (!pos && ((day += 7) <= last_day) && ++this_weekno);
-    }
-
-    /* Apply bydays map to the year days bitmask */
-    for (doy = doy_offset + 1; doy <= doy_offset + last_day; doy++) {
-        int valid;
-
-        if (is_limiting) {
-            /* "Filter" the year days bitmask with the bydays bitmask */
-            valid = (int)(daysmask_getbit(impl->days, doy) &
-                          daysmask_getbit(bydays, doy));
-        } else {
-            /* Add each BYDAY to the year days bitmask */
-            valid = (int)daysmask_getbit(bydays, doy);
-        }
-
-        daysmask_setbit(impl->days, doy, valid);
-
-        if (valid) {
-            set_pos_total++;
-            if (doy < impl->days_index)
-                impl->days_index = doy;
-        }
     }
 
     return set_pos_total;
