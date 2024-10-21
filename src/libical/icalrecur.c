@@ -3086,10 +3086,9 @@ static int prev_year(icalrecur_iterator *impl)
     return prev_yearday(impl, &__next_year);
 }
 
-static short daymask_find_next_bit(icalrecur_iterator *impl)
+static short daymask_find_next_bit(unsigned long *days, short start_index)
 {
-    unsigned long *days = impl->days;
-    short days_index = impl->days_index + 1;
+    short days_index = start_index;
     unsigned long v;
     short startBitIndex;
     unsigned short wordIdx, maxWordIdx;
@@ -3141,10 +3140,9 @@ static short daymask_find_next_bit(icalrecur_iterator *impl)
     return days_index;
 }
 
-static short daymask_find_prev_bit(icalrecur_iterator *impl)
+static short daymask_find_prev_bit(unsigned long *days, short start_index)
 {
-    unsigned long *days = impl->days;
-    short days_index = impl->days_index - 1;
+    short days_index = start_index;
     unsigned long v;
     short startBitIndex;
     int wordIdx;
@@ -3207,7 +3205,7 @@ static int next_yearday(icalrecur_iterator *impl,
     reset_period_start(impl);
 
     /* Find next year day that is set */
-    impl->days_index = daymask_find_next_bit(impl);
+    impl->days_index = daymask_find_next_bit(impl->days, impl->days_index + 1);
 
     if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
         for (;;) {
@@ -3242,14 +3240,14 @@ static int prev_yearday(icalrecur_iterator *impl,
     reset_period_start(impl);
 
     /* Find previous year day that is set */
-    impl->days_index = daymask_find_prev_bit(impl);
+    impl->days_index = daymask_find_prev_bit(impl->days, impl->days_index - 1);
 
     while (impl->days_index <= -ICAL_YEARDAYS_MASK_OFFSET) {
         /* Decrement to and expand the previous period */
         next_period(impl, -impl->rule->interval);
 
         impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
-        impl->days_index = daymask_find_prev_bit(impl);
+        impl->days_index = daymask_find_prev_bit(impl->days, impl->days_index - 1);
     }
 
     if (impl->days_index < 1) {
