@@ -3278,15 +3278,20 @@ int icalrecur_check_rulepart(icalrecur_iterator *impl,
     return 0;
 }
 
+static inline int has_contract_restriction(icalrecur_iterator *impl,
+                                           icalrecurrencetype_byrule byrule)
+{
+    return impl->bydata[byrule].by.size > 0 &&
+           expand_map[impl->rule->freq].map[byrule] == CONTRACT;
+}
+
 static int check_contract_restriction(icalrecur_iterator *impl,
                                       icalrecurrencetype_byrule byrule, int v)
 {
     int pass = 0;
     int itr;
-    icalrecurrencetype_frequency freq = impl->rule->freq;
 
-    if (impl->bydata[byrule].by.size > 0 &&
-        expand_map[freq].map[byrule] == CONTRACT) {
+    if (has_contract_restriction(impl, byrule)) {
         for (itr = 0; itr < impl->bydata[byrule].by.size; itr++) {
             if (impl->bydata[byrule].by.data[itr] == v) {
                 pass = 1;
@@ -3305,23 +3310,26 @@ static int check_contract_restriction(icalrecur_iterator *impl,
 static int check_contracting_rules(icalrecur_iterator *impl)
 {
     struct icaltimetype last = occurrence_as_icaltime(impl, 0);
-    int day_of_week;
-    int week_no = get_week_number(impl, last);
-    int year_day = get_day_of_year(impl, last.year, last.month, last.day);
-    int day_of_week = get_day_of_week_adjusted(impl, last.year, last.month, last.day);
 
-    if (check_contract_restriction(impl, ICAL_BY_SECOND, last.second) &&
-        check_contract_restriction(impl, ICAL_BY_MINUTE, last.minute) &&
-        check_contract_restriction(impl, ICAL_BY_HOUR, last.hour) &&
-        check_contract_restriction(impl, ICAL_BY_DAY, day_of_week) &&
-        check_contract_restriction(impl, ICAL_BY_WEEK_NO, week_no) &&
-        check_contract_restriction(impl, ICAL_BY_MONTH_DAY, last.day) &&
-        check_contract_restriction(impl, ICAL_BY_MONTH, last.month) &&
-        check_contract_restriction(impl, ICAL_BY_YEAR_DAY, year_day)) {
+// Check `has_contract_restriction` before calling `check_contract_restriction` to avoid
+// evaluating potentially expensive `v` if not needed.
+#define CHECK_CONTRACT_RESTRICTION(by, v) (!has_contract_restriction(impl, (by)) || check_contract_restriction(impl, (by), (v)))
+
+    if (
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_SECOND, last.second) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MINUTE, last.minute) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_HOUR, last.hour) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH_DAY, last.day) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH, last.month) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_WEEK_NO, get_week_number(impl, last)) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_DAY, get_day_of_week_adjusted(impl, last.year, last.month, last.day)) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_YEAR_DAY, get_day_of_year(impl, last.year, last.month, last.day))) {
         return 1;
-    } else {
-        return 0;
     }
+
+#undef CHECK_CONTRACT_RESTRICTION
+
+    return 0;
 }
 
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
