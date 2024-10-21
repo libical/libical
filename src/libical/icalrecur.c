@@ -2692,17 +2692,18 @@ static void filter_bysetpos(icalrecur_iterator *impl, int pos_total,
 
     impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
-    for (doy = start_doy; doy <= end_doy; doy++) {
-        if (daysmask_getbit(impl->days, doy)) {
-            daysmask_setbit(impl->days, doy,
-                            (check_set_position(impl, pos_count + 1) ||
-                             check_set_position(impl, pos_count - pos_total)));
+    for (doy = daymask_find_next_bit(impl->days, start_doy);
+         (doy != ICAL_YEARDAYS_MASK_SIZE) && (doy <= end_doy);
+         doy = daymask_find_next_bit(impl->days, doy + 1)) {
+        int valid = (check_set_position(impl, pos_count + 1) ||
+                     check_set_position(impl, pos_count - pos_total));
 
-            if (daysmask_getbit(impl->days, doy) && doy < impl->days_index) {
-                impl->days_index = doy;
-            }
-            pos_count++;
+        daysmask_setbit(impl->days, doy, valid);
+
+        if (valid && doy < impl->days_index) {
+            impl->days_index = doy;
         }
+        pos_count++;
     }
 }
 
