@@ -182,6 +182,7 @@ int icalrecurrencetype_rscale_is_supported(void)
 
 /****************** Forward declarations ******************/
 static void icalrecurrencetype_clear(struct icalrecurrencetype *recur);
+static short daymask_find_next_bit(unsigned long *days, short start_idx);
 
 /****************** Enumeration Routines ******************/
 
@@ -1128,14 +1129,44 @@ static void daysmask_clearall(unsigned long mask[])
            sizeof(unsigned long) * LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE));
 }
 
-static void daysmask_setbit(unsigned long mask[], short n, int v)
+static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilDayExcl, int v)
+{
+    int fromBitIdx = fromDayIncl + ICAL_YEARDAYS_MASK_OFFSET;
+    int untilBitIdx = untilDayExcl + ICAL_YEARDAYS_MASK_OFFSET;
+
+    for (int word_idx = fromBitIdx / BITS_PER_LONG;
+         word_idx < (int)((untilBitIdx + BITS_PER_LONG - 1) / BITS_PER_LONG);
+         word_idx++) {
+        int lowerBitIdxIncl = (fromBitIdx <= (int)(word_idx * BITS_PER_LONG)) ? 0 : (fromBitIdx - (int)(word_idx * BITS_PER_LONG));
+        int upperBitIdxExcl = (untilBitIdx >= (int)((word_idx + 1) * BITS_PER_LONG)) ? (int)BITS_PER_LONG : (int)(untilBitIdx - (int)(word_idx * BITS_PER_LONG));
+
+        unsigned long mask = (unsigned long)-1;
+        if (lowerBitIdxIncl > 0)
+            mask &= ((unsigned long)-1) << lowerBitIdxIncl;
+        if (upperBitIdxExcl < (int)BITS_PER_LONG)
+            mask &= ((unsigned long)-1) >> (BITS_PER_LONG - upperBitIdxExcl);
+
+        if (v)
+            days[word_idx] |= mask;
+        else
+            days[word_idx] &= ~mask;
+    }
+}
+
+static int daysmask_setbit(unsigned long mask[], short n, int v)
 {
     n += ICAL_YEARDAYS_MASK_OFFSET;
-    if (v) {
-        mask[n / BITS_PER_LONG] |= (1UL << (n % BITS_PER_LONG));
-    } else {
-        mask[n / BITS_PER_LONG] &= ~(1UL << (n % BITS_PER_LONG));
+    int prev = (mask[n / BITS_PER_LONG] & (1UL << (n % BITS_PER_LONG))) ? 1 : 0;
+
+    if (v != prev) {
+        if (v) {
+            mask[n / BITS_PER_LONG] |= (1UL << (n % BITS_PER_LONG));
+        } else {
+            mask[n / BITS_PER_LONG] &= ~(1UL << (n % BITS_PER_LONG));
+        }
     }
+
+    return prev;
 }
 
 static unsigned long daysmask_getbit(unsigned long mask[], short n)
@@ -1424,11 +1455,9 @@ static int get_days_in_month(icalrecur_iterator *impl, int month, int year)
                               UCAL_DAY_OF_MONTH, UCAL_ACTUAL_MAXIMUM, &status);
 }
 
-static int get_day_of_year(icalrecur_iterator *impl,
-                           int year, int month, int day, int *dow)
+static void prepare_rscale_adjusted(icalrecur_iterator *impl,
+                                    int year, int month, int day, UErrorCode *status)
 {
-    UErrorCode status = U_ZERO_ERROR;
-
     ucal_set(impl->rscale, UCAL_YEAR, (int32_t)year);
 
     if (!month) {
@@ -1440,15 +1469,25 @@ static int get_day_of_year(icalrecur_iterator *impl,
         day = impl->rstart.day;
     } else if (day < 0) {
         day += 1 + (int)ucal_getLimit(impl->rscale, UCAL_DAY_OF_MONTH,
-                                      UCAL_ACTUAL_MAXIMUM, &status);
+                                      UCAL_ACTUAL_MAXIMUM, status);
     }
     ucal_set(impl->rscale, UCAL_DAY_OF_MONTH, (int32_t)day);
+}
 
-    if (dow) {
-        *dow = (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
-    }
-
+static int get_day_of_year(icalrecur_iterator *impl,
+                           int year, int month, int day)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    prepare_rscale_adjusted(impl, year, month, day, &status);
     return (int)ucal_get(impl->rscale, UCAL_DAY_OF_YEAR, &status);
+}
+
+static int get_day_of_week_adjusted(icalrecur_iterator *impl,
+                                    int year, int month, int day)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    prepare_rscale_adjusted(impl, year, month, day, &status);
+    return (int)ucal_get(impl->rscale, UCAL_DAY_OF_WEEK, &status);
 }
 
 static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator *impl,
@@ -1796,7 +1835,7 @@ static void reset_period_start(icalrecur_iterator *impl)
 {
     struct icaltimetype start = impl->period_start;
 
-    (void)get_day_of_year(impl, start.year, start.month, start.day, NULL);
+    (void)get_day_of_year(impl, start.year, start.month, start.day);
 }
 
 #else /* !HAVE_LIBICU */
@@ -1901,8 +1940,8 @@ static int get_days_in_month(icalrecur_iterator *impl, int month, int year)
     return icaltime_days_in_month(month, year);
 }
 
-static int get_day_of_year(icalrecur_iterator *impl,
-                           int year, int month, int day, int *dow)
+static struct icaltimetype get_dtstart_adjusted(icalrecur_iterator *impl,
+                                                int year, int month, int day)
 {
     struct icaltimetype t = impl->dtstart;
 
@@ -1921,11 +1960,19 @@ static int get_day_of_year(icalrecur_iterator *impl,
     }
     t.day = day;
 
-    if (dow) {
-        *dow = icaltime_day_of_week(t);
-    }
+    return t;
+}
 
-    return icaltime_day_of_year(t);
+static int get_day_of_year(icalrecur_iterator *impl,
+                           int year, int month, int day)
+{
+    return icaltime_day_of_year(get_dtstart_adjusted(impl, year, month, day));
+}
+
+static int get_day_of_week_adjusted(icalrecur_iterator *impl,
+                                    int year, int month, int day)
+{
+    return icaltime_day_of_week(get_dtstart_adjusted(impl, year, month, day));
 }
 
 static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator *impl,
@@ -2225,8 +2272,8 @@ static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
     int diff;
 
     if (a.year == b.year) {
-        diff = get_day_of_year(impl, b.year, b.month, b.day, NULL) -
-               get_day_of_year(impl, a.year, a.month, a.day, NULL);
+        diff = get_day_of_year(impl, b.year, b.month, b.day) -
+               get_day_of_year(impl, a.year, a.month, a.day);
     } else {
         /* Swap a and b if a is greater than b */
         int flipped = 0;
@@ -2244,10 +2291,10 @@ static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
         year = a.year;
 
         diff = get_days_in_year(impl, year) -
-               get_day_of_year(impl, a.year, a.month, a.day, NULL);
+               get_day_of_year(impl, a.year, a.month, a.day);
         while (++year < b.year)
             diff += get_days_in_year(impl, year);
-        diff += get_day_of_year(impl, b.year, b.month, b.day, NULL);
+        diff += get_day_of_year(impl, b.year, b.month, b.day);
 
         if (flipped) {
             /* The difference is negative because a was greater than b */
@@ -2525,7 +2572,7 @@ static int expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
         }
 
         if (doy == ICAL_BY_YEARDAY_SIZE) {
-            doy = get_day_of_year(impl, year, this_month, mday, NULL);
+            doy = get_day_of_year(impl, year, this_month, mday);
         }
 
         daysmask_setbit(impl->days, doy, 1);
@@ -2546,9 +2593,10 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
     /* Try to calculate each of the occurrences. */
     unsigned long bydays[LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE)];
     int i, set_pos_total = 0;
-    short doy;
 
-    daysmask_clearall(bydays);
+    memcpy(bydays, impl->days, sizeof(bydays));
+
+    daysmask_set_range(impl->days, doy_offset + 1, doy_offset + last_day + 1, 0);
 
     for (i = 0; i < impl->bydata[ICAL_BY_DAY].by.size; i++) {
         /* This is 1 (Sun) to 7 (Sat). */
@@ -2616,32 +2664,20 @@ static int expand_by_day(icalrecur_iterator *impl, int year,
             }
 
             if (valid) {
-                daysmask_setbit(bydays, day + doy_offset, 1);
+                int new_val = is_limiting
+                                  /* "Filter" the year days bitmask with the bydays bitmask */
+                                  ? daysmask_getbit(bydays, day + doy_offset)
+                                  /* Add each BYDAY to the year days bitmask */
+                                  : 1;
+
+                if (!daysmask_setbit(impl->days, day + doy_offset, new_val) && new_val) {
+                    set_pos_total++;
+                    if (day + doy_offset < impl->days_index)
+                        impl->days_index = day + doy_offset;
+                }
             }
 
         } while (!pos && ((day += 7) <= last_day) && ++this_weekno);
-    }
-
-    /* Apply bydays map to the year days bitmask */
-    for (doy = doy_offset + 1; doy <= doy_offset + last_day; doy++) {
-        int valid;
-
-        if (is_limiting) {
-            /* "Filter" the year days bitmask with the bydays bitmask */
-            valid = (int)(daysmask_getbit(impl->days, doy) &
-                          daysmask_getbit(bydays, doy));
-        } else {
-            /* Add each BYDAY to the year days bitmask */
-            valid = (int)daysmask_getbit(bydays, doy);
-        }
-
-        daysmask_setbit(impl->days, doy, valid);
-
-        if (valid) {
-            set_pos_total++;
-            if (doy < impl->days_index)
-                impl->days_index = doy;
-        }
     }
 
     return set_pos_total;
@@ -2656,17 +2692,18 @@ static void filter_bysetpos(icalrecur_iterator *impl, int pos_total,
 
     impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
-    for (doy = start_doy; doy <= end_doy; doy++) {
-        if (daysmask_getbit(impl->days, doy)) {
-            daysmask_setbit(impl->days, doy,
-                            (check_set_position(impl, pos_count + 1) ||
-                             check_set_position(impl, pos_count - pos_total)));
+    for (doy = daymask_find_next_bit(impl->days, start_doy);
+         (doy != ICAL_YEARDAYS_MASK_SIZE) && (doy <= end_doy);
+         doy = daymask_find_next_bit(impl->days, doy + 1)) {
+        int valid = (check_set_position(impl, pos_count + 1) ||
+                     check_set_position(impl, pos_count - pos_total));
 
-            if (daysmask_getbit(impl->days, doy) && doy < impl->days_index) {
-                impl->days_index = doy;
-            }
-            pos_count++;
+        daysmask_setbit(impl->days, doy, valid);
+
+        if (valid && doy < impl->days_index) {
+            impl->days_index = doy;
         }
+        pos_count++;
     }
 }
 
@@ -2683,7 +2720,8 @@ static int expand_month_days(icalrecur_iterator *impl, int year, int month)
        Mark our current start date so next_month() can increment from here */
     impl->period_start = occurrence_as_icaltime(impl, 0);
 
-    doy_offset = get_day_of_year(impl, year, month, 1, &first_dow) - 1;
+    doy_offset = get_day_of_year(impl, year, month, 1) - 1;
+    first_dow = get_day_of_week_adjusted(impl, year, month, 1);
     days_in_month = get_days_in_month(impl, month, year);
 
     /* Add each BYMONTHDAY to the year days bitmask */
@@ -2695,7 +2733,7 @@ static int expand_month_days(icalrecur_iterator *impl, int year, int month)
 
         impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
-        (void)get_day_of_year(impl, year, month, days_in_month, &last_dow);
+        last_dow = get_day_of_week_adjusted(impl, year, month, days_in_month);
 
         set_pos_total = expand_by_day(impl, year, doy_offset, days_in_month,
                                       first_dow, last_dow,
@@ -2942,7 +2980,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
 
             /* Calculate location of DTSTART day in weekno 1 */
             doy = get_day_of_year(impl, year,
-                                  impl->dtstart.month, impl->dtstart.day, NULL);
+                                  impl->dtstart.month, impl->dtstart.day);
             (void)__icaltime_from_day_of_year(impl, doy, year, &weekno);
             if (weekno > doy)
                 doy += 7;
@@ -2992,12 +3030,13 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
 
                 /* Get offset within year & day of week of first day of month */
                 doy_offset =
-                    get_day_of_year(impl, year, month, 1, &first_dow) - 1;
+                    get_day_of_year(impl, year, month, 1) - 1;
+                first_dow = get_day_of_week_adjusted(impl, year, month, 1);
 
                 /* Get day of week of last day of month */
                 days_in_month = get_days_in_month(impl, month, year);
-                (void)get_day_of_year(impl, year,
-                                      month, days_in_month, &last_dow);
+                last_dow = get_day_of_week_adjusted(impl, year,
+                                                    month, days_in_month);
 
                 set_pos_total += expand_by_day(impl, year,
                                                doy_offset, days_in_month,
@@ -3026,7 +3065,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
                 last_dow = (first_dow + 6) % 7;
             } else {
                 /* Get day of week of first day of year */
-                (void)get_day_of_year(impl, year, 1, 1, &first_dow);
+                first_dow = get_day_of_week_adjusted(impl, year, 1, 1);
 
                 /* Get day of week of last day of year */
                 set_day_of_year(impl, days_in_year);
@@ -3068,10 +3107,9 @@ static int prev_year(icalrecur_iterator *impl)
     return prev_yearday(impl, &__next_year);
 }
 
-static short daymask_find_next_bit(icalrecur_iterator *impl)
+static short daymask_find_next_bit(unsigned long *days, short start_index)
 {
-    unsigned long *days = impl->days;
-    short days_index = impl->days_index + 1;
+    short days_index = start_index;
     unsigned long v;
     short startBitIndex;
     unsigned short wordIdx, maxWordIdx;
@@ -3123,10 +3161,9 @@ static short daymask_find_next_bit(icalrecur_iterator *impl)
     return days_index;
 }
 
-static short daymask_find_prev_bit(icalrecur_iterator *impl)
+static short daymask_find_prev_bit(unsigned long *days, short start_index)
 {
-    unsigned long *days = impl->days;
-    short days_index = impl->days_index - 1;
+    short days_index = start_index;
     unsigned long v;
     short startBitIndex;
     int wordIdx;
@@ -3189,7 +3226,7 @@ static int next_yearday(icalrecur_iterator *impl,
     reset_period_start(impl);
 
     /* Find next year day that is set */
-    impl->days_index = daymask_find_next_bit(impl);
+    impl->days_index = daymask_find_next_bit(impl->days, impl->days_index + 1);
 
     if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
         for (;;) {
@@ -3224,14 +3261,14 @@ static int prev_yearday(icalrecur_iterator *impl,
     reset_period_start(impl);
 
     /* Find previous year day that is set */
-    impl->days_index = daymask_find_prev_bit(impl);
+    impl->days_index = daymask_find_prev_bit(impl->days, impl->days_index - 1);
 
     while (impl->days_index <= -ICAL_YEARDAYS_MASK_OFFSET) {
         /* Decrement to and expand the previous period */
         next_period(impl, -impl->rule->interval);
 
         impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
-        impl->days_index = daymask_find_prev_bit(impl);
+        impl->days_index = daymask_find_prev_bit(impl->days, impl->days_index - 1);
     }
 
     if (impl->days_index < 1) {
@@ -3260,15 +3297,20 @@ int icalrecur_check_rulepart(icalrecur_iterator *impl,
     return 0;
 }
 
+static inline int has_contract_restriction(icalrecur_iterator *impl,
+                                           icalrecurrencetype_byrule byrule)
+{
+    return impl->bydata[byrule].by.size > 0 &&
+           expand_map[impl->rule->freq].map[byrule] == CONTRACT;
+}
+
 static int check_contract_restriction(icalrecur_iterator *impl,
                                       icalrecurrencetype_byrule byrule, int v)
 {
     int pass = 0;
     int itr;
-    icalrecurrencetype_frequency freq = impl->rule->freq;
 
-    if (impl->bydata[byrule].by.size > 0 &&
-        expand_map[freq].map[byrule] == CONTRACT) {
+    if (has_contract_restriction(impl, byrule)) {
         for (itr = 0; itr < impl->bydata[byrule].by.size; itr++) {
             if (impl->bydata[byrule].by.data[itr] == v) {
                 pass = 1;
@@ -3287,23 +3329,26 @@ static int check_contract_restriction(icalrecur_iterator *impl,
 static int check_contracting_rules(icalrecur_iterator *impl)
 {
     struct icaltimetype last = occurrence_as_icaltime(impl, 0);
-    int day_of_week;
-    int week_no = get_week_number(impl, last);
-    int year_day =
-        get_day_of_year(impl, last.year, last.month, last.day, &day_of_week);
 
-    if (check_contract_restriction(impl, ICAL_BY_SECOND, last.second) &&
-        check_contract_restriction(impl, ICAL_BY_MINUTE, last.minute) &&
-        check_contract_restriction(impl, ICAL_BY_HOUR, last.hour) &&
-        check_contract_restriction(impl, ICAL_BY_DAY, day_of_week) &&
-        check_contract_restriction(impl, ICAL_BY_WEEK_NO, week_no) &&
-        check_contract_restriction(impl, ICAL_BY_MONTH_DAY, last.day) &&
-        check_contract_restriction(impl, ICAL_BY_MONTH, last.month) &&
-        check_contract_restriction(impl, ICAL_BY_YEAR_DAY, year_day)) {
+// Check `has_contract_restriction` before calling `check_contract_restriction` to avoid
+// evaluating potentially expensive `v` if not needed.
+#define CHECK_CONTRACT_RESTRICTION(by, v) (!has_contract_restriction(impl, (by)) || check_contract_restriction(impl, (by), (v)))
+
+    if (
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_SECOND, last.second) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MINUTE, last.minute) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_HOUR, last.hour) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH_DAY, last.day) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH, last.month) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_WEEK_NO, get_week_number(impl, last)) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_DAY, get_day_of_week_adjusted(impl, last.year, last.month, last.day)) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_YEAR_DAY, get_day_of_year(impl, last.year, last.month, last.day))) {
         return 1;
-    } else {
-        return 0;
     }
+
+#undef CHECK_CONTRACT_RESTRICTION
+
+    return 0;
 }
 
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
