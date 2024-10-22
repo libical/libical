@@ -59,7 +59,7 @@ static void print_error_hdr(struct recur *r)
 int main(int argc, char *argv[])
 {
     /* Default to RFC 5545 tests */
-    const char *file_name = "icalrecur_test.out";
+    const char *file_name = "icalrecur_test.txt";
     int verbose = 0;
 
     /* Do not use getopt for command line parsing -- for portability on Windows */
