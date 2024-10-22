@@ -181,10 +181,10 @@ testme(builtin_timezones "${builtin_timezones_SRCS}")
 ########### next target ###############
 if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
   set(icalrecurtest_SRCS icalrecur_test.c)
-  configure_file(icalrecur_test.out icalrecur_test.out COPYONLY)
-  configure_file(icalrecur_withicu_test.out icalrecur_withicu_test.out COPYONLY)
-  configure_file(icalrecur_withouticu_test.out icalrecur_withouticu_test.out COPYONLY)
-  configure_file(icalrecur_withicu_dangi_test.out icalrecur_withicu_dangi_test.out COPYONLY)
+  configure_file(icalrecur_test.txt icalrecur_test.txt COPYONLY)
+  configure_file(icalrecur_test_rscale.txt icalrecur_test_rscale.txt COPYONLY)
+  configure_file(icalrecur_test_rscale_withicu.txt icalrecur_test_rscale_withicu.txt COPYONLY)
+  configure_file(icalrecur_test_rscale_withicu_dangi.txt icalrecur_test_rscale_withicu_dangi.txt COPYONLY)
   add_executable(icalrecurtest ${icalrecurtest_SRCS})
   target_link_libraries(icalrecurtest ical icalss icalvcal)
   if(WITH_CXX_BINDINGS)
@@ -193,27 +193,43 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
   endif()
   set(test_cmd "${PROJECT_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
 
-  #test rscale capable rrules
-  if(HAVE_ICU_DANGI)
-    set(reference_data "icalrecur_withicu_dangi_test.out")
-  elseif(ICU_FOUND)
-    set(reference_data "icalrecur_withicu_test.out")
-  else()
-    set(reference_data "icalrecur_withouticu_test.out")
-  endif()
-  set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
-  add_test(NAME icalrecurtest-r COMMAND ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
-                                        ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
-  )
-  setprops(icalrecurtest-r)
-
   #test non-rscale rrules
-  set(reference_data "icalrecur_test.out")
+  set(reference_data "icalrecur_test.txt")
   set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
   add_test(NAME icalrecurtest COMMAND ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
                                       ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
   )
   setprops(icalrecurtest)
+
+  #test rscale rrules without ICU
+  set(reference_data "icalrecur_test_rscale.txt")
+  set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+  add_test(NAME icalrecurtest-rscale COMMAND ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args}
+                                             -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
+  )
+  setprops(icalrecurtest-rscale)
+
+  if(ICU_FOUND)
+    #test rscale rrules with ICU
+    set(reference_data "icalrecur_test_rscale_withicu.txt")
+    set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+    add_test(NAME icalrecurtest-rscale-withicu
+             COMMAND ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
+                     ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
+    )
+    setprops(icalrecurtest-rscale-withicu)
+
+    if(HAVE_ICU_DANGI)
+      #test rscale rrules with ICU and DANGI
+      set(reference_data "icalrecur_test_rscale_withicu_dangi.txt")
+      set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+      add_test(NAME icalrecurtest-rscale-withicu-dangi
+               COMMAND ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
+                       ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
+      )
+      setprops(icalrecurtest-rscale-withicu-dangi)
+    endif()
+  endif()
 endif()
 
 ########### next target ###############
