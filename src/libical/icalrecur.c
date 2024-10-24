@@ -2892,18 +2892,43 @@ int icalrecur_check_rulepart(icalrecur_iterator *impl,
     return 0;
 }
 
+static int days_in_current_month(icalrecur_iterator *impl)
+{
+    return get_days_in_month(impl, impl->last.month, impl->last.year);
+}
+
+static int days_in_current_year(icalrecur_iterator *impl)
+{
+    return get_days_in_year(impl, impl->last.year);
+}
+
 static int check_contract_restriction(icalrecur_iterator *impl,
-                                      enum byrule byrule, int v)
+                                      enum byrule byrule, int v,
+                                      int (*get_total)(icalrecur_iterator *))
 {
     int pass = 0;
     int itr;
     icalrecurrencetype_frequency freq = impl->rule.freq;
+    int total = 0;
 
     if (impl->by_ptrs[byrule][0] != ICAL_RECURRENCE_ARRAY_MAX &&
         expand_map[freq].map[byrule] == CONTRACT) {
         for (itr = 0;
              impl->by_ptrs[byrule][itr] != ICAL_RECURRENCE_ARRAY_MAX; itr++) {
-            if (impl->by_ptrs[byrule][itr] == v) {
+            short byval = impl->by_ptrs[byrule][itr];
+            if ((byval < 0) && (total == 0)) {
+                if (get_total)
+                    // load total value lazily only when needed
+                    total = get_total(impl);
+                else {
+                    // limiting by negative values is only allowed for
+                    // BYMONTHDAY, BYYEARDAY (BYDAY is handled separately)
+                    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+                    continue;
+                }
+            }
+
+            if (v == ((byval >= 0) ? byval : (total + 1 + byval))) {
                 pass = 1;
                 break;
             }
@@ -2925,14 +2950,14 @@ static int check_contracting_rules(icalrecur_iterator *impl)
     int year_day =
         get_day_of_year(impl, last.year, last.month, last.day, &day_of_week);
 
-    if (check_contract_restriction(impl, BY_SECOND, last.second) &&
-        check_contract_restriction(impl, BY_MINUTE, last.minute) &&
-        check_contract_restriction(impl, BY_HOUR, last.hour) &&
-        check_contract_restriction(impl, BY_DAY, day_of_week) &&
-        check_contract_restriction(impl, BY_WEEK_NO, week_no) &&
-        check_contract_restriction(impl, BY_MONTH_DAY, last.day) &&
-        check_contract_restriction(impl, BY_MONTH, last.month) &&
-        check_contract_restriction(impl, BY_YEAR_DAY, year_day)) {
+    if (check_contract_restriction(impl, BY_SECOND, last.second, NULL) &&
+        check_contract_restriction(impl, BY_MINUTE, last.minute, NULL) &&
+        check_contract_restriction(impl, BY_HOUR, last.hour, NULL) &&
+        check_contract_restriction(impl, BY_DAY, day_of_week, NULL) &&
+        check_contract_restriction(impl, BY_WEEK_NO, week_no, NULL) &&
+        check_contract_restriction(impl, BY_MONTH_DAY, last.day, days_in_current_month) &&
+        check_contract_restriction(impl, BY_MONTH, last.month, NULL) &&
+        check_contract_restriction(impl, BY_YEAR_DAY, year_day, days_in_current_year)) {
 
         return 1;
     } else {
