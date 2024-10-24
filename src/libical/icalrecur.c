@@ -3297,6 +3297,16 @@ int icalrecur_check_rulepart(icalrecur_iterator *impl,
     return 0;
 }
 
+static int days_in_current_month(icalrecur_iterator *impl)
+{
+    return get_days_in_month(impl, impl->last.month, impl->last.year);
+}
+
+static int days_in_current_year(icalrecur_iterator *impl)
+{
+    return get_days_in_year(impl, impl->last.year);
+}
+
 static inline int has_contract_restriction(icalrecur_iterator *impl,
                                            icalrecurrencetype_byrule byrule)
 {
@@ -3305,14 +3315,29 @@ static inline int has_contract_restriction(icalrecur_iterator *impl,
 }
 
 static int check_contract_restriction(icalrecur_iterator *impl,
-                                      icalrecurrencetype_byrule byrule, int v)
+                                      icalrecurrencetype_byrule byrule, int v,
+                                      int (*get_total)(icalrecur_iterator *))
 {
     int pass = 0;
     int itr;
+    int total = 0;
 
     if (has_contract_restriction(impl, byrule)) {
         for (itr = 0; itr < impl->bydata[byrule].by.size; itr++) {
-            if (impl->bydata[byrule].by.data[itr] == v) {
+            short byval = impl->bydata[byrule].by.data[itr];
+            if ((byval < 0) && (total == 0)) {
+                if (get_total)
+                    // load total value lazily only when needed
+                    total = get_total(impl);
+                else {
+                    // limiting by negative values is only allowed for
+                    // BYMONTHDAY, BYYEARDAY (BYDAY is handled separately)
+                    icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+                    continue;
+                }
+            }
+
+            if (v == ((byval >= 0) ? byval : (total + 1 + byval))) {
                 pass = 1;
                 break;
             }
@@ -3332,17 +3357,17 @@ static int check_contracting_rules(icalrecur_iterator *impl)
 
 // Check `has_contract_restriction` before calling `check_contract_restriction` to avoid
 // evaluating potentially expensive `v` if not needed.
-#define CHECK_CONTRACT_RESTRICTION(by, v) (!has_contract_restriction(impl, (by)) || check_contract_restriction(impl, (by), (v)))
+#define CHECK_CONTRACT_RESTRICTION(by, v, get_total) (!has_contract_restriction(impl, (by)) || check_contract_restriction(impl, (by), (v), (get_total)))
 
     if (
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_SECOND, last.second) &&
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MINUTE, last.minute) &&
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_HOUR, last.hour) &&
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH_DAY, last.day) &&
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH, last.month) &&
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_WEEK_NO, get_week_number(impl, last)) &&
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_DAY, get_day_of_week_adjusted(impl, last.year, last.month, last.day)) &&
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_YEAR_DAY, get_day_of_year(impl, last.year, last.month, last.day))) {
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_SECOND, last.second, NULL) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MINUTE, last.minute, NULL) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_HOUR, last.hour, NULL) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH_DAY, last.day, days_in_current_month) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH, last.month, NULL) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_WEEK_NO, get_week_number(impl, last), NULL) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_DAY, get_day_of_week_adjusted(impl, last.year, last.month, last.day), NULL) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_YEAR_DAY, get_day_of_year(impl, last.year, last.month, last.day), days_in_current_year)) {
         return 1;
     }
 
