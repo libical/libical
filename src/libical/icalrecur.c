@@ -3297,11 +3297,13 @@ int icalrecur_check_rulepart(icalrecur_iterator *impl,
     return 0;
 }
 
-static int days_in_current_month(icalrecur_iterator *impl) {
+static int days_in_current_month(icalrecur_iterator *impl)
+{
     return get_days_in_month(impl, impl->last.month, impl->last.year);
 }
 
-static int days_in_current_year(icalrecur_iterator *impl) {
+static int days_in_current_year(icalrecur_iterator *impl)
+{
     return get_days_in_year(impl, impl->last.year);
 }
 
@@ -3323,8 +3325,7 @@ static int check_contract_restriction(icalrecur_iterator *impl,
     if (has_contract_restriction(impl, byrule)) {
         for (itr = 0; itr < impl->bydata[byrule].by.size; itr++) {
             short byval = impl->bydata[byrule].by.data[itr];
-            if ((byval < 0) && (total == 0))
-            {
+            if ((byval < 0) && (total == 0)) {
                 if (get_total)
                     // load total value lazily only when needed
                     total = get_total(impl);
