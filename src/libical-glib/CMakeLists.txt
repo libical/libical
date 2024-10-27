@@ -91,7 +91,7 @@ add_custom_target(
   BYPRODUCTS ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
              ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
              ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c
-  COMMENT "Generate the libical-glib-private.h headers"
+  COMMENT "Generate the libical-glib sources"
 )
 
 configure_file(
@@ -130,7 +130,7 @@ target_compile_definitions(ical-glib PRIVATE -DG_LOG_DOMAIN="libical-glib" -DLIB
 target_link_libraries(ical-glib PRIVATE ical ${GLIB_LIBRARIES})
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(ical-glib-static STATIC ${LIBICAL_GLIB_SOURCES})
-  add_dependencies(ical-glib-static ical-header)
+  add_dependencies(ical-glib-static ical-header ical-glib-header)
   target_compile_options(ical-glib-static PUBLIC ${GLIB_CFLAGS} -DG_LOG_DOMAIN="libical-glib" -DLIBICAL_GLIB_COMPILATION)
   target_link_libraries(ical-glib-static ${GLIB_LIBRARIES})
 endif()
