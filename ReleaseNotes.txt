@@ -88,6 +88,9 @@ Version 3.0.19 (UNRELEASED):
 ----------------------------
  * Fix for changes to the libicu 75 API
  * Add vcpkg manifest-mode support
+ * Improved berkeley-db discovery on Mac with homebrew
+ * Improved libicu discrovery on Mac with homebrew
+ * Properly set DYLD_LIBRARY_PATH on Mac for libical-ical tests
 
 Version 3.0.18 (31 March 2024):
 -------------------------------
