@@ -244,7 +244,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
      * In order to meet that requirement we'd need to set MAX_ITERATIONS to (1024 * 128) approximately.
      * We don't feel safe setting MAX_ITERATIONS that low.
      */
-    static const size_t MAX_ITERATIONS = (1024 * 1024 * 10); // should be plenty, but not low enough to avoid timeouts when fuzzy testing
+    static const size_t MAX_ITERATIONS = (1024 * 1024 * 10);
     char *str;
     char *str_p;
     const char *p;
