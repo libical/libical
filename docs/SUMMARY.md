@@ -8,6 +8,7 @@
 
 - [Using](./UsingLibical.md)
 - [Version 4.0 Migration Guide](./MigrationGuide_to_4.0.md)
+- [Known Limitations](./KnownLimitations.md)
 
 # Reference Guide
 
