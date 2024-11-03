@@ -203,6 +203,7 @@ int main(int argc, char *argv[])
             }
 
             icalrecur_iterator_free(ritr);
+            free(rrule.rscale);
 
             if (test_error)
                 nof_failed_tests++;
