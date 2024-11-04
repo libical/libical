@@ -156,7 +156,6 @@ int main(int argc, char *argv[])
             char actual_instances[2048];
             int actual_instances_len = 0;
             struct icaltimetype start;
-            start = icaltime_null_time();
             int test_error = 0;
 
             nof_tests++;
