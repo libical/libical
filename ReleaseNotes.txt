@@ -83,8 +83,6 @@ Version 3.1.0 (NOT RELEASED YET):
     (were in the public headers but not used at all)
     + struct icaltimezonetype
     + struct icaltimezonephase
- * Resolved known limitations:
-    + Negative values are now also supported for `BYMONTHDAY` and `BYYEARDAY`.
 
 Version 3.0.19 (UNRELEASED):
 ----------------------------
@@ -93,6 +91,8 @@ Version 3.0.19 (UNRELEASED):
  * Improved berkeley-db discovery on Mac with homebrew
  * Improved libicu discrovery on Mac with homebrew
  * Properly set DYLD_LIBRARY_PATH on Mac for libical-ical tests
+ * Resolved known limitation:
+    + Negative values are now also supported for `BYMONTHDAY` and `BYYEARDAY`
 
 Version 3.0.18 (31 March 2024):
 -------------------------------
