@@ -7,14 +7,14 @@ ci:
 exclude: ^(zoneinfo/|tzdata20.*/)
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
+  rev: v5.0.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
   - id: check-added-large-files
   - id: check-case-conflict
 - repo: https://github.com/perltidy/perltidy
-  rev: "20240511.10"
+  rev: "20240903.06"
   hooks:
   - id: perltidy
 - repo: https://github.com/codespell-project/codespell
