@@ -188,7 +188,7 @@ sub start{
 
 Accessor for the end time. Takes a I<Time> object, a valid time string,
 or an integer and returns a time object. This routine is coupled to
-the I<duration> accessor. See I<duration> below for more imformation.
+the I<duration> accessor. See I<duration> below for more information.
 
 =cut
 
