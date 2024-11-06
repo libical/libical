@@ -347,7 +347,7 @@
 	</method>
 	<method name="i_cal_value_get_attach" corresponds="icalvalue_get_attach" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalAttach *" annotation="nullable, transfer none" translator_argus="(GObject *)value" comment="The attach within #ICalValue"/>
+		<returns type="ICalAttach *" annotation="nullable, transfer full" translator_argus="(GObject *)value" comment="The attach within #ICalValue"/>
 		<comment>Gets the attach of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_reset_kind" corresponds="icalvalue_reset_kind" kind="other" since="1.0">
