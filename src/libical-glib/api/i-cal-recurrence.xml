@@ -74,6 +74,19 @@
         <comment xml:space="preserve">Creates a new #ICalRecurrence.</comment>
         <custom>	return i_cal_recurrence_new_full(i_cal_recurrence_new_default(), NULL);</custom>
     </method>
+    <method name="i_cal_recurrence_clone" corresponds="icalrecurrencetype_clone" kind="others" since="4.0">
+        <parameter type="ICalRecurrence *" name="src" comment="The #ICalRecurrence to be cloned"/>
+        <returns type="ICalRecurrence *" annotation="transfer full" comment="The newly created #ICalRecurrence." />
+        <comment xml:space="preserve">Creates a copy of the @src.</comment>
+    </method>
+    <method name="i_cal_recurrence_ref" corresponds="icalrecurrencetype_ref" annotation="skip" kind="others" since="4.0">
+        <parameter type="ICalRecurrence *" name="self" comment="The #ICalRecurrence to be referenced"/>
+        <comment xml:space="preserve">Increases the reference counter by 1 for the @self.</comment>
+    </method>
+    <method name="i_cal_recurrence_unref" corresponds="icalrecurrencetype_unref" annotation="skip" kind="others" since="4.0">
+        <parameter type="ICalRecurrence *" name="self" comment="The #ICalRecurrence to be unreferenced"/>
+        <comment xml:space="preserve">Decreases the reference counter by 1 for the @self.</comment>
+    </method>
     <method name="i_cal_recurrence_day_day_of_week" corresponds="icalrecurrencetype_day_day_of_week" since="1.0">
         <parameter type="gshort" name="day" comment="The encoded day which represents the day of the week and Nth day of the week"/>
         <returns type="ICalRecurrenceWeekday" comment="The decoded weekday with Monday to be 1."/>
