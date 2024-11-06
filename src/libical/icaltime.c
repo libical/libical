@@ -71,8 +71,11 @@ static int icaltime_leap_days(int y1, int y2)
  *  in that we don't want the automatic adjustments for
  *  local daylight savings time applied to the result.
  *  This function expects well-formed input.
+ *
+ *  The out_time_t is to store the result, it can be NULL.
+ *  Returns 0 on failure, 1 on success.
  */
-static icaltime_t make_time(const struct tm *tm, int tzm)
+static int make_time(const struct tm *tm, int tzm, icaltime_t *out_time_t)
 {
     icaltime_t tim;
     int febs;
@@ -82,29 +85,29 @@ static icaltime_t make_time(const struct tm *tm, int tzm)
     /* check that month specification within range */
 
     if (tm->tm_mon < 0 || tm->tm_mon > 11)
-        return ((icaltime_t)-1);
+        return 0;
 
     if (tm->tm_year < 2)
-        return ((icaltime_t)-1);
+        return 0;
 
 #if (SIZEOF_ICALTIME_T == 4)
     /* check that year specification within range */
 
     if (tm->tm_year > 138)
-        return ((icaltime_t)-1);
+        return 0;
 
     /* check for upper bound of Jan 17, 2038 (to avoid possibility of 32-bit arithmetic overflow) */
     if (tm->tm_year == 138) {
         if (tm->tm_mon > 0) {
-            return ((icaltime_t)-1);
+            return 0;
         } else if (tm->tm_mday > 17) {
-            return ((icaltime_t)-1);
+            return 0;
         }
     }
 #else
     /* We don't support years >= 10000, because the function has not been tested at this range. */
     if (tm->tm_year >= 8100) {
-        return ((icaltime_t)-1);
+        return 0;
     }
 #endif /* SIZEOF_ICALTIME_T */
 
@@ -153,7 +156,10 @@ static icaltime_t make_time(const struct tm *tm, int tzm)
 
     /* return number of seconds since start of the epoch */
 
-    return (tim);
+    if (out_time_t)
+        *out_time_t = tim;
+
+    return 1;
 }
 
 /*
@@ -168,7 +174,7 @@ static icaltime_t icaltime_timegm(const struct tm *tm)
     icaltime_t seconds;
 
     /* Validate the tm structure by passing it through make_time() */
-    if (make_time(tm, 0) < 0) {
+    if (!make_time(tm, 0, NULL)) {
         /* we have some invalid data in the tm struct */
         return 0;
     }
@@ -240,7 +246,7 @@ struct icaltimetype icaltime_today(void)
 icaltime_t icaltime_as_timet(const struct icaltimetype tt)
 {
     struct tm stm;
-    icaltime_t t;
+    icaltime_t t = (icaltime_t) -1;
 
     /* If the time is the special null time, return 0. */
     if (icaltime_is_null_time(tt)) {
@@ -263,7 +269,8 @@ icaltime_t icaltime_as_timet(const struct icaltimetype tt)
     stm.tm_year = tt.year - 1900;
     stm.tm_isdst = -1;
 
-    t = make_time(&stm, 0);
+    if (!make_time(&stm, 0, &t))
+        t = ((icaltime_t) -1);
 
     return t;
 }
