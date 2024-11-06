@@ -789,7 +789,7 @@
     </method>
     <method name="i_cal_property_get_exrule" corresponds="icalproperty_get_exrule" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalRecurrence *" annotation="transfer full" comment="Get the exrule recurrence type of #ICalProperty."/>
+        <returns type="ICalRecurrence *" annotation="transfer full" translator_argus="(GObject *)prop" comment="Get the exrule recurrence type of #ICalProperty."/>
         <comment>Gets the exrule recurrence type of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_freebusy" corresponds="icalproperty_new_freebusy" kind="constructor" since="1.0">
@@ -1603,7 +1603,7 @@
     </method>
     <method name="i_cal_property_get_rrule" corresponds="icalproperty_get_rrule" kind="get" since="1.0">
         <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalRecurrence *" annotation="transfer full" comment="Get the rrule recurrence type of #ICalProperty."/>
+        <returns type="ICalRecurrence *" annotation="transfer full" translator_argus="(GObject *)prop" comment="Get the rrule recurrence type of #ICalProperty."/>
         <comment>Gets the rrule recurrence type of #ICalProperty.</comment>
     </method>
     <method name="i_cal_property_new_scope" corresponds="icalproperty_new_scope" kind="constructor" since="1.0">
