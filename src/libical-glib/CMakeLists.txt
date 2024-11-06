@@ -229,6 +229,7 @@ endif()
 if(ICAL_GLIB_VAPI)
   add_custom_target(vala ALL COMMENT "Target to run vala")
   set(gir_fullname ${PROJECT_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
+  set(typelib_fullname ${PROJECT_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.typelib)
   set(metadata_fullname ${CMAKE_CURRENT_BINARY_DIR}/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.metadata)
   set(vapi_file ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.vapi)
 
@@ -240,7 +241,7 @@ if(ICAL_GLIB_VAPI)
       ${VAPIGEN} --vapidir=${CMAKE_CURRENT_SOURCE_DIR} --vapidir=${CMAKE_CURRENT_BINARY_DIR}
       --girdir=${PROJECT_BINARY_DIR}/src/libical-glib --pkg gio-2.0 --library libical-glib
       --metadatadir=${CMAKE_CURRENT_SOURCE_DIR} --metadatadir=${CMAKE_CURRENT_BINARY_DIR} ${gir_fullname}
-    DEPENDS ${gir_fullname} ${metadata_fullname}
+    DEPENDS ${gir_fullname} ${typelib_fullname} ${metadata_fullname}
     COMMENT "Run the tool to generate the Vala API"
   )
 
