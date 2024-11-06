@@ -246,7 +246,7 @@ struct icaltimetype icaltime_today(void)
 icaltime_t icaltime_as_timet(const struct icaltimetype tt)
 {
     struct tm stm;
-    icaltime_t t = (icaltime_t) -1;
+    icaltime_t t = (icaltime_t)-1;
 
     /* If the time is the special null time, return 0. */
     if (icaltime_is_null_time(tt)) {
@@ -270,7 +270,7 @@ icaltime_t icaltime_as_timet(const struct icaltimetype tt)
     stm.tm_isdst = -1;
 
     if (!make_time(&stm, 0, &t))
-        t = ((icaltime_t) -1);
+        t = ((icaltime_t)-1);
 
     return t;
 }
