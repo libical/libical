@@ -257,7 +257,7 @@
 	</method>
 	<method name="i_cal_value_get_recur" corresponds="icalvalue_get_recur" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalRecurrence *" annotation="nullable, transfer full" comment="The recur within #ICalValue"/>
+		<returns type="ICalRecurrence *" annotation="nullable, transfer full" translator_argus="(GObject *)value" comment="The recur within #ICalValue"/>
 		<comment>Gets the recur of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_trigger" corresponds="icalvalue_set_trigger" kind="set" since="1.0">
