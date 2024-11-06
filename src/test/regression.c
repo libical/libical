@@ -2123,25 +2123,25 @@ void do_test_time(const char *zone)
            0);
 
     /* Conversion to time_t around the epoch */
-    ictt = icaltime_from_string("19700101T000000Z");
+    ictt = icaltime_from_string("19691231T235958Z");
     tt = icaltime_as_timet_with_zone(ictt, utczone);
-    int_is("convert to time_t EPOCH", tt, 0);
-
-    ictt = icaltime_from_string("19700101T000001Z");
-    tt = icaltime_as_timet_with_zone(ictt, utczone);
-    int_is("convert to time_t EPOCH+1", tt, 1);
-
-    ictt = icaltime_from_string("19700101T000002Z");
-    tt = icaltime_as_timet_with_zone(ictt, utczone);
-    int_is("convert to time_t EPOCH+2", tt, 2);
+    int_is("convert to time_t EPOCH-2", (int)tt, -2);
 
     ictt = icaltime_from_string("19691231T235959Z");
     tt = icaltime_as_timet_with_zone(ictt, utczone);
-    int_is("convert to time_t EPOCH-1", tt, -1);
+    int_is("convert to time_t EPOCH-1", (int)tt, -1);
 
-    ictt = icaltime_from_string("19691231T235958Z");
+    ictt = icaltime_from_string("19700101T000000Z");
     tt = icaltime_as_timet_with_zone(ictt, utczone);
-    int_is("convert to time_t EPOCH-2", tt, -2);
+    int_is("convert to time_t EPOCH", (int)tt, 0);
+
+    ictt = icaltime_from_string("19700101T000001Z");
+    tt = icaltime_as_timet_with_zone(ictt, utczone);
+    int_is("convert to time_t EPOCH+1", (int)tt, 1);
+
+    ictt = icaltime_from_string("19700101T000002Z");
+    tt = icaltime_as_timet_with_zone(ictt, utczone);
+    int_is("convert to time_t EPOCH+2", (int)tt, 2);
 }
 
 void test_iterators(void)
