@@ -40,5 +40,5 @@ cmake -S .. \
   -DENABLE_GTK_DOC=ON \
   $CMAKE_VERSION4_OPTIONS \
   -DLIBICAL_BUILD_TESTING_BIGFUZZ=ON \
-  -DCMAKE_INSTALL_PREFIX="$HOME/tmp" &&
+  -DCMAKE_INSTALL_PREFIX="$HOME/tmp/libical-$BRANCH" &&
   ninja && ninja test && ninja install && ninja uninstall
