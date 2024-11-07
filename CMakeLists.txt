@@ -680,14 +680,9 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
+    set(SHARED_ONLY True)
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
-  endif()
-  if(GOBJECT_INTROSPECTION)
-    message(WARNING "Building the address sanitizer with GObject Introspection is not supported. "
-                    "Turning-off GObject Introspection."
-    )
-    set(GOBJECT_INTROSPECTION False)
   endif()
 endif()
 
@@ -699,14 +694,9 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
+    set(SHARED_ONLY True)
   else()
     message(FATAL_ERROR "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")
-  endif()
-  if(GOBJECT_INTROSPECTION)
-    message(WARNING "Building the thread sanitizer with GObject Introspection is not supported. "
-                    "Turning-off GObject Introspection."
-    )
-    set(GOBJECT_INTROSPECTION False)
   endif()
 endif()
 
@@ -718,14 +708,9 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+    set(SHARED_ONLY True)
   else()
     message(FATAL_ERROR "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
-  endif()
-  if(GOBJECT_INTROSPECTION)
-    message(WARNING "Building the undefined sanitizer with GObject Introspection is not supported. "
-                    "Turning-off GObject Introspection."
-    )
-    set(GOBJECT_INTROSPECTION False)
   endif()
 endif()
 
