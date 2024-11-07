@@ -329,7 +329,7 @@ TSAN_BUILD() {
     return
   fi
   echo "===== START TSAN BUILD: $1 ======"
-  SET_CLANG
+  #SET_CLANG currently has linking problems using ld.gold
   BUILD "$name" "-DLIBICAL_DEVMODE_THREAD_SANITIZER=True $2"
   echo "===== END TSAN BUILD: $1 ======"
 }
@@ -845,8 +845,7 @@ ASAN_BUILD test1asan "$DEFCMAKEOPTS"
 ASAN_BUILD test2asan "$CMAKEOPTS"
 ASAN_BUILD test3asan "$TZCMAKEOPTS"
 ASAN_BUILD test4asan "$UUCCMAKEOPTS"
-#GOBJECT_INSPECTION currently unsupported
-#ASAN_BUILD test5asan "$GLIBOPTS"
+ASAN_BUILD test5asan "$GLIBOPTS"
 ASAN_BUILD test6asan "$FUZZOPTS"
 
 #Thread sanitizer
@@ -854,8 +853,7 @@ TSAN_BUILD test1tsan "$DEFCMAKEOPTS"
 TSAN_BUILD test2tsan "$CMAKEOPTS"
 TSAN_BUILD test3tsan "$TZCMAKEOPTS"
 TSAN_BUILD test4tsan "$UUCCMAKEOPTS"
-#GOBJECT_INSPECTION currently unsupported
-#TSAN_BUILD test5tsan "$GLIBOPTS"
+TSAN_BUILD test5tsan "$GLIBOPTS"
 TSAN_BUILD test6tsan "$FUZZOPTS"
 
 #Undefined sanitizer
@@ -863,8 +861,7 @@ UBSAN_BUILD test1ubsan "$DEFCMAKEOPTS"
 UBSAN_BUILD test2ubsan "$CMAKEOPTS"
 UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
 UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
-#GOBJECT_INSPECTION currently unsupported
-#UBSAN_BUILD test5ubsan "$GLIBOPTS"
+UBSAN_BUILD test5ubsan "$GLIBOPTS"
 UBSAN_BUILD test6ubsan "$FUZZOPTS"
 
 #Threadlocal
