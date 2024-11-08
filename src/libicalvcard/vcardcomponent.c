@@ -1147,8 +1147,7 @@ static void comp_to_v3(vcardcomponent *impl)
                     if (lon) {
                         *lon++ = '\0';
                         geo.coords.lon = lon;
-                    }
-                    else {
+                    } else {
                         geo.coords.lon = "";
                     }
 
