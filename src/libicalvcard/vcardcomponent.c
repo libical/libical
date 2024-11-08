@@ -1148,6 +1148,9 @@ static void comp_to_v3(vcardcomponent *impl)
                         *lon++ = '\0';
                         geo.coords.lon = lon;
                     }
+                    else {
+                        geo.coords.lon = "";
+                    }
 
                     vcardvalue_set_geo(value, geo);
                 }
