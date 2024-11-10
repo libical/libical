@@ -155,7 +155,7 @@ check_c_compiler_flag(-Wswitch-enum c_flag_Wswitch_enum_supported)
 check_c_compiler_flag(-Wswitch c_flag_Wswitch_supported)
 if(c_flag_Wswitch_enum_supported AND c_flag_Wswitch_supported)
   add_executable(ical-glib-build-check ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c)
-  add_dependencies(ical-glib-build-check ical-glib)
+  add_dependencies(ical-glib-build-check ical-glib-header)
   target_link_libraries(ical-glib-build-check PRIVATE ical-glib ${GLIB_LIBRARIES})
   target_compile_options(
     ical-glib-build-check PRIVATE ${GLIB_CFLAGS} -DLIBICAL_GLIB_UNSTABLE_API=1 -Wswitch-enum -Wswitch
