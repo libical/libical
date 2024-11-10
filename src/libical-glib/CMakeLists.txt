@@ -101,7 +101,6 @@ add_custom_target(
   DEPENDS ${ical-glib-src-generator_EXE} ${xml_files}
   BYPRODUCTS ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
              ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
-             ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c
   COMMENT "Generate the libical-glib sources"
 )
 
