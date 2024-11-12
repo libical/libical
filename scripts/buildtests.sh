@@ -11,7 +11,8 @@ set -e
 set -o pipefail
 
 #ensure parallel builds
-export MAKEFLAGS=-j8
+export MAKEFLAGS=-j4
+export CMAKE_BUILD_PARALLEL_LEVEL=4
 
 if (test "$(uname -s)" = "Darwin"); then
   #needed to find homebrew's libxml2 and libffi on osx
