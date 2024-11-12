@@ -95,13 +95,19 @@ else()
   set(ical-glib-src-generator_EXE ical-glib-src-generator)
 endif()
 
-add_custom_target(
-  ical-glib-header
+list(
+  APPEND
+  LIBICAL_GLIB_SOURCES
+  ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
+  ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.c
+  ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.h
+)
+
+add_custom_command(
+  OUTPUT ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
+         ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c
   COMMAND ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
   DEPENDS ${ical-glib-src-generator_EXE} ${xml_files}
-  BYPRODUCTS ${LIBICAL_GLIB_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
-             ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
-             ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c
   COMMENT "Generate the libical-glib sources"
 )
 
@@ -111,14 +117,6 @@ configure_file(
 
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/i-cal-object.h.in ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.h COPYONLY
-)
-
-list(
-  APPEND
-  LIBICAL_GLIB_SOURCES
-  ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
-  ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.c
-  ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.h
 )
 
 include_directories(
@@ -133,7 +131,7 @@ add_library(
   ical-glib
   ${LIBRARY_TYPE} ${LIBICAL_GLIB_SOURCES}
 )
-add_dependencies(ical-glib ical-header ical-glib-header)
+add_dependencies(ical-glib ical-header)
 target_compile_options(ical-glib PRIVATE ${GLIB_CFLAGS})
 target_compile_definitions(ical-glib PRIVATE -DG_LOG_DOMAIN="libical-glib" -DLIBICAL_GLIB_COMPILATION)
 target_link_libraries(
@@ -142,7 +140,7 @@ target_link_libraries(
 )
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_library(ical-glib-static STATIC ${LIBICAL_GLIB_SOURCES})
-  add_dependencies(ical-glib-static ical-header ical-glib-header)
+  add_dependencies(ical-glib-static ical-header)
   target_compile_options(
     ical-glib-static PUBLIC ${GLIB_CFLAGS} -DG_LOG_DOMAIN="libical-glib" -DLIBICAL_GLIB_COMPILATION
   )
@@ -155,7 +153,7 @@ check_c_compiler_flag(-Wswitch-enum c_flag_Wswitch_enum_supported)
 check_c_compiler_flag(-Wswitch c_flag_Wswitch_supported)
 if(c_flag_Wswitch_enum_supported AND c_flag_Wswitch_supported)
   add_executable(ical-glib-build-check ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c)
-  add_dependencies(ical-glib-build-check ical-glib-header)
+  add_dependencies(ical-glib-build-check ical-glib)
   target_link_libraries(ical-glib-build-check PRIVATE ical-glib ${GLIB_LIBRARIES})
   target_compile_options(
     ical-glib-build-check PRIVATE ${GLIB_CFLAGS} -DLIBICAL_GLIB_UNSTABLE_API=1 -Wswitch-enum -Wswitch
