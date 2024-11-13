@@ -12,6 +12,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-LIBICAL_ICAL_EXPORT void icaltime_current_time_with_zone_ex(const icaltimezone *zone, struct icaltimetype* ret) {
+LIBICAL_ICAL_EXPORT void icaltime_current_time_with_zone_ex(const icaltimezone *zone, struct icaltimetype *ret)
+{
     *ret = icaltime_current_time_with_zone(zone);
 }
