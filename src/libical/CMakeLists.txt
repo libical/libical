@@ -216,6 +216,7 @@ set(ical_LIB_SRCS
     icallangbind.c
     caldate.c
     astime.h
+    byref.c
 )
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
   list(APPEND ical_LIB_SRCS ${PROJECT_SOURCE_DIR}/src/test/test-malloc.c)
