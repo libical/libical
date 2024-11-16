@@ -5,42 +5,42 @@ SPDX-PackageDownloadLocation = "https://github.com/libical/libical"
 
 #misc documentation
 [[annotations]]
-path = ["Install.txt", "README.md", "THANKS.md", "ReleaseNotes.txt", "book.toml", "docs/**.md", "examples/access-usecases.txt", "src/Net-ICal-Libical/README.txt", "src/php/README.txt", "src/Net-ICal-Libical/MANIFEST", "src/Net-ICal-Libical/netical_wrap.doc"]
+path = ["Install.txt", "README.md", "CONTRIBUTORS.md","ReleaseNotes.txt", "book.toml", "docs/**.md", "examples/access-usecases.txt", "src/Net-ICal-Libical/README.txt", "src/php/README.txt", "src/Net-ICal-Libical/MANIFEST", "src/Net-ICal-Libical/netical_wrap.doc"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright Contributors to the libical project"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
 
 #tool configuration files
 [[annotations]]
-path = ["REUSE.toml", ".clang-format", ".clang-tidy", ".cmake-format.py", ".codespellrc", ".editorconfig", ".dir-locals.el", ".gitattributes", ".gitignore", ".krazy", ".markdownlint.json", ".pre-commit-config.yaml", ".pylintrc", ".pep8", ".github/workflows/build.yml", ".shellcheckrc", "vcpkg.json"]
+path = ["REUSE.toml", ".clang-format", ".clang-tidy", ".cmake-format.py", ".codespellrc", ".editorconfig", ".dir-locals.el", ".gitattributes", ".gitignore", ".krazy", ".markdownlint.json", ".pre-commit-config.yaml", ".pylintrc", ".pep8", ".github/workflows/*.yml", ".shellcheckrc", "vcpkg.json"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright Contributors to the libical project"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "BSD-3-Clause"
 
 #other not-easy-to-comment source files
 [[annotations]]
 path = ["src/libical-glib/ICalGLib.metadata.in", "src/libical-glib/tools/header-structure-boilerplate-template", "src/libical-glib/tools/source-structure-boilerplate-template", "docs/reference/libical-glib/libical-glib-docs.sgml.in", "src/Net-ICal-Libical/netical_wrap.c", "src/libical/qsort_gen.c"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright Contributors to the libical project"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
 
 #timezones
 [[annotations]]
 path = "zoneinfo/**"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright Contributors to the libical project"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "CC0-1.0"
 
 #design data
 [[annotations]]
 path = "design-data/**"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright Contributors to the libical project"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
 
 #testing data
 [[annotations]]
 path = ["test-data/**", "src/test/**.out", "src/test/**.ics", "src/test/**.txt", "src/Net-ICal-Libical/test-data/**"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright Contributors to the libical project"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"

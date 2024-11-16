@@ -1,9 +1,23 @@
-# Thank Yous
+# Contributors
 
-There are now far too many contributors to libical to list here.
-Thanks to everyone involved!
+The Libical project was founded in 1999 (or perhaps earlier) by Eric Busboom <eric@clarinova.com>.
 
-From pre-2015 (the first 15 years) we recognize:
+We use the term "Contributors to the Libical project" to indicate the current active developers,
+to include and not limited to:
+
+* Allen Winter <winter@kde.org> (Maintainer)
+* Eric Busboom <eric@clarinova.com> (Founder)
+* Ken Murchison <murch@fastmail.com>
+* Kent Sutherland <git@ksuther.com>
+* Markus Minichmayr <markus@tapkey.com>
+* Milan Crha <mcrha@redhat.com>
+* Corentin Noël <corentin@elementary.io>
+
+There are now far too many Libical contributors to list here.
+See the commit history for the complete list.
+
+From pre-2015 (the first 15 years) we recognize these people who contributed by means
+outside of a version control system:
 
 * Allan Clark <allanc@atlas.platypus.bc.ca> for testing libical against UnixWare.
 
