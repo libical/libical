@@ -16,6 +16,6 @@
 
 -----------
 
-[Contributors](../THANKS.md)
+[Contributors](../CONTRIBUTORS.md)
 
 <!-- markdownlint-enable MD025 -->

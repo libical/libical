@@ -17,6 +17,8 @@ and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.
 
+Thanks to our [contributors](CONTRIBUTORS.md).
+
 ## RFCs
 
 See [RFC calendar standards](docs/rfcs.md) for list of RFCs supported by this library.
