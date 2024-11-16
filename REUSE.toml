@@ -5,7 +5,7 @@ SPDX-PackageDownloadLocation = "https://github.com/libical/libical"
 
 #misc documentation
 [[annotations]]
-path = ["Install.txt", "README.md", "THANKS.md", "ReleaseNotes.txt", "book.toml", "docs/AddingOrModifyingComponents.txt", "docs/**.md", "examples/access-usecases.txt", "src/Net-ICal-Libical/README.txt", "src/php/README.txt", "src/Net-ICal-Libical/MANIFEST", "src/Net-ICal-Libical/netical_wrap.doc"]
+path = ["Install.txt", "README.md", "THANKS.md", "ReleaseNotes.txt", "book.toml", "docs/**.md", "examples/access-usecases.txt", "src/Net-ICal-Libical/README.txt", "src/php/README.txt", "src/Net-ICal-Libical/MANIFEST", "src/Net-ICal-Libical/netical_wrap.doc"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Copyright Contributors to the libical project"
 SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
