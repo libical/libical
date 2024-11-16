@@ -4,12 +4,12 @@ Upstream-Contact: Allen Winter <winter@kde.org>
 Source: https://github.com/libical/libical
 
 #misc documentation
-Files: AUTHORS Install.txt README.md THANKS.md ReleaseNotes.txt TODO docs/AddingOrModifyingComponents.txt docs/UsingLibical.md examples/access-usecases.txt src/Net-ICal-Libical/README.txt src/php/README.txt src/Net-ICal-Libical/MANIFEST src/Net-ICal-Libical/netical_wrap.doc
+Files: Install.txt README.md THANKS.md ReleaseNotes.txt book.toml docs/AddingOrModifyingComponents.txt docs/*.md examples/access-usecases.txt src/Net-ICal-Libical/README.txt src/php/README.txt src/Net-ICal-Libical/MANIFEST src/Net-ICal-Libical/netical_wrap.doc
 Copyright: Copyright Contributors to the libical project
 License: LGPL-2.1-only OR MPL-2.0
 
 #tool configuration files
-Files: .clang-format .clang-tidy .cmake-format.py .codespellrc .dir-locals.el .gitattributes .gitignore .krazy .markdownlint.json .pre-commit-config.yaml .pylintrc .pep8 .github/workflows/build.yml vcpkg.json
+Files: .clang-format .clang-tidy .cmake-format.py .codespellrc .editorconfig .dir-locals.el .gitattributes .gitignore .krazy .markdownlint.json .pre-commit-config.yaml .pylintrc .pep8 .github/workflows/build.yml .shellcheckrc vcpkg.json
 Copyright: Copyright Contributors to the libical project
 License: BSD-3-Clause
 
@@ -29,6 +29,6 @@ Copyright: Copyright Contributors to the libical project
 License: LGPL-2.1-only OR MPL-2.0
 
 #testing data
-Files: test-data/* src/test/*.out src/test/*.ics src/Net-ICal-Libical/test-data/*
+Files: test-data/* src/test/*.out src/test/*.ics src/test/*.txt src/Net-ICal-Libical/test-data/*
 Copyright: Copyright Contributors to the libical project
 License: LGPL-2.1-only OR MPL-2.0
