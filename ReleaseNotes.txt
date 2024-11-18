@@ -91,9 +91,9 @@ Version 3.0.19 (UNRELEASED):
  * Improved berkeley-db discovery on Mac with homebrew
  * Improved libicu discrovery on Mac with homebrew
  * Properly set DYLD_LIBRARY_PATH on Mac for libical-ical tests
+ * Resolved known limitation: Negative values are now also supported for `BYMONTHDAY` and `BYYEARDAY`.
+ * Add support for RDATE;VALUE=PERIOD
  * Fix time conversion to time_t for times before epoch
- * Resolved known limitation:
-    + Negative values are now also supported for `BYMONTHDAY` and `BYYEARDAY`
 
 Version 3.0.18 (31 March 2024):
 -------------------------------
