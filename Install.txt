@@ -85,10 +85,6 @@ Homebrew:
     export PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig:\
                            /usr/local/opt/libxml2/lib/pkgconfig
 
-  Also, if building the gtkdocs you'll need to say where the xml
-  catalog files can be found so the gtk entities are located, like so:
-    export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
-
 == Building for Android ==
 
 % mkdir build
@@ -185,7 +181,7 @@ for example: cmake -DCMAKE_INSTALL_PREFIX=/opt -DCMAKE_INSTALL_LIBDIR=/opt/lib32
 == Build the documentation ==
 Run 'make docs' to build the API documentation and reference.
 Disable the docs make target by running CMake with -DICAL_BUILD_DOCS=False option.
-Disable the libical-glib developer documentation by running CMake with -DENABLE_GTK_DOC=False.
+Disable the libical-glib developer documentation by running CMake with -DICAL_GLIB_BUILD_DOCS=False.
 
 == Using vcpkg to install dependencies ==
 If you want to use vcpkg (in $VCPKG_ROOT) to build the dependencies as part

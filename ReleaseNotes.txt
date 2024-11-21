@@ -11,7 +11,7 @@ Version 3.1.0 (NOT RELEASED YET):
    Please port your icalvcal code to use icalvcard instead.
  * For the C++ bindings, requires a C++11 compliant compiler
  * The old src/python code is removed in favor of the glib-introspection generated
-   Python bindings. Requires building with -DGOBJECT_INTROSPECTION=ON
+   Python bindings. Requires building with -DGOBJECT_INTROSPECTION=True
  * New CMake option "LIBICAL_ENABLE_64BIT_ICALTIME_T" to use 64-bit time_t implementations
    on 32-bit systems (where available and supported.  Windows-only so far)
  * libical-glib requires glib 2.38 or higher
@@ -31,6 +31,8 @@ Version 3.1.0 (NOT RELEASED YET):
  * Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
  * icalparser_ctrl setting defines how to handle invalid CONTROL characters during parsing
+ * Make -DGOBJECT_INTROSPECTION=True the default
+ * Replace gtk-doc with gi-docgen to produce libical-glib developer documentation
  * New publicly available functions:
     + icalrecurrencetype_encode_day
     + icalrecurrencetype_encode_month
