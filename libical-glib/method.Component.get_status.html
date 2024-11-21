@@ -1,0 +1,320 @@
+<!--
+SPDX-FileCopyrightText: libical Development Team
+
+SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ICalGLib.Component.get_status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta charset="utf-8" />
+
+  
+  <meta property="og:type" content="website"/>
+
+  
+
+  
+  <meta priority="og:title" content="ICalGLib.Component.get_status"/>
+  <meta priority="og:description" content="Reference for ICalGLib.Component.get_status"/>
+  <meta name="twitter:title" content="ICalGLib.Component.get_status"/>
+  <meta name="twitter:description" content="Reference for ICalGLib.Component.get_status"/>
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+
+  
+  
+  
+  <link rel="search" type="application/opensearchdescription+xml" title="ICalGLib" href="opensearch.xml">
+  
+  
+
+  <link rel="stylesheet" href="style.css" type="text/css" />
+
+  
+
+  
+  <script src="urlmap.js"></script>
+  
+  
+  <script src="fzy.js"></script>
+  <script src="search.js"></script>
+  
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <div id="body-wrapper" tabindex="-1">
+
+    <nav class="sidebar devhelp-hidden">
+      
+      
+      <div class="search section">
+        <form id="search-form" autocomplete="off">
+          <input id="search-input" type="text" name="do-not-autocomplete" placeholder="Click, or press 's' to search" autocomplete="off"/>
+        </form>
+      </div>
+      
+      <div class="section namespace">
+        <h3><a href="index.html">ICalGLib</a></h3>
+        <p>API Version: 3.0</p>
+        
+        <p>Library Version: 3</p>
+        
+      </div>
+      
+<div class="section">
+  <h5>Type</h5>
+  <div class="links">
+    <a href="class.Component.html">Component</a>
+  </div>
+</div>
+<div class="section">
+  <h5>Methods</h5>
+  <div class="links">
+  
+    <a class="method" href="method.Component.add_component.html">add_component</a>
+  
+    <a class="method" href="method.Component.add_property.html">add_property</a>
+  
+    <a class="method" href="method.Component.as_ical_string.html">as_ical_string</a>
+  
+    <a class="method" href="method.Component.begin_component.html">begin_component</a>
+  
+    <a class="method" href="method.Component.check_restrictions.html">check_restrictions</a>
+  
+    <a class="method" href="method.Component.clone.html">clone</a>
+  
+    <a class="method" href="method.Component.convert_errors.html">convert_errors</a>
+  
+    <a class="method" href="method.Component.count_components.html">count_components</a>
+  
+    <a class="method" href="method.Component.count_errors.html">count_errors</a>
+  
+    <a class="method" href="method.Component.count_properties.html">count_properties</a>
+  
+    <a class="method" href="method.Component.end_component.html">end_component</a>
+  
+    <a class="method" href="method.Component.foreach_recurrence.html">foreach_recurrence</a>
+  
+    <a class="method" href="method.Component.foreach_tzid.html">foreach_tzid</a>
+  
+    <a class="method" href="method.Component.free.html">free</a>
+  
+    <a class="method" href="method.Component.get_comment.html">get_comment</a>
+  
+    <a class="method" href="method.Component.get_current_component.html">get_current_component</a>
+  
+    <a class="method" href="method.Component.get_current_property.html">get_current_property</a>
+  
+    <a class="method" href="method.Component.get_description.html">get_description</a>
+  
+    <a class="method" href="method.Component.get_dtend.html">get_dtend</a>
+  
+    <a class="method" href="method.Component.get_dtstamp.html">get_dtstamp</a>
+  
+    <a class="method" href="method.Component.get_dtstart.html">get_dtstart</a>
+  
+    <a class="method" href="method.Component.get_due.html">get_due</a>
+  
+    <a class="method" href="method.Component.get_duration.html">get_duration</a>
+  
+    <a class="method" href="method.Component.get_first_component.html">get_first_component</a>
+  
+    <a class="method" href="method.Component.get_first_property.html">get_first_property</a>
+  
+    <a class="method" href="method.Component.get_first_real_component.html">get_first_real_component</a>
+  
+    <a class="method" href="method.Component.get_inner.html">get_inner</a>
+  
+    <a class="method" href="method.Component.get_location.html">get_location</a>
+  
+    <a class="method" href="method.Component.get_method.html">get_method</a>
+  
+    <a class="method" href="method.Component.get_next_component.html">get_next_component</a>
+  
+    <a class="method" href="method.Component.get_next_property.html">get_next_property</a>
+  
+    <a class="method" href="method.Component.get_parent.html">get_parent</a>
+  
+    <a class="method" href="method.Component.get_recurrenceid.html">get_recurrenceid</a>
+  
+    <a class="method" href="method.Component.get_relcalid.html">get_relcalid</a>
+  
+    <a class="method" href="method.Component.get_sequence.html">get_sequence</a>
+  
+    <a class="method" href="method.Component.get_span.html">get_span</a>
+  
+    <a class="method current" href="method.Component.get_status.html">get_status</a>
+  
+    <a class="method" href="method.Component.get_summary.html">get_summary</a>
+  
+    <a class="method" href="method.Component.get_timezone.html">get_timezone</a>
+  
+    <a class="method" href="method.Component.get_uid.html">get_uid</a>
+  
+    <a class="method" href="method.Component.is_valid.html">is_valid</a>
+  
+    <a class="method" href="method.Component.isa.html">isa</a>
+  
+    <a class="method" href="method.Component.isa_component.html">isa_component</a>
+  
+    <a class="method" href="method.Component.merge_component.html">merge_component</a>
+  
+    <a class="method" href="method.Component.remove_component.html">remove_component</a>
+  
+    <a class="method" href="method.Component.remove_property.html">remove_property</a>
+  
+    <a class="method" href="method.Component.set_comment.html">set_comment</a>
+  
+    <a class="method" href="method.Component.set_description.html">set_description</a>
+  
+    <a class="method" href="method.Component.set_dtend.html">set_dtend</a>
+  
+    <a class="method" href="method.Component.set_dtstamp.html">set_dtstamp</a>
+  
+    <a class="method" href="method.Component.set_dtstart.html">set_dtstart</a>
+  
+    <a class="method" href="method.Component.set_due.html">set_due</a>
+  
+    <a class="method" href="method.Component.set_duration.html">set_duration</a>
+  
+    <a class="method" href="method.Component.set_location.html">set_location</a>
+  
+    <a class="method" href="method.Component.set_method.html">set_method</a>
+  
+    <a class="method" href="method.Component.set_parent.html">set_parent</a>
+  
+    <a class="method" href="method.Component.set_recurrenceid.html">set_recurrenceid</a>
+  
+    <a class="method" href="method.Component.set_relcalid.html">set_relcalid</a>
+  
+    <a class="method" href="method.Component.set_sequence.html">set_sequence</a>
+  
+    <a class="method" href="method.Component.set_status.html">set_status</a>
+  
+    <a class="method" href="method.Component.set_summary.html">set_summary</a>
+  
+    <a class="method" href="method.Component.set_uid.html">set_uid</a>
+  
+    <a class="method" href="method.Component.strip_errors.html">strip_errors</a>
+  
+    <a class="method" href="method.Component.take_component.html">take_component</a>
+  
+    <a class="method" href="method.Component.take_property.html">take_property</a>
+  
+  </div>
+</div>
+
+      <div class="section generator">
+        <p>Generated by <a href="https://gitlab.gnome.org/GNOME/gi-docgen">gi-docgen</a> 2023.3</p>
+      </div>
+    </nav>
+
+    <button id="btn-to-top" class="hidden"><span class="up-arrow"></span></button>
+
+    
+<section id="main" class="content">
+  <header>
+    <h3>Method</h3>
+    <h1><a href="index.html">ICalGLib</a><span class="sep"></span><a href="class.Component.html">Component</a><span class="sep"></span>get_status</h1>
+  </header>
+
+  <section>
+    <div class="docblock">
+      <p><span class="emblem available">since: 1.0</span></p>
+    </div>
+
+    <div class="declaration toggle-wrapper">
+      <h4 style="display:flex;" id="declaration">
+        Declaration
+        <a class="anchor" href="#declaration"></a>
+        
+        <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-component.h#L321">[src]</a>
+        
+      </h4>
+
+      <div class="docblock c-decl">
+        <pre><code><div class="highlight"><pre><span></span><span class="n">ICalPropertyStatus</span>
+<span class="n">i_cal_component_get_status</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="n">ICalComponent</span><span class="o">*</span><span class="w"> </span><span class="n">comp</span>
+<span class="p">)</span>
+</pre></div>
+</code></pre>
+      </div>
+    </div>
+
+    <div class="description toggle-wrapper">
+      <h4 style="display:flex;" id="description">
+        Description
+        <a class="anchor" href="#description"></a>
+        
+        <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-component.c#L1579">[src]</a>
+        
+      </h4>
+
+      <div class="docblock">
+        <p>Gets the status of the <code>ICalComponent</code>.</p>
+      </div>
+
+      <div class="docblock">
+        
+        <p>Available since: 1.0</p>
+        
+        
+        
+        
+      </div>
+
+      
+    </div>
+
+    
+
+    
+    <div class="return-value toggle-wrapper">
+      <h4 id="return-value">
+        Return value
+        <a href="#return-value" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <div class="returns">
+          <div class="arg-description">
+            <p><em>Type:</em>&nbsp;<a href="enum.PropertyStatus.html"><code>ICalPropertyStatus</code></a></p>
+            <p><p>A <code>ICalPropertyStatus</code>.</p></p>
+          </div>
+          <div>
+            <table>
+            
+            
+            
+            
+            
+            
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+  </section>
+</section>
+
+
+    
+
+    <section id="search" class="content hidden"></section>
+
+    <footer>
+    
+    </footer>
+  </div>
+</body>
+</html>

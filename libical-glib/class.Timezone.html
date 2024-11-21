@@ -1,0 +1,1031 @@
+<!--
+SPDX-FileCopyrightText: libical Development Team
+
+SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ICalGLib.Timezone</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta charset="utf-8" />
+
+  
+  <meta property="og:type" content="website"/>
+
+  
+
+  
+  <meta property="og:title" content="ICalGLib.Timezone"/>
+  <meta property="og:description" content="Reference for ICalGLib.Timezone"/>
+  <meta name="twitter:title" content="ICalGLib.Timezone"/>
+  <meta name="twitter:description" content="Reference for ICalGLib.Timezone"/>
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+
+  
+  
+  
+  <link rel="search" type="application/opensearchdescription+xml" title="ICalGLib" href="opensearch.xml">
+  
+  
+
+  <link rel="stylesheet" href="style.css" type="text/css" />
+
+  
+
+  
+  <script src="urlmap.js"></script>
+  
+  
+  <script src="fzy.js"></script>
+  <script src="search.js"></script>
+  
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <div id="body-wrapper" tabindex="-1">
+
+    <nav class="sidebar devhelp-hidden">
+      
+      
+      <div class="search section">
+        <form id="search-form" autocomplete="off">
+          <input id="search-input" type="text" name="do-not-autocomplete" placeholder="Click, or press 's' to search" autocomplete="off"/>
+        </form>
+      </div>
+      
+      <div class="section namespace">
+        <h3><a href="index.html">ICalGLib</a></h3>
+        <p>API Version: 3.0</p>
+        
+        <p>Library Version: 3</p>
+        
+      </div>
+      
+<div class="section">
+  <h5>Type</h5>
+  <div class="links">
+    <a class="current" href="class.Timezone.html#description">Timezone</a>
+  </div>
+</div>
+
+
+  
+<div class="section">
+  <h5>Constructors</h5>
+  <div class="links">
+  
+    <a class="ctor" href="ctor.Timezone.array_new.html">array_new</a>
+  
+    <a class="ctor" href="ctor.Timezone.new.html">new</a>
+  
+    <a class="ctor" href="ctor.Timezone.new_full.html">new_full</a>
+  
+  </div>
+</div>
+
+
+
+  
+<div class="section">
+  <h5>Functions</h5>
+  <div class="links">
+  
+    <a class="func" href="type_func.Timezone.array_append_from_vtimezone.html">array_append_from_vtimezone</a>
+  
+    <a class="func" href="type_func.Timezone.array_destroy.html">array_destroy</a>
+  
+    <a class="func" href="type_func.Timezone.array_element_at.html">array_element_at</a>
+  
+    <a class="func" href="type_func.Timezone.array_free.html">array_free</a>
+  
+    <a class="func" href="type_func.Timezone.destroy.html">destroy</a>
+  
+    <a class="func" href="type_func.Timezone.free_builtin_timezones.html">free_builtin_timezones</a>
+  
+    <a class="func" href="type_func.Timezone.free_zone_directory.html">free_zone_directory</a>
+  
+    <a class="func" href="type_func.Timezone.get_builtin_timezone.html">get_builtin_timezone</a>
+  
+    <a class="func" href="type_func.Timezone.get_builtin_timezone_from_offset.html">get_builtin_timezone_from_offset</a>
+  
+    <a class="func" href="type_func.Timezone.get_builtin_timezone_from_tzid.html">get_builtin_timezone_from_tzid</a>
+  
+    <a class="func" href="type_func.Timezone.get_builtin_timezones.html">get_builtin_timezones</a>
+  
+    <a class="func" href="type_func.Timezone.get_builtin_tzdata.html">get_builtin_tzdata</a>
+  
+    <a class="func" href="type_func.Timezone.get_location_from_vtimezone.html">get_location_from_vtimezone</a>
+  
+    <a class="func" href="type_func.Timezone.get_tznames_from_vtimezone.html">get_tznames_from_vtimezone</a>
+  
+    <a class="func" href="type_func.Timezone.get_utc_timezone.html">get_utc_timezone</a>
+  
+    <a class="func" href="type_func.Timezone.get_zone_directory.html">get_zone_directory</a>
+  
+    <a class="func" href="type_func.Timezone.release_zone_tab.html">release_zone_tab</a>
+  
+    <a class="func" href="type_func.Timezone.set_builtin_tzdata.html">set_builtin_tzdata</a>
+  
+    <a class="func" href="type_func.Timezone.set_tzid_prefix.html">set_tzid_prefix</a>
+  
+    <a class="func" href="type_func.Timezone.set_zone_directory.html">set_zone_directory</a>
+  
+  </div>
+</div>
+
+
+
+  
+<div class="section">
+  <h5>Instance methods</h5>
+  <div class="links">
+  
+    <a class="method" href="method.Timezone.copy.html">copy</a>
+  
+    <a class="method" href="method.Timezone.dump_changes.html">dump_changes</a>
+  
+    <a class="method" href="method.Timezone.free.html">free</a>
+  
+    <a class="method" href="method.Timezone.get_component.html">get_component</a>
+  
+    <a class="method" href="method.Timezone.get_display_name.html">get_display_name</a>
+  
+    <a class="method" href="method.Timezone.get_latitude.html">get_latitude</a>
+  
+    <a class="method" href="method.Timezone.get_location.html">get_location</a>
+  
+    <a class="method" href="method.Timezone.get_longitude.html">get_longitude</a>
+  
+    <a class="method" href="method.Timezone.get_tzid.html">get_tzid</a>
+  
+    <a class="method" href="method.Timezone.get_tznames.html">get_tznames</a>
+  
+    <a class="method" href="method.Timezone.get_utc_offset.html">get_utc_offset</a>
+  
+    <a class="method" href="method.Timezone.get_utc_offset_of_utc_time.html">get_utc_offset_of_utc_time</a>
+  
+    <a class="method" href="method.Timezone.set_component.html">set_component</a>
+  
+  </div>
+</div>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+
+      <div class="section generator">
+        <p>Generated by <a href="https://gitlab.gnome.org/GNOME/gi-docgen">gi-docgen</a> 2023.3</p>
+      </div>
+    </nav>
+
+    <button id="btn-to-top" class="hidden"><span class="up-arrow"></span></button>
+
+    
+<section id="main" class="content">
+  <header>
+    <h3>Class</h3>
+    <h1 aria-label="Name"><a href="index.html">ICalGLib</a><span class="sep" role="presentation"></span>Timezone</h1>
+  </header>
+
+  <section>
+    <summary>
+      <div class="docblock">
+        <p><span class="emblem available">since: 3.0</span></p>
+      </div>
+
+      <div class="toggle-wrapper">
+        <h4 id="description" style="display:flex;">
+          Description
+          <a href="#description" class="anchor"></a>
+          
+          <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-timezone.h#L27">[src]</a>
+          
+        </h4>
+
+        <pre><code>final class ICalGLib.Timezone : ICalGLib.Object
+{
+  /* No available fields */
+}</pre></code>
+
+        <div class="docblock">
+          <p>This is the ICalTimezone&nbsp;instance.</p>
+        </div>
+
+        <div class="docblock">
+          
+          
+          <p>Available since: 3.0</p>
+          
+          
+        </div>
+
+        
+      </div>
+    </summary>
+
+    
+    <div class="toggle-wrapper hierarchy">
+      <h4 id="hierarchy">
+        Hierarchy
+        <a href="#hierarchy" class="anchor"></a>
+      </h4>
+      <div class="docblock" alt="Hierarchy for ICalGLib.Timezone">
+        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: hierarchy Pages: 1 -->
+<svg width="103pt" height="188pt"
+ viewBox="0.00 0.00 103.00 188.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+<title>hierarchy</title>
+<!-- this -->
+<g id="node1" class="node">
+<title>this</title>
+<g id="a_node1"><a xlink:title="ICalTimezone">
+<path fill="none" stroke="black" d="M83,-36C83,-36 12,-36 12,-36 6,-36 0,-30 0,-24 0,-24 0,-12 0,-12 0,-6 6,0 12,0 12,0 83,0 83,0 89,0 95,-6 95,-12 95,-12 95,-24 95,-24 95,-30 89,-36 83,-36"/>
+<text text-anchor="middle" x="47.5" y="-14.3" font-family="Times,serif" font-size="14.00">ICalTimezone</text>
+</a>
+</g>
+</g>
+<!-- ancestor_0 -->
+<g id="node2" class="node link">
+<title>ancestor_0</title>
+<g id="a_node2"><a xlink:href="class.Object.html" xlink:title="ICalObject">
+<path fill="none" stroke="black" d="M73.5,-108C73.5,-108 21.5,-108 21.5,-108 15.5,-108 9.5,-102 9.5,-96 9.5,-96 9.5,-84 9.5,-84 9.5,-78 15.5,-72 21.5,-72 21.5,-72 73.5,-72 73.5,-72 79.5,-72 85.5,-78 85.5,-84 85.5,-84 85.5,-96 85.5,-96 85.5,-102 79.5,-108 73.5,-108"/>
+<text text-anchor="middle" x="47.5" y="-86.3" font-family="Times,serif" font-size="14.00">ICalObject</text>
+</a>
+</g>
+</g>
+<!-- ancestor_0&#45;&#45;this -->
+<g id="edge2" class="edge">
+<title>ancestor_0&#45;&#45;this</title>
+<path fill="none" stroke="black" d="M47.5,-71.7C47.5,-60.85 47.5,-46.92 47.5,-36.1"/>
+</g>
+<!-- ancestor_1 -->
+<g id="node3" class="node">
+<title>ancestor_1</title>
+<g id="a_node3"><a xlink:title="GObject.Object">
+<path fill="none" stroke="black" d="M66.5,-180C66.5,-180 28.5,-180 28.5,-180 22.5,-180 16.5,-174 16.5,-168 16.5,-168 16.5,-156 16.5,-156 16.5,-150 22.5,-144 28.5,-144 28.5,-144 66.5,-144 66.5,-144 72.5,-144 78.5,-150 78.5,-156 78.5,-156 78.5,-168 78.5,-168 78.5,-174 72.5,-180 66.5,-180"/>
+<text text-anchor="middle" x="47.5" y="-158.3" font-family="Times,serif" font-size="14.00">GObject</text>
+</a>
+</g>
+</g>
+<!-- ancestor_1&#45;&#45;ancestor_0 -->
+<g id="edge1" class="edge">
+<title>ancestor_1&#45;&#45;ancestor_0</title>
+<path fill="none" stroke="black" d="M47.5,-143.7C47.5,-132.85 47.5,-118.92 47.5,-108.1"/>
+</g>
+</g>
+</svg>
+
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper ancestors">
+      <h4 id="ancestors">
+        Ancestors
+        <a href="#ancestors" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <ul>
+        
+          
+          <li class="class"><a href="class.Object.html" title="Object">ICalObject</a></li>
+          
+        
+          
+          <li class="class"><a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a></li>
+          
+        
+        </ul>
+      </div>
+    </div>
+    
+
+    
+
+    
+
+    
+    <div class="toggle-wrapper constructors">
+      <h4 id="constructors">
+        Constructors
+        <a href="#constructors" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+        <div class="">
+          <h6><a href="ctor.Timezone.array_new.html">i_cal_timezone_array_new</a></h6>
+          <div class="docblock">
+            <p>Creates a new array of&nbsp;timezones.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Timezone.new.html">i_cal_timezone_new</a></h6>
+          <div class="docblock">
+            <p>The constructor of the type <code>ICalTimezone</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Timezone.new_full.html">i_cal_timezone_new_full</a></h6>
+          <div class="docblock">
+            <p>Create a new libical-glib object from the native libical object and the&nbsp;owner.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper methods">
+      <h4 id="type-functions">
+        Functions
+        <a href="#type-functions" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.array_append_from_vtimezone.html">i_cal_timezone_array_append_from_vtimezone</a></h6>
+        <div class="docblock">
+          <p>Populate the array of timezones with a&nbsp;component.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.array_destroy.html">i_cal_timezone_array_destroy</a></h6>
+        <div class="docblock">
+          <p>The destructor of the icalarray of icaltimezone elements to fully destroy the native&nbsp;object.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.array_element_at.html">i_cal_timezone_array_element_at</a></h6>
+        <div class="docblock">
+          <p>Gets the <code>ICalTimezone</code> at specified position in&nbsp;array.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.array_free.html">i_cal_timezone_array_free</a></h6>
+        <div class="docblock">
+          <p>Frees an array of&nbsp;timezones.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.destroy.html">i_cal_timezone_destroy</a></h6>
+        <div class="docblock">
+          <p>The destructor of the type <code>ICalTimezone</code> to fully destroy the object by providing 1 as the second argument
+of i_cal_time_zone_free. The method is used as a default destructor for&nbsp;introspection.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.free_builtin_timezones.html">i_cal_timezone_free_builtin_timezones</a></h6>
+        <div class="docblock">
+          <p>Frees any builtin timezone&nbsp;information.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.free_zone_directory.html">i_cal_timezone_free_zone_directory</a></h6>
+        <div class="docblock">
+          <p>Frees memory dedicated to the zonefile&nbsp;directory.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.get_builtin_timezone.html">i_cal_timezone_get_builtin_timezone</a></h6>
+        <div class="docblock">
+          <p>Returns a single builtin timezone, given its Olson city&nbsp;name.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.get_builtin_timezone_from_offset.html">i_cal_timezone_get_builtin_timezone_from_offset</a></h6>
+        <div class="docblock">
+          <p>Returns a single builtin timezone, given its&nbsp;offset.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.get_builtin_timezone_from_tzid.html">i_cal_timezone_get_builtin_timezone_from_tzid</a></h6>
+        <div class="docblock">
+          <p>Returns a single builtin timezone, given its <span class="caps">TZID</span>.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.get_builtin_timezones.html">i_cal_timezone_get_builtin_timezones</a></h6>
+        <div class="docblock">
+          <p>Returns a list of builtin&nbsp;timezones.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.get_builtin_tzdata.html">i_cal_timezone_get_builtin_tzdata</a></h6>
+        <div class="docblock">
+          <p>Gets whether to use builtin timezones&nbsp;files.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 2.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.get_location_from_vtimezone.html">i_cal_timezone_get_location_from_vtimezone</a></h6>
+        <div class="docblock">
+          <p>Gets the location of the vtimezone in&nbsp;component.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 2.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.get_tznames_from_vtimezone.html">i_cal_timezone_get_tznames_from_vtimezone</a></h6>
+        <div class="docblock">
+          <p>Gets the name of the vtimezone in&nbsp;component.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 2.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.get_utc_timezone.html">i_cal_timezone_get_utc_timezone</a></h6>
+        <div class="docblock">
+          <p>Returns the <span class="caps">UTC</span>&nbsp;timezone.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.get_zone_directory.html">i_cal_timezone_get_zone_directory</a></h6>
+        <div class="docblock">
+          <p>Gets the directory to look for the&nbsp;zonefiles.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available-next" title="This function will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.17</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.release_zone_tab.html">i_cal_timezone_release_zone_tab</a></h6>
+        <div class="docblock">
+          <p>Frees memory dedicated to the zonefile&nbsp;directory.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.set_builtin_tzdata.html">i_cal_timezone_set_builtin_tzdata</a></h6>
+        <div class="docblock">
+          <p>Sets whether to use builtin timezones&nbsp;files.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 2.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.set_tzid_prefix.html">i_cal_timezone_set_tzid_prefix</a></h6>
+        <div class="docblock">
+          <p>Sets the prefix to be used for tzid&#8217;s generated from system tzdata. Must be globally unique (such as
+a domain name owned by the developer of the calling application), and begin and end with forward slashes.
+Do not change or de-allocate the string buffer after calling&nbsp;this.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Timezone.set_zone_directory.html">i_cal_timezone_set_zone_directory</a></h6>
+        <div class="docblock">
+          <p>Sets the directory to look for the&nbsp;zonefiles.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper methods">
+      <h4 id="methods">
+        Instance methods
+        <a href="#methods" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+        <div class="">
+          <h6><a href="method.Timezone.copy.html">i_cal_timezone_copy</a></h6>
+          <div class="docblock">
+            <p>The clone method for <code>ICalTimezone</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.dump_changes.html">i_cal_timezone_dump_changes</a></h6>
+          <div class="docblock">
+            <p>Outputs a list of timezone changes for the given timezone to the given file, up to the maximum year&nbsp;given.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.free.html">i_cal_timezone_free</a></h6>
+          <div class="docblock">
+            <p>The destructor of <code>ICalTimezone</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.get_component.html">i_cal_timezone_get_component</a></h6>
+          <div class="docblock">
+            <p>Returns the <span class="caps">VTIMEZONE</span> component of a&nbsp;timezone.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.get_display_name.html">i_cal_timezone_get_display_name</a></h6>
+          <div class="docblock">
+            <p>Gets the display name of the <code>zone</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.get_latitude.html">i_cal_timezone_get_latitude</a></h6>
+          <div class="docblock">
+            <p>Returns the latitude of a builtin&nbsp;timezone.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.get_location.html">i_cal_timezone_get_location</a></h6>
+          <div class="docblock">
+            <p>Returns the city name of a timezone, or <code>NULL</code>, when none is set or when <code>zone</code> is also <code>NULL</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.get_longitude.html">i_cal_timezone_get_longitude</a></h6>
+          <div class="docblock">
+            <p>Returns the longitude of a builtin&nbsp;timezone.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.get_tzid.html">i_cal_timezone_get_tzid</a></h6>
+          <div class="docblock">
+            <p>Returns the <span class="caps">TZID</span> of a timezone, or <code>NULL</code>, when none is set or when <code>zone</code> is also <code>NULL</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.get_tznames.html">i_cal_timezone_get_tznames</a></h6>
+          <div class="docblock">
+            <p>Returns the <span class="caps">TZNAME</span> properties used in the latest <span class="caps">STANDARD</span> and <span class="caps">DAYLIGHT</span> components. If they are the same
+it will return just one, e.g. &#8220;<span class="caps">LMT</span>&#8221;. If they are different it will format them like &#8220;<span class="caps">EST</span>/<span class="caps">EDT</span>&#8221;. Note that
+this may also return <span class="caps">NULL</span>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.get_utc_offset.html">i_cal_timezone_get_utc_offset</a></h6>
+          <div class="docblock">
+            <p>Calculates the <span class="caps">UTC</span> offset of a given local time in the given timezone.  It is the number of seconds to
+add to <span class="caps">UTC</span> to get local time.  The is_daylight flag is set to 1 if the time is in daylight-savings&nbsp;time.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.get_utc_offset_of_utc_time.html">i_cal_timezone_get_utc_offset_of_utc_time</a></h6>
+          <div class="docblock">
+            <p>Calculates the <span class="caps">UTC</span> offset of a given <span class="caps">UTC</span> time in the given timezone.  It is the number of seconds to
+add to <span class="caps">UTC</span> to get local time.  The is_daylight flag is set to 1 if the time is in daylight-savings&nbsp;time.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Timezone.set_component.html">i_cal_timezone_set_component</a></h6>
+          <div class="docblock">
+            <p>Sets the <span class="caps">VTIMEZONE</span> component of <code>ICalTimezone</code>, initializing the tzid, location and tzname fields. It
+returns 1 on success or 0 on failure, i.e. no <span class="caps">TZID</span> was&nbsp;found.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+      </div>
+
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-methods">
+          <h5 style="display:block;">Methods inherited from <a href="class.Object.html">ICalObject</a> (12)</h5><div class="docblock">
+          
+            <h6><a href="method.Object.add_depender.html">i_cal_object_add_depender</a></h6><div class="docblock">
+              <p>Adds a <code>depender</code> into the list of objects which should not be destroyed before
+this <code>iobject</code>. It&#8217;s usually used for cases where the <code>iobject</code> uses native libical
+structure from the <code>depender</code>. The <code>depender</code> is referenced. It&#8217;s illegal to try
+to add one <code>depender</code> multiple&nbsp;times.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_always_destroy.html">i_cal_object_get_always_destroy</a></h6><div class="docblock">
+              <p>Obtain the <code>ICalObject</code>::always-destroy property&nbsp;value.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_is_global_memory.html">i_cal_object_get_is_global_memory</a></h6><div class="docblock">
+              <p>Obtains whether the native libical structure is a global shared memory,
+thus should not be destroyed. This can be set only during construction&nbsp;time.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_native.html">i_cal_object_get_native</a></h6><div class="docblock">
+              <p>Obtain native libical structure pointer associated with this <code>iobject</code>.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_native_destroy_func.html">i_cal_object_get_native_destroy_func</a></h6><div class="docblock">
+              <p>Obtain a pointer to a function responsible to free the libical native&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.ref_owner.html">i_cal_object_ref_owner</a></h6><div class="docblock">
+              <p>Obtain current owner of the native libical structure. The returned pointer,
+if not <span class="caps">NULL</span>, is referenced for thread safety. Unref it with g_object_unref
+when done with&nbsp;it.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.remove_depender.html">i_cal_object_remove_depender</a></h6><div class="docblock">
+              <p>Removes a <code>depender</code> from the list of objects which should not be destroyed before
+this <code>iobject</code>, previously added with i_cal_object_add_depender(). It&#8217;s illegal to try
+to remove the <code>depender</code> which is not in the internal&nbsp;list.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.remove_owner.html">i_cal_object_remove_owner</a></h6><div class="docblock">
+              <p>Unref and remove the&nbsp;owner.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_always_destroy.html">i_cal_object_set_always_destroy</a></h6><div class="docblock">
+              <p>Sets the <code>ICalObject</code>::always-destroy property value. When <code>TRUE</code>, the native
+libical structure is always freed, even when an owner of the <code>iobject</code> is&nbsp;set.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_native_destroy_func.html">i_cal_object_set_native_destroy_func</a></h6><div class="docblock">
+              <p>Sets a function to be used to destroy the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_owner.html">i_cal_object_set_owner</a></h6><div class="docblock">
+              <p>Sets an owner of the native libical structure, that is an object responsible
+for a destroy of the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.steal_native.html">i_cal_object_steal_native</a></h6><div class="docblock">
+              <p>Obtain native libical structure pointer associated with this <code>iobject</code> and sets the one
+at <code>iobject</code> to <span class="caps">NULL</span>, thus it&#8217;s invalid since now&nbsp;on.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-methods"><h5 style="display:block;">Methods inherited from <a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a> (43)</h5>
+          <div class="docblock">
+          
+            <div class="docblock">
+              <p>Please see&nbsp;<a class="external" href="javascript:void(0)" data-link="class.Object.html#methods" data-namespace="GObject">GObject</a>&nbsp;for a full list of methods.</em></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+
+      
+    </div>
+    
+
+    
+    <div class="toggle-wrapper properties">
+      <h4 id="properties">
+        Properties
+        <a href="#properties" class="anchor"></a>
+      </h4>
+
+      
+
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-properties">
+          <h5 style="display:block;">Properties inherited from <a href="class.Object.html">ICalObject</a> (5)</h5><div class="docblock">
+          
+            <h6><a href="property.Object.always-destroy.html">ICalGLib.Object:always-destroy</a></h6><div class="docblock">
+              <p>Whether free the native libical structure on <code>ICalObject</code><span class="quo">&#8216;</span>s finalize even
+if the object has set an&nbsp;owner.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This property will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="property.Object.is-global-memory.html">ICalGLib.Object:is-global-memory</a></h6><div class="docblock">
+              <p>Whether the native libical structure is from a global shared memory.
+If <span class="caps">TRUE</span>, then it is not freed on <code>ICalObject</code><span class="quo">&#8216;</span>s&nbsp;finalize.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.native.html">ICalGLib.Object:native</a></h6><div class="docblock">
+              <p>The native libical structure for this&nbsp;ICalObject.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.native-destroy-func.html">ICalGLib.Object:native-destroy-func</a></h6><div class="docblock">
+              <p>GDestroyNotify function to use to destroy the native libical&nbsp;pointer.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.owner.html">ICalGLib.Object:owner</a></h6><div class="docblock">
+              <p>Owner of the native libical structure. If set, then it is
+responsible for a free of the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+        
+      
+
+      
+
+    </div>
+    
+
+    
+    <div class="signals toggle-wrapper">
+      <h4 id="signals">
+        Signals
+        <a href="#signals" class="anchor"></a>
+      </h4>
+
+      
+
+      
+        
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-signals"><h5 style="display:block;">Signals inherited from <a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a> (1)</h5>
+          <div class="docblock">
+          <h6><a class="external" href="javascript:void(0)" data-namespace="GObject" data-link="signal.Object.notify.html">GObject::notify</a></h6>
+            <div class="docblock">
+              <p>The notify signal is emitted on an object when one of its properties has
+its value set through g_object_set_property(), g_object_set(), et&nbsp;al.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 2.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+
+      
+
+    </div>
+    
+
+    
+    <div class="class toggle-wrapper default-hide">
+      <h4 id="class-struct">
+        Class structure
+        <a href="#class-struct" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <pre><code>struct ICalGLibTimezoneClass {
+  /* no available fields */
+}</code></pre>
+      </div>
+
+      <div class="docblock">
+        <p>This is the ICalTimezone&nbsp;class.</p>
+      </div>
+
+      
+    </div>
+    
+
+    
+
+    
+
+  </section>
+</section>
+
+
+    
+<div id="toc" class="toc">
+  <nav aria-labelledby="toc-title">
+    <p id="toc-title">Content</p>
+    <ul class="toc-list">
+      <li class="toc-list-item"><a href="#description"><span class="link-text">Description</span></a></li>
+      
+      
+      <li class="toc-list-item"><a href="#hierarchy"><span class="link-text">Hierarchy</span></a></li>
+      
+      
+      <li class="toc-list-item"><a href="#ancestors"><span class="link-text">Ancestors</span></a></li>
+      
+      
+      
+<li class="toc-list-item"><a href="#constructors"><span class="link-text">Constructors</span></a></li>
+
+
+      
+<li class="toc-list-item"><a href="#type-functions"><span class="link-text">Functions</span></a></li>
+
+
+      
+<li class="toc-list-item"><a href="#methods"><span class="link-text">Methods</span></a></li>
+
+
+      
+
+      
+
+      
+
+      
+
+    </ul>
+  </nav>
+</div>
+
+
+    <section id="search" class="content hidden"></section>
+
+    <footer>
+    
+    </footer>
+  </div>
+</body>
+</html>

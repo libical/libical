@@ -1,0 +1,764 @@
+<!--
+SPDX-FileCopyrightText: libical Development Team
+
+SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ICalGLib.Property.get_patchtarget</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta charset="utf-8" />
+
+  
+  <meta property="og:type" content="website"/>
+
+  
+
+  
+  <meta priority="og:title" content="ICalGLib.Property.get_patchtarget"/>
+  <meta priority="og:description" content="Reference for ICalGLib.Property.get_patchtarget"/>
+  <meta name="twitter:title" content="ICalGLib.Property.get_patchtarget"/>
+  <meta name="twitter:description" content="Reference for ICalGLib.Property.get_patchtarget"/>
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+
+  
+  
+  
+  <link rel="search" type="application/opensearchdescription+xml" title="ICalGLib" href="opensearch.xml">
+  
+  
+
+  <link rel="stylesheet" href="style.css" type="text/css" />
+
+  
+
+  
+  <script src="urlmap.js"></script>
+  
+  
+  <script src="fzy.js"></script>
+  <script src="search.js"></script>
+  
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <div id="body-wrapper" tabindex="-1">
+
+    <nav class="sidebar devhelp-hidden">
+      
+      
+      <div class="search section">
+        <form id="search-form" autocomplete="off">
+          <input id="search-input" type="text" name="do-not-autocomplete" placeholder="Click, or press 's' to search" autocomplete="off"/>
+        </form>
+      </div>
+      
+      <div class="section namespace">
+        <h3><a href="index.html">ICalGLib</a></h3>
+        <p>API Version: 3.0</p>
+        
+        <p>Library Version: 3</p>
+        
+      </div>
+      
+<div class="section">
+  <h5>Type</h5>
+  <div class="links">
+    <a href="class.Property.html">Property</a>
+  </div>
+</div>
+<div class="section">
+  <h5>Methods</h5>
+  <div class="links">
+  
+    <a class="method" href="method.Property.add_parameter.html">add_parameter</a>
+  
+    <a class="method" href="method.Property.as_ical_string.html">as_ical_string</a>
+  
+    <a class="method" href="method.Property.clone.html">clone</a>
+  
+    <a class="method" href="method.Property.count_parameters.html">count_parameters</a>
+  
+    <a class="method" href="method.Property.free.html">free</a>
+  
+    <a class="method" href="method.Property.get_acceptresponse.html">get_acceptresponse</a>
+  
+    <a class="method" href="method.Property.get_acknowledged.html">get_acknowledged</a>
+  
+    <a class="method" href="method.Property.get_action.html">get_action</a>
+  
+    <a class="method" href="method.Property.get_allowconflict.html">get_allowconflict</a>
+  
+    <a class="method" href="method.Property.get_attach.html">get_attach</a>
+  
+    <a class="method" href="method.Property.get_attendee.html">get_attendee</a>
+  
+    <a class="method" href="method.Property.get_busytype.html">get_busytype</a>
+  
+    <a class="method" href="method.Property.get_calendaraddress.html">get_calendaraddress</a>
+  
+    <a class="method" href="method.Property.get_calid.html">get_calid</a>
+  
+    <a class="method" href="method.Property.get_calmaster.html">get_calmaster</a>
+  
+    <a class="method" href="method.Property.get_calscale.html">get_calscale</a>
+  
+    <a class="method" href="method.Property.get_capversion.html">get_capversion</a>
+  
+    <a class="method" href="method.Property.get_carid.html">get_carid</a>
+  
+    <a class="method" href="method.Property.get_carlevel.html">get_carlevel</a>
+  
+    <a class="method" href="method.Property.get_categories.html">get_categories</a>
+  
+    <a class="method" href="method.Property.get_class.html">get_class</a>
+  
+    <a class="method" href="method.Property.get_cmd.html">get_cmd</a>
+  
+    <a class="method" href="method.Property.get_color.html">get_color</a>
+  
+    <a class="method" href="method.Property.get_comment.html">get_comment</a>
+  
+    <a class="method" href="method.Property.get_completed.html">get_completed</a>
+  
+    <a class="method" href="method.Property.get_components.html">get_components</a>
+  
+    <a class="method" href="method.Property.get_conference.html">get_conference</a>
+  
+    <a class="method" href="method.Property.get_contact.html">get_contact</a>
+  
+    <a class="method" href="method.Property.get_created.html">get_created</a>
+  
+    <a class="method" href="method.Property.get_csid.html">get_csid</a>
+  
+    <a class="method" href="method.Property.get_datemax.html">get_datemax</a>
+  
+    <a class="method" href="method.Property.get_datemin.html">get_datemin</a>
+  
+    <a class="method" href="method.Property.get_datetime_with_component.html">get_datetime_with_component</a>
+  
+    <a class="method" href="method.Property.get_decreed.html">get_decreed</a>
+  
+    <a class="method" href="method.Property.get_defaultcharset.html">get_defaultcharset</a>
+  
+    <a class="method" href="method.Property.get_defaultlocale.html">get_defaultlocale</a>
+  
+    <a class="method" href="method.Property.get_defaulttzid.html">get_defaulttzid</a>
+  
+    <a class="method" href="method.Property.get_defaultvcars.html">get_defaultvcars</a>
+  
+    <a class="method" href="method.Property.get_deny.html">get_deny</a>
+  
+    <a class="method" href="method.Property.get_description.html">get_description</a>
+  
+    <a class="method" href="method.Property.get_dtend.html">get_dtend</a>
+  
+    <a class="method" href="method.Property.get_dtstamp.html">get_dtstamp</a>
+  
+    <a class="method" href="method.Property.get_dtstart.html">get_dtstart</a>
+  
+    <a class="method" href="method.Property.get_due.html">get_due</a>
+  
+    <a class="method" href="method.Property.get_duration.html">get_duration</a>
+  
+    <a class="method" href="method.Property.get_estimatedduration.html">get_estimatedduration</a>
+  
+    <a class="method" href="method.Property.get_exdate.html">get_exdate</a>
+  
+    <a class="method" href="method.Property.get_expand.html">get_expand</a>
+  
+    <a class="method" href="method.Property.get_exrule.html">get_exrule</a>
+  
+    <a class="method" href="method.Property.get_first_parameter.html">get_first_parameter</a>
+  
+    <a class="method" href="method.Property.get_freebusy.html">get_freebusy</a>
+  
+    <a class="method" href="method.Property.get_geo.html">get_geo</a>
+  
+    <a class="method" href="method.Property.get_grant.html">get_grant</a>
+  
+    <a class="method" href="method.Property.get_image.html">get_image</a>
+  
+    <a class="method" href="method.Property.get_itipversion.html">get_itipversion</a>
+  
+    <a class="method" href="method.Property.get_lastmodified.html">get_lastmodified</a>
+  
+    <a class="method" href="method.Property.get_location.html">get_location</a>
+  
+    <a class="method" href="method.Property.get_locationtype.html">get_locationtype</a>
+  
+    <a class="method" href="method.Property.get_maxcomponentsize.html">get_maxcomponentsize</a>
+  
+    <a class="method" href="method.Property.get_maxdate.html">get_maxdate</a>
+  
+    <a class="method" href="method.Property.get_maxresults.html">get_maxresults</a>
+  
+    <a class="method" href="method.Property.get_maxresultssize.html">get_maxresultssize</a>
+  
+    <a class="method" href="method.Property.get_method.html">get_method</a>
+  
+    <a class="method" href="method.Property.get_mindate.html">get_mindate</a>
+  
+    <a class="method" href="method.Property.get_multipart.html">get_multipart</a>
+  
+    <a class="method" href="method.Property.get_name.html">get_name</a>
+  
+    <a class="method" href="method.Property.get_next_parameter.html">get_next_parameter</a>
+  
+    <a class="method" href="method.Property.get_organizer.html">get_organizer</a>
+  
+    <a class="method" href="method.Property.get_owner.html">get_owner</a>
+  
+    <a class="method" href="method.Property.get_parameter_as_string.html">get_parameter_as_string</a>
+  
+    <a class="method" href="method.Property.get_parent.html">get_parent</a>
+  
+    <a class="method" href="method.Property.get_participanttype.html">get_participanttype</a>
+  
+    <a class="method" href="method.Property.get_patchdelete.html">get_patchdelete</a>
+  
+    <a class="method" href="method.Property.get_patchorder.html">get_patchorder</a>
+  
+    <a class="method" href="method.Property.get_patchparameter.html">get_patchparameter</a>
+  
+    <a class="method current" href="method.Property.get_patchtarget.html">get_patchtarget</a>
+  
+    <a class="method" href="method.Property.get_patchversion.html">get_patchversion</a>
+  
+    <a class="method" href="method.Property.get_percentcomplete.html">get_percentcomplete</a>
+  
+    <a class="method" href="method.Property.get_permission.html">get_permission</a>
+  
+    <a class="method" href="method.Property.get_pollcompletion.html">get_pollcompletion</a>
+  
+    <a class="method" href="method.Property.get_pollitemid.html">get_pollitemid</a>
+  
+    <a class="method" href="method.Property.get_pollmode.html">get_pollmode</a>
+  
+    <a class="method" href="method.Property.get_pollproperties.html">get_pollproperties</a>
+  
+    <a class="method" href="method.Property.get_pollwinner.html">get_pollwinner</a>
+  
+    <a class="method" href="method.Property.get_priority.html">get_priority</a>
+  
+    <a class="method" href="method.Property.get_prodid.html">get_prodid</a>
+  
+    <a class="method" href="method.Property.get_property_name.html">get_property_name</a>
+  
+    <a class="method" href="method.Property.get_proximity.html">get_proximity</a>
+  
+    <a class="method" href="method.Property.get_query.html">get_query</a>
+  
+    <a class="method" href="method.Property.get_queryid.html">get_queryid</a>
+  
+    <a class="method" href="method.Property.get_querylevel.html">get_querylevel</a>
+  
+    <a class="method" href="method.Property.get_queryname.html">get_queryname</a>
+  
+    <a class="method" href="method.Property.get_rdate.html">get_rdate</a>
+  
+    <a class="method" href="method.Property.get_recuraccepted.html">get_recuraccepted</a>
+  
+    <a class="method" href="method.Property.get_recurexpand.html">get_recurexpand</a>
+  
+    <a class="method" href="method.Property.get_recurlimit.html">get_recurlimit</a>
+  
+    <a class="method" href="method.Property.get_recurrenceid.html">get_recurrenceid</a>
+  
+    <a class="method" href="method.Property.get_refreshinterval.html">get_refreshinterval</a>
+  
+    <a class="method" href="method.Property.get_relatedto.html">get_relatedto</a>
+  
+    <a class="method" href="method.Property.get_relcalid.html">get_relcalid</a>
+  
+    <a class="method" href="method.Property.get_repeat.html">get_repeat</a>
+  
+    <a class="method" href="method.Property.get_replyurl.html">get_replyurl</a>
+  
+    <a class="method" href="method.Property.get_requeststatus.html">get_requeststatus</a>
+  
+    <a class="method" href="method.Property.get_resources.html">get_resources</a>
+  
+    <a class="method" href="method.Property.get_resourcetype.html">get_resourcetype</a>
+  
+    <a class="method" href="method.Property.get_response.html">get_response</a>
+  
+    <a class="method" href="method.Property.get_restriction.html">get_restriction</a>
+  
+    <a class="method" href="method.Property.get_rrule.html">get_rrule</a>
+  
+    <a class="method" href="method.Property.get_scope.html">get_scope</a>
+  
+    <a class="method" href="method.Property.get_sequence.html">get_sequence</a>
+  
+    <a class="method" href="method.Property.get_source.html">get_source</a>
+  
+    <a class="method" href="method.Property.get_status.html">get_status</a>
+  
+    <a class="method" href="method.Property.get_storesexpanded.html">get_storesexpanded</a>
+  
+    <a class="method" href="method.Property.get_structureddata.html">get_structureddata</a>
+  
+    <a class="method" href="method.Property.get_styleddescription.html">get_styleddescription</a>
+  
+    <a class="method" href="method.Property.get_summary.html">get_summary</a>
+  
+    <a class="method" href="method.Property.get_target.html">get_target</a>
+  
+    <a class="method" href="method.Property.get_taskmode.html">get_taskmode</a>
+  
+    <a class="method" href="method.Property.get_transp.html">get_transp</a>
+  
+    <a class="method" href="method.Property.get_trigger.html">get_trigger</a>
+  
+    <a class="method" href="method.Property.get_tzid.html">get_tzid</a>
+  
+    <a class="method" href="method.Property.get_tzidaliasof.html">get_tzidaliasof</a>
+  
+    <a class="method" href="method.Property.get_tzname.html">get_tzname</a>
+  
+    <a class="method" href="method.Property.get_tzoffsetfrom.html">get_tzoffsetfrom</a>
+  
+    <a class="method" href="method.Property.get_tzoffsetto.html">get_tzoffsetto</a>
+  
+    <a class="method" href="method.Property.get_tzuntil.html">get_tzuntil</a>
+  
+    <a class="method" href="method.Property.get_tzurl.html">get_tzurl</a>
+  
+    <a class="method" href="method.Property.get_uid.html">get_uid</a>
+  
+    <a class="method" href="method.Property.get_url.html">get_url</a>
+  
+    <a class="method" href="method.Property.get_value.html">get_value</a>
+  
+    <a class="method" href="method.Property.get_value_as_string.html">get_value_as_string</a>
+  
+    <a class="method" href="method.Property.get_version.html">get_version</a>
+  
+    <a class="method" href="method.Property.get_voter.html">get_voter</a>
+  
+    <a class="method" href="method.Property.get_x.html">get_x</a>
+  
+    <a class="method" href="method.Property.get_x_name.html">get_x_name</a>
+  
+    <a class="method" href="method.Property.get_xlicclass.html">get_xlicclass</a>
+  
+    <a class="method" href="method.Property.get_xlicclustercount.html">get_xlicclustercount</a>
+  
+    <a class="method" href="method.Property.get_xlicerror.html">get_xlicerror</a>
+  
+    <a class="method" href="method.Property.get_xlicmimecharset.html">get_xlicmimecharset</a>
+  
+    <a class="method" href="method.Property.get_xlicmimecid.html">get_xlicmimecid</a>
+  
+    <a class="method" href="method.Property.get_xlicmimecontenttype.html">get_xlicmimecontenttype</a>
+  
+    <a class="method" href="method.Property.get_xlicmimeencoding.html">get_xlicmimeencoding</a>
+  
+    <a class="method" href="method.Property.get_xlicmimefilename.html">get_xlicmimefilename</a>
+  
+    <a class="method" href="method.Property.get_xlicmimeoptinfo.html">get_xlicmimeoptinfo</a>
+  
+    <a class="method" href="method.Property.isa.html">isa</a>
+  
+    <a class="method" href="method.Property.isa_property.html">isa_property</a>
+  
+    <a class="method" href="method.Property.remove_parameter_by_kind.html">remove_parameter_by_kind</a>
+  
+    <a class="method" href="method.Property.remove_parameter_by_name.html">remove_parameter_by_name</a>
+  
+    <a class="method" href="method.Property.remove_parameter_by_ref.html">remove_parameter_by_ref</a>
+  
+    <a class="method" href="method.Property.set_acceptresponse.html">set_acceptresponse</a>
+  
+    <a class="method" href="method.Property.set_acknowledged.html">set_acknowledged</a>
+  
+    <a class="method" href="method.Property.set_action.html">set_action</a>
+  
+    <a class="method" href="method.Property.set_allowconflict.html">set_allowconflict</a>
+  
+    <a class="method" href="method.Property.set_attach.html">set_attach</a>
+  
+    <a class="method" href="method.Property.set_attendee.html">set_attendee</a>
+  
+    <a class="method" href="method.Property.set_busytype.html">set_busytype</a>
+  
+    <a class="method" href="method.Property.set_calendaraddress.html">set_calendaraddress</a>
+  
+    <a class="method" href="method.Property.set_calid.html">set_calid</a>
+  
+    <a class="method" href="method.Property.set_calmaster.html">set_calmaster</a>
+  
+    <a class="method" href="method.Property.set_calscale.html">set_calscale</a>
+  
+    <a class="method" href="method.Property.set_capversion.html">set_capversion</a>
+  
+    <a class="method" href="method.Property.set_carid.html">set_carid</a>
+  
+    <a class="method" href="method.Property.set_carlevel.html">set_carlevel</a>
+  
+    <a class="method" href="method.Property.set_categories.html">set_categories</a>
+  
+    <a class="method" href="method.Property.set_class.html">set_class</a>
+  
+    <a class="method" href="method.Property.set_cmd.html">set_cmd</a>
+  
+    <a class="method" href="method.Property.set_color.html">set_color</a>
+  
+    <a class="method" href="method.Property.set_comment.html">set_comment</a>
+  
+    <a class="method" href="method.Property.set_completed.html">set_completed</a>
+  
+    <a class="method" href="method.Property.set_components.html">set_components</a>
+  
+    <a class="method" href="method.Property.set_conference.html">set_conference</a>
+  
+    <a class="method" href="method.Property.set_contact.html">set_contact</a>
+  
+    <a class="method" href="method.Property.set_created.html">set_created</a>
+  
+    <a class="method" href="method.Property.set_csid.html">set_csid</a>
+  
+    <a class="method" href="method.Property.set_datemax.html">set_datemax</a>
+  
+    <a class="method" href="method.Property.set_datemin.html">set_datemin</a>
+  
+    <a class="method" href="method.Property.set_decreed.html">set_decreed</a>
+  
+    <a class="method" href="method.Property.set_defaultcharset.html">set_defaultcharset</a>
+  
+    <a class="method" href="method.Property.set_defaultlocale.html">set_defaultlocale</a>
+  
+    <a class="method" href="method.Property.set_defaulttzid.html">set_defaulttzid</a>
+  
+    <a class="method" href="method.Property.set_defaultvcars.html">set_defaultvcars</a>
+  
+    <a class="method" href="method.Property.set_deny.html">set_deny</a>
+  
+    <a class="method" href="method.Property.set_description.html">set_description</a>
+  
+    <a class="method" href="method.Property.set_dtend.html">set_dtend</a>
+  
+    <a class="method" href="method.Property.set_dtstamp.html">set_dtstamp</a>
+  
+    <a class="method" href="method.Property.set_dtstart.html">set_dtstart</a>
+  
+    <a class="method" href="method.Property.set_due.html">set_due</a>
+  
+    <a class="method" href="method.Property.set_duration.html">set_duration</a>
+  
+    <a class="method" href="method.Property.set_estimatedduration.html">set_estimatedduration</a>
+  
+    <a class="method" href="method.Property.set_exdate.html">set_exdate</a>
+  
+    <a class="method" href="method.Property.set_expand.html">set_expand</a>
+  
+    <a class="method" href="method.Property.set_exrule.html">set_exrule</a>
+  
+    <a class="method" href="method.Property.set_freebusy.html">set_freebusy</a>
+  
+    <a class="method" href="method.Property.set_geo.html">set_geo</a>
+  
+    <a class="method" href="method.Property.set_grant.html">set_grant</a>
+  
+    <a class="method" href="method.Property.set_image.html">set_image</a>
+  
+    <a class="method" href="method.Property.set_itipversion.html">set_itipversion</a>
+  
+    <a class="method" href="method.Property.set_lastmodified.html">set_lastmodified</a>
+  
+    <a class="method" href="method.Property.set_location.html">set_location</a>
+  
+    <a class="method" href="method.Property.set_locationtype.html">set_locationtype</a>
+  
+    <a class="method" href="method.Property.set_maxcomponentsize.html">set_maxcomponentsize</a>
+  
+    <a class="method" href="method.Property.set_maxdate.html">set_maxdate</a>
+  
+    <a class="method" href="method.Property.set_maxresults.html">set_maxresults</a>
+  
+    <a class="method" href="method.Property.set_maxresultssize.html">set_maxresultssize</a>
+  
+    <a class="method" href="method.Property.set_method.html">set_method</a>
+  
+    <a class="method" href="method.Property.set_mindate.html">set_mindate</a>
+  
+    <a class="method" href="method.Property.set_multipart.html">set_multipart</a>
+  
+    <a class="method" href="method.Property.set_name.html">set_name</a>
+  
+    <a class="method" href="method.Property.set_organizer.html">set_organizer</a>
+  
+    <a class="method" href="method.Property.set_owner.html">set_owner</a>
+  
+    <a class="method" href="method.Property.set_parameter.html">set_parameter</a>
+  
+    <a class="method" href="method.Property.set_parameter_from_string.html">set_parameter_from_string</a>
+  
+    <a class="method" href="method.Property.set_parent.html">set_parent</a>
+  
+    <a class="method" href="method.Property.set_participanttype.html">set_participanttype</a>
+  
+    <a class="method" href="method.Property.set_patchdelete.html">set_patchdelete</a>
+  
+    <a class="method" href="method.Property.set_patchorder.html">set_patchorder</a>
+  
+    <a class="method" href="method.Property.set_patchparameter.html">set_patchparameter</a>
+  
+    <a class="method" href="method.Property.set_patchtarget.html">set_patchtarget</a>
+  
+    <a class="method" href="method.Property.set_patchversion.html">set_patchversion</a>
+  
+    <a class="method" href="method.Property.set_percentcomplete.html">set_percentcomplete</a>
+  
+    <a class="method" href="method.Property.set_permission.html">set_permission</a>
+  
+    <a class="method" href="method.Property.set_pollcompletion.html">set_pollcompletion</a>
+  
+    <a class="method" href="method.Property.set_pollitemid.html">set_pollitemid</a>
+  
+    <a class="method" href="method.Property.set_pollmode.html">set_pollmode</a>
+  
+    <a class="method" href="method.Property.set_pollproperties.html">set_pollproperties</a>
+  
+    <a class="method" href="method.Property.set_pollwinner.html">set_pollwinner</a>
+  
+    <a class="method" href="method.Property.set_priority.html">set_priority</a>
+  
+    <a class="method" href="method.Property.set_prodid.html">set_prodid</a>
+  
+    <a class="method" href="method.Property.set_proximity.html">set_proximity</a>
+  
+    <a class="method" href="method.Property.set_query.html">set_query</a>
+  
+    <a class="method" href="method.Property.set_queryid.html">set_queryid</a>
+  
+    <a class="method" href="method.Property.set_querylevel.html">set_querylevel</a>
+  
+    <a class="method" href="method.Property.set_queryname.html">set_queryname</a>
+  
+    <a class="method" href="method.Property.set_rdate.html">set_rdate</a>
+  
+    <a class="method" href="method.Property.set_recuraccepted.html">set_recuraccepted</a>
+  
+    <a class="method" href="method.Property.set_recurexpand.html">set_recurexpand</a>
+  
+    <a class="method" href="method.Property.set_recurlimit.html">set_recurlimit</a>
+  
+    <a class="method" href="method.Property.set_recurrenceid.html">set_recurrenceid</a>
+  
+    <a class="method" href="method.Property.set_refreshinterval.html">set_refreshinterval</a>
+  
+    <a class="method" href="method.Property.set_relatedto.html">set_relatedto</a>
+  
+    <a class="method" href="method.Property.set_relcalid.html">set_relcalid</a>
+  
+    <a class="method" href="method.Property.set_repeat.html">set_repeat</a>
+  
+    <a class="method" href="method.Property.set_replyurl.html">set_replyurl</a>
+  
+    <a class="method" href="method.Property.set_requeststatus.html">set_requeststatus</a>
+  
+    <a class="method" href="method.Property.set_resources.html">set_resources</a>
+  
+    <a class="method" href="method.Property.set_resourcetype.html">set_resourcetype</a>
+  
+    <a class="method" href="method.Property.set_response.html">set_response</a>
+  
+    <a class="method" href="method.Property.set_restriction.html">set_restriction</a>
+  
+    <a class="method" href="method.Property.set_rrule.html">set_rrule</a>
+  
+    <a class="method" href="method.Property.set_scope.html">set_scope</a>
+  
+    <a class="method" href="method.Property.set_sequence.html">set_sequence</a>
+  
+    <a class="method" href="method.Property.set_source.html">set_source</a>
+  
+    <a class="method" href="method.Property.set_status.html">set_status</a>
+  
+    <a class="method" href="method.Property.set_storesexpanded.html">set_storesexpanded</a>
+  
+    <a class="method" href="method.Property.set_structureddata.html">set_structureddata</a>
+  
+    <a class="method" href="method.Property.set_styleddescription.html">set_styleddescription</a>
+  
+    <a class="method" href="method.Property.set_summary.html">set_summary</a>
+  
+    <a class="method" href="method.Property.set_target.html">set_target</a>
+  
+    <a class="method" href="method.Property.set_taskmode.html">set_taskmode</a>
+  
+    <a class="method" href="method.Property.set_transp.html">set_transp</a>
+  
+    <a class="method" href="method.Property.set_trigger.html">set_trigger</a>
+  
+    <a class="method" href="method.Property.set_tzid.html">set_tzid</a>
+  
+    <a class="method" href="method.Property.set_tzidaliasof.html">set_tzidaliasof</a>
+  
+    <a class="method" href="method.Property.set_tzname.html">set_tzname</a>
+  
+    <a class="method" href="method.Property.set_tzoffsetfrom.html">set_tzoffsetfrom</a>
+  
+    <a class="method" href="method.Property.set_tzoffsetto.html">set_tzoffsetto</a>
+  
+    <a class="method" href="method.Property.set_tzuntil.html">set_tzuntil</a>
+  
+    <a class="method" href="method.Property.set_tzurl.html">set_tzurl</a>
+  
+    <a class="method" href="method.Property.set_uid.html">set_uid</a>
+  
+    <a class="method" href="method.Property.set_url.html">set_url</a>
+  
+    <a class="method" href="method.Property.set_value.html">set_value</a>
+  
+    <a class="method" href="method.Property.set_value_from_string.html">set_value_from_string</a>
+  
+    <a class="method" href="method.Property.set_version.html">set_version</a>
+  
+    <a class="method" href="method.Property.set_voter.html">set_voter</a>
+  
+    <a class="method" href="method.Property.set_x.html">set_x</a>
+  
+    <a class="method" href="method.Property.set_x_name.html">set_x_name</a>
+  
+    <a class="method" href="method.Property.set_xlicclass.html">set_xlicclass</a>
+  
+    <a class="method" href="method.Property.set_xlicclustercount.html">set_xlicclustercount</a>
+  
+    <a class="method" href="method.Property.set_xlicerror.html">set_xlicerror</a>
+  
+    <a class="method" href="method.Property.set_xlicmimecharset.html">set_xlicmimecharset</a>
+  
+    <a class="method" href="method.Property.set_xlicmimecid.html">set_xlicmimecid</a>
+  
+    <a class="method" href="method.Property.set_xlicmimecontenttype.html">set_xlicmimecontenttype</a>
+  
+    <a class="method" href="method.Property.set_xlicmimeencoding.html">set_xlicmimeencoding</a>
+  
+    <a class="method" href="method.Property.set_xlicmimefilename.html">set_xlicmimefilename</a>
+  
+    <a class="method" href="method.Property.set_xlicmimeoptinfo.html">set_xlicmimeoptinfo</a>
+  
+    <a class="method" href="method.Property.take_parameter.html">take_parameter</a>
+  
+    <a class="method" href="method.Property.take_value.html">take_value</a>
+  
+  </div>
+</div>
+
+      <div class="section generator">
+        <p>Generated by <a href="https://gitlab.gnome.org/GNOME/gi-docgen">gi-docgen</a> 2023.3</p>
+      </div>
+    </nav>
+
+    <button id="btn-to-top" class="hidden"><span class="up-arrow"></span></button>
+
+    
+<section id="main" class="content">
+  <header>
+    <h3>Method</h3>
+    <h1><a href="index.html">ICalGLib</a><span class="sep"></span><a href="class.Property.html">Property</a><span class="sep"></span>get_patchtarget</h1>
+  </header>
+
+  <section>
+    <div class="docblock">
+      <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+    </div>
+
+    <div class="declaration toggle-wrapper">
+      <h4 style="display:flex;" id="declaration">
+        Declaration
+        <a class="anchor" href="#declaration"></a>
+        
+        <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-derived-property.h#L852">[src]</a>
+        
+      </h4>
+
+      <div class="docblock c-decl">
+        <pre><code><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">gchar</span><span class="o">*</span>
+<span class="n">i_cal_property_get_patchtarget</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">ICalProperty</span><span class="o">*</span><span class="w"> </span><span class="n">prop</span>
+<span class="p">)</span>
+</pre></div>
+</code></pre>
+      </div>
+    </div>
+
+    <div class="description toggle-wrapper">
+      <h4 style="display:flex;" id="description">
+        Description
+        <a class="anchor" href="#description"></a>
+        
+        <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-derived-property.c#L3782">[src]</a>
+        
+      </h4>
+
+      <div class="docblock">
+        <p>Gets value of the <code>prop</code> of kind <code>I_CAL_PATCHTARGET_PROPERTY</code>.</p>
+      </div>
+
+      <div class="docblock">
+        
+        <p>Available since: 3.1</p>
+        
+        
+        
+        
+      </div>
+
+      
+    </div>
+
+    
+
+    
+    <div class="return-value toggle-wrapper">
+      <h4 id="return-value">
+        Return value
+        <a href="#return-value" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <div class="returns">
+          <div class="arg-description">
+            <p><em>Type:</em>&nbsp;<code>const gchar*</code></p>
+            <p><p>The value of the <code>prop</code>.</p></p>
+          </div>
+          <div>
+            <table>
+            
+            
+            
+            <tr><td title="transfer: none">The data is owned by the instance.</td></tr>
+            
+            <tr><td>The value is a NUL terminated UTF-8 string.</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+  </section>
+</section>
+
+
+    
+
+    <section id="search" class="content hidden"></section>
+
+    <footer>
+    
+    </footer>
+  </div>
+</body>
+</html>

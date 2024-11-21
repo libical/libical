@@ -1,0 +1,1289 @@
+<!--
+SPDX-FileCopyrightText: libical Development Team
+
+SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ICalGLib.Time</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta charset="utf-8" />
+
+  
+  <meta property="og:type" content="website"/>
+
+  
+
+  
+  <meta property="og:title" content="ICalGLib.Time"/>
+  <meta property="og:description" content="Reference for ICalGLib.Time"/>
+  <meta name="twitter:title" content="ICalGLib.Time"/>
+  <meta name="twitter:description" content="Reference for ICalGLib.Time"/>
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+
+  
+  
+  
+  <link rel="search" type="application/opensearchdescription+xml" title="ICalGLib" href="opensearch.xml">
+  
+  
+
+  <link rel="stylesheet" href="style.css" type="text/css" />
+
+  
+
+  
+  <script src="urlmap.js"></script>
+  
+  
+  <script src="fzy.js"></script>
+  <script src="search.js"></script>
+  
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <div id="body-wrapper" tabindex="-1">
+
+    <nav class="sidebar devhelp-hidden">
+      
+      
+      <div class="search section">
+        <form id="search-form" autocomplete="off">
+          <input id="search-input" type="text" name="do-not-autocomplete" placeholder="Click, or press 's' to search" autocomplete="off"/>
+        </form>
+      </div>
+      
+      <div class="section namespace">
+        <h3><a href="index.html">ICalGLib</a></h3>
+        <p>API Version: 3.0</p>
+        
+        <p>Library Version: 3</p>
+        
+      </div>
+      
+<div class="section">
+  <h5>Type</h5>
+  <div class="links">
+    <a class="current" href="class.Time.html#description">Time</a>
+  </div>
+</div>
+
+
+  
+<div class="section">
+  <h5>Constructors</h5>
+  <div class="links">
+  
+    <a class="ctor" href="ctor.Time.new.html">new</a>
+  
+    <a class="ctor" href="ctor.Time.new_current_with_zone.html">new_current_with_zone</a>
+  
+    <a class="ctor" href="ctor.Time.new_from_day_of_year.html">new_from_day_of_year</a>
+  
+    <a class="ctor" href="ctor.Time.new_from_string.html">new_from_string</a>
+  
+    <a class="ctor" href="ctor.Time.new_from_timet_with_zone.html">new_from_timet_with_zone</a>
+  
+    <a class="ctor" href="ctor.Time.new_full.html">new_full</a>
+  
+    <a class="ctor" href="ctor.Time.new_null_date.html">new_null_date</a>
+  
+    <a class="ctor" href="ctor.Time.new_null_time.html">new_null_time</a>
+  
+    <a class="ctor" href="ctor.Time.new_today.html">new_today</a>
+  
+  </div>
+</div>
+
+
+
+  
+<div class="section">
+  <h5>Functions</h5>
+  <div class="links">
+  
+    <a class="func" href="type_func.Time.days_in_month.html">days_in_month</a>
+  
+    <a class="func" href="type_func.Time.days_in_year.html">days_in_year</a>
+  
+    <a class="func" href="type_func.Time.days_is_leap_year.html">days_is_leap_year</a>
+  
+    <a class="func" href="type_func.Time.timezone_expand_vtimezone.html">timezone_expand_vtimezone</a>
+  
+  </div>
+</div>
+
+
+
+  
+<div class="section">
+  <h5>Instance methods</h5>
+  <div class="links">
+  
+    <a class="method" href="method.Time.add.html">add</a>
+  
+    <a class="method" href="method.Time.adjust.html">adjust</a>
+  
+    <a class="method" href="method.Time.as_ical_string.html">as_ical_string</a>
+  
+    <a class="method" href="method.Time.as_timet.html">as_timet</a>
+  
+    <a class="method" href="method.Time.as_timet_with_zone.html">as_timet_with_zone</a>
+  
+    <a class="method" href="method.Time.clone.html">clone</a>
+  
+    <a class="method" href="method.Time.compare.html">compare</a>
+  
+    <a class="method" href="method.Time.compare_date_only.html">compare_date_only</a>
+  
+    <a class="method" href="method.Time.compare_date_only_tz.html">compare_date_only_tz</a>
+  
+    <a class="method" href="method.Time.convert_timezone.html">convert_timezone</a>
+  
+    <a class="method" href="method.Time.convert_to_zone.html">convert_to_zone</a>
+  
+    <a class="method" href="method.Time.convert_to_zone_inplace.html">convert_to_zone_inplace</a>
+  
+    <a class="method" href="method.Time.day_of_week.html">day_of_week</a>
+  
+    <a class="method" href="method.Time.day_of_year.html">day_of_year</a>
+  
+    <a class="method" href="method.Time.get_date.html">get_date</a>
+  
+    <a class="method" href="method.Time.get_day.html">get_day</a>
+  
+    <a class="method" href="method.Time.get_hour.html">get_hour</a>
+  
+    <a class="method" href="method.Time.get_minute.html">get_minute</a>
+  
+    <a class="method" href="method.Time.get_month.html">get_month</a>
+  
+    <a class="method" href="method.Time.get_second.html">get_second</a>
+  
+    <a class="method" href="method.Time.get_time.html">get_time</a>
+  
+    <a class="method" href="method.Time.get_timezone.html">get_timezone</a>
+  
+    <a class="method" href="method.Time.get_tzid.html">get_tzid</a>
+  
+    <a class="method" href="method.Time.get_year.html">get_year</a>
+  
+    <a class="method" href="method.Time.is_date.html">is_date</a>
+  
+    <a class="method" href="method.Time.is_daylight.html">is_daylight</a>
+  
+    <a class="method" href="method.Time.is_null_time.html">is_null_time</a>
+  
+    <a class="method" href="method.Time.is_utc.html">is_utc</a>
+  
+    <a class="method" href="method.Time.is_valid_time.html">is_valid_time</a>
+  
+    <a class="method" href="method.Time.normalize.html">normalize</a>
+  
+    <a class="method" href="method.Time.normalize_inplace.html">normalize_inplace</a>
+  
+    <a class="method" href="method.Time.set_date.html">set_date</a>
+  
+    <a class="method" href="method.Time.set_day.html">set_day</a>
+  
+    <a class="method" href="method.Time.set_hour.html">set_hour</a>
+  
+    <a class="method" href="method.Time.set_is_date.html">set_is_date</a>
+  
+    <a class="method" href="method.Time.set_is_daylight.html">set_is_daylight</a>
+  
+    <a class="method" href="method.Time.set_minute.html">set_minute</a>
+  
+    <a class="method" href="method.Time.set_month.html">set_month</a>
+  
+    <a class="method" href="method.Time.set_second.html">set_second</a>
+  
+    <a class="method" href="method.Time.set_time.html">set_time</a>
+  
+    <a class="method" href="method.Time.set_timezone.html">set_timezone</a>
+  
+    <a class="method" href="method.Time.set_year.html">set_year</a>
+  
+    <a class="method" href="method.Time.start_doy_week.html">start_doy_week</a>
+  
+    <a class="method" href="method.Time.subtract.html">subtract</a>
+  
+    <a class="method" href="method.Time.week_number.html">week_number</a>
+  
+  </div>
+</div>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+
+      <div class="section generator">
+        <p>Generated by <a href="https://gitlab.gnome.org/GNOME/gi-docgen">gi-docgen</a> 2023.3</p>
+      </div>
+    </nav>
+
+    <button id="btn-to-top" class="hidden"><span class="up-arrow"></span></button>
+
+    
+<section id="main" class="content">
+  <header>
+    <h3>Class</h3>
+    <h1 aria-label="Name"><a href="index.html">ICalGLib</a><span class="sep" role="presentation"></span>Time</h1>
+  </header>
+
+  <section>
+    <summary>
+      <div class="docblock">
+        <p><span class="emblem available">since: 3.0</span></p>
+      </div>
+
+      <div class="toggle-wrapper">
+        <h4 id="description" style="display:flex;">
+          Description
+          <a href="#description" class="anchor"></a>
+          
+          <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-time.h#L27">[src]</a>
+          
+        </h4>
+
+        <pre><code>final class ICalGLib.Time : ICalGLib.Object
+{
+  /* No available fields */
+}</pre></code>
+
+        <div class="docblock">
+          <p>This is the ICalTime&nbsp;instance.</p>
+        </div>
+
+        <div class="docblock">
+          
+          
+          <p>Available since: 3.0</p>
+          
+          
+        </div>
+
+        
+      </div>
+    </summary>
+
+    
+    <div class="toggle-wrapper hierarchy">
+      <h4 id="hierarchy">
+        Hierarchy
+        <a href="#hierarchy" class="anchor"></a>
+      </h4>
+      <div class="docblock" alt="Hierarchy for ICalGLib.Time">
+        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: hierarchy Pages: 1 -->
+<svg width="84pt" height="188pt"
+ viewBox="0.00 0.00 84.00 188.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+<title>hierarchy</title>
+<!-- this -->
+<g id="node1" class="node">
+<title>this</title>
+<g id="a_node1"><a xlink:title="ICalTime">
+<path fill="none" stroke="black" d="M60.5,-36C60.5,-36 15.5,-36 15.5,-36 9.5,-36 3.5,-30 3.5,-24 3.5,-24 3.5,-12 3.5,-12 3.5,-6 9.5,0 15.5,0 15.5,0 60.5,0 60.5,0 66.5,0 72.5,-6 72.5,-12 72.5,-12 72.5,-24 72.5,-24 72.5,-30 66.5,-36 60.5,-36"/>
+<text text-anchor="middle" x="38" y="-14.3" font-family="Times,serif" font-size="14.00">ICalTime</text>
+</a>
+</g>
+</g>
+<!-- ancestor_0 -->
+<g id="node2" class="node link">
+<title>ancestor_0</title>
+<g id="a_node2"><a xlink:href="class.Object.html" xlink:title="ICalObject">
+<path fill="none" stroke="black" d="M64,-108C64,-108 12,-108 12,-108 6,-108 0,-102 0,-96 0,-96 0,-84 0,-84 0,-78 6,-72 12,-72 12,-72 64,-72 64,-72 70,-72 76,-78 76,-84 76,-84 76,-96 76,-96 76,-102 70,-108 64,-108"/>
+<text text-anchor="middle" x="38" y="-86.3" font-family="Times,serif" font-size="14.00">ICalObject</text>
+</a>
+</g>
+</g>
+<!-- ancestor_0&#45;&#45;this -->
+<g id="edge2" class="edge">
+<title>ancestor_0&#45;&#45;this</title>
+<path fill="none" stroke="black" d="M38,-71.7C38,-60.85 38,-46.92 38,-36.1"/>
+</g>
+<!-- ancestor_1 -->
+<g id="node3" class="node">
+<title>ancestor_1</title>
+<g id="a_node3"><a xlink:title="GObject.Object">
+<path fill="none" stroke="black" d="M57,-180C57,-180 19,-180 19,-180 13,-180 7,-174 7,-168 7,-168 7,-156 7,-156 7,-150 13,-144 19,-144 19,-144 57,-144 57,-144 63,-144 69,-150 69,-156 69,-156 69,-168 69,-168 69,-174 63,-180 57,-180"/>
+<text text-anchor="middle" x="38" y="-158.3" font-family="Times,serif" font-size="14.00">GObject</text>
+</a>
+</g>
+</g>
+<!-- ancestor_1&#45;&#45;ancestor_0 -->
+<g id="edge1" class="edge">
+<title>ancestor_1&#45;&#45;ancestor_0</title>
+<path fill="none" stroke="black" d="M38,-143.7C38,-132.85 38,-118.92 38,-108.1"/>
+</g>
+</g>
+</svg>
+
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper ancestors">
+      <h4 id="ancestors">
+        Ancestors
+        <a href="#ancestors" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <ul>
+        
+          
+          <li class="class"><a href="class.Object.html" title="Object">ICalObject</a></li>
+          
+        
+          
+          <li class="class"><a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a></li>
+          
+        
+        </ul>
+      </div>
+    </div>
+    
+
+    
+
+    
+
+    
+    <div class="toggle-wrapper constructors">
+      <h4 id="constructors">
+        Constructors
+        <a href="#constructors" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+        <div class="">
+          <h6><a href="ctor.Time.new.html">i_cal_time_new</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Time.new_current_with_zone.html">i_cal_time_new_current_with_zone</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalTime</code> according to the timezone and current&nbsp;time.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Time.new_from_day_of_year.html">i_cal_time_new_from_day_of_year</a></h6>
+          <div class="docblock">
+            <p>Creates a new time, given a day of year and a&nbsp;year.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Time.new_from_string.html">i_cal_time_new_from_string</a></h6>
+          <div class="docblock">
+            <p>Creates a time from an <span class="caps">ISO</span> format&nbsp;string.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Time.new_from_timet_with_zone.html">i_cal_time_new_from_timet_with_zone</a></h6>
+          <div class="docblock">
+            <p>Converts seconds past <span class="caps">UNIX</span> epoch to a timetype, using&nbsp;timezones.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Time.new_full.html">i_cal_time_new_full</a></h6>
+          <div class="docblock">
+            <p>Create a new libical-glib object from the native libical object and the&nbsp;owner.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Time.new_null_date.html">i_cal_time_new_null_date</a></h6>
+          <div class="docblock">
+            <p>Creates a null date, which indicates no time has been&nbsp;set.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Time.new_null_time.html">i_cal_time_new_null_time</a></h6>
+          <div class="docblock">
+            <p>Creates a default time which is an epoch&nbsp;time.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Time.new_today.html">i_cal_time_new_today</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalTime</code> representing&nbsp;today.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper methods">
+      <h4 id="type-functions">
+        Functions
+        <a href="#type-functions" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+      <div class="">
+        <h6><a href="type_func.Time.days_in_month.html">i_cal_time_days_in_month</a></h6>
+        <div class="docblock">
+          <p>Gets the number of days in the target month in the target&nbsp;year.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Time.days_in_year.html">i_cal_time_days_in_year</a></h6>
+        <div class="docblock">
+          <p>Returns the number of days in this&nbsp;year.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 2.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Time.days_is_leap_year.html">i_cal_time_days_is_leap_year</a></h6>
+        <div class="docblock">
+          <p>Checks whether a year is a leap&nbsp;year.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Time.timezone_expand_vtimezone.html">i_cal_time_timezone_expand_vtimezone</a></h6>
+        <div class="docblock">
+          <p>Applies a list of timezone changes on the array of components until the end&nbsp;year.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 2.0</span></p>
+        </div>
+      </div>
+      
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper methods">
+      <h4 id="methods">
+        Instance methods
+        <a href="#methods" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+        <div class="">
+          <h6><a href="method.Time.add.html">i_cal_time_add</a></h6>
+          <div class="docblock">
+            <p>Adds a time duration on the&nbsp;time.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.adjust.html">i_cal_time_adjust</a></h6>
+          <div class="docblock">
+            <p>Adds or subtracts a number of days, hours, minutes and seconds from <code>tt</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.as_ical_string.html">i_cal_time_as_ical_string</a></h6>
+          <div class="docblock">
+            <p>Returns a string representation of the time, in <span class="caps">RFC2445</span>&nbsp;format.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.as_timet.html">i_cal_time_as_timet</a></h6>
+          <div class="docblock">
+            <p>Returns the time as seconds past the <span class="caps">UNIX</span>&nbsp;epoch.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.as_timet_with_zone.html">i_cal_time_as_timet_with_zone</a></h6>
+          <div class="docblock">
+            <p>Returns the time as seconds past the <span class="caps">UNIX</span> epoch, using&nbsp;timezones.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.clone.html">i_cal_time_clone</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalTime</code>, copy of <code>timetype</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.compare.html">i_cal_time_compare</a></h6>
+          <div class="docblock">
+            <p>I_cal_time_compare returns an integer indicating the result of the comparison, as&nbsp;follow:</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.compare_date_only.html">i_cal_time_compare_date_only</a></h6>
+          <div class="docblock">
+            <p>Like i_cal_time_compare(), but only use the date&nbsp;parts.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.compare_date_only_tz.html">i_cal_time_compare_date_only_tz</a></h6>
+          <div class="docblock">
+            <p>Like i_cal_time_compare_tz(), but only use the date parts; accepts&nbsp;timezone.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.convert_timezone.html">i_cal_time_convert_timezone</a></h6>
+          <div class="docblock">
+            <p>Convert time from one timezone to&nbsp;another.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.convert_to_zone.html">i_cal_time_convert_to_zone</a></h6>
+          <div class="docblock">
+            <p>Converts <code>tt</code> to <code>zone</code> and return new <code>ICalTime</code> object.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.convert_to_zone_inplace.html">i_cal_time_convert_to_zone_inplace</a></h6>
+          <div class="docblock">
+            <p>Converts <code>tt</code> to <code>zone</code> and store the result into <code>tt</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.5</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.day_of_week.html">i_cal_time_day_of_week</a></h6>
+          <div class="docblock">
+            <p>Returns the day of the week of the given time. Sunday is&nbsp;1.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.day_of_year.html">i_cal_time_day_of_year</a></h6>
+          <div class="docblock">
+            <p>Returns the day of the year of the given&nbsp;time.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.get_date.html">i_cal_time_get_date</a></h6>
+          <div class="docblock">
+            <p>Gets the year/month/date parts of the <code>timetype</code> in one&nbsp;call.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.get_day.html">i_cal_time_get_day</a></h6>
+          <div class="docblock">
+            <p>Gets the day of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.get_hour.html">i_cal_time_get_hour</a></h6>
+          <div class="docblock">
+            <p>Gets the hour of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.get_minute.html">i_cal_time_get_minute</a></h6>
+          <div class="docblock">
+            <p>Gets the minute of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.get_month.html">i_cal_time_get_month</a></h6>
+          <div class="docblock">
+            <p>Gets the month of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.get_second.html">i_cal_time_get_second</a></h6>
+          <div class="docblock">
+            <p>Gets the second of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.get_time.html">i_cal_time_get_time</a></h6>
+          <div class="docblock">
+            <p>Gets the hour/minute/second parts of the <code>timetype</code> in one&nbsp;call.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.get_timezone.html">i_cal_time_get_timezone</a></h6>
+          <div class="docblock">
+            <p>Returns the timezone, the <code>ICalTimezone</code> object is cached and can be either unreferenced once the last
+instance is used or can be kept until <code>i_cal_object_free_global_objects()</code> is called (usually at the very
+end of the&nbsp;program).</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.get_tzid.html">i_cal_time_get_tzid</a></h6>
+          <div class="docblock">
+            <p>Returns the tzid, or <span class="caps">NULL</span> for a floating&nbsp;time.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.get_year.html">i_cal_time_get_year</a></h6>
+          <div class="docblock">
+            <p>Gets the year of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.is_date.html">i_cal_time_is_date</a></h6>
+          <div class="docblock">
+            <p>Returns true if time is of <span class="caps">DATE</span> type, false if <span class="caps">DATE</span>-<span class="caps">TIME</span>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.is_daylight.html">i_cal_time_is_daylight</a></h6>
+          <div class="docblock">
+            <p>Gets the is_daylight of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.is_null_time.html">i_cal_time_is_null_time</a></h6>
+          <div class="docblock">
+            <p>Returns true if the time is&nbsp;null.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.is_utc.html">i_cal_time_is_utc</a></h6>
+          <div class="docblock">
+            <p>Returns true if time is relative to <span class="caps">UTC</span>&nbsp;zone.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.is_valid_time.html">i_cal_time_is_valid_time</a></h6>
+          <div class="docblock">
+            <p>Returns true if the time is&nbsp;null.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.normalize.html">i_cal_time_normalize</a></h6>
+          <div class="docblock">
+            <p>Normalizes the icaltime, so that all fields are within the normal&nbsp;range.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.normalize_inplace.html">i_cal_time_normalize_inplace</a></h6>
+          <div class="docblock">
+            <p>Normalizes the <code>tt</code>, so that all fields are within the normal&nbsp;range.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.5</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_date.html">i_cal_time_set_date</a></h6>
+          <div class="docblock">
+            <p>Sets the year/month/date parts of the <code>timetype</code> in one call. This doesn&#8217;t verify validity of the given&nbsp;date.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_day.html">i_cal_time_set_day</a></h6>
+          <div class="docblock">
+            <p>Sets the day of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_hour.html">i_cal_time_set_hour</a></h6>
+          <div class="docblock">
+            <p>Sets the hour of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_is_date.html">i_cal_time_set_is_date</a></h6>
+          <div class="docblock">
+            <p>Sets the is_date of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_is_daylight.html">i_cal_time_set_is_daylight</a></h6>
+          <div class="docblock">
+            <p>Sets the is_daylight of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_minute.html">i_cal_time_set_minute</a></h6>
+          <div class="docblock">
+            <p>Sets the minute of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_month.html">i_cal_time_set_month</a></h6>
+          <div class="docblock">
+            <p>Sets the month of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_second.html">i_cal_time_set_second</a></h6>
+          <div class="docblock">
+            <p>Sets the second of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_time.html">i_cal_time_set_time</a></h6>
+          <div class="docblock">
+            <p>Sets the hour/minute/second parts of the <code>timetype</code> in one call. This doesn&#8217;t verify validity of the given&nbsp;time.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_timezone.html">i_cal_time_set_timezone</a></h6>
+          <div class="docblock">
+            <p>Sets the timezone of the <code>tt</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.set_year.html">i_cal_time_set_year</a></h6>
+          <div class="docblock">
+            <p>Sets the year of <code>ICalTime</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.start_doy_week.html">i_cal_time_start_doy_week</a></h6>
+          <div class="docblock">
+            <p>Returns the day of the year for the first day of the week that the given time is&nbsp;within.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.subtract.html">i_cal_time_subtract</a></h6>
+          <div class="docblock">
+            <p>Gets the duration between two&nbsp;time.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Time.week_number.html">i_cal_time_week_number</a></h6>
+          <div class="docblock">
+            <p>Returns the week number for the week the given time is&nbsp;within.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+      </div>
+
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-methods">
+          <h5 style="display:block;">Methods inherited from <a href="class.Object.html">ICalObject</a> (12)</h5><div class="docblock">
+          
+            <h6><a href="method.Object.add_depender.html">i_cal_object_add_depender</a></h6><div class="docblock">
+              <p>Adds a <code>depender</code> into the list of objects which should not be destroyed before
+this <code>iobject</code>. It&#8217;s usually used for cases where the <code>iobject</code> uses native libical
+structure from the <code>depender</code>. The <code>depender</code> is referenced. It&#8217;s illegal to try
+to add one <code>depender</code> multiple&nbsp;times.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_always_destroy.html">i_cal_object_get_always_destroy</a></h6><div class="docblock">
+              <p>Obtain the <code>ICalObject</code>::always-destroy property&nbsp;value.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_is_global_memory.html">i_cal_object_get_is_global_memory</a></h6><div class="docblock">
+              <p>Obtains whether the native libical structure is a global shared memory,
+thus should not be destroyed. This can be set only during construction&nbsp;time.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_native.html">i_cal_object_get_native</a></h6><div class="docblock">
+              <p>Obtain native libical structure pointer associated with this <code>iobject</code>.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_native_destroy_func.html">i_cal_object_get_native_destroy_func</a></h6><div class="docblock">
+              <p>Obtain a pointer to a function responsible to free the libical native&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.ref_owner.html">i_cal_object_ref_owner</a></h6><div class="docblock">
+              <p>Obtain current owner of the native libical structure. The returned pointer,
+if not <span class="caps">NULL</span>, is referenced for thread safety. Unref it with g_object_unref
+when done with&nbsp;it.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.remove_depender.html">i_cal_object_remove_depender</a></h6><div class="docblock">
+              <p>Removes a <code>depender</code> from the list of objects which should not be destroyed before
+this <code>iobject</code>, previously added with i_cal_object_add_depender(). It&#8217;s illegal to try
+to remove the <code>depender</code> which is not in the internal&nbsp;list.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.remove_owner.html">i_cal_object_remove_owner</a></h6><div class="docblock">
+              <p>Unref and remove the&nbsp;owner.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_always_destroy.html">i_cal_object_set_always_destroy</a></h6><div class="docblock">
+              <p>Sets the <code>ICalObject</code>::always-destroy property value. When <code>TRUE</code>, the native
+libical structure is always freed, even when an owner of the <code>iobject</code> is&nbsp;set.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_native_destroy_func.html">i_cal_object_set_native_destroy_func</a></h6><div class="docblock">
+              <p>Sets a function to be used to destroy the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_owner.html">i_cal_object_set_owner</a></h6><div class="docblock">
+              <p>Sets an owner of the native libical structure, that is an object responsible
+for a destroy of the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.steal_native.html">i_cal_object_steal_native</a></h6><div class="docblock">
+              <p>Obtain native libical structure pointer associated with this <code>iobject</code> and sets the one
+at <code>iobject</code> to <span class="caps">NULL</span>, thus it&#8217;s invalid since now&nbsp;on.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-methods"><h5 style="display:block;">Methods inherited from <a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a> (43)</h5>
+          <div class="docblock">
+          
+            <div class="docblock">
+              <p>Please see&nbsp;<a class="external" href="javascript:void(0)" data-link="class.Object.html#methods" data-namespace="GObject">GObject</a>&nbsp;for a full list of methods.</em></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+
+      
+    </div>
+    
+
+    
+    <div class="toggle-wrapper properties">
+      <h4 id="properties">
+        Properties
+        <a href="#properties" class="anchor"></a>
+      </h4>
+
+      
+
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-properties">
+          <h5 style="display:block;">Properties inherited from <a href="class.Object.html">ICalObject</a> (5)</h5><div class="docblock">
+          
+            <h6><a href="property.Object.always-destroy.html">ICalGLib.Object:always-destroy</a></h6><div class="docblock">
+              <p>Whether free the native libical structure on <code>ICalObject</code><span class="quo">&#8216;</span>s finalize even
+if the object has set an&nbsp;owner.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This property will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="property.Object.is-global-memory.html">ICalGLib.Object:is-global-memory</a></h6><div class="docblock">
+              <p>Whether the native libical structure is from a global shared memory.
+If <span class="caps">TRUE</span>, then it is not freed on <code>ICalObject</code><span class="quo">&#8216;</span>s&nbsp;finalize.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.native.html">ICalGLib.Object:native</a></h6><div class="docblock">
+              <p>The native libical structure for this&nbsp;ICalObject.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.native-destroy-func.html">ICalGLib.Object:native-destroy-func</a></h6><div class="docblock">
+              <p>GDestroyNotify function to use to destroy the native libical&nbsp;pointer.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.owner.html">ICalGLib.Object:owner</a></h6><div class="docblock">
+              <p>Owner of the native libical structure. If set, then it is
+responsible for a free of the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+        
+      
+
+      
+
+    </div>
+    
+
+    
+    <div class="signals toggle-wrapper">
+      <h4 id="signals">
+        Signals
+        <a href="#signals" class="anchor"></a>
+      </h4>
+
+      
+
+      
+        
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-signals"><h5 style="display:block;">Signals inherited from <a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a> (1)</h5>
+          <div class="docblock">
+          <h6><a class="external" href="javascript:void(0)" data-namespace="GObject" data-link="signal.Object.notify.html">GObject::notify</a></h6>
+            <div class="docblock">
+              <p>The notify signal is emitted on an object when one of its properties has
+its value set through g_object_set_property(), g_object_set(), et&nbsp;al.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 2.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+
+      
+
+    </div>
+    
+
+    
+    <div class="class toggle-wrapper default-hide">
+      <h4 id="class-struct">
+        Class structure
+        <a href="#class-struct" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <pre><code>struct ICalGLibTimeClass {
+  /* no available fields */
+}</code></pre>
+      </div>
+
+      <div class="docblock">
+        <p>This is the ICalTime&nbsp;class.</p>
+      </div>
+
+      
+    </div>
+    
+
+    
+
+    
+
+  </section>
+</section>
+
+
+    
+<div id="toc" class="toc">
+  <nav aria-labelledby="toc-title">
+    <p id="toc-title">Content</p>
+    <ul class="toc-list">
+      <li class="toc-list-item"><a href="#description"><span class="link-text">Description</span></a></li>
+      
+      
+      <li class="toc-list-item"><a href="#hierarchy"><span class="link-text">Hierarchy</span></a></li>
+      
+      
+      <li class="toc-list-item"><a href="#ancestors"><span class="link-text">Ancestors</span></a></li>
+      
+      
+      
+<li class="toc-list-item"><a href="#constructors"><span class="link-text">Constructors</span></a></li>
+
+
+      
+<li class="toc-list-item"><a href="#type-functions"><span class="link-text">Functions</span></a></li>
+
+
+      
+<li class="toc-list-item"><a href="#methods"><span class="link-text">Methods</span></a></li>
+
+
+      
+
+      
+
+      
+
+      
+
+    </ul>
+  </nav>
+</div>
+
+
+    <section id="search" class="content hidden"></section>
+
+    <footer>
+    
+    </footer>
+  </div>
+</body>
+</html>

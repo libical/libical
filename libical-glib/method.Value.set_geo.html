@@ -1,0 +1,369 @@
+<!--
+SPDX-FileCopyrightText: libical Development Team
+
+SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ICalGLib.Value.set_geo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta charset="utf-8" />
+
+  
+  <meta property="og:type" content="website"/>
+
+  
+
+  
+  <meta priority="og:title" content="ICalGLib.Value.set_geo"/>
+  <meta priority="og:description" content="Reference for ICalGLib.Value.set_geo"/>
+  <meta name="twitter:title" content="ICalGLib.Value.set_geo"/>
+  <meta name="twitter:description" content="Reference for ICalGLib.Value.set_geo"/>
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+
+  
+  
+  
+  <link rel="search" type="application/opensearchdescription+xml" title="ICalGLib" href="opensearch.xml">
+  
+  
+
+  <link rel="stylesheet" href="style.css" type="text/css" />
+
+  
+
+  
+  <script src="urlmap.js"></script>
+  
+  
+  <script src="fzy.js"></script>
+  <script src="search.js"></script>
+  
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <div id="body-wrapper" tabindex="-1">
+
+    <nav class="sidebar devhelp-hidden">
+      
+      
+      <div class="search section">
+        <form id="search-form" autocomplete="off">
+          <input id="search-input" type="text" name="do-not-autocomplete" placeholder="Click, or press 's' to search" autocomplete="off"/>
+        </form>
+      </div>
+      
+      <div class="section namespace">
+        <h3><a href="index.html">ICalGLib</a></h3>
+        <p>API Version: 3.0</p>
+        
+        <p>Library Version: 3</p>
+        
+      </div>
+      
+<div class="section">
+  <h5>Type</h5>
+  <div class="links">
+    <a href="class.Value.html">Value</a>
+  </div>
+</div>
+<div class="section">
+  <h5>Methods</h5>
+  <div class="links">
+  
+    <a class="method" href="method.Value.as_ical_string.html">as_ical_string</a>
+  
+    <a class="method" href="method.Value.clone.html">clone</a>
+  
+    <a class="method" href="method.Value.compare.html">compare</a>
+  
+    <a class="method" href="method.Value.free.html">free</a>
+  
+    <a class="method" href="method.Value.get_action.html">get_action</a>
+  
+    <a class="method" href="method.Value.get_attach.html">get_attach</a>
+  
+    <a class="method" href="method.Value.get_binary.html">get_binary</a>
+  
+    <a class="method" href="method.Value.get_boolean.html">get_boolean</a>
+  
+    <a class="method" href="method.Value.get_busytype.html">get_busytype</a>
+  
+    <a class="method" href="method.Value.get_caladdress.html">get_caladdress</a>
+  
+    <a class="method" href="method.Value.get_carlevel.html">get_carlevel</a>
+  
+    <a class="method" href="method.Value.get_class.html">get_class</a>
+  
+    <a class="method" href="method.Value.get_cmd.html">get_cmd</a>
+  
+    <a class="method" href="method.Value.get_date.html">get_date</a>
+  
+    <a class="method" href="method.Value.get_datetime.html">get_datetime</a>
+  
+    <a class="method" href="method.Value.get_datetimedate.html">get_datetimedate</a>
+  
+    <a class="method" href="method.Value.get_datetimeperiod.html">get_datetimeperiod</a>
+  
+    <a class="method" href="method.Value.get_duration.html">get_duration</a>
+  
+    <a class="method" href="method.Value.get_float.html">get_float</a>
+  
+    <a class="method" href="method.Value.get_geo.html">get_geo</a>
+  
+    <a class="method" href="method.Value.get_integer.html">get_integer</a>
+  
+    <a class="method" href="method.Value.get_method.html">get_method</a>
+  
+    <a class="method" href="method.Value.get_parent.html">get_parent</a>
+  
+    <a class="method" href="method.Value.get_participanttype.html">get_participanttype</a>
+  
+    <a class="method" href="method.Value.get_period.html">get_period</a>
+  
+    <a class="method" href="method.Value.get_pollcompletion.html">get_pollcompletion</a>
+  
+    <a class="method" href="method.Value.get_pollmode.html">get_pollmode</a>
+  
+    <a class="method" href="method.Value.get_proximity.html">get_proximity</a>
+  
+    <a class="method" href="method.Value.get_query.html">get_query</a>
+  
+    <a class="method" href="method.Value.get_querylevel.html">get_querylevel</a>
+  
+    <a class="method" href="method.Value.get_recur.html">get_recur</a>
+  
+    <a class="method" href="method.Value.get_requeststatus.html">get_requeststatus</a>
+  
+    <a class="method" href="method.Value.get_resourcetype.html">get_resourcetype</a>
+  
+    <a class="method" href="method.Value.get_status.html">get_status</a>
+  
+    <a class="method" href="method.Value.get_string.html">get_string</a>
+  
+    <a class="method" href="method.Value.get_taskmode.html">get_taskmode</a>
+  
+    <a class="method" href="method.Value.get_text.html">get_text</a>
+  
+    <a class="method" href="method.Value.get_transp.html">get_transp</a>
+  
+    <a class="method" href="method.Value.get_trigger.html">get_trigger</a>
+  
+    <a class="method" href="method.Value.get_uri.html">get_uri</a>
+  
+    <a class="method" href="method.Value.get_utcoffset.html">get_utcoffset</a>
+  
+    <a class="method" href="method.Value.get_x.html">get_x</a>
+  
+    <a class="method" href="method.Value.get_xlicclass.html">get_xlicclass</a>
+  
+    <a class="method" href="method.Value.is_valid.html">is_valid</a>
+  
+    <a class="method" href="method.Value.isa.html">isa</a>
+  
+    <a class="method" href="method.Value.isa_value.html">isa_value</a>
+  
+    <a class="method" href="method.Value.reset_kind.html">reset_kind</a>
+  
+    <a class="method" href="method.Value.set_action.html">set_action</a>
+  
+    <a class="method" href="method.Value.set_attach.html">set_attach</a>
+  
+    <a class="method" href="method.Value.set_binary.html">set_binary</a>
+  
+    <a class="method" href="method.Value.set_boolean.html">set_boolean</a>
+  
+    <a class="method" href="method.Value.set_busytype.html">set_busytype</a>
+  
+    <a class="method" href="method.Value.set_caladdress.html">set_caladdress</a>
+  
+    <a class="method" href="method.Value.set_carlevel.html">set_carlevel</a>
+  
+    <a class="method" href="method.Value.set_class.html">set_class</a>
+  
+    <a class="method" href="method.Value.set_cmd.html">set_cmd</a>
+  
+    <a class="method" href="method.Value.set_date.html">set_date</a>
+  
+    <a class="method" href="method.Value.set_datetime.html">set_datetime</a>
+  
+    <a class="method" href="method.Value.set_datetimedate.html">set_datetimedate</a>
+  
+    <a class="method" href="method.Value.set_datetimeperiod.html">set_datetimeperiod</a>
+  
+    <a class="method" href="method.Value.set_duration.html">set_duration</a>
+  
+    <a class="method" href="method.Value.set_float.html">set_float</a>
+  
+    <a class="method current" href="method.Value.set_geo.html">set_geo</a>
+  
+    <a class="method" href="method.Value.set_integer.html">set_integer</a>
+  
+    <a class="method" href="method.Value.set_method.html">set_method</a>
+  
+    <a class="method" href="method.Value.set_parent.html">set_parent</a>
+  
+    <a class="method" href="method.Value.set_participanttype.html">set_participanttype</a>
+  
+    <a class="method" href="method.Value.set_period.html">set_period</a>
+  
+    <a class="method" href="method.Value.set_pollcompletion.html">set_pollcompletion</a>
+  
+    <a class="method" href="method.Value.set_pollmode.html">set_pollmode</a>
+  
+    <a class="method" href="method.Value.set_proximity.html">set_proximity</a>
+  
+    <a class="method" href="method.Value.set_query.html">set_query</a>
+  
+    <a class="method" href="method.Value.set_querylevel.html">set_querylevel</a>
+  
+    <a class="method" href="method.Value.set_recur.html">set_recur</a>
+  
+    <a class="method" href="method.Value.set_requeststatus.html">set_requeststatus</a>
+  
+    <a class="method" href="method.Value.set_resourcetype.html">set_resourcetype</a>
+  
+    <a class="method" href="method.Value.set_status.html">set_status</a>
+  
+    <a class="method" href="method.Value.set_string.html">set_string</a>
+  
+    <a class="method" href="method.Value.set_taskmode.html">set_taskmode</a>
+  
+    <a class="method" href="method.Value.set_text.html">set_text</a>
+  
+    <a class="method" href="method.Value.set_transp.html">set_transp</a>
+  
+    <a class="method" href="method.Value.set_trigger.html">set_trigger</a>
+  
+    <a class="method" href="method.Value.set_uri.html">set_uri</a>
+  
+    <a class="method" href="method.Value.set_utcoffset.html">set_utcoffset</a>
+  
+    <a class="method" href="method.Value.set_x.html">set_x</a>
+  
+    <a class="method" href="method.Value.set_xlicclass.html">set_xlicclass</a>
+  
+  </div>
+</div>
+
+      <div class="section generator">
+        <p>Generated by <a href="https://gitlab.gnome.org/GNOME/gi-docgen">gi-docgen</a> 2023.3</p>
+      </div>
+    </nav>
+
+    <button id="btn-to-top" class="hidden"><span class="up-arrow"></span></button>
+
+    
+<section id="main" class="content">
+  <header>
+    <h3>Method</h3>
+    <h1><a href="index.html">ICalGLib</a><span class="sep"></span><a href="class.Value.html">Value</a><span class="sep"></span>set_geo</h1>
+  </header>
+
+  <section>
+    <div class="docblock">
+      <p><span class="emblem available">since: 1.0</span></p>
+    </div>
+
+    <div class="declaration toggle-wrapper">
+      <h4 style="display:flex;" id="declaration">
+        Declaration
+        <a class="anchor" href="#declaration"></a>
+        
+        <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-derived-value.h#L325">[src]</a>
+        
+      </h4>
+
+      <div class="docblock c-decl">
+        <pre><code><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="n">i_cal_value_set_geo</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="n">ICalValue</span><span class="o">*</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ICalGeo</span><span class="o">*</span><span class="w"> </span><span class="n">v</span>
+<span class="p">)</span>
+</pre></div>
+</code></pre>
+      </div>
+    </div>
+
+    <div class="description toggle-wrapper">
+      <h4 style="display:flex;" id="description">
+        Description
+        <a class="anchor" href="#description"></a>
+        
+        <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-derived-value.c#L374">[src]</a>
+        
+      </h4>
+
+      <div class="docblock">
+        <p>Sets the geo in the <code>ICalValue</code>.</p>
+      </div>
+
+      <div class="docblock">
+        
+        <p>Available since: 1.0</p>
+        
+        
+        
+        
+      </div>
+
+      
+    </div>
+
+    
+    <div class="parameters toggle-wrapper">
+      <h4 id="parameters">
+        Parameters
+        <a href="#parameters" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <dl class="arguments">
+          
+          <dt class="arg-name"><code>v</code></dt>
+          <dd class="arg-description">
+            <p><em>Type:</em>&nbsp;<a href="class.Geo.html"><code>ICalGeo</code></a></p>
+            <p><p>The geo&nbsp;value.</p></p>
+            <table>
+            
+            
+            
+            
+            
+            
+            
+            <tr><td title="transfer: none">The data is owned by the caller of the method.</td></tr>
+            
+            </table>
+          </dd>
+          
+
+          
+        </dl>
+      </div>
+    </div>
+    
+
+    
+
+  </section>
+</section>
+
+
+    
+
+    <section id="search" class="content hidden"></section>
+
+    <footer>
+    
+    </footer>
+  </div>
+</body>
+</html>
