@@ -24,6 +24,10 @@ if (test "$BRANCH" = "master"); then
   "
 fi
 
+if (test "$(uname -s)" = "Darwin"); then
+  export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+fi
+
 rm -rf "$BDIR"
 mkdir -p "$BDIR" &&
   cd "$BDIR"
