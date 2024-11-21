@@ -60,10 +60,10 @@
 #  Requires libxml2.0 development package (version MIN_LIBXML).
 #  Default=true (build the libical-glib interface)
 #
-# -DENABLE_GTK_DOC=[true|false]
+# -DICAL_GLIB_BUILD_DOCS=[true|false]
 #  Set to build libical-glib developer documentation
-#  Requires gtk-doc and ICAL_BUILD_DOCS option to be true.
-#  Default=true (build gtk-doc developer documentation)
+#  Requires gi-docgen, GOBJECT_INTROSPECTION and ICAL_BUILD_DOCS options to be true.
+#  Default=true (build libical-glib developer documentation)
 #
 # -DUSE_32BIT_TIME_T=[true|false]
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
@@ -449,7 +449,7 @@ find_package(PkgConfig QUIET)
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
 libical_option(
   GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. \
-  Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher." False
+  Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher." True
 )
 if(GOBJECT_INTROSPECTION)
   if(NOT PKG_CONFIG_FOUND)
@@ -576,9 +576,6 @@ if(ICAL_GLIB)
         "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
     )
   endif()
-else()
-  #to quiet a warning about unused manually-specified variables
-  set(ENABLE_GTK_DOC False)
 endif()
 
 #
@@ -761,6 +758,23 @@ endif()
 
 libical_option(ICAL_BUILD_DOCS "Build documentation" True)
 if(ICAL_BUILD_DOCS)
+  libical_option(ICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
+  if(ICAL_GLIB_BUILD_DOCS)
+    if(NOT ICAL_GLIB)
+      message(
+        FATAL_ERROR "You requested to build the libical-glib documentation but have not enabled libical-glib itself. "
+                    "Please try again also passing -DICAL_GLIB=True to cmake."
+      )
+    endif()
+    if(NOT GOBJECT_INTROSPECTION)
+      message(
+        FATAL_ERROR
+          "You requested to build the libical-glib documentation but have not enabled the GObject Introspection. "
+          "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake."
+      )
+    endif()
+    include(GIDocgen)
+  endif()
   add_subdirectory(docs) # needs to go last, for the build source files
 endif()
 

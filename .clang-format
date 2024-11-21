@@ -197,3 +197,8 @@ Standard: Cpp11
 TabWidth: 4
 UseTab: Never
 FixNamespaceComments: false
+---
+Language:       JavaScript
+DisableFormat:  false
+IndentWidth: 4
+---
