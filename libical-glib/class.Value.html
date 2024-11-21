@@ -1,0 +1,2187 @@
+<!--
+SPDX-FileCopyrightText: libical Development Team
+
+SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ICalGLib.Value</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta charset="utf-8" />
+
+  
+  <meta property="og:type" content="website"/>
+
+  
+
+  
+  <meta property="og:title" content="ICalGLib.Value"/>
+  <meta property="og:description" content="Reference for ICalGLib.Value"/>
+  <meta name="twitter:title" content="ICalGLib.Value"/>
+  <meta name="twitter:description" content="Reference for ICalGLib.Value"/>
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+
+  
+  
+  
+  <link rel="search" type="application/opensearchdescription+xml" title="ICalGLib" href="opensearch.xml">
+  
+  
+
+  <link rel="stylesheet" href="style.css" type="text/css" />
+
+  
+
+  
+  <script src="urlmap.js"></script>
+  
+  
+  <script src="fzy.js"></script>
+  <script src="search.js"></script>
+  
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <div id="body-wrapper" tabindex="-1">
+
+    <nav class="sidebar devhelp-hidden">
+      
+      
+      <div class="search section">
+        <form id="search-form" autocomplete="off">
+          <input id="search-input" type="text" name="do-not-autocomplete" placeholder="Click, or press 's' to search" autocomplete="off"/>
+        </form>
+      </div>
+      
+      <div class="section namespace">
+        <h3><a href="index.html">ICalGLib</a></h3>
+        <p>API Version: 3.0</p>
+        
+        <p>Library Version: 3</p>
+        
+      </div>
+      
+<div class="section">
+  <h5>Type</h5>
+  <div class="links">
+    <a class="current" href="class.Value.html#description">Value</a>
+  </div>
+</div>
+
+
+  
+<div class="section">
+  <h5>Constructors</h5>
+  <div class="links">
+  
+    <a class="ctor" href="ctor.Value.new.html">new</a>
+  
+    <a class="ctor" href="ctor.Value.new_action.html">new_action</a>
+  
+    <a class="ctor" href="ctor.Value.new_attach.html">new_attach</a>
+  
+    <a class="ctor" href="ctor.Value.new_binary.html">new_binary</a>
+  
+    <a class="ctor" href="ctor.Value.new_boolean.html">new_boolean</a>
+  
+    <a class="ctor" href="ctor.Value.new_busytype.html">new_busytype</a>
+  
+    <a class="ctor" href="ctor.Value.new_caladdress.html">new_caladdress</a>
+  
+    <a class="ctor" href="ctor.Value.new_carlevel.html">new_carlevel</a>
+  
+    <a class="ctor" href="ctor.Value.new_class.html">new_class</a>
+  
+    <a class="ctor" href="ctor.Value.new_cmd.html">new_cmd</a>
+  
+    <a class="ctor" href="ctor.Value.new_date.html">new_date</a>
+  
+    <a class="ctor" href="ctor.Value.new_datetime.html">new_datetime</a>
+  
+    <a class="ctor" href="ctor.Value.new_datetimedate.html">new_datetimedate</a>
+  
+    <a class="ctor" href="ctor.Value.new_datetimeperiod.html">new_datetimeperiod</a>
+  
+    <a class="ctor" href="ctor.Value.new_duration.html">new_duration</a>
+  
+    <a class="ctor" href="ctor.Value.new_float.html">new_float</a>
+  
+    <a class="ctor" href="ctor.Value.new_from_string.html">new_from_string</a>
+  
+    <a class="ctor" href="ctor.Value.new_full.html">new_full</a>
+  
+    <a class="ctor" href="ctor.Value.new_geo.html">new_geo</a>
+  
+    <a class="ctor" href="ctor.Value.new_integer.html">new_integer</a>
+  
+    <a class="ctor" href="ctor.Value.new_method.html">new_method</a>
+  
+    <a class="ctor" href="ctor.Value.new_participanttype.html">new_participanttype</a>
+  
+    <a class="ctor" href="ctor.Value.new_period.html">new_period</a>
+  
+    <a class="ctor" href="ctor.Value.new_pollcompletion.html">new_pollcompletion</a>
+  
+    <a class="ctor" href="ctor.Value.new_pollmode.html">new_pollmode</a>
+  
+    <a class="ctor" href="ctor.Value.new_proximity.html">new_proximity</a>
+  
+    <a class="ctor" href="ctor.Value.new_query.html">new_query</a>
+  
+    <a class="ctor" href="ctor.Value.new_querylevel.html">new_querylevel</a>
+  
+    <a class="ctor" href="ctor.Value.new_recur.html">new_recur</a>
+  
+    <a class="ctor" href="ctor.Value.new_requeststatus.html">new_requeststatus</a>
+  
+    <a class="ctor" href="ctor.Value.new_resourcetype.html">new_resourcetype</a>
+  
+    <a class="ctor" href="ctor.Value.new_status.html">new_status</a>
+  
+    <a class="ctor" href="ctor.Value.new_string.html">new_string</a>
+  
+    <a class="ctor" href="ctor.Value.new_taskmode.html">new_taskmode</a>
+  
+    <a class="ctor" href="ctor.Value.new_text.html">new_text</a>
+  
+    <a class="ctor" href="ctor.Value.new_transp.html">new_transp</a>
+  
+    <a class="ctor" href="ctor.Value.new_trigger.html">new_trigger</a>
+  
+    <a class="ctor" href="ctor.Value.new_uri.html">new_uri</a>
+  
+    <a class="ctor" href="ctor.Value.new_utcoffset.html">new_utcoffset</a>
+  
+    <a class="ctor" href="ctor.Value.new_x.html">new_x</a>
+  
+    <a class="ctor" href="ctor.Value.new_xlicclass.html">new_xlicclass</a>
+  
+  </div>
+</div>
+
+
+
+  
+<div class="section">
+  <h5>Functions</h5>
+  <div class="links">
+  
+    <a class="func" href="type_func.Value.decode_ical_string.html">decode_ical_string</a>
+  
+    <a class="func" href="type_func.Value.encode_ical_string.html">encode_ical_string</a>
+  
+    <a class="func" href="type_func.Value.kind_from_string.html">kind_from_string</a>
+  
+    <a class="func" href="type_func.Value.kind_is_valid.html">kind_is_valid</a>
+  
+    <a class="func" href="type_func.Value.kind_to_property_kind.html">kind_to_property_kind</a>
+  
+    <a class="func" href="type_func.Value.kind_to_string.html">kind_to_string</a>
+  
+  </div>
+</div>
+
+
+
+  
+<div class="section">
+  <h5>Instance methods</h5>
+  <div class="links">
+  
+    <a class="method" href="method.Value.as_ical_string.html">as_ical_string</a>
+  
+    <a class="method" href="method.Value.clone.html">clone</a>
+  
+    <a class="method" href="method.Value.compare.html">compare</a>
+  
+    <a class="method" href="method.Value.free.html">free</a>
+  
+    <a class="method" href="method.Value.get_action.html">get_action</a>
+  
+    <a class="method" href="method.Value.get_attach.html">get_attach</a>
+  
+    <a class="method" href="method.Value.get_binary.html">get_binary</a>
+  
+    <a class="method" href="method.Value.get_boolean.html">get_boolean</a>
+  
+    <a class="method" href="method.Value.get_busytype.html">get_busytype</a>
+  
+    <a class="method" href="method.Value.get_caladdress.html">get_caladdress</a>
+  
+    <a class="method" href="method.Value.get_carlevel.html">get_carlevel</a>
+  
+    <a class="method" href="method.Value.get_class.html">get_class</a>
+  
+    <a class="method" href="method.Value.get_cmd.html">get_cmd</a>
+  
+    <a class="method" href="method.Value.get_date.html">get_date</a>
+  
+    <a class="method" href="method.Value.get_datetime.html">get_datetime</a>
+  
+    <a class="method" href="method.Value.get_datetimedate.html">get_datetimedate</a>
+  
+    <a class="method" href="method.Value.get_datetimeperiod.html">get_datetimeperiod</a>
+  
+    <a class="method" href="method.Value.get_duration.html">get_duration</a>
+  
+    <a class="method" href="method.Value.get_float.html">get_float</a>
+  
+    <a class="method" href="method.Value.get_geo.html">get_geo</a>
+  
+    <a class="method" href="method.Value.get_integer.html">get_integer</a>
+  
+    <a class="method" href="method.Value.get_method.html">get_method</a>
+  
+    <a class="method" href="method.Value.get_parent.html">get_parent</a>
+  
+    <a class="method" href="method.Value.get_participanttype.html">get_participanttype</a>
+  
+    <a class="method" href="method.Value.get_period.html">get_period</a>
+  
+    <a class="method" href="method.Value.get_pollcompletion.html">get_pollcompletion</a>
+  
+    <a class="method" href="method.Value.get_pollmode.html">get_pollmode</a>
+  
+    <a class="method" href="method.Value.get_proximity.html">get_proximity</a>
+  
+    <a class="method" href="method.Value.get_query.html">get_query</a>
+  
+    <a class="method" href="method.Value.get_querylevel.html">get_querylevel</a>
+  
+    <a class="method" href="method.Value.get_recur.html">get_recur</a>
+  
+    <a class="method" href="method.Value.get_requeststatus.html">get_requeststatus</a>
+  
+    <a class="method" href="method.Value.get_resourcetype.html">get_resourcetype</a>
+  
+    <a class="method" href="method.Value.get_status.html">get_status</a>
+  
+    <a class="method" href="method.Value.get_string.html">get_string</a>
+  
+    <a class="method" href="method.Value.get_taskmode.html">get_taskmode</a>
+  
+    <a class="method" href="method.Value.get_text.html">get_text</a>
+  
+    <a class="method" href="method.Value.get_transp.html">get_transp</a>
+  
+    <a class="method" href="method.Value.get_trigger.html">get_trigger</a>
+  
+    <a class="method" href="method.Value.get_uri.html">get_uri</a>
+  
+    <a class="method" href="method.Value.get_utcoffset.html">get_utcoffset</a>
+  
+    <a class="method" href="method.Value.get_x.html">get_x</a>
+  
+    <a class="method" href="method.Value.get_xlicclass.html">get_xlicclass</a>
+  
+    <a class="method" href="method.Value.is_valid.html">is_valid</a>
+  
+    <a class="method" href="method.Value.isa.html">isa</a>
+  
+    <a class="method" href="method.Value.isa_value.html">isa_value</a>
+  
+    <a class="method" href="method.Value.reset_kind.html">reset_kind</a>
+  
+    <a class="method" href="method.Value.set_action.html">set_action</a>
+  
+    <a class="method" href="method.Value.set_attach.html">set_attach</a>
+  
+    <a class="method" href="method.Value.set_binary.html">set_binary</a>
+  
+    <a class="method" href="method.Value.set_boolean.html">set_boolean</a>
+  
+    <a class="method" href="method.Value.set_busytype.html">set_busytype</a>
+  
+    <a class="method" href="method.Value.set_caladdress.html">set_caladdress</a>
+  
+    <a class="method" href="method.Value.set_carlevel.html">set_carlevel</a>
+  
+    <a class="method" href="method.Value.set_class.html">set_class</a>
+  
+    <a class="method" href="method.Value.set_cmd.html">set_cmd</a>
+  
+    <a class="method" href="method.Value.set_date.html">set_date</a>
+  
+    <a class="method" href="method.Value.set_datetime.html">set_datetime</a>
+  
+    <a class="method" href="method.Value.set_datetimedate.html">set_datetimedate</a>
+  
+    <a class="method" href="method.Value.set_datetimeperiod.html">set_datetimeperiod</a>
+  
+    <a class="method" href="method.Value.set_duration.html">set_duration</a>
+  
+    <a class="method" href="method.Value.set_float.html">set_float</a>
+  
+    <a class="method" href="method.Value.set_geo.html">set_geo</a>
+  
+    <a class="method" href="method.Value.set_integer.html">set_integer</a>
+  
+    <a class="method" href="method.Value.set_method.html">set_method</a>
+  
+    <a class="method" href="method.Value.set_parent.html">set_parent</a>
+  
+    <a class="method" href="method.Value.set_participanttype.html">set_participanttype</a>
+  
+    <a class="method" href="method.Value.set_period.html">set_period</a>
+  
+    <a class="method" href="method.Value.set_pollcompletion.html">set_pollcompletion</a>
+  
+    <a class="method" href="method.Value.set_pollmode.html">set_pollmode</a>
+  
+    <a class="method" href="method.Value.set_proximity.html">set_proximity</a>
+  
+    <a class="method" href="method.Value.set_query.html">set_query</a>
+  
+    <a class="method" href="method.Value.set_querylevel.html">set_querylevel</a>
+  
+    <a class="method" href="method.Value.set_recur.html">set_recur</a>
+  
+    <a class="method" href="method.Value.set_requeststatus.html">set_requeststatus</a>
+  
+    <a class="method" href="method.Value.set_resourcetype.html">set_resourcetype</a>
+  
+    <a class="method" href="method.Value.set_status.html">set_status</a>
+  
+    <a class="method" href="method.Value.set_string.html">set_string</a>
+  
+    <a class="method" href="method.Value.set_taskmode.html">set_taskmode</a>
+  
+    <a class="method" href="method.Value.set_text.html">set_text</a>
+  
+    <a class="method" href="method.Value.set_transp.html">set_transp</a>
+  
+    <a class="method" href="method.Value.set_trigger.html">set_trigger</a>
+  
+    <a class="method" href="method.Value.set_uri.html">set_uri</a>
+  
+    <a class="method" href="method.Value.set_utcoffset.html">set_utcoffset</a>
+  
+    <a class="method" href="method.Value.set_x.html">set_x</a>
+  
+    <a class="method" href="method.Value.set_xlicclass.html">set_xlicclass</a>
+  
+  </div>
+</div>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+
+      <div class="section generator">
+        <p>Generated by <a href="https://gitlab.gnome.org/GNOME/gi-docgen">gi-docgen</a> 2023.3</p>
+      </div>
+    </nav>
+
+    <button id="btn-to-top" class="hidden"><span class="up-arrow"></span></button>
+
+    
+<section id="main" class="content">
+  <header>
+    <h3>Class</h3>
+    <h1 aria-label="Name"><a href="index.html">ICalGLib</a><span class="sep" role="presentation"></span>Value</h1>
+  </header>
+
+  <section>
+    <summary>
+      <div class="docblock">
+        <p><span class="emblem available">since: 3.0</span></p>
+      </div>
+
+      <div class="toggle-wrapper">
+        <h4 id="description" style="display:flex;">
+          Description
+          <a href="#description" class="anchor"></a>
+          
+          <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-value.h#L30">[src]</a>
+          
+        </h4>
+
+        <pre><code>final class ICalGLib.Value : ICalGLib.Object
+{
+  /* No available fields */
+}</pre></code>
+
+        <div class="docblock">
+          <p>This is the ICalValue&nbsp;instance.</p>
+        </div>
+
+        <div class="docblock">
+          
+          
+          <p>Available since: 3.0</p>
+          
+          
+        </div>
+
+        
+      </div>
+    </summary>
+
+    
+    <div class="toggle-wrapper hierarchy">
+      <h4 id="hierarchy">
+        Hierarchy
+        <a href="#hierarchy" class="anchor"></a>
+      </h4>
+      <div class="docblock" alt="Hierarchy for ICalGLib.Value">
+        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: hierarchy Pages: 1 -->
+<svg width="84pt" height="188pt"
+ viewBox="0.00 0.00 84.00 188.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+<title>hierarchy</title>
+<!-- this -->
+<g id="node1" class="node">
+<title>this</title>
+<g id="a_node1"><a xlink:title="ICalValue">
+<path fill="none" stroke="black" d="M61.5,-36C61.5,-36 14.5,-36 14.5,-36 8.5,-36 2.5,-30 2.5,-24 2.5,-24 2.5,-12 2.5,-12 2.5,-6 8.5,0 14.5,0 14.5,0 61.5,0 61.5,0 67.5,0 73.5,-6 73.5,-12 73.5,-12 73.5,-24 73.5,-24 73.5,-30 67.5,-36 61.5,-36"/>
+<text text-anchor="middle" x="38" y="-14.3" font-family="Times,serif" font-size="14.00">ICalValue</text>
+</a>
+</g>
+</g>
+<!-- ancestor_0 -->
+<g id="node2" class="node link">
+<title>ancestor_0</title>
+<g id="a_node2"><a xlink:href="class.Object.html" xlink:title="ICalObject">
+<path fill="none" stroke="black" d="M64,-108C64,-108 12,-108 12,-108 6,-108 0,-102 0,-96 0,-96 0,-84 0,-84 0,-78 6,-72 12,-72 12,-72 64,-72 64,-72 70,-72 76,-78 76,-84 76,-84 76,-96 76,-96 76,-102 70,-108 64,-108"/>
+<text text-anchor="middle" x="38" y="-86.3" font-family="Times,serif" font-size="14.00">ICalObject</text>
+</a>
+</g>
+</g>
+<!-- ancestor_0&#45;&#45;this -->
+<g id="edge2" class="edge">
+<title>ancestor_0&#45;&#45;this</title>
+<path fill="none" stroke="black" d="M38,-71.7C38,-60.85 38,-46.92 38,-36.1"/>
+</g>
+<!-- ancestor_1 -->
+<g id="node3" class="node">
+<title>ancestor_1</title>
+<g id="a_node3"><a xlink:title="GObject.Object">
+<path fill="none" stroke="black" d="M57,-180C57,-180 19,-180 19,-180 13,-180 7,-174 7,-168 7,-168 7,-156 7,-156 7,-150 13,-144 19,-144 19,-144 57,-144 57,-144 63,-144 69,-150 69,-156 69,-156 69,-168 69,-168 69,-174 63,-180 57,-180"/>
+<text text-anchor="middle" x="38" y="-158.3" font-family="Times,serif" font-size="14.00">GObject</text>
+</a>
+</g>
+</g>
+<!-- ancestor_1&#45;&#45;ancestor_0 -->
+<g id="edge1" class="edge">
+<title>ancestor_1&#45;&#45;ancestor_0</title>
+<path fill="none" stroke="black" d="M38,-143.7C38,-132.85 38,-118.92 38,-108.1"/>
+</g>
+</g>
+</svg>
+
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper ancestors">
+      <h4 id="ancestors">
+        Ancestors
+        <a href="#ancestors" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <ul>
+        
+          
+          <li class="class"><a href="class.Object.html" title="Object">ICalObject</a></li>
+          
+        
+          
+          <li class="class"><a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a></li>
+          
+        
+        </ul>
+      </div>
+    </div>
+    
+
+    
+
+    
+
+    
+    <div class="toggle-wrapper constructors">
+      <h4 id="constructors">
+        Constructors
+        <a href="#constructors" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+        <div class="">
+          <h6><a href="ctor.Value.new.html">i_cal_value_new</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with specific&nbsp;kind.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_action.html">i_cal_value_new_action</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;action.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_attach.html">i_cal_value_new_attach</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;attach.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_binary.html">i_cal_value_new_binary</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;binary.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_boolean.html">i_cal_value_new_boolean</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;boolean.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_busytype.html">i_cal_value_new_busytype</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;busytype.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_caladdress.html">i_cal_value_new_caladdress</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;caladdress.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_carlevel.html">i_cal_value_new_carlevel</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;carlevel.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_class.html">i_cal_value_new_class</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;class.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_cmd.html">i_cal_value_new_cmd</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;cmd.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_date.html">i_cal_value_new_date</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;date.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_datetime.html">i_cal_value_new_datetime</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;datetime.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_datetimedate.html">i_cal_value_new_datetimedate</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type datetimedate (<span class="caps">DATE</span>-<span class="caps">TIME</span> or <span class="caps">DATE</span>).</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 3.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_datetimeperiod.html">i_cal_value_new_datetimeperiod</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;datetimeperiod.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_duration.html">i_cal_value_new_duration</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;duration.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_float.html">i_cal_value_new_float</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;float.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_from_string.html">i_cal_value_new_from_string</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> based on the <code>ICalValueKind</code> and a&nbsp;string.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_full.html">i_cal_value_new_full</a></h6>
+          <div class="docblock">
+            <p>Create a new libical-glib object from the native libical object and the&nbsp;owner.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_geo.html">i_cal_value_new_geo</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;geo.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_integer.html">i_cal_value_new_integer</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;integer.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_method.html">i_cal_value_new_method</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;method.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_participanttype.html">i_cal_value_new_participanttype</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> of kind <code>I_CAL_PARTICIPANTTYPE_VALUE</code> holding value <code>v</code> of type <code>ICalPropertyParticipanttype</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This constructor will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_period.html">i_cal_value_new_period</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;period.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_pollcompletion.html">i_cal_value_new_pollcompletion</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;pollcompletion.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_pollmode.html">i_cal_value_new_pollmode</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;pollmode.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_proximity.html">i_cal_value_new_proximity</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> of kind <code>I_CAL_PROXIMITY_VALUE</code> holding value <code>v</code> of type <code>ICalPropertyProximity</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This constructor will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_query.html">i_cal_value_new_query</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;query.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_querylevel.html">i_cal_value_new_querylevel</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;querylevel.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_recur.html">i_cal_value_new_recur</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;recur.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_requeststatus.html">i_cal_value_new_requeststatus</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;requeststatus.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_resourcetype.html">i_cal_value_new_resourcetype</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> of kind <code>I_CAL_RESOURCETYPE_VALUE</code> holding value <code>v</code> of type <code>ICalPropertyResourcetype</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This constructor will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_status.html">i_cal_value_new_status</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;status.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_string.html">i_cal_value_new_string</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;string.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_taskmode.html">i_cal_value_new_taskmode</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;taskmode.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_text.html">i_cal_value_new_text</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;text.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_transp.html">i_cal_value_new_transp</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;transp.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_trigger.html">i_cal_value_new_trigger</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;trigger.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_uri.html">i_cal_value_new_uri</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;uri.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_utcoffset.html">i_cal_value_new_utcoffset</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;utcoffset.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_x.html">i_cal_value_new_x</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;x.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Value.new_xlicclass.html">i_cal_value_new_xlicclass</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalValue</code> with the type&nbsp;xlicclass.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper methods">
+      <h4 id="type-functions">
+        Functions
+        <a href="#type-functions" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+      <div class="">
+        <h6><a href="type_func.Value.decode_ical_string.html">i_cal_value_decode_ical_string</a></h6>
+        <div class="docblock">
+          <p>Extracts the original character string encoded by the above&nbsp;function.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Value.encode_ical_string.html">i_cal_value_encode_ical_string</a></h6>
+        <div class="docblock">
+          <p>Encodes a character string in ical format, escape certain characters,&nbsp;etc.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Value.kind_from_string.html">i_cal_value_kind_from_string</a></h6>
+        <div class="docblock">
+          <p>Converts a string to <code>ICalValueKind</code>.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Value.kind_is_valid.html">i_cal_value_kind_is_valid</a></h6>
+        <div class="docblock">
+          <p>Checks whether the <code>ICalValueKind</code> is&nbsp;valid.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Value.kind_to_property_kind.html">i_cal_value_kind_to_property_kind</a></h6>
+        <div class="docblock">
+          <p>Converts a <code>ICalValueKind</code> to a <code>ICalPropertyKind</code>.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Value.kind_to_string.html">i_cal_value_kind_to_string</a></h6>
+        <div class="docblock">
+          <p>Converts the <code>ICalValueKind</code> to a&nbsp;string.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper methods">
+      <h4 id="methods">
+        Instance methods
+        <a href="#methods" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+        <div class="">
+          <h6><a href="method.Value.as_ical_string.html">i_cal_value_as_ical_string</a></h6>
+          <div class="docblock">
+            <p>Converts the <code>ICalValue</code> to a&nbsp;string.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.clone.html">i_cal_value_clone</a></h6>
+          <div class="docblock">
+            <p>Deeply clone a <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.compare.html">i_cal_value_compare</a></h6>
+          <div class="docblock">
+            <p>Compares two <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.free.html">i_cal_value_free</a></h6>
+          <div class="docblock">
+            <p>Frees a <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_action.html">i_cal_value_get_action</a></h6>
+          <div class="docblock">
+            <p>Gets the action of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_attach.html">i_cal_value_get_attach</a></h6>
+          <div class="docblock">
+            <p>Gets the attach of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_binary.html">i_cal_value_get_binary</a></h6>
+          <div class="docblock">
+            <p>Gets the binary of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_boolean.html">i_cal_value_get_boolean</a></h6>
+          <div class="docblock">
+            <p>Gets the boolean of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_busytype.html">i_cal_value_get_busytype</a></h6>
+          <div class="docblock">
+            <p>Gets the busytype of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_caladdress.html">i_cal_value_get_caladdress</a></h6>
+          <div class="docblock">
+            <p>Gets the caladdress of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_carlevel.html">i_cal_value_get_carlevel</a></h6>
+          <div class="docblock">
+            <p>Gets the carlevel of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_class.html">i_cal_value_get_class</a></h6>
+          <div class="docblock">
+            <p>Gets the class of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_cmd.html">i_cal_value_get_cmd</a></h6>
+          <div class="docblock">
+            <p>Gets the cmd of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_date.html">i_cal_value_get_date</a></h6>
+          <div class="docblock">
+            <p>Gets the date of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_datetime.html">i_cal_value_get_datetime</a></h6>
+          <div class="docblock">
+            <p>Gets the datetime of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_datetimedate.html">i_cal_value_get_datetimedate</a></h6>
+          <div class="docblock">
+            <p>Gets the datetimedate (<span class="caps">DATE</span>-<span class="caps">TIME</span> or <span class="caps">DATE</span>) of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 3.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_datetimeperiod.html">i_cal_value_get_datetimeperiod</a></h6>
+          <div class="docblock">
+            <p>Gets the datetimeperiod of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_duration.html">i_cal_value_get_duration</a></h6>
+          <div class="docblock">
+            <p>Gets the duration of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_float.html">i_cal_value_get_float</a></h6>
+          <div class="docblock">
+            <p>Gets the float of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_geo.html">i_cal_value_get_geo</a></h6>
+          <div class="docblock">
+            <p>Gets the geo of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_integer.html">i_cal_value_get_integer</a></h6>
+          <div class="docblock">
+            <p>Gets the integer of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_method.html">i_cal_value_get_method</a></h6>
+          <div class="docblock">
+            <p>Gets the method of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_parent.html">i_cal_value_get_parent</a></h6>
+          <div class="docblock">
+            <p>Gets the parent <code>ICalProperty</code> of the specified <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 3.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_participanttype.html">i_cal_value_get_participanttype</a></h6>
+          <div class="docblock">
+            <p>Gets value of the <code>val</code> of kind <code>I_CAL_PARTICIPANTTYPE_VALUE</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_period.html">i_cal_value_get_period</a></h6>
+          <div class="docblock">
+            <p>Gets the period of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_pollcompletion.html">i_cal_value_get_pollcompletion</a></h6>
+          <div class="docblock">
+            <p>Gets the pollcompletion of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_pollmode.html">i_cal_value_get_pollmode</a></h6>
+          <div class="docblock">
+            <p>Gets the pollmode of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_proximity.html">i_cal_value_get_proximity</a></h6>
+          <div class="docblock">
+            <p>Gets value of the <code>val</code> of kind <code>I_CAL_PROXIMITY_VALUE</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_query.html">i_cal_value_get_query</a></h6>
+          <div class="docblock">
+            <p>Gets the query of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_querylevel.html">i_cal_value_get_querylevel</a></h6>
+          <div class="docblock">
+            <p>Gets the querylevel of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_recur.html">i_cal_value_get_recur</a></h6>
+          <div class="docblock">
+            <p>Gets the recur of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_requeststatus.html">i_cal_value_get_requeststatus</a></h6>
+          <div class="docblock">
+            <p>Gets the requeststatus of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_resourcetype.html">i_cal_value_get_resourcetype</a></h6>
+          <div class="docblock">
+            <p>Gets value of the <code>val</code> of kind <code>I_CAL_RESOURCETYPE_VALUE</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_status.html">i_cal_value_get_status</a></h6>
+          <div class="docblock">
+            <p>Gets the status of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_string.html">i_cal_value_get_string</a></h6>
+          <div class="docblock">
+            <p>Gets the string of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_taskmode.html">i_cal_value_get_taskmode</a></h6>
+          <div class="docblock">
+            <p>Gets the taskmode of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_text.html">i_cal_value_get_text</a></h6>
+          <div class="docblock">
+            <p>Gets the text of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_transp.html">i_cal_value_get_transp</a></h6>
+          <div class="docblock">
+            <p>Gets the transp of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_trigger.html">i_cal_value_get_trigger</a></h6>
+          <div class="docblock">
+            <p>Gets the trigger of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_uri.html">i_cal_value_get_uri</a></h6>
+          <div class="docblock">
+            <p>Gets the uri of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_utcoffset.html">i_cal_value_get_utcoffset</a></h6>
+          <div class="docblock">
+            <p>Gets the utcoffset of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_x.html">i_cal_value_get_x</a></h6>
+          <div class="docblock">
+            <p>Gets the x of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.get_xlicclass.html">i_cal_value_get_xlicclass</a></h6>
+          <div class="docblock">
+            <p>Gets the xlicclass of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.is_valid.html">i_cal_value_is_valid</a></h6>
+          <div class="docblock">
+            <p>Checks if <code>ICalValue</code> is&nbsp;valid.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.isa.html">i_cal_value_isa</a></h6>
+          <div class="docblock">
+            <p>Gets the kind of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.isa_value.html">i_cal_value_isa_value</a></h6>
+          <div class="docblock">
+            <p>Checks whether the native part of <code>ICalValue</code> is an&nbsp;icalvalue.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.reset_kind.html">i_cal_value_reset_kind</a></h6>
+          <div class="docblock">
+            <p>Resets the kind of <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_action.html">i_cal_value_set_action</a></h6>
+          <div class="docblock">
+            <p>Sets the action in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_attach.html">i_cal_value_set_attach</a></h6>
+          <div class="docblock">
+            <p>Sets the attach in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_binary.html">i_cal_value_set_binary</a></h6>
+          <div class="docblock">
+            <p>Sets the binary in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_boolean.html">i_cal_value_set_boolean</a></h6>
+          <div class="docblock">
+            <p>Sets the boolean in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_busytype.html">i_cal_value_set_busytype</a></h6>
+          <div class="docblock">
+            <p>Sets the busytype in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_caladdress.html">i_cal_value_set_caladdress</a></h6>
+          <div class="docblock">
+            <p>Sets the caladdress in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_carlevel.html">i_cal_value_set_carlevel</a></h6>
+          <div class="docblock">
+            <p>Sets the carlevel in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_class.html">i_cal_value_set_class</a></h6>
+          <div class="docblock">
+            <p>Sets the class in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_cmd.html">i_cal_value_set_cmd</a></h6>
+          <div class="docblock">
+            <p>Sets the cmd in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_date.html">i_cal_value_set_date</a></h6>
+          <div class="docblock">
+            <p>Sets the date in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_datetime.html">i_cal_value_set_datetime</a></h6>
+          <div class="docblock">
+            <p>Sets the datetime in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_datetimedate.html">i_cal_value_set_datetimedate</a></h6>
+          <div class="docblock">
+            <p>Sets the datetimedate (<span class="caps">DATE</span>-<span class="caps">TIME</span> or <span class="caps">DATE</span>) in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 3.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_datetimeperiod.html">i_cal_value_set_datetimeperiod</a></h6>
+          <div class="docblock">
+            <p>Sets the datetimeperiod in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_duration.html">i_cal_value_set_duration</a></h6>
+          <div class="docblock">
+            <p>Sets the duration in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_float.html">i_cal_value_set_float</a></h6>
+          <div class="docblock">
+            <p>Sets the float in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_geo.html">i_cal_value_set_geo</a></h6>
+          <div class="docblock">
+            <p>Sets the geo in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_integer.html">i_cal_value_set_integer</a></h6>
+          <div class="docblock">
+            <p>Sets the integer in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_method.html">i_cal_value_set_method</a></h6>
+          <div class="docblock">
+            <p>Sets the method in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_parent.html">i_cal_value_set_parent</a></h6>
+          <div class="docblock">
+            <p>Sets the parent property of a&nbsp;value.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_participanttype.html">i_cal_value_set_participanttype</a></h6>
+          <div class="docblock">
+            <p>Sets value <code>v</code> to <code>val</code> of kind <code>I_CAL_PARTICIPANTTYPE_VALUE</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_period.html">i_cal_value_set_period</a></h6>
+          <div class="docblock">
+            <p>Sets the period in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_pollcompletion.html">i_cal_value_set_pollcompletion</a></h6>
+          <div class="docblock">
+            <p>Sets the pollcompletion in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_pollmode.html">i_cal_value_set_pollmode</a></h6>
+          <div class="docblock">
+            <p>Sets the pollmode in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_proximity.html">i_cal_value_set_proximity</a></h6>
+          <div class="docblock">
+            <p>Sets value <code>v</code> to <code>val</code> of kind <code>I_CAL_PROXIMITY_VALUE</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_query.html">i_cal_value_set_query</a></h6>
+          <div class="docblock">
+            <p>Sets the query in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_querylevel.html">i_cal_value_set_querylevel</a></h6>
+          <div class="docblock">
+            <p>Sets the querylevel in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_recur.html">i_cal_value_set_recur</a></h6>
+          <div class="docblock">
+            <p>Sets the recur in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_requeststatus.html">i_cal_value_set_requeststatus</a></h6>
+          <div class="docblock">
+            <p>Sets the requeststatus in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_resourcetype.html">i_cal_value_set_resourcetype</a></h6>
+          <div class="docblock">
+            <p>Sets value <code>v</code> to <code>val</code> of kind <code>I_CAL_RESOURCETYPE_VALUE</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_status.html">i_cal_value_set_status</a></h6>
+          <div class="docblock">
+            <p>Sets the status in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_string.html">i_cal_value_set_string</a></h6>
+          <div class="docblock">
+            <p>Sets the string in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_taskmode.html">i_cal_value_set_taskmode</a></h6>
+          <div class="docblock">
+            <p>Sets the taskmode in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 2.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_text.html">i_cal_value_set_text</a></h6>
+          <div class="docblock">
+            <p>Sets the text in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_transp.html">i_cal_value_set_transp</a></h6>
+          <div class="docblock">
+            <p>Sets the transp in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_trigger.html">i_cal_value_set_trigger</a></h6>
+          <div class="docblock">
+            <p>Sets the trigger in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_uri.html">i_cal_value_set_uri</a></h6>
+          <div class="docblock">
+            <p>Sets the uri in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_utcoffset.html">i_cal_value_set_utcoffset</a></h6>
+          <div class="docblock">
+            <p>Sets the utcoffset in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_x.html">i_cal_value_set_x</a></h6>
+          <div class="docblock">
+            <p>Sets the x in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Value.set_xlicclass.html">i_cal_value_set_xlicclass</a></h6>
+          <div class="docblock">
+            <p>Sets the xlicclass in the <code>ICalValue</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+      </div>
+
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-methods">
+          <h5 style="display:block;">Methods inherited from <a href="class.Object.html">ICalObject</a> (12)</h5><div class="docblock">
+          
+            <h6><a href="method.Object.add_depender.html">i_cal_object_add_depender</a></h6><div class="docblock">
+              <p>Adds a <code>depender</code> into the list of objects which should not be destroyed before
+this <code>iobject</code>. It&#8217;s usually used for cases where the <code>iobject</code> uses native libical
+structure from the <code>depender</code>. The <code>depender</code> is referenced. It&#8217;s illegal to try
+to add one <code>depender</code> multiple&nbsp;times.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_always_destroy.html">i_cal_object_get_always_destroy</a></h6><div class="docblock">
+              <p>Obtain the <code>ICalObject</code>::always-destroy property&nbsp;value.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_is_global_memory.html">i_cal_object_get_is_global_memory</a></h6><div class="docblock">
+              <p>Obtains whether the native libical structure is a global shared memory,
+thus should not be destroyed. This can be set only during construction&nbsp;time.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_native.html">i_cal_object_get_native</a></h6><div class="docblock">
+              <p>Obtain native libical structure pointer associated with this <code>iobject</code>.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_native_destroy_func.html">i_cal_object_get_native_destroy_func</a></h6><div class="docblock">
+              <p>Obtain a pointer to a function responsible to free the libical native&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.ref_owner.html">i_cal_object_ref_owner</a></h6><div class="docblock">
+              <p>Obtain current owner of the native libical structure. The returned pointer,
+if not <span class="caps">NULL</span>, is referenced for thread safety. Unref it with g_object_unref
+when done with&nbsp;it.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.remove_depender.html">i_cal_object_remove_depender</a></h6><div class="docblock">
+              <p>Removes a <code>depender</code> from the list of objects which should not be destroyed before
+this <code>iobject</code>, previously added with i_cal_object_add_depender(). It&#8217;s illegal to try
+to remove the <code>depender</code> which is not in the internal&nbsp;list.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.remove_owner.html">i_cal_object_remove_owner</a></h6><div class="docblock">
+              <p>Unref and remove the&nbsp;owner.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_always_destroy.html">i_cal_object_set_always_destroy</a></h6><div class="docblock">
+              <p>Sets the <code>ICalObject</code>::always-destroy property value. When <code>TRUE</code>, the native
+libical structure is always freed, even when an owner of the <code>iobject</code> is&nbsp;set.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_native_destroy_func.html">i_cal_object_set_native_destroy_func</a></h6><div class="docblock">
+              <p>Sets a function to be used to destroy the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_owner.html">i_cal_object_set_owner</a></h6><div class="docblock">
+              <p>Sets an owner of the native libical structure, that is an object responsible
+for a destroy of the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.steal_native.html">i_cal_object_steal_native</a></h6><div class="docblock">
+              <p>Obtain native libical structure pointer associated with this <code>iobject</code> and sets the one
+at <code>iobject</code> to <span class="caps">NULL</span>, thus it&#8217;s invalid since now&nbsp;on.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-methods"><h5 style="display:block;">Methods inherited from <a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a> (43)</h5>
+          <div class="docblock">
+          
+            <div class="docblock">
+              <p>Please see&nbsp;<a class="external" href="javascript:void(0)" data-link="class.Object.html#methods" data-namespace="GObject">GObject</a>&nbsp;for a full list of methods.</em></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+
+      
+    </div>
+    
+
+    
+    <div class="toggle-wrapper properties">
+      <h4 id="properties">
+        Properties
+        <a href="#properties" class="anchor"></a>
+      </h4>
+
+      
+
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-properties">
+          <h5 style="display:block;">Properties inherited from <a href="class.Object.html">ICalObject</a> (5)</h5><div class="docblock">
+          
+            <h6><a href="property.Object.always-destroy.html">ICalGLib.Object:always-destroy</a></h6><div class="docblock">
+              <p>Whether free the native libical structure on <code>ICalObject</code><span class="quo">&#8216;</span>s finalize even
+if the object has set an&nbsp;owner.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This property will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="property.Object.is-global-memory.html">ICalGLib.Object:is-global-memory</a></h6><div class="docblock">
+              <p>Whether the native libical structure is from a global shared memory.
+If <span class="caps">TRUE</span>, then it is not freed on <code>ICalObject</code><span class="quo">&#8216;</span>s&nbsp;finalize.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.native.html">ICalGLib.Object:native</a></h6><div class="docblock">
+              <p>The native libical structure for this&nbsp;ICalObject.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.native-destroy-func.html">ICalGLib.Object:native-destroy-func</a></h6><div class="docblock">
+              <p>GDestroyNotify function to use to destroy the native libical&nbsp;pointer.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.owner.html">ICalGLib.Object:owner</a></h6><div class="docblock">
+              <p>Owner of the native libical structure. If set, then it is
+responsible for a free of the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+        
+      
+
+      
+
+    </div>
+    
+
+    
+    <div class="signals toggle-wrapper">
+      <h4 id="signals">
+        Signals
+        <a href="#signals" class="anchor"></a>
+      </h4>
+
+      
+
+      
+        
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-signals"><h5 style="display:block;">Signals inherited from <a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a> (1)</h5>
+          <div class="docblock">
+          <h6><a class="external" href="javascript:void(0)" data-namespace="GObject" data-link="signal.Object.notify.html">GObject::notify</a></h6>
+            <div class="docblock">
+              <p>The notify signal is emitted on an object when one of its properties has
+its value set through g_object_set_property(), g_object_set(), et&nbsp;al.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 2.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+
+      
+
+    </div>
+    
+
+    
+    <div class="class toggle-wrapper default-hide">
+      <h4 id="class-struct">
+        Class structure
+        <a href="#class-struct" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <pre><code>struct ICalGLibValueClass {
+  /* no available fields */
+}</code></pre>
+      </div>
+
+      <div class="docblock">
+        <p>This is the ICalValue&nbsp;class.</p>
+      </div>
+
+      
+    </div>
+    
+
+    
+
+    
+
+  </section>
+</section>
+
+
+    
+<div id="toc" class="toc">
+  <nav aria-labelledby="toc-title">
+    <p id="toc-title">Content</p>
+    <ul class="toc-list">
+      <li class="toc-list-item"><a href="#description"><span class="link-text">Description</span></a></li>
+      
+      
+      <li class="toc-list-item"><a href="#hierarchy"><span class="link-text">Hierarchy</span></a></li>
+      
+      
+      <li class="toc-list-item"><a href="#ancestors"><span class="link-text">Ancestors</span></a></li>
+      
+      
+      
+<li class="toc-list-item"><a href="#constructors"><span class="link-text">Constructors</span></a></li>
+
+
+      
+<li class="toc-list-item"><a href="#type-functions"><span class="link-text">Functions</span></a></li>
+
+
+      
+<li class="toc-list-item"><a href="#methods"><span class="link-text">Methods</span></a></li>
+
+
+      
+
+      
+
+      
+
+      
+
+    </ul>
+  </nav>
+</div>
+
+
+    <section id="search" class="content hidden"></section>
+
+    <footer>
+    
+    </footer>
+  </div>
+</body>
+</html>

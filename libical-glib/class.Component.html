@@ -1,0 +1,1711 @@
+<!--
+SPDX-FileCopyrightText: libical Development Team
+
+SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ICalGLib.Component</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta charset="utf-8" />
+
+  
+  <meta property="og:type" content="website"/>
+
+  
+
+  
+  <meta property="og:title" content="ICalGLib.Component"/>
+  <meta property="og:description" content="Reference for ICalGLib.Component"/>
+  <meta name="twitter:title" content="ICalGLib.Component"/>
+  <meta name="twitter:description" content="Reference for ICalGLib.Component"/>
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+
+  
+  
+  
+  <link rel="search" type="application/opensearchdescription+xml" title="ICalGLib" href="opensearch.xml">
+  
+  
+
+  <link rel="stylesheet" href="style.css" type="text/css" />
+
+  
+
+  
+  <script src="urlmap.js"></script>
+  
+  
+  <script src="fzy.js"></script>
+  <script src="search.js"></script>
+  
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <div id="body-wrapper" tabindex="-1">
+
+    <nav class="sidebar devhelp-hidden">
+      
+      
+      <div class="search section">
+        <form id="search-form" autocomplete="off">
+          <input id="search-input" type="text" name="do-not-autocomplete" placeholder="Click, or press 's' to search" autocomplete="off"/>
+        </form>
+      </div>
+      
+      <div class="section namespace">
+        <h3><a href="index.html">ICalGLib</a></h3>
+        <p>API Version: 3.0</p>
+        
+        <p>Library Version: 3</p>
+        
+      </div>
+      
+<div class="section">
+  <h5>Type</h5>
+  <div class="links">
+    <a class="current" href="class.Component.html#description">Component</a>
+  </div>
+</div>
+
+
+  
+<div class="section">
+  <h5>Constructors</h5>
+  <div class="links">
+  
+    <a class="ctor" href="ctor.Component.new.html">new</a>
+  
+    <a class="ctor" href="ctor.Component.new_from_string.html">new_from_string</a>
+  
+    <a class="ctor" href="ctor.Component.new_full.html">new_full</a>
+  
+    <a class="ctor" href="ctor.Component.new_participant.html">new_participant</a>
+  
+    <a class="ctor" href="ctor.Component.new_vagenda.html">new_vagenda</a>
+  
+    <a class="ctor" href="ctor.Component.new_valarm.html">new_valarm</a>
+  
+    <a class="ctor" href="ctor.Component.new_vavailability.html">new_vavailability</a>
+  
+    <a class="ctor" href="ctor.Component.new_vcalendar.html">new_vcalendar</a>
+  
+    <a class="ctor" href="ctor.Component.new_vevent.html">new_vevent</a>
+  
+    <a class="ctor" href="ctor.Component.new_vfreebusy.html">new_vfreebusy</a>
+  
+    <a class="ctor" href="ctor.Component.new_vjournal.html">new_vjournal</a>
+  
+    <a class="ctor" href="ctor.Component.new_vlocation.html">new_vlocation</a>
+  
+    <a class="ctor" href="ctor.Component.new_vpatch.html">new_vpatch</a>
+  
+    <a class="ctor" href="ctor.Component.new_vpoll.html">new_vpoll</a>
+  
+    <a class="ctor" href="ctor.Component.new_vquery.html">new_vquery</a>
+  
+    <a class="ctor" href="ctor.Component.new_vresource.html">new_vresource</a>
+  
+    <a class="ctor" href="ctor.Component.new_vtimezone.html">new_vtimezone</a>
+  
+    <a class="ctor" href="ctor.Component.new_vtodo.html">new_vtodo</a>
+  
+    <a class="ctor" href="ctor.Component.new_vvoter.html">new_vvoter</a>
+  
+    <a class="ctor" href="ctor.Component.new_x.html">new_x</a>
+  
+    <a class="ctor" href="ctor.Component.new_xavailable.html">new_xavailable</a>
+  
+    <a class="ctor" href="ctor.Component.new_xdaylight.html">new_xdaylight</a>
+  
+    <a class="ctor" href="ctor.Component.new_xpatch.html">new_xpatch</a>
+  
+    <a class="ctor" href="ctor.Component.new_xstandard.html">new_xstandard</a>
+  
+    <a class="ctor" href="ctor.Component.new_xvote.html">new_xvote</a>
+  
+  </div>
+</div>
+
+
+
+  
+<div class="section">
+  <h5>Functions</h5>
+  <div class="links">
+  
+    <a class="func" href="type_func.Component.kind_from_string.html">kind_from_string</a>
+  
+    <a class="func" href="type_func.Component.kind_is_valid.html">kind_is_valid</a>
+  
+    <a class="func" href="type_func.Component.kind_to_string.html">kind_to_string</a>
+  
+  </div>
+</div>
+
+
+
+  
+<div class="section">
+  <h5>Instance methods</h5>
+  <div class="links">
+  
+    <a class="method" href="method.Component.add_component.html">add_component</a>
+  
+    <a class="method" href="method.Component.add_property.html">add_property</a>
+  
+    <a class="method" href="method.Component.as_ical_string.html">as_ical_string</a>
+  
+    <a class="method" href="method.Component.begin_component.html">begin_component</a>
+  
+    <a class="method" href="method.Component.check_restrictions.html">check_restrictions</a>
+  
+    <a class="method" href="method.Component.clone.html">clone</a>
+  
+    <a class="method" href="method.Component.convert_errors.html">convert_errors</a>
+  
+    <a class="method" href="method.Component.count_components.html">count_components</a>
+  
+    <a class="method" href="method.Component.count_errors.html">count_errors</a>
+  
+    <a class="method" href="method.Component.count_properties.html">count_properties</a>
+  
+    <a class="method" href="method.Component.end_component.html">end_component</a>
+  
+    <a class="method" href="method.Component.foreach_recurrence.html">foreach_recurrence</a>
+  
+    <a class="method" href="method.Component.foreach_tzid.html">foreach_tzid</a>
+  
+    <a class="method" href="method.Component.free.html">free</a>
+  
+    <a class="method" href="method.Component.get_comment.html">get_comment</a>
+  
+    <a class="method" href="method.Component.get_current_component.html">get_current_component</a>
+  
+    <a class="method" href="method.Component.get_current_property.html">get_current_property</a>
+  
+    <a class="method" href="method.Component.get_description.html">get_description</a>
+  
+    <a class="method" href="method.Component.get_dtend.html">get_dtend</a>
+  
+    <a class="method" href="method.Component.get_dtstamp.html">get_dtstamp</a>
+  
+    <a class="method" href="method.Component.get_dtstart.html">get_dtstart</a>
+  
+    <a class="method" href="method.Component.get_due.html">get_due</a>
+  
+    <a class="method" href="method.Component.get_duration.html">get_duration</a>
+  
+    <a class="method" href="method.Component.get_first_component.html">get_first_component</a>
+  
+    <a class="method" href="method.Component.get_first_property.html">get_first_property</a>
+  
+    <a class="method" href="method.Component.get_first_real_component.html">get_first_real_component</a>
+  
+    <a class="method" href="method.Component.get_inner.html">get_inner</a>
+  
+    <a class="method" href="method.Component.get_location.html">get_location</a>
+  
+    <a class="method" href="method.Component.get_method.html">get_method</a>
+  
+    <a class="method" href="method.Component.get_next_component.html">get_next_component</a>
+  
+    <a class="method" href="method.Component.get_next_property.html">get_next_property</a>
+  
+    <a class="method" href="method.Component.get_parent.html">get_parent</a>
+  
+    <a class="method" href="method.Component.get_recurrenceid.html">get_recurrenceid</a>
+  
+    <a class="method" href="method.Component.get_relcalid.html">get_relcalid</a>
+  
+    <a class="method" href="method.Component.get_sequence.html">get_sequence</a>
+  
+    <a class="method" href="method.Component.get_span.html">get_span</a>
+  
+    <a class="method" href="method.Component.get_status.html">get_status</a>
+  
+    <a class="method" href="method.Component.get_summary.html">get_summary</a>
+  
+    <a class="method" href="method.Component.get_timezone.html">get_timezone</a>
+  
+    <a class="method" href="method.Component.get_uid.html">get_uid</a>
+  
+    <a class="method" href="method.Component.is_valid.html">is_valid</a>
+  
+    <a class="method" href="method.Component.isa.html">isa</a>
+  
+    <a class="method" href="method.Component.isa_component.html">isa_component</a>
+  
+    <a class="method" href="method.Component.merge_component.html">merge_component</a>
+  
+    <a class="method" href="method.Component.remove_component.html">remove_component</a>
+  
+    <a class="method" href="method.Component.remove_property.html">remove_property</a>
+  
+    <a class="method" href="method.Component.set_comment.html">set_comment</a>
+  
+    <a class="method" href="method.Component.set_description.html">set_description</a>
+  
+    <a class="method" href="method.Component.set_dtend.html">set_dtend</a>
+  
+    <a class="method" href="method.Component.set_dtstamp.html">set_dtstamp</a>
+  
+    <a class="method" href="method.Component.set_dtstart.html">set_dtstart</a>
+  
+    <a class="method" href="method.Component.set_due.html">set_due</a>
+  
+    <a class="method" href="method.Component.set_duration.html">set_duration</a>
+  
+    <a class="method" href="method.Component.set_location.html">set_location</a>
+  
+    <a class="method" href="method.Component.set_method.html">set_method</a>
+  
+    <a class="method" href="method.Component.set_parent.html">set_parent</a>
+  
+    <a class="method" href="method.Component.set_recurrenceid.html">set_recurrenceid</a>
+  
+    <a class="method" href="method.Component.set_relcalid.html">set_relcalid</a>
+  
+    <a class="method" href="method.Component.set_sequence.html">set_sequence</a>
+  
+    <a class="method" href="method.Component.set_status.html">set_status</a>
+  
+    <a class="method" href="method.Component.set_summary.html">set_summary</a>
+  
+    <a class="method" href="method.Component.set_uid.html">set_uid</a>
+  
+    <a class="method" href="method.Component.strip_errors.html">strip_errors</a>
+  
+    <a class="method" href="method.Component.take_component.html">take_component</a>
+  
+    <a class="method" href="method.Component.take_property.html">take_property</a>
+  
+  </div>
+</div>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+
+      <div class="section generator">
+        <p>Generated by <a href="https://gitlab.gnome.org/GNOME/gi-docgen">gi-docgen</a> 2023.3</p>
+      </div>
+    </nav>
+
+    <button id="btn-to-top" class="hidden"><span class="up-arrow"></span></button>
+
+    
+<section id="main" class="content">
+  <header>
+    <h3>Class</h3>
+    <h1 aria-label="Name"><a href="index.html">ICalGLib</a><span class="sep" role="presentation"></span>Component</h1>
+  </header>
+
+  <section>
+    <summary>
+      <div class="docblock">
+        <p><span class="emblem available">since: 3.0</span></p>
+      </div>
+
+      <div class="toggle-wrapper">
+        <h4 id="description" style="display:flex;">
+          Description
+          <a href="#description" class="anchor"></a>
+          
+          <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-component.h#L31">[src]</a>
+          
+        </h4>
+
+        <pre><code>final class ICalGLib.Component : ICalGLib.Object
+{
+  /* No available fields */
+}</pre></code>
+
+        <div class="docblock">
+          <p>This is the ICalComponent&nbsp;instance.</p>
+        </div>
+
+        <div class="docblock">
+          
+          
+          <p>Available since: 3.0</p>
+          
+          
+        </div>
+
+        
+      </div>
+    </summary>
+
+    
+    <div class="toggle-wrapper hierarchy">
+      <h4 id="hierarchy">
+        Hierarchy
+        <a href="#hierarchy" class="anchor"></a>
+      </h4>
+      <div class="docblock" alt="Hierarchy for ICalGLib.Component">
+        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: hierarchy Pages: 1 -->
+<svg width="112pt" height="188pt"
+ viewBox="0.00 0.00 112.00 188.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+<title>hierarchy</title>
+<!-- this -->
+<g id="node1" class="node">
+<title>this</title>
+<g id="a_node1"><a xlink:title="ICalComponent">
+<path fill="none" stroke="black" d="M92,-36C92,-36 12,-36 12,-36 6,-36 0,-30 0,-24 0,-24 0,-12 0,-12 0,-6 6,0 12,0 12,0 92,0 92,0 98,0 104,-6 104,-12 104,-12 104,-24 104,-24 104,-30 98,-36 92,-36"/>
+<text text-anchor="middle" x="52" y="-14.3" font-family="Times,serif" font-size="14.00">ICalComponent</text>
+</a>
+</g>
+</g>
+<!-- ancestor_0 -->
+<g id="node2" class="node link">
+<title>ancestor_0</title>
+<g id="a_node2"><a xlink:href="class.Object.html" xlink:title="ICalObject">
+<path fill="none" stroke="black" d="M78,-108C78,-108 26,-108 26,-108 20,-108 14,-102 14,-96 14,-96 14,-84 14,-84 14,-78 20,-72 26,-72 26,-72 78,-72 78,-72 84,-72 90,-78 90,-84 90,-84 90,-96 90,-96 90,-102 84,-108 78,-108"/>
+<text text-anchor="middle" x="52" y="-86.3" font-family="Times,serif" font-size="14.00">ICalObject</text>
+</a>
+</g>
+</g>
+<!-- ancestor_0&#45;&#45;this -->
+<g id="edge2" class="edge">
+<title>ancestor_0&#45;&#45;this</title>
+<path fill="none" stroke="black" d="M52,-71.7C52,-60.85 52,-46.92 52,-36.1"/>
+</g>
+<!-- ancestor_1 -->
+<g id="node3" class="node">
+<title>ancestor_1</title>
+<g id="a_node3"><a xlink:title="GObject.Object">
+<path fill="none" stroke="black" d="M71,-180C71,-180 33,-180 33,-180 27,-180 21,-174 21,-168 21,-168 21,-156 21,-156 21,-150 27,-144 33,-144 33,-144 71,-144 71,-144 77,-144 83,-150 83,-156 83,-156 83,-168 83,-168 83,-174 77,-180 71,-180"/>
+<text text-anchor="middle" x="52" y="-158.3" font-family="Times,serif" font-size="14.00">GObject</text>
+</a>
+</g>
+</g>
+<!-- ancestor_1&#45;&#45;ancestor_0 -->
+<g id="edge1" class="edge">
+<title>ancestor_1&#45;&#45;ancestor_0</title>
+<path fill="none" stroke="black" d="M52,-143.7C52,-132.85 52,-118.92 52,-108.1"/>
+</g>
+</g>
+</svg>
+
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper ancestors">
+      <h4 id="ancestors">
+        Ancestors
+        <a href="#ancestors" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <ul>
+        
+          
+          <li class="class"><a href="class.Object.html" title="Object">ICalObject</a></li>
+          
+        
+          
+          <li class="class"><a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a></li>
+          
+        
+        </ul>
+      </div>
+    </div>
+    
+
+    
+
+    
+
+    
+    <div class="toggle-wrapper constructors">
+      <h4 id="constructors">
+        Constructors
+        <a href="#constructors" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+        <div class="">
+          <h6><a href="ctor.Component.new.html">i_cal_component_new</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalComponent</code> with specific&nbsp;type.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_from_string.html">i_cal_component_new_from_string</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalComponent</code> based on a&nbsp;string.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_full.html">i_cal_component_new_full</a></h6>
+          <div class="docblock">
+            <p>Create a new libical-glib object from the native libical object and the&nbsp;owner.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_participant.html">i_cal_component_new_participant</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> of type <code>I_CAL_PARTICIPANT_COMPONENT</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This constructor will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vagenda.html">i_cal_component_new_vagenda</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vagenda.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_valarm.html">i_cal_component_new_valarm</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;valarm.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vavailability.html">i_cal_component_new_vavailability</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vavailability.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vcalendar.html">i_cal_component_new_vcalendar</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vcalendar.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vevent.html">i_cal_component_new_vevent</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vevent.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vfreebusy.html">i_cal_component_new_vfreebusy</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vfreebusy.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vjournal.html">i_cal_component_new_vjournal</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vjournal.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vlocation.html">i_cal_component_new_vlocation</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> of type <code>I_CAL_VLOCATION_COMPONENT</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This constructor will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vpatch.html">i_cal_component_new_vpatch</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> of type <code>I_CAL_VPATCH_COMPONENT</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This constructor will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vpoll.html">i_cal_component_new_vpoll</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vpoll.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vquery.html">i_cal_component_new_vquery</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vquery.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vresource.html">i_cal_component_new_vresource</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> of type <code>I_CAL_VRESOURCE_COMPONENT</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This constructor will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vtimezone.html">i_cal_component_new_vtimezone</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vtimezone.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vtodo.html">i_cal_component_new_vtodo</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vtodo.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_vvoter.html">i_cal_component_new_vvoter</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;vvoter.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_x.html">i_cal_component_new_x</a></h6>
+          <div class="docblock">
+            <p>Creates a new <code>ICalComponent</code> based on name of x&nbsp;property.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_xavailable.html">i_cal_component_new_xavailable</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;xavailable.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_xdaylight.html">i_cal_component_new_xdaylight</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;xdaylight.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_xpatch.html">i_cal_component_new_xpatch</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> of type <code>I_CAL_XPATCH_COMPONENT</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This constructor will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_xstandard.html">i_cal_component_new_xstandard</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;xstandard.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="ctor.Component.new_xvote.html">i_cal_component_new_xvote</a></h6>
+          <div class="docblock">
+            <p>Creates a <code>ICalComponent</code> with the type to be&nbsp;xvote.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper methods">
+      <h4 id="type-functions">
+        Functions
+        <a href="#type-functions" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+      <div class="">
+        <h6><a href="type_func.Component.kind_from_string.html">i_cal_component_kind_from_string</a></h6>
+        <div class="docblock">
+          <p>Converts a string to a <code>ICalComponentKind</code>.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Component.kind_is_valid.html">i_cal_component_kind_is_valid</a></h6>
+        <div class="docblock">
+          <p>Checks if a <code>ICalComponentKind</code> is&nbsp;valid.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      <div class="">
+        <h6><a href="type_func.Component.kind_to_string.html">i_cal_component_kind_to_string</a></h6>
+        <div class="docblock">
+          <p>Converts a <code>ICalComponentKind</code> to a&nbsp;string.</p>
+        </div>
+        <div class="docblock">
+          <p><span class="emblem available">since: 1.0</span></p>
+        </div>
+      </div>
+      
+      </div>
+    </div>
+    
+
+    
+    <div class="toggle-wrapper methods">
+      <h4 id="methods">
+        Instance methods
+        <a href="#methods" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+      
+        <div class="">
+          <h6><a href="method.Component.add_component.html">i_cal_component_add_component</a></h6>
+          <div class="docblock">
+            <p>Adds a <code>ICalComponent</code> into another <code>ICalComponent</code> as a child&nbsp;component.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.add_property.html">i_cal_component_add_property</a></h6>
+          <div class="docblock">
+            <p>Adds an <code>ICalProperty</code> into <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.as_ical_string.html">i_cal_component_as_ical_string</a></h6>
+          <div class="docblock">
+            <p>Converts a <code>ICalComponent</code> to a&nbsp;string.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.begin_component.html">i_cal_component_begin_component</a></h6>
+          <div class="docblock">
+            <p>Gets the <code>ICalCompIter</code> pointing to the first child <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.check_restrictions.html">i_cal_component_check_restrictions</a></h6>
+          <div class="docblock">
+            <p>Checks the number of restrictions in <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.clone.html">i_cal_component_clone</a></h6>
+          <div class="docblock">
+            <p>Deeply clone a <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.1</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.convert_errors.html">i_cal_component_convert_errors</a></h6>
+          <div class="docblock">
+            <p>Converts some X-<span class="caps">LIC</span>-<span class="caps">ERROR</span> properties into <span class="caps">RETURN</span>-<span class="caps">STATUS</span>&nbsp;properties.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.count_components.html">i_cal_component_count_components</a></h6>
+          <div class="docblock">
+            <p>Counts the child <code>ICalComponent</code> with the target kind in the parent&nbsp;one.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.count_errors.html">i_cal_component_count_errors</a></h6>
+          <div class="docblock">
+            <p>Counts the number of errors in <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.count_properties.html">i_cal_component_count_properties</a></h6>
+          <div class="docblock">
+            <p>Counts the number of <code>ICalProperty</code> in <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.end_component.html">i_cal_component_end_component</a></h6>
+          <div class="docblock">
+            <p>Gets the <code>ICalCompIter</code> pointing to the end child <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.foreach_recurrence.html">i_cal_component_foreach_recurrence</a></h6>
+          <div class="docblock">
+            <p>Cycles through all recurrences of an event. This function will call the specified callback function for
+once for the base value of <span class="caps">DTSTART</span>, and foreach recurring date/time value. It will filter out events
+that are specified as an <span class="caps">EXDATE</span> or an <span class="caps">EXRULE</span>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.5</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.foreach_tzid.html">i_cal_component_foreach_tzid</a></h6>
+          <div class="docblock">
+            <p>Applies the same manipulation on every tzid in <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.5</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.free.html">i_cal_component_free</a></h6>
+          <div class="docblock">
+            <p>Frees a <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_comment.html">i_cal_component_get_comment</a></h6>
+          <div class="docblock">
+            <p>Gets the comment of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_current_component.html">i_cal_component_get_current_component</a></h6>
+          <div class="docblock">
+            <p>Gets the current <code>ICalComponent</code> in <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_current_property.html">i_cal_component_get_current_property</a></h6>
+          <div class="docblock">
+            <p>Gets the current <code>ICalProperty</code> in <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_description.html">i_cal_component_get_description</a></h6>
+          <div class="docblock">
+            <p>Gets the description of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_dtend.html">i_cal_component_get_dtend</a></h6>
+          <div class="docblock">
+            <p>Gets the dtend of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_dtstamp.html">i_cal_component_get_dtstamp</a></h6>
+          <div class="docblock">
+            <p>Gets the dtstamp of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_dtstart.html">i_cal_component_get_dtstart</a></h6>
+          <div class="docblock">
+            <p>Gets the dtstart of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_due.html">i_cal_component_get_due</a></h6>
+          <div class="docblock">
+            <p>Gets the due of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_duration.html">i_cal_component_get_duration</a></h6>
+          <div class="docblock">
+            <p>Gets the duration of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_first_component.html">i_cal_component_get_first_component</a></h6>
+          <div class="docblock">
+            <p>Gets the first <code>ICalComponent</code> with specific kind in <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_first_property.html">i_cal_component_get_first_property</a></h6>
+          <div class="docblock">
+            <p>Gets the first <code>ICalProperty</code> with specific kind in <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_first_real_component.html">i_cal_component_get_first_real_component</a></h6>
+          <div class="docblock">
+            <p>For <span class="caps">VCOMPONENT</span>: Returns a reference to the first <span class="caps">VEVENT</span>, <span class="caps">VTODO</span> or <span class="caps">VJOURNAL</span>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_inner.html">i_cal_component_get_inner</a></h6>
+          <div class="docblock">
+            <p>Returns the first <span class="caps">VEVENT</span>, <span class="caps">VTODO</span> or <span class="caps">VJOURNAL</span> sub-component of cop, or comp if it is one of those&nbsp;types.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_location.html">i_cal_component_get_location</a></h6>
+          <div class="docblock">
+            <p>Gets the location of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_method.html">i_cal_component_get_method</a></h6>
+          <div class="docblock">
+            <p>Gets the method of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_next_component.html">i_cal_component_get_next_component</a></h6>
+          <div class="docblock">
+            <p>Gets the next <code>ICalComponent</code> with specific kind in <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_next_property.html">i_cal_component_get_next_property</a></h6>
+          <div class="docblock">
+            <p>Gets the next <code>ICalProperty</code> with specific kind in <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_parent.html">i_cal_component_get_parent</a></h6>
+          <div class="docblock">
+            <p>Gets the parent component of the <code>component</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 3.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_recurrenceid.html">i_cal_component_get_recurrenceid</a></h6>
+          <div class="docblock">
+            <p>Gets the recurrenceid of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_relcalid.html">i_cal_component_get_relcalid</a></h6>
+          <div class="docblock">
+            <p>Gets the relcalid of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_sequence.html">i_cal_component_get_sequence</a></h6>
+          <div class="docblock">
+            <p>Gets the sequence of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_span.html">i_cal_component_get_span</a></h6>
+          <div class="docblock">
+            <p>For <span class="caps">VEVENT</span>, <span class="caps">VTODO</span>, <span class="caps">VJOURNAL</span> and <span class="caps">VTIMEZONE</span>: reports the start and end times of an event in <span class="caps">UTC</span>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_status.html">i_cal_component_get_status</a></h6>
+          <div class="docblock">
+            <p>Gets the status of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_summary.html">i_cal_component_get_summary</a></h6>
+          <div class="docblock">
+            <p>Gets the summary of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_timezone.html">i_cal_component_get_timezone</a></h6>
+          <div class="docblock">
+            <p>Returns the icaltimezone in the component corresponding to the <span class="caps">TZID</span>, or <span class="caps">NULL</span> if it can&#8217;t be&nbsp;found.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.get_uid.html">i_cal_component_get_uid</a></h6>
+          <div class="docblock">
+            <p>Gets the uid of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.is_valid.html">i_cal_component_is_valid</a></h6>
+          <div class="docblock">
+            <p>Checks whether <code>ICalComponent</code> is&nbsp;valid.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.isa.html">i_cal_component_isa</a></h6>
+          <div class="docblock">
+            <p>Gets the type of <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.isa_component.html">i_cal_component_isa_component</a></h6>
+          <div class="docblock">
+            <p>Checks whether the native part of <code>ICalComponent</code> is&nbsp;icalcomponent.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.merge_component.html">i_cal_component_merge_component</a></h6>
+          <div class="docblock">
+            <p>Takes 2 <span class="caps">VCALENDAR</span> components and merges the second one into the first, resolving any problems with conflicting
+TZIDs. comp_to_merge will no longer exist after calling this&nbsp;function.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.remove_component.html">i_cal_component_remove_component</a></h6>
+          <div class="docblock">
+            <p>Removes a child <code>ICalComponent</code> from another <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.remove_property.html">i_cal_component_remove_property</a></h6>
+          <div class="docblock">
+            <p>Removes <code>ICalProperty</code> from <code>ICalComponent</code>. Caution: The compare is based on address. So you must use
+the original <code>ICalProperty</code> as the&nbsp;target.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_comment.html">i_cal_component_set_comment</a></h6>
+          <div class="docblock">
+            <p>Sets the comment of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_description.html">i_cal_component_set_description</a></h6>
+          <div class="docblock">
+            <p>Sets the description of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_dtend.html">i_cal_component_set_dtend</a></h6>
+          <div class="docblock">
+            <p>Sets the dtend of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_dtstamp.html">i_cal_component_set_dtstamp</a></h6>
+          <div class="docblock">
+            <p>Sets the dtstamp of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_dtstart.html">i_cal_component_set_dtstart</a></h6>
+          <div class="docblock">
+            <p>Sets the dtstart of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_due.html">i_cal_component_set_due</a></h6>
+          <div class="docblock">
+            <p>Sets the due of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_duration.html">i_cal_component_set_duration</a></h6>
+          <div class="docblock">
+            <p>Sets the duration of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_location.html">i_cal_component_set_location</a></h6>
+          <div class="docblock">
+            <p>Sets the location of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_method.html">i_cal_component_set_method</a></h6>
+          <div class="docblock">
+            <p>Sets the method of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_parent.html">i_cal_component_set_parent</a></h6>
+          <div class="docblock">
+            <p>Sets the <code>parent</code> <code>ICalComponent</code> of the specified <code>component</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 3.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_recurrenceid.html">i_cal_component_set_recurrenceid</a></h6>
+          <div class="docblock">
+            <p>Sets the recurrenceid of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_relcalid.html">i_cal_component_set_relcalid</a></h6>
+          <div class="docblock">
+            <p>Sets the relcalid of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_sequence.html">i_cal_component_set_sequence</a></h6>
+          <div class="docblock">
+            <p>Sets the sequence of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_status.html">i_cal_component_set_status</a></h6>
+          <div class="docblock">
+            <p>Sets the status of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_summary.html">i_cal_component_set_summary</a></h6>
+          <div class="docblock">
+            <p>Sets the summary of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.set_uid.html">i_cal_component_set_uid</a></h6>
+          <div class="docblock">
+            <p>Sets the uid of the <code>ICalComponent</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.strip_errors.html">i_cal_component_strip_errors</a></h6>
+          <div class="docblock">
+            <p>Removes all X-<span class="caps">LIC</span>-<span class="caps">ERROR</span>&nbsp;properties.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.take_component.html">i_cal_component_take_component</a></h6>
+          <div class="docblock">
+            <p>Adds the <code>child</code> into the <code>parent</code> as a child component and unrefs the <code>child</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+        <div class="">
+          <h6><a href="method.Component.take_property.html">i_cal_component_take_property</a></h6>
+          <div class="docblock">
+            <p>Adds the <code>property</code> into the <code>component</code> and unrefs the <code>property</code>.</p>
+          </div>
+          <div class="docblock">
+            <p><span class="emblem available">since: 1.0</span></p>
+          </div>
+        </div>
+      
+      </div>
+
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-methods">
+          <h5 style="display:block;">Methods inherited from <a href="class.Object.html">ICalObject</a> (12)</h5><div class="docblock">
+          
+            <h6><a href="method.Object.add_depender.html">i_cal_object_add_depender</a></h6><div class="docblock">
+              <p>Adds a <code>depender</code> into the list of objects which should not be destroyed before
+this <code>iobject</code>. It&#8217;s usually used for cases where the <code>iobject</code> uses native libical
+structure from the <code>depender</code>. The <code>depender</code> is referenced. It&#8217;s illegal to try
+to add one <code>depender</code> multiple&nbsp;times.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_always_destroy.html">i_cal_object_get_always_destroy</a></h6><div class="docblock">
+              <p>Obtain the <code>ICalObject</code>::always-destroy property&nbsp;value.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_is_global_memory.html">i_cal_object_get_is_global_memory</a></h6><div class="docblock">
+              <p>Obtains whether the native libical structure is a global shared memory,
+thus should not be destroyed. This can be set only during construction&nbsp;time.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_native.html">i_cal_object_get_native</a></h6><div class="docblock">
+              <p>Obtain native libical structure pointer associated with this <code>iobject</code>.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.get_native_destroy_func.html">i_cal_object_get_native_destroy_func</a></h6><div class="docblock">
+              <p>Obtain a pointer to a function responsible to free the libical native&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.ref_owner.html">i_cal_object_ref_owner</a></h6><div class="docblock">
+              <p>Obtain current owner of the native libical structure. The returned pointer,
+if not <span class="caps">NULL</span>, is referenced for thread safety. Unref it with g_object_unref
+when done with&nbsp;it.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.remove_depender.html">i_cal_object_remove_depender</a></h6><div class="docblock">
+              <p>Removes a <code>depender</code> from the list of objects which should not be destroyed before
+this <code>iobject</code>, previously added with i_cal_object_add_depender(). It&#8217;s illegal to try
+to remove the <code>depender</code> which is not in the internal&nbsp;list.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.remove_owner.html">i_cal_object_remove_owner</a></h6><div class="docblock">
+              <p>Unref and remove the&nbsp;owner.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_always_destroy.html">i_cal_object_set_always_destroy</a></h6><div class="docblock">
+              <p>Sets the <code>ICalObject</code>::always-destroy property value. When <code>TRUE</code>, the native
+libical structure is always freed, even when an owner of the <code>iobject</code> is&nbsp;set.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This method will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_native_destroy_func.html">i_cal_object_set_native_destroy_func</a></h6><div class="docblock">
+              <p>Sets a function to be used to destroy the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.set_owner.html">i_cal_object_set_owner</a></h6><div class="docblock">
+              <p>Sets an owner of the native libical structure, that is an object responsible
+for a destroy of the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+            <h6><a href="method.Object.steal_native.html">i_cal_object_steal_native</a></h6><div class="docblock">
+              <p>Obtain native libical structure pointer associated with this <code>iobject</code> and sets the one
+at <code>iobject</code> to <span class="caps">NULL</span>, thus it&#8217;s invalid since now&nbsp;on.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 1.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-methods"><h5 style="display:block;">Methods inherited from <a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a> (43)</h5>
+          <div class="docblock">
+          
+            <div class="docblock">
+              <p>Please see&nbsp;<a class="external" href="javascript:void(0)" data-link="class.Object.html#methods" data-namespace="GObject">GObject</a>&nbsp;for a full list of methods.</em></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+
+      
+    </div>
+    
+
+    
+    <div class="toggle-wrapper properties">
+      <h4 id="properties">
+        Properties
+        <a href="#properties" class="anchor"></a>
+      </h4>
+
+      
+
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-properties">
+          <h5 style="display:block;">Properties inherited from <a href="class.Object.html">ICalObject</a> (5)</h5><div class="docblock">
+          
+            <h6><a href="property.Object.always-destroy.html">ICalGLib.Object:always-destroy</a></h6><div class="docblock">
+              <p>Whether free the native libical structure on <code>ICalObject</code><span class="quo">&#8216;</span>s finalize even
+if the object has set an&nbsp;owner.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available-next" title="This property will be available in the next stable release">unstable</span>&nbsp;<span class="emblem available">since: 3.0.11</span></p>
+            </div>
+          
+            <h6><a href="property.Object.is-global-memory.html">ICalGLib.Object:is-global-memory</a></h6><div class="docblock">
+              <p>Whether the native libical structure is from a global shared memory.
+If <span class="caps">TRUE</span>, then it is not freed on <code>ICalObject</code><span class="quo">&#8216;</span>s&nbsp;finalize.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.native.html">ICalGLib.Object:native</a></h6><div class="docblock">
+              <p>The native libical structure for this&nbsp;ICalObject.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.native-destroy-func.html">ICalGLib.Object:native-destroy-func</a></h6><div class="docblock">
+              <p>GDestroyNotify function to use to destroy the native libical&nbsp;pointer.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+            <h6><a href="property.Object.owner.html">ICalGLib.Object:owner</a></h6><div class="docblock">
+              <p>Owner of the native libical structure. If set, then it is
+responsible for a free of the native libical&nbsp;structure.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 3.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+        
+      
+
+      
+
+    </div>
+    
+
+    
+    <div class="signals toggle-wrapper">
+      <h4 id="signals">
+        Signals
+        <a href="#signals" class="anchor"></a>
+      </h4>
+
+      
+
+      
+        
+      
+        
+        <div class="toggle-wrapper default-hide ancestor-signals"><h5 style="display:block;">Signals inherited from <a class="external" href="javascript:void(0)" data-link="class.Object.html" data-namespace="GObject">GObject</a> (1)</h5>
+          <div class="docblock">
+          <h6><a class="external" href="javascript:void(0)" data-namespace="GObject" data-link="signal.Object.notify.html">GObject::notify</a></h6>
+            <div class="docblock">
+              <p>The notify signal is emitted on an object when one of its properties has
+its value set through g_object_set_property(), g_object_set(), et&nbsp;al.</p>
+            </div>
+            <div class="docblock">
+              <p><span class="emblem available">since: 2.0</span></p>
+            </div>
+          
+          </div>
+        </div>
+        
+      
+
+      
+
+    </div>
+    
+
+    
+    <div class="class toggle-wrapper default-hide">
+      <h4 id="class-struct">
+        Class structure
+        <a href="#class-struct" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <pre><code>struct ICalGLibComponentClass {
+  /* no available fields */
+}</code></pre>
+      </div>
+
+      <div class="docblock">
+        <p>This is the ICalComponent&nbsp;class.</p>
+      </div>
+
+      
+    </div>
+    
+
+    
+
+    
+
+  </section>
+</section>
+
+
+    
+<div id="toc" class="toc">
+  <nav aria-labelledby="toc-title">
+    <p id="toc-title">Content</p>
+    <ul class="toc-list">
+      <li class="toc-list-item"><a href="#description"><span class="link-text">Description</span></a></li>
+      
+      
+      <li class="toc-list-item"><a href="#hierarchy"><span class="link-text">Hierarchy</span></a></li>
+      
+      
+      <li class="toc-list-item"><a href="#ancestors"><span class="link-text">Ancestors</span></a></li>
+      
+      
+      
+<li class="toc-list-item"><a href="#constructors"><span class="link-text">Constructors</span></a></li>
+
+
+      
+<li class="toc-list-item"><a href="#type-functions"><span class="link-text">Functions</span></a></li>
+
+
+      
+<li class="toc-list-item"><a href="#methods"><span class="link-text">Methods</span></a></li>
+
+
+      
+
+      
+
+      
+
+      
+
+    </ul>
+  </nav>
+</div>
+
+
+    <section id="search" class="content hidden"></section>
+
+    <footer>
+    
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!--
+SPDX-FileCopyrightText: libical Development Team
+
+SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ICalGLib.Parameter.get_scheduleforcesend</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta charset="utf-8" />
+
+  
+  <meta property="og:type" content="website"/>
+
+  
+
+  
+  <meta priority="og:title" content="ICalGLib.Parameter.get_scheduleforcesend"/>
+  <meta priority="og:description" content="Reference for ICalGLib.Parameter.get_scheduleforcesend"/>
+  <meta name="twitter:title" content="ICalGLib.Parameter.get_scheduleforcesend"/>
+  <meta name="twitter:description" content="Reference for ICalGLib.Parameter.get_scheduleforcesend"/>
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+
+  
+  
+  
+  <link rel="search" type="application/opensearchdescription+xml" title="ICalGLib" href="opensearch.xml">
+  
+  
+
+  <link rel="stylesheet" href="style.css" type="text/css" />
+
+  
+
+  
+  <script src="urlmap.js"></script>
+  
+  
+  <script src="fzy.js"></script>
+  <script src="search.js"></script>
+  
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <div id="body-wrapper" tabindex="-1">
+
+    <nav class="sidebar devhelp-hidden">
+      
+      
+      <div class="search section">
+        <form id="search-form" autocomplete="off">
+          <input id="search-input" type="text" name="do-not-autocomplete" placeholder="Click, or press 's' to search" autocomplete="off"/>
+        </form>
+      </div>
+      
+      <div class="section namespace">
+        <h3><a href="index.html">ICalGLib</a></h3>
+        <p>API Version: 3.0</p>
+        
+        <p>Library Version: 3</p>
+        
+      </div>
+      
+<div class="section">
+  <h5>Type</h5>
+  <div class="links">
+    <a href="class.Parameter.html">Parameter</a>
+  </div>
+</div>
+<div class="section">
+  <h5>Methods</h5>
+  <div class="links">
+  
+    <a class="method" href="method.Parameter.as_ical_string.html">as_ical_string</a>
+  
+    <a class="method" href="method.Parameter.clone.html">clone</a>
+  
+    <a class="method" href="method.Parameter.free.html">free</a>
+  
+    <a class="method" href="method.Parameter.get_actionparam.html">get_actionparam</a>
+  
+    <a class="method" href="method.Parameter.get_altrep.html">get_altrep</a>
+  
+    <a class="method" href="method.Parameter.get_charset.html">get_charset</a>
+  
+    <a class="method" href="method.Parameter.get_cn.html">get_cn</a>
+  
+    <a class="method" href="method.Parameter.get_cutype.html">get_cutype</a>
+  
+    <a class="method" href="method.Parameter.get_delegatedfrom.html">get_delegatedfrom</a>
+  
+    <a class="method" href="method.Parameter.get_delegatedto.html">get_delegatedto</a>
+  
+    <a class="method" href="method.Parameter.get_derived.html">get_derived</a>
+  
+    <a class="method" href="method.Parameter.get_dir.html">get_dir</a>
+  
+    <a class="method" href="method.Parameter.get_display.html">get_display</a>
+  
+    <a class="method" href="method.Parameter.get_email.html">get_email</a>
+  
+    <a class="method" href="method.Parameter.get_enable.html">get_enable</a>
+  
+    <a class="method" href="method.Parameter.get_encoding.html">get_encoding</a>
+  
+    <a class="method" href="method.Parameter.get_fbtype.html">get_fbtype</a>
+  
+    <a class="method" href="method.Parameter.get_feature.html">get_feature</a>
+  
+    <a class="method" href="method.Parameter.get_filename.html">get_filename</a>
+  
+    <a class="method" href="method.Parameter.get_fmttype.html">get_fmttype</a>
+  
+    <a class="method" href="method.Parameter.get_iana.html">get_iana</a>
+  
+    <a class="method" href="method.Parameter.get_iana_name.html">get_iana_name</a>
+  
+    <a class="method" href="method.Parameter.get_iana_value.html">get_iana_value</a>
+  
+    <a class="method" href="method.Parameter.get_id.html">get_id</a>
+  
+    <a class="method" href="method.Parameter.get_label.html">get_label</a>
+  
+    <a class="method" href="method.Parameter.get_language.html">get_language</a>
+  
+    <a class="method" href="method.Parameter.get_latency.html">get_latency</a>
+  
+    <a class="method" href="method.Parameter.get_local.html">get_local</a>
+  
+    <a class="method" href="method.Parameter.get_localize.html">get_localize</a>
+  
+    <a class="method" href="method.Parameter.get_managedid.html">get_managedid</a>
+  
+    <a class="method" href="method.Parameter.get_member.html">get_member</a>
+  
+    <a class="method" href="method.Parameter.get_modified.html">get_modified</a>
+  
+    <a class="method" href="method.Parameter.get_options.html">get_options</a>
+  
+    <a class="method" href="method.Parameter.get_order.html">get_order</a>
+  
+    <a class="method" href="method.Parameter.get_parent.html">get_parent</a>
+  
+    <a class="method" href="method.Parameter.get_partstat.html">get_partstat</a>
+  
+    <a class="method" href="method.Parameter.get_patchaction.html">get_patchaction</a>
+  
+    <a class="method" href="method.Parameter.get_publiccomment.html">get_publiccomment</a>
+  
+    <a class="method" href="method.Parameter.get_range.html">get_range</a>
+  
+    <a class="method" href="method.Parameter.get_reason.html">get_reason</a>
+  
+    <a class="method" href="method.Parameter.get_related.html">get_related</a>
+  
+    <a class="method" href="method.Parameter.get_reltype.html">get_reltype</a>
+  
+    <a class="method" href="method.Parameter.get_required.html">get_required</a>
+  
+    <a class="method" href="method.Parameter.get_response.html">get_response</a>
+  
+    <a class="method" href="method.Parameter.get_role.html">get_role</a>
+  
+    <a class="method" href="method.Parameter.get_rsvp.html">get_rsvp</a>
+  
+    <a class="method" href="method.Parameter.get_scheduleagent.html">get_scheduleagent</a>
+  
+    <a class="method current" href="method.Parameter.get_scheduleforcesend.html">get_scheduleforcesend</a>
+  
+    <a class="method" href="method.Parameter.get_schedulestatus.html">get_schedulestatus</a>
+  
+    <a class="method" href="method.Parameter.get_schema.html">get_schema</a>
+  
+    <a class="method" href="method.Parameter.get_sentby.html">get_sentby</a>
+  
+    <a class="method" href="method.Parameter.get_size.html">get_size</a>
+  
+    <a class="method" href="method.Parameter.get_stayinformed.html">get_stayinformed</a>
+  
+    <a class="method" href="method.Parameter.get_substate.html">get_substate</a>
+  
+    <a class="method" href="method.Parameter.get_tzid.html">get_tzid</a>
+  
+    <a class="method" href="method.Parameter.get_value.html">get_value</a>
+  
+    <a class="method" href="method.Parameter.get_x.html">get_x</a>
+  
+    <a class="method" href="method.Parameter.get_xliccomparetype.html">get_xliccomparetype</a>
+  
+    <a class="method" href="method.Parameter.get_xlicerrortype.html">get_xlicerrortype</a>
+  
+    <a class="method" href="method.Parameter.get_xname.html">get_xname</a>
+  
+    <a class="method" href="method.Parameter.get_xvalue.html">get_xvalue</a>
+  
+    <a class="method" href="method.Parameter.has_same_name.html">has_same_name</a>
+  
+    <a class="method" href="method.Parameter.isa.html">isa</a>
+  
+    <a class="method" href="method.Parameter.isa_parameter.html">isa_parameter</a>
+  
+    <a class="method" href="method.Parameter.set_actionparam.html">set_actionparam</a>
+  
+    <a class="method" href="method.Parameter.set_altrep.html">set_altrep</a>
+  
+    <a class="method" href="method.Parameter.set_charset.html">set_charset</a>
+  
+    <a class="method" href="method.Parameter.set_cn.html">set_cn</a>
+  
+    <a class="method" href="method.Parameter.set_cutype.html">set_cutype</a>
+  
+    <a class="method" href="method.Parameter.set_delegatedfrom.html">set_delegatedfrom</a>
+  
+    <a class="method" href="method.Parameter.set_delegatedto.html">set_delegatedto</a>
+  
+    <a class="method" href="method.Parameter.set_derived.html">set_derived</a>
+  
+    <a class="method" href="method.Parameter.set_dir.html">set_dir</a>
+  
+    <a class="method" href="method.Parameter.set_display.html">set_display</a>
+  
+    <a class="method" href="method.Parameter.set_email.html">set_email</a>
+  
+    <a class="method" href="method.Parameter.set_enable.html">set_enable</a>
+  
+    <a class="method" href="method.Parameter.set_encoding.html">set_encoding</a>
+  
+    <a class="method" href="method.Parameter.set_fbtype.html">set_fbtype</a>
+  
+    <a class="method" href="method.Parameter.set_feature.html">set_feature</a>
+  
+    <a class="method" href="method.Parameter.set_filename.html">set_filename</a>
+  
+    <a class="method" href="method.Parameter.set_fmttype.html">set_fmttype</a>
+  
+    <a class="method" href="method.Parameter.set_iana.html">set_iana</a>
+  
+    <a class="method" href="method.Parameter.set_iana_name.html">set_iana_name</a>
+  
+    <a class="method" href="method.Parameter.set_iana_value.html">set_iana_value</a>
+  
+    <a class="method" href="method.Parameter.set_id.html">set_id</a>
+  
+    <a class="method" href="method.Parameter.set_label.html">set_label</a>
+  
+    <a class="method" href="method.Parameter.set_language.html">set_language</a>
+  
+    <a class="method" href="method.Parameter.set_latency.html">set_latency</a>
+  
+    <a class="method" href="method.Parameter.set_local.html">set_local</a>
+  
+    <a class="method" href="method.Parameter.set_localize.html">set_localize</a>
+  
+    <a class="method" href="method.Parameter.set_managedid.html">set_managedid</a>
+  
+    <a class="method" href="method.Parameter.set_member.html">set_member</a>
+  
+    <a class="method" href="method.Parameter.set_modified.html">set_modified</a>
+  
+    <a class="method" href="method.Parameter.set_options.html">set_options</a>
+  
+    <a class="method" href="method.Parameter.set_order.html">set_order</a>
+  
+    <a class="method" href="method.Parameter.set_parent.html">set_parent</a>
+  
+    <a class="method" href="method.Parameter.set_partstat.html">set_partstat</a>
+  
+    <a class="method" href="method.Parameter.set_patchaction.html">set_patchaction</a>
+  
+    <a class="method" href="method.Parameter.set_publiccomment.html">set_publiccomment</a>
+  
+    <a class="method" href="method.Parameter.set_range.html">set_range</a>
+  
+    <a class="method" href="method.Parameter.set_reason.html">set_reason</a>
+  
+    <a class="method" href="method.Parameter.set_related.html">set_related</a>
+  
+    <a class="method" href="method.Parameter.set_reltype.html">set_reltype</a>
+  
+    <a class="method" href="method.Parameter.set_required.html">set_required</a>
+  
+    <a class="method" href="method.Parameter.set_response.html">set_response</a>
+  
+    <a class="method" href="method.Parameter.set_role.html">set_role</a>
+  
+    <a class="method" href="method.Parameter.set_rsvp.html">set_rsvp</a>
+  
+    <a class="method" href="method.Parameter.set_scheduleagent.html">set_scheduleagent</a>
+  
+    <a class="method" href="method.Parameter.set_scheduleforcesend.html">set_scheduleforcesend</a>
+  
+    <a class="method" href="method.Parameter.set_schedulestatus.html">set_schedulestatus</a>
+  
+    <a class="method" href="method.Parameter.set_schema.html">set_schema</a>
+  
+    <a class="method" href="method.Parameter.set_sentby.html">set_sentby</a>
+  
+    <a class="method" href="method.Parameter.set_size.html">set_size</a>
+  
+    <a class="method" href="method.Parameter.set_stayinformed.html">set_stayinformed</a>
+  
+    <a class="method" href="method.Parameter.set_substate.html">set_substate</a>
+  
+    <a class="method" href="method.Parameter.set_tzid.html">set_tzid</a>
+  
+    <a class="method" href="method.Parameter.set_value.html">set_value</a>
+  
+    <a class="method" href="method.Parameter.set_x.html">set_x</a>
+  
+    <a class="method" href="method.Parameter.set_xliccomparetype.html">set_xliccomparetype</a>
+  
+    <a class="method" href="method.Parameter.set_xlicerrortype.html">set_xlicerrortype</a>
+  
+    <a class="method" href="method.Parameter.set_xname.html">set_xname</a>
+  
+    <a class="method" href="method.Parameter.set_xvalue.html">set_xvalue</a>
+  
+  </div>
+</div>
+
+      <div class="section generator">
+        <p>Generated by <a href="https://gitlab.gnome.org/GNOME/gi-docgen">gi-docgen</a> 2023.3</p>
+      </div>
+    </nav>
+
+    <button id="btn-to-top" class="hidden"><span class="up-arrow"></span></button>
+
+    
+<section id="main" class="content">
+  <header>
+    <h3>Method</h3>
+    <h1><a href="index.html">ICalGLib</a><span class="sep"></span><a href="class.Parameter.html">Parameter</a><span class="sep"></span>get_scheduleforcesend</h1>
+  </header>
+
+  <section>
+    <div class="docblock">
+      <p><span class="emblem available">since: 1.0</span></p>
+    </div>
+
+    <div class="declaration toggle-wrapper">
+      <h4 style="display:flex;" id="declaration">
+        Declaration
+        <a class="anchor" href="#declaration"></a>
+        
+        <a class="srclink" title="go to source location" href="https://github.com/libical/libical/blob/master/i-cal-derived-parameter.h#L756">[src]</a>
+        
+      </h4>
+
+      <div class="docblock c-decl">
+        <pre><code><div class="highlight"><pre><span></span><span class="n">ICalParameterScheduleforcesend</span>
+<span class="n">i_cal_parameter_get_scheduleforcesend</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">ICalParameter</span><span class="o">*</span><span class="w"> </span><span class="n">value</span>
+<span class="p">)</span>
+</pre></div>
+</code></pre>
+      </div>
+    </div>
+
+    <div class="description toggle-wrapper">
+      <h4 style="display:flex;" id="description">
+        Description
+        <a class="anchor" href="#description"></a>
+        
+      </h4>
+
+      <div class="docblock">
+        No description available.
+      </div>
+
+      <div class="docblock">
+        
+        <p>Available since: 1.0</p>
+        
+        
+        
+        
+      </div>
+
+      
+    </div>
+
+    
+
+    
+    <div class="return-value toggle-wrapper">
+      <h4 id="return-value">
+        Return value
+        <a href="#return-value" class="anchor"></a>
+      </h4>
+
+      <div class="docblock">
+        <div class="returns">
+          <div class="arg-description">
+            <p><em>Type:</em>&nbsp;<a href="enum.ParameterScheduleforcesend.html"><code>ICalParameterScheduleforcesend</code></a></p>
+            <p><p>The type of the <code>value</code>.</p></p>
+          </div>
+          <div>
+            <table>
+            
+            
+            
+            
+            
+            
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+  </section>
+</section>
+
+
+    
+
+    <section id="search" class="content hidden"></section>
+
+    <footer>
+    
+    </footer>
+  </div>
+</body>
+</html>
