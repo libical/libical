@@ -13,9 +13,23 @@
 
 ''' Test Python bindings for libical components '''
 
+import os
+import sys
+
 import gi
 gi.require_version('ICalGLib', '3.0')
 from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
+
+try:
+    zoneinfodir = os.environ['ZONEINFO_DIRECTORY']
+except KeyError:
+    print("Error: The ZONEINFO_DIRECTORY environment variable isn't set")
+    sys.exit(1)
+if not os.path.isdir(zoneinfodir):
+    print("Error: The ZONEINFO_DIRECTORY environment variable isn't properly set")
+    sys.exit(1)
+ICalGLib.Timezone.set_zone_directory(zoneinfodir)
+ICalGLib.Timezone.set_tzid_prefix("/citadel.org/")
 
 eventStr1 = \
     "BEGIN:VEVENT\n"                                \
