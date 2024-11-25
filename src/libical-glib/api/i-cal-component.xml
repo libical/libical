@@ -472,8 +472,8 @@ static void foreach_tzid_cb(icalparameter *in_param, void *user_data)
 }</declaration>
     <method name="i_cal_component_foreach_tzid" corresponds="CUSTOM" kind="other" since="3.0.5">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be queried"/>
-        <parameter type="ICalComponentForeachTZIDFunc" name="callback" annotation="scope call" comment="The callback function"/>
-        <parameter type="gpointer" name="user_data" annotation="nullable, closure callback" comment="The data for callback function"/>
+        <parameter type="ICalComponentForeachTZIDFunc" name="callback" annotation="scope call, closure user_data" comment="The callback function"/>
+        <parameter type="gpointer" name="user_data" annotation="nullable" comment="The data for callback function"/>
         <comment>Applies the same manipulation on every tzid in #ICalComponent.</comment>
         <custom>    struct ForeachTZIDData data;
     icalcomponent *native_comp;
@@ -514,8 +514,8 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be queried"/>
         <parameter type="ICalTime *" name="start" comment="Ignore timespans before this"/>
         <parameter type="ICalTime *" name="end" comment="Ignore timespans after this"/>
-        <parameter type="ICalComponentForeachRecurrenceFunc" name="callback" annotation="scope call" comment="Function called for each timespan within the range"/>
-        <parameter type="gpointer" name="user_data" annotation="nullable, closure callback" comment="The user data for callback function"/>
+        <parameter type="ICalComponentForeachRecurrenceFunc" name="callback" annotation="scope call, closure user_data" comment="Function called for each timespan within the range"/>
+        <parameter type="gpointer" name="user_data" annotation="nullable" comment="The user data for callback function"/>
         <comment>Cycles through all recurrences of an event. This function will call the specified callback function for once for the base value of DTSTART, and foreach recurring date/time value. It will filter out events that are specified as an EXDATE or an EXRULE.</comment>
         <custom>    struct ForeachRecurrenceData data;
     icalcomponent *native_comp;

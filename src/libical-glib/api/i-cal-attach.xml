@@ -32,7 +32,7 @@ static void unref_g_bytes(char *data, void *user_data)
     g_bytes_unref(bytes);
 }</declaration>
     <method name="i_cal_attach_new_from_bytes" corresponds="CUSTOM" kind="constructor" since="1.0">
-        <parameter type="GBytes *" annotation="transfer full" name="bytes" comment="The #GBytes holding the data used to create the #ICalAttach"/>
+        <parameter type="GBytes *" annotation="transfer full" name="bytes" comment="The GBytes holding the data used to create the #ICalAttach"/>
         <returns type="ICalAttach *" annotation="transfer full" comment="The newly created #ICalAttach" />
         <comment xml:space="preserve">Creates a new #ICalAttach from the data in bytes. Takes a reference of @bytes, increase the reference before calling this function if you with to use it afterward. The stored bytes should be already encoded with used encoding (like base64).</comment>
         <custom>    g_return_val_if_fail (bytes != NULL, NULL);
@@ -54,12 +54,12 @@ static void unref_g_bytes(char *data, void *user_data)
     </method>
     <method name="i_cal_attach_get_url" corresponds="icalattach_get_url" kind="others" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be queried"/>
-        <returns type="const gchar *" annotation="nullable, transfer none" comment="The url component of the @attach. %NULL if it is built from data or there is an error." />
+        <returns type="const gchar *" annotation="nullable, transfer none" comment="The url component of the @attach. NULL if it is built from data or there is an error." />
         <comment xml:space="preserve">Gets the url, if the #ICalAttach is built from the url.</comment>
     </method>
     <method name="i_cal_attach_get_data" corresponds="CUSTOM" kind="others" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be queried"/>
-        <returns type="const gchar *" annotation="nullable, transfer none" comment="The data component of the @attach. %NULL if it is built from url or there is an error." />
+        <returns type="const gchar *" annotation="nullable, transfer none" comment="The data component of the @attach. NULL if it is built from url or there is an error." />
         <comment xml:space="preserve">Gets the data, if the #ICalAttach is built from the data.</comment>
         <custom>    g_return_val_if_fail (I_CAL_IS_ATTACH (attach), NULL);
 

@@ -48,8 +48,8 @@ typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user
     </method>
     <method name="i_cal_parser_parse" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalParser *" name="parser" comment="The parser used to parse the string and output the #ICalComponent"/>
-        <parameter type="ICalParserLineGenFunc" name="func" annotation="scope call" comment="The function used to parse"/>
-        <parameter type="gpointer" name="user_data" annotation="closure" comment="The data given to @func"/>
+        <parameter type="ICalParserLineGenFunc" name="func" annotation="scope call, closure user_data" comment="The function used to parse"/>
+        <parameter type="gpointer" name="user_data" annotation="nullable" comment="The data given to @func"/>
         <returns type="ICalComponent *" annotation="transfer full" comment="The component output by the parser."/>
         <comment xml:space="preserve">icalparser_parse takes a string that holds the text ( in RFC 2445 format ) and returns a pointer to an #ICalComponent. The caller owns the memory. @func is a pointer to a function that returns one content line per invocation.</comment>
         <custom>	g_return_val_if_fail (parser != NULL &amp;&amp; func != NULL, NULL);
@@ -64,8 +64,8 @@ typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user
     </method>
     <method name="i_cal_parser_get_line" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalParser *" name="parser" comment="The parser to be queried"/>
-        <parameter type="ICalParserLineGenFunc" name="func" annotation="scope call" comment="A line generator function"/>
-        <parameter type="gpointer" name="user_data" annotation="closure" comment="The data given to @func"/>
+        <parameter type="ICalParserLineGenFunc" name="func" annotation="scope call, closure user_data" comment="A line generator function"/>
+        <parameter type="gpointer" name="user_data" annotation="nullable" comment="The data given to @func"/>
         <returns type="gchar *" annotation="transfer full" comment="A single iCal content line."/>
         <comment xml:space="preserve">Given a line generator function, returns a single iCal content line.</comment>
         <custom>gchar *line, *linecopy;

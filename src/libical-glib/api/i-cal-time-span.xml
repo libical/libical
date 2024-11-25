@@ -11,7 +11,7 @@
         <parameter type="time_t" name="end" comment="End of the time span"/>
         <parameter type="gboolean" name="is_busy" comment="Whether the time span is busy"/>
         <returns type="ICalTimeSpan *" annotation="transfer full" comment="The newly created #ICalTimeSpan." />
-        <comment xml:space="preserve">Creates a new #ICalTimeSpan. Free it with g_object_unref(), when no longer needed.</comment>
+        <comment xml:space="preserve">Creates a new #ICalTimeSpan. Free it with g_object_unref, when no longer needed.</comment>
         <custom>    struct icaltime_span span;
     span.start = start;
     span.end = end;
@@ -21,7 +21,7 @@
     <method name="i_cal_time_span_clone" corresponds="CUSTOM" kind="constructor" since="3.0.5">
         <parameter type="const ICalTimeSpan *" name="src" comment="A time span to clone"/>
         <returns type="ICalTimeSpan *" annotation="transfer full" comment="The newly created #ICalTimeSpan, clone of @src." />
-        <comment xml:space="preserve">Creates a new #ICalTimeSpan, clone of @src. Free it with g_object_unref(), when no longer needed.</comment>
+        <comment xml:space="preserve">Creates a new #ICalTimeSpan, clone of @src. Free it with g_object_unref, when no longer needed.</comment>
         <custom>    struct icaltime_span *span;
     g_return_val_if_fail(I_CAL_IS_TIME_SPAN((ICalTimeSpan *)src), NULL);
     span = ((struct icaltime_span *)i_cal_object_get_native ((ICalObject *)src));

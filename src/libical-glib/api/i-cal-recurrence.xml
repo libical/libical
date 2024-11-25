@@ -115,7 +115,7 @@
     </method>
     <method name="i_cal_recurrence_encode_month" corresponds="icalrecurrencetype_encode_month" since="3.0.5">
         <parameter type="gint" name="month" comment="The month to be encoded"/>
-        <parameter type="gboolean" name="is_leap" comment="%TRUE, when the month is leap, %FALSE otherwise"/>
+        <parameter type="gboolean" name="is_leap" comment="TRUE, when the month is leap, FALSE otherwise"/>
         <returns type="gshort" comment="Encoded @month and @is_leap"/>
         <comment xml:space="preserve">Encodes the @month and the @is_leap flag into a single value, which can be split by i_cal_recurrence_month_is_leap() and i_cal_recurrence_month_month().</comment>
     </method>

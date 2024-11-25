@@ -44,7 +44,7 @@
     <method name="i_cal_time_new_from_timet_with_zone" corresponds="icaltime_from_timet_with_zone" kind="others" since="1.0">
         <parameter type="const time_t" name="v" comment="The seconds past since epoch time"/>
         <parameter type="gint" name="is_date" comment="Whether it is a date type, 1 if yes, 0 if not"/>
-        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The timezone, or %NULL"/>
+        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The timezone, or NULL"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
         <comment xml:space="preserve">Converts seconds past UNIX epoch to a timetype, using timezones.</comment>
     </method>
@@ -148,7 +148,7 @@
         <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
 	<parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
         <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">Like i_cal_time_compare_tz(), but only use the date parts; accepts timezone.</comment>
+        <comment xml:space="preserve">This converts both times to the given @zone and compares their date components.</comment>
     </method>
     <method name="i_cal_time_adjust" corresponds="icaltime_adjust" since="1.0">
         <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime to be set"/>

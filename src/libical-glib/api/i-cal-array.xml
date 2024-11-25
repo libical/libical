@@ -51,7 +51,7 @@
     </method>
     <method name="i_cal_array_sort" corresponds="CUSTOM" annotation="skip" kind="others" since="1.0">
         <parameter type="ICalArray *" name="array" comment="The #ICalArray to be sorted"/>
-        <parameter type="gint (*compare)" name="(const void *, const void *)" annotation="scope call" comment="FULL: @compare: (scope call): The compare function"/>
+        <parameter type="gint (*compare)" name="(const void *, const void *)" comment="FULL:@compare: The compare function"/>
         <comment xml:space="preserve">Does not work right now. Sorts the @array using the sort function @compare.</comment>
         <custom>	g_return_if_fail (I_CAL_IS_ARRAY (array));
 	g_return_if_fail (array != NULL);

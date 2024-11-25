@@ -38,7 +38,7 @@ set(SOURCEDIRS ${PROJECT_BINARY_DIR}/src/libical-glib)
 
 set(DEPENDENCIES ical-glib)
 
-set(IGNORE_HEADERS libical-glib-private.h)
+set(IGNORE_HEADERS libical-glib-private.h i-cal-forward-declarations.h)
 
 set(extra_ldflags "")
 if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
