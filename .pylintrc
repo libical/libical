@@ -208,8 +208,8 @@ min-public-methods=2
 [EXCEPTIONS]
 
 # Exceptions that will emit a warning when caught.
-overgeneral-exceptions=BaseException,
-                       Exception
+#overgeneral-exceptions=BaseException,
+#                       Exception
 
 
 [FORMAT]
