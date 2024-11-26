@@ -9,13 +9,14 @@
 #
 ###############################################################################
 
-''' Test Python bindings for libical attachments '''
+"""Test Python bindings for libical attachments"""
 
 import gi
-gi.require_version('ICalGLib', '3.0')
-from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
-dummyUrl = "https://people.gnome.org/~engagement/logos/GnomeLogoVertical.svg"
+gi.require_version('ICalGLib', '3.0')
+from gi.repository import ICalGLib  # noqa E402
+
+dummyUrl = 'https://people.gnome.org/~engagement/logos/GnomeLogoVertical.svg'
 dummyData = "It's a super large attachment"
 
 attachUrl = ICalGLib.Attach.new_from_url(dummyUrl)
