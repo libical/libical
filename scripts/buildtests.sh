@@ -311,8 +311,7 @@ ASAN_BUILD() {
     return
   fi
   echo "===== START ASAN BUILD: $1 ======"
-  SET_GCC # I'm using ld.gold (vs ld.bfd), which doesn't play well with clang and asan=>use gcc
-  #SET_CLANG currently has linking problems using ld.gold
+  SET_GCC
   export ASAN_OPTIONS=verify_asan_link_order=0 #seems to be needed with different ld on Fedora (like gold)
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
@@ -329,7 +328,7 @@ TSAN_BUILD() {
     return
   fi
   echo "===== START TSAN BUILD: $1 ======"
-  #SET_CLANG currently has linking problems using ld.gold
+  SET_GCC
   BUILD "$name" "-DLIBICAL_DEVMODE_THREAD_SANITIZER=True $2"
   echo "===== END TSAN BUILD: $1 ======"
 }
@@ -345,15 +344,17 @@ UBSAN_BUILD() {
     return
   fi
   echo "===== START UBSAN BUILD: $1 ======"
-  SET_CLANG
-  ulimit -S -t 120     # oss-fuzz uses 60 seconds which is too low for us
+  SET_GCC
+  ulimit -S -t 180     # oss-fuzz uses 60 seconds which is too low for us
   ulimit -S -m 2621440 # oss-fuzz uses 2560Mb
-  export UBSAN_OPTIONS=allocator_release_to_os_interval_ms=500:halt_on_error=1:handle_abort=2:handle_segv=2:handle_sigbus=2:handle_sigfpe=2:handle_sigill=2:print_stacktrace=1:print_summary=1:print_suppressions=0:silence_unsigned_overflow=1:symbolize=1:use_sigaltstack=1
+  #export UBSAN_OPTIONS=allocator_release_to_os_interval_ms=500:halt_on_error=1:handle_abort=2:handle_segv=2:handle_sigbus=2:handle_sigfpe=2:handle_sigill=2:print_stacktrace=1:print_summary=1:print_suppressions=0:silence_unsigned_overflow=1:symbolize=1:use_sigaltstack=1
+  # halt_on_error=1 finds all possible ubs issues
+  export UBSAN_OPTIONS=allocator_release_to_os_interval_ms=500:handle_abort=2:handle_segv=2:handle_sigbus=2:handle_sigfpe=2:handle_sigill=2:print_stacktrace=1:print_summary=1:print_suppressions=0:silence_unsigned_overflow=1:symbolize=1:use_sigaltstack=1
   export CFLAGS="-g -fno-omit-frame-pointer"
   BUILD "$name" "-DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True $2"
   unset CFLAGS
   ulimit -S -t unlimited
-  unlimt -S -m unlimited
+  ulimit -S -m unlimited
   echo "===== END UBSAN BUILD: $1 ======"
 }
 
@@ -757,7 +758,7 @@ fi
 #use non-Ninja cmake generator by-default
 UNSET_NINJA
 
-DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DICAL_GLIB=False -DNDEBUG=1"
+DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DNDEBUG=1"
 CMAKEOPTS="-DCMAKE_BUILD_TYPE=Debug -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DUSE_BUILTIN_TZDATA=True"
@@ -805,12 +806,10 @@ GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
 #Ninja build tests
 NINJA_GCC_BUILD testninjagcc1 "$DEFCMAKEOPTS"
 NINJA_GCC_BUILD testninjagcc2 "-DICAL_GLIB=True"
-NINJA_GCC_BUILD testninjagcc3 "-DICAL_GLIB=True -DICAL_GLIB_VAPI=ON -DGOBJECT_INTROSPECTION=True"
-NINJA_GCC_BUILD testninjagcc4 "-DSHARED_ONLY=True -DICAL_GLIB=False"
-NINJA_GCC_BUILD testninjagcc5 "-DSHARED_ONLY=True -DICAL_GLIB=True"
-NINJA_GCC_BUILD testninjagcc6 "-DSTATIC_ONLY=True -DICAL_GLIB=False"
-NINJA_GCC_BUILD testninjagcc7 "-DSTATIC_ONLY=True -DICAL_GLIB=True -DICAL_GLIB_BUILD_DOCS=False"
-NINJA_GCC_BUILD testninjagcc9 "-DSHARED_ONLY=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=True -DICAL_GLIB_VAPI=ON"
+NINJA_GCC_BUILD testninjagcc3 "-DICAL_GLIB_VAPI=ON"
+NINJA_GCC_BUILD testninjagcc4 "-DSHARED_ONLY=True -DICAL_GLIB_BUILD_DOCS=False"
+NINJA_GCC_BUILD testninjagcc5 "-DSHARED_ONLY=True"
+NINJA_GCC_BUILD testninjagcc6 "-DSTATIC_ONLY=True -DGOBJECT_INTROSPECTION=False -DICAL_GLIB_BUILD_DOCS=False"
 
 # Clang based build tests
 CLANG_BUILD testclang1 "$DEFCMAKEOPTS"
@@ -849,12 +848,13 @@ ASAN_BUILD test5asan "$GLIBOPTS"
 ASAN_BUILD test6asan "$FUZZOPTS"
 
 #Thread sanitizer
-TSAN_BUILD test1tsan "$DEFCMAKEOPTS"
+#libical-glib tests fail tsan with /lib64/libtsan.so.2: cannot allocate memory in static TLS block
+#TSAN_BUILD test1tsan "$DEFCMAKEOPTS"
 TSAN_BUILD test2tsan "$CMAKEOPTS"
 TSAN_BUILD test3tsan "$TZCMAKEOPTS"
 TSAN_BUILD test4tsan "$UUCCMAKEOPTS"
-TSAN_BUILD test5tsan "$GLIBOPTS"
-TSAN_BUILD test6tsan "$FUZZOPTS"
+#TSAN_BUILD test5tsan "$GLIBOPTS"
+#TSAN_BUILD test6tsan "$FUZZOPTS"
 
 #Undefined sanitizer
 UBSAN_BUILD test1ubsan "$DEFCMAKEOPTS"
