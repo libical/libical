@@ -25,16 +25,16 @@ repos:
   hooks:
   - id: clang-format
     exclude: ^(src/java/|src/Net-ICal-Libical|src/libical/astime.h|src/libical/caldate.c|src/libicalvcal/port.h|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
-- repo: https://github.com/PyCQA/pylint
-  rev: v3.3.1
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  # Ruff version.
+  rev: v0.8.0
   hooks:
-  - id: pylint
-    exclude: ^(.cmake-format.py)
-- repo: https://github.com/hhatto/autopep8
-  rev: v2.3.1
-  hooks:
-  - id: autopep8
-    exclude: ^(.cmake-format.py)
+    # Run the linter.
+    - id: ruff
+      exclude: ^(.cmake-format.py)
+    # Run the formatter.
+    - id: ruff-format
+      exclude: ^(.cmake-format.py)
 - repo: https://github.com/codespell-project/codespell
   rev: v2.3.0
   hooks:

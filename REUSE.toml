@@ -12,7 +12,7 @@ SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
 
 #tool configuration files
 [[annotations]]
-path = ["REUSE.toml", ".clang-format", ".clang-tidy", ".cmake-format.py", ".codespellrc", ".editorconfig", ".dir-locals.el", ".gitattributes", ".gitignore", ".krazy", ".markdownlint.json", ".pre-commit-config.yaml", ".pylintrc", ".pep8", ".github/workflows/*.yml", ".shellcheckrc", "vcpkg.json", "docs/reference/libical-glib/libical-glib.toml.in"]
+path = ["REUSE.toml", ".clang-format", ".clang-tidy", ".cmake-format.py", ".codespellrc", ".editorconfig", ".dir-locals.el", ".gitattributes", ".gitignore", ".krazy", ".markdownlint.json", ".pre-commit-config.yaml", ".ruff.toml", ".github/workflows/*.yml", ".shellcheckrc", "vcpkg.json", "docs/reference/libical-glib/libical-glib.toml.in"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "BSD-3-Clause"

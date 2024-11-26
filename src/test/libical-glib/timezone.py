@@ -9,14 +9,15 @@
 #
 ###############################################################################
 
-''' Test Python bindings for libical timezone '''
+"""Test Python bindings for libical timezone"""
 
 import sys
 import os
 
 import gi
+
 gi.require_version('ICalGLib', '3.0')
-from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
+from gi.repository import ICalGLib  # noqa E402
 
 try:
     zoneinfodir = os.environ['ZONEINFO_DIRECTORY']
@@ -27,13 +28,13 @@ if not os.path.isdir(zoneinfodir):
     print("Error: The ZONEINFO_DIRECTORY environment variable isn't properly set")
     sys.exit(1)
 ICalGLib.Timezone.set_zone_directory(zoneinfodir)
-ICalGLib.Timezone.set_tzid_prefix("/citadel.org/")
+ICalGLib.Timezone.set_tzid_prefix('/citadel.org/')
 
-la = ICalGLib.Timezone.get_builtin_timezone("America/Los_Angeles")
-chicago = ICalGLib.Timezone.get_builtin_timezone("America/Chicago")
-assert la.get_tzid().find("Los_Angeles") != -1
-assert la.get_location() == "America/Los_Angeles"
-assert la.get_tznames() == "PST/PDT"
+la = ICalGLib.Timezone.get_builtin_timezone('America/Los_Angeles')
+chicago = ICalGLib.Timezone.get_builtin_timezone('America/Chicago')
+assert la.get_tzid().find('Los_Angeles') != -1
+assert la.get_location() == 'America/Los_Angeles'
+assert la.get_tznames() == 'PST/PDT'
 
 la_copy = la.copy()
 assert la_copy.get_tzid() == la.get_tzid()
@@ -42,14 +43,14 @@ assert la_copy.get_location() == la.get_location()
 timezones = ICalGLib.Timezone.get_builtin_timezones()
 timezone = ICalGLib.Timezone.array_element_at(timezones, 0)
 if not ICalGLib.Timezone.get_builtin_tzdata():
-    assert timezone.get_display_name() == "Europe/Andorra"
+    assert timezone.get_display_name() == 'Europe/Andorra'
 assert timezones.size() > 0
 
 from_tzid = ICalGLib.Timezone.get_builtin_timezone_from_tzid(la.get_tzid())
-assert from_tzid.get_location() == "America/Los_Angeles"
+assert from_tzid.get_location() == 'America/Los_Angeles'
 
 utc = ICalGLib.Timezone.get_utc_timezone()
-assert utc.get_display_name() == "UTC"
+assert utc.get_display_name() == 'UTC'
 utc2 = ICalGLib.Timezone.get_utc_timezone()
 assert utc == utc2
 

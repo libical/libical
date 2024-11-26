@@ -9,14 +9,15 @@
 #
 ###############################################################################
 
-''' Test Python bindings for libical arrays '''
+"""Test Python bindings for libical arrays"""
 
 import os
 import sys
 
 import gi
+
 gi.require_version('ICalGLib', '3.0')
-from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
+from gi.repository import ICalGLib  # noqa E402
 
 try:
     zoneinfodir = os.environ['ZONEINFO_DIRECTORY']
@@ -27,16 +28,16 @@ if not os.path.isdir(zoneinfodir):
     print("Error: The ZONEINFO_DIRECTORY environment variable isn't properly set")
     sys.exit(1)
 ICalGLib.Timezone.set_zone_directory(zoneinfodir)
-ICalGLib.Timezone.set_tzid_prefix("/citadel.org/")
+ICalGLib.Timezone.set_tzid_prefix('/citadel.org/')
 
 array = ICalGLib.Timezone.array_new()
 
 # TEST APPEND
-zone0 = ICalGLib.Timezone.get_builtin_timezone("Pacific/Midway")
-zone1 = ICalGLib.Timezone.get_builtin_timezone("America/Vancouver")
-zone2 = ICalGLib.Timezone.get_builtin_timezone("Atlantic/Bermuda")
-zone3 = ICalGLib.Timezone.get_builtin_timezone("Africa/Casablanca")
-zone4 = ICalGLib.Timezone.get_builtin_timezone("Asia/Irkutsk")
+zone0 = ICalGLib.Timezone.get_builtin_timezone('Pacific/Midway')
+zone1 = ICalGLib.Timezone.get_builtin_timezone('America/Vancouver')
+zone2 = ICalGLib.Timezone.get_builtin_timezone('Atlantic/Bermuda')
+zone3 = ICalGLib.Timezone.get_builtin_timezone('Africa/Casablanca')
+zone4 = ICalGLib.Timezone.get_builtin_timezone('Asia/Irkutsk')
 
 ICalGLib.Timezone.array_append_from_vtimezone(array, zone0.get_component())
 ICalGLib.Timezone.array_append_from_vtimezone(array, zone1.get_component())
