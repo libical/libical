@@ -9,11 +9,12 @@
 #
 ###############################################################################
 
-''' Test Python bindings for libical value '''
+"""Test Python bindings for libical value"""
 
 import gi
+
 gi.require_version('ICalGLib', '3.0')
-from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
+from gi.repository import ICalGLib  # noqa E402
 
 kind = ICalGLib.ValueKind.ATTACH_VALUE
 value = ICalGLib.Value.new(kind)
@@ -21,7 +22,7 @@ assert value.is_valid() == 1
 assert value.isa() == kind
 assert value.isa_value() == 1
 
-string = "This is a link"
+string = 'This is a link'
 value_from_string = ICalGLib.Value.new_from_string(kind, string)
 assert value_from_string.as_ical_string() == string
 assert value_from_string.is_valid() == 1
@@ -39,35 +40,35 @@ value_b = ICalGLib.Value.new(ICalGLib.ValueKind.ATTACH_VALUE)
 compare_result = ICalGLib.Value.compare(value_a, value_b)
 assert compare_result == ICalGLib.ParameterXliccomparetype.NOTEQUAL
 
-stringA = "a string"
-stringB = "a string"
+stringA = 'a string'
+stringB = 'a string'
 value_a = ICalGLib.Value.new_from_string(kind, stringA)
 value_b = ICalGLib.Value.new_from_string(kind, stringB)
 compare_result = ICalGLib.Value.compare(value_a, value_b)
 assert compare_result == ICalGLib.ParameterXliccomparetype.EQUAL
 
-stringA = "a string"
-stringB = "b string"
+stringA = 'a string'
+stringB = 'b string'
 value_a = ICalGLib.Value.new_from_string(kind, stringA)
 value_b = ICalGLib.Value.new_from_string(kind, stringB)
 compare_result = ICalGLib.Value.compare(value_a, value_b)
 assert compare_result == ICalGLib.ParameterXliccomparetype.NOTEQUAL
 
 kind_string = ICalGLib.Value.kind_to_string(kind)
-assert kind_string == "ATTACH"
+assert kind_string == 'ATTACH'
 converted_kind = ICalGLib.Value.kind_from_string(kind_string)
 assert converted_kind == kind
 
-szText = "This is a text\nand this is a new line"
-afterEncodedSZText = "This is a text\\nand this is a new line"
-beforeDecodedSZText = "This is a text\\\nand this is a new line"
+szText = 'This is a text\nand this is a new line'
+afterEncodedSZText = 'This is a text\\nand this is a new line'
+beforeDecodedSZText = 'This is a text\\\nand this is a new line'
 result = ICalGLib.Value.encode_ical_string(szText)
 assert result == afterEncodedSZText
 
 result = ICalGLib.Value.decode_ical_string(beforeDecodedSZText)
 assert result == szText
 
-szText = "Simple text"
+szText = 'Simple text'
 result = ICalGLib.Value.encode_ical_string(szText)
 assert result == szText
 result = ICalGLib.Value.decode_ical_string(result)

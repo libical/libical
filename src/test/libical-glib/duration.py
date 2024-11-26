@@ -9,15 +9,15 @@
 #
 ###############################################################################
 
-''' Test Python bindings for libical duration '''
+"""Test Python bindings for libical duration"""
 
 import gi
-gi.require_version('ICalGLib', '3.0')
-from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
+gi.require_version('ICalGLib', '3.0')
+from gi.repository import ICalGLib  # noqa E402
 
 length = 1000000000
-badString = "This is a bad string"
+badString = 'This is a bad string'
 
 duration = ICalGLib.Duration.new_from_int(length)
 assert duration.as_int() == length

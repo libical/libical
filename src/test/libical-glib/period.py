@@ -9,13 +9,14 @@
 #
 ###############################################################################
 
-''' Test Python bindings for libical period '''
+"""Test Python bindings for libical period"""
 
 import gi
-gi.require_version('ICalGLib', '3.0')
-from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
 
-string = "19970101T183248Z/19970102T071625Z"
+gi.require_version('ICalGLib', '3.0')
+from gi.repository import ICalGLib  # noqa E402
+
+string = '19970101T183248Z/19970102T071625Z'
 
 period = ICalGLib.Period.new_from_string(string)
 retrievedString = period.as_ical_string()
@@ -47,7 +48,7 @@ assert end.get_second() == 25
 duration = period.get_duration()
 assert duration.as_int() == 0
 
-string = "19970101T182346Z/PT5H30M"
+string = '19970101T182346Z/PT5H30M'
 period = ICalGLib.Period.new_from_string(string)
 retrieved_string = period.as_ical_string()
 assert retrieved_string == string
@@ -69,4 +70,4 @@ assert end.get_minute() == 0
 assert end.get_second() == 0
 
 duration = period.get_duration()
-assert duration.as_ical_string() == "PT5H30M"
+assert duration.as_ical_string() == 'PT5H30M'
