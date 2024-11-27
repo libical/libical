@@ -760,17 +760,30 @@ libical_option(ICAL_BUILD_DOCS "Build documentation" True)
 if(ICAL_BUILD_DOCS)
   libical_option(ICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
   if(ICAL_GLIB_BUILD_DOCS)
+    if(STATIC_ONLY)
+      message(
+        FATAL_ERROR
+          "You are attempting to build the glib docs, "
+          "however that option is not supported when building static libraries only. "
+          "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
+          "if you really want to build with the glib documentation. Alternatively, "
+          "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
+      )
+    endif()
     if(NOT ICAL_GLIB)
       message(
-        FATAL_ERROR "You requested to build the libical-glib documentation but have not enabled libical-glib itself. "
-                    "Please try again also passing -DICAL_GLIB=True to cmake."
+        FATAL_ERROR
+          "You requested to build the libical-glib documentation but have not enabled libical-glib itself. "
+          "Please try again also passing -DICAL_GLIB=True to cmake. Alternatively, "
+          "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
     if(NOT GOBJECT_INTROSPECTION)
       message(
         FATAL_ERROR
           "You requested to build the libical-glib documentation but have not enabled the GObject Introspection. "
-          "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake."
+          "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake. Alternatively, "
+          "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
     include(GIDocgen)
