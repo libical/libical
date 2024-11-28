@@ -27,6 +27,8 @@
 #include "icalproperty_cxx.h"
 #endif
 
+using namespace LibICal;
+
 /*
  * Class:     net_cp_jlibical_VComponent
  * Method:    as_ical_string
@@ -41,14 +43,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_as_1ical_1string
 
         if (cObj != NULL)
         {
-                char* icalStr = cObj->as_ical_string();
-
-                if (icalStr == NULL)
-                {
-                        icalStr = "";
-                }
-
-                result = env->NewStringUTF(icalStr);
+                auto icalStr = cObj->as_ical_string();
+                result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
         }
 
         return(result);
@@ -428,7 +424,6 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtstart
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1dtstart
   (JNIEnv *env, jobject jobj, jobject dtstart)
 {
-        jobject result = 0;
         // get the VComponent c++ object from jobj
         VComponent* cObj = getSubjectAsVComponent(env,jobj,JLIBICAL_ERR_CLIENT_INTERNAL);
 
@@ -475,7 +470,6 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtend
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1dtend
   (JNIEnv *env, jobject jobj, jobject dtend)
 {
-        jobject result = 0;
         // get the VComponent c++ object from jobj
         VComponent* cObj = getSubjectAsVComponent(env,jobj,JLIBICAL_ERR_CLIENT_INTERNAL);
 
@@ -522,7 +516,6 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1duration
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1duration
   (JNIEnv *env, jobject jobj, jobject duration)
 {
-        jobject result = 0;
         // get the VComponent c++ object from jobj
         VComponent* cObj = getSubjectAsVComponent(env,jobj,JLIBICAL_ERR_CLIENT_INTERNAL);
 
@@ -585,14 +578,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1summary
 
         if (cObj != NULL)
         {
-                char* icalStr = cObj->get_summary();
-
-                if (icalStr == NULL)
-                {
-                        icalStr = "";
-                }
-
-                result = env->NewStringUTF(icalStr);
+                auto icalStr = cObj->get_summary();
+                result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
         }
 
         return(result);
@@ -612,7 +599,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1summary
         {
                 const char* szTemp = env->GetStringUTFChars(str,NULL);
 
-                cObj->set_summary((char*)szTemp);
+                cObj->set_summary(szTemp);
                 env->ReleaseStringUTFChars(str,szTemp);
         }
 }
@@ -676,14 +663,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1location
 
         if (cObj != NULL)
         {
-                char* icalStr = cObj->get_location();
-
-                if (icalStr == NULL)
-                {
-                        icalStr = "";
-                }
-
-                result = env->NewStringUTF(icalStr);
+                auto icalStr = cObj->get_location();
+                result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
         }
 
         return(result);
@@ -721,14 +702,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1description
 
         if (cObj != NULL)
         {
-                char* icalStr = cObj->get_description();
-
-                if (icalStr == NULL)
-                {
-                        icalStr = "";
-                }
-
-                result = env->NewStringUTF(icalStr);
+                auto icalStr = cObj->get_description();
+                result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
         }
 
         return(result);
@@ -746,9 +721,9 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1description
 
         if (cObj != NULL)
         {
-                const char* szTemp = env->GetStringUTFChars(str,NULL);
+                auto szTemp = env->GetStringUTFChars(str,NULL);
 
-                cObj->set_summary((char*)szTemp);
+                cObj->set_summary(szTemp);
                 env->ReleaseStringUTFChars(str,szTemp);
         }
 }
@@ -765,14 +740,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1uid
 
         if (cObj != NULL)
         {
-                char* icalStr = cObj->get_uid();
-
-                if (icalStr == NULL)
-                {
-                        icalStr = "";
-                }
-
-                result = env->NewStringUTF(icalStr);
+                auto icalStr = cObj->get_uid();
+                result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
         }
 
         return(result);
@@ -896,14 +865,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1relcalid
 
         if (cObj != NULL)
         {
-                char* icalStr = cObj->get_relcalid();
-
-                if (icalStr == NULL)
-                {
-                        icalStr = "";
-                }
-
-                result = env->NewStringUTF(icalStr);
+                auto icalStr = cObj->get_relcalid();
+                result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
         }
 
         return(result);
@@ -941,7 +904,6 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1recurrenceid
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1recurrenceid
   (JNIEnv *env, jobject jobj, jobject recurrenceid)
 {
-        jobject result = 0;
         // get the VComponent c++ object from jobj
         VComponent* cObj = getSubjectAsVComponent(env,jobj,JLIBICAL_ERR_CLIENT_INTERNAL);
 

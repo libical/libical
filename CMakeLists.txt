@@ -10,6 +10,10 @@
 #  Build the C++ bindings.
 #  Default=true
 #
+# -DLIBICAL_JAVA_BINDINGS=[true|false]
+#  Build the Java bindings.
+#  Default=true
+#
 # -DICAL_ERRORS_ARE_FATAL=[true|false]
 #  Set to make icalerror_* calls abort instead of internally signaling an error
 #  Default=false
@@ -247,6 +251,34 @@ add_feature_info(
   "Option WITH_CXX_BINDINGS"
   WITH_CXX_BINDINGS
   "build the C++ bindings. Requires a C++ compiler"
+)
+
+libical_option(LIBICAL_JAVA_BINDINGS "Build the Java bindings. Requires java compiler" True)
+if(LIBICAL_JAVA_BINDINGS)
+  enable_language(Java)
+  if(NOT CMAKE_CXX_COMPILER)
+    message(
+      FATAL_ERROR
+      "Building the Java bindings is not possible since a C++ compiler could not be found. "
+      "Please install a C++ compiler and try again. "
+      "Otherwise, disable Java binding generation using the -DLIBICAL_JAVA_BINDINGS=False CMake option."
+    )
+  endif()
+  find_package(Java)
+  if(NOT Java_FOUND)
+    message(
+      FATAL_ERROR
+      "Building the Java bindings is not possible since a java compiler could not be found. "
+      "You might try setting the JAVA_HOME environment variable to help CMake locate java. "
+      "Otherwise, disable Java binding generation using the -DLIBICAL_JAVA_BINDINGS=False CMake option."
+    )
+    set(LIBICAL_JAVA_BINDINGS False)
+  endif()
+endif()
+add_feature_info(
+  "Option LIBICAL_JAVA_BINDINGS"
+  LIBICAL_JAVA_BINDINGS
+  "build the Java bindings. Requires a java compiler"
 )
 
 libical_option(STATIC_ONLY "Build static libraries only." False)
