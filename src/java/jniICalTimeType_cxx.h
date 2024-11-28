@@ -20,7 +20,7 @@ extern "C" {
 
 #include "ical.h"
 
-static void initICalTimeTypeFieldIDs(JNIEnv* env, jclass clazz);
+[[maybe_unused]] static void initICalTimeTypeFieldIDs(JNIEnv* env, jclass clazz);
 
 void  jni_SetYear_in_ICalTimeType(struct ICalTimeType* __ICalTimeType_, JNIEnv *env, jobject thisICalTimeType);
 void jni_GetYear_from_ICalTimeType(struct ICalTimeType* __ICalTimeType_, JNIEnv *env, jobject thisICalTimeType);
