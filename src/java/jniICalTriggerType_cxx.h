@@ -21,7 +21,7 @@ extern "C" {
 
 #include "ical.h"
 
-static void initICalTriggerTypeFieldIDs(JNIEnv* env, jclass clazz);
+[[maybe_unused]] static void initICalTriggerTypeFieldIDs(JNIEnv* env, jclass clazz);
 
 void  jni_SetTime_in_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
 void jni_GetTime_from_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
