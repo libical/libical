@@ -19,7 +19,7 @@ extern "C" {
 
 #include "ical.h"
 
-static void initICalRecurrenceTypeFieldIDs(JNIEnv* env, jclass clazz);
+[[maybe_unused]] static void initICalRecurrenceTypeFieldIDs(JNIEnv* env, jclass clazz);
 
 void  jni_SetUntil_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType);
 void jni_GetUntil_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType);

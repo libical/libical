@@ -15,10 +15,14 @@
 #include <jni.h>
 #endif
 
+namespace LibICal
+{
 class VComponent;
 class ICalProperty;
 class ICalValue;
 class ICalParameter;
+}
+
 struct icaltimetype;
 struct icaltriggertype;
 struct icaldurationtype;
@@ -30,10 +34,10 @@ void* getCObjectPtr(JNIEnv *env, jobject anObj);
 void setCObjectPtr(JNIEnv *env, jobject anObj, void* val);
 
 // type-safe getters
-VComponent* getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType);
-ICalProperty* getSubjectAsICalProperty(JNIEnv *env, jobject surrogateProperty, int exceptionType);
-ICalValue* getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int exceptionType);
-ICalParameter* getSubjectAsICalParameter(JNIEnv *env, jobject surrogateParameter, int exceptionType);
+LibICal::VComponent* getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType);
+LibICal::ICalProperty* getSubjectAsICalProperty(JNIEnv *env, jobject surrogateProperty, int exceptionType);
+LibICal::ICalValue* getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int exceptionType);
+LibICal::ICalParameter* getSubjectAsICalParameter(JNIEnv *env, jobject surrogateParameter, int exceptionType);
 
 bool copyObjToicaltimetype(JNIEnv *env, jobject src, icaltimetype* dest);
 bool copyObjToicaltriggertype(JNIEnv *env, jobject src, icaltriggertype* dest);
@@ -45,10 +49,10 @@ bool copyObjToicalperiodtype(JNIEnv *env, jobject src, icalperiodtype* dest);
 void throwException( JNIEnv *env, int cpErr );
 
 // create objects
-jobject createNewVComponentSurrogate(JNIEnv *env, VComponent* subject);
-jobject createNewICalPropertySurrogate(JNIEnv *env, ICalProperty* subject);
-jobject createNewICalValueSurrogate(JNIEnv *env, ICalValue* subject);
-jobject createNewICalParameterSurrogate(JNIEnv *env, ICalParameter* subject);
+jobject createNewVComponentSurrogate(JNIEnv *env, LibICal::VComponent* subject);
+jobject createNewICalPropertySurrogate(JNIEnv *env, LibICal::ICalProperty* subject);
+jobject createNewICalValueSurrogate(JNIEnv *env, LibICal::ICalValue* subject);
+jobject createNewICalParameterSurrogate(JNIEnv *env, LibICal::ICalParameter* subject);
 
 jobject createNewICalTimeType(JNIEnv *env, icaltimetype* source);
 jobject createNewICalTriggerType(JNIEnv *env, icaltriggertype* source);
