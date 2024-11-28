@@ -114,191 +114,128 @@ void jni_GetInterval_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRe
 
 void  jni_SetBy_second_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_second_FID);
-    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,61, (jshort*)&(__ICalRecurrenceType_->by_second[0]));
+    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,61, &__ICalRecurrenceType_->by->data[ICAL_BY_SECOND]);
 }
 
 void jni_GetBy_second_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    jboolean isCopy;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_second_FID);
-    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,61, (jshort*)&(__ICalRecurrenceType_->by_second[0]));
+    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,61, &__ICalRecurrenceType_->by->data[ICAL_BY_SECOND]);
 }
 
 void  jni_SetBy_minute_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_minute_FID);
-    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,61, (jshort*)&(__ICalRecurrenceType_->by_minute[0]));
+    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,61, &__ICalRecurrenceType_->by->data[ICAL_BY_MINUTE]);
 }
 
 void jni_GetBy_minute_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    jboolean isCopy;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_minute_FID);
-    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,61, (jshort*)&(__ICalRecurrenceType_->by_minute[0]));
+    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,61, &__ICalRecurrenceType_->by->data[ICAL_BY_MINUTE]);
 }
 
 void  jni_SetBy_hour_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_hour_FID);
-    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,25, (jshort*)&(__ICalRecurrenceType_->by_hour[0]));
+    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,25, &__ICalRecurrenceType_->by->data[ICAL_BY_HOUR]);
 }
 
 void jni_GetBy_hour_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    jboolean isCopy;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_hour_FID);
-    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,25, (jshort*)&(__ICalRecurrenceType_->by_hour[0]));
+    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,25, &__ICalRecurrenceType_->by->data[ICAL_BY_HOUR]);
 }
 
 void  jni_SetBy_day_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_day_FID);
-    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,364, (jshort*)&(__ICalRecurrenceType_->by_day[0]));
+    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,364, &__ICalRecurrenceType_->by->data[ICAL_BY_DAY]);
 }
 
 void jni_GetBy_day_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    jboolean isCopy;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_day_FID);
-    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,364, (jshort*)&(__ICalRecurrenceType_->by_day[0]));
+    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,364, &__ICalRecurrenceType_->by->data[ICAL_BY_DAY]);
 }
 
 void  jni_SetBy_month_day_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_month_day_FID);
-    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,32, (jshort*)&(__ICalRecurrenceType_->by_month_day[0]));
+    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,32, &__ICalRecurrenceType_->by->data[ICAL_BY_MONTH_DAY]);
 }
 
 void jni_GetBy_month_day_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    jboolean isCopy;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_month_day_FID);
-    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,32, (jshort*)&(__ICalRecurrenceType_->by_month_day[0]));
+    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,32, &__ICalRecurrenceType_->by->data[ICAL_BY_MONTH_DAY]);
 }
 
 void  jni_SetBy_year_day_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_year_day_FID);
-    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,367, (jshort*)&(__ICalRecurrenceType_->by_year_day[0]));
+    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,367, &__ICalRecurrenceType_->by->data[ICAL_BY_YEAR_DAY]);
 }
 
 void jni_GetBy_year_day_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    jboolean isCopy;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_year_day_FID);
-    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,367, (jshort*)&(__ICalRecurrenceType_->by_year_day[0]));
+    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,367, &__ICalRecurrenceType_->by->data[ICAL_BY_YEAR_DAY]);
 }
 
 void  jni_SetBy_week_no_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_week_no_FID);
-    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,54, (jshort*)&(__ICalRecurrenceType_->by_week_no[0]));
+    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,54, &__ICalRecurrenceType_->by->data[ICAL_BY_WEEK_NO]);
 }
 
 void jni_GetBy_week_no_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    jboolean isCopy;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_week_no_FID);
-    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,54, (jshort*)&(__ICalRecurrenceType_->by_week_no[0]));
+    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,54, &__ICalRecurrenceType_->by->data[ICAL_BY_WEEK_NO]);
 }
 
 void  jni_SetBy_month_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_month_FID);
-    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,13, (jshort*)&(__ICalRecurrenceType_->by_month[0]));
+    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,13, &__ICalRecurrenceType_->by->data[ICAL_BY_MONTH]);
 }
 
 void jni_GetBy_month_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    jboolean isCopy;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_month_FID);
-    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,13, (jshort*)&(__ICalRecurrenceType_->by_month[0]));
+    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,13, &__ICalRecurrenceType_->by->data[ICAL_BY_MONTH]);
 }
 
 void  jni_SetBy_set_pos_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_set_pos_FID);
-    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,367, (jshort*)&(__ICalRecurrenceType_->by_set_pos[0]));
+    env->SetShortArrayRegion((jshortArray)lcl_jobjA0, 0,367, &__ICalRecurrenceType_->by->data[ICAL_BY_SET_POS]);
 }
 
 void jni_GetBy_set_pos_from_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv *env, jobject thisICalRecurrenceType)
 {
-    jclass  elem_clazz;
-    jboolean isCopy;
-    int ix0;
-    jobject lcl_jobj0;
     jarray lcl_jobjA0;
     lcl_jobjA0 = (jarray) env->GetObjectField(thisICalRecurrenceType, ICalRecurrenceType_By_set_pos_FID);
-    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,367, (jshort*)&(__ICalRecurrenceType_->by_set_pos[0]));
+    env->GetShortArrayRegion((jshortArray)lcl_jobjA0, 0,367, &__ICalRecurrenceType_->by->data[ICAL_BY_SET_POS]);
 }
 void jni_SetAll_in_ICalRecurrenceType(struct ICalRecurrenceType* __ICalRecurrenceType_, JNIEnv* env, jobject thisICalRecurrenceType)
 {

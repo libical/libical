@@ -1,2 +1,4 @@
 book
 precommit.out
+/build/
+/src/java/build/
