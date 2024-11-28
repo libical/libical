@@ -3,6 +3,23 @@
 
 ########### next target ###############
 
+if(NOT DEFINED ENV{JAVA_HOME} OR "$ENV{JAVA_HOME}" STREQUAL "")
+    message(FATAL_ERROR "JAVA_HOME environment variable is not set")
+endif()
+
+find_package(Java REQUIRED)
+include(UseJava)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(JNI_PLATFORM "linux")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(JNI_PLATFORM "darwin")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(JNI_PLATFORM "win32")
+else()
+    message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
+endif()
+
 set(ical_jni_LIB_SRCS
     jlibical_consts_cxx.h
     jlibical_utils_cxx.cpp
@@ -32,14 +49,40 @@ add_library(
   ${LIBRARY_TYPE} ${ical_jni_LIB_SRCS}
 )
 
+target_include_directories(
+  ical_jni
+  PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/libical
+    ${CMAKE_BINARY_DIR}/src/libical
+    $ENV{JAVA_HOME}/include
+    $ENV{JAVA_HOME}/include/${JNI_PLATFORM}
+)
+
 target_link_libraries(
   ical_jni ical_cxx
 )
+
 if(NOT ANDROID)
   set_target_properties(
     ical_jni PROPERTIES VERSION ${LIBICAL_LIB_VERSION_STRING} SOVERSION ${LIBICAL_LIB_MAJOR_VERSION}
   )
 endif()
+
+file(GLOB JAVA_SOURCES ${CMAKE_SOURCE_DIR}/src/java/*.java)
+
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/manifest.txt
+    "Manifest-Version: 1.0\n"
+    "Created-By: CMake\n"
+    "Implementation-Title: libical Java Bindings\n"
+)
+
+add_jar(libical_jar
+    SOURCES ${JAVA_SOURCES}
+    OUTPUT_NAME libical
+    MANIFEST ${CMAKE_CURRENT_BINARY_DIR}/manifest.txt
+    GENERATE_NATIVE_HEADERS ical_jni_headers  # Optional: if you need JNI headers
+)
+
 install(
   TARGETS ical_jni
   EXPORT icalTargets
@@ -50,9 +93,9 @@ install(
 
 install(
   FILES
-  DESTINATION /include
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/include
 )
 install(
-  FILES libical.jar
-  DESTINATION /share
+  FILES ${CMAKE_BINARY_DIR}/src/java/libical.jar
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/share
 )
