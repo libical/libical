@@ -108,10 +108,10 @@ SET_BDIR() {
 CHECK_WARNINGS() {
   set +e
   declare -i numIssues
-  if (test -z "$3"); then
-    numIssues=$(grep "$2" <"$1" | sort | uniq | wc -l | awk '{print $1}')
-  else
+  if (test -n "$3"); then
     numIssues=$(grep "$2" <"$1" | grep -v "$3" | sort | uniq | wc -l | awk '{print $1}')
+  else
+    numIssues=$(grep "$2" <"$1" | sort | uniq | wc -l | awk '{print $1}')
   fi
   if (test $numIssues -gt 0); then
     echo "EXITING. $numIssues warnings encountered"
@@ -130,7 +130,7 @@ CHECK_WARNINGS() {
 # print warnings found in the compile-stage output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='\(i-cal-object\.c\|libical-glib-scan\.c\|no[[:space:]]link[[:space:]]for:\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|G_ADD_PRIVATE\|g_type_class_add_private.*is[[:space:]]deprecated\|g-ir-scanner:\|/gobject/gtype\.h\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|U_PLATFORM_HAS_WINUWP_API\|const[[:space:]]DBT\)'
+  whitelist='g-ir-scanner:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
@@ -145,8 +145,7 @@ CPPCHECK_WARNINGS() {
 # print warnings find in the clang-tidy output
 # $1 = file with the clang-tidy output
 TIDY_WARNINGS() {
-  #whitelist='\(Value[[:space:]]descriptions\|unused[[:space:]]declarations\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|modernize-\|cppcoreguidelines-pro-type-const-cast\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-type-reinterpret-cast\|cppcoreguidelines-owning-memory\|fuchsia.*\|hicpp-use-auto\|hicpp-no-malloc\|hicpp-use-nullptr\|hicpp-exception-baseclass\|hicpp-vararg\|cppcoreguidelines-pro-type-vararg\|cppcoreguidelines-pro-bounds-pointer-arithmetic\|google-build-using-namespace\|llvm-include-order\|hicpp-use-equals-default\|cppcoreguidelines-no-malloc\|g_type_class_add_private.*is[[:space:]]deprecated\)'
-  whitelist='\(no[[:space:]]link[[:space:]]for:\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|G_ADD_PRIVATE\|g_type_class_add_private.*is[[:space:]]deprecated\|g-ir-scanner:\|clang.*argument[[:space:]]unused[[:space:]]during[[:space:]]compilation\|libical-glib-scan\.c\)'
+  whitelist='g-ir-scanner:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
@@ -154,7 +153,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='\(no[[:space:]]link[[:space:]]for:\|g_type_class_add_private.*is[[:space:]]deprecated\|libical-glib-scan\.c\|/i-cal-object\.c\|/vcc\.c\|/vobject\.c\|/icalsslexer\.c\|Value[[:space:]]descriptions\|unused[[:space:]]declarations\|icalerror.*Dereference[[:space:]]of[[:space:]]null[[:space:]]pointer\|G_ADD_PRIVATE\|g-ir-scanner:\)'
+  whitelist='/vcc\.c\|/vobject\.c\|libical-glib-scan\.c\|Value[[:space:]]descriptions[[:space:]]\|g-ir-scanner:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
