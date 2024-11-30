@@ -52,8 +52,7 @@ struct icalparser_impl {
  */
 static void strstriplt(char *buf)
 {
-    size_t len;
-    int a;
+    size_t len, a;
 
     if (buf == NULL) {
         return;
@@ -156,15 +155,10 @@ static char *parser_get_next_char(char c, char *str, int qm)
 /** Makes a new tmp buffer out of a substring. */
 static char *make_segment(char *start, char *end)
 {
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstringop-truncation"
-#pragma GCC diagnostic ignored "-Wstringop-overflow"
-#endif
     char *buf, *tmp;
-    ptrdiff_t size = (ptrdiff_t)(end - start);
+    size_t size = (size_t)(ptrdiff_t)(end - start);
 
-    buf = icalmemory_new_buffer((size_t)(size + 1));
+    buf = icalmemory_new_buffer(size + 1);
     strncpy(buf, start, size);
     *(buf + size) = 0;
 
@@ -175,9 +169,6 @@ static char *make_segment(char *start, char *end)
     }
 
     return buf;
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic pop
-#endif
 }
 
 static char *parser_get_prop_name(char *line, char **end)
@@ -255,7 +246,7 @@ static bool parser_get_param_name_stack(char *line, char *name, size_t name_leng
         return false;
     }
 
-    requested_name_length = (ptrdiff_t)(next - line);
+    requested_name_length = (size_t)(ptrdiff_t)(next - line);
 
     /* Figure out what range of line contains the value (everything after the equals sign) */
     next++;
@@ -270,7 +261,7 @@ static bool parser_get_param_name_stack(char *line, char *name, size_t name_leng
             return false;
         }
 
-        requested_value_length = (ptrdiff_t)(end_quote - next);
+        requested_value_length = (size_t)(ptrdiff_t)(end_quote - next);
     } else {
         requested_value_length = strlen(next);
     }

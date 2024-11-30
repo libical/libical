@@ -190,12 +190,12 @@ gchar *get_upper_camel_from_lower_snake(const gchar *lowerSnake)
 
     buffer = g_new(gchar, BUFFER_SIZE);
     memset(buffer, 0, BUFFER_SIZE);
-    buffer[0] = toupper(lowerSnake[0]);
+    buffer[0] = (gchar)toupper(lowerSnake[0]);
     buffer[1] = '\0';
     for (i = 1; i < (guint)strlen(lowerSnake); i++) {
         if (lowerSnake[i] == '_') {
             len = (guint)strlen(buffer);
-            buffer[len] = toupper(lowerSnake[++i]);
+            buffer[len] = (gchar)toupper(lowerSnake[++i]);
             buffer[len + 1] = '\0';
         } else {
             len = (guint)strlen(buffer);
@@ -229,7 +229,7 @@ gchar *get_upper_snake_from_lower_snake(const gchar *lowerSnake)
             ret[i] = '_';
             ret[i + 1] = '\0';
         } else {
-            ret[i] = toupper(lowerSnake[i]);
+            ret[i] = (gchar)toupper(lowerSnake[i]);
             ret[i + 1] = '\0';
         }
     }
@@ -271,11 +271,11 @@ gchar *get_lower_snake_from_upper_camel(const gchar *upperCamel)
         if (isupper((int)upperCamel[i]) && i != 0) {
             len = (guint)strlen(buffer);
             buffer[len] = '_';
-            buffer[len + 1] = tolower(upperCamel[i]);
+            buffer[len + 1] = (gchar)tolower(upperCamel[i]);
             buffer[len + 2] = '\0';
         } else {
             len = (guint)strlen(buffer);
-            buffer[len] = tolower(upperCamel[i]);
+            buffer[len] = (gchar)tolower(upperCamel[i]);
             buffer[len + 1] = '\0';
         }
     }
@@ -835,10 +835,10 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                         --count;
                         last = '\0';
                     } else {
-                        last = c;
+                        last = (gchar)c;
                     }
                     len = (gint)strlen(buffer);
-                    buffer[len] = c;
+                    buffer[len] = (gchar)c;
                     buffer[len + 1] = '\0';
                 }
                 if (strlen(buffer) > 0) {
@@ -848,7 +848,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
             } else {
                 while (!feof(in) && !ferror(in) && (c = fgetc(in)) != '}') {
                     len = (gint)strlen(buffer);
-                    buffer[len] = c;
+                    buffer[len] = (gchar)c;
                     buffer[len + 1] = '\0';
                 }
 
@@ -1126,7 +1126,7 @@ void generate_forward_declarations_header_file(GList *structures)
 
             while (!feof(in) && !ferror(in) && (c = fgetc(in)) != '}') {
                 len = (gint)strlen(buffer);
-                buffer[len] = c;
+                buffer[len] = (gchar)c;
                 buffer[len + 1] = '\0';
             }
 
@@ -1351,7 +1351,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
 
                     while ((c = expression[++iter]) != '}') {
                         len = (gint)strlen(var);
-                        var[len] = c;
+                        var[len] = (gchar)c;
                         var[len + 1] = '\0';
                     }
 
@@ -2432,7 +2432,7 @@ void generate_header_header_file(GList *structures)
 
             while (!feof(in) && !ferror(in) && (c = fgetc(in)) != '}') {
                 len = (gint)strlen(buffer);
-                buffer[len] = c;
+                buffer[len] = (gchar)c;
                 buffer[len + 1] = '\0';
             }
 

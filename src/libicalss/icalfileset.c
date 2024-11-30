@@ -85,7 +85,7 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
         return 0;
     }
 
-    fset->fd = open(fset->path, flags, mode);
+    fset->fd = open(fset->path, flags, (mode_t)mode);
 
     if (fset->fd < 0) {
         icalerror_set_errno(ICAL_FILE_ERROR);
@@ -373,7 +373,7 @@ icalerrorenum icalfileset_commit(icalset *set)
         }
 
         icalmemory_free_buffer(str);
-        write_size += sz;
+        write_size += (size_t)sz;
     }
 
     fset->changed = 0;

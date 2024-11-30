@@ -246,11 +246,11 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
 
 int icaldurationtype_as_int(struct icaldurationtype dur)
 {
-    return (int)((dur.seconds +
-                  60 * (dur.minutes +
-                        60 * (dur.hours +
-                              24 * (dur.days +
-                                    7 * dur.weeks)))) *
+    return (int)(((int)dur.seconds +
+                  60 * ((int)dur.minutes +
+                        60 * ((int)dur.hours +
+                              24 * ((int)dur.days +
+                                    7 * (int)dur.weeks)))) *
                  (dur.is_neg == 1 ? -1 : 1));
 }
 
@@ -296,17 +296,17 @@ bool icaldurationtype_is_bad_duration(struct icaldurationtype d)
 struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype d)
 {
     if (!d.is_neg) {
-        t.second += d.seconds;
-        t.minute += d.minutes;
-        t.hour += d.hours;
-        t.day += d.days;
-        t.day += d.weeks * 7;
+        t.second += (int)d.seconds;
+        t.minute += (int)d.minutes;
+        t.hour += (int)d.hours;
+        t.day += (int)d.days;
+        t.day += (int)(d.weeks * 7);
     } else {
-        t.second -= d.seconds;
-        t.minute -= d.minutes;
-        t.hour -= d.hours;
-        t.day -= d.days;
-        t.day -= d.weeks * 7;
+        t.second -= (int)d.seconds;
+        t.minute -= (int)d.minutes;
+        t.hour -= (int)d.hours;
+        t.day -= (int)d.days;
+        t.day -= (int)(d.weeks * 7);
     }
 
     t = icaltime_normalize(t);

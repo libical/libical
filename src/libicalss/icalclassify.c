@@ -42,7 +42,7 @@ char *icalclassify_lowercase(const char *str)
 
     xnew = strdup(str);
     for (p = xnew; *p != 0; p++) {
-        *p = tolower((int)*p);
+        *p = (char)tolower((int)*p);
     }
 
     return xnew;

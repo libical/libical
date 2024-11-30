@@ -144,7 +144,7 @@ int main(void)
         }
 
         printf("\r%lu %% done",
-               (zz >= 0 ? zz : 0) * 100 / (unsigned long)builtin_timezones->num_elements);
+               (zz >= 0 ? (unsigned long)zz : 0) * 100 / (unsigned long)builtin_timezones->num_elements);
         fflush(stdout);
     }
 

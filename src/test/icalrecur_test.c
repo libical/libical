@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
 
             if (!ritr) {
                 snprintf(&actual_instances[actual_instances_len],
-                         sizeof(actual_instances) - actual_instances_len,
+                         sizeof(actual_instances) - (size_t)actual_instances_len,
                          " *** %s", icalerror_strerror(icalerrno));
             } else {
                 if (r.start_at[0]) {
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
                      !icaltime_is_null_time(next);
                      next = icalrecur_iterator_next(ritr)) {
                     actual_instances_len += snprintf(&actual_instances[actual_instances_len],
-                                                     sizeof(actual_instances) - actual_instances_len,
+                                                     sizeof(actual_instances) - (size_t)actual_instances_len,
                                                      "%s%s", sep, icaltime_as_ical_string(next));
                     sep = ",";
                 }
@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
                      !icaltime_is_null_time(next);
                      next = icalrecur_iterator_prev(ritr)) {
                     actual_instances_len += snprintf(&actual_instances[actual_instances_len],
-                                                     sizeof(actual_instances) - actual_instances_len,
+                                                     sizeof(actual_instances) - (size_t)actual_instances_len,
                                                      "%s%s", sep, icaltime_as_ical_string(next));
                     sep = ",";
                 }

@@ -860,7 +860,7 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
     zone_change = icalarray_element_at(zone->changes, change_num);
     step = 1;
     found_change = 0;
-    change_num_to_use = -1;
+    change_num_to_use = (size_t)-1; // invalid on purpose
     for (;;) {
         /* Copy the change, so we can adjust it. */
         tmp_change = *zone_change;
@@ -909,7 +909,7 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
             return tmp_change.prev_utc_offset;
         }
 
-        change_num += step;
+        change_num += (size_t)step;
 
         if (change_num >= zone->changes->num_elements)
             break;
@@ -1014,7 +1014,7 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
     zone_change = icalarray_element_at(zone->changes, change_num);
     step = 1;
     found_change = 0;
-    change_num_to_use = -1;
+    change_num_to_use = (size_t)-1; // invalid on purpose
     for (;;) {
         /* Copy the change and adjust it to UTC. */
         tmp_change = *zone_change;
@@ -1049,7 +1049,7 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
             return tmp_change.prev_utc_offset;
         }
 
-        change_num += step;
+        change_num += (size_t)step;
 
         if (change_num >= zone->changes->num_elements)
             break;
@@ -1599,7 +1599,7 @@ static bool fetch_lat_long_from_string(const char *str,
     while (*sptr != '\t' && *sptr != '\0') {
         sptr++;
     }
-    len = (ptrdiff_t)(sptr - temp);
+    len = (size_t)(ptrdiff_t)(sptr - temp);
     lat = (char *)icalmemory_new_buffer(len + 1);
     memset(lat, '\0', len + 1);
     strncpy(lat, temp, len);
@@ -1611,7 +1611,7 @@ static bool fetch_lat_long_from_string(const char *str,
     while (!isspace((int)(*sptr)) && (*sptr != '\0')) {
         sptr++;
     }
-    len = (ptrdiff_t)(sptr - loc);
+    len = (size_t)(ptrdiff_t)(sptr - loc);
     strncpy(location, loc, len);
     location[len] = '\0';
 

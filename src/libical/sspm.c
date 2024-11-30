@@ -386,7 +386,7 @@ static char *sspm_lowercase(char *str)
     }
     new = sspm_strdup(str);
     for (p = new; *p != 0; p++) {
-        *p = tolower((int)*p);
+        *p = (char)tolower((int)*p);
     }
 
     return new;
@@ -1065,7 +1065,7 @@ char *decode_quoted_printable(char *dest, char *src, size_t *size)
             }
             cc += isdigit((int)*src) ? (*src - '0') : (*src - 55);
 
-            *dest = cc;
+            *dest = (char)cc;
 
         } else {
             *dest = *src;
@@ -1122,7 +1122,7 @@ char *decode_base64(char *dest, char *src, size_t *size)
                 buf[p % 4] = 0;
             }
         } else {
-            buf[p % 4] = cc;
+            buf[p % 4] = (char)cc;
             size_out++;
             valid_data = 1;
         }
@@ -1130,9 +1130,9 @@ char *decode_base64(char *dest, char *src, size_t *size)
         /* When we have 4 base64 letters, convert them into three
            bytes */
         if (p % 4 == 3) {
-            *dest++ = (buf[0] << 2) | ((buf[1] & 0x30) >> 4);
-            *dest++ = ((buf[1] & 0x0F) << 4) | ((buf[2] & 0x3C) >> 2);
-            *dest++ = ((buf[2] & 0x03) << 6) | (buf[3] & 0x3F);
+            *dest++ = (char)(buf[0] << 2) | ((buf[1] & 0x30) >> 4);
+            *dest++ = (char)((buf[1] & 0x0F) << 4) | ((buf[2] & 0x3C) >> 2);
+            *dest++ = (char)((buf[2] & 0x03) << 6) | (buf[3] & 0x3F);
 
             memset(buf, 0, 4);
         }
@@ -1297,15 +1297,15 @@ static void sspm_write_base64(struct sspm_buffer *buf, char *inbuf, int size)
     switch (size) {
     case 4:
         outbuf[3] = inbuf[2] & 0x3F;
-        /* falls through */
+        _fallthrough();
 
     case 3:
-        outbuf[2] = ((inbuf[1] & 0x0F) << 2) | ((inbuf[2] & 0xC0) >> 6);
-        /* falls through */
+        outbuf[2] = (char)((inbuf[1] & 0x0F) << 2) | ((inbuf[2] & 0xC0) >> 6);
+        _fallthrough();
 
     case 2:
         outbuf[0] = (inbuf[0] & 0xFC) >> 2;
-        outbuf[1] = ((inbuf[0] & 0x03) << 4) | ((inbuf[1] & 0xF0) >> 4);
+        outbuf[1] = (char)((inbuf[0] & 0x03) << 4) | ((inbuf[1] & 0xF0) >> 4);
         break;
 
     default:

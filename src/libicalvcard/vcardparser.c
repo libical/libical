@@ -30,12 +30,6 @@
 
 #define DEBUG 0
 
-#if defined __GNUC__ && __GNUC__ > 6
-#define GCC_FALLTHROUGH __attribute__((fallthrough));
-#else
-#define GCC_FALLTHROUGH /* fall through */
-#endif
-
 enum parse_error
 {
     PE_OK = 0,
@@ -322,13 +316,13 @@ static int _parse_param_quoted(struct vcardparser_state *state,
             if (multivalued)
                 return PE_QSTRING_EOV;
             /* or fall through, comma isn't special */
-            GCC_FALLTHROUGH
+            _fallthrough();
 
         case ';':
             if (structured)
                 return PE_QSTRING_EOV;
             /* or fall through, semi-colon isn't special */
-            GCC_FALLTHROUGH
+            _fallthrough();
 
         default:
             PUTC(*state->p);
@@ -470,7 +464,7 @@ static int _parse_param_value(struct vcardparser_state *state)
                 break;
             }
             /* or fall through, comma isn't special */
-            GCC_FALLTHROUGH
+            _fallthrough();
 
         default:
             PUTC(*state->p);
@@ -738,7 +732,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
                 break;
             }
             /* or fall through, comma/semi-colon isn't special */
-            GCC_FALLTHROUGH
+            _fallthrough();
 
         default:
             PUTC(*state->p);

@@ -43,6 +43,10 @@
    define necessary library symbols; they are noted "INFRINGES ON
    USER NAME SPACE" below.  */
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+
 /* Identify Bison output.  */
 #define YYBISON 1
 
@@ -1714,3 +1718,4 @@ void sserror(const char *s)
     fprintf(stderr, "Parse error \'%s\'\n", s);
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 }
+#pragma GCC diagnostic pop

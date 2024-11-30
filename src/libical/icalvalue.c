@@ -295,10 +295,11 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
                 icalmemory_append_char(&str, &str_p, &buf_sz, *p);
                 break;
             }
-            /* falls through */
-            /*issue74, we don't escape double quotes
+            _fallthrough();
+
+        /*issue74, we don't escape double quotes
         case '"':
-*/
+        */
         case '\\': {
             icalmemory_append_char(&str, &str_p, &buf_sz, '\\');
             icalmemory_append_char(&str, &str_p, &buf_sz, *p);
@@ -327,7 +328,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
  */
 static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char *str)
 {
-    int e = icalproperty_kind_and_string_to_enum(kind, str);
+    int e = icalproperty_kind_and_string_to_enum((int)kind, str);
     struct icalvalue_impl *value;
 
     if (e != 0 && icalproperty_enum_belongs_to_property(icalproperty_value_kind_to_kind(kind), e)) {
@@ -527,7 +528,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
         /* treat the UTCOFSET string as a decimal number, disassemble its digits
                and reconstruct it as sections */
-        t = strtol(str, 0, 10);
+        t = (int)strtol(str, 0, 10);
         /* add phantom seconds field */
         if (strlen(str) < 7) {
             t *= 100;
@@ -772,11 +773,17 @@ void icalvalue_free(icalvalue *v)
         break;
     }
     case ICAL_TEXT_VALUE:
+        _fallthrough();
     case ICAL_CALADDRESS_VALUE:
+        _fallthrough();
     case ICAL_URI_VALUE:
+        _fallthrough();
     case ICAL_STRING_VALUE:
+        _fallthrough();
     case ICAL_QUERY_VALUE: {
+        _fallthrough();
     case ICAL_UID_VALUE:
+        _fallthrough();
     case ICAL_XMLREFERENCE_VALUE:
         if (v->data.v_string != 0) {
             icalmemory_free_buffer((void *)v->data.v_string);
@@ -1231,10 +1238,11 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
     case ICAL_X_VALUE:
         if (value->x_value != 0)
             return icalmemory_strdup_and_quote(value, value->x_value);
-
-        /* FALLTHRU */
+        _fallthrough();
 
     case ICAL_NO_VALUE:
+        _fallthrough();
+
     default: {
         return 0;
     }

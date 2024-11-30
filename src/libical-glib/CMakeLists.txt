@@ -1,6 +1,11 @@
 # SPDX-FileCopyrightText: Milan Crha <mcrha@redhat.com>
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
+if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-conversion -Wno-sign-conversion")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-conversion -Wno-sign-conversion")
+endif()
+
 add_definitions(-Dlibical_ical_EXPORTS)
 
 # a C11 compliant compiler is required to build this library

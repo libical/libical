@@ -151,7 +151,7 @@ void test_classify(void)
         class = icalclassify(c, match, "A@example.com");
         /** eventually test this too.. **/
         (void)get_note(match);
-        actual_result = icalproperty_enum_to_string(class);
+        actual_result = icalproperty_enum_to_string((int)class);
         snprintf(msg, sizeof(msg), "expecting %s", expected_result);
         str_is(msg, expected_result, actual_result);
 
@@ -160,7 +160,7 @@ void test_classify(void)
                    "Incoming:      %s\n"
                    "Matched:       %s\n"
                    "Classification: %s\n\n",
-                   i, this_note, get_note(match), icalproperty_enum_to_string(class));
+                   i, this_note, get_note(match), icalproperty_enum_to_string((int)class));
         }
     }
 
