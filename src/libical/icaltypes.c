@@ -140,7 +140,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
      */
 
     p2 = strchr(p1 + 1, ';');
-    if (p2 != 0 && *p2 != 0) {
+    if (p2 != 0 && *p2 != 0 && *p2 != ';') { // skipping empty debug strings
         stat.debug = icalmemory_tmp_copy(p2 + 1);
     }
 
@@ -171,7 +171,6 @@ char *icalreqstattype_as_string_r(struct icalreqstattype stat)
     if (stat.debug != 0) {
         snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s;%s", icalenum_reqstat_major(stat.code),
                  icalenum_reqstat_minor(stat.code), stat.desc, stat.debug);
-
     } else {
         snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s", icalenum_reqstat_major(stat.code),
                  icalenum_reqstat_minor(stat.code), stat.desc);
