@@ -4,20 +4,20 @@
 ########### next target ###############
 
 if(NOT DEFINED ENV{JAVA_HOME} OR "$ENV{JAVA_HOME}" STREQUAL "")
-    message(FATAL_ERROR "JAVA_HOME environment variable is not set")
+  message(FATAL_ERROR "JAVA_HOME environment variable is not set")
 endif()
 
 find_package(Java REQUIRED)
 include(UseJava)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(JNI_PLATFORM "linux")
+  set(JNI_PLATFORM "linux")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    set(JNI_PLATFORM "darwin")
+  set(JNI_PLATFORM "darwin")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(JNI_PLATFORM "win32")
+  set(JNI_PLATFORM "win32")
 else()
-    message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
+  message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
 endif()
 
 set(ical_jni_LIB_SRCS
