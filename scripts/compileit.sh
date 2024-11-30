@@ -14,10 +14,11 @@ TOP=$(readlink -nf "$0")
 TOP=$(dirname "$TOP")
 cd "$TOP/.."
 TOP=$(pwd)
-BRANCH=$(git branch --show-current)
+BRANCH=$(git branch --show-current | awk -F/ '{print $NF}')
 BDIR="$TOP/build-$BRANCH-gcc"
 
-if (test "$BRANCH" = "master"); then
+CMAKE_VERSION4_OPTIONS=""
+if (test "$BRANCH" != "3.0"); then
   CMAKE_VERSION4_OPTIONS="\
     -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=ON \
     -DLIBICAL_SYNCMODE_THREADLOCAL=ON \
