@@ -51,11 +51,8 @@ add_library(
 
 target_include_directories(
   ical_jni
-  PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/libical
-    ${CMAKE_BINARY_DIR}/src/libical
-    $ENV{JAVA_HOME}/include
-    $ENV{JAVA_HOME}/include/${JNI_PLATFORM}
+  PRIVATE ${CMAKE_SOURCE_DIR}/src/libical ${CMAKE_BINARY_DIR}/src/libical $ENV{JAVA_HOME}/include
+          $ENV{JAVA_HOME}/include/${JNI_PLATFORM}
 )
 
 target_link_libraries(
@@ -70,17 +67,15 @@ endif()
 
 file(GLOB JAVA_SOURCES ${CMAKE_SOURCE_DIR}/src/java/*.java)
 
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/manifest.txt
-    "Manifest-Version: 1.0\n"
-    "Created-By: CMake\n"
-    "Implementation-Title: libical Java Bindings\n"
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/manifest.txt "Manifest-Version: 1.0\n" "Created-By: CMake\n"
+                                                    "Implementation-Title: libical Java Bindings\n"
 )
 
-add_jar(libical_jar
-    SOURCES ${JAVA_SOURCES}
-    OUTPUT_NAME libical
-    MANIFEST ${CMAKE_CURRENT_BINARY_DIR}/manifest.txt
-    GENERATE_NATIVE_HEADERS ical_jni_headers  # Optional: if you need JNI headers
+add_jar(
+  libical_jar
+  SOURCES ${JAVA_SOURCES}
+  OUTPUT_NAME libical
+  MANIFEST ${CMAKE_CURRENT_BINARY_DIR}/manifest.txt GENERATE_NATIVE_HEADERS ical_jni_headers
 )
 
 install(
