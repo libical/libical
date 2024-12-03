@@ -14,7 +14,7 @@ repos:
   - id: check-added-large-files
   - id: check-case-conflict
 - repo: https://github.com/perltidy/perltidy
-  rev: "20240903.06"
+  rev: "20240903.07"
   hooks:
   - id: perltidy
 - repo: https://github.com/codespell-project/codespell
@@ -29,6 +29,6 @@ repos:
     language: ruby
     files: \.(md|mdown|markdown)$
 - repo: https://github.com/fsfe/reuse-tool
-  rev: v4.0.3
+  rev: v5.0.2
   hooks:
   - id: reuse
