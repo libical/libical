@@ -52,6 +52,8 @@
 #include "jniICalPeriodType_cxx.h"
 #endif
 
+using namespace LibICal;
+
 //-------------------------------------------------------
 // Returns a pointer to the subject (a c++ object) for the given surrogate (a java object)
 //-------------------------------------------------------
@@ -288,7 +290,7 @@ bool copyObjToicalperiodtype(JNIEnv *env, jobject src, icalperiodtype* dest)
 //-------------------------------------------------------
 jobject createNewVComponentSurrogate(JNIEnv *env, VComponent* subject)
 {
-        char* classname = JLIBICAL_CLASS_VCOMPONENT;
+        auto classname = JLIBICAL_CLASS_VCOMPONENT;
         if (dynamic_cast<VAlarm*>(subject))
                 classname = JLIBICAL_CLASS_VALARM;
         else if (dynamic_cast<VCalendar*>(subject))
@@ -397,7 +399,7 @@ jobject doCreateNewSurrogate(JNIEnv *env, jclass surrogateClass, jlong subject)
 {
         jobject result = NULL;
 
-        if (subject != NULL)
+        if (subject != 0)
         {
                 jmethodID jconstructorID = env->GetMethodID(surrogateClass, "<init>", "(J)V");
 
@@ -414,9 +416,6 @@ jobject doCreateNewSurrogate(JNIEnv *env, jclass surrogateClass, jlong subject)
 //-------------------------------------------------------
 void throwException(JNIEnv *env, int cpErr)
 {
-        jclass jexceptionClass;
-        jthrowable jexceptionObj;
-        jmethodID jconstructorID;
         const char* exClassName;
 
         if (env->ExceptionOccurred())
