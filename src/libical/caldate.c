@@ -114,7 +114,8 @@ long caldat( struct ut_instant * date )
 	date->d_second = (date->d_minute - (double)date->i_minute) * 60.0;/* second */
         date->i_second = (int)date->d_second;
 	date->weekday = (jd + 1L) % 7L;	/* day of week */
-	if ( date->year == ((date->year >> 2) << 2) )
+	// if ( date->year == ((date->year >> 2) << 2) ) // ubsan "runtime error: left shift of negative value -1179"
+	if ( date->year == ((date->year >> 2) * 4) )
 		date->day_of_year =
 			( ( 275 * date->month ) / 9)
 			- ((date->month + 9) / 12)
@@ -225,7 +226,8 @@ void caldat_int( struct ut_instant_int * date )
 	else
 		date->year = kc - 4715L;
 	date->weekday = (jd + 1L) % 7L;	/* day of week */
-	if ( date->year == ((date->year >> 2) << 2) )
+	// if ( date->year == ((date->year >> 2) << 2) ) // ubsan "runtime error: left shift of negative value -1179"
+	if ( date->year == ((date->year >> 2) * 4) )
 		date->day_of_year =
 			( ( 275 * date->month ) / 9)
 			- ((date->month + 9) / 12)
