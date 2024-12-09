@@ -257,7 +257,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     fuzztest
     52787 # cpu timeout fails beyond 60s
     56171
-    56539
+    56539 # memory usage exceeds 2560mb
     69341
     69344
     69527
@@ -267,6 +267,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     usban
     usban2
     usban3
+    usban4 # integer overflow in pvl_newlist
   )
     add_test(NAME fuzz1test${fuzztest} COMMAND icalcomponent_fuzz1 "${PROJECT_SOURCE_DIR}/test-data/fuzz${fuzztest}")
     setprops(fuzz1test${fuzztest})
