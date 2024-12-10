@@ -916,7 +916,7 @@ static const char *rrule_parse_monthly_days(const char *s,
                                             struct icalrecurrencetype *recur,
                                             const char **error_message)
 {
-    int i;
+    short i;
 
     /* If we've already found an error, just return. */
     if (*error_message)

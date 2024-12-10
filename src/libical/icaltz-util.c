@@ -426,7 +426,8 @@ static void terminate_rrule(struct zone_context *zone)
 
         // Remove BYMONTHDAY if BYDAY week != 0
         if ((zone->recur->by[ICAL_BY_DAY].size >= 1) && icalrecurrencetype_day_position(zone->recur->by[ICAL_BY_DAY].data[0])) {
-            icalrecur_resize_by(&zone->recur->by[ICAL_BY_MONTH_DAY], 0);
+            // Don't bother dealing with success/failure since we're simply removing
+            (void)icalrecur_resize_by(&zone->recur->by[ICAL_BY_MONTH_DAY], 0);
         }
 
         icalproperty_set_rrule(zone->rrule_prop, zone->recur);
