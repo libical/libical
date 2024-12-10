@@ -2180,6 +2180,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype *rule,
         rule = icalrecurrencetype_clone(rule);
         if (!rule) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+            icalmemory_free_buffer(impl);
             return 0;
         }
     } else
@@ -3205,6 +3206,7 @@ static short daymask_find_prev_bit(unsigned long *days, short start_index)
                 days_index -= maskSize;
             }
             maskSize /= 2;
+            /* coverity[integer_overflow] */
             mask <<= maskSize;
         }
     }

@@ -64,8 +64,9 @@ void vcardstrarray_remove(vcardstrarray *array, const char *del)
 
 void vcardstrarray_free(vcardstrarray *array)
 {
-    while (array->num_elements)
-        vcardstrarray_remove_element_at(array, (ssize_t)(array->num_elements - 1));
+    ssize_t i = (ssize_t)(array->num_elements - 1);
+    while (i >= 0)
+        vcardstrarray_remove_element_at(array, i--);
     icalarray_free(array);
 }
 
