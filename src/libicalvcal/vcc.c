@@ -644,7 +644,7 @@ struct LexBuf {
          /      can be represented correctly.
         */
     unsigned long len;
-    short buf[MAX_LEX_LOOKAHEAD];
+    short buf[MAX_LEX_LOOKAHEAD+1];
     unsigned long getPtr;
         /* context stack */
     unsigned long lexModeStackTop;
