@@ -22,6 +22,8 @@
 #include "icalduration.h"
 #include "icaltime.h"
 
+#include <stdbool.h>
+
 /**
  * @brief Struct to represent a period in time.
  */
@@ -145,7 +147,7 @@ LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_null_period(void);
 /**
  * Checks if a given ::icalperiodtype is a null period.
  * @param p The time period to check
- * @return 1 if @a p is a null period, 0 otherwise
+ * @return true if @a p is a null period, false otherwise
  * @sa icalperiodtype_null_period()
  *
  * @par Usage
@@ -157,12 +159,12 @@ LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_null_period(void);
  * assert(icalperiodtype_is_null_period(period));
  * ```
  */
-LIBICAL_ICAL_EXPORT int icalperiodtype_is_null_period(struct icalperiodtype p);
+LIBICAL_ICAL_EXPORT bool icalperiodtype_is_null_period(struct icalperiodtype p);
 
 /**
  * Checks if a given ::icalperiodtype is a valid period.
  * @param p The time period to check
- * @return 1 if @a p is a valid period, 0 otherwise
+ * @return true if @a p is a valid period, false otherwise
  *
  * @par Usage
  * ```c
@@ -170,9 +172,9 @@ LIBICAL_ICAL_EXPORT int icalperiodtype_is_null_period(struct icalperiodtype p);
  * struct icalperiodtype period = icalperiodtype_null_period();
  *
  * // a null period isn't a valid period
- * assert(icalperiodtype_is_valid_period(period) == 0);
+ * assert(icalperiodtype_is_valid_period(period));
  * ```
  */
-LIBICAL_ICAL_EXPORT int icalperiodtype_is_valid_period(struct icalperiodtype p);
+LIBICAL_ICAL_EXPORT bool icalperiodtype_is_valid_period(struct icalperiodtype p);
 
 #endif /* !ICALTIME_H */

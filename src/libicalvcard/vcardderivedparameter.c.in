@@ -81,23 +81,23 @@ vcardvalue_kind vcardparameter_kind_value_kind(const vcardparameter_kind kind,
     return 0;
 }
 
-int vcardparameter_kind_is_valid(const vcardparameter_kind kind)
+bool vcardparameter_kind_is_valid(const vcardparameter_kind kind)
 {
     int i = 0;
     int num_params = (int)(sizeof(parameter_map) / sizeof(parameter_map[0]));
 
     if (kind == VCARD_ANY_PARAMETER) {
-        return 0;
+        return false;
     }
 
     num_params--;
     do {
         if (parameter_map[i].kind == kind) {
-            return 1;
+            return true;
         }
     } while (i++ < num_params);
 
-    return 0;
+    return false;
 }
 
 const char *vcardparameter_kind_to_string(vcardparameter_kind kind)

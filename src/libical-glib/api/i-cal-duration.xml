@@ -120,12 +120,12 @@
     </method>
     <method name="i_cal_duration_is_null_duration" corresponds="icaldurationtype_is_null_duration" kind="others" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be checked"/>
-        <returns type="gboolean" comment="1 if @duration is the null_duration, 0 if not." />
+        <returns type="gboolean" comment="true if @duration is the null_duration, false if not." />
         <comment xml:space="preserve">Checks whether the #ICalDuration is the null_duration.</comment>
     </method>
     <method name="i_cal_duration_is_bad_duration" corresponds="icaldurationtype_is_bad_duration" kind="others" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be checked"/>
-        <returns type="gboolean" comment="1 if @duration is the bad_duration, 0 if not." />
+        <returns type="gboolean" comment="true if @duration is the bad_duration, false if not." />
         <comment xml:space="preserve">Checks whether the #ICalDuration is the bad_duration.</comment>
     </method>
 </structure>

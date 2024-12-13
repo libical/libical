@@ -263,12 +263,12 @@ struct icaldurationtype icaldurationtype_null_duration(void)
     return d;
 }
 
-int icaldurationtype_is_null_duration(struct icaldurationtype d)
+bool icaldurationtype_is_null_duration(struct icaldurationtype d)
 {
     if (icaldurationtype_as_int(d) == 0) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -288,7 +288,7 @@ struct icaldurationtype icaldurationtype_bad_duration(void)
     return d;
 }
 
-int icaldurationtype_is_bad_duration(struct icaldurationtype d)
+bool icaldurationtype_is_bad_duration(struct icaldurationtype d)
 {
     return (d.is_neg == -1);
 }

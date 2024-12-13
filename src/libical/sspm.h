@@ -14,6 +14,8 @@
 
 #include "libical_ical_export.h"
 
+#include <stdbool.h>
+
 enum sspm_major_type
 {
     SSPM_NO_MAJOR_TYPE,
@@ -112,7 +114,7 @@ LIBICAL_ICAL_EXPORT char *decode_quoted_printable(char *dest, char *src, size_t 
 
 LIBICAL_ICAL_EXPORT char *decode_base64(char *dest, char *src, size_t *size);
 
-LIBICAL_ICAL_EXPORT int sspm_write_mime(struct sspm_part *parts, size_t num_parts,
-                                        char **output_string, const char *header);
+LIBICAL_ICAL_EXPORT void sspm_write_mime(struct sspm_part *parts, size_t num_parts,
+                                         char **output_string, const char *header);
 
 #endif /* ICAL_SSPM_H */

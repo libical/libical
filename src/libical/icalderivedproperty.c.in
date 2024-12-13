@@ -60,23 +60,23 @@ struct icalproperty_enum_map
 
 <insert_code_here>
 
-int icalproperty_kind_is_valid(const icalproperty_kind kind)
+bool icalproperty_kind_is_valid(const icalproperty_kind kind)
 {
     int i = 0;
     int num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
 
     if (kind == ICAL_ANY_PROPERTY) {
-        return 0;
+        return false;
     }
 
     num_props--;
     do {
         if (property_map[i].kind == kind) {
-            return 1;
+            return true;
         }
     } while (i++ < num_props);
 
-    return 0;
+    return false;
 }
 
 const char *icalproperty_kind_to_string(icalproperty_kind kind)
@@ -148,17 +148,16 @@ icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind)
     return ICAL_NO_VALUE;
 }
 
-int icalproperty_value_kind_is_valid(icalproperty_kind pkind,
-                                     icalvalue_kind vkind)
+bool icalproperty_value_kind_is_valid(icalproperty_kind pkind, icalvalue_kind vkind)
 {
     int i, j;
     int num_props;
 
     if (vkind == ICAL_NO_VALUE)
-        return 0;
+        return false;
 
     if (pkind == ICAL_X_PROPERTY)
-        return 1;
+        return true;
 
     num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
     for (i = 0; i < num_props; i++) {
@@ -168,18 +167,17 @@ int icalproperty_value_kind_is_valid(icalproperty_kind pkind,
             const icalvalue_kind *valid = map->valid_values;
             for (j = 0; valid[j] != ICAL_NO_VALUE; j++) {
                 if (valid[j] == vkind) {
-                    return 1;
+                    return true;
                 }
             }
             break;
         }
     }
 
-    return 0;
+    return false;
 }
 
-int icalproperty_value_kind_is_multivalued(icalproperty_kind pkind,
-                                           icalvalue_kind *vkind)
+bool icalproperty_value_kind_is_multivalued(icalproperty_kind pkind, icalvalue_kind *vkind)
 {
     int i, num_props;
 
@@ -208,7 +206,7 @@ int icalproperty_value_kind_is_multivalued(icalproperty_kind pkind,
                 case ICAL_TEXT_VALUE:
               //case ICAL_TIME_VALUE:
                 case ICAL_X_VALUE:
-                    return 1;
+                    return true;
                     break;
 
                 default:
@@ -220,11 +218,11 @@ int icalproperty_value_kind_is_multivalued(icalproperty_kind pkind,
         }
     }
 
-    return 0;
+    return false;
 }
 
-int icalproperty_value_kind_is_default(icalproperty_kind pkind,
-                                       icalvalue_kind vkind)
+bool icalproperty_value_kind_is_default(icalproperty_kind pkind,
+                                        icalvalue_kind vkind)
 {
     int i, num_props;
 
@@ -239,7 +237,7 @@ int icalproperty_value_kind_is_default(icalproperty_kind pkind,
         }
     }
 
-    return 0;
+    return false;
 }
 
 const char *icalproperty_enum_to_string(int e)
@@ -286,18 +284,18 @@ int icalproperty_kind_and_string_to_enum(const int kind, const char *str)
     return 0;
 }
 
-int icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e)
+bool icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e)
 {
     int i;
 
     for (i = ICALPROPERTY_FIRST_ENUM; i != ICALPROPERTY_LAST_ENUM; i++) {
         if (enum_map[i - ICALPROPERTY_FIRST_ENUM].prop_enum == e &&
             enum_map[i - ICALPROPERTY_FIRST_ENUM].prop == kind) {
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
 const char *icalproperty_method_to_string(icalproperty_method method)

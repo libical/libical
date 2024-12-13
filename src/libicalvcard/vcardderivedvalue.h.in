@@ -18,6 +18,8 @@
 #include "vcardtime.h"
 #include "vcardtypes.h"
 
+#include <stdbool.h>
+
 typedef enum vcard_n_field {
     VCARD_N_FAMILY = 0,
     VCARD_N_GIVEN,

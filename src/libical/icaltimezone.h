@@ -18,6 +18,7 @@
 #include "libical_ical_export.h"
 #include "icalcomponent.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 
 #if !defined(ICALTIMEZONE_DEFINED)
@@ -130,18 +131,16 @@ LIBICAL_ICAL_EXPORT void icaltimezone_convert_time(struct icaltimetype *tt,
 /** @brief Calculates the UTC offset of a given local time in the given
  * timezone.
  *
- * It is the number of seconds to add to UTC to get local
- * time.  The is_daylight flag is set to 1 if the time is in
- * daylight-savings time.
+ * It is the number of seconds to add to UTC to get local time.
+ * The is_daylight flag is set to 1 (true) if the time is in daylight-savings time.
  */
 LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset(icaltimezone *zone,
                                                     struct icaltimetype *tt, int *is_daylight);
 
 /** @brief Calculates the UTC offset of a given UTC time in the given timezone.
  *
- * It is the number of seconds to add to UTC to get local
- * time.  The @p is_daylight flag is set to 1 if the time is in
- * daylight-savings time.
+ * It is the number of seconds to add to UTC to get local time.
+ * The @p is_daylight flag is set to 1 (true) if the time is in daylight-savings time.
  */
 LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
                                                                 struct icaltimetype *tt,
@@ -205,9 +204,9 @@ LIBICAL_ICAL_EXPORT void icaltimezone_release_zone_tab(void);
 /*
  * @par Handling whether to use builtin timezone files
  */
-LIBICAL_ICAL_EXPORT void icaltimezone_set_builtin_tzdata(int set);
+LIBICAL_ICAL_EXPORT void icaltimezone_set_builtin_tzdata(bool set);
 
-LIBICAL_ICAL_EXPORT int icaltimezone_get_builtin_tzdata(void);
+LIBICAL_ICAL_EXPORT bool icaltimezone_get_builtin_tzdata(void);
 
 /*
  * Debugging Output.
@@ -230,7 +229,7 @@ LIBICAL_ICAL_EXPORT int icaltimezone_get_builtin_tzdata(void);
  * The UTC Offset is for local (wall-clock) time. It is the amount of time
  * to add to UTC to get local time.
  */
-LIBICAL_ICAL_EXPORT int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp);
+LIBICAL_ICAL_EXPORT bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp);
 
 /* For the library only -- do not make visible */
 extern const char *icaltimezone_tzid_prefix(void);

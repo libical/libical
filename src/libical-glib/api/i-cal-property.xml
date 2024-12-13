@@ -37,7 +37,7 @@
     </method>
     <method name="i_cal_property_isa_property" corresponds="icalproperty_isa_property" since="1.0">
         <parameter type="ICalProperty *" name="property" comment="The object whose native part to be checked"/>
-        <returns type="gint" comment="1 if the native part of @property is of the type icalproperty, 0 if not."/>
+        <returns type="gboolean" comment="true if the native part of @property is of the type icalproperty, false if not."/>
         <comment xml:space="preserve">Checks whether the native part of #ICalProperty is of the type icalproperty.</comment>
     </method>
     <method name="i_cal_property_add_parameter" corresponds="icalproperty_add_parameter" since="1.0">
@@ -197,7 +197,7 @@
     </method>
     <method name="i_cal_property_kind_is_valid" corresponds="icalproperty_kind_is_valid" since="1.0">
         <parameter type="const ICalPropertyKind" name="kind" comment="The #ICalPropertyKind"/>
-        <returns type="gboolean" comment="1 if valid, 0 if not."/>
+        <returns type="gboolean" comment="true if valid, false if not."/>
         <comment xml:space="preserve">Checks whether #ICalPropertyKind is valid.</comment>
     </method>
     <method name="i_cal_property_method_from_string" corresponds="icalproperty_string_to_method" since="1.0">
@@ -234,7 +234,7 @@
     <method name="i_cal_property_kind_has_property" corresponds="icalproperty_enum_belongs_to_property" since="1.0">
         <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind"/>
         <parameter type="gint" name="e" comment="The enum to be checked"/>
-        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks whether the enum belongs to the #ICalPropertyKind.</comment>
     </method>
 </structure>

@@ -40,7 +40,7 @@ LIBICAL_VCARD_EXPORT void vcardproperty_free(vcardproperty *prop);
 
 LIBICAL_VCARD_EXPORT vcardproperty_kind vcardproperty_isa(vcardproperty *property);
 
-LIBICAL_VCARD_EXPORT int vcardproperty_isa_property(void *property);
+LIBICAL_VCARD_EXPORT bool vcardproperty_isa_property(void *property);
 
 LIBICAL_VCARD_EXPORT void vcardproperty_add_parameters(struct vcardproperty_impl *prop, va_list args);
 
@@ -161,13 +161,13 @@ LIBICAL_VCARD_EXPORT const char *vcardproperty_kind_to_string(vcardproperty_kind
 LIBICAL_VCARD_EXPORT vcardproperty_kind vcardproperty_string_to_kind(const char *string);
 
 /** Check validity of a specific vcardproperty_kind **/
-LIBICAL_VCARD_EXPORT int vcardproperty_kind_is_valid(const vcardproperty_kind kind);
+LIBICAL_VCARD_EXPORT bool vcardproperty_kind_is_valid(const vcardproperty_kind kind);
 
 LIBICAL_VCARD_EXPORT const char *vcardproperty_enum_to_string(int e);
 LIBICAL_VCARD_EXPORT char *vcardproperty_enum_to_string_r(int e);
 LIBICAL_VCARD_EXPORT int vcardproperty_kind_and_string_to_enum(const int kind, const char *str);
 
-LIBICAL_VCARD_EXPORT int vcardproperty_enum_belongs_to_property(vcardproperty_kind kind, int e);
+LIBICAL_VCARD_EXPORT bool vcardproperty_enum_belongs_to_property(vcardproperty_kind kind, int e);
 
 /**
  * Normalizes (reorders and sorts the parameters) the specified @p vcardproperty.
@@ -175,8 +175,8 @@ LIBICAL_VCARD_EXPORT int vcardproperty_enum_belongs_to_property(vcardproperty_ki
  */
 LIBICAL_VCARD_EXPORT void vcardproperty_normalize(vcardproperty *prop);
 
-LIBICAL_VCARD_EXPORT int vcardproperty_is_structured(vcardproperty_kind pkind);
-LIBICAL_VCARD_EXPORT int vcardproperty_is_multivalued(vcardproperty_kind pkind);
+LIBICAL_VCARD_EXPORT bool vcardproperty_is_structured(vcardproperty_kind pkind);
+LIBICAL_VCARD_EXPORT bool vcardproperty_is_multivalued(vcardproperty_kind pkind);
 
 LIBICAL_VCARD_EXPORT void vcardproperty_add_type_parameter(vcardproperty *prop,
                                                            vcardenumarray_element *type);

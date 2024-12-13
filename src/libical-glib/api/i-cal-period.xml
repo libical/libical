@@ -88,12 +88,12 @@
     </method>
     <method name="i_cal_period_is_null_period" corresponds="icalperiodtype_is_null_period" since="1.0">
         <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be checked"/>
-        <returns type="gboolean" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks the #ICalPeriod is null_period.</comment>
     </method>
     <method name="i_cal_period_is_valid_period" corresponds="icalperiodtype_is_valid_period" since="1.0">
         <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be checked"/>
-        <returns type="gboolean" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks the #ICalPeriod is valid_period.</comment>
     </method>
 </structure>

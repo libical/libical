@@ -43,7 +43,7 @@
     </method>
     <method name="i_cal_parameter_isa_parameter" corresponds="icalparameter_isa_parameter" kind="others" since="1.0">
         <parameter type="ICalParameter *" name="param" annotation="in" comment="The #ICalParameter to be checked"/>
-        <returns type="gint" comment="1 if the native part is of type icalparameter, 0 if not." />
+        <returns type="gboolean" comment="true if the native part is of type icalparameter, false if not." />
         <comment xml:space="preserve">Checks whether the native part of the #ICalParameter is of type icalparameter.</comment>
     </method>
     <method name="i_cal_parameter_set_xname" corresponds="icalparameter_set_xname" kind="set" since="1.0">
@@ -89,7 +89,7 @@
     <method name="i_cal_parameter_has_same_name" corresponds="icalparameter_has_same_name" kind="others" since="1.0">
         <parameter type="ICalParameter *" name="param1" comment="The #ICalParameter to be checked"/>
         <parameter type="ICalParameter *" name="param2" comment="The #ICalParameter to be checked"/>
-        <returns type="gint" comment="1 if the parameters have the same name, 0 or not." />
+        <returns type="gboolean" comment="true if the parameters have the same name, false or not." />
         <comment xml:space="preserve">Checks whether native parts of two #ICalParameters have the same name.</comment>
     </method>
     <method name="i_cal_parameter_kind_to_string" corresponds="icalparameter_kind_to_string" kind="others" since="1.0">
@@ -104,7 +104,7 @@
     </method>
     <method name="i_cal_parameter_kind_is_valid" corresponds="icalparameter_kind_is_valid" since="3.0.5">
         <parameter type="const ICalParameterKind" name="kind" comment="The #ICalPropertyKind"/>
-        <returns type="gboolean" comment="1 if valid, 0 if not."/>
+        <returns type="gboolean" comment="true if valid, false if not."/>
         <comment xml:space="preserve">Checks whether #ICalParameterKind is valid.</comment>
     </method>
 </structure>

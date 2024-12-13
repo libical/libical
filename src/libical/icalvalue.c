@@ -354,7 +354,7 @@ static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char
  * The code is locale *independent* and does *not* change the locale.
  * It should be thread safe.
  */
-static int simple_str_to_doublestr(const char *from, char *result, int result_len, char **to)
+static bool simple_str_to_doublestr(const char *from, char *result, int result_len, char **to)
 {
     char *start = NULL, *end = NULL, *cur = (char *)from;
 
@@ -364,7 +364,7 @@ static int simple_str_to_doublestr(const char *from, char *result, int result_le
 
     /*sanity checks */
     if (!from || !result) {
-        return 1;
+        return true;
     }
 
     /*skip the white spaces at the beginning */
@@ -404,9 +404,9 @@ static int simple_str_to_doublestr(const char *from, char *result, int result_le
 
     /* now try to convert to a floating point number, to check for validity only */
     if (sscanf(result, "%lf", &dtest) != 1) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 static void free_icalvalue_attach_data(char *data, void *user_data)
@@ -810,13 +810,13 @@ void icalvalue_free(icalvalue *v)
     icalmemory_free_buffer(v);
 }
 
-int icalvalue_is_valid(const icalvalue *value)
+bool icalvalue_is_valid(const icalvalue *value)
 {
     if (value == 0) {
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
 static char *icalvalue_binary_as_ical_string_r(const icalvalue *value)
@@ -1255,28 +1255,28 @@ icalvalue_kind icalvalue_isa(const icalvalue *value)
     return value->kind;
 }
 
-int icalvalue_isa_value(void *value)
+bool icalvalue_isa_value(void *value)
 {
     struct icalvalue_impl *impl = (struct icalvalue_impl *)value;
 
     icalerror_check_arg_rz((value != 0), "value");
 
     if (strcmp(impl->id, "val") == 0) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
-static int icalvalue_is_time(const icalvalue *a)
+static bool icalvalue_is_time(const icalvalue *a)
 {
     icalvalue_kind kind = icalvalue_isa(a);
 
     if (kind == ICAL_DATETIME_VALUE || kind == ICAL_DATE_VALUE) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 /*
@@ -1461,27 +1461,27 @@ icalproperty *icalvalue_get_parent(icalvalue *value)
     return value->parent;
 }
 
-int icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBufferLen)
+bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBufferLen)
 {
     char *ptr;
     icalvalue *value = 0;
 
     if ((szText == 0) || (szEncText == 0))
-        return 0;
+        return false;
 
     value = icalvalue_new_from_string(ICAL_STRING_VALUE, szText);
 
     if (value == 0)
-        return 0;
+        return false;
 
     ptr = icalvalue_text_as_ical_string_r(value);
     if (ptr == 0)
-        return 0;
+        return false;
 
     if ((int)strlen(ptr) >= nMaxBufferLen) {
         icalvalue_free(value);
         icalmemory_free_buffer(ptr);
-        return 0;
+        return false;
     }
 
     strcpy(szEncText, ptr);
@@ -1489,23 +1489,23 @@ int icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBu
 
     icalvalue_free((icalvalue *)value);
 
-    return 1;
+    return true;
 }
 
-int icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen)
+bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen)
 {
     char *str, *str_p;
     const char *p;
     size_t buf_sz;
 
     if ((szText == 0) || (szDecText == 0))
-        return 0;
+        return false;
 
     buf_sz = strlen(szText) + 1;
     str_p = str = (char *)icalmemory_new_buffer(buf_sz);
 
     if (str_p == 0) {
-        return 0;
+        return false;
     }
 
     for (p = szText; *p != 0; p++) {
@@ -1524,13 +1524,13 @@ int icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBu
 
     if ((int)strlen(str) >= nMaxBufferLen) {
         icalmemory_free_buffer(str);
-        return 0;
+        return false;
     }
 
     strcpy(szDecText, str);
 
     icalmemory_free_buffer(str);
-    return 1;
+    return true;
 }
 
 /* The remaining interfaces are 'new', 'set' and 'get' for each of the value

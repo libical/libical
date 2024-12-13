@@ -16,6 +16,8 @@
 #include "vcardderivedvalue.h"
 #include "vcardparameter.h"
 
+#include <stdbool.h>
+
 typedef struct vcardproperty_impl vcardproperty;
 
 <insert_code_here>

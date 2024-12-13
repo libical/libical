@@ -54,42 +54,42 @@ vcardtimetype vcardtime_current_utc_time(void)
     return tt;
 }
 
-int vcardtime_is_time(const vcardtimetype t)
+bool vcardtime_is_time(const vcardtimetype t)
 {
     return (t.year == -1 && t.month == -1 && t.day == -1);
 }
 
-int vcardtime_is_date(const vcardtimetype t)
+bool vcardtime_is_date(const vcardtimetype t)
 {
     return (t.hour == -1 && t.minute == -1 && t.second == -1);
 }
 
-int vcardtime_is_null_datetime(const vcardtimetype t)
+bool vcardtime_is_null_datetime(const vcardtimetype t)
 {
     return (vcardtime_is_time(t) && vcardtime_is_date(t));
 }
 
-int vcardtime_is_datetime(const vcardtimetype t)
+bool vcardtime_is_datetime(const vcardtimetype t)
 {
     return (t.day != -1 && t.hour != -1);
 }
 
-int vcardtime_is_timestamp(const vcardtimetype t)
+bool vcardtime_is_timestamp(const vcardtimetype t)
 {
     return (t.year != -1 && t.month != -1 && t.day != -1 &&
             t.hour != -1 && t.minute != -1 && t.second != -1 &&
             t.utcoffset != -1);
 }
 
-int vcardtime_is_utc(const vcardtimetype t)
+bool vcardtime_is_utc(const vcardtimetype t)
 {
     return (t.utcoffset == 0 && !vcardtime_is_date(t));
 }
 
-int vcardtime_is_leap_year(const int year)
+bool vcardtime_is_leap_year(const int year)
 {
     if (year == -1) {
-        return 1;
+        return true;
     } else if (year <= 1752) {
         return (year % 4 == 0);
     } else {
@@ -100,26 +100,26 @@ int vcardtime_is_leap_year(const int year)
 static const int days_in_month[] =
     {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-int vcardtime_is_valid_time(const struct vcardtimetype t)
+bool vcardtime_is_valid_time(const struct vcardtimetype t)
 {
     int days;
 
     if (t.year > 3000 || t.day == 0 ||
         t.hour > 23 || t.minute > 59 || t.second > 60 ||
         t.utcoffset < -720 || t.utcoffset > 840) {
-        return 0;
+        return false;
     }
 
     if (t.minute == -1 && t.hour != -1 && t.second != -1)
-        return 0;
+        return false;
 
     switch (t.month) {
     case 0:
-        return 0;
+        return false;
 
     case -1:
         if (t.year != -1 && t.day != -1)
-            return 0;
+            return false;
 
         days = 31;
         break;
@@ -130,16 +130,16 @@ int vcardtime_is_valid_time(const struct vcardtimetype t)
 
     default:
         if (t.month > 12)
-            return 0;
+            return false;
 
         days = days_in_month[t.month];
         break;
     }
 
     if (t.day > days)
-        return 0;
+        return false;
 
-    return 1;
+    return true;
 }
 
 static int sprintf_date(const vcardtimetype t, unsigned flags,

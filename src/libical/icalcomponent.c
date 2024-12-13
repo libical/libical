@@ -65,7 +65,7 @@ void icalcomponent_add_children(icalcomponent *impl, va_list args)
     while ((vp = va_arg(args, void *)) != 0) {
         icalassert(icalcomponent_isa_component(vp) != 0 || icalproperty_isa_property(vp) != 0);
 
-        if (icalcomponent_isa_component(vp) != 0) {
+        if (icalcomponent_isa_component(vp)) {
             icalcomponent_add_component(impl, (icalcomponent *)vp);
 
         } else if (icalproperty_isa_property(vp) != 0) {
@@ -296,12 +296,12 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
     return buf;
 }
 
-int icalcomponent_is_valid(icalcomponent *component)
+bool icalcomponent_is_valid(icalcomponent *component)
 {
     if ((strcmp(component->id, "comp") == 0) && component->kind != ICAL_NO_COMPONENT) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -312,16 +312,16 @@ icalcomponent_kind icalcomponent_isa(const icalcomponent *component)
     return component->kind;
 }
 
-int icalcomponent_isa_component(void *component)
+bool icalcomponent_isa_component(void *component)
 {
     icalcomponent *impl = component;
 
     icalerror_check_arg_rz((component != 0), "component");
 
     if (strcmp(impl->id, "comp") == 0) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -724,16 +724,16 @@ or empty VCALENDAR component"); */
     return span;
 }
 
-int icalproperty_recurrence_is_excluded(icalcomponent *comp,
-                                        struct icaltimetype *dtstart,
-                                        struct icaltimetype *recurtime)
+bool icalproperty_recurrence_is_excluded(icalcomponent *comp,
+                                         struct icaltimetype *dtstart,
+                                         struct icaltimetype *recurtime)
 {
     icalproperty *exdate, *exrule;
     pvl_elem property_iterator;
 
     if (comp == NULL || dtstart == NULL || recurtime == NULL || icaltime_is_null_time(*recurtime)) {
         /* BAD DATA */
-        return 1;
+        return true;
     }
 
     property_iterator = comp->property_iterator;
@@ -748,7 +748,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
             (icaltime_compare(*recurtime, exdatetime) == 0)) {
             /** MATCHED **/
             comp->property_iterator = property_iterator;
-            return 1;
+            return true;
         }
     }
 
@@ -772,7 +772,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
                 if (result == 0) {
                     icalrecur_iterator_free(exrule_itr);
                     comp->property_iterator = property_iterator;
-                    return 1;
+                    return true;
                     /** MATCH **/
                 }
                 if (result == 1)
@@ -786,7 +786,7 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
     }
     comp->property_iterator = property_iterator;
 
-    return 0; /* no matches */
+    return false; /* no matches */
 }
 
 /**
@@ -794,13 +794,13 @@ int icalproperty_recurrence_is_excluded(icalcomponent *comp,
  *
  * @param comp   A valid icalcomponent.
  *
- * @return 1 if the event is a busy item, 0 if it is not.
+ * @return true if the event is a busy item, false if it is not.
  */
-static int icalcomponent_is_busy(icalcomponent *comp)
+static bool icalcomponent_is_busy(icalcomponent *comp)
 {
     icalproperty *transp;
     enum icalproperty_status status;
-    int ret = 1;
+    bool ret = true;
 
     /** @todo check access control here, converting busy->free if the
      permissions do not allow access... */
@@ -815,14 +815,14 @@ static int icalcomponent_is_busy(icalcomponent *comp)
         case ICAL_TRANSP_OPAQUE:
         case ICAL_TRANSP_OPAQUENOCONFLICT:
         case ICAL_TRANSP_NONE:
-            ret = 1;
+            ret = true;
             break;
         case ICAL_TRANSP_TRANSPARENT:
         case ICAL_TRANSP_TRANSPARENTNOCONFLICT:
-            ret = 0;
+            ret = false;
             break;
         default:
-            ret = 0;
+            ret = false;
             break;
         }
     }
@@ -831,7 +831,7 @@ static int icalcomponent_is_busy(icalcomponent *comp)
         switch (status) {
         case ICAL_STATUS_CANCELLED:
         case ICAL_STATUS_TENTATIVE:
-            ret = 0;
+            ret = false;
             break;
         default:
             break;
@@ -1183,17 +1183,17 @@ static const struct icalcomponent_kind_map component_map[] = {
     {ICAL_NO_COMPONENT, ""},
 };
 
-int icalcomponent_kind_is_valid(const icalcomponent_kind kind)
+bool icalcomponent_kind_is_valid(const icalcomponent_kind kind)
 {
     int i = 0;
 
     do {
         if (component_map[i].kind == kind) {
-            return 1;
+            return true;
         }
     } while (component_map[i++].kind != ICAL_NO_COMPONENT);
 
-    return 0;
+    return false;
 }
 
 const char *icalcomponent_kind_to_string(icalcomponent_kind kind)

@@ -237,7 +237,7 @@ icalproperty_status ICalProperty::string_to_status(const std::string &str)
     return icalproperty_string_to_status(str.c_str());
 }
 
-int ICalProperty::enum_belongs_to_property(const icalproperty_kind &kind, const int &e)
+bool ICalProperty::enum_belongs_to_property(const icalproperty_kind &kind, const int &e)
 {
     return icalproperty_enum_belongs_to_property(kind, e);
 }

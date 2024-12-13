@@ -15,6 +15,8 @@
 #include "libical_ical_export.h"
 #include "icalvalueimpl.h"
 
+#include <stdbool.h>
+
 /** @file icalvalue.h */
 
 #define ICAL_BOOLEAN_TRUE 1
@@ -33,7 +35,7 @@ LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_from_string(icalvalue_kind kind, co
 
 LIBICAL_ICAL_EXPORT void icalvalue_free(icalvalue *value);
 
-LIBICAL_ICAL_EXPORT int icalvalue_is_valid(const icalvalue *value);
+LIBICAL_ICAL_EXPORT bool icalvalue_is_valid(const icalvalue *value);
 
 LIBICAL_ICAL_EXPORT const char *icalvalue_as_ical_string(const icalvalue *value);
 
@@ -41,7 +43,7 @@ LIBICAL_ICAL_EXPORT char *icalvalue_as_ical_string_r(const icalvalue *value);
 
 LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_isa(const icalvalue *value);
 
-LIBICAL_ICAL_EXPORT int icalvalue_isa_value(void *);
+LIBICAL_ICAL_EXPORT bool icalvalue_isa_value(void *);
 
 LIBICAL_ICAL_EXPORT icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a,
                                                                     const icalvalue *b);
@@ -75,15 +77,15 @@ LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_string_to_kind(const char *str);
 LIBICAL_ICAL_EXPORT const char *icalvalue_kind_to_string(const icalvalue_kind kind);
 
 /** Check validity of a specific icalvalue_kind **/
-LIBICAL_ICAL_EXPORT int icalvalue_kind_is_valid(const icalvalue_kind kind);
+LIBICAL_ICAL_EXPORT bool icalvalue_kind_is_valid(const icalvalue_kind kind);
 
 /** Encode a character string in ical format, escape certain characters, etc. */
-LIBICAL_ICAL_EXPORT int icalvalue_encode_ical_string(const char *szText,
-                                                     char *szEncText, int MaxBufferLen);
+LIBICAL_ICAL_EXPORT bool icalvalue_encode_ical_string(const char *szText,
+                                                      char *szEncText, int MaxBufferLen);
 
 /** Extract the original character string encoded by the above function **/
-LIBICAL_ICAL_EXPORT int icalvalue_decode_ical_string(const char *szText,
-                                                     char *szDecText, int nMaxBufferLen);
+LIBICAL_ICAL_EXPORT bool icalvalue_decode_ical_string(const char *szText,
+                                                      char *szDecText, int nMaxBufferLen);
 
 /* For the library only -- do not make visible */
 /// @cond

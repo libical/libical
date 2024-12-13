@@ -24,22 +24,22 @@ static pthread_mutex_t unk_token_mutex = PTHREAD_MUTEX_INITIALIZER;
 #include <ctype.h>
 static ICAL_GLOBAL_VAR ical_unknown_token_handling unknownTokenHandling = ICAL_TREAT_AS_ERROR;
 
-int icaltriggertype_is_null_trigger(struct icaltriggertype tr)
+bool icaltriggertype_is_null_trigger(struct icaltriggertype tr)
 {
     if (icaltime_is_null_time(tr.time) && icaldurationtype_is_null_duration(tr.duration)) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-int icaltriggertype_is_bad_trigger(struct icaltriggertype tr)
+bool icaltriggertype_is_bad_trigger(struct icaltriggertype tr)
 {
     if (icaldurationtype_is_bad_duration(tr.duration)) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 struct icaltriggertype icaltriggertype_from_int(const int reltime)

@@ -198,7 +198,7 @@
         <parameter type="ICalTimezone *" name="zone" comment="The timezone to be queried"/>
         <parameter type="gint" name="max_year" comment="Max year"/>
         <parameter type="FILE *" name="fp" comment="The file handle"/>
-        <returns type="gint" comment="1 if success."/>
+        <returns type="gboolean" comment="true if success."/>
         <comment>Outputs a list of timezone changes for the given timezone to the given file, up to the maximum year given.</comment>
     </method>
     <method name="i_cal_timezone_array_element_at" corresponds="CUSTOM" kind="other" since="1.0">

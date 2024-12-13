@@ -39,8 +39,8 @@ void icalproperty_add_parameters(icalproperty *prop, va_list args)
     void *vp;
 
     while ((vp = va_arg(args, void *)) != 0) {
-        if (icalvalue_isa_value(vp) != 0) {
-        } else if (icalparameter_isa_parameter(vp) != 0) {
+        if (icalvalue_isa_value(vp)) {
+        } else if (icalparameter_isa_parameter(vp)) {
             icalproperty_add_parameter((icalproperty *)prop, (icalparameter *)vp);
         } else {
             icalerror_set_errno(ICAL_BADARG_ERROR);
@@ -460,15 +460,15 @@ icalproperty_kind icalproperty_isa(icalproperty *p)
     return ICAL_NO_PROPERTY;
 }
 
-int icalproperty_isa_property(void *property)
+bool icalproperty_isa_property(void *property)
 {
     icalproperty *impl = (icalproperty *)property;
 
     icalerror_check_arg_rz((property != 0), "property");
     if (strcmp(impl->id, "prop") == 0) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 

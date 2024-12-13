@@ -118,9 +118,9 @@ static ICAL_GLOBAL_VAR icaltimezone utc_timezone = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 static ICAL_GLOBAL_VAR char *zone_files_directory = NULL;
 
 #if defined(USE_BUILTIN_TZDATA)
-static ICAL_GLOBAL_VAR int use_builtin_tzdata = 1;
+static ICAL_GLOBAL_VAR int use_builtin_tzdata = true;
 #else
-static ICAL_GLOBAL_VAR int use_builtin_tzdata = 0;
+static ICAL_GLOBAL_VAR int use_builtin_tzdata = false;
 #endif
 
 static void icaltimezone_reset(icaltimezone *zone);
@@ -137,9 +137,9 @@ static void icaltimezone_init(icaltimezone *zone);
 /** @brief Gets the TZID, LOCATION/X-LIC-LOCATION, and TZNAME properties from
  * the VTIMEZONE component and places them in the icaltimezone.
  *
- * @returns 1 on success, or 0 if the TZID can't be found.
+ * @returns true on success, or false if the TZID can't be found.
  */
-static int icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcomponent *component)
+static bool icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcomponent *component)
 #if defined(THREAD_SANITIZER)
     __attribute__((no_sanitize("thread")))
 #endif
@@ -298,24 +298,24 @@ static void icaltimezone_init(icaltimezone *zone)
 /** @brief Gets the TZID, LOCATION/X-LIC-LOCATION and TZNAME properties of
  * the VTIMEZONE component and stores them in the icaltimezone.
  *
- * @returns 1 on success, or 0 if the TZID can't be found.
+ * @returns true on success, or false if the TZID can't be found.
  *
  * Note that it expects the zone to be initialized or reset - it doesn't free
  * any old values.
  */
-static int icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcomponent *component)
+static bool icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcomponent *component)
 {
     icalproperty *prop;
     const char *tzid;
 
     prop = icalcomponent_get_first_property(component, ICAL_TZID_PROPERTY);
     if (!prop)
-        return 0;
+        return false;
 
     /* A VTIMEZONE MUST have a TZID, or a lot of our code won't work. */
     tzid = icalproperty_get_tzid(prop);
     if (!tzid) {
-        return 0;
+        return false;
     }
 
     if (zone->tzid) {
@@ -338,7 +338,7 @@ static int icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcompone
     }
     zone->tznames = icaltimezone_get_tznames_from_vtimezone(component);
 
-    return 1;
+    return true;
 }
 
 char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
@@ -1559,7 +1559,7 @@ static void icaltimezone_init_builtin_timezones(void)
     icaltimezone_builtin_unlock();
 }
 
-static int parse_coord(char *coord, int len, int *degrees, int *minutes, int *seconds)
+static bool parse_coord(char *coord, int len, int *degrees, int *minutes, int *seconds)
 {
     if (len == 5) {
         sscanf(coord + 1, "%2d%2d", degrees, minutes);
@@ -1571,21 +1571,21 @@ static int parse_coord(char *coord, int len, int *degrees, int *minutes, int *se
         sscanf(coord + 1, "%3d%2d%2d", degrees, minutes, seconds);
     } else {
         icalerrprintf("Invalid coordinate: %s\n", coord);
-        return 1;
+        return true;
     }
 
     if (coord[0] == '-')
         *degrees = -*degrees;
 
-    return 0;
+    return false;
 }
 
-static int fetch_lat_long_from_string(const char *str,
-                                      int *latitude_degrees, int *latitude_minutes,
-                                      int *latitude_seconds,
-                                      int *longitude_degrees, int *longitude_minutes,
-                                      int *longitude_seconds,
-                                      char *location)
+static bool fetch_lat_long_from_string(const char *str,
+                                       int *latitude_degrees, int *latitude_minutes,
+                                       int *latitude_seconds,
+                                       int *longitude_degrees, int *longitude_minutes,
+                                       int *longitude_seconds,
+                                       char *location)
 {
     size_t len;
     char *sptr, *lat, *lon, *loc, *temp;
@@ -1627,12 +1627,12 @@ static int fetch_lat_long_from_string(const char *str,
         parse_coord(lon, (int)strlen(lon),
                     longitude_degrees, longitude_minutes, longitude_seconds) == 1) {
         icalmemory_free_buffer(lat);
-        return 1;
+        return true;
     }
 
     icalmemory_free_buffer(lat);
 
-    return 0;
+    return false;
 }
 
 /** @brief Parses the zones.tab file containing the names and locations
@@ -1920,7 +1920,7 @@ static char *icaltimezone_load_get_line_fn(char *s, size_t size, void *data)
  * DEBUGGING
  */
 
-int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
+bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
 {
     static const char months[][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -1957,7 +1957,7 @@ int icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
 
     icaltimezone_changes_unlock();
 
-    return 1;
+    return true;
 }
 
 /** @brief Formats a UTC offset as "+HHMM" or "+HHMMSS".
@@ -2170,12 +2170,12 @@ void icaltimezone_set_tzid_prefix(const char *new_prefix)
     }
 }
 
-void icaltimezone_set_builtin_tzdata(int set)
+void icaltimezone_set_builtin_tzdata(bool set)
 {
     use_builtin_tzdata = set;
 }
 
-int icaltimezone_get_builtin_tzdata(void)
+bool icaltimezone_get_builtin_tzdata(void)
 {
     return use_builtin_tzdata;
 }

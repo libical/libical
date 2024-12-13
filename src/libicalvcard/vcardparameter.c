@@ -188,22 +188,22 @@ char *vcardparameter_as_vcard_string(vcardparameter *param)
  * ; Use restricted by charset parameter
  * ; on outer MIME object (UTF-8 preferred)
  */
-static int vcardparameter_is_safe_char(unsigned char character, int quoted)
+static bool vcardparameter_is_safe_char(unsigned char character, int quoted)
 {
     if (character == ' ' || character == '\t' || character == '!' ||
         (character >= 0x80 && character <= 0xF8)) {
-        return 1;
+        return true;
     }
 
     if (quoted && character >= 0x23 && character <= 0x7e) {
-        return 1;
+        return true;
     } else if (!quoted &&
                ((character >= 0x23 && character <= 0x39) ||
                 (character >= 0x3c && character <= 0x7e))) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 /**
@@ -376,18 +376,18 @@ vcardparameter_kind vcardparameter_isa(vcardparameter *parameter)
     return parameter->kind;
 }
 
-int vcardparameter_isa_parameter(void *parameter)
+bool vcardparameter_isa_parameter(void *parameter)
 {
     struct vcardparameter_impl *impl = (struct vcardparameter_impl *)parameter;
 
     if (parameter == 0) {
-        return 0;
+        return false;
     }
 
     if (strcmp(impl->id, "para") == 0) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -471,7 +471,7 @@ vcardproperty *vcardparameter_get_parent(vcardparameter *param)
     return param->parent;
 }
 
-int vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2)
+bool vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2)
 {
     vcardparameter_kind kind1;
     vcardparameter_kind kind2;
@@ -485,32 +485,32 @@ int vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2)
     kind2 = vcardparameter_isa(param2);
 
     if (kind1 != kind2)
-        return 0;
+        return false;
 
     if (kind1 == VCARD_X_PARAMETER) {
         name1 = vcardparameter_get_xname(param1);
         name2 = vcardparameter_get_xname(param2);
         if (strcasecmp(name1, name2) != 0) {
-            return 0;
+            return false;
         }
     } else if (kind1 == VCARD_IANA_PARAMETER) {
         name1 = vcardparameter_get_iana_name(param1);
         name2 = vcardparameter_get_iana_name(param2);
         if (strcasecmp(name1, name2) != 0) {
-            return 0;
+            return false;
         }
     }
-    return 1;
+    return true;
 }
 
-int vcardparameter_is_multivalued(vcardparameter *param)
+bool vcardparameter_is_multivalued(vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
     return param->is_multivalued;
 }
 
-int vcardparameter_is_structured(vcardparameter *param)
+bool vcardparameter_is_structured(vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 

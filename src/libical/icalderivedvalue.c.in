@@ -37,23 +37,23 @@ struct icalvalue_kind_map
 
 <insert_code_here>
 
-int icalvalue_kind_is_valid(const icalvalue_kind kind)
+bool icalvalue_kind_is_valid(const icalvalue_kind kind)
 {
     int i = 0;
     int num_values = (int)(sizeof(value_map) / sizeof(value_map[0]));
 
     if (kind == ICAL_ANY_VALUE) {
-        return 0;
+        return false;
     }
 
     num_values--;
     do {
         if (value_map[i].kind == kind) {
-            return 1;
+            return true;
         }
     } while (i++ < num_values);
 
-    return 0;
+    return false;
 }
 
 const char *icalvalue_kind_to_string(const icalvalue_kind kind)

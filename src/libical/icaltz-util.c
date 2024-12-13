@@ -265,14 +265,14 @@ static char *parse_posix_zone(char *p, ttinfo *type)
 
 #define nth_weekday(week, day) (icalrecurrencetype_encode_day(day, week))
 
-static int icalrecur_set_single_by(icalrecurrence_by_data *by, short value)
+static bool icalrecur_set_single_by(icalrecurrence_by_data *by, short value)
 {
     if ((by->size != 1) && !icalrecur_resize_by(by, 1)) {
-        return 0;
+        return false;
     }
 
     by->data[0] = value;
-    return 1;
+    return true;
 }
 
 static char *parse_posix_rule(char *p,

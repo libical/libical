@@ -73,9 +73,9 @@ static int icaltime_leap_days(int y1, int y2)
  *  This function expects well-formed input.
  *
  *  The out_time_t is to store the result, it can be NULL.
- *  Returns 0 on failure, 1 on success.
+ *  Returns false on failure, true on success.
  */
-static int make_time(const struct tm *tm, int tzm, icaltime_t *out_time_t)
+static bool make_time(const struct tm *tm, int tzm, icaltime_t *out_time_t)
 {
     icaltime_t tim;
     int febs;
@@ -85,29 +85,29 @@ static int make_time(const struct tm *tm, int tzm, icaltime_t *out_time_t)
     /* check that month specification within range */
 
     if (tm->tm_mon < 0 || tm->tm_mon > 11)
-        return 0;
+        return false;
 
     if (tm->tm_year < 2)
-        return 0;
+        return false;
 
 #if (SIZEOF_ICALTIME_T == 4)
     /* check that year specification within range */
 
     if (tm->tm_year > 138)
-        return 0;
+        return false;
 
     /* check for upper bound of Jan 17, 2038 (to avoid possibility of 32-bit arithmetic overflow) */
     if (tm->tm_year == 138) {
         if (tm->tm_mon > 0) {
-            return 0;
+            return false;
         } else if (tm->tm_mday > 17) {
-            return 0;
+            return false;
         }
     }
 #else
     /* We don't support years >= 10000, because the function has not been tested at this range. */
     if (tm->tm_year >= 8100) {
-        return 0;
+        return false;
     }
 #endif /* SIZEOF_ICALTIME_T */
 
@@ -159,7 +159,7 @@ static int make_time(const struct tm *tm, int tzm, icaltime_t *out_time_t)
     if (out_time_t)
         *out_time_t = tim;
 
-    return 1;
+    return true;
 }
 
 /*
@@ -194,7 +194,7 @@ static icaltime_t icaltime_timegm(const struct tm *tm)
     return seconds;
 }
 
-struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const int is_date,
+struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const bool is_date,
                                                   const icaltimezone *zone)
 {
     struct icaltimetype tt;
@@ -428,7 +428,7 @@ FAIL:
     return icaltime_null_time();
 }
 
-int icaltime_is_leap_year(const int year)
+bool icaltime_is_leap_year(const int year)
 {
     if (year <= 1752) {
         return (year % 4 == 0);
@@ -528,7 +528,7 @@ int icaltime_week_number(const struct icaltimetype ictt)
 
 int icaltime_day_of_year(const struct icaltimetype t)
 {
-    int is_leap = icaltime_is_leap_year(t.year);
+    unsigned int is_leap = (unsigned int)icaltime_is_leap_year(t.year);
 
     return days_in_year_passed_month[is_leap][t.month - 1] + t.day;
 }
@@ -536,12 +536,12 @@ int icaltime_day_of_year(const struct icaltimetype t)
 struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
 {
     struct icaltimetype tt = icaltime_null_date();
-    int is_leap;
+    unsigned int is_leap;
     int month;
     int doy = _doy;
     int year = _year;
 
-    is_leap = icaltime_is_leap_year(year);
+    is_leap = (unsigned int)icaltime_is_leap_year(year);
 
     /* Zero and neg numbers represent days  of the previous year */
     if (doy < 1) {
@@ -596,35 +596,35 @@ struct icaltimetype icaltime_null_date(void)
     return t;
 }
 
-int icaltime_is_valid_time(const struct icaltimetype t)
+bool icaltime_is_valid_time(const struct icaltimetype t)
 {
     if (t.year < 0 || t.year > 9999 ||
         t.month < 0 || t.month > 12 ||
         t.day < 0 || t.day > 31 ||
         t.is_date > 1 || t.is_date < 0) {
-        return 0;
+        return false;
     } else {
-        return 1;
+        return true;
     }
 }
 
-int icaltime_is_date(const struct icaltimetype t)
+bool icaltime_is_date(const struct icaltimetype t)
 {
-    return t.is_date;
+    return (t.is_date != 0);
 }
 
-int icaltime_is_utc(const struct icaltimetype t)
+bool icaltime_is_utc(const struct icaltimetype t)
 {
     return t.zone == icaltimezone_get_utc_timezone();
 }
 
-int icaltime_is_null_time(const struct icaltimetype t)
+bool icaltime_is_null_time(const struct icaltimetype t)
 {
     if (t.second + t.minute + t.hour + t.day + t.month + t.year == 0) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b_in)
@@ -893,7 +893,7 @@ struct icaltimetype icaltime_set_timezone(struct icaltimetype *t, const icaltime
     return *t;
 }
 
-icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype dtend, int is_busy)
+icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype dtend, bool is_busy)
 {
     icaltime_span span;
 
@@ -923,36 +923,36 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
     return span;
 }
 
-int icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2)
+bool icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2)
 {
     /* s1->start in s2 */
     if (s1->start > s2->start && s1->start < s2->end)
-        return 1;
+        return true;
 
     /* s1->end in s2 */
     if (s1->end > s2->start && s1->end < s2->end)
-        return 1;
+        return true;
 
     /* s2->start in s1 */
     if (s2->start > s1->start && s2->start < s1->end)
-        return 1;
+        return true;
 
     /* s2->end in s1 */
     if (s2->end > s1->start && s2->end < s1->end)
-        return 1;
+        return true;
 
     if (s1->start == s2->start && s1->end == s2->end)
-        return 1;
+        return true;
 
-    return 0;
+    return false;
 }
 
-int icaltime_span_contains(icaltime_span *s, icaltime_span *container)
+bool icaltime_span_contains(icaltime_span *s, icaltime_span *container)
 {
     if ((s->start >= container->start && s->start < container->end) &&
         (s->end <= container->end && s->end > container->start)) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }

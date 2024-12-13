@@ -21,6 +21,8 @@
 #include "libical_ical_export.h"
 #include "icaltime.h"
 
+#include <stdbool.h>
+
 /**
  * @brief A struct representing a duration
  */
@@ -183,7 +185,7 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_bad_duration(void);
 /**
  * @brief Checks if a duration is a null duration.
  * @param d The duration to check
- * @return 1 if the duration is a null duration, 0 otherwise
+ * @return true if the duration is a null duration, false otherwise
  * @sa icalduration_null_duration()
  *
  * @par Usage
@@ -196,12 +198,12 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_bad_duration(void);
  * assert(icaldurationtype_is_null_duration(duration));
  * ```
  */
-LIBICAL_ICAL_EXPORT int icaldurationtype_is_null_duration(struct icaldurationtype d);
+LIBICAL_ICAL_EXPORT bool icaldurationtype_is_null_duration(struct icaldurationtype d);
 
 /**
  * @brief Checks if a duration is a bad duration.
  * @param d The duration to check
- * @return 1 if the duration is a bad duration, 0 otherwise
+ * @return true if the duration is a bad duration, false otherwise
  * @sa icalduration_bad_duration()
  *
  * @par Usage
@@ -214,7 +216,7 @@ LIBICAL_ICAL_EXPORT int icaldurationtype_is_null_duration(struct icaldurationtyp
  * assert(icaldurationtype_is_bad_duration(duration));
  * ```
  */
-LIBICAL_ICAL_EXPORT int icaldurationtype_is_bad_duration(struct icaldurationtype d);
+LIBICAL_ICAL_EXPORT bool icaldurationtype_is_bad_duration(struct icaldurationtype d);
 
 /**
  * @brief Adds a duration to an icaltime object and returns the result.

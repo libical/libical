@@ -29,7 +29,7 @@ be cloned."/>
     </method>
     <method name="i_cal_value_is_valid" corresponds="icalvalue_is_valid" since="1.0">
         <parameter type="const ICalValue *" name="value" comment="The #ICalValue to be checked"/>
-        <returns type="gboolean" comment="1 if valid, 0 if not."/>
+        <returns type="gboolean" comment="true if valid, false if not."/>
         <comment xml:space="preserve">Checks if #ICalValue is valid.</comment>
     </method>
     <method name="i_cal_value_as_ical_string" corresponds="icalvalue_as_ical_string_r" since="1.0">
@@ -44,7 +44,7 @@ be cloned."/>
     </method>
     <method name="i_cal_value_isa_value" corresponds="icalvalue_isa_value" since="1.0">
         <parameter type="ICalValue *" name="value" comment="A #ICalValue"/>
-        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks whether the native part of #ICalValue is an icalvalue.</comment>
     </method>
     <method name="i_cal_value_compare" corresponds="icalvalue_compare" since="1.0">
@@ -65,7 +65,7 @@ be cloned."/>
     </method>
     <method name="i_cal_value_kind_is_valid" corresponds="icalvalue_kind_is_valid" since="1.0">
         <parameter type="const ICalValueKind" name="kind" comment="The #ICalValueKind to be checked"/>
-        <returns type="gboolean" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks whether the #ICalValueKind is valid.</comment>
     </method>
     <method name="i_cal_value_encode_ical_string" corresponds="CUSTOM" since="1.0">

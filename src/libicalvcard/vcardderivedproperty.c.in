@@ -63,23 +63,23 @@ struct vcardproperty_enum_map
 <insert_code_here>
 #pragma clang diagnostic pop
 
-int vcardproperty_kind_is_valid(const vcardproperty_kind kind)
+bool vcardproperty_kind_is_valid(const vcardproperty_kind kind)
 {
     int i = 0;
     int num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
 
     if (kind == VCARD_ANY_PROPERTY) {
-        return 0;
+        return false;
     }
 
     num_props--;
     do {
         if (property_map[i].kind == kind) {
-            return 1;
+            return true;
         }
     } while (i++ < num_props);
 
-    return 0;
+    return false;
 }
 
 const char *vcardproperty_kind_to_string(vcardproperty_kind kind)
@@ -151,17 +151,17 @@ vcardvalue_kind vcardproperty_kind_to_value_kind(vcardproperty_kind kind)
     return VCARD_NO_VALUE;
 }
 
-int vcardproperty_value_kind_is_valid(vcardproperty_kind pkind,
+bool vcardproperty_value_kind_is_valid(vcardproperty_kind pkind,
                                      vcardvalue_kind vkind)
 {
     int i, j;
     int num_props;
 
     if (vkind == VCARD_NO_VALUE)
-        return 0;
+        return false;
 
     if (pkind == VCARD_X_PROPERTY)
-        return 1;
+        return true;
 
     num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
     for (i = 0; i < num_props; i++) {
@@ -171,17 +171,17 @@ int vcardproperty_value_kind_is_valid(vcardproperty_kind pkind,
             const vcardvalue_kind *valid = map->valid_values;
             for (j = 0; valid[j] != VCARD_NO_VALUE; j++) {
                 if (valid[j] == vkind) {
-                    return 1;
+                    return true;
                 }
             }
             break;
         }
     }
 
-    return 0;
+    return false;
 }
 
-int vcardproperty_is_structured(vcardproperty_kind pkind)
+bool vcardproperty_is_structured(vcardproperty_kind pkind)
 {
     int i, num_props;
 
@@ -194,10 +194,10 @@ int vcardproperty_is_structured(vcardproperty_kind pkind)
         }
     }
 
-    return 0;
+    return false;
 }
 
-int vcardproperty_is_multivalued(vcardproperty_kind pkind)
+bool vcardproperty_is_multivalued(vcardproperty_kind pkind)
 {
     int i, num_props;
 
@@ -210,11 +210,11 @@ int vcardproperty_is_multivalued(vcardproperty_kind pkind)
         }
     }
 
-    return 0;
+    return false;
 }
 #if 0
-int vcardproperty_value_kind_is_multivalued(vcardproperty_kind pkind,
-                                           vcardvalue_kind *vkind)
+bool vcardproperty_value_kind_is_multivalued(vcardproperty_kind pkind,
+                                             vcardvalue_kind *vkind)
 {
     int i, num_props;
 
@@ -243,7 +243,7 @@ int vcardproperty_value_kind_is_multivalued(vcardproperty_kind pkind,
                 case VCARD_TEXT_VALUE:
               //case VCARD_TIME_VALUE:
                 case VCARD_X_VALUE:
-                    return 1;
+                    return true;
                     break;
 
                 default:
@@ -255,11 +255,11 @@ int vcardproperty_value_kind_is_multivalued(vcardproperty_kind pkind,
         }
     }
 
-    return 0;
+    return false;
 }
 #endif
-int vcardproperty_value_kind_is_default(vcardproperty_kind pkind,
-                                       vcardvalue_kind vkind)
+bool vcardproperty_value_kind_is_default(vcardproperty_kind pkind,
+                                         vcardvalue_kind vkind)
 {
     int i, num_props;
 
@@ -274,7 +274,7 @@ int vcardproperty_value_kind_is_default(vcardproperty_kind pkind,
         }
     }
 
-    return 0;
+    return false;
 }
 
 const char *vcardproperty_enum_to_string(int e)
@@ -321,16 +321,16 @@ int vcardproperty_kind_and_string_to_enum(const int kind, const char *str)
     return 0;
 }
 
-int vcardproperty_enum_belongs_to_property(vcardproperty_kind kind, int e)
+bool vcardproperty_enum_belongs_to_property(vcardproperty_kind kind, int e)
 {
     int i;
 
     for (i = VCARDPROPERTY_FIRST_ENUM; i != VCARDPROPERTY_LAST_ENUM; i++) {
         if (enum_map[i - VCARDPROPERTY_FIRST_ENUM].prop_enum == e &&
             enum_map[i - VCARDPROPERTY_FIRST_ENUM].prop == kind) {
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }

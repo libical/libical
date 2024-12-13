@@ -17,6 +17,8 @@
 #include "vcardproperty.h"
 #include "pvl.h"
 
+#include <stdbool.h>
+
 typedef enum vcardcomponent_kind
 {
     VCARD_NO_COMPONENT,
@@ -56,11 +58,11 @@ LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string(vcardcomponent *card);
 
 LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string_r(vcardcomponent *card);
 
-LIBICAL_VCARD_EXPORT int vcardcomponent_is_valid(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT bool vcardcomponent_is_valid(vcardcomponent *card);
 
 LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component);
 
-LIBICAL_VCARD_EXPORT int vcardcomponent_isa_component(void *component);
+LIBICAL_VCARD_EXPORT bool vcardcomponent_isa_component(void *component);
 
 /***** Working with Properties *****/
 
@@ -86,7 +88,7 @@ LIBICAL_VCARD_EXPORT int vcardcomponent_count_components(vcardcomponent *compone
 
 /* Kind conversion routines */
 
-LIBICAL_VCARD_EXPORT int vcardcomponent_kind_is_valid(const vcardcomponent_kind kind);
+LIBICAL_VCARD_EXPORT bool vcardcomponent_kind_is_valid(const vcardcomponent_kind kind);
 
 LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_string_to_kind(const char *string);
 

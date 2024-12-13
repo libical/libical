@@ -197,23 +197,23 @@ struct vcardtztype vcardvalue_get_tz(const vcardvalue *impl)
     return tz;
 }
 
-int vcardvalue_kind_is_valid(const vcardvalue_kind kind)
+bool vcardvalue_kind_is_valid(const vcardvalue_kind kind)
 {
     int i = 0;
     int num_values = (int)(sizeof(value_map) / sizeof(value_map[0]));
 
     if (kind == VCARD_ANY_VALUE) {
-        return 0;
+        return false;
     }
 
     num_values--;
     do {
         if (value_map[i].kind == kind) {
-            return 1;
+            return true;
         }
     } while (i++ < num_values);
 
-    return 0;
+    return false;
 }
 
 const char *vcardvalue_kind_to_string(const vcardvalue_kind kind)

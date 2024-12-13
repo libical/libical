@@ -70,6 +70,8 @@ reference count goes to zero.
 #include "icalarray.h"
 #include "icaltime.h"
 
+#include <stdbool.h>
+
 /*
  * Recurrence enumerations
  */
@@ -219,7 +221,7 @@ LIBICAL_ICAL_EXPORT void icalrecurrencetype_ref(struct icalrecurrencetype *recur
  */
 LIBICAL_ICAL_EXPORT void icalrecurrencetype_unref(struct icalrecurrencetype *recur);
 
-LIBICAL_ICAL_EXPORT int icalrecurrencetype_rscale_is_supported(void);
+LIBICAL_ICAL_EXPORT bool icalrecurrencetype_rscale_is_supported(void);
 
 LIBICAL_ICAL_EXPORT icalarray *icalrecurrencetype_rscale_supported_calendars(void);
 
@@ -232,9 +234,9 @@ LIBICAL_ICAL_EXPORT struct icalrecurrencetype *icalrecurrencetype_clone(struct i
 /**
  * @brief Resizes the buffer backing the 'by' array to the specified size, if different.
  * Frees the buffer if the new size is 0.
- * @return 1 on success, 0 on failure.
+ * @return true on success, false on failure.
  */
-LIBICAL_ICAL_EXPORT int icalrecur_resize_by(icalrecurrence_by_data *by, short size);
+LIBICAL_ICAL_EXPORT bool icalrecur_resize_by(icalrecurrence_by_data *by, short size);
 
 /*
  * Routines to decode the day values of the by[ICAL_BY_DAY] array
@@ -284,7 +286,7 @@ LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_day(enum icalrecurrencetype_
  *
  * The "L" suffix is encoded by setting a high-order bit.
  */
-LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_is_leap(short month);
+LIBICAL_ICAL_EXPORT bool icalrecurrencetype_month_is_leap(short month);
 
 LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_month(short month);
 
@@ -293,7 +295,7 @@ LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_month(short month);
  *  and icalrecurrencetype_month_month() to split the encoded value back into the parts
  *  @since 3.1
  */
-LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_month(int month, int is_leap);
+LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_month(int month, bool is_leap);
 
 /*
  * Recurrence rule parser
@@ -327,14 +329,14 @@ LIBICAL_ICAL_EXPORT icalrecur_iterator *icalrecur_iterator_new(struct icalrecurr
  * NOTE: CAN NOT be used with RRULEs that contain COUNT.
  * @since 3.0
  */
-LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_start(icalrecur_iterator *impl,
-                                                     struct icaltimetype start);
+LIBICAL_ICAL_EXPORT bool icalrecur_iterator_set_start(icalrecur_iterator *impl,
+                                                      struct icaltimetype start);
 
 /** Set the date-time at which the iterator will stop at the latest.
  *  Values equal to or greater than end will not be returned by the iterator.
 */
-LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_end(icalrecur_iterator *impl,
-                                                   struct icaltimetype end);
+LIBICAL_ICAL_EXPORT bool icalrecur_iterator_set_end(icalrecur_iterator *impl,
+                                                    struct icaltimetype end);
 
 /**
  * Sets the date-times over which the iterator will run,
@@ -353,9 +355,9 @@ LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_end(icalrecur_iterator *impl,
  * NOTE: CAN NOT be used with RRULEs that contain COUNT.
  * @since 3.1
  */
-LIBICAL_ICAL_EXPORT int icalrecur_iterator_set_range(icalrecur_iterator *impl,
-                                                     struct icaltimetype from,
-                                                     struct icaltimetype to);
+LIBICAL_ICAL_EXPORT bool icalrecur_iterator_set_range(icalrecur_iterator *impl,
+                                                      struct icaltimetype from,
+                                                      struct icaltimetype to);
 
 /**
  * Gets the next occurrence from an iterator.
@@ -381,8 +383,8 @@ LIBICAL_ICAL_EXPORT void icalrecur_iterator_free(icalrecur_iterator *);
  * are calculated in local time. You will have to convert the results
  * back into local time before using them.
  */
-LIBICAL_ICAL_EXPORT int icalrecur_expand_recurrence(const char *rule, icaltime_t start,
-                                                    int count, icaltime_t *array);
+LIBICAL_ICAL_EXPORT bool icalrecur_expand_recurrence(const char *rule, icaltime_t start,
+                                                     int count, icaltime_t *array);
 
 /* ical_invalid_rrule_handling :
  *    How should the ICAL library handle RRULEs with invalid BYxxx part combos?

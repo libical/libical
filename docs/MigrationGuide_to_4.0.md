@@ -1,5 +1,11 @@
 # Migrating to version 4.0
 
+## Bool return values
+
+A bunch of function signatures have been changed to use 'bool' rather than 'int' types.
+
+This is implemented using the C99 standards compliant <stdbool.h> header.
+
 ## `icalrecurrencetype` now passed by reference
 
 The way `struct icalrecurrencetype` is passed between functions has been changed. While it was

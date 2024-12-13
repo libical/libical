@@ -535,15 +535,15 @@ vcardproperty_kind vcardproperty_isa(vcardproperty *p)
     return VCARD_NO_PROPERTY;
 }
 
-int vcardproperty_isa_property(void *property)
+bool vcardproperty_isa_property(void *property)
 {
     vcardproperty *impl = (vcardproperty *)property;
 
     icalerror_check_arg_rz((property != 0), "property");
     if (strcmp(impl->id, "prop") == 0) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 

@@ -242,8 +242,8 @@ static void parser_decode_param_value(char *value)
         *out++ = '\0';
 }
 
-static int parser_get_param_name_stack(char *line, char *name, size_t name_length,
-                                       char *value, size_t value_length)
+static bool parser_get_param_name_stack(char *line, char *name, size_t name_length,
+                                        char *value, size_t value_length)
 {
     char *next, *end_quote;
     size_t requested_name_length, requested_value_length;
@@ -252,7 +252,7 @@ static int parser_get_param_name_stack(char *line, char *name, size_t name_lengt
     next = parser_get_next_char('=', line, 1);
 
     if (next == 0) {
-        return 0;
+        return false;
     }
 
     requested_name_length = (ptrdiff_t)(next - line);
@@ -267,7 +267,7 @@ static int parser_get_param_name_stack(char *line, char *name, size_t name_lengt
         end_quote = (*next == '"') ? next : parser_get_next_char('"', next, 0);
 
         if (end_quote == 0) {
-            return 0;
+            return false;
         }
 
         requested_value_length = (ptrdiff_t)(end_quote - next);
@@ -278,7 +278,7 @@ static int parser_get_param_name_stack(char *line, char *name, size_t name_lengt
     /* There's not enough room in the name or value inputs, we need to fall back
        to parser_get_param_name_heap and use heap-allocated strings */
     if (requested_name_length >= name_length - 1 || requested_value_length >= value_length - 1) {
-        return 0;
+        return false;
     }
 
     strncpy(name, line, requested_name_length);
@@ -289,7 +289,7 @@ static int parser_get_param_name_stack(char *line, char *name, size_t name_lengt
 
     parser_decode_param_value(value);
 
-    return 1;
+    return true;
 }
 
 static char *parser_get_param_name_heap(char *line, char **end)
@@ -604,7 +604,7 @@ static void insert_error(icalparser *parser, icalcomponent *comp, const char *te
     parser->error_count++;
 }
 
-static int line_is_blank(char *line)
+static bool line_is_blank(char *line)
 {
     int i = 0;
 
@@ -612,11 +612,11 @@ static int line_is_blank(char *line)
         char c = *(line + i);
 
         if (c != ' ' && c != '\n' && c != '\t') {
-            return 0;
+            return false;
         }
     }
 
-    return 1;
+    return true;
 }
 
 icalcomponent *icalparser_parse(icalparser *parser,
