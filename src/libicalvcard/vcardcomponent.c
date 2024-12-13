@@ -249,7 +249,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
     return buf;
 }
 
-int vcardcomponent_is_valid(vcardcomponent *component)
+bool vcardcomponent_is_valid(vcardcomponent *component)
 {
     return ((strcmp(component->id, "comp") == 0) &&
             (component->kind != VCARD_NO_COMPONENT));
@@ -262,7 +262,7 @@ vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component)
     return component->kind;
 }
 
-int vcardcomponent_isa_component(void *component)
+bool vcardcomponent_isa_component(void *component)
 {
     vcardcomponent *impl = component;
 
@@ -646,17 +646,17 @@ static const struct vcardcomponent_kind_map component_map[] = {
     {VCARD_NO_COMPONENT, ""},
 };
 
-int vcardcomponent_kind_is_valid(const vcardcomponent_kind kind)
+bool vcardcomponent_kind_is_valid(const vcardcomponent_kind kind)
 {
     int i = 0;
 
     do {
         if (component_map[i].kind == kind) {
-            return 1;
+            return true;
         }
     } while (component_map[i++].kind != VCARD_NO_COMPONENT);
 
-    return 0;
+    return false;
 }
 
 const char *vcardcomponent_kind_to_string(vcardcomponent_kind kind)

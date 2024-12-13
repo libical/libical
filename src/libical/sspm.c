@@ -250,36 +250,36 @@ static const struct sspm_action_map sspm_action_map[] = {
      sspm_default_end_part, sspm_default_free_part},
 };
 
-static int sspm_is_mime_header(char *line)
+static bool sspm_is_mime_header(char *line)
 {
     char *name = sspm_property_name(line);
     int i;
 
     if (name == 0) {
-        return 0;
+        return false;
     }
 
     for (i = 0; mime_headers[i] != 0; i++) {
         if (strcasecmp(name, mime_headers[i]) == 0) {
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
-static int sspm_is_mail_header(char *line)
+static bool sspm_is_mail_header(char *line)
 {
     char *name = sspm_property_name(line);
 
     if (name != 0) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-static int sspm_is_blank(char *line)
+static bool sspm_is_blank(char *line)
 {
     char *p;
     char c = 0;
@@ -291,37 +291,37 @@ static int sspm_is_blank(char *line)
     }
 
     if (c == 0) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-static int sspm_is_continuation_line(char *line)
+static bool sspm_is_continuation_line(char *line)
 {
     if (line[0] == ' ' || line[0] == '\t') {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-static int sspm_is_mime_boundary(char *line)
+static bool sspm_is_mime_boundary(char *line)
 {
     if (line[0] == '-' && line[1] == '-') {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-static int sspm_is_mime_terminating_boundary(char *line)
+static bool sspm_is_mime_terminating_boundary(char *line)
 {
     if (sspm_is_mime_boundary(line) && strstr(line, "--\n")) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 static enum line_type get_line_type(char *line)
@@ -1475,8 +1475,8 @@ static void sspm_write_multipart_part(struct sspm_buffer *buf,
     (*part_num)--; /* undo last, spurious, increment */
 }
 
-int sspm_write_mime(struct sspm_part *parts, size_t num_parts,
-                    char **output_string, const char *header)
+void sspm_write_mime(struct sspm_part *parts, size_t num_parts,
+                     char **output_string, const char *header)
 {
     struct sspm_buffer buf;
     int part_num = 0;
@@ -1517,6 +1517,4 @@ int sspm_write_mime(struct sspm_part *parts, size_t num_parts,
     }
 
     *output_string = buf.buffer;
-
-    return 0;
 }

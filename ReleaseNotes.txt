@@ -27,6 +27,7 @@ Version 3.1.0 (NOT RELEASED YET):
  * Allow previous recurrence iteration
  * Improved performance of recurrence iterators
  * GEO property has arbitrary precision (values are internally stored as strings, not doubles)
+ * Signatures for some functions changed to use 'bool' rather than 'int' types
  * All ical*_new_clone() functions have been deprecated in favour of ical*_clone()
  * Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
@@ -70,6 +71,7 @@ Version 3.1.0 (NOT RELEASED YET):
     + icalvalue_new_recur
     + icalvalue_get_recur
     + icalvalue_set_recur
+    + sspm_write_mime
  * Deprecated functions:
     + caldat (replaced by internal function icaldat_int())
     + juldat (replaced by internal function juldat_int())

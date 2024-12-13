@@ -531,13 +531,13 @@ void vcardvalue_free(vcardvalue *v)
     icalmemory_free_buffer(v);
 }
 
-int vcardvalue_is_valid(const vcardvalue *value)
+bool vcardvalue_is_valid(const vcardvalue *value)
 {
     if (value == 0) {
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
 static char *vcardvalue_boolean_as_vcard_string_r(const vcardvalue *value)
@@ -852,28 +852,28 @@ vcardvalue_kind vcardvalue_isa(const vcardvalue *value)
     return value->kind;
 }
 
-int vcardvalue_isa_value(void *value)
+bool vcardvalue_isa_value(void *value)
 {
     struct vcardvalue_impl *impl = (struct vcardvalue_impl *)value;
 
     icalerror_check_arg_rz((value != 0), "value");
 
     if (strcmp(impl->id, "val") == 0) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 #if 0
-static int vcardvalue_is_time(const vcardvalue *a)
+static bool vcardvalue_is_time(const vcardvalue *a)
 {
     vcardvalue_kind kind = vcardvalue_isa(a);
 
     if (kind == VCARD_DATETIME_VALUE || kind == VCARD_DATE_VALUE) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 /*

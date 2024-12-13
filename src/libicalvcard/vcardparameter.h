@@ -261,7 +261,7 @@ LIBICAL_VCARD_EXPORT vcardparameter_kind vcardparameter_isa(vcardparameter *para
 /**
  * Determines if the given param is an vcardparameter
  * @param param The libical-originated object to check
- * @return 1 if the object is an vcardparameter, 0 otherwise.
+ * @return true if the object is an vcardparameter, false otherwise.
  * @note This function expects to be given an object originating from
  *  libical - if this function is passed anything that is not from
  *  libical, its behavior is undefined.
@@ -281,7 +281,7 @@ LIBICAL_VCARD_EXPORT vcardparameter_kind vcardparameter_isa(vcardparameter *para
  * vcardparameter_free(param);
  * ```
  */
-LIBICAL_VCARD_EXPORT int vcardparameter_isa_parameter(void *param);
+LIBICAL_VCARD_EXPORT bool vcardparameter_isa_parameter(void *param);
 
 /* Access the name of an X parameter */
 
@@ -535,7 +535,7 @@ LIBICAL_VCARD_EXPORT const char *vcardparameter_get_iana_value(vcardparameter *p
  * @brief Determines if two parameters have the same name
  * @param param1 First parameter to compare
  * @param param2 Second parameter to compare
- * @return 1 if they have the same name, 0 otherwise.
+ * @return true if they have the same name, false otherwise.
  *
  * @par Error handling
  * If either of @a param1 or @a param2 are `NULL`, it returns 0 and sets
@@ -558,7 +558,7 @@ LIBICAL_VCARD_EXPORT const char *vcardparameter_get_iana_value(vcardparameter *p
  * vcardparameter_free(param2);
  * ```
  */
-LIBICAL_VCARD_EXPORT int vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2);
+LIBICAL_VCARD_EXPORT bool vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2);
 
 /* Convert enumerations */
 
@@ -609,7 +609,7 @@ LIBICAL_VCARD_EXPORT vcardparameter_kind vcardparameter_string_to_kind(const cha
 /**
  * @brief Checks the validity of a vcardparameter_kind
  * @param kind The vcardparameter_kind
- * @return 1 if @a kind is valid, 0 otherwise
+ * @return true if @a kind is valid, false otherwise
  *
  * @par Usage
  * ```c
@@ -617,13 +617,13 @@ LIBICAL_VCARD_EXPORT vcardparameter_kind vcardparameter_string_to_kind(const cha
  * ```
  * @since 3.0.4
  */
-LIBICAL_VCARD_EXPORT int vcardparameter_kind_is_valid(const vcardparameter_kind kind);
+LIBICAL_VCARD_EXPORT bool vcardparameter_kind_is_valid(const vcardparameter_kind kind);
 
 LIBICAL_VCARD_EXPORT vcardvalue_kind vcardparameter_kind_value_kind(const vcardparameter_kind kind,
                                                                     int *is_multivalued);
 
-LIBICAL_VCARD_EXPORT int vcardparameter_is_multivalued(vcardparameter *param);
+LIBICAL_VCARD_EXPORT bool vcardparameter_is_multivalued(vcardparameter *param);
 
-LIBICAL_VCARD_EXPORT int vcardparameter_is_structured(vcardparameter *param);
+LIBICAL_VCARD_EXPORT bool vcardparameter_is_structured(vcardparameter *param);
 
 #endif

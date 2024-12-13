@@ -182,23 +182,23 @@ char *icalparameter_as_ical_string(icalparameter *param)
  * ; Use restricted by charset parameter
  * ; on outer MIME object (UTF-8 preferred)
  */
-static int icalparameter_is_safe_char(unsigned char character, int quoted)
+static bool icalparameter_is_safe_char(unsigned char character, int quoted)
 {
     if (character == ' ' || character == '\t' || character == '!' ||
         (character >= 0x80 && character <= 0xF8)) {
-        return 1;
+        return true;
     }
 
     if (quoted && character >= 0x23 && character <= 0x7e) {
-        return 1;
+        return true;
     } else if (!quoted &&
                ((character >= 0x23 && character <= 0x2b) ||
                 (character >= 0x2d && character <= 0x39) ||
                 (character >= 0x3c && character <= 0x7e))) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 /**
@@ -325,18 +325,18 @@ icalparameter_kind icalparameter_isa(icalparameter *parameter)
     return parameter->kind;
 }
 
-int icalparameter_isa_parameter(void *parameter)
+bool icalparameter_isa_parameter(void *parameter)
 {
     struct icalparameter_impl *impl = (struct icalparameter_impl *)parameter;
 
     if (parameter == 0) {
-        return 0;
+        return false;
     }
 
     if (strcmp(impl->id, "para") == 0) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
@@ -420,7 +420,7 @@ icalproperty *icalparameter_get_parent(icalparameter *param)
     return param->parent;
 }
 
-int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
+bool icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
 {
     icalparameter_kind kind1;
     icalparameter_kind kind2;
@@ -434,22 +434,22 @@ int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
     kind2 = icalparameter_isa(param2);
 
     if (kind1 != kind2)
-        return 0;
+        return false;
 
     if (kind1 == ICAL_X_PARAMETER) {
         name1 = icalparameter_get_xname(param1);
         name2 = icalparameter_get_xname(param2);
         if (strcasecmp(name1, name2) != 0) {
-            return 0;
+            return false;
         }
     } else if (kind1 == ICAL_IANA_PARAMETER) {
         name1 = icalparameter_get_iana_name(param1);
         name2 = icalparameter_get_iana_name(param2);
         if (strcasecmp(name1, name2) != 0) {
-            return 0;
+            return false;
         }
     }
-    return 1;
+    return true;
 }
 
 /* Everything below this line is machine generated. Do not edit. */

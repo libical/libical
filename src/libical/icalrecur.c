@@ -175,9 +175,9 @@ static ICAL_GLOBAL_VAR ical_invalid_rrule_handling invalidRruleHandling = ICAL_R
 
 #define LEAP_MONTH 0x1000
 
-int icalrecurrencetype_rscale_is_supported(void)
+bool icalrecurrencetype_rscale_is_supported(void)
 {
-    return 1;
+    return true;
 }
 
 /****************** Forward declarations ******************/
@@ -307,31 +307,31 @@ static void icalrecur_free_by(icalrecurrence_by_data *by)
     by->size = 0;
 }
 
-int icalrecur_resize_by(icalrecurrence_by_data *by, short size)
+bool icalrecur_resize_by(icalrecurrence_by_data *by, short size)
 {
     if (by->size == size) {
-        return 1;
+        return true;
     }
 
     if (size == 0) {
         icalrecur_free_by(by);
-        return 1;
+        return true;
     }
 
     if ((by->data == NULL) || (by->size == 0)) {
         if ((by->data != NULL) || (by->size != 0)) {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
-            return 0;
+            return false;
         }
 
         by->data = (short *)icalmemory_new_buffer(size * sizeof(by->data[0]));
         if (!by->data) {
-            return 0;
+            return false;
         }
     } else {
         short *new_data = (short *)icalmemory_resize_buffer(by->data, size * sizeof(by->data[0]));
         if (!new_data) {
-            return 0;
+            return false;
         }
 
         by->data = new_data;
@@ -343,7 +343,7 @@ int icalrecur_resize_by(icalrecurrence_by_data *by, short size)
 
     by->size = size;
 
-    return 1;
+    return true;
 }
 
 /*********************** Rule parsing routines ************************/
@@ -2096,7 +2096,7 @@ static void reset_period_start(icalrecur_iterator *impl)
 
 #endif /* HAVE_LIBICU */
 
-static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start);
+static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start);
 static void increment_month(icalrecur_iterator *impl, int inc);
 static int expand_month_days(icalrecur_iterator *impl, int year, int month);
 static int expand_year_days(icalrecur_iterator *impl, int year);
@@ -3526,7 +3526,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
     return impl->last;
 }
 
-static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
+static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 {
     icalrecurrencetype_frequency freq = impl->rule->freq;
     short interval = impl->rule->interval;
@@ -3561,7 +3561,7 @@ static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
             expand_year_days(impl, start.year);
             if (icalerrno != ICAL_NO_ERROR) {
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-                return 0;
+                return false;
             }
             if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
                 break; /* break when a matching day is found */
@@ -3677,19 +3677,19 @@ static int __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
     /* Fail if first instance exceeds MAX_TIME_T_YEAR */
     if (impl->last.year > MAX_TIME_T_YEAR) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
-int icalrecur_iterator_set_start(icalrecur_iterator *impl,
-                                 struct icaltimetype start)
+bool icalrecur_iterator_set_start(icalrecur_iterator *impl,
+                                  struct icaltimetype start)
 {
     /* We can't adjust start date if we need to count occurrences */
     if (impl->rule->count > 0) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        return 0;
+        return false;
     }
 
     /* Convert start to same time zone as DTSTART */
@@ -3702,31 +3702,31 @@ int icalrecur_iterator_set_start(icalrecur_iterator *impl,
                icaltime_compare(start, impl->rule->until) > 0) {
         /* If start is after UNTIL, we're done */
         impl->last = start;
-        return 1;
+        return true;
     }
 
     return __iterator_set_start(impl, start);
 }
 
-int icalrecur_iterator_set_end(icalrecur_iterator *impl,
-                               struct icaltimetype end)
+bool icalrecur_iterator_set_end(icalrecur_iterator *impl,
+                                struct icaltimetype end)
 {
     /* Convert end to same time zone as DTSTART */
     end = icaltime_convert_to_zone(end, (icaltimezone *)impl->dtstart.zone);
 
     impl->iend = end;
 
-    return 1;
+    return true;
 }
 
-int icalrecur_iterator_set_range(icalrecur_iterator *impl,
-                                 struct icaltimetype from,
-                                 struct icaltimetype to)
+bool icalrecur_iterator_set_range(icalrecur_iterator *impl,
+                                  struct icaltimetype from,
+                                  struct icaltimetype to)
 {
     if (impl->rule->count > 0 || icaltime_is_null_time(from)) {
         /* Can't set a range without 'from' or if we need to count occurrences */
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        return 0;
+        return false;
     }
 
     if (!icaltime_is_null_time(to) && icaltime_compare(to, from) < 0) {
@@ -3742,11 +3742,11 @@ int icalrecur_iterator_set_range(icalrecur_iterator *impl,
         } else if (icaltime_compare(from, impl->dtstart) < 0) {
             /* If 'from' is before START, we're done */
             impl->last = from;
-            return 1;
+            return true;
         }
 
         if (!__iterator_set_start(impl, from))
-            return 0;
+            return false;
 
         /* __iterator_set_start() may back us up earlier than 'from'
            Iterate forward until we are later than 'from'.
@@ -3768,12 +3768,12 @@ int icalrecur_iterator_set_range(icalrecur_iterator *impl,
         impl->days_index = 0;
     } else {
         if (!icalrecur_iterator_set_start(impl, from))
-            return 0;
+            return false;
 
         icalrecur_iterator_set_end(impl, to);
     }
 
-    return 1;
+    return true;
 }
 
 /************************** Type Routines **********************/
@@ -3818,7 +3818,7 @@ short icalrecurrencetype_encode_day(enum icalrecurrencetype_weekday weekday, int
     return (weekday + (8 * abs(position))) * ((position < 0) ? -1 : 1);
 }
 
-int icalrecurrencetype_month_is_leap(short month)
+bool icalrecurrencetype_month_is_leap(short month)
 {
     return (month & LEAP_MONTH);
 }
@@ -3828,13 +3828,13 @@ int icalrecurrencetype_month_month(short month)
     return (month & ~LEAP_MONTH);
 }
 
-short icalrecurrencetype_encode_month(int month, int is_leap)
+short icalrecurrencetype_encode_month(int month, bool is_leap)
 {
     return month | (is_leap ? LEAP_MONTH : 0);
 }
 
-int icalrecur_expand_recurrence(const char *rule,
-                                icaltime_t start, int count, icaltime_t *array)
+bool icalrecur_expand_recurrence(const char *rule,
+                                 icaltime_t start, int count, icaltime_t *array)
 {
     struct icalrecurrencetype *recur;
     icalrecur_iterator *ritr;
@@ -3848,7 +3848,7 @@ int icalrecur_expand_recurrence(const char *rule,
 
     recur = icalrecurrencetype_new_from_string(rule);
     if (!recur) {
-        return 0;
+        return false;
     }
 
     ritr = icalrecur_iterator_new(recur, icstart);
@@ -3867,7 +3867,7 @@ int icalrecur_expand_recurrence(const char *rule,
 
     icalrecurrencetype_unref(recur);
 
-    return 1;
+    return true;
 }
 
 ical_invalid_rrule_handling ical_get_invalid_rrule_handling_setting(void)

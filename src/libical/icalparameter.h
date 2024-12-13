@@ -268,7 +268,7 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter *paramete
 /**
  * Determines if the given param is an icalparameter
  * @param param The libical-originated object to check
- * @return 1 if the object is an icalparameter, 0 otherwise.
+ * @return true if the object is an icalparameter, false otherwise.
  * @note This function expects to be given an object originating from
  *  libical - if this function is passed anything that is not from
  *  libical, its behavior is undefined.
@@ -288,7 +288,7 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter *paramete
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT int icalparameter_isa_parameter(void *param);
+LIBICAL_ICAL_EXPORT bool icalparameter_isa_parameter(void *param);
 
 /* Access the name of an X parameter */
 
@@ -542,7 +542,7 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(icalparameter *para
  * @brief Determines if two parameters have the same name
  * @param param1 First parameter to compare
  * @param param2 Second parameter to compare
- * @return 1 if they have the same name, 0 otherwise.
+ * @return true if they have the same name, false otherwise.
  *
  * @par Error handling
  * If either of @a param1 or @a param2 are `NULL`, it returns 0 and sets
@@ -565,7 +565,7 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(icalparameter *para
  * icalparameter_free(param2);
  * ```
  */
-LIBICAL_ICAL_EXPORT int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2);
+LIBICAL_ICAL_EXPORT bool icalparameter_has_same_name(icalparameter *param1, icalparameter *param2);
 
 /* Convert enumerations */
 
@@ -616,7 +616,7 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *
 /**
  * @brief Checks the validity of an icalparameter_kind
  * @param kind The icalparameter_kind
- * @return 1 if @a kind is valid, 0 otherwise
+ * @return true if @a kind is valid, false otherwise
  *
  * @par Usage
  * ```c
@@ -624,6 +624,6 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *
  * ```
  * @since 3.0.4
  */
-LIBICAL_ICAL_EXPORT int icalparameter_kind_is_valid(const icalparameter_kind kind);
+LIBICAL_ICAL_EXPORT bool icalparameter_kind_is_valid(const icalparameter_kind kind);
 
 #endif

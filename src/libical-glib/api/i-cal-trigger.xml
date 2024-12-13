@@ -18,12 +18,12 @@
     </method>
     <method name="i_cal_trigger_is_null_trigger" corresponds="icaltriggertype_is_null_trigger" since="1.0">
         <parameter type="ICalTrigger *" name="tr" comment="A #ICalTrigger"/>
-        <returns type="gboolean" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks if a #ICalTrigger is a null trigger.</comment>
     </method>
     <method name="i_cal_trigger_is_bad_trigger" corresponds="icaltriggertype_is_bad_trigger" since="1.0">
         <parameter type="ICalTrigger *" name="tr" comment="A #ICalTrigger"/>
-        <returns type="gboolean" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks if a #ICalTrigger is a bad trigger.</comment>
     </method>
     <method name="i_cal_trigger_get_time" corresponds="CUSTOM" kind="get" since="1.0">

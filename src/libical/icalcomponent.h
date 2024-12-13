@@ -65,11 +65,11 @@ LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string(icalcomponent *component)
 
 LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string_r(icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT int icalcomponent_is_valid(icalcomponent *component);
+LIBICAL_ICAL_EXPORT bool icalcomponent_is_valid(icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT icalcomponent_kind icalcomponent_isa(const icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT int icalcomponent_isa_component(void *component);
+LIBICAL_ICAL_EXPORT bool icalcomponent_isa_component(void *component);
 
 /* Deal with X components */
 
@@ -170,7 +170,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter *i);
 
 /***** Working with embedded error properties *****/
 
-/* Check the component against itip rules and insert error properties*/
+/* Check the component against itip rules and insert error properties */
 /* Working with embedded error properties */
 LIBICAL_ICAL_EXPORT int icalcomponent_check_restrictions(icalcomponent *comp);
 
@@ -195,7 +195,7 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_parent(icalcomponent *component,
 
 /* Kind conversion routines */
 
-LIBICAL_ICAL_EXPORT int icalcomponent_kind_is_valid(const icalcomponent_kind kind);
+LIBICAL_ICAL_EXPORT bool icalcomponent_kind_is_valid(const icalcomponent_kind kind);
 
 LIBICAL_ICAL_EXPORT icalcomponent_kind icalcomponent_string_to_kind(const char *string);
 
@@ -442,9 +442,9 @@ LIBICAL_ICAL_EXPORT icaltimezone *icalcomponent_get_timezone(icalcomponent *comp
  * In this case though you don't need to worry how you call this
  * function.  It will always return the correct result.
  */
-LIBICAL_ICAL_EXPORT int icalproperty_recurrence_is_excluded(icalcomponent *comp,
-                                                            struct icaltimetype *dtstart,
-                                                            struct icaltimetype *recurtime);
+LIBICAL_ICAL_EXPORT bool icalproperty_recurrence_is_excluded(icalcomponent *comp,
+                                                             struct icaltimetype *dtstart,
+                                                             struct icaltimetype *recurtime);
 
 /**
  * @brief Cycles through all recurrences of an event.

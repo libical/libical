@@ -16,6 +16,8 @@
 #include "icalderivedvalue.h"
 #include "icalrecur.h"
 
+#include <stdbool.h>
+
 typedef struct icalproperty_impl icalproperty;
 
 <insert_code_here>

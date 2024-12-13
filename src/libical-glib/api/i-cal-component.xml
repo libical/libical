@@ -37,7 +37,7 @@
     </method>
     <method name="i_cal_component_is_valid" corresponds="icalcomponent_is_valid" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be checked"/>
-        <returns type="gboolean" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks whether #ICalComponent is valid.</comment>
     </method>
     <method name="i_cal_component_isa" corresponds="icalcomponent_isa" since="1.0">
@@ -47,7 +47,7 @@
     </method>
     <method name="i_cal_component_isa_component" corresponds="icalcomponent_isa_component" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be checked"/>
-        <returns type="gint" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks whether the native part of #ICalComponent is icalcomponent.</comment>
     </method>
     <method name="i_cal_component_add_property" corresponds="icalcomponent_add_property" since="1.0">
@@ -278,7 +278,7 @@
     </method>
     <method name="i_cal_component_kind_is_valid" corresponds="icalcomponent_kind_is_valid" since="1.0">
         <parameter type="const ICalComponentKind" name="kind" comment="A #ICalComponentKind"/>
-        <returns type="gboolean" comment="1 if @kind id a #ICalComponent but not the I_CAL_NO_COMPONENT, 0 if not."/>
+        <returns type="gboolean" comment="true if @kind id a #ICalComponent but not the I_CAL_NO_COMPONENT, false if not."/>
         <comment xml:space="preserve">Checks if a #ICalComponentKind is valid.</comment>
     </method>
     <method name="i_cal_component_kind_from_string" corresponds="icalcomponent_string_to_kind" since="1.0">
@@ -549,7 +549,7 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
         <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
         <parameter type="ICalTime *" name="dtstart" native_op="POINTER" comment="The base dtstart value for this component"/>
         <parameter type="ICalTime *" name="recurtime" native_op="POINTER" comment="The time to test against"/>
-        <returns type="gboolean" comment="1 if yes, 0 if not."/>
+        <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Decides if this recurrence is acceptable. This function decides if a specific recurrence value is excluded by EXRULE or EXDATE properties.</comment>
     </method>
     <method name="i_cal_component_new_vcalendar" corresponds="icalcomponent_new_vcalendar" kind="constructor" since="1.0">

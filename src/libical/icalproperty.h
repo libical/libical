@@ -40,7 +40,7 @@ LIBICAL_ICAL_EXPORT void icalproperty_free(icalproperty *prop);
 
 LIBICAL_ICAL_EXPORT icalproperty_kind icalproperty_isa(icalproperty *property);
 
-LIBICAL_ICAL_EXPORT int icalproperty_isa_property(void *property);
+LIBICAL_ICAL_EXPORT bool icalproperty_isa_property(void *property);
 
 LIBICAL_ICAL_EXPORT void icalproperty_add_parameters(struct icalproperty_impl *prop, va_list args);
 
@@ -156,7 +156,7 @@ LIBICAL_ICAL_EXPORT const char *icalproperty_kind_to_string(icalproperty_kind ki
 LIBICAL_ICAL_EXPORT icalproperty_kind icalproperty_string_to_kind(const char *string);
 
 /** Check validity of a specific icalproperty_kind **/
-LIBICAL_ICAL_EXPORT int icalproperty_kind_is_valid(const icalproperty_kind kind);
+LIBICAL_ICAL_EXPORT bool icalproperty_kind_is_valid(const icalproperty_kind kind);
 
 LIBICAL_ICAL_EXPORT icalproperty_method icalproperty_string_to_method(const char *str);
 LIBICAL_ICAL_EXPORT const char *icalproperty_method_to_string(icalproperty_method method);
@@ -168,7 +168,7 @@ LIBICAL_ICAL_EXPORT int icalproperty_kind_and_string_to_enum(const int kind, con
 LIBICAL_ICAL_EXPORT const char *icalproperty_status_to_string(icalproperty_status);
 LIBICAL_ICAL_EXPORT icalproperty_status icalproperty_string_to_status(const char *string);
 
-LIBICAL_ICAL_EXPORT int icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e);
+LIBICAL_ICAL_EXPORT bool icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e);
 
 /**
  * Normalizes (reorders and sorts the parameters) the specified @p icalproperty.

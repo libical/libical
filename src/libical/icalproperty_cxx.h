@@ -100,7 +100,7 @@ public:
     static std::string status_to_string(const icalproperty_status &status);
     static icalproperty_status string_to_status(const std::string &str);
 
-    static int enum_belongs_to_property(const icalproperty_kind &kind, const int &e);
+    static bool enum_belongs_to_property(const icalproperty_kind &kind, const int &e);
 
 public:
     /* ACTION */

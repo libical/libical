@@ -14,6 +14,8 @@
 #include "libical_ical_export.h"
 #include "icalduration.h"
 
+#include <stdbool.h>
+
 typedef struct icalparameter_impl icalparameter;
 
 LIBICAL_ICAL_EXPORT const char *icalparameter_enum_to_string(int e);

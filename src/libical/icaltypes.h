@@ -16,6 +16,8 @@
 #include "icalenums.h"
 #include "icalperiod.h"
 
+#include <stdbool.h>
+
 struct icaldatetimeperiodtype {
     struct icaltimetype time;
     struct icalperiodtype period;
@@ -36,9 +38,9 @@ LIBICAL_ICAL_EXPORT struct icaltriggertype icaltriggertype_from_int(const int re
 
 LIBICAL_ICAL_EXPORT struct icaltriggertype icaltriggertype_from_string(const char *str);
 
-LIBICAL_ICAL_EXPORT int icaltriggertype_is_null_trigger(struct icaltriggertype tr);
+LIBICAL_ICAL_EXPORT bool icaltriggertype_is_null_trigger(struct icaltriggertype tr);
 
-LIBICAL_ICAL_EXPORT int icaltriggertype_is_bad_trigger(struct icaltriggertype tr);
+LIBICAL_ICAL_EXPORT bool icaltriggertype_is_bad_trigger(struct icaltriggertype tr);
 
 /* struct icalreqstattype. This struct contains two string pointers,
 but don't try to free either of them. The "desc" string is a pointer

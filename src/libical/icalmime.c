@@ -318,7 +318,8 @@ icalcomponent *icalmime_parse(char *(*get_string)(char *s, size_t size, void *d)
     return root;
 }
 
-int icalmime_test(char *(*get_string)(char *s, size_t size, void *d), void *data)
+#if 0
+bool icalmime_test(char *(*get_string)(char *s, size_t size, void *d), void *data)
 {
     char *out;
     struct sspm_part *parts;
@@ -326,7 +327,7 @@ int icalmime_test(char *(*get_string)(char *s, size_t size, void *d), void *data
 
     if ((parts = (struct sspm_part *)icalmemory_new_buffer(NUM_PARTS * sizeof(struct sspm_part))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-        return 0;
+        return false;
     }
 
     memset(parts, 0, NUM_PARTS * sizeof(struct sspm_part));
@@ -347,5 +348,6 @@ int icalmime_test(char *(*get_string)(char *s, size_t size, void *d), void *data
     printf("%s\n", out);
     icalmemory_free_buffer(out);
 
-    return 0;
+    return false;
 }
+#endif

@@ -14,6 +14,8 @@
 
 #include "libical_vcard_export.h"
 
+#include <stdbool.h>
+
 typedef struct vcardtimetype {
     int year;   /* 0000-9999 */
     int month;  /* 01 (Jan) to 12 (Dec). */
@@ -32,14 +34,14 @@ typedef struct vcardtimetype {
 LIBICAL_VCARD_EXPORT vcardtimetype vcardtime_null_datetime(void);
 LIBICAL_VCARD_EXPORT vcardtimetype vcardtime_current_utc_time(void);
 
-LIBICAL_VCARD_EXPORT int vcardtime_is_null_datetime(const vcardtimetype t);
-LIBICAL_VCARD_EXPORT int vcardtime_is_time(const vcardtimetype t);
-LIBICAL_VCARD_EXPORT int vcardtime_is_date(const vcardtimetype t);
-LIBICAL_VCARD_EXPORT int vcardtime_is_datetime(const vcardtimetype t);
-LIBICAL_VCARD_EXPORT int vcardtime_is_timestamp(const vcardtimetype t);
-LIBICAL_VCARD_EXPORT int vcardtime_is_utc(const vcardtimetype t);
-LIBICAL_VCARD_EXPORT int vcardtime_is_leap_year(const int year);
-LIBICAL_VCARD_EXPORT int vcardtime_is_valid_time(const struct vcardtimetype t);
+LIBICAL_VCARD_EXPORT bool vcardtime_is_null_datetime(const vcardtimetype t);
+LIBICAL_VCARD_EXPORT bool vcardtime_is_time(const vcardtimetype t);
+LIBICAL_VCARD_EXPORT bool vcardtime_is_date(const vcardtimetype t);
+LIBICAL_VCARD_EXPORT bool vcardtime_is_datetime(const vcardtimetype t);
+LIBICAL_VCARD_EXPORT bool vcardtime_is_timestamp(const vcardtimetype t);
+LIBICAL_VCARD_EXPORT bool vcardtime_is_utc(const vcardtimetype t);
+LIBICAL_VCARD_EXPORT bool vcardtime_is_leap_year(const int year);
+LIBICAL_VCARD_EXPORT bool vcardtime_is_valid_time(const struct vcardtimetype t);
 
 #define VCARDTIME_BARE_TIME (0x1) /* 'T' not needed for TIME */
 #define VCARDTIME_AS_V4 (0x2)     /* allow partial date and/or time */

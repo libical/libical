@@ -73,6 +73,7 @@
 
 #include "libical_ical_export.h"
 
+#include <stdbool.h>
 #include <time.h>
 #define icaltime_t ${ICAL_ICALTIME_T_TYPE}
 
@@ -88,7 +89,7 @@ struct icaltime_span
 {
     icaltime_t start;       /**< in UTC */
     icaltime_t end;         /**< in UTC */
-    int is_busy;        /**< 1->busy time, 0-> free time */
+    int is_busy;            /**< 1->busy time, 0-> free time */
 };
 
 typedef struct icaltime_span icaltime_span;
@@ -162,7 +163,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_today(void);
  *
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm,
-                                                                      const int is_date,
+                                                                      const bool is_date,
                                                                       const icaltimezone *zone);
 
 /**     @brief Constructor.
@@ -275,7 +276,7 @@ LIBICAL_ICAL_EXPORT int icaltime_start_doy_week(const struct icaltimetype t, int
 LIBICAL_ICAL_EXPORT int icaltime_week_number(const struct icaltimetype t);
 
 /** @brief Returns true if the time is null. */
-LIBICAL_ICAL_EXPORT int icaltime_is_null_time(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT bool icaltime_is_null_time(const struct icaltimetype t);
 
 /**
  *      @brief Returns false if the time is clearly invalid, but is not null.
@@ -283,20 +284,19 @@ LIBICAL_ICAL_EXPORT int icaltime_is_null_time(const struct icaltimetype t);
  *      This is usually the result of creating a new time type but not
  *      clearing it, or setting one of the flags to an illegal value.
  */
-LIBICAL_ICAL_EXPORT int icaltime_is_valid_time(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT bool icaltime_is_valid_time(const struct icaltimetype t);
 
 /**     @brief Returns true if time is a DATE.
  *
- * The options are DATE type, which returns true, or DATE-TIME, which
- * returns false.
+ * The options are DATE type, which returns true, or DATE-TIME, which returns false.
  */
-LIBICAL_ICAL_EXPORT int icaltime_is_date(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT bool icaltime_is_date(const struct icaltimetype t);
 
 /**     @brief Returns true if the time is relative to UTC zone.
  *
  *      @todo  We should only check the zone.
  */
-LIBICAL_ICAL_EXPORT int icaltime_is_utc(const struct icaltimetype t);
+LIBICAL_ICAL_EXPORT bool icaltime_is_utc(const struct icaltimetype t);
 
 /**
  *      @brief Returns -1, 0, or 1 to indicate that a is less than b, a
@@ -377,7 +377,7 @@ LIBICAL_ICAL_EXPORT int icaltime_days_in_month(const int month, const int year);
  *
  * Year is the normal year, e.g. 2001.
  */
-LIBICAL_ICAL_EXPORT int icaltime_is_leap_year(const int year);
+LIBICAL_ICAL_EXPORT bool icaltime_is_leap_year(const int year);
 
 /** Returns the number of days in this year. */
 LIBICAL_ICAL_EXPORT int icaltime_days_in_year(const int year);
@@ -388,11 +388,11 @@ LIBICAL_ICAL_EXPORT int icaltime_days_in_year(const int year);
  *  @param dtstart   The beginning time of the span, can be a date-time
  *                   or just a date.
  *  @param dtend     The end time of the span.
- *  @param is_busy   A boolean value, 0/1.
- *  @returns          A span using the supplied values. The times are specified in UTC.
+ *  @param is_busy   A boolean value, false/true.
+ *  @returns         A span using the supplied values. The times are specified in UTC.
  */
 LIBICAL_ICAL_EXPORT struct icaltime_span icaltime_span_new(struct icaltimetype dtstart,
-                                                           struct icaltimetype dtend, int is_busy);
+                                                           struct icaltimetype dtend, bool is_busy);
 
 /** @brief Returns true if the two spans overlap.
  *
@@ -407,7 +407,7 @@ LIBICAL_ICAL_EXPORT struct icaltime_span icaltime_span_new(struct icaltimetype d
  *
  *  Note, this will return false if the spans are adjacent.
  */
-LIBICAL_ICAL_EXPORT int icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2);
+LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2);
 
 /** @brief Returns true if the span is totally within the containing
  *  span.
@@ -417,6 +417,8 @@ LIBICAL_ICAL_EXPORT int icaltime_span_overlaps(icaltime_span *s1, icaltime_span 
  *  @return           boolean value.
  *
  */
-LIBICAL_ICAL_EXPORT int icaltime_span_contains(icaltime_span *s, icaltime_span *container);
+LIBICAL_ICAL_EXPORT bool icaltime_span_contains(icaltime_span *s, icaltime_span *container);
 
 #endif /* !ICALTIME_H */
+
+/* kate: syntax C; */

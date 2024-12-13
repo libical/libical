@@ -129,7 +129,7 @@ typedef icalset *(*fptr)(void);
 /**
  * Try to load the file and register any icalset found within.
  */
-static int load(const char *file)
+static bool load(const char *file)
 {
     void *modh;
     fptr inith;
@@ -138,7 +138,7 @@ static int load(const char *file)
 
     if ((modh = dlopen(file, RTLD_NOW)) == 0) {
         perror("dlopen");
-        return 0;
+        return false;
     }
 
     (void)dlerror(); /* clear */
@@ -147,7 +147,7 @@ static int load(const char *file)
     if (dlerr != NULL) {
         fprintf(stderr, "dlsym error: %s\n", dlerr);
         dlclose(modh);
-        return 0;
+        return false;
     }
 
     while ((icalset_init_ptr = ((inith)())) != 0) {
@@ -156,14 +156,14 @@ static int load(const char *file)
 
     (void)dlerror(); /* clear */
     dlclose(modh);
-    return 1;
+    return true;
 }
 
+#if 0
 /**
- * Look in the given directory for files called mod_*.o and try to
- * load them.
+ * Look in the given directory for files called mod_*.o and try to load them.
  */
-int icalset_loaddir(const char *path)
+bool icalset_loaddir(const char *path)
 {
     DIR *d;
     struct dirent *dp;
@@ -179,7 +179,7 @@ int icalset_loaddir(const char *path)
 
     if ((d = opendir(path)) == 0) {
         perror("opendir");
-        return 0;
+        return false;
     }
 
     while ((dp = readdir(d)) != 0) {
@@ -194,10 +194,9 @@ int icalset_loaddir(const char *path)
     }
     (void)closedir(d);
 
-    return 1;
+    return true;
 }
-
-int icalset_register_class(icalset *set);
+#endif
 
 static void icalset_init(void)
 {
@@ -213,14 +212,14 @@ static void icalset_init(void)
     icalset_init_done++;
 }
 
-int icalset_register_class(icalset *set)
+bool icalset_register_class(icalset *set)
 {
     if (!icalset_init_done) {
         icalset_init();
     }
 
     pvl_push(icalset_kinds, set);
-    return 1;
+    return true;
 }
 
 #endif

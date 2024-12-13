@@ -1039,7 +1039,7 @@ icalcomponent *icalbdbset_fetch(icalset *set, icalcomponent_kind kind, const cha
     return 0;
 }
 
-int icalbdbset_has_uid(icalset *store, const char *uid)
+int icalbdbset_has_uid(icalset *store, const char *uid) // return an int for icalset_bdbset_init
 {
     _unused(store);
     _unused(uid);

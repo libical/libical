@@ -243,7 +243,7 @@ void icalssutil_get_parts(icalcomponent *c, struct icalclassify_parts *parts)
     }
 }
 
-int icalssutil_is_rescheduled(icalcomponent *a, icalcomponent *b)
+static bool icalssutil_is_rescheduled(icalcomponent *a, icalcomponent *b)
 {
     icalproperty *p1, *p2;
     icalcomponent *i1, *i2;
@@ -273,7 +273,7 @@ int icalssutil_is_rescheduled(icalcomponent *a, icalcomponent *b)
         if ((p1 != 0) ^ (p2 != 0)) {
             /* Return true if the property exists in one component and not
                the other */
-            return 1;
+            return true;
         } else if (!p1 && !p2)
             continue;
 
@@ -284,11 +284,11 @@ int icalssutil_is_rescheduled(icalcomponent *a, icalcomponent *b)
         icalmemory_free_buffer(temp2);
 
         if (p1 && cmp != 0) {
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
 #define icalclassify_pre \

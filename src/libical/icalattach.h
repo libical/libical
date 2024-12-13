@@ -146,12 +146,9 @@ LIBICAL_ICAL_EXPORT void icalattach_unref(icalattach *attach);
 /**
  * @brief Determines if @a attach is an URL.
  * @param attach the icalattach object to check
- * @return 1 if it is a URL, otherwise 0.
  * @sa icalattach_get_url()
  *
- * @par Error handling
- * Returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR if
- * @a attach is `NULL`.
+ * Errors if @p attach is `NULL`.
  *
  * @par Usage
  * ```c

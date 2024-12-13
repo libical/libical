@@ -76,7 +76,7 @@ struct icalset_impl {
 };
 
 /** @brief Registers a new derived class */
-LIBICAL_ICALSS_EXPORT int icalset_register_class(icalset *set);
+LIBICAL_ICALSS_EXPORT bool icalset_register_class(icalset *set);
 
 /** @brief Generic icalset constructor
  *
