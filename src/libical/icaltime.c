@@ -916,10 +916,6 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
     span.end = icaltime_as_timet_with_zone(dtend,
                                            dtend.zone ? dtend.zone : icaltimezone_get_utc_timezone());
 
-    if (icaltime_is_date(dtstart)) {
-        /* no time specified, go until the end of the day.. */
-        span.end += 60 * 60 * 24 - 1;
-    }
     return span;
 }
 
