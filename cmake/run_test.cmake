@@ -12,7 +12,8 @@ endif()
 separate_arguments(test_args UNIX_COMMAND ${test_args})
 
 execute_process(
-  COMMAND ${test_cmd} ${test_args}
+  COMMAND
+    ${test_cmd} ${test_args}
   RESULT_VARIABLE test_not_successful
   ERROR_VARIABLE err
 )

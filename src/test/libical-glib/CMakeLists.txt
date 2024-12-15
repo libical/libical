@@ -3,11 +3,18 @@
 
 find_program(PYTHON3 python3)
 set_package_properties(
-  PYTHON3 PROPERTIES
-  TYPE REQUIRED
-  PURPOSE "Required by the libical build system."
+  PYTHON3
+  PROPERTIES
+    TYPE
+      REQUIRED
+    PURPOSE
+      "Required by the libical build system."
 )
-add_feature_info("libical-glib testing" PYTHON3 "python3 is required to run the regression tests")
+add_feature_info(
+  "libical-glib testing"
+  PYTHON3
+  "python3 is required to run the regression tests"
+)
 
 list(
   APPEND
@@ -46,7 +53,12 @@ if(PYTHON3)
     endif()
   endif()
 
-  list(APPEND test_env "GI_TYPELIB_PATH=${GI_TYPELIB_PATH_STR}" "ZONEINFO_DIRECTORY=${PROJECT_SOURCE_DIR}/zoneinfo")
+  list(
+    APPEND
+    test_env
+    "GI_TYPELIB_PATH=${GI_TYPELIB_PATH_STR}"
+    "ZONEINFO_DIRECTORY=${PROJECT_SOURCE_DIR}/zoneinfo"
+  )
   if(APPLE)
     list(APPEND test_env "DYLD_LIBRARY_PATH=${LIBRARY_PATH_STR}")
   elseif(NOT MSVC) #then UNIX-like
@@ -57,9 +69,17 @@ if(PYTHON3)
     string(REPLACE ".py" "" test_name ${test_file})
     set(test_name "libical-glib-${test_name}")
 
-    add_test(NAME ${test_name} COMMAND ${PYTHON3} -I ${CMAKE_CURRENT_SOURCE_DIR}/${test_file})
+    add_test(
+      NAME ${test_name}
+      COMMAND
+        ${PYTHON3} -I ${CMAKE_CURRENT_SOURCE_DIR}/${test_file}
+    )
     setprops(${test_name})
-    set_tests_properties(${test_name} PROPERTIES ENVIRONMENT "${test_env}")
-
+    set_tests_properties(
+      ${test_name}
+      PROPERTIES
+        ENVIRONMENT
+          "${test_env}"
+    )
   endforeach()
 endif()

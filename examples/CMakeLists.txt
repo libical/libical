@@ -12,24 +12,37 @@ include_directories(
 
 ########### doesnothing target ###############
 
-set(doesnothing_SRCS
-    access_components.c
-    access_properties_and_parameters.c
-    errors.c
-    main.c
-    parse_text.c
+set(
+  doesnothing_SRCS
+  access_components.c
+  access_properties_and_parameters.c
+  errors.c
+  main.c
+  parse_text.c
 )
 
-add_executable(
+add_executable(doesnothing ${doesnothing_SRCS})
+add_dependencies(
   doesnothing
-  ${doesnothing_SRCS}
+  ical
+  icalss
+  icalvcal
 )
-add_dependencies(doesnothing ical icalss icalvcal)
 
 if(NOT STATIC_ONLY)
-  target_link_libraries(doesnothing ical icalss icalvcal)
+  target_link_libraries(
+    doesnothing
+    ical
+    icalss
+    icalvcal
+  )
 else()
-  target_link_libraries(doesnothing ical-static icalss-static icalvcal-static)
+  target_link_libraries(
+    doesnothing
+    ical-static
+    icalss-static
+    icalvcal-static
+  )
   if(DEFINED CMAKE_THREAD_LIBS_INIT)
     target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
   endif()

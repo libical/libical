@@ -63,9 +63,13 @@ endif()
 # Find includes path
 find_path(
   BerkeleyDB_INCLUDE_DIRS
-  NAMES "db.h"
-  HINTS ${_BERKELEYDB_PATHS}
-  PATH_SUFFIXES "include" "includes"
+  NAMES
+    "db.h"
+  HINTS
+    ${_BERKELEYDB_PATHS}
+  PATH_SUFFIXES
+    "include"
+    "includes"
 )
 
 # Checks if the version file exists, save the version file to a var, and fail if there's no version file
@@ -82,7 +86,7 @@ else()
     # If the find_package(BerkeleyDB REQUIRED) was used, fail since we couldn't find the header
     message(
       FATAL_ERROR
-        "Failed to find Berkeley DB's header file \"db.h\"! Try setting \"BerkeleyDB_ROOT_DIR\" when initiating Cmake."
+      "Failed to find Berkeley DB's header file \"db.h\"! Try setting \"BerkeleyDB_ROOT_DIR\" when initiating Cmake."
     )
   endif()
   # Set some garbage values to the versions since we didn't find a file to read
@@ -102,19 +106,25 @@ macro(findpackage_berkeleydb_get_lib _berkeleydb_output_varname _target_berkeley
   # CMake recommends to put unversioned names before versioned names
   find_library(
     ${_berkeleydb_output_varname}
-    NAMES "${_target_berkeleydb_lib}"
-          "lib${_target_berkeleydb_lib}"
-          "lib${_target_berkeleydb_lib}${BerkeleyDB_VERSION_MAJOR}.${BerkeleyDB_VERSION_MINOR}"
-          "lib${_target_berkeleydb_lib}-${BerkeleyDB_VERSION_MAJOR}.${BerkeleyDB_VERSION_MINOR}"
-          "lib${_target_berkeleydb_lib}_${BerkeleyDB_VERSION_MAJOR}.${BerkeleyDB_VERSION_MINOR}"
-          "lib${_target_berkeleydb_lib}${BerkeleyDB_VERSION_MAJOR}${BerkeleyDB_VERSION_MINOR}"
-          "lib${_target_berkeleydb_lib}-${BerkeleyDB_VERSION_MAJOR}${BerkeleyDB_VERSION_MINOR}"
-          "lib${_target_berkeleydb_lib}_${BerkeleyDB_VERSION_MAJOR}${BerkeleyDB_VERSION_MINOR}"
-          "lib${_target_berkeleydb_lib}${BerkeleyDB_VERSION_MAJOR}"
-          "lib${_target_berkeleydb_lib}-${BerkeleyDB_VERSION_MAJOR}"
-          "lib${_target_berkeleydb_lib}_${BerkeleyDB_VERSION_MAJOR}"
-    HINTS ${_BERKELEYDB_PATHS}
-    PATH_SUFFIXES "lib" "lib64" "libs" "libs64"
+    NAMES
+      "${_target_berkeleydb_lib}"
+      "lib${_target_berkeleydb_lib}"
+      "lib${_target_berkeleydb_lib}${BerkeleyDB_VERSION_MAJOR}.${BerkeleyDB_VERSION_MINOR}"
+      "lib${_target_berkeleydb_lib}-${BerkeleyDB_VERSION_MAJOR}.${BerkeleyDB_VERSION_MINOR}"
+      "lib${_target_berkeleydb_lib}_${BerkeleyDB_VERSION_MAJOR}.${BerkeleyDB_VERSION_MINOR}"
+      "lib${_target_berkeleydb_lib}${BerkeleyDB_VERSION_MAJOR}${BerkeleyDB_VERSION_MINOR}"
+      "lib${_target_berkeleydb_lib}-${BerkeleyDB_VERSION_MAJOR}${BerkeleyDB_VERSION_MINOR}"
+      "lib${_target_berkeleydb_lib}_${BerkeleyDB_VERSION_MAJOR}${BerkeleyDB_VERSION_MINOR}"
+      "lib${_target_berkeleydb_lib}${BerkeleyDB_VERSION_MAJOR}"
+      "lib${_target_berkeleydb_lib}-${BerkeleyDB_VERSION_MAJOR}"
+      "lib${_target_berkeleydb_lib}_${BerkeleyDB_VERSION_MAJOR}"
+    HINTS
+      ${_BERKELEYDB_PATHS}
+    PATH_SUFFIXES
+      "lib"
+      "lib64"
+      "libs"
+      "libs64"
   )
   # If the library was found, add it to our list of libraries
   if(${_berkeleydb_output_varname})
@@ -140,21 +150,24 @@ include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
   BerkeleyDB
   FOUND_VAR BerkeleyDB_FOUND
-  REQUIRED_VARS BerkeleyDB_INCLUDE_DIRS BerkeleyDB_LIBRARY
+  REQUIRED_VARS
+    BerkeleyDB_INCLUDE_DIRS
+    BerkeleyDB_LIBRARY
   VERSION_VAR BerkeleyDB_VERSION
 )
 
 # Create an imported lib for easy linking by external projects
-if(BerkeleyDB_FOUND
-   AND BerkeleyDB_LIBRARIES
-   AND NOT TARGET Oracle::BerkeleyDB
-)
+if(BerkeleyDB_FOUND AND BerkeleyDB_LIBRARIES AND NOT TARGET Oracle::BerkeleyDB)
   add_library(Oracle::BerkeleyDB UNKNOWN IMPORTED)
   set_target_properties(
     Oracle::BerkeleyDB
-    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${BerkeleyDB_INCLUDE_DIRS}"
-               IMPORTED_LOCATION "${BerkeleyDB_LIBRARY}"
-               INTERFACE_LINK_LIBRARIES "${BerkeleyDB_LIBRARIES}"
+    PROPERTIES
+      INTERFACE_INCLUDE_DIRECTORIES
+        "${BerkeleyDB_INCLUDE_DIRS}"
+      IMPORTED_LOCATION
+        "${BerkeleyDB_LIBRARY}"
+      INTERFACE_LINK_LIBRARIES
+        "${BerkeleyDB_LIBRARIES}"
   )
 endif()
 
@@ -173,6 +186,7 @@ mark_as_advanced(
 include(FindPackageMessage)
 # A message that tells the user what includes/libs were found, and obeys the QUIET command.
 find_package_message(
-  BerkeleyDB "Found BerkeleyDB libraries: ${BerkeleyDB_LIBRARIES}"
+  BerkeleyDB
+  "Found BerkeleyDB libraries: ${BerkeleyDB_LIBRARIES}"
   "[${BerkeleyDB_LIBRARIES}[${BerkeleyDB_INCLUDE_DIRS}]]"
 )

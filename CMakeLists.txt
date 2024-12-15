@@ -156,8 +156,10 @@ if(MSVC)
   endif()
 endif()
 if(BAD_C_MESSAGE)
-  message(FATAL_ERROR "\nSorry, ${BAD_C_MESSAGE} is required to build this software. "
-                      "Please retry using a modern C compiler that supports the C99 standard."
+  message(
+    FATAL_ERROR
+    "\nSorry, ${BAD_C_MESSAGE} is required to build this software. "
+    "Please retry using a modern C compiler that supports the C99 standard."
   )
 endif()
 
@@ -167,8 +169,16 @@ enable_testing()
 if(WINCE)
   find_package(Wcecompat REQUIRED)
   include_directories(${WCECOMPAT_INCLUDE_DIR})
-  set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${WCECOMPAT_INCLUDE_DIR})
-  set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${WCECOMPAT_LIBRARIES})
+  set(
+    CMAKE_REQUIRED_INCLUDES
+    ${CMAKE_REQUIRED_INCLUDES}
+    ${WCECOMPAT_INCLUDE_DIR}
+  )
+  set(
+    CMAKE_REQUIRED_LIBRARIES
+    ${CMAKE_REQUIRED_LIBRARIES}
+    ${WCECOMPAT_LIBRARIES}
+  )
 endif()
 
 set(LIBICAL_LIB_MAJOR_VERSION "3")
@@ -192,13 +202,19 @@ if(WITH_CXX_BINDINGS)
   if(CMAKE_CXX_COMPILER)
     add_definitions(-DWITH_CXX_BINDINGS)
   else()
-    message(STATUS "Building the C++ bindings is not possible since a C++ compiler could not be found. "
-                   "Turning-off C++ bindings."
+    message(
+      STATUS
+      "Building the C++ bindings is not possible since a C++ compiler could not be found. "
+      "Turning-off C++ bindings."
     )
     set(WITH_CXX_BINDINGS False)
   endif()
 endif()
-add_feature_info("Option WITH_CXX_BINDINGS" WITH_CXX_BINDINGS "build the C++ bindings. Requires a C++ compiler")
+add_feature_info(
+  "Option WITH_CXX_BINDINGS"
+  WITH_CXX_BINDINGS
+  "build the C++ bindings. Requires a C++ compiler"
+)
 
 libical_option(STATIC_ONLY "Build static libraries only." False)
 if(STATIC_ONLY)
@@ -212,12 +228,18 @@ if(SHARED_ONLY)
 endif()
 
 if(NOT STATIC_ONLY AND NOT SHARED_ONLY)
-  add_feature_info("Build types" TRUE "build both shared and static libraries")
+  add_feature_info(
+    "Build types"
+    TRUE
+    "build both shared and static libraries"
+  )
 endif()
 
 if(STATIC_ONLY)
   add_definitions(
-    -DLIBICAL_ICAL_STATIC_DEFINE -DLIBICAL_ICALSS_STATIC_DEFINE -DLIBICAL_VCAL_STATIC_DEFINE
+    -DLIBICAL_ICAL_STATIC_DEFINE
+    -DLIBICAL_ICALSS_STATIC_DEFINE
+    -DLIBICAL_VCAL_STATIC_DEFINE
     -DLIBICAL_VCARD_STATIC_DEFINE
   )
 endif()
@@ -225,14 +247,22 @@ endif()
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
 set_package_properties(
-  Perl PROPERTIES
-  TYPE REQUIRED
-  PURPOSE "Required by the libical build system."
+  Perl
+  PROPERTIES
+    TYPE
+      REQUIRED
+    PURPOSE
+      "Required by the libical build system."
 )
 
 # Ensure finding 64bit libs when using 64-bit compilers
 if(CMAKE_CL_64)
-  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS True)
+  set_property(
+    GLOBAL
+    PROPERTY
+      FIND_LIBRARY_USE_LIB64_PATHS
+        True
+  )
 endif()
 
 # libicu is highly recommended for RSCALE support
@@ -245,13 +275,26 @@ if(NOT DEFINED ENV{ICU_ROOT} AND APPLE)
   #Use the homebrew version. MacOS provided ICU doesn't provide development files
   set(ICU_ROOT "/usr/local/opt/icu4c")
 endif()
-find_package(ICU COMPONENTS uc i18n data)
-set_package_properties(
-  ICU PROPERTIES
-  TYPE RECOMMENDED
-  PURPOSE "For RSCALE (RFC7529) support"
+find_package(
+  ICU
+  COMPONENTS
+    uc
+    i18n
+    data
 )
-add_feature_info("RSCALE support (RFC7529)" ICU_FOUND "build in RSCALE support")
+set_package_properties(
+  ICU
+  PROPERTIES
+    TYPE
+      RECOMMENDED
+    PURPOSE
+      "For RSCALE (RFC7529) support"
+)
+add_feature_info(
+  "RSCALE support (RFC7529)"
+  ICU_FOUND
+  "build in RSCALE support"
+)
 if(ICU_FOUND)
   set(HAVE_LIBICU 1)
   if(ICU_VERSION VERSION_GREATER 50)
@@ -272,10 +315,7 @@ if(ICU_FOUND)
   else()
     message(FATAL_ERROR "Unable to locate the ICU runtime path. Is your ICU installation broken?")
   endif()
-  set(ICU_BINARY_DIR
-      ${ICU_EXEC}
-      CACHE STRING "Runtime binaries directory for the ICU library"
-  )
+  set(ICU_BINARY_DIR ${ICU_EXEC} CACHE STRING "Runtime binaries directory for the ICU library")
 endif()
 
 # compile in Berkeley DB support
@@ -290,11 +330,18 @@ endif()
 set(BerkeleyDB_FIND_QUIETLY True)
 find_package(BerkeleyDB)
 set_package_properties(
-  BerkeleyDB PROPERTIES
-  TYPE OPTIONAL
-  PURPOSE "For Berkeley DB storage support"
+  BerkeleyDB
+  PROPERTIES
+    TYPE
+      OPTIONAL
+    PURPOSE
+      "For Berkeley DB storage support"
 )
-add_feature_info("Berkeley DB storage support" BerkeleyDB_FOUND "build in support for Berkeley DB storage")
+add_feature_info(
+  "Berkeley DB storage support"
+  BerkeleyDB_FOUND
+  "build in support for Berkeley DB storage"
+)
 set(BDB_FOUND False)
 if(BerkeleyDB_FOUND)
   set(HAVE_BDB True)
@@ -312,7 +359,11 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # MSVC specific definitions
 if(WIN32)
   if(MSVC)
-    add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DYY_NO_UNISTD_H)
+    add_definitions(
+      -D_CRT_SECURE_NO_DEPRECATE
+      -D_CRT_NONSTDC_NO_DEPRECATE
+      -DYY_NO_UNISTD_H
+    )
     libical_option(USE_32BIT_TIME_T "Build using a 32bit time_t (ignored unless building with MSVC on Windows)." False)
     if(USE_32BIT_TIME_T)
       add_definitions(-D_USE_32BIT_TIME_T)
@@ -324,9 +375,12 @@ if(WIN32)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4068") #unknown pragma
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4028") #formal parameter differs
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4068") #unknown pragma
-
   endif()
-  add_definitions(-DBIG_ENDIAN=0 -DLITTLE_ENDIAN=1 -DBYTE_ORDER=BIG_ENDIAN)
+  add_definitions(
+    -DBIG_ENDIAN=0
+    -DLITTLE_ENDIAN=1
+    -DBYTE_ORDER=BIG_ENDIAN
+  )
 endif()
 
 # define icaltime_t
@@ -350,22 +404,10 @@ endif()
 # Use GNUInstallDirs
 
 include(GNUInstallDirs)
-set(BIN_INSTALL_DIR
-    ${CMAKE_INSTALL_BINDIR}
-    CACHE STRING "User executables directory name" FORCE
-)
-set(LIB_INSTALL_DIR
-    ${CMAKE_INSTALL_LIBDIR}
-    CACHE STRING "Library directory name" FORCE
-)
-set(INCLUDE_INSTALL_DIR
-    ${CMAKE_INSTALL_INCLUDEDIR}
-    CACHE STRING "Include directory name" FORCE
-)
-set(SHARE_INSTALL_DIR
-    ${CMAKE_INSTALL_DATAROOTDIR}
-    CACHE STRING "Share directory name"
-)
+set(BIN_INSTALL_DIR ${CMAKE_INSTALL_BINDIR} CACHE STRING "User executables directory name" FORCE)
+set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR} CACHE STRING "Library directory name" FORCE)
+set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE STRING "Include directory name" FORCE)
+set(SHARE_INSTALL_DIR ${CMAKE_INSTALL_DATAROOTDIR} CACHE STRING "Share directory name")
 
 # set the output paths
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
@@ -385,7 +427,9 @@ else()
 endif()
 
 libical_option(
-  ICAL_ALLOW_EMPTY_PROPERTIES "Prevents empty properties from being replaced with X-LIC-ERROR properties." False
+  ICAL_ALLOW_EMPTY_PROPERTIES
+  "Prevents empty properties from being replaced with X-LIC-ERROR properties."
+  False
 )
 if(ICAL_ALLOW_EMPTY_PROPERTIES)
   set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
@@ -421,24 +465,23 @@ endif()
 
 include(ConfigureChecks.cmake)
 add_definitions(-DHAVE_CONFIG_H)
-configure_file(
-  config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h
-)
+configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 if(NDEBUG)
   add_definitions(-DNDEBUG)
 endif()
 
-set(INSTALL_TARGETS_DEFAULT_ARGS
-    RUNTIME
-    DESTINATION
-    ${BIN_INSTALL_DIR}
-    LIBRARY
-    DESTINATION
-    ${LIB_INSTALL_DIR}
-    ARCHIVE
-    DESTINATION
-    ${LIB_INSTALL_DIR}
+set(
+  INSTALL_TARGETS_DEFAULT_ARGS
+  RUNTIME
+  DESTINATION
+  ${BIN_INSTALL_DIR}
+  LIBRARY
+  DESTINATION
+  ${LIB_INSTALL_DIR}
+  ARCHIVE
+  DESTINATION
+  ${LIB_INSTALL_DIR}
 )
 
 #Look for PkgConfig
@@ -448,43 +491,49 @@ find_package(PkgConfig QUIET)
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
 libical_option(
-  GOBJECT_INTROSPECTION "Build GObject introspection \"typelib\" files. \
-  Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher." True
+  GOBJECT_INTROSPECTION
+  "Build GObject introspection \"typelib\" files. \
+  Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher."
+  True
 )
 if(GOBJECT_INTROSPECTION)
   if(NOT PKG_CONFIG_FOUND)
     message(
       FATAL_ERROR
-        "You are attempting to build with GObject Introspection enabled, however that option is "
-        "not supported unless pkg-config can be found.  Please install pkg-config and try again. "
-        "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake."
+      "You are attempting to build with GObject Introspection enabled, however that option is "
+      "not supported unless pkg-config can be found.  Please install pkg-config and try again. "
+      "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake."
     )
   endif()
 
   find_package(GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION})
   set_package_properties(
-    GObjectIntrospection PROPERTIES
-    TYPE OPTIONAL
-    URL "https://wiki.gnome.org/Projects/GObjectIntrospection"
-    PURPOSE "Needed in order to build the GObject introspection \"typelib\" files."
+    GObjectIntrospection
+    PROPERTIES
+      TYPE
+        OPTIONAL
+      URL
+        "https://wiki.gnome.org/Projects/GObjectIntrospection"
+      PURPOSE
+        "Needed in order to build the GObject introspection \"typelib\" files."
   )
   if(GObjectIntrospection_FOUND)
     if(STATIC_ONLY)
       message(
         FATAL_ERROR
-          "You are attempting to build with GObject Introspection enabled, "
-          "however that option is not supported when building static libraries only. "
-          "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
-          "if you really want to build with GObject Introspection. Alternatively, "
-          "you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to cmake)."
+        "You are attempting to build with GObject Introspection enabled, "
+        "however that option is not supported when building static libraries only. "
+        "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
+        "if you really want to build with GObject Introspection. Alternatively, "
+        "you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to cmake)."
       )
     endif()
   else()
     message(
       FATAL_ERROR
-        "You requested to build with GObject introspection, but the necessary development package "
-        "is missing or too low a version (GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION} or higher is required). "
-        "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake."
+      "You requested to build with GObject introspection, but the necessary development package "
+      "is missing or too low a version (GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION} or higher is required). "
+      "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake."
     )
   endif()
 endif()
@@ -494,30 +543,36 @@ if(ICAL_GLIB_VAPI)
   if(STATIC_ONLY)
     message(
       FATAL_ERROR
-        "You are attempting to build the Vala api, however that option is not supported "
-        "when building static libraries only. "
-        "Please disable the static only option (-DSTATIC_ONLY=False) "
-        "if you really want to build the Vala api. Alternatively, "
-        "you can disable this feature (by passing -DICAL_GLIB_VAPI=False to cmake)."
+      "You are attempting to build the Vala api, however that option is not supported "
+      "when building static libraries only. "
+      "Please disable the static only option (-DSTATIC_ONLY=False) "
+      "if you really want to build the Vala api. Alternatively, "
+      "you can disable this feature (by passing -DICAL_GLIB_VAPI=False to cmake)."
     )
   endif()
   if(NOT GOBJECT_INTROSPECTION)
-    message(FATAL_ERROR "You requested to build the Vala vapi but have not enabled the GObject Introspection. "
-                        "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake."
+    message(
+      FATAL_ERROR
+      "You requested to build the Vala vapi but have not enabled the GObject Introspection. "
+      "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake."
     )
   endif()
 
   find_program(VALAC valac DOC "the Vala compiler")
   if(NOT VALAC)
-    message(FATAL_ERROR "valac, the Vala compiler was not found. "
-                        "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False."
+    message(
+      FATAL_ERROR
+      "valac, the Vala compiler was not found. "
+      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False."
     )
   endif()
 
   find_program(VAPIGEN vapigen DOC "tool to generate the Vala API")
   if(NOT VAPIGEN)
-    message(FATAL_ERROR "vapigen, the tool for generating the Vala API was not found. "
-                        "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False."
+    message(
+      FATAL_ERROR
+      "vapigen, the tool for generating the Vala API was not found. "
+      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False."
     )
   endif()
 endif()
@@ -525,55 +580,66 @@ endif()
 set(MIN_GLIB "2.44")
 set(MIN_LIBXML "2.7.3")
 libical_option(
-  ICAL_GLIB "Build libical-glib interface. \
-  Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher." True
+  ICAL_GLIB
+  "Build libical-glib interface. \
+  Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher."
+  True
 )
 if(ICAL_GLIB)
   if(NOT PKG_CONFIG_FOUND)
     message(
       FATAL_ERROR
-        "You requested to build libical-glib, however that option is not supported "
-        "unless pkg-config can be found. Please install pkg-config and try again. "
-        "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "You requested to build libical-glib, however that option is not supported "
+      "unless pkg-config can be found. Please install pkg-config and try again. "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
     )
   endif()
 
   find_package(GLib ${MIN_GLIB})
   set_package_properties(
-    GLib PROPERTIES
-    TYPE OPTIONAL
-    PURPOSE "For the optional libical-glib interface"
+    GLib
+    PROPERTIES
+      TYPE
+        OPTIONAL
+      PURPOSE
+        "For the optional libical-glib interface"
   )
   find_package(LibXML ${MIN_LIBXML})
   set_package_properties(
-    LibXML PROPERTIES
-    TYPE OPTIONAL
-    DESCRIPTION "a library providing XML and HTML support"
-    URL "http://xmlsoft.org"
-    PURPOSE "For the optional libical-glib interface"
+    LibXML
+    PROPERTIES
+      TYPE
+        OPTIONAL
+      DESCRIPTION
+        "a library providing XML and HTML support"
+      URL
+        "http://xmlsoft.org"
+      PURPOSE
+        "For the optional libical-glib interface"
   )
   if(GLIB_FOUND AND LIBXML_FOUND)
     set(HAVE_GLIB TRUE)
   elseif(GLIB_FOUND)
     message(
       FATAL_ERROR
-        "You requested to build libical-glib, but the necessary development package "
-        "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
-        "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "You requested to build libical-glib, but the necessary development package "
+      "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
     )
   elseif(LIBXML_FOUND)
     message(
       FATAL_ERROR
-        "You requested to build libical-glib, but the necessary development package "
-        "is missing or too low a version (glib ${MIN_GLIB} or higher is required. "
-        "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "You requested to build libical-glib, but the necessary development package "
+      "is missing or too low a version (glib ${MIN_GLIB} or higher is required. "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
     )
   else()
     message(
       FATAL_ERROR
-        "You requested to build libical-glib, but the necessary development packages "
-        "are missing or too low a version " "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required). "
-        "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "You requested to build libical-glib, but the necessary development packages "
+      "are missing or too low a version "
+      "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required). "
+      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
     )
   endif()
 endif()
@@ -591,8 +657,9 @@ if(DEFINED CMAKE_C_COMPILER_ID)
   endif()
 endif()
 if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
-  set(CMAKE_C_FLAGS
-      "${CMAKE_C_FLAGS} \
+  set(
+    CMAKE_C_FLAGS
+    "${CMAKE_C_FLAGS} \
       -Werror -fvisibility=hidden \
       -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
       -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Wreturn-type \
@@ -623,8 +690,9 @@ if(DEFINED CMAKE_CXX_COMPILER_ID)
   endif()
 endif()
 if(CMAKE_CXX_COMPILER_IS_GCC OR CMAKE_CXX_COMPILER_IS_CLANG)
-  set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -Werror \
+  set(
+    CMAKE_CXX_FLAGS
+    "${CMAKE_CXX_FLAGS} -Werror \
       -fvisibility=hidden \
       -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wunused \
       -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Wreturn-type"
@@ -670,7 +738,10 @@ endif()
 mark_as_advanced(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
 
 libical_deprecated_option(
-  ADDRESS_SANITIZER LIBICAL_DEVMODE_ADDRESS_SANITIZER "(Developer-only) Build with the address sanitizer." False
+  ADDRESS_SANITIZER
+  LIBICAL_DEVMODE_ADDRESS_SANITIZER
+  "(Developer-only) Build with the address sanitizer."
+  False
 )
 mark_as_advanced(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
 if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
@@ -684,7 +755,10 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
 endif()
 
 libical_deprecated_option(
-  THREAD_SANITIZER LIBICAL_DEVMODE_THREAD_SANITIZER "(Developer-only) Build with the thread sanitizer." False
+  THREAD_SANITIZER
+  LIBICAL_DEVMODE_THREAD_SANITIZER
+  "(Developer-only) Build with the thread sanitizer."
+  False
 )
 mark_as_advanced(LIBICAL_DEVMODE_THREAD_SANITIZER)
 if(LIBICAL_DEVMODE_THREAD_SANITIZER)
@@ -698,7 +772,10 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
 endif()
 
 libical_deprecated_option(
-  UNDEFINED_SANITIZER LIBICAL_DEVMODE_UNDEFINED_SANITIZER "(Developer-only) Build with the undefined sanitizer." False
+  UNDEFINED_SANITIZER
+  LIBICAL_DEVMODE_UNDEFINED_SANITIZER
+  "(Developer-only) Build with the undefined sanitizer."
+  False
 )
 mark_as_advanced(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
 if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
@@ -763,27 +840,27 @@ if(ICAL_BUILD_DOCS)
     if(STATIC_ONLY)
       message(
         FATAL_ERROR
-          "You are attempting to build the glib docs, "
-          "however that option is not supported when building static libraries only. "
-          "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
-          "if you really want to build with the glib documentation. Alternatively, "
-          "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
+        "You are attempting to build the glib docs, "
+        "however that option is not supported when building static libraries only. "
+        "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
+        "if you really want to build with the glib documentation. Alternatively, "
+        "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
     if(NOT ICAL_GLIB)
       message(
         FATAL_ERROR
-          "You requested to build the libical-glib documentation but have not enabled libical-glib itself. "
-          "Please try again also passing -DICAL_GLIB=True to cmake. Alternatively, "
-          "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
+        "You requested to build the libical-glib documentation but have not enabled libical-glib itself. "
+        "Please try again also passing -DICAL_GLIB=True to cmake. Alternatively, "
+        "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
     if(NOT GOBJECT_INTROSPECTION)
       message(
         FATAL_ERROR
-          "You requested to build the libical-glib documentation but have not enabled the GObject Introspection. "
-          "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake. Alternatively, "
-          "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
+        "You requested to build the libical-glib documentation but have not enabled the GObject Introspection. "
+        "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake. Alternatively, "
+        "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
     include(GIDocgen)
@@ -817,21 +894,19 @@ else()
   set(REQUIRES_PRIVATE_ICU "")
 endif()
 
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY
-)
-install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc
-  DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
-)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 ########### Create and install the CMake Config files ##########
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-  LibIcalConfig.cmake.in ${libical_BINARY_DIR}/LibIcalConfig.cmake
+  LibIcalConfig.cmake.in
+  ${libical_BINARY_DIR}/LibIcalConfig.cmake
   INSTALL_DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal
-  PATH_VARS LIB_INSTALL_DIR INCLUDE_INSTALL_DIR
+  PATH_VARS
+    LIB_INSTALL_DIR
+    INCLUDE_INSTALL_DIR
 )
 
 # Create a version file
@@ -842,26 +917,28 @@ write_basic_package_version_file(
 )
 
 install(
-  FILES ${libical_BINARY_DIR}/LibIcalConfigVersion.cmake ${libical_BINARY_DIR}/LibIcalConfig.cmake
+  FILES
+    ${libical_BINARY_DIR}/LibIcalConfigVersion.cmake
+    ${libical_BINARY_DIR}/LibIcalConfig.cmake
   DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal
 )
 
-install(
-  EXPORT icalTargets
-  DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal
-  FILE LibIcalTargets.cmake
-)
+install(EXPORT icalTargets DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal FILE LibIcalTargets.cmake)
 
 ########## By popular demand, add an uninstall target ##########
 
 if(NOT TARGET uninstall)
   configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake" IMMEDIATE @ONLY
+    "${CMAKE_CURRENT_SOURCE_DIR}/uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake"
+    IMMEDIATE
+    @ONLY
   )
 
   add_custom_target(
     uninstall
-    COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake"
+    COMMAND
+      "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake"
     COMMENT "Target for uninstalling everything"
   )
 endif()

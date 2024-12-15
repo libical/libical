@@ -10,9 +10,12 @@
 #
 
 set_package_properties(
-  BDB PROPERTIES
-  DESCRIPTION "Berkeley DB storage"
-  URL "https://www.oracle.com/database/berkeley-db"
+  BDB
+  PROPERTIES
+    DESCRIPTION
+      "Berkeley DB storage"
+    URL
+      "https://www.oracle.com/database/berkeley-db"
 )
 
 if(BDB_INCLUDE_DIR AND BDB_LIBRARY)
@@ -23,19 +26,16 @@ endif()
 # Look for the header file.
 find_path(
   BDB_INCLUDE_DIR
-  NAMES db.h
-  HINTS /usr/local/opt/db/include
+  NAMES
+    db.h
+  HINTS
+    /usr/local/opt/db/include
   DOC "Include directory for the Berkeley DB library"
 )
 mark_as_advanced(BDB_INCLUDE_DIR)
 
 # Look for the library.
-find_library(
-  BDB_LIBRARY
-  NAMES db
-  HINTS /usr/local/opt/db4/lib
-  DOC "Libraries to link against for the Berkeley DB"
-)
+find_library(BDB_LIBRARY NAMES db HINTS /usr/local/opt/db4/lib DOC "Libraries to link against for the Berkeley DB")
 mark_as_advanced(BDB_LIBRARY)
 
 # Copy the results to the output variables.

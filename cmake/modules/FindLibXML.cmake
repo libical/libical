@@ -16,7 +16,10 @@ if(PKG_CONFIG_FOUND)
     set(_libxml_version_cmp ${LibXML_FIND_VERSION})
     set(_libxml_version_cmp ">=${_libxml_version_cmp}")
   endif()
-  pkg_check_modules(_pc_libxml libxml-2.0${_libxml_version_cmp})
+  pkg_check_modules(
+    _pc_libxml
+    libxml-2.0${_libxml_version_cmp}
+  )
   if(_pc_libxml_FOUND)
     set(LIBXML_FOUND TRUE)
     set(LIBXML_CFLAGS "${_pc_libxml_CFLAGS}")
@@ -24,4 +27,7 @@ if(PKG_CONFIG_FOUND)
   endif()
 endif()
 
-mark_as_advanced(LIBXML_CFLAGS LIBXML_LIBRARIES)
+mark_as_advanced(
+  LIBXML_CFLAGS
+  LIBXML_LIBRARIES
+)
