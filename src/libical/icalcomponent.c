@@ -784,6 +784,21 @@ static int icalcomponent_is_busy(icalcomponent *comp)
     return (ret);
 }
 
+static struct icaltimetype icaltime_with_time(const struct icaltimetype t, int hour, int minutes, int seconds)
+{
+    struct icaltimetype ret = t;
+    ret.hour = hour;
+    ret.minute = minutes;
+    ret.second = seconds;
+    ret.is_date = 0;
+    return ret;
+}
+
+static struct icaltimetype icaltime_at_midnight(const struct icaltimetype t)
+{
+    return icaltime_with_time(t, 0, 0, 0);
+}
+
 void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                       struct icaltimetype start,
                                       struct icaltimetype end,
@@ -821,10 +836,22 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 
     basespan.is_busy = icalcomponent_is_busy(comp);
 
+    if (start.is_date) {
+        /* We always treat start as date-time, because we do arithmetic calculations later
+           on that wouldn't work on date-only. As date-only values shouldn't have a timezone set,
+           we shouldn't have any issues with potential DST changes. */
+        start = icaltime_at_midnight(start);
+    }
+
     /* Calculate the ceiling and floor values.. */
     limit_start = icaltime_as_timet_with_zone(start,
                                               icaltimezone_get_utc_timezone());
     if (!icaltime_is_null_time(end)) {
+        if (end.is_date) {
+            /* Same as with start, treat as date-time to allow for arithmetic operations. */
+            end = icaltime_at_midnight(end);
+        }
+
         limit_end = icaltime_as_timet_with_zone(end,
                                                 icaltimezone_get_utc_timezone());
     } else {
@@ -864,6 +891,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
             icaltimetype mystart = start;
 
             /* make sure we include any recurrence that ends in timespan */
+            /* we ensured above that start is a date-time, so adding seconds is allowed. */
             icaltime_adjust(&mystart, 0, 0, 0, -(int)(long)dtduration);
             icalrecur_iterator_set_start(rrule_itr, mystart);
         }
