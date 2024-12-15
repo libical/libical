@@ -921,17 +921,6 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
                                              dtstart.zone ? dtstart.
                                              zone : icaltimezone_get_utc_timezone());
 
-    if (icaltime_is_null_time(dtend)) {
-        if (!icaltime_is_date(dtstart)) {
-            /* If dtstart is a DATE-TIME and there is no DTEND nor DURATION
-               it takes no time */
-            span.end = span.start;
-            return span;
-        } else {
-            dtend = dtstart;
-        }
-    }
-
     span.end = icaltime_as_timet_with_zone(dtend,
                                            dtend.zone ? dtend.
                                            zone : icaltimezone_get_utc_timezone());
