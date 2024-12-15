@@ -597,6 +597,66 @@ int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int e
     return 0;
 }
 
+void test_component_foreach_start_as_date_variant(const char *calStr, int expect_found)
+{
+    icalcomponent *calendar = icalparser_parse_string(calStr);
+    icalcomponent *event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+    // 2024-03-24 00:00 UTC to 2024-03-30 00:00 UTC
+    struct icaltimetype t_start = icaltime_from_string("20240324");
+    struct icaltimetype t_end = icaltime_from_string("20240330");
+
+    int found = 0;
+    icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &found);
+    int_is("Occurs", found, expect_found);
+
+    icalcomponent_free(calendar);
+}
+
+// reproduces #833
+void test_component_foreach_start_as_date(void)
+{
+    test_component_foreach_start_as_date_variant(
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART:20240323T010000Z\n"
+        "DTEND:20240324T000100Z\n"
+        "RRULE:FREQ=WEEKLY\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n",
+        1);
+
+    test_component_foreach_start_as_date_variant(
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART:20240323T010000\n"
+        "DTEND:20240324T000100\n"
+        "RRULE:FREQ=WEEKLY\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n",
+        1);
+
+    test_component_foreach_start_as_date_variant(
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART:20240323\n"
+        "DTEND:20240324\n"
+        "RRULE:FREQ=WEEKLY\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n",
+        0);
+
+    test_component_foreach_start_as_date_variant(
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART:20240323\n"
+        "DTEND:20240325\n"
+        "RRULE:FREQ=WEEKLY\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n",
+        1);
+}
+
 void test_component_foreach(void)
 {
     const char *calStr =
@@ -5830,6 +5890,7 @@ int main(int argc, char *argv[])
     test_run("Test Properties", test_properties, do_test, do_header);
     test_run("Test Components", test_components, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence", test_component_foreach, do_test, do_header);
+    test_run("Test icalcomponent_foreach_recurrence with start as date", test_component_foreach_start_as_date, do_test, do_header);
     test_run("Test icalrecur_iterator_set_start with date", test_recur_iterator_set_start, do_test, do_header);
     test_run("Test weekly icalrecur_iterator on January 1", test_recur_iterator_on_jan_1, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
