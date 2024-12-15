@@ -100,6 +100,7 @@ Version 3.0.19 (UNRELEASED):
  * Fix time conversion to time_t for times before epoch
  * Allow `icalcomponent_foreach_recurrence` to receive `DATE`-only `start` and `end` params.
  * Fix the calculation of an event's duration if `DTSTART` is a `DATE`-only value.
+ * Fix `icaltime_span_new()` - ignore the case where DTEND is unset and require it to be set by the caller instead.
 
 Version 3.0.18 (31 March 2024):
 -------------------------------
