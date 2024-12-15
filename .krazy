@@ -8,7 +8,6 @@ EXTRA crud,camelcase
 
 #For now skip java
 SKIP /java/
-SKIP \.cmake-format\.py
 #For now skip perl
 SKIP /Net-ICal-Libical/
 

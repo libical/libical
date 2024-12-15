@@ -22,25 +22,44 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 set(TEST_DATADIR "\"${PROJECT_SOURCE_DIR}/test-data\"")
-add_definitions(-DTEST_DATADIR=${TEST_DATADIR} -DTEST_ZONEDIR="${PROJECT_SOURCE_DIR}/zoneinfo")
+add_definitions(
+  -DTEST_DATADIR=${TEST_DATADIR}
+  -DTEST_ZONEDIR="${PROJECT_SOURCE_DIR}/zoneinfo"
+)
 
 # Set properties for the test
 macro(setprops _name)
   if(UNIX)
     file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
-    set_tests_properties(${_name} PROPERTIES WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+    set_tests_properties(
+      ${_name}
+      PROPERTIES
+        WORKING_DIRECTORY
+          "${PROJECT_BINARY_DIR}/bin"
+    )
   endif()
   if(WIN32)
     set(tpath "${PROJECT_BINARY_DIR}/bin;%PATH%")
     if(ICU_FOUND)
       set(tpath "${ICU_BINARY_DIR};${tpath}")
     endif()
-    set_tests_properties(${_name} PROPERTIES ENVIRONMENT "PATH=${tpath}" WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+    set_tests_properties(
+      ${_name}
+      PROPERTIES
+        ENVIRONMENT
+          "PATH=${tpath}"
+        WORKING_DIRECTORY
+          "${PROJECT_BINARY_DIR}/bin"
+    )
   endif()
   if(CYGWIN OR MSYS)
     set_tests_properties(
-      ${_name} PROPERTIES ENVIRONMENT "PATH=${EXECUTABLE_OUTPUT_PATH}:${PROJECT_BINARY_DIR}/lib:$ENV{PATH}"
-                          WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/lib"
+      ${_name}
+      PROPERTIES
+        ENVIRONMENT
+          "PATH=${EXECUTABLE_OUTPUT_PATH}:${PROJECT_BINARY_DIR}/lib:$ENV{PATH}"
+        WORKING_DIRECTORY
+          "${PROJECT_BINARY_DIR}/lib"
     )
   endif()
 endmacro()
@@ -48,18 +67,45 @@ endmacro()
 #macro to build (but do not create a test)
 macro(buildme _name _srcs)
   add_executable(${_name} ${_srcs})
-  add_dependencies(${_name} ical icalss icalvcal)
+  add_dependencies(
+    ${_name}
+    ical
+    icalss
+    icalvcal
+  )
   if(NOT SHARED_ONLY)
-    add_dependencies(${_name} ical-static icalss-static icalvcal-static)
+    add_dependencies(
+      ${_name}
+      ical-static
+      icalss-static
+      icalvcal-static
+    )
   endif()
-  target_link_libraries(${_name} ical icalss icalvcal)
+  target_link_libraries(
+    ${_name}
+    ical
+    icalss
+    icalvcal
+  )
 
   if(WITH_CXX_BINDINGS)
-    add_dependencies(${_name} ical_cxx icalss_cxx)
+    add_dependencies(
+      ${_name}
+      ical_cxx
+      icalss_cxx
+    )
     if(NOT SHARED_ONLY)
-      add_dependencies(${_name} ical_cxx-static icalss_cxx-static)
+      add_dependencies(
+        ${_name}
+        ical_cxx-static
+        icalss_cxx-static
+      )
     endif()
-    target_link_libraries(${_name} ical_cxx icalss_cxx)
+    target_link_libraries(
+      ${_name}
+      ical_cxx
+      icalss_cxx
+    )
   endif()
 
   if(DEFINED CMAKE_THREAD_LIBS_INIT)
@@ -95,16 +141,17 @@ buildme(copycluster "${copycluster_SRCS}")
 
 ########### next target ###############
 
-set(regression_SRCS
-    regression.c
-    regression.h
-    regression-component.c
-    regression-classify.c
-    regression-utils.c
-    regression-recur.c
-    regression-storage.c
-    test-malloc.c
-    test-malloc.h
+set(
+  regression_SRCS
+  regression.c
+  regression.h
+  regression-component.c
+  regression-classify.c
+  regression-utils.c
+  regression-recur.c
+  regression-storage.c
+  test-malloc.c
+  test-malloc.h
 )
 if(WITH_CXX_BINDINGS)
   list(APPEND regression_SRCS regression-cxx.cpp)
@@ -119,7 +166,11 @@ buildme(parser "${parser_SRCS}")
 file(GLOB TEST_FILES ${PROJECT_SOURCE_DIR}/test-data/*.ics)
 foreach(test_file ${TEST_FILES})
   get_filename_component(test_name ${test_file} NAME_WE)
-  add_test(NAME parser-${test_name} COMMAND parser ${test_file})
+  add_test(
+    NAME parser-${test_name}
+    COMMAND
+      parser ${test_file}
+  )
   setprops(parser-${test_name})
 endforeach()
 
@@ -186,26 +237,43 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
   configure_file(icalrecur_test_rscale_withicu.txt icalrecur_test_rscale_withicu.txt COPYONLY)
   configure_file(icalrecur_test_rscale_withicu_dangi.txt icalrecur_test_rscale_withicu_dangi.txt COPYONLY)
   add_executable(icalrecurtest ${icalrecurtest_SRCS})
-  target_link_libraries(icalrecurtest ical icalss icalvcal)
+  target_link_libraries(
+    icalrecurtest
+    ical
+    icalss
+    icalvcal
+  )
   if(WITH_CXX_BINDINGS)
     # https://github.com/libical/libical/pull/656
-    set_property(TARGET icalrecurtest PROPERTY LINKER_LANGUAGE CXX)
+    set_property(
+      TARGET
+        icalrecurtest
+      PROPERTY
+        LINKER_LANGUAGE
+          CXX
+    )
   endif()
   set(test_cmd "${PROJECT_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
 
   #test non-rscale rrules
   set(reference_data "icalrecur_test.txt")
   set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
-  add_test(NAME icalrecurtest COMMAND ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
-                                      ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
+  add_test(
+    NAME icalrecurtest
+    COMMAND
+      ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
+      ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
   )
   setprops(icalrecurtest)
 
   #test rscale rrules without ICU
   set(reference_data "icalrecur_test_rscale.txt")
   set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
-  add_test(NAME icalrecurtest-rscale COMMAND ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args}
-                                             -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
+  add_test(
+    NAME icalrecurtest-rscale
+    COMMAND
+      ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
+      ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
   )
   setprops(icalrecurtest-rscale)
 
@@ -213,9 +281,11 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
     #test rscale rrules with ICU
     set(reference_data "icalrecur_test_rscale_withicu.txt")
     set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
-    add_test(NAME icalrecurtest-rscale-withicu
-             COMMAND ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
-                     ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
+    add_test(
+      NAME icalrecurtest-rscale-withicu
+      COMMAND
+        ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
+        ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
     )
     setprops(icalrecurtest-rscale-withicu)
 
@@ -223,9 +293,11 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
       #test rscale rrules with ICU and DANGI
       set(reference_data "icalrecur_test_rscale_withicu_dangi.txt")
       set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
-      add_test(NAME icalrecurtest-rscale-withicu-dangi
-               COMMAND ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
-                       ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
+      add_test(
+        NAME icalrecurtest-rscale-withicu-dangi
+        COMMAND
+          ${CMAKE_COMMAND} -D test_cmd=${test_cmd} -D test_args:string=${test_args} -P
+          ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake
       )
       setprops(icalrecurtest-rscale-withicu-dangi)
     endif()
@@ -269,10 +341,18 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     usban3
     usban4 # integer overflow in pvl_newlist
   )
-    add_test(NAME fuzz1test${fuzztest} COMMAND icalcomponent_fuzz1 "${PROJECT_SOURCE_DIR}/test-data/fuzz${fuzztest}")
+    add_test(
+      NAME fuzz1test${fuzztest}
+      COMMAND
+        icalcomponent_fuzz1 "${PROJECT_SOURCE_DIR}/test-data/fuzz${fuzztest}"
+    )
     setprops(fuzz1test${fuzztest})
 
-    add_test(NAME fuzz2test${fuzztest} COMMAND icalcomponent_fuzz2 "${PROJECT_SOURCE_DIR}/test-data/fuzz${fuzztest}")
+    add_test(
+      NAME fuzz2test${fuzztest}
+      COMMAND
+        icalcomponent_fuzz2 "${PROJECT_SOURCE_DIR}/test-data/fuzz${fuzztest}"
+    )
     setprops(fuzz2test${fuzztest})
   endforeach()
 endif()

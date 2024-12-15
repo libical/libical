@@ -3,21 +3,22 @@
 
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering.
 # It is required to make the combined header vcard.h properly.
-set(COMBINEDHEADERSVCARD
-    ${TOPS}/src/libicalvcard/vcardenumarray.h
-    ${TOPS}/src/libicalvcard/vcardstrarray.h
-    ${TOPS}/src/libicalvcard/vcardstructured.h
-    ${TOPS}/src/libicalvcard/vcardtime.h
-    ${TOPS}/src/libicalvcard/vcardtypes.h
-    ${TOPB}/src/libicalvcard/vcardderivedvalue.h
-    ${TOPB}/src/libicalvcard/vcardderivedparameter.h
-    ${TOPS}/src/libicalvcard/vcardvalue.h
-    ${TOPS}/src/libicalvcard/vcardparameter.h
-    ${TOPB}/src/libicalvcard/vcardderivedproperty.h
-    ${TOPS}/src/libicalvcard/vcardproperty.h
-    ${TOPS}/src/libicalvcard/vcardcomponent.h
-    ${TOPS}/src/libicalvcard/vcardparser.h
-    ${TOPS}/src/libicalvcard/vcardrestriction.h
+set(
+  COMBINEDHEADERSVCARD
+  ${TOPS}/src/libicalvcard/vcardenumarray.h
+  ${TOPS}/src/libicalvcard/vcardstrarray.h
+  ${TOPS}/src/libicalvcard/vcardstructured.h
+  ${TOPS}/src/libicalvcard/vcardtime.h
+  ${TOPS}/src/libicalvcard/vcardtypes.h
+  ${TOPB}/src/libicalvcard/vcardderivedvalue.h
+  ${TOPB}/src/libicalvcard/vcardderivedparameter.h
+  ${TOPS}/src/libicalvcard/vcardvalue.h
+  ${TOPS}/src/libicalvcard/vcardparameter.h
+  ${TOPB}/src/libicalvcard/vcardderivedproperty.h
+  ${TOPS}/src/libicalvcard/vcardproperty.h
+  ${TOPS}/src/libicalvcard/vcardcomponent.h
+  ${TOPS}/src/libicalvcard/vcardparser.h
+  ${TOPS}/src/libicalvcard/vcardrestriction.h
 )
 
 file(WRITE ${VCARD_FILE_H_FILE} "#ifndef LIBICAL_VCARD_H\n")
