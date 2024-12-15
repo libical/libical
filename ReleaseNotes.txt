@@ -98,6 +98,8 @@ Version 3.0.19 (UNRELEASED):
  * Resolved known limitation: Negative values are now also supported for `BYMONTHDAY` and `BYYEARDAY`.
  * Add support for RDATE;VALUE=PERIOD
  * Fix time conversion to time_t for times before epoch
+ * Allow `icalcomponent_foreach_recurrence` to receive `DATE`-only `start` and `end` params.
+ * Fix the calculation of an event's duration if `DTSTART` is a `DATE`-only value.
 
 Version 3.0.18 (31 March 2024):
 -------------------------------
