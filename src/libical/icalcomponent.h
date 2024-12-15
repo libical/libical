@@ -462,7 +462,6 @@ LIBICAL_ICAL_EXPORT bool icalproperty_recurrence_is_excluded(icalcomponent *comp
  * It will filter out events that are specified as an EXDATE or an EXRULE.
  *
  * TODO: We do not filter out duplicate RRULES/RDATES
- * TODO: We do not handle RDATEs with explicit periods
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                           struct icaltimetype start,
