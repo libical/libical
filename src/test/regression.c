@@ -9,7 +9,6 @@
  The original author is Eric Busboom
  The original code is regression.c
 ======================================================================*/
-//krazy:skip
 
 #define NO_DEPRECATION_WARNINGS // do not complain about our own deprecated usage
 #ifdef HAVE_CONFIG_H

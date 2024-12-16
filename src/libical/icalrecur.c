@@ -390,8 +390,7 @@ static const struct expand_split_map_struct expand_map[] = {
     {ICAL_WEEKLY_RECURRENCE, {1, 3, 3, 3, 2, 2, 2, 2, 1}},
     {ICAL_MONTHLY_RECURRENCE, {1, 3, 3, 2, 2, 2, 2, 2, 1}},
     {ICAL_YEARLY_RECURRENCE, {2, 2, 2, 2, 2, 2, 2, 2, 1}},
-    {ICAL_NO_RECURRENCE, {0, 0, 0, 0, 0, 0, 0, 0, 0}} //krazy:exclude=style
-};
+    {ICAL_NO_RECURRENCE, {0, 0, 0, 0, 0, 0, 0, 0, 0}}};
 
 static const struct recur_map {
     const char *str;

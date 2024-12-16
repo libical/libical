@@ -55,7 +55,6 @@ char *pack_calendar(struct calendar *cal, size_t size);
 struct calendar *unpack_calendar(char *str, size_t size);
 #endif
 
-//krazy:cond=style
 /*
 static char str[] = "BEGIN:VCALENDAR\n\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\n\
@@ -118,7 +117,6 @@ LOCATION:1CP Conference Room 4350\n\
 END:VEVENT\n\
 END:VCALENDAR\n\
 ";
-//krazy:endcond=style
 
 void test_fileset_extended(void)
 {

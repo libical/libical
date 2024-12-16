@@ -174,7 +174,6 @@ char *make_mime(const char *to, const char *from, const char *subject,
     srand((unsigned int)(time(0) << getpid()));
     snprintf(content_id, TMPSIZE_SMALL, "%ld-%d@%s", (long)time(0), rand(), uts.nodename);
     snprintf(boundary, TMPSIZE_SMALL, "%ld-%d-%s", (long)time(0), rand(), uts.nodename);
-    //krazy:cond=style
     snprintf(mime_part_1, TMPSIZE, "Content-ID: %s\n\
 Content-type: text/plain\n\
 Content-Description: Text description of error message\n\n\
@@ -202,7 +201,6 @@ Content-Type:  multipart/mixed; boundary=\"%s\"\n\
 %s\n\
 ",
              to, from, subject, content_id, boundary, boundary, mime_part_1);
-    //krazy:endcond=style
     if (ical_message != 0 && method != 0) {
         strcat(m, mime_part_2);
     } else {
@@ -460,7 +458,6 @@ char *check_component(icalcomponent *comp, icalproperty **return_status,
 void usage(const char *message)
 {
     _unused(message);
-    //krazy:cond=style
     fprintf(stderr, "Usage: %s [-emdcn] [-i inputfile] [-o outputfile] [-u calid]\n", program_name);
     fprintf(stderr, "-e\tInput data is encapsulated in a MIME Message \n\
 -m\tInput is raw iCal \n\
@@ -470,7 +467,6 @@ void usage(const char *message)
 -u\tSet the calid to store the data to\n\
 -n\tSend errors to stdout instead of organizer\n\
 ");
-    //krazy:endcond=style
 }
 
 void get_options(int argc, char *argv[], struct options_struct *opt)

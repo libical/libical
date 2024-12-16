@@ -1978,7 +1978,6 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
 
     /* Generate the comment block */
     if (enumeration->comment != NULL) {
-        //krazy:cond=style
         comment = g_strdup("/**");
         tmp = g_strconcat(comment, "\n * ", enumeration->name, ":", NULL);
         g_free(comment);
@@ -1991,7 +1990,6 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
         tmp = g_strconcat(comment, "\n */\n", NULL);
         g_free(comment);
         comment = tmp;
-        //krazy:endcond=style
         write_str(out, comment);
         g_free(comment);
         comment = NULL;
