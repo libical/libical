@@ -743,6 +743,7 @@ if (test ! -z "$(REVERSE $cmakecompat)"); then
   fi
   export PATH=/usr/local/opt/cmake-$minCMakeVers/bin:$PATH
   # check the version
+  set +e
   declare -i isCMakeVersion
   isCMakeVersion=$(cmake --version | head -1 | grep -c "$minCMakeVers")
   if (test $isCMakeVersion -ne 1); then
@@ -750,6 +751,7 @@ if (test ! -z "$(REVERSE $cmakecompat)"); then
     echo "Maybe you need to install it into /usr/local/opt/cmake-$minCMakeVers (or use the -m option)"
     exit 1
   fi
+  set -e
 fi
 
 #use non-Ninja cmake generator by-default
