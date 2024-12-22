@@ -402,6 +402,10 @@ CPPCHECK() {
     --suppress=passedByValue --suppress=ctuOneDefinitionRuleViolation \
     --template='{file}:{line},{severity},{id},{message}' \
     --checkers-report=cppcheck-report.txt \
+    -D __cppcheck__ \
+    -D _unused="(void)" \
+    -D MIN="" \
+    -D sleep="" \
     -U PVL_USE_MACROS \
     -I "$BDIR" \
     -I "$BDIR/src/libical" \
@@ -414,11 +418,11 @@ CPPCHECK() {
     -I "$TOP/src/libicalvcal" \
     -I "$TOP/src/libicalvcard" \
     -I "$TOP/src/libical-glib" \
-    -i "$TOP/src/Net-ICal-Libical" \
-    -i "$TOP/src/libicalss/icalssyacc.c" \
-    -i "$TOP/src/libicalss/icalsslexer.c" \
-    -i "$TOP/src/libicalvcal/vcc.c" \
     "$TOP/src" "$BDIR"/src/libical/icalderived* 2>&1 |
+    grep -v "$TOP/src/Net-ICal-Libical" |
+    grep -v "icalssyacc.c:" |
+    grep -v "icalsslexer.c:" |
+    grep -v "vcc.c:" |
     tee cppcheck.out
   CPPCHECK_WARNINGS cppcheck.out
   rm -f cppcheck.out cppcheck-report.txt
