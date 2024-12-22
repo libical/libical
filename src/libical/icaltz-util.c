@@ -131,7 +131,12 @@ static int decode(const void *ptr)
     if ((BYTE_ORDER == BIG_ENDIAN) && sizeof(int) == 4) {
         return *(const int *)ptr;
     } else if (BYTE_ORDER == LITTLE_ENDIAN && sizeof(int) == 4) {
+#if !defined(__cppcheck__)
+        /* stumped why cppcheck 2.16 has a syntax error on this line */
         return (int)bswap_32(*(const unsigned int *)ptr);
+#else
+        return 1;
+#endif
     } else {
         const unsigned char *p = ptr;
         int result = *p & (1 << (CHAR_BIT - 1)) ? ~0 : 0;

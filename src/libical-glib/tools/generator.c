@@ -1194,7 +1194,7 @@ GHashTable *get_hash_table_from_structure(Structure *structure)
     gchar *lowerSnake;
     gchar *upperSnake;
     gchar *lowerTrain;
-    gchar *namespaceLowerSnake;
+    gchar *nameSpaceLowerSnake;
     gchar *nameLowerSnake;
 
     g_return_val_if_fail(structure != NULL, NULL);
@@ -1205,14 +1205,14 @@ GHashTable *get_hash_table_from_structure(Structure *structure)
     lowerSnake = get_lower_snake_from_upper_camel(upperCamel);
     upperSnake = get_upper_snake_from_lower_snake(lowerSnake);
     lowerTrain = get_lower_train_from_lower_snake(lowerSnake);
-    namespaceLowerSnake = get_upper_snake_from_upper_camel(structure->nameSpace);
+    nameSpaceLowerSnake = get_upper_snake_from_upper_camel(structure->nameSpace);
     nameLowerSnake = get_upper_snake_from_upper_camel(structure->name);
 
     (void)g_hash_table_insert(table, (char *)"upperCamel", upperCamel);
     (void)g_hash_table_insert(table, (char *)"lowerSnake", lowerSnake);
     (void)g_hash_table_insert(table, (char *)"upperSnake", upperSnake);
     (void)g_hash_table_insert(table, (char *)"lowerTrain", lowerTrain);
-    (void)g_hash_table_insert(table, (char *)"namespaceLowerSnake", namespaceLowerSnake);
+    (void)g_hash_table_insert(table, (char *)"namespaceLowerSnake", nameSpaceLowerSnake);
     (void)g_hash_table_insert(table, (char *)"nameLowerSnake", nameLowerSnake);
 
     if (structure->native != NULL) {
@@ -2036,7 +2036,7 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
     write_str(out, ";\n");
 }
 
-gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
+gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
 {
     GList *iter;
     Parameter *parameter;
@@ -2049,16 +2049,16 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
     gchar *res;
     gchar *defaultValue;
     gchar *retTrueType;
-    guint namespace_len;
+    guint nameSpace_len;
     gboolean param_is_out;
 
     g_return_val_if_fail(method != NULL, NULL);
-    g_return_val_if_fail(namespace != NULL && *namespace != '\0', NULL);
+    g_return_val_if_fail(nameSpace != NULL && *nameSpace != '\0', NULL);
 
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
     res = NULL;
-    namespace_len = (guint)strlen(namespace);
+    nameSpace_len = (guint)strlen(nameSpace);
 
     for (iter = g_list_first(method->parameters); iter != NULL; iter = g_list_next(iter)) {
         parameter = (Parameter *)iter->data;
@@ -2066,18 +2066,18 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
         if (parameter && parameter->type && parameter->type[strlen(parameter->type) - 1] == '*') {
             trueType = get_true_type(parameter->type);
             for (i = 0;
-                 i < namespace_len && trueType[i] && namespace[i] == trueType[i];
+                 i < nameSpace_len && trueType[i] && nameSpace[i] == trueType[i];
                  i++)
                 ;
 
-            if (i == namespace_len) {
+            if (i == nameSpace_len) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
                 if (annotation_contains_nullable(parameter->annotations)) {
                     (void)g_stpcpy(buffer + strlen(buffer), "if(");
                     (void)g_stpcpy(buffer + strlen(buffer), parameter->name);
                     (void)g_stpcpy(buffer + strlen(buffer), ")\n\t\t");
                 }
-                nameSpaceUpperSnake = get_upper_snake_from_upper_camel(namespace);
+                nameSpaceUpperSnake = get_upper_snake_from_upper_camel(nameSpace);
                 nameUpperSnake = get_upper_snake_from_upper_camel(trueType + i);
                 typeCheck =
                     g_strconcat(nameSpaceUpperSnake, "_IS_", nameUpperSnake, " ((", trueType, "*)",
@@ -2115,7 +2115,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *namespace)
             }
 
             param_is_out = parameter_is_out(parameter);
-            if (i != namespace_len && ((!param_is_out && !annotation_contains_nullable(parameter->annotations)) ||
+            if (i != nameSpace_len && ((!param_is_out && !annotation_contains_nullable(parameter->annotations)) ||
                                        (param_is_out && !annotation_contains_optional(parameter->annotations)))) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
                 if (method->ret != NULL) {
