@@ -5,11 +5,12 @@ var searchData=
   ['d_5fminute_2',['d_minute',['../structut__instant.html#ac7002360b3d2d6751c9f76b0751ccfca',1,'ut_instant']]],
   ['d_5fsecond_3',['d_second',['../structut__instant.html#ab379732301da97977b5a4700855b1cb6',1,'ut_instant']]],
   ['data_4',['data',['../unionicalvalue__impl_1_1data.html',1,'icalvalue_impl']]],
-  ['day_5',['day',['../structut__instant.html#a0a0f54d06f28fa91a46d9c1948172797',1,'ut_instant']]],
-  ['day_5fof_5fyear_6',['day_of_year',['../structut__instant.html#a3011a8ee4e51ab2bc3561821d6175b00',1,'ut_instant']]],
-  ['dbtype_7',['dbtype',['../structicalbdbset__options.html#a3c5ba0f36190405b6424f3a4b9c30f62',1,'icalbdbset_options']]],
-  ['dir_8',['dir',['../structicaldirset__impl.html#a6fc97201a8df517a5955e1ab1e7f2a68',1,'icaldirset_impl']]],
-  ['directory_9',['directory',['../structicaldirset__impl.html#af1aee50ad9db5e6f29673e7e59b90a75',1,'icaldirset_impl']]],
-  ['directory_5fiterator_10',['directory_iterator',['../structicaldirset__impl.html#aab05287b166acccc6734673842774523',1,'icaldirset_impl']]],
-  ['dump_11',['dump',['../classLibICal_1_1ICalSpanList.html#ae1c6dbf5f3b15806459f12ec4b89414b',1,'LibICal::ICalSpanList']]]
+  ['data_20formats_5',['Libical - an implementation of iCalendar protocols and data formats',['../index.html',1,'']]],
+  ['day_6',['day',['../structut__instant.html#a0a0f54d06f28fa91a46d9c1948172797',1,'ut_instant']]],
+  ['day_5fof_5fyear_7',['day_of_year',['../structut__instant.html#a3011a8ee4e51ab2bc3561821d6175b00',1,'ut_instant']]],
+  ['dbtype_8',['dbtype',['../structicalbdbset__options.html#a3c5ba0f36190405b6424f3a4b9c30f62',1,'icalbdbset_options']]],
+  ['dir_9',['dir',['../structicaldirset__impl.html#a6fc97201a8df517a5955e1ab1e7f2a68',1,'icaldirset_impl']]],
+  ['directory_10',['directory',['../structicaldirset__impl.html#af1aee50ad9db5e6f29673e7e59b90a75',1,'icaldirset_impl']]],
+  ['directory_5fiterator_11',['directory_iterator',['../structicaldirset__impl.html#aab05287b166acccc6734673842774523',1,'icaldirset_impl']]],
+  ['dump_12',['dump',['../classLibICal_1_1ICalSpanList.html#ae1c6dbf5f3b15806459f12ec4b89414b',1,'LibICal::ICalSpanList']]]
 ];

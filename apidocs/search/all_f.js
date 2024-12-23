@@ -6,6 +6,7 @@ var searchData=
   ['predefprop_3',['PreDefProp',['../structPreDefProp.html',1,'']]],
   ['prev_5futc_5foffset_4',['prev_utc_offset',['../struct__icaltimezonechange.html#a4c4c11ee948c011b073fa6f065739eb3',1,'_icaltimezonechange']]],
   ['prior_5',['prior',['../structpvl__elem__t.html#a00350aa18847b00658ba476816cb0274',1,'pvl_elem_t']]],
-  ['pvl_5felem_5ft_6',['pvl_elem_t',['../structpvl__elem__t.html',1,'']]],
-  ['pvl_5flist_5ft_7',['pvl_list_t',['../structpvl__list__t.html',1,'']]]
+  ['protocols_20and_20data_20formats_6',['Libical - an implementation of iCalendar protocols and data formats',['../index.html',1,'']]],
+  ['pvl_5felem_5ft_7',['pvl_elem_t',['../structpvl__elem__t.html',1,'']]],
+  ['pvl_5flist_5ft_8',['pvl_list_t',['../structpvl__list__t.html',1,'']]]
 ];

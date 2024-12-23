@@ -9,7 +9,7 @@ var indexSectionsWithContent =
   6: "i",
   7: "i",
   8: "i",
-  9: "l"
+  9: "adfilop"
 };
 
 var indexSectionNames =
