@@ -1,4 +1,4 @@
 [codespell]
-skip = ./build-*,.git,test-data,zoneinfo,regression.c
+skip = ./build-*,.git,book,test-data,zoneinfo,regression.c
 interactive = 3
 ignore-words-list = inout,gir,parameterizes,yau,crasher,thur,damon
