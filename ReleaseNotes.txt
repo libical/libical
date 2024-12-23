@@ -88,8 +88,12 @@ Version 3.1.0 (NOT RELEASED YET):
     + struct icaltimezonetype
     + struct icaltimezonephase
 
-Version 3.0.19 (UNRELEASED):
+Version 3.0.20 (UNRELEASED):
 ----------------------------
+ *
+
+Version 3.0.19 (23 December 2024):
+----------------------------------
  * Fix for changes to the libicu 75 API
  * Add vcpkg manifest-mode support
  * Improved berkeley-db discovery on Mac with homebrew
@@ -101,6 +105,7 @@ Version 3.0.19 (UNRELEASED):
  * Allow `icalcomponent_foreach_recurrence` to receive `DATE`-only `start` and `end` params.
  * Fix the calculation of an event's duration if `DTSTART` is a `DATE`-only value.
  * Fix `icaltime_span_new()` - ignore the case where DTEND is unset and require it to be set by the caller instead.
+ * Various fixes for fuzzer issues
 
 Version 3.0.18 (31 March 2024):
 -------------------------------
