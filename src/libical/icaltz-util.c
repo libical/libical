@@ -37,20 +37,10 @@
 #endif
 #if defined(HAVE_ENDIAN_H)
 #include <endian.h>
-#else
+#endif
 #if defined(HAVE_SYS_ENDIAN_H)
 #include <sys/endian.h>
-#if defined(bswap32)
-#define bswap_32 bswap32
-#else
-#define bswap_32 swap32
 #endif
-#endif
-#endif
-#endif
-
-#if defined(__OpenBSD__) && !defined(bswap_32)
-#define bswap_32 swap32
 #endif
 
 #if defined(_MSC_VER)
@@ -74,6 +64,18 @@
 (((x) & 0x00000000000000ffull) << 56))
 #endif
 #include <io.h>
+#endif
+
+#if defined(HAVE_ENDIAN_H) || defined(HAVE_SYS_ENDIAN_H)
+#define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8) & 0xff)
+#ifdef bswap32
+#define bswap_32 bswap32
+#define bswap_64 bswap64
+#endif
+#ifdef swap32
+#define bswap_32 swap32
+#define bswap_64 swap64
+#endif
 #endif
 
 #if defined(__APPLE__) || defined(__MINGW32__)
