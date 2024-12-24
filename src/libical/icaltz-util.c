@@ -38,6 +38,7 @@
 
 #if defined(__OpenBSD__) && !defined(bswap_32)
 #define bswap_32 swap32
+#define bswap_64 swap64
 #endif
 
 #if defined(_MSC_VER)
