@@ -70,10 +70,10 @@
 #  Default=false (use the default size of time_t)
 #
 # -DLIBICAL_ENABLE_64BIT_ICALTIME_T=[true|false]
-#  Redirect icaltime_t (and related functions) to a 64-bit version of time_t rather than to the
+#  Redirect icaltime_t (and related functions) to a 64-bit version of time_t rather than the
 #  C standard library time_t.  Intended for use on 32-bit systems which have a 64-bit time_t
-#  (such as `__time64_t` on Windows) available.
-#  Default=false (use plain time_t)
+#  (for example using `__time64_t`).
+#  Default=false (i.e. use plain time_t)
 #
 # -DLIBICAL_BUILD_TESTING=[true|false]
 #  Set to build the test suite
@@ -388,16 +388,27 @@ libical_option(
   LIBICAL_ENABLE_64BIT_ICALTIME_T
   "Redirect icaltime_t and related functions to a 64-bit version of time_t rather than to the \
   C standard library time_t. Intended for use on 32-bit systems which have a 64-bit time_t available. \
-  May not be implemented on all platforms yet"
+  May not be implemented on all platforms yet."
   False
 )
 if(LIBICAL_ENABLE_64BIT_ICALTIME_T)
-  if(MSVC)
+  if(SIZEOF___TIME64_T)
     set(ICAL_ICALTIME_T_TYPE "__time64_t")
   else()
-    message(FATAL_ERROR "Option LIBICAL_ENABLE_64BIT_ICALTIME_T is not supported with this compiler or architecture.")
+    message(
+      FATAL_ERROR
+      "Option LIBICAL_ENABLE_64BIT_ICALTIME_T is not supported for this compiler or architecture since \
+      the __time64_t type is not available."
+    )
   endif()
 else()
+  if(SIZEOF_TIME_T EQUAL 4)
+    message(
+      NOTICE
+      "The 32-bit time_t type has been detected. \
+      Consider reconfiguring with -DLIBICAL_ENABLE_64BIT_ICALTIME_T=True to enable 64-bit time_t types."
+    )
+  endif()
   set(ICAL_ICALTIME_T_TYPE "time_t")
 endif()
 

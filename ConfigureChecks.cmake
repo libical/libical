@@ -255,6 +255,10 @@ else()
   )
 endif()
 check_type_size(
+  __time64_t
+  SIZEOF___TIME64_T
+)
+check_type_size(
   ${ICAL_ICALTIME_T_TYPE}
   SIZEOF_ICALTIME_T
 )
