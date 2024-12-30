@@ -774,8 +774,7 @@ out:
             }
 
             value = vcardvalue_new_structured(&structured);
-        }
-        else
+        } else
             value = vcardvalue_new_textlist(textlist);
     } else {
         /* repair critical property values */
