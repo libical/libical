@@ -67,7 +67,9 @@
 #endif
 
 #if defined(HAVE_ENDIAN_H) || defined(HAVE_SYS_ENDIAN_H)
+#ifndef bswap_16
 #define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8) & 0xff)
+#endif
 #ifdef bswap32
 #define bswap_32 bswap32
 #define bswap_64 bswap64
