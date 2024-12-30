@@ -4,7 +4,7 @@
 
 "#Standard property parameters","RFC 6350 Section 5",,,
 "LANGUAGE","1","const char*",
-"VALUE","2","vcardparameter_value","X=20000;TEXT;URI;DATE;TIME;DATE-TIME;DATE-AND-OR-TIME;TIMESTAMP;BOOLEAN;INTEGER;FLOAT;UTC-OFFSET;LANGUAGE-TAG;NONE=20099"
+"VALUE","2","vcardparameter_value","X=20000;TEXT;URI;DATE;TIME;DATE-TIME;DATE-AND-OR-TIME;TIMESTAMP;BOOLEAN;INTEGER;FLOAT;UTC-OFFSET;LANGUAGE-TAG;STRUCTURED;NONE=20099"
 "PREF","3","int",
 "ALTID","4","const char*",
 "PID","5","const char*",,is_multivalued

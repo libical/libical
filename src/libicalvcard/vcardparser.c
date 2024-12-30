@@ -718,9 +718,15 @@ static int _parse_prop_value(struct vcardparser_state *state)
         case ';':
             if (is_structured || (is_multivalued && strchr(text_sep, *state->p))) {
                 const char *str = buf_cstring(&state->buf);
-                char *dequot_str = vcardvalue_strdup_and_dequote_text(&str, text_sep);
+                char *dequot_str =
+                    vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
-                vcardstrarray_append(textlist, dequot_str);
+                /* repair critical property values */
+                if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0')
+                    vcardstrarray_append(textlist, "0.0");
+                else
+                    vcardstrarray_append(textlist, dequot_str);
+
                 buf_reset(&state->buf);
                 icalmemory_free_buffer(dequot_str);
 
@@ -749,12 +755,26 @@ out:
         const char *str = buf_cstring(&state->buf);
         char *dequot_str =
             vcardvalue_strdup_and_dequote_text(&str, text_sep);
-        vcardstrarray_append(textlist, dequot_str);
+
+        /* repair critical property values */
+        if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0')
+            vcardstrarray_append(textlist, "0.0");
+        else
+            vcardstrarray_append(textlist, dequot_str);
+
         buf_reset(&state->buf);
         icalmemory_free_buffer(dequot_str);
 
-        if (is_structured)
+        if (is_structured) {
+            /* repair critical property values */
+            if (prop_kind == VCARD_GEO_PROPERTY && structured.num_fields == 1) {
+                textlist = vcardstrarray_new(1);
+                vcardstrarray_append(textlist, "0.0");
+                structured.field[structured.num_fields++] = textlist;
+            }
+
             value = vcardvalue_new_structured(&structured);
+        }
         else
             value = vcardvalue_new_textlist(textlist);
     } else {
