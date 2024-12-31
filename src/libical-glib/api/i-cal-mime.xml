@@ -16,8 +16,8 @@
  */
 typedef gchar *(*ICalMimeParseFunc)(gchar *bytes, size_t size, gpointer user_data);</declaration>
     <method name="i_cal_mime_parse" corresponds="CUSTOM" since="1.0">
-        <parameter type="ICalMimeParseFunc" name="func" annotation="scope call" comment="The parsing function"/>
-        <parameter type="gpointer" name="user_data" annotation="closure" comment="The date given to @func"/>
+        <parameter type="ICalMimeParseFunc" name="func" annotation="scope call,closure user_data" comment="The parsing function"/>
+        <parameter type="gpointer" name="user_data" comment="The date given to @func"/>
         <returns type="ICalComponent *" annotation="transfer full" comment="The parsed #ICalComponent"/>
         <comment xml:space="preserve">Parses data to #ICalComponent using the given function.</comment>
         <custom>	g_return_val_if_fail (func != NULL, NULL);
