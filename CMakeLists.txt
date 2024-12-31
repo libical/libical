@@ -203,7 +203,7 @@ if(WITH_CXX_BINDINGS)
     add_definitions(-DWITH_CXX_BINDINGS)
   else()
     message(
-      STATUS
+      NOTICE
       "Building the C++ bindings is not possible since a C++ compiler could not be found. "
       "Turning-off C++ bindings."
     )
@@ -458,7 +458,7 @@ endif()
 if(WIN32 OR WINCE)
   #Always use builtin tzdata on Windows systems.
   if(NOT USE_BUILTIN_TZDATA)
-    message(STATUS "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata.")
+    message(NOTICE "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata.")
     set(USE_BUILTIN_TZDATA 1)
   endif()
 endif()
