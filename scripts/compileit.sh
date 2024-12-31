@@ -47,3 +47,5 @@ cmake -S .. \
   -DLIBICAL_BUILD_TESTING_BIGFUZZ=ON \
   -DCMAKE_INSTALL_PREFIX="$HOME/tmp/libical-$BRANCH" &&
   ninja && ninja test && ninja install && ninja uninstall
+
+rm -rf "$HOME/tmp/libical-$BRANCH"
