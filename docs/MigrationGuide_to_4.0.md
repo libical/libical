@@ -1,5 +1,25 @@
 # Migrating to version 4.0
 
+## Conditional compilation
+
+To continue supporting the 3.0 version you can use conditional compilation, like so:
+
+```C
+     #if ICAL_CHECK_VERSION(4,0,0)
+     <...new code for the libical 4.0 version ...>
+     #else
+     <...old code for the libical 3.0 version ...>
+     #endif
+```
+
+you can handle code that no longer exists in 4.0 with:
+
+```C
+     #if !ICAL_CHECK_VERSION(4,0,0)
+     <...old code for the libical 3.0 version ...>
+     #endif
+```
+
 ## Bool return values
 
 A bunch of function signatures have been changed to use 'bool' rather than 'int' types.
@@ -11,6 +31,25 @@ This is implemented using the C99 standards compliant <stdbool.h> header.
 The way `struct icalrecurrencetype` is passed between functions has been changed. While it was
 usually passed by value in 3.0, it is now passed by reference. A reference counting mechanism is
 applied that takes care of deallocating an instance as soon as the reference counter goes to 0.
+
+## `icalgeotype` now uses character strings rather than doubles
+
+The members of `struct icalgeotype` for latitude ('lat`) and longitude ('lon`) have been changed
+to use ICAL_GEO_LEN long character strings rather than the double type.
+
+This means that simple assignments in 3.0 must be replaced by string copies.
+
+```C
+     geo.lat = 0.0;
+     geo.lon = 10.0;
+```
+
+becomes
+
+```C
+     strncpy(geo.lat, "0.0", ICAL_GEO_LEN-1);
+     strncpy(geo.lon, "10.0", ICAL_GEO_LEN-1);
+```
 
 ### libical C library
 
@@ -139,7 +178,7 @@ struct icalrecurrencetype {
 Memory is allocated in the required size using the new `icalrecur_resize_by()` function. It is
 automatically freed together with the containing `icalrecurrencetype`. As the size of the array is
 stored explicitly, no termination of the array with special value `ICAL_RECURRENCE_ARRAY_MAX` is
-required anymore.
+required anymore.  The array is iterated by comparing the iterator to the `size` member value.
 
 ### Migrating `icalrecurrencetype.by_xxx` static arrays usage from 3.0 to 4.0
 
@@ -175,13 +214,13 @@ type (day, month, ...) as a parameter.
 Code like this in libical 3.0:
 
 ```python
-recurrence.set_by_second(0,
-  recurrence.get_by_second(0) + 1)
+    recurrence.set_by_second(0,
+    recurrence.get_by_second(0) + 1)
 ```
 
 changes to something like this in libical 4.0:
 
 ```python
-recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0,
-  recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) + 1)
+    recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0,
+    recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) + 1)
 ```
