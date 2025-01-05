@@ -816,7 +816,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
 
-    while ((c = fgetc(in)) != EOF) {
+    while (!feof(in) && !ferror(in) && (c = fgetc(in)) != EOF) {
         if (c == '$') {
             if ((c = fgetc(in)) != '{' && c != '^') {
                 printf("The following char is not {");
@@ -827,7 +827,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
             if (c == '^') {
                 count = 1;
                 last = '\0';
-                while (!((c = fgetc(in)) == '$' && last == '^' && count == 1)) {
+                while (!feof(in) && !ferror(in) && !((c = fgetc(in)) == '$' && last == '^' && count == 1)) {
                     if (c == '^' && last == '$') {
                         ++count;
                         last = '\0';
@@ -846,7 +846,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                 }
                 generate_conditional(out, structure, buffer, table);
             } else {
-                while ((c = fgetc(in)) != '}') {
+                while (!feof(in) && !ferror(in) && (c = fgetc(in)) != '}') {
                     len = (gint)strlen(buffer);
                     buffer[len] = c;
                     buffer[len + 1] = '\0';
@@ -1115,16 +1115,16 @@ void generate_forward_declarations_header_file(GList *structures)
 
     *buffer = '\0';
 
-    while ((c = fgetc(in)) != EOF) {
+    while (!feof(in) && !ferror(in) && (c = fgetc(in)) != EOF) {
         if (c == '$') {
-            if ((c = fgetc(in)) != '{' && c != '^') {
+            if (!feof(in) && !ferror(in) && (c = fgetc(in)) != '{' && c != '^') {
                 printf("The following char is not {");
                 fclose(in);
                 fclose(out);
                 return;
             }
 
-            while ((c = fgetc(in)) != '}') {
+            while (!feof(in) && !ferror(in) && (c = fgetc(in)) != '}') {
                 len = (gint)strlen(buffer);
                 buffer[len] = c;
                 buffer[len + 1] = '\0';
@@ -2420,9 +2420,9 @@ void generate_header_header_file(GList *structures)
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
 
-    while ((c = fgetc(in)) != EOF) {
+    while (!feof(in) && !ferror(in) && (c = fgetc(in)) != EOF) {
         if (c == '$') {
-            if ((c = fgetc(in)) != '{' && c != '^') {
+            if (!feof(in) && !ferror(in) && (c = fgetc(in)) != '{' && c != '^') {
                 printf("The following char is not {");
                 g_free(buffer);
                 fclose(in);
@@ -2430,7 +2430,7 @@ void generate_header_header_file(GList *structures)
                 return;
             }
 
-            while ((c = fgetc(in)) != '}') {
+            while (!feof(in) && !ferror(in) && (c = fgetc(in)) != '}') {
                 len = (gint)strlen(buffer);
                 buffer[len] = c;
                 buffer[len + 1] = '\0';

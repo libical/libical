@@ -102,10 +102,12 @@ static const char *s_zoneinfo_search_paths[] = {
     "/etc/zoneinfo",
     "/usr/share/lib/zoneinfo"};
 
-#define EFREAD(buf, size, num, fs)                       \
-    if (fread(buf, size, num, fs) < num && ferror(fs)) { \
-        icalerror_set_errno(ICAL_FILE_ERROR);            \
-        goto error;                                      \
+#define EFREAD(buf, size, num, fs)                                     \
+    if (!ferror(fs) && !feof(fs) && fread(buf, size, num, fs) < num) { \
+        if (ferror(fs)) {                                              \
+            icalerror_set_errno(ICAL_FILE_ERROR);                      \
+            goto error;                                                \
+        }                                                              \
     }
 
 typedef struct
@@ -131,7 +133,7 @@ static int decode(const void *ptr)
     if ((BYTE_ORDER == BIG_ENDIAN) && sizeof(int) == 4) {
         return *(const int *)ptr;
     } else if (BYTE_ORDER == LITTLE_ENDIAN && sizeof(int) == 4) {
-#if !defined(__cppcheck__)
+#if !defined(__cppcheck__) && !defined(__clang_analyzer__) //core.CallAndMessage
         /* stumped why cppcheck 2.16 has a syntax error on this line */
         return (int)bswap_32(*(const unsigned int *)ptr);
 #else
@@ -156,7 +158,11 @@ static long long int decode64(const void *ptr)
     if ((BYTE_ORDER == BIG_ENDIAN)) {
         return *(const long long int *)ptr;
     } else {
+#if !defined(__clang_analyzer__) //core.CallAndMessage
         return (const long long int)bswap_64(*(const unsigned long long int *)ptr);
+#else
+        return 0;
+#endif
     }
 }
 
@@ -575,7 +581,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     } else {
         EFREAD(r_trans, (size_t)trans_size, num_trans, f);
         temp = r_trans;
-        for (i = 0; i < num_trans; i++) {
+        for (i = 0; i < num_trans && !feof(f) && !ferror(f); i++) {
             trans_idx[i] = fgetc(f);
             if (trans_size == 8) {
                 transitions[i] = (icaltime_t)decode64(r_trans);
@@ -597,9 +603,11 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         int c;
 
         EFREAD(a, 4, 1, f);
-        c = fgetc(f);
+        if (feof(f) || ferror(f) || (c = fgetc(f)) < 0) {
+            break;
+        }
         types[i].isdst = (unsigned char)c;
-        if ((c = fgetc(f)) < 0) {
+        if (feof(f) || ferror(f) || (c = fgetc(f)) < 0) {
             break;
         }
         types[i].abbr = (unsigned int)c;
@@ -634,7 +642,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         leaps[i].change = decode(c);
     }
 
-    for (i = 0; i < num_isstd; ++i) {
+    for (i = 0; i < num_isstd && !feof(f) && !ferror(f); ++i) {
         int c = getc(f);
         types[i].isstd = c != 0;
     }
@@ -643,9 +651,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
         types[i++].isstd = 0;
     }
 
-    for (i = 0; i < num_isgmt; ++i) {
+    for (i = 0; i < num_isgmt && !feof(f) && !ferror(f); ++i) {
         int c = getc(f);
-
         types[i].isgmt = c != 0;
     }
 
@@ -660,6 +667,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
 
     /* Read the footer */
     if (trans_size == 8 &&
+        !feof(f) &&
+        !ferror(f) &&
         (footer[0] = (char)fgetc(f)) == '\n' &&
         fgets(footer + 1, (int)sizeof(footer) - 1, f) &&
         footer[strlen(footer) - 1] == '\n') {

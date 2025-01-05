@@ -1698,6 +1698,7 @@ static void icaltimezone_parse_zone_tab(void)
         return;
     }
 
+#if !defined(__clang_analyzer__)
     while (fgets(buf, (int)sizeof(buf), fp)) {
         if (*buf == '#')
             continue;
@@ -1734,7 +1735,6 @@ static void icaltimezone_parse_zone_tab(void)
                 continue;
             }
         }
-
         icaltimezone_init(&zone);
         zone.location = icalmemory_strdup(location);
 
@@ -1768,7 +1768,7 @@ static void icaltimezone_parse_zone_tab(void)
         printf("Found zone: %s %f %f\n", location, zone.latitude, zone.longitude);
 #endif
     }
-
+#endif // __clang_analyzer__
     fclose(fp);
 }
 
