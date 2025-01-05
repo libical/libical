@@ -474,47 +474,47 @@
 		<returns type="ICalPropertyMethod" comment="The method within #ICalValue"/>
 		<comment>Gets the method of #ICalValue.</comment>
 	</method>
-	<method name="i_cal_value_new_participanttype" corresponds="icalvalue_new_participanttype" kind="constructor" since="3.1">
+	<method name="i_cal_value_new_participanttype" corresponds="icalvalue_new_participanttype" kind="constructor" since="4.0">
 		<parameter type="ICalPropertyParticipanttype" name="v" comment="An initial value for the new #ICalValue"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue." />
 		<comment xml:space="preserve">Creates a new #ICalValue of kind %I_CAL_PARTICIPANTTYPE_VALUE holding value @v of type #ICalPropertyParticipanttype</comment>
 	</method>
-	<method name="i_cal_value_get_participanttype" corresponds="icalvalue_get_participanttype" kind="get" since="3.1">
+	<method name="i_cal_value_get_participanttype" corresponds="icalvalue_get_participanttype" kind="get" since="4.0">
 		<parameter type="const ICalValue *" name="val" comment="An #ICalValue to be queried"/>
 		<returns type="ICalPropertyParticipanttype" comment="The value of the @val of type #ICalPropertyParticipanttype"/>
 		<comment xml:space="preserve">Gets value of the @val of kind %I_CAL_PARTICIPANTTYPE_VALUE</comment>
 	</method>
-	<method name="i_cal_value_set_participanttype" corresponds="icalvalue_set_participanttype" kind="set" since="3.1">
+	<method name="i_cal_value_set_participanttype" corresponds="icalvalue_set_participanttype" kind="set" since="4.0">
 		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
 		<parameter type="ICalPropertyParticipanttype" name="v" comment="The value of type #ICalPropertyParticipanttype to be set"/>
 		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_PARTICIPANTTYPE_VALUE</comment>
 	</method>
-	<method name="i_cal_value_new_proximity" corresponds="icalvalue_new_proximity" kind="constructor" since="3.1">
+	<method name="i_cal_value_new_proximity" corresponds="icalvalue_new_proximity" kind="constructor" since="4.0">
 		<parameter type="ICalPropertyProximity" name="v" comment="An initial value for the new #ICalValue"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue." />
 		<comment xml:space="preserve">Creates a new #ICalValue of kind %I_CAL_PROXIMITY_VALUE holding value @v of type #ICalPropertyProximity</comment>
 	</method>
-	<method name="i_cal_value_get_proximity" corresponds="icalvalue_get_proximity" kind="get" since="3.1">
+	<method name="i_cal_value_get_proximity" corresponds="icalvalue_get_proximity" kind="get" since="4.0">
 		<parameter type="const ICalValue *" name="val" comment="An #ICalValue to be queried"/>
 		<returns type="ICalPropertyProximity" comment="The value of the @val of type #ICalPropertyProximity"/>
 		<comment xml:space="preserve">Gets value of the @val of kind %I_CAL_PROXIMITY_VALUE</comment>
 	</method>
-	<method name="i_cal_value_set_proximity" corresponds="icalvalue_set_proximity" kind="set" since="3.1">
+	<method name="i_cal_value_set_proximity" corresponds="icalvalue_set_proximity" kind="set" since="4.0">
 		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
 		<parameter type="ICalPropertyProximity" name="v" comment="The value of type #ICalPropertyProximity to be set"/>
 		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_PROXIMITY_VALUE</comment>
 	</method>
-	<method name="i_cal_value_new_resourcetype" corresponds="icalvalue_new_resourcetype" kind="constructor" since="3.1">
+	<method name="i_cal_value_new_resourcetype" corresponds="icalvalue_new_resourcetype" kind="constructor" since="4.0">
 		<parameter type="ICalPropertyResourcetype" name="v" comment="An initial value for the new #ICalValue"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue." />
 		<comment xml:space="preserve">Creates a new #ICalValue of kind %I_CAL_RESOURCETYPE_VALUE holding value @v of type #ICalPropertyResourcetype</comment>
 	</method>
-	<method name="i_cal_value_get_resourcetype" corresponds="icalvalue_get_resourcetype" kind="get" since="3.1">
+	<method name="i_cal_value_get_resourcetype" corresponds="icalvalue_get_resourcetype" kind="get" since="4.0">
 		<parameter type="const ICalValue *" name="val" comment="An #ICalValue to be queried"/>
 		<returns type="ICalPropertyResourcetype" comment="The value of the @val of type #ICalPropertyResourcetype"/>
 		<comment xml:space="preserve">Gets value of the @val of kind %I_CAL_RESOURCETYPE_VALUE</comment>
 	</method>
-	<method name="i_cal_value_set_resourcetype" corresponds="icalvalue_set_resourcetype" kind="set" since="3.1">
+	<method name="i_cal_value_set_resourcetype" corresponds="icalvalue_set_resourcetype" kind="set" since="4.0">
 		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
 		<parameter type="ICalPropertyResourcetype" name="v" comment="The value of type #ICalPropertyResourcetype to be set"/>
 		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_RESOURCETYPE_VALUE</comment>

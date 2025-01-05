@@ -27,7 +27,7 @@ LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);
 /** @brief Deeply clones an icalvalue.
  *
  * Returns a pointer to the memory for the newly cloned icalvalue.
- * @since 3.1.0
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_clone(const icalvalue *value);
 

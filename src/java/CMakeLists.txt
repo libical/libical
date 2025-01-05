@@ -42,7 +42,7 @@ if(NOT ANDROID)
       VERSION
         ${LIBICAL_LIB_VERSION_STRING}
       SOVERSION
-        ${LIBICAL_LIB_MAJOR_VERSION}
+        ${LIBICAL_LIB_SOVERSION_STRING}
   )
 endif()
 install(

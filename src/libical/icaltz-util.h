@@ -30,7 +30,7 @@ LIBICAL_ICAL_EXPORT const char *icaltzutil_get_zone_directory(void);
  * @param A const character string containing the fullpath to the zoneinfo directory.
  *
  * The internal zoneinfo path can be cleared if @p zonepath is empty or NULL.
- * @since 3.1
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT void icaltzutil_set_zone_directory(const char *zonepath);
 
@@ -41,7 +41,7 @@ LIBICAL_ICAL_EXPORT void icaltzutil_set_zone_directory(const char *zonepath);
  * @param location is a string containing the name of a location with a timezone file
  *        found under the zoneinfo data.
  *
- * @since 3.1 no longer publicly accessible
+ * @since 4.0 no longer publicly accessible
  */
 LIBICAL_ICAL_NO_EXPORT icalcomponent *icaltzutil_fetch_timezone(const char *location);
 

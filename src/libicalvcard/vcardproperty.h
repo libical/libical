@@ -26,7 +26,7 @@ LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_new_impl(vcardproperty_kind ki
 /** @brief Deeply clones an vcardproperty.
  *
  * Returns a pointer to the memory for the newly cloned vcardproperty.
- * @since 3.1.0
+ * @since 4.0
  */
 LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_clone(const vcardproperty *prop);
 

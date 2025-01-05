@@ -11,7 +11,7 @@
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Creates a new #ICalComponent with specific type.</comment>
     </method>
-    <method name="i_cal_component_clone" corresponds="icalcomponent_clone" kind="clone" since="3.1">
+    <method name="i_cal_component_clone" corresponds="icalcomponent_clone" kind="clone" since="4.0">
         <parameter type="const ICalComponent *" name="component" comment="The #ICalComponent to be created."/>
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly deeply cloned #ICalComponent."/>
         <comment xml:space="preserve">Deeply clone a #ICalComponent.</comment>
@@ -616,23 +616,23 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Creates a #ICalComponent with the type to be xvote.</comment>
     </method>
-    <method name="i_cal_component_new_vpatch" corresponds="icalcomponent_new_vpatch" kind="constructor" since="3.1">
+    <method name="i_cal_component_new_vpatch" corresponds="icalcomponent_new_vpatch" kind="constructor" since="4.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Creates a #ICalComponent of type %I_CAL_VPATCH_COMPONENT.</comment>
     </method>
-    <method name="i_cal_component_new_xpatch" corresponds="icalcomponent_new_xpatch" kind="constructor" since="3.1">
+    <method name="i_cal_component_new_xpatch" corresponds="icalcomponent_new_xpatch" kind="constructor" since="4.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Creates a #ICalComponent of type %I_CAL_XPATCH_COMPONENT.</comment>
     </method>
-    <method name="i_cal_component_new_participant" corresponds="icalcomponent_new_participant" kind="constructor" since="3.1">
+    <method name="i_cal_component_new_participant" corresponds="icalcomponent_new_participant" kind="constructor" since="4.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Creates a #ICalComponent of type %I_CAL_PARTICIPANT_COMPONENT.</comment>
     </method>
-    <method name="i_cal_component_new_vlocation" corresponds="icalcomponent_new_vlocation" kind="constructor" since="3.1">
+    <method name="i_cal_component_new_vlocation" corresponds="icalcomponent_new_vlocation" kind="constructor" since="4.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Creates a #ICalComponent of type %I_CAL_VLOCATION_COMPONENT.</comment>
     </method>
-    <method name="i_cal_component_new_vresource" corresponds="icalcomponent_new_vresource" kind="constructor" since="3.1">
+    <method name="i_cal_component_new_vresource" corresponds="icalcomponent_new_vresource" kind="constructor" since="4.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Creates a #ICalComponent of type %I_CAL_VRESOURCE_COMPONENT.</comment>
     </method>

@@ -78,7 +78,7 @@ LIBICAL_VCARD_EXPORT vcardparameter *vcardparameter_new(vcardparameter_kind kind
  * vcardparameter_free(param);
  * vcardparameter_free(clone);
  * ```
- * @since 3.1.0
+ * @since 4.0
  */
 LIBICAL_VCARD_EXPORT vcardparameter *vcardparameter_clone(const vcardparameter *p);
 

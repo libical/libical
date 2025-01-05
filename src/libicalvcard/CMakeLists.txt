@@ -259,7 +259,7 @@ set_target_properties(
     VERSION
       ${LIBICAL_LIB_VERSION_STRING}
     SOVERSION
-      ${LIBICAL_LIB_MAJOR_VERSION}
+      ${LIBICAL_LIB_SOVERSION_STRING}
 )
 set_target_properties(
   icalvcard
