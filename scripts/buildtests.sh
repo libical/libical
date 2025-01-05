@@ -153,7 +153,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='/vcc\.c\|/vobject\.c\|libical-glib-scan\.c\|Value[[:space:]]descriptions[[:space:]]\|g-ir-scanner:'
+  whitelist='/vcc\.c\|/vobject\.c\|libical-glib-scan\.c\|/ICalGLib-3.0\.c\|ICal-3.0\.c\|Value[[:space:]]descriptions[[:space:]]\|g-ir-scanner:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 

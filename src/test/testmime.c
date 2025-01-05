@@ -294,5 +294,8 @@ int main(int argc, char *argv[])
 
     icalmemory_free_ring();
 
+    if (opt.input_file) {
+        fclose(f);
+    }
     return 0;
 }
