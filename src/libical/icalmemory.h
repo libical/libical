@@ -154,7 +154,7 @@ typedef void (*icalmemory_free_f)(void *);
  * Note: The memory management functions configured via this
  * functions are used throughout the core libical component but not within
  * other components like libicalvcal.
- * @since 3.1.0
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc,
                                                         icalmemory_realloc_f f_realloc,
@@ -168,7 +168,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_ma
  * @param f_free A pointer to the function to use for memory deallocation.
  *
  * Retrieves the functions used by the library for memory management.
- * @since 3.1.0
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f *f_malloc,
                                                         icalmemory_realloc_f *f_realloc, icalmemory_free_f *f_free);

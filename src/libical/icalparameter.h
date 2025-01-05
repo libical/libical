@@ -84,7 +84,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
  * icalparameter_free(param);
  * icalparameter_free(clone);
  * ```
- * @since 3.1.0
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT icalparameter *icalparameter_clone(const icalparameter *p);
 

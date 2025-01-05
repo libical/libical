@@ -38,7 +38,7 @@ LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_new(vcardcomponent_kind kind
 /**
  * @brief Deeply clones an vcard.
  * Returns a pointer to the memory for the newly cloned vcard.
- * @since 3.1.0
+ * @since 4.0
  */
 LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_clone(const vcardcomponent *card);
 

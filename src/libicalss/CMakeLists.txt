@@ -148,7 +148,7 @@ if(NOT ANDROID)
       VERSION
         ${LIBICAL_LIB_VERSION_STRING}
       SOVERSION
-        ${LIBICAL_LIB_MAJOR_VERSION}
+        ${LIBICAL_LIB_SOVERSION_STRING}
   )
 endif()
 set_target_properties(
@@ -256,7 +256,7 @@ if(WITH_CXX_BINDINGS)
         VERSION
           ${LIBICAL_LIB_VERSION_STRING}
         SOVERSION
-          ${LIBICAL_LIB_MAJOR_VERSION}
+          ${LIBICAL_LIB_SOVERSION_STRING}
     )
   endif()
   set_target_properties(

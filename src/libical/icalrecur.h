@@ -270,7 +270,7 @@ LIBICAL_ICAL_EXPORT int icalrecurrencetype_day_position(short day);
 /** Encodes the @p weekday and @p position into a form, which can be stored
  *  to icalrecurrencetype::by[ICAL_BY_DAY] array. Use icalrecurrencetype_day_day_of_week()
  *  and icalrecurrencetype_day_position() to split the encoded value back into the parts.
- * @since 3.1
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_day(enum icalrecurrencetype_weekday weekday,
                                                         int position);
@@ -293,7 +293,7 @@ LIBICAL_ICAL_EXPORT int icalrecurrencetype_month_month(short month);
 /** Encodes the @p month and the @p is_leap into a form, which can be stored
  *  to icalrecurrencetype::by[ICAL_BY_MONTH] array. Use icalrecurrencetype_month_is_leap()
  *  and icalrecurrencetype_month_month() to split the encoded value back into the parts
- *  @since 3.1
+ *  @since 4.0
  */
 LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_month(int month, bool is_leap);
 
@@ -353,7 +353,7 @@ LIBICAL_ICAL_EXPORT bool icalrecur_iterator_set_end(icalrecur_iterator *impl,
  * and will return values down to and including @p to.
  *
  * NOTE: CAN NOT be used with RRULEs that contain COUNT.
- * @since 3.1
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT bool icalrecur_iterator_set_range(icalrecur_iterator *impl,
                                                       struct icaltimetype from,
@@ -366,7 +366,7 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_next(icalrecur_iterat
 
 /**
  * Gets the previous occurrence from an iterator.
- * @since 3.1
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *);
 

@@ -11,7 +11,7 @@
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty with the type @kind."/>
         <comment xml:space="preserve">Creates a #ICalProperty of the target type.</comment>
     </method>
-    <method name="i_cal_property_clone" corresponds="icalproperty_clone" kind="clone" since="3.1">
+    <method name="i_cal_property_clone" corresponds="icalproperty_clone" kind="clone" since="4.0">
         <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be cloned."/>
         <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty deeply cloned from @prop."/>
         <comment xml:space="preserve">Deeply clone a #ICalProperty.</comment>

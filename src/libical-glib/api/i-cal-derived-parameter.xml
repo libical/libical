@@ -377,17 +377,17 @@
         <parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_derived" corresponds="icalparameter_new_derived" kind="constructor" since="3.1">
+    <method name="i_cal_parameter_new_derived" corresponds="icalparameter_new_derived" kind="constructor" since="4.0">
         <parameter type="ICalParameterDerived" name="v" comment="An initial value for the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve">Creates a new #ICalParameter of kind %I_CAL_DERIVED_PARAMETER holding value @v of type #ICalParameterDerived</comment>
     </method>
-    <method name="i_cal_parameter_get_derived" corresponds="icalparameter_get_derived" kind="get" since="3.1">
+    <method name="i_cal_parameter_get_derived" corresponds="icalparameter_get_derived" kind="get" since="4.0">
         <parameter type="const ICalParameter *" name="param" comment="An #ICalParameter to be queried"/>
         <returns type="ICalParameterDerived" comment="The value of the @param of type #ICalParameterDerived"/>
         <comment xml:space="preserve">Gets value of the @param of kind %I_CAL_DERIVED_PARAMETER</comment>
     </method>
-    <method name="i_cal_parameter_set_derived" corresponds="icalparameter_set_derived" kind="set" since="3.1">
+    <method name="i_cal_parameter_set_derived" corresponds="icalparameter_set_derived" kind="set" since="4.0">
         <parameter type="ICalParameter *" name="param" comment="An #ICalParameter"/>
         <parameter type="ICalParameterDerived" name="v" comment="The value of type #ICalParameterDerived to be set"/>
         <comment xml:space="preserve">Sets value @v to parameter @param of kind %I_CAL_DERIVED_PARAMETER</comment>
@@ -692,17 +692,17 @@
         <parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_order" corresponds="icalparameter_new_order" kind="constructor" since="3.1">
+    <method name="i_cal_parameter_new_order" corresponds="icalparameter_new_order" kind="constructor" since="4.0">
         <parameter type="gint" name="v" comment="An initial value for the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve">Creates a new #ICalParameter of kind %I_CAL_ORDER_PARAMETER holding value @v.</comment>
     </method>
-    <method name="i_cal_parameter_get_order" corresponds="icalparameter_get_order" kind="get" since="3.1">
+    <method name="i_cal_parameter_get_order" corresponds="icalparameter_get_order" kind="get" since="4.0">
         <parameter type="const ICalParameter *" name="param" comment="An #ICalParameter to be queried"/>
         <returns type="gint" comment="The value of the @param" />
         <comment xml:space="preserve">Gets value of the @param of kind %I_CAL_ORDER_PARAMETER</comment>
     </method>
-    <method name="i_cal_parameter_set_order" corresponds="icalparameter_set_order" kind="set" since="3.1">
+    <method name="i_cal_parameter_set_order" corresponds="icalparameter_set_order" kind="set" since="4.0">
         <parameter type="ICalParameter *" name="param" comment="An #ICalParameter"/>
         <parameter type="gint" name="v" comment="The value to set"/>
         <comment xml:space="preserve">Sets value @v to parameter @param of kind %I_CAL_ORDER_PARAMETER</comment>
@@ -917,17 +917,17 @@
         <parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_schema" corresponds="icalparameter_new_schema" kind="constructor" since="3.1">
+    <method name="i_cal_parameter_new_schema" corresponds="icalparameter_new_schema" kind="constructor" since="4.0">
         <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve">Creates a new #ICalParameter of kind %I_CAL_SCHEMA_PARAMETER holding value @v.</comment>
     </method>
-    <method name="i_cal_parameter_get_schema" corresponds="icalparameter_get_schema" kind="get" since="3.1">
+    <method name="i_cal_parameter_get_schema" corresponds="icalparameter_get_schema" kind="get" since="4.0">
         <parameter type="const ICalParameter *" name="param" comment="An #ICalParameter to be queried"/>
         <returns type="const gchar *" comment="The value of the @param" />
         <comment xml:space="preserve">Gets value of the @param of kind %I_CAL_SCHEMA_PARAMETER</comment>
     </method>
-    <method name="i_cal_parameter_set_schema" corresponds="icalparameter_set_schema" kind="set" since="3.1">
+    <method name="i_cal_parameter_set_schema" corresponds="icalparameter_set_schema" kind="set" since="4.0">
         <parameter type="ICalParameter *" name="param" comment="An #ICalParameter"/>
         <parameter type="const gchar *" name="v" comment="The value to set"/>
         <comment xml:space="preserve">Sets value @v to parameter @param of kind %I_CAL_SCHEMA_PARAMETER</comment>

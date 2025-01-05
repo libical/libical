@@ -39,7 +39,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new(icalcomponent_kind kind);
 /**
  * @brief Deeply clones an icalcomponent.
  * Returns a pointer to the memory for the newly cloned icalcomponent.
- * @since 3.1.0
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_clone(const icalcomponent *component);
 

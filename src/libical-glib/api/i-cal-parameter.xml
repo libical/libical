@@ -11,7 +11,7 @@
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve">Creates a new #ICalParameter according to the kind type.</comment>
     </method>
-    <method name="i_cal_parameter_clone" corresponds="icalparameter_clone" kind="clone" since="3.1">
+    <method name="i_cal_parameter_clone" corresponds="icalparameter_clone" kind="clone" since="4.0">
         <parameter type="const ICalParameter *" name="p" annotation="in" comment="The #ICalParameter to be cloned"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter with the same properties as the @p." />
         <comment xml:space="preserve">Deep clone a #ICalParameter.</comment>
