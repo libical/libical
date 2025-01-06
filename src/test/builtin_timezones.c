@@ -47,7 +47,7 @@ static void *thread_func(void *user_data)
     pthread_mutex_unlock(&thread_comp_mutex);
     /* Do not call the clone, it confuses the Thread Sanitizer, which
        claims data race on the internal members of the icalcomp. */
-    /* icalcomp = icalcomponent_new_clone(icalcomp);
+    /* icalcomp = icalcomponent_clone(icalcomp);
        icalcomponent_free(icalcomp);
     */
 

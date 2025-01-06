@@ -2826,7 +2826,7 @@ void test_recur_parser(void)
 static int test_juldat_caldat_instance(long year, int month, int day)
 {
     struct icaltimetype t;
-    struct ut_instant originalInstant;
+    struct ut_instant_int originalInstant;
 
     memset(&t, 0, sizeof(t));
     t.year = year;
@@ -2838,8 +2838,8 @@ static int test_juldat_caldat_instance(long year, int month, int day)
     originalInstant.month = month;
     originalInstant.day = day;
 
-    juldat(&originalInstant);
-    caldat(&originalInstant);
+    juldat_int(&originalInstant);
+    caldat_int(&originalInstant);
 
     if (icaltime_day_of_week(t) != originalInstant.weekday + 1)
         return -1;
@@ -5438,7 +5438,7 @@ test_icalvalue_resets_timezone_on_set(void)
     ok("1st - comp dtstart is non-UTC zone", (comp_dtstart.zone != NULL && comp_dtstart.zone != icaltimezone_get_utc_timezone()));
     ok("1st - comp dtend is UTC zone", (comp_dtend.zone == icaltimezone_get_utc_timezone()));
     ok("1st - comp due is floating", (comp_due.zone == NULL));
-    clone = icalcomponent_new_clone(inner);
+    clone = icalcomponent_clone(inner);
     icalcomponent_free(comp);
     /* note the comp_dtstart.zone points to a freed memory now (it was freed with the 'comp') */
     clone_dtstart = icalcomponent_get_dtstart(clone);
@@ -5470,7 +5470,7 @@ test_icalvalue_resets_timezone_on_set(void)
     ok("2nd - comp dtstart is non-UTC zone", (comp_dtstart.zone != NULL && comp_dtstart.zone != icaltimezone_get_utc_timezone()));
     ok("2nd - comp dtend is UTC zone after set", (comp_dtend.zone == icaltimezone_get_utc_timezone()));
     ok("2nd - comp due is floating after set", (comp_due.zone == NULL));
-    clone = icalcomponent_new_clone(inner);
+    clone = icalcomponent_clone(inner);
     icalcomponent_free(comp);
     /* note the comp_dtstart.zone points to a freed memory now (it was freed with the 'comp') */
     clone_dtstart = icalcomponent_get_dtstart(clone);
@@ -5669,7 +5669,7 @@ void test_attendees(void)
     comp = icalcomponent_new_from_string(str);
     verify_comp_attendee(comp);
 
-    clone = icalcomponent_new_clone(comp);
+    clone = icalcomponent_clone(comp);
     verify_comp_attendee(clone);
     icalcomponent_free(comp);
 
@@ -5767,7 +5767,7 @@ void test_ical_relationships(void)
     comp = icalcomponent_new_from_string(str);
     verify_comp_relations(comp);
 
-    clone = icalcomponent_new_clone(comp);
+    clone = icalcomponent_clone(comp);
     verify_comp_relations(clone);
     icalcomponent_free(comp);
 

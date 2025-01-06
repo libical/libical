@@ -107,11 +107,6 @@ icalparameter *icalparameter_clone(const icalparameter *old)
     return clone;
 }
 
-icalparameter *icalparameter_new_clone(icalparameter *old)
-{
-    return icalparameter_clone(old);
-}
-
 icalparameter *icalparameter_new_from_string(const char *str)
 {
     char *eq;

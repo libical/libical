@@ -72,7 +72,7 @@ Version 4.0.0 (NOT RELEASED YET):
     + icalvalue_get_recur
     + icalvalue_set_recur
     + sspm_write_mime
- * Deprecated functions:
+ * Removed functions:
     + caldat (replaced by internal function icaldat_int())
     + juldat (replaced by internal function juldat_int())
     + icalcomponent_new_clone

@@ -11,7 +11,6 @@
 #ifndef ICALCLUSTER_H
 #define ICALCLUSTER_H
 
-#include "libical_deprecated.h"
 #include "libical_icalss_export.h"
 #include "icalcomponent.h"
 #include "icalerror.h"
@@ -58,12 +57,5 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_current_component(icalclust
 LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_first_component(icalcluster *cluster);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_next_component(icalcluster *cluster);
-
-/**
- * @copydoc icalcluster_clone()
- * @deprecated use icalcluster_clone() instead
- */
-LIBICAL_ICALSS_EXPORT LIBICAL_DEPRECATED(icalcluster *icalcluster_new_clone(
-    const icalcluster *cluster));
 
 #endif /* !ICALCLUSTER_H */

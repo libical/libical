@@ -15,7 +15,6 @@
 #ifndef ICALCOMPONENT_H
 #define ICALCOMPONENT_H
 
-#include "libical_deprecated.h"
 #include "libical_sentinel.h"
 #include "libical_ical_export.h"
 #include "icalenums.h" /* Defines icalcomponent_kind */
@@ -81,13 +80,6 @@ LIBICAL_ICAL_EXPORT const char *icalcomponent_get_x_name(icalcomponent *comp);
  */
 LIBICAL_ICAL_EXPORT const char *icalcomponent_get_component_name(const icalcomponent *comp);
 LIBICAL_ICAL_EXPORT char *icalcomponent_get_component_name_r(const icalcomponent *comp);
-
-/**
- * @copydoc icalcomponent_clone()
- * @deprecated Use icalcomponent_clone() instead
- */
-LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalcomponent *icalcomponent_new_clone(
-    icalcomponent *component));
 
 /***** Working with Properties *****/
 
