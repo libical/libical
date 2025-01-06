@@ -18,7 +18,6 @@
 #ifndef ICALPARAMETER_H
 #define ICALPARAMETER_H
 
-#include "libical_deprecated.h"
 #include "libical_ical_export.h"
 #include "icalderivedparameter.h"
 
@@ -87,12 +86,6 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
  * @since 4.0
  */
 LIBICAL_ICAL_EXPORT icalparameter *icalparameter_clone(const icalparameter *p);
-
-/**
- * @copydoc icalparameter_clone()
- * @deprecated Use icalparameter_clone() instead
- */
-LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalparameter *icalparameter_new_clone(icalparameter *p));
 
 /**
  * @brief Creates new icalparameter object from string

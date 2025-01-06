@@ -87,6 +87,14 @@ The following functions have been added:
 #### Removed functions
 
 * `icalrecurrencetype_clear()` has been removed.
+* deprecated functions have also been removed:
+  * `caldat()`
+  * `juldat()`
+  * `icalcomponent_new_clone()`
+  * `icalparameter_new_clone()`
+  * `icalproperty_new_clone()`
+  * `icalvalue_new_clone()`
+  * `icalcluster_new_clone()`
 
 #### Migrating from 3.0 to 4.0
 

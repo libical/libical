@@ -58,36 +58,9 @@
 #ifndef ICAL_ASTIME_H
 #define ICAL_ASTIME_H
 
-#include "libical_deprecated.h"
 #include "libical_ical_export.h"
 
-typedef struct ut_instant
-{
-    double j_date;      /**< Julian decimal date, 0 = 01 Jan 4713 BC 12 HR UT */
-    long year;          /**< year, valid range [-4,713, +2,147,483,647] */
-    int month;          /**<    [1-12]  */
-    int day;            /**<    [1-31]  */
-    int i_hour;         /**<    [0-23]  */
-    int i_minute;               /**<    [0-59]  */
-    int i_second;               /**<    [0-59]  */
-    double d_hour;              /**< [0.0-23.9999] includes minute and second */
-    double d_minute;            /**<    [0.0-59.9999] includes second   */
-    double d_second;            /**<    [0.0-59.9999]   */
-    int weekday;                /**<    [0-6]   */
-    int day_of_year;            /**<    [1-366] */
-} UTinstant, *UTinstantPtr;
-
 /*      Functions in caldate.c  */
-
-/** Converts julian date to year,mo,da
- *  @deprecated use caldat_int() instead
- */
-LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(long caldat(UTinstantPtr));
-
-/** Returns julian day from year,mo,da
- *  @deprecated use juldat_int() instead
- */
-LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(double juldat(UTinstantPtr));
 
 typedef struct ut_instant_int
 {
@@ -102,8 +75,8 @@ typedef struct ut_instant_int
 /*      Functions in caldate.c  */
 
 /**
- *	caldat computes the day of the week, the day of the year
- *	the gregorian (or julian) calendar date
+ *	Computes the day of the week, the day of the year from
+ *	the Gregorian (or julian) calendar date
  *	from the julian decimal date.
  *	for astronomical purposes, The Gregorian calendar reform occurred
  *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
@@ -114,16 +87,16 @@ typedef struct ut_instant_int
  *	output:  will set all the other elements of the structure.
  *		As a convenience, the function will also return the year.
  *
- *	Reference: Astronomial formulae for calculators, meeus, p 23
+ *	Reference: Astronomical formulae for calculators, meeus, p 23
  *	from fortran program by F. Espenak - April 1982 Page 277,
  *	50 Year canon of solar eclipses: 1986-2035
  *
  */
-void caldat_int(UTinstantIntPtr);
+LIBICAL_ICAL_EXPORT void caldat_int(UTinstantIntPtr);
 
 /**
- *	juldat computes the julian decimal date (j_date) from
- *	the gregorian (or Julian) calendar date.
+ *	Computes the julian decimal date (j_date) from
+ *	the Gregorian (or Julian) calendar date.
  *	for astronomical purposes, The Gregorian calendar reform occurred
  *	on 15 Oct. 1582.  This is 05 Oct 1582 by the julian calendar.
  *	Input:  a ut_instant structure pointer where Day, Month, Year
@@ -132,10 +105,10 @@ void caldat_int(UTinstantIntPtr);
  *	Output: the j_date and weekday elements of the structure will be set.
  *		Also, the return value of the function will be the j_date too.
  *
- *	Reference: Astronomial formulae for calculators, meeus, p 23
+ *	Reference: Astronomical formulae for calculators, meeus, p 23
  *	from fortran program by F. Espenak - April 1982 Page 276,
  *	50 Year canon of solar eclipses: 1986-2035
  */
-void juldat_int(UTinstantIntPtr);
+LIBICAL_ICAL_EXPORT void juldat_int(UTinstantIntPtr);
 
 #endif

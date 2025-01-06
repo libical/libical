@@ -83,11 +83,6 @@ icalcluster *icalcluster_clone(const icalcluster *data)
     return impl;
 }
 
-icalcluster *icalcluster_new_clone(const icalcluster *data)
-{
-    return icalcluster_clone(data);
-}
-
 void icalcluster_free(icalcluster *impl)
 {
     icalerror_check_arg_rv((impl != 0), "cluster");

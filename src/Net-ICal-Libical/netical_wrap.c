@@ -2901,7 +2901,6 @@ XS(boot_Net__ICal__Libical) {
 	 newXS("Net::ICal::Libical::var_Net__ICal__Libical_init", _wrap_perl5_Net__ICal__Libical_var_init, file);
 	 newXS("Net::ICal::Libical::icalparser_parse_string", _wrap_icalparser_parse_string, file);
 	 newXS("Net::ICal::Libical::icalcomponent_new", _wrap_icalcomponent_new, file);
-	 newXS("Net::ICal::Libical::icalcomponent_new_clone", _wrap_icalcomponent_clone, file);
 	 newXS("Net::ICal::Libical::icalcomponent_clone", _wrap_icalcomponent_clone, file);
 	 newXS("Net::ICal::Libical::icalcomponent_new_from_string", _wrap_icalcomponent_new_from_string, file);
 	 newXS("Net::ICal::Libical::icalcomponent_as_ical_string", _wrap_icalcomponent_as_ical_string, file);

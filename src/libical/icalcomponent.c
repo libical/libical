@@ -155,11 +155,6 @@ icalcomponent *icalcomponent_clone(const icalcomponent *old)
     return clone;
 }
 
-icalcomponent *icalcomponent_new_clone(icalcomponent *old)
-{
-    return icalcomponent_clone(old);
-}
-
 icalcomponent *icalcomponent_new_x(const char *x_name)
 {
     icalcomponent *comp = icalcomponent_new_impl(ICAL_X_COMPONENT);

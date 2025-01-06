@@ -117,11 +117,6 @@ icalproperty *icalproperty_clone(const icalproperty *old)
     return clone;
 }
 
-icalproperty *icalproperty_new_clone(icalproperty *old)
-{
-    return icalproperty_clone(old);
-}
-
 icalproperty *icalproperty_new_from_string(const char *str)
 {
     size_t buf_size = 1024;

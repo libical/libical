@@ -152,11 +152,6 @@ icalvalue *icalvalue_clone(const icalvalue *old)
     return clone;
 }
 
-icalvalue *icalvalue_new_clone(const icalvalue *old)
-{
-    return icalvalue_clone(old);
-}
-
 static char *icalmemory_strdup_and_dequote(const char *str)
 {
     const char *p;
