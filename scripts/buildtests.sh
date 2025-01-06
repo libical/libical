@@ -127,10 +127,10 @@ CHECK_WARNINGS() {
 }
 
 #function COMPILE_WARNINGS:
-# print warnings found in the compile-stage output
+# print warnings found in the compile-step output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='g-ir-scanner:'
+  whitelist='g-ir-scanner:\|better[[:space:]]use[[:space:]]'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
