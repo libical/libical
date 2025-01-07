@@ -118,11 +118,6 @@ vcardproperty *vcardproperty_clone(const vcardproperty *old)
     return clone;
 }
 
-vcardproperty *vcardproperty_new_clone(vcardproperty *old)
-{
-    return vcardproperty_clone(old);
-}
-
 vcardproperty *vcardproperty_new_from_string(const char *str)
 {
     size_t buf_size = 1024;
