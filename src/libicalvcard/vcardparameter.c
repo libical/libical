@@ -113,11 +113,6 @@ vcardparameter *vcardparameter_clone(const vcardparameter *old)
     return clone;
 }
 
-vcardparameter *vcardparameter_new_clone(vcardparameter *old)
-{
-    return vcardparameter_clone(old);
-}
-
 vcardparameter *vcardparameter_new_from_string(const char *str)
 {
     char *eq;
