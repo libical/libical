@@ -77,15 +77,21 @@
 #
 # -DLIBICAL_BUILD_TESTING=[true|false]
 #  Set to build the test suite
-#  Default=true
+#  Default=false (always true if LIBICAL_DEVMODE is on)
 #
 # -DLIBICAL_BUILD_EXAMPLES=[true|false]
 #  Set to build the examples
 #  Default=true
 #
 
-# ## DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!!
+# # # DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!! # # #
 ## Special CMake Options for Developers
+#
+# -DLIBICAL_DEVMODE=[true|false]
+#  Configure the build for a developer setup. Enables some features that are not geared towards end-users.
+#  Developer mode builds the code in Debug mode (use CMAKE_BUILD_TYPE to override).
+#  Forces the test suite to be built.
+#  Default=false
 #
 # -DLIBICAL_BUILD_TESTING_BIGFUZZ=[true|false]
 #  Set to build the big fuzzer tests
@@ -194,6 +200,27 @@ set(PROJECT_URL "https://libical.github.io/libical/")
 set(LIBRARY_TYPE SHARED)
 
 ########################################################
+libical_option(LIBICAL_DEVMODE "Developer mode" False)
+# Set a default build type if none was specified
+set(default_build_type "Release")
+if(EXISTS "${CMAKE_SOURCE_DIR}/.git" OR LIBICAL_DEVMODE)
+  set(default_build_type "Debug")
+endif()
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to ${default_build_type} as none was specified.")
+  set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(
+    CACHE
+      CMAKE_BUILD_TYPE
+    PROPERTY
+      STRINGS
+        "Debug"
+        "Release"
+        "MinSizeRel"
+        "RelWithDebInfo"
+  )
+endif()
 
 option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
 if(WITH_CXX_BINDINGS)
@@ -369,8 +396,12 @@ if(WIN32)
     if(USE_32BIT_TIME_T)
       add_definitions(-D_USE_32BIT_TIME_T)
     endif()
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3 /WX")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /WX")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3")
+    if(LIBICAL_DEVMODE)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /WX")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX")
+    endif()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4211") #allow redefine extern as static
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4290") #C++ exception specification ignored
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4068") #unknown pragma
@@ -672,11 +703,14 @@ if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   set(
     CMAKE_C_FLAGS
     "${CMAKE_C_FLAGS} \
-      -Werror -fvisibility=hidden \
+      -fvisibility=hidden \
       -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
       -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Wreturn-type \
       -Wold-style-definition -Wstrict-prototypes"
   )
+  if(LIBICAL_DEVMODE)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror")
+  endif()
   libical_add_cflag(-Wunused-but-set-variable UNUSED_BUT_SET)
   libical_add_cflag(-Wlogical-op LOGICAL_OP)
   libical_add_cflag(-Wsizeof-pointer-memaccess POINTER_MEMACCESS)
@@ -704,11 +738,14 @@ endif()
 if(CMAKE_CXX_COMPILER_IS_GCC OR CMAKE_CXX_COMPILER_IS_CLANG)
   set(
     CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -Werror \
+    "${CMAKE_CXX_FLAGS} \
       -fvisibility=hidden \
       -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wunused \
       -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Wreturn-type"
   )
+  if(LIBICAL_DEVMODE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+  endif()
   libical_add_cxxflag(-Wunused-but-set-variable UNUSED_BUT_SET)
   libical_add_cxxflag(-Wlogical-op LOGICAL_OP)
   libical_add_cxxflag(-Wsizeof-pointer-memaccess POINTER_MEMACCESS)
@@ -828,7 +865,11 @@ if(ENABLE_LTO_BUILD)
   endif()
 endif()
 
-libical_option(LIBICAL_BUILD_TESTING "Build tests." True)
+libical_option(LIBICAL_BUILD_TESTING "Build tests." False)
+# Always build the test suite in developer-mode
+if(LIBICAL_DEVMODE)
+  set(LIBICAL_BUILD_TESTING True)
+endif()
 libical_option(LIBICAL_BUILD_EXAMPLES "Build examples." True)
 
 ################# build subdirs ########################
