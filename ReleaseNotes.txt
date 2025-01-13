@@ -4,6 +4,7 @@ Release Highlights
 Version 3.0.20 (UNRELEASED):
 ----------------------------
  * Clean up the byte-swapping macros
+ * Fix a testcase in libical-glib when using 64-bit on a 32-bit system
 
 Version 3.0.19 (23 December 2024):
 ----------------------------------
