@@ -325,6 +325,8 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         break;
 
     case VCARD_UTCOFFSET_VALUE: {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
         /* "+" / "-" hh [ [":"] mm ] */
         char sign[2] = "";
         unsigned hour, min = 0;
@@ -345,6 +347,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         } else if (2 != sscanf(str, "%1[+-]%02u%n", sign, &hour, &nchar)) {
             nchar = 0;
         }
+#pragma GCC diagnostic pop
 
         if (len && (len == nchar)) {
             int utcoffset = (int)(hour * 3600 + min * 60);
@@ -599,6 +602,8 @@ static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value,
     h = MIN(abs(h), 23);
     m = MIN(abs(m), 59);
     s = MIN(abs(s), 59);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
     if (s != 0) {
         if (version == VCARD_VERSION_40) {
             fmt = "%c%02d%02d%02d";
@@ -616,7 +621,7 @@ static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value,
     }
 
     snprintf(str, size, fmt, sign, h, m, s);
-
+#pragma GCC diagnostic pop
     return str;
 }
 
@@ -799,12 +804,17 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     case VCARD_TIME_VALUE:
         flags |= VCARDTIME_BARE_TIME;
-
-        /* FALLTHRU */
+        _fallthrough();
 
     case VCARD_DATE_VALUE:
+        _fallthrough();
+
     case VCARD_DATETIME_VALUE:
+        _fallthrough();
+
     case VCARD_DATEANDORTIME_VALUE:
+        _fallthrough();
+
     case VCARD_TIMESTAMP_VALUE:
         if (version == VCARD_VERSION_40) {
             flags |= VCARDTIME_AS_V4;
@@ -833,10 +843,11 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
             return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
                                                 value->x_value, 0);
         }
-
-        /* FALLTHRU */
+        _fallthrough();
 
     case VCARD_NO_VALUE:
+        _fallthrough();
+
     default: {
         return 0;
     }

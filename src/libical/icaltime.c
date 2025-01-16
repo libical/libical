@@ -330,6 +330,8 @@ char *icaltime_as_ical_string_r(const struct icaltimetype tt)
     if (tt.is_date) {
         snprintf(buf, size, "%04d%02d%02d", tt.year, tt.month, tt.day);
     } else {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
         const char *fmt;
 
         if (icaltime_is_utc(tt)) {
@@ -338,6 +340,7 @@ char *icaltime_as_ical_string_r(const struct icaltimetype tt)
             fmt = "%04d%02d%02dT%02d%02d%02d";
         }
         snprintf(buf, size, fmt, tt.year, tt.month, tt.day, tt.hour, tt.minute, tt.second);
+#pragma GCC diagnostic pop
     }
 
     return buf;

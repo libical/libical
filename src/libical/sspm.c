@@ -1297,11 +1297,11 @@ static void sspm_write_base64(struct sspm_buffer *buf, char *inbuf, int size)
     switch (size) {
     case 4:
         outbuf[3] = inbuf[2] & 0x3F;
-        /* falls through */
+        _fallthrough();
 
     case 3:
         outbuf[2] = ((inbuf[1] & 0x0F) << 2) | ((inbuf[2] & 0xC0) >> 6);
-        /* falls through */
+        _fallthrough();
 
     case 2:
         outbuf[0] = (inbuf[0] & 0xFC) >> 2;

@@ -121,8 +121,10 @@ int main(int argc, char *argv[])
             break;
         }
         case ICAL_XLICCLASS_PUBLISHNEW: {
-            /* Don't accept published events from anyone but
-                   self. If self, fall through to ICAL_XLICCLASS_REQUESTNEW */
+            /* Don't accept published events from anyone but self.
+             * If self, fall through to ICAL_XLICCLASS_REQUESTNEW
+             */
+            _fallthrough();
         }
         case ICAL_XLICCLASS_REQUESTNEW: {
             /* Book the new component if it does not overlap
@@ -215,8 +217,10 @@ int main(int argc, char *argv[])
         }
 
         case ICAL_XLICCLASS_PUBLISHUPDATE: {
-            /* Only accept publish updates from self. If self, fall
-                   through to ICAL_XLICCLASS_REQUESTUPDATE */
+            /* Only accept publish updates from self.
+             * If self, fall through to ICAL_XLICCLASS_REQUESTUPDATE
+             */
+            _fallthrough();
         }
 
         case ICAL_XLICCLASS_REQUESTUPDATE: {

@@ -22,8 +22,12 @@ SKIP /src/libical/astime\.h
 SKIP /src/libical/caldate\.c
 SKIP /cmake/Kitware/
 SKIP /cmake/modules/GObjectIntrospectionMacros\.cmake|/cmake/modules/FindGObjectIntrospection\.cmake
-SKIP /docs/Doxyfile\.cmake
+SKIP /cmake/modules/openssf-c.cmake
+SKIP /cmake/modules/openssf-cpp.cmake
 SKIP /cmake/Toolchain-QNX|/cmake/modules/FindBerkeleyDB.cmake|/uninstall.cmake.in
+
+#Skip more
+SKIP /docs/Doxyfile\.cmake
 SKIP .markdownlint.json
 
 #Skip test-data

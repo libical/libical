@@ -598,6 +598,15 @@ typedef ssize_t IO_SSIZE_T;
 #endif
 #endif
 
+/* fallthrough macro */
+#if !defined(_fallthrough)
+#if defined(__GNUC__) || defined(__clang__)
+#define _fallthrough() __attribute__((fallthrough))
+#else
+#define _fallthrough() (void)0
+#endif
+#endif
+
 #define icalassert(...) assert(__VA_ARGS__)
 #define icalerrprintf(...) fprintf(stderr, __VA_ARGS__)
 

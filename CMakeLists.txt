@@ -703,6 +703,7 @@ if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   set(
     CMAKE_C_FLAGS
     "${CMAKE_C_FLAGS} \
+      -O2 \
       -fvisibility=hidden \
       -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
       -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Wreturn-type \
@@ -739,6 +740,7 @@ if(CMAKE_CXX_COMPILER_IS_GCC OR CMAKE_CXX_COMPILER_IS_CLANG)
   set(
     CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS} \
+      -O2 \
       -fvisibility=hidden \
       -Weffc++ -Wno-deprecated -Wall -Wextra -Woverloaded-virtual -Winit-self -Wunused \
       -Wno-div-by-zero -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Wreturn-type"
@@ -874,6 +876,12 @@ libical_option(LIBICAL_BUILD_EXAMPLES "Build examples." True)
 
 ################# build subdirs ########################
 
+if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
+  include(openssf-c) #hardening
+  if(WITH_CXX_BINDINGS)
+    include(openssf-cpp) #hardening
+  endif()
+endif()
 add_subdirectory(design-data)
 add_subdirectory(scripts)
 add_subdirectory(test-data)

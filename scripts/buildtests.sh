@@ -41,7 +41,6 @@ HELP() {
   echo " -g, --no-gcc-build         Don't run any gcc-build tests with Unix Makefiles"
   echo " -n, --no-ninja-gcc-build   Don't run any gcc build tests with ninja"
   echo " -l, --no-clang-build       Don't run any clang-build tests"
-  echo " -f, --no-fortify-build     Don't run the FORTIFY-build tests (gcc12)"
   echo " -x, --no-memc-build        Don't run any MEMCONSIST-build (memory consistency) tests"
   echo " -a, --no-asan-build        Don't run any ASAN-build (sanitize-address) tests"
   echo " -d, --no-tsan-build        Don't run any TSAN-build (sanitize-threads) tests"
@@ -223,31 +222,6 @@ GCC_BUILD() {
   echo "===== END GCC BUILD: $1 ======"
 }
 
-#function FORTIFY_BUILD:
-# runs a build test using gcc (v12 or higher) with fortify CFLAGS
-# $1 = the name of the test (which will have "-fortify" appended to it)
-# $2 = CMake options
-FORTIFY_BUILD() {
-  name="$1-fortify"
-  if (test -z "$(REVERSE $runfortifybuild)"); then
-    echo "===== FORTIFY BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
-    return
-  fi
-  COMMAND_EXISTS "gcc"
-  declare -i gccVersion
-  gccVersion=$(gcc -dumpversion)
-  if (test $gccVersion -lt 12); then
-    echo "Sorry, gcc must be version 12 or higher to support fortify. Exiting..."
-    exit 1
-  fi
-  echo "===== START FORTIFY BUILD: $1 ======"
-  SET_GCC
-  export CFLAGS="-Og -gdwarf-5 -fno-optimize-sibling-calls -Wall -W -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -D_FORTIFY_SOURCE=3 -fPIC -grecord-gcc-switches -fno-allow-store-data-races -fstack-protector-strong -fstack-clash-protection -fcf-protection=full --param=ssp-buffer-size=1"
-  BUILD "$name" "$2"
-  unset CFLAGS
-  echo "===== END FORTIFY BUILD: $1 ======"
-}
-
 #function NINJA_GCC_BUILD:
 # runs a build test using gcc using the Ninja cmake generator
 # $1 = the name of the test (which will have "-ninjagcc" appended to it)
@@ -392,6 +366,8 @@ CPPCHECK() {
 
   echo "===== START CPPCHECK: $1 ======"
   cd "$TOP" || exit 1
+  rm -f cppcheck.out cppcheck-report.txt
+  set +e
   cppcheck --quiet \
     --language=c++ \
     --std=c++11 \
@@ -404,6 +380,7 @@ CPPCHECK() {
     --checkers-report=cppcheck-report.txt \
     -D __cppcheck__ \
     -D _unused="(void)" \
+    -D _fallthrough="" \
     -D MIN="" \
     -D sleep="" \
     -U PVL_USE_MACROS \
@@ -418,12 +395,13 @@ CPPCHECK() {
     -I "$TOP/src/libicalvcal" \
     -I "$TOP/src/libicalvcard" \
     -I "$TOP/src/libical-glib" \
+    -i "$TOP/src/Net-ICal-Libical/" \
     "$TOP/src" "$BDIR"/src/libical/icalderived* 2>&1 |
-    grep -v "$TOP/src/Net-ICal-Libical" |
     grep -v "icalssyacc.c:" |
     grep -v "icalsslexer.c:" |
     grep -v "vcc.c:" |
     tee cppcheck.out
+  set -e
   CPPCHECK_WARNINGS cppcheck.out
   rm -f cppcheck.out cppcheck-report.txt
   CLEAN
@@ -463,6 +441,7 @@ SPLINT() {
     grep -v build-)
   files="$files $BDIR/src/libical/*.c $BDIR/src/libical/*.h"
 
+  rm "splint-$name.out"
   # shellcheck disable=SC2086
   splint $files \
     -badflag \
@@ -556,6 +535,7 @@ CLANGSCAN() {
   COMMAND_EXISTS "scan-build" "-b"
   echo "===== START SCAN-BUILD: $1 ====="
   cd "$TOP" || exit 1
+  rm -f make-scan.out
 
   #configure specially with scan-build
   SET_BDIR "$1-scan"
@@ -581,6 +561,7 @@ KRAZY() {
   COMMAND_EXISTS "krazy2all" "-k"
   echo "===== START KRAZY ====="
   cd "$TOP" || exit 1
+  rm -f krazy.out
   krazy2all 2>&1 | tee krazy.out
   status=$?
   if (test $status -gt 0); then
@@ -601,6 +582,7 @@ PRECOMMIT() {
   COMMAND_EXISTS "pre-commit" "-p"
   echo "===== START PRECOMMIT ====="
   cd "$TOP" || exit 1
+  rm -f precommit.out
   pre-commit run --all-files 2>&1 | tee precommit.out
   status=$?
   if (test $status -gt 0); then
@@ -613,7 +595,7 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hmpksbtcgnlfxadurR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-fortify-build,no-memc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-threadlocal-build,reverse" -- "$@")
+options=$(getopt -o "hmpksbtcgnlxadurR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-threadlocal-build,reverse" -- "$@")
 eval set -- "$options"
 
 reverse=0
@@ -631,7 +613,6 @@ runasanbuild=1
 runtsanbuild=1
 runubsanbuild=1
 runmemcbuild=1
-runfortifybuild=1
 runthreadlocalbuild=1
 while true; do
   case "$1" in
@@ -693,10 +674,6 @@ while true; do
     ;;
   -x | --no-memc-build)
     runmemcbuild=0
-    shift
-    ;;
-  -f | --no-fortify-build)
-    runfortifybuild=0
     shift
     ;;
   -r | --no-threadlocal-build)
@@ -825,14 +802,6 @@ if (test "$(uname -s)" = "Linux"); then
 #  CLANG_BUILD testclang1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
 #  CLANG_BUILD testclang2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
 fi
-
-#Fortify build
-FORTIFY_BUILD test1fortify "$DEFCMAKEOPTS"
-FORTIFY_BUILD test2fortify "$CMAKEOPTS"
-FORTIFY_BUILD test3fortify "$TZCMAKEOPTS"
-FORTIFY_BUILD test4fortify "$UUCCMAKEOPTS"
-FORTIFY_BUILD test5fortify "$GLIBOPTS"
-FORTIFY_BUILD test6fortify "$FUZZOPTS"
 
 #Memory consistency check
 MEMCONSIST_BUILD test1memc ""
