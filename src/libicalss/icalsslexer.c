@@ -2,6 +2,8 @@
   SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 
 #define YY_INT_ALIGNED short int
 
@@ -47,7 +49,7 @@
 extern int isatty(int);
 #endif /* __cplusplus */
 
-#ifdef _WIN32_WCE
+#ifdef _WIN32_WCE //krazy:exclude=cpp
 #include <io.h>
 #endif
 
@@ -1917,3 +1919,4 @@ int sswrap(void)
 {
     return 1;
 }
+#pragma GCC diagnostic pop

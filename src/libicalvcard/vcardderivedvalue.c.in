@@ -23,12 +23,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if defined __GNUC__ && __GNUC__ > 6
-#define GCC_FALLTHROUGH __attribute__((fallthrough));
-#else
-#define GCC_FALLTHROUGH /* fall through */
-#endif
-
 struct vcardvalue_impl *vcardvalue_new_impl(vcardvalue_kind kind);
 
 /* This map associates each of the value types with its string
@@ -138,11 +132,11 @@ struct vcardgeotype vcardvalue_get_geo(const vcardvalue *impl)
         default:
             geo.coords.lon =
                 vcardstrarray_element_at(impl->data.v_structured.field[1], 0);
-            GCC_FALLTHROUGH
+            _fallthrough();
         case 1:
             geo.coords.lat =
                 vcardstrarray_element_at(impl->data.v_structured.field[0], 0);
-            GCC_FALLTHROUGH
+            _fallthrough();
         case 0:
             break;
         }

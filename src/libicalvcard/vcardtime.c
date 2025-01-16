@@ -142,6 +142,8 @@ bool vcardtime_is_valid_time(const struct vcardtimetype t)
     return true;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
 static int sprintf_date(const vcardtimetype t, unsigned flags,
                         char *buf, size_t size)
 {
@@ -253,6 +255,7 @@ static int sprintf_time(const vcardtimetype t, unsigned flags,
 
     return n;
 }
+#pragma GCC diagnostic pop
 
 char *vcardtime_as_vcard_string_r(const vcardtimetype t, unsigned flags)
 {

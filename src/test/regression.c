@@ -4833,7 +4833,10 @@ void test_timezone_from_builtin(void)
 
     len = strlen(strcomp_fmt) + strlen(icaltimezone_get_tzid(zone)) + 2;
     strcomp = (char *)malloc(len + 1);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
     snprintf(strcomp, len, strcomp_fmt, icaltimezone_get_tzid(zone));
+#pragma GCC diagnostic pop
 
     comp = icalcomponent_new_from_string(strcomp);
     ok("icalcomponent_new_from_string()", (comp != NULL));

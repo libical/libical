@@ -295,7 +295,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
                 icalmemory_append_char(&str, &str_p, &buf_sz, *p);
                 break;
             }
-            /* falls through */
+            _fallthrough();
             /*issue74, we don't escape double quotes
         case '"':
 */
@@ -772,11 +772,21 @@ void icalvalue_free(icalvalue *v)
         break;
     }
     case ICAL_TEXT_VALUE:
+        _fallthrough();
+
     case ICAL_CALADDRESS_VALUE:
+        _fallthrough();
+
     case ICAL_URI_VALUE:
+        _fallthrough();
+
     case ICAL_STRING_VALUE:
+        _fallthrough();
+
     case ICAL_QUERY_VALUE: {
+        _fallthrough();
     case ICAL_UID_VALUE:
+        _fallthrough();
     case ICAL_XMLREFERENCE_VALUE:
         if (v->data.v_string != 0) {
             icalmemory_free_buffer((void *)v->data.v_string);
@@ -1231,10 +1241,11 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
     case ICAL_X_VALUE:
         if (value->x_value != 0)
             return icalmemory_strdup_and_quote(value, value->x_value);
-
-        /* FALLTHRU */
+        _fallthrough();
 
     case ICAL_NO_VALUE:
+        _fallthrough();
+
     default: {
         return 0;
     }
