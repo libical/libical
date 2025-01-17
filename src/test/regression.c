@@ -5778,6 +5778,38 @@ void test_ical_relationships(void)
     icalcomponent_free(comp);
 }
 
+static void test_vtodo_partstat_inprocess(void)
+{
+    const char *str =
+	"BEGIN:VCALENDAR\r\n"
+	"PRODID:-//FOO//bar//EN\r\n"
+	"VERSION:2.0\r\n"
+	"BEGIN:VTODO\r\n"
+	"ATTENDEE;PARTSTAT=IN-PROCESS:mailto:foo@example.com\r\n"
+	"DTSTAMP:20060102T030405Z\r\n"
+	"UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n"
+	"ORGANIZER:mailto:bar@example.com\r\n"
+	"END:VTODO\r\n"
+	"END:VCALENDAR\r\n";
+
+    icalcomponent *ical = icalcomponent_new_from_string(str);
+    ok("Parsed iCalendar object", (ical != NULL));
+
+    icalcomponent *comp = icalcomponent_get_first_real_component(ical);
+    ok("Parsed VTODO component", (icalcomponent_isa(comp) == ICAL_VTODO_COMPONENT));
+
+    icalproperty *prop = icalcomponent_get_first_property(comp, ICAL_ATTENDEE_PROPERTY);
+    ok("Parsed ATTENDEE property", (prop != NULL));
+
+    icalparameter *param = icalproperty_get_first_parameter(prop, ICAL_PARTSTAT_PARAMETER);
+    ok("Parsed PARTSTAT parameter", (param != NULL));
+
+    icalparameter_partstat partstat = icalparameter_get_partstat(param);
+    ok("Parsed IN-PROCESS PARTSTAT parameter value", (partstat == ICAL_PARTSTAT_INPROCESS));
+
+    icalcomponent_free(ical);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -5945,6 +5977,7 @@ int main(int argc, char *argv[])
     test_run("Test icalcomponent_vanew with lastmodified property", test_icalcomponent_with_lastmodified, do_test, do_header);
     test_run("Test attendees", test_attendees, do_test, do_header);
     test_run("Test iCalendar Relationships", test_ical_relationships, do_test, do_header);
+    test_run("Test IN-PROCESS PARTSTAT parameter value", test_vtodo_partstat_inprocess, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
