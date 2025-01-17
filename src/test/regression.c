@@ -5781,16 +5781,16 @@ void test_ical_relationships(void)
 static void test_vtodo_partstat_inprocess(void)
 {
     const char *str =
-	"BEGIN:VCALENDAR\r\n"
-	"PRODID:-//FOO//bar//EN\r\n"
-	"VERSION:2.0\r\n"
-	"BEGIN:VTODO\r\n"
-	"ATTENDEE;PARTSTAT=IN-PROCESS:mailto:foo@example.com\r\n"
-	"DTSTAMP:20060102T030405Z\r\n"
-	"UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n"
-	"ORGANIZER:mailto:bar@example.com\r\n"
-	"END:VTODO\r\n"
-	"END:VCALENDAR\r\n";
+        "BEGIN:VCALENDAR\r\n"
+        "PRODID:-//FOO//bar//EN\r\n"
+        "VERSION:2.0\r\n"
+        "BEGIN:VTODO\r\n"
+        "ATTENDEE;PARTSTAT=IN-PROCESS:mailto:foo@example.com\r\n"
+        "DTSTAMP:20060102T030405Z\r\n"
+        "UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n"
+        "ORGANIZER:mailto:bar@example.com\r\n"
+        "END:VTODO\r\n"
+        "END:VCALENDAR\r\n";
 
     icalcomponent *ical = icalcomponent_new_from_string(str);
     ok("Parsed iCalendar object", (ical != NULL));
