@@ -246,17 +246,21 @@ $pointer_check_rv\
 "    if (impl->data.v_${union_data} != 0) {\n        vcardstrarray_free(impl->data.v_${union_data});\n    }\n";
       }
 
+      $castStr = "";
+      if ($union_data eq 'enum'){ $castStr = "(int)"; }
       print "\
-    impl->data.v_$union_data = $assign\
+    impl->data.v_$union_data = $castStr$assign\
     ${lcprefix}value_reset_kind(impl);\n}\n\n";
 
       print "$type\ ${lcprefix}value_get_${lc}(const ${lcprefix}value *value)\n{\n";
+      $retString = "";
       if ($union_data eq 'string' or $union_data eq 'structured.field[0]') {
         print "    icalerror_check_arg_rz((value != 0), \"value\");\n";
       } else {
         print "    icalerror_check_arg((value != 0), \"value\");\n";
         if ($union_data eq 'enum') {
           print "    if (!value) {\n        return ${ucprefix}_${uc}_NONE;\n    }\n";
+          $retString = "(${type})";
         } elsif ($union_data eq 'int') {
           print "    if (!value) {\n        return 0;\n    }\n";
         } elsif ($union_data eq 'float') {
@@ -276,7 +280,7 @@ $pointer_check_rv\
         }
       }
       print "    icalerror_check_value_type(value, ${ucprefix}_${uc}_VALUE);\
-    return ((struct ${lcprefix}value_impl *)value)->data.v_${union_data};\n}\n";
+    return ${retString}(((struct ${lcprefix}value_impl *)value)->data.v_${union_data});\n}\n";
 
     } elsif ($opt_h && $autogen) {
 

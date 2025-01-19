@@ -242,7 +242,7 @@ static int sprintf_time(const vcardtimetype t, unsigned flags,
     if (t.utcoffset != -1) {
         /* zone = "Z" / ( sign hour minute ) */
         buf += n;
-        size -= n;
+        size -= (size_t)n;
 
         if (t.utcoffset == 0) {
             strncpy(buf, "Z", size);
@@ -268,7 +268,7 @@ char *vcardtime_as_vcard_string_r(const vcardtimetype t, unsigned flags)
     if (!(flags & VCARDTIME_AS_V4) || !vcardtime_is_time(t)) {
         n = sprintf_date(t, flags, ptr, size);
         ptr += n;
-        size -= n;
+        size -= (size_t)n;
     }
     if (!vcardtime_is_date(t)) {
         (void)sprintf_time(t, flags, ptr, size);

@@ -283,7 +283,7 @@ static char *parse_posix_zone(char *p, ttinfo *type)
     return p;
 }
 
-#define nth_weekday(week, day) (icalrecurrencetype_encode_day(day, week))
+#define nth_weekday(week, day) (icalrecurrencetype_encode_day((enum icalrecurrencetype_weekday)day, (short)week))
 
 static bool icalrecur_set_single_by(icalrecurrence_by_data *by, short value)
 {
@@ -373,7 +373,7 @@ static char *parse_posix_rule(char *p,
 
     if (month) {
         error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_DAY], nth_weekday(week, (day % 7) + 1));
-        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH], month);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH], (short)month);
 
         if (monthday) {
             error |= !icalrecur_resize_by(&recur->by[ICAL_BY_MONTH_DAY], 7);
@@ -795,7 +795,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             terminate_rrule(zone);
             zone->rrule_comp = NULL;
         } else {
-            dow = icaltime_day_of_week(icaltime);
+            dow = (enum icalrecurrencetype_weekday)icaltime_day_of_week(icaltime);
             by_day = nth_weekday(calculate_pos(icaltime), dow);
         }
 
@@ -849,7 +849,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                             if (zone->num_monthdays > j) {
                                 memmove(&zone->recur->by[ICAL_BY_MONTH_DAY].data[j + 1],
                                         &zone->recur->by[ICAL_BY_MONTH_DAY].data[j],
-                                        (zone->num_monthdays - j) *
+                                        (size_t)(zone->num_monthdays - j) *
                                             sizeof(zone->recur->by[ICAL_BY_MONTH_DAY].data[0]));
                             }
 

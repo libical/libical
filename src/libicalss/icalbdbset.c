@@ -372,7 +372,7 @@ DB *icalbdbset_bdb_open_secondary(DB *dbp, const char *database, const char *sub
     }
 
     flags = (u_int32_t)(DB_CREATE | DB_THREAD);
-    ret = sdbp->open(sdbp, NULL, database, sub_database, type, (u_int32_t)flags, 0644);
+    ret = sdbp->open(sdbp, NULL, database, sub_database, (DBTYPE)type, (u_int32_t)flags, 0644);
     if (ret != 0) {
         ICAL_DB_ENV->err(ICAL_DB_ENV, ret, "failed to open secondary index: %s", sub_database);
         if (ret == DB_RUNRECOVERY) {
@@ -422,7 +422,7 @@ DB *icalbdbset_bdb_open(const char *path, const char *subdb, int dbtype, int mod
         dbp->set_flags(dbp, flag);
     }
 
-    if ((ret = dbp->open(dbp, NULL, path, subdb, dbtype, flags, mode)) != 0) {
+    if ((ret = dbp->open(dbp, NULL, path, subdb, (DBTYPE)dbtype, flags, mode)) != 0) {
         ICAL_DB_ENV->err(ICAL_DB_ENV, ret, "%s (database: %s): open failed.", path, subdb);
         if (ret == DB_RUNRECOVERY) {
             abort();
@@ -701,7 +701,7 @@ icalerrorenum icalbdbset_commit(icalset *set)
     icalcomponent *c;
     char *str = NULL;
     int ret = 0;
-    int reterr = ICAL_NO_ERROR;
+    icalerrorenum reterr = ICAL_NO_ERROR;
     char keystore[256];
     char uidbuf[256];
     char datastore[1024];

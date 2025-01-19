@@ -15,7 +15,7 @@
 #include "icalcomponent.h"
 #include "icalproperty.h"
 
-LIBICAL_ICAL_EXPORT int *icallangbind_new_array(int size);
+LIBICAL_ICAL_EXPORT int *icallangbind_new_array(unsigned int size);
 
 LIBICAL_ICAL_EXPORT void icallangbind_free_array(int *array);
 
