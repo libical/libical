@@ -3,6 +3,7 @@
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 */
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-conversion"
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 
 #define YY_INT_ALIGNED short int

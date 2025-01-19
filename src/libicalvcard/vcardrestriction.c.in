@@ -105,8 +105,7 @@ static const char *vcardrestriction_validate_datetime_value(
         return 0;
 
     if (comp && vcardcomponent_get_version(comp) != VCARD_VERSION_40) {
-        unsigned missing_time_parts =
-            (t.hour < 0) + (t.minute < 0) + (t.second < 0);
+        unsigned missing_time_parts = (unsigned)((t.hour < 0) + (t.minute < 0) + (t.second < 0));
 
         if (t.year < 0 || t.month < 0 || t.day < 0 ||
             (missing_time_parts && missing_time_parts != 3)) {

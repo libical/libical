@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 
-int *icallangbind_new_array(int size)
+int *icallangbind_new_array(unsigned int size)
 {
     int *p = (int *)icalmemory_new_buffer(size * sizeof(int));
 

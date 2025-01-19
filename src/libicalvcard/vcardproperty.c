@@ -258,7 +258,8 @@ static char *get_next_line_start(char *line_start, size_t chars_left)
  */
 static char *fold_property_line(char *text)
 {
-    size_t buf_size, len, chars_left;
+    size_t buf_size, len;
+    ssize_t chars_left;
     char *buf, *buf_ptr, *line_start, *next_line_start;
     int first_line;
     char ch;
@@ -272,14 +273,14 @@ static char *fold_property_line(char *text)
 
     /* Step through the text, finding each line to add to the output. */
     line_start = text;
-    chars_left = len;
+    chars_left = (ssize_t)len;
     first_line = 1;
     for (;;) {
         if (chars_left <= 0)
             break;
 
         /* This returns the first character for the next line. */
-        next_line_start = get_next_line_start(line_start, chars_left);
+        next_line_start = get_next_line_start(line_start, (size_t)chars_left);
 
         /* If this isn't the first line, we need to output a newline and space
            first. */

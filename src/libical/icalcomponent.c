@@ -2507,7 +2507,7 @@ static int prop_compare(void *a, void *b)
     icalproperty *p2 = (icalproperty *)b;
     icalproperty_kind k1 = icalproperty_isa(p1);
     icalproperty_kind k2 = icalproperty_isa(p2);
-    int r = k1 - k2;
+    int r = (int)(k1 - k2);
 
     if (r == 0) {
         if (k1 == ICAL_X_PROPERTY) {
@@ -2539,7 +2539,7 @@ static int comp_compare(void *a, void *b)
     icalcomponent *c2 = (icalcomponent *)b;
     icalcomponent_kind k1 = icalcomponent_isa(c1);
     icalcomponent_kind k2 = icalcomponent_isa(c2);
-    int r = k1 - k2;
+    int r = (int)(k1 - k2);
 
     if (r == 0) {
         if (k1 == ICAL_X_COMPONENT && (c1->x_name && c2->x_name)) {

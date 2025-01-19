@@ -226,7 +226,7 @@ void test_values(void)
     icalvalue_free(v);
     icalvalue_free(copy);
 
-    v = icalvalue_new(-1);
+    v = icalvalue_new((icalvalue_kind)-1);
 
     ok("icalvalue_new(-1), Invalid type", (v == NULL));
 
@@ -328,7 +328,7 @@ void test_properties(void)
     icalproperty_free(clone);
     icalproperty_free(prop);
 
-    prop = icalproperty_new(-1);
+    prop = icalproperty_new((icalproperty_kind)-1);
 
     ok("test icalproperty_new() with invalid type (-1)", (prop == NULL));
 
@@ -2508,7 +2508,7 @@ void test_fblist(void)
         char *strp = out_str;
 
         for (i = 0; foo[i] != -1; i++) {
-            snprintf(strp, 79 - i, "%1d", foo[i]);
+            snprintf(strp, (size_t)(79 - i), "%1d", foo[i]);
             strp++;
         }
         str_is("Checking freebusy validity", out_str, "1121110");
@@ -4720,23 +4720,23 @@ void test_string_to_kind(void)
     ok("VALUE NULL is ICAL_NO_VALUE",
        (icalvalue_string_to_kind(NULL) == ICAL_NO_VALUE));
     int_is("ICAL_POLLCOMPLETION_VALUE is POLLCOMPLETION",
-           icalvalue_string_to_kind("POLLCOMPLETION"), ICAL_POLLCOMPLETION_VALUE);
+           (int)icalvalue_string_to_kind("POLLCOMPLETION"), ICAL_POLLCOMPLETION_VALUE);
     int_is("ICAL_NO_VALUE is empty string",
-           icalvalue_string_to_kind(""), ICAL_NO_VALUE);
+           (int)icalvalue_string_to_kind(""), ICAL_NO_VALUE);
 
     ok("PARAMETER NULL is ICAL_NO_PARAMETER",
        (icalparameter_string_to_kind(NULL) == ICAL_NO_PARAMETER));
     int_is("ICAL_EMAIL_PARAMETER is EMAIL",
-           icalparameter_string_to_kind("EMAIL"), ICAL_EMAIL_PARAMETER);
+           (int)icalparameter_string_to_kind("EMAIL"), ICAL_EMAIL_PARAMETER);
     int_is("ICAL_NO_PARAMETER is empty string",
-           icalparameter_string_to_kind(""), ICAL_NO_PARAMETER);
+           (int)icalparameter_string_to_kind(""), ICAL_NO_PARAMETER);
 
     ok("PROPERTY NULL is ICAL_NO_PROPERTY",
        (icalproperty_string_to_kind(NULL) == ICAL_NO_PROPERTY));
     int_is("ICAL_VOTER_PROPERTY is VOTER",
-           icalproperty_string_to_kind("VOTER"), ICAL_VOTER_PROPERTY);
+           (int)icalproperty_string_to_kind("VOTER"), ICAL_VOTER_PROPERTY);
     int_is("ICAL_NO_PROPERTY is empty string",
-           icalproperty_string_to_kind(""), ICAL_NO_PROPERTY);
+           (int)icalproperty_string_to_kind(""), ICAL_NO_PROPERTY);
 }
 
 void test_set_date_datetime_value(void)

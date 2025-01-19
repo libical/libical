@@ -327,7 +327,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
  */
 static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char *str)
 {
-    int e = icalproperty_kind_and_string_to_enum(kind, str);
+    int e = icalproperty_kind_and_string_to_enum((int)kind, str);
     struct icalvalue_impl *value;
 
     if (e != 0 && icalproperty_enum_belongs_to_property(icalproperty_value_kind_to_kind(kind), e)) {

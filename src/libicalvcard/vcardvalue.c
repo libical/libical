@@ -197,7 +197,7 @@ char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
  * As such, \b, \f, \r are not allowed, not even escaped
  */
 static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_sz,
-                                          const char *unquoted_str, int is_param)
+                                          const char *unquoted_str, bool is_param)
 {
     const char *p;
 
@@ -256,7 +256,7 @@ static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_
  */
 static vcardvalue *vcardvalue_new_enum(vcardvalue_kind kind, int x_type, const char *str)
 {
-    int e = vcardproperty_kind_and_string_to_enum(kind, str);
+    int e = vcardproperty_kind_and_string_to_enum((int)kind, str);
     struct vcardvalue_impl *value;
 
     if (e != 0 && vcardproperty_enum_belongs_to_property(vcardproperty_value_kind_to_kind(kind), e)) {
@@ -652,7 +652,7 @@ static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
 
 static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *buf_sz,
                                              vcardstrarray *array, const char sep,
-                                             int is_param)
+                                             bool is_param)
 {
     size_t i;
 
@@ -679,7 +679,7 @@ char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array, const char sep
     return buf;
 }
 
-char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, int is_param)
+char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_param)
 {
     char *buf;
     char *buf_ptr;
@@ -759,7 +759,7 @@ const char *vcardvalue_as_vcard_string(const vcardvalue *value)
 char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 {
     vcardproperty_version version = VCARD_VERSION_NONE;
-    int is_structured;
+    bool is_structured;
     unsigned flags = 0;
 
     if (value == 0) {
