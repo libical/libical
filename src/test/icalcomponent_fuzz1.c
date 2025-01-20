@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     data = malloc(filesize + 1);
     memset(data, 0, filesize + 1);
 
-    r = read(fd, data, filesize);
+    r = (int)read(fd, data, filesize);
     /* cppcheck-suppress doubleFree */
     fclose(fp);
 

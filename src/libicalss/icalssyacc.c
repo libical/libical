@@ -44,6 +44,7 @@
    USER NAME SPACE" below.  */
 
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 
 /* Identify Bison output.  */

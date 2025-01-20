@@ -115,7 +115,7 @@ static void test_parse_file(const char *fname)
     data = malloc(filesize + 1);
     memset(data, 0, filesize + 1);
 
-    r = read(fd, data, filesize);
+    r = (int)read(fd, data, filesize);
     fclose(fp);
 
     if (r < 0) {

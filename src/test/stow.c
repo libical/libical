@@ -123,7 +123,7 @@ static char *lowercase(const char *str)
     }
 
     for (p = lower; *p != 0; p++) {
-        *p = tolower((int)*p);
+        *p = (char)tolower((int)*p);
     }
 
     return lower;

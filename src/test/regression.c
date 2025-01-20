@@ -1347,7 +1347,7 @@ void test_recur(void)
 void test_recur_encode_by_day(void)
 {
     struct icalrecurrencetype *rt;
-    int ii;
+    short ii;
 
     rt = icalrecurrencetype_new_from_string("FREQ=WEEKLY;BYDAY=WE");
     ok("Is weekly recurrence", (rt->freq == ICAL_WEEKLY_RECURRENCE));
@@ -2047,9 +2047,9 @@ void do_test_time(const char *zone)
     if (VERBOSE)
         printf("\n Day Of week \n");
 
-    day_of_week = icaltime_day_of_week(ictt);
-    start_day_of_week = icaltime_start_doy_week(ictt, 1);
-    day_of_year = icaltime_day_of_year(ictt);
+    day_of_week = (short)icaltime_day_of_week(ictt);
+    start_day_of_week = (short)icaltime_start_doy_week(ictt, 1);
+    day_of_year = (short)icaltime_day_of_year(ictt);
 
     snprintf(msg, sizeof(msg), "Testing day of week %d", day_of_week);
     int_is(msg, day_of_week, 6);
@@ -2869,9 +2869,9 @@ static int test_juldat_caldat_instance(long year, int month, int day)
     struct ut_instant_int originalInstant;
 
     memset(&t, 0, sizeof(t));
-    t.year = year;
-    t.month = month;
-    t.day = day;
+    t.year = (int)year;
+    t.month = (int)month;
+    t.day = (int)day;
 
     memset(&originalInstant, 0, sizeof(originalInstant));
     originalInstant.year = year;
@@ -3009,9 +3009,9 @@ void test_doy(void)
 
         (void)icalmktime(&stm);
 
-        doy = icaltime_day_of_year(tt1);
+        doy = (short)icaltime_day_of_year(tt1);
 
-        doy2 = stm.tm_yday + 1;
+        doy2 = (short)stm.tm_yday + 1;
 
         if (doy == 1) {
             /** show some test cases **/
@@ -3040,9 +3040,9 @@ void test_doy(void)
             int_is(msg, doy, doy2);
         }
 
-        doy = icaltime_day_of_year(tt1);
+        doy = (short)icaltime_day_of_year(tt1);
         tt2 = icaltime_from_day_of_year(doy, tt1.year);
-        doy2 = icaltime_day_of_year(tt2);
+        doy2 = (short)icaltime_day_of_year(tt2);
 
         assert(doy2 == doy);
         assert(icaltime_compare(tt1, tt2) == 0);
@@ -3053,7 +3053,7 @@ void test_doy(void)
     } while (tt1.year < 2010);
 
     tt1 = icaltime_from_string("19950301");
-    doy = icaltime_day_of_year(tt1);
+    doy = (short)icaltime_day_of_year(tt1);
     tt2 = icaltime_from_day_of_year(doy, 1995);
     if (VERBOSE) {
         printf("%d %s %s\n", doy, icaltime_as_ctime(tt1), icaltime_as_ctime(tt2));
@@ -3062,7 +3062,7 @@ void test_doy(void)
     ok("day of year == 60", (doy == 60));
 
     tt1 = icaltime_from_string("19960301");
-    doy = icaltime_day_of_year(tt1);
+    doy = (short)icaltime_day_of_year(tt1);
     tt2 = icaltime_from_day_of_year(doy, 1996);
     if (VERBOSE) {
         printf("%d %s %s\n", doy, icaltime_as_ctime(tt1), icaltime_as_ctime(tt2));
@@ -3071,7 +3071,7 @@ void test_doy(void)
     ok("day of year == 61", (doy == 61));
 
     tt1 = icaltime_from_string("19970301");
-    doy = icaltime_day_of_year(tt1);
+    doy = (short)icaltime_day_of_year(tt1);
     tt2 = icaltime_from_day_of_year(doy, 1997);
     if (VERBOSE) {
         printf("%d %s %s\n", doy, icaltime_as_ctime(tt1), icaltime_as_ctime(tt2));

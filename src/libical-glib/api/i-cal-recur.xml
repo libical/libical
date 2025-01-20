@@ -17,13 +17,13 @@
         gint result;
         g_return_val_if_fail (rule != NULL, 0);
         array = g_new (time_t, count);
-        result = icalrecur_expand_recurrence (rule, start, count, array);
+        result = (int)icalrecur_expand_recurrence (rule, start, (int)count, array);
         if (result == 0) {
                 g_free (array);
                 return NULL;
         } else {
                 garray = g_array_new (FALSE, FALSE, sizeof (time_t));
-                g_array_append_vals (garray, array, count);
+                g_array_append_vals (garray, array, (int)count);
                 g_free (array);
                 return garray;
         }</custom>

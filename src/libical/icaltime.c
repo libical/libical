@@ -333,7 +333,6 @@ char *icaltime_as_ical_string_r(const struct icaltimetype tt)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
         const char *fmt;
-
         if (icaltime_is_utc(tt)) {
             fmt = "%04d%02d%02dT%02d%02d%02dZ";
         } else {
