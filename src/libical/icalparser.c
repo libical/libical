@@ -155,11 +155,6 @@ static char *parser_get_next_char(char c, char *str, int qm)
 /** Makes a new tmp buffer out of a substring. */
 static char *make_segment(char *start, char *end)
 {
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstringop-truncation"
-#pragma GCC diagnostic ignored "-Wstringop-overflow"
-#endif
     char *buf, *tmp;
     size_t size = (size_t)(ptrdiff_t)(end - start);
 
@@ -174,9 +169,6 @@ static char *make_segment(char *start, char *end)
     }
 
     return buf;
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic pop
-#endif
 }
 
 static char *parser_get_prop_name(char *line, char **end)
