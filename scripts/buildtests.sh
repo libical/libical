@@ -31,7 +31,7 @@ HELP() {
   echo
   echo "Run build tests"
   echo "Options:"
-  echo " -m, --no-cmake-compat      Don't require CMake version compatibility"
+  echo " -C, --no-cmake-compat      Don't require CMake version compatibility"
   echo " -p, --no-precommit         Don't run pre-commit test"
   echo " -k, --no-krazy             Don't run any Krazy tests"
   echo " -s, --no-splint            Don't run any splint tests"
@@ -43,6 +43,8 @@ HELP() {
   echo " -l, --no-clang-build       Don't run any clang-build tests"
   echo " -x, --no-memc-build        Don't run any MEMCONSIST-build (memory consistency) tests"
   echo " -a, --no-asan-build        Don't run any ASAN-build (sanitize-address) tests"
+  echo " -m, --no-msan-build        Don't run any MSAN-build (sanitize-memory) tests"
+  echo "                            (MSAN-build is off by default. Use -Rm to enable)"
   echo " -d, --no-tsan-build        Don't run any TSAN-build (sanitize-threads) tests"
   echo " -u, --no-ubsan-build       Don't run any UBSAN-build (sanitize-undefined) tests"
   echo " -r, --no-threadlocal-build Don't run the THREADLOCAL-build tests"
@@ -259,7 +261,7 @@ CLANG_BUILD() {
 }
 
 #function MEMCONSIST_BUILD:
-# runs a gcc memory consistency build test
+# runs a memory consistency build test
 # $1 = the name of the test (which will have "-mem" appended to it)
 # $2 = CMake options
 MEMCONSIST_BUILD() {
@@ -269,12 +271,13 @@ MEMCONSIST_BUILD() {
     return
   fi
   echo "===== START MEMCONSIST BUILD: $1 ======"
+  SET_GCC
   BUILD "$name" "-DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True $2"
   echo "===== END MEMCONSIST BUILD: $1 ======"
 }
 
 #function ASAN_BUILD:
-# runs a clang ASAN build test
+# runs an ASAN build test
 # $1 = the name of the test (which will have "-asan" appended to it)
 # $2 = CMake options
 ASAN_BUILD() {
@@ -290,8 +293,24 @@ ASAN_BUILD() {
   echo "===== END ASAN BUILD: $1 ======"
 }
 
+#function MSAN_BUILD:
+# runs an MSAN build test (clang is required)
+# $1 = the name of the test (which will have "-msan" appended to it)
+# $2 = CMake options
+MSAN_BUILD() {
+  name="$1-msan"
+  if (test -z "$(REVERSE $runmsanbuild)"); then
+    echo "===== MSAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START MSAN BUILD: $1 ======"
+  SET_CLANG
+  BUILD "$name" "-DLIBICAL_DEVMODE_MEMORY_SANITIZER=True $2"
+  echo "===== END MSAN BUILD: $1 ======"
+}
+
 #function TSAN_BUILD:
-# runs a clang TSAN build test
+# runs a TSAN build test
 # $1 = the name of the test (which will have "-tsan" appended to it)
 # $2 = CMake options
 TSAN_BUILD() {
@@ -307,7 +326,7 @@ TSAN_BUILD() {
 }
 
 #function UBSAN_BUILD:
-# runs a clang UBSAN build test
+# runs a UBSAN build test
 # $1 = the name of the test (which will have "-ubsan" appended to it)
 # $2 = CMake options
 UBSAN_BUILD() {
@@ -595,7 +614,7 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hmpksbtcgnlxadurR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-tsan-build,no-ubsan-build,no-threadlocal-build,reverse" -- "$@")
+options=$(getopt -o "hCpksbtcgnlxamdurR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-threadlocal-build,reverse" -- "$@")
 eval set -- "$options"
 
 reverse=0
@@ -610,6 +629,7 @@ runninja=1
 runclangbuild=1
 rungccbuild=1
 runasanbuild=1
+runmsanbuild=0
 runtsanbuild=1
 runubsanbuild=1
 runmemcbuild=1
@@ -620,7 +640,7 @@ while true; do
     HELP
     exit 1
     ;;
-  -m | --no-cmake-compat)
+  -C | --no-cmake-compat)
     cmakecompat=0
     shift
     ;;
@@ -662,6 +682,10 @@ while true; do
     ;;
   -a | --no-asan-build)
     runasanbuild=0
+    shift
+    ;;
+  -m | --no-msan-build)
+    runmsanbuild=0
     shift
     ;;
   -d | --no-tsan-build)
@@ -818,6 +842,14 @@ ASAN_BUILD test3asan "$TZCMAKEOPTS"
 ASAN_BUILD test4asan "$UUCCMAKEOPTS"
 ASAN_BUILD test5asan "$GLIBOPTS"
 ASAN_BUILD test6asan "$FUZZOPTS"
+
+#Memory sanitizer
+#MSAN_BUILD test1msan "$DEFCMAKEOPTS"
+MSAN_BUILD test2msan "$CMAKEOPTS"
+#MSAN_BUILD test3msan "$TZCMAKEOPTS"
+#MSAN_BUILD test4msan "$UUCCMAKEOPTS"
+#MSAN_BUILD test5msan "$GLIBOPTS"
+#MSAN_BUILD test6msan "$FUZZOPTS"
 
 #Thread sanitizer
 #libical-glib tests fail tsan with /lib64/libtsan.so.2: cannot allocate memory in static TLS block
