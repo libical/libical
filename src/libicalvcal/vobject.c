@@ -101,6 +101,7 @@ char* dupStr(const char *s, size_t size)
         }
     t = (char*)malloc(size+1);
     if (t) {
+        memset(t,0,size+1);
         memcpy(t,s,size);
         t[size] = 0;
         return t;

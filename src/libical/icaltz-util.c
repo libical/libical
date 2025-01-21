@@ -188,7 +188,7 @@ static char *zname_from_stridx(char *str, size_t idx)
 
 static void set_zoneinfopath(void)
 {
-    char file_path[MAXPATHLEN];
+    char file_path[MAXPATHLEN] = {0};
     const char *fname = ZONES_TAB_SYSTEM_FILENAME;
     size_t i, num_zi_search_paths;
 
@@ -697,7 +697,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 /* No rule, so ignore the TZ string */
                 tzstr = NULL;
             } else {
-                struct icaltimetype std_trans, dst_trans;
+                struct icaltimetype std_trans = {0}, dst_trans = {0};
 
                 /* Parse std->dst rule */
                 p = parse_posix_rule(++p, /* skip ',' */

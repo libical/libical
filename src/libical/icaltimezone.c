@@ -812,7 +812,8 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
 
 int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int *is_daylight)
 {
-    icaltimezonechange *zone_change, *prev_zone_change, tt_change, tmp_change;
+    icaltimezonechange *zone_change, *prev_zone_change;
+    icaltimezonechange tt_change = {0}, tmp_change = {0};
     size_t change_num, change_num_to_use;
     int found_change;
     int step, utc_offset_change, cmp;
@@ -1650,8 +1651,8 @@ static void icaltimezone_parse_zone_tab(void)
     const char *zonedir, *zonetab;
     char *filename;
     FILE *fp;
-    char buf[1024];      /* Used to store each line of zones.tab as it is read. */
-    char location[1024]; /* Stores the city name when parsing buf. */
+    char buf[1024] = {0};      /* Used to store each line of zones.tab as it is read. */
+    char location[1024] = {0}; /* Stores the city name when parsing buf. */
     size_t filename_len;
     int latitude_degrees = 0, latitude_minutes = 0, latitude_seconds = 0;
     int longitude_degrees = 0, longitude_minutes = 0, longitude_seconds = 0;

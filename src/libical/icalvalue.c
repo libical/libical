@@ -1030,7 +1030,7 @@ void print_datetime_to_string(char *str, const struct icaltimetype *data)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
-    char temp[20];
+    char temp[20] = {0};
 
     str[0] = '\0';
     if (data != 0) {
