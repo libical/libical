@@ -5813,6 +5813,129 @@ static void test_vtodo_partstat_inprocess(void)
     icalcomponent_free(ical);
 }
 
+static void test_icalpropiter(void)
+{
+    const char *str =
+        "BEGIN:VEVENT\r\n"
+        "DTSTAMP:20060102T030405Z\r\n"
+        "COMMENT:comment1\r\n"
+        "UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n"
+        "DTSTART;VALUE=DATE:20250120\r\n"
+        "COMMENT:comment2\r\n"
+        "END:VEVENT\r\n";
+
+    icalcomponent *comp = icalcomponent_new_from_string(str);
+    ok("Parsed VEVENT component", (comp != NULL));
+
+    icalproperty *dtstamp =
+        icalcomponent_get_first_property(comp, ICAL_DTSTAMP_PROPERTY);
+    assert(dtstamp != NULL);
+    icalproperty *dtstart =
+        icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+    assert(dtstart != NULL);
+    icalproperty *comment1 =
+        icalcomponent_get_first_property(comp, ICAL_COMMENT_PROPERTY);
+    assert(comment1 != NULL);
+    icalproperty *comment2 =
+        icalcomponent_get_next_property(comp, ICAL_COMMENT_PROPERTY);
+    assert(comment2 != NULL);
+    icalproperty *uid =
+        icalcomponent_get_first_property(comp, ICAL_UID_PROPERTY);
+    assert(uid != NULL);
+
+    // Iterate all properties.
+    icalpropiter iter = icalcomponent_begin_property(comp, ICAL_ANY_PROPERTY);
+    ok("iter at DTSTAMP",
+        dtstamp == icalpropiter_deref(&iter));
+    ok("iter at COMMENT (comment1)",
+        comment1 == icalpropiter_next(&iter) &&
+        comment1 == icalpropiter_deref(&iter));
+    ok("iter at UID",
+        uid == icalpropiter_next(&iter) &&
+        uid == icalpropiter_deref(&iter));
+    ok("iter at DTSTART",
+        dtstart == icalpropiter_next(&iter) &&
+        dtstart == icalpropiter_deref(&iter));
+    ok("iter at COMMENT (comment2)",
+        comment2 == icalpropiter_next(&iter) &&
+        comment2 == icalpropiter_deref(&iter));
+    ok("iter at end",
+        NULL == icalpropiter_next(&iter) &&
+        NULL == icalpropiter_deref(&iter));
+
+    // Iterate COMMENT property.
+    iter = icalcomponent_begin_property(comp, ICAL_COMMENT_PROPERTY);
+    ok("iter at COMMENT (comment1)",
+        comment1 == icalpropiter_deref(&iter));
+    ok("iter at COMMENT (comment2)",
+        comment2 == icalpropiter_next(&iter) &&
+        comment2 == icalpropiter_deref(&iter));
+    ok("iter at end",
+        NULL == icalpropiter_next(&iter) &&
+        NULL == icalpropiter_deref(&iter));
+
+    // Iterate in-existent property.
+    iter = icalcomponent_begin_property(comp, ICAL_DESCRIPTION_PROPERTY);
+    ok("iter at end", NULL == icalpropiter_deref(&iter));
+
+    icalcomponent_free(comp);
+}
+
+static void test_icalparamiter(void)
+{
+    const char *str =
+        "BEGIN:VEVENT\r\n"
+        "DTSTAMP:20060102T030405Z\r\n"
+        "UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n"
+        "DTSTART;VALUE=DATE:20250120\r\n"
+        "ATTENDEE\r\n"
+        " ;RSVP=TRUE\r\n"
+        " ;PARTSTAT=TENTATIVE\r\n"
+        " :mailto:foo@example.com\r\n"
+        "END:VEVENT\r\n";
+
+    icalcomponent *comp = icalcomponent_new_from_string(str);
+    ok("Parsed VEVENT component", (comp != NULL));
+
+    icalproperty *prop =
+        icalcomponent_get_first_property(comp, ICAL_ATTENDEE_PROPERTY);
+    ok("Parsed ATTENDEE property", (prop != NULL));
+
+    icalparameter *rsvp =
+        icalproperty_get_first_parameter(prop, ICAL_RSVP_PARAMETER);
+    assert(rsvp != NULL);
+    icalparameter *partstat =
+        icalproperty_get_first_parameter(prop, ICAL_PARTSTAT_PARAMETER);
+    assert(partstat != NULL);
+
+    // Iterate all parameters.
+    icalparamiter iter = icalproperty_begin_parameter(prop, ICAL_ANY_PARAMETER);
+    ok("iter at RSVP",
+        rsvp == icalparamiter_deref(&iter));
+    ok("iter at PARTSTAT",
+        partstat == icalparamiter_next(&iter) &&
+        partstat == icalparamiter_deref(&iter));
+    ok("iter at end",
+        NULL == icalparamiter_next(&iter) &&
+        NULL == icalparamiter_deref(&iter));
+
+    // Iterate PARTSTAT parameter.
+    iter = icalproperty_begin_parameter(prop, ICAL_PARTSTAT_PARAMETER);
+    ok("iter at PARTSTAT",
+        partstat == icalparamiter_deref(&iter));
+    ok("iter at end",
+        NULL == icalparamiter_next(&iter) &&
+        NULL == icalparamiter_deref(&iter));
+
+    // Iterate in-existent parameter.
+    iter = icalproperty_begin_parameter(prop, ICAL_CN_PARAMETER);
+    ok("iter at end", NULL == icalparamiter_deref(&iter));
+
+    icalcomponent_free(comp);
+}
+
+
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -5981,6 +6104,8 @@ int main(int argc, char *argv[])
     test_run("Test attendees", test_attendees, do_test, do_header);
     test_run("Test iCalendar Relationships", test_ical_relationships, do_test, do_header);
     test_run("Test IN-PROCESS PARTSTAT parameter value", test_vtodo_partstat_inprocess, do_test, do_header);
+    test_run("Test external property iterator", test_icalpropiter, do_test, do_header);
+    test_run("Test external parameter iterator", test_icalparamiter, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

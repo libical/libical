@@ -13,6 +13,7 @@
 
 #include "libical_ical_export.h"
 #include "icalderivedproperty.h" /* To get icalproperty_kind enumerations */
+#include "pvl.h"
 
 #include <stdarg.h> /* for va_... */
 
@@ -174,5 +175,18 @@ LIBICAL_ICAL_EXPORT bool icalproperty_enum_belongs_to_property(icalproperty_kind
  * @since 3.0
  */
 LIBICAL_ICAL_EXPORT void icalproperty_normalize(icalproperty *prop);
+
+/* This is exposed so that callers will not have to allocate and
+   deallocate iterators. Pretend that you can't see it. */
+typedef struct icalparamiter {
+    icalparameter_kind kind;
+    pvl_elem iter;
+} icalparamiter;
+
+LIBICAL_ICAL_EXPORT icalparamiter icalproperty_begin_parameter(icalproperty *property, icalparameter_kind kind);
+
+LIBICAL_ICAL_EXPORT icalparameter *icalparamiter_next(icalparamiter *i);
+
+LIBICAL_ICAL_EXPORT icalparameter *icalparamiter_deref(icalparamiter *i);
 
 #endif /*ICALPROPERTY_H */
