@@ -113,6 +113,10 @@
 #  Build with the address sanitizer (requires gcc or clang)
 #  Default=false
 #
+# -DLIBICAL_DEVMODE_MEMORY_SANITIZER=[true|false]
+#  Build with the memory sanitizer (requires clang)
+#  Default=false
+#
 # -DLIBICAL_DEVMODE_THREAD_SANITIZER=[true|false]
 #  Build with the thread sanitizer (requires gcc or clang)
 #  Default=false
@@ -802,6 +806,24 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
     set(SHARED_ONLY True)
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
+  endif()
+endif()
+
+libical_option(LIBICAL_DEVMODE_MEMORY_SANITIZER "(Developer-only) Build with the memory sanitizer." False)
+mark_as_advanced(LIBICAL_DEVMODE_MEMORY_SANITIZER)
+if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
+  if(CMAKE_C_COMPILER_IS_CLANG)
+    set(
+      CMAKE_C_FLAGS
+      "${CMAKE_C_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
+    )
+    set(
+      CMAKE_CXX_FLAGS
+      "${CMAKE_CXX_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
+    )
+    set(SHARED_ONLY True)
+  else()
+    message(FATAL_ERROR "You are trying to build with the memory sanitizer using a non-Clang compiler.")
   endif()
 endif()
 
