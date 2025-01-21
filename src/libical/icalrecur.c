@@ -776,12 +776,11 @@ struct icalrecurrencetype *icalrecurrencetype_clone(struct icalrecurrencetype *r
 
 struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
 {
-    struct icalrecur_parser parser;
+    struct icalrecur_parser parser = {0};
     icalrecurrencetype_byrule byrule;
 
     icalerror_check_arg_re(str != 0, "str", 0);
 
-    memset(&parser, 0, sizeof(parser));
     parser.rt = icalrecurrencetype_new();
     if (!parser.rt) {
         return NULL;
@@ -961,7 +960,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
     char *str;
     char *str_p;
     size_t buf_sz = 200;
-    char temp[20];
+    char temp[20] = {0};
     int i, j;
 
     if (recur == 0 || recur->freq == ICAL_NO_RECURRENCE) {
@@ -1632,7 +1631,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
 {
     struct icalrecurrencetype *rule = impl->rule;
     struct icaltimetype dtstart = impl->dtstart;
-    char locale[ULOC_KEYWORD_AND_VALUES_CAPACITY] = "";
+    char locale[ULOC_KEYWORD_AND_VALUES_CAPACITY] = {0};
     UErrorCode status = U_ZERO_ERROR;
     UChar *tzid = (UChar *)UCAL_UNKNOWN_ZONE_ID;
     bool is_hebrew = false;
