@@ -1153,6 +1153,8 @@ void icalcomponent_set_parent(icalcomponent *component, icalcomponent *parent)
 
 static const icalcompiter icalcompiter_null = {ICAL_NO_COMPONENT, 0};
 
+static const icalpropiter icalpropiter_null = {ICAL_NO_PROPERTY, 0};
+
 struct icalcomponent_kind_map {
     icalcomponent_kind kind;
     char name[20];
@@ -1332,6 +1334,54 @@ icalcomponent *icalcompiter_prior(icalcompiter *i)
 
 icalcomponent *icalcompiter_deref(icalcompiter *i)
 {
+    if (i->iter == 0) {
+        return 0;
+    }
+
+    return pvl_data(i->iter);
+}
+
+icalpropiter icalcomponent_begin_property(icalcomponent *component, icalproperty_kind kind)
+{
+    icalerror_check_arg_re(component != 0, "component", icalpropiter_null);
+
+    pvl_elem i;
+
+    for (i = pvl_head(component->properties); i != 0; i = pvl_next(i)) {
+        icalproperty *p = (icalproperty *)pvl_data(i);
+
+        if (icalproperty_isa(p) == kind || kind == ICAL_ANY_PROPERTY) {
+            icalpropiter itr = { kind, i };
+            return itr;
+        }
+    }
+
+    return icalpropiter_null;
+}
+
+icalproperty *icalpropiter_next(icalpropiter *i)
+{
+    icalerror_check_arg_rz((i != 0), "i");
+
+    if (i->iter == 0) {
+        return 0;
+    }
+
+    for (i->iter = pvl_next(i->iter); i->iter != 0; i->iter = pvl_next(i->iter)) {
+        icalproperty *p = (icalproperty *)pvl_data(i->iter);
+
+        if (icalproperty_isa(p) == i->kind || i->kind == ICAL_ANY_PROPERTY) {
+            return icalpropiter_deref(i);
+        }
+    }
+
+    return 0;
+}
+
+icalproperty *icalpropiter_deref(icalpropiter *i)
+{
+    icalerror_check_arg_rz((i != 0), "i");
+
     if (i->iter == 0) {
         return 0;
     }

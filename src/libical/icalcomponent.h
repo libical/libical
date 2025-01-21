@@ -28,8 +28,12 @@ typedef struct icalcomponent_impl icalcomponent;
 typedef struct icalcompiter {
     icalcomponent_kind kind;
     pvl_elem iter;
-
 } icalcompiter;
+
+typedef struct icalpropiter {
+    icalproperty_kind kind;
+    pvl_elem iter;
+} icalpropiter;
 
 /** @brief Constructor
  */
@@ -159,6 +163,13 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_next(icalcompiter *i);
 LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_prior(icalcompiter *i);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter *i);
+
+LIBICAL_ICAL_EXPORT icalpropiter icalcomponent_begin_property(icalcomponent *component,
+                                                             icalproperty_kind kind);
+
+LIBICAL_ICAL_EXPORT icalproperty *icalpropiter_next(icalpropiter *i);
+
+LIBICAL_ICAL_EXPORT icalproperty *icalpropiter_deref(icalpropiter *i);
 
 /***** Working with embedded error properties *****/
 

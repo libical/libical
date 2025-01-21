@@ -1076,3 +1076,51 @@ struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop,
 
     return ret;
 }
+
+static const icalparamiter icalparamiter_null = {ICAL_NO_PARAMETER, 0};
+
+icalparamiter icalproperty_begin_parameter(icalproperty *property, icalparameter_kind kind)
+{
+    icalerror_check_arg_re(property != 0, "property", icalparamiter_null);
+
+    pvl_elem i;
+
+    for (i = pvl_head(property->parameters); i != 0; i = pvl_next(i)) {
+        icalparameter *p = (icalparameter *)pvl_data(i);
+
+        if (icalparameter_isa(p) == kind || kind == ICAL_ANY_PARAMETER) {
+            icalparamiter itr = { kind, i };
+            return itr;
+        }
+    }
+
+    return icalparamiter_null;
+}
+
+icalparameter *icalparamiter_next(icalparamiter *i)
+{
+    icalerror_check_arg_rz((i != 0), "i");
+
+    if (i->iter == 0) {
+        return 0;
+    }
+
+    for (i->iter = pvl_next(i->iter); i->iter != 0; i->iter = pvl_next(i->iter)) {
+        icalparameter *p = (icalparameter *)pvl_data(i->iter);
+
+        if (icalparameter_isa(p) == i->kind || i->kind == ICAL_ANY_PARAMETER) {
+            return icalparamiter_deref(i);
+        }
+    }
+
+    return 0;
+}
+
+icalparameter *icalparamiter_deref(icalparamiter *i)
+{
+    if (i->iter == 0) {
+        return 0;
+    }
+
+    return pvl_data(i->iter);
+}
