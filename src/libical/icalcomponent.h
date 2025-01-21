@@ -165,7 +165,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_prior(icalcompiter *i);
 LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter *i);
 
 LIBICAL_ICAL_EXPORT icalpropiter icalcomponent_begin_property(icalcomponent *component,
-                                                             icalproperty_kind kind);
+                                                              icalproperty_kind kind);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalpropiter_next(icalpropiter *i);
 
