@@ -1298,11 +1298,11 @@ icalcompiter icalcomponent_end_component(icalcomponent *component, icalcomponent
 
 icalcomponent *icalcompiter_next(icalcompiter *i)
 {
+    icalerror_check_arg_rz((i != 0), "i");
+
     if (i->iter == 0) {
         return 0;
     }
-
-    icalerror_check_arg_rz((i != 0), "i");
 
     for (i->iter = pvl_next(i->iter); i->iter != 0; i->iter = pvl_next(i->iter)) {
         icalcomponent *c = (icalcomponent *)pvl_data(i->iter);
@@ -1317,6 +1317,8 @@ icalcomponent *icalcompiter_next(icalcompiter *i)
 
 icalcomponent *icalcompiter_prior(icalcompiter *i)
 {
+    icalerror_check_arg_rz((i != 0), "i");
+
     if (i->iter == 0) {
         return 0;
     }
@@ -1334,6 +1336,8 @@ icalcomponent *icalcompiter_prior(icalcompiter *i)
 
 icalcomponent *icalcompiter_deref(icalcompiter *i)
 {
+    icalerror_check_arg_rz((i != 0), "i");
+
     if (i->iter == 0) {
         return 0;
     }
