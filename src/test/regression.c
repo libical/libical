@@ -5846,33 +5846,33 @@ static void test_icalpropiter(void)
     // Iterate all properties.
     icalpropiter iter = icalcomponent_begin_property(comp, ICAL_ANY_PROPERTY);
     ok("iter at DTSTAMP",
-        dtstamp == icalpropiter_deref(&iter));
+       dtstamp == icalpropiter_deref(&iter));
     ok("iter at COMMENT (comment1)",
-        comment1 == icalpropiter_next(&iter) &&
-        comment1 == icalpropiter_deref(&iter));
+       comment1 == icalpropiter_next(&iter) &&
+           comment1 == icalpropiter_deref(&iter));
     ok("iter at UID",
-        uid == icalpropiter_next(&iter) &&
-        uid == icalpropiter_deref(&iter));
+       uid == icalpropiter_next(&iter) &&
+           uid == icalpropiter_deref(&iter));
     ok("iter at DTSTART",
-        dtstart == icalpropiter_next(&iter) &&
-        dtstart == icalpropiter_deref(&iter));
+       dtstart == icalpropiter_next(&iter) &&
+           dtstart == icalpropiter_deref(&iter));
     ok("iter at COMMENT (comment2)",
-        comment2 == icalpropiter_next(&iter) &&
-        comment2 == icalpropiter_deref(&iter));
+       comment2 == icalpropiter_next(&iter) &&
+           comment2 == icalpropiter_deref(&iter));
     ok("iter at end",
-        NULL == icalpropiter_next(&iter) &&
-        NULL == icalpropiter_deref(&iter));
+       NULL == icalpropiter_next(&iter) &&
+           NULL == icalpropiter_deref(&iter));
 
     // Iterate COMMENT property.
     iter = icalcomponent_begin_property(comp, ICAL_COMMENT_PROPERTY);
     ok("iter at COMMENT (comment1)",
-        comment1 == icalpropiter_deref(&iter));
+       comment1 == icalpropiter_deref(&iter));
     ok("iter at COMMENT (comment2)",
-        comment2 == icalpropiter_next(&iter) &&
-        comment2 == icalpropiter_deref(&iter));
+       comment2 == icalpropiter_next(&iter) &&
+           comment2 == icalpropiter_deref(&iter));
     ok("iter at end",
-        NULL == icalpropiter_next(&iter) &&
-        NULL == icalpropiter_deref(&iter));
+       NULL == icalpropiter_next(&iter) &&
+           NULL == icalpropiter_deref(&iter));
 
     // Iterate in-existent property.
     iter = icalcomponent_begin_property(comp, ICAL_DESCRIPTION_PROPERTY);
@@ -5911,21 +5911,21 @@ static void test_icalparamiter(void)
     // Iterate all parameters.
     icalparamiter iter = icalproperty_begin_parameter(prop, ICAL_ANY_PARAMETER);
     ok("iter at RSVP",
-        rsvp == icalparamiter_deref(&iter));
+       rsvp == icalparamiter_deref(&iter));
     ok("iter at PARTSTAT",
-        partstat == icalparamiter_next(&iter) &&
-        partstat == icalparamiter_deref(&iter));
+       partstat == icalparamiter_next(&iter) &&
+           partstat == icalparamiter_deref(&iter));
     ok("iter at end",
-        NULL == icalparamiter_next(&iter) &&
-        NULL == icalparamiter_deref(&iter));
+       NULL == icalparamiter_next(&iter) &&
+           NULL == icalparamiter_deref(&iter));
 
     // Iterate PARTSTAT parameter.
     iter = icalproperty_begin_parameter(prop, ICAL_PARTSTAT_PARAMETER);
     ok("iter at PARTSTAT",
-        partstat == icalparamiter_deref(&iter));
+       partstat == icalparamiter_deref(&iter));
     ok("iter at end",
-        NULL == icalparamiter_next(&iter) &&
-        NULL == icalparamiter_deref(&iter));
+       NULL == icalparamiter_next(&iter) &&
+           NULL == icalparamiter_deref(&iter));
 
     // Iterate in-existent parameter.
     iter = icalproperty_begin_parameter(prop, ICAL_CN_PARAMETER);
@@ -5933,8 +5933,6 @@ static void test_icalparamiter(void)
 
     icalcomponent_free(comp);
 }
-
-
 
 int main(int argc, char *argv[])
 {

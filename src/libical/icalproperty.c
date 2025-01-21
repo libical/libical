@@ -1089,7 +1089,7 @@ icalparamiter icalproperty_begin_parameter(icalproperty *property, icalparameter
         icalparameter *p = (icalparameter *)pvl_data(i);
 
         if (icalparameter_isa(p) == kind || kind == ICAL_ANY_PARAMETER) {
-            icalparamiter itr = { kind, i };
+            icalparamiter itr = {kind, i};
             return itr;
         }
     }

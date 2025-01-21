@@ -1355,7 +1355,7 @@ icalpropiter icalcomponent_begin_property(icalcomponent *component, icalproperty
         icalproperty *p = (icalproperty *)pvl_data(i);
 
         if (icalproperty_isa(p) == kind || kind == ICAL_ANY_PROPERTY) {
-            icalpropiter itr = { kind, i };
+            icalpropiter itr = {kind, i};
             return itr;
         }
     }
