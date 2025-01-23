@@ -1383,8 +1383,30 @@ icalcomponent *icalparser_parse_string(const char *str)
 
     icalerrorstate es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
 
+    if (str == 0) {
+        goto error;
+    }
+
+    // Ignore leading space / form-feeds / new-lines
+    const char *strStart = str;
+    while (isspace((unsigned char) *strStart) || *strStart == '\f' || *strStart == '\n' || *strStart == '\r') {
+        strStart++;
+    }
+
+    // All spaces?
+    if (*strStart == 0) {
+        goto error;
+    }
+
+    // basic validation
+    size_t beginSize = strlen("BEGIN");
+    int startIndex = strncasecmp(strStart, "BEGIN", beginSize);
+    if (startIndex != 0) {
+        goto error;
+    }
+
     d.pos = 0;
-    d.str = str;
+    d.str = strStart;
 
     p = icalparser_new();
     if (!p)
@@ -1401,6 +1423,11 @@ icalcomponent *icalparser_parse_string(const char *str)
     icalparser_free(p);
 
     return c;
+
+    error:
+        icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return NULL;
 }
 
 enum icalparser_ctrl icalparser_get_ctrl(void)
