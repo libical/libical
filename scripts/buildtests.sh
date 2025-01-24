@@ -872,7 +872,8 @@ ASAN_BUILD test6asan "$FUZZOPTS"
 
 #Memory sanitizer
 #MSAN_BUILD test1msan "$DEFCMAKEOPTS"
-MSAN_BUILD test2msan "$CMAKEOPTS"
+#in case libicu has uninitialized memory
+MSAN_BUILD test2msan "$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 #MSAN_BUILD test3msan "$TZCMAKEOPTS"
 #MSAN_BUILD test4msan "$UUCCMAKEOPTS"
 #MSAN_BUILD test5msan "$GLIBOPTS"
