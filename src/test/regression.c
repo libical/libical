@@ -4380,7 +4380,7 @@ void test_vcal(void)
  */
 void test_recurrenceexcluded(void)
 {
-    char funTime[2048];
+    char funTime[2048] = {0};
     icalcomponent *calendar = NULL;
     icalcomponent *event = NULL;
     struct icaltimetype dtstart;
