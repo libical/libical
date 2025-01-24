@@ -44,7 +44,7 @@ HELP() {
   echo " -x, --no-memc-build        Don't run any MEMCONSIST-build (memory consistency) tests"
   echo " -a, --no-asan-build        Don't run any ASAN-build (sanitize-address) tests"
   echo " -m, --no-msan-build        Don't run any MSAN-build (sanitize-memory) tests"
-  echo "                            (MSAN-build is off by default. Use -Rm to enable)"
+  echo "                            (MSAN-build is off by default. Use -m to enable)"
   echo " -d, --no-tsan-build        Don't run any TSAN-build (sanitize-threads) tests"
   echo " -u, --no-ubsan-build       Don't run any UBSAN-build (sanitize-undefined) tests"
   echo " -r, --no-threadlocal-build Don't run the THREADLOCAL-build tests"
@@ -61,28 +61,34 @@ REVERSE() {
 }
 
 COMMAND_EXISTS() {
+  set +e
   command -v "$1" >/dev/null 2>&1
   if (test $? != 0); then
-    echo "$1 is not in your PATH. Either install this program or skip the associated test"
+    echo "$1 is not in your PATH.  Please install this program."
     if (test $# -gt 1); then
-      echo "or disable this check by passing the $2 command-line option"
+      echo "Else disable this associated tests by passing the $2 command-line option"
     fi
     exit 1
   fi
+  set -e
 }
 
 #function SET_NINJA
 # set cmake generator to ninja
 SET_NINJA() {
+  COMMAND_EXISTS "ninja"
   export CMAKE_GENERATOR=Ninja
 }
 UNSET_NINJA() {
+  COMMAND_EXISTS "make"
   unset CMAKE_GENERATOR
 }
 
 #function SET_GCC
 # setup compiling with gcc
 SET_GCC() {
+  COMMAND_EXISTS "gcc"
+  COMMAND_EXISTS "g++"
   export CC=gcc
   export CXX=g++
 }
@@ -90,6 +96,8 @@ SET_GCC() {
 #function SET_CLANG
 # setup compiling with clang
 SET_CLANG() {
+  COMMAND_EXISTS "clang"
+  COMMAND_EXISTS "clang++"
   export CC=clang
   export CXX=clang++
 }
@@ -299,7 +307,8 @@ ASAN_BUILD() {
 # $2 = CMake options
 MSAN_BUILD() {
   name="$1-msan"
-  if (test -z "$(REVERSE $runmsanbuild)"); then
+  #if (test -z "$(REVERSE $runmsanbuild)"); then # TODO once we are mem-init-clean
+  if (test $runmsanbuild -eq 0); then
     echo "===== MSAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -629,6 +638,7 @@ runninja=1
 runclangbuild=1
 rungccbuild=1
 runasanbuild=1
+#runmsanbuild=1 # TODO once we are mem-init-clean
 runmsanbuild=0
 runtsanbuild=1
 runubsanbuild=1
@@ -685,7 +695,7 @@ while true; do
     shift
     ;;
   -m | --no-msan-build)
-    runmsanbuild=0
+    runmsanbuild=1
     shift
     ;;
   -d | --no-tsan-build)
@@ -726,6 +736,7 @@ cd ..
 TOP=$(pwd)
 BDIR=""
 
+COMMAND_EXISTS "cmake"
 #use minimum cmake version unless the --no-cmake-compat option is specified
 if (test ! -z "$(REVERSE $cmakecompat)"); then
   if (test ! -e "$TOP/CMakeLists.txt"); then
@@ -753,7 +764,7 @@ if (test ! -z "$(REVERSE $cmakecompat)"); then
   isCMakeVersion=$(cmake --version | head -1 | grep -c "$minCMakeVers")
   if (test $isCMakeVersion -ne 1); then
     echo "Not using cmake version $minCMakeVers"
-    echo "Maybe you need to install it into /usr/local/opt/cmake-$minCMakeVers (or use the -m option)"
+    echo "Maybe you need to install it into /usr/local/opt/cmake-$minCMakeVers (or use the -C option)"
     exit 1
   fi
   set -e
