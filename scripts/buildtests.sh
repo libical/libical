@@ -60,6 +60,19 @@ REVERSE() {
   fi
 }
 
+FILEPATTERN_EXISTS() {
+  set +e
+  ls "$1"* >/dev/null 2>&1
+  if (test $? != 0); then
+    echo "$1 not found. Please install."
+    if (test $# -gt 1); then
+      echo "Else disable this associated tests by passing the $2 command-line option"
+    fi
+    exit 1
+  fi
+  set -e
+}
+
 COMMAND_EXISTS() {
   set +e
   command -v "$1" >/dev/null 2>&1
@@ -295,6 +308,7 @@ ASAN_BUILD() {
     return
   fi
   echo "===== START ASAN BUILD: $1 ======"
+  FILEPATTERN_EXISTS "/usr/lib64/libasan.so" "-a"
   SET_GCC
   export ASAN_OPTIONS=verify_asan_link_order=0 #seems to be needed with different ld on Fedora (like gold)
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
@@ -329,6 +343,7 @@ TSAN_BUILD() {
     return
   fi
   echo "===== START TSAN BUILD: $1 ======"
+  FILEPATTERN_EXISTS "/usr/lib64/libtsan.so" "-a"
   SET_GCC
   BUILD "$name" "-DLIBICAL_DEVMODE_THREAD_SANITIZER=True $2"
   echo "===== END TSAN BUILD: $1 ======"
@@ -345,6 +360,7 @@ UBSAN_BUILD() {
     return
   fi
   echo "===== START UBSAN BUILD: $1 ======"
+  FILEPATTERN_EXISTS "/usr/lib64/libubsan.so" "-a"
   SET_GCC
   ulimit -S -t 180     # oss-fuzz uses 60 seconds which is too low for us
   ulimit -S -m 2621440 # oss-fuzz uses 2560Mb
@@ -469,7 +485,7 @@ SPLINT() {
     grep -v build-)
   files="$files $BDIR/src/libical/*.c $BDIR/src/libical/*.h"
 
-  rm "splint-$name.out"
+  rm -f "splint-$name.out"
   # shellcheck disable=SC2086
   splint $files \
     -badflag \
@@ -527,7 +543,7 @@ SPLINT() {
     exit 1
   fi
   CLEAN
-  rm "splint-$name.out"
+  rm -f "splint-$name.out"
   echo "===== END SPLINT: $1 ======"
 }
 
