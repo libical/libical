@@ -21,6 +21,10 @@
 
 #include <string.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+
 /* This map associates the property kinds with:
    - the string representation of the property name;
    - the VALUE kind that libical uses internally;
@@ -353,3 +357,5 @@ icalproperty_status icalenum_string_to_status(const char *str)
 
     return ICAL_STATUS_NONE;
 }
+
+#pragma GCC diagnostic pop

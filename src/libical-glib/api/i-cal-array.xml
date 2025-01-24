@@ -14,7 +14,7 @@
 	gint ret;
 	g_return_val_if_fail (array != NULL &amp;&amp; I_CAL_IS_ARRAY (array), -1);
 	native = i_cal_object_get_native ((ICalObject *)array);
-	ret = native->num_elements;
+	ret = (gint)native->num_elements;
 	native = NULL;
 	return ret;</custom>
 	</method>
@@ -40,12 +40,12 @@
     </method> -->
     <method name="i_cal_array_remove_element_at" corresponds="icalarray_remove_element_at" kind="others" since="1.0">
         <parameter type="ICalArray *" name="array"  comment="The #ICalArray to be modified"/>
-        <parameter type="gint" name="position" comment="The position in which the element will be removed from the array"/>
+        <parameter type="gulong" name="position" comment="The position in which the element will be removed from the array"/>
         <comment xml:space="preserve">Removes the element at the @position from the array.</comment>
     </method>
     <method name="i_cal_array_element_at" corresponds="icalarray_element_at" annotation="skip" kind="private" since="1.0">
         <parameter type="ICalArray *" name="array" comment="The #ICalArray to be queried"/>
-        <parameter type="gint" name="position" comment="The position the target element is located"/>
+        <parameter type="gulong" name="position" comment="The position the target element is located"/>
         <returns type="GObject *" annotation="transfer none, nullable" comment="The element located at the @position in the @array"/>
         <comment xml:space="preserve">Gets the element located in the @position in the @array. NULL if position if out of bound.</comment>
     </method>
