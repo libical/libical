@@ -321,8 +321,7 @@ ASAN_BUILD() {
 # $2 = CMake options
 MSAN_BUILD() {
   name="$1-msan"
-  #if (test -z "$(REVERSE $runmsanbuild)"); then # TODO once we are mem-init-clean
-  if (test $runmsanbuild -eq 0); then
+  if (test -z "$(REVERSE $runmsanbuild)"); then
     echo "===== MSAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
     return
   fi
@@ -654,8 +653,7 @@ runninja=1
 runclangbuild=1
 rungccbuild=1
 runasanbuild=1
-#runmsanbuild=1 # TODO once we are mem-init-clean
-runmsanbuild=0
+runmsanbuild=1
 runtsanbuild=1
 runubsanbuild=1
 runmemcbuild=1
@@ -711,7 +709,7 @@ while true; do
     shift
     ;;
   -m | --no-msan-build)
-    runmsanbuild=1
+    runmsanbuild=0
     shift
     ;;
   -d | --no-tsan-build)
@@ -871,13 +869,14 @@ ASAN_BUILD test5asan "$GLIBOPTS"
 ASAN_BUILD test6asan "$FUZZOPTS"
 
 #Memory sanitizer
-#MSAN_BUILD test1msan "$DEFCMAKEOPTS"
-#in case libicu has uninitialized memory
-MSAN_BUILD test2msan "$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
-#MSAN_BUILD test3msan "$TZCMAKEOPTS"
-#MSAN_BUILD test4msan "$UUCCMAKEOPTS"
-#MSAN_BUILD test5msan "$GLIBOPTS"
-#MSAN_BUILD test6msan "$FUZZOPTS"
+# currently MSAN fails inside libicu and also isn't working with std:stringstreams properly
+SKIPOPTS="-DCMAKE_DISABLE_FIND_PACKAGE_ICU=True -DWITH_CXX_BINDINGS=False"
+MSAN_BUILD test1msan "$DEFCMAKEOPTS $SKIPOPTS"
+MSAN_BUILD test2msan "$CMAKEOPTS $SKIPOPTS"
+MSAN_BUILD test3msan "$TZCMAKEOPTS $SKIPOPTS"
+MSAN_BUILD test4msan "$UUCCMAKEOPTS $SKIPOPTS"
+MSAN_BUILD test5msan "$GLIBOPTS $SKIPOPTS"
+MSAN_BUILD test6msan "$FUZZOPTS $SKIPOPTS"
 
 #Thread sanitizer
 #libical-glib tests fail tsan with /lib64/libtsan.so.2: cannot allocate memory in static TLS block

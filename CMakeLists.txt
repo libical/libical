@@ -822,6 +822,16 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
       "${CMAKE_CXX_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
     )
     set(SHARED_ONLY True)
+    #currently unavailable for glib-based code
+    message(
+      NOTICE
+      "Currently unable to build memory sanitizer for glib-based configurations."
+      "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
+    )
+    set(ICAL_GLIB False)
+    set(GOBJECT_INTROSPECTION False)
+    set(ICAL_GLIB_BUILD_DOCS False)
+    set(ICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the memory sanitizer using a non-Clang compiler.")
   endif()
