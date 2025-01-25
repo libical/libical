@@ -113,6 +113,10 @@
 #  Build with the address sanitizer (requires gcc or clang)
 #  Default=false
 #
+# -DLIBICAL_DEVMODE_LEAK_SANITIZER=[true|false]
+#  Build with the memory leak sanitizer (requires gcc or clang)
+#  Default=false
+#
 # -DLIBICAL_DEVMODE_MEMORY_SANITIZER=[true|false]
 #  Build with the memory sanitizer (requires clang)
 #  Default=false
@@ -808,6 +812,29 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
     set(SHARED_ONLY True)
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
+  endif()
+endif()
+
+libical_option(LIBICAL_DEVMODE_LEAK_SANITIZER "(Developer-only) Build with the leak sanitizer." False)
+mark_as_advanced(LIBICAL_DEVMODE_LEAK_SANITIZER)
+if(LIBICAL_DEVMODE_LEAK_SANITIZER)
+  if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
+    if(WITH_CXX_BINDINGS)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
+    endif()
+    set(SHARED_ONLY True)
+    message(
+      NOTICE
+      "Currently unable to build leak sanitizer for glib-based configurations."
+      "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
+    )
+    set(ICAL_GLIB False)
+    set(GOBJECT_INTROSPECTION False)
+    set(ICAL_GLIB_BUILD_DOCS False)
+    set(ICAL_GLIB_VAPI False)
+  else()
+    message(FATAL_ERROR "You are trying to build with the leak sanitizer using a non-GCC or Clang compiler.")
   endif()
 endif()
 

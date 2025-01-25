@@ -40,9 +40,10 @@ HELP() {
   echo " -c, --no-cppcheck          Don't run any cppcheck tests"
   echo " -g, --no-gcc-build         Don't run any gcc-build tests with Unix Makefiles"
   echo " -n, --no-ninja-gcc-build   Don't run any gcc build tests with ninja"
-  echo " -l, --no-clang-build       Don't run any clang-build tests"
+  echo " -z, --no-clang-build       Don't run any clang-build tests"
   echo " -x, --no-memc-build        Don't run any MEMCONSIST-build (memory consistency) tests"
   echo " -a, --no-asan-build        Don't run any ASAN-build (sanitize-address) tests"
+  echo " -l, --no-lsan-build        Don't run any LSAN-build (sanitize-leak) tests"
   echo " -m, --no-msan-build        Don't run any MSAN-build (sanitize-memory) tests"
   echo " -d, --no-tsan-build        Don't run any TSAN-build (sanitize-threads) tests"
   echo " -u, --no-ubsan-build       Don't run any UBSAN-build (sanitize-undefined) tests"
@@ -312,6 +313,22 @@ ASAN_BUILD() {
   export ASAN_OPTIONS=verify_asan_link_order=0 #seems to be needed with different ld on Fedora (like gold)
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
+}
+#function LSAN_BUILD:
+# runs an LSAN build test (clang is required)
+# $1 = the name of the test (which will have "-lsan" appended to it)
+# $2 = CMake options
+LSAN_BUILD() {
+  name="$1-lsan"
+  if (test -z "$(REVERSE $runlsanbuild)"); then
+    echo "===== LSAN BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START LSAN BUILD: $1 ======"
+  FILEPATTERN_EXISTS "/usr/lib64/liblsan.so" "-l"
+  SET_GCC
+  BUILD "$name" "-DLIBICAL_DEVMODE_LEAK_SANITIZER=True $2"
+  echo "===== END LSAN BUILD: $1 ======"
 }
 
 #function MSAN_BUILD:
@@ -637,7 +654,7 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hCpksbtcgnlxamdurR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-threadlocal-build,reverse" -- "$@")
+options=$(getopt -o "hCpksbtcgnzxalmdurR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-threadlocal-build,reverse" -- "$@")
 eval set -- "$options"
 
 reverse=0
@@ -652,6 +669,7 @@ runninja=1
 runclangbuild=1
 rungccbuild=1
 runasanbuild=1
+runlsanbuild=1
 runmsanbuild=1
 runtsanbuild=1
 runubsanbuild=1
@@ -695,7 +713,7 @@ while true; do
     runninja=0
     shift
     ;;
-  -l | --no-clang-build)
+  -z | --no-clang-build)
     runclangbuild=0
     shift
     ;;
@@ -705,6 +723,10 @@ while true; do
     ;;
   -a | --no-asan-build)
     runasanbuild=0
+    shift
+    ;;
+  -e | --no-lsan-build)
+    runlsanbuild=0
     shift
     ;;
   -m | --no-msan-build)
@@ -866,6 +888,15 @@ ASAN_BUILD test3asan "$TZCMAKEOPTS"
 ASAN_BUILD test4asan "$UUCCMAKEOPTS"
 ASAN_BUILD test5asan "$GLIBOPTS"
 ASAN_BUILD test6asan "$FUZZOPTS"
+
+#Leak sanitizer
+#libical-glib tests fail lsan
+#LSAN_BUILD test1lsan "$DEFCMAKEOPTS"
+LSAN_BUILD test2lsan "$CMAKEOPTS"
+LSAN_BUILD test3lsan "$TZCMAKEOPTS"
+LSAN_BUILD test4lsan "$UUCCMAKEOPTS"
+#LSAN_BUILD test5lsan "$GLIBOPTS"
+#LSAN_BUILD test6lsan "$FUZZOPTS"
 
 #Memory sanitizer
 # currently MSAN fails inside libicu and also isn't working with std:stringstreams properly
