@@ -882,6 +882,15 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     endif()
     set(SHARED_ONLY True)
+    message(
+      NOTICE
+      "Currently unable to build thread sanitizer for glib-based configurations."
+      "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
+    )
+    set(ICAL_GLIB False)
+    set(GOBJECT_INTROSPECTION False)
+    set(ICAL_GLIB_BUILD_DOCS False)
+    set(ICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")
   endif()
