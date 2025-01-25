@@ -44,7 +44,6 @@ HELP() {
   echo " -x, --no-memc-build        Don't run any MEMCONSIST-build (memory consistency) tests"
   echo " -a, --no-asan-build        Don't run any ASAN-build (sanitize-address) tests"
   echo " -m, --no-msan-build        Don't run any MSAN-build (sanitize-memory) tests"
-  echo "                            (MSAN-build is off by default. Use -m to enable)"
   echo " -d, --no-tsan-build        Don't run any TSAN-build (sanitize-threads) tests"
   echo " -u, --no-ubsan-build       Don't run any UBSAN-build (sanitize-undefined) tests"
   echo " -r, --no-threadlocal-build Don't run the THREADLOCAL-build tests"
