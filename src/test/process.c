@@ -75,16 +75,15 @@ int main(int argc, char *argv[])
             const char *match_note = 0;
             icalproperty *p;
 
-            for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
-                 p != 0; p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
+            for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY); p != 0;
+                 p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
                 if (strcmp(icalproperty_get_x_name(p), "X-LIC-NOTE") == 0) {
                     inc_note = icalproperty_get_x(p);
                 }
             }
 
             if (match != 0) {
-                for (p = icalcomponent_get_first_property(match, ICAL_X_PROPERTY);
-                     p != 0;
+                for (p = icalcomponent_get_first_property(match, ICAL_X_PROPERTY); p != 0;
                      p = icalcomponent_get_next_property(match, ICAL_X_PROPERTY)) {
                     if (strcmp(icalproperty_get_x_name(p), "X-LIC-NOTE") == 0) {
                         match_note = icalproperty_get_x(p);
@@ -141,9 +140,7 @@ int main(int argc, char *argv[])
                 /*                  icalset_add_component(cal,icalcomponent_clone(c));*/
 
                 /* Return a reply */
-                reply =
-                    icalmessage_new_accept_reply(
-                        c, this_user, "I can make it to this meeting");
+                reply = icalmessage_new_accept_reply(c, this_user, "I can make it to this meeting");
 
                 (void)icalset_add_component(out, reply);
 
@@ -154,13 +151,9 @@ int main(int argc, char *argv[])
 
                 if (dtstart.hour % 4 == 0) {
                     /* Delegate the meeting */
-                    reply =
-                        icalmessage_new_delegate_reply(
-                            c,
-                            this_user,
-                            "bob@cal.softwarestudio.org",
-                            "Unfortunately, I have another commitment that conflicts "
-                            "with this meeting. I am delegating my attendance to Bob.");
+                    reply = icalmessage_new_delegate_reply(c, this_user, "bob@cal.softwarestudio.org",
+                                                           "Unfortunately, I have another commitment that conflicts "
+                                                           "with this meeting. I am delegating my attendance to Bob.");
                     (void)icalset_add_component(out, reply);
 
                 } else if (dtstart.hour % 4 == 1) {
@@ -168,11 +161,9 @@ int main(int argc, char *argv[])
                     icalcomponent *newc;
                     struct icalperiodtype next_time;
 
-                    icalspanlist *spanl = icalspanlist_new(cal, dtstart,
-                                                           icaltime_null_time());
+                    icalspanlist *spanl = icalspanlist_new(cal, dtstart, icaltime_null_time());
 
-                    next_time =
-                        icalspanlist_next_free_time(spanl, icalcomponent_get_dtstart(c));
+                    next_time = icalspanlist_next_free_time(spanl, icalcomponent_get_dtstart(c));
 
                     newc = icalcomponent_clone(c);
 
@@ -183,13 +174,10 @@ int main(int argc, char *argv[])
                            available */
                     icalcomponent_set_duration(newc, icalcomponent_get_duration(c));
 
-                    reply =
-                        icalmessage_new_counterpropose_reply(
-                            c,
-                            newc,
-                            this_user,
-                            "Unfortunately, I have another commitment that conflicts with "
-                            "this meeting. I am proposing a time that works better for me.");
+                    reply = icalmessage_new_counterpropose_reply(
+                        c, newc, this_user,
+                        "Unfortunately, I have another commitment that conflicts with "
+                        "this meeting. I am proposing a time that works better for me.");
 
                     (void)icalset_add_component(out, reply);
                     icalspanlist_free(spanl);
@@ -198,11 +186,7 @@ int main(int argc, char *argv[])
                 } else {
                     /* Decline the meeting */
 
-                    reply =
-                        icalmessage_new_decline_reply(
-                            c,
-                            this_user,
-                            "I can't make it to this meeting");
+                    reply = icalmessage_new_decline_reply(c, this_user, "I can't make it to this meeting");
 
                     (void)icalset_add_component(out, reply);
                 }
@@ -306,8 +290,7 @@ int main(int argc, char *argv[])
             break;
         }
         case ICAL_XLICCLASS_UNKNOWN: {
-            printf(" ** Don't know what to do with this component:\n%s",
-                   icalcomponent_as_ical_string(c));
+            printf(" ** Don't know what to do with this component:\n%s", icalcomponent_as_ical_string(c));
             /* Send back an error */
             break;
         }

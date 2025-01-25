@@ -66,8 +66,7 @@ icalproperty *icallangbind_get_first_property(icalcomponent *c, const char *prop
     }
 
     if (kind == ICAL_X_PROPERTY) {
-        for (p = icalcomponent_get_first_property(c, kind);
-             p != 0; p = icalcomponent_get_next_property(c, kind)) {
+        for (p = icalcomponent_get_first_property(c, kind); p != 0; p = icalcomponent_get_next_property(c, kind)) {
             if (strcmp(icalproperty_get_x_name(p), prop) == 0) {
                 return p;
             }
@@ -91,8 +90,7 @@ icalproperty *icallangbind_get_next_property(icalcomponent *c, const char *prop)
     }
 
     if (kind == ICAL_X_PROPERTY) {
-        for (p = icalcomponent_get_next_property(c, kind);
-             p != 0; p = icalcomponent_get_next_property(c, kind)) {
+        for (p = icalcomponent_get_next_property(c, kind); p != 0; p = icalcomponent_get_next_property(c, kind)) {
             if (strcmp(icalproperty_get_x_name(p), prop) == 0) {
                 return p;
             }
@@ -218,8 +216,8 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
 
     /* Add Parameters */
 
-    for (param = icalproperty_get_first_parameter(prop, ICAL_ANY_PARAMETER);
-         param != 0; param = icalproperty_get_next_parameter(prop, ICAL_ANY_PARAMETER)) {
+    for (param = icalproperty_get_first_parameter(prop, ICAL_ANY_PARAMETER); param != 0;
+         param = icalproperty_get_next_parameter(prop, ICAL_ANY_PARAMETER)) {
         char *copy = icalparameter_as_ical_string_r(param);
         char *v;
 

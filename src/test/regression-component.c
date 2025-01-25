@@ -98,8 +98,7 @@ void create_new_component(void)
 
     icalcomponent_add_property(calendar, icalproperty_new_version("2.0"));
 
-    icalcomponent_add_property(calendar,
-                               icalproperty_new_prodid("-//RDU Software//NONSGML HandCal//EN"));
+    icalcomponent_add_property(calendar, icalproperty_new_prodid("-//RDU Software//NONSGML HandCal//EN"));
 
     /* Create a timezone object and add it to the calendar */
 
@@ -218,58 +217,31 @@ void create_new_component_with_va_args(void)
     rtime.period.duration = icaldurationtype_null_duration();
     rtime.time = icaltime_null_time();
 
-    calendar =
+    calendar = icalcomponent_vanew(
+        ICAL_VCALENDAR_COMPONENT, icalproperty_new_version("2.0"),
+        icalproperty_new_prodid("-//RDU Software//NONSGML HandCal//EN"),
         icalcomponent_vanew(
-            ICAL_VCALENDAR_COMPONENT,
-            icalproperty_new_version("2.0"),
-            icalproperty_new_prodid("-//RDU Software//NONSGML HandCal//EN"),
-            icalcomponent_vanew(ICAL_VTIMEZONE_COMPONENT,
-                                icalproperty_new_tzid("America/New_York"),
-                                icalcomponent_vanew(ICAL_XDAYLIGHT_COMPONENT,
-                                                    icalproperty_new_dtstart(atime),
-                                                    icalproperty_new_rdate(rtime),
-                                                    icalproperty_new_tzoffsetfrom(-4),
-                                                    icalproperty_new_tzoffsetto(-5),
-                                                    icalproperty_new_tzname("EST"),
-                                                    (void *)0),
-                                icalcomponent_vanew(ICAL_XSTANDARD_COMPONENT,
-                                                    icalproperty_new_dtstart(atime),
-                                                    icalproperty_new_rdate(rtime),
-                                                    icalproperty_new_tzoffsetfrom(-5),
-                                                    icalproperty_new_tzoffsetto(-4),
-                                                    icalproperty_new_tzname("EST"),
-                                                    (void *)0),
-                                (void *)0),
-            icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                                icalproperty_new_dtstamp(atime),
-                                icalproperty_new_uid("guid-1.host1.com"),
-                                icalproperty_vanew_organizer(
-                                    "mrbig@host.com",
-                                    icalparameter_new_role(ICAL_ROLE_CHAIR),
-                                    (void *)0),
-                                icalproperty_vanew_attendee(
-                                    "employee-A@host.com",
-                                    icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
-                                    icalparameter_new_rsvp(ICAL_RSVP_TRUE),
-                                    icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
-                                    (void *)0),
-                                icalproperty_new_description("Project XYZ Review Meeting"),
-                                icalproperty_new_categories("MEETING"),
-                                icalproperty_new_class(ICAL_CLASS_PUBLIC),
-                                icalproperty_new_created(atime),
-                                icalproperty_new_summary("XYZ Project Review"),
-                                icalproperty_vanew_dtstart(
-                                    atime,
-                                    icalparameter_new_tzid("America/New_York"),
-                                    (void *)0),
-                                icalproperty_vanew_dtend(
-                                    atime,
-                                    icalparameter_new_tzid("America/New_York"),
-                                    (void *)0),
-                                icalproperty_new_location(
-                                    "1CP Conference Room 4350"),
-                                (void *)0),
-            (void *)0);
+            ICAL_VTIMEZONE_COMPONENT, icalproperty_new_tzid("America/New_York"),
+            icalcomponent_vanew(ICAL_XDAYLIGHT_COMPONENT, icalproperty_new_dtstart(atime),
+                                icalproperty_new_rdate(rtime), icalproperty_new_tzoffsetfrom(-4),
+                                icalproperty_new_tzoffsetto(-5), icalproperty_new_tzname("EST"), (void *)0),
+            icalcomponent_vanew(ICAL_XSTANDARD_COMPONENT, icalproperty_new_dtstart(atime),
+                                icalproperty_new_rdate(rtime), icalproperty_new_tzoffsetfrom(-5),
+                                icalproperty_new_tzoffsetto(-4), icalproperty_new_tzname("EST"), (void *)0),
+            (void *)0),
+        icalcomponent_vanew(
+            ICAL_VEVENT_COMPONENT, icalproperty_new_dtstamp(atime), icalproperty_new_uid("guid-1.host1.com"),
+            icalproperty_vanew_organizer("mrbig@host.com", icalparameter_new_role(ICAL_ROLE_CHAIR), (void *)0),
+            icalproperty_vanew_attendee("employee-A@host.com", icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
+                                        icalparameter_new_rsvp(ICAL_RSVP_TRUE),
+                                        icalparameter_new_cutype(ICAL_CUTYPE_GROUP), (void *)0),
+            icalproperty_new_description("Project XYZ Review Meeting"), icalproperty_new_categories("MEETING"),
+            icalproperty_new_class(ICAL_CLASS_PUBLIC), icalproperty_new_created(atime),
+            icalproperty_new_summary("XYZ Project Review"),
+            icalproperty_vanew_dtstart(atime, icalparameter_new_tzid("America/New_York"), (void *)0),
+            icalproperty_vanew_dtend(atime, icalparameter_new_tzid("America/New_York"), (void *)0),
+            icalproperty_new_location("1CP Conference Room 4350"), (void *)0),
+        (void *)0);
 
     if (VERBOSE && calendar)
         printf("%s\n", icalcomponent_as_ical_string(calendar));
@@ -322,13 +294,12 @@ void test_icalcomponent_get_span(void)
      *  We specify times in a timezone, the returned span is in UTC
      */
     azone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
-    c = icalcomponent_vanew(
-        ICAL_VEVENT_COMPONENT,
-        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                   icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
-        icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
-                                 icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
-        (void *)0);
+    c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+                            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
+                                                       icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
+                            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
+                                                     icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
+                            (void *)0);
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
@@ -344,10 +315,8 @@ void test_icalcomponent_get_span(void)
      *  with no conversion applied - so result should be as test 0
      */
     c = icalcomponent_vanew(
-        ICAL_VEVENT_COMPONENT,
-        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL), (void *)0),
-        icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), (void *)0),
-        (void *)0);
+        ICAL_VEVENT_COMPONENT, icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL), (void *)0),
+        icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), (void *)0), (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)
@@ -361,13 +330,12 @@ void test_icalcomponent_get_span(void)
      *  We specify times in a timezone, the returned span is in UTC
      */
     azone = icaltimezone_get_builtin_timezone("America/New_York");
-    c = icalcomponent_vanew(
-        ICAL_VEVENT_COMPONENT,
-        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                   icalparameter_new_tzid("America/New_York"), (void *)0),
-        icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
-                                 icalparameter_new_tzid("America/New_York"), (void *)0),
-        (void *)0);
+    c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+                            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
+                                                       icalparameter_new_tzid("America/New_York"), (void *)0),
+                            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
+                                                     icalparameter_new_tzid("America/New_York"), (void *)0),
+                            (void *)0);
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
@@ -384,13 +352,12 @@ void test_icalcomponent_get_span(void)
      */
     azone = icaltimezone_get_builtin_timezone("America/New_York");
     bzone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
-    c = icalcomponent_vanew(
-        ICAL_VEVENT_COMPONENT,
-        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                   icalparameter_new_tzid("America/New_York"), (void *)0),
-        icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, bzone),
-                                 icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
-        (void *)0);
+    c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+                            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
+                                                       icalparameter_new_tzid("America/New_York"), (void *)0),
+                            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, bzone),
+                                                     icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
+                            (void *)0);
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
@@ -408,12 +375,10 @@ void test_icalcomponent_get_span(void)
     azone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
     memset(&dur, 0, sizeof(dur));
     dur.minutes = 30;
-    c = icalcomponent_vanew(
-        ICAL_VEVENT_COMPONENT,
-        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                   icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
-        icalproperty_new_duration(dur),
-        (void *)0);
+    c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+                            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
+                                                       icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
+                            icalproperty_new_duration(dur), (void *)0);
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
@@ -428,10 +393,8 @@ void test_icalcomponent_get_span(void)
     /** test 6
      *  We specify only start time, should return a null span with no error
      */
-    c = icalcomponent_vanew(
-        ICAL_VEVENT_COMPONENT,
-        icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL)),
-        (void *)0);
+    c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL)), (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)
@@ -443,11 +406,9 @@ void test_icalcomponent_get_span(void)
     /** test 7
      *  We specify start and end date
      */
-    c = icalcomponent_vanew(
-        ICAL_VEVENT_COMPONENT,
-        icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
-        icalproperty_new_dtend(icaltime_from_timet_with_zone(tm1, 1, NULL)),
-        (void *)0);
+    c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
+                            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm1, 1, NULL)), (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)
@@ -461,8 +422,7 @@ void test_icalcomponent_get_span(void)
      */
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
                             icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
-                            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm2, 1, NULL)),
-                            (void *)0);
+                            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm2, 1, NULL)), (void *)0);
 
     span = icalcomponent_get_span(c);
     int_is("UTC #2", (int)(long)span.start, 973296000);
@@ -475,8 +435,7 @@ void test_icalcomponent_get_span(void)
      *  We specify start date
      */
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
-                            (void *)0);
+                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)), (void *)0);
 
     span = icalcomponent_get_span(c);
     if (VERBOSE)

@@ -68,9 +68,7 @@ struct icalset_impl {
     icalcomponent *(*get_current_component)(icalset *set);
     icalcomponent *(*get_first_component)(icalset *set);
     icalcomponent *(*get_next_component)(icalset *set);
-    icalsetiter (*icalset_begin_component)(icalset *set,
-                                           icalcomponent_kind kind, icalgauge *gauge,
-                                           const char *tzid);
+    icalsetiter (*icalset_begin_component)(icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid);
     icalcomponent *(*icalsetiter_to_next)(icalset *set, icalsetiter *i);
     icalcomponent *(*icalsetiter_to_prior)(icalset *set, icalsetiter *i);
 };
@@ -133,8 +131,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch_match(icalset *set, icalcompo
 
 /** Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */
-LIBICAL_ICALSS_EXPORT icalerrorenum icalset_modify(icalset *set,
-                                                   icalcomponent *oldc, icalcomponent *newc);
+LIBICAL_ICALSS_EXPORT icalerrorenum icalset_modify(icalset *set, icalcomponent *oldc, icalcomponent *newc);
 
 /** Iterates through the components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
@@ -148,9 +145,8 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalset_get_next_component(icalset *set);
 /** External Iterator with gauge - for thread safety */
 LIBICAL_ICALSS_EXPORT extern icalsetiter icalsetiter_null;
 
-LIBICAL_ICALSS_EXPORT icalsetiter icalset_begin_component(icalset *set,
-                                                          icalcomponent_kind kind,
-                                                          icalgauge *gauge, const char *tzid);
+LIBICAL_ICALSS_EXPORT icalsetiter icalset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge,
+                                                          const char *tzid);
 
 /** Default _next, _prior, _deref for subclasses that use single cluster */
 LIBICAL_ICALSS_EXPORT icalcomponent *icalsetiter_next(icalsetiter *i);

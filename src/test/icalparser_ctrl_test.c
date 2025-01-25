@@ -22,10 +22,7 @@
 
 #include "libical/ical.h"
 
-static void assert_ctrl(enum icalparser_ctrl ctrl,
-                        const char *data,
-                        const char *want_desc,
-                        int want_xlicerror)
+static void assert_ctrl(enum icalparser_ctrl ctrl, const char *data, const char *want_desc, int want_xlicerror)
 {
     icalparser_set_ctrl(ctrl);
 

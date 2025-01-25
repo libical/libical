@@ -185,16 +185,13 @@ char *vcardparameter_as_vcard_string(vcardparameter *param)
  */
 static bool vcardparameter_is_safe_char(unsigned char character, int quoted)
 {
-    if (character == ' ' || character == '\t' || character == '!' ||
-        (character >= 0x80 && character <= 0xF8)) {
+    if (character == ' ' || character == '\t' || character == '!' || (character >= 0x80 && character <= 0xF8)) {
         return true;
     }
 
     if (quoted && character >= 0x23 && character <= 0x7e) {
         return true;
-    } else if (!quoted &&
-               ((character >= 0x23 && character <= 0x39) ||
-                (character >= 0x3c && character <= 0x7e))) {
+    } else if (!quoted && ((character >= 0x23 && character <= 0x39) || (character >= 0x3c && character <= 0x7e))) {
         return true;
     }
 
@@ -208,8 +205,7 @@ static bool vcardparameter_is_safe_char(unsigned char character, int quoted)
  * paramtext    = *SAFE-CHAR
  * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
  */
-static void vcardparameter_append_encoded_value(char **buf, char **buf_ptr,
-                                                size_t *buf_size, const char *value)
+static void vcardparameter_append_encoded_value(char **buf, char **buf_ptr, size_t *buf_size, const char *value)
 {
     int qm = 0;
     const char *p;
@@ -277,16 +273,13 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     buf_ptr = buf;
 
     if (param->kind == VCARD_X_PARAMETER) {
-        icalmemory_append_string(&buf, &buf_ptr,
-                                 &buf_size, vcardparameter_get_xname(param));
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, vcardparameter_get_xname(param));
     } else if (param->kind == VCARD_IANA_PARAMETER) {
-        icalmemory_append_string(&buf, &buf_ptr,
-                                 &buf_size, vcardparameter_get_iana_name(param));
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, vcardparameter_get_iana_name(param));
     } else {
         kind_string = vcardparameter_kind_to_string(param->kind);
 
-        if (param->kind == VCARD_NO_PARAMETER ||
-            param->kind == VCARD_ANY_PARAMETER || kind_string == 0) {
+        if (param->kind == VCARD_NO_PARAMETER || param->kind == VCARD_ANY_PARAMETER || kind_string == 0) {
             icalerror_set_errno(ICAL_BADARG_ERROR);
             icalmemory_free_buffer(buf);
             return 0;
@@ -299,8 +292,7 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "=");
 
     if (param->string != 0) {
-        vcardparameter_append_encoded_value(&buf, &buf_ptr,
-                                            &buf_size, param->string);
+        vcardparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, param->string);
     } else if (param->data != 0) {
         char *intbuf = NULL;
         const char *str;
@@ -327,14 +319,11 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
             if (param->value_kind == VCARD_TEXT_VALUE) {
                 const char *str = vcardstrarray_element_at(param->values, i);
 
-                vcardparameter_append_encoded_value(&buf, &buf_ptr,
-                                                    &buf_size, str);
+                vcardparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, str);
             } else {
-                const vcardenumarray_element *elem =
-                    vcardenumarray_element_at(param->values, i);
+                const vcardenumarray_element *elem = vcardenumarray_element_at(param->values, i);
                 if (elem->xvalue != 0) {
-                    vcardparameter_append_encoded_value(&buf, &buf_ptr,
-                                                        &buf_size, elem->xvalue);
+                    vcardparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, elem->xvalue);
                 } else {
                     const char *str = vcardparameter_enum_to_string(elem->val);
 

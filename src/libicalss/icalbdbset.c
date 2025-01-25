@@ -35,16 +35,13 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b);
 #endif
 
 /** Default options used when NULL is passed to icalset_new() **/
-static icalbdbset_options icalbdbset_options_default =
-    {
-        ICALBDB_EVENTS, DB_BTREE, 0644, 0, NULL, NULL};
+static icalbdbset_options icalbdbset_options_default = {ICALBDB_EVENTS, DB_BTREE, 0644, 0, NULL, NULL};
 
 static DB_ENV *ICAL_DB_ENV = 0;
 
 /** Initialize the db environment */
 
-int icalbdbset_init_dbenv(char *db_env_dir,
-                          void (*logDbFunc)(const DB_ENV *, const char *, const char *))
+int icalbdbset_init_dbenv(char *db_env_dir, void (*logDbFunc)(const DB_ENV *, const char *, const char *))
 {
     int ret;
     u_int32_t flags;
@@ -72,8 +69,7 @@ int icalbdbset_init_dbenv(char *db_env_dir,
         return ret;
     }
 
-    flags = (u_int32_t)(DB_INIT_LOCK | DB_INIT_TXN | DB_CREATE | DB_THREAD |
-                        DB_RECOVER | DB_INIT_LOG | DB_INIT_MPOOL);
+    flags = (u_int32_t)(DB_INIT_LOCK | DB_INIT_TXN | DB_CREATE | DB_THREAD | DB_RECOVER | DB_INIT_LOG | DB_INIT_MPOOL);
 #if defined(_WIN32) //krazy:exclude=cpp
     ret = ICAL_DB_ENV->open(ICAL_DB_ENV, db_env_dir, flags, 0 /*ignored on Windows*/);
 #else
@@ -298,8 +294,7 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
         break;
     }
 
-    cal_db = icalbdbset_bdb_open(set->dsn,
-                                 subdb_name, options->dbtype, options->mode, options->flag);
+    cal_db = icalbdbset_bdb_open(set->dsn, subdb_name, options->dbtype, options->mode, options->flag);
     if (cal_db == NULL) {
         return NULL;
     }
@@ -321,8 +316,7 @@ icalset *icalbdbset_init(icalset *set, const char *dsn, void *options_in)
     flag = set_flag() DUP | DUP_SORT
  */
 
-icalset *icalbdbset_new(const char *database_filename, icalbdbset_subdb_type subdb_type, int dbtype,
-                        u_int32_t flag)
+icalset *icalbdbset_new(const char *database_filename, icalbdbset_subdb_type subdb_type, int dbtype, u_int32_t flag)
 {
     icalbdbset_options options = icalbdbset_options_default;
 
@@ -342,9 +336,7 @@ icalset *icalbdbset_new(const char *database_filename, icalbdbset_subdb_type sub
  */
 
 DB *icalbdbset_bdb_open_secondary(DB *dbp, const char *database, const char *sub_database,
-                                  int (*callback)(DB *db, const DBT *dbt1, const DBT *dbt2,
-                                                  DBT *dbt3),
-                                  int type)
+                                  int (*callback)(DB *db, const DBT *dbt1, const DBT *dbt2, DBT *dbt3), int type)
 {
     int ret;
     u_int32_t flags;
@@ -823,8 +815,7 @@ icalerrorenum icalbdbset_commit(icalset *set)
         }
 
         deadlocked = 0;
-        for (c = icalcomponent_get_first_component(bset->cluster, ICAL_ANY_COMPONENT);
-             c != 0 && !deadlocked;
+        for (c = icalcomponent_get_first_component(bset->cluster, ICAL_ANY_COMPONENT); c != 0 && !deadlocked;
              c = icalcomponent_get_next_component(bset->cluster, ICAL_ANY_COMPONENT)) {
             memset(&key, 0, sizeof(key));
             memset(&data, 0, sizeof(data));
@@ -1006,8 +997,7 @@ icalcomponent *icalbdbset_fetch(icalset *set, icalcomponent_kind kind, const cha
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
-    for (i = icalcomponent_begin_component(bset->cluster, kind);
-         icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
+    for (i = icalcomponent_begin_component(bset->cluster, kind); icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
         icalcomponent *this = icalcompiter_deref(&i);
         icalproperty *p = NULL;
         const char *this_uid = NULL;
@@ -1132,14 +1122,13 @@ icalcomponent *icalbdbset_fetch_match(icalset *set, icalcomponent *comp)
     icalerror_check_arg_rz((bset != 0), "bset");
     comp_id = icalbdbset_get_id(comp);
 
-    for (i = icalcomponent_begin_component(bset->cluster, ICAL_ANY_COMPONENT);
-         icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
+    for (i = icalcomponent_begin_component(bset->cluster, ICAL_ANY_COMPONENT); icalcompiter_deref(&i) != 0;
+         icalcompiter_next(&i)) {
         icalcomponent *match = icalcompiter_deref(&i);
 
         match_id = icalbdbset_get_id(match);
 
-        if (_compare_ids(comp_id.uid, match_id.uid) &&
-            _compare_ids(comp_id.recurrence_id, match_id.recurrence_id)) {
+        if (_compare_ids(comp_id.uid, match_id.uid) && _compare_ids(comp_id.recurrence_id, match_id.recurrence_id)) {
             /* HACK. What to do with SEQUENCE? */
 
             icalbdbset_id_free(&match_id);
@@ -1228,8 +1217,7 @@ icalcomponent *icalbdbset_get_first_component(icalset *set)
     return 0;
 }
 
-icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
-                                       icalgauge *gauge, const char *tzid)
+icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid)
 {
     icalsetiter itr = icalsetiter_null;
     icalcomponent *comp = NULL;

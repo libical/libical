@@ -26,29 +26,11 @@
     );
 */
 
-const char *major_type_string[] = {
-    "TEXT",
-    "IMAGE",
-    "AUDIO",
-    "VIDEO",
-    "APPLICATION",
-    "MULTIPART",
-    "MESSAGE",
-    "UNKNOWN",
-    "NO"};
+const char *major_type_string[] = {"TEXT",      "IMAGE",   "AUDIO",   "VIDEO", "APPLICATION",
+                                   "MULTIPART", "MESSAGE", "UNKNOWN", "NO"};
 
-const char *minor_type_string[] = {
-    "ANY",
-    "PLAIN",
-    "RFC822",
-    "DIGEST",
-    "CALENDAR",
-    "MIXED",
-    "RELATED",
-    "ALTERNATIVE",
-    "PARALLEL",
-    "UNKNOWN",
-    "NO"};
+const char *minor_type_string[] = {"ANY",     "PLAIN",       "RFC822",   "DIGEST",  "CALENDAR", "MIXED",
+                                   "RELATED", "ALTERNATIVE", "PARALLEL", "UNKNOWN", "NO"};
 
 char *read_stream(char *s, size_t size, void *d)
 {

@@ -30,8 +30,7 @@
  * function receives the pointer to the list to be sorted and the indices of
  * the elements to be compared.
  */
-void qsort_gen(void *list, size_t nitems,
-               int (*compar)(const void *, size_t, size_t),
+void qsort_gen(void *list, size_t nitems, int (*compar)(const void *, size_t, size_t),
                void (*swapr)(void *, size_t, size_t));
 
 /**

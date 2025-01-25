@@ -124,7 +124,8 @@ int main(int argc, char *argv[])
                 parse_err = parse_err || check_and_copy_field(line, "DTSTART:", r.dtstart, sizeof(r.dtstart));
                 parse_err = parse_err || check_and_copy_field(line, "START-AT:", r.start_at, sizeof(r.start_at));
                 parse_err = parse_err || check_and_copy_field(line, "INSTANCES:", r.instances, sizeof(r.instances));
-                parse_err = parse_err || check_and_copy_field(line, "PREV-INSTANCES:", r.rev_instances, sizeof(r.rev_instances));
+                parse_err = parse_err ||
+                            check_and_copy_field(line, "PREV-INSTANCES:", r.rev_instances, sizeof(r.rev_instances));
 
                 if (parse_err) {
                     nof_errors++;
@@ -165,20 +166,19 @@ int main(int argc, char *argv[])
 
             if (!ritr) {
                 snprintf(&actual_instances[actual_instances_len],
-                         sizeof(actual_instances) - (size_t)actual_instances_len,
-                         " *** %s", icalerror_strerror(icalerrno));
+                         sizeof(actual_instances) - (size_t)actual_instances_len, " *** %s",
+                         icalerror_strerror(icalerrno));
             } else {
                 if (r.start_at[0]) {
                     start = icaltime_from_string(r.start_at);
                     icalrecur_iterator_set_start(ritr, start);
                 }
 
-                for (next = icalrecur_iterator_next(ritr);
-                     !icaltime_is_null_time(next);
+                for (next = icalrecur_iterator_next(ritr); !icaltime_is_null_time(next);
                      next = icalrecur_iterator_next(ritr)) {
                     actual_instances_len += snprintf(&actual_instances[actual_instances_len],
-                                                     sizeof(actual_instances) - (size_t)actual_instances_len,
-                                                     "%s%s", sep, icaltime_as_ical_string(next));
+                                                     sizeof(actual_instances) - (size_t)actual_instances_len, "%s%s",
+                                                     sep, icaltime_as_ical_string(next));
                     sep = ",";
                 }
             }
@@ -202,12 +202,11 @@ int main(int argc, char *argv[])
                 memset(&actual_instances[0], 0, sizeof(actual_instances));
                 actual_instances_len = 0;
 
-                for (next = icalrecur_iterator_prev(ritr);
-                     !icaltime_is_null_time(next);
+                for (next = icalrecur_iterator_prev(ritr); !icaltime_is_null_time(next);
                      next = icalrecur_iterator_prev(ritr)) {
                     actual_instances_len += snprintf(&actual_instances[actual_instances_len],
-                                                     sizeof(actual_instances) - (size_t)actual_instances_len,
-                                                     "%s%s", sep, icaltime_as_ical_string(next));
+                                                     sizeof(actual_instances) - (size_t)actual_instances_len, "%s%s",
+                                                     sep, icaltime_as_ical_string(next));
                     sep = ",";
                 }
 

@@ -43,14 +43,11 @@ LIBICAL_ICALSS_EXPORT void icalcluster_commit(icalcluster *cluster);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_component(icalcluster *cluster);
 
-LIBICAL_ICALSS_EXPORT int icalcluster_count_components(icalcluster *cluster,
-                                                       icalcomponent_kind kind);
+LIBICAL_ICALSS_EXPORT int icalcluster_count_components(icalcluster *cluster, icalcomponent_kind kind);
 
-LIBICAL_ICALSS_EXPORT icalerrorenum icalcluster_add_component(icalcluster *cluster,
-                                                              icalcomponent *child);
+LIBICAL_ICALSS_EXPORT icalerrorenum icalcluster_add_component(icalcluster *cluster, icalcomponent *child);
 
-LIBICAL_ICALSS_EXPORT icalerrorenum icalcluster_remove_component(icalcluster *cluster,
-                                                                 icalcomponent *child);
+LIBICAL_ICALSS_EXPORT icalerrorenum icalcluster_remove_component(icalcluster *cluster, icalcomponent *child);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_current_component(icalcluster *cluster);
 

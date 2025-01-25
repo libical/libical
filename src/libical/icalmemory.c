@@ -33,8 +33,7 @@
 
 /* HACK. Not threadsafe */
 
-typedef struct
-{
+typedef struct {
     int pos;
     void *ring[BUFFER_RING_SIZE];
 } buffer_ring;
@@ -288,8 +287,7 @@ static ICAL_GLOBAL_VAR icalmemory_free_f global_icalmem_free = &ICALMEMORY_DEFAU
 static ICAL_GLOBAL_VAR icalmemory_free_f global_icalmem_free = NULL;
 #endif
 
-void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc,
-                                    icalmemory_realloc_f f_realloc,
+void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc, icalmemory_realloc_f f_realloc,
                                     icalmemory_free_f f_free)
 {
     global_icalmem_malloc = f_malloc;
@@ -297,8 +295,7 @@ void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc,
     global_icalmem_free = f_free;
 }
 
-void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f *f_malloc,
-                                    icalmemory_realloc_f *f_realloc,
+void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f *f_malloc, icalmemory_realloc_f *f_realloc,
                                     icalmemory_free_f *f_free)
 {
     if (f_malloc) {

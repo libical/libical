@@ -66,8 +66,7 @@ icalarray *icalarray_copy(icalarray *originalarray)
         for (chunk = 0; chunk < chunks; chunk++) {
             array->chunks[chunk] = icalarray_alloc_chunk(array);
             if (array->chunks[chunk]) {
-                memcpy(array->chunks[chunk], originalarray->chunks[chunk],
-                       array->increment_size * array->element_size);
+                memcpy(array->chunks[chunk], originalarray->chunks[chunk], array->increment_size * array->element_size);
 
                 array->space_allocated += array->increment_size;
             } else {
@@ -130,8 +129,7 @@ void *icalarray_element_at(icalarray *array, size_t position)
 void icalarray_remove_element_at(icalarray *array, size_t position)
 {
     while (position < array->num_elements - 1) {
-        memmove(icalarray_element_at(array, position),
-                icalarray_element_at(array, position + 1), array->element_size);
+        memmove(icalarray_element_at(array, position), icalarray_element_at(array, position + 1), array->element_size);
         position++;
     }
 

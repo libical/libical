@@ -47,10 +47,7 @@ public:
     explicit VComponent(const std::string &str);
     explicit VComponent(const icalcomponent_kind &kind);
 
-    operator icalcomponent *()
-    {
-        return imp;
-    }
+    operator icalcomponent *() { return imp; }
 
     void new_from_string(const std::string &str);
 

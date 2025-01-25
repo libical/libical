@@ -35,10 +35,7 @@ public:
     explicit ICalValue(const icalvalue_kind &kind);
     ICalValue(const icalvalue_kind &kind, const std::string &str);
 
-    operator icalvalue *()
-    {
-        return imp;
-    }
+    operator icalvalue *() { return imp; }
 
     void detach();
 

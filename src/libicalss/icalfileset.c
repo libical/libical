@@ -362,8 +362,8 @@ icalerrorenum icalfileset_commit(icalset *set)
         return ICAL_FILE_ERROR;
     }
 
-    for (c = icalcomponent_get_first_component(fset->cluster, ICAL_ANY_COMPONENT);
-         c != 0; c = icalcomponent_get_next_component(fset->cluster, ICAL_ANY_COMPONENT)) {
+    for (c = icalcomponent_get_first_component(fset->cluster, ICAL_ANY_COMPONENT); c != 0;
+         c = icalcomponent_get_next_component(fset->cluster, ICAL_ANY_COMPONENT)) {
         IO_SSIZE_T sz;
 
         str = icalcomponent_as_ical_string_r(c);
@@ -491,15 +491,15 @@ icalcomponent *icalfileset_fetch(icalset *set, icalcomponent_kind kind, const ch
     icalerror_check_arg_rz(set != 0, "set");
     fset = (icalfileset *)set;
 
-    for (i = icalcomponent_begin_component(fset->cluster, ICAL_ANY_COMPONENT);
-         icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
+    for (i = icalcomponent_begin_component(fset->cluster, ICAL_ANY_COMPONENT); icalcompiter_deref(&i) != 0;
+         icalcompiter_next(&i)) {
         icalcomponent *this = icalcompiter_deref(&i);
         icalcomponent *inner;
         icalproperty *p;
         const char *this_uid;
 
-        for (inner = icalcomponent_get_first_component(this, ICAL_ANY_COMPONENT);
-             inner != 0; inner = icalcomponent_get_next_component(this, ICAL_ANY_COMPONENT)) {
+        for (inner = icalcomponent_get_first_component(this, ICAL_ANY_COMPONENT); inner != 0;
+             inner = icalcomponent_get_next_component(this, ICAL_ANY_COMPONENT)) {
             p = icalcomponent_get_first_property(inner, ICAL_UID_PROPERTY);
             if (p) {
                 this_uid = icalproperty_get_uid(p);
@@ -612,14 +612,13 @@ icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *comp)
 
     comp_id = icalfileset_get_id(comp);
 
-    for (i = icalcomponent_begin_component(fset->cluster, ICAL_ANY_COMPONENT);
-         icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
+    for (i = icalcomponent_begin_component(fset->cluster, ICAL_ANY_COMPONENT); icalcompiter_deref(&i) != 0;
+         icalcompiter_next(&i)) {
         icalcomponent *match = icalcompiter_deref(&i);
 
         match_id = icalfileset_get_id(match);
 
-        if (_compare_ids(comp_id.uid, match_id.uid) &&
-            _compare_ids(comp_id.recurrence_id, match_id.recurrence_id)) {
+        if (_compare_ids(comp_id.uid, match_id.uid) && _compare_ids(comp_id.recurrence_id, match_id.recurrence_id)) {
             /* HACK. What to do with SEQUENCE? */
 
             icalfileset_id_free(&match_id);
@@ -727,8 +726,7 @@ icalsetiter icalfileset_begin_component(icalset* set, icalcomponent_kind kind, i
 
 */
 
-icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge,
-                                        const char *tzid)
+icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid)
 {
     icalsetiter itr = icalsetiter_null;
     icalcomponent *comp = NULL;

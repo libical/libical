@@ -35,15 +35,7 @@ int main(void)
     struct _icaltimezone *v1;
 
     icaltimetype v0 = {
-        5,
-        -2147483639,
-        -1,
-        1,
-        60,
-        14,
-        7,
-        118,
-        NULL,
+        5, -2147483639, -1, 1, 60, 14, 7, 118, NULL,
     }; // dtstart
 
     v1 = icaltimezone_new(); // zone
@@ -51,15 +43,7 @@ int main(void)
         return 0;
 
     icaltimetype v3 = {
-        3,
-        -11,
-        3,
-        4,
-        -4,
-        -3,
-        6,
-        -1,
-        v1,
+        3, -11, 3, 4, -4, -3, 6, -1, v1,
     }; // dtend
 
     i32 v4 = 40;                         // is_busy

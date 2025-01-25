@@ -41,8 +41,7 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_commit(icalset *set);
 
 LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_add_component(icalset *set, icalcomponent *child);
 
-LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_remove_component(icalset *set,
-                                                                 icalcomponent *child);
+LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_remove_component(icalset *set, icalcomponent *child);
 
 LIBICAL_ICALSS_EXPORT int icalfileset_count_components(icalset *set, icalcomponent_kind kind);
 
@@ -56,8 +55,7 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_select(icalset *set, icalgauge *
 LIBICAL_ICALSS_EXPORT void icalfileset_clear(icalset *set);
 
 /** @brief Gets and searches for a component by uid **/
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch(icalset *set,
-                                                       icalcomponent_kind kind, const char *uid);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch(icalset *set, icalcomponent_kind kind, const char *uid);
 
 LIBICAL_ICALSS_EXPORT int icalfileset_has_uid(icalset *set, const char *uid);
 
@@ -68,9 +66,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch_match(icalset *set, icalc
  *
  *  Works on the currently selected components.
  */
-LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_modify(icalset *set,
-                                                       icalcomponent *oldcomp,
-                                                       icalcomponent *newcomp);
+LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_modify(icalset *set, icalcomponent *oldcomp, icalcomponent *newcomp);
 
 /* Iterates through components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
@@ -82,14 +78,12 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_first_component(icalset *cl
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_next_component(icalset *cluster);
 
 /* External iterator for thread safety */
-LIBICAL_ICALSS_EXPORT icalsetiter icalfileset_begin_component(icalset *set,
-                                                              icalcomponent_kind kind,
-                                                              icalgauge *gauge, const char *tzid);
+LIBICAL_ICALSS_EXPORT icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge,
+                                                              const char *tzid);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *iter);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *
-                                                                                         itr);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *itr);
 
 /** Returns a reference to the internal component. **You probably should
    not be using this.** */

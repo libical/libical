@@ -80,8 +80,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    for (itr = icalfileset_get_first_component(cin);
-         itr != 0; itr = icalfileset_get_next_component(cin)) {
+    for (itr = icalfileset_get_first_component(cin); itr != 0; itr = icalfileset_get_next_component(cin)) {
         struct icaltimetype start;
         struct icaltimetype end = icaltime_today();
 
@@ -91,8 +90,7 @@ int main(int argc, char *argv[])
 
         if (desc == 0 || dtstart == 0 || rrule == 0) {
             printf("\n******** Error in input component ********\n");
-            printf("The following component is malformed:\n %s\n",
-                   icalcomponent_as_ical_string(itr));
+            printf("The following component is malformed:\n %s\n", icalcomponent_as_ical_string(itr));
             continue;
         }
 
@@ -110,9 +108,7 @@ int main(int argc, char *argv[])
         icalrecur_iterator_free(ritr);
 
         ritr = icalrecur_iterator_new(recur, start);
-        for (next = icalrecur_iterator_next(ritr);
-             !icaltime_is_null_time(next);
-             next = icalrecur_iterator_next(ritr)) {
+        for (next = icalrecur_iterator_next(ritr); !icaltime_is_null_time(next); next = icalrecur_iterator_next(ritr)) {
             tt = icaltime_as_timet(next);
             printf("  %s", icalctime(&tt));
         }

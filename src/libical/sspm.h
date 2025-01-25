@@ -102,11 +102,10 @@ LIBICAL_ICAL_EXPORT const char *sspm_minor_type_string(enum sspm_minor_type type
 
 LIBICAL_ICAL_EXPORT const char *sspm_encoding_string(enum sspm_encoding type);
 
-LIBICAL_ICAL_EXPORT int sspm_parse_mime(struct sspm_part *parts,
-                                        size_t max_parts,
+LIBICAL_ICAL_EXPORT int sspm_parse_mime(struct sspm_part *parts, size_t max_parts,
                                         const struct sspm_action_map *actions,
-                                        char *(*get_string)(char *s, size_t size, void *data),
-                                        void *get_string_data, struct sspm_header *first_header);
+                                        char *(*get_string)(char *s, size_t size, void *data), void *get_string_data,
+                                        struct sspm_header *first_header);
 
 LIBICAL_ICAL_EXPORT void sspm_free_parts(struct sspm_part *parts, size_t max_parts);
 
@@ -114,7 +113,7 @@ LIBICAL_ICAL_EXPORT char *decode_quoted_printable(char *dest, char *src, size_t 
 
 LIBICAL_ICAL_EXPORT char *decode_base64(char *dest, char *src, size_t *size);
 
-LIBICAL_ICAL_EXPORT void sspm_write_mime(struct sspm_part *parts, size_t num_parts,
-                                         char **output_string, const char *header);
+LIBICAL_ICAL_EXPORT void sspm_write_mime(struct sspm_part *parts, size_t num_parts, char **output_string,
+                                         const char *header);
 
 #endif /* ICAL_SSPM_H */

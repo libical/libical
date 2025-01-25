@@ -76,8 +76,7 @@ bool vcardtime_is_datetime(const vcardtimetype t)
 
 bool vcardtime_is_timestamp(const vcardtimetype t)
 {
-    return (t.year != -1 && t.month != -1 && t.day != -1 &&
-            t.hour != -1 && t.minute != -1 && t.second != -1 &&
+    return (t.year != -1 && t.month != -1 && t.day != -1 && t.hour != -1 && t.minute != -1 && t.second != -1 &&
             t.utcoffset != -1);
 }
 
@@ -97,16 +96,14 @@ bool vcardtime_is_leap_year(const int year)
     }
 }
 
-static const int days_in_month[] =
-    {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static const int days_in_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 bool vcardtime_is_valid_time(const struct vcardtimetype t)
 {
     int days;
 
-    if (t.year > 3000 || t.day == 0 ||
-        t.hour > 23 || t.minute > 59 || t.second > 60 ||
-        t.utcoffset < -720 || t.utcoffset > 840) {
+    if (t.year > 3000 || t.day == 0 || t.hour > 23 || t.minute > 59 || t.second > 60 || t.utcoffset < -720 ||
+        t.utcoffset > 840) {
         return false;
     }
 
@@ -144,8 +141,7 @@ bool vcardtime_is_valid_time(const struct vcardtimetype t)
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
-static int sprintf_date(const vcardtimetype t, unsigned flags,
-                        char *buf, size_t size)
+static int sprintf_date(const vcardtimetype t, unsigned flags, char *buf, size_t size)
 {
     /*
       date = year    [month  day]
@@ -156,9 +152,7 @@ static int sprintf_date(const vcardtimetype t, unsigned flags,
     const char *fmt;
 
     if (!(flags & VCARDTIME_AS_V4)) {
-        return snprintf(buf, size, "%04d%02d%02d",
-                        t.year == -1 ? 0 : t.year,
-                        t.month == -1 ? 1 : t.month,
+        return snprintf(buf, size, "%04d%02d%02d", t.year == -1 ? 0 : t.year, t.month == -1 ? 1 : t.month,
                         t.day == -1 ? 1 : t.day);
     } else if (t.year != -1) {
         if (t.month == -1) {
@@ -185,8 +179,7 @@ static int sprintf_date(const vcardtimetype t, unsigned flags,
     }
 }
 
-static int sprintf_time(const vcardtimetype t, unsigned flags,
-                        char *buf, size_t size)
+static int sprintf_time(const vcardtimetype t, unsigned flags, char *buf, size_t size)
 {
     /*
       time = ["T"] hour [minute [second]] [zone]
@@ -203,9 +196,7 @@ static int sprintf_time(const vcardtimetype t, unsigned flags,
     }
 
     if (!(flags & VCARDTIME_AS_V4)) {
-        n = snprintf(buf, size, "%02d%02d%02d",
-                     t.hour == -1 ? 0 : t.hour,
-                     t.minute == -1 ? 0 : t.minute,
+        n = snprintf(buf, size, "%02d%02d%02d", t.hour == -1 ? 0 : t.hour, t.minute == -1 ? 0 : t.minute,
                      t.second == -1 ? 0 : t.second);
     } else if (t.hour != -1) {
         /* hour [minute [second]] [zone] */
@@ -248,8 +239,7 @@ static int sprintf_time(const vcardtimetype t, unsigned flags,
             strncpy(buf, "Z", size);
             n++;
         } else {
-            n += snprintf(buf, size, "%+03d%02d",
-                          t.utcoffset / 60, abs(t.utcoffset % 60));
+            n += snprintf(buf, size, "%+03d%02d", t.utcoffset / 60, abs(t.utcoffset % 60));
         }
     }
 
@@ -317,8 +307,7 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
             ndig = num_digits(month);
 
             if (ndig == 4) {
-                sscanf(str, "--%2u%2u%n",
-                       (unsigned *)&t->month, (unsigned *)&t->day, &nchar);
+                sscanf(str, "--%2u%2u%n", (unsigned *)&t->month, (unsigned *)&t->day, &nchar);
             } else if (ndig == 2) {
                 sscanf(str, "--%2u%n", (unsigned *)&t->month, &nchar);
             }
@@ -327,9 +316,7 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
         ndig = num_digits(str);
 
         if (ndig == 8) {
-            sscanf(str, "%4u%2u%2u%n",
-                   (unsigned *)&t->year, (unsigned *)&t->month,
-                   (unsigned *)&t->day, &nchar);
+            sscanf(str, "%4u%2u%2u%n", (unsigned *)&t->year, (unsigned *)&t->month, (unsigned *)&t->day, &nchar);
         } else if (ndig == 4) {
             month = str + 4;
 
@@ -340,13 +327,10 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
 
                 if (ndig == 2) {
                     if (month[2] == '-') {
-                        sscanf(str, "%4u-%2u-%2u%n",
-                               (unsigned *)&t->year, (unsigned *)&t->month,
-                               (unsigned *)&t->day, &nchar);
-                    } else {
-                        sscanf(str, "%4u-%2u%n",
-                               (unsigned *)&t->year, (unsigned *)&t->month,
+                        sscanf(str, "%4u-%2u-%2u%n", (unsigned *)&t->year, (unsigned *)&t->month, (unsigned *)&t->day,
                                &nchar);
+                    } else {
+                        sscanf(str, "%4u-%2u%n", (unsigned *)&t->year, (unsigned *)&t->month, &nchar);
                     }
                 }
             }
@@ -428,8 +412,7 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
             ndig = num_digits(str + 1);
 
             if (ndig == 4) {
-                sscanf(str, "-%2u%2u%n",
-                       (unsigned *)&t->minute, (unsigned *)&t->second, &nchar);
+                sscanf(str, "-%2u%2u%n", (unsigned *)&t->minute, (unsigned *)&t->second, &nchar);
             } else if (ndig == 2) {
                 sscanf(str, "-%2u%n", (unsigned *)&t->minute, &nchar);
                 t->second = 0;
@@ -439,23 +422,18 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
         ndig = num_digits(str);
 
         if (ndig == 6) {
-            sscanf(str, "%2u%2u%2u%n",
-                   (unsigned *)&t->hour, (unsigned *)&t->minute,
-                   (unsigned *)&t->second, &nchar);
+            sscanf(str, "%2u%2u%2u%n", (unsigned *)&t->hour, (unsigned *)&t->minute, (unsigned *)&t->second, &nchar);
         } else if (ndig == 4) {
-            sscanf(str, "%2u%2u%n",
-                   (unsigned *)&t->hour, (unsigned *)&t->minute, &nchar);
+            sscanf(str, "%2u%2u%n", (unsigned *)&t->hour, (unsigned *)&t->minute, &nchar);
             t->second = 0;
         } else if (ndig == 2) {
             if (str[2] == ':') {
                 if (str[8] == '.') {
-                    sscanf(str, "%2u:%2u:%2u.%u%n",
-                           (unsigned *)&t->hour, (unsigned *)&t->minute,
+                    sscanf(str, "%2u:%2u:%2u.%u%n", (unsigned *)&t->hour, (unsigned *)&t->minute,
                            (unsigned *)&t->second, (unsigned *)&secfrac, &nchar);
                 } else {
-                    sscanf(str, "%2u:%2u:%2u%n",
-                           (unsigned *)&t->hour, (unsigned *)&t->minute,
-                           (unsigned *)&t->second, &nchar);
+                    sscanf(str, "%2u:%2u:%2u%n", (unsigned *)&t->hour, (unsigned *)&t->minute, (unsigned *)&t->second,
+                           &nchar);
                 }
             } else {
                 sscanf(str, "%2u%n", (unsigned *)&t->hour, &nchar);

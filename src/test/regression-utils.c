@@ -35,9 +35,8 @@ const char *ical_timet_string(const icaltime_t t)
         memset(&stm, 0, sizeof(stm));
     }
 
-    snprintf(ictt_str, sizeof(ictt_str),
-             "%02d-%02d-%02d %02d:%02d:%02d Z",
-             stm.tm_year + 1900, stm.tm_mon + 1, stm.tm_mday, stm.tm_hour, stm.tm_min, stm.tm_sec);
+    snprintf(ictt_str, sizeof(ictt_str), "%02d-%02d-%02d %02d:%02d:%02d Z", stm.tm_year + 1900, stm.tm_mon + 1,
+             stm.tm_mday, stm.tm_hour, stm.tm_min, stm.tm_sec);
 
     return ictt_str;
 }
@@ -47,14 +46,11 @@ const char *ictt_as_string(struct icaltimetype t)
     const char *zone = icaltimezone_get_tzid((icaltimezone *)t.zone);
 
     if (icaltime_is_utc(t)) {
-        snprintf(ictt_str, sizeof(ictt_str),
-                 "%02d-%02d-%02d %02d:%02d:%02d Z UTC",
-                 t.year, t.month, t.day, t.hour, t.minute, t.second);
+        snprintf(ictt_str, sizeof(ictt_str), "%02d-%02d-%02d %02d:%02d:%02d Z UTC", t.year, t.month, t.day, t.hour,
+                 t.minute, t.second);
     } else {
-        snprintf(ictt_str, sizeof(ictt_str),
-                 "%02d-%02d-%02d %02d:%02d:%02d %s",
-                 t.year, t.month, t.day, t.hour, t.minute, t.second,
-                 zone == NULL ? "(floating)" : zone);
+        snprintf(ictt_str, sizeof(ictt_str), "%02d-%02d-%02d %02d:%02d:%02d %s", t.year, t.month, t.day, t.hour,
+                 t.minute, t.second, zone == NULL ? "(floating)" : zone);
     }
 
     return ictt_str;
@@ -240,9 +236,7 @@ void test_run(const char *test_name, void (*test_fcn)(void), int do_test, int he
         // Now we should get clean statistics.
         testmalloc_get_statistics(&mem_statistics);
 
-        ok("no memory leaked",
-           (mem_statistics.mem_allocated_current == 0) &&
-               (mem_statistics.blocks_allocated == 0));
+        ok("no memory leaked", (mem_statistics.mem_allocated_current == 0) && (mem_statistics.blocks_allocated == 0));
 
         if (!QUIET)
             printf("\n");

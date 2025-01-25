@@ -79,7 +79,6 @@ typedef enum ical_unknown_token_handling
 
 LIBICAL_ICAL_EXPORT ical_unknown_token_handling ical_get_unknown_token_handling_setting(void);
 
-LIBICAL_ICAL_EXPORT void ical_set_unknown_token_handling_setting(
-    ical_unknown_token_handling newSetting);
+LIBICAL_ICAL_EXPORT void ical_set_unknown_token_handling_setting(ical_unknown_token_handling newSetting);
 
 #endif /* !ICALTYPES_H */

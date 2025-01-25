@@ -48,8 +48,7 @@ const char *ictt_as_string(struct icaltimetype t);
 char *icaltime_as_ctime(struct icaltimetype t);
 
 void _ok(const char *name, int result, const char *file, int linenum, const char *test);
-void _is(const char *test_name, const char *str1, const char *str2, const char *file,
-         int linenum);
+void _is(const char *test_name, const char *str1, const char *str2, const char *file, int linenum);
 void _int_is(const char *test_name, int i1, int i2, const char *file, int linenum);
 #define ok(TEST, EX) (_ok(TEST, EX, __FILE__, __LINE__, #EX))
 #define str_is(S1, S2, EX) (_is(S1, S2, EX, __FILE__, __LINE__))

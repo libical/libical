@@ -20,14 +20,12 @@ struct icalattach_impl {
 
     union {
         /* URL attachment data */
-        struct
-        {
+        struct {
             char *url;
         } url;
 
         /* Inline data */
-        struct
-        {
+        struct {
             char *data;
             icalattach_free_fn_t free_fn;
             void *free_fn_data;

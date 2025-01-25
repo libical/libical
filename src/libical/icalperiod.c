@@ -133,8 +133,8 @@ struct icalperiodtype icalperiodtype_null_period(void)
 
 bool icalperiodtype_is_null_period(struct icalperiodtype p)
 {
-    if (icaltime_is_null_time(p.start) &&
-        icaltime_is_null_time(p.end) && icaldurationtype_is_null_duration(p.duration)) {
+    if (icaltime_is_null_time(p.start) && icaltime_is_null_time(p.end) &&
+        icaldurationtype_is_null_duration(p.duration)) {
         return true;
     } else {
         return false;
@@ -143,8 +143,7 @@ bool icalperiodtype_is_null_period(struct icalperiodtype p)
 
 bool icalperiodtype_is_valid_period(struct icalperiodtype p)
 {
-    if (icaltime_is_valid_time(p.start) &&
-        (icaltime_is_valid_time(p.end) || icaltime_is_null_time(p.end))) {
+    if (icaltime_is_valid_time(p.start) && (icaltime_is_valid_time(p.end) || icaltime_is_null_time(p.end))) {
         return true;
     }
 

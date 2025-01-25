@@ -284,7 +284,6 @@ LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray *array, size_t position
  * }
  * ```
  */
-LIBICAL_ICAL_EXPORT void icalarray_sort(icalarray *array,
-                                        int (*compare)(const void *, const void *));
+LIBICAL_ICAL_EXPORT void icalarray_sort(icalarray *array, int (*compare)(const void *, const void *));
 
 #endif /* ICALARRAY_H */

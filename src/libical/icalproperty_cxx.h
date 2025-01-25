@@ -41,10 +41,7 @@ public:
     explicit ICalProperty(icalproperty_kind kind);
     ICalProperty(icalproperty_kind kind, std::string str);
 
-    operator icalproperty *()
-    {
-        return imp;
-    }
+    operator icalproperty *() { return imp; }
     int operator==(ICalProperty &rhs);
 
     void detach();

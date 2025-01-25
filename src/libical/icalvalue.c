@@ -290,8 +290,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
                 (icalproperty_isa(value->parent) == ICAL_RESOURCES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_POLLPROPERTIES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_LOCATIONTYPE_PROPERTY) ||
-                ((icalproperty_isa(value->parent) == ICAL_X_PROPERTY) &&
-                 icalvalue_isa(value) != ICAL_TEXT_VALUE)) {
+                ((icalproperty_isa(value->parent) == ICAL_X_PROPERTY) && icalvalue_isa(value) != ICAL_TEXT_VALUE)) {
                 icalmemory_append_char(&str, &str_p, &buf_sz, *p);
                 break;
             }
@@ -386,7 +385,8 @@ static bool simple_str_to_doublestr(const char *from, char *result, int result_l
      * of the current locale.
      */
     for (i = 0; i < len; ++i) {
-        if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0] && loc_data->decimal_point[0] != '.') {
+        if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0] &&
+            loc_data->decimal_point[0] != '.') {
             /*replace '.' by the digit separator of the current locale */
             result[i] = loc_data->decimal_point[0];
         } else {
@@ -410,8 +410,7 @@ static void free_icalvalue_attach_data(char *data, void *user_data)
     free(data);
 }
 
-static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
-                                                       const char *str, icalproperty **error)
+static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind, const char *str, icalproperty **error)
 {
     struct icalvalue_impl *value = 0;
 
@@ -454,9 +453,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             char temp[TMP_BUF_SIZE];
             icalparameter *errParam;
 
-            snprintf(temp, sizeof(temp),
-                     "Could not parse %s as a %s property",
-                     str, icalvalue_kind_to_string(kind));
+            snprintf(temp, sizeof(temp), "Could not parse %s as a %s property", str, icalvalue_kind_to_string(kind));
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
             *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
             icalparameter_free(errParam);
@@ -599,9 +596,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             char temp[TMP_BUF_SIZE];
             icalparameter *errParam;
 
-            snprintf(temp, sizeof(temp),
-                     "Could not parse %s as a %s property",
-                     str, icalvalue_kind_to_string(kind));
+            snprintf(temp, sizeof(temp), "Could not parse %s as a %s property", str, icalvalue_kind_to_string(kind));
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
             *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
             icalparameter_free(errParam);
@@ -722,8 +717,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             icalparameter_free(errParam);
         }
 
-        snprintf(temp, TMP_BUF_SIZE,
-                 "icalvalue_new_from_string got an unknown value type (%s) for \'%s\'",
+        snprintf(temp, TMP_BUF_SIZE, "icalvalue_new_from_string got an unknown value type (%s) for \'%s\'",
                  icalvalue_kind_to_string(kind), str);
         icalerror_warn(temp);
         value = 0;
@@ -1302,10 +1296,8 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
 
     switch (icalvalue_isa(a)) {
     case ICAL_ATTACH_VALUE: {
-        if (icalattach_get_is_url(a->data.v_attach) &&
-            icalattach_get_is_url(b->data.v_attach)) {
-            if (strcasecmp(icalattach_get_url(a->data.v_attach),
-                           icalattach_get_url(b->data.v_attach)) == 0) {
+        if (icalattach_get_is_url(a->data.v_attach) && icalattach_get_is_url(b->data.v_attach)) {
+            if (strcasecmp(icalattach_get_url(a->data.v_attach), icalattach_get_url(b->data.v_attach)) == 0) {
                 return ICAL_XLICCOMPARETYPE_EQUAL;
             } else {
                 return ICAL_XLICCOMPARETYPE_NOTEQUAL;

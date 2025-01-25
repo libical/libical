@@ -17,29 +17,24 @@
 
 /*** @brief Allowed request status values
  */
-static const struct
-{
+static const struct {
     enum icalrequeststatus kind;
     int major;
     int minor;
     const char *str;
 } request_status_map[] = {
     {ICAL_2_0_SUCCESS_STATUS, 2, 0, "Success."},
-    {ICAL_2_1_FALLBACK_STATUS, 2, 1,
-     "Success but fallback taken  on one or more property  values."},
+    {ICAL_2_1_FALLBACK_STATUS, 2, 1, "Success but fallback taken  on one or more property  values."},
     {ICAL_2_2_IGPROP_STATUS, 2, 2, "Success, invalid property ignored."},
     {ICAL_2_3_IGPARAM_STATUS, 2, 3, "Success, invalid property parameter ignored."},
     {ICAL_2_4_IGXPROP_STATUS, 2, 4, "Success, unknown non-standard property ignored."},
     {ICAL_2_5_IGXPARAM_STATUS, 2, 5, "Success, unknown non standard property value  ignored."},
     {ICAL_2_6_IGCOMP_STATUS, 2, 6, "Success, invalid calendar component ignored."},
     {ICAL_2_7_FORWARD_STATUS, 2, 7, "Success, request forwarded to Calendar User."},
-    {ICAL_2_8_ONEEVENT_STATUS, 2, 8,
-     "Success, repeating event ignored. Scheduled as a  single component."},
+    {ICAL_2_8_ONEEVENT_STATUS, 2, 8, "Success, repeating event ignored. Scheduled as a  single component."},
     {ICAL_2_9_TRUNC_STATUS, 2, 9, "Success, truncated end date time to date boundary."},
-    {ICAL_2_10_ONETODO_STATUS, 2, 10,
-     "Success, repeating VTODO ignored. Scheduled as a  single VTODO."},
-    {ICAL_2_11_TRUNCRRULE_STATUS, 2, 11,
-     "Success, unbounded RRULE clipped at some finite  number of instances  "},
+    {ICAL_2_10_ONETODO_STATUS, 2, 10, "Success, repeating VTODO ignored. Scheduled as a  single VTODO."},
+    {ICAL_2_11_TRUNCRRULE_STATUS, 2, 11, "Success, unbounded RRULE clipped at some finite  number of instances  "},
     {ICAL_3_0_INVPROPNAME_STATUS, 3, 0, "Invalid property name."},
     {ICAL_3_1_INVPROPVAL_STATUS, 3, 1, "Invalid property value."},
     {ICAL_3_2_INVPARAM_STATUS, 3, 2, "Invalid property parameter."},

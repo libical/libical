@@ -51,8 +51,7 @@ static void *icalmime_text_new_part(void)
     return impl;
 }
 
-static void icalmime_text_add_line(void *part,
-                                   struct sspm_header *header, const char *line, size_t size)
+static void icalmime_text_add_line(void *part, struct sspm_header *header, const char *line, size_t size)
 {
     struct text_part *impl = (struct text_part *)part;
 
@@ -105,8 +104,7 @@ static void *icalmime_attachment_new_part(void)
     return 0;
 }
 
-static void icalmime_attachment_add_line(void *part, struct sspm_header *header,
-                                         const char *line, size_t size)
+static void icalmime_attachment_add_line(void *part, struct sspm_header *header, const char *line, size_t size)
 {
     _unused(part);
     _unused(header);
@@ -132,14 +130,14 @@ static const struct sspm_action_map icalmime_local_action_map[] = {
      icalmime_text_end_part_r, icalmime_text_free_part},
     {SSPM_TEXT_MAJOR_TYPE, SSPM_PLAIN_MINOR_TYPE, icalmime_text_new_part, icalmime_text_add_line,
      icalmime_text_end_part_r, icalmime_text_free_part},
-    {SSPM_APPLICATION_MAJOR_TYPE, SSPM_CALENDAR_MINOR_TYPE, icalmime_attachment_new_part,
-     icalmime_attachment_add_line, icalmime_attachment_end_part, icalmime_attachment_free_part},
-    {SSPM_IMAGE_MAJOR_TYPE, SSPM_CALENDAR_MINOR_TYPE, icalmime_attachment_new_part,
-     icalmime_attachment_add_line, icalmime_attachment_end_part, icalmime_attachment_free_part},
-    {SSPM_AUDIO_MAJOR_TYPE, SSPM_CALENDAR_MINOR_TYPE, icalmime_attachment_new_part,
-     icalmime_attachment_add_line, icalmime_attachment_end_part, icalmime_attachment_free_part},
-    {SSPM_IMAGE_MAJOR_TYPE, SSPM_CALENDAR_MINOR_TYPE, icalmime_attachment_new_part,
-     icalmime_attachment_add_line, icalmime_attachment_end_part, icalmime_attachment_free_part},
+    {SSPM_APPLICATION_MAJOR_TYPE, SSPM_CALENDAR_MINOR_TYPE, icalmime_attachment_new_part, icalmime_attachment_add_line,
+     icalmime_attachment_end_part, icalmime_attachment_free_part},
+    {SSPM_IMAGE_MAJOR_TYPE, SSPM_CALENDAR_MINOR_TYPE, icalmime_attachment_new_part, icalmime_attachment_add_line,
+     icalmime_attachment_end_part, icalmime_attachment_free_part},
+    {SSPM_AUDIO_MAJOR_TYPE, SSPM_CALENDAR_MINOR_TYPE, icalmime_attachment_new_part, icalmime_attachment_add_line,
+     icalmime_attachment_end_part, icalmime_attachment_free_part},
+    {SSPM_IMAGE_MAJOR_TYPE, SSPM_CALENDAR_MINOR_TYPE, icalmime_attachment_new_part, icalmime_attachment_add_line,
+     icalmime_attachment_end_part, icalmime_attachment_free_part},
     {SSPM_UNKNOWN_MAJOR_TYPE, SSPM_UNKNOWN_MINOR_TYPE, NULL, NULL, NULL, NULL}};
 
 #define NUM_PARTS 100 /* HACK. Hard Limit */
@@ -221,58 +219,44 @@ icalcomponent *icalmime_parse(char *(*get_string)(char *s, size_t size, void *d)
             }
 
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_MIMEPARSEERROR);
-            icalcomponent_add_property(
-                comp,
-                icalproperty_vanew_xlicerror(temp, errParam, (void *)0));
+            icalcomponent_add_property(comp, icalproperty_vanew_xlicerror(temp, errParam, (void *)0));
             icalparameter_free(errParam);
         }
 
-        if (parts[i].header.major != SSPM_NO_MAJOR_TYPE &&
-            parts[i].header.major != SSPM_UNKNOWN_MAJOR_TYPE) {
+        if (parts[i].header.major != SSPM_NO_MAJOR_TYPE && parts[i].header.major != SSPM_UNKNOWN_MAJOR_TYPE) {
             char *mimeTypeCopy = icalmemory_strdup(mimetype);
-            icalcomponent_add_property(
-                comp,
-                icalproperty_new_xlicmimecontenttype(mimeTypeCopy));
+            icalcomponent_add_property(comp, icalproperty_new_xlicmimecontenttype(mimeTypeCopy));
             icalmemory_free_buffer(mimeTypeCopy);
         }
 
         if (parts[i].header.encoding != SSPM_NO_ENCODING) {
             icalcomponent_add_property(
-                comp,
-                icalproperty_new_xlicmimeencoding(sspm_encoding_string(parts[i].header.encoding)));
+                comp, icalproperty_new_xlicmimeencoding(sspm_encoding_string(parts[i].header.encoding)));
         }
 
         if (parts[i].header.filename != 0) {
-            icalcomponent_add_property(
-                comp,
-                icalproperty_new_xlicmimefilename(parts[i].header.filename));
+            icalcomponent_add_property(comp, icalproperty_new_xlicmimefilename(parts[i].header.filename));
         }
 
         if (parts[i].header.content_id != 0) {
-            icalcomponent_add_property(
-                comp,
-                icalproperty_new_xlicmimecid(parts[i].header.content_id));
+            icalcomponent_add_property(comp, icalproperty_new_xlicmimecid(parts[i].header.content_id));
         }
 
         if (parts[i].header.charset != 0) {
-            icalcomponent_add_property(
-                comp,
-                icalproperty_new_xlicmimecharset(parts[i].header.charset));
+            icalcomponent_add_property(comp, icalproperty_new_xlicmimecharset(parts[i].header.charset));
         }
 
         /* Add iCal components as children of the component */
-        if (parts[i].header.major == SSPM_TEXT_MAJOR_TYPE &&
-            parts[i].header.minor == SSPM_CALENDAR_MINOR_TYPE && parts[i].data != 0) {
+        if (parts[i].header.major == SSPM_TEXT_MAJOR_TYPE && parts[i].header.minor == SSPM_CALENDAR_MINOR_TYPE &&
+            parts[i].data != 0) {
             icalcomponent_add_component(comp, (icalcomponent *)parts[i].data);
             parts[i].data = 0;
 
-        } else if (parts[i].header.major == SSPM_TEXT_MAJOR_TYPE &&
-                   parts[i].header.minor != SSPM_CALENDAR_MINOR_TYPE && parts[i].data != 0) {
+        } else if (parts[i].header.major == SSPM_TEXT_MAJOR_TYPE && parts[i].header.minor != SSPM_CALENDAR_MINOR_TYPE &&
+                   parts[i].data != 0) {
             /* Add other text components as "DESCRIPTION" properties */
             char *descStr = icalmemory_strdup((char *)parts[i].data);
-            icalcomponent_add_property(
-                comp,
-                icalproperty_new_description(descStr));
+            icalcomponent_add_property(comp, icalproperty_new_description(descStr));
             icalmemory_free_buffer(descStr);
             parts[i].data = 0;
         }

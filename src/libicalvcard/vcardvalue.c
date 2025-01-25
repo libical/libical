@@ -196,8 +196,8 @@ char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
                  %x21-2B / %x2D-3A / %x3C-5B / %x5D-7E
  * As such, \b, \f, \r are not allowed, not even escaped
  */
-static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_sz,
-                                          const char *unquoted_str, bool is_param)
+static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_sz, const char *unquoted_str,
+                                          bool is_param)
 {
     const char *p;
 
@@ -272,9 +272,7 @@ static vcardvalue *vcardvalue_new_enum(vcardvalue_kind kind, int x_type, const c
     return value;
 }
 
-static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
-                                                         const char *str,
-                                                         vcardproperty **error)
+static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind, const char *str, vcardproperty **error)
 {
     struct vcardvalue_impl *value = 0;
 
@@ -294,9 +292,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
             char temp[TMP_BUF_SIZE];
             vcardparameter *errParam;
 
-            snprintf(temp, sizeof(temp),
-                     "Could not parse %s as a %s property",
-                     str, vcardvalue_kind_to_string(kind));
+            snprintf(temp, sizeof(temp), "Could not parse %s as a %s property", str, vcardvalue_kind_to_string(kind));
             errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
             *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
             vcardparameter_free(errParam);
@@ -359,9 +355,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
             char temp[TMP_BUF_SIZE];
             vcardparameter *errParam;
 
-            snprintf(temp, sizeof(temp),
-                     "Could not parse %s as a %s property",
-                     str, vcardvalue_kind_to_string(kind));
+            snprintf(temp, sizeof(temp), "Could not parse %s as a %s property", str, vcardvalue_kind_to_string(kind));
             errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
             *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
             vcardparameter_free(errParam);
@@ -460,8 +454,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
             vcardparameter_free(errParam);
         }
 
-        snprintf(temp, TMP_BUF_SIZE,
-                 "vcardvalue_new_from_string got an unknown value type (%s) for \'%s\'",
+        snprintf(temp, TMP_BUF_SIZE, "vcardvalue_new_from_string got an unknown value type (%s) for \'%s\'",
                  vcardvalue_kind_to_string(kind), str);
         icalerror_warn(temp);
         value = 0;
@@ -575,8 +568,7 @@ static char *vcardvalue_int_as_vcard_string_r(const vcardvalue *value)
     return str;
 }
 
-static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value,
-                                                    vcardproperty_version version)
+static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value, vcardproperty_version version)
 {
     int data, h, m, s;
     char sign;
@@ -631,8 +623,7 @@ static char *vcardvalue_text_as_vcard_string_r(const vcardvalue *value)
     char *str_p = NULL;
     size_t buf_sz;
 
-    return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
-                                        value->data.v_string, 0);
+    return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz, value->data.v_string, 0);
 }
 
 static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
@@ -650,9 +641,8 @@ static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
     return str;
 }
 
-static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *buf_sz,
-                                             vcardstrarray *array, const char sep,
-                                             bool is_param)
+static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *buf_sz, vcardstrarray *array,
+                                             const char sep, bool is_param)
 {
     size_t i;
 
@@ -662,8 +652,7 @@ static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *b
             icalmemory_append_char(str, str_p, buf_sz, sep);
         }
 
-        (void)vcardmemory_strdup_and_quote(str, str_p, buf_sz,
-                                           vcardstrarray_element_at(array, i), is_param);
+        (void)vcardmemory_strdup_and_quote(str, str_p, buf_sz, vcardstrarray_element_at(array, i), is_param);
     }
 }
 
@@ -673,8 +662,7 @@ char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array, const char sep
     char *buf_ptr = NULL;
     size_t buf_size;
 
-    _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size,
-                                     (vcardstrarray *)array, sep, 0);
+    _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size, (vcardstrarray *)array, sep, 0);
 
     return buf;
 }
@@ -697,8 +685,7 @@ char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_pa
         }
 
         if (array)
-            _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size,
-                                             array, ',', is_param);
+            _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size, array, ',', is_param);
         else
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, '\0');
     }
@@ -706,8 +693,7 @@ char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_pa
     return buf;
 }
 
-static char *vcardvalue_textlist_as_vcard_string_r(const vcardvalue *value,
-                                                   const char sep)
+static char *vcardvalue_textlist_as_vcard_string_r(const vcardvalue *value, const char sep)
 {
     icalerror_check_arg_rz((value != 0), "value");
 
@@ -792,8 +778,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
         return vcardvalue_text_as_vcard_string_r(value);
 
     case VCARD_TEXTLIST_VALUE:
-        return vcardvalue_textlist_as_vcard_string_r(value,
-                                                     is_structured ? ';' : ',');
+        return vcardvalue_textlist_as_vcard_string_r(value, is_structured ? ';' : ',');
 
     case VCARD_STRUCTURED_VALUE:
         return vcardvalue_structured_as_vcard_string_r(value);
@@ -840,8 +825,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
             char *str_p;
             size_t buf_sz;
 
-            return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
-                                                value->x_value, 0);
+            return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz, value->x_value, 0);
         }
         _fallthrough();
 

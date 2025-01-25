@@ -27,10 +27,8 @@ void get_required_attendees(icalcomponent *event)
        struct, so the are not thread safe unless you lock the whole
        component. */
 
-    for (
-        p = icalcomponent_get_first_property(event, ICAL_ATTENDEE_PROPERTY);
-        p != 0;
-        p = icalcomponent_get_next_property(event, ICAL_ATTENDEE_PROPERTY)) {
+    for (p = icalcomponent_get_first_property(event, ICAL_ATTENDEE_PROPERTY); p != 0;
+         p = icalcomponent_get_next_property(event, ICAL_ATTENDEE_PROPERTY)) {
         /* Get the first ROLE parameter in the property. There should
            only be one, so we won't bother to iterate over them. But,
            you can iterate over parameters just like with properties */
@@ -62,17 +60,13 @@ void update_attendees(icalcomponent *event)
     assert(event != 0);
     assert(icalcomponent_isa(event) == ICAL_VEVENT_COMPONENT);
 
-    for (
-        p = icalcomponent_get_first_property(event, ICAL_ATTENDEE_PROPERTY);
-        p != 0;
-        p = icalcomponent_get_next_property(event, ICAL_ATTENDEE_PROPERTY)) {
+    for (p = icalcomponent_get_first_property(event, ICAL_ATTENDEE_PROPERTY); p != 0;
+         p = icalcomponent_get_next_property(event, ICAL_ATTENDEE_PROPERTY)) {
         parameter = icalproperty_get_first_parameter(p, ICAL_PARTSTAT_PARAMETER);
 
         if (parameter == 0) {
             /* There was no PARTSTAT parameter, so add one.  */
-            icalproperty_add_parameter(
-                p,
-                icalparameter_new_partstat(ICAL_PARTSTAT_TENTATIVE));
+            icalproperty_add_parameter(p, icalparameter_new_partstat(ICAL_PARTSTAT_TENTATIVE));
 
         } else if (icalparameter_get_partstat(parameter) == ICAL_PARTSTAT_NEEDSACTION) {
             /* Remove the NEEDSACTION parameter and replace it with
@@ -84,9 +78,7 @@ void update_attendees(icalcomponent *event)
             icalparameter_free(parameter);
 
             /* Add a new one */
-            icalproperty_add_parameter(
-                p,
-                icalparameter_new_partstat(ICAL_PARTSTAT_TENTATIVE));
+            icalproperty_add_parameter(p, icalparameter_new_partstat(ICAL_PARTSTAT_TENTATIVE));
         }
     }
 }
@@ -103,17 +95,12 @@ void test_properties(void)
     icalproperty *clone;
 
     /* Create a new property */
-    prop = icalproperty_vanew_comment(
-        "Another Comment",
-        icalparameter_new_cn("A Common Name 1"),
-        icalparameter_new_cn("A Common Name 2"),
-        icalparameter_new_cn("A Common Name 3"),
-        icalparameter_new_cn("A Common Name 4"),
-        (void *)0);
+    prop = icalproperty_vanew_comment("Another Comment", icalparameter_new_cn("A Common Name 1"),
+                                      icalparameter_new_cn("A Common Name 2"), icalparameter_new_cn("A Common Name 3"),
+                                      icalparameter_new_cn("A Common Name 4"), (void *)0);
 
     /* Iterate through all of the parameters in the property */
-    for (param = icalproperty_get_first_parameter(prop, ICAL_ANY_PARAMETER);
-         param != 0;
+    for (param = icalproperty_get_first_parameter(prop, ICAL_ANY_PARAMETER); param != 0;
          param = icalproperty_get_next_parameter(prop, ICAL_ANY_PARAMETER)) {
         printf("Prop parameter: %s\n", icalparameter_get_cn(param));
     }

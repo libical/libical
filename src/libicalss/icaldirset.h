@@ -71,8 +71,7 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_commit(icalset *set);
   component must have a DSTAMP property
 */
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_add_component(icalset *store, icalcomponent *comp);
-LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_remove_component(icalset *store,
-                                                                icalcomponent *comp);
+LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_remove_component(icalset *store, icalcomponent *comp);
 
 LIBICAL_ICALSS_EXPORT int icaldirset_count_components(icalset *store, icalcomponent_kind kind);
 
@@ -83,8 +82,7 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_select(icalset *store, icalgauge 
 LIBICAL_ICALSS_EXPORT void icaldirset_clear(icalset *store);
 
 /* Gets a component by uid */
-LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch(icalset *store,
-                                                      icalcomponent_kind kind, const char *uid);
+LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch(icalset *store, icalcomponent_kind kind, const char *uid);
 
 LIBICAL_ICALSS_EXPORT int icaldirset_has_uid(icalset *store, const char *uid);
 
@@ -92,8 +90,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch_match(icalset *set, icalco
 
 /* Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */
-LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_modify(icalset *store,
-                                                      icalcomponent *oldc, icalcomponent *newc);
+LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_modify(icalset *store, icalcomponent *oldc, icalcomponent *newc);
 
 /* Iterates through the components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
@@ -105,9 +102,8 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_first_component(icalset *sto
 LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_next_component(icalset *store);
 
 /* External iterator for thread safety */
-LIBICAL_ICALSS_EXPORT icalsetiter icaldirset_begin_component(icalset *set,
-                                                             icalcomponent_kind kind,
-                                                             icalgauge *gauge, const char *tzid);
+LIBICAL_ICALSS_EXPORT icalsetiter icaldirset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge,
+                                                             const char *tzid);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icaldirsetiter_to_next(icalset *set, icalsetiter *i);
 

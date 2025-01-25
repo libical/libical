@@ -177,14 +177,14 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
  */
 
 #ifdef __GNUC__ca
-#define icalerror_warn(message)                                                        \
-    {                                                                                  \
-        icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
+#define icalerror_warn(message)                                                                                        \
+    {                                                                                                                  \
+        icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message);                                 \
     }
 #else /* __GNU_C__ */
-#define icalerror_warn(message)                                    \
-    {                                                              \
-        icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message); \
+#define icalerror_warn(message)                                                                                        \
+    {                                                                                                                  \
+        icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message);                                                     \
     }
 #endif /* __GNU_C__ */
 
@@ -331,15 +331,14 @@ LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
  * ```
  */
 #if !defined(ICAL_SETERROR_ISFUNC)
-#define icalerror_set_errno(x)                                 \
-    icalerrno = x;                                             \
-    if (icalerror_get_error_state(x) == ICAL_ERROR_FATAL ||    \
-        (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && \
-         icalerror_get_errors_are_fatal() == 1)) {             \
-        icalerror_warn(icalerror_strerror(x));                 \
-        ical_bt();                                             \
-        icalassert(0);                                         \
-    }                                                          \
+#define icalerror_set_errno(x)                                                                                         \
+    icalerrno = x;                                                                                                     \
+    if (icalerror_get_error_state(x) == ICAL_ERROR_FATAL ||                                                            \
+        (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && icalerror_get_errors_are_fatal() == 1)) {               \
+        icalerror_warn(icalerror_strerror(x));                                                                         \
+        ical_bt();                                                                                                     \
+        icalassert(0);                                                                                                 \
+    }                                                                                                                  \
     }
 #else
 /**
@@ -399,18 +398,18 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
 #if ICAL_ERRORS_ARE_FATAL == 1
 
 #ifdef __GNUC__
-#define icalerror_assert(test, message)                                                \
-    if (!(test)) {                                                                     \
-        icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
-        icalerror_stop_here();                                                         \
-        abort();                                                                       \
+#define icalerror_assert(test, message)                                                                                \
+    if (!(test)) {                                                                                                     \
+        icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message);                                 \
+        icalerror_stop_here();                                                                                         \
+        abort();                                                                                                       \
     }
 #else /*__GNUC__*/
-#define icalerror_assert(test, message)                            \
-    if (!(test)) {                                                 \
-        icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message); \
-        icalerror_stop_here();                                     \
-        abort();                                                   \
+#define icalerror_assert(test, message)                                                                                \
+    if (!(test)) {                                                                                                     \
+        icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message);                                                     \
+        icalerror_stop_here();                                                                                         \
+        abort();                                                                                                       \
     }
 #endif /*__GNUC__*/
 
@@ -436,9 +435,9 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
  * }
  * ```
  */
-#define icalerror_check_arg(test, arg)          \
-    if (!(test)) {                              \
-        icalerror_set_errno(ICAL_BADARG_ERROR); \
+#define icalerror_check_arg(test, arg)                                                                                 \
+    if (!(test)) {                                                                                                     \
+        icalerror_set_errno(ICAL_BADARG_ERROR);                                                                        \
     }
 
 /**
@@ -460,10 +459,10 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
  * }
  * ```
  */
-#define icalerror_check_arg_rv(test, arg)       \
-    if (!(test)) {                              \
-        icalerror_set_errno(ICAL_BADARG_ERROR); \
-        return;                                 \
+#define icalerror_check_arg_rv(test, arg)                                                                              \
+    if (!(test)) {                                                                                                     \
+        icalerror_set_errno(ICAL_BADARG_ERROR);                                                                        \
+        return;                                                                                                        \
     }
 
 /**
@@ -486,10 +485,10 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
  * }
  * ```
  */
-#define icalerror_check_arg_rz(test, arg)       \
-    if (!(test)) {                              \
-        icalerror_set_errno(ICAL_BADARG_ERROR); \
-        return 0;                               \
+#define icalerror_check_arg_rz(test, arg)                                                                              \
+    if (!(test)) {                                                                                                     \
+        icalerror_set_errno(ICAL_BADARG_ERROR);                                                                        \
+        return 0;                                                                                                      \
     }
 
 /**
@@ -513,11 +512,11 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
  * }
  * ```
  */
-#define icalerror_check_arg_re(test, arg, error) \
-    if (!(test)) {                               \
-        icalerror_stop_here();                   \
-        icalassert(0);                           \
-        return error;                            \
+#define icalerror_check_arg_re(test, arg, error)                                                                       \
+    if (!(test)) {                                                                                                     \
+        icalerror_stop_here();                                                                                         \
+        icalassert(0);                                                                                                 \
+        return error;                                                                                                  \
     }
 
 /**
@@ -541,10 +540,10 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
  * }
  * ```
  */
-#define icalerror_check_arg_rx(test, arg, x)    \
-    if (!(test)) {                              \
-        icalerror_set_errno(ICAL_BADARG_ERROR); \
-        return x;                               \
+#define icalerror_check_arg_rx(test, arg, x)                                                                           \
+    if (!(test)) {                                                                                                     \
+        icalerror_set_errno(ICAL_BADARG_ERROR);                                                                        \
+        return x;                                                                                                      \
     }
 
 /* String interfaces to set an error to NONFATAL and restore it to its original value */

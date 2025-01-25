@@ -172,8 +172,8 @@ char *icalreqstattype_as_string_r(struct icalreqstattype stat)
         snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s;%s", icalenum_reqstat_major(stat.code),
                  icalenum_reqstat_minor(stat.code), stat.desc, stat.debug);
     } else {
-        snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s", icalenum_reqstat_major(stat.code),
-                 icalenum_reqstat_minor(stat.code), stat.desc);
+        snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s", icalenum_reqstat_major(stat.code), icalenum_reqstat_minor(stat.code),
+                 stat.desc);
     }
 
     return temp;

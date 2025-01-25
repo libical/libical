@@ -96,8 +96,7 @@ LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_url(const char *url);
  * use, icalattach_unref() needs to be called to signal that they are
  * not used anymore.
  */
-LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_data(const char *data,
-                                                         icalattach_free_fn_t free_fn,
+LIBICAL_ICAL_EXPORT icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn,
                                                          void *free_fn_data);
 
 /**

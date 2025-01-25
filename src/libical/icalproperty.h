@@ -48,14 +48,11 @@ LIBICAL_ICAL_EXPORT void icalproperty_add_parameter(icalproperty *prop, icalpara
 
 LIBICAL_ICAL_EXPORT void icalproperty_set_parameter(icalproperty *prop, icalparameter *parameter);
 
-LIBICAL_ICAL_EXPORT void icalproperty_set_parameter_from_string(icalproperty *prop,
-                                                                const char *name,
+LIBICAL_ICAL_EXPORT void icalproperty_set_parameter_from_string(icalproperty *prop, const char *name,
                                                                 const char *value);
-LIBICAL_ICAL_EXPORT const char *icalproperty_get_parameter_as_string(icalproperty *prop,
-                                                                     const char *name);
+LIBICAL_ICAL_EXPORT const char *icalproperty_get_parameter_as_string(icalproperty *prop, const char *name);
 
-LIBICAL_ICAL_EXPORT char *icalproperty_get_parameter_as_string_r(icalproperty *prop,
-                                                                 const char *name);
+LIBICAL_ICAL_EXPORT char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *name);
 
 /** @brief Removes all parameters with the specified kind.
  *
@@ -66,8 +63,7 @@ LIBICAL_ICAL_EXPORT char *icalproperty_get_parameter_as_string_r(icalproperty *p
  *  icalproperty_remove_parameter_by_ref() for alternate ways of
  *  removing parameters
  */
-LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_kind(icalproperty *prop,
-                                                               icalparameter_kind kind);
+LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_kind(icalproperty *prop, icalparameter_kind kind);
 
 /** @brief Removes all parameters with the specified name.
  *
@@ -82,8 +78,7 @@ LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_kind(icalproperty *pro
  *  icalproperty_remove_parameter_by_ref() for alternate ways of removing
  *  parameters
  */
-LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_name(icalproperty *prop,
-                                                               const char *name);
+LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name);
 
 /** @brief Removes the specified parameter reference from the property.
  *
@@ -93,20 +88,16 @@ LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_name(icalproperty *pro
  *  This function removes the specified parameter reference from the
  *  property.
  */
-LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_ref(icalproperty *prop,
-                                                              icalparameter *param);
+LIBICAL_ICAL_EXPORT void icalproperty_remove_parameter_by_ref(icalproperty *prop, icalparameter *param);
 
 LIBICAL_ICAL_EXPORT int icalproperty_count_parameters(const icalproperty *prop);
 
 /* Iterate through the parameters */
-LIBICAL_ICAL_EXPORT icalparameter *icalproperty_get_first_parameter(icalproperty *prop,
-                                                                    icalparameter_kind kind);
-LIBICAL_ICAL_EXPORT icalparameter *icalproperty_get_next_parameter(icalproperty *prop,
-                                                                   icalparameter_kind kind);
+LIBICAL_ICAL_EXPORT icalparameter *icalproperty_get_first_parameter(icalproperty *prop, icalparameter_kind kind);
+LIBICAL_ICAL_EXPORT icalparameter *icalproperty_get_next_parameter(icalproperty *prop, icalparameter_kind kind);
 /* Access the value of the property */
 LIBICAL_ICAL_EXPORT void icalproperty_set_value(icalproperty *prop, icalvalue *value);
-LIBICAL_ICAL_EXPORT void icalproperty_set_value_from_string(icalproperty *prop, const char *value,
-                                                            const char *kind);
+LIBICAL_ICAL_EXPORT void icalproperty_set_value_from_string(icalproperty *prop, const char *value, const char *kind);
 
 LIBICAL_ICAL_EXPORT icalvalue *icalproperty_get_value(const icalproperty *prop);
 LIBICAL_ICAL_EXPORT const char *icalproperty_get_value_as_string(const icalproperty *prop);

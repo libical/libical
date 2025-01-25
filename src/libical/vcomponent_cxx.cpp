@@ -528,8 +528,7 @@ struct icaltime_span VComponent::get_span()
     return icalcomponent_get_span(imp);
 }
 
-int VComponent::recurrence_is_excluded(struct icaltimetype *dtstart,
-                                       struct icaltimetype *recurtime)
+int VComponent::recurrence_is_excluded(struct icaltimetype *dtstart, struct icaltimetype *recurtime)
 {
     return icalproperty_recurrence_is_excluded(imp, dtstart, recurtime);
 }
@@ -555,8 +554,7 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
 
     /* properties first */
     ICalPropertyTmpPtr propToBeRemoved;
-    for (propToBeRemoved = fromVC.get_first_property(ICAL_ANY_PROPERTY);
-         propToBeRemoved != NULL;
+    for (propToBeRemoved = fromVC.get_first_property(ICAL_ANY_PROPERTY); propToBeRemoved != NULL;
          propToBeRemoved = fromVC.get_next_property(ICAL_ANY_PROPERTY)) {
         /* loop through properties from this component */
         ICalPropertyTmpPtr next;
@@ -580,15 +578,13 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
          comp = fromVC.get_next_component(ICAL_ANY_COMPONENT)) {
         const std::string fromCompUid = comp->get_uid();
         VComponentTmpPtr c;
-        for (c = this->get_first_component(comp->isa()); c != NULL;
-             c = this->get_next_component(comp->isa())) {
+        for (c = this->get_first_component(comp->isa()); c != NULL; c = this->get_next_component(comp->isa())) {
             if (strcmp(fromCompUid.c_str(), c->get_uid().c_str()) == 0) {
                 // recursively go down the components
                 c->remove(*comp, ignoreValue);
                 // if all properties are removed and there is no sub-components, then
                 // remove this component
-                if ((c->count_properties(ICAL_ANY_PROPERTY) == 0) &&
-                    (c->count_components(ICAL_ANY_COMPONENT) == 0)) {
+                if ((c->count_properties(ICAL_ANY_PROPERTY) == 0) && (c->count_components(ICAL_ANY_COMPONENT) == 0)) {
                     this->remove_component(c);
                 }
                 break;
@@ -697,9 +693,7 @@ VCalendar &VCalendar::operator=(const VCalendar &v)
     return *this;
 }
 
-VCalendar::~VCalendar()
-{
-}
+VCalendar::~VCalendar() {}
 
 VCalendar::VCalendar(icalcomponent *v)
     : VComponent(v)
@@ -733,9 +727,7 @@ VEvent &VEvent::operator=(const VEvent &v)
     return *this;
 }
 
-VEvent::~VEvent()
-{
-}
+VEvent::~VEvent() {}
 
 VEvent::VEvent(icalcomponent *v)
     : VComponent(v)
@@ -769,9 +761,7 @@ VToDo &VToDo::operator=(const VToDo &v)
     return *this;
 }
 
-VToDo::~VToDo()
-{
-}
+VToDo::~VToDo() {}
 
 VToDo::VToDo(icalcomponent *v)
     : VComponent(v)
@@ -805,9 +795,7 @@ VAgenda &VAgenda::operator=(const VAgenda &v)
     return *this;
 }
 
-VAgenda::~VAgenda()
-{
-}
+VAgenda::~VAgenda() {}
 
 VAgenda::VAgenda(icalcomponent *v)
     : VComponent(v)
@@ -841,9 +829,7 @@ VQuery &VQuery::operator=(const VQuery &v)
     return *this;
 }
 
-VQuery::~VQuery()
-{
-}
+VQuery::~VQuery() {}
 
 VQuery::VQuery(icalcomponent *v)
     : VComponent(v)
@@ -877,9 +863,7 @@ VJournal &VJournal::operator=(const VJournal &v)
     return *this;
 }
 
-VJournal::~VJournal()
-{
-}
+VJournal::~VJournal() {}
 
 VJournal::VJournal(icalcomponent *v)
     : VComponent(v)
@@ -913,9 +897,7 @@ VAlarm &VAlarm::operator=(const VAlarm &v)
     return *this;
 }
 
-VAlarm::~VAlarm()
-{
-}
+VAlarm::~VAlarm() {}
 
 VAlarm::VAlarm(icalcomponent *v)
     : VComponent(v)
@@ -1039,9 +1021,7 @@ VFreeBusy &VFreeBusy::operator=(const VFreeBusy &v)
     return *this;
 }
 
-VFreeBusy::~VFreeBusy()
-{
-}
+VFreeBusy::~VFreeBusy() {}
 
 VFreeBusy::VFreeBusy(icalcomponent *v)
     : VComponent(v)
@@ -1075,9 +1055,7 @@ VTimezone &VTimezone::operator=(const VTimezone &v)
     return *this;
 }
 
-VTimezone::~VTimezone()
-{
-}
+VTimezone::~VTimezone() {}
 
 VTimezone::VTimezone(icalcomponent *v)
     : VComponent(v)
@@ -1111,9 +1089,7 @@ XStandard &XStandard::operator=(const XStandard &v)
     return *this;
 }
 
-XStandard::~XStandard()
-{
-}
+XStandard::~XStandard() {}
 
 XStandard::XStandard(icalcomponent *v)
     : VComponent(v)
@@ -1147,9 +1123,7 @@ XDaylight &XDaylight::operator=(const XDaylight &v)
     return *this;
 }
 
-XDaylight::~XDaylight()
-{
-}
+XDaylight::~XDaylight() {}
 
 XDaylight::XDaylight(icalcomponent *v)
     : VComponent(v)

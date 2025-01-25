@@ -62,10 +62,7 @@ public:
         ipp->ptr = 0;
     };
 
-    ~ICPointerHolder()
-    {
-        release();
-    }
+    ~ICPointerHolder() { release(); }
 
     ICPointerHolder &operator=(T *p)
     {
@@ -82,20 +79,11 @@ public:
         return *this;
     }
 
-    bool operator!=(T *p)
-    {
-        return (ptr != p);
-    }
+    bool operator!=(T *p) { return (ptr != p); }
 
-    bool operator==(T *p)
-    {
-        return (ptr == p);
-    }
+    bool operator==(T *p) { return (ptr == p); }
 
-    operator T *() const
-    {
-        return ptr;
-    }
+    operator T *() const { return ptr; }
 
     T *operator->() const
     {

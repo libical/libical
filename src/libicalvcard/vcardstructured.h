@@ -26,8 +26,7 @@ typedef struct vcardstructuredtype {
 
 LIBICAL_VCARD_EXPORT vcardstructuredtype *vcardstructured_new(void);
 
-LIBICAL_VCARD_EXPORT char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s,
-                                                             bool is_param);
+LIBICAL_VCARD_EXPORT char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_param);
 
 LIBICAL_VCARD_EXPORT vcardstructuredtype *vcardstructured_from_string(const char *s);
 

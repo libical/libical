@@ -177,8 +177,7 @@ error:
     return icaldurationtype_bad_duration();
 }
 
-static void append_duration_segment(char **buf, char **buf_ptr, size_t *buf_size,
-                                    const char *sep, unsigned int value)
+static void append_duration_segment(char **buf, char **buf_ptr, size_t *buf_size, const char *sep, unsigned int value)
 {
     char temp[1024];
 
@@ -247,10 +246,7 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
 int icaldurationtype_as_int(struct icaldurationtype dur)
 {
     return (int)(((int)dur.seconds +
-                  60 * ((int)dur.minutes +
-                        60 * ((int)dur.hours +
-                              24 * ((int)dur.days +
-                                    7 * (int)dur.weeks)))) *
+                  60 * ((int)dur.minutes + 60 * ((int)dur.hours + 24 * ((int)dur.days + 7 * (int)dur.weeks)))) *
                  (dur.is_neg == 1 ? -1 : 1));
 }
 

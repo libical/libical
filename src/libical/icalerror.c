@@ -126,18 +126,17 @@ struct icalerror_state {
     icalerrorstate state;
 };
 
-static ICAL_GLOBAL_VAR struct icalerror_state error_state_map[] = {
-    {ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_NEWFAILED_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_ALLOCATION_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_PARSE_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_INTERNAL_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_FILE_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_USAGE_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_UNIMPLEMENTED_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_UNKNOWN_ERROR, ICAL_ERROR_DEFAULT},
-    {ICAL_NO_ERROR, ICAL_ERROR_DEFAULT}
+static ICAL_GLOBAL_VAR struct icalerror_state error_state_map[] = {{ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_NEWFAILED_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_ALLOCATION_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_PARSE_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_INTERNAL_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_FILE_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_USAGE_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_UNIMPLEMENTED_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_UNKNOWN_ERROR, ICAL_ERROR_DEFAULT},
+                                                                   {ICAL_NO_ERROR, ICAL_ERROR_DEFAULT}
 
 };
 
@@ -149,8 +148,7 @@ struct icalerror_string_map {
 
 static const struct icalerror_string_map string_map[] = {
     {"BADARG", ICAL_BADARG_ERROR, "BADARG: Bad argument to function"},
-    {"NEWFAILED", ICAL_NEWFAILED_ERROR,
-     "NEWFAILED: Failed to create a new object via a *_new() routine"},
+    {"NEWFAILED", ICAL_NEWFAILED_ERROR, "NEWFAILED: Failed to create a new object via a *_new() routine"},
     {"ALLOCATION", ICAL_ALLOCATION_ERROR, "ALLOCATION: Failed to allocate new memory"},
     {"MALFORMEDDATA", ICAL_MALFORMEDDATA_ERROR,
      "MALFORMEDDATA: An input string was not correctly formed or a component has "
@@ -159,12 +157,9 @@ static const struct icalerror_string_map string_map[] = {
     {"INTERNAL", ICAL_INTERNAL_ERROR,
      "INTERNAL: Random internal error. This indicates an error in the library code, "
      "not an error in use"},
-    {"FILE", ICAL_FILE_ERROR,
-     "FILE: An operation on a file failed. Check errno for more detail."},
-    {"USAGE", ICAL_USAGE_ERROR,
-     "USAGE: Failed to propertyl sequence calls to a set of interfaces"},
-    {"UNIMPLEMENTED", ICAL_UNIMPLEMENTED_ERROR,
-     "UNIMPLEMENTED: This feature has not been implemented"},
+    {"FILE", ICAL_FILE_ERROR, "FILE: An operation on a file failed. Check errno for more detail."},
+    {"USAGE", ICAL_USAGE_ERROR, "USAGE: Failed to propertyl sequence calls to a set of interfaces"},
+    {"UNIMPLEMENTED", ICAL_UNIMPLEMENTED_ERROR, "UNIMPLEMENTED: This feature has not been implemented"},
     {"NO", ICAL_NO_ERROR, "NO: No error"},
     {"UNKNOWN", ICAL_UNKNOWN_ERROR,
      "UNKNOWN: Unknown error type -- icalerror_strerror() was probably given bad input"}};

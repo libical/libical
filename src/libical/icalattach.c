@@ -50,8 +50,7 @@ static void attach_data_free(char *data, void *free_fn_data)
     icalmemory_free_buffer(data);
 }
 
-icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn,
-                                     void *free_fn_data)
+icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free_fn, void *free_fn_data)
 {
     icalattach *attach;
 

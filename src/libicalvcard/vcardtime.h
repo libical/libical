@@ -46,12 +46,9 @@ LIBICAL_VCARD_EXPORT bool vcardtime_is_valid_time(const struct vcardtimetype t);
 #define VCARDTIME_BARE_TIME (0x1) /* 'T' not needed for TIME */
 #define VCARDTIME_AS_V4 (0x2)     /* allow partial date and/or time */
 
-LIBICAL_VCARD_EXPORT const char *vcardtime_as_vcard_string(const vcardtimetype t,
-                                                           unsigned flags);
-LIBICAL_VCARD_EXPORT char *vcardtime_as_vcard_string_r(const vcardtimetype t,
-                                                       unsigned flags);
+LIBICAL_VCARD_EXPORT const char *vcardtime_as_vcard_string(const vcardtimetype t, unsigned flags);
+LIBICAL_VCARD_EXPORT char *vcardtime_as_vcard_string_r(const vcardtimetype t, unsigned flags);
 
-LIBICAL_VCARD_EXPORT vcardtimetype vcardtime_from_string(const char *str,
-                                                         int is_bare_time);
+LIBICAL_VCARD_EXPORT vcardtimetype vcardtime_from_string(const char *str, int is_bare_time);
 
 #endif /* VCARDTIME_H */

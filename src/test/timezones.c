@@ -94,13 +94,9 @@ int main(void)
             curr_tt = icaltime_convert_to_zone(curr_tt, zone);
 
             /* compare... */
-            curr_failed =
-                curr_tm.tm_year + 1900 != curr_tt.year ||
-                curr_tm.tm_mon + 1 != curr_tt.month ||
-                curr_tm.tm_mday != curr_tt.day ||
-                curr_tm.tm_hour != curr_tt.hour ||
-                curr_tm.tm_min != curr_tt.minute ||
-                curr_tm.tm_sec != curr_tt.second;
+            curr_failed = curr_tm.tm_year + 1900 != curr_tt.year || curr_tm.tm_mon + 1 != curr_tt.month ||
+                          curr_tm.tm_mday != curr_tt.day || curr_tm.tm_hour != curr_tt.hour ||
+                          curr_tm.tm_min != curr_tt.minute || curr_tm.tm_sec != curr_tt.second;
 
             /* only print first failed day and first day which is okay again */
             if (verbose || curr_failed != failed) {
@@ -110,24 +106,16 @@ int main(void)
                 if (!icalgmtime_r(&curr_time, &utc_tm))
                     memset(&utc_tm, 0, sizeof(utc_tm));
 
-                printf(
-                    "%s: day %03d: %s: %04d-%02d-%02d %02d:%02d:%02d UTC = "
-                    "libc %04d-%02d-%02d %02d:%02d:%02d dst %d",
-                    icaltimezone_get_location(zone), day,
-                    verbose ? (curr_failed ? "failed" : "okay") : (curr_failed ? "first failed" : "okay again"),
-                    utc_tm.tm_year + 1900, utc_tm.tm_mon + 1, utc_tm.tm_mday, utc_tm.tm_hour,
-                    utc_tm.tm_min, utc_tm.tm_sec, curr_tm.tm_year + 1900, curr_tm.tm_mon + 1,
-                    curr_tm.tm_mday, curr_tm.tm_hour, curr_tm.tm_min, curr_tm.tm_sec,
-                    curr_tm.tm_isdst);
+                printf("%s: day %03d: %s: %04d-%02d-%02d %02d:%02d:%02d UTC = "
+                       "libc %04d-%02d-%02d %02d:%02d:%02d dst %d",
+                       icaltimezone_get_location(zone), day,
+                       verbose ? (curr_failed ? "failed" : "okay") : (curr_failed ? "first failed" : "okay again"),
+                       utc_tm.tm_year + 1900, utc_tm.tm_mon + 1, utc_tm.tm_mday, utc_tm.tm_hour, utc_tm.tm_min,
+                       utc_tm.tm_sec, curr_tm.tm_year + 1900, curr_tm.tm_mon + 1, curr_tm.tm_mday, curr_tm.tm_hour,
+                       curr_tm.tm_min, curr_tm.tm_sec, curr_tm.tm_isdst);
                 if (curr_failed) {
-                    printf(" != libical %04d-%02d-%02d %02d:%02d:%02d dst %d",
-                           curr_tt.year,
-                           curr_tt.month,
-                           curr_tt.day,
-                           curr_tt.hour,
-                           curr_tt.minute,
-                           curr_tt.second,
-                           curr_tt.is_daylight);
+                    printf(" != libical %04d-%02d-%02d %02d:%02d:%02d dst %d", curr_tt.year, curr_tt.month, curr_tt.day,
+                           curr_tt.hour, curr_tt.minute, curr_tt.second, curr_tt.is_daylight);
                     ret = 1;
                 }
                 printf("\n");

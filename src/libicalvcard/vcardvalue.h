@@ -22,8 +22,7 @@ LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new(vcardvalue_kind kind);
 
 LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_clone(const vcardvalue *value);
 
-LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new_from_string(vcardvalue_kind kind,
-                                                            const char *str);
+LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new_from_string(vcardvalue_kind kind, const char *str);
 
 LIBICAL_VCARD_EXPORT void vcardvalue_free(vcardvalue *value);
 
@@ -47,17 +46,12 @@ LIBICAL_VCARD_EXPORT const char *vcardvalue_kind_to_string(const vcardvalue_kind
 LIBICAL_VCARD_EXPORT bool vcardvalue_kind_is_valid(const vcardvalue_kind kind);
 
 /** Encode a character string in ical format, escape certain characters, etc. */
-LIBICAL_VCARD_EXPORT int vcardvalue_encode_ical_string(const char *szText,
-                                                       char *szEncText,
-                                                       int MaxBufferLen);
+LIBICAL_VCARD_EXPORT int vcardvalue_encode_ical_string(const char *szText, char *szEncText, int MaxBufferLen);
 
 /** Extract the original character string encoded by the above function **/
-LIBICAL_VCARD_EXPORT int vcardvalue_decode_ical_string(const char *szText,
-                                                       char *szDecText,
-                                                       int nMaxBufferLen);
+LIBICAL_VCARD_EXPORT int vcardvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen);
 
 /* Duplicate and dequote a TEXT value */
-LIBICAL_VCARD_EXPORT char *vcardvalue_strdup_and_dequote_text(const char **str,
-                                                              const char *sep);
+LIBICAL_VCARD_EXPORT char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep);
 
 #endif /* VCARDVALUE_H */

@@ -91,8 +91,7 @@ int ICalProperty::operator==(ICalProperty &rhs)
     icalparameter_xliccomparetype result;
     ICalValue *thisPropValue = this->get_value();
     ICalValue *rhsPropValue = rhs.get_value();
-    result = icalvalue_compare(static_cast<icalvalue *>(*thisPropValue),
-                               static_cast<icalvalue *>(*rhsPropValue));
+    result = icalvalue_compare(static_cast<icalvalue *>(*thisPropValue), static_cast<icalvalue *>(*rhsPropValue));
     delete thisPropValue;
     delete rhsPropValue;
     return (result == ICAL_XLICCOMPARETYPE_EQUAL) ? 1 : 0;

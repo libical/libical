@@ -16,8 +16,7 @@ void program_errors(void)
     icalcomponent *comp = icalcomponent_new(ICAL_VEVENT_COMPONENT);
 
     if (icalerrno != ICAL_NO_ERROR) {
-        fprintf(stderr, "Horrible libical error: %s\n",
-                icalerror_strerror(icalerrno));
+        fprintf(stderr, "Horrible libical error: %s\n", icalerror_strerror(icalerrno));
     }
     icalcomponent_free(comp);
 }
@@ -37,8 +36,7 @@ void component_errors(icalcomponent *comp)
        correct, because it does not descend into any sub-components,
        as icalcomponent_count_errors() does. */
 
-    for (p = icalcomponent_get_first_property(comp, ICAL_XLICERROR_PROPERTY);
-         p != 0;
+    for (p = icalcomponent_get_first_property(comp, ICAL_XLICERROR_PROPERTY); p != 0;
          p = icalcomponent_get_next_property(comp, ICAL_XLICERROR_PROPERTY)) {
         printf("-- The error is %s:\n", icalproperty_get_xlicerror(p));
     }

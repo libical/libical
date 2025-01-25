@@ -26,8 +26,8 @@ static const char *get_note(icalcomponent *c)
     const char *note = 0;
 
     if (c != 0) {
-        for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
-             p != 0; p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
+        for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY); p != 0;
+             p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
             if (strcmp(icalproperty_get_x_name(p), "X-LIC-NOTE") == 0) {
                 note = icalproperty_get_x(p);
             }
@@ -49,8 +49,8 @@ static const char *get_expect(icalcomponent *c)
     const char *note = 0;
 
     if (c != 0) {
-        for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
-             p != 0; p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
+        for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY); p != 0;
+             p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
             if (strcmp(icalproperty_get_x_name(p), "X-LIC-EXPECT") == 0) {
                 note = icalproperty_get_x(p);
             }
@@ -96,8 +96,7 @@ void test_classify(void)
     assert(cal != 0);
 
     /* Iterate through all of the incoming components */
-    for (c = icalset_get_first_component(incoming); c != 0;
-         c = icalset_get_next_component(incoming)) {
+    for (c = icalset_get_first_component(incoming); c != 0; c = icalset_get_next_component(incoming)) {
         icalproperty_xlicclass class;
         icalcomponent *match = 0;
         const char *this_uid;
@@ -122,8 +121,7 @@ void test_classify(void)
 
         if (error_count != 0) {
             if (VERBOSE) {
-                printf("----- Component has errors ------- \n%s-----------------\n",
-                       icalcomponent_as_ical_string(c));
+                printf("----- Component has errors ------- \n%s-----------------\n", icalcomponent_as_ical_string(c));
             }
         }
 

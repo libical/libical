@@ -133,10 +133,9 @@ icalcomponent *get_first_real_component(icalcomponent *comp)
 {
     icalcomponent *c;
 
-    for (c = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
-         c != 0; c = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
-        if (icalcomponent_isa(c) == ICAL_VEVENT_COMPONENT ||
-            icalcomponent_isa(c) == ICAL_VTODO_COMPONENT ||
+    for (c = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT); c != 0;
+         c = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
+        if (icalcomponent_isa(c) == ICAL_VEVENT_COMPONENT || icalcomponent_isa(c) == ICAL_VTODO_COMPONENT ||
             icalcomponent_isa(c) == ICAL_VJOURNAL_COMPONENT) {
             return c;
         }
@@ -145,17 +144,15 @@ icalcomponent *get_first_real_component(icalcomponent *comp)
     return 0;
 }
 
-char *make_mime(const char *to, const char *from, const char *subject,
-                const char *text_message, const char *method, const char *ical_message)
+char *make_mime(const char *to, const char *from, const char *subject, const char *text_message, const char *method,
+                const char *ical_message)
 {
-    if ((to == NULL) || (from == NULL) || (subject == NULL) ||
-        (text_message == NULL) || (ical_message == NULL)) {
+    if ((to == NULL) || (from == NULL) || (subject == NULL) || (text_message == NULL) || (ical_message == NULL)) {
         return NULL;
     }
 
     size_t mess_size =
-        strlen(to) +
-        strlen(from) + strlen(subject) + strlen(text_message) + strlen(ical_message) + TMPSIZE;
+        strlen(to) + strlen(from) + strlen(subject) + strlen(text_message) + strlen(ical_message) + TMPSIZE;
 
     char mime_part_1[TMPSIZE];
     char mime_part_2[TMPSIZE];
@@ -238,13 +235,11 @@ void return_failure(icalcomponent *comp, char *message, struct options_struct *o
     }
 
     if (p == 0) {
-        fprintf(stderr,
-                "%s: fatal. Could not open pipe to sendmail (\"%s\") \n", program_name, SENDMAIL);
+        fprintf(stderr, "%s: fatal. Could not open pipe to sendmail (\"%s\") \n", program_name, SENDMAIL);
         byebye(1, opt);
     }
 
-    mime = make_mime(org_addr, local_attendee, "iMIP error",
-                     message, "reply", icalcomponent_as_ical_string(comp));
+    mime = make_mime(org_addr, local_attendee, "iMIP error", message, "reply", icalcomponent_as_ical_string(comp));
     if (mime) {
         fputs(mime, p);
         free(mime);
@@ -268,8 +263,7 @@ void return_error(icalcomponent *comp, char *message, struct options_struct *opt
     }
 }
 
-icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
-                          struct options_struct *opt)
+icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status, struct options_struct *opt)
 {
     icalcomponent *reply, *rinner;
     icalcomponent *inner = get_first_real_component(comp);
@@ -281,27 +275,18 @@ icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
 
     snprintf(attendee, TMPSIZE, "mailto:%s", local_attendee);
 
-    snprintf(prodid, TMPSIZE, "-//Softwarestudio.org//%s version %s//EN", ICAL_PACKAGE,
-             ICAL_VERSION);
+    snprintf(prodid, TMPSIZE, "-//Softwarestudio.org//%s version %s//EN", ICAL_PACKAGE, ICAL_VERSION);
 
     /* Create the base component */
-    reply =
-        icalcomponent_vanew(
-            ICAL_VCALENDAR_COMPONENT,
-            icalproperty_new_version("2.0"),
-            icalproperty_new_prodid(prodid),
-            icalproperty_new_method(ICAL_METHOD_REPLY),
-            icalcomponent_vanew(
-                ICAL_VEVENT_COMPONENT,
-                icalproperty_clone(
-                    icalcomponent_get_first_property(inner, ICAL_DTSTAMP_PROPERTY)),
-                icalproperty_clone(
-                    icalcomponent_get_first_property(inner, ICAL_ORGANIZER_PROPERTY)),
-                icalproperty_clone(
-                    icalcomponent_get_first_property(inner, ICAL_UID_PROPERTY)),
-                icalproperty_new_attendee(attendee),
-                (void *)0),
-            (void *)0);
+    reply = icalcomponent_vanew(
+        ICAL_VCALENDAR_COMPONENT, icalproperty_new_version("2.0"), icalproperty_new_prodid(prodid),
+        icalproperty_new_method(ICAL_METHOD_REPLY),
+        icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
+                            icalproperty_clone(icalcomponent_get_first_property(inner, ICAL_DTSTAMP_PROPERTY)),
+                            icalproperty_clone(icalcomponent_get_first_property(inner, ICAL_ORGANIZER_PROPERTY)),
+                            icalproperty_clone(icalcomponent_get_first_property(inner, ICAL_UID_PROPERTY)),
+                            icalproperty_new_attendee(attendee), (void *)0),
+        (void *)0);
 
     /* Convert errors into request-status properties and transfers
        them to the reply component */
@@ -310,8 +295,7 @@ icalcomponent *make_reply(icalcomponent *comp, icalproperty *return_status,
 
     rinner = get_first_real_component(reply);
 
-    for (p = icalcomponent_get_first_property(inner, ICAL_REQUESTSTATUS_PROPERTY);
-         p != 0;
+    for (p = icalcomponent_get_first_property(inner, ICAL_REQUESTSTATUS_PROPERTY); p != 0;
          p = icalcomponent_get_next_property(inner, ICAL_REQUESTSTATUS_PROPERTY)) {
         icalcomponent_add_property(rinner, icalproperty_clone(p));
     }
@@ -347,8 +331,7 @@ int check_attendee(icalproperty *p, struct options_struct *opt)
 }
 
 char static_component_error_str[MAXPATHLEN];
-char *check_component(icalcomponent *comp, icalproperty **return_status,
-                      struct options_struct *opt)
+char *check_component(icalcomponent *comp, icalproperty **return_status, struct options_struct *opt)
 {
     char *component_error_str = 0;
     icalcomponent *inner;
@@ -392,8 +375,7 @@ char *check_component(icalcomponent *comp, icalproperty **return_status,
         /* Check that the component has a METHOD */
 
         if (icalcomponent_get_first_property(comp, ICAL_METHOD_PROPERTY) == 0) {
-            strcpy(static_component_error_str,
-                   "The component you sent did not have a METHOD property");
+            strcpy(static_component_error_str, "The component you sent did not have a METHOD property");
             component_error_str = static_component_error_str;
             rs.code = ICAL_3_11_MISSREQCOMP_STATUS;
             break;
@@ -403,21 +385,20 @@ char *check_component(icalcomponent *comp, icalproperty **return_status,
 
         /* Check that the compopnent has an organizer */
         if (icalcomponent_get_first_property(inner, ICAL_ORGANIZER_PROPERTY) == 0) {
-            fprintf(stderr, "%s: fatal. Component does not have an ORGANIZER property\n",
-                    program_name);
+            fprintf(stderr, "%s: fatal. Component does not have an ORGANIZER property\n", program_name);
             rs.code = ICAL_3_11_MISSREQCOMP_STATUS;
             break;
         }
 
         /* Check for this user as an attendee or organizer */
 
-        for (p = icalcomponent_get_first_property(inner, ICAL_ATTENDEE_PROPERTY);
-             p != 0; p = icalcomponent_get_next_property(inner, ICAL_ATTENDEE_PROPERTY)) {
+        for (p = icalcomponent_get_first_property(inner, ICAL_ATTENDEE_PROPERTY); p != 0;
+             p = icalcomponent_get_next_property(inner, ICAL_ATTENDEE_PROPERTY)) {
             found_attendee += check_attendee(p, opt);
         }
 
-        for (p = icalcomponent_get_first_property(inner, ICAL_ORGANIZER_PROPERTY);
-             p != 0; p = icalcomponent_get_next_property(inner, ICAL_ORGANIZER_PROPERTY)) {
+        for (p = icalcomponent_get_first_property(inner, ICAL_ORGANIZER_PROPERTY); p != 0;
+             p = icalcomponent_get_next_property(inner, ICAL_ORGANIZER_PROPERTY)) {
             found_attendee += check_attendee(p, opt);
         }
 
@@ -579,9 +560,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
         struct passwd *pw;
 
         if (!user) {
-            fprintf(stderr,
-                    "%s: Can't get username. Try explicitly specifying the output file with -o",
-                    program_name);
+            fprintf(stderr, "%s: Can't get username. Try explicitly specifying the output file with -o", program_name);
             byebye(1, opt);
         }
 
@@ -634,9 +613,8 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
             errno = 0;
             if (type == NO_FILE) {
                 if (mkdir(facspath, 0775) != 0) {
-                    fprintf(stderr,
-                            "%s: Failed to create calendar directory %s: %s\n",
-                            program_name, facspath, strerror(errno));
+                    fprintf(stderr, "%s: Failed to create calendar directory %s: %s\n", program_name, facspath,
+                            strerror(errno));
                     free(facspath);
                     byebye(1, opt);
                 } else {
@@ -644,8 +622,7 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
                 }
 
             } else if (type == REGULAR || type == ERROR) {
-                fprintf(stderr, "%s: Cannot create calendar directory %s\n",
-                        program_name, facspath);
+                fprintf(stderr, "%s: Cannot create calendar directory %s\n", program_name, facspath);
                 free(facspath);
                 byebye(1, opt);
             }
@@ -668,25 +645,23 @@ void store_component(icalcomponent *comp, struct options_struct *opt)
         icalset *fs = icalfileset_new(opt->output_file);
 
         if (fs == 0) {
-            fprintf(stderr,
-                    "%s: Failed to get incoming component directory: %s\n",
-                    program_name, icalerror_strerror(icalerrno));
+            fprintf(stderr, "%s: Failed to get incoming component directory: %s\n", program_name,
+                    icalerror_strerror(icalerrno));
             byebye(1, opt);
         }
 
         error = icalfileset_add_component(fs, comp);
 
         if (error != ICAL_NO_ERROR) {
-            fprintf(stderr, "%s: Failed to write incoming component: %s\n",
-                    program_name, icalerror_strerror(icalerrno));
+            fprintf(stderr, "%s: Failed to write incoming component: %s\n", program_name,
+                    icalerror_strerror(icalerrno));
             byebye(1, opt);
         }
 
         error = icalfileset_commit(fs);
 
         if (error != ICAL_NO_ERROR) {
-            fprintf(stderr, "%s: Failed to commit incoming cluster: %s\n",
-                    program_name, icalerror_strerror(icalerrno));
+            fprintf(stderr, "%s: Failed to commit incoming cluster: %s\n", program_name, icalerror_strerror(icalerrno));
             byebye(1, opt);
         }
 
@@ -754,8 +729,8 @@ icalcomponent *find_vcalendar(icalcomponent *comp)
 {
     icalcomponent *c, *rtrn;
 
-    for (c = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
-         c != 0; c = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
+    for (c = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT); c != 0;
+         c = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
         if (icalcomponent_isa(c) == ICAL_VCALENDAR_COMPONENT) {
             icalcomponent_remove_component(comp, c);
             return c;

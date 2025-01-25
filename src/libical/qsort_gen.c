@@ -44,16 +44,16 @@ void qsort_gen_memswap(void *m1, void *m2, size_t size)
 #define T 7
 
 /* Macros for handling the QSort stack */
-#define PREPARE_STACK        \
-    size_t stack[STACKSIZE]; \
+#define PREPARE_STACK                                                                                                  \
+    size_t stack[STACKSIZE];                                                                                           \
     size_t *stackptr = stack
-#define PUSH(base, limit) \
-    stackptr[0] = base;   \
-    stackptr[1] = limit;  \
+#define PUSH(base, limit)                                                                                              \
+    stackptr[0] = base;                                                                                                \
+    stackptr[1] = limit;                                                                                               \
     stackptr += 2
-#define POP(base, limit) \
-    stackptr -= 2;       \
-    base = stackptr[0];  \
+#define POP(base, limit)                                                                                               \
+    stackptr -= 2;                                                                                                     \
+    base = stackptr[0];                                                                                                \
     limit = stackptr[1]
 /* TODO: Stack usage is log2(nmemb) (minus what T shaves off the worst case).
          Worst-case nmemb is platform dependent and should probably be
@@ -61,8 +61,7 @@ void qsort_gen_memswap(void *m1, void *m2, size_t size)
 */
 #define STACKSIZE 64
 
-void qsort_gen(void *list, size_t nitems,
-               int (*compar)(const void *, size_t, size_t),
+void qsort_gen(void *list, size_t nitems, int (*compar)(const void *, size_t, size_t),
                void (*swapr)(void *, size_t, size_t))
 {
     size_t i;

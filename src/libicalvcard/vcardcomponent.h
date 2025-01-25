@@ -66,25 +66,20 @@ LIBICAL_VCARD_EXPORT bool vcardcomponent_isa_component(void *component);
 
 /***** Working with Properties *****/
 
-LIBICAL_VCARD_EXPORT void vcardcomponent_add_property(vcardcomponent *card,
-                                                      vcardproperty *property);
+LIBICAL_VCARD_EXPORT void vcardcomponent_add_property(vcardcomponent *card, vcardproperty *property);
 
-LIBICAL_VCARD_EXPORT void vcardcomponent_remove_property(vcardcomponent *card,
-                                                         vcardproperty *property);
+LIBICAL_VCARD_EXPORT void vcardcomponent_remove_property(vcardcomponent *card, vcardproperty *property);
 
-LIBICAL_VCARD_EXPORT int vcardcomponent_count_properties(vcardcomponent *card,
-                                                         vcardproperty_kind kind,
+LIBICAL_VCARD_EXPORT int vcardcomponent_count_properties(vcardcomponent *card, vcardproperty_kind kind,
                                                          int ignore_alts);
 
 /***** Working with Components *****/
 
 LIBICAL_VCARD_EXPORT void vcardcomponent_add_component(vcardcomponent *parent, vcardcomponent *child);
 
-LIBICAL_VCARD_EXPORT void vcardcomponent_remove_component(vcardcomponent *parent,
-                                                          vcardcomponent *child);
+LIBICAL_VCARD_EXPORT void vcardcomponent_remove_component(vcardcomponent *parent, vcardcomponent *child);
 
-LIBICAL_VCARD_EXPORT int vcardcomponent_count_components(vcardcomponent *component,
-                                                         vcardcomponent_kind kind);
+LIBICAL_VCARD_EXPORT int vcardcomponent_count_components(vcardcomponent *component, vcardcomponent_kind kind);
 
 /* Kind conversion routines */
 
@@ -98,8 +93,7 @@ LIBICAL_VCARD_EXPORT const char *vcardcomponent_kind_to_string(vcardcomponent_ki
  *  This takes 2 VCARD components and merges the second one into the first.
  *  comp_to_merge will no longer exist after calling this function.
  */
-LIBICAL_VCARD_EXPORT void vcardcomponent_merge_component(vcardcomponent *comp,
-                                                         vcardcomponent *comp_to_merge);
+LIBICAL_VCARD_EXPORT void vcardcomponent_merge_component(vcardcomponent *comp, vcardcomponent *comp_to_merge);
 
 /* Iteration Routines. There are two forms of iterators, internal and
 external. The internal ones came first, and are almost completely
@@ -118,8 +112,7 @@ LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_next_component(vcardcomp
  * @brief Sets the parent vcard for the specified vcardproperty @p property.
  * @since 3.0
  */
-LIBICAL_VCARD_EXPORT void vcardproperty_set_parent(vcardproperty *property,
-                                                   vcardcomponent *card);
+LIBICAL_VCARD_EXPORT void vcardproperty_set_parent(vcardproperty *property, vcardcomponent *card);
 
 /**
  * @brief Returns the parent vcard for the specified @p property.
@@ -129,8 +122,7 @@ LIBICAL_VCARD_EXPORT vcardcomponent *vcardproperty_get_parent(const vcardpropert
 /* Iterate through the properties */
 LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_current_property(vcardcomponent *card);
 
-LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_first_property(vcardcomponent *card,
-                                                                      vcardproperty_kind kind);
+LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_first_property(vcardcomponent *card, vcardproperty_kind kind);
 LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_next_property(vcardcomponent *component,
                                                                      vcardproperty_kind kind);
 
@@ -138,8 +130,7 @@ LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_next_property(vcardcompon
  *  This takes 2 VCARD components and merges the second one into the first.
  *  comp_to_merge will no longer exist after calling this function.
  */
-LIBICAL_VCARD_EXPORT void vcardcomponent_merge_card(vcardcomponent *card,
-                                                    vcardcomponent *card_to_merge);
+LIBICAL_VCARD_EXPORT void vcardcomponent_merge_card(vcardcomponent *card, vcardcomponent *card_to_merge);
 
 /***** Working with embedded error properties *****/
 
@@ -166,8 +157,7 @@ LIBICAL_VCARD_EXPORT void vcardcomponent_convert_errors(vcardcomponent *card);
  */
 LIBICAL_VCARD_EXPORT void vcardcomponent_normalize(vcardcomponent *card);
 
-LIBICAL_VCARD_EXPORT void vcardcomponent_transform(vcardcomponent *impl,
-                                                   vcardproperty_version version);
+LIBICAL_VCARD_EXPORT void vcardcomponent_transform(vcardcomponent *impl, vcardproperty_version version);
 
 /******************** Convenience routines **********************/
 

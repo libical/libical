@@ -102,9 +102,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     /* Gets a list of spans of busy time from the events in the set
        and order the spans based on the start time */
 
-    for (c = icalset_get_first_component(set);
-         c != 0;
-         c = icalset_get_next_component(set)) {
+    for (c = icalset_get_first_component(set); c != 0; c = icalset_get_next_component(set)) {
         kind = icalcomponent_isa(c);
         inner = icalcomponent_get_inner(c);
 
@@ -336,8 +334,7 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     return matrix;
 }
 
-icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
-                                         const char *organizer, const char *attendee)
+icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl, const char *organizer, const char *attendee)
 {
     icalcomponent *comp;
     icalproperty *p;
@@ -405,8 +402,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
     sl->spans = pvl_newlist();
 
     /* cycle through each FREEBUSY property, adding to the spanlist */
-    for (prop = icalcomponent_get_first_property(inner, ICAL_FREEBUSY_PROPERTY);
-         prop != NULL;
+    for (prop = icalcomponent_get_first_property(inner, ICAL_FREEBUSY_PROPERTY); prop != NULL;
          prop = icalcomponent_get_next_property(inner, ICAL_FREEBUSY_PROPERTY)) {
         icaltime_span *s = (icaltime_span *)malloc(sizeof(icaltime_span));
         icalparameter *param;

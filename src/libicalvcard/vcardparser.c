@@ -58,9 +58,7 @@ struct buf {
     size_t len;
     size_t alloc;
 };
-#define BUF_INITIALIZER \
-    {                   \
-        NULL, 0, 0}
+#define BUF_INITIALIZER {NULL, 0, 0}
 
 struct vcardparser_state {
     struct buf buf;
@@ -184,16 +182,15 @@ static void buf_vprintf(struct buf *buf, const char *fmt, va_list args)
 #define MAKE(X, Y) X = icalmemory_new_buffer(sizeof(struct Y))
 #define PUTC(C) buf_putc(&state->buf, C)
 #define INC(I) state->p += I
-#define IS_CTRL(ch) \
-    (ch > 0 && ch <= 0x1f && ch != '\r' && ch != '\n' && ch != '\t')
-#define HANDLECTRL(state)              \
-    {                                  \
-        if (IS_CTRL(*state->p)) {      \
-            while (IS_CTRL(*state->p)) \
-                state->p++;            \
-        }                              \
-        if ((*state->p) == 0)          \
-            break;                     \
+#define IS_CTRL(ch) (ch > 0 && ch <= 0x1f && ch != '\r' && ch != '\n' && ch != '\t')
+#define HANDLECTRL(state)                                                                                              \
+    {                                                                                                                  \
+        if (IS_CTRL(*state->p)) {                                                                                      \
+            while (IS_CTRL(*state->p))                                                                                 \
+                state->p++;                                                                                            \
+        }                                                                                                              \
+        if ((*state->p) == 0)                                                                                          \
+            break;                                                                                                     \
     }
 
 static int _parse_param_name(struct vcardparser_state *state)
@@ -246,8 +243,7 @@ static int _parse_param_name(struct vcardparser_state *state)
 }
 
 /* just leaves it on the buffer */
-static int _parse_param_quoted(struct vcardparser_state *state,
-                               int structured, int multivalued)
+static int _parse_param_quoted(struct vcardparser_state *state, int structured, int multivalued)
 {
     NOTESTART();
 
@@ -401,9 +397,7 @@ static int _parse_param_value(struct vcardparser_state *state)
 
         case '"':
             INC(1);
-            while ((r = _parse_param_quoted(state,
-                                            structured != NULL,
-                                            multivalued)) == PE_QSTRING_EOV) {
+            while ((r = _parse_param_quoted(state, structured != NULL, multivalued)) == PE_QSTRING_EOV) {
                 if (structured) {
                     vcardstrarray_append(field, buf_cstring(&state->buf));
 
@@ -412,8 +406,7 @@ static int _parse_param_value(struct vcardparser_state *state)
                         structured->field[structured->num_fields++] = field;
                     }
                 } else {
-                    vcardparameter_add_value_from_string(state->param,
-                                                         buf_cstring(&state->buf));
+                    vcardparameter_add_value_from_string(state->param, buf_cstring(&state->buf));
                 }
 
                 buf_reset(&state->buf);
@@ -429,16 +422,13 @@ static int _parse_param_value(struct vcardparser_state *state)
             if (structured) {
                 vcardstrarray_append(field, buf_cstring(&state->buf));
             } else if (multivalued) {
-                vcardparameter_add_value_from_string(state->param,
-                                                     buf_cstring(&state->buf));
+                vcardparameter_add_value_from_string(state->param, buf_cstring(&state->buf));
             } else {
-                vcardparameter_set_value_from_string(state->param,
-                                                     buf_cstring(&state->buf));
+                vcardparameter_set_value_from_string(state->param, buf_cstring(&state->buf));
 
                 /* if it is a VALUE parameter, set the value kind */
                 if (vcardparameter_isa(state->param) == VCARD_VALUE_PARAMETER) {
-                    vcardvalue_kind kind =
-                        vcardvalue_string_to_kind(buf_cstring(&state->buf));
+                    vcardvalue_kind kind = vcardvalue_string_to_kind(buf_cstring(&state->buf));
                     if (kind != VCARD_NO_VALUE)
                         state->value_kind = kind;
                 }
@@ -460,8 +450,7 @@ static int _parse_param_value(struct vcardparser_state *state)
 
         case ',':
             if (multivalued) {
-                vcardparameter_add_value_from_string(state->param,
-                                                     buf_cstring(&state->buf));
+                vcardparameter_add_value_from_string(state->param, buf_cstring(&state->buf));
                 buf_reset(&state->buf);
                 INC(1);
                 break;
@@ -479,9 +468,7 @@ static int _parse_param_value(struct vcardparser_state *state)
     return PE_PARAMVALUE_EOF;
 }
 
-static void _parse_error(struct vcardparser_state *state,
-                         enum vcardparameter_xlicerrortype type,
-                         const char *fmt, ...)
+static void _parse_error(struct vcardparser_state *state, enum vcardparameter_xlicerrortype type, const char *fmt, ...)
 {
     va_list ap;
 
@@ -494,9 +481,7 @@ static void _parse_error(struct vcardparser_state *state,
         vcardproperty_free(state->prop);
 
     state->prop =
-        vcardproperty_vanew_xlicerror(buf_cstring(&state->errbuf),
-                                      vcardparameter_new_xlicerrortype(type),
-                                      (void *)0);
+        vcardproperty_vanew_xlicerror(buf_cstring(&state->errbuf), vcardparameter_new_xlicerrortype(type), (void *)0);
     buf_reset(&state->buf);
 }
 
@@ -515,11 +500,9 @@ static int _parse_prop_params(struct vcardparser_state *state)
         /* get the name */
         r = _parse_param_name(state);
         if (r) {
-            _parse_error(state,
-                         VCARD_XLICERRORTYPE_PARAMETERNAMEPARSEERROR,
-                         "%s '%s' in %s%s%s property. Removing entire property",
-                         vcardparser_errstr(r), buf_cstring(&state->buf),
-                         group ? group : "", group ? "." : "",
+            _parse_error(state, VCARD_XLICERRORTYPE_PARAMETERNAMEPARSEERROR,
+                         "%s '%s' in %s%s%s property. Removing entire property", vcardparser_errstr(r),
+                         buf_cstring(&state->buf), group ? group : "", group ? "." : "",
                          vcardproperty_kind_to_string(prop_kind));
             return r;
         }
@@ -531,12 +514,9 @@ static int _parse_prop_params(struct vcardparser_state *state)
         if (r) {
             vcardparameter_kind param_kind = vcardparameter_isa(state->param);
 
-            _parse_error(state,
-                         VCARD_XLICERRORTYPE_PARAMETERVALUEPARSEERROR,
-                         "%s for %s in %s%s%s property. Removing entire property",
-                         vcardparser_errstr(r),
-                         vcardparameter_kind_to_string(param_kind),
-                         group ? group : "", group ? "." : "",
+            _parse_error(state, VCARD_XLICERRORTYPE_PARAMETERVALUEPARSEERROR,
+                         "%s for %s in %s%s%s property. Removing entire property", vcardparser_errstr(r),
+                         vcardparameter_kind_to_string(param_kind), group ? group : "", group ? "." : "",
                          vcardproperty_kind_to_string(prop_kind));
             return r;
         }
@@ -650,8 +630,7 @@ static int _parse_prop_name(struct vcardparser_state *state)
 static int _parse_prop_value(struct vcardparser_state *state)
 {
     vcardproperty_kind prop_kind = vcardproperty_isa(state->prop);
-    int is_multivalued = (state->value_kind == VCARD_TEXTLIST_VALUE) ||
-                         vcardproperty_is_multivalued(prop_kind);
+    int is_multivalued = (state->value_kind == VCARD_TEXTLIST_VALUE) || vcardproperty_is_multivalued(prop_kind);
     int is_structured = (state->value_kind == VCARD_STRUCTURED_VALUE);
     const char *text_sep = NULL;
     vcardstructuredtype structured = {0, {0}};
@@ -665,8 +644,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
             memset(&structured, 0, sizeof(vcardstructuredtype));
             structured.field[structured.num_fields++] = textlist;
             text_sep = ";,";
-        } else if ((state->value_kind == VCARD_TEXTLIST_VALUE) &&
-                   vcardproperty_is_structured(prop_kind)) {
+        } else if ((state->value_kind == VCARD_TEXTLIST_VALUE) && vcardproperty_is_structured(prop_kind)) {
             text_sep = ";";
         } else {
             text_sep = ",";
@@ -719,8 +697,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
         case ';':
             if (is_structured || (is_multivalued && strchr(text_sep, *state->p))) {
                 const char *str = buf_cstring(&state->buf);
-                char *dequot_str =
-                    vcardvalue_strdup_and_dequote_text(&str, text_sep);
+                char *dequot_str = vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
                 /* repair critical property values */
                 if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0')
@@ -754,8 +731,7 @@ out:
 
     if (is_multivalued || is_structured) {
         const char *str = buf_cstring(&state->buf);
-        char *dequot_str =
-            vcardvalue_strdup_and_dequote_text(&str, text_sep);
+        char *dequot_str = vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
         /* repair critical property values */
         if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0')
@@ -784,8 +760,7 @@ out:
             state->version = state->prop;
         }
 
-        value = vcardvalue_new_from_string(state->value_kind,
-                                           buf_cstring(&state->buf));
+        value = vcardvalue_new_from_string(state->value_kind, buf_cstring(&state->buf));
     }
 
     if (!value)
@@ -827,23 +802,16 @@ static void _parse_prop(struct vcardparser_state *state)
         if (r == PE_PROP_MULTIGROUP) {
             vcardproperty_kind prop_kind = vcardproperty_isa(state->prop);
 
-            _parse_error(state,
-                         VCARD_XLICERRORTYPE_PROPERTYPARSEERROR,
-                         "%s '%s.%s'. Removing entire property",
-                         vcardparser_errstr(r),
-                         vcardproperty_get_group(state->prop),
+            _parse_error(state, VCARD_XLICERRORTYPE_PROPERTYPARSEERROR, "%s '%s.%s'. Removing entire property",
+                         vcardparser_errstr(r), vcardproperty_get_group(state->prop),
                          vcardproperty_kind_to_string(prop_kind));
             _parse_eatline(state);
         } else if (r == PE_NAME_INVALID) {
-            _parse_error(state,
-                         VCARD_XLICERRORTYPE_PROPERTYPARSEERROR,
-                         "%s '%s'. Removing entire property",
+            _parse_error(state, VCARD_XLICERRORTYPE_PROPERTYPARSEERROR, "%s '%s'. Removing entire property",
                          vcardparser_errstr(r), buf_cstring(&state->buf));
             _parse_eatline(state);
         } else {
-            _parse_error(state,
-                         VCARD_XLICERRORTYPE_PROPERTYPARSEERROR,
-                         "%s '%s'. Ignoring property",
+            _parse_error(state, VCARD_XLICERRORTYPE_PROPERTYPARSEERROR, "%s '%s'. Ignoring property",
                          vcardparser_errstr(r), buf_cstring(&state->buf));
         }
         return;
@@ -864,27 +832,20 @@ static void _parse_prop(struct vcardparser_state *state)
         const char *group = vcardproperty_get_group(state->prop);
 
         if (r == PE_VALUE_INVALID) {
-            _parse_error(state,
-                         VCARD_XLICERRORTYPE_VALUEPARSEERROR,
+            _parse_error(state, VCARD_XLICERRORTYPE_VALUEPARSEERROR,
                          "Error parsing '%s' as %s value in %s%s%s property."
                          " Removing entire property",
-                         buf_cstring(&state->buf),
-                         vcardvalue_kind_to_string(state->value_kind),
-                         group ? group : "", group ? "." : "",
-                         vcardproperty_kind_to_string(prop_kind));
+                         buf_cstring(&state->buf), vcardvalue_kind_to_string(state->value_kind), group ? group : "",
+                         group ? "." : "", vcardproperty_kind_to_string(prop_kind));
         } else {
-            _parse_error(state,
-                         VCARD_XLICERRORTYPE_VALUEPARSEERROR,
-                         "%s in %s%s%s property. Removing entire property",
-                         vcardparser_errstr(r),
-                         group ? group : "", group ? "." : "",
+            _parse_error(state, VCARD_XLICERRORTYPE_VALUEPARSEERROR, "%s in %s%s%s property. Removing entire property",
+                         vcardparser_errstr(r), group ? group : "", group ? "." : "",
                          vcardproperty_kind_to_string(prop_kind));
         }
     }
 }
 
-static int _parse_vcard(struct vcardparser_state *state,
-                        vcardcomponent *comp, int only_one)
+static int _parse_vcard(struct vcardparser_state *state, vcardcomponent *comp, int only_one)
 {
     vcardcomponent *sub;
     const char *cardstart = state->p;
@@ -892,8 +853,7 @@ static int _parse_vcard(struct vcardparser_state *state,
 
     while (*state->p) {
         /* whitespace is very skippable before AND afterwards */
-        if (*state->p == '\r' || *state->p == '\n' ||
-            *state->p == ' ' || *state->p == '\t') {
+        if (*state->p == '\r' || *state->p == '\n' || *state->p == ' ' || *state->p == '\t') {
             INC(1);
             continue;
         }
@@ -901,8 +861,7 @@ static int _parse_vcard(struct vcardparser_state *state,
         _parse_prop(state);
 
         if (vcardproperty_isa(state->prop) == VCARD_BEGIN_PROPERTY) {
-            const char *val =
-                vcardvalue_get_text(vcardproperty_get_value(state->prop));
+            const char *val = vcardvalue_get_text(vcardproperty_get_value(state->prop));
             vcardcomponent_kind kind = vcardcomponent_string_to_kind(val);
 
             if (kind == VCARD_NO_COMPONENT) {
@@ -925,8 +884,7 @@ static int _parse_vcard(struct vcardparser_state *state,
             r = PE_MISMATCHED_CARD;
             break;
         } else if (vcardproperty_isa(state->prop) == VCARD_END_PROPERTY) {
-            const char *val =
-                vcardvalue_get_text(vcardproperty_get_value(state->prop));
+            const char *val = vcardvalue_get_text(vcardproperty_get_value(state->prop));
             vcardcomponent_kind kind = vcardcomponent_string_to_kind(val);
 
             if (kind != vcardcomponent_isa(comp)) {
@@ -1037,10 +995,8 @@ vcardcomponent *vcardparser_parse_string(const char *str)
     parser.base = str;
     r = vcardparser_parse(&parser, 0);
     if (!r) {
-        if (vcardcomponent_count_components(parser.root,
-                                            VCARD_VCARD_COMPONENT) == 1) {
-            vcard = vcardcomponent_get_first_component(parser.root,
-                                                       VCARD_VCARD_COMPONENT);
+        if (vcardcomponent_count_components(parser.root, VCARD_VCARD_COMPONENT) == 1) {
+            vcard = vcardcomponent_get_first_component(parser.root, VCARD_VCARD_COMPONENT);
             vcardcomponent_remove_component(parser.root, vcard);
         } else {
             vcard = parser.root;

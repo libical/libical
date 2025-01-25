@@ -302,8 +302,8 @@ icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
 
     /* Determine which cluster this object belongs in. This is a HACK */
 
-    for (inner = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
-         inner != 0; inner = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
+    for (inner = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT); inner != 0;
+         inner = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
         dt = icalcomponent_get_first_property(inner, ICAL_DTSTAMP_PROPERTY);
 
         if (dt != 0) {
@@ -312,8 +312,8 @@ icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
     }
 
     if (dt == 0) {
-        for (inner = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
-             inner != 0; inner = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
+        for (inner = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT); inner != 0;
+             inner = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
             dt = icalcomponent_get_first_property(inner, ICAL_DTSTART_PROPERTY);
 
             if (dt != 0) {
@@ -383,8 +383,8 @@ icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
 
     filecomp = icalcluster_get_component(dset->cluster);
 
-    for (i = icalcomponent_begin_component(filecomp, ICAL_ANY_COMPONENT);
-         icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
+    for (i = icalcomponent_begin_component(filecomp, ICAL_ANY_COMPONENT); icalcompiter_deref(&i) != 0;
+         icalcompiter_next(&i)) {
         icalcomponent *this = icalcompiter_deref(&i);
 
         if (this == comp) {
@@ -609,8 +609,8 @@ icalcomponent *icaldirset_get_next_component(icalset *set)
 
     while (1) {
         /* Iterate through all of the objects in the cluster */
-        for (c = icalcluster_get_current_component(dset->cluster);
-             c != 0; c = icalcluster_get_next_component(dset->cluster)) {
+        for (c = icalcluster_get_current_component(dset->cluster); c != 0;
+             c = icalcluster_get_next_component(dset->cluster)) {
             /* If there is a gauge defined and the component does not
                pass the gauge, skip the rest of the loop */
 
@@ -642,8 +642,7 @@ icalcomponent *icaldirset_get_next_component(icalset *set)
     return 0; /* Should never get here */
 }
 
-icalsetiter icaldirset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge,
-                                       const char *tzid)
+icalsetiter icaldirset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge, const char *tzid)
 {
     _unused(set);
     _unused(kind);

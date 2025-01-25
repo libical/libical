@@ -18,8 +18,7 @@
 
 #include <string.h>
 
-ssize_t vcardstrarray_find(vcardstrarray *array,
-                           const char *needle)
+ssize_t vcardstrarray_find(vcardstrarray *array, const char *needle)
 {
     size_t i;
 

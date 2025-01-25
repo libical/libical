@@ -18,16 +18,14 @@
 
 #include <string.h>
 
-ssize_t vcardenumarray_find(vcardenumarray *array,
-                            vcardenumarray_element *needle)
+ssize_t vcardenumarray_find(vcardenumarray *array, vcardenumarray_element *needle)
 {
     size_t i;
 
     for (i = 0; array && i < array->num_elements; i++) {
         vcardenumarray_element *e = icalarray_element_at(array, i);
         if (!!e->xvalue == !!needle->xvalue &&
-            ((e->xvalue && !strcmp(e->xvalue, needle->xvalue)) ||
-             (!e->xvalue && (e->val == needle->val)))) {
+            ((e->xvalue && !strcmp(e->xvalue, needle->xvalue)) || (!e->xvalue && (e->val == needle->val)))) {
             return (ssize_t)i;
         }
     }
@@ -37,8 +35,7 @@ ssize_t vcardenumarray_find(vcardenumarray *array,
 
 void vcardenumarray_append(vcardenumarray *array, vcardenumarray_element *elem)
 {
-    vcardenumarray_element copy = {
-        elem->val, elem->xvalue ? icalmemory_strdup(elem->xvalue) : NULL};
+    vcardenumarray_element copy = {elem->val, elem->xvalue ? icalmemory_strdup(elem->xvalue) : NULL};
 
     icalarray_append(array, &copy);
 }
@@ -49,8 +46,7 @@ void vcardenumarray_add(vcardenumarray *array, vcardenumarray_element *add)
         vcardenumarray_append(array, add);
 }
 
-void vcardenumarray_remove_element_at(vcardenumarray *array,
-                                      ssize_t position)
+void vcardenumarray_remove_element_at(vcardenumarray *array, ssize_t position)
 {
     vcardenumarray_element *del = icalarray_element_at(array, (size_t)position);
 

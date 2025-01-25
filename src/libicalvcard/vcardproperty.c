@@ -41,8 +41,7 @@ void vcardproperty_add_parameters(vcardproperty *prop, va_list args)
     while ((vp = va_arg(args, void *)) != 0) {
         if (vcardvalue_isa_value(vp) != 0) {
         } else if (vcardparameter_isa_parameter(vp) != 0) {
-            vcardproperty_add_parameter((vcardproperty *)prop,
-                                        (vcardparameter *)vp);
+            vcardproperty_add_parameter((vcardproperty *)prop, (vcardparameter *)vp);
         } else {
             icalerror_set_errno(ICAL_BADARG_ERROR);
         }
@@ -307,13 +306,11 @@ static char *fold_property_line(char *text)
 /* Determine what VALUE parameter to include. The VALUE parameters
    are ignored in the normal parameter printing ( the block after
    this one, so we need to do it here */
-static const char *vcardproperty_get_value_kind(vcardproperty *prop,
-                                                vcardvalue *value)
+static const char *vcardproperty_get_value_kind(vcardproperty *prop, vcardvalue *value)
 {
     const char *kind_string = NULL;
     vcardvalue_kind kind = VCARD_NO_VALUE;
-    vcardparameter *val_param =
-        vcardproperty_get_first_parameter(prop, VCARD_VALUE_PARAMETER);
+    vcardparameter *val_param = vcardproperty_get_first_parameter(prop, VCARD_VALUE_PARAMETER);
     vcardproperty_version version = vcardcomponent_get_version(prop->parent);
 
     if (version == VCARD_VERSION_NONE) {
@@ -346,8 +343,7 @@ static const char *vcardproperty_get_value_kind(vcardproperty *prop,
         /* v3 default: VALUE=BINARY (ENCODING=b parameter)
          * v4 default: VALUE=URL
          */
-        if (version == VCARD_VERSION_40 ||
-            vcardproperty_get_first_parameter(prop, VCARD_ENCODING_PARAMETER)) {
+        if (version == VCARD_VERSION_40 || vcardproperty_get_first_parameter(prop, VCARD_ENCODING_PARAMETER)) {
             kind = VCARD_NO_VALUE;
         }
         break;
@@ -358,8 +354,7 @@ static const char *vcardproperty_get_value_kind(vcardproperty *prop,
         /* TIME is v4 specific.
          * All other types are self-evident.
          */
-        if (version == VCARD_VERSION_40 &&
-            (kind == VCARD_TIME_VALUE || kind == VCARD_DATEANDORTIME_VALUE)) {
+        if (version == VCARD_VERSION_40 && (kind == VCARD_TIME_VALUE || kind == VCARD_DATEANDORTIME_VALUE)) {
             kind = VCARD_NO_VALUE;
         } else if (kind == VCARD_DATE_VALUE || kind == VCARD_DATETIME_VALUE) {
             kind = VCARD_NO_VALUE;
@@ -396,8 +391,7 @@ static const char *vcardproperty_get_value_kind(vcardproperty *prop,
         break;
     }
 
-    if (kind != VCARD_NO_VALUE &&
-        !vcardproperty_value_kind_is_default(prop->kind, kind)) {
+    if (kind != VCARD_NO_VALUE && !vcardproperty_value_kind_is_default(prop->kind, kind)) {
         /* Not the default, so it must be specified */
         kind_string = vcardvalue_kind_to_string(kind);
     } else {
@@ -467,8 +461,8 @@ char *vcardproperty_as_vcard_string_r(vcardproperty *prop)
     }
 
     /* Append parameters */
-    for (param = vcardproperty_get_first_parameter(prop, VCARD_ANY_PARAMETER);
-         param != 0; param = vcardproperty_get_next_parameter(prop, VCARD_ANY_PARAMETER)) {
+    for (param = vcardproperty_get_first_parameter(prop, VCARD_ANY_PARAMETER); param != 0;
+         param = vcardproperty_get_next_parameter(prop, VCARD_ANY_PARAMETER)) {
         vcardparameter_kind kind = vcardparameter_isa(param);
 
         kind_string = vcardparameter_as_vcard_string_r(param);
@@ -570,8 +564,7 @@ void vcardproperty_set_parameter(vcardproperty *prop, vcardparameter *parameter)
     vcardproperty_add_parameter(prop, parameter);
 }
 
-void vcardproperty_set_parameter_from_string(vcardproperty *prop,
-                                             const char *name, const char *value)
+void vcardproperty_set_parameter_from_string(vcardproperty *prop, const char *name, const char *value)
 {
     vcardparameter_kind kind;
     vcardparameter *param;
@@ -631,8 +624,8 @@ char *vcardproperty_get_parameter_as_string_r(vcardproperty *prop, const char *n
         return 0;
     }
 
-    for (param = vcardproperty_get_first_parameter(prop, kind);
-         param != 0; param = vcardproperty_get_next_parameter(prop, kind)) {
+    for (param = vcardproperty_get_first_parameter(prop, kind); param != 0;
+         param = vcardproperty_get_next_parameter(prop, kind)) {
         if (kind == VCARD_X_PARAMETER) {
             if (strcmp(vcardparameter_get_xname(param), name) == 0) {
                 break;
@@ -770,8 +763,8 @@ vcardparameter *vcardproperty_get_first_parameter(vcardproperty *p, vcardparamet
         return 0;
     }
 
-    for (p->parameter_iterator = pvl_head(p->parameters);
-         p->parameter_iterator != 0; p->parameter_iterator = pvl_next(p->parameter_iterator)) {
+    for (p->parameter_iterator = pvl_head(p->parameters); p->parameter_iterator != 0;
+         p->parameter_iterator = pvl_next(p->parameter_iterator)) {
         vcardparameter *param = (vcardparameter *)pvl_data(p->parameter_iterator);
 
         if (vcardparameter_isa(param) == kind || kind == VCARD_ANY_PARAMETER) {
@@ -790,8 +783,8 @@ vcardparameter *vcardproperty_get_next_parameter(vcardproperty *p, vcardparamete
         return 0;
     }
 
-    for (p->parameter_iterator = pvl_next(p->parameter_iterator);
-         p->parameter_iterator != 0; p->parameter_iterator = pvl_next(p->parameter_iterator)) {
+    for (p->parameter_iterator = pvl_next(p->parameter_iterator); p->parameter_iterator != 0;
+         p->parameter_iterator = pvl_next(p->parameter_iterator)) {
         vcardparameter *param = (vcardparameter *)pvl_data(p->parameter_iterator);
 
         if (vcardparameter_isa(param) == kind || kind == VCARD_ANY_PARAMETER) {
@@ -826,8 +819,7 @@ void vcardproperty_set_value(vcardproperty *p, vcardvalue *value)
 
         val_param = vcardproperty_get_first_parameter(p, VCARD_VALUE_PARAMETER);
 
-        if (val_param &&
-            vcardparameter_value_to_value_kind(vcardparameter_get_value(val_param)) != kind) {
+        if (val_param && vcardparameter_value_to_value_kind(vcardparameter_get_value(val_param)) != kind) {
             vcardproperty_remove_parameter_by_kind(p, VCARD_VALUE_PARAMETER);
         }
     }
@@ -1070,8 +1062,7 @@ void vcardproperty_normalize(vcardproperty *prop)
                 /* Is it just TYPE=VOICE ? */
                 vcardenumarray_element voice = {VCARD_TYPE_VOICE, NULL};
 
-                if (vcardenumarray_find(vcardparameter_get_type(param),
-                                        &voice) == 0) {
+                if (vcardenumarray_find(vcardparameter_get_type(param), &voice) == 0) {
                     remove = 1;
                 }
             }
@@ -1117,12 +1108,10 @@ void vcardproperty_normalize(vcardproperty *prop)
     }
 }
 
-void vcardproperty_add_type_parameter(vcardproperty *prop,
-                                      vcardenumarray_element *type)
+void vcardproperty_add_type_parameter(vcardproperty *prop, vcardenumarray_element *type)
 {
     vcardenumarray *types;
-    vcardparameter *param =
-        vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER);
+    vcardparameter *param = vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER);
 
     if (param) {
         types = vcardparameter_get_type(param);

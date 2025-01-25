@@ -66,45 +66,39 @@ static const struct major_content_type_map {
     enum sspm_major_type type;
     const char *str;
 
-} major_content_type_map[] = {
-    {SSPM_MULTIPART_MAJOR_TYPE, "multipart"},
-    {SSPM_TEXT_MAJOR_TYPE, "text"},
-    {SSPM_TEXT_MAJOR_TYPE, "text"},
-    {SSPM_IMAGE_MAJOR_TYPE, "image"},
-    {SSPM_AUDIO_MAJOR_TYPE, "audio"},
-    {SSPM_VIDEO_MAJOR_TYPE, "video"},
-    {SSPM_APPLICATION_MAJOR_TYPE, "application"},
-    {SSPM_MULTIPART_MAJOR_TYPE, "multipart"},
-    {SSPM_MESSAGE_MAJOR_TYPE, "message"},
-    {SSPM_UNKNOWN_MAJOR_TYPE, ""}};
+} major_content_type_map[] = {{SSPM_MULTIPART_MAJOR_TYPE, "multipart"},
+                              {SSPM_TEXT_MAJOR_TYPE, "text"},
+                              {SSPM_TEXT_MAJOR_TYPE, "text"},
+                              {SSPM_IMAGE_MAJOR_TYPE, "image"},
+                              {SSPM_AUDIO_MAJOR_TYPE, "audio"},
+                              {SSPM_VIDEO_MAJOR_TYPE, "video"},
+                              {SSPM_APPLICATION_MAJOR_TYPE, "application"},
+                              {SSPM_MULTIPART_MAJOR_TYPE, "multipart"},
+                              {SSPM_MESSAGE_MAJOR_TYPE, "message"},
+                              {SSPM_UNKNOWN_MAJOR_TYPE, ""}};
 
 static const struct minor_content_type_map {
     enum sspm_minor_type type;
     const char *str;
 
-} minor_content_type_map[] = {
-    {SSPM_ANY_MINOR_TYPE, "*"},
-    {SSPM_PLAIN_MINOR_TYPE, "plain"},
-    {SSPM_RFC822_MINOR_TYPE, "rfc822"},
-    {SSPM_DIGEST_MINOR_TYPE, "digest"},
-    {SSPM_CALENDAR_MINOR_TYPE, "calendar"},
-    {SSPM_MIXED_MINOR_TYPE, "mixed"},
-    {SSPM_RELATED_MINOR_TYPE, "related"},
-    {SSPM_ALTERNATIVE_MINOR_TYPE, "alternative"},
-    {SSPM_PARALLEL_MINOR_TYPE, "parallel"},
-    {SSPM_UNKNOWN_MINOR_TYPE, ""}};
+} minor_content_type_map[] = {{SSPM_ANY_MINOR_TYPE, "*"},
+                              {SSPM_PLAIN_MINOR_TYPE, "plain"},
+                              {SSPM_RFC822_MINOR_TYPE, "rfc822"},
+                              {SSPM_DIGEST_MINOR_TYPE, "digest"},
+                              {SSPM_CALENDAR_MINOR_TYPE, "calendar"},
+                              {SSPM_MIXED_MINOR_TYPE, "mixed"},
+                              {SSPM_RELATED_MINOR_TYPE, "related"},
+                              {SSPM_ALTERNATIVE_MINOR_TYPE, "alternative"},
+                              {SSPM_PARALLEL_MINOR_TYPE, "parallel"},
+                              {SSPM_UNKNOWN_MINOR_TYPE, ""}};
 
 static const struct encoding_map {
     enum sspm_encoding encoding;
     const char *str;
-} sspm_encoding_map[] = {
-    {SSPM_NO_ENCODING, ""},
-    {SSPM_QUOTED_PRINTABLE_ENCODING, "quoted-printable"},
-    {SSPM_8BIT_ENCODING, "8bit"},
-    {SSPM_7BIT_ENCODING, "7bit"},
-    {SSPM_BINARY_ENCODING, "binary"},
-    {SSPM_BASE64_ENCODING, "base64"},
-    {SSPM_UNKNOWN_ENCODING, ""}
+} sspm_encoding_map[] = {{SSPM_NO_ENCODING, ""},           {SSPM_QUOTED_PRINTABLE_ENCODING, "quoted-printable"},
+                         {SSPM_8BIT_ENCODING, "8bit"},     {SSPM_7BIT_ENCODING, "7bit"},
+                         {SSPM_BINARY_ENCODING, "binary"}, {SSPM_BASE64_ENCODING, "base64"},
+                         {SSPM_UNKNOWN_ENCODING, ""}
 
 };
 
@@ -213,20 +207,14 @@ static char *sspm_value(char *line)
 }
 
 static const char *mime_headers[] = {
-    "Content-Type",
-    "Content-Transfer-Encoding",
-    "Content-Disposition",
-    "Content-Id",
-    "Mime-Version",
-    0};
+    "Content-Type", "Content-Transfer-Encoding", "Content-Disposition", "Content-Id", "Mime-Version", 0};
 
 static void *sspm_default_new_part(void)
 {
     return 0;
 }
 
-static void sspm_default_add_line(void *part, struct sspm_header *header,
-                                  const char *line, size_t size)
+static void sspm_default_add_line(void *part, struct sspm_header *header, const char *line, size_t size)
 {
     _unused(part);
     _unused(header);
@@ -345,8 +333,7 @@ static enum line_type get_line_type(char *line)
     }
 }
 
-static struct sspm_action_map get_action(struct mime_impl *impl,
-                                         enum sspm_major_type major, enum sspm_minor_type minor)
+static struct sspm_action_map get_action(struct mime_impl *impl, enum sspm_major_type major, enum sspm_minor_type minor)
 {
     size_t i;
     size_t len;
@@ -355,8 +342,7 @@ static struct sspm_action_map get_action(struct mime_impl *impl,
 
     if (impl->actions != 0) {
         for (i = 0; impl->actions[i].major != SSPM_UNKNOWN_MAJOR_TYPE; i++) {
-            if ((major == impl->actions[i].major &&
-                 minor == impl->actions[i].minor) ||
+            if ((major == impl->actions[i].major && minor == impl->actions[i].minor) ||
                 (major == impl->actions[i].major && minor == SSPM_ANY_MINOR_TYPE)) {
                 return impl->actions[i];
             }
@@ -366,8 +352,7 @@ static struct sspm_action_map get_action(struct mime_impl *impl,
     /* Else, read default action map */
     len = sizeof(sspm_action_map) / sizeof(sspm_action_map[0]);
     for (i = 0; i < len && sspm_action_map[i].major != SSPM_UNKNOWN_MAJOR_TYPE; i++) {
-        if ((major == sspm_action_map[i].major &&
-             minor == sspm_action_map[i].minor) ||
+        if ((major == sspm_action_map[i].major && minor == sspm_action_map[i].minor) ||
             (major == sspm_action_map[i].major && minor == SSPM_ANY_MINOR_TYPE)) {
             return sspm_action_map[i];
         }
@@ -399,8 +384,7 @@ static enum sspm_major_type sspm_find_major_content_type(char *type)
     char *ltype = sspm_lowercase(type);
 
     for (i = 0; major_content_type_map[i].type != SSPM_UNKNOWN_MAJOR_TYPE; i++) {
-        if (strncmp(ltype, major_content_type_map[i].str,
-                    strlen(major_content_type_map[i].str)) == 0) {
+        if (strncmp(ltype, major_content_type_map[i].str, strlen(major_content_type_map[i].str)) == 0) {
             icalmemory_free_buffer(ltype);
             return major_content_type_map[i].type;
         }
@@ -562,8 +546,7 @@ static char *sspm_get_next_line(struct mime_impl *impl)
     return s;
 }
 
-static void sspm_store_part(struct mime_impl *impl, struct sspm_header header,
-                            int level, void *part, size_t size)
+static void sspm_store_part(struct mime_impl *impl, struct sspm_header header, int level, void *part, size_t size)
 {
     impl->parts[impl->part_no].header = header;
     impl->parts[impl->part_no].level = level;
@@ -609,8 +592,7 @@ static void sspm_read_header(struct mime_impl *impl, struct sspm_header *header)
     header->error_text = 0;
 
     /* Read all of the lines into memory */
-    while (current_line < (MAX_HEADER_LINES - 2) &&
-           (end == 0) && ((buf = sspm_get_next_line(impl)) != 0)) {
+    while (current_line < (MAX_HEADER_LINES - 2) && (end == 0) && ((buf = sspm_get_next_line(impl)) != 0)) {
         enum line_type line_type = get_line_type(buf);
 
         switch (line_type) {
@@ -671,15 +653,13 @@ static void sspm_read_header(struct mime_impl *impl, struct sspm_header *header)
         }
     }
 
-    for (current_line = 0;
-         current_line < MAX_HEADER_LINES && header_lines[current_line][0] != 0; current_line++) {
+    for (current_line = 0; current_line < MAX_HEADER_LINES && header_lines[current_line][0] != 0; current_line++) {
         sspm_build_header(header, header_lines[current_line]);
     }
 }
 
-static void sspm_make_part(struct mime_impl *impl,
-                           struct sspm_header *header,
-                           struct sspm_header *parent_header, void **end_part, size_t *size)
+static void sspm_make_part(struct mime_impl *impl, struct sspm_header *header, struct sspm_header *parent_header,
+                           void **end_part, size_t *size)
 {
     /* For a single part type, read to the boundary, if there is a
        boundary. Otherwise, read until the end of input.  This routine
@@ -690,9 +670,7 @@ static void sspm_make_part(struct mime_impl *impl,
     void *part;
     int end = 0;
 
-    struct sspm_action_map action = get_action(impl,
-                                               header->major,
-                                               header->minor);
+    struct sspm_action_map action = get_action(impl, header->major, header->minor);
 
     *size = 0;
     part = action.new_part();
@@ -852,8 +830,7 @@ static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_hea
                 icalassert(parent_header != 0);
 
                 /* Check if it is the right boundary */
-                if (!sspm_is_mime_terminating_boundary(line) &&
-                    strcmp((line + 2), parent_header->boundary) == 0) {
+                if (!sspm_is_mime_terminating_boundary(line) && strcmp((line + 2), parent_header->boundary) == 0) {
                     /* The +2 in strncmp skips over the leading "--" */
 
                     break;
@@ -934,11 +911,9 @@ static void *sspm_make_multipart_subpart(struct mime_impl *impl, struct sspm_hea
 }
 
 /* Root routine for parsing mime entries*/
-int sspm_parse_mime(struct sspm_part *parts,
-                    size_t max_parts,
-                    const struct sspm_action_map *actions,
-                    char *(*get_string)(char *s, size_t size, void *data),
-                    void *get_string_data, struct sspm_header *first_header)
+int sspm_parse_mime(struct sspm_part *parts, size_t max_parts, const struct sspm_action_map *actions,
+                    char *(*get_string)(char *s, size_t size, void *data), void *get_string_data,
+                    struct sspm_header *first_header)
 {
     struct mime_impl impl;
     struct sspm_header header;
@@ -1281,11 +1256,10 @@ static void sspm_encode_quoted_printable(struct sspm_buffer *buf, char *data)
     }
 }
 
-static const char BaseTable[64] = {
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-    'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
-    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-    'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
+static const char BaseTable[64] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                                   'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+                                   'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                                   'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
 
 static void sspm_write_base64(struct sspm_buffer *buf, char *inbuf, int size)
 {
@@ -1406,8 +1380,7 @@ static void sspm_write_header(struct sspm_buffer *buf, struct sspm_header *heade
     /*Content-Transfer-Encoding */
 
     if (header->encoding != SSPM_UNKNOWN_ENCODING && header->encoding != SSPM_NO_ENCODING) {
-        snprintf(temp, sizeof(temp), "Content-Transfer-Encoding: %s\n",
-                 sspm_encoding_string(header->encoding));
+        snprintf(temp, sizeof(temp), "Content-Transfer-Encoding: %s\n", sspm_encoding_string(header->encoding));
     }
 
     sspm_append_char(buf, '\n');
@@ -1438,8 +1411,7 @@ static void sspm_write_part(struct sspm_buffer *buf, struct sspm_part *part, int
     sspm_append_string(buf, "\n\n");
 }
 
-static void sspm_write_multipart_part(struct sspm_buffer *buf,
-                                      struct sspm_part *parts, int *part_num)
+static void sspm_write_multipart_part(struct sspm_buffer *buf, struct sspm_part *parts, int *part_num)
 {
     int parent_level, level;
     struct sspm_header *header = &(parts[*part_num].header);
@@ -1475,8 +1447,7 @@ static void sspm_write_multipart_part(struct sspm_buffer *buf,
     (*part_num)--; /* undo last, spurious, increment */
 }
 
-void sspm_write_mime(struct sspm_part *parts, size_t num_parts,
-                     char **output_string, const char *header)
+void sspm_write_mime(struct sspm_part *parts, size_t num_parts, char **output_string, const char *header)
 {
     struct sspm_buffer buf;
     int part_num = 0;

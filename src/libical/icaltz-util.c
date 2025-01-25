@@ -39,21 +39,13 @@
 #if !defined(HAVE_BYTESWAP_H) && !defined(HAVE_SYS_ENDIAN_H) && !defined(HAVE_ENDIAN_H)
 #define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8) & 0xff)
 
-#define bswap_32(x)               \
-    (((x) << 24) & 0xff000000) |  \
-        (((x) << 8) & 0xff0000) | \
-        (((x) >> 8) & 0xff00) |   \
-        (((x) >> 24) & 0xff)
+#define bswap_32(x) (((x) << 24) & 0xff000000) | (((x) << 8) & 0xff0000) | (((x) >> 8) & 0xff00) | (((x) >> 24) & 0xff)
 
-#define bswap_64(x)                          \
-    ((((x) & 0xff00000000000000ull) >> 56) | \
-     (((x) & 0x00ff000000000000ull) >> 40) | \
-     (((x) & 0x0000ff0000000000ull) >> 24) | \
-     (((x) & 0x000000ff00000000ull) >> 8) |  \
-     (((x) & 0x00000000ff000000ull) << 8) |  \
-     (((x) & 0x0000000000ff0000ull) << 24) | \
-     (((x) & 0x000000000000ff00ull) << 40) | \
-     (((x) & 0x00000000000000ffull) << 56))
+#define bswap_64(x)                                                                                                    \
+    ((((x) & 0xff00000000000000ull) >> 56) | (((x) & 0x00ff000000000000ull) >> 40) |                                   \
+     (((x) & 0x0000ff0000000000ull) >> 24) | (((x) & 0x000000ff00000000ull) >> 8) |                                    \
+     (((x) & 0x00000000ff000000ull) << 8) | (((x) & 0x0000000000ff0000ull) << 24) |                                    \
+     (((x) & 0x000000000000ff00ull) << 40) | (((x) & 0x00000000000000ffull) << 56))
 #endif
 #include <io.h>
 #endif
@@ -79,8 +71,7 @@
 #endif
 
 //@cond PRIVATE
-typedef struct
-{
+typedef struct {
     char magic[4];
     char version;
     char unused[15];
@@ -96,22 +87,18 @@ typedef struct
 static ICAL_GLOBAL_VAR char s_zoneinfopath[MAXPATHLEN] = {0};
 
 /* A few well-known locations for system zoneinfo; can be overridden with TZDIR environment */
-static const char *s_zoneinfo_search_paths[] = {
-    "/usr/share/zoneinfo",
-    "/usr/lib/zoneinfo",
-    "/etc/zoneinfo",
-    "/usr/share/lib/zoneinfo"};
+static const char *s_zoneinfo_search_paths[] = {"/usr/share/zoneinfo", "/usr/lib/zoneinfo", "/etc/zoneinfo",
+                                                "/usr/share/lib/zoneinfo"};
 
-#define EFREAD(buf, size, num, fs)                                     \
-    if (!ferror(fs) && !feof(fs) && fread(buf, size, num, fs) < num) { \
-        if (ferror(fs)) {                                              \
-            icalerror_set_errno(ICAL_FILE_ERROR);                      \
-            goto error;                                                \
-        }                                                              \
+#define EFREAD(buf, size, num, fs)                                                                                     \
+    if (!ferror(fs) && !feof(fs) && fread(buf, size, num, fs) < num) {                                                 \
+        if (ferror(fs)) {                                                                                              \
+            icalerror_set_errno(ICAL_FILE_ERROR);                                                                      \
+            goto error;                                                                                                \
+        }                                                                                                              \
     }
 
-typedef struct
-{
+typedef struct {
     long int gmtoff;
     unsigned char isdst;
     unsigned int abbr;
@@ -121,8 +108,7 @@ typedef struct
 
 } ttinfo;
 
-typedef struct
-{
+typedef struct {
     icaltime_t transition;
     long int change;
 } leap;
@@ -295,8 +281,7 @@ static bool icalrecur_set_single_by(icalrecurrence_by_data *by, short value)
     return true;
 }
 
-static char *parse_posix_rule(char *p,
-                              struct icalrecurrencetype *recur, icaltimetype *t)
+static char *parse_posix_rule(char *p, struct icalrecurrencetype *recur, icaltimetype *t)
 {
     int month = 0, monthday = 0, week = 0, day;
 
@@ -425,7 +410,8 @@ static void terminate_rrule(struct zone_context *zone)
         zone->recur->until.zone = icaltimezone_get_utc_timezone();
 
         // Remove BYMONTHDAY if BYDAY week != 0
-        if ((zone->recur->by[ICAL_BY_DAY].size >= 1) && icalrecurrencetype_day_position(zone->recur->by[ICAL_BY_DAY].data[0])) {
+        if ((zone->recur->by[ICAL_BY_DAY].size >= 1) &&
+            icalrecurrencetype_day_position(zone->recur->by[ICAL_BY_DAY].data[0])) {
             // Don't bother dealing with success/failure since we're simply removing
             (void)icalrecur_resize_by(&zone->recur->by[ICAL_BY_MONTH_DAY], 0);
         }
@@ -468,16 +454,30 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     icalproperty *icalprop;
     icaltimetype icaltime;
 
-    struct zone_context standard =
-        {ICAL_XSTANDARD_COMPONENT, NULL, LONG_MIN, LONG_MIN,
-         ICALTIMETYPE_INITIALIZER, ICALTIMETYPE_INITIALIZER,
-         NULL, NULL, NULL, 0,
-         icalrecurrencetype_new(), icalrecurrencetype_new()};
-    struct zone_context daylight =
-        {ICAL_XDAYLIGHT_COMPONENT, NULL, LONG_MIN, LONG_MIN,
-         ICALTIMETYPE_INITIALIZER, ICALTIMETYPE_INITIALIZER,
-         NULL, NULL, NULL, 0,
-         icalrecurrencetype_new(), icalrecurrencetype_new()};
+    struct zone_context standard = {ICAL_XSTANDARD_COMPONENT,
+                                    NULL,
+                                    LONG_MIN,
+                                    LONG_MIN,
+                                    ICALTIMETYPE_INITIALIZER,
+                                    ICALTIMETYPE_INITIALIZER,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    0,
+                                    icalrecurrencetype_new(),
+                                    icalrecurrencetype_new()};
+    struct zone_context daylight = {ICAL_XDAYLIGHT_COMPONENT,
+                                    NULL,
+                                    LONG_MIN,
+                                    LONG_MIN,
+                                    ICALTIMETYPE_INITIALIZER,
+                                    ICALTIMETYPE_INITIALIZER,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    0,
+                                    icalrecurrencetype_new(),
+                                    icalrecurrencetype_new()};
     struct zone_context *zone;
 
     if (!standard.recur || !standard.final_recur || !daylight.recur || !daylight.final_recur) {
@@ -534,8 +534,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     num_types = (size_t)decode(header.typecnt);
 
     if (trans_size == 8) {
-        size_t skip = num_trans * 5 + num_types * 6 +
-                      num_chars + num_leaps * 8 + num_isstd + num_isgmt;
+        size_t skip = num_trans * 5 + num_types * 6 + num_chars + num_leaps * 8 + num_isstd + num_isgmt;
 
         /* skip version 1 data block */
         if (fseek(f, (long)skip, SEEK_CUR) != 0) {
@@ -667,12 +666,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
     }
 
     /* Read the footer */
-    if (trans_size == 8 &&
-        !feof(f) &&
-        !ferror(f) &&
-        (footer[0] = (char)fgetc(f)) == '\n' &&
-        fgets(footer + 1, (int)sizeof(footer) - 1, f) &&
-        footer[strlen(footer) - 1] == '\n') {
+    if (trans_size == 8 && !feof(f) && !ferror(f) && (footer[0] = (char)fgetc(f)) == '\n' &&
+        fgets(footer + 1, (int)sizeof(footer) - 1, f) && footer[strlen(footer) - 1] == '\n') {
         tzstr = footer + 1;
     }
     if (tzstr) {
@@ -719,9 +714,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     /* Trailing junk, so ignore the TZ string */
                     tzstr = NULL;
                 } else {
-                    struct icaltimetype last_trans =
-                        icaltime_from_timet_with_zone(transitions[num_trans - 1],
-                                                      0, NULL);
+                    struct icaltimetype last_trans = icaltime_from_timet_with_zone(transitions[num_trans - 1], 0, NULL);
                     icalrecur_iterator *iter;
 
                     if (types[trans_idx[num_trans - 1]].isdst) {
@@ -729,8 +722,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         std_trans.year = last_trans.year;
                         std_trans.month = last_trans.month;
                         std_trans.day = last_trans.day;
-                        iter = icalrecur_iterator_new(standard.final_recur,
-                                                      std_trans);
+                        iter = icalrecur_iterator_new(standard.final_recur, std_trans);
                         std_trans = icalrecur_iterator_next(iter);
                         icaltime_adjust(&std_trans, 0, 0, 0, -dst_type->gmtoff);
                         transitions[num_trans] = icaltime_as_timet(std_trans);
@@ -741,8 +733,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         dst_trans.year = last_trans.year;
                         dst_trans.month = last_trans.month;
                         dst_trans.day = last_trans.day;
-                        iter = icalrecur_iterator_new(daylight.final_recur,
-                                                      dst_trans);
+                        iter = icalrecur_iterator_new(daylight.final_recur, dst_trans);
                         dst_trans = icalrecur_iterator_next(iter);
                         icaltime_adjust(&dst_trans, 0, 0, 0, -std_type->gmtoff);
                         transitions[num_trans] = icaltime_as_timet(dst_trans);
@@ -805,24 +796,24 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             int rdate = 0;
 
             // Check if the zone name or either of the offsets have changed
-            if (types[prev_idx].gmtoff != zone->gmtoff_from ||
-                types[idx].gmtoff != zone->gmtoff_to ||
-                (types[idx].zname != NULL &&
-                 strcmp(types[idx].zname, zone->name))) {
+            if (types[prev_idx].gmtoff != zone->gmtoff_from || types[idx].gmtoff != zone->gmtoff_to ||
+                (types[idx].zname != NULL && strcmp(types[idx].zname, zone->name))) {
                 zone->rdate_comp = NULL;
                 terminate = 1;
             }
             // Check if most of the recurrence pattern is the same
-            else if (icaltime.year == zone->time.year + 1 &&
-                     icaltime.month == zone->time.month &&
-                     icaltime.hour == zone->time.hour &&
-                     icaltime.minute == zone->time.minute &&
+            else if (icaltime.year == zone->time.year + 1 && icaltime.month == zone->time.month &&
+                     icaltime.hour == zone->time.hour && icaltime.minute == zone->time.minute &&
                      icaltime.second == zone->time.second) {
                 if ((zone->recur->by[ICAL_BY_DAY].size >= 1) && (by_day == zone->recur->by[ICAL_BY_DAY].data[0])) {
                     // Same nth weekday of the month - continue
-                } else if ((zone->recur->by[ICAL_BY_DAY].size >= 1) && (dow == icalrecurrencetype_day_day_of_week(zone->recur->by[ICAL_BY_DAY].data[0]))) {
+                } else if ((zone->recur->by[ICAL_BY_DAY].size >= 1) &&
+                           (dow == icalrecurrencetype_day_day_of_week(zone->recur->by[ICAL_BY_DAY].data[0]))) {
                     // Same weekday in the month
-                    if (((zone->recur->by[ICAL_BY_MONTH_DAY].size >= 1) && (icaltime.day >= zone->recur->by[ICAL_BY_MONTH_DAY].data[0] + 7)) || (zone->recur->by[ICAL_BY_MONTH_DAY].size <= zone->num_monthdays - 1) || (icaltime.day + 7 <= zone->recur->by[ICAL_BY_MONTH_DAY].data[zone->num_monthdays - 1])) {
+                    if (((zone->recur->by[ICAL_BY_MONTH_DAY].size >= 1) &&
+                         (icaltime.day >= zone->recur->by[ICAL_BY_MONTH_DAY].data[0] + 7)) ||
+                        (zone->recur->by[ICAL_BY_MONTH_DAY].size <= zone->num_monthdays - 1) ||
+                        (icaltime.day + 7 <= zone->recur->by[ICAL_BY_MONTH_DAY].data[zone->num_monthdays - 1])) {
                         // Don't allow two month days with the same weekday -
                         // possible RDATE
                         rdate = terminate = 1;
@@ -862,7 +853,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         // zone->recur->by[ICAL_BY_DAY].size cannot be < 1 here
                         zone->recur->by[ICAL_BY_DAY].data[0] = nth_weekday(0, dow);
                     }
-                } else if ((zone->recur->by[ICAL_BY_MONTH_DAY].size >= 1) && (icaltime.day == zone->recur->by[ICAL_BY_MONTH_DAY].data[0])) {
+                } else if ((zone->recur->by[ICAL_BY_MONTH_DAY].size >= 1) &&
+                           (icaltime.day == zone->recur->by[ICAL_BY_MONTH_DAY].data[0])) {
                     // Same day of the month - remove BYDAY
                     if (zone->recur->by[ICAL_BY_DAY].data) {
                         icalrecur_resize_by(&zone->recur->by[ICAL_BY_DAY], 0);
@@ -884,9 +876,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                     if (zone->rdate_comp) {
                         // Add an RDATE to the previous component
                         // Remove the current RRULE component
-                        struct icaldatetimeperiodtype dtp =
-                            {zone->time,
-                             ICALPERIODTYPE_INITIALIZER};
+                        struct icaldatetimeperiodtype dtp = {zone->time, ICALPERIODTYPE_INITIALIZER};
 
                         icalprop = icalproperty_new_rdate(dtp);
                         icalcomponent_add_property(zone->rdate_comp, icalprop);
@@ -948,14 +938,10 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                 break;
             }
 
-            zone->rrule_comp =
-                icalcomponent_vanew(zone->kind,
-                                    icalproperty_new_tzname(zone->name),
-                                    icalproperty_new_tzoffsetfrom(zone->gmtoff_from),
-                                    icalproperty_new_tzoffsetto(zone->gmtoff_to),
-                                    icalproperty_new_dtstart(zone->time),
-                                    zone->rrule_prop,
-                                    (void *)0);
+            zone->rrule_comp = icalcomponent_vanew(zone->kind, icalproperty_new_tzname(zone->name),
+                                                   icalproperty_new_tzoffsetfrom(zone->gmtoff_from),
+                                                   icalproperty_new_tzoffsetto(zone->gmtoff_to),
+                                                   icalproperty_new_dtstart(zone->time), zone->rrule_prop, (void *)0);
             icalcomponent_add_component(tz_comp, zone->rrule_comp);
         }
     }
