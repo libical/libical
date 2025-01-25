@@ -802,7 +802,9 @@ mark_as_advanced(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
 if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
+    if(WITH_CXX_BINDINGS)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
+    endif()
     set(SHARED_ONLY True)
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
@@ -817,10 +819,12 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
       CMAKE_C_FLAGS
       "${CMAKE_C_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
     )
-    set(
-      CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
-    )
+    if(WITH_CXX_BINDINGS)
+      set(
+        CMAKE_CXX_FLAGS
+        "${CMAKE_CXX_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
+      )
+    endif()
     set(SHARED_ONLY True)
     #currently unavailable for glib-based code
     message(
@@ -847,7 +851,9 @@ mark_as_advanced(LIBICAL_DEVMODE_THREAD_SANITIZER)
 if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
+    if(WITH_CXX_BINDINGS)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
+    endif()
     set(SHARED_ONLY True)
   else()
     message(FATAL_ERROR "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")
@@ -864,7 +870,9 @@ mark_as_advanced(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
 if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+    if(WITH_CXX_BINDINGS)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+    endif()
     set(SHARED_ONLY True)
   else()
     message(FATAL_ERROR "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
@@ -959,6 +967,8 @@ if(ICAL_BUILD_DOCS)
     include(GIDocgen)
   endif()
   add_subdirectory(docs) # needs to go last, for the build source files
+else()
+  set(ICAL_GLIB_BUILD_DOCS)
 endif()
 
 ########### create and install pkg-config file #########
