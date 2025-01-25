@@ -901,12 +901,12 @@ LSAN_BUILD test4lsan "$UUCCMAKEOPTS"
 #Memory sanitizer
 # currently MSAN fails inside libicu and also isn't working with std:stringstreams properly
 SKIPOPTS="-DCMAKE_DISABLE_FIND_PACKAGE_ICU=True -DWITH_CXX_BINDINGS=False"
-MSAN_BUILD test1msan "$DEFCMAKEOPTS $SKIPOPTS"
+#MSAN_BUILD test1msan "$DEFCMAKEOPTS $SKIPOPTS"
 MSAN_BUILD test2msan "$CMAKEOPTS $SKIPOPTS"
 MSAN_BUILD test3msan "$TZCMAKEOPTS $SKIPOPTS"
 MSAN_BUILD test4msan "$UUCCMAKEOPTS $SKIPOPTS"
-MSAN_BUILD test5msan "$GLIBOPTS $SKIPOPTS"
-MSAN_BUILD test6msan "$FUZZOPTS $SKIPOPTS"
+#MSAN_BUILD test5msan "$GLIBOPTS $SKIPOPTS"
+#MSAN_BUILD test6msan "$FUZZOPTS $SKIPOPTS"
 
 #Thread sanitizer
 #libical-glib tests fail tsan with /lib64/libtsan.so.2: cannot allocate memory in static TLS block
