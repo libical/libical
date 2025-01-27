@@ -1248,9 +1248,15 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
     case ICAL_NO_VALUE:
         _fallthrough();
 
-    default: {
+    default:
+#if ICAL_ALLOW_EMPTY_PROPERTIES
+        /* empty string is set to no-value, per
+         * commit b1a9eb33597028b2d160f289b6105f4aa67276a7
+         * Convert back to an empty string here */
+        return icalmemory_strdup("");
+#else
         return 0;
-    }
+#endif
     }
 }
 
