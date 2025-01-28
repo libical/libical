@@ -1135,19 +1135,26 @@ static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilD
     for (int word_idx = fromBitIdx / BITS_PER_LONG;
          word_idx < (int)((untilBitIdx + BITS_PER_LONG - 1) / BITS_PER_LONG);
          word_idx++) {
-        int lowerBitIdxIncl = (fromBitIdx <= (int)(word_idx * BITS_PER_LONG)) ? 0 : (fromBitIdx - (int)(word_idx * BITS_PER_LONG));
-        int upperBitIdxExcl = (untilBitIdx >= (int)((word_idx + 1) * BITS_PER_LONG)) ? (int)BITS_PER_LONG : (int)(untilBitIdx - (int)(word_idx * BITS_PER_LONG));
+        int lowerBitIdxIncl = (fromBitIdx <= (int)(word_idx * BITS_PER_LONG))
+                                  ? 0
+                                  : (fromBitIdx - (int)(word_idx * BITS_PER_LONG));
+        int upperBitIdxExcl = (untilBitIdx >= (int)((word_idx + 1) * BITS_PER_LONG))
+                                  ? (int)BITS_PER_LONG
+                                  : (int)(untilBitIdx - (int)(word_idx * BITS_PER_LONG));
 
         unsigned long mask = (unsigned long)-1;
-        if (lowerBitIdxIncl > 0)
+        if (lowerBitIdxIncl > 0) {
             mask &= ((unsigned long)-1) << lowerBitIdxIncl;
-        if (upperBitIdxExcl < (int)BITS_PER_LONG)
+        }
+        if (upperBitIdxExcl < (int)BITS_PER_LONG) {
             mask &= ((unsigned long)-1) >> (BITS_PER_LONG - upperBitIdxExcl);
+        }
 
-        if (v)
+        if (v) {
             days[word_idx] |= mask;
-        else
+        } else {
             days[word_idx] &= ~mask;
+        }
     }
 }
 
@@ -1798,8 +1805,9 @@ static int month_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 
         set_day_of_year(impl, 1);
         diff = get_months_in_year(impl, year) - a.month;
-        while (++year < b.year)
+        while (++year < b.year) {
             diff += get_months_in_year(impl, year);
+        }
         diff += b.month;
 
         /* Restore date */
@@ -2795,7 +2803,8 @@ static int next_weekday_by_week(icalrecur_iterator *impl)
         /* Add the day of week offset to the start of this week, and use
            that to get the next day */
         /* ignore position of dow ("4FR"), only use dow ("FR") */
-        dow = (int)icalrecurrencetype_day_day_of_week(impl->bydata[ICAL_BY_DAY].by.data[impl->bydata[ICAL_BY_DAY].index]);
+        dow = (int)icalrecurrencetype_day_day_of_week(
+            impl->bydata[ICAL_BY_DAY].by.data[impl->bydata[ICAL_BY_DAY].index]);
         dow -= (int)impl->rule->week_start; /* Set Sunday to be 0 */
         if (dow < 0) {
             dow += 7;
@@ -2981,8 +2990,9 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             doy = get_day_of_year(impl, year,
                                   impl->dtstart.month, impl->dtstart.day);
             (void)__icaltime_from_day_of_year(impl, doy, year, &weekno);
-            if (weekno > doy)
+            if (weekno > doy) {
                 doy += 7;
+            }
             start_doy = doy + get_start_of_week(impl);
 
             /* Add day of week in each BYWEEKNO to the year days bitmask */
@@ -3326,10 +3336,10 @@ static int check_contract_restriction(icalrecur_iterator *impl,
         for (itr = 0; itr < impl->bydata[byrule].by.size; itr++) {
             short byval = impl->bydata[byrule].by.data[itr];
             if ((byval < 0) && (total == 0)) {
-                if (get_total)
+                if (get_total) {
                     // load total value lazily only when needed
                     total = get_total(impl);
-                else {
+                } else {
                     // limiting by negative values is only allowed for
                     // BYMONTHDAY, BYYEARDAY (BYDAY is handled separately)
                     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
@@ -3357,7 +3367,8 @@ static int check_contracting_rules(icalrecur_iterator *impl)
 
 // Check `has_contract_restriction` before calling `check_contract_restriction` to avoid
 // evaluating potentially expensive `v` if not needed.
-#define CHECK_CONTRACT_RESTRICTION(by, v, get_total) (!has_contract_restriction(impl, (by)) || check_contract_restriction(impl, (by), (v), (get_total)))
+#define CHECK_CONTRACT_RESTRICTION(by, v, get_total) \
+    (!has_contract_restriction(impl, (by)) || check_contract_restriction(impl, (by), (v), (get_total)))
 
     if (
         CHECK_CONTRACT_RESTRICTION(ICAL_BY_SECOND, last.second, NULL) &&
@@ -3366,8 +3377,10 @@ static int check_contracting_rules(icalrecur_iterator *impl)
         CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH_DAY, last.day, days_in_current_month) &&
         CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH, last.month, NULL) &&
         CHECK_CONTRACT_RESTRICTION(ICAL_BY_WEEK_NO, get_week_number(impl, last), NULL) &&
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_DAY, get_day_of_week_adjusted(impl, last.year, last.month, last.day), NULL) &&
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_YEAR_DAY, get_day_of_year(impl, last.year, last.month, last.day), days_in_current_year)) {
+        CHECK_CONTRACT_RESTRICTION(
+            ICAL_BY_DAY, get_day_of_week_adjusted(impl, last.year, last.month, last.day), NULL) &&
+        CHECK_CONTRACT_RESTRICTION(
+            ICAL_BY_YEAR_DAY, get_day_of_year(impl, last.year, last.month, last.day), days_in_current_year)) {
         return 1;
     }
 
