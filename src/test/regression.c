@@ -1693,11 +1693,9 @@ void test_requeststat(void)
     }
     p = icalcomponent_get_first_property(c, ICAL_REQUESTSTATUS_PROPERTY);
 
-#if ADD_TESTS_REQUIRING_INVESTIGATION
     str_is("icalproperty_new_from_string()",
            icalproperty_as_ical_string(p),
            "REQUEST-STATUS:2.1;Success but fallback taken  on one or more property  \r\n values.;booga\r\n");
-#endif
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
     st2 = icalreqstattype_from_string("16.4");
 

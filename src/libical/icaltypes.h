@@ -53,9 +53,8 @@ LIBICAL_ICAL_EXPORT int icaltriggertype_is_bad_trigger(struct icaltriggertype tr
 /* struct icalreqstattype. This struct contains two string pointers,
 but don't try to free either of them. The "desc" string is a pointer
 to a static table inside the library.  Don't try to free it. The
-"debug" string is a pointer into the string that the called passed
-into to icalreqstattype_from_string. Don't try to free it either, and
-don't use it after the original string has been freed.
+"debug" string is allocated in the ring buffer. Don't try to free it
+either.
 
 BTW, you would get that original string from
 *icalproperty_get_requeststatus() or icalvalue_get_text(), when
