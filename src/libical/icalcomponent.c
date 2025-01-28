@@ -1000,18 +1000,22 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                     (icaltime_t)icaldurationtype_as_int(rdate_period.period.duration);
             } else {
                 recurspan.end =
-                    icaltime_as_timet_with_zone(rdate_period.period.end,
-                                                rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
+                    icaltime_as_timet_with_zone(
+                        rdate_period.period.end,
+                        rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
             }
         } else {
             rdate_duration = dtduration;
         }
 
         recurspan.start =
-            icaltime_as_timet_with_zone(rdate_start,
-                                        rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
-        if (rdate_duration)
+            icaltime_as_timet_with_zone(
+                rdate_start,
+                rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
+
+        if (rdate_duration) {
             recurspan.end = recurspan.start + rdate_duration;
+        }
 
         /* save the iterator ICK! */
         property_iterator = comp->property_iterator;

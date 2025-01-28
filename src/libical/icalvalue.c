@@ -386,7 +386,8 @@ static bool simple_str_to_doublestr(const char *from, char *result, int result_l
      * of the current locale.
      */
     for (i = 0; i < len; ++i) {
-        if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0] && loc_data->decimal_point[0] != '.') {
+        if (start[i] == '.' &&
+            loc_data && loc_data->decimal_point && loc_data->decimal_point[0] && loc_data->decimal_point[0] != '.') {
             /*replace '.' by the digit separator of the current locale */
             result[i] = loc_data->decimal_point[0];
         } else {
@@ -1239,8 +1240,9 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
         return icalproperty_enum_to_string_r(value->data.v_enum);
 
     case ICAL_X_VALUE:
-        if (value->x_value != 0)
+        if (value->x_value != 0) {
             return icalmemory_strdup_and_quote(value, value->x_value);
+        }
         _fallthrough();
 
     case ICAL_NO_VALUE:

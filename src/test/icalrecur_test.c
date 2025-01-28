@@ -110,11 +110,11 @@ int main(int argc, char *argv[])
                 line[--l] = '\0';
             }
 
-            if (l == 0)
+            if (l == 0) {
                 yield = 1;
-            else if (line[0] == '#')
+            } else if (line[0] == '#') {
                 continue;
-            else {
+            } else {
                 int parse_err = 0;
 
                 if (r.rrule[0] == 0)
@@ -124,7 +124,8 @@ int main(int argc, char *argv[])
                 parse_err = parse_err || check_and_copy_field(line, "DTSTART:", r.dtstart, sizeof(r.dtstart));
                 parse_err = parse_err || check_and_copy_field(line, "START-AT:", r.start_at, sizeof(r.start_at));
                 parse_err = parse_err || check_and_copy_field(line, "INSTANCES:", r.instances, sizeof(r.instances));
-                parse_err = parse_err || check_and_copy_field(line, "PREV-INSTANCES:", r.rev_instances, sizeof(r.rev_instances));
+                parse_err = parse_err ||
+                            check_and_copy_field(line, "PREV-INSTANCES:", r.rev_instances, sizeof(r.rev_instances));
 
                 if (parse_err) {
                     nof_errors++;
