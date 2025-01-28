@@ -2740,6 +2740,48 @@ void test_convenience(void)
     ok("Duration is 90 m", (duration == 90));
 
     icalcomponent_free(c);
+
+    c = icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
+                            icalcomponent_vanew(ICAL_VEVENT_COMPONENT, (void *)0),
+                            (void *)0);
+
+    tt = icaltime_from_string("20250127T130000");
+    (void)icaltime_set_timezone(&tt, icaltimezone_get_builtin_timezone("Europe/Berlin"));
+    icalcomponent_set_dtstart(c, tt);
+
+    tt = icaltime_from_string("20250127T140000");
+    (void)icaltime_set_timezone(&tt, icaltimezone_get_builtin_timezone("America/New_York"));
+    icalcomponent_set_dtend(c, tt);
+
+    if (VERBOSE)
+        printf("\n%s\n", icalcomponent_as_ical_string(c));
+
+    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 3600;
+
+    ok("Duration is 7 h", (duration == 7));
+
+    icalcomponent_free(c);
+
+    c = icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
+                            icalcomponent_vanew(ICAL_VTODO_COMPONENT, (void *)0),
+                            (void *)0);
+
+    tt = icaltime_from_string("20250127T130000");
+    (void)icaltime_set_timezone(&tt, icaltimezone_get_builtin_timezone("Europe/Berlin"));
+    icalcomponent_set_dtstart(c, tt);
+
+    tt = icaltime_from_string("20250127T140000");
+    (void)icaltime_set_timezone(&tt, icaltimezone_get_builtin_timezone("America/New_York"));
+    icalcomponent_set_due(c, tt);
+
+    if (VERBOSE)
+        printf("\n%s\n", icalcomponent_as_ical_string(c));
+
+    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 3600;
+
+    ok("Duration is 7 h", (duration == 7));
+
+    icalcomponent_free(c);
 }
 
 void test_time_parser(void)
