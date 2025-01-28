@@ -725,7 +725,7 @@ while true; do
     runasanbuild=0
     shift
     ;;
-  -e | --no-lsan-build)
+  -l | --no-lsan-build)
     runlsanbuild=0
     shift
     ;;
