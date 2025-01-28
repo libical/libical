@@ -32,6 +32,7 @@ Version 4.0.0 (NOT RELEASED YET):
  * Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions
  * icaltzutil_get_zone_directory() can use the TZDIR environment to find system zoneinfo
  * icalparser_ctrl setting defines how to handle invalid CONTROL characters during parsing
+ * Fixed icalcomponent_get_duration() to account for DTEND/DUE TZID
  * Make -DGOBJECT_INTROSPECTION=True the default
  * Replace gtk-doc with gi-docgen to produce libical-glib developer documentation
  * New publicly available functions:

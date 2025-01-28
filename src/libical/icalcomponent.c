@@ -1572,7 +1572,6 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
     icalcomponent *inner = icalcomponent_get_inner(comp);
     const icalcomponent_kind kind = icalcomponent_isa(inner);
     icalproperty *end_prop, *dur_prop;
-    struct icaltimetype end;
     struct icaldurationtype ret;
 
     switch (kind) {
@@ -1580,15 +1579,9 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
     case ICAL_VEVENT_COMPONENT:
     case ICAL_XAVAILABLE_COMPONENT:
         end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
-        if (end_prop) {
-            end = icalcomponent_get_dtend(inner);
-        }
         break;
     case ICAL_VTODO_COMPONENT:
         end_prop = icalcomponent_get_first_property(inner, ICAL_DUE_PROPERTY);
-        if (end_prop) {
-            end = icalcomponent_get_due(inner);
-        }
         break;
     default:
         /* The libical API is used incorrectly */
@@ -1601,12 +1594,12 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
         ret = icalproperty_get_duration(dur_prop);
 
     } else if (end_prop != 0 && dur_prop == 0) {
-        /**
-         * FIXME
-         * We assume DTSTART and DTEND are not in different time zones.
-         * The standard actually allows different time zones.
-         */
-        struct icaltimetype start = icalcomponent_get_dtstart(inner);
+        icaltimezone *utc = icaltimezone_get_utc_timezone();
+        struct icaltimetype start =
+            icaltime_convert_to_zone(icalcomponent_get_dtstart(inner), utc);
+        struct icaltimetype end =
+            icaltime_convert_to_zone(
+                icalproperty_get_datetime_with_component(end_prop, comp), utc);
 
         ret = icaltime_subtract(end, start);
     } else if (end_prop == 0 && dur_prop == 0) {
