@@ -17,6 +17,7 @@ For RSCALE support the libicu development package is needed.
 - pkgconfig
 - gobject-introspection (-devel)
 - libxml2 (-devel)
+- python3
 
 and to build the associated GLib bindings documentation you'll need;
 
