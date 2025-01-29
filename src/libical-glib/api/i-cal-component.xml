@@ -209,7 +209,7 @@
     </method>
     <method name="i_cal_comp_iter_next" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter"/>
-        <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalCompIter"/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalComponent"/>
         <comment xml:space="preserve">Gets the next #ICalComponent pointed by #ICalCompIter.</comment>
         <custom>    ICalComponent *comp;
 
@@ -226,7 +226,7 @@
     </method>
     <method name="i_cal_comp_iter_prior" corresponds="CUSTOM" since="1.0">
         <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter"/>
-        <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalCompIter"/>
+        <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalComponent"/>
         <comment xml:space="preserve">Gets the prior #ICalComponent pointed by #ICalCompIter.</comment>
         <custom>    ICalComponent *comp;
 
@@ -257,6 +257,57 @@
     }
 
     return comp;</custom>
+    </method>
+    <method name="i_cal_component_begin_property" corresponds="CUSTOM" since="4.0">
+        <parameter type="ICalComponent *" name="component" comment="A #ICalComponent"/>
+        <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind"/>
+        <returns type="ICalPropIter *" annotation="transfer full" comment="A #ICalPropIter"/>
+        <comment xml:space="preserve">Gets the #ICalPropIter pointing to the first property of type @kind in #ICalComponent.</comment>
+        <custom>    ICalPropIter *iter;
+
+    g_return_val_if_fail (I_CAL_IS_COMPONENT (component), NULL);
+
+    iter = i_cal_prop_iter_new_full(icalcomponent_begin_property((icalcomponent *)i_cal_object_get_native(I_CAL_OBJECT (component)), (icalproperty_kind) (kind)));
+    if (iter) {
+        i_cal_object_set_owner(I_CAL_OBJECT(iter), G_OBJECT(component));
+        i_cal_object_set_always_destroy(I_CAL_OBJECT(iter), TRUE);
+    }
+
+    return iter;</custom>
+    </method>
+    <method name="i_cal_prop_iter_next" corresponds="CUSTOM" since="4.0">
+        <parameter type="ICalPropIter *" name="i" native_op="POINTER" comment="A #ICalPropIter"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="A #ICalProperty"/>
+        <comment xml:space="preserve">Gets the next #ICalProperty pointed by #ICalPropIter.</comment>
+        <custom>    ICalProperty *prop;
+
+    g_return_val_if_fail (I_CAL_IS_PROP_ITER (i), NULL);
+
+    prop = i_cal_property_new_full(icalpropiter_next((struct icalpropiter *)i_cal_object_get_native(I_CAL_OBJECT (i))), NULL);
+    if (prop) {
+        GObject *owner = i_cal_object_ref_owner(I_CAL_OBJECT(i));
+        i_cal_object_set_owner(I_CAL_OBJECT(prop), owner);
+        g_clear_object(&amp;owner);
+    }
+
+    return prop;</custom>
+    </method>
+    <method name="i_cal_prop_iter_deref" corresponds="CUSTOM" since="4.0">
+        <parameter type="ICalPropIter *" name="i" native_op="POINTER" comment="A #ICalPropIter"/>
+        <returns type="ICalProperty *" annotation="transfer full" comment="A #ICalProperty"/>
+        <comment xml:space="preserve">Gets the current #ICalProperty pointed by #ICalPropIter.</comment>
+        <custom>    ICalProperty *prop;
+
+    g_return_val_if_fail (I_CAL_IS_PROP_ITER (i), NULL);
+
+    prop = i_cal_property_new_full(icalpropiter_deref((struct icalpropiter *)i_cal_object_get_native(I_CAL_OBJECT (i))), NULL);
+    if (prop) {
+        GObject *owner = i_cal_object_ref_owner(I_CAL_OBJECT(i));
+        i_cal_object_set_owner(I_CAL_OBJECT(prop), owner);
+        g_clear_object(&amp;owner);
+    }
+
+    return prop;</custom>
     </method>
     <method name="i_cal_component_check_restrictions" corresponds="icalcomponent_check_restrictions" kind="other" since="1.0">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be checked"/>
