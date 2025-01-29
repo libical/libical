@@ -237,4 +237,55 @@
         <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks whether the enum belongs to the #ICalPropertyKind.</comment>
     </method>
+    <method name="i_cal_property_begin_parameter" corresponds="CUSTOM" since="4.0">
+        <parameter type="ICalProperty *" name="prop" comment="A #ICalProperty"/>
+        <parameter type="ICalParameterKind" name="kind" comment="A #ICalParameterKind"/>
+        <returns type="ICalParamIter *" annotation="transfer full" comment="A #ICalParamIter"/>
+        <comment xml:space="preserve">Gets the #ICalParamIter pointing to the first parameter of type @kind in #ICalComponent.</comment>
+        <custom>    ICalParamIter *iter;
+
+    g_return_val_if_fail (I_CAL_IS_PROPERTY (prop), NULL);
+
+    iter = i_cal_param_iter_new_full(icalproperty_begin_parameter((icalproperty *)i_cal_object_get_native(I_CAL_OBJECT (prop)), (icalparameter_kind) (kind)));
+    if (iter) {
+        i_cal_object_set_owner(I_CAL_OBJECT(iter), G_OBJECT(prop));
+        i_cal_object_set_always_destroy(I_CAL_OBJECT(iter), TRUE);
+    }
+
+    return iter;</custom>
+    </method>
+    <method name="i_cal_param_iter_next" corresponds="CUSTOM" since="4.0">
+        <parameter type="ICalParamIter *" name="i" native_op="POINTER" comment="A #ICalParamIter"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="A #ICalParameter"/>
+        <comment xml:space="preserve">Gets the next #ICalParameter pointed by #ICalParamIter.</comment>
+        <custom>    ICalParameter *param;
+
+    g_return_val_if_fail (I_CAL_IS_PARAM_ITER (i), NULL);
+
+    param = i_cal_parameter_new_full(icalparamiter_next((struct icalparamiter *)i_cal_object_get_native(I_CAL_OBJECT (i))), NULL);
+    if (param) {
+        GObject *owner = i_cal_object_ref_owner(I_CAL_OBJECT(i));
+        i_cal_object_set_owner(I_CAL_OBJECT(param), owner);
+        g_clear_object(&amp;owner);
+    }
+
+    return param;</custom>
+    </method>
+    <method name="i_cal_param_iter_deref" corresponds="CUSTOM" since="4.0">
+        <parameter type="ICalParamIter *" name="i" native_op="POINTER" comment="A #ICalParamIter"/>
+        <returns type="ICalParameter *" annotation="transfer full" comment="A #ICalParameter"/>
+        <comment xml:space="preserve">Gets the current #ICalParameter pointed by #ICalParamIter.</comment>
+        <custom>    ICalParameter *param;
+
+    g_return_val_if_fail (I_CAL_IS_PARAM_ITER (i), NULL);
+
+    param = i_cal_parameter_new_full(icalparamiter_deref((struct icalparamiter *)i_cal_object_get_native(I_CAL_OBJECT (i))), NULL);
+    if (param) {
+        GObject *owner = i_cal_object_ref_owner(I_CAL_OBJECT(i));
+        i_cal_object_set_owner(I_CAL_OBJECT(param), owner);
+        g_clear_object(&amp;owner);
+    }
+
+    return param;</custom>
+    </method>
 </structure>

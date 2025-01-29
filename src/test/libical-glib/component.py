@@ -314,6 +314,18 @@ def main():
     comp.foreach_tzid(foreachTZIDCb, counter)
     assert counter.counter == 2
 
+    # Test propiter and paramiter
+    comp = ICalGLib.Component.new_from_string(eventStr1)
+    iter = comp.begin_property(ICalGLib.PropertyKind.ANY_PROPERTY)
+    assert iter.deref().as_ical_string().split('\n', 1)[0] == 'UID:event-uid-123\r'
+    iter.next()
+    prop = iter.deref()
+    assert prop.as_ical_string().split('\n', 1)[0] == 'SUMMARY;LANGUAGE=en-US:test1\r'
+    paramiter = prop.begin_parameter(ICalGLib.ParameterKind.ANY_PARAMETER)
+    assert paramiter.deref().as_ical_string().split('\n', 1)[0] == 'LANGUAGE=en-US'
+    paramiter.next()
+    assert paramiter.deref() is None
+
     counter = TestCounter()
     comp = ICalGLib.Component.new_from_string(recurringStr)
     comp.foreach_recurrence(

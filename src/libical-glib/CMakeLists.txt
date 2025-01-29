@@ -60,9 +60,11 @@ list(
   api/i-cal-memory.xml
   api/i-cal-mime.xml
   api/i-cal-parameter.xml
+  api/i-cal-param-iter.xml
   api/i-cal-parser.xml
   api/i-cal-period.xml
   api/i-cal-property.xml
+  api/i-cal-prop-iter.xml
   api/i-cal-recur-iterator.xml
   api/i-cal-recurrence.xml
   api/i-cal-recur.xml
