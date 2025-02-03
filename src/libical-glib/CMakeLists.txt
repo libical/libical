@@ -298,7 +298,10 @@ if(ICAL_GLIB_VAPI)
       --girdir=${PROJECT_BINARY_DIR}/src/libical-glib --pkg gio-2.0 --library libical-glib
       --metadatadir=${CMAKE_CURRENT_SOURCE_DIR} --metadatadir=${CMAKE_CURRENT_BINARY_DIR} ${gir_fullname}
     DEPENDS
+      ical-glib
       ${gir_fullname}
+      ${LIBICAL_GLIB_GIR_SOURCES}
+      ${GObjectIntrospection_GIRS}
       ${typelib_fullname}
       ${metadata_fullname}
     COMMENT "Run the tool to generate the Vala API"
