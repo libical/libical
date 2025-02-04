@@ -7,6 +7,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.cmake ${CMAKE_CURRENT_B
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icaltime.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icaltime.h)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
+
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
@@ -480,6 +482,8 @@ if(WITH_CXX_BINDINGS)
 endif()
 
 ########### install files ###############
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 install(
   FILES
