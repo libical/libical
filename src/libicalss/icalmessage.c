@@ -40,7 +40,7 @@ static char *lowercase(const char *str)
     n = strdup(str);
 
     for (p = n; *p != 0; p++) {
-        *p = tolower((int)*p);
+        *p = (char)tolower((int)*p);
     }
 
     return n;

@@ -298,7 +298,7 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
             _fallthrough();
             /*issue74, we don't escape double quotes
         case '"':
-*/
+        */
         case '\\': {
             icalmemory_append_char(&str, &str_p, &buf_sz, '\\');
             icalmemory_append_char(&str, &str_p, &buf_sz, *p);
@@ -528,7 +528,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
         /* treat the UTCOFSET string as a decimal number, disassemble its digits
                and reconstruct it as sections */
-        t = strtol(str, 0, 10);
+        t = (int)strtol(str, 0, 10);
         /* add phantom seconds field */
         if (strlen(str) < 7) {
             t *= 100;
@@ -774,16 +774,12 @@ void icalvalue_free(icalvalue *v)
     }
     case ICAL_TEXT_VALUE:
         _fallthrough();
-
     case ICAL_CALADDRESS_VALUE:
         _fallthrough();
-
     case ICAL_URI_VALUE:
         _fallthrough();
-
     case ICAL_STRING_VALUE:
         _fallthrough();
-
     case ICAL_QUERY_VALUE: {
         _fallthrough();
     case ICAL_UID_VALUE:

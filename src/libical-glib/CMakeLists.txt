@@ -3,6 +3,9 @@
 
 if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-conversion -Wno-sign-conversion")
+  if(WITH_CXX_BINDINGS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-conversion -Wno-sign-conversion")
+  endif()
 endif()
 
 add_definitions(-Dlibical_ical_EXPORTS)

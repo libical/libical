@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
             srand(j);
             memset(buf, 0, size * 2);
             /* First insert some non-randomized lines */
-            non_rand = (unsigned int)(((float)rand() / (float)RAND_MAX) * last);
+            non_rand = (unsigned int)(((float)rand() / (float)RAND_MAX) * (float)last);
             for (i = 0; i < last && i < non_rand; i++) {
                 strcat(buf, array[i]);
             }
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
 
             for (i = 0; i < rand_lines; i++) {
                 srand(i);
-                r = (unsigned int)(((float)rand() / (float)RAND_MAX) * rand_lines);
+                r = (unsigned int)(((float)rand() / (float)RAND_MAX) * (float)rand_lines);
                 strcat(buf, array[r + non_rand]);
             }
 

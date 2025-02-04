@@ -273,12 +273,12 @@ static char *parse_posix_zone(char *p, ttinfo *type)
     }
 
     /* Zone offset: hh[:mm[:ss]] */
-    type->gmtoff = strtol(p, &p, 10) * -3600; /* sign of offset is reversed */
+    type->gmtoff = (int)strtol(p, &p, 10) * -3600; /* sign of offset is reversed */
     if (*p == ':') {
-        type->gmtoff += strtol(++p, &p, 10) * 60;
+        type->gmtoff += (int)strtol(++p, &p, 10) * 60;
     }
     if (*p == ':') {
-        type->gmtoff += strtol(++p, &p, 10);
+        type->gmtoff += (int)strtol(++p, &p, 10);
     }
     return p;
 }
@@ -307,7 +307,7 @@ static char *parse_posix_rule(char *p,
            including leap years, February 28 is day 59 and March 1 is day 60.
            It is impossible to refer explicitly to the occasional February 29.
         */
-        day = strtol(++p, &p, 10);
+        day = (int)strtol(++p, &p, 10);
     } else if (*p == 'M') {
         /* The d'th day (0 <= d <= 6)
            of week n of month m of the year (1 <= n <= 5, 1 <= m <= 12,
@@ -316,9 +316,9 @@ static char *parse_posix_rule(char *p,
            Week 1 is the first week in which the d'th day occurs.
            Day zero is Sunday.
         */
-        month = strtol(++p, &p, 10);
-        week = strtol(++p, &p, 10);
-        day = strtol(++p, &p, 10);
+        month = (int)strtol(++p, &p, 10);
+        week = (int)strtol(++p, &p, 10);
+        day = (int)strtol(++p, &p, 10);
         if (week == 5) {
             week = -1;
         }
@@ -328,7 +328,7 @@ static char *parse_posix_rule(char *p,
 
            Flag this by adding 1001 to the day.
         */
-        day = strtol(++p, &p, 10) + 1001;
+        day = (int)strtol(++p, &p, 10) + 1001;
     }
 
     /* Parse time */
@@ -336,12 +336,12 @@ static char *parse_posix_rule(char *p,
     t->hour = 2; /* default is 02:00 */
 
     if (*p == '/') {
-        t->hour = strtol(++p, &p, 10);
+        t->hour = (int)strtol(++p, &p, 10);
         if (*p == ':') {
-            t->minute = strtol(++p, &p, 10);
+            t->minute = (int)strtol(++p, &p, 10);
         }
         if (*p == ':') {
-            t->second = strtol(++p, &p, 10);
+            t->second = (int)strtol(++p, &p, 10);
         }
     }
 
@@ -381,17 +381,17 @@ static char *parse_posix_rule(char *p,
             error |= !icalrecur_resize_by(&recur->by[ICAL_BY_MONTH_DAY], 7);
             unsigned i;
             for (i = 0; i < 7; i++) {
-                recur->by[ICAL_BY_MONTH_DAY].data[i] = monthday++;
+                recur->by[ICAL_BY_MONTH_DAY].data[i] = (short)monthday++;
             }
         }
     } else if (day > 1000) {
-        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_YEAR_DAY], day - 1000);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_YEAR_DAY], (short)(day - 1000));
     } else {
         /* Convert day-of-non-leap-year into month/day */
         icaltimetype t = icaltime_from_day_of_year(day, 1 /* non-leap */);
 
-        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH], t.month);
-        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH_DAY], t.day);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH], (short)t.month);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH_DAY], (short)t.day);
     }
 
     if (error)
@@ -423,7 +423,7 @@ static void terminate_rrule(struct zone_context *zone)
         // Multiple instances
         // Set UNTIL of the component's recurrence
         zone->recur->until = zone->time;
-        icaltime_adjust(&zone->recur->until, 0, 0, 0, -zone->gmtoff_from);
+        icaltime_adjust(&zone->recur->until, 0, 0, 0, (int)-zone->gmtoff_from);
         zone->recur->until.zone = icaltimezone_get_utc_timezone();
 
         // Remove BYMONTHDAY if BYDAY week != 0
@@ -735,7 +735,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         iter = icalrecur_iterator_new(standard.final_recur,
                                                       std_trans);
                         std_trans = icalrecur_iterator_next(iter);
-                        icaltime_adjust(&std_trans, 0, 0, 0, -dst_type->gmtoff);
+                        icaltime_adjust(&std_trans, 0, 0, 0, (int)-dst_type->gmtoff);
                         transitions[num_trans] = icaltime_as_timet(std_trans);
                         trans_idx[num_trans++] = (int)num_types - 2;
                         icalrecur_iterator_free(iter);
@@ -747,7 +747,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         iter = icalrecur_iterator_new(daylight.final_recur,
                                                       dst_trans);
                         dst_trans = icalrecur_iterator_next(iter);
-                        icaltime_adjust(&dst_trans, 0, 0, 0, -std_type->gmtoff);
+                        icaltime_adjust(&dst_trans, 0, 0, 0, (int)-std_type->gmtoff);
                         transitions[num_trans] = icaltime_as_timet(dst_trans);
                         trans_idx[num_trans++] = (int)num_types - 1;
                         icalrecur_iterator_free(iter);
@@ -849,7 +849,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         }
 
                         if ((j >= zone->num_monthdays) || (icaltime.day < zone->recur->by[ICAL_BY_MONTH_DAY].data[j])) {
-                            if (!icalrecur_resize_by(&zone->recur->by[ICAL_BY_MONTH_DAY], zone->num_monthdays + 1)) {
+                            if (!icalrecur_resize_by(&zone->recur->by[ICAL_BY_MONTH_DAY], (short)(zone->num_monthdays + 1))) {
                                 icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                                 break;
                             }
@@ -861,7 +861,7 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                                             sizeof(zone->recur->by[ICAL_BY_MONTH_DAY].data[0]));
                             }
 
-                            zone->recur->by[ICAL_BY_MONTH_DAY].data[j] = icaltime.day;
+                            zone->recur->by[ICAL_BY_MONTH_DAY].data[j] = (short)icaltime.day;
                             zone->num_monthdays++;
                         }
 
@@ -932,9 +932,9 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             }
 
             zone->recur->freq = ICAL_YEARLY_RECURRENCE;
-            error |= !icalrecur_set_single_by(&zone->recur->by[ICAL_BY_DAY], by_day);
-            error |= !icalrecur_set_single_by(&zone->recur->by[ICAL_BY_MONTH], icaltime.month);
-            error |= !icalrecur_set_single_by(&zone->recur->by[ICAL_BY_MONTH_DAY], icaltime.day);
+            error |= !icalrecur_set_single_by(&zone->recur->by[ICAL_BY_DAY], (short)by_day);
+            error |= !icalrecur_set_single_by(&zone->recur->by[ICAL_BY_MONTH], (short)icaltime.month);
+            error |= !icalrecur_set_single_by(&zone->recur->by[ICAL_BY_MONTH_DAY], (short)icaltime.day);
             if (error) {
                 icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                 break;
@@ -959,8 +959,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
             zone->rrule_comp =
                 icalcomponent_vanew(zone->kind,
                                     icalproperty_new_tzname(zone->name),
-                                    icalproperty_new_tzoffsetfrom(zone->gmtoff_from),
-                                    icalproperty_new_tzoffsetto(zone->gmtoff_to),
+                                    icalproperty_new_tzoffsetfrom((int)zone->gmtoff_from),
+                                    icalproperty_new_tzoffsetto((int)zone->gmtoff_to),
                                     icalproperty_new_dtstart(zone->time),
                                     zone->rrule_prop,
                                     (void *)0);
