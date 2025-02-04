@@ -364,21 +364,9 @@ if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   )
 endif()
 
-install(
-  TARGETS
-    ical-glib
-  EXPORT icalTargets
-  DESTINATION
-  ${INSTALL_TARGETS_DEFAULT_ARGS}
-)
+install(TARGETS ical-glib EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  install(
-    TARGETS
-      ical-glib-static
-    EXPORT icalTargets
-    DESTINATION
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
-  )
+  install(TARGETS ical-glib-static EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif()
 
 ########### install files ###############

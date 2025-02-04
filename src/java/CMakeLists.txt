@@ -45,13 +45,7 @@ if(NOT ANDROID)
         ${LIBICAL_LIB_SOVERSION_STRING}
   )
 endif()
-install(
-  TARGETS
-    ical_jni
-  EXPORT icalTargets
-  DESTINATION
-  lib
-)
+install(TARGETS ical_jni EXPORT icalTargets DESTINATION lib)
 
 ########### install files ###############
 
