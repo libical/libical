@@ -3,6 +3,8 @@
 
 add_definitions(-Dlibical_vcard_EXPORTS)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libicalvcard.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libicalvcard.pc @ONLY)
+
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
@@ -294,6 +296,8 @@ if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
 endif()
 
 ########### install files ###############
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libicalvcard.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 install(
   FILES

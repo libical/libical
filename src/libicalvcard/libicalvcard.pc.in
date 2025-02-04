@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright Contributors to the libical project
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libicalvcard
+Description: An implementation of vCard
+Version: @LIBICAL_LIB_VERSION_STRING@
+Libs: -L${libdir} -lical
+Libs.private: @PTHREAD_LIBS@
+Requires: libical
+@REQUIRES_PRIVATE_ICU@
+Cflags: -I${includedir}

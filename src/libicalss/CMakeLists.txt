@@ -3,6 +3,8 @@
 
 add_definitions(-Dlibical_icalss_EXPORTS)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libicalss.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libicalss.pc @ONLY)
+
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
@@ -293,6 +295,8 @@ if(WITH_CXX_BINDINGS)
 endif()
 
 ########### install files ###############
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libicalss.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 install(
   FILES
