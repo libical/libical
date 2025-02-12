@@ -822,8 +822,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
         if (parser->level < 0) {
             // Encountered an END before any BEGIN, this must be invalid data
-            icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR,
-                                      icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR));
+            icalerror_warn("Encountered END before BEGIN");
             parser->state = ICALPARSER_ERROR;
             parser->level = 0;
             return 0;

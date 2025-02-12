@@ -93,6 +93,9 @@ Version 3.0.20 (UNRELEASED):
 ----------------------------
  * Clean up the byte-swapping macros
  * Fix a testcase in libical-glib when using 64-bit on a 32-bit system
+ * Fix regression introduced in v3.0.19 ignoring non-empty REQUEST-STATUS extdata
+ * Fix regression introduced in v3.0.19 error reporting for END before BEGIN
+ * Fix a CMake problem in libical-glib
 
 Version 3.0.19 (23 December 2024):
 ----------------------------------
