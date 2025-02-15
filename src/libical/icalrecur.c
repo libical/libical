@@ -3572,10 +3572,18 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
            fail after hitting the year 20000 if no expanded days match */
         while (start.year < 20000) {
             expand_year_days(impl, start.year);
-            if (icalerrno != ICAL_NO_ERROR) {
+
+            icalerrorenum err = icalerrno;
+            switch (err) {
+            case ICAL_NO_ERROR:
+                break;
+            case ICAL_UNIMPLEMENTED_ERROR:
+                return false;
+            default:
                 icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
                 return false;
             }
+
             if (impl->days_index < ICAL_YEARDAYS_MASK_SIZE) {
                 break; /* break when a matching day is found */
             }
