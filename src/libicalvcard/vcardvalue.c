@@ -333,6 +333,8 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         int nchar = 0, len = (int)strlen(str);
 
         if (len > 3) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
             const char *fmt;
 
             if (str[3] == ':') {
@@ -344,6 +346,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
             if (3 != sscanf(str, fmt, sign, &hour, &min, &nchar)) {
                 nchar = 0;
             }
+#pragma GCC diagnostic pop
         } else if (2 != sscanf(str, "%1[+-]%02u%n", sign, &hour, &nchar)) {
             nchar = 0;
         }
@@ -574,7 +577,8 @@ static char *vcardvalue_int_as_vcard_string_r(const vcardvalue *value)
 
     return str;
 }
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
 static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value,
                                                     vcardproperty_version version)
 {
@@ -624,6 +628,7 @@ static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value,
 #pragma GCC diagnostic pop
     return str;
 }
+#pragma GCC diagnostic pop
 
 static char *vcardvalue_text_as_vcard_string_r(const vcardvalue *value)
 {

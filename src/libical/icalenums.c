@@ -115,7 +115,7 @@ short icalenum_reqstat_major(icalrequeststatus stat)
     int len = (int)(sizeof(request_status_map) / sizeof(request_status_map[0]));
     for (i = 0; i < len && request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
         if (request_status_map[i].kind == stat) {
-            return request_status_map[i].major;
+            return (short)request_status_map[i].major;
         }
     }
     return -1;
@@ -128,7 +128,7 @@ short icalenum_reqstat_minor(icalrequeststatus stat)
     int len = (int)(sizeof(request_status_map) / sizeof(request_status_map[0]));
     for (i = 0; i < len && request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
         if (request_status_map[i].kind == stat) {
-            return request_status_map[i].minor;
+            return (short)request_status_map[i].minor;
         }
     }
     return -1;
