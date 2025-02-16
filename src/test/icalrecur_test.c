@@ -65,7 +65,8 @@ static void reverse_array(char *str, size_t len)
     }
 }
 
-static void reverse_instances(char* str) {
+static void reverse_instances(char *str)
+{
     size_t l = strlen(str);
     reverse_array(str, l);
 
@@ -81,7 +82,8 @@ static void reverse_instances(char* str) {
     reverse_array(&str[current_instance_start], l - current_instance_start);
 }
 
-static char *skip_first(char *instances) {
+static char *skip_first(char *instances)
+{
     while (*instances && (*instances != ',')) {
         instances++;
     }
@@ -92,8 +94,8 @@ static char *skip_first(char *instances) {
     return instances;
 }
 
-static char* skip_until(char* instances, icaltimetype t, int order) {
-
+static char *skip_until(char *instances, icaltimetype t, int order)
+{
     char *start = instances;
     while (1) {
         char *next = skip_first(start);
@@ -226,7 +228,6 @@ int main(int argc, char *argv[])
                          sizeof(actual_instances) - (size_t)actual_instances_len,
                          " *** %s", icalerror_strerror(icalerrno));
             } else {
-
                 if (r.start_at[0]) {
                     start = icaltime_from_string(r.start_at);
                     icalrecur_iterator_set_start(ritr, start);
