@@ -688,20 +688,26 @@ static int _parse_prop_value(struct vcardparser_state *state)
                 }
                 if (state->p[1] == '\n') {
                     if (state->p[2] != ' ' && state->p[2] != '\t') {
-                        vcardstrarray_free(textlist);
-                        return PE_BACKQUOTE_EOF;
+                        /* value ends with unescaped backslash */
+                        PUTC('\\');
+                        PUTC('\\');
+                        INC(2);
+                        goto out;
                     }
                     INC(2);
                 }
             }
-            if (!state->p[1]) {
-                vcardstrarray_free(textlist);
-                return PE_BACKQUOTE_EOF;
-            }
-            /* preserve escape sequences */
             PUTC('\\');
-            PUTC(state->p[1]);
-            INC(2);
+            if (state->p[1]) {
+                /* preserve escape sequences */
+                PUTC(state->p[1]);
+                INC(2);
+            } else {
+                /* value ends with unescaped backslash */
+                PUTC('\\');
+                INC(1);
+                goto out;
+            }
             break;
         case '\r':
             INC(1);
