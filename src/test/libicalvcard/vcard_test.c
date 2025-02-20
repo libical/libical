@@ -373,6 +373,52 @@ static void test_v3_to_v4(vcardcomponent *card)
     assert_str_equals(want, vcardcomponent_as_vcard_string(card));
 }
 
+static void test_ignore_backslash_at_eol(void)
+{
+    const char *str =
+"BEGIN:VCARD\r\n"
+"VERSION:3.0\r\n"
+"FN:foo\r\n"
+// unescaped backslash before CRLF
+"NOTE:test1\\\r\n"
+// unescaped backslash followed by line folds before CRLF
+"NOTE:test2\\\r\n\t\r\n \r\n"
+// escaped backslash before CRLF
+"NOTE:test3\\\\\r\n"
+// escaped backslash, separated by line folds before CRLF
+"NOTE:test4\\\r\n\t\r\n \\\r\n"
+// escaped newline, separated by line folds before CRLF
+"NOTE:test5\\\r\n\t\r\n n\r\n"
+"END:VCARD\r\n";
+
+    vcardcomponent *vcard = vcardcomponent_new_from_string(str);
+    assert(vcard);
+    vcardproperty *prop;
+
+    prop = vcardcomponent_get_first_property(vcard, VCARD_NOTE_PROPERTY);
+    assert_str_equals("test1",
+            vcardvalue_as_vcard_string(vcardproperty_get_value(prop)));
+
+    prop = vcardcomponent_get_next_property(vcard, VCARD_NOTE_PROPERTY);
+    assert_str_equals("test2",
+            vcardvalue_as_vcard_string(vcardproperty_get_value(prop)));
+
+    prop = vcardcomponent_get_next_property(vcard, VCARD_NOTE_PROPERTY);
+    assert_str_equals("test3\\\\",
+            vcardvalue_as_vcard_string(vcardproperty_get_value(prop)));
+
+    prop = vcardcomponent_get_next_property(vcard, VCARD_NOTE_PROPERTY);
+    assert_str_equals("test4\\\\",
+            vcardvalue_as_vcard_string(vcardproperty_get_value(prop)));
+
+    prop = vcardcomponent_get_next_property(vcard, VCARD_NOTE_PROPERTY);
+    assert_str_equals("test5\\n",
+            vcardvalue_as_vcard_string(vcardproperty_get_value(prop)));
+
+    vcardcomponent_free(vcard);
+}
+
+
 int main(int argc, const char **argv)
 {
     vcardcomponent *card;
@@ -389,6 +435,7 @@ int main(int argc, const char **argv)
     test_add_props(card);
     test_n_restriction(card);
     test_v3_to_v4(card);
+    test_ignore_backslash_at_eol();
 
     vcardcomponent_free(card);
 
