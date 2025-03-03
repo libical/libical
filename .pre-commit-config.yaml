@@ -27,7 +27,7 @@ repos:
     exclude: ^(src/java/|src/Net-ICal-Libical|src/libical/astime.h|src/libical/caldate.c|src/libicalvcal/port.h|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
-  rev: v0.9.4
+  rev: v0.9.9
   hooks:
     # Run the linter.
     - id: ruff
@@ -39,7 +39,7 @@ repos:
   - id: codespell
     exclude: ^(CONTRIBUTORS.md)
 - repo: https://github.com/BlankSpruce/gersemi
-  rev: 0.18.2
+  rev: 0.19.1
   hooks:
   - id: gersemi
     exclude: (cmake/Toolchain-|.h.cmake|/Doxyfile.cmake)
