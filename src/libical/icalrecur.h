@@ -273,7 +273,7 @@ LIBICAL_ICAL_EXPORT int icalrecurrencetype_day_position(short day);
  * @since 4.0
  */
 LIBICAL_ICAL_EXPORT short icalrecurrencetype_encode_day(enum icalrecurrencetype_weekday weekday,
-                                                        int position);
+                                                        short position);
 
 /*
  * Routines to decode the 'month' element of the by[ICAL_BY_MONTH] array

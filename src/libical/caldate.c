@@ -73,11 +73,11 @@ void caldat_int( struct ut_instant_int * date )
 	kc = (long) ( ((kb * 100LL) - 12210LL) / 36525LL );
 	kd = (long) ( ( kc * 36525LL ) / 100LL );
 	ke = (long) ( (kb - kd) * 10000LL / 306001LL );
-	date->day = kb - kd - ((long) ( (ke * 306001LL) / 10000LL ));
+	date->day = (int)(kb - kd - ((long) ( (ke * 306001LL) / 10000LL )));
 	if ( ke > 13L )
-		date->month = ke - 13L;
+		date->month = (int)(ke - 13L);
 	else
-		date->month = ke - 1L;
+		date->month = (int)(ke - 1L);
 	if ( (date->month == 2) && (date->day > 28) )
 		date->day = 29;
 	if ( (date->month == 2) && (date->day == 29) && (ke == 3L) )
@@ -86,7 +86,7 @@ void caldat_int( struct ut_instant_int * date )
 		date->year = kc - 4716L;
 	else
 		date->year = kc - 4715L;
-	date->weekday = (jd + 1L) % 7L;	/* day of week */
+	date->weekday = (int)((jd + 1L) % 7L);	/* day of week */
 	// if ( date->year == ((date->year >> 2) << 2) ) // ubsan "runtime error: left shift of negative value -1179"
 	if ( date->year == ((date->year >> 2) * 4) )
 		date->day_of_year =
@@ -136,5 +136,5 @@ void juldat_int( struct ut_instant_int * date )
 		jd += ib;
 	}
 	date->j_date0 = jd;
-	date->weekday = (jd + 2L) % 7L;
+	date->weekday = (int)((jd + 2L) % 7L);
 }	/*	end of	void juldat( date )	*/

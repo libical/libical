@@ -184,7 +184,10 @@ static int sprintf_date(const vcardtimetype t, unsigned flags,
         return snprintf(buf, size, "---%02d", t.day);
     }
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
 static int sprintf_time(const vcardtimetype t, unsigned flags,
                         char *buf, size_t size)
 {
