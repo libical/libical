@@ -89,8 +89,12 @@ Version 4.0.0 (NOT RELEASED YET):
     + struct icaltimezonetype
     + struct icaltimezonephase
 
-Version 3.0.20 (UNRELEASED):
+Version 3.0.21 (UNRELEASED):
 ----------------------------
+ *
+
+Version 3.0.20 (10 March 2025):
+-------------------------------
  * Clean up the byte-swapping macros
  * Fix a testcase in libical-glib when using 64-bit on a 32-bit system
  * Fix regression introduced in v3.0.19 ignoring non-empty REQUEST-STATUS extdata
