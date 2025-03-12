@@ -168,6 +168,21 @@ LIBICAL_ICAL_EXPORT int icalproperty_kind_and_string_to_enum(const int kind, con
 LIBICAL_ICAL_EXPORT const char *icalproperty_status_to_string(icalproperty_status);
 LIBICAL_ICAL_EXPORT icalproperty_status icalproperty_string_to_status(const char *string);
 
+LIBICAL_ICAL_EXPORT const char *icalproperty_action_to_string(icalproperty_action);
+LIBICAL_ICAL_EXPORT icalproperty_action icalproperty_string_to_action(const char *string);
+
+LIBICAL_ICAL_EXPORT const char *icalproperty_transp_to_string(icalproperty_transp);
+LIBICAL_ICAL_EXPORT icalproperty_transp icalproperty_string_to_transp(const char *string);
+
+LIBICAL_ICAL_EXPORT const char *icalproperty_class_to_string(icalproperty_class);
+LIBICAL_ICAL_EXPORT icalproperty_class icalproperty_string_to_class(const char *string);
+
+LIBICAL_ICAL_EXPORT const char *icalproperty_participanttype_to_string(icalproperty_participanttype);
+LIBICAL_ICAL_EXPORT icalproperty_participanttype icalproperty_string_to_participanttype(const char *string);
+
+LIBICAL_ICAL_EXPORT const char *icalproperty_resourcetype_to_string(icalproperty_resourcetype);
+LIBICAL_ICAL_EXPORT icalproperty_resourcetype icalproperty_string_to_resourcetype(const char *string);
+
 LIBICAL_ICAL_EXPORT bool icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e);
 
 /**
