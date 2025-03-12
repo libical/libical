@@ -5974,6 +5974,33 @@ static void test_icalparamiter(void)
     icalcomponent_free(comp);
 }
 
+static void test_icalproperty_enum_convert_string(void)
+{
+    icalproperty_action action = icalenum_string_to_action("DISPLAY");
+    ok("action", action == ICAL_ACTION_DISPLAY);
+    str_is("action", icalenum_action_to_string(action), "DISPLAY");
+
+    icalproperty_transp transp = icalenum_string_to_transp("OPAQUE");
+    ok("transp", transp == ICAL_TRANSP_OPAQUE);
+    str_is("transp", icalenum_transp_to_string(transp), "OPAQUE");
+
+    icalproperty_class class = icalenum_string_to_class("PRIVATE");
+    ok("class", class == ICAL_CLASS_PRIVATE);
+    str_is("class", icalenum_class_to_string(class), "PRIVATE");
+
+    icalproperty_participanttype ptype =
+        icalenum_string_to_participanttype("CONTACT");
+    ok("participanttype", ptype == ICAL_PARTICIPANTTYPE_CONTACT);
+    str_is("participanttype",
+           icalenum_participanttype_to_string(ptype), "CONTACT");
+
+    icalproperty_resourcetype rtype =
+        icalenum_string_to_resourcetype("PROJECTOR");
+    ok("resourcetype", rtype == ICAL_RESOURCETYPE_PROJECTOR);
+    str_is("resourcetype",
+           icalenum_resourcetype_to_string(rtype), "PROJECTOR");
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -6144,6 +6171,7 @@ int main(int argc, char *argv[])
     test_run("Test IN-PROCESS PARTSTAT parameter value", test_vtodo_partstat_inprocess, do_test, do_header);
     test_run("Test external property iterator", test_icalpropiter, do_test, do_header);
     test_run("Test external parameter iterator", test_icalparamiter, do_test, do_header);
+    test_run("Test property enum value string conversion", test_icalproperty_enum_convert_string, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

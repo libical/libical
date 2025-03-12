@@ -171,4 +171,34 @@ LIBICAL_ICAL_EXPORT char *icalenum_reqstat_code_r(icalrequeststatus stat);
 /*icalcomponent_kind icalenum_string_to_component_kind(const char* string);*/
 #define icalenum_string_to_component_kind(x) icalcomponent_string_to_kind(x)
 
+/*const char* icalenum_action_to_string(icalproperty_action);*/
+#define icalenum_action_to_string(x) icalproperty_action_to_string(x)
+
+/*icalproperty_action icalenum_string_to_action(const char* string);*/
+#define icalenum_string_to_action(x) icalproperty_string_to_action(x)
+
+/*const char* icalenum_transp_to_string(icalproperty_transp);*/
+#define icalenum_transp_to_string(x) icalproperty_transp_to_string(x)
+
+/*icalproperty_transp icalenum_string_to_transp(const char* string);*/
+#define icalenum_string_to_transp(x) icalproperty_string_to_transp(x)
+
+/*const char* icalenum_class_to_string(icalproperty_class);*/
+#define icalenum_class_to_string(x) icalproperty_class_to_string(x)
+
+/*icalproperty_class icalenum_string_to_class(const char* string);*/
+#define icalenum_string_to_class(x) icalproperty_string_to_class(x)
+
+/*const char* icalenum_participanttype_to_string(icalproperty_participanttype);*/
+#define icalenum_participanttype_to_string(x) icalproperty_participanttype_to_string(x)
+
+/*icalproperty_participanttype icalenum_string_to_participanttype(const char* string);*/
+#define icalenum_string_to_participanttype(x) icalproperty_string_to_participanttype(x)
+
+/*const char* icalenum_resourcetype_to_string(icalproperty_resourcetype);*/
+#define icalenum_resourcetype_to_string(x) icalproperty_resourcetype_to_string(x)
+
+/*icalproperty_resourcetype icalenum_string_to_resourcetype(const char* string);*/
+#define icalenum_string_to_resourcetype(x) icalproperty_string_to_resourcetype(x)
+
 #endif /* !ICALENUMS_H */
