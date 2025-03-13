@@ -2397,7 +2397,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
                 ritr = icalrecur_iterator_new(rrule, dtstart);
 
-                if (trunc_dtstart) {
+                if (ritr && trunc_dtstart) {
                     /* Bump RRULE start to 1 year prior to our window open */
                     icaltimetype newstart = dtstart;
                     newstart.year  = start.year - 1;
@@ -2514,7 +2514,6 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                             newstart.year  = end.year - 1;
                             newstart.month = end.month;
                             newstart.day   = end.day;
-                            (void)icaltime_normalize(newstart);
                             icalrecur_iterator_set_start(ritr, newstart);
                         }
                     }
