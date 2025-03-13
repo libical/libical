@@ -322,8 +322,9 @@ testme(icalcomponent_fuzz2 icalcomponent_fuzz2.c)
 
 testme(icaltime_fuzz icaltime_fuzz.c)
 testme(icalcomponent_timefuzz icalcomponent_timefuzz.c)
+testme(icaltimezone_fuzz icaltimezone_fuzz.c)
 
-libical_option(LIBICAL_BUILD_TESTING_BIGFUZZ "Build big fuzzer tests." False)
+libical_option(LIBICAL_BUILD_TESTING_BIGFUZZ "Build fuzzer tests" False)
 if(LIBICAL_BUILD_TESTING_BIGFUZZ)
   foreach(
     fuzztest
