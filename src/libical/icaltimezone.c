@@ -2382,7 +2382,6 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                         newstart.year = start.year - 1;
                         newstart.month = start.month;
                         newstart.day = start.day;
-                        (void)icaltime_normalize(newstart);
                         icalrecur_iterator_set_start(ritr, newstart);
                     }
                 }

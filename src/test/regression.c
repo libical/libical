@@ -3470,8 +3470,6 @@ icalcomponent *make_component(int i)
 
     t.day += i;
 
-    (void)icaltime_normalize(t);
-
     c = icalcomponent_vanew(ICAL_VCALENDAR_COMPONENT,
                             icalproperty_new_method(ICAL_METHOD_REQUEST),
                             icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
