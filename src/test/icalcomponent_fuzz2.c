@@ -55,6 +55,12 @@ int main(int argc, char *argv[])
     }
     filesize = (size_t)sbuf.st_size;
     data = malloc(filesize + 1);
+    if (!data) {
+        fprintf(stderr, "Error: unable to allocate memory\n");
+        free(data);
+        assert(0);
+    }
+    /* cppcheck-suppress nullPointerRedundantCheck */
     memset(data, 0, filesize + 1);
 
     r = read(fd, data, filesize);
@@ -62,7 +68,7 @@ int main(int argc, char *argv[])
     fclose(fp);
 
     if (r < 0) {
-        fprintf(stderr, "Failed to read data\n");
+        fprintf(stderr, "Error: Failed to read data\n");
         free(data);
         assert(0);
     }

@@ -459,6 +459,7 @@ CPPCHECK() {
     grep -v "icalssyacc.c:" |
     grep -v "icalsslexer.c:" |
     grep -v "vcc.c:" |
+    grep -v "vcc.y:" |
     tee cppcheck.out
   set -e
   CPPCHECK_WARNINGS cppcheck.out

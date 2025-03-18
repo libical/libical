@@ -519,14 +519,18 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
                 len = strlen(url) + 12;
 
                 new_url = malloc(len);
-                strcpy(new_url, "file://");
-                strcat(new_url, url);
+                if (new_url) {
+                    strcpy(new_url, "file://");
+                    strcat(new_url, url);
 
-                new_attach = icalattach_new_from_url(new_url);
-                free(new_url);
+                    new_attach = icalattach_new_from_url(new_url);
+                    free(new_url);
 
-                icalproperty_set_attach(attach_prop, new_attach);
-                icalattach_unref(attach);
+                    icalproperty_set_attach(attach_prop, new_attach);
+                    icalattach_unref(attach);
+                } else {
+                    is_valid_alarm = 0;
+                }
 
             } else {
                 is_valid_alarm = 0;

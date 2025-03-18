@@ -113,13 +113,19 @@ static void test_parse_file(const char *fname)
     }
     filesize = (size_t)sbuf.st_size;
     data = malloc(filesize + 1);
+    if (!data) {
+        fprintf(stderr, "Error: unable to allocate memory\n");
+        free(data);
+        assert(0);
+    }
+    /* cppcheck-suppress nullPointerRedundantCheck */
     memset(data, 0, filesize + 1);
 
     r = read(fd, data, filesize);
     fclose(fp);
 
     if (r < 0) {
-        fprintf(stderr, "Failed to read vCard\n");
+        fprintf(stderr, "Error: Failed to read vCard\n");
         free(data);
         assert(0);
     }
@@ -129,7 +135,7 @@ static void test_parse_file(const char *fname)
     free(data);
 
     if (card == NULL) {
-        fprintf(stderr, "Failed to parse vCard\n");
+        fprintf(stderr, "Error: Failed to parse vCard\n");
         assert(0);
     }
 

@@ -41,6 +41,10 @@ char *icalclassify_lowercase(const char *str)
     }
 
     xnew = strdup(str);
+    if (!xnew) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return 0;
+    }
     for (p = xnew; *p != 0; p++) {
         *p = tolower((int)*p);
     }
@@ -104,6 +108,9 @@ icalproperty *icalclassify_find_attendee(icalcomponent *c, const char *attendee)
     }
 
     lattendee = icalclassify_lowercase(attendee);
+    if (!lattendee) {
+        return 0;
+    }
     upn = strchr(lattendee, ':');
 
     if (upn == 0) {
