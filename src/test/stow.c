@@ -619,6 +619,11 @@ void get_options(int argc, char *argv[], struct options_struct *opt)
     if (opt->storage == STORE_IN_FILE) {
         char *p;
         char *facspath = strdup(opt->output_file);
+        if (!facspath) {
+            fprintf(stderr, "%s: Cannot allocate enough memory\n", program_name);
+            byebye(1, opt);
+        }
+
         enum file_type type;
 
         /* Cut off the last slash to make it just a directory */

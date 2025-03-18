@@ -38,6 +38,10 @@ static char *lowercase(const char *str)
     }
 
     n = strdup(str);
+    if (!n) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return 0;
+    }
 
     for (p = n; *p != 0; p++) {
         *p = tolower((int)*p);
@@ -50,7 +54,6 @@ static icalproperty *icalmessage_find_attendee(icalcomponent *comp, const char *
 {
     icalcomponent *inner = icalmessage_get_inner(comp);
     icalproperty *p, *attendee = 0;
-    char *luser = lowercase(user);
 
     for (p = icalcomponent_get_first_property(inner, ICAL_ATTENDEE_PROPERTY);
          p != 0;
@@ -58,17 +61,16 @@ static icalproperty *icalmessage_find_attendee(icalcomponent *comp, const char *
         char *lattendee;
 
         lattendee = lowercase(icalproperty_get_attendee(p));
+        if (lattendee) {
+            if (strstr(lattendee, user) != 0) {
+                free(lattendee);
+                attendee = p;
+                break;
+            }
 
-        if (strstr(lattendee, user) != 0) {
             free(lattendee);
-            attendee = p;
-            break;
         }
-
-        free(lattendee);
     }
-
-    free(luser);
 
     return attendee;
 }

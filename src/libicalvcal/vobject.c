@@ -71,11 +71,13 @@ const char** fieldedProp;
 static VObject* newVObject_(const char *id)
 {
     VObject *p = (VObject*)malloc(sizeof(VObject));
-    p->next = 0;
-    p->id = id;
-    p->prop = 0;
-    VALUE_TYPE(p) = 0;
-    ANY_VALUE_OF(p) = 0;
+    if (p) {
+        p->next = 0;
+        p->id = id;
+        p->prop = 0;
+        VALUE_TYPE(p) = 0;
+        ANY_VALUE_OF(p) = 0;
+    }
     return p;
 }
 
@@ -120,9 +122,11 @@ void deleteStr(const char *p)
 static StrItem* newStrItem(const char *s, StrItem *next)
 {
     StrItem *p = (StrItem*)malloc(sizeof(StrItem));
-    p->next = next;
-    p->s = s;
-    p->refCnt = 1;
+    if (p) {
+        p->next = next;
+        p->s = s;
+        p->refCnt = 1;
+    }
     return p;
 }
 
@@ -1389,6 +1393,8 @@ wchar_t* fakeUnicode(const char *ps, size_t *bytes)
     size_t len = strlen(ps)+1;
 
     pw = r = (wchar_t*)malloc(sizeof(wchar_t)*len);
+    if(!r)
+        return (wchar_t *)0;
     if (bytes)
         *bytes = len * sizeof(wchar_t);
 
@@ -1428,6 +1434,8 @@ char* fakeCString(const wchar_t *u)
 
     len = (size_t)(uStrLen(u) + 1);
     t = s = (char*)malloc(len);
+    if(!s)
+        return (char *)0;
     while (*u) {
         if (*u == (wchar_t)0x2028)
             *t = '\n';

@@ -53,20 +53,29 @@ int main(int argc, char *argv[])
         assert(0);
     }
     filesize = (size_t)sbuf.st_size;
+    /* cppcheck-suppress nullPointerRedundantCheck */
     data = malloc(filesize + 1);
+    if (!data) {
+        fprintf(stderr, "Error: unable to allocate memory\n");
+        free(data);
+        assert(0);
+    }
+    /* cppcheck-suppress nullPointerRedundantCheck */
     memset(data, 0, filesize + 1);
     r = read(fd, data, filesize);
     /* cppcheck-suppress doubleFree */
     fclose(fp);
 
     if (r < 0) {
-        fprintf(stderr, "Failed to read data\n");
+        fprintf(stderr, "Error: Failed to read data\n");
+        /* cppcheck-suppress doubleFree */
         free(data);
         assert(0);
     }
 #define LOOKBACK_CHARS 40
     if (r <= LOOKBACK_CHARS) {
-        fprintf(stderr, "Failed to read enough data -- more than %d chars is required for this test", LOOKBACK_CHARS);
+        fprintf(stderr, "Error: Failed to read enough data -- more than %d chars is required for this test", LOOKBACK_CHARS);
+        /* cppcheck-suppress doubleFree */
         free(data);
         assert(0);
     }
@@ -76,6 +85,7 @@ int main(int argc, char *argv[])
         return 0;
     }
     memset(ics_str, '\0', ics_len + 1);
+    /* cppcheck-suppress deallocuse */
     memcpy(ics_str, data, ics_len);
     icalcomponent *vtz = icalcomponent_new_from_string(ics_str);
     free(ics_str);
