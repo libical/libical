@@ -185,7 +185,8 @@ static char*	expand_tzname			(char		*zone_name,
 						 char		*format,
 						 gboolean	 have_letter_s,
 						 char		*letter_s,
-						 gboolean	 is_daylight);
+						 gboolean	 is_daylight,
+             int walloff);
 static int	compare_times			(VzicTime	*time1,
 						 int		 stdoff1,
 						 int		 walloff1,
@@ -758,7 +759,7 @@ output_zone_to_files		(ZoneData	*zone,
     if (vzictime_start) {
       vzictime_start->tzname = expand_tzname (zone_name, zone_line->format,
 					      found_letter_s,
-					      start_letter_s, is_daylight);
+					      start_letter_s, is_daylight, vzictime_start->walloff);
     }
 
     /* The start of the next Zone line is the end time of this one. */
@@ -902,7 +903,7 @@ add_rule_changes			(ZoneLineData	*zone_line,
       break;
 
     vzictime.tzname = expand_tzname (zone_name, zone_line->format, TRUE,
-				     rule->letter_s, is_daylight);
+				     rule->letter_s, is_daylight, vzictime.walloff);
 
     g_array_append_val (changes, vzictime);
 
@@ -929,19 +930,23 @@ add_rule_changes			(ZoneLineData	*zone_line,
 
 
 /* This expands the Zone line FORMAT field, using the given LETTER_S from a
-   Rule line. There are 3 types of FORMAT field:
-   1. a string with an %s in, e.g. "WE%sT". The %s is replaced with LETTER_S.
-   2. a string with an '/' in, e.g. "CAT/CAWT". The first part is used for
+   Rule line. There are 4 types of FORMAT field:
+   1. the string "%z". The string is replaced by the UT offset, e.g., '-07' for
+      seven hours behind UT and '+0530' for five hours and thirty minutes
+      ahead.
+   2. a string with an %s in, e.g. "WE%sT". The %s is replaced with LETTER_S.
+   3. a string with an '/' in, e.g. "CAT/CAWT". The first part is used for
       standard time and the second part for when daylight-saving is in effect.
-   3. a plain string, e.g. "LMT", which we leave as-is.
-   Note that (1) is the only type in which letter_s is required.
+   4. a plain string, e.g. "LMT", which we leave as-is.
+   Note that (2) is the only type in which letter_s is required.
 */
 static char*
 expand_tzname				(char		*zone_name,
 					 char		*format,
 					 gboolean	 have_letter_s,
 					 char		*letter_s,
-					 gboolean	 is_daylight)
+					 gboolean	 is_daylight,
+          int walloff)
 {
   char *p, buffer[256], *guess = NULL;
   int len;
@@ -955,7 +960,17 @@ expand_tzname				(char		*zone_name,
     exit (1);
   }
 
-  /* 1. Look for a "%s". */
+  /* 1. Look for "%z" */
+  if (strcmp(format, "%z") == 0) {
+    if (walloff % 3600 == 0)
+      sprintf(buffer, "%+03d", walloff / 3600);
+    else
+      sprintf(buffer, "%+03d%02d", walloff / 3600, abs(walloff) / 60 % 60);
+
+    return g_strdup(buffer);
+  }
+
+  /* 2. Look for a "%s". */
   p = strchr (format, '%');
   if (p && *(p + 1) == 's') {
     if (!have_letter_s) {
@@ -1025,7 +1040,7 @@ expand_tzname				(char		*zone_name,
     return g_strdup (buffer);
   }
 
-  /* 2. Look for a "/". */
+  /* 3. Look for a "/". */
   p = strchr (format, '/');
   if (p) {
     if (is_daylight) {
@@ -1038,7 +1053,7 @@ expand_tzname				(char		*zone_name,
     }
   }
 
-  /* 3. Just use format as it is. */
+  /* 4. Just use format as it is. */
   return g_strdup (format);
 }
 
