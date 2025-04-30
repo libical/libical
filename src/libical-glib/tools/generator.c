@@ -67,44 +67,47 @@ gchar *get_source_method_comment(Method *method)
         for (iter_list = g_list_first(method->parameters); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
             para = (Parameter *)iter_list->data;
-            comment_len = (guint)strlen(para->comment);
-
-            /* Handling the special case in which the parameter's comment is fully specified */
-            for (iter = 0; iter < full_flag_len && iter < comment_len; iter++) {
-                if (full_flag[iter] != para->comment[iter]) {
-                    break;
+            if (para) {
+                comment_len = 0;
+                if (para->comment) {
+                    comment_len = (guint)strlen(para->comment);
                 }
-            }
 
-            if (iter == full_flag_len) {
-                full_comment = g_new(gchar, comment_len - full_flag_len + 1);
-                (void)g_stpcpy(full_comment, para->comment + full_flag_len);
-                buffer = g_strconcat(res, "\n * ", full_comment, NULL);
-                g_free(res);
-                res = buffer;
-                g_free(full_comment);
-            } else {
-                buffer = g_strconcat(res, "\n * @", NULL);
-                g_free(res);
-                res = buffer;
-
-                para = (Parameter *)iter_list->data;
-                buffer = g_strconcat(res, para->name, NULL);
-                g_free(res);
-                res = buffer;
-
-                for (jter = g_list_first(para->annotations);
-                     jter != NULL; jter = g_list_next(jter)) {
-                    anno = (gchar *)jter->data;
-                    if (jter == g_list_first(para->annotations)) {
-                        buffer = g_strconcat(res, ": (", anno, ")", NULL);
-                    } else {
-                        buffer = g_strconcat(res, " (", anno, ")", NULL);
+                /* Handling the special case in which the parameter's comment is fully specified */
+                for (iter = 0; iter < full_flag_len && iter < comment_len; iter++) {
+                    if (full_flag[iter] != para->comment[iter]) {
+                        break;
                     }
+                }
+
+                if (iter == full_flag_len) {
+                    full_comment = g_new(gchar, comment_len - full_flag_len + 1);
+                    (void)g_stpcpy(full_comment, para->comment + full_flag_len);
+                    buffer = g_strconcat(res, "\n * ", full_comment, NULL);
                     g_free(res);
                     res = buffer;
-                }
+                    g_free(full_comment);
+                } else {
+                    buffer = g_strconcat(res, "\n * @", NULL);
+                    g_free(res);
+                    res = buffer;
 
+                    buffer = g_strconcat(res, para->name, NULL);
+                    g_free(res);
+                    res = buffer;
+
+                    for (jter = g_list_first(para->annotations);
+                         jter != NULL; jter = g_list_next(jter)) {
+                        anno = (gchar *)jter->data;
+                        if (jter == g_list_first(para->annotations)) {
+                            buffer = g_strconcat(res, ": (", anno, ")", NULL);
+                        } else {
+                            buffer = g_strconcat(res, " (", anno, ")", NULL);
+                        }
+                        g_free(res);
+                        res = buffer;
+                    }
+                }
                 if (para->comment != NULL) {
                     buffer = g_strconcat(res, ": ", para->comment, NULL);
                     g_free(res);
@@ -1676,6 +1679,8 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
     Structure *structure;
     Parameter *parameter;
 
+    g_return_val_if_fail(method != NULL, NULL);
+
     buffer = g_new(gchar, BUFFER_SIZE);
     buffer[0] = '\0';
     translator = NULL;
@@ -1792,6 +1797,8 @@ gchar *get_source_method_proto(Method *method)
     gint paddingLength;
     gchar *padding;
     gint iter;
+
+    g_return_val_if_fail(method != NULL, NULL);
 
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
@@ -2065,6 +2072,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
 
         if (parameter && parameter->type && parameter->type[strlen(parameter->type) - 1] == '*') {
             trueType = get_true_type(parameter->type);
+            g_return_val_if_fail(trueType != NULL, NULL);
             for (i = 0;
                  i < nameSpace_len && trueType[i] && nameSpace[i] == trueType[i];
                  i++)

@@ -435,17 +435,30 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         break;
     }
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
+#endif
     case ICAL_BINARY_VALUE: {
         icalattach *attach;
 
-        attach = icalattach_new_from_data(strdup(str), free_icalvalue_attach_data, 0);
-        if (!attach)
-            break;
+        char *dupStr = strdup(str); // will be freed later on during unref
+        if (dupStr) {
+            attach = icalattach_new_from_data(dupStr, free_icalvalue_attach_data, 0);
+            if (!attach) {
+                free(dupStr);
+                break;
+            }
 
-        value = icalvalue_new_attach(attach);
-        icalattach_unref(attach);
+            value = icalvalue_new_attach(attach);
+            icalattach_unref(attach);
+        }
         break;
     }
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
+
     case ICAL_BOOLEAN_VALUE: {
         if (!strcmp(str, "TRUE")) {
             value = icalvalue_new_boolean(1);
@@ -731,6 +744,10 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
     }
     }
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
+#endif
     if (error != 0 && *error == 0 && value == 0) {
         char temp[TMP_BUF_SIZE];
         icalparameter *errParam;
@@ -741,7 +758,9 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
         icalparameter_free(errParam);
     }
-
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
     return value;
 }
 
@@ -1385,8 +1404,17 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
         char *temp1, *temp2;
 
         temp1 = icalvalue_as_ical_string_r(a);
-        temp2 = icalvalue_as_ical_string_r(b);
-        r = strcmp(temp1, temp2);
+        if (temp1) {
+            temp2 = icalvalue_as_ical_string_r(b);
+            if (temp2) {
+                r = strcmp(temp1, temp2);
+            } else {
+                icalmemory_free_buffer(temp1);
+                return ICAL_XLICCOMPARETYPE_GREATER;
+            }
+        } else {
+            return ICAL_XLICCOMPARETYPE_LESS;
+        }
         icalmemory_free_buffer(temp1);
         icalmemory_free_buffer(temp2);
 
@@ -1447,7 +1475,8 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
 
 void icalvalue_reset_kind(icalvalue *value)
 {
-    if ((value->kind == ICAL_DATETIME_VALUE || value->kind == ICAL_DATE_VALUE) &&
+    if (value &&
+        (value->kind == ICAL_DATETIME_VALUE || value->kind == ICAL_DATE_VALUE) &&
         !icaltime_is_null_time(value->data.v_time)) {
         if (icaltime_is_date(value->data.v_time)) {
             value->kind = ICAL_DATE_VALUE;

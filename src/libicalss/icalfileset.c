@@ -198,6 +198,10 @@ long icalfileset_filesize(icalfileset *fset)
 {
     struct stat sbuf;
 
+    if (!fset || !fset->path || fset->path[0] == '\0') {
+        return -1;
+    }
+
     if (stat(fset->path, &sbuf) != 0) {
         /* A file by the given name does not exist, or there was
            another error */
@@ -221,8 +225,6 @@ long icalfileset_filesize(icalfileset *fset)
             return (long)sbuf.st_size;
         }
     }
-
-    /*return -1; not reached */
 }
 
 void icalfileset_free(icalset *set)

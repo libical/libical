@@ -24,13 +24,19 @@
 #include <stdlib.h>
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-unsafe-call-within-signal-handler"
+#endif
 static void sig_alrm(int i)
 {
     _unused(i);
     fprintf(stderr, "Could not get lock on file\n");
     exit(1);
 }
-
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void *data)

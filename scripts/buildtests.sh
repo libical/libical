@@ -47,6 +47,7 @@ HELP() {
   echo " -m, --no-msan-build        Don't run any MSAN-build (sanitize-memory) tests"
   echo " -d, --no-tsan-build        Don't run any TSAN-build (sanitize-threads) tests"
   echo " -u, --no-ubsan-build       Don't run any UBSAN-build (sanitize-undefined) tests"
+  echo " -f, --no-gcc-analyzer      Don't run any gcc analyzers tests"
   echo " -r, --no-threadlocal-build Don't run the THREADLOCAL-build tests"
   echo " -R, --reverse              Reverse polarity on the options"
   echo
@@ -218,7 +219,6 @@ BUILD() {
   CONFIGURE "$1" "$2"
   cmake --build . 2>&1 | tee make.out || exit 1
   COMPILE_WARNINGS make.out
-
   if (test "$(uname -s)" = "Darwin"); then
     export DYLD_LIBRARY_PATH=$BDIR/lib
   else
@@ -386,6 +386,22 @@ UBSAN_BUILD() {
   ulimit -S -t unlimited
   ulimit -S -m unlimited
   echo "===== END UBSAN BUILD: $1 ======"
+}
+
+# function GCC_ANALYZER_BUILD:
+# runs a gcc analyzer build test
+# $1 = the name of the test (which will have "-gccanalyzer" appended to it)
+# $2 = CMake options
+function GCC_ANALYZER_BUILD() {
+  name="$1-gccanalyzer"
+  if (test -z "$(REVERSE $rungccanalyzer)"); then
+    echo "===== GCC ANALYZER BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START GCC_ANALYZER BUILD: $1 ======"
+  SET_GCC
+  BUILD "$name" "$2 -DLIBICAL_BUILD_TESTING=True -DLIBICAL_DEVMODE=False -DCMAKE_C_FLAGS=-fanalyzer" #TODO -DCMAKE_CXX_FLAGS=-fanalyzer
+  echo "===== END GCC_ANALYZER BUILD: $1 ======"
 }
 
 #function THREADLOCAL_BUILD() {
@@ -655,7 +671,7 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hCpksbtcgnzxalmdurR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-threadlocal-build,reverse" -- "$@")
+options=$(getopt -o "hCpksbtcgnzxalmdufrR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse" -- "$@")
 eval set -- "$options"
 
 reverse=0
@@ -675,6 +691,7 @@ runmsanbuild=1
 runtsanbuild=1
 runubsanbuild=1
 runmemcbuild=1
+rungccanalyzer=1
 runthreadlocalbuild=1
 while true; do
   case "$1" in
@@ -744,6 +761,10 @@ while true; do
     ;;
   -x | --no-memc-build)
     runmemcbuild=0
+    shift
+    ;;
+  -f | --no-gcc-analyzer)
+    rungccanalyzer=0
     shift
     ;;
   -r | --no-threadlocal-build)
@@ -925,6 +946,14 @@ UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
 UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
 UBSAN_BUILD test5ubsan "$GLIBOPTS"
 UBSAN_BUILD test6ubsan "$FUZZOPTS"
+
+#gcc analyzer
+GCC_ANALYZER_BUILD test1gccan "$DEFCMAKEOPTS"
+GCC_ANALYZER_BUILD test2gccan "$CMAKEOPTS"
+GCC_ANALYZER_BUILD test3gccan "$TZCMAKEOPTS"
+GCC_ANALYZER_BUILD test4gccan "$UUCCMAKEOPTS"
+GCC_ANALYZER_BUILD test5gccan "$GLIBOPTS"
+GCC_ANALYZER_BUILD test6gccan "$FUZZOPTS"
 
 #Threadlocal
 THREADLOCAL_BUILD test1threadlocal "$DEFCMAKEOPTS"

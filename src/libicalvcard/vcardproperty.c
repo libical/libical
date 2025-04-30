@@ -311,6 +311,9 @@ static const char *vcardproperty_get_value_kind(vcardproperty *prop,
                                                 vcardvalue *value)
 {
     const char *kind_string = NULL;
+    if (!prop) {
+        return kind_string;
+    }
     vcardvalue_kind kind = VCARD_NO_VALUE;
     vcardparameter *val_param =
         vcardproperty_get_first_parameter(prop, VCARD_VALUE_PARAMETER);

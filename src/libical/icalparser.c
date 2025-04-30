@@ -478,7 +478,11 @@ char *icalparser_get_line(icalparser *parser,
     char *line_p;
     size_t buf_size = parser->tmp_buf_size;
 
-    line_p = line = icalmemory_new_buffer(buf_size);
+    line = icalmemory_new_buffer(buf_size);
+    if (!line) {
+        return NULL;
+    }
+    line_p = line;
     line[0] = '\0';
 
     /* Read lines by calling line_gen_func and putting the data into

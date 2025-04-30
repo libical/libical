@@ -1380,7 +1380,7 @@ icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
     for (lower = 0; lower < builtin_timezones->num_elements; lower++) {
         zone = icalarray_element_at(builtin_timezones, lower);
         zone_location = icaltimezone_get_location(zone);
-        if (strcmp(location, zone_location) == 0)
+        if (location && zone_location && strcmp(location, zone_location) == 0)
             return zone;
     }
 

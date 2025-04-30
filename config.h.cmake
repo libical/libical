@@ -645,3 +645,7 @@ typedef ssize_t IO_SSIZE_T;
 #else
 #define ICAL_GLOBAL_VAR
 #endif
+
+#if defined(__GNUC__)
+#define ICAL_GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+#endif
