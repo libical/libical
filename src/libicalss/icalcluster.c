@@ -47,6 +47,9 @@ icalcluster *icalcluster_new(const char *key, icalcomponent *data)
 {
     struct icalcluster_impl *impl = icalcluster_new_impl();
 
+    if (!impl) {
+        return NULL;
+    }
     assert(impl->data == 0);
 
     impl->key = strdup(key);
@@ -76,16 +79,20 @@ icalcluster *icalcluster_clone(const icalcluster *data)
     struct icalcluster_impl *old = (struct icalcluster_impl *)data;
     struct icalcluster_impl *impl = icalcluster_new_impl();
 
-    impl->key = strdup(old->key);
-    impl->data = icalcomponent_clone(old->data);
-    impl->changed = 0;
+    if (impl) {
+        impl->key = strdup(old->key);
+        impl->data = icalcomponent_clone(old->data);
+        impl->changed = 0;
+    }
 
     return impl;
 }
 
 void icalcluster_free(icalcluster *impl)
 {
-    icalerror_check_arg_rv((impl != 0), "cluster");
+    if (!impl) {
+        return;
+    }
 
     if (impl->key != 0) {
         free(impl->key);

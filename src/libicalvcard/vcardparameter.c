@@ -49,10 +49,7 @@ vcardparameter *vcardparameter_new(vcardparameter_kind kind)
 
 void vcardparameter_free(vcardparameter *param)
 {
-    /*  Comment out the following as it always triggers, even when parameter is non-zero
-    icalerror_check_arg_rv((parameter==0),"parameter");*/
-
-    if (param->parent != 0) {
+    if (!param || param->parent != 0) {
         return;
     }
 

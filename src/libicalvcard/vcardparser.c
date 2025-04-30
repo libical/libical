@@ -720,7 +720,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
 
         case ',':
         case ';':
-            if (is_structured || (is_multivalued && strchr(text_sep, *state->p))) {
+            if (is_structured || (is_multivalued && text_sep && strchr(text_sep, *state->p))) {
                 const char *str = buf_cstring(&state->buf);
                 char *dequot_str =
                     vcardvalue_strdup_and_dequote_text(&str, text_sep);

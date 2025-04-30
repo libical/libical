@@ -43,8 +43,16 @@
    define necessary library symbols; they are noted "INFRINGES ON
    USER NAME SPACE" below.  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
+#if defined(__GNUC__) && !defined(__clang__) && ICAL_GCC_VERSION >= 120000
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-use-of-uninitialized-value" // since gcc12
+#endif
 
 /* Identify Bison output.  */
 #define YYBISON 1
@@ -1579,7 +1587,7 @@ static void ssyacc_add_where(struct icalgauge_impl *impl, char *str1,
                              icalgaugecompare compare, const char *value_str)
 {
     struct icalgauge_where *where;
-    char *compstr, *propstr, *c, *l;
+    char *propstr, *c, *l;
     const char *s;
     size_t lenstr;
 
@@ -1612,19 +1620,12 @@ static void ssyacc_add_where(struct icalgauge_impl *impl, char *str1,
     /* Is there a period in str1 ? If so, the string specified both a */
     /* component and a property                                       */
     if ((c = strrchr(str1, '.')) != 0) {
-        compstr = str1;
+        where->comp = icalenum_string_to_component_kind(str1);
         propstr = c + 1;
         *c = '\0';
     } else {
-        compstr = 0;
-        propstr = str1;
-    }
-
-    /* Handle the case where a component was specified */
-    if (compstr != 0) {
-        where->comp = icalenum_string_to_component_kind(compstr);
-    } else {
         where->comp = ICAL_NO_COMPONENT;
+        propstr = str1;
     }
 
     where->prop = icalenum_string_to_property_kind(propstr);
@@ -1650,7 +1651,7 @@ static void set_logic(struct icalgauge_impl *impl, icalgaugelogic l)
 
 static void ssyacc_add_select(struct icalgauge_impl *impl, char *str1)
 {
-    char *c, *compstr, *propstr;
+    char *c, *propstr;
     struct icalgauge_where *where;
 
     /* Uses only the prop and comp fields of the where structure */
@@ -1668,19 +1669,12 @@ static void ssyacc_add_select(struct icalgauge_impl *impl, char *str1)
     /* Is there a period in str1 ? If so, the string specified both a */
     /* component and a property */
     if ((c = strrchr(str1, '.')) != 0) {
-        compstr = str1;
+        where->comp = icalenum_string_to_component_kind(str1);
         propstr = c + 1;
         *c = '\0';
     } else {
-        compstr = 0;
-        propstr = str1;
-    }
-
-    /* Handle the case where a component was specified */
-    if (compstr != 0) {
-        where->comp = icalenum_string_to_component_kind(compstr);
-    } else {
         where->comp = ICAL_NO_COMPONENT;
+        propstr = str1;
     }
 
     /* If the property was '*', then accept all properties */
@@ -1717,4 +1711,7 @@ void sserror(const char *s)
     fprintf(stderr, "Parse error \'%s\'\n", s);
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 }
+#if defined(__GNUC__) && !defined(__clang__) && ICAL_GCC_VERSION >= 120000
+#pragma GCC diagnostic pop
+#endif
 #pragma GCC diagnostic pop

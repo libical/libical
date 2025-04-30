@@ -305,6 +305,10 @@ static char *fold_property_line(char *text)
 static const char *icalproperty_get_value_kind(icalproperty *prop)
 {
     const char *kind_string = NULL;
+    if (!prop) {
+        return kind_string;
+    }
+
     icalvalue_kind kind = ICAL_NO_VALUE;
     icalparameter *val_param =
         icalproperty_get_first_parameter(prop, ICAL_VALUE_PARAMETER);

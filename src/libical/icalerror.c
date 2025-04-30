@@ -75,6 +75,10 @@ void icalerror_stop_here(void)
 
 void icalerror_crash_here(void)
 {
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-null-dereference"
+#endif
 #if !defined(__clang_analyzer__)
     int *p = 0;
     /* coverity[var_deref_op] */
@@ -83,6 +87,9 @@ void icalerror_crash_here(void)
 
     /* cppcheck-suppress nullPointer */
     icalassert(*p);
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
 #endif
 }
 

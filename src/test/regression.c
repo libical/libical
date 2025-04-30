@@ -4325,6 +4325,10 @@ static void test_free_attach_data(char *data, void *user_data)
     (*pbeen_called)++;
 }
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
+#endif
 void test_attach_data(void)
 {
     static const char test_icalcomp_str_attachwithdata[] =
@@ -4359,21 +4363,28 @@ void test_attach_data(void)
 
     icalcomponent_free(ac);
 
-    attach = icalattach_new_from_data(strdup("foofile"), test_free_attach_data, &free_been_called);
-    ac = icalcomponent_new(ICAL_VALARM_COMPONENT);
-    ap = icalproperty_new_attach(attach);
+    char *dupStr = strdup("foofile"); // will be freed in the unref
+    if (dupStr) {
+        attach = icalattach_new_from_data(dupStr, test_free_attach_data, &free_been_called);
+        if (attach) {
+            ac = icalcomponent_new(ICAL_VALARM_COMPONENT);
+            ap = icalproperty_new_attach(attach);
 
-    icalcomponent_add_property(ac, ap);
-    if (VERBOSE) {
-        printf("%s\n", icalcomponent_as_ical_string(ac));
+            icalcomponent_add_property(ac, ap);
+            if (VERBOSE) {
+                printf("%s\n", icalcomponent_as_ical_string(ac));
+            }
+            str_is("attach data 3", (const char *)icalattach_get_data(attach), "foofile");
+            str_is("attach with data 3", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
+
+            icalattach_unref(attach);
+            ok("Free should not be called yet", (!free_been_called));
+            icalcomponent_free(ac);
+            ok("Free should be called now", (free_been_called == 1));
+        } else {
+            free(dupStr);
+        }
     }
-    str_is("attach data 3", (const char *)icalattach_get_data(attach), "foofile");
-    str_is("attach with data 3", icalcomponent_as_ical_string(ac), test_icalcomp_str_attachwithdata);
-
-    icalattach_unref(attach);
-    ok("Free should not be called yet", (!free_been_called));
-    icalcomponent_free(ac);
-    ok("Free should be called now", (free_been_called == 1));
 
     ac = icalcomponent_new_from_string(test_icalcomp_str_attachwithencodingdata);
     ap = icalcomponent_get_first_property(ac, ICAL_ATTACH_PROPERTY);
@@ -4383,6 +4394,9 @@ void test_attach_data(void)
 
     icalcomponent_free(ac);
 }
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 void test_vcal(void)
 {

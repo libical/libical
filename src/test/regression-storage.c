@@ -49,7 +49,9 @@ int vcalendar_init(struct calendar **cal, const char *vcalendar, const char *tit
 #if defined(HAVE_BDB)
 #include <db.h>
 
+/*
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey);
+*/
 char *parse_vcalendar(const DBT *dbt);
 char *pack_calendar(struct calendar *cal, size_t size);
 struct calendar *unpack_calendar(char *str, size_t size);
@@ -496,7 +498,7 @@ int vcalendar_init(struct calendar **rcal, const char *vcalendar, const char *ti
 
 /* just create a random title for now */
 #if defined(HAVE_BDB)
-
+/*
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
 {
     icalcomponent *cl;
@@ -505,6 +507,9 @@ int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
     _unused(dbp);
     _unused(pkey);
 
+    if (!skey) {
+        return -1;
+    }
     memset(skey, 0, sizeof(DBT));
 
     cl = icalparser_parse_string((char *)pdata->data);
@@ -512,9 +517,9 @@ int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
 
     skey->data = strdup(title);
     skey->size = (u_int32_t)strlen(skey->data);
-    return (0);
+    return 0;
 }
-
+*/
 char *pack_calendar(struct calendar *cal, size_t size)
 {
     char *str;
@@ -600,9 +605,12 @@ char *parse_vcalendar(const DBT *dbt)
     str = (char *)dbt->data;
     cal = unpack_calendar(str, dbt->size);
 
-    str = cal->vcalendar;
-    free(cal);
-    return str;
+    if (cal) {
+        str = cal->vcalendar;
+        free(cal);
+        return str;
+    }
+    return NULL;
 }
 
 #endif

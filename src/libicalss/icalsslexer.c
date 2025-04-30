@@ -1099,6 +1099,10 @@ YY_DECL
  *      EOB_ACT_CONTINUE_SCAN - continue scanning from current position
  *      EOB_ACT_END_OF_FILE - end of file
  */
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
+#endif
 static int yy_get_next_buffer(void)
 {
     register char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
@@ -1148,6 +1152,10 @@ static int yy_get_next_buffer(void)
 
             /* just a shorter name for the current buffer */
             YY_BUFFER_STATE b = YY_CURRENT_BUFFER;
+            if (!b) {
+                YY_FATAL_ERROR(
+                    "fatal error - something is badly broken");
+            }
 
             int yy_c_buf_p_offset =
                 (int)((yy_c_buf_p)-b->yy_ch_buf);
@@ -1219,6 +1227,9 @@ static int yy_get_next_buffer(void)
 
     return ret_val;
 }
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 /* yy_get_previous_state - get the state just before the EOB char was reached */
 
@@ -1456,8 +1467,10 @@ YY_BUFFER_STATE ss_create_buffer(FILE *file, int size)
          * we need to put in 2 end-of-buffer characters.
          */
     b->yy_ch_buf = (char *)ssalloc(b->yy_buf_size + 2);
-    if (!b->yy_ch_buf)
+    if (!b->yy_ch_buf) {
+        free(b);
         YY_FATAL_ERROR("out of dynamic memory in ss_create_buffer()");
+    }
 
     b->yy_is_our_buffer = 1;
 
@@ -1492,6 +1505,9 @@ static void ss_init_buffer(YY_BUFFER_STATE b, FILE *file)
 
 {
     int oerrno = errno;
+
+    if (!b)
+        return;
 
     ss_flush_buffer(b);
 
@@ -1705,8 +1721,10 @@ YY_BUFFER_STATE ss_scan_bytes(yyconst char *yybytes, int _yybytes_len)
     buf[_yybytes_len] = buf[_yybytes_len + 1] = YY_END_OF_BUFFER_CHAR;
 
     b = ss_scan_buffer(buf, n);
-    if (!b)
+    if (!b) {
+        free(buf);
         YY_FATAL_ERROR("bad buffer in ss_scan_bytes()");
+    }
 
     /* It's okay to grow etc. this buffer, and we should throw it
          * away when we're done.

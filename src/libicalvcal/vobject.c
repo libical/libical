@@ -1034,7 +1034,7 @@ stuff:
             fp->s = realloc(fp->s,(size_t)fp->limit);
             if (fp->s) goto stuff;
             }
-        if (fp->alloc)
+        if (fp->s)
             free(fp->s);
         fp->s = 0;
         fp->fail = 1;
