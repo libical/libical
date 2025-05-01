@@ -122,7 +122,7 @@ int vcardparameter_compare_kind_map(const struct vcardparameter_kind_map *a,
 
 vcardparameter_kind vcardparameter_string_to_kind(const char *string)
 {
-    struct vcardparameter_kind_map key;
+    struct vcardparameter_kind_map key = {0};
     struct vcardparameter_kind_map *result;
 
     if (string == 0) {
