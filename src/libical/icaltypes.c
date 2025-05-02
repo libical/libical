@@ -189,7 +189,6 @@ char *icalreqstattype_as_string_r(struct icalreqstattype stat)
     return temp;
 }
 
-
 ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
 {
     ical_unknown_token_handling myHandling;
