@@ -159,25 +159,36 @@ const char *icalreqstattype_as_string(struct icalreqstattype stat)
 char *icalreqstattype_as_string_r(struct icalreqstattype stat)
 {
     char *temp;
+    const char *desc_safe = NULL;
+    const char *debug_safe = NULL;
 
     icalerror_check_arg_rz((stat.code != ICAL_UNKNOWN_STATUS), "Status");
 
     temp = (char *)icalmemory_new_buffer(TMP_BUF_SIZE);
 
     if (stat.desc == 0) {
-        stat.desc = icalenum_reqstat_desc(stat.code);
+        desc_safe = icalenum_reqstat_desc(stat.code);
+    } else {
+        desc_safe = stat.desc;
     }
 
     if (stat.debug != 0) {
-        snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s;%s", icalenum_reqstat_major(stat.code),
-                 icalenum_reqstat_minor(stat.code), stat.desc, stat.debug);
+        debug_safe = stat.debug;
+        snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s;%s",
+                 icalenum_reqstat_major(stat.code),
+                 icalenum_reqstat_minor(stat.code),
+                 desc_safe ? desc_safe : "",
+                 debug_safe);
     } else {
-        snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s", icalenum_reqstat_major(stat.code),
-                 icalenum_reqstat_minor(stat.code), stat.desc);
+        snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s",
+                 icalenum_reqstat_major(stat.code),
+                 icalenum_reqstat_minor(stat.code),
+                 desc_safe ? desc_safe : "");
     }
 
     return temp;
 }
+
 
 ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
 {
