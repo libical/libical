@@ -144,17 +144,6 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(libical C) #CXX is optional for the bindings
 
-cmake_policy(SET CMP0003 NEW)
-if(POLICY CMP0042)
-  cmake_policy(SET CMP0042 NEW)
-endif()
-if(POLICY CMP0054)
-  cmake_policy(SET CMP0054 NEW)
-endif()
-if(POLICY CMP0074)
-  cmake_policy(SET CMP0074 NEW) #don't warn about ICU_ROOT envvar
-endif()
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 #Include CMake capabilities
