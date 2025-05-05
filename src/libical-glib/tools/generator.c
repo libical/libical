@@ -2072,7 +2072,10 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
 
         if (parameter && parameter->type && parameter->type[strlen(parameter->type) - 1] == '*') {
             trueType = get_true_type(parameter->type);
-            g_return_val_if_fail(trueType != NULL, NULL);
+            if (!trueType) {
+                fprintf(stderr, "Unknown type '%s' in method %s\n", parameter->type, method->name);
+                continue;
+            }
             for (i = 0;
                  i < nameSpace_len && trueType[i] && nameSpace[i] == trueType[i];
                  i++)
