@@ -1,5 +1,5 @@
 [library]
-version = "@LIBICAL_LIB_MAJOR_VERSION@"
+version = "@CMAKE_PROJECT_VERSION_MAJOR@"
 browse_url = "https://github.com/libical/libical"
 repository_url = "https://github.com/libical/libical.git"
 website_url = "https://libical.github.io/libical/"

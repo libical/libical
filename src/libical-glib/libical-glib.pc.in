@@ -8,7 +8,7 @@ includedir=@includedir@
 
 Name: libical-glib
 Description: A GObject interface of the libical library
-Version: @LIBICAL_LIB_VERSION_STRING@
+Version: @CMAKE_PROJECT_VERSION@
 Requires: glib-2.0, gobject-2.0, libical
 Cflags: -I${includedir}
 Libs: -L${libdir} -lical-glib
