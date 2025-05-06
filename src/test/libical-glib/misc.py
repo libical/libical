@@ -13,7 +13,7 @@
 
 import gi
 
-gi.require_version('ICalGLib', '3.0')
+gi.require_version('ICalGLib', '4.0')
 from gi.repository import ICalGLib  # noqa E402
 
 geo = ICalGLib.Geo.new(10.0, 20.0)
