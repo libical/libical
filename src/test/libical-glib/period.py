@@ -13,7 +13,7 @@
 
 import gi
 
-gi.require_version('ICalGLib', '3.0')
+gi.require_version('ICalGLib', '4.0')
 from gi.repository import ICalGLib  # noqa E402
 
 string = '19970101T183248Z/19970102T071625Z'
