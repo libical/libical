@@ -5260,7 +5260,7 @@ static void test_builtin_compat_tzid(void)
     icaltimezone *tz;
 
     for (jj = 0; jj < 2; jj++) {
-        if(jj == 1) {
+        if (jj == 1) {
             icaltimezone_set_tzid_prefix(NULL);
             icaltimezone_free_builtin_timezones();
         }
