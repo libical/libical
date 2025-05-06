@@ -142,7 +142,14 @@
 #  Default: false.
 
 cmake_minimum_required(VERSION 3.20.0)
-project(libical C) #CXX is optional for the bindings
+project(
+  libical
+  VERSION 3.99.99
+  DESCRIPTION "An implementation of basic iCAL protocols"
+  HOMEPAGE_URL "https://libical.github.io/libical/"
+  LANGUAGES
+    C #CXX is optional for the bindings
+)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
@@ -189,14 +196,9 @@ if(WINCE)
   )
 endif()
 
-set(LIBICAL_LIB_MAJOR_VERSION "3")
-set(LIBICAL_LIB_MINOR_VERSION "99")
-set(LIBICAL_LIB_PATCH_VERSION "99")
-set(LIBICAL_LIB_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}.${LIBICAL_LIB_PATCH_VERSION}")
 set(LIBICAL_LIB_SOVERSION_STRING "4.0")
 
 set(PROJECT_VERSION "4.0")
-set(PROJECT_URL "https://libical.github.io/libical/")
 
 # library build types
 set(LIBRARY_TYPE SHARED)
@@ -1003,7 +1005,7 @@ endif()
 
 ########### create and install pkg-config file #########
 
-set(VERSION "${LIBICAL_LIB_VERSION_STRING}")
+set(VERSION "${CMAKE_PROJECT_VERSION}")
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 set(exec_prefix "\${prefix}")
 if(IS_ABSOLUTE ${LIB_INSTALL_DIR})
@@ -1045,7 +1047,7 @@ configure_package_config_file(
 # Create a version file
 write_basic_package_version_file(
   ${libical_BINARY_DIR}/LibIcalConfigVersion.cmake
-  VERSION ${LIBICAL_LIB_VERSION_STRING}
+  VERSION ${CMAKE_PROJECT_VERSION}
   COMPATIBILITY SameMajorVersion
 )
 

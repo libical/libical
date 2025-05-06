@@ -7,8 +7,8 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: libical
-Description: An implementation of basic iCAL protocols
-Version: @LIBICAL_LIB_VERSION_STRING@
+Description: @CMAKE_PROJECT_DESCRIPTION@
+Version: @CMAKE_PROJECT_VERSION@
 Libs: -L${libdir} -lical -licalss -licalvcal
 Libs.private: @PTHREAD_LIBS@
 @REQUIRES_PRIVATE_ICU@

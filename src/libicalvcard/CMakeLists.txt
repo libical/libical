@@ -257,7 +257,7 @@ set_target_properties(
   icalvcard
   PROPERTIES
     VERSION
-      ${LIBICAL_LIB_VERSION_STRING}
+      ${CMAKE_PROJECT_VERSION}
     SOVERSION
       ${LIBICAL_LIB_SOVERSION_STRING}
 )

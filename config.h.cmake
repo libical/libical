@@ -184,7 +184,7 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 #define ICAL_ALLOW_EMPTY_PROPERTIES ${ICAL_ALLOW_EMPTY_PROPERTIES}
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "${PROJECT_URL}"
+#define PACKAGE_BUGREPORT "${CMAKE_PROJECT_HOMEPAGE_URL}"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "${CMAKE_PROJECT_NAME}"
