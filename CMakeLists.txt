@@ -150,6 +150,11 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 include(LibIcalMacrosInternal)
 include(FeatureSummary)
 
+if(NOT PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
+  # Git auto-ignore out-of-source build directory
+  file(GENERATE OUTPUT .gitignore CONTENT "*")
+endif()
+
 # Exit for blacklisted compilers that don't support necessary C standards
 #  MSVC++ < 2013 aka 1800
 set(BAD_C_MESSAGE "")
