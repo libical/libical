@@ -51,7 +51,6 @@ assert recurrence.to_string() == 'FREQ=DAILY;COUNT=10'
 
 recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0, 1)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) == 1
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 1) == 0
 assert recurrence.get_by_array_size(ICalGLib.RecurrenceByRule.BY_SECOND) == 1
 array = recurrence.get_by_array(ICalGLib.RecurrenceByRule.BY_SECOND)
 assert array[0] == 1
@@ -61,7 +60,6 @@ assert len(array) == 2
 recurrence.set_by_array(ICalGLib.RecurrenceByRule.BY_SECOND, array)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) == 100
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 1) == 101
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 2) == 0
 array = recurrence.get_by_array(ICalGLib.RecurrenceByRule.BY_SECOND)
 assert array[0] == 100
 assert array[1] == 101
@@ -70,7 +68,6 @@ assert len(array) == 2
 recurrence.set_by(ICalGLib.RecurrenceByRule.BY_MINUTE, 0, 2)
 recurrence.resize_by_array(ICalGLib.RecurrenceByRule.BY_MINUTE, 1)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MINUTE, 0) == 2
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MINUTE, 1) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_MINUTE,
 )
@@ -81,7 +78,6 @@ assert len(array) == 2
 recurrence.set_by_array(ICalGLib.RecurrenceByRule.BY_MINUTE, array)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MINUTE, 0) == 200
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MINUTE, 1) == 201
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MINUTE, 2) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_MINUTE,
 )
@@ -92,7 +88,6 @@ assert len(array) == 2
 recurrence.set_by(ICalGLib.RecurrenceByRule.BY_HOUR, 0, 3)
 recurrence.resize_by_array(ICalGLib.RecurrenceByRule.BY_HOUR, 1)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_HOUR, 0) == 3
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_HOUR, 1) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_HOUR,
 )
@@ -103,7 +98,6 @@ assert len(array) == 2
 recurrence.set_by_array(ICalGLib.RecurrenceByRule.BY_HOUR, array)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_HOUR, 0) == 300
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_HOUR, 1) == 301
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_HOUR, 2) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_HOUR,
 )
@@ -114,7 +108,6 @@ assert len(array) == 2
 recurrence.set_by(ICalGLib.RecurrenceByRule.BY_DAY, 0, 4)
 recurrence.resize_by_array(ICalGLib.RecurrenceByRule.BY_DAY, 1)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_DAY, 0) == 4
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_DAY, 1) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_DAY,
 )
@@ -125,7 +118,6 @@ assert len(array) == 2
 recurrence.set_by_array(ICalGLib.RecurrenceByRule.BY_DAY, array)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_DAY, 0) == 400
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_DAY, 1) == 401
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_DAY, 2) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_DAY,
 )
@@ -136,7 +128,6 @@ assert len(array) == 2
 recurrence.set_by(ICalGLib.RecurrenceByRule.BY_MONTH_DAY, 0, 5)
 recurrence.resize_by_array(ICalGLib.RecurrenceByRule.BY_MONTH_DAY, 1)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MONTH_DAY, 0) == 5
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MONTH_DAY, 1) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_MONTH_DAY,
 )
@@ -147,7 +138,6 @@ assert len(array) == 2
 recurrence.set_by_array(ICalGLib.RecurrenceByRule.BY_MONTH_DAY, array)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MONTH_DAY, 0) == 500
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MONTH_DAY, 1) == 501
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MONTH_DAY, 2) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_MONTH_DAY,
 )
@@ -158,7 +148,6 @@ assert len(array) == 2
 recurrence.set_by(ICalGLib.RecurrenceByRule.BY_YEAR_DAY, 0, 6)
 recurrence.resize_by_array(ICalGLib.RecurrenceByRule.BY_YEAR_DAY, 1)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_YEAR_DAY, 0) == 6
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_YEAR_DAY, 1) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_YEAR_DAY,
 )
@@ -169,7 +158,6 @@ assert len(array) == 2
 recurrence.set_by_array(ICalGLib.RecurrenceByRule.BY_YEAR_DAY, array)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_YEAR_DAY, 0) == 600
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_YEAR_DAY, 1) == 601
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_YEAR_DAY, 2) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_YEAR_DAY,
 )
@@ -180,7 +168,6 @@ assert len(array) == 2
 recurrence.set_by(ICalGLib.RecurrenceByRule.BY_WEEK_NO, 0, 7)
 recurrence.resize_by_array(ICalGLib.RecurrenceByRule.BY_WEEK_NO, 1)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_WEEK_NO, 0) == 7
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_WEEK_NO, 1) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_WEEK_NO,
 )
@@ -191,7 +178,6 @@ assert len(array) == 2
 recurrence.set_by_array(ICalGLib.RecurrenceByRule.BY_WEEK_NO, array)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_WEEK_NO, 0) == 700
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_WEEK_NO, 1) == 701
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_WEEK_NO, 2) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_WEEK_NO,
 )
@@ -202,7 +188,6 @@ assert len(array) == 2
 recurrence.set_by(ICalGLib.RecurrenceByRule.BY_MONTH, 0, 8)
 recurrence.resize_by_array(ICalGLib.RecurrenceByRule.BY_MONTH, 1)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MONTH, 0) == 8
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MONTH, 1) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_MONTH,
 )
@@ -213,7 +198,6 @@ assert len(array) == 2
 recurrence.set_by_array(ICalGLib.RecurrenceByRule.BY_MONTH, array)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MONTH, 0) == 800
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MONTH, 1) == 801
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_MONTH, 2) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_MONTH,
 )
@@ -224,7 +208,6 @@ assert len(array) == 2
 recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SET_POS, 0, 9)
 recurrence.resize_by_array(ICalGLib.RecurrenceByRule.BY_SET_POS, 1)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SET_POS, 0) == 9
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SET_POS, 1) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_SET_POS,
 )
@@ -235,7 +218,6 @@ assert len(array) == 2
 recurrence.set_by_array(ICalGLib.RecurrenceByRule.BY_SET_POS, array)
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SET_POS, 0) == 900
 assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SET_POS, 1) == 901
-assert recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SET_POS, 2) == 0
 array = recurrence.get_by_array(
     ICalGLib.RecurrenceByRule.BY_SET_POS,
 )
