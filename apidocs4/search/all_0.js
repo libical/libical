@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['0_0',['0',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md38',1,'Migrating &lt;tt&gt;ICalGLib.Recurrence.*_by_*&lt;/tt&gt; methods from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md36',1,'Migrating &lt;tt&gt;icalrecurrencetype.by_xxx&lt;/tt&gt; static arrays usage from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md27',1,'Migrating from 3.0 to 4.0']]],
+  ['0_20to_204_200_1',['0 to 4 0',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md38',1,'Migrating &lt;tt&gt;ICalGLib.Recurrence.*_by_*&lt;/tt&gt; methods from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md36',1,'Migrating &lt;tt&gt;icalrecurrencetype.by_xxx&lt;/tt&gt; static arrays usage from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md27',1,'Migrating from 3.0 to 4.0']]]
+];
