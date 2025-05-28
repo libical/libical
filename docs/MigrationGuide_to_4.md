@@ -1,4 +1,6 @@
-# Migrating to version 4.0
+# Migrating to version 4
+
+A guide to help developers port their code from libical v3.x to libical 4.0.
 
 ## Conditional compilation
 
@@ -20,54 +22,26 @@ you can handle code that no longer exists in 4.0 with:
      #endif
 ```
 
-## Bool return values
+## C library
 
-A bunch of function signatures have been changed to use 'bool' rather than 'int' types.
-
-This is implemented using the C99 standards compliant <stdbool.h> header.
-
-## `icalrecurrencetype` now passed by reference
-
-The way `struct icalrecurrencetype` is passed between functions has been changed. While it was
-usually passed by value in 3.0, it is now passed by reference. A reference counting mechanism is
-applied that takes care of deallocating an instance as soon as the reference counter goes to 0.
-
-## `icalgeotype` now uses character strings rather than doubles
-
-The members of `struct icalgeotype` for latitude ('lat`) and longitude ('lon`) have been changed
-to use ICAL_GEO_LEN long character strings rather than the double type.
-
-This means that simple assignments in 3.0 must be replaced by string copies.
-
-```C
-     geo.lat = 0.0;
-     geo.lon = 10.0;
-```
-
-becomes
-
-```C
-     strncpy(geo.lat, "0.0", ICAL_GEO_LEN-1);
-     strncpy(geo.lon, "10.0", ICAL_GEO_LEN-1);
-```
-
-### libical C library
-
-#### Modified functions
+### Modified functions
 
 * `icalrecurrencetype_from_string()` was replaced by `icalrecurrencetype_new_from_string()`,
    which returns a `struct icalrecurrencetype *` rather than a `struct icalrecurrencetype`.
 * The following functions now take arguments of type `struct icalrecurrencetype *` rather than
   `struct icalrecurrencetype`:
   * `icalproperty_new_rrule()`
+  * `icalproperty_get_rrule()`
   * `icalproperty_set_rrule()`
   * `icalproperty_vanew_rrule()`
   * `icalproperty_new_exrule()`
   * `icalproperty_set_exrule()`
+  * `icalproperty_get_exrule()`
   * `icalproperty_vanew_exrule()`
   * `icalrecur_iterator_new()`
   * `icalvalue_new_recur()`
   * `icalvalue_set_recur()`
+  * `icalvalue_get_recur()`
 
 * The following functions now return a value of type `struct icalrecurrencetype *` rather than
   `struct icalrecurrencetype`:
@@ -75,7 +49,7 @@ becomes
   * `icalproperty_get_exrule()`
   * `icalvalue_get_recur()`
 
-#### New functions
+### New functions
 
 The following functions have been added:
 
@@ -83,11 +57,34 @@ The following functions have been added:
 * `icalrecurrencetype_ref()`
 * `icalrecurrencetype_unref()`
 * `icalrecurrencetype_clone()`
+* `icalrecurrencetype_encode_day()`
+* `icalrecurrencetype_encode_month()`
+* `icaltzutil_set_zone_directory()`
+* `icalcomponent_clone()`
+* `icalproperty_clone()`
+* `icalparameter_clone()`
+* `icalvalue_clone()`
+* `icalcluster_clone()`
+* `icalrecur_iterator_prev()`
+* `icalrecur_resize_by()`
+* `icalrecurrencetype_new()`
+* `icalrecurrencetype_ref()`
+* `icalrecurrencetype_unref()`
+* `icalrecurrencetype_clone()`
+* `icalrecurrencetype_from_string()`
+* `icalcomponent_set_x_name()`
+* `icalcomponent_get_x_name()`
+* `icalcomponent_get_component_name()`
+* `icalcomponent_get_component_name_r()`
+* `ical_set_invalid_rrule_handling_setting()`
+* `ical_get_invalid_rrule_handling_setting()`
+* `icalparser_get_ctrl()`
+* `icalparser_set_ctrl()`
 
-#### Removed functions
+### Removed functions
 
 * `icalrecurrencetype_clear()` has been removed.
-* deprecated functions have also been removed:
+* These deprecated functions have been removed:
   * `caldat()`
   * `juldat()`
   * `icalcomponent_new_clone()`
@@ -96,10 +93,34 @@ The following functions have been added:
   * `icalvalue_new_clone()`
   * `icalcluster_new_clone()`
 
-#### Migrating from 3.0 to 4.0
+* No longer publicly visible functions:
+  * `icaltzutil_fetch_timezone()`
+  * `icalrecurrencetype_clear()`
 
-Instead of allocating `icalrecurrencetype` on the stack, use one of the constructor functions and
-take care of deallocation.
+### Removed data types
+
+* These data structures have been removed (as they were never used):
+  * struct icaltimezonetype
+  * struct icaltimezonephase
+
+### Migrating from 3.0 to 4.0
+
+### bool return values
+
+A number of function signatures have been changed to use 'bool' rather than 'int' types.
+
+This is implemented using the C99 standards compliant <stdbool.h> header.
+
+### Clone functions
+
+Replace all `ical*_new_clone()` function calls with `ical*_clone()` .
+ie, use `icalcomponent_clone()` rather then `icalcomponent_new_clone()`.
+
+### `icalrecurrencetype` now passed by reference
+
+The way `struct icalrecurrencetype` is passed between functions has been changed. While it was
+usually passed by value in 3.0, it is now passed by reference. A reference counting mechanism is
+applied that takes care of de-allocating an instance as soon as the reference counter goes to 0.
 
 Code like this in libical 3.0:
 
@@ -129,6 +150,40 @@ changes to this in libical 4.0:
     }
 ```
 
+### `icalgeotype` now uses character strings rather than doubles
+
+The members of `struct icalgeotype` for latitude ('lat`) and longitude ('lon`) have been changed
+to use ICAL_GEO_LEN long character strings rather than the double type.
+
+This means that simple assignments in 3.0 must be replaced by string copies.
+
+```C
+     geo.lat = 0.0;
+     geo.lon = 10.0;
+```
+
+becomes
+
+```C
+     strncpy(geo.lat, "0.0", ICAL_GEO_LEN-1);
+     strncpy(geo.lon, "10.0", ICAL_GEO_LEN-1);
+```
+
+and
+
+```C
+    double lat = geo.lat;
+    double lon = geo.lon;
+```
+
+becomes
+
+```C
+    double lat, lon;
+    sscanf(geo.lat, "%lf", &lat);
+    sscanf(geo.lon, "%lf", &lon);
+```
+
 ### Working with `icalvalue` and `icalproperty`
 
 Code like this in libical 3.0:
@@ -150,9 +205,9 @@ changes to this in libical 4.0:
     // No need to unref
 ```
 
-### C++ library
+## C++ library
 
-#### Modified methods
+### Modified methods
 
 * The following methods now take arguments of type `struct icalrecurrencetype *` rather than `const
   struct icalrecurrencetype &`:
@@ -166,7 +221,7 @@ changes to this in libical 4.0:
   * `ICalProperty.get_exrule()`
   * `ICalProperty.get_rrule()`
 
-## `icalrecurrencetype.by_xxx` static arrays replaced by dynamically allocated ones
+### `icalrecurrencetype.by_xxx` static arrays replaced by dynamically allocated ones
 
 I.e. memory `short by_hour[ICAL_BY_DAY_SIZE]` etc. are replaced by
 

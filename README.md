@@ -10,7 +10,7 @@ Libical — an implementation of iCalendar protocols and data formats
 Most of the code in here was written by Eric Busboom at the end
 of the last millennium with help from dozens of contributors.
 It is currently maintained by Allen Winter and the libical team
-at <https://github.com/libical/libical>.
+at <https://libical.github.io>.
 
 Libical is an Open Source implementation of the iCalendar protocols
 and protocol data units. The iCalendar specification describes how
@@ -44,11 +44,15 @@ See the top-level [Install.txt](Install.txt) file.
 
 ## Documentation
 
-Documentation is hosted at <https://libical.github.io/libical/apidocs/>.
+See the [C API documentation](https://libical.github.io/libical/apidocs/) and
+[glibc API documentation](https://libical.github.io/libical/libical-glib/).
 
 For a conceptual overview of the library, see [Using Libical](docs/UsingLibical.md).
 There is other rudimentary, unfinished documentation in the `docs/` directory of the
 source distribution, annotated examples in `examples/` and the test code in `src/test/`.
+
+For developers porting their code to libical version 4, please visit the
+[Version 4 Migration Guide](docs/MigrationGuide_to_4.md).
 
 ## Acknowledgments
 
