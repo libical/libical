@@ -10,7 +10,7 @@ Libical — an implementation of iCalendar protocols and data formats
 Most of the code in here was written by Eric Busboom at the end
 of the last millennium with help from dozens of contributors.
 It is currently maintained by Allen Winter and the libical team
-at <https://libical.github.io>.
+at <https://libical.github.io/libical>.
 
 Libical is an Open Source implementation of the iCalendar protocols
 and protocol data units. The iCalendar specification describes how
