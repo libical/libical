@@ -1061,6 +1061,14 @@ install(
 
 install(EXPORT icalTargets DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal FILE LibIcalTargets.cmake)
 
+add_custom_target(
+  build-book
+  COMMAND
+    mdbook build --dest-dir ${CMAKE_CURRENT_BINARY_DIR}/book
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  COMMENT "Building the libical book"
+)
+
 ########## By popular demand, add an uninstall target ##########
 
 if(NOT TARGET uninstall)
