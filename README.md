@@ -44,6 +44,9 @@ See the top-level [Install.txt](Install.txt) file.
 
 ## Documentation
 
+For new releases please refer to our [Change Log](CHANGELOG.md) for a high-level
+overview of changes since the previous version.
+
 See the [C API documentation](https://libical.github.io/libical/apidocs/) and
 [glibc API documentation](https://libical.github.io/libical/libical-glib/).
 
