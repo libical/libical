@@ -763,7 +763,7 @@ bool icalproperty_recurrence_is_excluded(icalcomponent *comp,
                 if (icaltime_is_null_time(exrule_time))
                     break;
 
-                result = icaltime_compare(*recurtime, exrule_time);
+                result = icaltime_compare(exrule_time, *recurtime);
                 if (result == 0) {
                     icalrecur_iterator_free(exrule_itr);
                     comp->property_iterator = property_iterator;

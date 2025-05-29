@@ -55,7 +55,7 @@ for details about API changes since libical 3.x.
 
 ## [3.0.21] - Unreleased
 
--
+- Fix some scenarios with RRULEs and EXRULE (#754)
 
 ## [3.0.20] - 2025-05-10
 
