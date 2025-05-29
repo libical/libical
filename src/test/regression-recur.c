@@ -115,7 +115,7 @@ void test_recur_file(void)
 
         struct icaltimetype start;
         struct icaltimetype startmin = icaltime_from_timet_with_zone(1, 0, NULL);
-        struct icaltimetype endmax = icaltime_null_time();
+        struct icaltimetype endmax = icaltime_from_timet_with_zone(1748497476, 0, NULL);
         const char *desc_str = "malformed component";
 
         desc = icalcomponent_get_first_property(itr, ICAL_DESCRIPTION_PROPERTY);
@@ -167,9 +167,7 @@ void test_recur_file(void)
         icalcomponent_foreach_recurrence(itr, startmin, endmax, recur_callback, &num_recurs_found);
 
         snprintf(msg, sizeof(msg), "   expecting total of %d events", expected_events);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
         int_is(msg, num_recurs_found, expected_events);
-#endif
     }
 
     icalset_free(cin);
