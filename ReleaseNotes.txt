@@ -3,7 +3,7 @@ Release Highlights
 
 Version 3.0.21 (UNRELEASED):
 ----------------------------
- *
+ * Fix some scenarios with RRULEs and EXRULE (#754)
 
 Version 3.0.20 (10 March 2025):
 -------------------------------
