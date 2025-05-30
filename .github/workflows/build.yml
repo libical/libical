@@ -11,7 +11,7 @@ jobs:
         configuration:
           - Debug
           - Release
-    runs-on: windows-2019
+    runs-on: [windows-2019, windows-latest]
     steps:
       - uses: actions/checkout@v2
       - uses: ilammy/msvc-dev-cmd@v1
@@ -35,7 +35,7 @@ jobs:
         configuration:
           - Debug
           - Release
-    runs-on: ubuntu-22.04
+    runs-on: [ubuntu-22.04, ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
@@ -55,7 +55,7 @@ jobs:
         configuration:
           - Debug
           - Release
-    runs-on: macos-13
+    runs-on: [macos-13, macos-14, macos-latest]
     env:
       XML_CATALOG_FILES: /usr/local/etc/xml/catalog
     steps:
