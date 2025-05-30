@@ -1,29 +1,6 @@
 var searchData=
 [
-  ['rather_20than_20doubles_0',['&lt;tt&gt;icalgeotype&lt;/tt&gt; now uses character strings rather than doubles',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md31',1,'']]],
-  ['rdate_1',['rdate',['../structrdate.html',1,'']]],
-  ['recommended_2',['Highly Recommended',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2Dependencies.html#autotoc_md13',1,'']]],
-  ['recur_5fmap_3',['recur_map',['../structrecur__map.html',1,'']]],
-  ['recurrence_20_5fby_5f_20tt_20methods_4',['GLib/Python bindings - changed &lt;tt&gt;ICalGLib.Recurrence.*_by_*&lt;/tt&gt; methods',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md37',1,'']]],
-  ['recurrence_20_5fby_5f_20tt_20methods_20from_203_200_20to_204_200_5',['Migrating &lt;tt&gt;ICalGLib.Recurrence.*_by_*&lt;/tt&gt; methods from 3.0 to 4.0',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md38',1,'']]],
-  ['recurrence_20rule_20section_203_203_2010_6',['Recurrence Rule section 3.3.10',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2KnownLimitations.html#autotoc_md18',1,'']]],
-  ['recurrence_20rule_20sections_203_208_205_203_20duration_203_203_206_7',['Recurrence Rule sections 3.8.5.3, DURATION 3.3.6',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2KnownLimitations.html#autotoc_md19',1,'']]],
-  ['reference_8',['7 Library Reference',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md103',1,'']]],
-  ['reference_9',['&lt;tt&gt;icalrecurrencetype&lt;/tt&gt; now passed by reference',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md30',1,'']]],
-  ['reference_20counting_10',['5.5.1 Reference Counting',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md96',1,'']]],
-  ['reference_20guide_11',['Reference Guide',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2SUMMARY.html#autotoc_md50',1,'']]],
-  ['remove_12',['remove',['../classLibICal_1_1VComponent.html#ae251ebedad802b6d982af2926ff289a2',1,'LibICal::VComponent']]],
-  ['removed_20data_20types_13',['Removed data types',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md26',1,'']]],
-  ['removed_20functions_14',['Removed functions',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md25',1,'']]],
-  ['removing_20components_15',['Removing Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md83',1,'5.2.4 Removing Components'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md93',1,'5.4.2 Adding, Finding and Removing Components']]],
-  ['replaced_20by_20dynamically_20allocated_20ones_16',['&lt;tt&gt;icalrecurrencetype.by_xxx&lt;/tt&gt; static arrays replaced by dynamically allocated ones',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md35',1,'']]],
-  ['required_17',['Required',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2Dependencies.html#autotoc_md12',1,'']]],
-  ['return_20values_18',['5.6.1 Return values',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md98',1,'']]],
-  ['return_20values_19',['bool return values',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md28',1,'']]],
-  ['rfc_205545_20',['RFC 5545',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2KnownLimitations.html#autotoc_md17',1,'']]],
-  ['rfc_20calendar_20standards_20support_21',['Libical RFC calendar standards support',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2rfcs.html',1,'']]],
-  ['rfcs_22',['RFCs',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md70',1,'4 Differences From RFCs'],['../index.html#autotoc_md3',1,'RFCs'],['..//home/winterz/projects/libical/libical/docs/README.md#autotoc_md41',1,'RFCs']]],
-  ['routines_23',['routines',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md90',1,'5.3.3 Time manipulating routines'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md94',1,'5.4.3 Other routines']]],
-  ['rule_20section_203_203_2010_24',['Recurrence Rule section 3.3.10',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2KnownLimitations.html#autotoc_md18',1,'']]],
-  ['rule_20sections_203_208_205_203_20duration_203_203_206_25',['Recurrence Rule sections 3.8.5.3, DURATION 3.3.6',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2KnownLimitations.html#autotoc_md19',1,'']]]
+  ['qsort_5fgen_0',['qsort_gen',['../qsort__gen_8h.html#a753fcd0f6f620d386b346b40093fd490',1,'qsort_gen.c']]],
+  ['qsort_5fgen_2eh_1',['qsort_gen.h',['../qsort__gen_8h.html',1,'']]],
+  ['qsort_5fgen_5fmemswap_2',['qsort_gen_memswap',['../qsort__gen_8h.html#a3998b0ef289bfaa85389b31796184061',1,'qsort_gen.c']]]
 ];

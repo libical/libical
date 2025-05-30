@@ -1,17 +1,13 @@
 var searchData=
 [
-  ['fd_0',['fd',['../structicalfileset__impl.html#abae099ff18e830676aa35f69737ee73c',1,'icalfileset_impl']]],
-  ['files_1',['5.1.3 Parsing Text Files',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md78',1,'']]],
-  ['finding_20and_20removing_20components_2',['5.4.2 Adding, Finding and Removing Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md93',1,'']]],
-  ['finding_20components_3',['5.2.1 Finding Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md80',1,'']]],
-  ['first_5fcomponent_4',['first_component',['../structicaldirset__impl.html#a8e6c64e19d709ce5fd79b8eadecca817',1,'icaldirset_impl']]],
-  ['flag_5',['flag',['../structicalbdbset__options.html#a7f0f7a47ee749994b7009e7494dcafbc',1,'icalbdbset_options']]],
-  ['flags_6',['flags',['../structicaldirset__options.html#a0198ec47b0288039a835e8fd5cfd2df0',1,'icaldirset_options::flags'],['../structicalfileset__options.html#ad19cc9176412d8a16b2a6ac45c8f3bd1',1,'icalfileset_options::flags']]],
-  ['formats_7',['Libical — an implementation of iCalendar protocols and data formats',['../index.html',1,'']]],
-  ['free_5fzone_5fdirectory_8',['free_zone_directory',['../icaltimezone_8h.html#a431f7b425ec073cdd490431d4285f294',1,'icaltimezone.c']]],
-  ['freq_5fmap_9',['freq_map',['../structfreq__map.html',1,'']]],
-  ['from_10',['from',['../structicalgauge__impl.html#a9e1fa8848b716866cebcc22750f273fa',1,'icalgauge_impl']]],
-  ['from_203_200_20to_204_200_11',['from 3 0 to 4 0',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md38',1,'Migrating &lt;tt&gt;ICalGLib.Recurrence.*_by_*&lt;/tt&gt; methods from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md36',1,'Migrating &lt;tt&gt;icalrecurrencetype.by_xxx&lt;/tt&gt; static arrays usage from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md27',1,'Migrating from 3.0 to 4.0']]],
-  ['from_20rfcs_12',['4 Differences From RFCs',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md70',1,'']]],
-  ['functions_13',['functions',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md29',1,'Clone functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md23',1,'Modified functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md24',1,'New functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md25',1,'Removed functions']]]
+  ['elements_20of_20libical_0',['3.2 Other elements of libical',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md151',1,'']]],
+  ['encoding_5fmap_1',['encoding_map',['../structencoding__map.html',1,'']]],
+  ['end_2',['end',['../structicaltime__span.html#a29dcaed4d2a058b27120229a1c9053df',1,'icaltime_span::end'],['../structicalspanlist__impl.html#ad9b5b7be8203c36283e28fad77b97975',1,'icalspanlist_impl::end']]],
+  ['end_5fyear_3',['end_year',['../struct__icaltimezone.html#af13e59b4c5f832286020da795b819e11',1,'_icaltimezone']]],
+  ['enumerations_20and_20types_4',['3.2.1 Enumerations and types',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md152',1,'']]],
+  ['error_20handling_5',['5.6 Error Handling',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md184',1,'']]],
+  ['error_20objects_6',['3.2.3 Error objects',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md154',1,'']]],
+  ['error_20tt_20and_20tt_20x_20lic_20invalid_20component_20tt_7',['5.6.3 &lt;tt&gt;X-LIC-ERROR&lt;/tt&gt; and &lt;tt&gt;X-LIC-INVALID-COMPONENT&lt;/tt&gt;',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md186',1,'']]],
+  ['example_20code_8',['1.3 Example Code',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md143',1,'']]],
+  ['expand_5fsplit_5fmap_5fstruct_9',['expand_split_map_struct',['../structexpand__split__map__struct.html',1,'']]]
 ];

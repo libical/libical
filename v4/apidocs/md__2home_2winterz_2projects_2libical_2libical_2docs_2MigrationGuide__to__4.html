@@ -87,9 +87,9 @@ $(function(){ initResizable(false); });
   <div class="headertitle"><div class="title">Migrating to version 4</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md20"></a></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md107"></a></p>
 <p>A guide to help developers port their code from libical v3.x to libical 4.0.</p>
-<h1><a class="anchor" id="autotoc_md21"></a>
+<h1><a class="anchor" id="autotoc_md108"></a>
 Conditional compilation</h1>
 <p>To continue supporting the 3.0 version you can use conditional compilation, like so:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#if ICAL_CHECK_VERSION(4,0,0)</span></div>
@@ -101,9 +101,9 @@ Conditional compilation</h1>
 <div class="fragment"><div class="line"><span class="preprocessor">#if !ICAL_CHECK_VERSION(4,0,0)</span></div>
 <div class="line">&lt;...old code <span class="keywordflow">for</span> the libical 3.0 version ...&gt;</div>
 <div class="line"><span class="preprocessor">#endif</span></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md22"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md109"></a>
 C library</h1>
-<h2><a class="anchor" id="autotoc_md23"></a>
+<h2><a class="anchor" id="autotoc_md110"></a>
 Modified functions</h2>
 <ul>
 <li><code>icalrecurrencetype_from_string()</code> was replaced by <code>icalrecurrencetype_new_from_string()</code>, which returns a <code>struct icalrecurrencetype *</code> rather than a <code>struct icalrecurrencetype</code>.</li>
@@ -129,7 +129,7 @@ Modified functions</h2>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md24"></a>
+<h2><a class="anchor" id="autotoc_md111"></a>
 New functions</h2>
 <p>The following functions have been added:</p>
 <ul>
@@ -161,7 +161,7 @@ New functions</h2>
 <li><code>icalparser_get_ctrl()</code></li>
 <li><code>icalparser_set_ctrl()</code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md25"></a>
+<h2><a class="anchor" id="autotoc_md112"></a>
 Removed functions</h2>
 <ul>
 <li><code>icalrecurrencetype_clear()</code> has been removed.</li>
@@ -181,7 +181,7 @@ Removed functions</h2>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md26"></a>
+<h2><a class="anchor" id="autotoc_md113"></a>
 Removed data types</h2>
 <ul>
 <li>These data structures have been removed (as they were never used):<ul>
@@ -190,16 +190,16 @@ Removed data types</h2>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md27"></a>
+<h2><a class="anchor" id="autotoc_md114"></a>
 Migrating from 3.0 to 4.0</h2>
-<h2><a class="anchor" id="autotoc_md28"></a>
+<h2><a class="anchor" id="autotoc_md115"></a>
 bool return values</h2>
 <p>A number of function signatures have been changed to use 'bool' rather than 'int' types.</p>
 <p>This is implemented using the C99 standards compliant &lt;stdbool.h&gt; header.</p>
-<h2><a class="anchor" id="autotoc_md29"></a>
+<h2><a class="anchor" id="autotoc_md116"></a>
 Clone functions</h2>
 <p>Replace all <code>ical*_new_clone()</code> function calls with <code>ical*_clone()</code> . ie, use <code>icalcomponent_clone()</code> rather then <code>icalcomponent_new_clone()</code>.</p>
-<h2><a class="anchor" id="autotoc_md30"></a>
+<h2><a class="anchor" id="autotoc_md117"></a>
 <code>icalrecurrencetype</code> now passed by reference</h2>
 <p>The way <code>struct icalrecurrencetype</code> is passed between functions has been changed. While it was usually passed by value in 3.0, it is now passed by reference. A reference counting mechanism is applied that takes care of de-allocating an instance as soon as the reference counter goes to 0.</p>
 <p>Code like this in libical 3.0:</p>
@@ -225,7 +225,7 @@ Clone functions</h2>
 <div class="line">}</div>
 <div class="ttc" id="aicalrecur_8h_html_a6ef32c4da69e9a5f2059f160bf3792ab"><div class="ttname"><a href="icalrecur_8h.html#a6ef32c4da69e9a5f2059f160bf3792ab">icalrecurrencetype_new</a></div><div class="ttdeci">struct icalrecurrencetype * icalrecurrencetype_new(void)</div><div class="ttdoc">Allocates and initializes a new instance of icalrecurrencetype. The new instance is returned with a r...</div><div class="ttdef"><b>Definition</b> icalrecur.c:654</div></div>
 <div class="ttc" id="aicalrecur_8h_html_ab514cbb2acf2d8781490199224752a91"><div class="ttname"><a href="icalrecur_8h.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a></div><div class="ttdeci">void icalrecurrencetype_unref(struct icalrecurrencetype *recur)</div><div class="ttdoc">Decreases the reference counter by 1. If it goes to 0, the instance and all referenced memory (i....</div><div class="ttdef"><b>Definition</b> icalrecur.c:699</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md31"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md118"></a>
 <code>icalgeotype</code> now uses character strings rather than doubles</h2>
 <p>The members of <code>struct icalgeotype</code> for latitude ('lat<code>) and longitude ('lon</code>) have been changed to use ICAL_GEO_LEN long character strings rather than the double type.</p>
 <p>This means that simple assignments in 3.0 must be replaced by string copies.</p>
@@ -241,7 +241,7 @@ Clone functions</h2>
 <div class="fragment"><div class="line"><span class="keywordtype">double</span> lat, lon;</div>
 <div class="line">sscanf(geo.lat, <span class="stringliteral">&quot;%lf&quot;</span>, &amp;lat);</div>
 <div class="line">sscanf(geo.lon, <span class="stringliteral">&quot;%lf&quot;</span>, &amp;lon);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md32"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md119"></a>
 Working with <code>icalvalue</code> and <code>icalproperty</code></h2>
 <p>Code like this in libical 3.0:</p>
 <div class="fragment"><div class="line">icalvalue *recur_value = ...;</div>
@@ -254,9 +254,9 @@ Working with <code>icalvalue</code> and <code>icalproperty</code></h2>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Work with the object</span></div>
 <div class="line"><span class="comment">// No need to unref</span></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md33"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md120"></a>
 C++ library</h1>
-<h2><a class="anchor" id="autotoc_md34"></a>
+<h2><a class="anchor" id="autotoc_md121"></a>
 Modified methods</h2>
 <ul>
 <li>The following methods now take arguments of type <code>struct icalrecurrencetype *</code> rather than <code>const struct icalrecurrencetype &amp;</code>:<ul>
@@ -272,7 +272,7 @@ Modified methods</h2>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md35"></a>
+<h2><a class="anchor" id="autotoc_md122"></a>
 <code>icalrecurrencetype.by_xxx</code> static arrays replaced by dynamically allocated ones</h2>
 <p>I.e. memory <code>short by_hour[ICAL_BY_DAY_SIZE]</code> etc. are replaced by</p>
 <div class="fragment"><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span></div>
@@ -287,7 +287,7 @@ Modified methods</h2>
 <div class="line">}</div>
 <div class="ttc" id="astructicalrecurrence__by__data_html"><div class="ttname"><a href="structicalrecurrence__by__data.html">icalrecurrence_by_data</a></div><div class="ttdef"><b>Definition</b> icalrecur.h:163</div></div>
 </div><!-- fragment --><p>Memory is allocated in the required size using the new <code>icalrecur_resize_by()</code> function. It is automatically freed together with the containing <code>icalrecurrencetype</code>. As the size of the array is stored explicitly, no termination of the array with special value <code>ICAL_RECURRENCE_ARRAY_MAX</code> is required anymore. The array is iterated by comparing the iterator to the <code>size</code> member value.</p>
-<h2><a class="anchor" id="autotoc_md36"></a>
+<h2><a class="anchor" id="autotoc_md123"></a>
 Migrating <code>icalrecurrencetype.by_xxx</code> static arrays usage from 3.0 to 4.0</h2>
 <p>Code like this in libical 3.0:</p>
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structicalrecurrencetype.html">icalrecurrencetype</a> recur;</div>
@@ -304,10 +304,10 @@ Migrating <code>icalrecurrencetype.by_xxx</code> static arrays usage from 3.0 to
 <div class="line">  recur.by[ICAL_BY_HOUR].data[0] = 12;</div>
 <div class="line">}</div>
 <div class="ttc" id="aicalrecur_8h_html_a27e50d989ba059c6c91b4844428930e2"><div class="ttname"><a href="icalrecur_8h.html#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by</a></div><div class="ttdeci">bool icalrecur_resize_by(icalrecurrence_by_data *by, short size)</div><div class="ttdoc">Resizes the buffer backing the &#39;by&#39; array to the specified size, if different. Frees the buffer if th...</div><div class="ttdef"><b>Definition</b> icalrecur.c:310</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md37"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md124"></a>
 GLib/Python bindings - changed <code>ICalGLib.Recurrence.*_by_*</code> methods</h1>
 <p><code>i_cal_recurrence_*_by_xxx*</code> methods have been replaced by more generic versions that take the 'by' type (day, month, ...) as a parameter.</p>
-<h2><a class="anchor" id="autotoc_md38"></a>
+<h2><a class="anchor" id="autotoc_md125"></a>
 Migrating <code>ICalGLib.Recurrence.*_by_*</code> methods from 3.0 to 4.0</h2>
 <p>Code like this in libical 3.0:</p>
 <div class="fragment"><div class="line">recurrence.set_by_second(0,</div>
@@ -319,7 +319,7 @@ Migrating <code>ICalGLib.Recurrence.*_by_*</code> methods from 3.0 to 4.0</h2>
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 28 2025 12:18:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
+Generated on Fri May 30 2025 11:51:05 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
 </div><!-- doc-content -->
 </body>

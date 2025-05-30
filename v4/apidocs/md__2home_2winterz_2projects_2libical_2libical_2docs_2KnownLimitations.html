@@ -87,12 +87,12 @@ $(function(){ initResizable(false); });
   <div class="headertitle"><div class="title">Known Limitations</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md16"></a></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md103"></a></p>
 <p>List where libical doesn't fully support all the features described in the RFCs.</p>
 <p>Contributions to help us fix these limitations are welcome.</p>
-<h1><a class="anchor" id="autotoc_md17"></a>
+<h1><a class="anchor" id="autotoc_md104"></a>
 RFC 5545</h1>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md105"></a>
 Recurrence Rule section 3.3.10</h2>
 <ul>
 <li>BYSETPOS is only supported for MONTHLY and YEARLY frequencies (<a href="https://github.com/libical/libical/issues/795">https://github.com/libical/libical/issues/795</a>)</li>
@@ -103,7 +103,7 @@ Recurrence Rule section 3.3.10</h2>
 <p class="startli">ref: <a href="https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2928">https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2928</a></p>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md106"></a>
 Recurrence Rule sections 3.8.5.3, DURATION 3.3.6</h2>
 <ul>
 <li><p class="startli">The lib (e.g. <code>icalcomponent_foreach_recurrence()</code>, <code>icalcomponent_get_dtend()</code>) does not differentiate between nominal and exact durations. According to the RFC, when a component's duration is specified using the <code>DURATION</code> property rather than <code>DTEND</code>, the nominal duration must be used to calculate each recurrence's duration. However, the current implementation always uses the exact duration, which can cause discrepancies if a recurrence spans a daylight saving time transition.</p>
@@ -114,7 +114,7 @@ Recurrence Rule sections 3.8.5.3, DURATION 3.3.6</h2>
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 28 2025 12:18:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
+Generated on Fri May 30 2025 11:51:05 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
 </div><!-- doc-content -->
 </body>

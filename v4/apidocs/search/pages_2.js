@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['calendar_20standards_20support_0',['Libical RFC calendar standards support',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2rfcs.html',1,'']]],
-  ['contributors_1',['Contributors',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CONTRIBUTORS.html',1,'']]]
+  ['building_20libical_0',['Building Libical',['../md__2home_2winterz_2projects_2libical_2libical_2INSTALL.html',1,'Building Libical'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html',1,'Building Libical']]]
 ];

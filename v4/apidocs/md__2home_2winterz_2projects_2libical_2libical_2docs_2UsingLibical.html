@@ -87,31 +87,31 @@ $(function(){ initResizable(false); });
   <div class="headertitle"><div class="title">Using Libical</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md52"></a></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md139"></a></p>
 <blockquote class="doxtable">
 <p>Author: Eric Busboom <a href="#" onclick="location.href='mai'+'lto:'+'eri'+'c@'+'civ'+'ic'+'kno'+'wl'+'edg'+'e.'+'com'; return false;">eric@<span class="obfuscator">.nosp@m.</span>civi<span class="obfuscator">.nosp@m.</span>cknow<span class="obfuscator">.nosp@m.</span>ledg<span class="obfuscator">.nosp@m.</span>e.com</a></p>
 <p>Date: January 2001 </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md140"></a>
 1 Introduction</h1>
 <p>Libical is an Open Source implementation of the iCalendar protocols and protocol data units. The iCalendar specification describes how calendar clients can communicate with calendar servers so users can store their calendar data and arrange meetings with other users.</p>
 <p>Libical implements multiple <a class="el" href="md__2home_2winterz_2projects_2libical_2libical_2docs_2rfcs.html">RFC calendar standards</a>.</p>
 <p>This documentation assumes that you are familiar with the iCalendar standards <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> and <a href="https://tools.ietf.org/html/rfc5546">RFC5546</a>. These specifications are available at the <a href="https://tools.ietf.org/">IETF Tools</a> website:</p>
-<h2><a class="anchor" id="autotoc_md54"></a>
+<h2><a class="anchor" id="autotoc_md141"></a>
 1.1 The libical project</h2>
 <p>This code is under active development. If you would like to contribute to the project, visit <a href="https://libical.github.io/libical/">https://libical.github.io/libical/</a>.</p>
-<h2><a class="anchor" id="autotoc_md55"></a>
+<h2><a class="anchor" id="autotoc_md142"></a>
 1.2 License</h2>
 <p>The code and datafiles in this distribution are licensed under the Mozilla Public License version 2.0. See <a href="https://www.mozilla.org/MPL">https://www.mozilla.org/MPL</a> for a copy of the license. Alternately, you may use libical under the terms of the GNU Lesser General Public License, version 2.1. See <a href="https://www.gnu.org/licenses/lgpl-2.1.html">https://www.gnu.org/licenses/lgpl-2.1.html</a> for a copy of the LGPL.</p>
 <p>This dual license ensures that the library can be incorporated into both proprietary code and GPL'd programs, and will benefit from improvements made by programmers in both realms. We (the libical developers) will only accept changes to this library if they are similarly dual-licensed.</p>
-<h2><a class="anchor" id="autotoc_md56"></a>
+<h2><a class="anchor" id="autotoc_md143"></a>
 1.3 Example Code</h2>
 <p>A lot of the documentation for this library is in the form of example code. These examples are in the <code>examples/</code> directory of the distribution. Also look in <code>src/test/</code> for additional annotated examples.</p>
-<h1><a class="anchor" id="autotoc_md57"></a>
+<h1><a class="anchor" id="autotoc_md144"></a>
 2 Building the Library</h1>
 <p>Libical uses CMake to generate makefiles. It should build with no adjustments on Linux, MacOS and Windows using <code>gcc</code>, <code>clang</code> and Microsoft Visual. Please report build problems to the <a href="https://github.com/libical/libical/issues">Libical issue tracker</a>.</p>
-<p>For a more complete guide to building the library, see the <code>Install.txt</code> file in the distribution.</p>
-<h1><a class="anchor" id="autotoc_md58"></a>
+<p>For a more complete guide to building the library, see the <a class="el" href="md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html">Building Libical</a> instructions.</p>
+<h1><a class="anchor" id="autotoc_md145"></a>
 3 Structure</h1>
 <p>The iCalendar data model is based on four types of objects: <em>components</em>, <em>properties</em>, <em>values</em> and <em>parameters</em>.</p>
 <p>Properties are the fundamental unit of information in iCalendar, and they work a bit like a hash entry, with a constant key and a variable value. Properties may also have modifiers, called parameters. In the iCal content line</p>
@@ -139,53 +139,53 @@ $(function(){ initResizable(false); });
 <div class="line">END:VEVENT</div>
 <div class="line">END:VCALENDAR</div>
 </div><!-- fragment --><p>Note that components can be nested; this example has both a VCALENDAR and a VEVENT component, one nested inside the other.</p>
-<h2><a class="anchor" id="autotoc_md59"></a>
+<h2><a class="anchor" id="autotoc_md146"></a>
 3.1 Core iCal classes</h2>
 <p>Libical is an object-based, data-oriented library. Nearly all of the routines in the library are associated with an opaque data types and perform some operation on that data type. Although the library does not actually have classes, we will use those terms since the behavior of these associations of data and routines is very similar to a class.</p>
-<h3><a class="anchor" id="autotoc_md60"></a>
+<h3><a class="anchor" id="autotoc_md147"></a>
 3.1.1 Properties</h3>
 <p>Properties are represented with the <code>icalproperty</code> class and its many "derived" classes with one "derived" class per property type in <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a>. Again, there is no actual inheritance relations, but there are clusters of routines that make this term useful. A property is a container for a single value and a set of parameters.</p>
-<h3><a class="anchor" id="autotoc_md61"></a>
+<h3><a class="anchor" id="autotoc_md148"></a>
 3.1.2 Components</h3>
 <p>In libical, components are represented with the <code>icalcomponent</code> class. <code>icalcomponent</code> is a container for a set of other components and properties.</p>
-<h3><a class="anchor" id="autotoc_md62"></a>
+<h3><a class="anchor" id="autotoc_md149"></a>
 3.1.3 Values</h3>
 <p>Values are represented in a similar way to properties; a base class and many "derived " classes. A value is essentially an abstract handle on a single fundamental type, a structure or a union.</p>
-<h3><a class="anchor" id="autotoc_md63"></a>
+<h3><a class="anchor" id="autotoc_md150"></a>
 3.1.4 Parameters</h3>
 <p>Parameters are represented in a similar way to properties, except that they contain only one value.</p>
-<h2><a class="anchor" id="autotoc_md64"></a>
+<h2><a class="anchor" id="autotoc_md151"></a>
 3.2 Other elements of libical</h2>
 <p>In addition to the core iCal classes, libical has many other types, structures, and classes that aid in creating and using iCal components.</p>
-<h3><a class="anchor" id="autotoc_md65"></a>
+<h3><a class="anchor" id="autotoc_md152"></a>
 3.2.1 Enumerations and types</h3>
 <p>Libical is strongly typed, so every component, property, parameter, and value type has an enumeration, and some have an associated structure or union.</p>
-<h3><a class="anchor" id="autotoc_md66"></a>
+<h3><a class="anchor" id="autotoc_md153"></a>
 3.2.2 The parser</h3>
 <p>The libical parser offers a variety of ways to convert <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> text into a libical internal component structure. The parser can parse blocks of text as a string, or it can parse line-by-line.</p>
-<h3><a class="anchor" id="autotoc_md67"></a>
+<h3><a class="anchor" id="autotoc_md154"></a>
 3.2.3 Error objects</h3>
 <p>Libical has a substantial error reporting system for both programming errors and component usage errors.</p>
-<h3><a class="anchor" id="autotoc_md68"></a>
+<h3><a class="anchor" id="autotoc_md155"></a>
 3.2.4 Memory Management</h3>
 <p>Since many of libical's interfaces return strings, the library has its own memory management system to eliminate the need to free every string returned from the library. See <a class="el" href="#memory">Memory Management</a>.</p>
-<h3><a class="anchor" id="autotoc_md69"></a>
+<h3><a class="anchor" id="autotoc_md156"></a>
 3.2.5 Storage classes</h3>
 <p>The library also offers several classes to store components to files, memory or databases.</p>
-<h1><a class="anchor" id="autotoc_md70"></a>
+<h1><a class="anchor" id="autotoc_md157"></a>
 4 Differences From RFCs</h1>
 <p>Libical has been designed to follow the standards as closely as possible, so that the key objects in the standards are also key objects in the library. However, there are a few areas where the specifications are (arguably) irregular, and following them exactly would result in an unfriendly interface. These deviations make libical easier to use by maintaining a self-similar interface.</p>
-<h2><a class="anchor" id="autotoc_md71"></a>
+<h2><a class="anchor" id="autotoc_md158"></a>
 4.1 Pseudo Components</h2>
 <p>Libical defines components for groups of properties that look and act like components, but are not defined as components in the specification. <code>XDAYLIGHT</code> and <code>XSTANDARD</code> are notable examples. These pseudo components group properties within the <code>VTIMEZONE</code> components. For instance, the timezone properties associated with daylight savings time starts with <code>BEGIN:DAYLIGHT</code> and ends with <code>END:DAYLIGHT</code>, just like other components, but is not defined as a component in <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> (see <a href="https://tools.ietf.org/html/rfc5545#section-3.6.5&gt;">section 3.6.5</a>) In libical, this grouping is represented by the <code>XDAYLIGHT</code> component. Standard iCal components all start with the letter "V," while pseudo components start with "X."</p>
 <p>There are also pseudo components that are conceptually derived classes of <code>VALARM</code>. <a href="https://tools.ietf.org/html/rfc5546">RFC5546</a> defines what properties may be included in each component, and for <code>VALARM</code>, the set of properties it may have depends on the value of the <code>ACTION</code> property.</p>
 <p>For instance, if a <code>VALARM</code> component has an <code>ACTION</code> property with the value of <code>AUDIO</code>, the component must also have an <code>ATTACH</code> property. However, if the <code>ACTION</code> value is <code>DISPLAY</code>, the component must have a <code>DESCRIPTION</code> property.</p>
 <p>To handle these various, complex restrictions, libical has pseudo components for each type of alarm: <code>XAUDIOALARM</code>, <code>XDISPLAYALARM</code>, <code>XEMAILALARM</code> and <code>XPROCEDUREALARM</code>.</p>
-<h2><a class="anchor" id="autotoc_md72"></a>
+<h2><a class="anchor" id="autotoc_md159"></a>
 4.2 Combined Values</h2>
 <p>Many values can take more than one type. <code>TRIGGER</code>, for instance, can have a value type of with <code>DURATION</code> or of <code>DATE-TIME</code>. These multiple types make it difficult to create routines to return the value associated with a property.</p>
 <p>It is natural to have interfaces that would return the value of a property, but it is cumbersome for a single routine to return multiple types. So, in libical, properties that can have multiple types are given a single type that is the union of their RFC5545 types. For instance, in libical, the value of the <code>TRIGGER</code> property resolves to struct <code>icaltriggertype</code>. This type is a union of a <code>DURATION</code> and a <code>DATE-TIME</code>.</p>
-<h2><a class="anchor" id="autotoc_md73"></a>
+<h2><a class="anchor" id="autotoc_md160"></a>
 4.3 Multi-Valued Properties</h2>
 <p>Some properties, such as <code>CATEGORIES</code> have only one value type, but each <code>CATEGORIES</code> property can have multiple value instances. This also results in a cumbersome interface &ndash; <code>CATEGORIES</code> accessors would have to return a list while all other accessors returned a single value. In libical, all properties have a single value, and multi-valued properties are broken down into multiple single valued properties during parsing. That is, an input line like,</p>
 <div class="fragment"><div class="line">CATEGORIES: work, home</div>
@@ -193,9 +193,9 @@ $(function(){ initResizable(false); });
 <div class="fragment"><div class="line">CATEGORIES: work</div>
 <div class="line">CATEGORIES: home</div>
 </div><!-- fragment --><p>Oddly, <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> allows some multi-valued properties (like <code>FREEBUSY</code>) to exist as both a multi-values property and as multiple single value properties, while others (like <code>CATEGORIES</code>) can only exist as single multi-valued properties. This makes the internal representation for <code>CATEGORIES</code> illegal. However when you convert a component to a string, the library will collect all of the <code>CATEGORIES</code> properties into one.</p>
-<h1><a class="anchor" id="autotoc_md74"></a>
+<h1><a class="anchor" id="autotoc_md161"></a>
 5 Using libical</h1>
-<h2><a class="anchor" id="autotoc_md75"></a>
+<h2><a class="anchor" id="autotoc_md162"></a>
 5.1 Creating Components</h2>
 <p>There are three ways to create components in Libical:</p>
 <ol type="1">
@@ -203,7 +203,7 @@ $(function(){ initResizable(false); });
 <li>building entire objects in massive vargs calls,</li>
 <li>parsing a text file containing iCalendar data.</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md76"></a>
+<h3><a class="anchor" id="autotoc_md163"></a>
 5.1.1 Constructor Interfaces</h3>
 <p>Using constructor interfaces, you create each of the objects separately and then assemble them in to components:</p>
 <div class="fragment"><div class="line">icalcomponent *event;</div>
@@ -230,7 +230,7 @@ $(function(){ initResizable(false); });
 <div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition</b> icaltime.h:98</div></div>
 </div><!-- fragment --><p>Notice that libical uses a semi-object-oriented style of interface. Most things you work with are objects, that are instantiated with a constructor that has "new" in the name. Also note that, other than the object reference, most structure data is passed in to libical routines by value. Libical has some complex but very regular memory handling rules. These are detailed in section <a class="el" href="#memory">Memory Management</a>.</p>
 <p>If any of the constructors fail, they will return 0. If you try to insert 0 into a property or component, or use a zero-valued object reference, libical will either silently ignore the error or will abort with an error message. This behavior is controlled by a compile time flag (<code>ICAL_ERRORS_ARE_FATAL</code>), and will abort by default.</p>
-<h3><a class="anchor" id="autotoc_md77"></a>
+<h3><a class="anchor" id="autotoc_md164"></a>
 5.1.2 varargs Constructors</h3>
 <p>There is another way to create complex components, which is arguably more elegant, if you are not horrified by varargs. The varargs constructor interface allows you to create intricate components in a single block of code. Here is the previous examples in the vaargs style.</p>
 <div class="fragment"><div class="line">icalcomponent *calendar;</div>
@@ -263,7 +263,7 @@ $(function(){ initResizable(false); });
 <div class="line">        (<span class="keywordtype">void</span> *)0);</div>
 </div><!-- fragment --><p>This form is similar to the constructor form, except that the constructors have <code>vanew</code> instead of <code>new</code> in the name. The arguments are similar too, except that the component constructor can have a list of properties, and the property constructor can have a list of parameters.</p>
 <p><em>Be sure to terminate every list with a <code>NULL</code> (or a *<code>(void 0)</code></em>, or your code will crash, if you are lucky*. The reason you can't use 0 itself is that depending on what platform you are on, <code>sizeof(int) ≠ sizeof(void *)</code>.</p>
-<h3><a class="anchor" id="autotoc_md78"></a>
+<h3><a class="anchor" id="autotoc_md165"></a>
 5.1.3 Parsing Text Files</h3>
 <p>The final way to create components will probably be the most common; you can create components from <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> compliant text. If you have the string in memory, use</p>
 <div class="fragment"><div class="line">icalcomponent* icalparser_parse_string(<span class="keywordtype">char</span>* str);</div>
@@ -363,10 +363,10 @@ $(function(){ initResizable(false); });
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md79"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md166"></a>
 5.2 Accessing Components</h2>
 <p>Given a reference to a component, you probably will want to access the properties, parameters and values inside. Libical interfaces let you find sub-component, add and remove sub-components, and do the same three operations on properties.</p>
-<h3><a class="anchor" id="autotoc_md80"></a>
+<h3><a class="anchor" id="autotoc_md167"></a>
 5.2.1 Finding Components</h3>
 <p>To find a sub-component of a component, use:</p>
 <div class="fragment"><div class="line">icalcomponent* icalcomponent_get_first_component(</div>
@@ -384,7 +384,7 @@ $(function(){ initResizable(false); });
 </ul>
 <p>These are only the most common components; there are many more listed in <a class="el" href="icalenums_8h.html">icalenums.h</a>.</p>
 <p>As you might guess, if there is more than one subcomponent of the type you have chosen, this routine will return only the first. to get at the others, you need to iterate through the component.</p>
-<h3><a class="anchor" id="autotoc_md81"></a>
+<h3><a class="anchor" id="autotoc_md168"></a>
 5.2.2 Iterating Through Components</h3>
 <p>Iteration requires a second routine to get the next subcomponent after the first:</p>
 <div class="fragment"><div class="line">icalcomponent* icalcomponent_get_next_component(</div>
@@ -400,7 +400,7 @@ $(function(){ initResizable(false); });
 <div class="line">      do_something(c);</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>This code bit will iterate through all of the subcomponents in <code>comp</code> but you can select a specific type of component by changing <code>ICAL_ANY_COMPONENT</code> to another component type.</p>
-<h3><a class="anchor" id="autotoc_md82"></a>
+<h3><a class="anchor" id="autotoc_md169"></a>
 5.2.3 Using Component Iterators</h3>
 <p>The iteration model in the previous section requires the component to keep the state of the iteration. So, you could not use this model to perform a sorting operations, since you'd need two iterators and there is only space for one. If you ever call <code>icalcomponent_get_first_component()</code> when an iteration is in progress, the pointer will be reset to the beginning.</p>
 <p>To solve this problem, there are also external iterators for components. The routines associated with these external iterators are:</p>
@@ -430,7 +430,7 @@ $(function(){ initResizable(false); });
 <div class="line">{</div>
 <div class="line">    icalcomponent *<span class="keyword">this</span> = icalcompiter_deref(&amp;i);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md83"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md170"></a>
 5.2.4 Removing Components</h3>
 <p>Removing an element from a list while iterating through the list with the internal iterators can cause problems, since you will probably be removing the element that the internal iterator points to. The <code>_remove()</code> routine will keep the iterator valid by moving it to the next component, but in a normal loop, this will result in two advances per iteration, and you will remove only every other component. To avoid the problem, you will need to step the iterator ahead of the element you are going to remove, like this:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">for</span>(c = icalcomponent_get_first_component(parent_comp, ICAL_ANY_COMPONENT);</div>
@@ -450,7 +450,7 @@ $(function(){ initResizable(false); });
 <div class="line">      icalcomponent_get_next_component(parent_comp,ICAL_VEVENT_COMPONENT);</div>
 <div class="line">   }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md84"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md171"></a>
 5.2.5 Working with properties and parameters</h3>
 <p>Finding, iterating and removing properties works the same as it does for components, using the property-specific or parameter-specific interfaces:</p>
 <div class="fragment"><div class="line">icalproperty* icalcomponent_get_first_property(</div>
@@ -485,7 +485,7 @@ $(function(){ initResizable(false); });
 <div class="line">     icalproperty* prop,</div>
 <div class="line">     icalparameter_kind kind);</div>
 </div><!-- fragment --><p>Note that since there should be only one parameter of each type in a property, you will rarely need to use <code>icalparameter_get_next_parameter()</code>.</p>
-<h3><a class="anchor" id="autotoc_md85"></a>
+<h3><a class="anchor" id="autotoc_md172"></a>
 5.2.6 Working with values</h3>
 <p>Values are typically part of a property, although they can exist on their own. You can manipulate them either as part of the property or independently.</p>
 <p>The most common way to work with values to is to manipulate them from the properties that contain them. This involves fewer routine calls and intermediate variables than working with them independently, and it is type-safe.</p>
@@ -528,7 +528,7 @@ $(function(){ initResizable(false); });
 <div class="line"><span class="keywordtype">void</span> icalproperty_set_x_name(</div>
 <div class="line">    icalproperty* prop,</div>
 <div class="line">    <span class="keywordtype">char</span>* name);</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md86"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md173"></a>
 5.2.7 Checking Component Validity</h3>
 <p><a href="https://tools.ietf.org/html/rfc5546">RFC5546</a> defines rules for what properties must exist in a component to be used for transferring scheduling data. Most of these rules relate to the existence of properties relative to the <code>METHOD</code> property, which declares what operation a remote receiver should use to process a component. For instance, if the <code>METHOD</code> is <code>REQUEST</code> and the component is a <code>VEVENT</code>, the sender is probably asking the receiver to join in a meeting. In this case, RFC5546 says that the component must specify a start time (<code>DTSTART</code>) and list the receiver as an attendee (<code>ATTENDEE</code>).</p>
 <p>Libical can check these restrictions with the routine:</p>
@@ -547,9 +547,9 @@ $(function(){ initResizable(false); });
 <div class="line"><span class="keywordtype">char</span>* icalvalue_as_ical_string(icalvalue* value)</div>
 </div><!-- fragment --><p>In most cases, you will only use <code>icalcomponent_as_ical_string()</code>, since it will cascade and convert all of the parameters, properties and values that are attached to the root component.</p>
 <p>Remember that the string returned by these routines is owned by the library, and will eventually be re-written. You should copy it if you want to preserve it.</p>
-<h2><a class="anchor" id="autotoc_md87"></a>
+<h2><a class="anchor" id="autotoc_md174"></a>
 5.3 Time</h2>
-<h3><a class="anchor" id="autotoc_md88"></a>
+<h3><a class="anchor" id="autotoc_md175"></a>
 5.3.1 Time structure</h3>
 <p>Libical defines its own time structure for storing all dates and times. It would have been nice to reuse the C library's struct <code>tm</code>, but that structure does not differentiate between dates and times, and between local time and UTC. The libical structure is:</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> {</div>
@@ -566,7 +566,7 @@ $(function(){ initResizable(false); });
 <div class="ttc" id="astructicaltimetype_html_a4f64cd87ff0d4aba7bf318485b7374b8"><div class="ttname"><a href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">icaltimetype::year</a></div><div class="ttdeci">int year</div><div class="ttdef"><b>Definition</b> icaltime.h:99</div></div>
 <div class="ttc" id="astructicaltimetype_html_abfb15dfde907211cafd3cd6cafa5531d"><div class="ttname"><a href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">icaltimetype::month</a></div><div class="ttdeci">int month</div><div class="ttdef"><b>Definition</b> icaltime.h:100</div></div>
 </div><!-- fragment --><p>The <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code>, <code>minute</code> and <code>second</code> fields hold the broken-out time values. The <code>is_utc</code> field distinguishes between times in UTC and a local time zone. The <code>is_date</code> field indicates if the time should be interpreted only as a date. If it is a date, the hour, minute and second fields are assumed to be zero, regardless of their actual values.</p>
-<h3><a class="anchor" id="autotoc_md89"></a>
+<h3><a class="anchor" id="autotoc_md176"></a>
 5.3.2 Creating time structures</h3>
 <p>There are several ways to create a new icaltimetype structure:</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> <a class="code hl_function" href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a>(</div>
@@ -583,7 +583,7 @@ $(function(){ initResizable(false); });
 </div><!-- fragment --><p><code><a class="el" href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5" title="Constructor.">icaltime_from_string()</a></code> takes any RFC5545 compliant time string:</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> tt = <a class="code hl_function" href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a>(<span class="stringliteral">&quot;19970101T103000&quot;</span>);</div>
 </div><!-- fragment --><p><code><a class="el" href="icaltime_8h.html#afa1f4bd60882a641f0e0b8d5b549a36b" title="Constructor.">icaltime_from_timet_with_zone()</a></code> takes a <code>icaltime_t</code> value, representing seconds past the POSIX epoch, a flag to indicate if the time is a date, and a time zone. Dates have an identical structure to a time, but the time portion (hours, minutes and seconds) is always 00:00:00. Dates act differently in sorting and comparison, and they have a different string representation in <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a>.</p>
-<h3><a class="anchor" id="autotoc_md90"></a>
+<h3><a class="anchor" id="autotoc_md177"></a>
 5.3.3 Time manipulating routines</h3>
 <p>The <code>null</code> time value is used to indicate that the data in the structure is not a valid time.</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> <a class="code hl_function" href="icaltime_8h.html#af3f088ebb60b8716131742ef16eb7ce1">icaltime_null_time</a>(void);</div>
@@ -663,7 +663,7 @@ $(function(){ initResizable(false); });
 <div class="line"> </div>
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> icaltime_as_local(</div>
 <div class="line">    struct <a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> tt);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md91"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md178"></a>
 5.4 Storing Objects</h2>
 <p>The libical distribution includes a separate library, libicalss, that allows you to store iCal component data to disk in a variety of ways.</p>
 <p>The file storage routines are organized in an inheritance hierarchy that is rooted in icalset, with the derived class icalfileset and icaldirset. Icalfileset stores components to a file, while icaldirset stores components to multiple files, one per month based on DTSTAMP. Other storages classes, for storage to a heap or a mysql database for example, could be added in the future.</p>
@@ -728,7 +728,7 @@ $(function(){ initResizable(false); });
 <div class="line">icalcomponent* icaldirset_get_next_component(</div>
 <div class="line">    icaldirset* store);</div>
 <div class="ttc" id="aicalerror_8h_html_a601c122fcea522513b1b7732fa23e833"><div class="ttname"><a href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a></div><div class="ttdeci">icalerrorenum</div><div class="ttdoc">Represents the different types of errors that can be triggered in libical.</div><div class="ttdef"><b>Definition</b> icalerror.h:67</div></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md92"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md179"></a>
 5.4.1 Creating a new set</h3>
 <p>You can create a new set from either the base class or the direved class. From the base class use one of:</p>
 <div class="fragment"><div class="line">icalset* icalset_new_file(<span class="keyword">const</span> <span class="keywordtype">char</span>* path);</div>
@@ -749,7 +749,7 @@ $(function(){ initResizable(false); });
 </div><!-- fragment --><p><code>icalset_new_file()</code> is identical to <code>icalfileset_new()</code>. Both routines will open an existing file for reading and writing, or create a new file if it does not exist. <code>icalfileset_new_open()</code> takes the same arguments as the open() system routine and behaves in the same way.</p>
 <p>The icalset and icalfileset objects are somewhat interchangeable &ndash; you can use an <code>icalfileset*</code> as an argument to any of the icalset routines.</p>
 <p>The following examples will all use icalfileset routines; using the other icalset derived classes will be similar.</p>
-<h3><a class="anchor" id="autotoc_md93"></a>
+<h3><a class="anchor" id="autotoc_md180"></a>
 5.4.2 Adding, Finding and Removing Components</h3>
 <p>To add components to a set, use:</p>
 <div class="fragment"><div class="line"><a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_add_component(</div>
@@ -805,10 +805,10 @@ $(function(){ initResizable(false); });
 <div class="line"> </div>
 <div class="line">    icalfileset_free(fs);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md94"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md181"></a>
 5.4.3 Other routines</h3>
 <p>There are several other routines in the icalset interface, but they not fully implemented yet.</p>
-<h3><a class="anchor" id="autotoc_md95"></a>
+<h3><a class="anchor" id="autotoc_md182"></a>
 5.5 Memory Management</h3>
 <p><a class="anchor" id="memory"></a> Libical relies heavily on dynamic allocation for both the core objects and for the strings used to hold values. Some of this memory the library caller owns and must free, and some of the memory is managed by the library. Here is a summary of the memory rules.</p>
 <ol type="1">
@@ -819,7 +819,7 @@ $(function(){ initResizable(false); });
 <li>If the routine returns a string and its name does NOT end in <code>_r</code>, libical owns the memory and will put it on a ring buffer to reclaim later. For example, <code>icalcomponent_as_ical_string()</code>. You better <code>strdup()</code> it if you want to keep it, and you don't have to delete it.</li>
 <li>If the routine returns a string and its name <em>does</em> end in <code>_r</code>, the caller gets control of the memory and is responsible for freeing it. For example, <code>icalcomponent_as_ical_string_r()</code> does the same thing as <code>icalcomponent_as_ical_string()</code>, except you now have control of the string buffer it returns.</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md96"></a>
+<h3><a class="anchor" id="autotoc_md183"></a>
 5.5.1 Reference Counting</h3>
 <p>Some special types are managed using reference counting, in particular:</p>
 <ul>
@@ -839,10 +839,10 @@ $(function(){ initResizable(false); });
 </ul>
 <p>The object is automatically deallocated when the reference counter reaches 0. No explicit <code>*_free()</code> functions exist for these types.</p>
 <p>When such objects are passed to functions as arguments, it is the task of the function being called to manage the reference counter, not of the caller. If a pointer to an object is returned by a function other than the constructor functions, it is the task of the calling function rather than of the returning function to manage the reference counter.</p>
-<h2><a class="anchor" id="autotoc_md97"></a>
+<h2><a class="anchor" id="autotoc_md184"></a>
 5.6 Error Handling</h2>
 <p>Libical has several error handling mechanisms for the various types of programming, semantic and syntactic errors you may encounter.</p>
-<h3><a class="anchor" id="autotoc_md98"></a>
+<h3><a class="anchor" id="autotoc_md185"></a>
 5.6.1 Return values</h3>
 <p>Many library routines signal errors through their return values. All routines that return a pointer, such as <code>icalcomponent_new()</code>, will return 0 (zero) on a fatal error. Some routines will return a value of enum <code>icalerrorenum</code>.</p>
 <p>5.6.2 <code>icalerrno</code></p>
@@ -861,7 +861,7 @@ $(function(){ initResizable(false); });
 <li><code>ICAL_TIMEDOUT_ERROR</code>: For CSTP and acquiring locks</li>
 <li><code>ICAL_UNKNOWN_ERROR</code>: ?</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md99"></a>
+<h3><a class="anchor" id="autotoc_md186"></a>
 5.6.3 <code>X-LIC-ERROR</code> and <code>X-LIC-INVALID-COMPONENT</code></h3>
 <p>The library handles semantic and syntactic errors in components by inserting errors properties into the components. If the parser cannot parse incoming text (a syntactic error) or if the <code><a class="el" href="icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57" title="Checks if a given VCALENDAR meets all the restrictions imposed by the standard.">icalrestriction_check()</a></code> routine indicates that the component does not meet the requirements of RFC5546 (a semantic error) the library will insert properties of the type <code>X-LIC-ERROR</code> to describe the error. Here is an example of the error property:</p>
 <div class="fragment"><div class="line">X-LIC-ERROR;X-LIC-ERRORTYPE=INVALID_ITIP :Failed iTIP restrictions</div>
@@ -894,11 +894,11 @@ $(function(){ initResizable(false); });
 </ul>
 <p>The libical parser will generate the error that end in <code>PARSEERROR</code> when it encounters garbage in the input steam. <code>ICAL_XLICERRORTYPE_INVALIDITIP</code> is inserted by <code><a class="el" href="icalrestriction_8h.html#a36eeedfdce2344da44fd09d9e3f18b57" title="Checks if a given VCALENDAR meets all the restrictions imposed by the standard.">icalrestriction_check()</a></code>, and <code>ICAL_XLICERRORTYPE_UNKVCALPROP</code> is generated by <code>icalvcal_convert()</code> when it encounters a vCal property that it cannot convert or does not know about.</p>
 <p><code>icalcomponent_convert_errors()</code> converts some of the error properties in a component into <code>REQUEST-STATUS</code> properties that indicate a failure. As of libical version 0.18, this routine only converts <code>PARSEERROR</code> errors and it always generates a 3.x (failure) code. This makes it more of a good idea than a really useful bit of code.</p>
-<h3><a class="anchor" id="autotoc_md100"></a>
+<h3><a class="anchor" id="autotoc_md187"></a>
 5.6.4 <code>ICAL_ERRORS_ARE_FATAL</code> and <code>icalerror_errors_are_fatal</code></h3>
 <p>If <code>icalerror_get_errors_are_fatal()</code> returns 1, then any error condition will cause the program to abort. The abort occurs in <code>icalerror_set_errno()</code>, and is done with an assert(0) if NDEBUG is undefined, and with <code>icalerror_crash_here()</code> if NDEBUG is defined. Initially, <code>icalerror_get_errors_are_fatal()</code> is 1 when <code>ICAL_ERRORS_ARE_FATAL</code> is defined, and 0 otherwise. Since <code>ICAL_ERRORS_ARE_FATAL</code> is defined by default, <code>icalerror_get_errors_are_fatal()</code> is also set to 1 by default.</p>
 <p>You can change the compiled-in <code>ICAL_ERRORS_ARE_FATAL</code> behavior at runtime by calling <code>icalerror_set_errors_are_fatal(0)</code> (i.e, errors are not fatal) or <code>icalerror_set_errors_are_fatal(1)</code> (i.e, errors are fatal).</p>
-<h2><a class="anchor" id="autotoc_md101"></a>
+<h2><a class="anchor" id="autotoc_md188"></a>
 5.7 Naming Standard</h2>
 <p>Structures that you access with the "struct" keyword, such as <code>struct icaltimetype</code> are things that you are allowed to see inside and poke at.</p>
 <p>Structures that you access though a typedef, such as <code>icalcomponent</code> are things where all of the data is hidden.</p>
@@ -912,16 +912,16 @@ as the second word. For instance: &lt;tt&gt;ICAL_ROLE_REQPARTICIPANT&lt;/tt&gt; 
 The enums for the parts of a recurrence rule and request statuses
 are irregular.
 
-@section autotoc_md102 6 Hacks and Bugs
+@section autotoc_md189 6 Hacks and Bugs
 
 There are a lot of hacks in the library &amp;ndash; bits of code that I am not
 proud of and should probably be changed. These are marked with the
 comment string "HACK."</p>
-<h1><a class="anchor" id="autotoc_md103"></a>
+<h1><a class="anchor" id="autotoc_md190"></a>
 7 Library Reference</h1>
-<h2><a class="anchor" id="autotoc_md104"></a>
+<h2><a class="anchor" id="autotoc_md191"></a>
 7.1 Manipulating struct icaltimetype</h2>
-<h3><a class="anchor" id="autotoc_md105"></a>
+<h3><a class="anchor" id="autotoc_md192"></a>
 7.1.1 Struct icaltimetype</h3>
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a></div>
 <div class="line"> </div>
@@ -940,7 +940,7 @@ comment string "HACK."</p>
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 28 2025 12:18:43 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
+Generated on Fri May 30 2025 11:51:05 for Libical API Documentation by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
 </small></address>
 </div><!-- doc-content -->
 </body>
