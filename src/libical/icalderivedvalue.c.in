@@ -503,6 +503,7 @@ static void free_icalvalue_attach_data(char *data, void *user_data)
 void icalvalue_set_binary(icalvalue *value, const char * v)
 {
     struct icalvalue_impl *impl;
+    char *dupStr;
 
     icalerror_check_arg_rv((value != NULL), "value");
     icalerror_check_value_type(value, ICAL_BINARY_VALUE);
@@ -517,7 +518,7 @@ void icalvalue_set_binary(icalvalue *value, const char * v)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
 #endif
-    char *dupStr = strdup(v); // will be freed later in unref
+    dupStr = strdup(v); /* will be freed later in unref */
     impl->data.v_attach = NULL;
     if (dupStr) {
         impl->data.v_attach = icalattach_new_from_data(dupStr, free_icalvalue_attach_data, 0);

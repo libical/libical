@@ -40,15 +40,15 @@ accept changes to this library if they are similarly dual-licensed.
 
 ## Building
 
-See the top-level [Install.txt](Install.txt) file.
+See the [Building Libical](INSTALL.md) instructions.
 
 ## Documentation
 
 For new releases please refer to our [Change Log](CHANGELOG.md) for a high-level
 overview of changes since the previous version.
 
-See the [C API documentation](https://libical.github.io/libical/apidocs/) and
-[glibc API documentation](https://libical.github.io/libical/libical-glib/).
+See the [C API documentation](https://libical.github.io/libical/v4/apidocs/) and
+[glibc API documentation](https://libical.github.io/libical/v4/libical-glib/).
 
 For a conceptual overview of the library, see [Using Libical](docs/UsingLibical.md).
 There is other rudimentary, unfinished documentation in the `docs/` directory of the

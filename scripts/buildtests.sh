@@ -176,7 +176,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='/vcc\.c\|/vobject\.c\|libical-glib-scan\.c\|/ICalGLib-3.0\.c\|ICal-3.0\.c\|Value[[:space:]]descriptions[[:space:]]\|g-ir-scanner:'
+  whitelist='/vcc\.c\|/vobject\.c\|libical-glib-scan\.c\|/ICalGLib-4.0\.c\|ICal-4.0\.c\|Value[[:space:]]descriptions[[:space:]]\|g-ir-scanner:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
@@ -563,15 +563,23 @@ SPLINT() {
     -I "$TOP/src/libicalss" \
     -I "$TOP/src/libicalvcal" \
     -I "$TOP/src/libicalvcard" \
-    -I "$TOP/src/libical-glib" |
+    -I "$TOP/src/libical-glib" 2>&1 |
     grep -v '[[:space:]]Location[[:space:]]unknown[[:space:]]' |
     grep -v '[[:space:]]Code[[:space:]]cannot[[:space:]]be[[:space:]]parsed.' |
-    cat - 2>&1 | tee "splint-$name.out"
+    tee "splint-$name.out"
   set -e
   declare -i status
   status=${PIPESTATUS[0]}
   if (test $status -gt 0); then
     echo "Splint warnings encountered.  Exiting..."
+    exit 1
+  fi
+  set +e
+  declare -i parse
+  parse=$(grep -ci "Parse Error" "splint-$name.out")
+  set -e
+  if (test $parse -gt 0); then
+    echo "Splint parse error encountered.  Exiting..."
     exit 1
   fi
   CLEAN

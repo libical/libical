@@ -11,7 +11,7 @@ jobs:
         configuration:
           - Debug
           - Release
-    runs-on: [windows-2019, windows-latest]
+    runs-on: [windows-2022, windows-latest]
     steps:
       - uses: actions/checkout@v2
       - uses: ilammy/msvc-dev-cmd@v1
