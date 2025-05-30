@@ -44,3 +44,12 @@ path = ["test-data/**", "src/test/**.out", "src/test/**.ics", "src/test/**.txt",
 precedence = "aggregate"
 SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
+
+### 3rdparty
+
+# doxygen awesome
+[[annotations]]
+path = "docs/doxygen-awesome.css"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021 - 2023 jothepro"
+SPDX-License-Identifier = "MIT"
