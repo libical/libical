@@ -38,6 +38,10 @@ both proprietary code and GPL'd programs, and will benefit from improvements
 made by programmers in both realms. We (the libical developers) will only
 accept changes to this library if they are similarly dual-licensed.
 
+Some 3rdparty software with compatible licensing may be bundled with libcal.
+Please refer to our [3rdparty list](3RDPARTY.md) to see the projects
+included, along with their respective licenses.
+
 ## Building
 
 See the [Building Libical](INSTALL.md) instructions.

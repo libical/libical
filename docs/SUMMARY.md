@@ -15,6 +15,7 @@
 # Reference Guide
 
 - [RFCS](rfcs.md)
+- [3rdparty Software](3RDPARTY.md)
 
 -----------
 

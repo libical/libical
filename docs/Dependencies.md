@@ -30,3 +30,5 @@ in addition, to build the Vala support you'll also need:
 ## Optional dependencies
 
 - berkeleydb (-devel) for Berkeley DB storage support in libicalss
+- doxygen for building the API documentation
+- mdbook for building the manual
