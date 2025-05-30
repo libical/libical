@@ -51,8 +51,8 @@ Libical uses CMake to generate makefiles. It should build with no adjustments on
 MacOS and Windows using `gcc`, `clang` and Microsoft Visual.  Please report build problems
 to the [Libical issue tracker](https://github.com/libical/libical/issues).
 
-For a more complete guide to building the library, see the `Install.txt` file
-in the distribution.
+For a more complete guide to building the library, see the
+[Building Libical](INSTALL.md) instructions.
 
 ## 3 Structure
 
