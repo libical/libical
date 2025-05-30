@@ -184,10 +184,12 @@ both proprietary code and GPL'd programs, and will benefit from improvements
 made by programmers in both realms. We (the libical developers) will only
 accept changes to this library if they are similarly dual-licensed.</p>
 <h2 id="building"><a class="header" href="#building">Building</a></h2>
-<p>See the top-level <a href="Install.txt">Install.txt</a> file.</p>
+<p>See the <a href="INSTALL.html">Building Libical</a> instructions.</p>
 <h2 id="documentation"><a class="header" href="#documentation">Documentation</a></h2>
-<p>See the <a href="https://libical.github.io/libical/apidocs/">C API documentation</a> and
-<a href="https://libical.github.io/libical/libical-glib/">glibc API documentation</a>.</p>
+<p>For new releases please refer to our <a href="CHANGELOG.html">Change Log</a> for a high-level
+overview of changes since the previous version.</p>
+<p>See the <a href="https://libical.github.io/libical/v4/apidocs/">C API documentation</a> and
+<a href="https://libical.github.io/libical/v4/libical-glib/">glibc API documentation</a>.</p>
 <p>For a conceptual overview of the library, see <a href="docs/UsingLibical.html">Using Libical</a>.
 There is other rudimentary, unfinished documentation in the <code>docs/</code> directory of the
 source distribution, annotated examples in <code>examples/</code> and the test code in <code>src/test/</code>.</p>
@@ -226,6 +228,201 @@ See <a href="src/libicalvcal/README.txt">src/libicalvcal/README.TXT</a> for deta
 <a href="https://github.com/libical/libical/discussions">https://github.com/libical/libical/discussions</a></p>
 <p>Report bugs to our issue tracker at
 <a href="https://github.com/libical/libical/issues">https://github.com/libical/libical/issues</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="building-libical"><a class="header" href="#building-libical">Building Libical</a></h1>
+<p>Libical uses the <a href="https://cmake.org">CMake buildsystem</a></p>
+<p>Please see the comments at the top of CMakeLists.txt for
+the available configuration options you can pass to cmake.</p>
+<p>The installation directory defaults to /usr/local on UNIX
+and c:/Program Files on Windows.  You can change this by
+passing -DCMAKE_INSTALL_PREFIX=/install/path to cmake.</p>
+<p>To build a debug version pass -DCMAKE_BUILD_TYPE=Debug to cmake.</p>
+<p>To build libical you will need:</p>
+<ul>
+<li>a C99-compliant C compiler (let us know if the build fails with your C compiler)</li>
+<li>a C11-compliant C compiler for libical-glib</li>
+<li>a C++11 compliant compiler for C++ bindings</li>
+<li>CMake version 3.20.0 or higher</li>
+<li>Perl</li>
+<li>libicu (not required but strongly recommended)</li>
+</ul>
+<p>Building on Unix with gcc or clang:</p>
+<pre><code class="language-shell">% mkdir build
+% cd build
+% cmake ..
+% make
+% make install
+</code></pre>
+<p>Building on Windows with MicroSoft Visual Studio:
+From a command prompt for the version of MSVC you want to use</p>
+<pre><code class="language-shell">% mkdir build
+% cd build
+% cmake -G "NMake Makefiles" ..
+% nmake
+% nmake install
+</code></pre>
+<p>NOTE: Some MSVC 32bit compilers (like MSVC2005) use a 64bit version of time_t.
+In these cases you must pass -DUSE_32BIT_TIME_T=true to cmake to make sure
+the 32bit version of time_t is used instead.</p>
+<p>Building on Windows with mingw:
+Make sure you have the path to the MinGW programs in %PATH% first, for example:</p>
+<pre><code class="language-shell">% set "PATH=c:\MinGW\mingw64\bin;%PATH%"
+% mkdir build
+% cd build
+% cmake -G "MinGW Makefiles" ..
+% mingw32-make
+% mingw32-make install
+</code></pre>
+<p>Building on Windows under Cygwin:</p>
+<pre><code class="language-shell">% mkdir build
+% cd build
+% cmake ..
+% make
+% make install
+</code></pre>
+<p>Building on MSYS with mingw:</p>
+<pre><code class="language-shell">% mkdir build
+% cd build
+% cmake -G "MSYS Makefiles" ..
+% nmake
+% nmake install
+</code></pre>
+<p>To run the test suite, from inside the build directory
+run <code>make test</code> (or <code>nmake test</code> or <code>mingw32-make test</code>)</p>
+<p>To run the test suite in verbose mode, pass ARGS="-V" to the make command
+For example: <code>nmake test ARGS="-V"</code></p>
+<p>By default, the buildsystem creates shared(dynamic) and static versions
+of the libraries, but that behavior can be modified at CMake time:</p>
+<ul>
+<li>To build the static libraries only, pass -DSTATIC_ONLY=True to cmake.</li>
+<li>To build the shared libraries only, pass -DSHARED_ONLY=True to cmake.</li>
+</ul>
+<h2 id="building-with-different-compilers"><a class="header" href="#building-with-different-compilers">Building with Different Compilers</a></h2>
+<p>For example, say you want to use Clang to build on Linux.
+Then you can set the C and C++ compilers at CMake time, like so:</p>
+<pre><code class="language-shell">% CC=clang CXX=clang++ cmake ..
+</code></pre>
+<h2 id="building-for-osx-mac"><a class="header" href="#building-for-osx-mac">Building for OSX (Mac)</a></h2>
+<h3 id="homebrew"><a class="header" href="#homebrew">Homebrew</a></h3>
+<p>A couple of necessary dependencies do not have their headers
+and development libraries linked into /usr/local/{include,lib} due
+to possible contamination with the operating system versions of the
+same name.  This is known to be the case with libffi and libxml2</p>
+<p>Fix is to export PKG_CONFIG_PATH so CMake can find them, as in:</p>
+<pre><code class="language-shell">export PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig
+</code></pre>
+<h2 id="building-for-android"><a class="header" href="#building-for-android">Building for Android</a></h2>
+<pre><code class="language-shell">% mkdir build
+% cd build
+% export ANDROID_NDK=/path/to/android-ndk
+% cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
+        -DCMAKE_INSTALL_PREFIX=/install/path .. \
+        -DANDROID_ABI=[x86,x86_64,armeabi-v7a,arm64-v8a,...]
+% make
+% make install
+</code></pre>
+<p>For more information about building CMake projects on Android see
+<a href="https://developer.android.com/ndk/guides/cmake">https://developer.android.com/ndk/guides/cmake</a></p>
+<h2 id="optional-dependencies"><a class="header" href="#optional-dependencies">Optional Dependencies</a></h2>
+<ul>
+<li>
+<p>libicu "International Components for Unicode" development libraries.
+Highly recommended for RSCALE support.
+libicu can be found at <a href="http://www.icu-project.org">http://www.icu-project.org</a></p>
+<p>If CMake doesn't locate your libicu installation try setting the
+ICU_ROOT or ICU_BASE environment variables to the top folder where
+libicu is installed and run cmake again.</p>
+</li>
+<li>
+<p>Berkeley DB storage.
+Optional for the Berkeley Database storage support.
+The development toolkit can be found at <a href="https://www.oracle.com/database/berkeley-db">https://www.oracle.com/database/berkeley-db</a></p>
+<p><strong>This code path has not been fully tested.</strong>
+<strong>Don't be surprised if there are bugs.</strong>
+<strong>Do NOT use for production code.</strong></p>
+</li>
+<li>
+<p>GObject Introspection.  To generate GObject introspection "typelib"
+files pass the -DGOBJECT_INTROSPECTION=True option to cmake.  You'll
+need to have the GObject Introspection development package v0.6.7 or higher
+installed beforehand.</p>
+<p>Requires the GObject Introspection development package:</p>
+<ul>
+<li>Ubuntu: apt-get install gobject-introspection</li>
+<li>Fedora: dnf install gobject-introspection</li>
+<li>Mac: brew install gobject-introspection pygobject3</li>
+<li>Windows: vcpkg install gobject-introspection (see [using vcpkg](#Using vcpkg to install dependencies).</li>
+</ul>
+</li>
+</ul>
+<p>You can also force CMake to ignore any of the optional dependencies
+by passing the option -DCMAKE_DISABLE_FIND_PACKAGE_<PACKAGE>=True.
+For instance:</p>
+<pre><code class="language-shell">  % cmake -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True # tell cmake to ignore ICU
+</code></pre>
+<h2 id="language-bindings"><a class="header" href="#language-bindings">Language Bindings</a></h2>
+<p>This C library can be built with bindings for these other languages:</p>
+<ul>
+<li>
+<p>C++. If a C++ compiler is found the buildsystem will create and install the C++ bindings API.
+Turn this off by passing -DWITH_CXX_BINDINGS=False option to cmake.
+Don't mix ABI from C and C++ compilers.</p>
+</li>
+<li>
+<p>Python bindings are built using gobject-introspection, which is enabled
+by passing -DGOBJECT_INTROSPECTION=True to cmake.</p>
+<p>Requires the GObject Introspection development package (see above).</p>
+<p>Don't forget to set (or append to, as needed) the GI_TYPELIB_PATH environment
+variable to $PREFIX/lib/girepository-1.0 (or $PREFIX/lib64/girepository-1.0).</p>
+</li>
+</ul>
+<h2 id="tweaking-the-library-behavior"><a class="header" href="#tweaking-the-library-behavior">Tweaking the Library Behavior</a></h2>
+<p>Use these CMake options to adjust the library behavior as follows:</p>
+<ul>
+<li>
+<p>ICAL_ERRORS_ARE_FATAL=[true|false]
+Set to make icalerror_* calls abort instead of internally signaling an error.
+Default=false</p>
+</li>
+<li>
+<p>ICAL_ALLOW_EMPTY_PROPERTIES=[true|false]
+Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
+Default=false</p>
+</li>
+<li>
+<p>USE_BUILTIN_TZDATA=[true|false]
+Set to build using our own (instead of the system's) timezone data.
+Default=false (use the system timezone data on non-Windows systems)
+ALWAYS true on Windows systems</p>
+</li>
+</ul>
+<h2 id="tweaking-the-installation-directories"><a class="header" href="#tweaking-the-installation-directories">Tweaking the Installation Directories</a></h2>
+<p>By default, the installation layout is according to the
+<a href="https://www.gnu.org/prep/standards/html_node/Directory-Variables.html">GNU standard installation directories</a>.</p>
+<p>You can override various installation folders by passing the following variables to cmake:</p>
+<ul>
+<li>CMAKE_INSTALL_LIBDIR = The fullpath where you want the put the installed libraries</li>
+<li>CMAKE_INSTALL_INCLUDEDIR = The fullpath where you want to put the installed include files</li>
+<li>CMAKE_INSTALL_DATAROOTDIR = The fullpath where to want to put the shared files</li>
+</ul>
+<p>for example: <code>cmake -DCMAKE_INSTALL_PREFIX=/opt -DCMAKE_INSTALL_LIBDIR=/opt/lib32 ..</code></p>
+<h2 id="build-the-documentation"><a class="header" href="#build-the-documentation">Build the documentation</a></h2>
+<p>Run <code>make docs</code> to build the API documentation and reference.</p>
+<p>Disable the docs make target by running cmake with -DICAL_BUILD_DOCS=False option.
+Disable the libical-glib developer documentation by running cmake with -DICAL_GLIB_BUILD_DOCS=False.</p>
+<h2 id="using-vcpkg-to-install-dependencies"><a class="header" href="#using-vcpkg-to-install-dependencies">Using vcpkg to install dependencies</a></h2>
+<p>If you want to use vcpkg (in $VCPKG_ROOT) to build the dependencies as part
+of the project you can also tell CMake the vcpkg toolchain file with:
+"-DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"</p>
+<p>for example: if you have vcpkg installed in $HOME/vcpkg, then run
+<code>cmake -DCMAKE_TOOLCHAIN_FILE=$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake ..</code></p>
+<p>Windows note:
+MSVC comes with vcpkg pre-installed and sets %VCPKG_ROOT% for you.
+However, the only way to update that vcpkg version is by upgrading
+MSVC itself; which may not be what you want and may be too old.
+Consider installing your own vcpkg instead of relying on the MSVC vcpkg.</p>
+<p>Non-Windows note:
+You'll need to pre-install autoconf, automake and autoconf-archive for icu.
+See %VCPKG_ROOT%/p rts/icu/portfile.cmake for more info.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h1>
 <h2 id="required"><a class="header" href="#required">Required</a></h2>
 <ul>
@@ -251,7 +448,7 @@ See <a href="src/libicalvcal/README.txt">src/libicalvcal/README.TXT</a> for deta
 <ul>
 <li>vala (valac, the Vala compiler)</li>
 </ul>
-<h2 id="optional-dependencies"><a class="header" href="#optional-dependencies">Optional dependencies</a></h2>
+<h2 id="optional-dependencies-1"><a class="header" href="#optional-dependencies-1">Optional dependencies</a></h2>
 <ul>
 <li>berkeleydb (-devel) for Berkeley DB storage support in libicalss</li>
 </ul>
@@ -290,8 +487,8 @@ Also look in <code>src/test/</code> for additional annotated examples.</p>
 <p>Libical uses CMake to generate makefiles. It should build with no adjustments on Linux,
 MacOS and Windows using <code>gcc</code>, <code>clang</code> and Microsoft Visual.  Please report build problems
 to the <a href="https://github.com/libical/libical/issues">Libical issue tracker</a>.</p>
-<p>For a more complete guide to building the library, see the <code>Install.txt</code> file
-in the distribution.</p>
+<p>For a more complete guide to building the library, see the
+<a href="INSTALL.html">Building Libical</a> instructions.</p>
 <h2 id="3-structure"><a class="header" href="#3-structure">3 Structure</a></h2>
 <p>The iCalendar data model is based on four types of objects: <em>components</em>,
 <em>properties</em>, <em>values</em> and <em>parameters</em>.</p>
@@ -1839,6 +2036,391 @@ thread safe memory allocator, and a lot of documentation.</p>
 <li>
 <p>Mark Tearle <a href="mailto:mtearle@tearle.com">mtearle@tearle.com</a> for keeping the Python bindings up to date.</p>
 </li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
+<p>All notable changes to this project will be documented in this file.</p>
+<p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
+and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="400---unreleased"><a class="header" href="#400---unreleased">[4.0.0] - Unreleased</a></h2>
+<p>This is a major release and is <strong>not</strong> source or binary compatible with version 3.x.</p>
+<p>Please see <a href="docs/MigrationGuide_to_4.html">Version 4 Migration Guide</a>
+for details about API changes since libical 3.x.</p>
+<h3 id="added"><a class="header" href="#added">Added</a></h3>
+<ul>
+<li>REUSE compliant licensing</li>
+<li>Brand new icalvcard library that follows the libical API.</li>
+<li>draft-ietf-calext-eventpub-extensions-19 (RFC 9073) support added</li>
+<li>draft-ietf-calext-valarm-extensions-07 (RFC 9074) support added</li>
+<li>Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions</li>
+<li>New CMake option "LIBICAL_ENABLE_64BIT_ICALTIME_T" to use 64-bit time_t implementations
+on 32-bit systems (where available and supported.  Windows-only so far)</li>
+<li>GEO property has arbitrary precision (values are internally stored as strings, not doubles)</li>
+<li>Allow previous recurrence iteration</li>
+<li>icalparser_ctrl setting defines how to handle invalid CONTROL characters during parsing</li>
+</ul>
+<h3 id="changed"><a class="header" href="#changed">Changed</a></h3>
+<ul>
+<li>Requires MSVC 2013 or higher (when building on Windows with MSVC)</li>
+<li>Requires CMake v3.20.0 or higher</li>
+<li>For the C++ bindings, requires a C++11 compliant C++ compiler</li>
+<li>libical-glib requires glib 2.38 or higher</li>
+<li>libical-glib requires a C11 compliant C compiler</li>
+<li>Replace gtk-doc with gi-docgen to produce libical-glib developer documentation</li>
+<li>libical-glib API is considered stable; no longer need to define LIBICAL_GLIB_UNSTABLE_API=1
+before including &lt;libical-glib/libical-glib.h&gt;</li>
+<li>CMake option -DGOBJECT_INTROSPECTION=True by default.</li>
+<li><code>icaltzutil_get_zone_directory()</code> can use the TZDIR environment to find system zoneinfo</li>
+</ul>
+<h3 id="deprecated"><a class="header" href="#deprecated">Deprecated</a></h3>
+<ul>
+<li>The icalvcal library is deprecated and will be removed sometime in the 4.x series.
+Please port your icalvcal code to use icalvcard instead.</li>
+</ul>
+<h3 id="removed"><a class="header" href="#removed">Removed</a></h3>
+<ul>
+<li>The old src/python code is removed in favor of the glib-introspection generated
+Python bindings. Requires building with -DGOBJECT_INTROSPECTION=True</li>
+</ul>
+<h3 id="fixed"><a class="header" href="#fixed">Fixed</a></h3>
+<ul>
+<li>Fixed <code>icalcomponent_get_duration()</code> to account for DTEND/DUE TZID</li>
+<li>Improved performance of recurrence iterators</li>
+</ul>
+<h2 id="3021---unreleased"><a class="header" href="#3021---unreleased">[3.0.21] - Unreleased</a></h2>
+<ul>
+<li>Fix some scenarios with RRULEs and EXRULE (#754)</li>
+</ul>
+<h2 id="3020---2025-05-10"><a class="header" href="#3020---2025-05-10">[3.0.20] - 2025-05-10</a></h2>
+<ul>
+<li>Clean up the byte-swapping macros</li>
+<li>Fix a testcase in libical-glib when using 64-bit on a 32-bit system</li>
+<li>Fix regression introduced in v3.0.19 ignoring non-empty REQUEST-STATUS extdata</li>
+<li>Fix regression introduced in v3.0.19 error reporting for END before BEGIN</li>
+<li>Fix a CMake problem in libical-glib</li>
+</ul>
+<h2 id="3019---2024-12-23"><a class="header" href="#3019---2024-12-23">[3.0.19] - 2024-12-23</a></h2>
+<ul>
+<li>Fix for changes to the libicu 75 API</li>
+<li>Add vcpkg manifest-mode support</li>
+<li>Improved berkeley-db discovery on Mac with homebrew</li>
+<li>Improved libicu discrovery on Mac with homebrew</li>
+<li>Properly set DYLD_LIBRARY_PATH on Mac for libical-ical tests</li>
+<li>Resolved known limitation: Negative values are now also supported for <code>BYMONTHDAY</code> and <code>BYYEARDAY</code>.</li>
+<li>Add support for RDATE;VALUE=PERIOD</li>
+<li>Fix time conversion to time_t for times before epoch</li>
+<li>Allow <code>icalcomponent_foreach_recurrence</code> to receive <code>DATE</code>-only <code>start</code> and <code>end</code> params.</li>
+<li>Fix the calculation of an event's duration if <code>DTSTART</code> is a <code>DATE</code>-only value.</li>
+<li>Fix <code>icaltime_span_new()</code> - ignore the case where DTEND is unset and require it to be
+set by the caller instead.</li>
+<li>Various fixes for fuzzer issues</li>
+</ul>
+<h2 id="3018---2024-03-24"><a class="header" href="#3018---2024-03-24">[3.0.18] - 2024-03-24</a></h2>
+<ul>
+<li>Requires CMake v3.5.0 or higher</li>
+<li>Escape ^ (U+005E) character in parameter values according to RFC 6868</li>
+<li>New CMake option LIBICAL_BUILD_EXAMPLES to disable building the examples</li>
+<li>Should be able to use the project as a submodule</li>
+<li>Built-in timezones updated to tzdata2024a</li>
+</ul>
+<h2 id="3017---2023-10-14"><a class="header" href="#3017---2023-10-14">[3.0.17] - 2023-10-14</a></h2>
+<ul>
+<li>Improved Android support</li>
+<li>Escape commas in x-property TEXT values</li>
+<li>Built-in timezones updated to tzdata2023c</li>
+<li>icalparser_ctrl setting defines how to handle invalid CONTROL characters during parsing</li>
+<li>New publicly available functions:
+<ul>
+<li>get_zone_directory</li>
+<li>icalparser_get_ctrl</li>
+<li>icalparser_set_ctrl</li>
+</ul>
+</li>
+</ul>
+<h2 id="3016---2022-10-17"><a class="header" href="#3016---2022-10-17">[3.0.16] - 2022-10-17</a></h2>
+<ul>
+<li>Fix regressions in 3.0.15 due to improperly tested fuzz fixes</li>
+<li>Fix argument guards in icaltime_as_timet to match documentation and tests</li>
+</ul>
+<h2 id="3015---2022-10-06"><a class="header" href="#3015---2022-10-06">[3.0.15] - 2022-10-06</a></h2>
+<ul>
+<li>Add missing property parameters into libical-glib</li>
+<li>Fix CMake option USE_32BIT_TIME_T actually uses a 32-bit time_t value</li>
+<li>Fix icaltime_as_timet, which returned incorrect results for years &gt;= 2100,
+to work properly between years 1902 and 10k.</li>
+<li>Fix x-property comma handling and escaping</li>
+<li>Built-in timezones updated to tzdata2022d (now with a VTIMEZONE for each time zone alias)</li>
+<li>Fix a fuzzer issue</li>
+<li>Handle unreachable-code compile warnings with clang</li>
+<li>Ensure all vanew_foo() calls finish with (void*)0 (not 0)</li>
+</ul>
+<h2 id="3014---2022-02-15"><a class="header" href="#3014---2022-02-15">[3.0.14] - 2022-02-15</a></h2>
+<ul>
+<li>icalvalue: Reset non-UTC icaltimetype::zone on set</li>
+<li>Fix icalcomponent_set_due not removing TZID when necessary</li>
+</ul>
+<h2 id="3013---2022-01-17"><a class="header" href="#3013---2022-01-17">[3.0.13] - 2022-01-17</a></h2>
+<ul>
+<li><code>icalcomponent_get_dtend()</code> returns <code>icaltime_null_time()</code> unless called on VEVENT, VAVAILABILITY
+or VFREEBUSY</li>
+<li><code>icalcomponent_get_duration()</code> for VTODO calculate with DUE instead of DTEND</li>
+<li>Replace CMake FindBDB with FindBerleyDB (<a href="https://github.com/sum01/FindBerkeleyDB">https://github.com/sum01/FindBerkeleyDB</a>)</li>
+<li>Fix finding ICU and BerkeleyDB on Mac (look for homebrew installs first)</li>
+</ul>
+<h2 id="3012---2021-12-08"><a class="header" href="#3012---2021-12-08">[3.0.12] - 2021-12-08</a></h2>
+<ul>
+<li>Fix a libicalval crash in cleanVObject</li>
+<li>METHOD:DECLINECOUNTER must have DTEND or DURATION</li>
+<li>Handle if DTEND and DURATION are both missing</li>
+<li>Improved FindICU (copied from official CMake.  see files in cmake/Kitware)</li>
+<li>Buildsystem fixes (especially for the Ninja generator)</li>
+<li>Built-in timezones updated to tzdata2021e</li>
+</ul>
+<h2 id="3011---2021-10-09"><a class="header" href="#3011---2021-10-09">[3.0.11] - 2021-10-09</a></h2>
+<ul>
+<li>Fix <code>icalrecur_iterator_set_start()</code> for hourly, minutely, and secondly recurrences</li>
+<li>Fix build for Berkeley DB version greater than 5</li>
+<li>Fix vcal for some architectures (like aarch64, ppc64le and s390x)</li>
+<li>Fix memory leaks in vcal</li>
+<li>Prevent crash when looking for tzid in initialize_rscale</li>
+<li>Adjust libdir and includedir in generated pkgconfig files</li>
+<li>Built-in timezones updated to tzdata2021c</li>
+</ul>
+<h2 id="3010---2021-04-17"><a class="header" href="#3010---2021-04-17">[3.0.10] - 2021-04-17</a></h2>
+<ul>
+<li>Fix building -DSTATIC_ONLY=True with Ninja</li>
+<li>Fix generating wrong recurrence rules (#478)</li>
+<li>Fix a bug computing transitions in tzfiles</li>
+<li>Fix reading TZif files to use TZ string in the footer as the last (non-terminating) transitions</li>
+<li>Fix reading TZif files to use more RRULEs and/or RDATEs whevever possible</li>
+<li>Built-in timezones updated to tzdata2021a</li>
+</ul>
+<h2 id="309---2021-01-16"><a class="header" href="#309---2021-01-16">[3.0.9] - 2021-01-16</a></h2>
+<ul>
+<li>Add support for empty parameters, e.g. CN=""</li>
+<li>Accept VTIMEZONE with more than one X- property</li>
+<li>Several fixes for recurrences containing BYWEEKNO</li>
+<li><code>icalrecurrencetype_from_string()</code> will reject any RRULE that contains a rule-part that
+occurs more than once</li>
+<li>Improve thread safety</li>
+<li>Fix compiled-in path for the built-in timezone data</li>
+<li>Fix reading TZif files with empty v1 data (use v2+ whenever possible)</li>
+<li>Add backwards compatibility for previous TZIDs</li>
+<li>Built-in timezones updated to tzdata2020d</li>
+<li><code>icalrecurrencetype_from_string()</code> will reject any RRULE that contains a rule-part that
+occurs more than once</li>
+<li>Fix build with newer libicu</li>
+<li>Fix cross-compile support in libical-glib</li>
+</ul>
+<h2 id="308---2020-03-07"><a class="header" href="#308---2020-03-07">[3.0.8] - 2020-03-07</a></h2>
+<ul>
+<li>Fix for <code>icalattach_new_from_data()</code> and the 'free_fn' argument</li>
+<li>Fix if recurrencetype contains both COUNT and UNTIL (only output UNTIL in the RRULE)</li>
+</ul>
+<h2 id="307---2019-12-15"><a class="header" href="#307---2019-12-15">[3.0.7] - 2019-12-15</a></h2>
+<ul>
+<li>libical-glib: Fix ICalAttach handling of the icalattach native structure</li>
+<li>Let <code>icalattach_new_from_data()</code> use the 'free_fn' argument again</li>
+<li>Fix memory leaks in attachment handling and elsewhere</li>
+<li>Fix a multithreading race condition</li>
+<li>More fuzzification fixes</li>
+</ul>
+<h2 id="306---2019-09-14"><a class="header" href="#306---2019-09-14">[3.0.6] - 2019-09-14</a></h2>
+<ul>
+<li>Handle both COUNT and UNTIL in RRULEs</li>
+<li>Fix RRULE BYDAY with INTERVAL=2 conflict</li>
+<li>Various fuzzification fixes</li>
+<li>New publicly available function:
+<ul>
+<li>icaltimezone_truncate_vtimezone</li>
+</ul>
+</li>
+<li>Add option to disable building the test suite</li>
+<li>Built-in timezones updated to tzdata2019c</li>
+</ul>
+<h2 id="305---2019-05-14"><a class="header" href="#305---2019-05-14">[3.0.5] - 2019-05-14</a></h2>
+<ul>
+<li>New publicly available function:
+<ul>
+<li>icalproperty_get_datetime_with_component</li>
+</ul>
+</li>
+<li>Allow reset DATE/DATE-TIME VALUE parameter for all-day events</li>
+<li><code>icalproperty_get_datetime_with_component()</code> will use location as TZID fallback.</li>
+<li>New CMake option ENABLE_GTK_DOC for disabling the libical-glib developer documentation</li>
+<li>GObject Introspection - use $MAJOR-0 versioning</li>
+<li>libical-glib API is considered unstable, define LIBICAL_GLIB_UNSTABLE_API=1 before
+including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
+<li>Built-in timezones updated to tzdata2019a</li>
+<li>De-fuzzifications and Coverity fixes</li>
+</ul>
+<h2 id="304---2018-08-14"><a class="header" href="#304---2018-08-14">[3.0.4] - 2018-08-14</a></h2>
+<ul>
+<li>Silently fail RSCALE recurrence clauses when RSCALE is disabled</li>
+<li>Fixed <code>icalcomponent_set_comment()</code> and <code>icalcomponent_set_uid()</code></li>
+<li>fix FREQ=MONTHLY;BYMONTH</li>
+<li>Skip UTF-8 marker when parsing</li>
+<li>Fix parsing <CR>?<LF> in VCF files produced by Outlook</li>
+<li>Fix TZID on DATE-TIME value can override time specified in UTC</li>
+<li>CMake discovery module for ICU uses pkg-config now</li>
+<li>New publicly available function:
+<ul>
+<li>icalparameter_kind_is_valid</li>
+</ul>
+</li>
+<li>Built-in timezones updated to tzdata2018e</li>
+</ul>
+<h2 id="303---2018-02-27"><a class="header" href="#303---2018-02-27">[3.0.3] - 2018-02-27</a></h2>
+<ul>
+<li>VTODO COMPLETED property can be a DATE-TIME or DATE (for backward compatibility)</li>
+<li>Improved recurrence iteration</li>
+</ul>
+<h2 id="302---2018-02-17"><a class="header" href="#302---2018-02-17">[3.0.2] - 2018-02-17</a></h2>
+<ul>
+<li>No longer attempt to detect the need for -DUSE_32BIT_TIME_T with MSVC</li>
+<li>New CMake option ICAL_BUILD_DOCS which can be used to disable the docs target</li>
+<li>Fix threading hang in BSD type systems (OpenBSD, MacOS,...)</li>
+<li>Build with Ninja improvements</li>
+</ul>
+<h2 id="301---2017-11-18"><a class="header" href="#301---2017-11-18">[3.0.1] - 2017-11-18</a></h2>
+<ul>
+<li>Built-in timezones updated to tzdata2017c</li>
+<li>Fix a multi-threaded deadlock in <code>icaltimezone_load_builtin_timezone()</code></li>
+<li>Fix a CMake problem with parallel builds</li>
+</ul>
+<h2 id="300---2017-10-28"><a class="header" href="#300---2017-10-28">[3.0.0] - 2017-10-28</a></h2>
+<ul>
+<li>Relicense from MPL 1.0 to MPL 2.0 (keep dual license for LGPL v2.1)</li>
+<li>Requires CMake v3.1.0 or higher along with various CMake and buildsystem fixes</li>
+<li>Added a 'make uninstall'</li>
+<li>Fixed use-after-free issues and some memory leaks</li>
+<li>Built-in timezones updated to tzdata2017b</li>
+<li>More accurate VTIMEZONE generation when using the system time zone data (when USE_BUILTIN_TZDATA=False)</li>
+<li><code>icalvalue_as_ical_string()</code> returns "TRUE" (non-zero) or "FALSE" (zero) values only.</li>
+<li>New icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE</li>
+<li>Better value type checking of property values when parsing</li>
+<li>icalvalue_new/set_date and icalvalue_new/set_datetime now enforce DATE and DATE-TIME values respectively</li>
+<li>draft-ietf-calext-extensions (RFC 7986) support added</li>
+<li>Parameter values are now en/decoded per RFC 6868</li>
+<li>Removed is_utc from icaltimetype struct
+<ul>
+<li>Set icaltimetype.zone to <code>icaltimezone_get_utc_timezone()</code> to change a time to UTC</li>
+<li>Use <code>icaltime_is_utc()</code> to check if a time is in UTC</li>
+</ul>
+</li>
+<li>Added support for VPATCH component</li>
+<li>New publicly available functions:
+<ul>
+<li>icalproperty_set_parent (icalproperty_get_parent was already public)</li>
+<li>icalvalue_get_parent (icalvalue_set_parent was already public)</li>
+<li>icalparameter_set_parent</li>
+<li>icalparameter_get_parent</li>
+<li>icalvalue_new_datetimedate (DATE or DATE-TIME)</li>
+<li>icalvalue_set_datetimedate</li>
+<li>icalvalue_get_datetimedate</li>
+<li>icalrecur_iterator_set_start</li>
+<li>icalcomponent_normalize</li>
+<li>icalproperty_normalize</li>
+</ul>
+</li>
+<li>Removed deprecated functions:
+<ul>
+<li>icaltime_from_timet (use icaltime_from_timet_with_zone)</li>
+<li>icaltime_start_day_of_week (use icaltime_start_day_week)</li>
+<li>icalproperty_remove_parameter (use icalproperty_remove_parameter_by_kind)</li>
+<li>icalproperty_string_to_enum (use icalproperty_kind_and_string_to_enum)</li>
+</ul>
+</li>
+<li>Signature changed for functions:
+<ul>
+<li>Parse_MIME_FromFileName</li>
+<li>icalgauge *icalgauge_new_from_sql</li>
+<li>const char *icallangbind_property_eval_string</li>
+<li>const char *icallangbind_property_eval_string_r</li>
+<li>void set_zone_directory</li>
+<li>icalcalendar *icalcalendar_new</li>
+<li>int icalrecur_expand_recurrence</li>
+</ul>
+</li>
+</ul>
+<h2 id="200---2015-12-28"><a class="header" href="#200---2015-12-28">[2.0.0] - 2015-12-28</a></h2>
+<ul>
+<li>WARNING: Version 2 IS NOT Binary Compatible with Older Versions</li>
+<li>Version 2 is Source Compatible with Older Versions</li>
+<li>Lots of source code scrubbing</li>
+<li>[New] RSCALE support (requires libicu from <a href="http://www.icu-project.org">http://www.icu-project.org</a>)</li>
+<li>[New] CalDAV attachment support (draft-ietf-calext-caldav-attachments)</li>
+<li>[New] Resurrect the Berkeley DB storage support</li>
+<li>[Bug] issue83: Incorrect recurrence generation for weekly pattern</li>
+<li>Handle RRULEs better</li>
+<li>Handle threading better</li>
+</ul>
+<h2 id="101---2014-10-11"><a class="header" href="#101---2014-10-11">[1.0.1] - 2014-10-11</a></h2>
+<ul>
+<li>[Bug] issue74: Do not escape double quote character</li>
+<li>[Bug] issue80,issue92: fix crashes using <code>icaltimezone_load_builtin_timezone()</code> recursively</li>
+<li>[Bug] Fix <code>icalcomponent_foreach_recurrence()</code> and large durations between recurrences (e.g. FREQ=YEARLY)</li>
+<li>[Bug] Properly handle UTCOFFSETs of the form +/-00mmss</li>
+<li>[Bug] Properly skip bogus dates (e.g. 2/30, 4/31) in RRULE:FREQ=MONTHLY</li>
+<li>[Bug] Properly handle RRULE:FREQ=MONTHLY;BYDAY;BYMONTHDAY when DTSTART isn't on BYDAY</li>
+<li>[Bug] Fix RRULE:FREQ=YEARLY;BYDAY;BYWEEKNO - MUST use ISO weeks</li>
+</ul>
+<!-- markdownlint-disable MD052 -->
+<ul>
+<li>
+<p>[Bug] Properly skip bogus dates (e.g. 2/29) in RRULE:FREQ=YEARLY[;BYMONTH][;BYMONTHDAY]</p>
+</li>
+<li>
+<p>[New] Update tzdata to version 2014g</p>
+</li>
+<li>
+<p>[New] Support added for schedule params: agent, status, force-send</p>
+</li>
+<li>
+<p>[New] Added a UID to the VFREEBUSY component</p>
+</li>
+<li>
+<p>[New] Allow dates &gt; 2038 if sizeof(time_t) &gt; 4</p>
+</li>
+<li>
+<p>[New] Add properties from draft-ietf-tzdist-service</p>
+</li>
+<li>
+<p>[New] Add support for RRULE:FREQ=YEARLY;BYDAY;BYYEARDAY</p>
+</li>
+<li>
+<p>[New] Fixed RRULE:FREQ=YEARLY;BYYEARDAY for negative days</p>
+</li>
+<li>
+<p>[Build] Autotools build system is removed</p>
+</li>
+<li>
+<p>[Build] CMake version 2.8.9 (or higher) is required (was CMake version 2.4.0)</p>
+</li>
+<li>
+<p>[Build] Add new -DSHARED_ONLY and -DSTATIC_ONLY CMake options</p>
+</li>
+<li>
+<p>[Build] Remove -DSTATIC_LIBRARY CMake option</p>
+</li>
+<li>
+<p>[Build] MSYS2 builds (fixed instructions)</p>
+</li>
+<li>
+<p>[Build/Doc] Now can build api documentation with make docs</p>
+</li>
+<li>
+<p>[Quality] More regression tests added, in particular for recurrence</p>
+</li>
+<li>
+<p>[Quality] Almost all compile warnings silenced</p>
+</li>
+<li>
+<p>[Quality] A bunch of Coverity Scan warnings silenced</p>
+</li>
+</ul>
+<h2 id="100---2014-06-28"><a class="header" href="#100---2014-06-28">[1.0.0] - 2014-06-28</a></h2>
+<ul>
+<li>Reborn</li>
 </ul>
 
                     </main>
