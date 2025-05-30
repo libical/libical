@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ilammy/msvc-dev-cmd@v1
         with:
-          vsversion: 2019
+          vsversion: 2022
       - name: Configure project
         run: |
           mkdir build
