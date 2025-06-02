@@ -21,13 +21,13 @@ repos:
   - id: destroyed-symlinks
   - id: check-executables-have-shebangs
 - repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v20.1.3
+  rev: v20.1.5
   hooks:
   - id: clang-format
     exclude: ^(src/java/|src/Net-ICal-Libical|src/libical/astime.h|src/libical/caldate.c|src/libicalvcal/port.h|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
-  rev: v0.11.8
+  rev: v0.11.12
   hooks:
     # Run the linter.
     - id: ruff
@@ -44,7 +44,7 @@ repos:
   - id: gersemi
     exclude: (cmake/Toolchain-|.h.cmake|/Doxyfile.cmake)
 - repo: https://github.com/DavidAnson/markdownlint-cli2
-  rev: v0.17.2
+  rev: v0.18.1
   hooks:
   - id: markdownlint-cli2
     files: \.(md|mdown|markdown)$
