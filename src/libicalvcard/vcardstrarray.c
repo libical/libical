@@ -79,3 +79,15 @@ void vcardstrarray_sort(vcardstrarray *array)
 {
     icalarray_sort(array, (int (*)(const void *, const void *))&strpcmp);
 }
+
+vcardstrarray *vcardstrarray_clone(vcardstrarray *array)
+{
+    vcardstrarray *clone = vcardstrarray_new(array->increment_size);
+    size_t i;
+
+    for (i = 0; i < array->num_elements; i++) {
+        vcardstrarray_append(clone, vcardstrarray_element_at(array, i));
+    }
+
+    return clone;
+}
