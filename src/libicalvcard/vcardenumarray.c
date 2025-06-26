@@ -93,3 +93,15 @@ void vcardenumarray_sort(vcardenumarray *array)
 {
     icalarray_sort(array, (int (*)(const void *, const void *))&enumcmp);
 }
+
+vcardenumarray *vcardenumarray_clone(vcardenumarray *array)
+{
+    vcardenumarray *clone = vcardenumarray_new(array->increment_size);
+    size_t i;
+
+    for (i = 0; i < array->num_elements; i++) {
+        vcardenumarray_append(clone, vcardenumarray_element_at(array, i));
+    }
+
+    return clone;
+}
