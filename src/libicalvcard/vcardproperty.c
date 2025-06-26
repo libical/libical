@@ -1131,9 +1131,7 @@ void vcardproperty_add_type_parameter(vcardproperty *prop,
         types = vcardparameter_get_type(param);
         vcardenumarray_add(types, type);
     } else {
-        types = vcardenumarray_new(1);
-        vcardenumarray_add(types, type);
-        param = vcardparameter_new_type(types);
+        param = vcardparameter_new_type(type);
         vcardproperty_add_parameter(prop, param);
     }
 }
