@@ -6003,6 +6003,51 @@ static void test_icalproperty_enum_convert_string(void)
            icalenum_resourcetype_to_string(rtype), "PROJECTOR");
 }
 
+static void test_icalparameter_parse_multivalued(void)
+{
+    char buffer[4096] = {0};
+    strcat(buffer, "BEGIN:VEVENT\r\n");
+
+    const char *display_param_str =
+        "IMAGE;VALUE=URI;DISPLAY=X-FOO,BADGE:http://local/img2.png\r\n";
+    strcat(buffer, display_param_str);
+
+    const char *delegatedfrom_param_str =
+        "ATTENDEE;DELEGATED-FROM=\"mailto:d1\",\"mailto:d2\":mailto:delgfrom\r\n";
+    strcat(buffer, delegatedfrom_param_str);
+
+    const char *delegatedto_param_str =
+        "ATTENDEE;DELEGATED-TO=\"mailto:d1\",\"mailto:d2\":mailto:delgto\r\n";
+    strcat(buffer, delegatedto_param_str);
+
+    const char *member_param_str =
+        "ATTENDEE;MEMBER=\"mailto:d1\",\"mailto:d2\":mailto:member\r\n";
+    strcat(buffer, member_param_str);
+
+    strcat(buffer, "END:VEVENT\r\n");
+
+    icalcomponent *comp = icalcomponent_new_from_string(buffer);
+    icalproperty *prop;
+
+    prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
+    str_is("DISPLAY", icalproperty_as_ical_string(prop),
+            display_param_str);
+
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    str_is("DELEGATED-FROM", icalproperty_as_ical_string(prop),
+            delegatedfrom_param_str);
+
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    str_is("DELEGATED-TO", icalproperty_as_ical_string(prop),
+            delegatedto_param_str);
+
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    str_is("MEMBER", icalproperty_as_ical_string(prop),
+            member_param_str);
+
+    icalcomponent_free(comp);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -6174,6 +6219,7 @@ int main(int argc, char *argv[])
     test_run("Test external property iterator", test_icalpropiter, do_test, do_header);
     test_run("Test external parameter iterator", test_icalparamiter, do_test, do_header);
     test_run("Test property enum value string conversion", test_icalproperty_enum_convert_string, do_test, do_header);
+    test_run("Test parsing multi-valued parameters", test_icalparameter_parse_multivalued, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
