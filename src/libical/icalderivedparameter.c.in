@@ -33,7 +33,11 @@ struct icalparameter_kind_map
     icalparameter_kind kind;
     const char *name;
 
+    icalvalue_kind value_kind;
+    unsigned int flags;
 };
+
+#define ICAL_PARAMETER_IS_MULTIVALUED (1U<<0)
 
 /* This map associates the enumerations for the VALUE parameter with
    the kinds of VALUEs. */
