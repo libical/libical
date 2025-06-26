@@ -50,4 +50,6 @@ LIBICAL_VCARD_EXPORT void vcardenumarray_free(vcardenumarray *array);
 
 LIBICAL_VCARD_EXPORT void vcardenumarray_sort(vcardenumarray *array);
 
+LIBICAL_VCARD_EXPORT vcardenumarray *vcardenumarray_clone(vcardenumarray *array);
+
 #endif /* VCARDENUMARRAY_H */
