@@ -619,4 +619,7 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *
  */
 LIBICAL_ICAL_EXPORT bool icalparameter_kind_is_valid(const icalparameter_kind kind);
 
+/** Decode parameter value per RFC6868 */
+LIBICAL_ICAL_EXPORT void icalparameter_decode_value(char *value);
+
 #endif

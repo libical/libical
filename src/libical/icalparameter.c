@@ -447,5 +447,43 @@ bool icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
     return true;
 }
 
+/** Decode parameter value per RFC6868 */
+void icalparameter_decode_value(char *value)
+{
+    char *in, *out;
+
+    for (in = out = value; *in; in++, out++) {
+        int found_escaped_char = 0;
+
+        if (*in == '^') {
+            switch (*(in + 1)) {
+            case 'n':
+                *out = '\n';
+                found_escaped_char = 1;
+                break;
+            case '^':
+                *out = '^';
+                found_escaped_char = 1;
+                break;
+
+            case '\'':
+                *out = '"';
+                found_escaped_char = 1;
+                break;
+            }
+        }
+
+        if (found_escaped_char) {
+            ++in;
+        } else {
+            *out = *in;
+        }
+    }
+
+    while (*out)
+        *out++ = '\0';
+}
+
+
 /* Everything below this line is machine generated. Do not edit. */
 /* ALTREP */
