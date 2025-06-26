@@ -204,43 +204,6 @@ static char *parser_get_prop_name(char *line, char **end)
     return str;
 }
 
-/** Decode parameter value per RFC6868 */
-static void parser_decode_param_value(char *value)
-{
-    char *in, *out;
-
-    for (in = out = value; *in; in++, out++) {
-        int found_escaped_char = 0;
-
-        if (*in == '^') {
-            switch (*(in + 1)) {
-            case 'n':
-                *out = '\n';
-                found_escaped_char = 1;
-                break;
-            case '^':
-                *out = '^';
-                found_escaped_char = 1;
-                break;
-
-            case '\'':
-                *out = '"';
-                found_escaped_char = 1;
-                break;
-            }
-        }
-
-        if (found_escaped_char) {
-            ++in;
-        } else {
-            *out = *in;
-        }
-    }
-
-    while (*out)
-        *out++ = '\0';
-}
-
 static bool parser_get_param_name_stack(char *line, char *name, size_t name_length,
                                         char *value, size_t value_length)
 {
@@ -286,7 +249,7 @@ static bool parser_get_param_name_stack(char *line, char *name, size_t name_leng
     strncpy(value, next, requested_value_length);
     value[requested_value_length] = 0;
 
-    parser_decode_param_value(value);
+    icalparameter_decode_value(value);
 
     return true;
 }
@@ -322,7 +285,7 @@ static char *parser_get_param_name_heap(char *line, char **end)
         *end = make_segment(*end, *end + strlen(*end));
     }
 
-    parser_decode_param_value(*end);
+    icalparameter_decode_value(*end);
 
     return str;
 }
