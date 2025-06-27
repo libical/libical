@@ -12,6 +12,8 @@ set(
   ${TOPS}/src/libical/icalenums.h
   ${TOPS}/src/libical/icaltypes.h
   ${TOPS}/src/libical/icalarray.h
+  ${TOPS}/src/libical/icalenumarray.h
+  ${TOPS}/src/libical/icalstrarray.h
   ${TOPS}/src/libical/icalrecur.h
   ${TOPS}/src/libical/icalattach.h
   ${TOPB}/src/libical/icalderivedvalue.h
