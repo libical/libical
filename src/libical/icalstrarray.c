@@ -19,7 +19,7 @@
 #include <string.h>
 
 ssize_t icalstrarray_find(icalstrarray *array,
-                           const char *needle)
+                          const char *needle)
 {
     size_t i;
 
