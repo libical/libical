@@ -108,9 +108,7 @@ vcardparameter *vcardparameter_clone(const vcardparameter *old)
     }
 
     if (old->values != 0) {
-        clone->values = old->value_kind == VCARD_TEXT_VALUE ?
-            vcardstrarray_clone(old->values) :
-            vcardenumarray_clone(old->values);
+        clone->values = old->value_kind == VCARD_TEXT_VALUE ? vcardstrarray_clone(old->values) : vcardenumarray_clone(old->values);
         if (clone->values == 0) {
             clone->parent = 0;
             vcardparameter_free(clone);

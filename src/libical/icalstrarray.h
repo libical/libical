@@ -28,26 +28,26 @@ typedef icalarray icalstrarray;
 #define icalstrarray_size(array) ((array)->num_elements)
 
 LIBICAL_ICAL_EXPORT ssize_t icalstrarray_find(icalstrarray *array,
-                                                const char *needle);
+                                              const char *needle);
 
 LIBICAL_ICAL_EXPORT void icalstrarray_append(icalstrarray *array,
-                                               const char *elem);
+                                             const char *elem);
 
 LIBICAL_ICAL_EXPORT void icalstrarray_add(icalstrarray *array,
-                                            const char *add);
+                                          const char *add);
 
 LIBICAL_ICAL_EXPORT void icalstrarray_remove_element_at(icalstrarray *array,
-                                                          ssize_t position);
+                                                        ssize_t position);
 
 LIBICAL_ICAL_EXPORT void icalstrarray_remove(icalstrarray *array,
-                                               const char *del);
+                                             const char *del);
 
 LIBICAL_ICAL_EXPORT void icalstrarray_free(icalstrarray *array);
 
 LIBICAL_ICAL_EXPORT void icalstrarray_sort(icalstrarray *array);
 
 LIBICAL_ICAL_EXPORT char *icalstrarray_as_ical_string_r(const icalstrarray *array,
-                                                           const char sep);
+                                                        const char sep);
 
 LIBICAL_ICAL_EXPORT icalstrarray *icalstrarray_clone(icalstrarray *array);
 
