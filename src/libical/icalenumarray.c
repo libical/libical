@@ -19,7 +19,7 @@
 #include <string.h>
 
 ssize_t icalenumarray_find(icalenumarray *array,
-                            const icalenumarray_element *needle)
+                           const icalenumarray_element *needle)
 {
     size_t i;
 
@@ -50,7 +50,7 @@ void icalenumarray_add(icalenumarray *array, const icalenumarray_element *add)
 }
 
 void icalenumarray_remove_element_at(icalenumarray *array,
-                                      ssize_t position)
+                                     ssize_t position)
 {
     icalenumarray_element *del = icalarray_element_at(array, (size_t)position);
 

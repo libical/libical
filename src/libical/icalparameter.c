@@ -111,9 +111,7 @@ icalparameter *icalparameter_clone(const icalparameter *old)
     }
 
     if (old->values != 0) {
-        clone->values = old->value_kind == ICAL_TEXT_VALUE ?
-            icalstrarray_clone(old->values) :
-            icalenumarray_clone(old->values);
+        clone->values = old->value_kind == ICAL_TEXT_VALUE ? icalstrarray_clone(old->values) : icalenumarray_clone(old->values);
         if (clone->values == 0) {
             clone->parent = 0;
             icalparameter_free(clone);
@@ -319,7 +317,7 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
         const char *str = icalparameter_enum_to_string(param->data);
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
-      } else if (param->values != 0) {
+    } else if (param->values != 0) {
         size_t i;
         const char *sep = "";
 
@@ -533,7 +531,6 @@ void icalparameter_decode_value(char *value)
     while (*out)
         *out++ = '\0';
 }
-
 
 /* Everything below this line is machine generated. Do not edit. */
 /* ALTREP */
