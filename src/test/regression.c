@@ -5666,13 +5666,13 @@ static void verify_comp_attendee(icalcomponent *comp)
 
     prop = icalcomponent_get_first_property(comp, ICAL_ATTENDEE_PROPERTY);
     str_is("value", icalproperty_get_attendee(prop), "mailto:att1");
-    str_is("member", get_param(ICAL_MEMBER_PARAMETER, member), "member");
+    str_is("member", icalparameter_get_member_nth(icalproperty_get_first_parameter(prop, ICAL_MEMBER_PARAMETER), 0), "member");
     ok("cutype", get_param(ICAL_CUTYPE_PARAMETER, cutype) == ICAL_CUTYPE_INDIVIDUAL);
     ok("role", get_param(ICAL_ROLE_PARAMETER, role) == ICAL_ROLE_CHAIR);
     ok("partstat", get_param(ICAL_PARTSTAT_PARAMETER, partstat) == ICAL_PARTSTAT_NEEDSACTION);
     ok("rsvp", (get_param(ICAL_RSVP_PARAMETER, rsvp) == ICAL_RSVP_FALSE));
-    str_is("delegatedfrom", get_param(ICAL_DELEGATEDFROM_PARAMETER, delegatedfrom), "mailto:delgfrom");
-    str_is("delegatedto", get_param(ICAL_DELEGATEDTO_PARAMETER, delegatedto), "mailto:delgto");
+    str_is("delegatedfrom", icalparameter_get_delegatedfrom_nth(icalproperty_get_first_parameter(prop, ICAL_DELEGATEDFROM_PARAMETER), 0), "mailto:delgfrom");
+    str_is("delegatedto", icalparameter_get_delegatedto_nth(icalproperty_get_first_parameter(prop, ICAL_DELEGATEDTO_PARAMETER), 0), "mailto:delgto");
     str_is("sentby", get_param(ICAL_SENTBY_PARAMETER, sentby), "mailto:sentby");
     str_is("cn", get_param(ICAL_CN_PARAMETER, cn), "First attendee");
     str_is("language", get_param(ICAL_LANGUAGE_PARAMETER, language), "en_US");
@@ -5684,26 +5684,24 @@ void test_attendees(void)
 {
     icalcomponent *comp, *clone;
     icalproperty *prop;
-    icalparameter *param;
     const char *str;
 
     comp = icalcomponent_new_vevent();
     prop = icalproperty_new(ICAL_ATTENDEE_PROPERTY);
     icalproperty_set_attendee(prop, "mailto:att1");
-#define set_param(_kind, _suffix, _value)    \
-    param = icalparameter_new(_kind);        \
-    icalproperty_add_parameter(prop, param); \
-    icalparameter_set_##_suffix(param, _value);
-    set_param(ICAL_MEMBER_PARAMETER, member, "member");
-    set_param(ICAL_CUTYPE_PARAMETER, cutype, ICAL_CUTYPE_INDIVIDUAL);
-    set_param(ICAL_ROLE_PARAMETER, role, ICAL_ROLE_CHAIR);
-    set_param(ICAL_PARTSTAT_PARAMETER, partstat, ICAL_PARTSTAT_NEEDSACTION);
-    set_param(ICAL_RSVP_PARAMETER, rsvp, ICAL_RSVP_FALSE);
-    set_param(ICAL_DELEGATEDFROM_PARAMETER, delegatedfrom, "mailto:delgfrom");
-    set_param(ICAL_DELEGATEDTO_PARAMETER, delegatedto, "mailto:delgto");
-    set_param(ICAL_SENTBY_PARAMETER, sentby, "mailto:sentby");
-    set_param(ICAL_CN_PARAMETER, cn, "First attendee");
-    set_param(ICAL_LANGUAGE_PARAMETER, language, "en_US");
+#define set_param(_suffix, _value)   \
+    icalproperty_add_parameter(prop, \
+                               icalparameter_new_##_suffix(_value))
+    set_param(member, "member");
+    set_param(cutype, ICAL_CUTYPE_INDIVIDUAL);
+    set_param(role, ICAL_ROLE_CHAIR);
+    set_param(partstat, ICAL_PARTSTAT_NEEDSACTION);
+    set_param(rsvp, ICAL_RSVP_FALSE);
+    set_param(delegatedfrom, "mailto:delgfrom");
+    set_param(delegatedto, "mailto:delgto");
+    set_param(sentby, "mailto:sentby");
+    set_param(cn, "First attendee");
+    set_param(language, "en_US");
 #undef set_param
 
     icalcomponent_add_property(comp, prop);
@@ -6003,6 +6001,84 @@ static void test_icalproperty_enum_convert_string(void)
            icalenum_resourcetype_to_string(rtype), "PROJECTOR");
 }
 
+static void test_icalparameter_parse_multivalued(void)
+{
+    char buffer[4096] = {0};
+    strcat(buffer, "BEGIN:VEVENT\r\n");
+
+    const char *display_param_str =
+        "IMAGE;VALUE=URI;DISPLAY=X-FOO,BADGE:http://local/img2.png\r\n";
+    strcat(buffer, display_param_str);
+
+    const char *delegatedfrom_param_str =
+        "ATTENDEE;DELEGATED-FROM=\"mailto:d1\",\"mailto:d2\":mailto:delgfrom\r\n";
+    strcat(buffer, delegatedfrom_param_str);
+
+    const char *delegatedto_param_str =
+        "ATTENDEE;DELEGATED-TO=\"mailto:d1\",\"mailto:d2\":mailto:delgto\r\n";
+    strcat(buffer, delegatedto_param_str);
+
+    const char *member_param_str =
+        "ATTENDEE;MEMBER=\"mailto:d1\",\"mailto:d2\":mailto:member\r\n";
+    strcat(buffer, member_param_str);
+
+    strcat(buffer, "END:VEVENT\r\n");
+
+    icalcomponent *comp = icalcomponent_new_from_string(buffer);
+    icalproperty *prop;
+
+    prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
+    str_is("DISPLAY", icalproperty_as_ical_string(prop),
+           display_param_str);
+
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    str_is("DELEGATED-FROM", icalproperty_as_ical_string(prop),
+           delegatedfrom_param_str);
+
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    str_is("DELEGATED-TO", icalproperty_as_ical_string(prop),
+           delegatedto_param_str);
+
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    str_is("MEMBER", icalproperty_as_ical_string(prop),
+           member_param_str);
+
+    icalcomponent_free(comp);
+}
+
+static void test_icalparameter_create_multivalued(void)
+{
+    icalparameter *param;
+
+    param = icalparameter_new(ICAL_DISPLAY_PARAMETER);
+
+    icalenumarray *display = icalenumarray_new(5);
+    icalenumarray_element elem = {0};
+    elem.val = ICAL_DISPLAY_BADGE;
+    icalenumarray_append(display, &elem);
+    elem.val = ICAL_DISPLAY_X;
+    elem.xvalue = "X-FOO";
+    icalenumarray_append(display, &elem);
+    icalparameter_set_display(param, display);
+
+    str_is("DISPLAY", icalparameter_as_ical_string(param),
+           "DISPLAY=BADGE,X-FOO");
+
+    icalparameter_free(param);
+
+    param = icalparameter_new(ICAL_MEMBER_PARAMETER);
+
+    icalstrarray *member = icalenumarray_new(5);
+    icalstrarray_append(member, "mailto:member1");
+    icalstrarray_append(member, "mailto:member2");
+    icalparameter_set_member(param, member);
+
+    str_is("MEMBER", icalparameter_as_ical_string(param),
+           "MEMBER=\"mailto:member1\",\"mailto:member2\"");
+
+    icalparameter_free(param);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -6174,6 +6250,8 @@ int main(int argc, char *argv[])
     test_run("Test external property iterator", test_icalpropiter, do_test, do_header);
     test_run("Test external parameter iterator", test_icalparamiter, do_test, do_header);
     test_run("Test property enum value string conversion", test_icalproperty_enum_convert_string, do_test, do_header);
+    test_run("Test parsing multi-valued parameters", test_icalparameter_parse_multivalued, do_test, do_header);
+    test_run("Test creating multi-valued parameters", test_icalparameter_create_multivalued, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 

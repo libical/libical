@@ -147,14 +147,25 @@ icalparameter_kind ICalParameter::string_to_kind(const std::string &str)
 }
 
 /* DELEGATED-FROM */
-std::string ICalParameter::get_delegatedfrom() const
+std::vector<std::string> ICalParameter::get_delegatedfrom() const
 {
-    return static_cast<std::string>(icalparameter_get_delegatedfrom(imp));
+    std::vector<std::string> vals;
+    icalstrarray *c_vals = icalparameter_get_delegatedfrom(imp);
+    if (c_vals) {
+        for (size_t i = 0; i < icalstrarray_size(c_vals); ++i) {
+            vals.push_back(std::string(icalstrarray_element_at(c_vals, i)));
+        }
+    }
+    return vals;
 }
 
-void ICalParameter::set_delegatedfrom(const std::string &v)
+void ICalParameter::set_delegatedfrom(const std::vector<std::string> &v)
 {
-    icalparameter_set_delegatedfrom(imp, v.c_str());
+    icalstrarray *c_vals = icalstrarray_new(v.size());
+    for (size_t i = 0; i < v.size(); i++) {
+        icalstrarray_append(c_vals, v[i].c_str());
+    }
+    icalparameter_set_delegatedfrom(imp, c_vals);
 }
 
 /* RELATED */
@@ -268,14 +279,25 @@ void ICalParameter::set_range(const icalparameter_range &v)
 }
 
 /* DELEGATED-TO */
-std::string ICalParameter::get_delegatedto() const
+std::vector<std::string> ICalParameter::get_delegatedto() const
 {
-    return static_cast<std::string>(icalparameter_get_delegatedto(imp));
+    std::vector<std::string> vals;
+    icalstrarray *c_vals = icalparameter_get_delegatedto(imp);
+    if (c_vals) {
+        for (size_t i = 0; i < icalstrarray_size(c_vals); ++i) {
+            vals.push_back(std::string(icalstrarray_element_at(c_vals, i)));
+        }
+    }
+    return vals;
 }
 
-void ICalParameter::set_delegatedto(const std::string &v)
+void ICalParameter::set_delegatedto(const std::vector<std::string> &v)
 {
-    icalparameter_set_delegatedto(imp, v.c_str());
+    icalstrarray *c_vals = icalstrarray_new(v.size());
+    for (size_t i = 0; i < v.size(); i++) {
+        icalstrarray_append(c_vals, v[i].c_str());
+    }
+    icalparameter_set_delegatedto(imp, c_vals);
 }
 
 /* CN */
@@ -334,14 +356,25 @@ void ICalParameter::set_xlicerrortype(const icalparameter_xlicerrortype &v)
 }
 
 /* MEMBER */
-std::string ICalParameter::get_member() const
+std::vector<std::string> ICalParameter::get_member() const
 {
-    return static_cast<std::string>(icalparameter_get_member(imp));
+    std::vector<std::string> vals;
+    icalstrarray *c_vals = icalparameter_get_member(imp);
+    if (c_vals) {
+        for (size_t i = 0; i < icalstrarray_size(c_vals); ++i) {
+            vals.push_back(std::string(icalstrarray_element_at(c_vals, i)));
+        }
+    }
+    return vals;
 }
 
-void ICalParameter::set_member(const std::string &v)
+void ICalParameter::set_member(const std::vector<std::string> &v)
 {
-    icalparameter_set_member(imp, v.c_str());
+    icalstrarray *c_vals = icalstrarray_new(v.size());
+    for (size_t i = 0; i < v.size(); i++) {
+        icalstrarray_append(c_vals, v[i].c_str());
+    }
+    icalparameter_set_member(imp, c_vals);
 }
 
 /* X */

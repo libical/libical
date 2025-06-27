@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: vcardstrarray.c
+ FILE: icalstrarray.c
 
  CREATOR: Ken Murchison 24 Aug 2022
 
@@ -13,18 +13,18 @@
 #include <config.h>
 #endif
 
-#include "vcardstrarray.h"
+#include "icalstrarray.h"
 #include "icalmemory.h"
 
 #include <string.h>
 
-ssize_t vcardstrarray_find(vcardstrarray *array,
-                           const char *needle)
+ssize_t icalstrarray_find(icalstrarray *array,
+                          const char *needle)
 {
     size_t i;
 
     for (i = 0; i < array->num_elements; i++) {
-        if (!strcmp(needle, vcardstrarray_element_at(array, i))) {
+        if (!strcmp(needle, icalstrarray_element_at(array, i))) {
             return (ssize_t)i;
         }
     }
@@ -32,20 +32,20 @@ ssize_t vcardstrarray_find(vcardstrarray *array,
     return -1;
 }
 
-void vcardstrarray_append(vcardstrarray *array, const char *elem)
+void icalstrarray_append(icalstrarray *array, const char *elem)
 {
     char *copy = icalmemory_strdup(elem);
 
     icalarray_append(array, &copy);
 }
 
-void vcardstrarray_add(vcardstrarray *array, const char *add)
+void icalstrarray_add(icalstrarray *array, const char *add)
 {
-    if (vcardstrarray_find(array, add) < 0)
-        vcardstrarray_append(array, add);
+    if (icalstrarray_find(array, add) < 0)
+        icalstrarray_append(array, add);
 }
 
-void vcardstrarray_remove_element_at(vcardstrarray *array, ssize_t position)
+void icalstrarray_remove_element_at(icalstrarray *array, ssize_t position)
 {
     char **del = icalarray_element_at(array, (size_t)position);
 
@@ -54,19 +54,19 @@ void vcardstrarray_remove_element_at(vcardstrarray *array, ssize_t position)
     icalarray_remove_element_at(array, (size_t)position);
 }
 
-void vcardstrarray_remove(vcardstrarray *array, const char *del)
+void icalstrarray_remove(icalstrarray *array, const char *del)
 {
-    ssize_t position = vcardstrarray_find(array, del);
+    ssize_t position = icalstrarray_find(array, del);
 
     if (position >= 0)
-        vcardstrarray_remove_element_at(array, position);
+        icalstrarray_remove_element_at(array, position);
 }
 
-void vcardstrarray_free(vcardstrarray *array)
+void icalstrarray_free(icalstrarray *array)
 {
     ssize_t i = (ssize_t)(array->num_elements - 1);
     while (i >= 0)
-        vcardstrarray_remove_element_at(array, i--);
+        icalstrarray_remove_element_at(array, i--);
     icalarray_free(array);
 }
 
@@ -75,18 +75,18 @@ static int strpcmp(const char **a, const char **b)
     return strcmp(*a, *b);
 }
 
-void vcardstrarray_sort(vcardstrarray *array)
+void icalstrarray_sort(icalstrarray *array)
 {
     icalarray_sort(array, (int (*)(const void *, const void *))&strpcmp);
 }
 
-vcardstrarray *vcardstrarray_clone(vcardstrarray *array)
+icalstrarray *icalstrarray_clone(icalstrarray *array)
 {
-    vcardstrarray *clone = vcardstrarray_new(array->increment_size);
+    icalstrarray *clone = icalstrarray_new(array->increment_size);
     size_t i;
 
     for (i = 0; i < array->num_elements; i++) {
-        vcardstrarray_append(clone, vcardstrarray_element_at(array, i));
+        icalstrarray_append(clone, icalstrarray_element_at(array, i));
     }
 
     return clone;
