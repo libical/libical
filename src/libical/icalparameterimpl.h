@@ -30,7 +30,7 @@ struct icalparameter_impl {
 
     int data;
     struct icaldurationtype duration;
-    icalarray *values;  /* array of enums or strings */
+    icalarray *values; /* array of enums or strings */
 };
 
 #endif /*ICALPARAMETER_IMPL */
