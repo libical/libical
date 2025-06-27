@@ -37,6 +37,7 @@ LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparame
     strcpy(v->id, "para");
 
     v->kind = kind;
+    v->value_kind = icalparameter_kind_value_kind(kind, &v->is_multivalued);
 
     return v;
 }
@@ -59,6 +60,11 @@ void icalparameter_free(icalparameter *param)
 
     if (param->string != 0) {
         icalmemory_free_buffer((void *)param->string);
+    } else if (param->values != 0) {
+        if (param->value_kind == ICAL_TEXT_VALUE)
+            icalstrarray_free(param->values);
+        else
+            icalenumarray_free(param->values);
     }
 
     if (param->x_name != 0) {
@@ -98,6 +104,17 @@ icalparameter *icalparameter_clone(const icalparameter *old)
     if (old->x_name != 0) {
         clone->x_name = icalmemory_strdup(old->x_name);
         if (clone->x_name == 0) {
+            clone->parent = 0;
+            icalparameter_free(clone);
+            return 0;
+        }
+    }
+
+    if (old->values != 0) {
+        clone->values = old->value_kind == ICAL_TEXT_VALUE ?
+            icalstrarray_clone(old->values) :
+            icalenumarray_clone(old->values);
+        if (clone->values == 0) {
             clone->parent = 0;
             icalparameter_free(clone);
             return 0;
@@ -302,6 +319,32 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
         const char *str = icalparameter_enum_to_string(param->data);
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+      } else if (param->values != 0) {
+        size_t i;
+        const char *sep = "";
+
+        for (i = 0; i < param->values->num_elements; i++) {
+            icalmemory_append_string(&buf, &buf_ptr, &buf_size, sep);
+
+            if (param->value_kind == ICAL_TEXT_VALUE) {
+                const char *str = icalstrarray_element_at(param->values, i);
+
+                icalparameter_append_encoded_value(&buf, &buf_ptr,
+                                                   &buf_size, str);
+            } else {
+                const icalenumarray_element *elem =
+                    icalenumarray_element_at(param->values, i);
+                if (elem->xvalue != 0) {
+                    icalparameter_append_encoded_value(&buf, &buf_ptr,
+                                                       &buf_size, elem->xvalue);
+                } else {
+                    const char *str = icalparameter_enum_to_string(elem->val);
+
+                    icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+                }
+            }
+            sep = ",";
+        }
     } else {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         icalmemory_free_buffer(buf);
@@ -445,6 +488,13 @@ bool icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
         }
     }
     return true;
+}
+
+bool icalparameter_is_multivalued(icalparameter *param)
+{
+    icalerror_check_arg_rz((param != 0), "param");
+
+    return param->is_multivalued;
 }
 
 /** Decode parameter value per RFC6868 */

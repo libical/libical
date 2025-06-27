@@ -13,6 +13,8 @@
 
 #include "libical_ical_export.h"
 #include "icalduration.h"
+#include "icalenumarray.h"
+#include "icalstrarray.h"
 
 #include <stdbool.h>
 

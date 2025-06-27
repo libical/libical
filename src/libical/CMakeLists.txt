@@ -211,6 +211,8 @@ set(
   icalattach.c
   icalcomponent.c
   icalcomponent.h
+  icalenumarray.c
+  icalenumarray.h
   icalenums.c
   icalenums.h
   icalerror.c
@@ -229,6 +231,8 @@ set(
   icalrecur.c
   icalrecur.h
   icalrestriction.h
+  icalstrarray.c
+  icalstrarray.h
   icaltime.c
   icaltime.h
   icaltz-util.c
