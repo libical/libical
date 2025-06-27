@@ -60,6 +60,25 @@ struct icalparameter_map
 
 <insert_code_here>
 
+icalvalue_kind icalparameter_kind_value_kind(const icalparameter_kind kind,
+                                               int *is_multivalued)
+{
+    int i, num_params;
+
+    num_params = (int)(sizeof(parameter_map) / sizeof(parameter_map[0]));
+    for (i = 0; i < num_params; i++) {
+        if (parameter_map[i].kind == kind) {
+            if (is_multivalued) {
+                *is_multivalued =
+                    (parameter_map[i].flags & ICAL_PARAMETER_IS_MULTIVALUED);
+            }
+            return (parameter_map[i].value_kind);
+        }
+    }
+
+    return 0;
+}
+
 bool icalparameter_kind_is_valid(const icalparameter_kind kind)
 {
     int i = 0;
@@ -176,6 +195,78 @@ int icalparameter_string_to_enum(const char *str)
     return 0;
 }
 
+
+static icalarray *icalparameter_values_from_value_string(icalparameter_kind kind, const char *val)
+{
+    icalvalue_kind value_kind = icalparameter_kind_value_kind(kind, NULL);
+    icalarray *values;
+    int enum_start = 0, enum_end = 0;
+
+    if (value_kind == ICAL_TEXT_VALUE) {
+        values = icalstrarray_new(5);
+    } else {
+        values = icalenumarray_new(5);
+    }
+
+    if (value_kind != ICAL_TEXT_VALUE) {
+        int num_params =
+            (int)(sizeof(icalparameter_map) / sizeof(icalparameter_map[0]));
+        for (int i = 0; i < num_params && !enum_end; i++) {
+            if (kind == icalparameter_map[i].kind && !enum_start)
+                enum_start = i;
+            else if (kind != icalparameter_map[i].kind && enum_start)
+                enum_end = i;
+        }
+    }
+
+    do {
+        const char *end = val;
+        if (val[0] == '"') {
+            end = strchr(val + 1, '"');
+            if (end) val++;
+        }
+        else {
+            end = strchr(val, ',');
+        }
+        size_t val_len = end ? (size_t)(end - val) : strlen(val);
+
+        if (!val_len) break;
+
+        const char *next_val = end;
+        if (next_val && next_val[0] == '"')
+            next_val = strchr(next_val, ',');
+
+        if (next_val && next_val[0] == ',')
+            next_val++;
+
+        char *tmpbuf = icalmemory_new_buffer(val_len + 1);
+        strncpy(tmpbuf, val, val_len);
+        icalparameter_decode_value(tmpbuf);
+
+        if (value_kind == ICAL_TEXT_VALUE) {
+            icalstrarray_append(values, tmpbuf);
+        } else {
+            icalenumarray_element elem = { 0 };
+
+            for (int i = enum_start; i < enum_end; i++) {
+                if (strncasecmp(val, icalparameter_map[i].str, val_len) == 0) {
+                    elem.val = (int)icalparameter_map[i].enumeration;
+                    break;
+                }
+            }
+
+            if (!elem.val) elem.xvalue = tmpbuf;
+            icalenumarray_append(values, &elem);
+        }
+
+        icalmemory_free_buffer(tmpbuf);
+
+        val = next_val;
+    } while (val);
+
+    return values;
+}
+
 icalparameter *icalparameter_new_from_value_string(icalparameter_kind kind, const char *val)
 {
     struct icalparameter_impl *param = 0;
@@ -193,6 +284,10 @@ icalparameter *icalparameter_new_from_value_string(icalparameter_kind kind, cons
 
     if (kind == ICAL_GAP_PARAMETER) {
         param->duration = icaldurationtype_from_string(val);
+        return param;
+    }
+    else if (icalparameter_is_multivalued(param)) {
+        param->values = icalparameter_values_from_value_string(kind, val);
         return param;
     }
 

@@ -20,6 +20,7 @@
 
 #include "libical_ical_export.h"
 #include "icalderivedparameter.h"
+#include "icalderivedvalue.h"
 
 /* Declared in icalderivedparameter.h */
 /*typedef struct icalparameter_impl icalparameter;*/
@@ -618,6 +619,10 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *
  * @since 3.0.4
  */
 LIBICAL_ICAL_EXPORT bool icalparameter_kind_is_valid(const icalparameter_kind kind);
+
+LIBICAL_ICAL_EXPORT icalvalue_kind icalparameter_kind_value_kind(const icalparameter_kind kind, int *is_multivalued);
+
+LIBICAL_ICAL_EXPORT bool icalparameter_is_multivalued(icalparameter *param);
 
 /** Decode parameter value per RFC6868 */
 LIBICAL_ICAL_EXPORT void icalparameter_decode_value(char *value);
