@@ -25,8 +25,12 @@ struct icalparameter_impl {
     const char *x_name;
     icalproperty *parent;
 
+    icalvalue_kind value_kind;
+    int is_multivalued;
+
     int data;
     struct icaldurationtype duration;
+    icalarray *values;  /* array of enums or strings */
 };
 
 #endif /*ICALPARAMETER_IMPL */

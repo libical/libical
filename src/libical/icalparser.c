@@ -17,11 +17,13 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icalvalue.h"
+#include "icalparameter.h"
 #include "icalproperty_p.h"
 
 #include <ctype.h>
 #include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
+#include <string.h>
 
 #define TMP_BUF_SIZE 80
 #define MAXIMUM_ALLOWED_PARAMETERS 100
@@ -219,11 +221,24 @@ static bool parser_get_param_name_stack(char *line, char *name, size_t name_leng
 
     requested_name_length = (size_t)(ptrdiff_t)(next - line);
 
+    /* There's not enough room in the name input, we need to fall back
+       to parser_get_param_name_heap and use heap-allocated strings */
+    if (requested_name_length >= name_length - 1) {
+        return false;
+    }
+
+    strncpy(name, line, requested_name_length);
+    name[requested_name_length] = 0;
+
+    icalparameter_kind kind = icalparameter_string_to_kind(name);
+    int is_multivalued = 0;
+    icalparameter_kind_value_kind(kind, &is_multivalued);
+
     /* Figure out what range of line contains the value (everything after the equals sign) */
     next++;
 
-    if (next[0] == '"') {
-        /* Dequote the value */
+    if (next[0] == '"' && !is_multivalued) {
+        /* Dequote the value if it is a single quoted-string */
         next++;
 
         end_quote = (*next == '"') ? next : parser_get_next_char('"', next, 0);
@@ -237,19 +252,16 @@ static bool parser_get_param_name_stack(char *line, char *name, size_t name_leng
         requested_value_length = strlen(next);
     }
 
-    /* There's not enough room in the name or value inputs, we need to fall back
+    /* There's not enough room in the value input, we need to fall back
        to parser_get_param_name_heap and use heap-allocated strings */
-    if (requested_name_length >= name_length - 1 || requested_value_length >= value_length - 1) {
+    if (requested_value_length >= value_length - 1) {
         return false;
     }
 
-    strncpy(name, line, requested_name_length);
-    name[requested_name_length] = 0;
-
-    strncpy(value, next, requested_value_length);
+    memcpy(value, next, requested_value_length);
     value[requested_value_length] = 0;
 
-    icalparameter_decode_value(value);
+    if (!is_multivalued) icalparameter_decode_value(value);
 
     return true;
 }
@@ -270,22 +282,27 @@ static char *parser_get_param_name_heap(char *line, char **end)
     }
 
     str = make_segment(line, next);
+
+    icalparameter_kind kind = icalparameter_string_to_kind(str);
+    int is_multivalued = 0;
+    icalparameter_kind_value_kind(kind, &is_multivalued);
+
     *end = next + 1;
-    if (**end == '"') {
+    if (**end == '"' && !is_multivalued) {
         *end = *end + 1;
         next = (**end == '"') ? *end : parser_get_next_char('"', *end, 0);
         if (next == 0) {
             icalmemory_free_buffer(str);
             *end = NULL;
             return 0;
+        } else {
+            *end = make_segment(*end, next);
         }
-
-        *end = make_segment(*end, next);
     } else {
         *end = make_segment(*end, *end + strlen(*end));
     }
 
-    icalparameter_decode_value(*end);
+    if (!is_multivalued) icalparameter_decode_value(*end);
 
     return str;
 }
