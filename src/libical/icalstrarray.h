@@ -12,10 +12,6 @@
 #ifndef ICALSTRARRAY_H
 #define ICALSTRARRAY_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "libical_ical_export.h"
 #include "icalarray.h"
 
