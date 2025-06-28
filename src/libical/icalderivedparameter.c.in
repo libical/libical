@@ -128,6 +128,8 @@ icalparameter_kind icalparameter_string_to_kind(const char *string)
 
     key.kind = ICAL_ANY_PARAMETER;
     key.name = string;
+    key.value_kind = ICAL_NO_VALUE;
+    key.flags = 0;
     result =
         bsearch(&key, parameter_map, sizeof(parameter_map) / sizeof(struct icalparameter_kind_map),
                 sizeof(struct icalparameter_kind_map),
