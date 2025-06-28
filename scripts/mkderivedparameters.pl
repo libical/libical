@@ -356,7 +356,7 @@ sub insert_code
                 "    icalerror_check_arg_rz((param != 0), \"param\");\n    return param->values;";
 
             $charorenum_nth =
-                "   icalerror_check_arg((param != 0), \"param\");\n    if (param && param->values && ${lcprefix}enumarray_size(param->values)) {\n        const $singletype v = ${lcprefix}enumarray_element_at(param->values, position);\n        return v->val;\n    } else {\n        return ${ucprefix}_${uc}_NONE;\n    }";
+                "   icalerror_check_arg((param != 0), \"param\");\n    if (param && param->values && ${lcprefix}enumarray_size(param->values)) {\n        const $singletype v = ${lcprefix}enumarray_element_at(param->values, position);\n        return (${elemtype})v->val;\n    } else {\n        return ${ucprefix}_${uc}_NONE;\n    }";
 
             $set_code = "if (param->values != NULL) {\n        ${lcprefix}enumarray_free(param->values);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->values = v;";
 
