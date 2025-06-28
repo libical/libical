@@ -466,7 +466,10 @@ typedef int IO_SIZE_T;
 typedef unsigned int IO_SSIZE_T;
 #else
 typedef size_t IO_SIZE_T;
+#cmakedefine HAVE_SSIZE_T
+#if !defined(HAVE_SSIZE_T)
 typedef ssize_t IO_SSIZE_T;
+#endif
 #endif
 
 #if defined(_MSC_VER)
