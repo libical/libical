@@ -205,7 +205,7 @@ static void test_add_props(vcardcomponent *card)
     vcardproperty *prop =
         vcardproperty_vanew_note("Test vCard",
                                  vcardparameter_new_language("en"),
-                                 vcardparameter_new_pid(sa),
+                                 vcardparameter_new_pid_list(sa),
                                  (void *)0);
     vcardcomponent_add_property(card, prop);
     vcardproperty_set_group(prop, "group1");

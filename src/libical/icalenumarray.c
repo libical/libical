@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: vcardenumarray.c
+ FILE: icalenumarray.c
 
  CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
 
@@ -13,18 +13,18 @@
 #include <config.h>
 #endif
 
-#include "vcardenumarray.h"
+#include "icalenumarray.h"
 #include "icalmemory.h"
 
 #include <string.h>
 
-ssize_t vcardenumarray_find(vcardenumarray *array,
-                            const vcardenumarray_element *needle)
+ssize_t icalenumarray_find(icalenumarray *array,
+                           const icalenumarray_element *needle)
 {
     size_t i;
 
     for (i = 0; array && i < array->num_elements; i++) {
-        vcardenumarray_element *e = icalarray_element_at(array, i);
+        icalenumarray_element *e = icalarray_element_at(array, i);
         if (!!e->xvalue == !!needle->xvalue &&
             ((e->xvalue && !strcmp(e->xvalue, needle->xvalue)) ||
              (!e->xvalue && (e->val == needle->val)))) {
@@ -35,46 +35,46 @@ ssize_t vcardenumarray_find(vcardenumarray *array,
     return -1;
 }
 
-void vcardenumarray_append(vcardenumarray *array, const vcardenumarray_element *elem)
+void icalenumarray_append(icalenumarray *array, const icalenumarray_element *elem)
 {
-    vcardenumarray_element copy = {
+    icalenumarray_element copy = {
         elem->val, elem->xvalue ? icalmemory_strdup(elem->xvalue) : NULL};
 
     icalarray_append(array, &copy);
 }
 
-void vcardenumarray_add(vcardenumarray *array, const vcardenumarray_element *add)
+void icalenumarray_add(icalenumarray *array, const icalenumarray_element *add)
 {
-    if (vcardenumarray_find(array, add) < 0)
-        vcardenumarray_append(array, add);
+    if (icalenumarray_find(array, add) < 0)
+        icalenumarray_append(array, add);
 }
 
-void vcardenumarray_remove_element_at(vcardenumarray *array,
-                                      ssize_t position)
+void icalenumarray_remove_element_at(icalenumarray *array,
+                                     ssize_t position)
 {
-    vcardenumarray_element *del = icalarray_element_at(array, (size_t)position);
+    icalenumarray_element *del = icalarray_element_at(array, (size_t)position);
 
     if (del->xvalue)
         icalmemory_free_buffer((char *)del->xvalue);
     icalarray_remove_element_at(array, (size_t)position);
 }
 
-void vcardenumarray_remove(vcardenumarray *array, const vcardenumarray_element *del)
+void icalenumarray_remove(icalenumarray *array, icalenumarray_element *del)
 {
-    ssize_t position = vcardenumarray_find(array, del);
+    ssize_t position = icalenumarray_find(array, del);
 
     if (position >= 0)
-        vcardenumarray_remove_element_at(array, position);
+        icalenumarray_remove_element_at(array, position);
 }
 
-void vcardenumarray_free(vcardenumarray *array)
+void icalenumarray_free(icalenumarray *array)
 {
     while (array->num_elements)
-        vcardenumarray_remove_element_at(array, (ssize_t)(array->num_elements - 1));
+        icalenumarray_remove_element_at(array, (ssize_t)(array->num_elements - 1));
     icalarray_free(array);
 }
 
-static int enumcmp(const vcardenumarray_element *a, const vcardenumarray_element *b)
+static int enumcmp(const icalenumarray_element *a, const icalenumarray_element *b)
 {
     /* Sort X- values alphabetically, but last */
     if (a->xvalue) {
@@ -89,18 +89,18 @@ static int enumcmp(const vcardenumarray_element *a, const vcardenumarray_element
     }
 }
 
-void vcardenumarray_sort(vcardenumarray *array)
+void icalenumarray_sort(icalenumarray *array)
 {
     icalarray_sort(array, (int (*)(const void *, const void *))&enumcmp);
 }
 
-vcardenumarray *vcardenumarray_clone(vcardenumarray *array)
+icalenumarray *icalenumarray_clone(icalenumarray *array)
 {
-    vcardenumarray *clone = vcardenumarray_new(array->increment_size);
+    icalenumarray *clone = icalenumarray_new(array->increment_size);
     size_t i;
 
     for (i = 0; i < array->num_elements; i++) {
-        vcardenumarray_append(clone, vcardenumarray_element_at(array, i));
+        icalenumarray_append(clone, icalenumarray_element_at(array, i));
     }
 
     return clone;

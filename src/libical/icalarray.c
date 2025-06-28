@@ -33,7 +33,7 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
     }
 
     array->element_size = element_size;
-    array->increment_size = increment_size;
+    array->increment_size = increment_size ? increment_size : 1;
     array->num_elements = 0;
     array->space_allocated = 0;
     array->chunks = NULL;
