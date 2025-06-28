@@ -6007,7 +6007,7 @@ static void test_icalparameter_parse_multivalued(void)
     strcat(buffer, "BEGIN:VEVENT\r\n");
 
     const char *display_param_str =
-        "IMAGE;VALUE=URI;DISPLAY=X-FOO,BADGE:http://local/img2.png\r\n";
+        "IMAGE;VALUE=URI;DISPLAY=X-FOO,BADGE:https://local/img2.png\r\n";
     strcat(buffer, display_param_str);
 
     const char *delegatedfrom_param_str =
