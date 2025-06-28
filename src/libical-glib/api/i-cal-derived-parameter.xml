@@ -414,7 +414,7 @@
     </method>
     <method name="i_cal_parameter_get_display" corresponds="icalparameter_get_display" kind="get" since="3.0.15">
         <parameter type="const ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
-        <returns type="ICalParameterDisplay" comment="The #ICalParameterDisplay value of the @param"/>
+        <returns type="icalenumarray *" comment="The icalenumarray value of the @param"/>
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_display" corresponds="icalparameter_set_display" kind="set" since="3.0.15">
@@ -489,7 +489,7 @@
     </method>
     <method name="i_cal_parameter_get_feature" corresponds="icalparameter_get_feature" kind="get" since="3.0.15">
         <parameter type="const ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
-        <returns type="ICalParameterFeature" comment="The #ICalParameterFeature value of the @param"/>
+        <returns type="icalenumarray *" comment="The icalenumarray value of the @param"/>
         <comment xml:space="preserve"></comment>
     </method>
     <method name="i_cal_parameter_set_feature" corresponds="icalparameter_set_feature" kind="set" since="3.0.15">
