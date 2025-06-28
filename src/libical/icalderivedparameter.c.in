@@ -70,7 +70,7 @@ icalvalue_kind icalparameter_kind_value_kind(const icalparameter_kind kind,
         if (parameter_map[i].kind == kind) {
             if (is_multivalued) {
                 *is_multivalued =
-                    (parameter_map[i].flags & ICAL_PARAMETER_IS_MULTIVALUED);
+                    (int)(parameter_map[i].flags & ICAL_PARAMETER_IS_MULTIVALUED);
             }
             return (parameter_map[i].value_kind);
         }
@@ -209,9 +209,9 @@ static icalarray *icalparameter_values_from_value_string(icalparameter_kind kind
     }
 
     if (value_kind != ICAL_TEXT_VALUE) {
-        int num_params =
-            (int)(sizeof(icalparameter_map) / sizeof(icalparameter_map[0]));
-        for (int i = 0; i < num_params && !enum_end; i++) {
+        int i;
+        int num_params = (int)(sizeof(icalparameter_map) / sizeof(icalparameter_map[0]));
+        for (i = 0; i < num_params && !enum_end; i++) {
             if (kind == icalparameter_map[i].kind && !enum_start)
                 enum_start = i;
             else if (kind != icalparameter_map[i].kind && enum_start)
@@ -220,7 +220,12 @@ static icalarray *icalparameter_values_from_value_string(icalparameter_kind kind
     }
 
     do {
+        int i;
+        size_t val_len;
+        char *tmpbuf;
+        const char *next_val;
         const char *end = val;
+        icalenumarray_element elem;
         if (val[0] == '"') {
             end = strchr(val + 1, '"');
             if (end) val++;
@@ -228,27 +233,26 @@ static icalarray *icalparameter_values_from_value_string(icalparameter_kind kind
         else {
             end = strchr(val, ',');
         }
-        size_t val_len = end ? (size_t)(end - val) : strlen(val);
+        val_len = end ? (size_t)(end - val) : strlen(val);
 
         if (!val_len) break;
 
-        const char *next_val = end;
+        next_val = end;
         if (next_val && next_val[0] == '"')
             next_val = strchr(next_val, ',');
 
         if (next_val && next_val[0] == ',')
             next_val++;
 
-        char *tmpbuf = icalmemory_new_buffer(val_len + 1);
+        tmpbuf = icalmemory_new_buffer(val_len + 1);
         strncpy(tmpbuf, val, val_len);
         icalparameter_decode_value(tmpbuf);
 
         if (value_kind == ICAL_TEXT_VALUE) {
             icalstrarray_append(values, tmpbuf);
         } else {
-            icalenumarray_element elem = { 0 };
-
-            for (int i = enum_start; i < enum_end; i++) {
+            elem.val = 0; elem.xvalue = NULL;
+            for (i = enum_start; i < enum_end; i++) {
                 if (strncasecmp(val, icalparameter_map[i].str, val_len) == 0) {
                     elem.val = (int)icalparameter_map[i].enumeration;
                     break;

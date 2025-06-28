@@ -425,8 +425,9 @@ EOM
           print <<EOM;
 
 ${lcprefix}parameter * ${lcprefix}parameter_new_${lc}($singletype v)
-{$pointer_check
-    ${apitype} *values = ${apitype}_new(1);
+{${apitype} *values;
+    $pointer_check
+    values = ${apitype}_new(1);
     ${apitype}_add(values, v);
     return ${lcprefix}parameter_new_${lc}${newfnsuffix}(values);
 }
@@ -446,21 +447,23 @@ ${elemtype} ${lcprefix}parameter_get_${lc}_nth(${lcprefix}parameter *param, size
 }
 
 void ${lcprefix}parameter_add_${lc}(${lcprefix}parameter *param, ${singletype} v)
-{$pointer_check_v
+{${apitype} **values;
+    $pointer_check_v
     icalerror_check_arg_rv((param != 0), "param");
     icalerror_clear_errno();
 
-    ${apitype} **values = &((struct ${lcprefix}parameter_impl *)param)->values;
+   values = &((struct ${lcprefix}parameter_impl *)param)->values;
     if (*values == 0) *values = ${apitype}_new(5);
     ${apitype}_add(*values, v);
 }
 
 void ${lcprefix}parameter_remove_${lc}(${lcprefix}parameter *param, ${singletype} v)
-{$pointer_check_v
+{${apitype} *values;
+    $pointer_check_v
     icalerror_check_arg_rv((param != 0), "param");
     icalerror_clear_errno();
 
-    ${apitype} *values = ((struct ${lcprefix}parameter_impl *)param)->values;
+    values = ((struct ${lcprefix}parameter_impl *)param)->values;
     if (values != 0) ${apitype}_remove(values, v);
 }
 
