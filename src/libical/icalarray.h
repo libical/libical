@@ -45,11 +45,12 @@ struct _icalarray {
  * the size of the elements that the array will hold (in bytes). The parameter
  * @a increment_size determines how many extra elements to be allocated when
  * expanding the array for performance reasons (expansions are expensive, since
- * it involves copying all existing elements).
+ * it involves copying all existing elements). If increment_size is zero, then
+ * the default increment size specified during libical build time is chosen.
  *
  * @par Error handling
- * If @a element_size or @a increment_size is not at least 1, using the icalarray
- * object results in undefined behaviour. If there is an error while creating the
+ * If @a element_size is not at least 1, using the icalarray object results in
+ * undefined behaviour. If there is an error while creating the
  * object, it returns `NULL` and sets ::icalerrno to ::ICAL_NEWFAILED_ERROR.
  *
  * @par Ownership

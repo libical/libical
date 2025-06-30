@@ -20,6 +20,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef ICALARRAY_DEFAULT_INCREMENT_SIZE
+#define ICALARRAY_DEFAULT_INCREMENT_SIZE 4
+#endif
+
 static void icalarray_expand(icalarray *array, size_t space_needed);
 
 icalarray *icalarray_new(size_t element_size, size_t increment_size)
@@ -32,8 +36,11 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
         return NULL;
     }
 
+    if (!increment_size)
+        increment_size = ICALARRAY_DEFAULT_INCREMENT_SIZE;
+
     array->element_size = element_size;
-    array->increment_size = increment_size ? increment_size : 1;
+    array->increment_size = increment_size;
     array->num_elements = 0;
     array->space_allocated = 0;
     array->chunks = NULL;
