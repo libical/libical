@@ -18,8 +18,8 @@
 
 #include <string.h>
 
-ssize_t vcardenumarray_find(vcardenumarray *array,
-                            const vcardenumarray_element *needle)
+size_t vcardenumarray_find(vcardenumarray *array,
+                           const vcardenumarray_element *needle)
 {
     size_t i;
 
@@ -28,11 +28,11 @@ ssize_t vcardenumarray_find(vcardenumarray *array,
         if (!!e->xvalue == !!needle->xvalue &&
             ((e->xvalue && !strcmp(e->xvalue, needle->xvalue)) ||
              (!e->xvalue && (e->val == needle->val)))) {
-            return (ssize_t)i;
+            return i;
         }
     }
 
-    return -1;
+    return vcardenumarray_size(array);
 }
 
 void vcardenumarray_append(vcardenumarray *array, const vcardenumarray_element *elem)
@@ -45,32 +45,39 @@ void vcardenumarray_append(vcardenumarray *array, const vcardenumarray_element *
 
 void vcardenumarray_add(vcardenumarray *array, const vcardenumarray_element *add)
 {
-    if (vcardenumarray_find(array, add) < 0)
+    if (vcardenumarray_find(array, add) >= vcardenumarray_size(array))
         vcardenumarray_append(array, add);
 }
 
 void vcardenumarray_remove_element_at(vcardenumarray *array,
-                                      ssize_t position)
+                                      size_t position)
 {
-    vcardenumarray_element *del = icalarray_element_at(array, (size_t)position);
+    if (position >= vcardenumarray_size(array)) return;
+
+    vcardenumarray_element *del = icalarray_element_at(array, position);
 
     if (del->xvalue)
         icalmemory_free_buffer((char *)del->xvalue);
-    icalarray_remove_element_at(array, (size_t)position);
+    icalarray_remove_element_at(array, position);
 }
 
 void vcardenumarray_remove(vcardenumarray *array, const vcardenumarray_element *del)
 {
-    ssize_t position = vcardenumarray_find(array, del);
+    size_t position = vcardenumarray_find(array, del);
 
-    if (position >= 0)
+    if (position < vcardenumarray_size(array))
         vcardenumarray_remove_element_at(array, position);
 }
 
 void vcardenumarray_free(vcardenumarray *array)
 {
-    while (array->num_elements)
-        vcardenumarray_remove_element_at(array, (ssize_t)(array->num_elements - 1));
+
+    for (size_t i = 0; i < vcardenumarray_size(array); i++) {
+        vcardenumarray_element *del = icalarray_element_at(array, i);
+        if (del->xvalue)
+            icalmemory_free_buffer((char *)del->xvalue);
+    }
+
     icalarray_free(array);
 }
 

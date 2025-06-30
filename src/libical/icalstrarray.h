@@ -27,8 +27,8 @@ typedef icalarray icalstrarray;
 
 #define icalstrarray_size(array) ((array)->num_elements)
 
-LIBICAL_ICAL_EXPORT ssize_t icalstrarray_find(icalstrarray *array,
-                                              const char *needle);
+LIBICAL_ICAL_EXPORT size_t icalstrarray_find(icalstrarray *array,
+                                             const char *needle);
 
 LIBICAL_ICAL_EXPORT void icalstrarray_append(icalstrarray *array,
                                              const char *elem);
@@ -37,7 +37,7 @@ LIBICAL_ICAL_EXPORT void icalstrarray_add(icalstrarray *array,
                                           const char *add);
 
 LIBICAL_ICAL_EXPORT void icalstrarray_remove_element_at(icalstrarray *array,
-                                                        ssize_t position);
+                                                        size_t position);
 
 LIBICAL_ICAL_EXPORT void icalstrarray_remove(icalstrarray *array,
                                              const char *del);

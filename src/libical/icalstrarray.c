@@ -18,18 +18,18 @@
 
 #include <string.h>
 
-ssize_t icalstrarray_find(icalstrarray *array,
+size_t icalstrarray_find(icalstrarray *array,
                           const char *needle)
 {
     size_t i;
 
     for (i = 0; i < array->num_elements; i++) {
         if (!strcmp(needle, icalstrarray_element_at(array, i))) {
-            return (ssize_t)i;
+            return i;
         }
     }
 
-    return -1;
+    return array->num_elements;
 }
 
 void icalstrarray_append(icalstrarray *array, const char *elem)
@@ -41,32 +41,36 @@ void icalstrarray_append(icalstrarray *array, const char *elem)
 
 void icalstrarray_add(icalstrarray *array, const char *add)
 {
-    if (icalstrarray_find(array, add) < 0)
+    if (icalstrarray_find(array, add) >= icalstrarray_size(array))
         icalstrarray_append(array, add);
 }
 
-void icalstrarray_remove_element_at(icalstrarray *array, ssize_t position)
+void icalstrarray_remove_element_at(icalstrarray *array, size_t position)
 {
-    char **del = icalarray_element_at(array, (size_t)position);
+    if (position >= icalstrarray_size(array)) return;
+
+    char **del = icalarray_element_at(array, position);
 
     if (del && *del)
         icalmemory_free_buffer(*del);
-    icalarray_remove_element_at(array, (size_t)position);
+    icalarray_remove_element_at(array, position);
 }
 
 void icalstrarray_remove(icalstrarray *array, const char *del)
 {
-    ssize_t position = icalstrarray_find(array, del);
+    size_t position = icalstrarray_find(array, del);
 
-    if (position >= 0)
+    if (position < icalstrarray_size(array))
         icalstrarray_remove_element_at(array, position);
 }
 
 void icalstrarray_free(icalstrarray *array)
 {
-    ssize_t i = (ssize_t)(array->num_elements - 1);
-    while (i >= 0)
-        icalstrarray_remove_element_at(array, i--);
+    for (size_t i = 0; i < array->num_elements; i++) {
+      char **del = icalarray_element_at(array, i);
+      if (del && *del) icalmemory_free_buffer(*del);
+    }
+
     icalarray_free(array);
 }
 
