@@ -6068,7 +6068,7 @@ static void test_icalparameter_create_multivalued(void)
 
     param = icalparameter_new(ICAL_MEMBER_PARAMETER);
 
-    icalstrarray *member = icalenumarray_new(5);
+    icalstrarray *member = icalstrarray_new(5);
     icalstrarray_append(member, "mailto:member1");
     icalstrarray_append(member, "mailto:member2");
     icalparameter_set_member(param, member);
