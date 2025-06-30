@@ -19,7 +19,7 @@
 #include <string.h>
 
 size_t icalstrarray_find(icalstrarray *array,
-                          const char *needle)
+                         const char *needle)
 {
     size_t i;
 
@@ -47,7 +47,8 @@ void icalstrarray_add(icalstrarray *array, const char *add)
 
 void icalstrarray_remove_element_at(icalstrarray *array, size_t position)
 {
-    if (position >= icalstrarray_size(array)) return;
+    if (position >= icalstrarray_size(array))
+        return;
 
     char **del = icalarray_element_at(array, position);
 
@@ -67,8 +68,9 @@ void icalstrarray_remove(icalstrarray *array, const char *del)
 void icalstrarray_free(icalstrarray *array)
 {
     for (size_t i = 0; i < array->num_elements; i++) {
-      char **del = icalarray_element_at(array, i);
-      if (del && *del) icalmemory_free_buffer(*del);
+        char **del = icalarray_element_at(array, i);
+        if (del && *del)
+            icalmemory_free_buffer(*del);
     }
 
     icalarray_free(array);
