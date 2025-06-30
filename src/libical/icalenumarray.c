@@ -52,7 +52,8 @@ void icalenumarray_add(icalenumarray *array, const icalenumarray_element *add)
 void icalenumarray_remove_element_at(icalenumarray *array,
                                      size_t position)
 {
-    if (position >= icalenumarray_size(array)) return;
+    if (position >= icalenumarray_size(array))
+        return;
 
     icalenumarray_element *del = icalarray_element_at(array, position);
 
@@ -71,7 +72,6 @@ void icalenumarray_remove(icalenumarray *array, const icalenumarray_element *del
 
 void icalenumarray_free(icalenumarray *array)
 {
-
     for (size_t i = 0; i < icalenumarray_size(array); i++) {
         icalenumarray_element *del = icalarray_element_at(array, i);
         if (del->xvalue)
