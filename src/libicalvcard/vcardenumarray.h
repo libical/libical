@@ -32,8 +32,8 @@ typedef struct {
 
 #define vcardenumarray_size(array) ((array)->num_elements)
 
-LIBICAL_VCARD_EXPORT ssize_t vcardenumarray_find(vcardenumarray *array,
-                                                 const vcardenumarray_element *needle);
+LIBICAL_VCARD_EXPORT size_t vcardenumarray_find(vcardenumarray *array,
+                                                const vcardenumarray_element *needle);
 
 LIBICAL_VCARD_EXPORT void vcardenumarray_append(vcardenumarray *array,
                                                 const vcardenumarray_element *elem);
@@ -42,7 +42,7 @@ LIBICAL_VCARD_EXPORT void vcardenumarray_add(vcardenumarray *array,
                                              const vcardenumarray_element *add);
 
 LIBICAL_VCARD_EXPORT void vcardenumarray_remove_element_at(vcardenumarray *array,
-                                                           ssize_t position);
+                                                           size_t position);
 LIBICAL_VCARD_EXPORT void vcardenumarray_remove(vcardenumarray *array,
                                                 const vcardenumarray_element *del);
 
