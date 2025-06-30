@@ -18,8 +18,8 @@
 
 #include <string.h>
 
-ssize_t icalenumarray_find(icalenumarray *array,
-                           const icalenumarray_element *needle)
+size_t icalenumarray_find(icalenumarray *array,
+                          const icalenumarray_element *needle)
 {
     size_t i;
 
@@ -28,11 +28,11 @@ ssize_t icalenumarray_find(icalenumarray *array,
         if (!!e->xvalue == !!needle->xvalue &&
             ((e->xvalue && !strcmp(e->xvalue, needle->xvalue)) ||
              (!e->xvalue && (e->val == needle->val)))) {
-            return (ssize_t)i;
+            return i;
         }
     }
 
-    return -1;
+    return icalenumarray_size(array);
 }
 
 void icalenumarray_append(icalenumarray *array, const icalenumarray_element *elem)
@@ -45,32 +45,39 @@ void icalenumarray_append(icalenumarray *array, const icalenumarray_element *ele
 
 void icalenumarray_add(icalenumarray *array, const icalenumarray_element *add)
 {
-    if (icalenumarray_find(array, add) < 0)
+    if (icalenumarray_find(array, add) >= icalenumarray_size(array))
         icalenumarray_append(array, add);
 }
 
 void icalenumarray_remove_element_at(icalenumarray *array,
-                                     ssize_t position)
+                                     size_t position)
 {
-    icalenumarray_element *del = icalarray_element_at(array, (size_t)position);
+    if (position >= icalenumarray_size(array)) return;
+
+    icalenumarray_element *del = icalarray_element_at(array, position);
 
     if (del->xvalue)
         icalmemory_free_buffer((char *)del->xvalue);
-    icalarray_remove_element_at(array, (size_t)position);
+    icalarray_remove_element_at(array, position);
 }
 
-void icalenumarray_remove(icalenumarray *array, icalenumarray_element *del)
+void icalenumarray_remove(icalenumarray *array, const icalenumarray_element *del)
 {
-    ssize_t position = icalenumarray_find(array, del);
+    size_t position = icalenumarray_find(array, del);
 
-    if (position >= 0)
+    if (position < icalenumarray_size(array))
         icalenumarray_remove_element_at(array, position);
 }
 
 void icalenumarray_free(icalenumarray *array)
 {
-    while (array->num_elements)
-        icalenumarray_remove_element_at(array, (ssize_t)(array->num_elements - 1));
+
+    for (size_t i = 0; i < icalenumarray_size(array); i++) {
+        icalenumarray_element *del = icalarray_element_at(array, i);
+        if (del->xvalue)
+            icalmemory_free_buffer((char *)del->xvalue);
+    }
+
     icalarray_free(array);
 }
 

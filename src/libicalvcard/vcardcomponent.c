@@ -349,7 +349,7 @@ int vcardcomponent_count_properties(vcardcomponent *comp,
                 if (param) {
                     const char *altid = vcardparameter_get_altid(param);
 
-                    if (vcardstrarray_find(altids, altid) != -1)
+                    if (vcardstrarray_find(altids, altid) >= vcardstrarray_size(altids))
                         continue;
 
                     vcardstrarray_append(altids, altid);
@@ -850,11 +850,11 @@ static void comp_to_v4(vcardcomponent *impl)
         param = vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER);
         if (param) {
             vcardenumarray_element pref = {VCARD_TYPE_PREF, NULL};
-            ssize_t i;
+            size_t i;
 
             types = vcardparameter_get_type(param);
             i = vcardenumarray_find(types, &pref);
-            if (i >= 0) {
+            if (i < vcardenumarray_size(types)) {
                 vcardenumarray_remove_element_at(types, i);
                 if (!vcardenumarray_size(types)) {
                     vcardproperty_remove_parameter_by_ref(prop, param);
@@ -958,7 +958,7 @@ static void comp_to_v4(vcardcomponent *impl)
                         }
 
                         /* Remove this TYPE */
-                        vcardenumarray_remove_element_at(types, (ssize_t)i);
+                        vcardenumarray_remove_element_at(types, i);
                         if (!vcardenumarray_size(types)) {
                             vcardproperty_remove_parameter_by_ref(prop, param);
                         }

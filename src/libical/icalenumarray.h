@@ -32,8 +32,8 @@ typedef struct {
 
 #define icalenumarray_size(array) ((array)->num_elements)
 
-LIBICAL_ICAL_EXPORT ssize_t icalenumarray_find(icalenumarray *array,
-                                               const icalenumarray_element *needle);
+LIBICAL_ICAL_EXPORT size_t icalenumarray_find(icalenumarray *array,
+                                              const icalenumarray_element *needle);
 
 LIBICAL_ICAL_EXPORT void icalenumarray_append(icalenumarray *array,
                                               const icalenumarray_element *elem);
@@ -42,9 +42,9 @@ LIBICAL_ICAL_EXPORT void icalenumarray_add(icalenumarray *array,
                                            const icalenumarray_element *add);
 
 LIBICAL_ICAL_EXPORT void icalenumarray_remove_element_at(icalenumarray *array,
-                                                         ssize_t position);
+                                                         size_t position);
 LIBICAL_ICAL_EXPORT void icalenumarray_remove(icalenumarray *array,
-                                              icalenumarray_element *del);
+                                              const icalenumarray_element *del);
 
 LIBICAL_ICAL_EXPORT void icalenumarray_free(icalenumarray *array);
 

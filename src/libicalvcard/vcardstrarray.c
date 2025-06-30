@@ -18,18 +18,18 @@
 
 #include <string.h>
 
-ssize_t vcardstrarray_find(vcardstrarray *array,
-                           const char *needle)
+size_t vcardstrarray_find(vcardstrarray *array,
+                          const char *needle)
 {
     size_t i;
 
     for (i = 0; i < array->num_elements; i++) {
         if (!strcmp(needle, vcardstrarray_element_at(array, i))) {
-            return (ssize_t)i;
+            return i;
         }
     }
 
-    return -1;
+    return array->num_elements;
 }
 
 void vcardstrarray_append(vcardstrarray *array, const char *elem)
@@ -41,32 +41,36 @@ void vcardstrarray_append(vcardstrarray *array, const char *elem)
 
 void vcardstrarray_add(vcardstrarray *array, const char *add)
 {
-    if (vcardstrarray_find(array, add) < 0)
+    if (vcardstrarray_find(array, add) >= vcardstrarray_size(array))
         vcardstrarray_append(array, add);
 }
 
-void vcardstrarray_remove_element_at(vcardstrarray *array, ssize_t position)
+void vcardstrarray_remove_element_at(vcardstrarray *array, size_t position)
 {
-    char **del = icalarray_element_at(array, (size_t)position);
+    if (position >= vcardstrarray_size(array)) return;
+
+    char **del = icalarray_element_at(array, position);
 
     if (del && *del)
         icalmemory_free_buffer(*del);
-    icalarray_remove_element_at(array, (size_t)position);
+    icalarray_remove_element_at(array, position);
 }
 
 void vcardstrarray_remove(vcardstrarray *array, const char *del)
 {
-    ssize_t position = vcardstrarray_find(array, del);
+    size_t position = vcardstrarray_find(array, del);
 
-    if (position >= 0)
+    if (position < vcardstrarray_size(array))
         vcardstrarray_remove_element_at(array, position);
 }
 
 void vcardstrarray_free(vcardstrarray *array)
 {
-    ssize_t i = (ssize_t)(array->num_elements - 1);
-    while (i >= 0)
-        vcardstrarray_remove_element_at(array, i--);
+    for (size_t i = 0; i < vcardstrarray_size(array); i++) {
+      char **del = icalarray_element_at(array, i);
+      if (del && *del) icalmemory_free_buffer(*del);
+    }
+
     icalarray_free(array);
 }
 
