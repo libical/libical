@@ -47,7 +47,8 @@ void vcardstrarray_add(vcardstrarray *array, const char *add)
 
 void vcardstrarray_remove_element_at(vcardstrarray *array, size_t position)
 {
-    if (position >= vcardstrarray_size(array)) return;
+    if (position >= vcardstrarray_size(array))
+        return;
 
     char **del = icalarray_element_at(array, position);
 
@@ -67,8 +68,9 @@ void vcardstrarray_remove(vcardstrarray *array, const char *del)
 void vcardstrarray_free(vcardstrarray *array)
 {
     for (size_t i = 0; i < vcardstrarray_size(array); i++) {
-      char **del = icalarray_element_at(array, i);
-      if (del && *del) icalmemory_free_buffer(*del);
+        char **del = icalarray_element_at(array, i);
+        if (del && *del)
+            icalmemory_free_buffer(*del);
     }
 
     icalarray_free(array);

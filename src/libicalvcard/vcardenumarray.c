@@ -52,7 +52,8 @@ void vcardenumarray_add(vcardenumarray *array, const vcardenumarray_element *add
 void vcardenumarray_remove_element_at(vcardenumarray *array,
                                       size_t position)
 {
-    if (position >= vcardenumarray_size(array)) return;
+    if (position >= vcardenumarray_size(array))
+        return;
 
     vcardenumarray_element *del = icalarray_element_at(array, position);
 
@@ -71,7 +72,6 @@ void vcardenumarray_remove(vcardenumarray *array, const vcardenumarray_element *
 
 void vcardenumarray_free(vcardenumarray *array)
 {
-
     for (size_t i = 0; i < vcardenumarray_size(array); i++) {
         vcardenumarray_element *del = icalarray_element_at(array, i);
         if (del->xvalue)
