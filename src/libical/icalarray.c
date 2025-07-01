@@ -134,6 +134,11 @@ void *icalarray_element_at(icalarray *array, size_t position)
     return (char *)(array->chunks[chunk]) + (offset * array->element_size);
 }
 
+void icalarray_set_element_at(icalarray *array, const void *element, size_t position)
+{
+    memcpy(icalarray_element_at(array, position), element, array->element_size);
+}
+
 void icalarray_remove_element_at(icalarray *array, size_t position)
 {
     while (position < array->num_elements - 1) {
