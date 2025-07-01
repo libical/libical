@@ -20,13 +20,15 @@
 
 size_t icalenumarray_size(icalenumarray *array)
 {
-    if (!array) return 0;
+    if (!array)
+        return 0;
     return array->num_elements;
 }
 
 const icalenumarray_element *icalenumarray_element_at(icalenumarray *array, size_t position)
 {
-    if (position >= icalenumarray_size(array)) return NULL;
+    if (position >= icalenumarray_size(array))
+        return NULL;
     return icalarray_element_at(array, position);
 }
 
@@ -49,17 +51,18 @@ static int enumcmp(const icalenumarray_element *a, const icalenumarray_element *
         return 0;
 }
 
-
 size_t icalenumarray_find(icalenumarray *array,
                           const icalenumarray_element *needle)
 {
-    if (!array || !needle) return icalenumarray_size(array);
+    if (!array || !needle)
+        return icalenumarray_size(array);
 
     size_t i;
 
     for (i = 0; array && i < array->num_elements; i++) {
         icalenumarray_element *e = icalarray_element_at(array, i);
-        if (!enumcmp(e, needle)) return i;
+        if (!enumcmp(e, needle))
+            return i;
     }
 
     return icalenumarray_size(array);
@@ -67,7 +70,8 @@ size_t icalenumarray_find(icalenumarray *array,
 
 void icalenumarray_append(icalenumarray *array, const icalenumarray_element *elem)
 {
-    if (!array || !elem) return;
+    if (!array || !elem)
+        return;
 
     icalenumarray_element copy = {
         elem->val, elem->xvalue ? icalmemory_strdup(elem->xvalue) : NULL};
@@ -77,7 +81,8 @@ void icalenumarray_append(icalenumarray *array, const icalenumarray_element *ele
 
 void icalenumarray_add(icalenumarray *array, const icalenumarray_element *add)
 {
-    if (!array || !add) return;
+    if (!array || !add)
+        return;
 
     if (icalenumarray_find(array, add) >= icalenumarray_size(array))
         icalenumarray_append(array, add);
@@ -98,7 +103,8 @@ void icalenumarray_remove_element_at(icalenumarray *array,
 
 void icalenumarray_remove(icalenumarray *array, const icalenumarray_element *del)
 {
-    if (!array || !del) return;
+    if (!array || !del)
+        return;
 
     size_t j = 0;
 
@@ -106,10 +112,9 @@ void icalenumarray_remove(icalenumarray *array, const icalenumarray_element *del
         const icalenumarray_element *elem = icalarray_element_at(array, i);
         if (enumcmp(elem, del)) {
             icalarray_set_element_at(array, elem, j++);
-        }
-        else {
-          if (elem->xvalue)
-            icalmemory_free_buffer((char *)elem->xvalue);
+        } else {
+            if (elem->xvalue)
+                icalmemory_free_buffer((char *)elem->xvalue);
         }
     }
 
@@ -118,7 +123,8 @@ void icalenumarray_remove(icalenumarray *array, const icalenumarray_element *del
 
 void icalenumarray_free(icalenumarray *array)
 {
-    if (!array) return;
+    if (!array)
+        return;
 
     for (size_t i = 0; i < icalenumarray_size(array); i++) {
         icalenumarray_element *del = icalarray_element_at(array, i);
@@ -131,14 +137,16 @@ void icalenumarray_free(icalenumarray *array)
 
 void icalenumarray_sort(icalenumarray *array)
 {
-    if (!array) return;
+    if (!array)
+        return;
 
     icalarray_sort(array, (int (*)(const void *, const void *))&enumcmp);
 }
 
 icalenumarray *icalenumarray_clone(icalenumarray *array)
 {
-    if (!array) return NULL;
+    if (!array)
+        return NULL;
 
     icalenumarray *clone = icalenumarray_new(array->increment_size);
     size_t i;
