@@ -171,7 +171,6 @@ set(
   libical_vcard_export.h
   vcardcomponent.c
   vcardcomponent.h
-  vcardenumarray.c
   vcardenumarray.h
   vcardparameter.c
   vcardparameter.h
@@ -180,7 +179,6 @@ set(
   vcardparser.h
   vcardproperty.c
   vcardproperty.h
-  vcardstrarray.c
   vcardstrarray.h
   vcardstructured.c
   vcardstructured.h
