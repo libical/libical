@@ -18,6 +18,17 @@
 
 #include <string.h>
 
+static int is_equal(const icalenumarray_element *a,
+                    const icalenumarray_element *b)
+{
+    if (!!a->xvalue == !!b->xvalue &&
+        ((a->xvalue && !strcmp(a->xvalue, b->xvalue)) ||
+         (!a->xvalue && (a->val == b->val)))) {
+        return 1;
+    }
+    return 0;
+}
+
 size_t icalenumarray_find(icalenumarray *array,
                           const icalenumarray_element *needle)
 {
@@ -25,11 +36,7 @@ size_t icalenumarray_find(icalenumarray *array,
 
     for (i = 0; array && i < array->num_elements; i++) {
         icalenumarray_element *e = icalarray_element_at(array, i);
-        if (!!e->xvalue == !!needle->xvalue &&
-            ((e->xvalue && !strcmp(e->xvalue, needle->xvalue)) ||
-             (!e->xvalue && (e->val == needle->val)))) {
-            return i;
-        }
+        if (is_equal(e, needle)) return i;
     }
 
     return icalenumarray_size(array);
@@ -64,10 +71,20 @@ void icalenumarray_remove_element_at(icalenumarray *array,
 
 void icalenumarray_remove(icalenumarray *array, const icalenumarray_element *del)
 {
-    size_t position = icalenumarray_find(array, del);
+    size_t j = 0;
 
-    if (position < icalenumarray_size(array))
-        icalenumarray_remove_element_at(array, position);
+    for (size_t i = 0; i < array->num_elements; i++) {
+        const icalenumarray_element *elem = icalarray_element_at(array, i);
+        if (!is_equal(elem, del)) {
+            icalarray_set_element_at(array, elem, j++);
+        }
+        else {
+          if (elem->xvalue)
+            icalmemory_free_buffer((char *)elem->xvalue);
+        }
+    }
+
+    array->num_elements = j;
 }
 
 void icalenumarray_free(icalenumarray *array)
