@@ -59,10 +59,19 @@ void icalstrarray_remove_element_at(icalstrarray *array, size_t position)
 
 void icalstrarray_remove(icalstrarray *array, const char *del)
 {
-    size_t position = icalstrarray_find(array, del);
+    size_t j = 0;
 
-    if (position < icalstrarray_size(array))
-        icalstrarray_remove_element_at(array, position);
+    for (size_t i = 0; i < array->num_elements; i++) {
+        char **elem = icalarray_element_at(array, i);
+        if (strcmp(*elem, del)) {
+            icalarray_set_element_at(array, elem, j++);
+        }
+        else {
+            icalmemory_free_buffer(*elem);
+        }
+    }
+
+    array->num_elements = j;
 }
 
 void icalstrarray_free(icalstrarray *array)
