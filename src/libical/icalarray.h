@@ -249,6 +249,28 @@ LIBICAL_ICAL_EXPORT void icalarray_remove_element_at(icalarray *array, size_t po
 LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray *array, size_t position);
 
 /**
+ * @brief Overwrites an existing element in an array with a new value.
+ * @param array The array to overwrite the element in
+ * @param element The element to set as the new value
+ * @param position The position of the element to overwrite
+ *
+ * Sets the given @a element at the @a position in the @a array,
+ * overwriting the current element at that position.
+ *
+ * @par Error handling
+ * If @a array or @a element is `NULL` or @a position is higher than
+ * the last position in the array, using this function results
+ * in undefined behaviour (most likely a segfault).
+ *
+ * @par Ownership
+ * The @a element does not get consumed by the method, since it creates
+ * a copy of it. The existing element gets overwritten, callers are
+ * responsible to free any heap-allocated values of the element.
+ *
+ */
+LIBICAL_ICAL_EXPORT void icalarray_set_element_at(icalarray *array, const void *element, size_t position);
+
+/**
  * @brief Sorts the elements of an icalarray using the given comparison function.
  * @param array The array to sort
  * @param compare The comparison function to use
