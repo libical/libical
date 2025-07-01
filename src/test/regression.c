@@ -6193,8 +6193,8 @@ static void test_icalenumarray(void)
     const icalenumarray_element *elem;
     size_t pos;
 
-    icalenumarray_element foo = { 42, "foo" };
-    icalenumarray_element bar = { 11, NULL };
+    icalenumarray_element foo = {42, "foo"};
+    icalenumarray_element bar = {11, NULL};
 
     ok("array: empty", 0 == icalenumarray_size(array));
 
