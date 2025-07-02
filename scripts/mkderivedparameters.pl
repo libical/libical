@@ -301,6 +301,8 @@ sub insert_code
             $charorenum_nth =
                 "   icalerror_check_arg_rz((param != 0), \"param\");\n    if (param->values && ${lcprefix}strarray_size(param->values)) {\n        return ${lcprefix}strarray_element_at(param->values, position);\n    } else {\n        return NULL;\n    }";
 
+            $charorenum_values_add_v = "icalstrarray_add(values, v)";
+
             $set_code = "if (param->values != NULL) {\n        ${lcprefix}strarray_free(param->values);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->values = v;";
 
         } else {
@@ -357,6 +359,8 @@ sub insert_code
 
             $charorenum_nth =
                 "   icalerror_check_arg((param != 0), \"param\");\n    if (param && param->values && ${lcprefix}enumarray_size(param->values)) {\n        const $singletype v = ${lcprefix}enumarray_element_at(param->values, position);\n        return (${elemtype})v->val;\n    } else {\n        return ${ucprefix}_${uc}_NONE;\n    }";
+
+            $charorenum_values_add_v = "icalenumarray_element _elem = { (int)v, NULL };\n    icalenumarray_add(values, &_elem)";
 
             $set_code = "if (param->values != NULL) {\n        ${lcprefix}enumarray_free(param->values);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->values = v;";
 
@@ -424,11 +428,10 @@ EOM
       if ($is_multivalued) {
           print <<EOM;
 
-${lcprefix}parameter * ${lcprefix}parameter_new_${lc}($singletype v)
-{${apitype} *values;
-    $pointer_check
-    values = ${apitype}_new(1);
-    ${apitype}_add(values, v);
+${lcprefix}parameter * ${lcprefix}parameter_new_${lc}($elemtype v)
+{
+    ${apitype} *values = ${apitype}_new(1);
+    $charorenum_values_add_v;
     return ${lcprefix}parameter_new_${lc}${newfnsuffix}(values);
 }
 
@@ -482,7 +485,7 @@ EOM
 
       if ($is_multivalued) {
       print <<EOM;
-LIBICAL_${ucprefix}_EXPORT ${lcprefix}parameter * ${lcprefix}parameter_new_${lc}($singletype v);
+LIBICAL_${ucprefix}_EXPORT ${lcprefix}parameter * ${lcprefix}parameter_new_${lc}($elemtype v);
 LIBICAL_${ucprefix}_EXPORT size_t ${lcprefix}parameter_get_${lc}_size(${lcprefix}parameter *param);
 LIBICAL_${ucprefix}_EXPORT ${elemtype} ${lcprefix}parameter_get_${lc}_nth(${lcprefix}parameter *param, size_t position);
 LIBICAL_${ucprefix}_EXPORT void ${lcprefix}parameter_add_${lc}(${lcprefix}parameter *value, ${singletype} v);
