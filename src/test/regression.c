@@ -6050,6 +6050,9 @@ static void test_icalparameter_create_multivalued(void)
 {
     icalparameter *param;
 
+    // Test icalenumarray-valued parameter.
+
+    // Generic constructor:
     param = icalparameter_new(ICAL_DISPLAY_PARAMETER);
 
     icalenumarray *display = icalenumarray_new(5);
@@ -6060,12 +6063,25 @@ static void test_icalparameter_create_multivalued(void)
     elem.xvalue = "X-FOO";
     icalenumarray_append(display, &elem);
     icalparameter_set_display(param, display);
-
     str_is("DISPLAY", icalparameter_as_ical_string(param),
            "DISPLAY=BADGE,X-FOO");
-
     icalparameter_free(param);
 
+    // Generated "new_list" constructor:
+    display = icalenumarray_new(5);
+    elem.val = ICAL_DISPLAY_BADGE;
+    elem.xvalue = NULL;
+    icalenumarray_append(display, &elem);
+    param = icalparameter_new_display_list(display);
+    str_is("DISPLAY", icalparameter_as_ical_string(param), "DISPLAY=BADGE");
+    icalparameter_free(param);
+
+    // Generated "new" constructor:
+    param = icalparameter_new_display(ICAL_DISPLAY_BADGE);
+    str_is("DISPLAY", icalparameter_as_ical_string(param), "DISPLAY=BADGE");
+    icalparameter_free(param);
+
+    // Test icalstrarray-valued parameter.
     param = icalparameter_new(ICAL_MEMBER_PARAMETER);
 
     icalstrarray *member = icalstrarray_new(5);
@@ -6076,6 +6092,20 @@ static void test_icalparameter_create_multivalued(void)
     str_is("MEMBER", icalparameter_as_ical_string(param),
            "MEMBER=\"mailto:member1\",\"mailto:member2\"");
 
+    icalparameter_free(param);
+
+    // Generated "new_list" constructor:
+    member = icalstrarray_new(5);
+    icalstrarray_append(member, "mailto:member1");
+    param = icalparameter_new_member_list(member);
+    str_is("MEMBER", icalparameter_as_ical_string(param),
+           "MEMBER=\"mailto:member1\"");
+    icalparameter_free(param);
+
+    // Generated "new" constructor:
+    param = icalparameter_new_member("mailto:member1");
+    str_is("MEMBER", icalparameter_as_ical_string(param),
+           "MEMBER=\"mailto:member1\"");
     icalparameter_free(param);
 }
 
