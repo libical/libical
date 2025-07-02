@@ -469,6 +469,7 @@ install(
     icalcomponent.h
     ${BUILT_HEADERS}
     icalduration.h
+    icalenumarray.h
     icalenums.h
     icalerror.h
     icallangbind.h
@@ -480,6 +481,7 @@ install(
     icalproperty.h
     icalrecur.h
     icalrestriction.h
+    icalstrarray.h
     ${PROJECT_BINARY_DIR}/src/libical/icaltime.h
     icaltz-util.h
     icaltimezone.h
