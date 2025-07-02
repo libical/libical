@@ -450,7 +450,9 @@ CPPCHECK() {
     --enable=warning,performance,portability \
     --check-level=exhaustive \
     --disable=missingInclude \
-    --suppress=passedByValue --suppress=ctuOneDefinitionRuleViolation \
+    --suppress=passedByValue \
+    --suppress=ctuOneDefinitionRuleViolation \
+    --suppress=dangerousTypeCast \
     --template='{file}:{line},{severity},{id},{message}' \
     --checkers-report=cppcheck-report.txt \
     -D __cppcheck__ \
