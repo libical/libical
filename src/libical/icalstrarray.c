@@ -42,7 +42,8 @@ size_t icalstrarray_find(icalstrarray *array,
     size_t i;
 
     for (i = 0; i < array->num_elements; i++) {
-        if (!strcmp(needle, icalstrarray_element_at(array, i))) {
+        const char *s = icalstrarray_element_at(array, i);
+        if (s && !strcmp(needle, s)) {
             return i;
         }
     }
