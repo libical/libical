@@ -311,8 +311,8 @@ endif()
 find_package(
   ICU
   COMPONENTS
-    uc
     i18n
+    uc
     data
 )
 set_package_properties(
