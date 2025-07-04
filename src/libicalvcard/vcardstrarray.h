@@ -50,6 +50,9 @@ typedef icalstrarray vcardstrarray;
 #define vcardstrarray_clone(array) \
     icalstrarray_clone(array)
 
+/**
+ * @since 4.0.0
+ */
 LIBICAL_VCARD_EXPORT char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array,
                                                            const char sep);
 #endif /* VCARDSTRARRAY_H */

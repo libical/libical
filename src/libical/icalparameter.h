@@ -620,11 +620,22 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *
  */
 LIBICAL_ICAL_EXPORT bool icalparameter_kind_is_valid(const icalparameter_kind kind);
 
+/**
+ * @since 4.0.0
+ */
 LIBICAL_ICAL_EXPORT icalvalue_kind icalparameter_kind_value_kind(const icalparameter_kind kind, int *is_multivalued);
 
+/**
+ * Return true if the specified parameter is multivalued.
+ *
+ * @since 4.0.0
+ */
 LIBICAL_ICAL_EXPORT bool icalparameter_is_multivalued(icalparameter *param);
 
-/** Decode parameter value per RFC6868 */
+/** Decode parameter value per RFC6868
+ *
+ * @since 4.0.0
+ */
 LIBICAL_ICAL_EXPORT void icalparameter_decode_value(char *value);
 
 #endif

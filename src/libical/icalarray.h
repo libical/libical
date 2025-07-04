@@ -267,6 +267,7 @@ LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray *array, size_t position
  * a copy of it. The existing element gets overwritten, callers are
  * responsible to free any heap-allocated values of the element.
  *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalarray_set_element_at(icalarray *array, const void *element, size_t position);
 
