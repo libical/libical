@@ -54,6 +54,7 @@ list(
   api/i-cal-derived-property.xml
   api/i-cal-derived-value.xml
   api/i-cal-duration.xml
+  api/i-cal-enum-array.xml
   api/i-cal-enums.xml
   api/i-cal-error.xml
   api/i-cal-geo.xml
