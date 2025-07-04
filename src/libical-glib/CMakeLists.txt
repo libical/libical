@@ -70,6 +70,7 @@ list(
   api/i-cal-recur.xml
   api/i-cal-reqstat.xml
   api/i-cal-restriction.xml
+  api/i-cal-str-array.xml
   api/i-cal-time-span.xml
   api/i-cal-time.xml
   api/i-cal-timezone.xml
