@@ -1,0 +1,36 @@
+<!--
+  SPDX-FileCopyrightText: 2025 Allen Winter <winter@kde.org>
+
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+ <structure namespace="ICal" name="StrArray" native="icalstrarray" destroy_func="icalstrarray_free">
+	<method name="i_cal_strarray_size" corresponds="icalstrarray_size" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray"/>
+		<returns type="gint" comment="The size of current array."/>
+		<comment>Gets the size of the array.</comment>
+	</method>
+	<method name="i_cal_strarray_clone" corresponds="icalstrarray_clone" kind="clone" since="4.0">
+		<parameter type="ICalStrArray *" name="array" annotation="in" comment="The #ICalStrArray to be cloned"/>
+		<returns type="ICalStrArray *" annotation="transfer full" translator_argus="NULL" comment="The newly cloned #ICalStrArray with the same value as the @array"/>
+		<comment xml:space="preserve">Creates a deep copy of #ICalStrArray with the same properties as the @array.</comment>
+	</method>
+	<method name="i_cal_strarray_free" corresponds="icalstrarray_free" annotation="skip" kind="destructor" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray to be freed"/>
+		<comment xml:space="preserve">Frees the #ICalStrArray.</comment>
+	</method>
+	<method name="i_cal_strarray_remove_element_at" corresponds="icalstrarray_remove_element_at" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array"  comment="The #ICalStrArray to be modified"/>
+		<parameter type="gint" name="position" comment="The position in which the element will be removed from the array"/>
+		<comment xml:space="preserve">Removes the element at the @position from the array.</comment>
+	</method>
+	<method name="i_cal_strarray_element_at" corresponds="icalstrarray_element_at" annotation="skip" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray to be queried"/>
+		<parameter type="gint" name="position" comment="The position the target element is located"/>
+		<returns type="const gchar *" annotation="transfer none, nullable" comment="The element located at the @position in the @array"/>
+		<comment xml:space="preserve">Gets the element located in the @position in the @array. NULL if position if out of bound.</comment>
+	</method>
+	<method name="i_cal_strarray_sort" corresponds="icalstrarray_sort" annotation="skip" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray to be sorted"/>
+	</method>
+</structure>
