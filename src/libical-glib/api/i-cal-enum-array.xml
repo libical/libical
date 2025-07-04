@@ -1,0 +1,36 @@
+<!--
+  SPDX-FileCopyrightText: 2025 Allen Winter <winter@kde.org>
+
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+ <structure namespace="ICal" name="EnumArray" native="icalenumarray" destroy_func="icalenumarray_free">
+	<method name="i_cal_enumarray_size" corresponds="icalenumarray_size" kind="other" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
+		<returns type="gint" comment="The size of current array."/>
+		<comment>Gets the size of the array.</comment>
+	</method>
+	<method name="i_cal_enumarray_clone" corresponds="icalenumarray_clone" kind="clone" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" annotation="in" comment="The #ICalEnumArray to be cloned"/>
+		<returns type="ICalEnumArray *" annotation="transfer full" translator_argus="NULL" comment="The newly cloned #ICalEnumArray with the same value as the @array"/>
+		<comment xml:space="preserve">Creates a deep copy of #ICalEnumArray with the same properties as the @array.</comment>
+	</method>
+	<method name="i_cal_enumarray_free" corresponds="icalenumarray_free" annotation="skip" kind="destructor" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray to be freed"/>
+		<comment xml:space="preserve">Frees the #ICalEnumArray.</comment>
+	</method>
+	<method name="i_cal_enumarray_remove_element_at" corresponds="icalenumarray_remove_element_at" kind="other" since="4.0">
+		<parameter type="ICalEnumArray *" name="array"  comment="The #ICalEnumArray to be modified"/>
+		<parameter type="gint" name="position" comment="The position in which the element will be removed from the array"/>
+		<comment xml:space="preserve">Removes the element at the @position from the array.</comment>
+	</method>
+	<method name="i_cal_enumarray_element_at" corresponds="icalenumarray_element_at" annotation="skip" kind="other" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray to be queried"/>
+		<parameter type="gint" name="position" comment="The position the target element is located"/>
+		<returns type="const icalenumarray_element *" annotation="transfer none, nullable" comment="The element located at the @position in the @array"/>
+		<comment xml:space="preserve">Gets the element located in the @position in the @array. NULL if position if out of bound.</comment>
+	</method>
+	<method name="i_cal_enumarray_sort" corresponds="icalenumarray_sort" annotation="skip" kind="other" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray to be sorted"/>
+	</method>
+</structure>
