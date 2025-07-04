@@ -59,6 +59,7 @@ typedef icalarray icalstrarray;
  * The string is owned by the icalstrarray, it must not be freed by
  * the user.
  *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT const char *icalstrarray_element_at(icalstrarray *array, size_t position);
 
@@ -72,6 +73,7 @@ LIBICAL_ICAL_EXPORT const char *icalstrarray_element_at(icalstrarray *array, siz
  * @par Error handling
  * If @a array is `NULL` then the return value is zero.
  *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT size_t icalstrarray_size(icalstrarray *array);
 
@@ -90,6 +92,7 @@ LIBICAL_ICAL_EXPORT size_t icalstrarray_size(icalstrarray *array);
  * If @a array or @a needle is `NULL`, then the return value is the same
  * as if the value is not found.
  *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT size_t icalstrarray_find(icalstrarray *array,
                                              const char *needle);
@@ -105,6 +108,8 @@ LIBICAL_ICAL_EXPORT size_t icalstrarray_find(icalstrarray *array,
  *
  * @par Error handling
  * If @a array or @a elem is `NULL` then this function is a noop.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalstrarray_append(icalstrarray *array,
                                              const char *elem);
@@ -119,6 +124,8 @@ LIBICAL_ICAL_EXPORT void icalstrarray_append(icalstrarray *array,
  *
  * @par Error handling
  * If @a array or @a elem is `NULL` then this function is a noop.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalstrarray_add(icalstrarray *array,
                                           const char *add);
@@ -133,6 +140,8 @@ LIBICAL_ICAL_EXPORT void icalstrarray_add(icalstrarray *array,
  * @par Error handling
  * If @a array is `NULL` or @a position is higher or equal to the
  * count of strings, this function is a noop.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalstrarray_remove_element_at(icalstrarray *array,
                                                         size_t position);
@@ -146,6 +155,8 @@ LIBICAL_ICAL_EXPORT void icalstrarray_remove_element_at(icalstrarray *array,
  *
  * @par Error handling
  * If @a array or @a del is `NULL`, then this function is a noop.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalstrarray_remove(icalstrarray *array,
                                              const char *del);
@@ -158,6 +169,8 @@ LIBICAL_ICAL_EXPORT void icalstrarray_remove(icalstrarray *array,
  *
  * @par Error handling
  * If @a array is `NULL`, this is a noop.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalstrarray_free(icalstrarray *array);
 
@@ -170,6 +183,8 @@ LIBICAL_ICAL_EXPORT void icalstrarray_free(icalstrarray *array);
  *
  * @par Error handling
  * If @a array is `NULL`, this is a noop.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalstrarray_sort(icalstrarray *array);
 
@@ -183,6 +198,8 @@ LIBICAL_ICAL_EXPORT void icalstrarray_sort(icalstrarray *array);
  *
  * @par Error handling
  * If @a array is `NULL` then the return value is `NULL`.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT icalstrarray *icalstrarray_clone(icalstrarray *array);
 

@@ -64,6 +64,7 @@ typedef struct {
  * The element is owned by the icalenumarray, it must not be freed by
  * the user.
  *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT const icalenumarray_element *icalenumarray_element_at(icalenumarray *array, size_t position);
 
@@ -76,6 +77,8 @@ LIBICAL_ICAL_EXPORT const icalenumarray_element *icalenumarray_element_at(icalen
  *
  * @par Error handling
  * If @a array is `NULL` then the return value is zero.
+ *
+ * @since 4.0.0
  *
  */
 LIBICAL_ICAL_EXPORT size_t icalenumarray_size(icalenumarray *array);
@@ -95,6 +98,7 @@ LIBICAL_ICAL_EXPORT size_t icalenumarray_size(icalenumarray *array);
  * If @a array or @a needle is `NULL`, then the return value is the same
  * as if the value is not found.
  *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT size_t icalenumarray_find(icalenumarray *array,
                                               const icalenumarray_element *needle);
@@ -110,6 +114,9 @@ LIBICAL_ICAL_EXPORT size_t icalenumarray_find(icalenumarray *array,
  *
  * @par Error handling
  * If @a array or @a elem is `NULL` then this function is a noop.
+ *
+ * @since 4.0.0
+ *
  */
 LIBICAL_ICAL_EXPORT void icalenumarray_append(icalenumarray *array,
                                               const icalenumarray_element *elem);
@@ -124,6 +131,9 @@ LIBICAL_ICAL_EXPORT void icalenumarray_append(icalenumarray *array,
  *
  * @par Error handling
  * If @a array or @a elem is `NULL` then this function is a noop.
+ *
+ * @since 4.0.0
+ *
  */
 LIBICAL_ICAL_EXPORT void icalenumarray_add(icalenumarray *array,
                                            const icalenumarray_element *elem);
@@ -138,6 +148,8 @@ LIBICAL_ICAL_EXPORT void icalenumarray_add(icalenumarray *array,
  * @par Error handling
  * If @a array is `NULL` or @a position is higher or equal to the
  * count of elements, this function is a noop.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalenumarray_remove_element_at(icalenumarray *array,
                                                          size_t position);
@@ -151,6 +163,8 @@ LIBICAL_ICAL_EXPORT void icalenumarray_remove_element_at(icalenumarray *array,
  *
  * @par Error handling
  * If @a array or @a del is `NULL`, then this function is a noop.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalenumarray_remove(icalenumarray *array,
                                               const icalenumarray_element *del);
@@ -163,6 +177,8 @@ LIBICAL_ICAL_EXPORT void icalenumarray_remove(icalenumarray *array,
  *
  * @par Error handling
  * If @a array is `NULL`, this is a noop.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalenumarray_free(icalenumarray *array);
 
@@ -175,6 +191,8 @@ LIBICAL_ICAL_EXPORT void icalenumarray_free(icalenumarray *array);
  *
  * @par Error handling
  * If @a array is `NULL`, this is a noop.
+ *
+ * @since 4.0.0
  */
 LIBICAL_ICAL_EXPORT void icalenumarray_sort(icalenumarray *array);
 
@@ -187,6 +205,9 @@ LIBICAL_ICAL_EXPORT void icalenumarray_sort(icalenumarray *array);
  *
  * @par Error handling
  * If @a array is `NULL` then the return value is `NULL`.
+ *
+ * @since 4.0.0
+ *
  */
 LIBICAL_ICAL_EXPORT icalenumarray *icalenumarray_clone(icalenumarray *array);
 
