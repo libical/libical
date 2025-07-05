@@ -132,17 +132,17 @@ CHECK_WARNINGS() {
   set +e
   declare -i numIssues
   if (test -n "$3"); then
-    numIssues=$(grep "$2" <"$1" | grep -v "$3" | sort | uniq | wc -l | awk '{print $1}')
+    numIssues=$(grep -i "$2" <"$1" | grep -v "$3" | sort | uniq | wc -l | awk '{print $1}')
   else
-    numIssues=$(grep "$2" <"$1" | sort | uniq | wc -l | awk '{print $1}')
+    numIssues=$(grep -i "$2" <"$1" | sort | uniq | wc -l | awk '{print $1}')
   fi
   if (test $numIssues -gt 0); then
     echo "EXITING. $numIssues warnings encountered"
     echo
     if (test -n "$3"); then
-      grep "$2" <"$1" | grep -v "$3" | sort | uniq
+      grep -i "$2" <"$1" | grep -v "$3" | sort | uniq
     else
-      grep "$2" <"$1" | sort | uniq
+      grep -i "$2" <"$1" | sort | uniq
     fi
     exit 1
   fi
@@ -176,7 +176,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='/vcc\.c\|/vobject\.c\|libical-glib-scan\.c\|/ICalGLib-4.0\.c\|ICal-4.0\.c\|Value[[:space:]]descriptions[[:space:]]\|g-ir-scanner:'
+  whitelist='ICalGLib-4.0\.c\|ICal-4.0\.c\|g-ir-scanner:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
