@@ -352,7 +352,7 @@
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_delegatedfrom_list" corresponds="icalparameter_new_delegatedfrom_list" kind="constructor" since="1.0">
+    <method name="i_cal_parameter_new_delegatedfrom_list" corresponds="icalparameter_new_delegatedfrom_list" kind="constructor" since="4.0.0">
         <parameter type="ICalStrArray *" name="v" comment="The string array used to create the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
@@ -372,7 +372,7 @@
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_delegatedto_list" corresponds="icalparameter_new_delegatedto_list" kind="constructor" since="1.0">
+    <method name="i_cal_parameter_new_delegatedto_list" corresponds="icalparameter_new_delegatedto_list" kind="constructor" since="4.0.0">
         <parameter type="ICalStrArray *" name="v" comment="The string array used to create the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
@@ -422,7 +422,7 @@
         <returns type="ICalParameter *" annotation="nullable" comment="The newly created #ICalParameter" />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_display_list" corresponds="icalparameter_new_display_list" kind="constructor" since="3.0.15">
+    <method name="i_cal_parameter_new_display_list" corresponds="icalparameter_new_display_list" kind="constructor" since="4.0.0">
         <parameter type="ICalEnumArray *" name="value" comment="The #ICalEnumArray element value of the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
         <comment xml:space="preserve"></comment>
@@ -502,7 +502,7 @@
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_feature_list" corresponds="icalparameter_new_feature_list" kind="constructor" since="3.0.15">
+    <method name="i_cal_parameter_new_feature_list" corresponds="icalparameter_new_feature_list" kind="constructor" since="4.0.0">
         <parameter type="ICalEnumArray *" name="value" comment="The #ICalEnumArray value of the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
         <comment xml:space="preserve"></comment>
@@ -672,7 +672,7 @@
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_member_list" corresponds="icalparameter_new_member_list" kind="constructor" since="1.0">
+    <method name="i_cal_parameter_new_member_list" corresponds="icalparameter_new_member_list" kind="constructor" since="4.0.0">
         <parameter type="ICalStrArray *" name="v" comment="The string array used to create the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
