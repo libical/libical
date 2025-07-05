@@ -15,6 +15,7 @@ for details about API changes since libical 3.x.
 ### Added
 
 - REUSE compliant licensing
+- Supports multi-valued parameters (DELEGATED-FROM, DELEGATED-TO, MEMBER, DISPLAY, FEATURE, etc)
 - Brand new icalvcard library that follows the libical API.
 - draft-ietf-calext-eventpub-extensions-19 (RFC 9073) support added
 - draft-ietf-calext-valarm-extensions-07 (RFC 9074) support added
