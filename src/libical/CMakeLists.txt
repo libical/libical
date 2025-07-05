@@ -211,6 +211,8 @@ set(
   icalattach.c
   icalcomponent.c
   icalcomponent.h
+  icalenumarray.c
+  icalenumarray.h
   icalenums.c
   icalenums.h
   icalerror.c
@@ -229,6 +231,8 @@ set(
   icalrecur.c
   icalrecur.h
   icalrestriction.h
+  icalstrarray.c
+  icalstrarray.h
   icaltime.c
   icaltime.h
   icaltz-util.c
@@ -465,6 +469,7 @@ install(
     icalcomponent.h
     ${BUILT_HEADERS}
     icalduration.h
+    icalenumarray.h
     icalenums.h
     icalerror.h
     icallangbind.h
@@ -476,6 +481,7 @@ install(
     icalproperty.h
     icalrecur.h
     icalrestriction.h
+    icalstrarray.h
     ${PROJECT_BINARY_DIR}/src/libical/icaltime.h
     icaltz-util.h
     icaltimezone.h

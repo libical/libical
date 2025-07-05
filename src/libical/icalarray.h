@@ -45,11 +45,12 @@ struct _icalarray {
  * the size of the elements that the array will hold (in bytes). The parameter
  * @a increment_size determines how many extra elements to be allocated when
  * expanding the array for performance reasons (expansions are expensive, since
- * it involves copying all existing elements).
+ * it involves copying all existing elements). If increment_size is zero, then
+ * the default increment size specified during libical build time is chosen.
  *
  * @par Error handling
- * If @a element_size or @a increment_size is not at least 1, using the icalarray
- * object results in undefined behaviour. If there is an error while creating the
+ * If @a element_size is not at least 1, using the icalarray object results in
+ * undefined behaviour. If there is an error while creating the
  * object, it returns `NULL` and sets ::icalerrno to ::ICAL_NEWFAILED_ERROR.
  *
  * @par Ownership
@@ -246,6 +247,29 @@ LIBICAL_ICAL_EXPORT void icalarray_remove_element_at(icalarray *array, size_t po
  * ```
  */
 LIBICAL_ICAL_EXPORT void *icalarray_element_at(icalarray *array, size_t position);
+
+/**
+ * @brief Overwrites an existing element in an array with a new value.
+ * @param array The array to overwrite the element in
+ * @param element The element to set as the new value
+ * @param position The position of the element to overwrite
+ *
+ * Sets the given @a element at the @a position in the @a array,
+ * overwriting the current element at that position.
+ *
+ * @par Error handling
+ * If @a array or @a element is `NULL` or @a position is higher than
+ * the last position in the array, using this function results
+ * in undefined behaviour (most likely a segfault).
+ *
+ * @par Ownership
+ * The @a element does not get consumed by the method, since it creates
+ * a copy of it. The existing element gets overwritten, callers are
+ * responsible to free any heap-allocated values of the element.
+ *
+ * @since 4.0.0
+ */
+LIBICAL_ICAL_EXPORT void icalarray_set_element_at(icalarray *array, const void *element, size_t position);
 
 /**
  * @brief Sorts the elements of an icalarray using the given comparison function.

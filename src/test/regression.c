@@ -5666,13 +5666,13 @@ static void verify_comp_attendee(icalcomponent *comp)
 
     prop = icalcomponent_get_first_property(comp, ICAL_ATTENDEE_PROPERTY);
     str_is("value", icalproperty_get_attendee(prop), "mailto:att1");
-    str_is("member", get_param(ICAL_MEMBER_PARAMETER, member), "member");
+    str_is("member", icalparameter_get_member_nth(icalproperty_get_first_parameter(prop, ICAL_MEMBER_PARAMETER), 0), "member");
     ok("cutype", get_param(ICAL_CUTYPE_PARAMETER, cutype) == ICAL_CUTYPE_INDIVIDUAL);
     ok("role", get_param(ICAL_ROLE_PARAMETER, role) == ICAL_ROLE_CHAIR);
     ok("partstat", get_param(ICAL_PARTSTAT_PARAMETER, partstat) == ICAL_PARTSTAT_NEEDSACTION);
     ok("rsvp", (get_param(ICAL_RSVP_PARAMETER, rsvp) == ICAL_RSVP_FALSE));
-    str_is("delegatedfrom", get_param(ICAL_DELEGATEDFROM_PARAMETER, delegatedfrom), "mailto:delgfrom");
-    str_is("delegatedto", get_param(ICAL_DELEGATEDTO_PARAMETER, delegatedto), "mailto:delgto");
+    str_is("delegatedfrom", icalparameter_get_delegatedfrom_nth(icalproperty_get_first_parameter(prop, ICAL_DELEGATEDFROM_PARAMETER), 0), "mailto:delgfrom");
+    str_is("delegatedto", icalparameter_get_delegatedto_nth(icalproperty_get_first_parameter(prop, ICAL_DELEGATEDTO_PARAMETER), 0), "mailto:delgto");
     str_is("sentby", get_param(ICAL_SENTBY_PARAMETER, sentby), "mailto:sentby");
     str_is("cn", get_param(ICAL_CN_PARAMETER, cn), "First attendee");
     str_is("language", get_param(ICAL_LANGUAGE_PARAMETER, language), "en_US");
@@ -5684,26 +5684,24 @@ void test_attendees(void)
 {
     icalcomponent *comp, *clone;
     icalproperty *prop;
-    icalparameter *param;
     const char *str;
 
     comp = icalcomponent_new_vevent();
     prop = icalproperty_new(ICAL_ATTENDEE_PROPERTY);
     icalproperty_set_attendee(prop, "mailto:att1");
-#define set_param(_kind, _suffix, _value)    \
-    param = icalparameter_new(_kind);        \
-    icalproperty_add_parameter(prop, param); \
-    icalparameter_set_##_suffix(param, _value);
-    set_param(ICAL_MEMBER_PARAMETER, member, "member");
-    set_param(ICAL_CUTYPE_PARAMETER, cutype, ICAL_CUTYPE_INDIVIDUAL);
-    set_param(ICAL_ROLE_PARAMETER, role, ICAL_ROLE_CHAIR);
-    set_param(ICAL_PARTSTAT_PARAMETER, partstat, ICAL_PARTSTAT_NEEDSACTION);
-    set_param(ICAL_RSVP_PARAMETER, rsvp, ICAL_RSVP_FALSE);
-    set_param(ICAL_DELEGATEDFROM_PARAMETER, delegatedfrom, "mailto:delgfrom");
-    set_param(ICAL_DELEGATEDTO_PARAMETER, delegatedto, "mailto:delgto");
-    set_param(ICAL_SENTBY_PARAMETER, sentby, "mailto:sentby");
-    set_param(ICAL_CN_PARAMETER, cn, "First attendee");
-    set_param(ICAL_LANGUAGE_PARAMETER, language, "en_US");
+#define set_param(_suffix, _value)   \
+    icalproperty_add_parameter(prop, \
+                               icalparameter_new_##_suffix(_value))
+    set_param(member, "member");
+    set_param(cutype, ICAL_CUTYPE_INDIVIDUAL);
+    set_param(role, ICAL_ROLE_CHAIR);
+    set_param(partstat, ICAL_PARTSTAT_NEEDSACTION);
+    set_param(rsvp, ICAL_RSVP_FALSE);
+    set_param(delegatedfrom, "mailto:delgfrom");
+    set_param(delegatedto, "mailto:delgto");
+    set_param(sentby, "mailto:sentby");
+    set_param(cn, "First attendee");
+    set_param(language, "en_US");
 #undef set_param
 
     icalcomponent_add_property(comp, prop);
@@ -6003,6 +6001,332 @@ static void test_icalproperty_enum_convert_string(void)
            icalenum_resourcetype_to_string(rtype), "PROJECTOR");
 }
 
+static void test_icalparameter_parse_multivalued(void)
+{
+    char buffer[4096] = {0};
+    strcat(buffer, "BEGIN:VEVENT\r\n");
+
+    const char *display_param_str =
+        "IMAGE;VALUE=URI;DISPLAY=X-FOO,BADGE:https://local/img2.png\r\n";
+    strcat(buffer, display_param_str);
+
+    const char *delegatedfrom_param_str =
+        "ATTENDEE;DELEGATED-FROM=\"mailto:d1\",\"mailto:d2\":mailto:delgfrom\r\n";
+    strcat(buffer, delegatedfrom_param_str);
+
+    const char *delegatedto_param_str =
+        "ATTENDEE;DELEGATED-TO=\"mailto:d1\",\"mailto:d2\":mailto:delgto\r\n";
+    strcat(buffer, delegatedto_param_str);
+
+    const char *member_param_str =
+        "ATTENDEE;MEMBER=\"mailto:d1\",\"mailto:d2\":mailto:member\r\n";
+    strcat(buffer, member_param_str);
+
+    strcat(buffer, "END:VEVENT\r\n");
+
+    icalcomponent *comp = icalcomponent_new_from_string(buffer);
+    icalproperty *prop;
+
+    prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
+    str_is("DISPLAY", icalproperty_as_ical_string(prop),
+           display_param_str);
+
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    str_is("DELEGATED-FROM", icalproperty_as_ical_string(prop),
+           delegatedfrom_param_str);
+
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    str_is("DELEGATED-TO", icalproperty_as_ical_string(prop),
+           delegatedto_param_str);
+
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    str_is("MEMBER", icalproperty_as_ical_string(prop),
+           member_param_str);
+
+    icalcomponent_free(comp);
+}
+
+static void test_icalparameter_create_multivalued(void)
+{
+    icalparameter *param;
+
+    // Test icalenumarray-valued parameter.
+
+    // Generic constructor:
+    param = icalparameter_new(ICAL_DISPLAY_PARAMETER);
+
+    icalenumarray *display = icalenumarray_new(5);
+    icalenumarray_element elem = {0};
+    elem.val = ICAL_DISPLAY_BADGE;
+    icalenumarray_append(display, &elem);
+    elem.val = ICAL_DISPLAY_X;
+    elem.xvalue = "X-FOO";
+    icalenumarray_append(display, &elem);
+    icalparameter_set_display(param, display);
+    str_is("DISPLAY", icalparameter_as_ical_string(param),
+           "DISPLAY=BADGE,X-FOO");
+    icalparameter_free(param);
+
+    // Generated "new_list" constructor:
+    display = icalenumarray_new(5);
+    elem.val = ICAL_DISPLAY_BADGE;
+    elem.xvalue = NULL;
+    icalenumarray_append(display, &elem);
+    param = icalparameter_new_display_list(display);
+    str_is("DISPLAY", icalparameter_as_ical_string(param), "DISPLAY=BADGE");
+    icalparameter_free(param);
+
+    // Generated "new" constructor:
+    param = icalparameter_new_display(ICAL_DISPLAY_BADGE);
+    str_is("DISPLAY", icalparameter_as_ical_string(param), "DISPLAY=BADGE");
+    icalparameter_free(param);
+
+    // Test icalstrarray-valued parameter.
+    param = icalparameter_new(ICAL_MEMBER_PARAMETER);
+
+    icalstrarray *member = icalstrarray_new(5);
+    icalstrarray_append(member, "mailto:member1");
+    icalstrarray_append(member, "mailto:member2");
+    icalparameter_set_member(param, member);
+
+    str_is("MEMBER", icalparameter_as_ical_string(param),
+           "MEMBER=\"mailto:member1\",\"mailto:member2\"");
+
+    icalparameter_free(param);
+
+    // Generated "new_list" constructor:
+    member = icalstrarray_new(5);
+    icalstrarray_append(member, "mailto:member1");
+    param = icalparameter_new_member_list(member);
+    str_is("MEMBER", icalparameter_as_ical_string(param),
+           "MEMBER=\"mailto:member1\"");
+    icalparameter_free(param);
+
+    // Generated "new" constructor:
+    param = icalparameter_new_member("mailto:member1");
+    str_is("MEMBER", icalparameter_as_ical_string(param),
+           "MEMBER=\"mailto:member1\"");
+    icalparameter_free(param);
+}
+
+static void test_icalstrarray(void)
+{
+    icalstrarray *array = icalstrarray_new(0);
+    icalstrarray *clone;
+    const char *val;
+    size_t pos;
+
+    ok("array: empty", 0 == icalstrarray_size(array));
+
+    icalstrarray_append(array, "foo");
+    ok("array: append foo", 1 == icalstrarray_size(array));
+
+    val = icalstrarray_element_at(array, 0);
+    ok("array[0] == foo", val && !strcmp(val, "foo"));
+
+    icalstrarray_append(array, "bar");
+    ok("array: append bar", 2 == icalstrarray_size(array));
+
+    val = icalstrarray_element_at(array, 1);
+    ok("array[1] == bar", val && !strcmp(val, "bar"));
+
+    pos = icalstrarray_find(array, "bar");
+    ok("array: find(bar) == 1", 1 == pos);
+
+    icalstrarray_add(array, "bar");
+    ok("array: add bar (omit duplicate)", 2 == icalstrarray_size(array));
+
+    icalstrarray_append(array, "bar");
+    ok("array: append bar (duplicate)", 3 == icalstrarray_size(array));
+
+    pos = icalstrarray_find(array, "bar");
+    ok("array: find(bar) == 1", 1 == pos);
+
+    clone = icalstrarray_clone(array);
+    ok("array: clone", 3 == icalstrarray_size(array));
+    val = icalstrarray_element_at(clone, 0);
+    ok("clone[0] == foo", val && !strcmp(val, "foo"));
+    val = icalstrarray_element_at(clone, 1);
+    ok("clone[1] == bar", val && !strcmp(val, "bar"));
+    val = icalstrarray_element_at(clone, 2);
+    ok("clone[2] == bar", val && !strcmp(val, "bar"));
+
+    icalstrarray_remove_element_at(clone, 0);
+    ok("clone: remove clone[0]", 2 == icalstrarray_size(clone));
+
+    val = icalstrarray_element_at(clone, 0);
+    ok("clone[0] == bar", val && !strcmp(val, "bar"));
+    val = icalstrarray_element_at(clone, 1);
+    ok("clone[1] == bar", val && !strcmp(val, "bar"));
+
+    icalstrarray_remove(clone, "bar");
+    ok("clone: remove bar", 0 == icalstrarray_size(clone));
+
+    icalstrarray_sort(array);
+    ok("array: sort", 3 == icalstrarray_size(array));
+    val = icalstrarray_element_at(array, 0);
+    ok("array[0] == bar", val && !strcmp(val, "bar"));
+    val = icalstrarray_element_at(array, 1);
+    ok("array[1] == bar", val && !strcmp(val, "bar"));
+    val = icalstrarray_element_at(array, 2);
+    ok("array[2] == foo", val && !strcmp(val, "foo"));
+
+    icalstrarray_remove(array, "bar");
+    ok("array: remove bar", 1 == icalstrarray_size(array));
+    val = icalstrarray_element_at(array, 0);
+    ok("array[0] == foo", val && !strcmp(val, "foo"));
+
+    icalstrarray_free(array);
+    icalstrarray_free(clone);
+
+    // NULL array pointer safety
+    ok("NULL: size == 0", 0 == icalstrarray_size(NULL));
+
+    icalstrarray_append(NULL, "foo");
+    icalstrarray_add(NULL, "foo");
+    icalstrarray_remove_element_at(NULL, 0);
+    icalstrarray_remove(NULL, 0);
+    icalstrarray_sort(NULL);
+    icalstrarray_free(NULL);
+
+    val = icalstrarray_element_at(NULL, 0);
+    ok("NULL: element_at(0) == NULL", val == NULL);
+
+    pos = icalstrarray_find(NULL, "foo");
+    ok("NULL: find foo == 0", pos == 0);
+
+    clone = icalstrarray_clone(NULL);
+    ok("NULL: clone == NULL", clone == NULL);
+
+    // NULL or invalid argument safety
+    array = icalstrarray_new(0);
+
+    icalstrarray_append(array, NULL);
+    ok("array: append NULL", 0 == icalstrarray_size(array));
+
+    icalstrarray_add(array, NULL);
+    ok("array: add NULL", 0 == icalstrarray_size(array));
+
+    pos = icalstrarray_find(array, NULL);
+    ok("array: find NULL == 0", pos == 0);
+
+    icalstrarray_remove_element_at(array, 0);
+    icalstrarray_remove(array, 0);
+
+    icalstrarray_free(array);
+}
+
+static void test_icalenumarray(void)
+{
+    icalenumarray *array = icalenumarray_new(0);
+    icalenumarray *clone;
+    const icalenumarray_element *elem;
+    size_t pos;
+
+    icalenumarray_element foo = {42, "foo"};
+    icalenumarray_element bar = {11, NULL};
+
+    ok("array: empty", 0 == icalenumarray_size(array));
+
+    icalenumarray_append(array, &foo);
+    ok("array: append foo", 1 == icalenumarray_size(array));
+
+    elem = icalenumarray_element_at(array, 0);
+    ok("array[0] == foo", elem && elem->val == 42 && !strcmp(elem->xvalue, "foo"));
+
+    icalenumarray_append(array, &bar);
+    ok("array: append bar", 2 == icalenumarray_size(array));
+
+    elem = icalenumarray_element_at(array, 1);
+    ok("array[1] == bar", elem && elem->val == 11 && elem->xvalue == NULL);
+
+    pos = icalenumarray_find(array, &bar);
+    ok("array: find(bar) == 1", 1 == pos);
+
+    icalenumarray_add(array, &bar);
+    ok("array: add bar (omit duplicate)", 2 == icalenumarray_size(array));
+
+    icalenumarray_append(array, &bar);
+    ok("array: append bar (duplicate)", 3 == icalenumarray_size(array));
+
+    pos = icalenumarray_find(array, &bar);
+    ok("array: find(bar) == 1", 1 == pos);
+
+    clone = icalenumarray_clone(array);
+    ok("array: clone", 3 == icalenumarray_size(array));
+    elem = icalenumarray_element_at(clone, 0);
+    ok("clone[0] == foo", elem && elem->val == 42 && !strcmp(elem->xvalue, "foo"));
+    elem = icalenumarray_element_at(clone, 1);
+    ok("clone[1] == bar", elem && elem->val == 11 && elem->xvalue == NULL);
+    elem = icalenumarray_element_at(clone, 2);
+    ok("clone[2] == bar", elem && elem->val == 11 && elem->xvalue == NULL);
+
+    icalenumarray_remove_element_at(clone, 0);
+    ok("clone: remove clone[0]", 2 == icalenumarray_size(clone));
+
+    elem = icalenumarray_element_at(clone, 0);
+    ok("clone[0] == bar", elem && elem->val == 11 && elem->xvalue == NULL);
+    elem = icalenumarray_element_at(clone, 1);
+    ok("clone[1] == bar", elem && elem->val == 11 && elem->xvalue == NULL);
+
+    icalenumarray_remove(clone, &bar);
+    ok("clone: remove bar", 0 == icalenumarray_size(clone));
+
+    icalenumarray_free(clone);
+
+    icalenumarray_sort(array);
+    ok("array: sort", 3 == icalenumarray_size(array));
+    elem = icalenumarray_element_at(array, 0);
+    ok("array[0] == bar", elem && elem->val == 11 && elem->xvalue == NULL);
+    elem = icalenumarray_element_at(array, 1);
+    ok("array[1] == bar", elem && elem->val == 11 && elem->xvalue == NULL);
+    elem = icalenumarray_element_at(array, 2);
+    ok("array[2] == foo", elem && elem->val == 42 && !strcmp(elem->xvalue, "foo"));
+
+    icalenumarray_remove(array, &bar);
+    ok("array: remove bar", 1 == icalenumarray_size(array));
+    elem = icalenumarray_element_at(array, 0);
+    ok("array[0] == foo", elem && elem->val == 42 && !strcmp(elem->xvalue, "foo"));
+
+    icalenumarray_free(array);
+
+    // NULL array pointer safety
+    ok("NULL: size == 0", 0 == icalenumarray_size(NULL));
+
+    icalenumarray_append(NULL, &foo);
+    icalenumarray_add(NULL, &foo);
+    icalenumarray_remove_element_at(NULL, 0);
+    icalenumarray_remove(NULL, 0);
+    icalenumarray_sort(NULL);
+    icalenumarray_free(NULL);
+
+    elem = icalenumarray_element_at(NULL, 0);
+    ok("NULL: element_at(0) == NULL", elem == NULL);
+
+    pos = icalenumarray_find(NULL, &foo);
+    ok("NULL: find foo == 0", pos == 0);
+
+    clone = icalenumarray_clone(NULL);
+    ok("NULL: clone == NULL", clone == NULL);
+
+    // NULL or invalid argument safety
+    array = icalenumarray_new(0);
+
+    icalenumarray_append(array, NULL);
+    ok("array: append NULL", 0 == icalenumarray_size(array));
+
+    icalenumarray_add(array, NULL);
+    ok("array: add NULL", 0 == icalenumarray_size(array));
+
+    pos = icalenumarray_find(array, NULL);
+    ok("array: find NULL == 0", pos == 0);
+
+    icalenumarray_remove_element_at(array, 0);
+    icalenumarray_remove(array, 0);
+
+    icalenumarray_free(array);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -6174,6 +6498,10 @@ int main(int argc, char *argv[])
     test_run("Test external property iterator", test_icalpropiter, do_test, do_header);
     test_run("Test external parameter iterator", test_icalparamiter, do_test, do_header);
     test_run("Test property enum value string conversion", test_icalproperty_enum_convert_string, do_test, do_header);
+    test_run("Test parsing multi-valued parameters", test_icalparameter_parse_multivalued, do_test, do_header);
+    test_run("Test creating multi-valued parameters", test_icalparameter_create_multivalued, do_test, do_header);
+    test_run("Test string arrays", test_icalstrarray, do_test, do_header);
+    test_run("Test enum arrays", test_icalenumarray, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
