@@ -53,6 +53,7 @@ you can handle code that no longer exists in 4.0 with:
 
 The following functions have been added:
 
+* `icalarray_set_element_at()`
 * `icalrecurrencetype_new()`
 * `icalrecurrencetype_ref()`
 * `icalrecurrencetype_unref()`
@@ -63,6 +64,9 @@ The following functions have been added:
 * `icalcomponent_clone()`
 * `icalproperty_clone()`
 * `icalparameter_clone()`
+* `icalparameter_kind_value_kind()`
+* `icalparameter_is_multivalued()`
+* `icalparameter_decode_value()`
 * `icalvalue_clone()`
 * `icalcluster_clone()`
 * `icalrecur_iterator_prev()`
@@ -80,6 +84,7 @@ The following functions have been added:
 * `ical_get_invalid_rrule_handling_setting()`
 * `icalparser_get_ctrl()`
 * `icalparser_set_ctrl()`
+* and the new functions for the `icalstrarray` and `icalenumarray` data types
 
 ### Removed functions
 
@@ -96,6 +101,13 @@ The following functions have been added:
 * No longer publicly visible functions:
   * `icaltzutil_fetch_timezone()`
   * `icalrecurrencetype_clear()`
+
+### Added data types
+
+* These data types have been added:
+  * icalstrarray - for manipulating an array of strings
+  * icalenumarray_element - structure to hold a generic enum value
+  * icalenumarray - for manipulating an array of enum elements
 
 ### Removed data types
 
@@ -203,6 +215,25 @@ changes to this in libical 4.0:
 
     // Work with the object
     // No need to unref
+```
+
+### Multi-valued parameters
+
+Support for these multi-valued parameters is added in libical 4.0.
+
+* DELEGATED-FROM (RFC 5545)
+* DELEGATED-TO (RFC 5545)
+* MEMBER (RFC 5545)
+* DISPLAY (RFC 7986)
+* FEATURE (RFC 7986)
+
+You can access the 'nth' value for such parameters using the new "_nth" functions.
+
+For example, to access the first delegated-to attendee use
+
+```c
+param = icalproperty_get_first_parameter(prop, ICAL_DELEGATEDTO_PARAMETER);
+icalparameter_get_delegatedto_nth(param, 0)
 ```
 
 ## C++ library
