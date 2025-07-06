@@ -352,17 +352,17 @@
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_delegatedfrom_list" corresponds="icalparameter_new_delegatedfrom_list" kind="constructor" since="4.0.0">
+    <method name="i_cal_parameter_new_delegatedfrom_list" corresponds="icalparameter_new_delegatedfrom_list" kind="constructor" since="4.0">
         <parameter type="ICalStrArray *" name="v" comment="The string array used to create the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_get_delegatedfrom" corresponds="icalparameter_get_delegatedfrom" kind="get" since="1.0">
+    <method name="i_cal_parameter_get_delegatedfrom" corresponds="icalparameter_get_delegatedfrom" kind="get" since="4.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
         <returns type="ICalStrArray *" annotation="transfer full" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_set_delegatedfrom" corresponds="icalparameter_set_delegatedfrom" kind="set" since="1.0">
+    <method name="i_cal_parameter_set_delegatedfrom" corresponds="icalparameter_set_delegatedfrom" kind="set" since="4.0">
         <parameter type="ICalParameter *" name="value" comment="The #ICalParameter to be set"/>
         <parameter type="ICalStrArray *" name="v" comment="The string used to set into the @value"/>
         <comment xml:space="preserve"></comment>
@@ -372,17 +372,17 @@
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_delegatedto_list" corresponds="icalparameter_new_delegatedto_list" kind="constructor" since="4.0.0">
+    <method name="i_cal_parameter_new_delegatedto_list" corresponds="icalparameter_new_delegatedto_list" kind="constructor" since="4.0">
         <parameter type="ICalStrArray *" name="v" comment="The string array used to create the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_get_delegatedto" corresponds="icalparameter_get_delegatedto" kind="get" since="1.0">
+    <method name="i_cal_parameter_get_delegatedto" corresponds="icalparameter_get_delegatedto" kind="get" since="4.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
         <returns type="ICalStrArray *" annotation="transfer full" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_set_delegatedto" corresponds="icalparameter_set_delegatedto" kind="set" since="1.0">
+    <method name="i_cal_parameter_set_delegatedto" corresponds="icalparameter_set_delegatedto" kind="set" since="4.0">
         <parameter type="ICalParameter *" name="value" comment="The #ICalParameter to be set"/>
         <parameter type="ICalStrArray *" name="v" comment="The string used to set into the @value"/>
         <comment xml:space="preserve"></comment>
@@ -422,17 +422,17 @@
         <returns type="ICalParameter *" annotation="nullable" comment="The newly created #ICalParameter" />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_display_list" corresponds="icalparameter_new_display_list" kind="constructor" since="4.0.0">
+    <method name="i_cal_parameter_new_display_list" corresponds="icalparameter_new_display_list" kind="constructor" since="4.0">
         <parameter type="ICalEnumArray *" name="value" comment="The #ICalEnumArray element value of the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_get_display" corresponds="icalparameter_get_display" kind="get" since="3.0.15">
+    <method name="i_cal_parameter_get_display" corresponds="icalparameter_get_display" kind="get" since="4.0">
         <parameter type="const ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
         <returns type="ICalEnumArray *" annotation="transfer full" comment="The #ICalEnumArray value of the @param"/>
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_set_display" corresponds="icalparameter_set_display" kind="set" since="3.0.15">
+    <method name="i_cal_parameter_set_display" corresponds="icalparameter_set_display" kind="set" since="4.0">
         <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be set"/>
         <parameter type="ICalEnumArray *" name="value" comment="The #ICalEnumArray to set into the @param"/>
         <comment xml:space="preserve"></comment>
@@ -502,17 +502,17 @@
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_feature_list" corresponds="icalparameter_new_feature_list" kind="constructor" since="4.0.0">
+    <method name="i_cal_parameter_new_feature_list" corresponds="icalparameter_new_feature_list" kind="constructor" since="4.0">
         <parameter type="ICalEnumArray *" name="value" comment="The #ICalEnumArray value of the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter" />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_get_feature" corresponds="icalparameter_get_feature" kind="get" since="3.0.15">
+    <method name="i_cal_parameter_get_feature" corresponds="icalparameter_get_feature" kind="get" since="4.0">
         <parameter type="const ICalParameter *" name="param" comment="The #ICalParameter to be queried"/>
         <returns type="ICalEnumArray *" annotation="transfer full" comment="The #ICalEnumArray value of the @param"/>
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_set_feature" corresponds="icalparameter_set_feature" kind="set" since="3.0.15">
+    <method name="i_cal_parameter_set_feature" corresponds="icalparameter_set_feature" kind="set" since="4.0">
         <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be set"/>
         <parameter type="ICalEnumArray *" name="value" comment="The #ICalEnumArray to set into the @param"/>
         <comment xml:space="preserve"></comment>
@@ -672,17 +672,17 @@
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_new_member_list" corresponds="icalparameter_new_member_list" kind="constructor" since="4.0.0">
+    <method name="i_cal_parameter_new_member_list" corresponds="icalparameter_new_member_list" kind="constructor" since="4.0">
         <parameter type="ICalStrArray *" name="v" comment="The string array used to create the new #ICalParameter"/>
         <returns type="ICalParameter *" annotation="transfer full" comment="The newly created #ICalParameter." />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_get_member" corresponds="icalparameter_get_member" kind="get" since="1.0">
+    <method name="i_cal_parameter_get_member" corresponds="icalparameter_get_member" kind="get" since="4.0">
         <parameter type="const ICalParameter *" name="value" comment="The #ICalParameter to be queried"/>
         <returns type="ICalStrArray *" annotation="transfer full" comment="The property of the @value" />
         <comment xml:space="preserve"></comment>
     </method>
-    <method name="i_cal_parameter_set_member" corresponds="icalparameter_set_member" kind="set" since="1.0">
+    <method name="i_cal_parameter_set_member" corresponds="icalparameter_set_member" kind="set" since="4.0">
         <parameter type="ICalParameter *" name="value" comment="The #ICalParameter to be set"/>
         <parameter type="ICalStrArray *" name="v" comment="The string used to set into the @value"/>
         <comment xml:space="preserve"></comment>
