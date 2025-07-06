@@ -161,7 +161,8 @@ COMPILE_WARNINGS() {
 # print warnings found in the cppcheck output
 # $1 = file with the cppcheck output
 CPPCHECK_WARNINGS() {
-  CHECK_WARNINGS "$1" "\(warning\|error\|portability\)" ""
+  whitelist=''
+  CHECK_WARNINGS "$1" "\(warning\|error\|portability\|style\)" "$whitelist"
 }
 
 #function TIDY_WARNINGS:
@@ -433,12 +434,6 @@ CPPCHECK() {
   COMMAND_EXISTS "cppcheck" "-c"
   echo "===== START SETUP FOR CPPCHECK: $1 ======"
 
-  #first build it
-  cd "$TOP" || exit 1
-  SET_GCC
-  CONFIGURE "$name" "$2"
-  make 2>&1 | tee make.out || exit 1
-
   echo "===== START CPPCHECK: $1 ======"
   cd "$TOP" || exit 1
   rm -f cppcheck.out cppcheck-report.txt
@@ -456,28 +451,25 @@ CPPCHECK() {
     --template='{file}:{line},{severity},{id},{message}' \
     --checkers-report=cppcheck-report.txt \
     -D __cppcheck__ \
+    -D ICAL_PACKAGE="\"x\"" \
+    -D ICAL_VERSION="\"y\"" \
     -D _unused="(void)" \
     -D _fallthrough="" \
     -D MIN="" \
     -D sleep="" \
     -U PVL_USE_MACROS \
-    -I "$BDIR" \
-    -I "$BDIR/src/libical" \
-    -I "$BDIR/src/libicalss" \
-    -I "$BDIR/src/libicalvcal" \
-    -I "$BDIR/src/libicalvcard" \
-    -I "$BDIR/src/libical-glib" \
     -I "$TOP/src/libical" \
     -I "$TOP/src/libicalss" \
     -I "$TOP/src/libicalvcal" \
     -I "$TOP/src/libicalvcard" \
     -I "$TOP/src/libical-glib" \
     -i "$TOP/src/Net-ICal-Libical/" \
-    "$TOP/src" "$BDIR"/src/libical/icalderived* 2>&1 |
-    grep -v "icalssyacc.c:" |
-    grep -v "icalsslexer.c:" |
-    grep -v "vcc.c:" |
-    grep -v "vcc.y:" |
+    -i "$TOP/src/java/" \
+    -i "$TOP/src/libicalss/icalssyacc.c" \
+    -i "$TOP/src/libicalss/icalsslexer.c" \
+    -i "$TOP/src/libicalvcal/vcc.y" \
+    -i "$TOP/src/libicalvcal/vcc.c" \
+    "$TOP/src" 2>&1 |
     tee cppcheck.out
   set -e
   CPPCHECK_WARNINGS cppcheck.out
