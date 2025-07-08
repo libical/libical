@@ -14,7 +14,7 @@ repos:
   - id: check-added-large-files
   - id: check-case-conflict
 - repo: https://github.com/perltidy/perltidy
-  rev: "20250311.06"
+  rev: "20250616.02"
   hooks:
   - id: perltidy
 - repo: https://github.com/codespell-project/codespell
