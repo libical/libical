@@ -1751,14 +1751,22 @@ const char *icalcomponent_get_uid(icalcomponent *comp)
 
 void icalcomponent_set_recurrenceid(icalcomponent *comp, struct icaltimetype v)
 {
+    const char *tzid;
+
     ICALSETUPSET(ICAL_RECURRENCEID_PROPERTY);
 
     if (prop == 0) {
         prop = icalproperty_new_recurrenceid(v);
         icalcomponent_add_property(inner, prop);
+    } else {
+        icalproperty_remove_parameter_by_kind(prop, ICAL_TZID_PARAMETER);
     }
 
     icalproperty_set_recurrenceid(prop, v);
+
+    if ((tzid = icaltime_get_tzid(v)) != NULL && !icaltime_is_utc(v)) {
+        icalproperty_add_parameter(prop, icalparameter_new_tzid(tzid));
+    }
 }
 
 struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent *comp)
@@ -1784,7 +1792,7 @@ struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent *comp)
         return icaltime_null_time();
     }
 
-    return icalproperty_get_recurrenceid(prop);
+    return icalproperty_get_datetime_with_component(prop, comp);
 }
 
 void icalcomponent_set_description(icalcomponent *comp, const char *v)
