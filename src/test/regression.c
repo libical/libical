@@ -4749,7 +4749,7 @@ void test_recur_tzid(void)
 
     recurid = icalcomponent_get_recurrenceid(subcomp);
 
-    ok("RECURRENCE-ID is test_tz", (strcmp(icaltimezone_get_tzid((icaltimezone*)recurid.zone), "test_tz") == 0));
+    ok("RECURRENCE-ID is test_tz", (strcmp(icaltimezone_get_tzid((icaltimezone *)recurid.zone), "test_tz") == 0));
 
     icalcomponent_free(comp);
 }
