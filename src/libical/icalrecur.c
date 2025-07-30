@@ -472,6 +472,25 @@ static void icalrecur_clause_name_and_value(struct icalrecur_parser *parser,
     *value = idx;
 }
 
+/*
+ * We expect BYHOUR, BYMINUTE, and BYSECOND data to be sorted.
+ */
+static void sort_byrules(icalrecurrence_by_data *by)
+{
+    short *array = by->data;
+
+    int i, j;
+
+    for (i = 1; i < by->size; i++) {
+        for (j = i - 1; j >= 0 && array[j] > array[j + 1]; j--) {
+            short tmp = array[j + 1];
+
+            array[j + 1] = array[j];
+            array[j] = tmp;
+        }
+    }
+}
+
 /* returns < 0 if a parsing problem:
    -2 if an RSCALE rule is encountered yet we don't RSCALE support enabled
    -1 for all other parsing problems
@@ -540,6 +559,16 @@ static int icalrecur_add_byrules(struct icalrecur_parser *parser, icalrecurrence
     if (!icalrecur_resize_by(by, i)) {
         return -1;
     }
+
+    /* Sort time bylists.
+     * Date bylists do not require sorting because they are implemented
+     * differently (with a bitmask), and are not directly used to find
+     * the next occurrence.
+     */
+    if (by == &parser->rt->by[ICAL_BY_HOUR] ||
+        by == &parser->rt->by[ICAL_BY_MINUTE] ||
+        by == &parser->rt->by[ICAL_BY_SECOND])
+        sort_byrules(by);
 
     return 0;
 }
@@ -3539,6 +3568,19 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
     return impl->last;
 }
 
+/** Set bydata->index so that bydata->by.data[bydata->index] == tfield, if possible.
+ */
+static void set_bydata_start(icalrecurrence_iterator_by_data *bydata, int tfield)
+{
+    int bdi;
+    for (bdi = 0;
+         bdi < bydata->by.size; bdi++)
+        if (bydata->by.data[bdi] == tfield) {
+            bydata->index = bdi;
+            return;
+        }
+}
+
 static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 {
     icalrecurrencetype_frequency freq = impl->rule->freq;
@@ -3668,6 +3710,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
                bump start to next hour that matches interval */
             increment_hour(impl, interval - diff);
         }
+        set_bydata_start(&impl->bydata[ICAL_BY_HOUR], impl->istart.hour);
         break;
 
     case ICAL_MINUTELY_RECURRENCE:
@@ -3677,6 +3720,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
                bump start to next minute that matches interval */
             increment_minute(impl, interval - diff);
         }
+        set_bydata_start(&impl->bydata[ICAL_BY_MINUTE], impl->istart.minute);
         break;
 
     case ICAL_SECONDLY_RECURRENCE:
@@ -3686,6 +3730,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
                bump start to next second that matches interval */
             increment_second(impl, interval - diff);
         }
+        set_bydata_start(&impl->bydata[ICAL_BY_SECOND], impl->istart.second);
         break;
 
     default:
