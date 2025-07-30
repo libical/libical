@@ -315,6 +315,13 @@ if(WITH_CXX_BINDINGS)
   testme(vcf_leak vcf_leak.cpp)
 endif()
 
+########### next target ###############
+
+if(NOT LIBICAL_DEVMODE_LEAK_SANITIZER)
+  set(mime_doublefree_SRCS mime_doublefree.c)
+  testme(mime_doublefree "${mime_doublefree_SRCS}")
+endif()
+
 ############# fuzzer tests ############
 
 testme(icalcomponent_fuzz1 icalcomponent_fuzz1.c)
