@@ -4709,6 +4709,51 @@ void test_tzid_with_utc_time(void)
     icalcomponent_free(comp);
 }
 
+void test_recur_tzid(void)
+{
+    const char *calstr =
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VTIMEZONE\r\n"
+        "TZID:test_tz\r\n"
+        "BEGIN:STANDARD\r\n"
+        "TZOFFSETFROM:-0400\r\n"
+        "TZOFFSETTO:-0500\r\n"
+        "TZNAME:EST\r\n"
+        "DTSTART:19701101T020000\r\n"
+        "RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\r\n"
+        "END:STANDARD\r\n"
+        "END:VTIMEZONE\r\n"
+        "BEGIN:VEVENT\r\n"
+        "DTSTART;TZID=test_tz:20250603T023000\r\n"
+        "DTEND;TZID=test_tz:20250603T033000\r\n"
+        "RRULE:FREQ=WEEKLY;BYDAY=TU\r\n"
+        "UID:a\r\n"
+        "END:VEVENT\r\n"
+        "BEGIN:VEVENT\r\n"
+        "DTSTART;TZID=test_tz:20250617T030000\r\n"
+        "DTEND;TZID=test_tz:20250617T040000\r\n"
+        "DTSTAMP:20250603T063931Z\r\n"
+        "UID:a\r\n"
+        "RECURRENCE-ID;TZID=test_tz:20250617T023000\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+
+    icalcomponent *comp, *subcomp;
+    struct icaltimetype recurid;
+
+    comp = icalcomponent_new_from_string(calstr);
+    ok("icalcomponent_new_from_string()", (comp != NULL));
+    icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+    subcomp = icalcomponent_get_next_component(comp, ICAL_VEVENT_COMPONENT);
+    ok("get subcomp", (subcomp != NULL));
+
+    recurid = icalcomponent_get_recurrenceid(subcomp);
+
+    ok("RECURRENCE-ID is test_tz", (strcmp(icaltimezone_get_tzid((icaltimezone*)recurid.zone), "test_tz") == 0));
+
+    icalcomponent_free(comp);
+}
+
 void test_kind_to_string(void)
 {
     // value testing
@@ -6474,6 +6519,7 @@ int main(int argc, char *argv[])
              do_header);
     test_run("Test setting/unsetting zoneinfo dir", test_zoneinfo_stuff, do_test, do_header);
     test_run("Test TZID with UTC time", test_tzid_with_utc_time, do_test, do_header);
+    test_run("Test RECURRENCE-ID TZID", test_recur_tzid, do_test, do_header);
     test_run("Test kind_to_string", test_kind_to_string, do_test, do_header);
     test_run("Test string_to_kind", test_string_to_kind, do_test, do_header);
     test_run("Test set DATE/DATE-TIME VALUE", test_set_date_datetime_value, do_test, do_header);
