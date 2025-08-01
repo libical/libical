@@ -224,7 +224,6 @@ icalcomponent *icalmime_parse(char *(*get_string)(char *s, size_t size, void *d)
             icalcomponent_add_property(
                 comp,
                 icalproperty_vanew_xlicerror(temp, errParam, (void *)0));
-            icalparameter_free(errParam);
         }
 
         if (parts[i].header.major != SSPM_NO_MAJOR_TYPE &&

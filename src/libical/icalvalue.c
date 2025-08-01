@@ -473,7 +473,6 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                      str, icalvalue_kind_to_string(kind));
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
             *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            icalparameter_free(errParam);
         }
         break;
     }
@@ -618,7 +617,6 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                      str, icalvalue_kind_to_string(kind));
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
             *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            icalparameter_free(errParam);
         }
     } break;
 
@@ -733,7 +731,6 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
             *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            icalparameter_free(errParam);
         }
 
         snprintf(temp, TMP_BUF_SIZE,
@@ -756,7 +753,6 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
         errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
         *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
-        icalparameter_free(errParam);
     }
 #if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic pop
