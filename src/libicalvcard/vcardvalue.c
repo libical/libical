@@ -299,7 +299,6 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                      str, vcardvalue_kind_to_string(kind));
             errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
             *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            vcardparameter_free(errParam);
         }
         break;
     }
@@ -364,7 +363,6 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                      str, vcardvalue_kind_to_string(kind));
             errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
             *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            vcardparameter_free(errParam);
         }
         break;
     }
@@ -457,7 +455,6 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
             errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
             *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            vcardparameter_free(errParam);
         }
 
         snprintf(temp, TMP_BUF_SIZE,
@@ -476,7 +473,6 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
         errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
         *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
-        vcardparameter_free(errParam);
     }
 
     return value;
