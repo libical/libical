@@ -311,7 +311,8 @@ ASAN_BUILD() {
   echo "===== START ASAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libasan.so" "-a"
   SET_GCC
-  export ASAN_OPTIONS=verify_asan_link_order=0 #seems to be needed with different ld on Fedora (like gold)
+  #asan also does leak detection. do that in the specific leak sanitizer
+  export ASAN_OPTIONS="detect_leaks=0:verify_asan_link_order=0" #link_order is needed with different ld on Fedora (like gold)
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
 }
