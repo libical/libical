@@ -3015,14 +3015,24 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
         if (!has_by_data(impl, ICAL_BY_DAY)) {
             int nweeks = weeks_in_year(year);
 
-            /* Calculate location of DTSTART day in weekno 1 */
-            doy = get_day_of_year(impl, year,
-                                  impl->dtstart.month, impl->dtstart.day);
-            (void)__icaltime_from_day_of_year(impl, doy, year, &weekno);
-            if (weekno > doy) {
-                doy += 7;
+            start_doy = 1;
+            /* See which week contains Jan 1 */
+            (void)__icaltime_from_day_of_year(impl, 1, year, &weekno);
+            if (weekno > 1) {
+                /* Jan 1 is in last week of previous year - jump ahead */
+                start_doy += 7;
             }
-            start_doy = doy + get_start_of_week(impl);
+            /* Get the first day of the first week,
+			 * accounting for the week start */
+			set_day_of_year(impl, 1);
+            start_doy += get_start_of_week(impl) - 1;
+            /* Adjust to the next instance of DTSTART's week day */
+            start_doy += (get_day_of_week_adjusted(impl, impl->dtstart.year,
+                                                   impl->dtstart.month, impl->dtstart.day) -
+                          (int)impl->rule->week_start + 7) %
+                         7;
+            /* Reset impl to this year */
+            (void)get_days_in_year(impl, year);
 
             /* Add day of week in each BYWEEKNO to the year days bitmask */
             for (i = 0; i < impl->bydata[ICAL_BY_WEEK_NO].by.size; i++) {
@@ -3635,6 +3645,9 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 
         /* Copy the first day into last */
         set_day_of_year(impl, impl->days_index);
+        if (impl->days_index < 1) {
+            increment_year(impl, -1);
+        }
 
         break;
 
