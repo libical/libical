@@ -81,5 +81,4 @@ install(TARGETS ical_jni EXPORT icalTargets DESTINATION lib)
 
 ########### install files ###############
 
-install(FILES DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
 install(FILES ${CMAKE_BINARY_DIR}/src/java/libical.jar DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
