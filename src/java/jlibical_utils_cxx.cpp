@@ -96,7 +96,7 @@ void setCObjectPtr(JNIEnv *env, jobject surrogate, void* subject)
         return;
     }
 
-        env->SetLongField(surrogate,fid,(long)subject);
+        env->SetLongField(surrogate,fid,(jlong)subject);
 }
 
 //-------------------------------------------------------
