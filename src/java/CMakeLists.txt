@@ -5,16 +5,6 @@
 
 include(UseJava)
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-  set(JNI_PLATFORM "linux")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-  set(JNI_PLATFORM "darwin")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-  set(JNI_PLATFORM "win32")
-else()
-  message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
-endif()
-
 set(
   ical_jni_LIB_SRCS
   jlibical_consts_cxx.h
@@ -51,8 +41,7 @@ target_include_directories(
   PRIVATE
     ${CMAKE_SOURCE_DIR}/src/libical
     ${CMAKE_BINARY_DIR}/src/libical
-    $ENV{JAVA_HOME}/include
-    $ENV{JAVA_HOME}/include/${JNI_PLATFORM}
+    ${JNI_INCLUDE_DIRS}
 )
 
 target_link_libraries(ical_jni ical_cxx)

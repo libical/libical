@@ -265,6 +265,15 @@ if(LIBICAL_JAVA_BINDINGS)
     )
   endif()
   find_package(Java)
+  find_package(JNI)
+  if(NOT JNI_FOUND)
+    message(
+      FATAL_ERROR
+      "Building the Java bindings is not possible since the JNI headers could not be found. "
+      "You might try setting the JAVA_HOME environment variable to help CMake locate java. "
+      "Otherwise, disable Java binding generation using the -DLIBICAL_JAVA_BINDINGS=False CMake option."
+    )
+  endif()
   if(NOT Java_FOUND)
     message(
       FATAL_ERROR
