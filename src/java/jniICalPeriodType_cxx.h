@@ -20,7 +20,6 @@ extern "C" {
 
 #include "ical.h"
 
-[[maybe_unused]]static void initICalPeriodTypeFieldIDs(JNIEnv* env, jclass clazz);
 
 void  jni_SetStart_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType);
 void jni_GetStart_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType);
