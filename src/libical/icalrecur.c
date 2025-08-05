@@ -3024,7 +3024,7 @@ static int expand_year_days(icalrecur_iterator *impl, int year)
             }
             /* Get the first day of the first week,
 			 * accounting for the week start */
-			set_day_of_year(impl, 1);
+            set_day_of_year(impl, 1);
             start_doy += get_start_of_week(impl) - 1;
             /* Adjust to the next instance of DTSTART's week day */
             start_doy += (get_day_of_week_adjusted(impl, impl->dtstart.year,
