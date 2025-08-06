@@ -94,11 +94,17 @@ if(LIBICAL_BUILD_TESTING)
     set(_test_results_dir "${CMAKE_BINARY_DIR}/test-results/java")
     file(MAKE_DIRECTORY "${_test_results_dir}")
 
+    if(WIN32)
+      set(_classpath_sep ";")
+    else()
+      set(_classpath_sep ":")
+    endif()
+
     add_test(
       NAME libical_java_test
       COMMAND
         ${Java_JAVA_EXECUTABLE} -Djava.library.path=$<TARGET_FILE_DIR:ical_jni> -jar ${JUnit_JAR} --class-path
-        "$<TARGET_PROPERTY:libical_test,JAR_FILE>:$<TARGET_PROPERTY:libical_jar,JAR_FILE>"
+        "$<TARGET_PROPERTY:libical_test,JAR_FILE>${_classpath_sep}$<TARGET_PROPERTY:libical_jar,JAR_FILE>"
         --select-class=net.cp.jlibical.LibIcalTest --reports-dir="${_test_results_dir}"
     )
 
