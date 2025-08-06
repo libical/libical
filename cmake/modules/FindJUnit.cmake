@@ -20,14 +20,12 @@ if(NOT DEFINED JUnit_FIND_VERSION)
 endif()
 
 set(_junit_jar_name "junit-platform-console-standalone-${JUnit_FIND_VERSION}.jar")
-set(_junit_url "https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/${JUnit_FIND_VERSION}/${_junit_jar_name}")
-
-FetchContent_Declare(
-  junit
-  URL "${_junit_url}"
-  DOWNLOAD_NO_EXTRACT TRUE
-  DOWNLOAD_NAME "${_junit_jar_name}"
+set(
+  _junit_url
+  "https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/${JUnit_FIND_VERSION}/${_junit_jar_name}"
 )
+
+FetchContent_Declare(junit URL "${_junit_url}" DOWNLOAD_NO_EXTRACT TRUE DOWNLOAD_NAME "${_junit_jar_name}")
 
 FetchContent_MakeAvailable(junit)
 
@@ -39,8 +37,12 @@ if(EXISTS "${JUnit_JAR}")
 
   if(NOT TARGET JUnit::JUnit)
     add_library(JUnit::JUnit IMPORTED INTERFACE)
-    set_target_properties(JUnit::JUnit PROPERTIES
-      IMPORTED_LOCATION "${JUnit_JAR}")
+    set_target_properties(
+      JUnit::JUnit
+      PROPERTIES
+        IMPORTED_LOCATION
+          "${JUnit_JAR}"
+    )
   endif()
 
   if(NOT JUnit_FIND_QUIETLY)
@@ -60,4 +62,3 @@ mark_as_advanced(JUnit_JAR)
 unset(_junit_jar_name)
 unset(_junit_url)
 unset(_junit_source_dir)
-

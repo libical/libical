@@ -134,7 +134,7 @@ public class LibIcalTest {
 
         ICalProperty exdateProp = new ICalProperty(ICalProperty.ICalPropertyKind.ICAL_EXDATE_PROPERTY);
         exdateProp.set_exdate(testTime);
-        
+
         ICalTimeType returnedTime = exdateProp.get_exdate();
         assertEquals(2001, returnedTime.getYear());
         assertEquals(12, returnedTime.getMonth());
@@ -157,22 +157,22 @@ public class LibIcalTest {
 
         ICalProperty exruleProp = new ICalProperty(ICalProperty.ICalPropertyKind.ICAL_EXRULE_PROPERTY);
         ICalRecurrenceType exrule = new ICalRecurrenceType();
-        
+
         exrule.setUntil(testTime);
         exrule.setFreq(ICalRecurrenceType.ICalRecurrenceTypeFrequency.ICAL_MINUTELY_RECURRENCE);
         exrule.setWeek_start(ICalRecurrenceType.ICalRecurrenceTypeWeekday.ICAL_SUNDAY_WEEKDAY);
-        
+
         short[] testArray = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61};
         exrule.setBy_second(testArray);
         exrule.setBy_minute(testArray);
-        
+
         exruleProp.set_exrule(exrule);
 
         ICalRecurrenceType returnedExrule = exruleProp.get_exrule();
 
         assertEquals(ICalRecurrenceType.ICalRecurrenceTypeFrequency.ICAL_MINUTELY_RECURRENCE, returnedExrule.getFreq());
         assertEquals(ICalRecurrenceType.ICalRecurrenceTypeWeekday.ICAL_SUNDAY_WEEKDAY, returnedExrule.getWeek_start());
-        
+
         assertEquals(31, returnedExrule.getBy_secondIndexed(30));
         assertEquals(29, returnedExrule.getBy_minuteIndexed(28));
     }
@@ -190,7 +190,7 @@ public class LibIcalTest {
 
         ICalProperty recurrenceIdProp = new ICalProperty(ICalProperty.ICalPropertyKind.ICAL_RECURRENCEID_PROPERTY);
         recurrenceIdProp.set_recurrenceid(testTime);
-        
+
         ICalTimeType returnedTime = recurrenceIdProp.get_recurrenceid();
         assertEquals(2001, returnedTime.getYear());
         assertEquals(12, returnedTime.getMonth());
@@ -213,21 +213,21 @@ public class LibIcalTest {
 
         ICalProperty rruleProp = new ICalProperty(ICalProperty.ICalPropertyKind.ICAL_RRULE_PROPERTY);
         ICalRecurrenceType rrule = new ICalRecurrenceType();
-        
+
         rrule.setUntil(testTime);
         rrule.setFreq(ICalRecurrenceType.ICalRecurrenceTypeFrequency.ICAL_MINUTELY_RECURRENCE);
         rrule.setWeek_start(ICalRecurrenceType.ICalRecurrenceTypeWeekday.ICAL_SUNDAY_WEEKDAY);
-        
+
         short[] testHourArray = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
         rrule.setBy_hour(testHourArray);
-        
+
         rruleProp.set_rrule(rrule);
 
         ICalRecurrenceType returnedRrule = rruleProp.get_rrule();
 
         assertEquals(ICalRecurrenceType.ICalRecurrenceTypeFrequency.ICAL_MINUTELY_RECURRENCE, returnedRrule.getFreq());
         assertEquals(ICalRecurrenceType.ICalRecurrenceTypeWeekday.ICAL_SUNDAY_WEEKDAY, returnedRrule.getWeek_start());
-        
+
         assertEquals(12, returnedRrule.getBy_hourIndexed(11));
     }
 
@@ -254,7 +254,7 @@ public class LibIcalTest {
         ICalProperty freebusyProp = new ICalProperty(ICalProperty.ICalPropertyKind.ICAL_FREEBUSY_PROPERTY);
         ICalPeriodType period = new ICalPeriodType();
         ICalDurationType duration = new ICalDurationType();
-        
+
         duration.setDays(0);
         duration.setHours(10);
         duration.setMinutes(15);
@@ -296,7 +296,7 @@ public class LibIcalTest {
 
         ICalProperty dtstampProp = new ICalProperty(ICalProperty.ICalPropertyKind.ICAL_DTSTAMP_PROPERTY);
         dtstampProp.set_dtstamp(testTime);
-        
+
         ICalTimeType returnedTime = dtstampProp.get_dtstamp();
         assertEquals(2001, returnedTime.getYear());
         assertEquals(12, returnedTime.getMonth());
@@ -311,7 +311,7 @@ public class LibIcalTest {
         ICalProperty attendeeProp = new ICalProperty(ICalProperty.ICalPropertyKind.ICAL_ATTENDEE_PROPERTY);
         String expectedAttendee = "MAILTO:userid@domain";
         attendeeProp.set_attendee(expectedAttendee);
-        
+
         assertEquals(expectedAttendee, attendeeProp.get_attendee());
     }
 
@@ -320,7 +320,7 @@ public class LibIcalTest {
         ICalProperty commentProp = new ICalProperty(ICalProperty.ICalPropertyKind.ICAL_COMMENT_PROPERTY);
         String expectedComment = "Test comment";
         commentProp.set_comment(expectedComment);
-        
+
         assertEquals(expectedComment, commentProp.get_comment());
     }
 
@@ -329,20 +329,20 @@ public class LibIcalTest {
         ICalProperty organizerProp = new ICalProperty(ICalProperty.ICalPropertyKind.ICAL_ORGANIZER_PROPERTY);
         String expectedOrganizer = "MAILTO:organizer@domain";
         organizerProp.set_organizer(expectedOrganizer);
-        
+
         assertEquals(expectedOrganizer, organizerProp.get_organizer());
     }
 
     @Test
     public void testVComponentParsing() {
         String content = "BEGIN:VCALENDAR\nVERSION:2.1\nBEGIN:VEVENT\nUID:abcd12345\nDTSTART:20020307T180000Z\nDTEND:20020307T190000Z\nSUMMARY:Important Meeting\nEND:VEVENT\nEND:VCALENDAR";
-        
+
         VComponent vc = new VComponent(content);
         assertNotNull(vc);
-        
+
         VEvent vEvent = (VEvent) vc.get_first_component(VComponent.ICalComponentKind.ICAL_VEVENT_COMPONENT);
         assertNotNull(vEvent);
-        
+
         assertEquals("Important Meeting", vEvent.get_summary());
         assertEquals("abcd12345", vEvent.get_uid());
     }
@@ -350,10 +350,10 @@ public class LibIcalTest {
     @Test
     public void testVComponentRecurrenceId() {
         String content = "BEGIN:VCALENDAR\nVERSION:2.1\nBEGIN:VEVENT\nUID:abcd12345\nDTSTART:20020307T180000Z\nDTEND:20020307T190000Z\nSUMMARY:Important Meeting\nEND:VEVENT\nEND:VCALENDAR";
-        
+
         VComponent vc = new VComponent(content);
         assertNotNull(vc);
-        
+
         ICalTimeType testTime = new ICalTimeType();
         testTime.setYear(2002);
         testTime.setMonth(2);
@@ -365,7 +365,7 @@ public class LibIcalTest {
 
         vc.set_recurrenceid(testTime);
         ICalTimeType returnedTime = vc.get_recurrenceid();
-        
+
         assertEquals(2002, returnedTime.getYear());
         assertEquals(2, returnedTime.getMonth());
         assertEquals(2, returnedTime.getDay());
@@ -377,10 +377,10 @@ public class LibIcalTest {
     @Test
     public void testVComponentDtstamp() {
         String content = "BEGIN:VCALENDAR\nVERSION:2.1\nBEGIN:VEVENT\nUID:abcd12345\nDTSTART:20020307T180000Z\nDTEND:20020307T190000Z\nSUMMARY:Important Meeting\nEND:VEVENT\nEND:VCALENDAR";
-        
+
         VComponent vc = new VComponent(content);
         assertNotNull(vc);
-        
+
         ICalTimeType testTime = new ICalTimeType();
         testTime.setYear(2002);
         testTime.setMonth(2);
@@ -392,7 +392,7 @@ public class LibIcalTest {
 
         vc.set_dtstamp(testTime);
         ICalTimeType returnedTime = vc.get_dtstamp();
-        
+
         assertEquals(2002, returnedTime.getYear());
         assertEquals(2, returnedTime.getMonth());
         assertEquals(2, returnedTime.getDay());
@@ -424,7 +424,7 @@ public class LibIcalTest {
         valarm.add_property(attendeeProp);
 
         assertEquals("MAILTO:" + userEmail, attendeeProp.get_attendee());
-        
+
         String alarmString = valarm.as_ical_string();
         assertTrue(alarmString.contains("TRIGGER:-PT15M"));
         assertTrue(alarmString.contains("ATTENDEE:MAILTO:userid@domain"));
@@ -434,7 +434,7 @@ public class LibIcalTest {
     public void testICalParameterRole() {
         ICalParameter roleProp = new ICalParameter(ICalParameter.ICalParameterKind.ICAL_ROLE_PARAMETER);
         roleProp.set_role(ICalParameter.ICalParameterRole.ICAL_ROLE_REQPARTICIPANT);
-        
+
         assertEquals(ICalParameter.ICalParameterRole.ICAL_ROLE_REQPARTICIPANT, roleProp.get_role());
     }
 
@@ -442,8 +442,7 @@ public class LibIcalTest {
     public void testICalParameterPartstat() {
         ICalParameter partstatProp = new ICalParameter(ICalParameter.ICalParameterKind.ICAL_PARTSTAT_PARAMETER);
         partstatProp.set_partstat(ICalParameter.ICalParameterPartStat.ICAL_PARTSTAT_DECLINED);
-        
+
         assertEquals(ICalParameter.ICalParameterPartStat.ICAL_PARTSTAT_DECLINED, partstatProp.get_partstat());
     }
 }
-
