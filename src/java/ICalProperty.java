@@ -14,12 +14,12 @@ public class ICalProperty
         {
                 // icalproperty_method
                 int ICAL_METHOD_X = 10011;
-                int ICAL_METHOD_PUBLISH = 10012;
-                int ICAL_METHOD_REQUEST = 10013;
-                int ICAL_METHOD_REPLY = 10014;
-                int ICAL_METHOD_ADD = 10015;
-                int ICAL_METHOD_CANCEL = 10016;
-                int ICAL_METHOD_REFRESH = 10017;
+                int ICAL_METHOD_PUBLISH = 10501;
+                int ICAL_METHOD_REQUEST = 10502;
+                int ICAL_METHOD_REPLY = 10503;
+                int ICAL_METHOD_ADD = 10504;
+                int ICAL_METHOD_CANCEL = 10505;
+                int ICAL_METHOD_REFRESH = 10506;
                 int ICAL_METHOD_COUNTER = 10018;
                 int ICAL_METHOD_DECLINECOUNTER = 10019;
                 int ICAL_METHOD_CREATE = 10020;
@@ -188,12 +188,12 @@ public class ICalProperty
         {
                 // icalproperty_status
                 int ICAL_STATUS_X = 10028;
-                int ICAL_STATUS_TENTATIVE = 10029;
-                int ICAL_STATUS_CONFIRMED = 10030;
-                int ICAL_STATUS_COMPLETED = 10031;
-                int ICAL_STATUS_NEEDSACTION = 10032;
-                int ICAL_STATUS_CANCELLED = 10033;
-                int ICAL_STATUS_INPROCESS = 10034;
+                int ICAL_STATUS_TENTATIVE = 10901;
+                int ICAL_STATUS_CONFIRMED = 10902;
+                int ICAL_STATUS_COMPLETED = 10903;
+                int ICAL_STATUS_NEEDSACTION = 10900;
+                int ICAL_STATUS_CANCELLED = 10905;
+                int ICAL_STATUS_INPROCESS = 10900;
                 int ICAL_STATUS_DRAFT = 10035;
                 int ICAL_STATUS_FINAL = 10036;
                 int ICAL_STATUS_NONE = 10037;

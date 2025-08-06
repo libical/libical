@@ -77,6 +77,41 @@ add_jar(
   GENERATE_NATIVE_HEADERS ical_jni_headers
 )
 
+if(LIBICAL_BUILD_TESTING)
+  find_package(JUnit QUIET)
+
+  if(JUnit_FOUND)
+    add_jar(
+      libical_test
+      SOURCES
+        test/LibIcalTest.java
+      OUTPUT_NAME libical_test
+      INCLUDE_JARS
+        libical_jar
+        ${JUnit_JAR}
+    )
+
+    set(_test_results_dir "${CMAKE_BINARY_DIR}/test-results/java")
+    file(MAKE_DIRECTORY "${_test_results_dir}")
+
+    add_test(
+      NAME libical_java_test
+      COMMAND ${Java_JAVA_EXECUTABLE}
+        -Djava.library.path=$<TARGET_FILE_DIR:ical_jni>
+        -cp "$<TARGET_PROPERTY:libical_test,JAR_FILE>:$<TARGET_PROPERTY:libical_jar,JAR_FILE>:${JUnit_JAR}"
+        org.junit.platform.console.ConsoleLauncher
+        --select-class=net.cp.jlibical.LibIcalTest
+        --reports-dir="${_test_results_dir}"
+    )
+
+    set_tests_properties(libical_java_test PROPERTIES TIMEOUT 60)
+
+    unset(_test_results_dir)
+  else()
+    message(STATUS "JUnit not found - Java tests will not be built")
+  endif()
+endif()
+
 install(TARGETS ical_jni EXPORT icalTargets DESTINATION lib)
 
 ########### install files ###############
