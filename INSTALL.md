@@ -172,7 +172,7 @@ For instance:
 This C library can be built with bindings for these other languages:
 
 - C++. If a C++ compiler is found the buildsystem will create and install the C++ bindings API.
-  Turn this off by passing -DWITH_CXX_BINDINGS=False option to cmake.
+  Turn off the C++ bindings by passing -DWITH_CXX_BINDINGS=False to cmake.
   Don't mix ABI from C and C++ compilers.
 
 - Python bindings are built using gobject-introspection, which is enabled
@@ -182,6 +182,13 @@ This C library can be built with bindings for these other languages:
 
   Don't forget to set (or append to, as needed) the GI_TYPELIB_PATH environment
   variable to $PREFIX/lib/girepository-1.0 (or $PREFIX/lib64/girepository-1.0).
+
+- Java. If Java (and associated JNI) along with a C++ compiler is found the
+  buildsystem will create and install the Java bindings.
+
+  Depending on your system, you may need to set the JAVA_HOME environment variable as well.
+
+  Disable the Java bindings by passing -DLIBICAL_JAVA_BINDINGS=False to cmake.
 
 ## Tweaking the Library Behavior
 
