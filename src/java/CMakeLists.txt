@@ -112,7 +112,8 @@ if(LIBICAL_BUILD_TESTING)
       set_tests_properties(
         libical_java_test
         PROPERTIES
-          ENVIRONMENT "PATH=$<TARGET_FILE_DIR:ical>;%PATH%"
+          ENVIRONMENT
+            "PATH=$<TARGET_FILE_DIR:ical>;%PATH%"
       )
     endif()
 
