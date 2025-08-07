@@ -1414,7 +1414,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1exrule
     ICalProperty* cObj = getSubjectAsICalProperty(env,jobj,JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL)
     {
-        auto aExRule = new icalrecurrencetype;
+        auto aExRule = icalrecurrencetype_new();
         if (copyObjToicalrecurrencetype(env,exrule,aExRule))
         {
             cObj->set_exrule(aExRule);
@@ -1551,7 +1551,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1rrule
 
     if (cObj != NULL)
     {
-        auto aRRule = new icalrecurrencetype;
+        auto aRRule = icalrecurrencetype_new();
 
         if (copyObjToicalrecurrencetype(env,rrule,aRRule))
         {
