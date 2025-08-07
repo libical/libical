@@ -108,6 +108,14 @@ if(LIBICAL_BUILD_TESTING)
         --select-class=net.cp.jlibical.LibIcalTest "--reports-dir=${_test_results_dir}"
     )
 
+    if(WIN32)
+      set_tests_properties(
+        libical_java_test
+        PROPERTIES
+          ENVIRONMENT "PATH=$<TARGET_FILE_DIR:ical>;%PATH%"
+      )
+    endif()
+
     set_tests_properties(
       libical_java_test
       PROPERTIES
