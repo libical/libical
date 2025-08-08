@@ -1,3 +1,7 @@
+#
+# SPDX-FileCopyrightText: 2025 Contributors to the libical project
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+#
 # Try to find JUnit
 #
 #  JUnit_FOUND - system has JUnit
