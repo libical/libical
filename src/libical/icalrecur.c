@@ -504,7 +504,7 @@ static void sort_bysetpos(icalrecurrence_by_data *by)
     for (i = 1; i < by->size; i++) {
         for (j = i - 1;
              j >= 0 && (abs(array[j]) > abs(array[j + 1]) ||
-             (array[j] < 0 && array[j + 1] > 0));
+                        (array[j] < 0 && array[j + 1] > 0));
              j--) {
             short tmp = array[j + 1];
 
@@ -1147,10 +1147,10 @@ struct icalrecur_iterator_impl {
     struct icaltimetype last;   /* last time returned from iterator */
     int occurrence_no;          /* number of steps made on the iterator */
 
-    short set_pos;              /* our position in the recurrence set */
-    short set_pos_max;          /* the size of the recurrence set */
-    short sp_idxp, sp_idxn;     /* positive and negative BYSETPOS indices */
-    short sp_pmax;              /* the last index of the BYSETPOS array with a positive value */
+    short set_pos;          /* our position in the recurrence set */
+    short set_pos_max;      /* the size of the recurrence set */
+    short sp_idxp, sp_idxn; /* positive and negative BYSETPOS indices */
+    short sp_pmax;          /* the last index of the BYSETPOS array with a positive value */
 
 #if defined(HAVE_LIBICU)
     UCalendar *greg;   /* Gregorian calendar */
@@ -2307,11 +2307,11 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype *rule,
 
     setup_defaults(impl, ICAL_BY_MONTH, impl->rstart.month);
 
-    if(has_by_data(impl, ICAL_BY_SET_POS)) {
+    if (has_by_data(impl, ICAL_BY_SET_POS)) {
         sort_bysetpos(&(impl->bydata[ICAL_BY_SET_POS].by));
         impl->sp_pmax = 0;
-        while(impl->sp_pmax < impl->bydata[ICAL_BY_SET_POS].by.size &&
-              impl->bydata[ICAL_BY_SET_POS].by.data[impl->sp_pmax] > 0) {
+        while (impl->sp_pmax < impl->bydata[ICAL_BY_SET_POS].by.size &&
+               impl->bydata[ICAL_BY_SET_POS].by.data[impl->sp_pmax] > 0) {
             impl->sp_pmax++;
         }
         impl->sp_pmax--;
@@ -2648,9 +2648,9 @@ static void expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
 
 /** Expand the BYDAY rule part and apply it to the year days map. */
 static void expand_by_day(icalrecur_iterator *impl, int year,
-                         int doy_offset, int last_day,
-                         int first_dow, int last_dow,
-                         int is_limiting)
+                          int doy_offset, int last_day,
+                          int first_dow, int last_dow,
+                          int is_limiting)
 {
     /* Try to calculate each of the occurrences. */
     unsigned long bydays[LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE)];
@@ -2771,8 +2771,8 @@ static void expand_month_days(icalrecur_iterator *impl, int year, int month)
         last_dow = get_day_of_week_adjusted(impl, year, month, days_in_month);
 
         expand_by_day(impl, year, doy_offset, days_in_month,
-                                      first_dow, last_dow,
-                                      has_by_data(impl, ICAL_BY_MONTH_DAY));
+                      first_dow, last_dow,
+                      has_by_data(impl, ICAL_BY_MONTH_DAY));
     }
 }
 
@@ -3070,7 +3070,7 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
                                                     month, days_in_month);
 
                 expand_by_day(impl, year, doy_offset, days_in_month,
-                               first_dow, last_dow, limiting);
+                              first_dow, last_dow, limiting);
             }
         } else {
             /* Numeric BYDAY are within the year */
@@ -3255,7 +3255,7 @@ static int next_yearday(icalrecur_iterator *impl,
 
     if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
         ret = 1;
-        if(next_period) {
+        if (next_period) {
             for (;;) {
                 /* Increment to and expand the next period */
                 next_period(impl, impl->rule->interval);
@@ -3296,7 +3296,7 @@ static int prev_yearday(icalrecur_iterator *impl,
     int ret = 0;
 
     while (impl->days_index <= -ICAL_YEARDAYS_MASK_OFFSET) {
-        if(next_period) {
+        if (next_period) {
             ret = 1;
             /* Decrement to and expand the previous period */
             next_period(impl, -impl->rule->interval);
@@ -3429,7 +3429,7 @@ static void setup_setpos(icalrecur_iterator *impl, int next)
     /* Save data that will be modified */
     int days_index = impl->days_index;
     int bydata_indices[ICAL_BY_NUM_PARTS];
-    for(int byrule = 0; byrule < ICAL_BY_NUM_PARTS; byrule++) {
+    for (int byrule = 0; byrule < ICAL_BY_NUM_PARTS; byrule++) {
         bydata_indices[byrule] = impl->bydata[byrule].index;
     }
     struct icaltimetype last = impl->last;
@@ -3440,50 +3440,50 @@ static void setup_setpos(icalrecur_iterator *impl, int next)
     impl->set_pos_max = 1;
     int period_change = 1, prev_index;
     do {
-        switch(impl->rule->freq) {
-            case ICAL_SECONDLY_RECURRENCE:
-                return;
-            case ICAL_MINUTELY_RECURRENCE:
-                prev_index = impl->bydata[ICAL_BY_MINUTE].index;
-                /* call next_unit instead of next_minute
+        switch (impl->rule->freq) {
+        case ICAL_SECONDLY_RECURRENCE:
+            return;
+        case ICAL_MINUTELY_RECURRENCE:
+            prev_index = impl->bydata[ICAL_BY_MINUTE].index;
+            /* call next_unit instead of next_minute
                  * to avoid going to the next minute */
-                period_change = (next ? next_unit : prev_unit)(impl,
-                       ICAL_BY_MINUTE, ICAL_MINUTELY_RECURRENCE, (next ? next_second : prev_second),
-                       &set_minute, &increment_minute, NULL) ||
-                      (prev_index != impl->bydata[ICAL_BY_MINUTE].index);
-                break;
-            case ICAL_HOURLY_RECURRENCE:
-                prev_index = impl->bydata[ICAL_BY_HOUR].index;
-                period_change = (next ? next_unit : prev_unit)(impl,
-                       ICAL_BY_HOUR, ICAL_HOURLY_RECURRENCE, (next ? next_minute : prev_minute),
-                       &set_hour, &increment_hour, NULL) ||
-                      (prev_index != impl->bydata[ICAL_BY_HOUR].index);
-                break;
-            case ICAL_DAILY_RECURRENCE:
-                period_change = (next ? next_unit : prev_unit)(impl,
-                       ICAL_BYRULE_NO_CONTRACTION, ICAL_DAILY_RECURRENCE, (next ? next_hour : prev_hour),
-                       NULL, &increment_monthday, NULL);
-                break;
-            case ICAL_WEEKLY_RECURRENCE:
-                period_change = (next ? next_weekday_by_week : prev_weekday_by_week)(impl);
-                break;
-            case ICAL_MONTHLY_RECURRENCE:
-                /* call next_yearday instead of next_month
+            period_change = (next ? next_unit : prev_unit)(impl,
+                                                           ICAL_BY_MINUTE, ICAL_MINUTELY_RECURRENCE, (next ? next_second : prev_second),
+                                                           &set_minute, &increment_minute, NULL) ||
+                            (prev_index != impl->bydata[ICAL_BY_MINUTE].index);
+            break;
+        case ICAL_HOURLY_RECURRENCE:
+            prev_index = impl->bydata[ICAL_BY_HOUR].index;
+            period_change = (next ? next_unit : prev_unit)(impl,
+                                                           ICAL_BY_HOUR, ICAL_HOURLY_RECURRENCE, (next ? next_minute : prev_minute),
+                                                           &set_hour, &increment_hour, NULL) ||
+                            (prev_index != impl->bydata[ICAL_BY_HOUR].index);
+            break;
+        case ICAL_DAILY_RECURRENCE:
+            period_change = (next ? next_unit : prev_unit)(impl,
+                                                           ICAL_BYRULE_NO_CONTRACTION, ICAL_DAILY_RECURRENCE, (next ? next_hour : prev_hour),
+                                                           NULL, &increment_monthday, NULL);
+            break;
+        case ICAL_WEEKLY_RECURRENCE:
+            period_change = (next ? next_weekday_by_week : prev_weekday_by_week)(impl);
+            break;
+        case ICAL_MONTHLY_RECURRENCE:
+            /* call next_yearday instead of next_month
                  * to avoid expanding month days */
-                period_change = (next ? next_yearday : prev_yearday)(impl, NULL);
-                break;
-            case ICAL_YEARLY_RECURRENCE:
-                period_change = (next ? next_yearday : prev_yearday)(impl, NULL);
-                break;
-            default:
-                icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-                return;
+            period_change = (next ? next_yearday : prev_yearday)(impl, NULL);
+            break;
+        case ICAL_YEARLY_RECURRENCE:
+            period_change = (next ? next_yearday : prev_yearday)(impl, NULL);
+            break;
+        default:
+            icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+            return;
         }
-        if(period_change == 0 && check_contracting_rules(impl)) {
+        if (period_change == 0 && check_contracting_rules(impl)) {
             impl->set_pos_max++;
         }
-    } while(period_change == 0);
-    if(!next) {
+    } while (period_change == 0);
+    if (!next) {
         impl->set_pos = impl->set_pos_max;
         impl->sp_idxp = impl->sp_pmax;
         impl->sp_idxn = impl->sp_pmax + 1;
@@ -3491,7 +3491,7 @@ static void setup_setpos(icalrecur_iterator *impl, int next)
     /* Restore what was modified */
     set_datetime(impl, last);
     impl->days_index = days_index;
-    for(int byrule = 0; byrule < ICAL_BY_NUM_PARTS; byrule++) {
+    for (int byrule = 0; byrule < ICAL_BY_NUM_PARTS; byrule++) {
         impl->bydata[byrule].index = bydata_indices[byrule];
     }
 }
@@ -3504,45 +3504,45 @@ static void setup_setpos(icalrecur_iterator *impl, int next)
  */
 static int check_setpos(icalrecur_iterator *impl, int next)
 {
-    if(!has_by_data(impl, ICAL_BY_SET_POS))
+    if (!has_by_data(impl, ICAL_BY_SET_POS))
         return 1;
     short set_pos;
-    if(impl->sp_idxp <= impl->sp_pmax && impl->sp_idxp >= 0) {
+    if (impl->sp_idxp <= impl->sp_pmax && impl->sp_idxp >= 0) {
         set_pos = impl->bydata[ICAL_BY_SET_POS].by.data[impl->sp_idxp];
         /* Adjust the positive index so we can compare to our current set position */
-        if(next) {
-            while(impl->sp_idxp < impl->sp_pmax &&
-                    set_pos < impl->set_pos) {
+        if (next) {
+            while (impl->sp_idxp < impl->sp_pmax &&
+                   set_pos < impl->set_pos) {
                 impl->sp_idxp++;
                 set_pos = impl->bydata[ICAL_BY_SET_POS].by.data[impl->sp_idxp];
             }
         } else {
-            while(impl->sp_idxp > 0 &&
-                    set_pos > impl->set_pos) {
+            while (impl->sp_idxp > 0 &&
+                   set_pos > impl->set_pos) {
                 impl->sp_idxp--;
                 set_pos = impl->bydata[ICAL_BY_SET_POS].by.data[impl->sp_idxp];
             }
         }
-        if(impl->set_pos == set_pos) {
+        if (impl->set_pos == set_pos) {
             return 1;
         }
     }
-    if(impl->sp_idxn < impl->bydata[ICAL_BY_SET_POS].by.size && impl->sp_idxn > impl->sp_pmax) {
+    if (impl->sp_idxn < impl->bydata[ICAL_BY_SET_POS].by.size && impl->sp_idxn > impl->sp_pmax) {
         set_pos = impl->bydata[ICAL_BY_SET_POS].by.data[impl->sp_idxn];
-        if(next) {
-            while(impl->sp_idxn > impl->sp_pmax + 1 &&
-                    set_pos + impl->set_pos_max + 1 < impl->set_pos) {
+        if (next) {
+            while (impl->sp_idxn > impl->sp_pmax + 1 &&
+                   set_pos + impl->set_pos_max + 1 < impl->set_pos) {
                 impl->sp_idxn--;
                 set_pos = impl->bydata[ICAL_BY_SET_POS].by.data[impl->sp_idxn];
             }
         } else {
-            while(impl->sp_idxn < impl->bydata[ICAL_BY_SET_POS].by.size - 1 &&
-                    set_pos + impl->set_pos_max + 1 > impl->set_pos) {
+            while (impl->sp_idxn < impl->bydata[ICAL_BY_SET_POS].by.size - 1 &&
+                   set_pos + impl->set_pos_max + 1 > impl->set_pos) {
                 impl->sp_idxn++;
                 set_pos = impl->bydata[ICAL_BY_SET_POS].by.data[impl->sp_idxn];
             }
         }
-        if(impl->set_pos == set_pos + impl->set_pos_max + 1) {
+        if (impl->set_pos == set_pos + impl->set_pos_max + 1) {
             return 1;
         }
     }
@@ -3560,11 +3560,12 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     }
 
     /* If initial time is valid, return it */
-    if((impl->occurrence_no == 0) && check_contracting_rules(impl)) {
-        if ((icaltime_compare(impl->last, impl->istart) >= 0) && check_setpos(impl, 1)) {
-            impl->occurrence_no++;
-            return impl->last;
-        }
+    if ((impl->occurrence_no == 0) &&
+        (icaltime_compare(impl->last, impl->istart) >= 0) &&
+        check_contracting_rules(impl) &&
+        check_setpos(impl, 1)) {
+        impl->occurrence_no++;
+        return impl->last;
     }
 
     int period_change = 1, prev_index;
@@ -3619,8 +3620,8 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
             return icaltime_null_time();
         }
 
-        if(check_contracting_rules(impl) && has_by_data(impl, ICAL_BY_SET_POS)) {
-            if(period_change) {
+        if (check_contracting_rules(impl) && has_by_data(impl, ICAL_BY_SET_POS)) {
+            if (period_change) {
                 setup_setpos(impl, 1);
             } else {
                 impl->set_pos++;
@@ -3704,12 +3705,12 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
             return icaltime_null_time();
         }
 
-        if(check_contracting_rules(impl) && has_by_data(impl, ICAL_BY_SET_POS)) {
-            if(period_change != 0) {
+        if (check_contracting_rules(impl) && has_by_data(impl, ICAL_BY_SET_POS)) {
+            if (period_change) {
                 setup_setpos(impl, 0);
             } else {
                 impl->set_pos--;
-                if(impl->set_pos <= 0) {
+                if (impl->set_pos <= 0) {
                     impl->set_pos += impl->set_pos_max;
                 }
             }
@@ -3902,7 +3903,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 
     /* Get start date as Gregorian date */
     impl->last = occurrence_as_icaltime(impl, 1);
-    if(has_by_data(impl, ICAL_BY_SET_POS)) {
+    if (has_by_data(impl, ICAL_BY_SET_POS)) {
         setup_setpos(impl, 1);
     }
 
