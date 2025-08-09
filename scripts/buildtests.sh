@@ -869,7 +869,7 @@ if (test "$(uname -s)" = "Linux"); then
   GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
 fi
 GCC_BUILD testgcc4glib "$GLIBOPTS"
-GCC_BUILD testgccnocxx "$CMAKEOPTS -DWITH_CXX_BINDINGS=off"
+GCC_BUILD testgccnocxx "$CMAKEOPTS -DWITH_CXX_BINDINGS=off -DLIBICAL_JAVA_BINDINGS=off"
 if (test "$(uname -s)" = "Linux"); then
   echo "Temporarily disable cross-compile tests"
 #  GCC_BUILD testgcc1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
@@ -925,7 +925,7 @@ LSAN_BUILD test4lsan "$UUCCMAKEOPTS"
 
 #Memory sanitizer
 # currently MSAN fails inside libicu and also isn't working with std:stringstreams properly
-SKIPOPTS="-DCMAKE_DISABLE_FIND_PACKAGE_ICU=True -DWITH_CXX_BINDINGS=False"
+SKIPOPTS="-DCMAKE_DISABLE_FIND_PACKAGE_ICU=True -DWITH_CXX_BINDINGS=False -DLIBICAL_JAVA_BINDINGS=False"
 #MSAN_BUILD test1msan "$DEFCMAKEOPTS $SKIPOPTS"
 MSAN_BUILD test2msan "$CMAKEOPTS $SKIPOPTS"
 MSAN_BUILD test3msan "$TZCMAKEOPTS $SKIPOPTS"
