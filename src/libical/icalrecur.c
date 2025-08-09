@@ -2159,7 +2159,10 @@ static int day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 
 static void reset_period_start(icalrecur_iterator *impl)
 {
-    set_datetime(impl, impl->period_start);
+    /* We only want to set the date, not the time */
+    impl->last.year = impl->period_start.year;
+    impl->last.month = impl->period_start.month;
+    impl->last.day = impl->period_start.day;
 }
 
 #endif /* HAVE_LIBICU */
