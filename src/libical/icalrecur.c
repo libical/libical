@@ -1813,7 +1813,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
 }
 
 /** Sets the Gregorian date and convert to RSCALE */
-static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
+static void set_start(icalrecur_iterator *impl, icaltimetype date)
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -1837,6 +1837,35 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
                          (int32_t)hour,
                          (int32_t)minute,
                          (int32_t)second,
+                         &status);
+    }
+
+    if (impl->rscale != impl->greg) {
+        UDate millis = ucal_getMillis(impl->greg, &status);
+        ucal_setMillis(impl->rscale, millis, &status);
+    }
+}
+
+static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
+{
+    UErrorCode status = U_ZERO_ERROR;
+
+    impl->last.is_date = impl->rstart.is_date;
+    impl->last.zone = impl->rstart.zone;
+
+    if (impl->rstart.is_date) {
+        ucal_setDate(impl->greg,
+                     (int32_t)date.year,
+                     (int32_t)(date.month - 1), /* UCal is 0-based */
+                     (int32_t)date.day, &status);
+    } else {
+        ucal_setDateTime(impl->greg,
+                         (int32_t)date.year,
+                         (int32_t)(date.month - 1), /* UCal is 0-based */
+                         (int32_t)date.day,
+                         (int32_t)date.hour,
+                         (int32_t)date.minute,
+                         (int32_t)date.second,
                          &status);
     }
 
@@ -2129,7 +2158,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
 }
 
 /** Sets the Gregorian date */
-static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
+static void set_start(icalrecur_iterator *impl, icaltimetype date)
 {
     impl->last.year = date.year;
     impl->last.month = date.month;
@@ -2141,6 +2170,11 @@ static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
         __get_start_time(impl, date, &impl->last.hour,
                          &impl->last.minute, &impl->last.second);
     }
+}
+
+static void set_datetime(icalrecur_iterator *impl, icaltimetype date)
+{
+    impl->last = date;
 }
 
 /** Calculate the number of Gregorian months between 2 dates */
@@ -3496,6 +3530,7 @@ static void setup_setpos(icalrecur_iterator *impl, int next)
      * Because we do not expand month/year days,
      * the days bitfield is not modified */
     set_datetime(impl, last);
+    impl->last = last;
     impl->days_index = days_index;
     for (int byrule = 0; byrule < ICAL_BY_NUM_PARTS; byrule++) {
         impl->bydata[byrule].index = bydata_indices[byrule];
@@ -3768,7 +3803,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
     impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
     /* Set Gregorian start date */
-    set_datetime(impl, start);
+    set_start(impl, start);
 
     switch (freq) {
     case ICAL_YEARLY_RECURRENCE:
