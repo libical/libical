@@ -26,6 +26,7 @@ for details about API changes since libical 3.x.
 - GEO property has arbitrary precision (values are internally stored as strings, not doubles)
 - Allow previous recurrence iteration
 - icalparser_ctrl setting defines how to handle invalid CONTROL characters during parsing
+- Full support for `BYSETPOS`, i.e. remove the limitation to MONTHLY and YEARLY frequencies
 
 ### Changed
 
