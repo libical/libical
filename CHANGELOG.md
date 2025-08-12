@@ -55,6 +55,7 @@ for details about API changes since libical 3.x.
 
 - Fixed `icalcomponent_get_duration()` to account for DTEND/DUE TZID
 - Improved performance of recurrence iterators
+- Improved handling of BYWEEKNO when BYDAY is not present
 
 ## [3.0.21] - Unreleased
 
