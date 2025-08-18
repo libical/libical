@@ -141,6 +141,19 @@ icalvalue *icalvalue_clone(const icalvalue *old)
         break;
     }
 
+    case ICAL_REQUESTSTATUS_VALUE: {
+        clone->data = old->data;
+        if (old->data.v_requeststatus.debug != 0) {
+            clone->data.v_requeststatus.debug = icalmemory_strdup(old->data.v_requeststatus.debug);
+            if (clone->data.v_requeststatus.debug == 0) {
+                clone->parent = 0;
+                icalvalue_free(clone);
+                return 0;
+            }
+        }
+        break;
+    }
+
     default: {
         /* all of the other types are stored as values, not
                pointers, so we can just copy the whole structure. */
@@ -814,6 +827,14 @@ void icalvalue_free(icalvalue *v)
         if (v->data.v_recur != 0) {
             icalrecurrencetype_unref(v->data.v_recur);
             v->data.v_recur = NULL;
+        }
+        break;
+    }
+
+    case ICAL_REQUESTSTATUS_VALUE: {
+        if (v->data.v_requeststatus.debug != 0) {
+            icalmemory_free_buffer((void *)v->data.v_requeststatus.debug);
+            v->data.v_requeststatus.debug = 0;
         }
         break;
     }
