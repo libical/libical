@@ -89,6 +89,10 @@ LIBICAL_ICAL_EXPORT void icalvalue_reset_kind(icalvalue *value);
 #define icalvalue_set_relatedto icalvalue_set_text
 #define icalvalue_get_relatedto icalvalue_get_text
 
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_requeststatus(struct icalreqstattype v);
+LIBICAL_ICAL_EXPORT struct icalreqstattype icalvalue_get_requeststatus(const icalvalue *value);
+LIBICAL_ICAL_EXPORT void icalvalue_set_requeststatus(icalvalue *value, struct icalreqstattype v);
+
 <insert_code_here>
 
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_class(enum icalproperty_class v);
