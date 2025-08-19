@@ -144,7 +144,7 @@ icalcluster *icalfileset_produce_icalcluster(const char *path)
 
 static char *icalfileset_read_from_file(char *s, size_t size, void *d)
 {
-    char *p = s;
+    char *p;
     icalfileset *set = d;
 
     /* Simulate fgets -- read single characters and stop at '\n' */
