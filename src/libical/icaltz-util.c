@@ -388,10 +388,10 @@ static char *parse_posix_rule(char *p,
         error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_YEAR_DAY], day - 1000);
     } else {
         /* Convert day-of-non-leap-year into month/day */
-        icaltimetype t = icaltime_from_day_of_year(day, 1 /* non-leap */);
+        icaltimetype doy_t = icaltime_from_day_of_year(day, 1 /* non-leap */);
 
-        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH], t.month);
-        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH_DAY], t.day);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH], doy_t.month);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH_DAY], doy_t.day);
     }
 
     if (error)

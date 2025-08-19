@@ -173,13 +173,13 @@ int main(int argc, char *argv[])
     }
 
     if (opt.normal == 1) {
-        icalcomponent *c;
+        icalcomponent *comp;
 
-        c = icalmime_parse(read_stream, f);
+        comp = icalmime_parse(read_stream, f);
 
-        printf("%s\n", icalcomponent_as_ical_string(c));
+        printf("%s\n", icalcomponent_as_ical_string(comp));
 
-        icalcomponent_free(c);
+        icalcomponent_free(comp);
 
     } else if (opt.stress == 1) {
         /* Read file in by lines, then randomize the lines into a
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
         unsigned int i, j;
         unsigned int last, non_rand, rand_lines, r;
         size_t size;
-        icalcomponent *c;
+        icalcomponent *comp;
         struct slg_data {
             char *pos;
             char *str;
@@ -235,11 +235,11 @@ int main(int argc, char *argv[])
             d.pos = 0;
             d.str = buf;
 
-            c = icalmime_parse(icalparser_string_line_generator, &d);
+            comp = icalmime_parse(icalparser_string_line_generator, &d);
 
-            printf("%s\n", icalcomponent_as_ical_string(c));
+            printf("%s\n", icalcomponent_as_ical_string(comp));
 
-            icalcomponent_free(c);
+            icalcomponent_free(comp);
         }
 
         free(buf);

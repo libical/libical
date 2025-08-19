@@ -1000,11 +1000,11 @@ static const char *rrule_parse_monthly_positions(const char *s,
 
     /* First read the month position into our local occurrences array. */
     for (i = 0; i < ICAL_BY_DAY_SIZE; i++) {
-        int month_position;
+        int pos;
 
         /* Check we got a valid position number. */
-        month_position = *s - '0';
-        if (month_position < 0 || month_position > 5)
+        pos = *s - '0';
+        if (pos < 0 || pos > 5)
             break;
 
         /* See if it is followed by a '+' or '-'. */
@@ -1013,14 +1013,14 @@ static const char *rrule_parse_monthly_positions(const char *s,
             e++;
         } else if (*e == '-') {
             e++;
-            month_position = -month_position;
+            pos = -pos;
         }
 
         /* Check the next char is whitespace or the end of the string. */
         if (*e != ' ' && *e != '\t' && *e != '\0')
             break;
 
-        occurrences[i] = month_position;
+        occurrences[i] = pos;
 
         s = e;
         /* Skip any whitespace. */
@@ -1031,15 +1031,15 @@ static const char *rrule_parse_monthly_positions(const char *s,
 
     /* Now read the weekdays in. */
     for (;;) {
-        const char *e = s;
-        int found_day, day;
+        const char *t_s = s;
+        int found_day;
 
         found_day = -1;
         for (day = 0; day < 7; day++) {
             if (!strncmp(weekdays[day], s, 2)) {
                 /* Check the next char is whitespace or the end of string. */
-                e = s + 2;
-                if (*e == ' ' || *e == '\t' || *e == '\0') {
+                t_s = s + 2;
+                if (*t_s == ' ' || *t_s == '\t' || *t_s == '\0') {
                     found_day = day;
                     break;
                 }
@@ -1051,7 +1051,7 @@ static const char *rrule_parse_monthly_positions(const char *s,
 
         found_weekdays[found_day] = 1;
 
-        s = e;
+        s = t_s;
         /* Skip any whitespace. */
         while (*s == ' ' || *s == '\t')
             s++;

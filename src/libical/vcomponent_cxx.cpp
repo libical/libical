@@ -559,10 +559,10 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
          propToBeRemoved != NULL;
          propToBeRemoved = fromVC.get_next_property(ICAL_ANY_PROPERTY)) {
         /* loop through properties from this component */
-        ICalPropertyTmpPtr next;
+        ICalPropertyTmpPtr next_prop;
         ICalPropertyTmpPtr p;
-        for (p = this->get_first_property(propToBeRemoved->isa()); p != NULL; p = next) {
-            next = this->get_next_property(propToBeRemoved->isa());
+        for (p = this->get_first_property(propToBeRemoved->isa()); p != NULL; p = next_prop) {
+            next_prop = this->get_next_property(propToBeRemoved->isa());
             if (ignoreValue) {
                 this->remove_property(p);
             } else {
