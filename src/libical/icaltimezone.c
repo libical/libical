@@ -2008,10 +2008,10 @@ static const char *get_zone_directory_builtin(void)
 
 #if !defined(_WIN32_WCE)
     char buffer[1000], zoneinfodir[1000], dirname[1000];
+    int used_default;
 #else
     wchar_t zoneinfodir[1000], dirname[1000];
 #endif
-    int used_default;
     static ICAL_GLOBAL_VAR char *cache = NULL;
 
 #if !defined(_WIN32_WCE)
