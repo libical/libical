@@ -2591,7 +2591,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         /* Need to add tombstone component/observance starting at window open
            as long as its not prior to start of TZ data */
         icalcomponent *tomb;
-        icalproperty *prop, *nextp;
+        icalproperty *tomb_prop, *nextp;
 
         /* Determine which tombstone component we need */
         if (tombstone.onset.is_daylight) {
@@ -2603,30 +2603,30 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         }
 
         /* Set property values on our tombstone */
-        for (prop = icalcomponent_get_first_property(tomb, ICAL_ANY_PROPERTY);
-             prop; prop = nextp) {
+        for (tomb_prop = icalcomponent_get_first_property(tomb, ICAL_ANY_PROPERTY);
+             tomb_prop; tomb_prop = nextp) {
             nextp = icalcomponent_get_next_property(tomb, ICAL_ANY_PROPERTY);
 
-            switch (icalproperty_isa(prop)) {
+            switch (icalproperty_isa(tomb_prop)) {
             case ICAL_TZNAME_PROPERTY:
-                icalproperty_set_tzname(prop, tombstone.name);
+                icalproperty_set_tzname(tomb_prop, tombstone.name);
                 break;
             case ICAL_TZOFFSETFROM_PROPERTY:
-                icalproperty_set_tzoffsetfrom(prop, tombstone.offset_from);
+                icalproperty_set_tzoffsetfrom(tomb_prop, tombstone.offset_from);
                 break;
             case ICAL_TZOFFSETTO_PROPERTY:
-                icalproperty_set_tzoffsetto(prop, tombstone.offset_to);
+                icalproperty_set_tzoffsetto(tomb_prop, tombstone.offset_to);
                 break;
             case ICAL_DTSTART_PROPERTY:
                 /* Adjust window open to local time */
                 icaltime_adjust(&start, 0, 0, 0, tombstone.offset_from);
                 (void)icaltime_set_timezone(&start, NULL);
 
-                icalproperty_set_dtstart(prop, start);
+                icalproperty_set_dtstart(tomb_prop, start);
                 break;
             default:
-                icalcomponent_remove_property(tomb, prop);
-                icalproperty_free(prop);
+                icalcomponent_remove_property(tomb, tomb_prop);
+                icalproperty_free(tomb_prop);
                 break;
             }
         }

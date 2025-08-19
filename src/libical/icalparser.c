@@ -1178,13 +1178,13 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             if (value == 0) {
                 char temp[200]; /* HACK */
 
-                icalproperty_kind prop_kind = icalproperty_isa(prop);
+                icalproperty_kind isa_prop_kind = icalproperty_isa(prop);
                 icalcomponent *tail = pvl_data(pvl_tail(parser->components));
 
                 snprintf(temp, sizeof(temp),
                          "Can't parse as %s value in %s property. Removing entire property",
                          icalvalue_kind_to_string(value_kind),
-                         icalproperty_kind_to_string(prop_kind));
+                         icalproperty_kind_to_string(isa_prop_kind));
 
                 insert_error(parser, tail, str, temp, ICAL_XLICERRORTYPE_VALUEPARSEERROR);
 
@@ -1219,11 +1219,11 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             if (vcount == 0) {
                 char temp[200]; /* HACK */
 
-                icalproperty_kind prop_kind = icalproperty_isa(prop);
+                icalproperty_kind isa_prop_kind = icalproperty_isa(prop);
                 icalcomponent *tail = pvl_data(pvl_tail(parser->components));
 
                 snprintf(temp, sizeof(temp), "No value for %s property. Removing entire property",
-                         icalproperty_kind_to_string(prop_kind));
+                         icalproperty_kind_to_string(isa_prop_kind));
 
                 insert_error(parser, tail, str, temp, ICAL_XLICERRORTYPE_VALUEPARSEERROR);
 

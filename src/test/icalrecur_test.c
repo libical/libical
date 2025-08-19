@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
             }
 
             if (ritr) {
-                char *instances = r.instances;
+                instances = r.instances;
 
                 reverse_instances(instances);
 

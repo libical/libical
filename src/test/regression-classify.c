@@ -99,7 +99,7 @@ void test_classify(void)
     for (c = icalset_get_first_component(incoming); c != 0;
          c = icalset_get_next_component(incoming)) {
         icalproperty_xlicclass class;
-        icalcomponent *match = 0;
+        match = 0;
         const char *this_uid;
         const char *this_note = get_note(c);
         const char *expected_result = get_expect(c);
