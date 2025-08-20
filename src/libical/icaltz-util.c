@@ -141,7 +141,7 @@ static int decode(const void *ptr)
 #endif
     } else {
         const unsigned char *p = ptr;
-        int result = *p & (1 << (CHAR_BIT - 1)) ? ~0 : 0;
+        int result = (*p & (1 << (CHAR_BIT - 1))) ? ~0 : 0;
 
         /* cppcheck-suppress shiftNegativeLHS */
         result = (result << 8) | *p++;
