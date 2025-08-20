@@ -548,7 +548,7 @@ static void icalfileset_id_free(struct icalfileset_id *id)
     }
 }
 
-static struct icalfileset_id icalfileset_get_id(icalcomponent *comp)
+static struct icalfileset_id icalfileset_get_id(const icalcomponent *comp)
 {
     icalcomponent *inner;
     struct icalfileset_id id;

@@ -352,7 +352,7 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
     return buf;
 }
 
-icalparameter_kind icalparameter_isa(icalparameter *parameter)
+icalparameter_kind icalparameter_isa(const icalparameter *parameter)
 {
     if (parameter == 0) {
         return ICAL_NO_PARAMETER;
@@ -392,7 +392,7 @@ void icalparameter_set_xname(icalparameter *param, const char *v)
     }
 }
 
-const char *icalparameter_get_xname(icalparameter *param)
+const char *icalparameter_get_xname(const icalparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
@@ -415,7 +415,7 @@ void icalparameter_set_xvalue(icalparameter *param, const char *v)
     }
 }
 
-const char *icalparameter_get_xvalue(icalparameter *param)
+const char *icalparameter_get_xvalue(const icalparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
@@ -427,7 +427,7 @@ void icalparameter_set_iana_value(icalparameter *param, const char *v)
     icalparameter_set_xvalue(param, v);
 }
 
-const char *icalparameter_get_iana_value(icalparameter *param)
+const char *icalparameter_get_iana_value(const icalparameter *param)
 {
     return icalparameter_get_xvalue(param);
 }
@@ -437,7 +437,7 @@ void icalparameter_set_iana_name(icalparameter *param, const char *v)
     icalparameter_set_xname(param, v);
 }
 
-const char *icalparameter_get_iana_name(icalparameter *param)
+const char *icalparameter_get_iana_name(const icalparameter *param)
 {
     return icalparameter_get_xname(param);
 }
@@ -449,14 +449,14 @@ void icalparameter_set_parent(icalparameter *param, icalproperty *property)
     param->parent = property;
 }
 
-icalproperty *icalparameter_get_parent(icalparameter *param)
+icalproperty *icalparameter_get_parent(const icalparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
     return param->parent;
 }
 
-bool icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
+bool icalparameter_has_same_name(const icalparameter *param1, const icalparameter *param2)
 {
     icalparameter_kind kind1;
     icalparameter_kind kind2;
@@ -488,7 +488,7 @@ bool icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
     return true;
 }
 
-bool icalparameter_is_multivalued(icalparameter *param)
+bool icalparameter_is_multivalued(const icalparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 

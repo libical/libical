@@ -81,7 +81,7 @@ LIBICAL_ICAL_EXPORT const icalenumarray_element *icalenumarray_element_at(icalen
  * @since 4.0
  *
  */
-LIBICAL_ICAL_EXPORT size_t icalenumarray_size(icalenumarray *array);
+LIBICAL_ICAL_EXPORT size_t icalenumarray_size(const icalenumarray *array);
 
 /**
  * @brief Finds an element in the array.

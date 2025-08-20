@@ -121,12 +121,12 @@ LIBICAL_ICAL_EXPORT void icalvalue_set_parent(icalvalue *value, icalproperty *pr
  * Returns the parent @p icalproperty for the specified @p icalvalue.
  * @since 3.0
  */
-LIBICAL_ICAL_EXPORT icalproperty *icalvalue_get_parent(icalvalue *value);
+LIBICAL_ICAL_EXPORT icalproperty *icalvalue_get_parent(const icalvalue *value);
 
 /* Deal with X properties */
 
 LIBICAL_ICAL_EXPORT void icalproperty_set_x_name(icalproperty *prop, const char *name);
-LIBICAL_ICAL_EXPORT const char *icalproperty_get_x_name(icalproperty *prop);
+LIBICAL_ICAL_EXPORT const char *icalproperty_get_x_name(const icalproperty *prop);
 
 /** Returns the name of the property -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X
@@ -147,7 +147,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_parent(icalparameter *param, icalprop
  * Returns the parent @p icalproperty for the specified @p icalparameter.
  * @since 3.0
  */
-LIBICAL_ICAL_EXPORT icalproperty *icalparameter_get_parent(icalparameter *param);
+LIBICAL_ICAL_EXPORT icalproperty *icalparameter_get_parent(const icalparameter *param);
 
 /* Convert kinds to string and get default value type */
 LIBICAL_ICAL_EXPORT icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);

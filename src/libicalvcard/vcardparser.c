@@ -96,7 +96,7 @@ void buf_init(struct buf *buf, size_t size)
     buf->s = icalmemory_new_buffer(buf->alloc);
 }
 
-static size_t buf_len(struct buf *buf)
+static size_t buf_len(const struct buf *buf)
 {
     return buf->len;
 }

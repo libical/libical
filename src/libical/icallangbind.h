@@ -19,7 +19,7 @@ LIBICAL_ICAL_EXPORT int *icallangbind_new_array(unsigned int size);
 
 LIBICAL_ICAL_EXPORT void icallangbind_free_array(int *array);
 
-LIBICAL_ICAL_EXPORT int icallangbind_access_array(int *array, int index);
+LIBICAL_ICAL_EXPORT int icallangbind_access_array(const int *array, int index);
 
 LIBICAL_ICAL_EXPORT icalproperty *icallangbind_get_first_property(icalcomponent *c,
                                                                   const char *prop);

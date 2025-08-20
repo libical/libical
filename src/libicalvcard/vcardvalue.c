@@ -1083,7 +1083,7 @@ void vcardvalue_set_parent(vcardvalue *value, vcardproperty *property)
     value->parent = property;
 }
 
-vcardproperty *vcardvalue_get_parent(vcardvalue *value)
+vcardproperty *vcardvalue_get_parent(const vcardvalue *value)
 {
     return value->parent;
 }

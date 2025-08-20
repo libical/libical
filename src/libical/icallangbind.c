@@ -31,7 +31,7 @@ void icallangbind_free_array(int *array)
     icalmemory_free_buffer(array);
 }
 
-int icallangbind_access_array(int *array, int index)
+int icallangbind_access_array(const int *array, int index)
 {
     return array[index];
 }

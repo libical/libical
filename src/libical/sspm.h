@@ -110,9 +110,9 @@ LIBICAL_ICAL_EXPORT int sspm_parse_mime(struct sspm_part *parts,
 
 LIBICAL_ICAL_EXPORT void sspm_free_parts(struct sspm_part *parts, size_t max_parts);
 
-LIBICAL_ICAL_EXPORT char *decode_quoted_printable(char *dest, char *src, size_t *size);
+LIBICAL_ICAL_EXPORT char *decode_quoted_printable(char *dest, const char *src, size_t *size);
 
-LIBICAL_ICAL_EXPORT char *decode_base64(char *dest, char *src, size_t *size);
+LIBICAL_ICAL_EXPORT char *decode_base64(char *dest, const char *src, size_t *size);
 
 LIBICAL_ICAL_EXPORT void sspm_write_mime(struct sspm_part *parts, size_t num_parts,
                                          char **output_string, const char *header);

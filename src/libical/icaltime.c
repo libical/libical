@@ -911,7 +911,7 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
     return span;
 }
 
-bool icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2)
+bool icaltime_span_overlaps(const icaltime_span *s1, const icaltime_span *s2)
 {
     /* s1->start in s2 */
     if (s1->start > s2->start && s1->start < s2->end)
@@ -935,7 +935,7 @@ bool icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2)
     return false;
 }
 
-bool icaltime_span_contains(icaltime_span *s, icaltime_span *container)
+bool icaltime_span_contains(const icaltime_span *s, const icaltime_span *container)
 {
     if ((s->start >= container->start && s->start < container->end) &&
         (s->end <= container->end && s->end > container->start)) {

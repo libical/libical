@@ -308,7 +308,7 @@ static char *fold_property_line(char *text)
    are ignored in the normal parameter printing ( the block after
    this one, so we need to do it here */
 static const char *vcardproperty_get_value_kind(vcardproperty *prop,
-                                                vcardvalue *value)
+                                                const vcardvalue *value)
 {
     const char *kind_string = NULL;
     if (!prop) {
@@ -920,7 +920,7 @@ void vcardproperty_set_x_name(vcardproperty *prop, const char *name)
     }
 }
 
-const char *vcardproperty_get_x_name(vcardproperty *prop)
+const char *vcardproperty_get_x_name(const vcardproperty *prop)
 {
     icalerror_check_arg_rz((prop != 0), "prop");
 
@@ -943,7 +943,7 @@ void vcardproperty_set_group(vcardproperty *prop, const char *group)
     }
 }
 
-const char *vcardproperty_get_group(vcardproperty *prop)
+const char *vcardproperty_get_group(const vcardproperty *prop)
 {
     icalerror_check_arg_rz((prop != 0), "prop");
 

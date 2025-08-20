@@ -182,7 +182,7 @@ bool icalrecurrencetype_rscale_is_supported(void)
 
 /****************** Forward declarations ******************/
 static void icalrecurrencetype_clear(struct icalrecurrencetype *recur);
-static short daymask_find_next_bit(unsigned long *days, short start_idx);
+static short daymask_find_next_bit(const unsigned long *days, short start_idx);
 
 /****************** Enumeration Routines ******************/
 
@@ -3168,7 +3168,7 @@ static int prev_year(icalrecur_iterator *impl)
     return prev_yearday(impl, &__next_year);
 }
 
-static short daymask_find_next_bit(unsigned long *days, short start_index)
+static short daymask_find_next_bit(const unsigned long *days, short start_index)
 {
     short days_index = start_index;
     unsigned long v;
@@ -3222,7 +3222,7 @@ static short daymask_find_next_bit(unsigned long *days, short start_index)
     return days_index;
 }
 
-static short daymask_find_prev_bit(unsigned long *days, short start_index)
+static short daymask_find_prev_bit(const unsigned long *days, short start_index)
 {
     short days_index = start_index;
     unsigned long v;
@@ -3363,7 +3363,7 @@ static int prev_yearday(icalrecur_iterator *impl,
     return ret;
 }
 
-int icalrecur_check_rulepart(icalrecur_iterator *impl,
+int icalrecur_check_rulepart(const icalrecur_iterator *impl,
                              int v, icalrecurrencetype_byrule byrule)
 {
     int itr;

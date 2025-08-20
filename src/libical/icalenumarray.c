@@ -18,7 +18,7 @@
 
 #include <string.h>
 
-size_t icalenumarray_size(icalenumarray *array)
+size_t icalenumarray_size(const icalenumarray *array)
 {
     if (!array)
         return 0;

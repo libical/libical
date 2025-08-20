@@ -54,7 +54,7 @@ int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey);
 */
 char *parse_vcalendar(const DBT *dbt);
 char *pack_calendar(struct calendar *cal, size_t size);
-struct calendar *unpack_calendar(char *str, size_t size);
+struct calendar *unpack_calendar(const char *str, size_t size);
 #endif
 
 /*
@@ -548,7 +548,7 @@ char *pack_calendar(struct calendar *cal, size_t size)
     return str;
 }
 
-struct calendar *unpack_calendar(char *str, size_t size)
+struct calendar *unpack_calendar(const char *str, size_t size)
 {
     struct calendar *cal;
 

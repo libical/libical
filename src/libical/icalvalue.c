@@ -1510,7 +1510,7 @@ void icalvalue_set_parent(icalvalue *value, icalproperty *property)
     value->parent = property;
 }
 
-icalproperty *icalvalue_get_parent(icalvalue *value)
+icalproperty *icalvalue_get_parent(const icalvalue *value)
 {
     return value->parent;
 }

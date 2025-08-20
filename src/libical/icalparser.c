@@ -155,7 +155,7 @@ static char *parser_get_next_char(char c, char *str, int qm)
 }
 
 /** Makes a new tmp buffer out of a substring. */
-static char *make_segment(char *start, char *end)
+static char *make_segment(const char *start, const char *end)
 {
 #if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
@@ -589,7 +589,7 @@ static void insert_error(icalparser *parser, icalcomponent *comp, const char *te
     parser->error_count++;
 }
 
-static bool line_is_blank(char *line)
+static bool line_is_blank(const char *line)
 {
     int i = 0;
 
@@ -1256,7 +1256,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
     }
 }
 
-icalparser_state icalparser_get_state(icalparser *parser)
+icalparser_state icalparser_get_state(const icalparser *parser)
 {
     return parser->state;
 }

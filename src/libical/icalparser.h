@@ -190,7 +190,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_clean(icalparser *parser);
  *
  * icalparser_free(parser);
  */
-LIBICAL_ICAL_EXPORT icalparser_state icalparser_get_state(icalparser *parser);
+LIBICAL_ICAL_EXPORT icalparser_state icalparser_get_state(const icalparser *parser);
 
 /**
  * @brief Frees an icalparser object.
