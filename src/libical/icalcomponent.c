@@ -215,7 +215,7 @@ void icalcomponent_free(icalcomponent *c)
     }
 }
 
-char *icalcomponent_as_ical_string(icalcomponent *impl)
+char *icalcomponent_as_ical_string(const icalcomponent *impl)
 {
     char *buf;
 
@@ -226,7 +226,7 @@ char *icalcomponent_as_ical_string(icalcomponent *impl)
     return buf;
 }
 
-char *icalcomponent_as_ical_string_r(icalcomponent *impl)
+char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
 {
     char *buf;
     char *tmp_buf;
@@ -291,7 +291,7 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
     return buf;
 }
 
-bool icalcomponent_is_valid(icalcomponent *component)
+bool icalcomponent_is_valid(const icalcomponent *component)
 {
     if ((strcmp(component->id, "comp") == 0) && component->kind != ICAL_NO_COMPONENT) {
         return true;
@@ -336,7 +336,7 @@ void icalcomponent_set_x_name(icalcomponent *comp, const char *name)
     }
 }
 
-const char *icalcomponent_get_x_name(icalcomponent *comp)
+const char *icalcomponent_get_x_name(const icalcomponent *comp)
 {
     icalerror_check_arg_rz((comp != 0), "comp");
 
@@ -629,12 +629,13 @@ icalcomponent *icalcomponent_get_next_component(icalcomponent *c, icalcomponent_
     return 0;
 }
 
-icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c)
+icalcomponent *icalcomponent_get_first_real_component(const icalcomponent *c)
 {
     icalcomponent *comp;
+    icalcomponent *cin = (icalcomponent *)c;
 
-    for (comp = icalcomponent_get_first_component(c, ICAL_ANY_COMPONENT);
-         comp != 0; comp = icalcomponent_get_next_component(c, ICAL_ANY_COMPONENT)) {
+    for (comp = icalcomponent_get_first_component(cin, ICAL_ANY_COMPONENT);
+         comp != 0; comp = icalcomponent_get_next_component(cin, ICAL_ANY_COMPONENT)) {
         icalcomponent_kind kind = icalcomponent_isa(comp);
 
         if (kind == ICAL_VEVENT_COMPONENT ||
@@ -1145,7 +1146,7 @@ void icalcomponent_convert_errors(icalcomponent *component)
     }
 }
 
-icalcomponent *icalcomponent_get_parent(icalcomponent *component)
+icalcomponent *icalcomponent_get_parent(const icalcomponent *component)
 {
     return component->parent;
 }

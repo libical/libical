@@ -117,6 +117,10 @@ The following functions have been added:
 
 ### Migrating from 3.0 to 4.0
 
+### const pointers
+
+Many function signatures have been changed to use const pointers.
+
 ### bool return values
 
 A number of function signatures have been changed to use 'bool' rather than 'int' types.

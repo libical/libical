@@ -140,7 +140,7 @@ static void deleteStrItem(StrItem *p)
   The following function provide accesses to VObject's value.
   ----------------------------------------------------------------------*/
 
-const char* vObjectName(VObject *o)
+const char* vObjectName(const VObject *o)
 {
     return NAME_OF(o);
 }
@@ -229,7 +229,7 @@ void setVObjectVObjectValue(VObject *o, VObject *p)
     VALUE_TYPE(o) = VCVT_VOBJECT;
 }
 
-int vObjectValueType(VObject *o)
+int vObjectValueType(const VObject *o)
 {
     return (int)VALUE_TYPE(o);
 }
@@ -298,7 +298,7 @@ void addList(VObject **o, VObject *p)
         }
 }
 
-VObject* nextVObjectInList(VObject *o)
+VObject* nextVObjectInList(const VObject *o)
 {
     return o->next;
 }
@@ -330,7 +330,7 @@ void initVObjectIterator(VObjectIterator *i, VObject *o)
     i->next = 0;
 }
 
-int moreIteration(VObjectIterator *i)
+int moreIteration(const VObjectIterator *i)
 {
     return (i->start && (i->next==0 || i->next!=i->start));
 }
@@ -524,7 +524,7 @@ void printVObject(FILE *fp,VObject *o)
     printVObject_(fp,o,0);
 }
 
-void printVObjectToFile(char *fname,VObject *o)
+void printVObjectToFile(const char *fname, VObject *o)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -533,7 +533,7 @@ void printVObjectToFile(char *fname,VObject *o)
         }
 }
 
-void printVObjectsToFile(char *fname,VObject *list)
+void printVObjectsToFile(const char *fname, VObject *list)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -1340,7 +1340,7 @@ void writeVObject(FILE *fp, VObject *o)
     writeVObject_(&ofp,o);
 }
 
-void writeVObjectToFile(char *fname, VObject *o)
+void writeVObjectToFile(const char *fname, VObject *o)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -1349,7 +1349,7 @@ void writeVObjectToFile(char *fname, VObject *o)
         }
 }
 
-void writeVObjectsToFile(char *fname, VObject *list)
+void writeVObjectsToFile(const char *fname, VObject *list)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {

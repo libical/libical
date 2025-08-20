@@ -368,7 +368,7 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     return buf;
 }
 
-vcardparameter_kind vcardparameter_isa(vcardparameter *parameter)
+vcardparameter_kind vcardparameter_isa(const vcardparameter *parameter)
 {
     if (parameter == 0) {
         return VCARD_NO_PARAMETER;
@@ -408,7 +408,7 @@ void vcardparameter_set_xname(vcardparameter *param, const char *v)
     }
 }
 
-const char *vcardparameter_get_xname(vcardparameter *param)
+const char *vcardparameter_get_xname(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
@@ -431,7 +431,7 @@ void vcardparameter_set_xvalue(vcardparameter *param, const char *v)
     }
 }
 
-const char *vcardparameter_get_xvalue(vcardparameter *param)
+const char *vcardparameter_get_xvalue(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
@@ -443,7 +443,7 @@ void vcardparameter_set_iana_value(vcardparameter *param, const char *v)
     vcardparameter_set_xvalue(param, v);
 }
 
-const char *vcardparameter_get_iana_value(vcardparameter *param)
+const char *vcardparameter_get_iana_value(const vcardparameter *param)
 {
     return vcardparameter_get_xvalue(param);
 }
@@ -453,7 +453,7 @@ void vcardparameter_set_iana_name(vcardparameter *param, const char *v)
     vcardparameter_set_xname(param, v);
 }
 
-const char *vcardparameter_get_iana_name(vcardparameter *param)
+const char *vcardparameter_get_iana_name(const vcardparameter *param)
 {
     return vcardparameter_get_xname(param);
 }
@@ -465,14 +465,14 @@ void vcardparameter_set_parent(vcardparameter *param, vcardproperty *property)
     param->parent = property;
 }
 
-vcardproperty *vcardparameter_get_parent(vcardparameter *param)
+vcardproperty *vcardparameter_get_parent(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
     return param->parent;
 }
 
-bool vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2)
+bool vcardparameter_has_same_name(const vcardparameter *param1, const vcardparameter *param2)
 {
     vcardparameter_kind kind1;
     vcardparameter_kind kind2;
@@ -504,14 +504,14 @@ bool vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2
     return true;
 }
 
-bool vcardparameter_is_multivalued(vcardparameter *param)
+bool vcardparameter_is_multivalued(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
     return param->is_multivalued;
 }
 
-bool vcardparameter_is_structured(vcardparameter *param)
+bool vcardparameter_is_structured(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 

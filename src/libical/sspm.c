@@ -179,7 +179,7 @@ static char *sspm_property_name(const char *line)
     }
 }
 
-static char *sspm_value(char *line)
+static char *sspm_value(const char *line)
 {
     static ICAL_GLOBAL_VAR char value[1024];
 
@@ -250,7 +250,7 @@ static const struct sspm_action_map sspm_action_map[] = {
      sspm_default_end_part, sspm_default_free_part},
 };
 
-static bool sspm_is_mime_header(char *line)
+static bool sspm_is_mime_header(const char *line)
 {
     char *name = sspm_property_name(line);
     int i;
@@ -268,7 +268,7 @@ static bool sspm_is_mime_header(char *line)
     return false;
 }
 
-static bool sspm_is_mail_header(char *line)
+static bool sspm_is_mail_header(const char *line)
 {
     char *name = sspm_property_name(line);
 
@@ -297,7 +297,7 @@ static bool sspm_is_blank(char *line)
     return false;
 }
 
-static bool sspm_is_continuation_line(char *line)
+static bool sspm_is_continuation_line(const char *line)
 {
     if (line[0] == ' ' || line[0] == '\t') {
         return true;
@@ -306,7 +306,7 @@ static bool sspm_is_continuation_line(char *line)
     return false;
 }
 
-static bool sspm_is_mime_boundary(char *line)
+static bool sspm_is_mime_boundary(const char *line)
 {
     if (line[0] == '-' && line[1] == '-') {
         return true;
@@ -376,7 +376,7 @@ static struct sspm_action_map get_action(struct mime_impl *impl,
     return sspm_action_map[0];
 }
 
-static char *sspm_lowercase(char *str)
+static char *sspm_lowercase(const char *str)
 {
     char *p = 0;
     char *new;
@@ -392,7 +392,7 @@ static char *sspm_lowercase(char *str)
     return new;
 }
 
-static enum sspm_major_type sspm_find_major_content_type(char *type)
+static enum sspm_major_type sspm_find_major_content_type(const char *type)
 {
     int i;
 
@@ -409,7 +409,7 @@ static enum sspm_major_type sspm_find_major_content_type(char *type)
     return major_content_type_map[i].type; /* Should return SSPM_UNKNOWN_MINOR_TYPE */
 }
 
-static enum sspm_minor_type sspm_find_minor_content_type(char *type)
+static enum sspm_minor_type sspm_find_minor_content_type(const char *type)
 {
     int i;
     char *ltype = sspm_lowercase(type);
@@ -475,7 +475,7 @@ const char *sspm_encoding_string(enum sspm_encoding type)
 
 /* Interpret a header line and add its data to the header
    structure. */
-static void sspm_build_header(struct sspm_header *header, char *line)
+static void sspm_build_header(struct sspm_header *header, const char *line)
 {
     char *prop;
     char *val;
@@ -572,7 +572,7 @@ static void sspm_store_part(struct mime_impl *impl, struct sspm_header header,
     impl->part_no++;
 }
 
-static void sspm_set_error(struct sspm_header *header, enum sspm_error error, char *message)
+static void sspm_set_error(struct sspm_header *header, enum sspm_error error, const char *message)
 {
     header->error = error;
 
@@ -1036,7 +1036,7 @@ The code is heavily modified by Eric Busboom.
 
 ***********************************************************************/
 
-char *decode_quoted_printable(char *dest, char *src, size_t *size)
+char *decode_quoted_printable(char *dest, const char *src, size_t *size)
 {
     int cc;
     size_t i = 0;
@@ -1082,7 +1082,7 @@ char *decode_quoted_printable(char *dest, char *src, size_t *size)
     return (dest);
 }
 
-char *decode_base64(char *dest, char *src, size_t *size)
+char *decode_base64(char *dest, const char *src, size_t *size)
 {
     int cc = 0;
     char buf[4] = {0, 0, 0, 0};
@@ -1287,7 +1287,7 @@ static const char BaseTable[64] = {
     'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
     'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
 
-static void sspm_write_base64(struct sspm_buffer *buf, char *inbuf, int size)
+static void sspm_write_base64(struct sspm_buffer *buf, const char *inbuf, int size)
 {
     char outbuf[4];
     int i;
@@ -1366,7 +1366,7 @@ static void sspm_encode_base64(struct sspm_buffer *buf, char *data, size_t size)
     }
 }
 
-static void sspm_write_header(struct sspm_buffer *buf, struct sspm_header *header)
+static void sspm_write_header(struct sspm_buffer *buf, const struct sspm_header *header)
 {
     int i;
     char temp[TMP_BUF_SIZE];

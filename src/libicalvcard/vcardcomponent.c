@@ -249,7 +249,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
     return buf;
 }
 
-bool vcardcomponent_is_valid(vcardcomponent *component)
+bool vcardcomponent_is_valid(const vcardcomponent *component)
 {
     return ((strcmp(component->id, "comp") == 0) &&
             (component->kind != VCARD_NO_COMPONENT));

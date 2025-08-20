@@ -33,15 +33,15 @@ LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_clone(const icalcluster *cluster)
 
 LIBICAL_ICALSS_EXPORT void icalcluster_free(icalcluster *cluster);
 
-LIBICAL_ICALSS_EXPORT const char *icalcluster_key(icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT const char *icalcluster_key(const icalcluster *cluster);
 
-LIBICAL_ICALSS_EXPORT int icalcluster_is_changed(icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT int icalcluster_is_changed(const icalcluster *cluster);
 
 LIBICAL_ICALSS_EXPORT void icalcluster_mark(icalcluster *cluster);
 
 LIBICAL_ICALSS_EXPORT void icalcluster_commit(icalcluster *cluster);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_component(icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_component(const icalcluster *cluster);
 
 LIBICAL_ICALSS_EXPORT int icalcluster_count_components(icalcluster *cluster,
                                                        icalcomponent_kind kind);

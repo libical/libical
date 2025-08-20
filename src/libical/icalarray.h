@@ -110,7 +110,7 @@ LIBICAL_ICAL_EXPORT icalarray *icalarray_new(size_t element_size, size_t increme
  * icalarray_free(copy);
  * ```
  */
-LIBICAL_ICAL_EXPORT icalarray *icalarray_copy(icalarray *array);
+LIBICAL_ICAL_EXPORT icalarray *icalarray_copy(const icalarray *array);
 
 /**
  * @brief Frees an array object and everything that it contains.

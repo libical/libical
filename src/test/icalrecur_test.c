@@ -46,7 +46,7 @@ int check_and_copy_field(const char *line, const char *pref, char *field, size_t
     return 0;
 }
 
-static void print_error_hdr(struct recur *r)
+static void print_error_hdr(const struct recur *r)
 {
     fprintf(stderr, "Test case at line %d failed.\n", r->line_no);
     fprintf(stderr, "RRULE:%s\n", r->rrule);

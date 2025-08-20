@@ -94,7 +94,7 @@ enum file_type test_file(char *path)
     return type;
 }
 
-static void byebye(int code, struct options_struct *opt)
+static void byebye(int code, const struct options_struct *opt)
 {
     if (opt->output_file) {
         free(opt->output_file);
@@ -129,12 +129,13 @@ static char *lowercase(const char *str)
     return lower;
 }
 
-icalcomponent *get_first_real_component(icalcomponent *comp)
+icalcomponent *get_first_real_component(const icalcomponent *comp)
 {
     icalcomponent *c;
+    icalcomponent *cin = (icalcomponent *)comp;
 
-    for (c = icalcomponent_get_first_component(comp, ICAL_ANY_COMPONENT);
-         c != 0; c = icalcomponent_get_next_component(comp, ICAL_ANY_COMPONENT)) {
+    for (c = icalcomponent_get_first_component(cin, ICAL_ANY_COMPONENT);
+         c != 0; c = icalcomponent_get_next_component(cin, ICAL_ANY_COMPONENT)) {
         if (icalcomponent_isa(c) == ICAL_VEVENT_COMPONENT ||
             icalcomponent_isa(c) == ICAL_VTODO_COMPONENT ||
             icalcomponent_isa(c) == ICAL_VJOURNAL_COMPONENT) {
@@ -211,7 +212,7 @@ Content-Type:  multipart/mixed; boundary=\"%s\"\n\
 }
 
 /* The incoming component had fatal errors */
-void return_failure(icalcomponent *comp, char *message, struct options_struct *opt)
+void return_failure(const icalcomponent *comp, const char *message, const struct options_struct *opt)
 {
     char *local_attendee = opt->calid;
     FILE *p;
@@ -256,7 +257,7 @@ void return_failure(icalcomponent *comp, char *message, struct options_struct *o
 }
 
 /* The program had a fatal error and could not process the incoming component*/
-void return_error(icalcomponent *comp, char *message, struct options_struct *opt)
+void return_error(const icalcomponent *comp, const char *message, const struct options_struct *opt)
 {
     _unused(comp);
     _unused(opt);
@@ -710,7 +711,7 @@ char *read_stream(char *s, size_t size, void *d)
     return c;
 }
 
-icalcomponent *read_nonmime_component(struct options_struct *opt)
+icalcomponent *read_nonmime_component(const struct options_struct *opt)
 {
     FILE *stream;
     icalcomponent *comp;
@@ -774,7 +775,7 @@ icalcomponent *find_vcalendar(icalcomponent *comp)
     return 0;
 }
 
-icalcomponent *read_mime_component(struct options_struct *opt)
+icalcomponent *read_mime_component(const struct options_struct *opt)
 {
     icalcomponent *comp, *mimecomp;
     FILE *stream;
@@ -805,7 +806,7 @@ icalcomponent *read_mime_component(struct options_struct *opt)
     return comp;
 }
 
-icalcomponent *read_component(struct options_struct *opt)
+icalcomponent *read_component(const struct options_struct *opt)
 {
     if (opt->input_type == INPUT_IS_MIME) {
         return read_mime_component(opt);

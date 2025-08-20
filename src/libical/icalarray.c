@@ -48,7 +48,7 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
     return array;
 }
 
-static void *icalarray_alloc_chunk(icalarray *array)
+static void *icalarray_alloc_chunk(const icalarray *array)
 {
     void *chunk = icalmemory_new_buffer(array->element_size * array->increment_size);
 
@@ -58,7 +58,7 @@ static void *icalarray_alloc_chunk(icalarray *array)
     return chunk;
 }
 
-icalarray *icalarray_copy(icalarray *originalarray)
+icalarray *icalarray_copy(const icalarray *originalarray)
 {
     icalarray *array = icalarray_new(originalarray->element_size, originalarray->increment_size);
     size_t chunks = originalarray->space_allocated / originalarray->increment_size;

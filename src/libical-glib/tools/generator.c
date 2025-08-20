@@ -1851,7 +1851,7 @@ gchar *get_source_method_proto(Method *method)
     return ret;
 }
 
-gchar *get_translator_name_for_return(gchar *upperCamel)
+gchar *get_translator_name_for_return(const gchar *upperCamel)
 {
     gchar *lowerSnake;
     gchar *res;

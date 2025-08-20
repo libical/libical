@@ -845,7 +845,7 @@ void icalproperty_set_x_name(icalproperty *prop, const char *name)
     }
 }
 
-const char *icalproperty_get_x_name(icalproperty *prop)
+const char *icalproperty_get_x_name(const icalproperty *prop)
 {
     icalerror_check_arg_rz((prop != 0), "prop");
 

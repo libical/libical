@@ -96,7 +96,7 @@ icalcomponent *icalclassify_find_overlaps(icalset *set, icalcomponent *comp)
     }
 }
 
-icalproperty *icalclassify_find_attendee(icalcomponent *c, const char *attendee)
+icalproperty *icalclassify_find_attendee(const icalcomponent *c, const char *attendee)
 {
     icalproperty *p;
     icalcomponent *inner;
@@ -250,7 +250,7 @@ void icalssutil_get_parts(icalcomponent *c, struct icalclassify_parts *parts)
     }
 }
 
-static bool icalssutil_is_rescheduled(icalcomponent *a, icalcomponent *b)
+static bool icalssutil_is_rescheduled(const icalcomponent *a, const icalcomponent *b)
 {
     icalproperty *p1, *p2;
     icalcomponent *i1, *i2;

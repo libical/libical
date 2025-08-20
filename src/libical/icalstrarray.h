@@ -75,7 +75,7 @@ LIBICAL_ICAL_EXPORT const char *icalstrarray_element_at(icalstrarray *array, siz
  *
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT size_t icalstrarray_size(icalstrarray *array);
+LIBICAL_ICAL_EXPORT size_t icalstrarray_size(const icalstrarray *array);
 
 /**
  * @brief Finds a string in the array.

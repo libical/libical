@@ -127,7 +127,7 @@ static void icaltimezone_reset(icaltimezone *zone);
 static void icaltimezone_expand_changes(icaltimezone *zone, int end_year);
 static int icaltimezone_compare_change_fn(const void *elem1, const void *elem2);
 
-static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonechange *change);
+static size_t icaltimezone_find_nearby_change(icaltimezone *zone, const icaltimezonechange *change);
 
 static void icaltimezone_adjust_change(icaltimezonechange *tt,
                                        int days, int hours, int minutes, int seconds);
@@ -213,7 +213,7 @@ icaltimezone *icaltimezone_new(void)
     return zone;
 }
 
-icaltimezone *icaltimezone_copy(icaltimezone *originalzone)
+icaltimezone *icaltimezone_copy(const icaltimezone *originalzone)
 {
     icaltimezone *zone;
 
@@ -810,7 +810,7 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
     icaltime_adjust(tt, 0, 0, 0, utc_offset);
 }
 
-int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int *is_daylight)
+int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *tt, int *is_daylight)
 {
     icaltimezonechange *zone_change, *prev_zone_change;
     icaltimezonechange tt_change = {0}, tmp_change = {0};
@@ -969,7 +969,7 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
 }
 
 int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
-                                            struct icaltimetype *tt, int *is_daylight)
+                                            const struct icaltimetype *tt, int *is_daylight)
 {
     icaltimezonechange *zone_change, tt_change, tmp_change;
     size_t change_num, change_num_to_use;
@@ -1079,7 +1079,7 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
  *
  * Hold icaltimezone_changes_lock(); before calling this function.
 */
-static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonechange *change)
+static size_t icaltimezone_find_nearby_change(icaltimezone *zone, const icaltimezonechange *change)
 {
     icaltimezonechange *zone_change;
     size_t lower, middle, upper;
@@ -1186,7 +1186,7 @@ const char *icaltimezone_get_tzid(icaltimezone *zone)
     return zone->tzid;
 }
 
-const char *icaltimezone_get_location(icaltimezone *zone)
+const char *icaltimezone_get_location(const icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
     if (!zone)
@@ -1208,7 +1208,7 @@ const char *icaltimezone_get_tznames(icaltimezone *zone)
     return zone->tznames;
 }
 
-double icaltimezone_get_latitude(icaltimezone *zone)
+double icaltimezone_get_latitude(const icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return 0. */
     if (!zone)
@@ -1219,7 +1219,7 @@ double icaltimezone_get_latitude(icaltimezone *zone)
     return zone->latitude;
 }
 
-double icaltimezone_get_longitude(icaltimezone *zone)
+double icaltimezone_get_longitude(const icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return 0. */
     if (!zone)
@@ -1402,7 +1402,7 @@ icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
     return NULL;
 }
 
-static struct icaltimetype tm_to_icaltimetype(struct tm *tm)
+static struct icaltimetype tm_to_icaltimetype(const struct tm *tm)
 {
     struct icaltimetype itt;
 

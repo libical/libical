@@ -107,14 +107,14 @@ void icalcluster_free(icalcluster *impl)
     free(impl);
 }
 
-const char *icalcluster_key(icalcluster *impl)
+const char *icalcluster_key(const icalcluster *impl)
 {
     icalerror_check_arg_rz((impl != 0), "cluster");
 
     return impl->key;
 }
 
-int icalcluster_is_changed(icalcluster *impl)
+int icalcluster_is_changed(const icalcluster *impl)
 {
     icalerror_check_arg_rz((impl != 0), "cluster");
 
@@ -135,7 +135,7 @@ void icalcluster_commit(icalcluster *impl)
     impl->changed = 0;
 }
 
-icalcomponent *icalcluster_get_component(icalcluster *impl)
+icalcomponent *icalcluster_get_component(const icalcluster *impl)
 {
     icalerror_check_arg_rz((impl != 0), "cluster");
 

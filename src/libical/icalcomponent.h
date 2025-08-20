@@ -64,11 +64,11 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_x(const char *x_name);
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_free(icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string(icalcomponent *component);
+LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string(const icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string_r(icalcomponent *component);
+LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string_r(const icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT bool icalcomponent_is_valid(icalcomponent *component);
+LIBICAL_ICAL_EXPORT bool icalcomponent_is_valid(const icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT icalcomponent_kind icalcomponent_isa(const icalcomponent *component);
 
@@ -77,7 +77,7 @@ LIBICAL_ICAL_EXPORT bool icalcomponent_isa_component(void *component);
 /* Deal with X components */
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_x_name(icalcomponent *comp, const char *name);
-LIBICAL_ICAL_EXPORT const char *icalcomponent_get_x_name(icalcomponent *comp);
+LIBICAL_ICAL_EXPORT const char *icalcomponent_get_x_name(const icalcomponent *comp);
 
 /** Returns the name of the component -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X component
@@ -191,7 +191,7 @@ LIBICAL_ICAL_EXPORT void icalcomponent_strip_errors(icalcomponent *component);
 LIBICAL_ICAL_EXPORT void icalcomponent_convert_errors(icalcomponent *component);
 
 /* Internal operations. They are private, and you should not be using them. */
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_parent(icalcomponent *component);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_parent(const icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_parent(icalcomponent *component,
                                                   icalcomponent *parent);
@@ -213,7 +213,7 @@ wrong component subtypes. */
 /** @brief Returns a reference to the first VEVENT, VTODO or
  * VJOURNAL in the component.
  */
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_first_real_component(const icalcomponent *c);
 
 /**     @brief Gets the timespan covered by this component, in UTC.
  *

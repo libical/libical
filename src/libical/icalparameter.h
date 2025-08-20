@@ -257,7 +257,7 @@ LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string_r(icalparameter *paramete
  * icalparameter_free(param);
  * @endcode
  */
-LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter *parameter);
+LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(const icalparameter *parameter);
 
 /**
  * Determines if the given param is an icalparameter
@@ -344,7 +344,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_xname(icalparameter *param, const cha
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_xname(icalparameter *param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_xname(const icalparameter *param);
 
 /**
  * @brief Sets the X-value of @a param to @a v
@@ -406,7 +406,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_xvalue(icalparameter *param, const ch
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_xvalue(icalparameter *param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_xvalue(const icalparameter *param);
 
 /* Access the name of an IANA parameter */
 
@@ -468,7 +468,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_iana_name(icalparameter *param, const
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_name(icalparameter *param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_name(const icalparameter *param);
 
 /**
  * @brief Sets the IANA value of @a param to @a v
@@ -530,7 +530,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_iana_value(icalparameter *param, cons
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(icalparameter *param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(const icalparameter *param);
 
 /**
  * @brief Determines if two parameters have the same name
@@ -559,7 +559,7 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(icalparameter *para
  * icalparameter_free(param2);
  * ```
  */
-LIBICAL_ICAL_EXPORT bool icalparameter_has_same_name(icalparameter *param1, icalparameter *param2);
+LIBICAL_ICAL_EXPORT bool icalparameter_has_same_name(const icalparameter *param1, const icalparameter *param2);
 
 /* Convert enumerations */
 
@@ -630,7 +630,7 @@ LIBICAL_ICAL_EXPORT icalvalue_kind icalparameter_kind_value_kind(const icalparam
  *
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT bool icalparameter_is_multivalued(icalparameter *param);
+LIBICAL_ICAL_EXPORT bool icalparameter_is_multivalued(const icalparameter *param);
 
 /** Decode parameter value per RFC6868
  *

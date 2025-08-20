@@ -19,7 +19,7 @@
 #include <string.h>
 #include <stdint.h>
 
-size_t icalstrarray_size(icalstrarray *array)
+size_t icalstrarray_size(const icalstrarray *array)
 {
     if (!array)
         return 0;

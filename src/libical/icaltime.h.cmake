@@ -407,7 +407,7 @@ LIBICAL_ICAL_EXPORT struct icaltime_span icaltime_span_new(struct icaltimetype d
  *
  *  Note, this will return false if the spans are adjacent.
  */
-LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2);
+LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(const icaltime_span *s1, const icaltime_span *s2);
 
 /** @brief Returns true if the span is totally within the containing
  *  span.
@@ -417,7 +417,7 @@ LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(icaltime_span *s1, icaltime_span
  *  @return           boolean value.
  *
  */
-LIBICAL_ICAL_EXPORT bool icaltime_span_contains(icaltime_span *s, icaltime_span *container);
+LIBICAL_ICAL_EXPORT bool icaltime_span_contains(const icaltime_span *s, const icaltime_span *container);
 
 #endif /* !ICALTIME_H */
 
