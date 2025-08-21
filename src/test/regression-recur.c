@@ -61,7 +61,7 @@ static int get_expected_numevents(icalcomponent *c)
     return num_events;
 }
 
-static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
+static void recur_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     int *num_recurs = data;
 

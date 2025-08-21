@@ -39,7 +39,7 @@ static void sig_alrm(int i)
 #endif
 #endif
 
-static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
+static void recur_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     _unused(comp);
     _unused(data);

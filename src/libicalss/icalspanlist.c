@@ -58,7 +58,7 @@ static int compare_span(void *a, void *b)
  *  to build up a spanlist.
  */
 
-static void icalspanlist_new_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
+static void icalspanlist_new_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     icaltime_span *s;
     icalspanlist *sl = (icalspanlist *)data;

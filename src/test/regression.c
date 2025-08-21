@@ -557,7 +557,7 @@ void test_components(void)
     icalerror_set_errors_are_fatal(estate);
 }
 
-static void test_component_foreach_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
+static void test_component_foreach_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     int *foundExpected;
     _unused(comp);
