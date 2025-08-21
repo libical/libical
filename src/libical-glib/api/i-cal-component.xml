@@ -548,7 +548,7 @@ struct ForeachRecurrenceData {
     void *user_data;
 };
 
-static void foreach_recurrence_cb(icalcomponent *in_comp, struct icaltime_span *in_span, void *user_data)
+static void foreach_recurrence_cb(const icalcomponent *in_comp, const struct icaltime_span *in_span, void *user_data)
 {
     ICalTimeSpan *span;
     struct ForeachRecurrenceData *data = user_data;

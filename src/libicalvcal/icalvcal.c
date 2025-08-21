@@ -60,12 +60,12 @@ static const int weekday_codes[] = {
 struct conversion_table_struct {
     const char *vcalname;
     enum datatype type;
-    void *(*conversion_func)(int icaltype, VObject *o, icalcomponent *comp,
+    void *(*conversion_func)(int icaltype, VObject *o, const icalcomponent *comp,
                              icalvcal_defaults *defaults);
     int icaltype;
 };
 
-static void *dc_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *dc_prop(int icaltype, VObject *object, const icalcomponent *comp,
                      icalvcal_defaults *defaults);
 
 /* Creates an error property with the given message. */
@@ -204,7 +204,7 @@ icalcomponent *icalvcal_convert(VObject *object)
  * timezone_comp() may not really be necessary, I think it would be
  * easier to use them. */
 
-static void *comp(int icaltype, VObject *o, icalcomponent *comp, icalvcal_defaults *defaults)
+static void *comp(int icaltype, VObject *o, const icalcomponent *comp, icalvcal_defaults *defaults)
 {
     icalcomponent_kind kind = (icalcomponent_kind)icaltype;
     icalcomponent *c = icalcomponent_new(kind);
@@ -550,7 +550,7 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
     return is_valid_alarm;
 }
 
-static void *alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
+static void *alarm_comp(int icaltype, VObject *o, const icalcomponent *comp,
                         icalvcal_defaults *defaults)
 {
     /*    icalcomponent_kind kind = (icalcomponent_kind)icaltype; */
@@ -574,7 +574,7 @@ static void *alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
 #define parameter NULL
 #define rsvp_parameter NULL
 
-static void *transp_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *transp_prop(int icaltype, VObject *object, const icalcomponent *comp,
                          icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
@@ -600,7 +600,7 @@ static void *transp_prop(int icaltype, VObject *object, icalcomponent *comp,
     return (void *)prop;
 }
 
-static void *sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *sequence_prop(int icaltype, VObject *object, const icalcomponent *comp,
                            icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
@@ -629,7 +629,7 @@ static void *sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
 
 /* This handles properties which have multiple values, which are separated by
    ';' in vCalendar but ',' in iCalendar. So we just switch those. */
-static void *multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *multivalued_prop(int icaltype, VObject *object, const icalcomponent *comp,
                               icalvcal_defaults *defaults)
 {
     icalproperty_kind kind = (icalproperty_kind)icaltype;
@@ -669,7 +669,7 @@ static void *multivalued_prop(int icaltype, VObject *object, icalcomponent *comp
     return (void *)prop;
 }
 
-static void *status_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *status_prop(int icaltype, VObject *object, const icalcomponent *comp,
                          icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
@@ -721,7 +721,7 @@ static void *status_prop(int icaltype, VObject *object, icalcomponent *comp,
     return (void *)prop;
 }
 
-static void *utc_datetime_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *utc_datetime_prop(int icaltype, VObject *object, const icalcomponent *comp,
                                icalvcal_defaults *defaults)
 {
     icalproperty_kind kind = (icalproperty_kind)icaltype;
@@ -1205,7 +1205,7 @@ static const char *rrule_parse_yearly_days(const char *s,
         recurrences, time modifiers in DAILY rules and maybe other stuff.
 */
 
-static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *rule_prop(int icaltype, VObject *object, const icalcomponent *comp,
                        icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
@@ -1291,7 +1291,7 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 /* directly convertible property. The string representation of vcal is
    the same as ical */
 
-void *dc_prop(int icaltype, VObject *object, icalcomponent *comp, icalvcal_defaults *defaults)
+void *dc_prop(int icaltype, VObject *object, const icalcomponent *comp, icalvcal_defaults *defaults)
 {
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop;

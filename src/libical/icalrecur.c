@@ -1689,6 +1689,7 @@ static short decode_month(short *month, bool is_hebrew)
     return icalrecurrencetype_month_month(*month) - 1; /* UCal is 0-based */
 }
 
+/* cppcheck-suppress constParameterCallback */
 static short decode_day(short *day, bool flags)
 {
     _unused(flags);

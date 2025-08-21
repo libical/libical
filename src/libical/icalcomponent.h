@@ -470,9 +470,8 @@ LIBICAL_ICAL_EXPORT bool icalproperty_recurrence_is_excluded(icalcomponent *comp
 LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                           struct icaltimetype start,
                                                           struct icaltimetype end,
-                                                          void (*callback)(icalcomponent *comp,
-                                                                           struct icaltime_span *
-                                                                               span,
+                                                          void (*callback)(const icalcomponent *comp,
+                                                                           const struct icaltime_span *span,
                                                                            void *data),
                                                           void *callback_data);
 
