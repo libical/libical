@@ -1497,8 +1497,8 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
     if (end_prop != 0 && dur_prop == 0) {
         ret = icalproperty_get_datetime_with_component(end_prop, comp);
     } else if (end_prop == 0 && dur_prop != 0) {
-        struct icaltimetype start = icalcomponent_get_dtstart(inner);
-        struct icaldurationtype duration;
+        struct icaltimetype start = icalcomponent_get_dtstart(inner), end_days;
+        struct icaldurationtype duration, dur_days;
 
         //extra check to prevent empty durations from crashing
         if (icalproperty_get_value(dur_prop)) {
@@ -1507,7 +1507,26 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
             duration = icaldurationtype_null_duration();
         }
 
-        ret = icaltime_add(start, duration);
+        /* RFC 5545 specifies that we are to add days first
+         * and treat them as nominal, not exact */
+        dur_days = duration;
+        dur_days.hours =
+            dur_days.minutes =
+            dur_days.seconds = 0;
+        end_days = icaltime_add(start, dur_days);
+
+        duration.days =
+            duration.weeks = 0;
+        ret = icaltime_add(end_days, duration);
+        /* RFC 5545 states:
+         * In the case of discontinuities in the time scale, such
+         * as the change from standard time to daylight time and back, the
+         * computation of the exact duration requires the subtraction or
+         * addition of the change of duration of the discontinuity.
+         */
+        icaltime_adjust(&ret, 0, 0, 0,
+                icaltimezone_get_utc_offset((icaltimezone*)ret.zone, &ret, &ret.is_daylight) -
+                icaltimezone_get_utc_offset((icaltimezone*)end_days.zone, &end_days, &end_days.is_daylight));
     } else if (end_prop == 0 && dur_prop == 0) {
         if (kind == ICAL_VEVENT_COMPONENT) {
             struct icaltimetype start = icalcomponent_get_dtstart(inner);
@@ -1600,13 +1619,26 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
 
     } else if (end_prop != 0 && dur_prop == 0) {
         icaltimezone *utc = icaltimezone_get_utc_timezone();
-        struct icaltimetype start =
-            icaltime_convert_to_zone(icalcomponent_get_dtstart(inner), utc);
-        struct icaltimetype end =
-            icaltime_convert_to_zone(
-                icalproperty_get_datetime_with_component(end_prop, comp), utc);
+        struct icaltimetype start = icalcomponent_get_dtstart(inner);
+        struct icaltimetype end = icalproperty_get_datetime_with_component(end_prop, comp),
+            end_days = start;
+        struct icaldurationtype ret_time;
 
+        /* Get nominal days */
         ret = icaltime_subtract(end, start);
+        /* Convert to UTC and subtract to get exact time */
+        end = icaltime_convert_to_zone(end, utc);
+
+        ret.hours =
+            ret.minutes =
+            ret.seconds = 0;
+        end_days = icaltime_add(end_days, ret);
+        end_days = icaltime_convert_to_zone(end_days, utc);
+
+        ret_time = icaltime_subtract(end, end_days);
+        ret.hours = ret_time.hours;
+        ret.minutes = ret_time.minutes;
+        ret.seconds = ret_time.seconds;
     } else if (end_prop == 0 && dur_prop == 0) {
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         ret = icaldurationtype_null_duration();
