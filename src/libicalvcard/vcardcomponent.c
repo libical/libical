@@ -132,40 +132,38 @@ void vcardcomponent_free(vcardcomponent *c)
 
     icalerror_check_arg_rv((c != 0), "component");
 
-    if (c != 0) {
-        if (c->parent != 0) {
-            return;
-        }
-
-        if (c->properties != 0) {
-            while ((prop = pvl_pop(c->properties)) != 0) {
-                vcardproperty_set_parent(prop, 0);
-                vcardproperty_free(prop);
-            }
-            pvl_free(c->properties);
-        }
-
-        while ((comp = pvl_data(pvl_head(c->components))) != 0) {
-            vcardcomponent_remove_component(c, comp);
-            vcardcomponent_free(comp);
-        }
-
-        pvl_free(c->components);
-
-        if (c->x_name != 0) {
-            icalmemory_free_buffer(c->x_name);
-        }
-
-        c->kind = VCARD_NO_COMPONENT;
-        c->properties = 0;
-        c->property_iterator = 0;
-        c->components = 0;
-        c->component_iterator = 0;
-        c->x_name = 0;
-        c->id[0] = 'X';
-
-        icalmemory_free_buffer(c);
+    if (c->parent != 0) {
+        return;
     }
+
+    if (c->properties != 0) {
+        while ((prop = pvl_pop(c->properties)) != 0) {
+            vcardproperty_set_parent(prop, 0);
+            vcardproperty_free(prop);
+        }
+        pvl_free(c->properties);
+    }
+
+    while ((comp = pvl_data(pvl_head(c->components))) != 0) {
+        vcardcomponent_remove_component(c, comp);
+        vcardcomponent_free(comp);
+    }
+
+    pvl_free(c->components);
+
+    if (c->x_name != 0) {
+        icalmemory_free_buffer(c->x_name);
+    }
+
+    c->kind = VCARD_NO_COMPONENT;
+    c->properties = 0;
+    c->property_iterator = 0;
+    c->components = 0;
+    c->component_iterator = 0;
+    c->x_name = 0;
+    c->id[0] = 'X';
+
+    icalmemory_free_buffer(c);
 }
 
 char *vcardcomponent_as_vcard_string(vcardcomponent *impl)

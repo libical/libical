@@ -852,13 +852,7 @@ struct icaltimetype icaltime_convert_to_zone(const struct icaltimetype tt, icalt
 
     /* If it's a floating time we don't want to adjust the time */
     if (tt.zone != NULL) {
-        icaltimezone *from_zone = (icaltimezone *)tt.zone;
-
-        if (!from_zone) {
-            from_zone = icaltimezone_get_utc_timezone();
-        }
-
-        icaltimezone_convert_time(&ret, from_zone, zone);
+        icaltimezone_convert_time(&ret, (icaltimezone *)tt.zone, zone);
     }
 
     ret.zone = zone;

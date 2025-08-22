@@ -1552,7 +1552,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
             }
         }
         /* end of recurring event with expand query */
-        if (comp != 0 && (i->gauge == 0 || icalgauge_compare(i->gauge, comp) == 1)) {
+        if ((i->gauge == 0 || icalgauge_compare(i->gauge, comp) == 1)) {
             /* found a matched, return it */
             return comp;
         }

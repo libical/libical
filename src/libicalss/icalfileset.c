@@ -100,6 +100,7 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
     (void)icalfileset_lock(fset);
 
     if (cluster_file_size > 0) {
+        /* cppcheck-suppress knownConditionTrueFalse; we might want to return an error some day */
         if (icalfileset_read_file(fset, mode) != ICAL_NO_ERROR) {
             icalfileset_free(set);
             return 0;
@@ -802,7 +803,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
             icalcomponent_add_property(comp, icalproperty_new_recurrenceid(next));
         }
 
-        if (gauge == 0 || icalgauge_compare(itr.gauge, comp) == 1) {
+        if (icalgauge_compare(itr.gauge, comp) == 1) {
             /* matches and returns */
             itr.iter = citr;
             return itr;
@@ -950,10 +951,10 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
         }
         icalcomponent_add_property(c, icalproperty_new_recurrenceid(next));
 
-        if (c != 0 && (i->gauge == 0 || icalgauge_compare(i->gauge, c) == 1)) {
+        if ((i->gauge == 0 || icalgauge_compare(i->gauge, c) == 1)) {
             return c;
         }
-    } while (c != 0);
+    } while (true);
 
     return 0;
 }

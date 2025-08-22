@@ -1380,7 +1380,7 @@ icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
     for (lower = 0; lower < builtin_timezones->num_elements; lower++) {
         zone = icalarray_element_at(builtin_timezones, lower);
         zone_location = icaltimezone_get_location(zone);
-        if (location && zone_location && strcmp(location, zone_location) == 0)
+        if (zone_location && strcmp(location, zone_location) == 0)
             return zone;
     }
 
@@ -1981,7 +1981,7 @@ static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size)
     /* Sanity check. Standard timezone offsets shouldn't be much more than 12
        hours, and daylight saving shouldn't change it by more than a few hours.
        (The maximum offset is 15 hours 56 minutes at present.) */
-    if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60) {
+    if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60 || seconds < 0) {
         icalerrprintf("Warning: Strange timezone offset: H:%i M:%i S:%i\n",
                       hours, minutes, seconds);
     }
@@ -2024,6 +2024,7 @@ static const char *get_zone_directory_builtin(void)
     if (zone_files_directory)
         return zone_files_directory;
 
+    /* cppcheck-suppress knownConditionTrueFalse */
     if (cache)
         return cache;
 
