@@ -72,7 +72,7 @@ static void strstriplt(char *buf)
         return;
     }
     a = 0;
-    while ((buf[0] != 0) && (isspace((unsigned char)buf[a]))) {
+    while (isspace((unsigned char)buf[a])) {
         a++;
     }
     if (a > 0) {

@@ -202,7 +202,7 @@ Content-Type:  multipart/mixed; boundary=\"%s\"\n\
 %s\n\
 ",
              to, from, subject, content_id, boundary, boundary, mime_part_1);
-    if (ical_message != 0 && method != 0) {
+    if (method != 0) {
         strcat(m, mime_part_2);
     } else {
         strcat(m, "--\n");
@@ -831,6 +831,7 @@ int main(int argc, char *argv[])
 
     get_options(argc, argv, &opt);
 
+    /* cppcheck-suppress knownConditionTrueFalse; we might allow check_options to return false one day */
     if ((options_error_str = check_options(&opt)) != 0) {
         usage(options_error_str);
         byebye(1, &opt);

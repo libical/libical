@@ -566,6 +566,7 @@ static int icalrecur_add_byrules(struct icalrecur_parser *parser, icalrecurrence
         if (*t) {
             /* Check for leap month suffix (RSCALE only) */
             if (by == &parser->rt->by[ICAL_BY_MONTH] && strcmp(t, "L") == 0) {
+                /* cppcheck-suppress knownConditionTrueFalse; we might return false some day */
                 if (icalrecurrencetype_rscale_is_supported()) {
                     /* The "L" suffix in a BYMONTH recur-rule-part
                        is encoded by setting a high-order bit */
@@ -2514,7 +2515,7 @@ static int next_unit(icalrecur_iterator *impl,
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
         }
 
-    } else if (!has_by_unit && this_frequency) {
+    } else if (this_frequency) {
         /* Compute the next value from the last time and the freq interval */
         increment_unit(impl, impl->rule->interval);
         end_of_data = 1;
@@ -2590,7 +2591,7 @@ static int prev_unit(icalrecur_iterator *impl,
 
         set_unit(impl, bydata->by.data[bydata->index]);
 
-    } else if (!has_by_unit && this_frequency) {
+    } else if (this_frequency) {
         /* Compute the next value from the last time and the freq interval */
         increment_unit(impl, -impl->rule->interval);
         end_of_data = 1;

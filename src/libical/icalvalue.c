@@ -929,6 +929,7 @@ static char *icalvalue_utcoffset_as_ical_string_r(const icalvalue *value)
     h = MIN(abs(h), 23);
     m = MIN(abs(m), 59);
     s = MIN(abs(s), 59);
+    /* cppcheck-suppress knownConditionTrueFalse */
     if (s != 0) {
         snprintf(str, 9, "%c%02d%02d%02d", sign, h, m, s);
     } else {

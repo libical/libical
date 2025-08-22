@@ -173,46 +173,44 @@ void icalcomponent_free(icalcomponent *c)
 
     icalerror_check_arg_rv((c != 0), "component");
 
-    if (c != 0) {
-        if (c->parent != 0) {
-            return;
-        }
-
-        if (c->properties != 0) {
-            while ((prop = pvl_pop(c->properties)) != 0) {
-                icalproperty_set_parent(prop, 0);
-                icalproperty_free(prop);
-            }
-            pvl_free(c->properties);
-        }
-
-        while ((comp = pvl_data(pvl_head(c->components))) != 0) {
-            icalcomponent_remove_component(c, comp);
-            icalcomponent_free(comp);
-        }
-
-        pvl_free(c->components);
-
-        if (c->x_name != 0) {
-            icalmemory_free_buffer(c->x_name);
-        }
-
-        if (c->timezones) {
-            icaltimezone_array_free(c->timezones);
-            c->timezones = 0;
-        }
-
-        c->kind = ICAL_NO_COMPONENT;
-        c->properties = 0;
-        c->property_iterator = 0;
-        c->components = 0;
-        c->component_iterator = 0;
-        c->x_name = 0;
-        c->id[0] = 'X';
-        c->timezones = NULL;
-
-        icalmemory_free_buffer(c);
+    if (c->parent != 0) {
+        return;
     }
+
+    if (c->properties != 0) {
+        while ((prop = pvl_pop(c->properties)) != 0) {
+            icalproperty_set_parent(prop, 0);
+            icalproperty_free(prop);
+        }
+        pvl_free(c->properties);
+    }
+
+    while ((comp = pvl_data(pvl_head(c->components))) != 0) {
+        icalcomponent_remove_component(c, comp);
+        icalcomponent_free(comp);
+    }
+
+    pvl_free(c->components);
+
+    if (c->x_name != 0) {
+        icalmemory_free_buffer(c->x_name);
+    }
+
+    if (c->timezones) {
+        icaltimezone_array_free(c->timezones);
+        c->timezones = 0;
+    }
+
+    c->kind = ICAL_NO_COMPONENT;
+    c->properties = 0;
+    c->property_iterator = 0;
+    c->components = 0;
+    c->component_iterator = 0;
+    c->x_name = 0;
+    c->id[0] = 'X';
+    c->timezones = NULL;
+
+    icalmemory_free_buffer(c);
 }
 
 char *icalcomponent_as_ical_string(const icalcomponent *impl)

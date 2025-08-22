@@ -59,7 +59,7 @@ size_t icalenumarray_find(icalenumarray *array,
 
     size_t i;
 
-    for (i = 0; array && i < array->num_elements; i++) {
+    for (i = 0; i < array->num_elements; i++) {
         icalenumarray_element *e = icalarray_element_at(array, i);
         if (!enumcmp(e, needle))
             return i;
