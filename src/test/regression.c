@@ -5485,10 +5485,9 @@ static void test_implicit_dtend_duration(void)
     icalcomponent_free(c);
 }
 
-static void test_icalcomponent_get_dtend_from_duration_single(const char* dtstart, const char* duration, const char* expected_dtend)
+static void test_icalcomponent_get_dtend_from_duration_single(const char *dtstart, const char *duration, const char *expected_dtend)
 {
-
-    icalcomponent* comp = icalcomponent_new(ICAL_VEVENT_COMPONENT);
+    icalcomponent *comp = icalcomponent_new(ICAL_VEVENT_COMPONENT);
 
     icaltimetype dtstartt = icaltime_from_string(dtstart);
     dtstartt.zone = icaltimezone_get_builtin_timezone("Europe/Vienna");
@@ -5499,13 +5498,11 @@ static void test_icalcomponent_get_dtend_from_duration_single(const char* dtstar
     ok("icalcomponent_get_dtend must consider DURATION's time part as accurate.", icaltime_compare(icalcomponent_get_dtend(comp), icaltime_from_string(expected_dtend)) == 0);
 
     icalcomponent_free(comp);
-
 }
 
-static void test_icalcomponent_get_duration_from_dtend_single(const char* dtstart, const char* dtend, const char* expected_duration)
+static void test_icalcomponent_get_duration_from_dtend_single(const char *dtstart, const char *dtend, const char *expected_duration)
 {
-
-    icalcomponent* comp = icalcomponent_new(ICAL_VEVENT_COMPONENT);
+    icalcomponent *comp = icalcomponent_new(ICAL_VEVENT_COMPONENT);
 
     icaltimetype dtstartt = icaltime_from_string(dtstart);
     dtstartt.zone = icaltimezone_get_builtin_timezone("Europe/Vienna");
@@ -5519,14 +5516,13 @@ static void test_icalcomponent_get_duration_from_dtend_single(const char* dtstar
     struct icaldurationtype dret = icalcomponent_get_duration(comp);
 
     ok("icalcomponent_get_duration must consider DURATION's time part as accurate.",
-            det.weeks == dret.weeks &&
-            det.days == dret.days &&
-            det.hours == dret.hours &&
-            det.minutes == dret.minutes &&
-            det.seconds == dret.seconds);
+       det.weeks == dret.weeks &&
+           det.days == dret.days &&
+           det.hours == dret.hours &&
+           det.minutes == dret.minutes &&
+           det.seconds == dret.seconds);
 
     icalcomponent_free(comp);
-
 }
 
 static void test_icalcomponent_get_dtend_from_duration(void)

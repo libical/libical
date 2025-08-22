@@ -1512,7 +1512,7 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
         dur_days = duration;
         dur_days.hours =
             dur_days.minutes =
-            dur_days.seconds = 0;
+                dur_days.seconds = 0;
         end_days = icaltime_add(start, dur_days);
 
         duration.days =
@@ -1525,8 +1525,8 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
          * addition of the change of duration of the discontinuity.
          */
         icaltime_adjust(&ret, 0, 0, 0,
-                icaltimezone_get_utc_offset((icaltimezone*)ret.zone, &ret, &ret.is_daylight) -
-                icaltimezone_get_utc_offset((icaltimezone*)end_days.zone, &end_days, &end_days.is_daylight));
+                        icaltimezone_get_utc_offset((icaltimezone *)ret.zone, &ret, &ret.is_daylight) -
+                            icaltimezone_get_utc_offset((icaltimezone *)end_days.zone, &end_days, &end_days.is_daylight));
     } else if (end_prop == 0 && dur_prop == 0) {
         if (kind == ICAL_VEVENT_COMPONENT) {
             struct icaltimetype start = icalcomponent_get_dtstart(inner);
@@ -1621,7 +1621,7 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
         icaltimezone *utc = icaltimezone_get_utc_timezone();
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         struct icaltimetype end = icalproperty_get_datetime_with_component(end_prop, comp),
-            end_days = start;
+                            end_days = start;
         struct icaldurationtype ret_time;
 
         /* Get nominal days */
@@ -1631,7 +1631,7 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
 
         ret.hours =
             ret.minutes =
-            ret.seconds = 0;
+                ret.seconds = 0;
         end_days = icaltime_add(end_days, ret);
         end_days = icaltime_convert_to_zone(end_days, utc);
 
