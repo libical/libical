@@ -5485,6 +5485,83 @@ static void test_implicit_dtend_duration(void)
     icalcomponent_free(c);
 }
 
+static void test_icalcomponent_get_dtend_from_duration_single(const char* dtstart, const char* duration, const char* expected_dtend)
+{
+
+    icalcomponent* comp = icalcomponent_new(ICAL_VEVENT_COMPONENT);
+
+    icaltimetype dtstartt = icaltime_from_string(dtstart);
+    dtstartt.zone = icaltimezone_get_builtin_timezone("Europe/Vienna");
+    icalcomponent_set_dtstart(comp, dtstartt);
+
+    icalcomponent_set_duration(comp, icaldurationtype_from_string(duration));
+
+    ok("icalcomponent_get_dtend must consider DURATION's time part as accurate.", icaltime_compare(icalcomponent_get_dtend(comp), icaltime_from_string(expected_dtend)) == 0);
+
+    icalcomponent_free(comp);
+
+}
+
+static void test_icalcomponent_get_duration_from_dtend_single(const char* dtstart, const char* dtend, const char* expected_duration)
+{
+
+    icalcomponent* comp = icalcomponent_new(ICAL_VEVENT_COMPONENT);
+
+    icaltimetype dtstartt = icaltime_from_string(dtstart);
+    dtstartt.zone = icaltimezone_get_builtin_timezone("Europe/Vienna");
+    icalcomponent_set_dtstart(comp, dtstartt);
+
+    icaltimetype dtendt = icaltime_from_string(dtend);
+    dtendt.zone = icaltimezone_get_builtin_timezone("Europe/Vienna");
+    icalcomponent_set_dtend(comp, dtendt);
+
+    struct icaldurationtype det = icaldurationtype_from_string(expected_duration);
+    struct icaldurationtype dret = icalcomponent_get_duration(comp);
+
+    ok("icalcomponent_get_duration must consider DURATION's time part as accurate.",
+            det.weeks == dret.weeks &&
+            det.days == dret.days &&
+            det.hours == dret.hours &&
+            det.minutes == dret.minutes &&
+            det.seconds == dret.seconds);
+
+    icalcomponent_free(comp);
+
+}
+
+static void test_icalcomponent_get_dtend_from_duration(void)
+{
+    // The test cases refer to the 'Europe/Vienna' time zone, where DST ended at 2022-10-30 3:00.
+    // Duration doesn't cross DST end.
+    test_icalcomponent_get_dtend_from_duration_single("20221029T010000", "PT4H", "20221029T050000");
+    test_icalcomponent_get_duration_from_dtend_single("20221029T010000", "20221029T050000", "PT4H");
+
+    // Duration crosses DST end. As it's only the time part, it must be considered as accurate duration.
+    test_icalcomponent_get_dtend_from_duration_single("20221030T010000", "PT4H", "20221030T040000");
+    test_icalcomponent_get_duration_from_dtend_single("20221030T010000", "20221030T040000", "PT4H");
+
+    // The date part is added first, which doesn't cross DST end.
+    // Afterwards the time part is added, which crosses DST end. The time part must be considered as accurate duration.
+    test_icalcomponent_get_dtend_from_duration_single("20221029T010000", "P1DT4H", "20221030T040000");
+    test_icalcomponent_get_duration_from_dtend_single("20221029T010000", "20221030T040000", "P1DT4H");
+
+    // The date part is added first, which crosses DST end. The date part must be considered as nominal duration.
+    // Afterwards the time part is added, which doesn't crross DST end.
+    test_icalcomponent_get_dtend_from_duration_single("20221030T010000", "P1DT4H", "20221031T050000");
+    test_icalcomponent_get_duration_from_dtend_single("20221030T010000", "20221031T050000", "P1DT4H");
+
+    // The duration exceeds 1D but is specified in hours, so it must be considered as accurate duration.
+    test_icalcomponent_get_dtend_from_duration_single("20221030T010000", "PT28H", "20221031T040000");
+    // Don't check duration here because 28 hours is not correct
+    //test_icalcomponent_get_duration_from_dtend_single("20221030T010000", "20221031T040000", "PT28H");
+
+    test_icalcomponent_get_dtend_from_duration_single("20221030T010000", "P2D", "20221101T010000");
+    test_icalcomponent_get_duration_from_dtend_single("20221030T010000", "20221101T010000", "P2D");
+
+    test_icalcomponent_get_dtend_from_duration_single("20220327T010000", "P2D", "20220329T010000");
+    test_icalcomponent_get_duration_from_dtend_single("20220327T010000", "20220329T010000", "P2D");
+}
+
 static void
 test_icalvalue_resets_timezone_on_set(void)
 {
@@ -6533,6 +6610,7 @@ int main(int argc, char *argv[])
     test_run("Test builtin compat TZID", test_builtin_compat_tzid, do_test, do_header);
     test_run("Test VCC vCard parse", test_vcc_vcard_parse, do_test, do_header);
     test_run("Test implicit DTEND and DURATION for VEVENT and VTODO", test_implicit_dtend_duration, do_test, do_header);
+    test_run("Test DTEND with exact and nominal DURATION", test_icalcomponent_get_dtend_from_duration, do_test, do_header);
     test_run("Test icalvalue resets timezone on set", test_icalvalue_resets_timezone_on_set, do_test, do_header);
     test_run("Test removing TZID from DUE with icalcomponent_set_due", test_remove_tzid_from_due, do_test, do_header);
     test_run("Test geo precision", test_geo_props, do_test, do_header);
