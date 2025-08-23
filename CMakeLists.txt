@@ -210,6 +210,10 @@ set(LIBRARY_TYPE SHARED)
 
 ########################################################
 libical_option(LIBICAL_DEVMODE "Developer mode" False)
+if(LIBICAL_DEVMODE)
+  # generate compile_commands.json
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+endif()
 # Set a default build type if none was specified
 set(default_build_type "Release")
 if(EXISTS "${CMAKE_SOURCE_DIR}/.git" OR LIBICAL_DEVMODE)
