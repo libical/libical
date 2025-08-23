@@ -3618,6 +3618,9 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     }
 
     int period_change = 1, prev_index;
+    /* store previous instance, including iterator structures
+     * (e.g., bydata) */
+    icalrecur_iterator impl_last = *impl;
 
     /* Iterate until we get the next valid time */
     do {
@@ -3671,6 +3674,9 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
              icaltime_compare(impl->last, impl->rule->until) > 0) ||
             (!icaltime_is_null_time(impl->iend) &&
              icaltime_compare(impl->last, impl->iend) >= 0)) {
+            /* reset to valid instance */
+            *impl = impl_last;
+            set_datetime(impl, impl_last.last);
             return icaltime_null_time();
         }
 
@@ -3683,6 +3689,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         }
 
     } while (icaltime_compare(impl->last, impl->istart) < 0 ||
+             icaltime_compare(impl->last, impl_last.last) == 0 ||
              !check_contracting_rules(impl) ||
              (has_by_data(impl, ICAL_BY_SET_POS) && !check_setpos(impl, 1)));
 
@@ -3711,6 +3718,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
 #endif
 
     int period_change = 1, prev_index;
+    icalrecur_iterator impl_last = *impl;
 
     /* Iterate until we get the next valid time */
     do {
@@ -3756,6 +3764,8 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
         if (icaltime_compare(impl->last, impl->dtstart) < 0 ||
             (!icaltime_is_null_time(impl->istart) &&
              icaltime_compare(impl->last, impl->istart) < 0)) {
+            *impl = impl_last;
+            set_datetime(impl, impl_last.last);
             return icaltime_null_time();
         }
 
@@ -3772,6 +3782,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
               icaltime_compare(impl->last, impl->rule->until) > 0) ||
              (!icaltime_is_null_time(impl->iend) &&
               icaltime_compare(impl->last, impl->iend) > 0) ||
+             icaltime_compare(impl->last, impl_last.last) == 0 ||
              !check_contracting_rules(impl) ||
              (has_by_data(impl, ICAL_BY_SET_POS) && !check_setpos(impl, 0)));
 
