@@ -10,7 +10,7 @@
  * implementation still belongs to the original component. To stop memory leak,
  * caller must delete the pointer. However, the destructor will call the
  * appropriate free function. eg. ~VComponent calls icalcomponent_free(imp).
- *d
+ *
  * As stated previously, imp still belongs to the original component. To avoid
  * freeing the wrapped "imp", caller must set the "imp" to null before deleting
  * the pointer.
@@ -26,9 +26,7 @@
  *   for (p=component.get_first_component; p!= 0; p=component.get_next_component) {
  *
  * SPDX-FileCopyrightText: 2001, Critical Path
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifndef ICPTRHOLDER_CXX_H

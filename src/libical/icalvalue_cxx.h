@@ -1,10 +1,9 @@
 /*======================================================================
  FILE: icalvalue_cxx.h
  CREATOR: fnguyen 12/13/01
+
  SPDX-FileCopyrightText: 2001, Critical Path
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALVALUE_CXX_H
