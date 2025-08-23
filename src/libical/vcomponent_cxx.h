@@ -200,13 +200,6 @@ public:
     bool add(VComponent &);
 
 private:
-    /* Internal operations. They are private, and you should not be using them. */
-    VComponent *get_parent();
-    void set_parent(VComponent *parent);
-
-    char *quote_ical_string(char *str);
-
-private:
     icalcomponent *imp;
 };
 
