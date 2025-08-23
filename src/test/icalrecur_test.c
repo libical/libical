@@ -260,11 +260,7 @@ int main(int argc, char *argv[])
 
                 reverse_instances(instances);
 
-                if (icaltime_is_null_time(rrule->until)) {
-                    // If UNTIL is not set, the first instance is skipped (see
-                    // https://github.com/libical/libical/issues/787)
-                    instances = skip_first(instances);
-                }
+                instances = skip_first(instances);
 
                 if (r.start_at[0]) {
                     icalrecur_iterator_set_range(ritr, start, dtstart);
