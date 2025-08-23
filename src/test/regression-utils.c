@@ -90,6 +90,7 @@ void _ok(const char *test_name, int success, const char *file, int linenum, cons
 {
     testnumber++;
 
+    /* cppcheck-suppress redundantCondition */
     if (!QUIET || (QUIET && !success))
         printf("%sok %d - %s\n", (success) ? "" : "not ", testnumber, test_name);
 
