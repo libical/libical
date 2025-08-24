@@ -15,6 +15,7 @@
 #include "libical_ical_export.h"
 
 #include <stdbool.h>
+#include <stddef.h>
 
 enum sspm_major_type
 {

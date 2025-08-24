@@ -14,6 +14,8 @@
 #define ICALDIRSETIMPL_H
 
 #include "icalcluster.h"
+#include "icaldirset.h"
+#include "icalset.h"
 
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icalset*/

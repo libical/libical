@@ -19,10 +19,6 @@
 #include <libical/ical.h>
 #include <stdlib.h>
 
-#if defined(HAVE_LIBICU)
-#include <unicode/ucal.h>
-#endif
-
 struct recur {
     int line_no;
     char dtstart[100];

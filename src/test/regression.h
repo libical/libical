@@ -10,7 +10,7 @@
 #ifndef TEST_REGRESSION_H
 #define TEST_REGRESSION_H
 
-#include "icaltypes.h"
+#include "icaltime.h"
 
 #ifdef __cplusplus
 extern "C" {

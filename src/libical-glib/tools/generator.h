@@ -9,8 +9,6 @@
 
 #include <ctype.h>
 #include <stdio.h>
-#include <string.h>
-#include <libxml/xmlreader.h>
 #include <glib.h>
 #include "xml-parser.h"
 

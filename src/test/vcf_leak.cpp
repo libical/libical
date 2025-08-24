@@ -21,9 +21,7 @@
 #include <iostream>
 #include <sstream>
 #include <memory>
-#include <vector>
 
-#include "libical/ical.h"
 #include "vcc.h"
 #include "vobject.h"
 

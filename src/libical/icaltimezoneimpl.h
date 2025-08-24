@@ -11,6 +11,10 @@
 #ifndef ICALTIMEZONEIMPL_H
 #define ICALTIMEZONEIMPL_H
 
+#include "icalarray.h"
+#include "icalcomponent.h"
+#include "icaltimezone.h"
+
 struct _icaltimezone {
     char *tzid;
     /**< The unique ID of this timezone,

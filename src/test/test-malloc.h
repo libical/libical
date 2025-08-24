@@ -10,6 +10,7 @@ SPDX-FileCopyrightText: 2018-2022, Markus Minichmayr <markus@tapkey.com>
 #ifndef TESTMALLOC_H
 #define TESTMALLOC_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 struct testmalloc_statistics {

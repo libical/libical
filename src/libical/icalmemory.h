@@ -35,6 +35,8 @@
 
 #include "libical_ical_export.h"
 
+#include <stddef.h>
+
 /**
  * @brief Creates a new temporary buffer on the ring and returns it.
  * @param size How big (in bytes) the buffer should be
