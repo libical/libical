@@ -11,6 +11,8 @@
 #ifndef ICALCLUSTERIMPL_H
 #define ICALCLUSTERIMPL_H
 
+#include "icalcomponent.h"
+
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icaldirset*/
 

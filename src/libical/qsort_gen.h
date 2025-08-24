@@ -11,6 +11,8 @@
 #ifndef QSORT_GEN_H
 #define QSORT_GEN_H
 
+#include <stddef.h>
+
 /**
  * @file qsort_gen.h
  * @brief An implementation of qsort that is more flexible than the version

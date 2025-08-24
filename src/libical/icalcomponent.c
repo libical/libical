@@ -16,7 +16,6 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icalparser.h"
-#include "icalproperty_p.h"
 #include "icalrestriction.h"
 #include "icaltimezone.h"
 

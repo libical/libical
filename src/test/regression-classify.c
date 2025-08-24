@@ -11,8 +11,7 @@
 #include <config.h>
 #endif
 
-#include <stdio.h> /* for printf */
-#include <errno.h>
+#include <stdio.h>  /* for printf */
 #include <string.h> /* For strerror */
 
 #include <libical/ical.h>

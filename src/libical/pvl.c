@@ -18,7 +18,6 @@
 
 #include <assert.h>
 #include <errno.h>
-#include <stdlib.h>
 
 /* To mute a ThreadSanitizer claim */
 #if (ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD) && defined(THREAD_SANITIZER)

@@ -12,7 +12,7 @@
 
 #include "libical_icalss_export.h"
 
-#include <string>
+#include <cstring>
 
 namespace LibICal
 {
