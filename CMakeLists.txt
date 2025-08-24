@@ -755,7 +755,7 @@ if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     "${CMAKE_C_FLAGS} \
       -O2 \
       -fvisibility=hidden \
-      -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
+      -Wno-deprecated -Wall -Wunknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
       -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Wreturn-type \
       -Wold-style-definition -Wstrict-prototypes"
   )
