@@ -47,8 +47,10 @@
 #include <config.h>
 #endif
 
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
 #if defined(__GNUC__) && !defined(__clang__) && ICAL_GCC_VERSION >= 120000
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wanalyzer-use-of-uninitialized-value" // since gcc12
@@ -1482,11 +1484,15 @@ yyerrorlab:
     /* Pacify compilers like GCC when the user code never invokes
      YYERROR and the label yyerrorlab therefore never appears in user
      code.  */
+#if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunreachable-code"
+#endif
     if (/*CONSTCOND*/ 0)
         goto yyerrorlab;
+#if defined(__clang__)
 #pragma clang diagnostic pop
+#endif
     /* Do not reclaim the symbols of the rule which action triggered
      this YYERROR.  */
     YYPOPSTACK(yylen);
@@ -1714,4 +1720,6 @@ void sserror(const char *s)
 #if defined(__GNUC__) && !defined(__clang__) && ICAL_GCC_VERSION >= 120000
 #pragma GCC diagnostic pop
 #endif
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
+#endif

@@ -78,8 +78,10 @@ vcardcomponent *vcardcomponent_new(vcardcomponent_kind kind)
     return vcardcomponent_new_impl(kind);
 }
 
+#if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wvarargs"
+#endif
 vcardcomponent *vcardcomponent_vanew(vcardcomponent_kind kind, ...)
 {
     va_list args;
@@ -96,7 +98,9 @@ vcardcomponent *vcardcomponent_vanew(vcardcomponent_kind kind, ...)
 
     return impl;
 }
+#if defined(__clang__)
 #pragma clang diagnostic pop
+#endif
 
 vcardcomponent *vcardcomponent_new_from_string(const char *str)
 {

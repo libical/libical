@@ -58,10 +58,14 @@ struct vcardproperty_enum_map
     const char *str;
 };
 
+#if defined(__clang_)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wvarargs"
+#endif
 <insert_code_here>
+#if defined(__clang_)
 #pragma clang diagnostic pop
+#endif
 
 bool vcardproperty_kind_is_valid(const vcardproperty_kind kind)
 {

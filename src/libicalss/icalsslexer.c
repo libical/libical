@@ -2,9 +2,12 @@
   SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 */
+
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
 
 #define YY_INT_ALIGNED short int
 
@@ -1938,4 +1941,6 @@ int sswrap(void)
 {
     return 1;
 }
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
+#endif
