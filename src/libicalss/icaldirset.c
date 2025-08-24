@@ -527,6 +527,7 @@ icalcomponent *icaldirset_get_current_component(icalset *set)
     if (dset->cluster == 0) {
         (void)icaldirset_get_first_component(set);
     }
+    /* cppcheck-suppress duplicateCondition */
     if (dset->cluster == 0) {
         return 0;
     }
