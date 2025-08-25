@@ -179,9 +179,6 @@ if(WITH_CXX_BINDINGS)
     icalspanlist_cxx.cpp
     icalspanlist_cxx.h
   )
-  if(BDB_FOUND)
-    list(APPEND icalsscxx_LIB_SRCS icalbdbset_cxx.h)
-  endif()
   add_library(
     icalss_cxx
     ${LIBRARY_TYPE}
@@ -292,7 +289,4 @@ install(
 
 if(WITH_CXX_BINDINGS)
   install(FILES icalspanlist_cxx.h DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
-  if(BDB_FOUND)
-    install(FILES icalbdbset_cxx.h DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
-  endif()
 endif()
