@@ -1,9 +1,9 @@
 /*======================================================================
- FILE: sspm.h Mime Parser
+ FILE: sspm.h
  CREATOR: eric 25 June 2000
+ PURPOSE: Parse Mime
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Initial Developer of the Original Code is Eric Busboom

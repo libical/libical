@@ -1,12 +1,10 @@
 /*======================================================================
  *
  * SPDX-FileCopyrightText: 2024 Contributors to the libical project <git@github.com:libical/libical>
- *
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  *
  * Based on the original code from:
  * https://issues.oss-fuzz.com/issues/42538568
- *
  * ======================================================================*/
 
 #ifdef HAVE_CONFIG_H

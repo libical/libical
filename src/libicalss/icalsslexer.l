@@ -1,17 +1,15 @@
 %{
 /*
-  ======================================================================
-  FILE: icalsslexer.l
-  CREATOR: eric 8 Aug 2000
+ ======================================================================
+ FILE: icalsslexer.l
+ CREATOR: eric 8 Aug 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
-
-  ======================================================================*/
+ ======================================================================*/
 
 #include "icalssyacc.h"
 #include "icalgaugeimpl.h"

@@ -3,6 +3,7 @@
  CREATOR: eric 17 Jul 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  Icalset is the "base class" for representations of a collection of
  iCal components. Derived classes (actually delegates) include:
@@ -11,8 +12,6 @@
     icaldirset    Store components in multiple files in a directory
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database.
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom

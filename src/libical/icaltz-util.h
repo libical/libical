@@ -3,7 +3,6 @@
  *  Chenthill Palanisamy <pchenthill@novell.com>
  *
  * SPDX-FileCopyrightText: 2007, Novell, Inc.
- *
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 

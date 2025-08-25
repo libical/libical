@@ -3,9 +3,7 @@
  CREATOR: Damon Chaplin 07 March 2001
 
  SPDX-FileCopyrightText: 2001, Ximian, Inc.
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H

@@ -3,9 +3,7 @@
  CREATOR: Robert Stepanek, 10 October 2023
 
  SPDX-FileCopyrightText: 2000 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 /*

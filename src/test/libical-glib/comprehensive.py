@@ -2,11 +2,8 @@
 # GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./comprehensive.py
 
 ###############################################################################
-#
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
 ###############################################################################
 
 """Comprehensive testing for Python libical bindings"""
