@@ -1,11 +1,9 @@
 /*======================================================================
- FILE: icalfilesetimpl.h
+ FILE: icalclusterimpl.h
  CREATOR: acampi 13 March 2002
 
  SPDX-FileCopyrightText: 2002 Andrea Campi <a.campi@inet.it>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALCLUSTERIMPL_H

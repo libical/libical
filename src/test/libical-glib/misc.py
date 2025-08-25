@@ -2,11 +2,8 @@
 # GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./misc.py
 
 ###############################################################################
-#
 # SPDX-FileCopyrightText: 2019 Red Hat Inc. <www.redhat.com>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
 ###############################################################################
 
 """Test Python bindings for libical miscellaneous types"""

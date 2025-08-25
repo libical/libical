@@ -3,13 +3,11 @@
 /***************************************************************************
 SPDX-FileCopyrightText: 1996 Apple Computer, Inc., AT&T Corp., International
 Business Machines Corporation and Siemens Rolm Communications Inc.
-
 SPDX-License-Identifier: LicenseRef-APPLEMIT
 
 The software is provided with RESTRICTED RIGHTS.  Use, duplication, or
 disclosure by the government are subject to restrictions set forth in
 DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
-
 ***************************************************************************/
 
 /*

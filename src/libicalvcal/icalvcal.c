@@ -3,10 +3,7 @@
  CREATOR: eric 25 May 00
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
- The original code is icalvcal.c
 
  The icalvcal_convert routine calls icalvcal_traverse_objects to do
  its work.s his routine steps through all of the properties

@@ -2,9 +2,7 @@
  FILE: icalbdbset.h
 
  SPDX-FileCopyrightText: 2001, Critical Path
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALBDBSET_H

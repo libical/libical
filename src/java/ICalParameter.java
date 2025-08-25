@@ -1,6 +1,7 @@
 /*======================================================================
  FILE: ICalParameter.java
  CREATOR: gnorman 01/09/02
+
  SPDX-FileCopyrightText: 2002, Critical Path
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/

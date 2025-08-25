@@ -3,9 +3,7 @@
  CREATOR: Milan Crha 26 November 2014
 
  SPDX-FileCopyrightText: 2014 Milan Crha <mcrha@redhat.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H

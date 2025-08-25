@@ -3,9 +3,7 @@
  CREATOR: acampi 28 May 02
 
  SPDX-FileCopyrightText: 2000, Andrea Campi <a.campi@inet.it>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALATTACHIMPL_H

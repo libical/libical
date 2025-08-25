@@ -3,9 +3,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
  SPDX-FileCopyrightText: 2001, Damon Chaplin <damon@ximian.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 /**
  * @file icaltimezone.h

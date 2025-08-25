@@ -2,7 +2,6 @@
  FILE: icalattach-leak.c
 
  SPDX-FileCopyrightText: 2019 Red Hat, Inc. <www.redhat.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Initial Developer of the Original Code is Milan Crha
