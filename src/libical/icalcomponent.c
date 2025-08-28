@@ -139,6 +139,10 @@ icalcomponent *icalcomponent_clone(const icalcomponent *old)
         return 0;
     }
 
+    if (old->x_name) {
+        clone->x_name = icalmemory_strdup(old->x_name);
+    }
+
     for (itr = pvl_head(old->properties); itr != 0; itr = pvl_next(itr)) {
         p = (icalproperty *)pvl_data(itr);
         icalcomponent_add_property(clone, icalproperty_clone(p));

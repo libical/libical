@@ -6462,6 +6462,31 @@ static void test_xcomponent_as_string(void)
     icalcomponent_free(ical);
 }
 
+static void test_clone_xcomponent(void)
+{
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:X-FOO\r\n"
+        "UID:5D0D3350\r\n"
+        "END:X-FOO\r\n"
+        "END:VCALENDAR\r\n";
+
+    icalcomponent *ical = icalcomponent_new_from_string(str);
+
+    ok("Parsed VCALENDAR",
+       (ical != NULL) && icalcomponent_isa(ical) == ICAL_VCALENDAR_COMPONENT);
+
+    icalcomponent *clone = icalcomponent_clone(ical);
+
+    ok("Cloned VCALENDAR",
+       (clone != NULL) && icalcomponent_isa(clone) == ICAL_VCALENDAR_COMPONENT);
+
+    str_is("Assert iCalendar", icalcomponent_as_ical_string(clone), str);
+
+    icalcomponent_free(clone);
+    icalcomponent_free(ical);
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -6640,6 +6665,7 @@ int main(int argc, char *argv[])
     test_run("Test string arrays", test_icalstrarray, do_test, do_header);
     test_run("Test enum arrays", test_icalenumarray, do_test, do_header);
     test_run("Test serializing x-component", test_xcomponent_as_string, do_test, do_header);
+    test_run("Test cloning x-component", test_clone_xcomponent, do_test, do_header);
 
     /** OPTIONAL TESTS go here... **/
 
