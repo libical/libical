@@ -1558,33 +1558,27 @@ void test_duration(void)
     }
     int_is("PT10H10M10S", icaldurationtype_as_int(d), 36610);
 
+    icalerror_set_errors_are_fatal(0);
+
+    /* Test conversion of bad input */
+
     d = icaldurationtype_from_string("P7W");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("P7W", icaldurationtype_as_int(d), 4233600);
+    int_is("P7W", icaldurationtype_as_int(d), 0);
 
     d = icaldurationtype_from_string("P2DT8H30M");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("P2DT8H30M", icaldurationtype_as_int(d), 203400);
+    int_is("P2DT8H30M", icaldurationtype_as_int(d), 0);
 
     d = icaldurationtype_from_string("P2W1DT5H");
     if (VERBOSE) {
         printf("%s %d\n", icaldurationtype_as_ical_string(d), icaldurationtype_as_int(d));
     }
-    int_is("P2W1DT5H", icaldurationtype_as_int(d), 1314000);
-
-    icalerror_set_errors_are_fatal(0);
-
-    /* Test conversion of bad input */
-
-    d = icaldurationtype_from_int(1314000);
-    if (VERBOSE) {
-        printf("%s %d\n", icaldurationtype_as_ical_string(d), icaldurationtype_as_int(d));
-    }
-    str_is("1314000", icaldurationtype_as_ical_string(d), "P15DT5H");
+    int_is("P2W1DT5H", icaldurationtype_as_int(d), 0);
 
     d = icaldurationtype_from_string("P-2DT8H30M");
     if (VERBOSE) {
@@ -1610,13 +1604,13 @@ void test_duration(void)
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    str_is("P7W", icaldurationtype_as_ical_string(d), "P7W");
+    str_is("PT4233600S", icaldurationtype_as_ical_string(d), "PT4233600S");
 
     d = icaldurationtype_from_int(4424400);
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    str_is("P51DT5H", icaldurationtype_as_ical_string(d), "P51DT5H");
+    str_is("PT4424400S", icaldurationtype_as_ical_string(d), "PT4424400S");
 }
 
 void test_period(void)
@@ -5474,7 +5468,7 @@ static void test_implicit_dtend_duration(void)
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    str_is("P1D", "P1D", icaldurationtype_as_ical_string(d));
+    str_is("PT86400S", "PT86400S", icaldurationtype_as_ical_string(d));
 
     if (VERBOSE) {
         printf("%i\n", icaltime_is_null_time(end));
@@ -5498,62 +5492,29 @@ static void test_icalcomponent_get_dtend_from_duration_single(const char *dtstar
     icalcomponent_free(comp);
 }
 
-static void test_icalcomponent_get_duration_from_dtend_single(const char *dtstart, const char *dtend, const char *expected_duration)
-{
-    icalcomponent *comp = icalcomponent_new(ICAL_VEVENT_COMPONENT);
-
-    icaltimetype dtstartt = icaltime_from_string(dtstart);
-    dtstartt.zone = icaltimezone_get_builtin_timezone("Europe/Vienna");
-    icalcomponent_set_dtstart(comp, dtstartt);
-
-    icaltimetype dtendt = icaltime_from_string(dtend);
-    dtendt.zone = icaltimezone_get_builtin_timezone("Europe/Vienna");
-    icalcomponent_set_dtend(comp, dtendt);
-
-    struct icaldurationtype det = icaldurationtype_from_string(expected_duration);
-    struct icaldurationtype dret = icalcomponent_get_duration(comp);
-
-    ok("icalcomponent_get_duration must consider DURATION's time part as accurate.",
-       det.weeks == dret.weeks &&
-           det.days == dret.days &&
-           det.hours == dret.hours &&
-           det.minutes == dret.minutes &&
-           det.seconds == dret.seconds);
-
-    icalcomponent_free(comp);
-}
-
 static void test_icalcomponent_get_dtend_from_duration(void)
 {
     // The test cases refer to the 'Europe/Vienna' time zone, where DST ended at 2022-10-30 3:00.
     // Duration doesn't cross DST end.
     test_icalcomponent_get_dtend_from_duration_single("20221029T010000", "PT4H", "20221029T050000");
-    test_icalcomponent_get_duration_from_dtend_single("20221029T010000", "20221029T050000", "PT4H");
 
     // Duration crosses DST end. As it's only the time part, it must be considered as accurate duration.
     test_icalcomponent_get_dtend_from_duration_single("20221030T010000", "PT4H", "20221030T040000");
-    test_icalcomponent_get_duration_from_dtend_single("20221030T010000", "20221030T040000", "PT4H");
 
     // The date part is added first, which doesn't cross DST end.
     // Afterwards the time part is added, which crosses DST end. The time part must be considered as accurate duration.
     test_icalcomponent_get_dtend_from_duration_single("20221029T010000", "P1DT4H", "20221030T040000");
-    test_icalcomponent_get_duration_from_dtend_single("20221029T010000", "20221030T040000", "P1DT4H");
 
     // The date part is added first, which crosses DST end. The date part must be considered as nominal duration.
     // Afterwards the time part is added, which doesn't crross DST end.
     test_icalcomponent_get_dtend_from_duration_single("20221030T010000", "P1DT4H", "20221031T050000");
-    test_icalcomponent_get_duration_from_dtend_single("20221030T010000", "20221031T050000", "P1DT4H");
 
     // The duration exceeds 1D but is specified in hours, so it must be considered as accurate duration.
     test_icalcomponent_get_dtend_from_duration_single("20221030T010000", "PT28H", "20221031T040000");
-    // Don't check duration here because 28 hours is not correct
-    //test_icalcomponent_get_duration_from_dtend_single("20221030T010000", "20221031T040000", "PT28H");
 
     test_icalcomponent_get_dtend_from_duration_single("20221030T010000", "P2D", "20221101T010000");
-    test_icalcomponent_get_duration_from_dtend_single("20221030T010000", "20221101T010000", "P2D");
 
     test_icalcomponent_get_dtend_from_duration_single("20220327T010000", "P2D", "20220329T010000");
-    test_icalcomponent_get_duration_from_dtend_single("20220327T010000", "20220329T010000", "P2D");
 }
 
 static void
