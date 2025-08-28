@@ -781,6 +781,81 @@ void test_component_foreach(void)
     }
 }
 
+typedef struct {
+    size_t found;
+    icalarray *arr;
+} foreach_arr_t;
+
+static void test_component_foreach_dtend_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
+{
+    foreach_arr_t *a = (foreach_arr_t *)data;
+    _unused(comp);
+    _unused(span);
+
+    assert(a->found < a->arr->num_elements);
+    icaltime_t *dtend = (icaltime_t *)icalarray_element_at(a->arr, a->found);
+    ok("DTEND matches", *dtend == span->end);
+
+    a->found++;
+}
+
+void test_component_foreach_dtend_daily(int count, const char *dtstart_str, const char *duration_str, const char **dtend_strs)
+{
+    if (count <= 0)
+        return;
+    icalcomponent *comp = icalcomponent_new(ICAL_VEVENT_COMPONENT);
+
+    icaltimetype dtstartt = icaltime_from_string(dtstart_str), dtendt;
+    icaltime_t dtend;
+    dtstartt.zone = icaltimezone_get_builtin_timezone("America/New_York");
+    icalcomponent_set_dtstart(comp, dtstartt);
+
+    struct icalrecurrencetype *rrule = icalrecurrencetype_new_from_string("FREQ=DAILY");
+    rrule->count = count;
+    icalproperty *rrule_prop = icalproperty_new_rrule(rrule);
+    icalcomponent_add_property(comp, rrule_prop);
+
+    struct icaldurationtype dur = icaldurationtype_from_string(duration_str);
+    icalcomponent_set_duration(comp, dur);
+
+    foreach_arr_t a;
+    a.found = 0;
+    a.arr = icalarray_new(sizeof(dtend), 1);
+
+    for (int i = 0; i < count; i++) {
+        dtendt = icaltime_from_string(dtend_strs[i]);
+        dtendt.zone = icaltimezone_get_builtin_timezone("America/New_York");
+        dtend = icaltime_as_timet_with_zone(dtendt, dtendt.zone);
+        icalarray_append(a.arr, &dtend);
+    }
+
+    icalcomponent_foreach_recurrence(comp, dtstartt, dtendt, test_component_foreach_dtend_callback, &a);
+
+    icalcomponent_free(comp);
+    icalarray_free(a.arr);
+    icalrecurrencetype_unref(rrule);
+}
+
+void test_component_foreach_dtend_nominal(void)
+{
+    const char *dtends[] = {
+        "20251101T220000",
+        "20251102T220000",
+        "20251103T220000",
+    };
+    test_component_foreach_dtend_daily(3, "20251031T220000", "P1D", dtends);
+}
+
+void test_component_foreach_dtend_exact(void)
+{
+    const char *dtends[] = {
+        "20251101T220000",
+        "20251102T210000",
+        "20251103T220000",
+    };
+    test_component_foreach_dtend_daily(3, "20251031T220000", "PT24H", dtends);
+}
+
 void test_recur_iterator_set_start(void)
 {
     icaltimetype start = icaltime_from_string("20150526");
@@ -6561,6 +6636,8 @@ int main(int argc, char *argv[])
     test_run("Test Components", test_components, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence", test_component_foreach, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence with start as date", test_component_foreach_start_as_date, do_test, do_header);
+    test_run("Test icalcomponent_foreach_recurrence with nominal duration", test_component_foreach_dtend_nominal, do_test, do_header);
+    test_run("Test icalcomponent_foreach_recurrence with exact duration", test_component_foreach_dtend_exact, do_test, do_header);
     test_run("Test icalrecur_iterator_set_start with date", test_recur_iterator_set_start, do_test, do_header);
     test_run("Test weekly icalrecur_iterator on January 1", test_recur_iterator_on_jan_1, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
