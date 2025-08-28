@@ -24,6 +24,8 @@
 
 /**
  * @brief A struct representing a duration
+ *
+ * Days and weeks are nominal; hours, minutes and seconds are exact
  */
 struct icaldurationtype {
     int is_neg;
