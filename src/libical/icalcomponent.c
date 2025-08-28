@@ -861,7 +861,8 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     struct icaltimetype dtstart, dtend;
     icaltime_span recurspan, basespan, limit_span;
     icaltime_t limit_start, limit_end;
-    icaltime_t dtduration;
+    struct icaldurationtype dtduration;
+
     icalproperty *rrule, *rdate;
     pvl_elem property_iterator; /* for saving the iterator */
 
@@ -881,6 +882,8 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     /* The end time could be specified as either a DTEND, a DURATION or be missing */
     /* icalcomponent_get_dtend takes care of these cases. */
     dtend = icalcomponent_get_dtend(comp);
+    /* Our duration may similarly be derived from DTSTART and DTEND */
+    dtduration = icalcomponent_get_duration(comp);
 
     /* Now set up the base span for this item, corresponding to the
        base DTSTART and DTEND */
@@ -927,7 +930,6 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     }
 
     recurspan = basespan;
-    dtduration = basespan.end - basespan.start;
 
     /* Now cycle through the rrule entries */
     for (; rrule != NULL;
@@ -944,8 +946,11 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                 icaltimetype mystart = start;
 
                 /* make sure we include any recurrence that ends in timespan */
-                /* we ensured above that start is a date-time, so adding seconds is allowed. */
-                icaltime_adjust(&mystart, 0, 0, 0, -(int)(long)dtduration);
+                /* duration should be positive */
+                dtduration.is_neg = 1;
+                mystart = icaltime_add(mystart, dtduration);
+                dtduration.is_neg = 0;
+
                 icalrecur_iterator_set_start(rrule_itr, mystart);
             }
 
@@ -960,7 +965,10 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                 recurspan.start =
                     icaltime_as_timet_with_zone(rrule_time,
                                                 rrule_time.zone ? rrule_time.zone : icaltimezone_get_utc_timezone());
-                recurspan.end = recurspan.start + dtduration;
+                recurspan.end =
+                    icaltime_as_timet_with_zone(
+                        icaltime_add(rrule_time, dtduration),
+                        rrule_time.zone ? rrule_time.zone : icaltimezone_get_utc_timezone());
 
                 /* save the iterator ICK! */
                 property_iterator = comp->property_iterator;
@@ -985,7 +993,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         struct icaldatetimeperiodtype rdate_period =
             icalproperty_get_rdate(rdate);
         struct icaltimetype rdate_start = rdate_period.time;
-        icaltime_t rdate_duration = 0;
+        struct icaldurationtype rdate_duration = icaldurationtype_null_duration();
 
         /* RDATES can specify raw datetimes, periods, or dates.
             we only support raw datetimes and periods for now.
@@ -996,8 +1004,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
             rdate_start = rdate_period.period.start;
 
             if (icaltime_is_null_time(rdate_period.period.end)) {
-                rdate_duration =
-                    (icaltime_t)icaldurationtype_as_int(rdate_period.period.duration);
+                rdate_duration = rdate_period.period.duration;
             } else {
                 recurspan.end =
                     icaltime_as_timet_with_zone(
@@ -1013,8 +1020,10 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                 rdate_start,
                 rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
 
-        if (rdate_duration) {
-            recurspan.end = recurspan.start + rdate_duration;
+        if (!icaldurationtype_is_null_duration(rdate_duration)) {
+            recurspan.end = icaltime_as_timet_with_zone(
+                icaltime_add(rdate_start, rdate_duration),
+                rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
         }
 
         /* save the iterator ICK! */
@@ -1496,8 +1505,8 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
     if (end_prop != 0 && dur_prop == 0) {
         ret = icalproperty_get_datetime_with_component(end_prop, comp);
     } else if (end_prop == 0 && dur_prop != 0) {
-        struct icaltimetype start = icalcomponent_get_dtstart(inner), end_days;
-        struct icaldurationtype duration, dur_days;
+        struct icaltimetype start = icalcomponent_get_dtstart(inner);
+        struct icaldurationtype duration;
 
         //extra check to prevent empty durations from crashing
         if (icalproperty_get_value(dur_prop)) {
@@ -1506,26 +1515,7 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
             duration = icaldurationtype_null_duration();
         }
 
-        /* RFC 5545 specifies that we are to add days first
-         * and treat them as nominal, not exact */
-        dur_days = duration;
-        dur_days.hours =
-            dur_days.minutes =
-                dur_days.seconds = 0;
-        end_days = icaltime_add(start, dur_days);
-
-        duration.days =
-            duration.weeks = 0;
-        ret = icaltime_add(end_days, duration);
-        /* RFC 5545 states:
-         * In the case of discontinuities in the time scale, such
-         * as the change from standard time to daylight time and back, the
-         * computation of the exact duration requires the subtraction or
-         * addition of the change of duration of the discontinuity.
-         */
-        icaltime_adjust(&ret, 0, 0, 0,
-                        icaltimezone_get_utc_offset((icaltimezone *)ret.zone, &ret, &ret.is_daylight) -
-                            icaltimezone_get_utc_offset((icaltimezone *)end_days.zone, &end_days, &end_days.is_daylight));
+        ret = icaltime_add(start, duration);
     } else if (end_prop == 0 && dur_prop == 0) {
         if (kind == ICAL_VEVENT_COMPONENT) {
             struct icaltimetype start = icalcomponent_get_dtstart(inner);
@@ -1617,27 +1607,14 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
         ret = icalproperty_get_duration(dur_prop);
 
     } else if (end_prop != 0 && dur_prop == 0) {
+        /* Get exact duration */
         icaltimezone *utc = icaltimezone_get_utc_timezone();
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
-        struct icaltimetype end = icalproperty_get_datetime_with_component(end_prop, comp),
-                            end_days = start;
-        struct icaldurationtype ret_time;
-
-        /* Get nominal days */
-        ret = icaltime_subtract(end, start);
-        /* Convert to UTC and subtract to get exact time */
+        struct icaltimetype end = icalproperty_get_datetime_with_component(end_prop, comp);
+        start = icaltime_convert_to_zone(start, utc);
         end = icaltime_convert_to_zone(end, utc);
 
-        ret.hours =
-            ret.minutes =
-                ret.seconds = 0;
-        end_days = icaltime_add(end_days, ret);
-        end_days = icaltime_convert_to_zone(end_days, utc);
-
-        ret_time = icaltime_subtract(end, end_days);
-        ret.hours = ret_time.hours;
-        ret.minutes = ret_time.minutes;
-        ret.seconds = ret_time.seconds;
+        ret = icaltime_subtract(end, start);
     } else if (end_prop == 0 && dur_prop == 0) {
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         ret = icaldurationtype_null_duration();
