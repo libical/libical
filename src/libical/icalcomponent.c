@@ -280,7 +280,7 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
     }
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:");
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, icalcomponent_kind_to_string(kind));
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
     return buf;
