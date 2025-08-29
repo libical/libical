@@ -130,6 +130,7 @@ struct icaldatetimeperiodtype ICalValue::get_datetimeperiod()
     return icalvalue_get_datetimeperiod(imp);
 }
 
+/* cppcheck-suppress constParameterReference */
 icalparameter_xliccomparetype ICalValue::compare(ICalValue &a, ICalValue &b)
 {
     return icalvalue_compare(a, b);

@@ -81,11 +81,13 @@ public:
         return *this;
     }
 
+    /* cppcheck-suppress constParameterPointer */
     bool operator!=(T *p)
     {
         return (ptr != p);
     }
 
+    /* cppcheck-suppress constParameterPointer */
     bool operator==(T *p)
     {
         return (ptr == p);

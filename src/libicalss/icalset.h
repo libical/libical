@@ -61,7 +61,7 @@ struct icalset_impl {
     icalerrorenum (*select)(icalset *set, icalgauge *gauge);
     void (*clear)(icalset *set);
     icalcomponent *(*fetch)(icalset *set, icalcomponent_kind kind, const char *uid);
-    icalcomponent *(*fetch_match)(icalset *set, icalcomponent *comp);
+    icalcomponent *(*fetch_match)(icalset *set, const icalcomponent *comp);
     int (*has_uid)(icalset *set, const char *uid);
     icalerrorenum (*modify)(icalset *set, icalcomponent *old, icalcomponent *newc);
     icalcomponent *(*get_current_component)(icalset *set);
@@ -128,7 +128,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch(icalset *set, const char *uid
 
 LIBICAL_ICALSS_EXPORT int icalset_has_uid(icalset *set, const char *uid);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch_match(icalset *set, icalcomponent *c);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch_match(icalset *set, const icalcomponent *c);
 
 /** Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */

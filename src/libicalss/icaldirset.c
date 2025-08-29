@@ -430,7 +430,7 @@ int icaldirset_count_components(icalset *store, icalcomponent_kind kind)
     return 0;
 }
 
-icalcomponent *icaldirset_fetch_match(icalset *set, icalcomponent *c)
+icalcomponent *icaldirset_fetch_match(icalset *set, const icalcomponent *c)
 {
     _unused(set);
     _unused(c);
