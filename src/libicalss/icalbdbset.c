@@ -672,6 +672,7 @@ int icalbdbset_get(DB *dbp, DB_TXN *tid, DBT *key, DBT *data, u_int32_t flags)
 
 /** Returns the path of the database file **/
 
+/* cppcheck-suppress constParameterPointer */
 const char *icalbdbset_path(icalset *set)
 {
     icalerror_check_arg_rz((set != 0), "set");
@@ -1064,7 +1065,7 @@ static void icalbdbset_id_free(struct icalbdbset_id *id)
     }
 }
 
-struct icalbdbset_id icalbdbset_get_id(icalcomponent *comp)
+struct icalbdbset_id icalbdbset_get_id(const icalcomponent *comp)
 {
     icalcomponent *inner;
     struct icalbdbset_id id;
@@ -1121,7 +1122,7 @@ static int _compare_ids(const char *compid, const char *matchid)
     return 0;
 }
 
-icalcomponent *icalbdbset_fetch_match(icalset *set, icalcomponent *comp)
+icalcomponent *icalbdbset_fetch_match(icalset *set, const icalcomponent *comp)
 {
     icalbdbset *bset = (icalbdbset *)set;
     icalcompiter i;
