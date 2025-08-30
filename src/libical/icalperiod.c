@@ -30,7 +30,7 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
     icalerrorenum e = icalerrno;
 
     p.start = p.end = icaltime_null_time();
-    p.duration = icaldurationtype_from_int(0);
+    p.duration = icaldurationtype_null_duration();
 
     null_p = p;
 
@@ -61,7 +61,7 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
     if (icaltime_is_null_time(p.end)) {
         p.duration = icaldurationtype_from_string(end);
 
-        if (icaldurationtype_as_int(p.duration) == 0)
+        if (icaldurationtype_is_null_duration(p.duration))
             goto error;
     }
 
