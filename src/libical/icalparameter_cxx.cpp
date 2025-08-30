@@ -113,21 +113,25 @@ int ICalParameter::isa_parameter(void *param)
 }
 
 /* Access the name of an X parameter */
+/* cppcheck-suppress constParameterReference */
 void ICalParameter::set_xname(ICalParameter &param, const std::string &v)
 {
     icalparameter_set_xname(param, v.c_str());
 }
 
+/* cppcheck-suppress constParameterReference */
 std::string ICalParameter::get_xname(ICalParameter &param)
 {
     return static_cast<std::string>(icalparameter_get_xname(param));
 }
 
+/* cppcheck-suppress constParameterReference */
 void ICalParameter::set_xvalue(ICalParameter &param, const std::string &v)
 {
     icalparameter_set_xvalue(param, v.c_str());
 }
 
+/* cppcheck-suppress constParameterReference */
 std::string ICalParameter::get_xvalue(ICalParameter &param)
 {
     return static_cast<std::string>(icalparameter_get_xvalue(param));

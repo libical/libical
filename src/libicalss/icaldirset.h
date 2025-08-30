@@ -87,7 +87,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch(icalset *store,
 
 LIBICAL_ICALSS_EXPORT int icaldirset_has_uid(icalset *store, const char *uid);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch_match(icalset *set, icalcomponent *c);
+LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch_match(icalset *set, const icalcomponent *c);
 
 /* Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */

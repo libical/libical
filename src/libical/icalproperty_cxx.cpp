@@ -96,11 +96,13 @@ int ICalProperty::operator==(ICalProperty &rhs)
     return (result == ICAL_XLICCOMPARETYPE_EQUAL) ? 1 : 0;
 }
 
+/* cppcheck-suppress constParameterReference */
 void ICalProperty::add_parameter(ICalParameter &parameter)
 {
     icalproperty_add_parameter(imp, parameter);
 }
 
+/* cppcheck-suppress constParameterReference */
 void ICalProperty::set_parameter(ICalParameter &parameter)
 {
     icalproperty_set_parameter(imp, parameter);
@@ -169,11 +171,13 @@ std::string ICalProperty::get_name() const
 }
 
 /* Deal with X properties */
+/* cppcheck-suppress constParameterReference */
 void ICalProperty::set_x_name(ICalProperty &prop, const std::string &name)
 {
     icalproperty_set_x_name(prop, name.c_str());
 }
 
+/* cppcheck-suppress constParameterReference */
 std::string ICalProperty::get_x_name(ICalProperty &prop)
 {
     return static_cast<std::string>(icalproperty_get_x_name(prop));

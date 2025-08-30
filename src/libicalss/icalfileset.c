@@ -307,6 +307,7 @@ int icalfileset_unlock(icalfileset *set)
 }
 
 /* Lifted from https://stackoverflow.com/questions/29079011/copy-file-function-in-c */
+/* cppcheck-suppress constParameter */
 static int file_copy(char fileSource[], char fileDestination[])
 {
     char c[1024]; // or any other constant you like
@@ -605,7 +606,7 @@ static int _compare_ids(const char *compid, const char *matchid)
     return 0;
 }
 
-icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *comp)
+icalcomponent *icalfileset_fetch_match(icalset *set, const icalcomponent *comp)
 {
     icalfileset *fset = (icalfileset *)set;
     icalcompiter i;

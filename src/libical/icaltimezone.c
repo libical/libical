@@ -1651,7 +1651,6 @@ static void icaltimezone_parse_zone_tab(void)
     size_t filename_len;
     int latitude_degrees = 0, latitude_minutes = 0, latitude_seconds = 0;
     int longitude_degrees = 0, longitude_minutes = 0, longitude_seconds = 0;
-    icaltimezone zone;
 
     icalerror_assert(builtin_timezones == NULL, "Parsing zones.tab file multiple times");
 
@@ -1731,6 +1730,7 @@ static void icaltimezone_parse_zone_tab(void)
                 continue;
             }
         }
+        icaltimezone zone;
         icaltimezone_init(&zone);
         zone.location = icalmemory_strdup(location);
 

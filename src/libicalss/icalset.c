@@ -413,7 +413,7 @@ icalcomponent *icalset_fetch(icalset *set, const char *uid)
     return set->fetch(set, 0, uid);
 }
 
-icalcomponent *icalset_fetch_match(icalset *set, icalcomponent *comp)
+icalcomponent *icalset_fetch_match(icalset *set, const icalcomponent *comp)
 {
     return set->fetch_match(set, comp);
 }

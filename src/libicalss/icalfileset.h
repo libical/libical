@@ -60,7 +60,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch(icalset *set,
 
 LIBICAL_ICALSS_EXPORT int icalfileset_has_uid(icalset *set, const char *uid);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *c);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch_match(icalset *set, const icalcomponent *c);
 
 /**
  *  @brief Modifies components according to the MODIFY method of CAP.

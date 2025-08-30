@@ -109,7 +109,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch(icalset *set,
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_has_uid(icalset *set, const char *uid);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch_match(icalset *set, icalcomponent *c);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch_match(icalset *set, const icalcomponent *c);
 
 LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_modify(icalset *set, icalcomponent *old,
                                                       icalcomponent *newc);
