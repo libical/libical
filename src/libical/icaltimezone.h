@@ -42,12 +42,25 @@ LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_copy(const icaltimezone *original
  */
 LIBICAL_ICAL_EXPORT void icaltimezone_free(icaltimezone *zone, int free_struct);
 
-/** Sets the prefix to be used for tzid's generated from system tzdata.
-    Must be globally unique (such as a domain name owned by the developer
-    of the calling application), and begin and end with forward slashes.
-    Do not change or de-allocate the string buffer after calling this.
+/**
+ * Sets the prefix to be used for tzid's generated from system tzdata.
+ * Must be globally unique (such as a domain name owned by the developer
+ * of the calling application), and begin and end with forward slashes.
+ * The string must be less than 256 chars long.
+ *
+ * No error or sanity checking is performed in this function; the caller is
+ * entirely responsible for using a proper tzid string.
+ *
+ * Do not change or de-allocate the string buffer after calling this.
+ *
+ * @param new_prefix a string (properly formatted and less then 256 characters long)
+ * representing the tzid for the system tzdata. If not specified, the library default
+ * "/freeassociation.sourceforge.net/" is used.
  */
 LIBICAL_ICAL_EXPORT void icaltimezone_set_tzid_prefix(const char *new_prefix);
+
+/** Returns the current setting of the tzid prefix. */
+LIBICAL_ICAL_EXPORT const char *icaltimezone_tzid_prefix(void);
 
 /*
  * Accessing timezones.
@@ -228,8 +241,5 @@ LIBICAL_ICAL_EXPORT bool icaltimezone_get_builtin_tzdata(void);
  * to add to UTC to get local time.
  */
 LIBICAL_ICAL_EXPORT bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp);
-
-/* For the library only -- do not make visible */
-extern const char *icaltimezone_tzid_prefix(void);
 
 #endif /* ICALTIMEZONE_H */
