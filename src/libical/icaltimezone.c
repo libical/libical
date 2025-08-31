@@ -64,9 +64,7 @@ static const struct _compat_tzids {
     {NULL, -1}};
 
 /* The prefix to be used for tzid's generated from system tzdata */
-static
- ICAL_GLOBAL_VAR 
-char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
+static ICAL_GLOBAL_VAR char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
 
 /** This is the filename of the file containing the city names and
     coordinates of all the builtin timezones. */
