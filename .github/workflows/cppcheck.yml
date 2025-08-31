@@ -1,0 +1,31 @@
+name: cppcheck-action-test
+on: [push]
+
+jobs:
+  build:
+    name: cppcheck-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: cppcheck
+        uses: deep5050/cppcheck-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN}}
+          check_library: disable
+          skip_preprocessor: disable
+          enable: warning,performance,portability,style
+          exclude_check:
+          inconclusive: enable
+          inline_suppression: enable
+          force_language: c
+          force: enable
+          max_ctu_depth: 2
+          platform: unspecified
+          std: c++11
+          other_options: --suppress-xml=cppcheck-suppressions.xml -D __cppcheck__ -D ICAL_ERRORS_ARE_FATAL=0 -D ICAL_PACKAGE="\"x\"" -D ICAL_VERSION="\"y\"" -D _unused="(void)" -D _fallthrough="" -D MIN="" -D sleep="" -U PVL_USE_MACROS -I ./src/libical -I ./src/libicalss -I ./src/libicalvcal -I ./src/libicalvcard -I ./src/libical-glib -i ./src/Net-ICal-Libical/ -i ./src/java -i ./src/libicalss/icalssyacc.c -i ./src/libicalss/icalsslexer.c -i ./src/libicalvcal/vcc.y -i ./src/libicalvcal/vcc.c ./src
+
+      - name: publish report
+        uses: mikeal/publish-to-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: 'master'
