@@ -109,6 +109,7 @@ static char *skip_until(char *instances, icaltimetype t, int order)
     }
 }
 
+/* cppcheck-suppress constParameter */
 int main(int argc, char *argv[])
 {
     /* Default to RFC 5545 tests */

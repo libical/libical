@@ -27,6 +27,7 @@
 
 */
 
+/* cppcheck-suppress constParameter */
 int main(int argc, char *argv[])
 {
     VObject *vcal = 0;
