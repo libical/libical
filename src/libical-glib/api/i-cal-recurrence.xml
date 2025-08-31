@@ -57,10 +57,6 @@
         <element name="ICAL_BY_SETPOS_SIZE"/>
         <element name="ICAL_BY_DAY_SIZE"/>
     </enum>
-    <method name="i_cal_recurrence_rscale_is_supported" corresponds="icalrecurrencetype_rscale_is_supported" kind="get" since="2.0">
-	<returns type="gboolean" comment="Whether rscale is supported"/>
-	<comment xml:space="preserve">Checks whether rscale is supported.</comment>
-    </method>
     <method name="i_cal_recurrence_rscale_supported_calendars" corresponds="icalrecurrencetype_rscale_supported_calendars" kind="other" since="2.0">
 	<returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="Array of calendars. Currently always NULL."/>
 	<comment xml:space="preserve">Gets an array of calendars supporting rscale (currently always return NULL).</comment>

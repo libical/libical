@@ -219,8 +219,6 @@ LIBICAL_ICAL_EXPORT void icalrecurrencetype_ref(struct icalrecurrencetype *recur
  */
 LIBICAL_ICAL_EXPORT void icalrecurrencetype_unref(struct icalrecurrencetype *recur);
 
-LIBICAL_ICAL_EXPORT bool icalrecurrencetype_rscale_is_supported(void);
-
 LIBICAL_ICAL_EXPORT icalarray *icalrecurrencetype_rscale_supported_calendars(void);
 
 /**
