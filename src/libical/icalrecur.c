@@ -173,11 +173,6 @@ static ICAL_GLOBAL_VAR ical_invalid_rrule_handling invalidRruleHandling = ICAL_R
 
 #define LEAP_MONTH 0x1000
 
-bool icalrecurrencetype_rscale_is_supported(void)
-{
-    return true;
-}
-
 /****************** Forward declarations ******************/
 static void icalrecurrencetype_clear(struct icalrecurrencetype *recur);
 static short daymask_find_next_bit(const unsigned long *days, short start_idx);
@@ -564,14 +559,9 @@ static int icalrecur_add_byrules(struct icalrecur_parser *parser, icalrecurrence
         if (*t) {
             /* Check for leap month suffix (RSCALE only) */
             if (by == &parser->rt->by[ICAL_BY_MONTH] && strcmp(t, "L") == 0) {
-                /* cppcheck-suppress knownConditionTrueFalse; we might return false some day */
-                if (icalrecurrencetype_rscale_is_supported()) {
-                    /* The "L" suffix in a BYMONTH recur-rule-part
-                       is encoded by setting a high-order bit */
-                    v |= LEAP_MONTH;
-                } else {
-                    return -2;
-                }
+                /* The "L" suffix in a BYMONTH recur-rule-part
+                    is encoded by setting a high-order bit */
+                v |= LEAP_MONTH;
             } else {
                 return -1;
             }

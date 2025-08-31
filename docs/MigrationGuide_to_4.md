@@ -89,6 +89,11 @@ The following functions have been added:
 ### Removed functions
 
 * `icalrecurrencetype_clear()` has been removed.
+
+* `icalrecurrencetype_rscale_is_supported()` has been removed as
+   RSCALE=GREGORIAN is supported without libicu now.
+   Replace `icalrecurrencetype_rscale_is_supported()` calls with a true condition.
+
 * These deprecated functions have been removed:
   * `caldat()`
   * `juldat()`
