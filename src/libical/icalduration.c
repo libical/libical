@@ -17,13 +17,12 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icaltime.h"
+#include "icaltimezone.h"
 
 /* From Seth Alves, <alves@hungry.com>   */
 struct icaldurationtype icaldurationtype_from_int(int t)
 {
     struct icaldurationtype dur;
-    unsigned int ut;
-    unsigned int used = 0;
 
     dur = icaldurationtype_null_duration();
 
@@ -31,20 +30,7 @@ struct icaldurationtype icaldurationtype_from_int(int t)
         dur.is_neg = 1;
         t = -t;
     }
-
-    ut = (unsigned int)t;
-    if (ut % (60 * 60 * 24 * 7) == 0) {
-        dur.weeks = ut / (60 * 60 * 24 * 7);
-    } else {
-        used += dur.weeks * (60 * 60 * 24 * 7);
-        dur.days = (ut - used) / (60 * 60 * 24);
-        used += dur.days * (60 * 60 * 24);
-        dur.hours = (ut - used) / (60 * 60);
-        used += dur.hours * (60 * 60);
-        dur.minutes = (ut - used) / (60);
-        used += dur.minutes * (60);
-        dur.seconds = (ut - used);
-    }
+    dur.seconds = (unsigned int)t;
 
     return dur;
 }
@@ -201,14 +187,17 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
     char *buf;
     size_t buf_size = 256;
     char *buf_ptr = 0;
-    int seconds;
 
     buf = (char *)icalmemory_new_buffer(buf_size);
     buf_ptr = buf;
 
-    seconds = icaldurationtype_as_int(d);
-
-    if (seconds != 0) {
+    if (d.weeks == 0 &&
+        d.days == 0 &&
+        d.hours == 0 &&
+        d.minutes == 0 &&
+        d.seconds == 0) {
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, "PT0S");
+    } else {
         if (d.is_neg == 1) {
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, '-');
         }
@@ -236,8 +225,6 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
                 append_duration_segment(&buf, &buf_ptr, &buf_size, "S", d.seconds);
             }
         }
-    } else {
-        icalmemory_append_string(&buf, &buf_ptr, &buf_size, "PT0S");
     }
 
     return buf;
@@ -245,11 +232,14 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
 
 int icaldurationtype_as_int(struct icaldurationtype dur)
 {
+    if (dur.days != 0 || dur.weeks != 0) {
+        /* The length of a day is position-dependent */
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
     return (int)(((int)dur.seconds +
                   60 * ((int)dur.minutes +
-                        60 * ((int)dur.hours +
-                              24 * ((int)dur.days +
-                                    7 * (int)dur.weeks)))) *
+                        60 * ((int)dur.hours))) *
                  (dur.is_neg == 1 ? -1 : 1));
 }
 
@@ -264,11 +254,8 @@ struct icaldurationtype icaldurationtype_null_duration(void)
 
 bool icaldurationtype_is_null_duration(struct icaldurationtype d)
 {
-    if (icaldurationtype_as_int(d) == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    struct icaldurationtype n = icaldurationtype_null_duration();
+    return memcmp(&d, &n, sizeof(struct icaldurationtype)) ? false : true;
 }
 
 /* In icalvalue_new_from_string_with_error, we should not call
@@ -294,21 +281,40 @@ bool icaldurationtype_is_bad_duration(struct icaldurationtype d)
 
 struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype d)
 {
+    struct icaltimetype t_days;
+
+    /* Days are nominal (not exact) and position-dependent */
     if (!d.is_neg) {
-        t.second += (int)d.seconds;
-        t.minute += (int)d.minutes;
-        t.hour += (int)d.hours;
         t.day += (int)d.days;
         t.day += (int)(d.weeks * 7);
     } else {
-        t.second -= (int)d.seconds;
-        t.minute -= (int)d.minutes;
-        t.hour -= (int)d.hours;
         t.day -= (int)d.days;
         t.day -= (int)(d.weeks * 7);
     }
 
     t = icaltime_normalize(t);
+    t_days = t;
+
+    if (!d.is_neg) {
+        t.second += (int)d.seconds;
+        t.minute += (int)d.minutes;
+        t.hour += (int)d.hours;
+    } else {
+        t.second -= (int)d.seconds;
+        t.minute -= (int)d.minutes;
+        t.hour -= (int)d.hours;
+    }
+
+    t = icaltime_normalize(t);
+    /* RFC 5545 states:
+     * In the case of discontinuities in the time scale, such
+     * as the change from standard time to daylight time and back, the
+     * computation of the exact duration requires the subtraction or
+     * addition of the change of duration of the discontinuity.
+     */
+    icaltime_adjust(&t, 0, 0, 0,
+                    icaltimezone_get_utc_offset((icaltimezone *)t.zone, &t, &t.is_daylight) -
+                        icaltimezone_get_utc_offset((icaltimezone *)t.zone, &t_days, &t_days.is_daylight));
 
     return t;
 }
