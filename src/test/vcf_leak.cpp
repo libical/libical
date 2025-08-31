@@ -23,6 +23,7 @@
 #include "vcc.h"
 #include "vobject.h"
 
+/* cppcheck-suppress constParameter */
 int main(int argc, char *argv[])
 {
     const char *fname;

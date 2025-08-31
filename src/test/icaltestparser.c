@@ -66,6 +66,7 @@ char *read_stream(char *s, size_t size, void *d)
     return c;
 }
 
+/* cppcheck-suppress constParameter */
 int main(int argc, char *argv[])
 {
     char *line;

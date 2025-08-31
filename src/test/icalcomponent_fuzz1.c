@@ -19,6 +19,7 @@
 
 #include "libical/ical.h"
 
+/* cppcheck-suppress constParameter */
 int main(int argc, char *argv[])
 {
     FILE *fp;

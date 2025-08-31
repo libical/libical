@@ -1235,7 +1235,7 @@ static int daysmask_setbit(unsigned long mask[], short n, int v)
     return prev;
 }
 
-static unsigned long daysmask_getbit(unsigned long mask[], short n)
+static unsigned long daysmask_getbit(const unsigned long mask[], short n)
 {
     n += ICAL_YEARDAYS_MASK_OFFSET;
     return (mask[n / BITS_PER_LONG] >> (n % BITS_PER_LONG)) & 1;
