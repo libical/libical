@@ -10,8 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-
-      # ... optionally setup build env to create a compilation database
+      - name: Install dependencies
+        run: sudo apt-get -y install python3-pip xml-core libdb-dev gobject-introspection libgirepository1.0-dev valac cmake ninja-build && pip3 install --user gi-docgen
+      - name: Configure project
+        run: |
+          cmake -G Ninja -DLIBICAL_DEVMODE=True -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=False -DICAL_GLIB_BUILD_DOCS=False -DICAL_GLIB=False -DGOBJECT_INTROSPECTION=False -DICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=False
 
       - uses: cpp-linter/cpp-linter-action@v2
         id: linter
