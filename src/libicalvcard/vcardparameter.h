@@ -134,13 +134,10 @@ LIBICAL_VCARD_EXPORT vcardparameter *vcardparameter_new_from_string(const char *
  * vcardparameter_free(param);
  * ```
  */
-LIBICAL_VCARD_EXPORT vcardparameter *vcardparameter_new_from_value_string(vcardparameter_kind kind,
-                                                                          const char *value);
+LIBICAL_VCARD_EXPORT vcardparameter *vcardparameter_new_from_value_string(vcardparameter_kind kind, const char *value);
 
-LIBICAL_VCARD_EXPORT void vcardparameter_set_value_from_string(vcardparameter *param,
-                                                               const char *val);
-LIBICAL_VCARD_EXPORT void vcardparameter_add_value_from_string(vcardparameter *param,
-                                                               const char *val);
+LIBICAL_VCARD_EXPORT void vcardparameter_set_value_from_string(vcardparameter *param, const char *val);
+LIBICAL_VCARD_EXPORT void vcardparameter_add_value_from_string(vcardparameter *param, const char *val);
 
 /**
  * @brief Frees an vcardparameter object.

@@ -36,8 +36,7 @@ typedef icalarray icalstrarray;
  * icalstrarray_free().
  *
  */
-#define icalstrarray_new(increment_size) \
-    (icalarray_new(sizeof(char *), increment_size))
+#define icalstrarray_new(increment_size) (icalarray_new(sizeof(char *), increment_size))
 
 /**
  * @brief Accesses a string stored in the array.
@@ -91,8 +90,7 @@ LIBICAL_ICAL_EXPORT size_t icalstrarray_size(const icalstrarray *array);
  *
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT size_t icalstrarray_find(icalstrarray *array,
-                                             const char *needle);
+LIBICAL_ICAL_EXPORT size_t icalstrarray_find(icalstrarray *array, const char *needle);
 
 /**
  * @brief Appends a string to the array.
@@ -108,8 +106,7 @@ LIBICAL_ICAL_EXPORT size_t icalstrarray_find(icalstrarray *array,
  *
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT void icalstrarray_append(icalstrarray *array,
-                                             const char *elem);
+LIBICAL_ICAL_EXPORT void icalstrarray_append(icalstrarray *array, const char *elem);
 
 /**
  * @brief Appends a string to the array, omitting duplicates.
@@ -124,8 +121,7 @@ LIBICAL_ICAL_EXPORT void icalstrarray_append(icalstrarray *array,
  *
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT void icalstrarray_add(icalstrarray *array,
-                                          const char *add);
+LIBICAL_ICAL_EXPORT void icalstrarray_add(icalstrarray *array, const char *add);
 
 /**
  * @brief Removes the string at an array position.
@@ -140,8 +136,7 @@ LIBICAL_ICAL_EXPORT void icalstrarray_add(icalstrarray *array,
  *
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT void icalstrarray_remove_element_at(icalstrarray *array,
-                                                        size_t position);
+LIBICAL_ICAL_EXPORT void icalstrarray_remove_element_at(icalstrarray *array, size_t position);
 
 /**
  * @brief Removes all occurrences of a string.
@@ -155,8 +150,7 @@ LIBICAL_ICAL_EXPORT void icalstrarray_remove_element_at(icalstrarray *array,
  *
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT void icalstrarray_remove(icalstrarray *array,
-                                             const char *del);
+LIBICAL_ICAL_EXPORT void icalstrarray_remove(icalstrarray *array, const char *del);
 
 /**
  * @brief Frees this array's memory and all its elements.

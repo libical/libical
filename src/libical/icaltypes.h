@@ -16,18 +16,21 @@
 
 #include <stdbool.h>
 
-struct icaldatetimeperiodtype {
+struct icaldatetimeperiodtype
+{
     struct icaltimetype time;
     struct icalperiodtype period;
 };
 
 #define ICAL_GEO_LEN 16
-struct icalgeotype {
+struct icalgeotype
+{
     char lat[ICAL_GEO_LEN];
     char lon[ICAL_GEO_LEN];
 };
 
-struct icaltriggertype {
+struct icaltriggertype
+{
     struct icaltimetype time;
     struct icaldurationtype duration;
 };
@@ -49,7 +52,8 @@ BTW, you would get that original string from
 *icalproperty_get_requeststatus() or icalvalue_get_text(), when
 operating on the value of a request_status property. */
 
-struct icalreqstattype {
+struct icalreqstattype
+{
     icalrequeststatus code;
     const char *desc;
     const char *debug;
@@ -75,7 +79,6 @@ typedef enum ical_unknown_token_handling
 
 LIBICAL_ICAL_EXPORT ical_unknown_token_handling ical_get_unknown_token_handling_setting(void);
 
-LIBICAL_ICAL_EXPORT void ical_set_unknown_token_handling_setting(
-    ical_unknown_token_handling newSetting);
+LIBICAL_ICAL_EXPORT void ical_set_unknown_token_handling_setting(ical_unknown_token_handling newSetting);
 
 #endif /* !ICALTYPES_H */

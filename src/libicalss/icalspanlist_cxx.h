@@ -56,10 +56,7 @@ public:
     ICalSpanList &operator=(const ICalSpanList &);
 
     /** Returns the base data when casting */
-    operator icalspanlist *()
-    {
-        return data;
-    }
+    operator icalspanlist *() { return data; }
 
     /** Returns a vector of the number of events over delta t */
     std::vector<int> as_vector(int delta_t);

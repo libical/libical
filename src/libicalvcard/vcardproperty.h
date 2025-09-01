@@ -45,14 +45,11 @@ LIBICAL_VCARD_EXPORT void vcardproperty_add_parameter(vcardproperty *prop, vcard
 
 LIBICAL_VCARD_EXPORT void vcardproperty_set_parameter(vcardproperty *prop, vcardparameter *parameter);
 
-LIBICAL_VCARD_EXPORT void vcardproperty_set_parameter_from_string(vcardproperty *prop,
-                                                                  const char *name,
+LIBICAL_VCARD_EXPORT void vcardproperty_set_parameter_from_string(vcardproperty *prop, const char *name,
                                                                   const char *value);
-LIBICAL_VCARD_EXPORT const char *vcardproperty_get_parameter_as_string(vcardproperty *prop,
-                                                                       const char *name);
+LIBICAL_VCARD_EXPORT const char *vcardproperty_get_parameter_as_string(vcardproperty *prop, const char *name);
 
-LIBICAL_VCARD_EXPORT char *vcardproperty_get_parameter_as_string_r(vcardproperty *prop,
-                                                                   const char *name);
+LIBICAL_VCARD_EXPORT char *vcardproperty_get_parameter_as_string_r(vcardproperty *prop, const char *name);
 
 /** @brief Removes all parameters with the specified kind.
  *
@@ -63,8 +60,7 @@ LIBICAL_VCARD_EXPORT char *vcardproperty_get_parameter_as_string_r(vcardproperty
  *  vcardproperty_remove_parameter_by_ref() for alternate ways of
  *  removing parameters
  */
-LIBICAL_VCARD_EXPORT void vcardproperty_remove_parameter_by_kind(vcardproperty *prop,
-                                                                 vcardparameter_kind kind);
+LIBICAL_VCARD_EXPORT void vcardproperty_remove_parameter_by_kind(vcardproperty *prop, vcardparameter_kind kind);
 
 /** @brief Removes all parameters with the specified name.
  *
@@ -79,8 +75,7 @@ LIBICAL_VCARD_EXPORT void vcardproperty_remove_parameter_by_kind(vcardproperty *
  *  vcardproperty_remove_parameter_by_ref() for alternate ways of removing
  *  parameters
  */
-LIBICAL_VCARD_EXPORT void vcardproperty_remove_parameter_by_name(vcardproperty *prop,
-                                                                 const char *name);
+LIBICAL_VCARD_EXPORT void vcardproperty_remove_parameter_by_name(vcardproperty *prop, const char *name);
 
 /** @brief Removes the specified parameter reference from the property.
  *
@@ -90,20 +85,16 @@ LIBICAL_VCARD_EXPORT void vcardproperty_remove_parameter_by_name(vcardproperty *
  *  This function removes the specified parameter reference from the
  *  property.
  */
-LIBICAL_VCARD_EXPORT void vcardproperty_remove_parameter_by_ref(vcardproperty *prop,
-                                                                vcardparameter *param);
+LIBICAL_VCARD_EXPORT void vcardproperty_remove_parameter_by_ref(vcardproperty *prop, vcardparameter *param);
 
 LIBICAL_VCARD_EXPORT int vcardproperty_count_parameters(const vcardproperty *prop);
 
 /* Iterate through the parameters */
-LIBICAL_VCARD_EXPORT vcardparameter *vcardproperty_get_first_parameter(vcardproperty *prop,
-                                                                       vcardparameter_kind kind);
-LIBICAL_VCARD_EXPORT vcardparameter *vcardproperty_get_next_parameter(vcardproperty *prop,
-                                                                      vcardparameter_kind kind);
+LIBICAL_VCARD_EXPORT vcardparameter *vcardproperty_get_first_parameter(vcardproperty *prop, vcardparameter_kind kind);
+LIBICAL_VCARD_EXPORT vcardparameter *vcardproperty_get_next_parameter(vcardproperty *prop, vcardparameter_kind kind);
 /* Access the value of the property */
 LIBICAL_VCARD_EXPORT void vcardproperty_set_value(vcardproperty *prop, vcardvalue *value);
-LIBICAL_VCARD_EXPORT void vcardproperty_set_value_from_string(vcardproperty *prop, const char *value,
-                                                              const char *kind);
+LIBICAL_VCARD_EXPORT void vcardproperty_set_value_from_string(vcardproperty *prop, const char *value, const char *kind);
 
 LIBICAL_VCARD_EXPORT vcardvalue *vcardproperty_get_value(const vcardproperty *prop);
 LIBICAL_VCARD_EXPORT const char *vcardproperty_get_value_as_string(const vcardproperty *prop);
@@ -175,7 +166,6 @@ LIBICAL_VCARD_EXPORT void vcardproperty_normalize(vcardproperty *prop);
 LIBICAL_VCARD_EXPORT bool vcardproperty_is_structured(vcardproperty_kind pkind);
 LIBICAL_VCARD_EXPORT bool vcardproperty_is_multivalued(vcardproperty_kind pkind);
 
-LIBICAL_VCARD_EXPORT void vcardproperty_add_type_parameter(vcardproperty *prop,
-                                                           vcardenumarray_element *type);
+LIBICAL_VCARD_EXPORT void vcardproperty_add_type_parameter(vcardproperty *prop, vcardenumarray_element *type);
 
 #endif /*VCARDPROPERTY_H */

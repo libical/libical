@@ -26,8 +26,7 @@ typedef enum icalbdbset_subdb_type icalbdbset_subdb_type;
 
 /** sets up the db environment, should be done in parent thread.. */
 LIBICAL_ICALSS_EXPORT int icalbdbset_init_dbenv(char *db_env_dir,
-                                                void (*logDbFunc)(const DB_ENV *,
-                                                                  const char *, const char *));
+                                                void (*logDbFunc)(const DB_ENV *, const char *, const char *));
 
 LIBICAL_ICALSS_EXPORT icalset *icalbdbset_init(icalset *set, const char *dsn, void *options);
 
@@ -39,18 +38,12 @@ LIBICAL_ICALSS_EXPORT void icalbdbset_rmdbLog(void);
 
 /** Creates a component handle.  flags allows caller to
    specify if database is internally a BTREE or HASH */
-LIBICAL_ICALSS_EXPORT icalset *icalbdbset_new(const char *database_filename,
-                                              icalbdbset_subdb_type subdb_type,
+LIBICAL_ICALSS_EXPORT icalset *icalbdbset_new(const char *database_filename, icalbdbset_subdb_type subdb_type,
                                               int dbtype, u_int32_t flag);
 
-LIBICAL_ICALSS_EXPORT DB *icalbdbset_bdb_open_secondary(DB *dbp,
-                                                        const char *subdb,
-                                                        const char *sindex,
-                                                        int (*callback)(DB *db,
-                                                                        const DBT *dbt1,
-                                                                        const DBT *dbt2,
-                                                                        DBT *dbt3),
-                                                        int type);
+LIBICAL_ICALSS_EXPORT DB *
+icalbdbset_bdb_open_secondary(DB *dbp, const char *subdb, const char *sindex,
+                              int (*callback)(DB *db, const DBT *dbt1, const DBT *dbt2, DBT *dbt3), int type);
 
 LIBICAL_ICALSS_EXPORT char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc)(const DBT *dbt));
 
@@ -59,11 +52,9 @@ LIBICAL_ICALSS_EXPORT void icalbdbset_free(icalset *set);
 /* cursor operations */
 LIBICAL_ICALSS_EXPORT int icalbdbset_acquire_cursor(DB *dbp, DB_TXN *tid, DBC **rdbcp);
 
-LIBICAL_ICALSS_EXPORT int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data,
-                                          u_int32_t access_method);
+LIBICAL_ICALSS_EXPORT int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method);
 
-LIBICAL_ICALSS_EXPORT int icalbdbset_cput(DBC *dbcp, DBT *key, DBT *data,
-                                          u_int32_t access_method);
+LIBICAL_ICALSS_EXPORT int icalbdbset_cput(DBC *dbcp, DBT *key, DBT *data, u_int32_t access_method);
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_get_first(DBC *dbcp, DBT *key, DBT *data);
 
@@ -77,8 +68,7 @@ LIBICAL_ICALSS_EXPORT int icalbdbset_delete(DB *dbp, DBT *key);
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_put(DB *dbp, DBT *key, DBT *data, u_int32_t access_method);
 
-LIBICAL_ICALSS_EXPORT int icalbdbset_get(DB *dbp, DB_TXN *tid, DBT *key, DBT *data,
-                                         u_int32_t flags);
+LIBICAL_ICALSS_EXPORT int icalbdbset_get(DB *dbp, DB_TXN *tid, DBT *key, DBT *data, u_int32_t flags);
 
 LIBICAL_ICALSS_EXPORT const char *icalbdbset_path(icalset *set);
 
@@ -92,8 +82,7 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_commit(icalset *set);
 
 LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_add_component(icalset *set, icalcomponent *child);
 
-LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_remove_component(icalset *set,
-                                                                icalcomponent *child);
+LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_remove_component(icalset *set, icalcomponent *child);
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_count_components(icalset *set, icalcomponent_kind kind);
 
@@ -104,15 +93,13 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_select(icalset *store, icalgauge 
 LIBICAL_ICALSS_EXPORT void icalbdbset_clear(icalset *store);
 
 /* Gets and searches for a component by uid */
-LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch(icalset *set,
-                                                      icalcomponent_kind kind, const char *uid);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch(icalset *set, icalcomponent_kind kind, const char *uid);
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_has_uid(icalset *set, const char *uid);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch_match(icalset *set, const icalcomponent *c);
 
-LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_modify(icalset *set, icalcomponent *old,
-                                                      icalcomponent *newc);
+LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_modify(icalset *set, icalcomponent *old, icalcomponent *newc);
 
 /* cluster management functions */
 LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_set_cluster(icalset *set, icalcomponent *cluster);
@@ -131,12 +118,10 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_get_first_component(icalset *set
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_get_next_component(icalset *set);
 
 /* External iterator for thread safety */
-LIBICAL_ICALSS_EXPORT icalsetiter icalbdbset_begin_component(icalset *set,
-                                                             icalcomponent_kind kind,
-                                                             icalgauge *gauge, const char *tzid);
+LIBICAL_ICALSS_EXPORT icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind, icalgauge *gauge,
+                                                             const char *tzid);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *
-                                                                                        itr);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i);
 
@@ -153,11 +138,10 @@ LIBICAL_ICALSS_EXPORT int icalbdbset_begin_transaction(DB_TXN *parent_id, DB_TXN
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_commit_transaction(DB_TXN *txnid);
 
-LIBICAL_ICALSS_EXPORT DB *icalbdbset_bdb_open(const char *path,
-                                              const char *subdb,
-                                              int type, int mode, u_int32_t flag);
+LIBICAL_ICALSS_EXPORT DB *icalbdbset_bdb_open(const char *path, const char *subdb, int type, int mode, u_int32_t flag);
 
-typedef struct icalbdbset_options {
+typedef struct icalbdbset_options
+{
     icalbdbset_subdb_type subdb; /**< the subdatabase to open */
     int dbtype;                  /**< db_open type: DB_HASH | DB_BTREE */
     int mode;                    /**< file mode */

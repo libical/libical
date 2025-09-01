@@ -27,7 +27,8 @@
  *
  * Days and weeks are nominal; hours, minutes and seconds are exact
  */
-struct icaldurationtype {
+struct icaldurationtype
+{
     int is_neg;
     unsigned int days;
     unsigned int weeks;
@@ -36,9 +37,7 @@ struct icaldurationtype {
     unsigned int seconds;
 };
 
-#define ICALDURATIONTYPE_INITIALIZER \
-    {                                \
-        0, 0, 0, 0, 0, 0}
+#define ICALDURATIONTYPE_INITIALIZER {0, 0, 0, 0, 0, 0}
 
 /**
  * @brief Creates a new ::icaldurationtype from a duration in seconds.
@@ -238,8 +237,7 @@ LIBICAL_ICAL_EXPORT bool icaldurationtype_is_bad_duration(struct icaldurationtyp
  * time = icaltime_add(time, duration);
  * ```
  */
-LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_add(struct icaltimetype t,
-                                                     struct icaldurationtype d);
+LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype d);
 
 /**
  * @brief Returns the difference between two ::icaltimetype as a duration.
@@ -258,7 +256,6 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_add(struct icaltimetype t,
  * duration = icaltime_subtract(t1, t2);
  * ```
  */
-LIBICAL_ICAL_EXPORT struct icaldurationtype icaltime_subtract(struct icaltimetype t1,
-                                                              struct icaltimetype t2);
+LIBICAL_ICAL_EXPORT struct icaldurationtype icaltime_subtract(struct icaltimetype t1, struct icaltimetype t2);
 
 #endif /* !ICALDURATION_H */

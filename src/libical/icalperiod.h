@@ -26,17 +26,14 @@
 /**
  * @brief Struct to represent a period in time.
  */
-struct icalperiodtype {
+struct icalperiodtype
+{
     struct icaltimetype start;
     struct icaltimetype end;
     struct icaldurationtype duration;
 };
 
-#define ICALPERIODTYPE_INITIALIZER \
-    {                              \
-        ICALTIMETYPE_INITIALIZER,  \
-        ICALTIMETYPE_INITIALIZER,  \
-        ICALDURATIONTYPE_INITIALIZER}
+#define ICALPERIODTYPE_INITIALIZER {ICALTIMETYPE_INITIALIZER, ICALTIMETYPE_INITIALIZER, ICALDURATIONTYPE_INITIALIZER}
 
 /**
  * @brief Constructs a new ::icalperiodtype from @a str

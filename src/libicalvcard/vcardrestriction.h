@@ -61,8 +61,7 @@ typedef enum vcardrestriction_kind
  * assert(vcardrestriction_compare(VCARDRESTRICTION_NONE,    3) == false);
  * ```
  */
-LIBICAL_VCARD_EXPORT int vcardrestriction_compare(vcardrestriction_kind restr,
-                                                  int count);
+LIBICAL_VCARD_EXPORT int vcardrestriction_compare(vcardrestriction_kind restr, int count);
 
 /**
  * @brief Checks if a given `VCARD` meets all the restrictions imposed by

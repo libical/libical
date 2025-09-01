@@ -12,11 +12,13 @@
 #include "icalattach.h"
 
 /* Private structure for ATTACH values */
-struct icalattach_impl {
+struct icalattach_impl
+{
     /* Reference count */
     int refcount;
 
-    union {
+    union
+    {
         /* URL attachment data */
         struct
         {

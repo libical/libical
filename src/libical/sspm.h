@@ -66,7 +66,8 @@ enum sspm_error
     SSPM_MALFORMED_HEADER_ERROR
 };
 
-struct sspm_header {
+struct sspm_header
+{
     int def;
     char *boundary;
     enum sspm_major_type major;
@@ -81,14 +82,16 @@ struct sspm_header {
     char *error_text;
 };
 
-struct sspm_part {
+struct sspm_part
+{
     struct sspm_header header;
     int level;
     size_t data_size;
     void *data;
 };
 
-struct sspm_action_map {
+struct sspm_action_map
+{
     enum sspm_major_type major;
     enum sspm_minor_type minor;
     void *(*new_part)(void);
@@ -103,11 +106,10 @@ LIBICAL_ICAL_EXPORT const char *sspm_minor_type_string(enum sspm_minor_type type
 
 LIBICAL_ICAL_EXPORT const char *sspm_encoding_string(enum sspm_encoding type);
 
-LIBICAL_ICAL_EXPORT int sspm_parse_mime(struct sspm_part *parts,
-                                        size_t max_parts,
+LIBICAL_ICAL_EXPORT int sspm_parse_mime(struct sspm_part *parts, size_t max_parts,
                                         const struct sspm_action_map *actions,
-                                        char *(*get_string)(char *s, size_t size, void *data),
-                                        void *get_string_data, struct sspm_header *first_header);
+                                        char *(*get_string)(char *s, size_t size, void *data), void *get_string_data,
+                                        struct sspm_header *first_header);
 
 LIBICAL_ICAL_EXPORT void sspm_free_parts(struct sspm_part *parts, size_t max_parts);
 
@@ -115,7 +117,7 @@ LIBICAL_ICAL_EXPORT char *decode_quoted_printable(char *dest, const char *src, s
 
 LIBICAL_ICAL_EXPORT char *decode_base64(char *dest, const char *src, size_t *size);
 
-LIBICAL_ICAL_EXPORT void sspm_write_mime(struct sspm_part *parts, size_t num_parts,
-                                         char **output_string, const char *header);
+LIBICAL_ICAL_EXPORT void sspm_write_mime(struct sspm_part *parts, size_t num_parts, char **output_string,
+                                         const char *header);
 
 #endif /* ICAL_SSPM_H */

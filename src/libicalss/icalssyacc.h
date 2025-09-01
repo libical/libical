@@ -62,35 +62,36 @@ enum yytokentype
 };
 #endif
 /* Tokens.  */
-#define STRING 258
-#define SELECT 259
-#define FROM 260
-#define WHERE 261
-#define COMMA 262
-#define QUOTE 263
-#define EQUALS 264
-#define NOTEQUALS 265
-#define LESS 266
-#define GREATER 267
-#define LESSEQUALS 268
+#define STRING        258
+#define SELECT        259
+#define FROM          260
+#define WHERE         261
+#define COMMA         262
+#define QUOTE         263
+#define EQUALS        264
+#define NOTEQUALS     265
+#define LESS          266
+#define GREATER       267
+#define LESSEQUALS    268
 #define GREATEREQUALS 269
-#define AND 270
-#define OR 271
-#define EOL 272
-#define END 273
-#define IS 274
-#define NOT 275
-#define SQLNULL 276
+#define AND           270
+#define OR            271
+#define EOL           272
+#define END           273
+#define IS            274
+#define NOT           275
+#define SQLNULL       276
 
 #if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE {
+typedef union YYSTYPE
+{
     char *v_string;
 }
 /* Line 1489 of yacc.c.  */
 YYSTYPE;
-#define yystype YYSTYPE /* obsolescent; will be withdrawn */
+#define yystype             YYSTYPE /* obsolescent; will be withdrawn */
 #define YYSTYPE_IS_DECLARED 1
-#define YYSTYPE_IS_TRIVIAL 1
+#define YYSTYPE_IS_TRIVIAL  1
 #endif
 
 extern YYSTYPE sslval;

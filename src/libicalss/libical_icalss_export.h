@@ -22,7 +22,7 @@
 #endif
 #define LIBICAL_ICALSS_NO_EXPORT
 #else
-#define LIBICAL_ICALSS_EXPORT __attribute__((visibility("default")))
+#define LIBICAL_ICALSS_EXPORT    __attribute__((visibility("default")))
 #define LIBICAL_ICALSS_NO_EXPORT __attribute__((visibility("hidden")))
 #endif
 #endif

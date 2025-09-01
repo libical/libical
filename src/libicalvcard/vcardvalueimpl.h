@@ -13,7 +13,8 @@
 #include "vcardproperty.h"
 #include "vcardtime.h"
 
-struct vcardvalue_impl {
+struct vcardvalue_impl
+{
     vcardvalue_kind kind; /* the kind that is visible from the outside */
 
     char id[5];
@@ -21,7 +22,8 @@ struct vcardvalue_impl {
     vcardproperty *parent;
     char *x_value;
 
-    union data {
+    union data
+    {
         vcardstructuredtype v_structured;
         /*char *v_name; */       /* use v_structured field[0-4] only */
         /*char *v_nickname; */   /* use v_structured field[0] only */

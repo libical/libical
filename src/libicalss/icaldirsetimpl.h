@@ -19,7 +19,8 @@
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icalset*/
 
-struct icaldirset_impl {
+struct icaldirset_impl
+{
     icalset super;               /**< parent class */
     char *dir;                   /**< directory containing ics files  */
     icaldirset_options options;  /**< copy of options passed to icalset_new() */

@@ -13,7 +13,8 @@
 #include "icalcomponent.h"
 #include "icaltimezone.h"
 
-struct _icaltimezone {
+struct _icaltimezone
+{
     char *tzid;
     /**< The unique ID of this timezone,
        e.g. "/citadel.org/Olson_20010601_1/Africa/Banjul".

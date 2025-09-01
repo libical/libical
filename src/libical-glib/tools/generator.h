@@ -12,22 +12,22 @@
 #include <glib.h>
 #include "xml-parser.h"
 
-#define HEADER_TEMPLATE "header-template"
-#define HEADER_HEADER_TEMPLATE "header-header-template"
-#define HEADER_FORWARD_DECLARATIONS_TEMPLATE "header-forward-declarations-template"
-#define INLINE_TRANSLATION "${translator} (${name})"
-#define SOURCE_TEMPLATE "source-template"
-#define COMMON_HEADER "libical-glib/i-cal-object"
+#define HEADER_TEMPLATE                       "header-template"
+#define HEADER_HEADER_TEMPLATE                "header-header-template"
+#define HEADER_FORWARD_DECLARATIONS_TEMPLATE  "header-forward-declarations-template"
+#define INLINE_TRANSLATION                    "${translator} (${name})"
+#define SOURCE_TEMPLATE                       "source-template"
+#define COMMON_HEADER                         "libical-glib/i-cal-object"
 #define HEADER_STRUCTURE_BOILERPLATE_TEMPLATE "header-structure-boilerplate-template"
 #define SOURCE_STRUCTURE_BOILERPLATE_TEMPLATE "source-structure-boilerplate-template"
-#define ENUM_HEADER "ICAL"
-#define BUFFER_SIZE 4000
-#define TAB_SIZE 8
-#define RET_TAB_COUNT 2
-#define METHOD_NAME_TAB_COUNT 4
-#define COMMENT_LINE_LENGTH 100
-#define PRIVATE_HEADER "libical-glib-private.h"
-#define FORWARD_DECLARATIONS_HEADER "i-cal-forward-declarations.h"
+#define ENUM_HEADER                           "ICAL"
+#define BUFFER_SIZE                           4000
+#define TAB_SIZE                              8
+#define RET_TAB_COUNT                         2
+#define METHOD_NAME_TAB_COUNT                 4
+#define COMMENT_LINE_LENGTH                   100
+#define PRIVATE_HEADER                        "libical-glib-private.h"
+#define FORWARD_DECLARATIONS_HEADER           "i-cal-forward-declarations.h"
 
 /* Store the default value for bare type */
 GHashTable *defaultValues;

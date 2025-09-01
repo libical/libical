@@ -16,7 +16,8 @@
 
 typedef icalarray icalenumarray;
 
-typedef struct {
+typedef struct
+{
     int val;
     const char *xvalue;
 } icalenumarray_element;
@@ -41,8 +42,7 @@ typedef struct {
  * icalenumarray_free().
  *
  */
-#define icalenumarray_new(increment_size) \
-    icalarray_new(sizeof(icalenumarray_element), increment_size)
+#define icalenumarray_new(increment_size) icalarray_new(sizeof(icalenumarray_element), increment_size)
 
 /**
  * @brief Accesses an element stored in the array.
@@ -97,8 +97,7 @@ LIBICAL_ICAL_EXPORT size_t icalenumarray_size(const icalenumarray *array);
  *
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT size_t icalenumarray_find(icalenumarray *array,
-                                              const icalenumarray_element *needle);
+LIBICAL_ICAL_EXPORT size_t icalenumarray_find(icalenumarray *array, const icalenumarray_element *needle);
 
 /**
  * @brief Appends an element to the array.
@@ -115,8 +114,7 @@ LIBICAL_ICAL_EXPORT size_t icalenumarray_find(icalenumarray *array,
  * @since 4.0
  *
  */
-LIBICAL_ICAL_EXPORT void icalenumarray_append(icalenumarray *array,
-                                              const icalenumarray_element *elem);
+LIBICAL_ICAL_EXPORT void icalenumarray_append(icalenumarray *array, const icalenumarray_element *elem);
 
 /**
  * @brief Appends an element to the array, omitting duplicates.
@@ -132,8 +130,7 @@ LIBICAL_ICAL_EXPORT void icalenumarray_append(icalenumarray *array,
  * @since 4.0
  *
  */
-LIBICAL_ICAL_EXPORT void icalenumarray_add(icalenumarray *array,
-                                           const icalenumarray_element *elem);
+LIBICAL_ICAL_EXPORT void icalenumarray_add(icalenumarray *array, const icalenumarray_element *elem);
 
 /**
  * @brief Removes the element at an array position.
@@ -148,8 +145,7 @@ LIBICAL_ICAL_EXPORT void icalenumarray_add(icalenumarray *array,
  *
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT void icalenumarray_remove_element_at(icalenumarray *array,
-                                                         size_t position);
+LIBICAL_ICAL_EXPORT void icalenumarray_remove_element_at(icalenumarray *array, size_t position);
 
 /**
  * @brief Removes all occurrences of an element.
@@ -163,8 +159,7 @@ LIBICAL_ICAL_EXPORT void icalenumarray_remove_element_at(icalenumarray *array,
  *
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT void icalenumarray_remove(icalenumarray *array,
-                                              const icalenumarray_element *del);
+LIBICAL_ICAL_EXPORT void icalenumarray_remove(icalenumarray *array, const icalenumarray_element *del);
 
 /**
  * @brief Frees this array's memory and all its elements.

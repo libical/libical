@@ -141,8 +141,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_string(const char *val
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_value_string(icalparameter_kind kind,
-                                                                       const char *value);
+LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_value_string(icalparameter_kind kind, const char *value);
 
 /**
  * @brief Frees an icalparameter object.

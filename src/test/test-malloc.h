@@ -11,7 +11,8 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 #include <stddef.h>
 #include <stdint.h>
 
-struct testmalloc_statistics {
+struct testmalloc_statistics
+{
     int malloc_cnt;
     int realloc_cnt;
     int free_cnt;

@@ -14,7 +14,8 @@
 
 #include "icalproperty.h"
 
-struct icalvalue_impl {
+struct icalvalue_impl
+{
     icalvalue_kind kind; /*this is the kind that is visible from the outside */
 
     char id[5];
@@ -22,7 +23,8 @@ struct icalvalue_impl {
     icalproperty *parent;
     char *x_value;
 
-    union data {
+    union data
+    {
         icalattach *v_attach;
         /* void *v_binary; */ /* use v_attach */
 

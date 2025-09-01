@@ -61,10 +61,7 @@ public:
         ipp->ptr = 0;
     };
 
-    ~ICPointerHolder()
-    {
-        release();
-    }
+    ~ICPointerHolder() { release(); }
 
     ICPointerHolder &operator=(T *p)
     {
@@ -82,21 +79,12 @@ public:
     }
 
     /* cppcheck-suppress constParameterPointer */
-    bool operator!=(T *p)
-    {
-        return (ptr != p);
-    }
+    bool operator!=(T *p) { return (ptr != p); }
 
     /* cppcheck-suppress constParameterPointer */
-    bool operator==(T *p)
-    {
-        return (ptr == p);
-    }
+    bool operator==(T *p) { return (ptr == p); }
 
-    operator T *() const
-    {
-        return ptr;
-    }
+    operator T *() const { return ptr; }
 
     T *operator->() const
     {
@@ -113,7 +101,8 @@ public:
 private:
     void release()
     {
-        if (ptr != 0) {
+        if (ptr != 0)
+        {
             ptr->detach();
             delete ptr;
 

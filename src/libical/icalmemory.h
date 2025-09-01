@@ -157,8 +157,7 @@ typedef void (*icalmemory_free_f)(void *);
  * other components like libicalvcal.
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc,
-                                                        icalmemory_realloc_f f_realloc,
+LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc, icalmemory_realloc_f f_realloc,
                                                         icalmemory_free_f f_free);
 
 /**
@@ -171,8 +170,8 @@ LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_ma
  * Retrieves the functions used by the library for memory management.
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f *f_malloc,
-                                                        icalmemory_realloc_f *f_realloc, icalmemory_free_f *f_free);
+LIBICAL_ICAL_EXPORT void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f *f_malloc, icalmemory_realloc_f *f_realloc,
+                                                        icalmemory_free_f *f_free);
 
 /**
  * @brief Creates new buffer with the specified size.
@@ -306,8 +305,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void *buf);
  * icalmemory_free_buffer(buffer);
  * ```
  */
-LIBICAL_ICAL_EXPORT void icalmemory_append_string(char **buf, char **pos, size_t *buf_size,
-                                                  const char *string);
+LIBICAL_ICAL_EXPORT void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const char *string);
 
 /**
  * @brief Appends a character to a buffer.

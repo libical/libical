@@ -13,7 +13,8 @@
 #include "vcardderivedvalue.h"
 #include "icalarray.h"
 
-struct vcardparameter_impl {
+struct vcardparameter_impl
+{
     vcardparameter_kind kind;
     char id[5];
     int size;

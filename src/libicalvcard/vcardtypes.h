@@ -11,15 +11,18 @@
 
 #include "libical_vcard_export.h"
 
-typedef struct vcardgeotype {
+typedef struct vcardgeotype
+{
     const char *uri;
-    struct {
+    struct
+    {
         const char *lat;
         const char *lon;
     } coords;
 } vcardgeotype;
 
-typedef struct vcardtztype {
+typedef struct vcardtztype
+{
     const char *tzid;
     const char *uri;
     int utcoffset;

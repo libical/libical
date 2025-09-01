@@ -12,7 +12,8 @@
 #include <stdio.h>
 #include <glib.h>
 
-typedef struct Parameter {
+typedef struct Parameter
+{
     gchar *type;
     GList *annotations;
     gchar *comment;
@@ -24,7 +25,8 @@ typedef struct Parameter {
     gchar *owner_op;
 } Parameter;
 
-typedef struct Ret {
+typedef struct Ret
+{
     gchar *type;
     GList *annotations;
     gchar *comment;
@@ -33,7 +35,8 @@ typedef struct Ret {
     gchar *errorReturnValue;
 } Ret;
 
-typedef struct Method {
+typedef struct Method
+{
     gchar *name;
     gchar *corresponds;
     gchar *kind;
@@ -45,7 +48,8 @@ typedef struct Method {
     GList *annotations;
 } Method;
 
-typedef struct Structure {
+typedef struct Structure
+{
     gchar *nameSpace;
     gchar *name;
     gchar *native;
@@ -62,12 +66,14 @@ typedef struct Structure {
     GList *declarations;
 } Structure;
 
-typedef struct Declaration {
+typedef struct Declaration
+{
     gchar *position;
     gchar *content;
 } Declaration;
 
-typedef struct Enumeration {
+typedef struct Enumeration
+{
     gchar *name;
     gchar *nativeName;
     GList *elements;

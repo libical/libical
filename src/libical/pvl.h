@@ -20,7 +20,8 @@ typedef struct pvl_elem_t *pvl_elem;
  * blocks work
  */
 
-typedef struct pvl_elem_t {
+typedef struct pvl_elem_t
+{
     int MAGIC;                /**< Magic Identifier */
     void *d;                  /**< Pointer to data user is storing */
     struct pvl_elem_t *next;  /**< Next element */

@@ -14,42 +14,30 @@
 
 typedef icalstrarray vcardstrarray;
 
-#define vcardstrarray_new(increment_size) \
-    icalstrarray_new(increment_size)
+#define vcardstrarray_new(increment_size)                icalstrarray_new(increment_size)
 
-#define vcardstrarray_element_at(array, position) \
-    icalstrarray_element_at(array, position)
+#define vcardstrarray_element_at(array, position)        icalstrarray_element_at(array, position)
 
-#define vcardstrarray_size(array) \
-    icalstrarray_size(array)
+#define vcardstrarray_size(array)                        icalstrarray_size(array)
 
-#define vcardstrarray_find(array, needle) \
-    icalstrarray_find(array, needle)
+#define vcardstrarray_find(array, needle)                icalstrarray_find(array, needle)
 
-#define vcardstrarray_append(array, elem) \
-    icalstrarray_append(array, elem)
+#define vcardstrarray_append(array, elem)                icalstrarray_append(array, elem)
 
-#define vcardstrarray_add(array, add) \
-    icalstrarray_add(array, add)
+#define vcardstrarray_add(array, add)                    icalstrarray_add(array, add)
 
-#define vcardstrarray_remove_element_at(array, position) \
-    icalstrarray_remove_element_at(array, position)
+#define vcardstrarray_remove_element_at(array, position) icalstrarray_remove_element_at(array, position)
 
-#define vcardstrarray_remove(array, del) \
-    icalstrarray_remove(array, del)
+#define vcardstrarray_remove(array, del)                 icalstrarray_remove(array, del)
 
-#define vcardstrarray_free(array) \
-    icalstrarray_free(array)
+#define vcardstrarray_free(array)                        icalstrarray_free(array)
 
-#define vcardstrarray_sort(array) \
-    icalstrarray_sort(array)
+#define vcardstrarray_sort(array)                        icalstrarray_sort(array)
 
-#define vcardstrarray_clone(array) \
-    icalstrarray_clone(array)
+#define vcardstrarray_clone(array)                       icalstrarray_clone(array)
 
 /**
  * @since 4.0
  */
-LIBICAL_VCARD_EXPORT char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array,
-                                                           const char sep);
+LIBICAL_VCARD_EXPORT char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array, const char sep);
 #endif /* VCARDSTRARRAY_H */

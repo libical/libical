@@ -22,7 +22,7 @@
 #endif
 #define LIBICAL_VCARD_NO_EXPORT
 #else
-#define LIBICAL_VCARD_EXPORT __attribute__((visibility("default")))
+#define LIBICAL_VCARD_EXPORT    __attribute__((visibility("default")))
 #define LIBICAL_VCARD_NO_EXPORT __attribute__((visibility("hidden")))
 #endif
 #endif

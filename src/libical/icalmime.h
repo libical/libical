@@ -12,9 +12,6 @@
 #include "libical_ical_export.h"
 #include "icalcomponent.h"
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalmime_parse(char *(*line_gen_func)(char *s,
-                                                                         size_t size,
-                                                                         void *d),
-                                                  void *data);
+LIBICAL_ICAL_EXPORT icalcomponent *icalmime_parse(char *(*line_gen_func)(char *s, size_t size, void *d), void *data);
 
 #endif /* !ICALMIME_H */

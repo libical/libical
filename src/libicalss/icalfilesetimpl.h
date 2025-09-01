@@ -14,7 +14,8 @@
 
 #include "icalfileset.h"
 
-struct icalfileset_impl {
+struct icalfileset_impl
+{
     icalset super;               /**< parent class */
     char *path;                  /**< pathname of file */
     icalfileset_options options; /**< copy of options passed to icalset_new() */

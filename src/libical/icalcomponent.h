@@ -23,12 +23,14 @@ typedef struct icalcomponent_impl icalcomponent;
 
 /* This is exposed so that callers will not have to allocate and
    deallocate iterators. Pretend that you can't see it. */
-typedef struct icalcompiter {
+typedef struct icalcompiter
+{
     icalcomponent_kind kind;
     pvl_elem iter;
 } icalcompiter;
 
-typedef struct icalpropiter {
+typedef struct icalpropiter
+{
     icalproperty_kind kind;
     pvl_elem iter;
 } icalpropiter;
@@ -85,21 +87,17 @@ LIBICAL_ICAL_EXPORT char *icalcomponent_get_component_name_r(const icalcomponent
 
 /***** Working with Properties *****/
 
-LIBICAL_ICAL_EXPORT void icalcomponent_add_property(icalcomponent *component,
-                                                    icalproperty *property);
+LIBICAL_ICAL_EXPORT void icalcomponent_add_property(icalcomponent *component, icalproperty *property);
 
-LIBICAL_ICAL_EXPORT void icalcomponent_remove_property(icalcomponent *component,
-                                                       icalproperty *property);
+LIBICAL_ICAL_EXPORT void icalcomponent_remove_property(icalcomponent *component, icalproperty *property);
 
-LIBICAL_ICAL_EXPORT int icalcomponent_count_properties(icalcomponent *component,
-                                                       icalproperty_kind kind);
+LIBICAL_ICAL_EXPORT int icalcomponent_count_properties(icalcomponent *component, icalproperty_kind kind);
 
 /**
  * @brief Sets the parent icalcomponent for the specified icalproperty @p property.
  * @since 3.0
  */
-LIBICAL_ICAL_EXPORT void icalproperty_set_parent(icalproperty *property,
-                                                 icalcomponent *component);
+LIBICAL_ICAL_EXPORT void icalproperty_set_parent(icalproperty *property, icalcomponent *component);
 
 /**
  * @brief Returns the parent icalcomponent for the specified @p property.
@@ -109,10 +107,8 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalproperty_get_parent(const icalproperty *p
 /* Iterate through the properties */
 LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_current_property(icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_first_property(icalcomponent *component,
-                                                                   icalproperty_kind kind);
-LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_next_property(icalcomponent *component,
-                                                                  icalproperty_kind kind);
+LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_first_property(icalcomponent *component, icalproperty_kind kind);
+LIBICAL_ICAL_EXPORT icalproperty *icalcomponent_get_next_property(icalcomponent *component, icalproperty_kind kind);
 
 /***** Working with Components *****/
 
@@ -122,19 +118,16 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_inner(icalcomponent *comp);
 
 LIBICAL_ICAL_EXPORT void icalcomponent_add_component(icalcomponent *parent, icalcomponent *child);
 
-LIBICAL_ICAL_EXPORT void icalcomponent_remove_component(icalcomponent *parent,
-                                                        icalcomponent *child);
+LIBICAL_ICAL_EXPORT void icalcomponent_remove_component(icalcomponent *parent, icalcomponent *child);
 
-LIBICAL_ICAL_EXPORT int icalcomponent_count_components(icalcomponent *component,
-                                                       icalcomponent_kind kind);
+LIBICAL_ICAL_EXPORT int icalcomponent_count_components(icalcomponent *component, icalcomponent_kind kind);
 
 /**
  *  This takes 2 VCALENDAR components and merges the second one into the first,
  *  resolving any problems with conflicting TZIDs. comp_to_merge will no
  *  longer exist after calling this function.
  */
-LIBICAL_ICAL_EXPORT void icalcomponent_merge_component(icalcomponent *comp,
-                                                       icalcomponent *comp_to_merge);
+LIBICAL_ICAL_EXPORT void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_merge);
 
 /* Iteration Routines. There are two forms of iterators, internal and
 external. The internal ones came first, and are almost completely
@@ -144,17 +137,13 @@ removes components from the container.*/
 /* Iterate through components */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_current_component(icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_first_component(icalcomponent *component,
-                                                                     icalcomponent_kind kind);
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_next_component(icalcomponent *component,
-                                                                    icalcomponent_kind kind);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_first_component(icalcomponent *component, icalcomponent_kind kind);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_next_component(icalcomponent *component, icalcomponent_kind kind);
 
 /* Using external iterators */
-LIBICAL_ICAL_EXPORT icalcompiter icalcomponent_begin_component(icalcomponent *component,
-                                                               icalcomponent_kind kind);
+LIBICAL_ICAL_EXPORT icalcompiter icalcomponent_begin_component(icalcomponent *component, icalcomponent_kind kind);
 
-LIBICAL_ICAL_EXPORT icalcompiter icalcomponent_end_component(icalcomponent *component,
-                                                             icalcomponent_kind kind);
+LIBICAL_ICAL_EXPORT icalcompiter icalcomponent_end_component(icalcomponent *component, icalcomponent_kind kind);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_next(icalcompiter *i);
 
@@ -162,8 +151,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_prior(icalcompiter *i);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter *i);
 
-LIBICAL_ICAL_EXPORT icalpropiter icalcomponent_begin_property(icalcomponent *component,
-                                                              icalproperty_kind kind);
+LIBICAL_ICAL_EXPORT icalpropiter icalcomponent_begin_property(icalcomponent *component, icalproperty_kind kind);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalpropiter_next(icalpropiter *i);
 
@@ -191,8 +179,7 @@ LIBICAL_ICAL_EXPORT void icalcomponent_convert_errors(icalcomponent *component);
 /* Internal operations. They are private, and you should not be using them. */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_parent(const icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT void icalcomponent_set_parent(icalcomponent *component,
-                                                  icalcomponent *parent);
+LIBICAL_ICAL_EXPORT void icalcomponent_set_parent(icalcomponent *component, icalcomponent *parent);
 
 /* Kind conversion routines */
 
@@ -341,8 +328,7 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_due(icalcomponent *comp, struct icalt
  *      If neither exists, the routine will create the appropriate
  *      property.
  */
-LIBICAL_ICAL_EXPORT void icalcomponent_set_duration(icalcomponent *comp,
-                                                    struct icaldurationtype v);
+LIBICAL_ICAL_EXPORT void icalcomponent_set_duration(icalcomponent *comp, struct icaldurationtype v);
 
 /**     @brief Gets the DURATION property as an icalduration
  *
@@ -386,8 +372,7 @@ LIBICAL_ICAL_EXPORT void icalcomponent_set_relcalid(icalcomponent *comp, const c
 
 LIBICAL_ICAL_EXPORT const char *icalcomponent_get_relcalid(icalcomponent *comp);
 
-LIBICAL_ICAL_EXPORT void icalcomponent_set_recurrenceid(icalcomponent *comp,
-                                                        struct icaltimetype v);
+LIBICAL_ICAL_EXPORT void icalcomponent_set_recurrenceid(icalcomponent *comp, struct icaltimetype v);
 
 LIBICAL_ICAL_EXPORT struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent *comp);
 
@@ -411,15 +396,13 @@ LIBICAL_ICAL_EXPORT enum icalproperty_status icalcomponent_get_status(icalcompon
  *  component, and any subcomponents.
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_foreach_tzid(icalcomponent *comp,
-                                                    void (*callback)(icalparameter *param,
-                                                                     void *data),
+                                                    void (*callback)(icalparameter *param, void *data),
                                                     void *callback_data);
 
 /** @brief Returns the icaltimezone in the component corresponding to the
  *  TZID, or NULL if it can't be found.
  */
-LIBICAL_ICAL_EXPORT icaltimezone *icalcomponent_get_timezone(icalcomponent *comp,
-                                                             const char *tzid);
+LIBICAL_ICAL_EXPORT icaltimezone *icalcomponent_get_timezone(icalcomponent *comp, const char *tzid);
 
 /**
  * @brief Decides if a recurrence is acceptable.
@@ -443,8 +426,7 @@ LIBICAL_ICAL_EXPORT icaltimezone *icalcomponent_get_timezone(icalcomponent *comp
  * In this case though you don't need to worry how you call this
  * function.  It will always return the correct result.
  */
-LIBICAL_ICAL_EXPORT bool icalproperty_recurrence_is_excluded(icalcomponent *comp,
-                                                             struct icaltimetype *dtstart,
+LIBICAL_ICAL_EXPORT bool icalproperty_recurrence_is_excluded(icalcomponent *comp, struct icaltimetype *dtstart,
                                                              struct icaltimetype *recurtime);
 
 /**
@@ -465,13 +447,9 @@ LIBICAL_ICAL_EXPORT bool icalproperty_recurrence_is_excluded(icalcomponent *comp
  * TODO: We do not filter out duplicate RRULES/RDATES
  * TODO: We do not differentiate between nominal and exact durations.
  */
-LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
-                                                          struct icaltimetype start,
-                                                          struct icaltimetype end,
-                                                          void (*callback)(const icalcomponent *comp,
-                                                                           const struct icaltime_span *span,
-                                                                           void *data),
-                                                          void *callback_data);
+LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(
+    icalcomponent *comp, struct icaltimetype start, struct icaltimetype end,
+    void (*callback)(const icalcomponent *comp, const struct icaltime_span *span, void *data), void *callback_data);
 
 /**
  * @brief Normalizes (reorders and sorts the properties) the specified icalcomponent @p comp.
@@ -489,9 +467,8 @@ LIBICAL_ICAL_EXPORT void icalcomponent_normalize(icalcomponent *comp);
  *
  * @since 3.0.5
  */
-LIBICAL_ICAL_EXPORT struct icaltimetype icalproperty_get_datetime_with_component(
-    icalproperty *prop,
-    icalcomponent *comp);
+LIBICAL_ICAL_EXPORT struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop,
+                                                                                 icalcomponent *comp);
 /*************** Type Specific routines ***************/
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vcalendar(void);
