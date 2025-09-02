@@ -44,14 +44,13 @@ static ICAL_GLOBAL_VAR int pvl_elem_count = 0;
 static ICAL_GLOBAL_VAR int pvl_list_count = 0;
 
 /**
-  struct pvl_list_t
-
-  The list structure. This is the handle for the entire list
-
-  This type is also private. Use pvl_list instead
-
-  */
-
+ *  struct pvl_list_t
+ *
+ * The list structure. This is the handle for the entire list
+ *
+ * This type is private. Always use pvl_list instead.
+ *
+ */
 typedef struct pvl_list_t {
     int MAGIC;               /**< Magic Identifier */
     struct pvl_elem_t *head; /**< Head of list */
@@ -59,6 +58,20 @@ typedef struct pvl_list_t {
     int count;               /**< Number of items in the list */
     struct pvl_elem_t *p;    /**< Pointer used for iterators */
 } pvl_list_t;
+
+/**
+ * struct pvl_elem_t
+ *
+ * The element structure.
+ *
+ * This type is private. Always use pvl_elem instead.
+ */
+typedef struct pvl_elem_t {
+    int MAGIC;                /**< Magic Identifier */
+    void *d;                  /**< Pointer to data user is storing */
+    struct pvl_elem_t *next;  /**< Next element */
+    struct pvl_elem_t *prior; /**< Prior element */
+} pvl_elem_t;
 
 /**
  * @brief Creates a new list, clears the pointers and assigns a magic number
@@ -501,7 +514,6 @@ pvl_elem pvl_tail(pvl_list L)
     return (pvl_elem)L->tail;
 }
 
-#if !defined(PVL_USE_MACROS)
 void *pvl_data(pvl_elem E)
 {
     if (E == 0) {
@@ -510,8 +522,6 @@ void *pvl_data(pvl_elem E)
 
     return E->d;
 }
-
-#endif
 
 /**
  * @brief Call a function for every item in the list.
