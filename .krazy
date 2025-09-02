@@ -18,8 +18,6 @@ SKIP /src/libicalvcal/vcc\.
 SKIP /src/libicalvcal/vobject\.
 
 #Skip contributed files
-SKIP /src/libical/astime\.h
-SKIP /src/libical/caldate\.c
 SKIP /cmake/Kitware/
 SKIP /cmake/modules/GObjectIntrospectionMacros\.cmake|/cmake/modules/FindGObjectIntrospection\.cmake
 SKIP /cmake/modules/openssf-c.cmake

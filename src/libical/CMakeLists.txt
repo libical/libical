@@ -257,8 +257,8 @@ set(
   qsort_gen.h
   icallangbind.h
   icallangbind.c
-  caldate.c
-  astime.h
+  icaldate_p.c
+  icaldate_p.h
   byref.c
 )
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
@@ -468,6 +468,7 @@ install(
     icalattach.h
     icalcomponent.h
     ${BUILT_HEADERS}
+    icaldate_p.h
     icalduration.h
     icalenumarray.h
     icalenums.h

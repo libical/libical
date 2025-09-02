@@ -18,9 +18,9 @@
 #endif
 
 #include "regression.h"
-#include "libical/astime.h"
 #include "test-malloc.h"
 #include "libical/ical.h"
+#include "libical/icaldate_p.h"
 #include "libicalss/icalss.h"
 #include "libicalvcal/icalvcal.h"
 #include "libicalvcal/vobject.h"
@@ -2945,8 +2945,8 @@ static int test_juldat_caldat_instance(long year, int month, int day)
     originalInstant.month = month;
     originalInstant.day = day;
 
-    juldat_int(&originalInstant);
-    caldat_int(&originalInstant);
+    ical_juldat(&originalInstant);
+    ical_caldat(&originalInstant);
 
     if (icaltime_day_of_week(t) != originalInstant.weekday + 1)
         return -1;
@@ -2961,8 +2961,8 @@ static int test_juldat_caldat_instance(long year, int month, int day)
 }
 
 /*
- * This test verifies the caldat_int and juldat_int functions. The functions are reworked versions
- * of the original caldat and juldat functions but avoid using floating point arithmetic. As the
+ * This test verifies the ical_caldat and ical_juldat functions. The functions are reworked versions
+ * of the original ical_caldat and ical_juldat functions but avoid using floating point arithmetic. As the
  * new functions are not exported, the test cannot access them directly. It therefore checks the
  * output of the icaltime_day_of_week, icaltime_start_doy_week and icaltime_week_number functions
  * which are based on the functions to be tested.
@@ -2972,14 +2972,14 @@ void test_juldat_caldat(void)
     int i;
     int failed = 0;
 
-    ok("juldat and caldat return the expected values for specified min input values", test_juldat_caldat_instance(-4713, 1, 1) == 0);
-    ok("juldat and caldat return the expected values for specified max input values", test_juldat_caldat_instance(+32767, 12, 31) == 0);
+    ok("ical_juldat and ical_caldat return the expected values for specified min input values", test_juldat_caldat_instance(-4713, 1, 1) == 0);
+    ok("ical_juldat and ical_caldat return the expected values for specified max input values", test_juldat_caldat_instance(+32767, 12, 31) == 0);
 
-    ok("juldat and caldat return the expected values before end of julian calendar", test_juldat_caldat_instance(1582, 10, 4) == 0);
-    ok("juldat and caldat return the expected values at end of julian calendar", test_juldat_caldat_instance(1582, 10, 5) == 0);
-    ok("juldat and caldat return the expected values before introduction of gregorian calendar", test_juldat_caldat_instance(1582, 10, 14) == 0);
-    ok("juldat and caldat return the expected values at introduction of gregorian calendar", test_juldat_caldat_instance(1582, 10, 15) == 0);
-    ok("juldat and caldat return the expected values after introduction of gregorian calendar", test_juldat_caldat_instance(1582, 10, 16) == 0);
+    ok("ical_juldat and ical_caldat return the expected values before end of julian calendar", test_juldat_caldat_instance(1582, 10, 4) == 0);
+    ok("ical_juldat and ical_caldat return the expected values at end of julian calendar", test_juldat_caldat_instance(1582, 10, 5) == 0);
+    ok("ical_juldat and ical_caldat return the expected values before introduction of gregorian calendar", test_juldat_caldat_instance(1582, 10, 14) == 0);
+    ok("ical_juldat and ical_caldat return the expected values at introduction of gregorian calendar", test_juldat_caldat_instance(1582, 10, 15) == 0);
+    ok("ical_juldat and ical_caldat return the expected values after introduction of gregorian calendar", test_juldat_caldat_instance(1582, 10, 16) == 0);
 
     for (i = 0; i < 2582; i++) {
         long y = i;
@@ -2987,13 +2987,13 @@ void test_juldat_caldat(void)
         failed |= (test_juldat_caldat_instance(y, 1, 1) != 0);
         failed |= (test_juldat_caldat_instance(y, 2, 28) != 0);
 
-        // Not every year has a leap day, but juldat_int/caldat_int should still produce
+        // Not every year has a leap day, but ical_juldat/ical_caldat should still produce
         // the same output as the original implementation.
         failed |= (test_juldat_caldat_instance(y, 2, 29) != 0);
         failed |= (test_juldat_caldat_instance(y, 3, 1) != 0);
         failed |= (test_juldat_caldat_instance(y, 12, 31) != 0);
     }
-    ok("juldat and caldat return the expected values for random input values", failed == 0);
+    ok("ical_juldat and ical_caldat return the expected values for random input values", failed == 0);
 
     failed = 0;
     for (i = 0; i < 10000; i++) {
@@ -3001,14 +3001,14 @@ void test_juldat_caldat(void)
         long y = rand() % 2582;
         int m = rand() % 12 + 1;
 
-        // Might produce some invalid dates, but juldat_int/caldat_int should still produce
+        // Might produce some invalid dates, but ical_juldat/ical_caldat should still produce
         // the same output as the original implementation.
         int d = rand() % 31 + 1;
 
         failed |= (test_juldat_caldat_instance(y, m, d) != 0);
     }
 
-    ok("juldat and caldat return the expected values for random input values", failed == 0);
+    ok("ical_juldat and ical_caldat return the expected values for random input values", failed == 0);
 }
 
 char *ical_strstr(const char *haystack, const char *needle)
