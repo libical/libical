@@ -514,7 +514,7 @@ pvl_elem pvl_tail(pvl_list L)
     return (pvl_elem)L->tail;
 }
 
-void *pvl_data(pvl_elem E)
+inline void *pvl_data(pvl_elem E)
 {
     if (E == 0) {
         return 0;

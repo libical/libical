@@ -173,7 +173,7 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
  * ```
  */
 
-#ifdef __GNUC__ca
+#ifdef __GNUC__
 #define icalerror_warn(message)                                                        \
     {                                                                                  \
         icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \

@@ -201,7 +201,7 @@ AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignConsecutiveMacros:
-  Enabled: true
+  Enabled: false
   AcrossEmptyLines: true
   AcrossComments: false
 AlignEscapedNewlinesLeft: false
@@ -220,14 +220,14 @@ BinPackArguments: true
 BinPackParameters: true
 BraceWrapping:
   AfterClass:      true
-  AfterControlStatement: true
+  AfterControlStatement: false
   AfterCaseLabel:  true
   AfterEnum:       true
   AfterFunction:   true
   AfterNamespace:  true
   AfterObjCDeclaration: true
-  AfterStruct:     true
-  AfterUnion:      true
+  AfterStruct:     false
+  AfterUnion:      false
   BeforeCatch:     true
   BeforeElse:      true
   IndentBraces:    false
@@ -237,7 +237,7 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
 BreakAfterJavaFieldAnnotations: false
 BreakStringLiterals: true
-ColumnLimit: 120
+ColumnLimit: 0
 CommentPragmas: 'FORMAT-IGNORE'
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 4
