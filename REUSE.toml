@@ -47,6 +47,8 @@ SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
 
 ### 3rdparty
 
+# Hiram Clawson BSD-3-Clause (see src/libical/icaldate_p.[c,h])
+
 # doxygen awesome
 [[annotations]]
 path = "docs/doxygen-awesome.css"
