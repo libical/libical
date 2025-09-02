@@ -55,12 +55,12 @@ struct vcardproperty_enum_map
     const char *str;
 };
 
-#if defined(__clang_)
+#if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wvarargs"
 #endif
 <insert_code_here>
-#if defined(__clang_)
+#if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
 
