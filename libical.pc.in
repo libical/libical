@@ -9,7 +9,7 @@ includedir=@includedir@
 Name: libical
 Description: @CMAKE_PROJECT_DESCRIPTION@
 Version: @CMAKE_PROJECT_VERSION@
-Libs: -L${libdir} -lical -licalss -licalvcal
+Libs: -L${libdir} -lical -licalss -licalvcal -licalvcard
 Libs.private: @PTHREAD_LIBS@
 @REQUIRES_PRIVATE_ICU@
 Cflags: -I${includedir}
