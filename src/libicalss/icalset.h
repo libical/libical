@@ -39,7 +39,7 @@ typedef enum icalset_kind
 } icalset_kind;
 
 typedef struct icalsetiter {
-    icalcompiter iter; /* icalcomponent_kind, pvl_elem iter */
+    icalcompiter iter; /* icalcomponent_kind, icalpvl_elem iter */
     icalgauge *gauge;
     icalrecur_iterator *ritr;      /*the last iterator */
     icalcomponent *last_component; /*the pending recurring component to be processed  */

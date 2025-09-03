@@ -1,17 +1,24 @@
 /*======================================================================
- FILE: pvl.c
+ FILE: icalpvl_p.c
  CREATOR: eric November, 1995
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+ The original code is pvl.c
 ======================================================================*/
+
+/*************************************************************************
+ * WARNING: USE AT YOUR OWN RISK                                         *
+ * These are library internal-only functions.                            *
+ * Be warned that these functions can change at any time without notice. *
+ *************************************************************************/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include "pvl.h"
-
+#include "icalpvl_p.h"
 #include "icalmemory.h"
 
 #include <assert.h>
@@ -20,58 +27,58 @@
 /* To mute a ThreadSanitizer claim */
 #if (ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD) && defined(THREAD_SANITIZER)
 #include <pthread.h>
-static pthread_mutex_t pvl_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t icalpvl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-static void pvl_global_lock(void)
+static void icalpvl_global_lock(void)
 {
-    pthread_mutex_lock(&pvl_mutex);
+    pthread_mutex_lock(&icalpvl_mutex);
 }
 
-static void pvl_global_unlock(void)
+static void icalpvl_global_unlock(void)
 {
-    pthread_mutex_unlock(&pvl_mutex);
+    pthread_mutex_unlock(&icalpvl_mutex);
 }
 #else
-#define pvl_global_lock()
-#define pvl_global_unlock()
+#define icalpvl_global_lock()
+#define icalpvl_global_unlock()
 #endif
 
 /**
- * Globals incremented for each call to pvl_new_element(); each list gets a unique id.
+ * Globals incremented for each call to icalpvl_new_element(); each list gets a unique id.
  */
 
-static ICAL_GLOBAL_VAR int pvl_elem_count = 0;
-static ICAL_GLOBAL_VAR int pvl_list_count = 0;
+static ICAL_GLOBAL_VAR int icalpvl_elem_count = 0;
+static ICAL_GLOBAL_VAR int icalpvl_list_count = 0;
 
 /**
- *  struct pvl_list_t
+ *  struct icalpvl_list_t
  *
  * The list structure. This is the handle for the entire list
  *
- * This type is private. Always use pvl_list instead.
+ * This type is private. Always use icalpvl_list instead.
  *
  */
-typedef struct pvl_list_t {
-    int MAGIC;               /**< Magic Identifier */
-    struct pvl_elem_t *head; /**< Head of list */
-    struct pvl_elem_t *tail; /**< Tail of list */
-    int count;               /**< Number of items in the list */
-    struct pvl_elem_t *p;    /**< Pointer used for iterators */
-} pvl_list_t;
+typedef struct icalpvl_list_t {
+    int MAGIC;                   /**< Magic Identifier */
+    struct icalpvl_elem_t *head; /**< Head of list */
+    struct icalpvl_elem_t *tail; /**< Tail of list */
+    int count;                   /**< Number of items in the list */
+    struct icalpvl_elem_t *p;    /**< Pointer used for iterators */
+} icalpvl_list_t;
 
 /**
- * struct pvl_elem_t
+ * struct icalpvl_elem_t
  *
  * The element structure.
  *
- * This type is private. Always use pvl_elem instead.
+ * This type is private. Always use icalpvl_elem instead.
  */
-typedef struct pvl_elem_t {
-    int MAGIC;                /**< Magic Identifier */
-    void *d;                  /**< Pointer to data user is storing */
-    struct pvl_elem_t *next;  /**< Next element */
-    struct pvl_elem_t *prior; /**< Prior element */
-} pvl_elem_t;
+typedef struct icalpvl_elem_t {
+    int MAGIC;                    /**< Magic Identifier */
+    void *d;                      /**< Pointer to data user is storing */
+    struct icalpvl_elem_t *next;  /**< Next element */
+    struct icalpvl_elem_t *prior; /**< Prior element */
+} icalpvl_elem_t;
 
 /**
  * @brief Creates a new list, clears the pointers and assigns a magic number
@@ -79,18 +86,18 @@ typedef struct pvl_elem_t {
  * @return  Pointer to the new list, 0 if there is no available memory.
  */
 
-pvl_list pvl_newlist(void)
+icalpvl_list icalpvl_newlist(void)
 {
-    struct pvl_list_t *L;
+    struct icalpvl_list_t *L;
 
-    if ((L = (struct pvl_list_t *)icalmemory_new_buffer(sizeof(struct pvl_list_t))) == 0) {
+    if ((L = (struct icalpvl_list_t *)icalmemory_new_buffer(sizeof(struct icalpvl_list_t))) == 0) {
         errno = ENOMEM;
         return 0;
     }
 
-    pvl_global_lock();
-    L->MAGIC = pvl_list_count++;
-    pvl_global_unlock();
+    icalpvl_global_lock();
+    L->MAGIC = icalpvl_list_count++;
+    icalpvl_global_unlock();
     L->head = 0;
     L->tail = 0;
     L->count = 0;
@@ -99,11 +106,11 @@ pvl_list pvl_newlist(void)
     return L;
 }
 
-void pvl_free(pvl_list l)
+void icalpvl_free(icalpvl_list l)
 {
-    struct pvl_list_t *L = (struct pvl_list_t *)l;
+    struct icalpvl_list_t *L = (struct icalpvl_list_t *)l;
 
-    pvl_clear(l);
+    icalpvl_clear(l);
 
     icalmemory_free_buffer(L);
 }
@@ -114,7 +121,7 @@ void pvl_free(pvl_list l)
  *
  * Passing in the next and previous points may seem odd, but it allows the user
  * to set them while keeping the internal data hidden. In nearly all cases,
- * the user is the pvl library itself.
+ * the user is the icalpvl library itself.
  *
  * @param d     The data item to be stored in the list
  * @param next  Pointer value to assign to the member "next"
@@ -123,23 +130,23 @@ void pvl_free(pvl_list l)
  * @return A pointer to the new element, 0 if there is no memory available.
  */
 
-pvl_elem pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
+icalpvl_elem icalpvl_new_element(void *d, icalpvl_elem next, icalpvl_elem prior)
 {
-    struct pvl_elem_t *E;
+    struct icalpvl_elem_t *E;
 
-    if ((E = (struct pvl_elem_t *)icalmemory_new_buffer(sizeof(struct pvl_elem_t))) == 0) {
+    if ((E = (struct icalpvl_elem_t *)icalmemory_new_buffer(sizeof(struct icalpvl_elem_t))) == 0) {
         errno = ENOMEM;
         return 0;
     }
 
-    pvl_global_lock();
-    E->MAGIC = pvl_elem_count++;
-    pvl_global_unlock();
+    icalpvl_global_lock();
+    E->MAGIC = icalpvl_elem_count++;
+    icalpvl_global_unlock();
     E->d = d;
     E->next = next;
     E->prior = prior;
 
-    return (pvl_elem)E;
+    return (icalpvl_elem)E;
 }
 
 /**
@@ -149,9 +156,9 @@ pvl_elem pvl_new_element(void *d, pvl_elem next, pvl_elem prior)
  * @param d     Pointer to the item to add
  */
 
-void pvl_unshift(pvl_list L, void *d)
+void icalpvl_unshift(icalpvl_list L, void *d)
 {
-    struct pvl_elem_t *E = pvl_new_element(d, L->head, 0);
+    struct icalpvl_elem_t *E = icalpvl_new_element(d, L->head, 0);
 
     if (E->next != 0) {
         /* Link the head node to it */
@@ -178,13 +185,13 @@ void pvl_unshift(pvl_list L, void *d)
  * @return the entry on the front of the list
  */
 
-void *pvl_shift(pvl_list L)
+void *icalpvl_shift(icalpvl_list L)
 {
     if (L->head == 0) {
         return 0;
     }
 
-    return pvl_remove(L, (void *)L->head);
+    return icalpvl_remove(L, (void *)L->head);
 }
 
 /**
@@ -195,11 +202,11 @@ void *pvl_shift(pvl_list L)
  *
  */
 
-void pvl_push(pvl_list L, void *d)
+void icalpvl_push(icalpvl_list L, void *d)
 {
-    struct pvl_elem_t *E = pvl_new_element(d, 0, L->tail);
+    struct icalpvl_elem_t *E = icalpvl_new_element(d, 0, L->tail);
 
-    /* These are done in pvl_new_element
+    /* These are done in icalpvl_new_element
        E->next = 0;
        E->prior = L->tail;
      */
@@ -223,13 +230,13 @@ void pvl_push(pvl_list L, void *d)
  * @param L     The list to operate on
  */
 
-void *pvl_pop(pvl_list L)
+void *icalpvl_pop(icalpvl_list L)
 {
     if (L->tail == 0) {
         return 0;
     }
 
-    return pvl_remove(L, (void *)L->tail);
+    return icalpvl_remove(L, (void *)L->tail);
 }
 
 /**
@@ -241,29 +248,29 @@ void *pvl_pop(pvl_list L)
  * @param d     Pointer to data to pass to the comparison function
  */
 
-void pvl_insert_ordered(pvl_list L, pvl_comparef f, void *d)
+void icalpvl_insert_ordered(icalpvl_list L, icalpvl_comparef f, void *d)
 {
-    struct pvl_elem_t *P;
+    struct icalpvl_elem_t *P;
 
     L->count++;
 
     /* Empty list, add to head */
 
     if (L->head == 0) {
-        pvl_unshift(L, d);
+        icalpvl_unshift(L, d);
         return;
     }
 
     /* smaller than head, add to head */
 
     if (((*f)(d, L->head->d)) <= 0) {
-        pvl_unshift(L, d);
+        icalpvl_unshift(L, d);
         return;
     }
 
     /* larger than tail, add to tail */
     if ((*f)(d, L->tail->d) >= 0) {
-        pvl_push(L, d);
+        icalpvl_push(L, d);
         return;
     }
 
@@ -271,7 +278,7 @@ void pvl_insert_ordered(pvl_list L, pvl_comparef f, void *d)
 
     for (P = L->head; P != 0; P = P->next) {
         if ((*f)(P->d, d) >= 0) {
-            pvl_insert_before(L, P, d);
+            icalpvl_insert_before(L, P, d);
             return;
         }
     }
@@ -287,23 +294,23 @@ void pvl_insert_ordered(pvl_list L, pvl_comparef f, void *d)
  * @param d     Pointer to the item to add.
  */
 
-void pvl_insert_after(pvl_list L, pvl_elem P, void *d)
+void icalpvl_insert_after(icalpvl_list L, icalpvl_elem P, void *d)
 {
-    struct pvl_elem_t *E = 0;
+    struct icalpvl_elem_t *E = 0;
 
     L->count++;
 
     if (P == 0) {
-        pvl_unshift(L, d);
+        icalpvl_unshift(L, d);
         return;
     }
 
     if (P == L->tail) {
-        E = pvl_new_element(d, 0, P);
+        E = icalpvl_new_element(d, 0, P);
         L->tail = E;
         E->prior->next = E;
     } else {
-        E = pvl_new_element(d, P->next, P);
+        E = icalpvl_new_element(d, P->next, P);
         E->next->prior = E;
         E->prior->next = E;
     }
@@ -317,23 +324,23 @@ void pvl_insert_after(pvl_list L, pvl_elem P, void *d)
  * @param d     Pointer to the data to be added.
  */
 
-void pvl_insert_before(pvl_list L, pvl_elem P, void *d)
+void icalpvl_insert_before(icalpvl_list L, icalpvl_elem P, void *d)
 {
-    struct pvl_elem_t *E = 0;
+    struct icalpvl_elem_t *E = 0;
 
     L->count++;
 
     if (P == 0) {
-        pvl_unshift(L, d);
+        icalpvl_unshift(L, d);
         return;
     }
 
     if (P == L->head) {
-        E = pvl_new_element(d, P, 0);
+        E = icalpvl_new_element(d, P, 0);
         E->next->prior = E;
         L->head = E;
     } else {
-        E = pvl_new_element(d, P, P->prior);
+        E = icalpvl_new_element(d, P, P->prior);
         E->prior->next = E;
         E->next->prior = E;
     }
@@ -349,7 +356,7 @@ void pvl_insert_before(pvl_list L, pvl_elem P, void *d)
  * @param E     The element to remove.
  */
 
-void *pvl_remove(pvl_list L, pvl_elem E)
+void *icalpvl_remove(icalpvl_list L, icalpvl_elem E)
 {
     void *data;
 
@@ -404,14 +411,14 @@ void *pvl_remove(pvl_list L, pvl_elem E)
  * @return Pointer to the element that the find function found.
  */
 
-pvl_elem pvl_find(pvl_list l, pvl_findf f, void *v)
+icalpvl_elem icalpvl_find(icalpvl_list l, icalpvl_findf f, void *v)
 {
-    pvl_elem e;
+    icalpvl_elem e;
 
-    for (e = pvl_head(l); e != 0; e = pvl_next(e)) {
-        if ((*f)(((struct pvl_elem_t *)e)->d, v) == 1) {
+    for (e = icalpvl_head(l); e != 0; e = icalpvl_next(e)) {
+        if ((*f)(((struct icalpvl_elem_t *)e)->d, v) == 1) {
             /* Save this elem for a call to find_next */
-            ((struct pvl_list_t *)l)->p = e;
+            ((struct icalpvl_list_t *)l)->p = e;
             return e;
         }
     }
@@ -420,7 +427,7 @@ pvl_elem pvl_find(pvl_list l, pvl_findf f, void *v)
 }
 
 /**
- * @brief Like pvl_find(), but continues the search where the last find() or
+ * @brief Like icalpvl_find(), but continues the search where the last find() or
  * find_next() left off.
  *
  * @param l     The list to operate on
@@ -430,14 +437,14 @@ pvl_elem pvl_find(pvl_list l, pvl_findf f, void *v)
  * @return Pointer to the element that the find function found.
  */
 
-pvl_elem pvl_find_next(pvl_list l, pvl_findf f, void *v)
+icalpvl_elem pvl_find_next(icalpvl_list l, icalpvl_findf f, void *v)
 {
-    pvl_elem e;
+    icalpvl_elem e;
 
-    for (e = pvl_head(l); e != 0; e = pvl_next(e)) {
-        if ((*f)(((struct pvl_elem_t *)e)->d, v) == 1) {
+    for (e = icalpvl_head(l); e != 0; e = icalpvl_next(e)) {
+        if ((*f)(((struct icalpvl_elem_t *)e)->d, v) == 1) {
             /* Save this elem for a call to find_next */
-            ((struct pvl_list_t *)l)->p = e;
+            ((struct icalpvl_list_t *)l)->p = e;
             return e;
         }
     }
@@ -450,18 +457,18 @@ pvl_elem pvl_find_next(pvl_list l, pvl_findf f, void *v)
  * the data items the elements hold.
  */
 
-void pvl_clear(pvl_list l)
+void icalpvl_clear(icalpvl_list l)
 {
-    pvl_elem e = pvl_head(l);
-    pvl_elem next;
+    icalpvl_elem e = icalpvl_head(l);
+    icalpvl_elem next;
 
     if (e == 0) {
         return;
     }
 
     while (e != 0) {
-        next = pvl_next(e);
-        (void)pvl_remove(l, e);
+        next = icalpvl_next(e);
+        (void)icalpvl_remove(l, e);
         e = next;
     }
 }
@@ -470,7 +477,7 @@ void pvl_clear(pvl_list l)
  * @brief Returns the number of items in the list.
  */
 
-int pvl_count(pvl_list L)
+int icalpvl_count(icalpvl_list L)
 {
     return L->count;
 }
@@ -479,42 +486,42 @@ int pvl_count(pvl_list L)
  * @brief Returns a pointer to the given element
  */
 
-pvl_elem pvl_next(pvl_elem E)
+icalpvl_elem icalpvl_next(icalpvl_elem E)
 {
     if (E == 0) {
         return 0;
     }
 
-    return (pvl_elem)E->next;
+    return (icalpvl_elem)E->next;
 }
 
 /**
  * @brief Returns a pointer to the element previous to the element given.
  */
 
-pvl_elem pvl_prior(pvl_elem E)
+icalpvl_elem icalpvl_prior(icalpvl_elem E)
 {
-    return (pvl_elem)E->prior;
+    return (icalpvl_elem)E->prior;
 }
 
 /**
  * @brief Returns a pointer to the first item in the list.
  */
 
-pvl_elem pvl_head(pvl_list L)
+icalpvl_elem icalpvl_head(icalpvl_list L)
 {
-    return (pvl_elem)L->head;
+    return (icalpvl_elem)L->head;
 }
 
 /**
  * @brief Returns a pointer to the last item in the list.
  */
-pvl_elem pvl_tail(pvl_list L)
+icalpvl_elem icalpvl_tail(icalpvl_list L)
 {
-    return (pvl_elem)L->tail;
+    return (icalpvl_elem)L->tail;
 }
 
-inline void *pvl_data(pvl_elem E)
+inline void *icalpvl_data(icalpvl_elem E)
 {
     if (E == 0) {
         return 0;
@@ -531,11 +538,11 @@ inline void *pvl_data(pvl_elem E)
  * @param v     Data to pass to the function on every iteration
  */
 
-void pvl_apply(pvl_list l, pvl_applyf f, void *v)
+void icalpvl_apply(icalpvl_list l, icalpvl_applyf f, void *v)
 {
-    pvl_elem e;
+    icalpvl_elem e;
 
-    for (e = pvl_head(l); e != 0; e = pvl_next(e)) {
-        (*f)(((struct pvl_elem_t *)e)->d, v);
+    for (e = icalpvl_head(l); e != 0; e = icalpvl_next(e)) {
+        (*f)(((struct icalpvl_elem_t *)e)->d, v);
     }
 }
