@@ -111,8 +111,7 @@ int icalerror_get_errors_are_fatal(void)
     return icalerror_errors_are_fatal;
 }
 
-#if defined(ICAL_SETERROR_ISFUNC)
-void icalerror_set_errno(icalerrorenum x)
+inline void icalerror_set_errno(icalerrorenum x)
 {
     icalerrno = x;
     if (icalerror_get_error_state(x) == ICAL_ERROR_FATAL ||
@@ -122,8 +121,6 @@ void icalerror_set_errno(icalerrorenum x)
         icalassert(0);
     }
 }
-
-#endif
 
 struct icalerror_state {
     icalerrorenum error;

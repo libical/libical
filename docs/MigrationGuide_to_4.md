@@ -27,6 +27,11 @@ you can handle code that no longer exists in 4.0 with:
 The `PVL_USE_MACROS` conditional compile macro is removed.
 The pvl unit always compiles the inline `pvl_data` function.
 
+## ICAL_SETERROR_ISFUNC
+
+The `ICAL_SETERROR_ISFUNC` conditional compile macro is removed.
+The icalerror unit always compiles the inline `icalerror_set_errno` function.
+
 ## C library
 
 ### Modified functions
