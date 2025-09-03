@@ -14,19 +14,6 @@
 typedef struct pvl_list_t *pvl_list;
 typedef struct pvl_elem_t *pvl_elem;
 
-/**
- * This type is private. Always use pvl_elem instead. The struct would
- * not even appear in this header except to make code in the USE_MACROS
- * blocks work
- */
-
-typedef struct pvl_elem_t {
-    int MAGIC;                /**< Magic Identifier */
-    void *d;                  /**< Pointer to data user is storing */
-    struct pvl_elem_t *next;  /**< Next element */
-    struct pvl_elem_t *prior; /**< Prior element */
-} pvl_elem_t;
-
 /* Create new lists or elements */
 LIBICAL_ICAL_EXPORT pvl_elem pvl_new_element(void *d, pvl_elem next, pvl_elem prior);
 
@@ -70,11 +57,7 @@ LIBICAL_ICAL_EXPORT pvl_elem pvl_next(pvl_elem e);
 LIBICAL_ICAL_EXPORT pvl_elem pvl_prior(pvl_elem e);
 
 /* get the data in the list */
-#if !defined(PVL_USE_MACROS)
 LIBICAL_ICAL_EXPORT void *pvl_data(pvl_elem);
-#else
-#define pvl_data(x) x == 0 ? 0 : ((struct pvl_elem_t *)x)->d;
-#endif
 
 /* Find an element for which a function returns true */
 typedef int (*pvl_findf)(void *a, void *b); /*a is list elem, b is other data */

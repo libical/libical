@@ -22,6 +22,11 @@ you can handle code that no longer exists in 4.0 with:
      #endif
 ```
 
+## PVL_USE_MACROS
+
+The `PVL_USE_MACROS` conditional compile macro is removed.
+The pvl unit always compiles the inline `pvl_data` function.
+
 ## C library
 
 ### Modified functions

@@ -456,7 +456,6 @@ CPPCHECK() {
     -D _fallthrough="" \
     -D MIN="" \
     -D sleep="" \
-    -U PVL_USE_MACROS \
     -I "$TOP/src/libical" \
     -I "$TOP/src/libicalss" \
     -I "$TOP/src/libicalvcal" \
