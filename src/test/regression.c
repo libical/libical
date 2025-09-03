@@ -759,6 +759,27 @@ void test_component_foreach(void)
 
     icalcomponent_free(calendar);
 
+    calStr =
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART;20180220\n"
+        "DURATION:P1D\n"
+        "RDATE;VALUE=DATE:20180221,20180222\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
+    calendar = icalparser_parse_string(calStr);
+    event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+    t_start = icaltime_from_string("20180219T000000Z");
+    t_end = icaltime_from_string("20180226T000000Z");
+
+    foundExpectedCnt = 0;
+    icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &foundExpectedCnt);
+    ok("Exactly three instances were returned for an event with RDATEs.", foundExpectedCnt == 3);
+
+    icalcomponent_free(calendar);
+
     for (i = 0; i < 3; i++) {
         /* Add one week with every run, so the first run will address the
         first recurrence instance, the second run the second instance,
@@ -5543,7 +5564,7 @@ static void test_implicit_dtend_duration(void)
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    str_is("PT86400S", "PT86400S", icaldurationtype_as_ical_string(d));
+    str_is("P1D", "P1D", icaldurationtype_as_ical_string(d));
 
     if (VERBOSE) {
         printf("%i\n", icaltime_is_null_time(end));
