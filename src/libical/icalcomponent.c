@@ -995,10 +995,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         struct icaltimetype rdate_start = rdate_period.time;
         struct icaldurationtype rdate_duration = icaldurationtype_null_duration();
 
-        /* RDATES can specify raw datetimes, periods, or dates.
-            we only support raw datetimes and periods for now.
-
-            @todo Add support for other types */
+        /* RDATES can specify raw datetimes, periods, or dates. */
 
         if (icaltime_is_null_time(rdate_start)) {
             rdate_start = rdate_period.period.start;
@@ -1608,11 +1605,8 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
 
     } else if (end_prop != 0 && dur_prop == 0) {
         /* Get exact duration */
-        icaltimezone *utc = icaltimezone_get_utc_timezone();
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         struct icaltimetype end = icalproperty_get_datetime_with_component(end_prop, comp);
-        start = icaltime_convert_to_zone(start, utc);
-        end = icaltime_convert_to_zone(end, utc);
 
         ret = icaltime_subtract(end, start);
     } else if (end_prop == 0 && dur_prop == 0) {

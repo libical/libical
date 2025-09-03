@@ -282,6 +282,14 @@ bool icaldurationtype_is_bad_duration(struct icaldurationtype d)
 struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype d)
 {
     struct icaltimetype t_days;
+    if (t.is_date &&
+        (d.seconds != 0 ||
+         d.minutes != 0 ||
+         d.hours != 0)) {
+        /* We can't add time durations to dates */
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return icaltime_null_time();
+    }
 
     /* Days are nominal (not exact) and position-dependent */
     if (!d.is_neg) {
@@ -321,8 +329,21 @@ struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype 
 
 struct icaldurationtype icaltime_subtract(struct icaltimetype t1, struct icaltimetype t2)
 {
-    icaltime_t t1t = icaltime_as_timet(t1);
-    icaltime_t t2t = icaltime_as_timet(t2);
+    if ((!t1.is_date && t2.is_date) ||
+        (t1.is_date && !t2.is_date))
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
 
-    return icaldurationtype_from_int((int)(t1t - t2t));
+    struct icaldurationtype ret;
+    if (t1.is_date) {
+        icaltime_t t1t = icaltime_as_timet(t1);
+        icaltime_t t2t = icaltime_as_timet(t2);
+        ret = icaldurationtype_null_duration();
+        ret.days = ((unsigned int)(t1t - t2t)) / (60 * 60 * 24);
+    } else {
+        icaltime_t t1t = icaltime_as_timet_with_zone(t1, t1.zone);
+        icaltime_t t2t = icaltime_as_timet_with_zone(t2, t2.zone);
+
+        ret = icaldurationtype_from_int((int)(t1t - t2t));
+    }
+    return ret;
 }
