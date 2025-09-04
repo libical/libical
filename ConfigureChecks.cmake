@@ -267,7 +267,7 @@ check_type_size(
   SIZEOF_WINT_T
 )
 
-include(FindThreads)
+find_package(Threads)
 check_library_exists(
   pthread
   pthread_attr_get_np
