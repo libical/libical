@@ -94,6 +94,7 @@ The following functions have been added:
 * `ical_get_invalid_rrule_handling_setting()`
 * `icalparser_get_ctrl()`
 * `icalparser_set_ctrl()`
+* `icaltimezone_tzid_prefix()`
 * and the new functions for the `icalstrarray` and `icalenumarray` data types
 
 ### Removed functions
@@ -254,6 +255,18 @@ For example, to access the first delegated-to attendee use
 param = icalproperty_get_first_parameter(prop, ICAL_DELEGATEDTO_PARAMETER);
 icalparameter_get_delegatedto_nth(param, 0)
 ```
+
+### Setting the tzid
+
+The `icaltimezone_set_tzid_prefix` function now allows setting an empty prefix.
+In older libical versions, calling `icaltimezone_set_tzid_prefix` with an empty tzid prefix
+would reset to the BUILTIN_TZID_PREFIX value (i.e. ""/freeassociation.sourceforge.net/").
+
+The new publicly visible function `icaltimezone_tzid_prefix` returns the current tzid prefix string.
+
+Note that the tzid prefix must be globally unique (such as a domain name owned by the developer
+of the calling application), and begin and end with forward slashes. The tzid string must be
+fewer than 256 characters long.
 
 ## C++ library
 
