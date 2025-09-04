@@ -121,7 +121,7 @@ static icalset icalset_bdbset_init = {
 
 #if defined(_DLOPEN_TEST)
 static int icalset_init_done = 0;
-static pvl_list icalset_kinds = 0;
+static icalpvl_list icalset_kinds = 0;
 
 typedef icalset *(*fptr)(void);
 
@@ -150,7 +150,7 @@ static bool load(const char *file)
     }
 
     while ((icalset_init_ptr = ((inith)())) != 0) {
-        pvl_push(icalset_kinds, &icalset_init_ptr);
+        icalpvl_push(icalset_kinds, &icalset_init_ptr);
     }
 
     (void)dlerror(); /* clear */
@@ -200,12 +200,12 @@ bool icalset_loaddir(const char *path)
 static void icalset_init(void)
 {
     assert(icalset_kinds == 0);
-    icalset_kinds = pvl_newlist();
+    icalset_kinds = icalpvl_newlist();
 
-    pvl_push(icalset_kinds, &icalset_fileset_init);
-    pvl_push(icalset_kinds, &icalset_dirset_init);
+    icalpvl_push(icalset_kinds, &icalset_fileset_init);
+    icalpvl_push(icalset_kinds, &icalset_dirset_init);
 #if defined(HAVE_BDB)
-    pvl_push(icalset_kinds, &icalset_bdb4set_init);
+    icalpvl_push(icalset_kinds, &icalset_bdb4set_init);
 #endif
 
     icalset_init_done++;
@@ -217,7 +217,7 @@ bool icalset_register_class(icalset *set)
         icalset_init();
     }
 
-    pvl_push(icalset_kinds, set);
+    icalpvl_push(icalset_kinds, set);
     return true;
 }
 
@@ -229,15 +229,15 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
     icalset *ret = NULL;
 
 #if defined(_DLOPEN_TEST)
-    pvl_elem e;
+    icalpvl_elem e;
     icalset *impl;
 
     if (!icalset_init_done) {
         icalset_init();
     }
 
-    for (e = pvl_head(icalset_kinds); e != 0; e = pvl_next(e)) {
-        impl = (icalset *)pvl_data(e);
+    for (e = icalpvl_head(icalset_kinds); e != 0; e = icalpvl_next(e)) {
+        impl = (icalset *)icalpvl_data(e);
         if (impl->kind == kind) {
             break;
         }

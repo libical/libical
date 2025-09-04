@@ -17,7 +17,7 @@
 #include "icalparser.h"
 #include "icaltimezone.h"
 #include "icalvalue.h"
-#include "pvl.h"
+#include "icalpvl_p.h"
 
 #include <stdlib.h>
 
@@ -25,8 +25,8 @@ struct icalproperty_impl {
     char id[5];
     icalproperty_kind kind;
     char *x_name;
-    pvl_list parameters;
-    pvl_elem parameter_iterator;
+    icalpvl_list parameters;
+    icalpvl_elem parameter_iterator;
     icalvalue *value;
     icalcomponent *parent;
 };
@@ -62,7 +62,7 @@ icalproperty *icalproperty_new_impl(icalproperty_kind kind)
     strcpy(prop->id, "prop");
 
     prop->kind = kind;
-    prop->parameters = pvl_newlist();
+    prop->parameters = icalpvl_newlist();
 
     return prop;
 }
@@ -79,7 +79,7 @@ icalproperty *icalproperty_new(icalproperty_kind kind)
 icalproperty *icalproperty_clone(const icalproperty *old)
 {
     icalproperty *clone;
-    pvl_elem p;
+    icalpvl_elem p;
 
     icalerror_check_arg_rz((old != 0), "old");
     clone = icalproperty_new_impl(old->kind);
@@ -99,8 +99,8 @@ icalproperty *icalproperty_clone(const icalproperty *old)
         }
     }
 
-    for (p = pvl_head(old->parameters); p != 0; p = pvl_next(p)) {
-        icalparameter *param = icalparameter_clone(pvl_data(p));
+    for (p = icalpvl_head(old->parameters); p != 0; p = icalpvl_next(p)) {
+        icalparameter *param = icalparameter_clone(icalpvl_data(p));
 
         if (param == 0) {
             icalproperty_free(clone);
@@ -108,7 +108,7 @@ icalproperty *icalproperty_clone(const icalproperty *old)
             return 0;
         }
 
-        pvl_push(clone->parameters, param);
+        icalpvl_push(clone->parameters, param);
     }
 
     return clone;
@@ -175,11 +175,11 @@ void icalproperty_free(icalproperty *p)
         icalvalue_free(p->value);
     }
 
-    while ((param = pvl_pop(p->parameters)) != 0) {
+    while ((param = icalpvl_pop(p->parameters)) != 0) {
         icalparameter_free(param);
     }
 
-    pvl_free(p->parameters);
+    icalpvl_free(p->parameters);
 
     if (p->x_name != 0) {
         icalmemory_free_buffer(p->x_name);
@@ -474,7 +474,7 @@ void icalproperty_add_parameter(icalproperty *p, icalparameter *parameter)
     icalerror_check_arg_rv((p != 0), "prop");
     icalerror_check_arg_rv((parameter != 0), "parameter");
 
-    pvl_push(p->parameters, parameter);
+    icalpvl_push(p->parameters, parameter);
 }
 
 void icalproperty_set_parameter(icalproperty *prop, icalparameter *parameter)
@@ -614,15 +614,15 @@ char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *nam
 
 void icalproperty_remove_parameter_by_kind(icalproperty *prop, icalparameter_kind kind)
 {
-    pvl_elem p;
+    icalpvl_elem p;
 
     icalerror_check_arg_rv((prop != 0), "prop");
 
-    for (p = pvl_head(prop->parameters); p != 0; p = pvl_next(p)) {
-        icalparameter *param = (icalparameter *)pvl_data(p);
+    for (p = icalpvl_head(prop->parameters); p != 0; p = icalpvl_next(p)) {
+        icalparameter *param = (icalparameter *)icalpvl_data(p);
 
         if (icalparameter_isa(param) == kind) {
-            (void)pvl_remove(prop->parameters, p);
+            (void)icalpvl_remove(prop->parameters, p);
             icalparameter_free(param);
             break;
         }
@@ -631,12 +631,12 @@ void icalproperty_remove_parameter_by_kind(icalproperty *prop, icalparameter_kin
 
 void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
 {
-    pvl_elem p;
+    icalpvl_elem p;
 
     icalerror_check_arg_rv((prop != 0), "prop");
 
-    for (p = pvl_head(prop->parameters); p != 0; p = pvl_next(p)) {
-        icalparameter *param = (icalparameter *)pvl_data(p);
+    for (p = icalpvl_head(prop->parameters); p != 0; p = icalpvl_next(p)) {
+        icalparameter *param = (icalparameter *)icalpvl_data(p);
         const char *kind_string;
 
         if (icalparameter_isa(param) == ICAL_X_PARAMETER) {
@@ -651,7 +651,7 @@ void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
             continue;
 
         if (0 == strcmp(kind_string, name)) {
-            (void)pvl_remove(prop->parameters, p);
+            (void)icalpvl_remove(prop->parameters, p);
             icalparameter_free(param);
             break;
         }
@@ -660,16 +660,16 @@ void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
 
 void icalproperty_remove_parameter_by_ref(icalproperty *prop, icalparameter *parameter)
 {
-    pvl_elem p;
+    icalpvl_elem p;
 
     icalerror_check_arg_rv((prop != 0), "prop");
     icalerror_check_arg_rv((parameter != 0), "parameter");
 
-    for (p = pvl_head(prop->parameters); p != 0; p = pvl_next(p)) {
-        icalparameter *p_param = (icalparameter *)pvl_data(p);
+    for (p = icalpvl_head(prop->parameters); p != 0; p = icalpvl_next(p)) {
+        icalparameter *p_param = (icalparameter *)icalpvl_data(p);
 
         if (icalparameter_has_same_name(parameter, p_param)) {
-            (void)pvl_remove(prop->parameters, p);
+            (void)icalpvl_remove(prop->parameters, p);
             icalparameter_free(p_param);
             break;
         }
@@ -679,7 +679,7 @@ void icalproperty_remove_parameter_by_ref(icalproperty *prop, icalparameter *par
 int icalproperty_count_parameters(const icalproperty *prop)
 {
     if (prop != 0) {
-        return pvl_count(prop->parameters);
+        return icalpvl_count(prop->parameters);
     }
 
     icalerror_set_errno(ICAL_USAGE_ERROR);
@@ -690,15 +690,15 @@ icalparameter *icalproperty_get_first_parameter(icalproperty *p, icalparameter_k
 {
     icalerror_check_arg_rz((p != 0), "prop");
 
-    p->parameter_iterator = pvl_head(p->parameters);
+    p->parameter_iterator = icalpvl_head(p->parameters);
 
     if (p->parameter_iterator == 0) {
         return 0;
     }
 
-    for (p->parameter_iterator = pvl_head(p->parameters);
-         p->parameter_iterator != 0; p->parameter_iterator = pvl_next(p->parameter_iterator)) {
-        icalparameter *param = (icalparameter *)pvl_data(p->parameter_iterator);
+    for (p->parameter_iterator = icalpvl_head(p->parameters);
+         p->parameter_iterator != 0; p->parameter_iterator = icalpvl_next(p->parameter_iterator)) {
+        icalparameter *param = (icalparameter *)icalpvl_data(p->parameter_iterator);
 
         if (icalparameter_isa(param) == kind || kind == ICAL_ANY_PARAMETER) {
             return param;
@@ -716,9 +716,9 @@ icalparameter *icalproperty_get_next_parameter(icalproperty *p, icalparameter_ki
         return 0;
     }
 
-    for (p->parameter_iterator = pvl_next(p->parameter_iterator);
-         p->parameter_iterator != 0; p->parameter_iterator = pvl_next(p->parameter_iterator)) {
-        icalparameter *param = (icalparameter *)pvl_data(p->parameter_iterator);
+    for (p->parameter_iterator = icalpvl_next(p->parameter_iterator);
+         p->parameter_iterator != 0; p->parameter_iterator = icalpvl_next(p->parameter_iterator)) {
+        icalparameter *param = (icalparameter *)icalpvl_data(p->parameter_iterator);
 
         if (icalparameter_isa(param) == kind || kind == ICAL_ANY_PARAMETER) {
             return param;
@@ -914,11 +914,11 @@ static int param_compare(void *a, void *b)
 void icalproperty_normalize(icalproperty *prop)
 {
     icalproperty_kind prop_kind = icalproperty_isa(prop);
-    pvl_list sorted_params = pvl_newlist();
+    icalpvl_list sorted_params = icalpvl_newlist();
     icalparameter *param;
 
     /* Normalize parameters into sorted list */
-    while ((param = pvl_pop(prop->parameters)) != 0) {
+    while ((param = icalpvl_pop(prop->parameters)) != 0) {
         int remove = 0;
 
         /* Remove parameters having default values */
@@ -1022,11 +1022,11 @@ void icalproperty_normalize(icalproperty *prop)
             icalparameter_set_parent(param, 0); // MUST NOT have a parent to free
             icalparameter_free(param);
         } else {
-            pvl_insert_ordered(sorted_params, param_compare, param);
+            icalpvl_insert_ordered(sorted_params, param_compare, param);
         }
     }
 
-    pvl_free(prop->parameters);
+    icalpvl_free(prop->parameters);
     prop->parameters = sorted_params;
 }
 
@@ -1084,10 +1084,10 @@ icalparamiter icalproperty_begin_parameter(icalproperty *property, icalparameter
 {
     icalerror_check_arg_re(property != 0, "property", icalparamiter_null);
 
-    pvl_elem i;
+    icalpvl_elem i;
 
-    for (i = pvl_head(property->parameters); i != 0; i = pvl_next(i)) {
-        icalparameter *p = (icalparameter *)pvl_data(i);
+    for (i = icalpvl_head(property->parameters); i != 0; i = icalpvl_next(i)) {
+        icalparameter *p = (icalparameter *)icalpvl_data(i);
 
         if (icalparameter_isa(p) == kind || kind == ICAL_ANY_PARAMETER) {
             icalparamiter itr = {kind, i};
@@ -1106,8 +1106,8 @@ icalparameter *icalparamiter_next(icalparamiter *i)
         return 0;
     }
 
-    for (i->iter = pvl_next(i->iter); i->iter != 0; i->iter = pvl_next(i->iter)) {
-        icalparameter *p = (icalparameter *)pvl_data(i->iter);
+    for (i->iter = icalpvl_next(i->iter); i->iter != 0; i->iter = icalpvl_next(i->iter)) {
+        icalparameter *p = (icalparameter *)icalpvl_data(i->iter);
 
         if (icalparameter_isa(p) == i->kind || i->kind == ICAL_ANY_PARAMETER) {
             return icalparamiter_deref(i);
@@ -1123,5 +1123,5 @@ icalparameter *icalparamiter_deref(icalparamiter *i)
         return 0;
     }
 
-    return pvl_data(i->iter);
+    return icalpvl_data(i->iter);
 }

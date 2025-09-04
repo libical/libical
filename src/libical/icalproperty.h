@@ -11,7 +11,7 @@
 
 #include "libical_ical_export.h"
 #include "icalderivedproperty.h" /* To get icalproperty_kind enumerations */
-#include "pvl.h"
+#include "icalpvl_p.h"
 
 #include <stdarg.h> /* for va_... */
 
@@ -193,7 +193,7 @@ LIBICAL_ICAL_EXPORT void icalproperty_normalize(icalproperty *prop);
    deallocate iterators. Pretend that you can't see it. */
 typedef struct icalparamiter {
     icalparameter_kind kind;
-    pvl_elem iter;
+    icalpvl_elem iter;
 } icalparamiter;
 
 LIBICAL_ICAL_EXPORT icalparamiter icalproperty_begin_parameter(icalproperty *property, icalparameter_kind kind);

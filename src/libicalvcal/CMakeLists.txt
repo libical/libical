@@ -103,6 +103,9 @@ if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   install(TARGETS icalvcal-static EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif()
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libicalvcal.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libicalvcal.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libicalvcal.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+
 ########### install files ###############
 
 install(
