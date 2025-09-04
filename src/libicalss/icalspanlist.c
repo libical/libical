@@ -16,7 +16,7 @@
 #include <stdlib.h>
 
 struct icalspanlist_impl {
-    pvl_list spans;            /**< list of icaltime_span data **/
+    icalpvl_list spans;        /**< list of icaltime_span data **/
     struct icaltimetype start; /**< start time of span **/
     struct icaltimetype end;   /**< end time of span **/
 };
@@ -73,13 +73,13 @@ static void icalspanlist_new_callback(const icalcomponent *comp, const struct ic
 
     /* copy span data into allocated memory.. **/
     *s = *span;
-    pvl_insert_ordered(sl->spans, compare_span, (void *)s);
+    icalpvl_insert_ordered(sl->spans, compare_span, (void *)s);
 }
 
 icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct icaltimetype end)
 {
     struct icaltime_span range;
-    pvl_elem itr;
+    icalpvl_elem itr;
     icalcomponent *c, *inner;
     icalcomponent_kind kind, inner_kind;
     icalspanlist *sl;
@@ -90,7 +90,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
         return 0;
     }
 
-    sl->spans = pvl_newlist();
+    sl->spans = icalpvl_newlist();
     sl->start = start;
     sl->end = end;
 
@@ -124,8 +124,8 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
        that runs from the start of the range to the start of the
        span. */
 
-    for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
-        struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
+    for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
+        struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
 
         if (!s)
             continue;
@@ -142,7 +142,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
 
             freetime->is_busy = 0;
 
-            pvl_insert_ordered(sl->spans, compare_span, (void *)freetime);
+            icalpvl_insert_ordered(sl->spans, compare_span, (void *)freetime);
         } else {
             free(freetime);
         }
@@ -157,7 +157,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     if (icaltime_is_null_time(end)) {
         struct icaltime_span *last_span;
 
-        last_span = (struct icaltime_span *)pvl_data(pvl_tail(sl->spans));
+        last_span = (struct icaltime_span *)icalpvl_data(icalpvl_tail(sl->spans));
 
         if (last_span != 0) {
             if ((freetime = (struct icaltime_span *)malloc(sizeof(struct icaltime_span))) == 0) {
@@ -169,7 +169,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
             freetime->is_busy = 0;
             freetime->start = last_span->end;
             freetime->end = freetime->start;
-            pvl_insert_ordered(sl->spans, compare_span, (void *)freetime);
+            icalpvl_insert_ordered(sl->spans, compare_span, (void *)freetime);
         }
     }
 
@@ -183,11 +183,11 @@ void icalspanlist_free(icalspanlist *sl)
     if (sl == NULL)
         return;
 
-    while ((span = pvl_pop(sl->spans)) != 0) {
+    while ((span = icalpvl_pop(sl->spans)) != 0) {
         free(span);
     }
 
-    pvl_free(sl->spans);
+    icalpvl_free(sl->spans);
 
     sl->spans = 0;
 
@@ -197,10 +197,10 @@ void icalspanlist_free(icalspanlist *sl)
 void icalspanlist_dump(icalspanlist *sl)
 {
     int i = 0;
-    pvl_elem itr;
+    icalpvl_elem itr;
 
-    for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
-        struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
+    for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
+        struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
         if (s) {
             printf("#%02d %d start: %s", ++i, s->is_busy, icalctime(&s->start));
             printf("      end  : %s", icalctime(&s->end));
@@ -212,7 +212,7 @@ icalcomponent *icalspanlist_make_busy_list(icalspanlist *sl);
 
 struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icaltimetype t)
 {
-    pvl_elem itr;
+    icalpvl_elem itr;
     struct icalperiodtype period;
     struct icaltime_span *s;
 
@@ -222,8 +222,8 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
     period.end = icaltime_null_time();
     period.duration = icaldurationtype_null_duration();
 
-    itr = pvl_head(sl->spans);
-    s = (struct icaltime_span *)pvl_data(itr);
+    itr = icalpvl_head(sl->spans);
+    s = (struct icaltime_span *)icalpvl_data(itr);
 
     if (s == 0) {
         /* No elements in span */
@@ -248,8 +248,8 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
 
     /* Otherwise, find the first free span that contains the
        reference time. */
-    for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
-        s = (struct icaltime_span *)pvl_data(itr);
+    for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
+        s = (struct icaltime_span *)icalpvl_data(itr);
 
         if (!s)
             continue;
@@ -275,7 +275,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
 
 int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
 {
-    pvl_elem itr;
+    icalpvl_elem itr;
     icaltime_t spanduration_secs;
     int *matrix;
     icaltime_t matrix_slots;
@@ -315,8 +315,8 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
 
     /* loop through each span and mark the slots in the array */
 
-    for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
-        struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
+    for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
+        struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
 
         if (s && s->is_busy == 1) {
             icaltime_t offset_start = s->start / delta_t - sl_start / delta_t;
@@ -340,7 +340,7 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
     icalcomponent *comp;
     icalproperty *p;
     struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
-    pvl_elem itr;
+    icalpvl_elem itr;
     icaltimezone *utc_zone;
     icalparameter *param;
 
@@ -364,9 +364,9 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 
     /* now add the freebusy sections.. */
 
-    for (itr = pvl_head(sl->spans); itr != 0; itr = pvl_next(itr)) {
+    for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
         struct icalperiodtype period;
-        struct icaltime_span *s = (struct icaltime_span *)pvl_data(itr);
+        struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
 
         if (s && s->is_busy == 1) {
             period.start = icaltime_from_timet_with_zone(s->start, 0, utc_zone);
@@ -400,7 +400,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
     }
-    sl->spans = pvl_newlist();
+    sl->spans = icalpvl_newlist();
 
     /* cycle through each FREEBUSY property, adding to the spanlist */
     for (prop = icalcomponent_get_first_property(inner, ICAL_FREEBUSY_PROPERTY);
@@ -434,7 +434,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
         s->start = icaltime_as_timet_with_zone(period.start, icaltimezone_get_utc_timezone());
         s->end = icaltime_as_timet_with_zone(period.end, icaltimezone_get_utc_timezone());
 
-        pvl_insert_ordered(sl->spans, compare_span, (void *)s);
+        icalpvl_insert_ordered(sl->spans, compare_span, (void *)s);
     }
     /** @todo calculate start/end limits.. fill in holes? **/
     return sl;

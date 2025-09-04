@@ -20,14 +20,14 @@
    main header file, but used by "friend classes" like icalset*/
 
 struct icaldirset_impl {
-    icalset super;               /**< parent class */
-    char *dir;                   /**< directory containing ics files  */
-    icaldirset_options options;  /**< copy of options passed to icalset_new() */
-    icalcluster *cluster;        /**< cluster containing data */
-    icalgauge *gauge;            /**< gauge for filtering out data  */
-    int first_component;         /**< ??? */
-    pvl_list directory;          /**< ??? */
-    pvl_elem directory_iterator; /**< ??? */
+    icalset super;                   /**< parent class */
+    char *dir;                       /**< directory containing ics files  */
+    icaldirset_options options;      /**< copy of options passed to icalset_new() */
+    icalcluster *cluster;            /**< cluster containing data */
+    icalgauge *gauge;                /**< gauge for filtering out data  */
+    int first_component;             /**< ??? */
+    icalpvl_list directory;          /**< ??? */
+    icalpvl_elem directory_iterator; /**< ??? */
 };
 
 #endif

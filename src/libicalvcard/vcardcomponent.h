@@ -12,7 +12,6 @@
 #include "libical_sentinel.h"
 #include "libical_vcard_export.h"
 #include "vcardproperty.h"
-#include "pvl.h"
 
 #include <stdbool.h>
 
