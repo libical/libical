@@ -22,6 +22,7 @@
 #include <libical/vcard.h>
 #include <libical/libical_vcard_export.h>
 #endif
+#include <libical/icaltime_p.h>
 
 #define I_CAL_TYPE_OBJECT \
     (i_cal_object_get_type ())

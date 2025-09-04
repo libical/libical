@@ -242,6 +242,9 @@ The following functions have been added:
   * `icalerror_check_property_type()`
   * `icalerror_check_parameter_type()`
   * `icalerror_check_component_type()`
+  * `icaltime_span_new()`
+  * `icaltime_span_overlaps()`
+  * `icaltime_span_contains()`
 
 ### Removed macros
 
