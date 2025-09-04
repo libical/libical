@@ -10,6 +10,8 @@
 #include <config.h>
 #endif
 
+#include "icaltime_p.h"
+
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 #include <assert.h>
