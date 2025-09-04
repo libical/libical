@@ -21,7 +21,6 @@ set(
   ${TOPS}/src/libical/icalvalue.h
   ${TOPS}/src/libical/icalparameter.h
   ${TOPB}/src/libical/icalderivedproperty.h
-  ${TOPS}/src/libical/pvl.h
   ${TOPS}/src/libical/icalproperty.h
   ${TOPS}/src/libical/icalcomponent.h
   ${TOPS}/src/libical/icaltimezone.h
@@ -48,7 +47,6 @@ foreach(_current_FILE ${COMBINEDHEADERSICAL})
     # do not remove includes for private headers (of the form ical*_p.h)
     string(REGEX REPLACE "#include \"ical.*[^_p]\\.h\"" "" _currentLINE "${_currentLINE}")
     string(REGEX REPLACE "#include \"config.*\\.h\"" "" _currentLINE "${_currentLINE}")
-    string(REGEX REPLACE "#include \"pvl\\.h\"" "" _currentLINE "${_currentLINE}")
     if(NOT "${_currentLINE}" STREQUAL "")
       file(APPEND ${ICAL_FILE_H_FILE} "${_currentLINE}\n")
     endif()
