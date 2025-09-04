@@ -41,9 +41,9 @@ struct icalgauge_where {
 };
 
 struct icalgauge_impl {
-    pvl_list select; /**< Of icalgaugecompare, using only prop and comp fields*/
-    pvl_list from;   /**< List of component_kinds, as integers */
-    pvl_list where;  /**< List of icalgaugecompare */
+    icalpvl_list select; /**< Of icalgaugecompare, using only prop and comp fields*/
+    icalpvl_list from;   /**< List of component_kinds, as integers */
+    icalpvl_list where;  /**< List of icalgaugecompare */
     int expand;
 };
 

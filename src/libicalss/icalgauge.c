@@ -37,9 +37,9 @@ icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
         return 0;
     }
 
-    impl->select = pvl_newlist();
-    impl->from = pvl_newlist();
-    impl->where = pvl_newlist();
+    impl->select = icalpvl_newlist();
+    impl->from = icalpvl_newlist();
+    impl->where = icalpvl_newlist();
     impl->expand = expand;
 
     icalss_yy_gauge = impl;
@@ -70,29 +70,29 @@ void icalgauge_free(icalgauge *gauge)
     assert(gauge->from != 0);
 
     if (gauge->select) {
-        while ((w = pvl_pop(gauge->select)) != 0) {
+        while ((w = icalpvl_pop(gauge->select)) != 0) {
             if (w->value != 0) {
                 free(w->value);
             }
             free(w);
         }
-        pvl_free(gauge->select);
+        icalpvl_free(gauge->select);
         gauge->select = 0;
     }
 
     if (gauge->where) {
-        while ((w = pvl_pop(gauge->where)) != 0) {
+        while ((w = icalpvl_pop(gauge->where)) != 0) {
             if (w->value != 0) {
                 free(w->value);
             }
             free(w);
         }
-        pvl_free(gauge->where);
+        icalpvl_free(gauge->where);
         gauge->where = 0;
     }
 
     if (gauge->from) {
-        pvl_free(gauge->from);
+        icalpvl_free(gauge->from);
         gauge->from = 0;
     }
 
@@ -246,7 +246,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
     icalcomponent *inner;
     int local_pass = 0;
     int last_clause = 1, this_clause = 1;
-    pvl_elem e;
+    icalpvl_elem e;
     icalcomponent_kind kind;
     icalproperty *rrule;
     int compare_recur = 0;
@@ -275,8 +275,8 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 
     /* Check that this component is one of the FROM types */
     local_pass = 0;
-    for (e = pvl_head(gauge->from); e != 0; e = pvl_next(e)) {
-        icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)pvl_data(e);
+    for (e = icalpvl_head(gauge->from); e != 0; e = icalpvl_next(e)) {
+        icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)icalpvl_data(e);
 
         if (k == icalcomponent_isa(inner)) {
             local_pass = 1;
@@ -288,8 +288,8 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
     }
 
     /**** Check each where clause against the component ****/
-    for (e = pvl_head(gauge->where); e != 0; e = pvl_next(e)) {
-        struct icalgauge_where *w = pvl_data(e);
+    for (e = icalpvl_head(gauge->where); e != 0; e = icalpvl_next(e)) {
+        struct icalgauge_where *w = icalpvl_data(e);
         icalcomponent *sub_comp;
         icalvalue *v;
         icalproperty *prop;
@@ -412,11 +412,11 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 
 void icalgauge_dump(icalgauge *gauge)
 {
-    pvl_elem p;
+    icalpvl_elem p;
 
     printf("--- Select ---\n");
-    for (p = pvl_head(gauge->select); p != 0; p = pvl_next(p)) {
-        struct icalgauge_where *w = pvl_data(p);
+    for (p = icalpvl_head(gauge->select); p != 0; p = icalpvl_next(p)) {
+        struct icalgauge_where *w = icalpvl_data(p);
 
         if (!w)
             continue;
@@ -441,15 +441,15 @@ void icalgauge_dump(icalgauge *gauge)
     }
 
     printf("--- From ---\n");
-    for (p = pvl_head(gauge->from); p != 0; p = pvl_next(p)) {
-        icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)pvl_data(p);
+    for (p = icalpvl_head(gauge->from); p != 0; p = icalpvl_next(p)) {
+        icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)icalpvl_data(p);
 
         printf("%s\n", icalenum_component_kind_to_string(k));
     }
 
     printf("--- Where ---\n");
-    for (p = pvl_head(gauge->where); p != 0; p = pvl_next(p)) {
-        struct icalgauge_where *w = pvl_data(p);
+    for (p = icalpvl_head(gauge->where); p != 0; p = icalpvl_next(p)) {
+        struct icalgauge_where *w = icalpvl_data(p);
 
         if (!w)
             continue;

@@ -89,7 +89,7 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
     }
 
     /* clear contents of directory list */
-    while ((str = pvl_pop(dset->directory))) {
+    while ((str = icalpvl_pop(dset->directory))) {
         free(str);
     }
 
@@ -100,7 +100,7 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
             continue;
         }
 
-        pvl_push(dset->directory, (void *)strdup(de->d_name));
+        icalpvl_push(dset->directory, (void *)strdup(de->d_name));
     }
 
     closedir(dp);
@@ -113,7 +113,7 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
         icalerror_set_errno(ICAL_FILE_ERROR);
         return ICAL_FILE_ERROR;
     } else {
-        while ((str = pvl_pop(dset->directory))) {
+        while ((str = icalpvl_pop(dset->directory))) {
             free(str);
         }
 
@@ -124,7 +124,7 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
                 continue;
             }
 
-            pvl_push(dset->directory, (void *)strdup(c_file.name));
+            icalpvl_push(dset->directory, (void *)strdup(c_file.name));
         } while (_findnext(hFile, &c_file) == 0);
 
         _findclose(hFile);
@@ -160,7 +160,7 @@ icalset *icaldirset_init(icalset *set, const char *dir, void *options_in)
 
     dset->dir = (char *)strdup(dir);
     dset->options = *options;
-    dset->directory = pvl_newlist();
+    dset->directory = icalpvl_newlist();
     dset->directory_iterator = 0;
     dset->gauge = 0;
     dset->first_component = 0;
@@ -213,12 +213,12 @@ void icaldirset_free(icalset *s)
         icalcluster_free(dset->cluster);
     }
 
-    while (dset->directory != 0 && (str = pvl_pop(dset->directory)) != 0) {
+    while (dset->directory != 0 && (str = icalpvl_pop(dset->directory)) != 0) {
         free(str);
     }
 
     if (dset->directory != 0) {
-        pvl_free(dset->directory);
+        icalpvl_free(dset->directory);
         dset->directory = 0;
     }
 
@@ -234,7 +234,7 @@ static icalerrorenum icaldirset_next_cluster(icaldirset *dset)
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
         return ICAL_INTERNAL_ERROR;
     }
-    dset->directory_iterator = pvl_next(dset->directory_iterator);
+    dset->directory_iterator = icalpvl_next(dset->directory_iterator);
 
     if (dset->directory_iterator == 0) {
         /* There are no more clusters */
@@ -245,7 +245,7 @@ static icalerrorenum icaldirset_next_cluster(icaldirset *dset)
         return ICAL_NO_ERROR;
     }
 
-    snprintf(path, sizeof(path), "%s/%s", dset->dir, (char *)pvl_data(dset->directory_iterator));
+    snprintf(path, sizeof(path), "%s/%s", dset->dir, (char *)icalpvl_data(dset->directory_iterator));
 
     icalcluster_free(dset->cluster);
     dset->cluster = icalfileset_produce_icalcluster(path);
@@ -548,14 +548,14 @@ icalcomponent *icaldirset_get_first_component(icalset *set)
         return 0;
     }
 
-    dset->directory_iterator = pvl_head(dset->directory);
+    dset->directory_iterator = icalpvl_head(dset->directory);
 
     if (dset->directory_iterator == 0) {
         icalerror_set_errno(error);
         return 0;
     }
 
-    snprintf(path, MAXPATHLEN, "%s/%s", dset->dir, (char *)pvl_data(dset->directory_iterator));
+    snprintf(path, MAXPATHLEN, "%s/%s", dset->dir, (char *)icalpvl_data(dset->directory_iterator));
 
     /* If the next cluster we need is different than the current cluster,
        delete the current one and get a new one */

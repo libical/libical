@@ -153,13 +153,13 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
     return;
     }
 
-    pvl_push(impl->where,where);
+    icalpvl_push(impl->where,where);
 }
 
 static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l)
 {
-    pvl_elem e = pvl_tail(impl->where);
-    struct icalgauge_where *where = pvl_data(e);
+    icalpvl_elem e = icalpvl_tail(impl->where);
+    struct icalgauge_where *where = icalpvl_data(e);
 
     where->logic = l;
 
@@ -218,7 +218,7 @@ static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
       return;
     }
 
-    pvl_push(impl->select,where);
+    icalpvl_push(impl->select,where);
 }
 
 static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
@@ -231,7 +231,7 @@ static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
     assert(0);
     }
 
-    pvl_push(impl->from,(void *)ckind);
+    icalpvl_push(impl->from,(void *)ckind);
 
 }
 
