@@ -992,6 +992,32 @@ if(LIBICAL_DEVMODE)
 endif()
 libical_option(LIBICAL_BUILD_EXAMPLES "Build examples." True)
 
+########### Configure pkg-config variables #########
+
+set(VERSION "${CMAKE_PROJECT_VERSION}")
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(exec_prefix "\${prefix}")
+if(IS_ABSOLUTE ${LIB_INSTALL_DIR})
+  set(libdir "${LIB_INSTALL_DIR}")
+else()
+  set(libdir "\${prefix}/${LIB_INSTALL_DIR}")
+endif()
+if(IS_ABSOLUTE ${INCLUDE_INSTALL_DIR})
+  set(includedir "${INCLUDE_INSTALL_DIR}")
+else()
+  set(includedir "\${prefix}/include")
+endif()
+if(CMAKE_THREAD_LIBS_INIT)
+  set(PTHREAD_LIBS_PRIVATE "\nLibs.private: ${CMAKE_THREAD_LIBS_INIT}")
+else()
+  set(PTHREAD_LIBS_PRIVATE "")
+endif()
+if(ICU_FOUND)
+  set(REQUIRES_PRIVATE_ICU "\nRequires.private: icu-i18n")
+else()
+  set(REQUIRES_PRIVATE_ICU "")
+endif()
+
 ################# build subdirs ########################
 
 if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
@@ -1048,35 +1074,6 @@ if(ICAL_BUILD_DOCS)
 else()
   set(ICAL_GLIB_BUILD_DOCS)
 endif()
-
-########### create and install pkg-config file #########
-
-set(VERSION "${CMAKE_PROJECT_VERSION}")
-set(prefix "${CMAKE_INSTALL_PREFIX}")
-set(exec_prefix "\${prefix}")
-if(IS_ABSOLUTE ${LIB_INSTALL_DIR})
-  set(libdir "${LIB_INSTALL_DIR}")
-else()
-  set(libdir "\${exec_prefix}/${LIB_INSTALL_DIR}")
-endif()
-if(IS_ABSOLUTE ${INCLUDE_INSTALL_DIR})
-  set(includedir "${INCLUDE_INSTALL_DIR}")
-else()
-  set(includedir "\${prefix}/include")
-endif()
-if(DEFINED CMAKE_THREAD_LIBS_INIT)
-  set(PTHREAD_LIBS "${CMAKE_THREAD_LIBS_INIT}")
-else()
-  set(PTHREAD_LIBS "")
-endif()
-if(ICU_FOUND)
-  set(REQUIRES_PRIVATE_ICU "Requires.private: icu-i18n") #for libical.pc
-else()
-  set(REQUIRES_PRIVATE_ICU "")
-endif()
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 ########### Create and install the CMake Config files ##########
 include(CMakePackageConfigHelpers)

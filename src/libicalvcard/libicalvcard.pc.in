@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright Contributors to the libical project
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+prefix=@prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libicalvcard
+Description: @CMAKE_PROJECT_DESCRIPTION@ (VCard)
+URL: @CMAKE_PROJECT_HOMEPAGE_URL@
+Version: @CMAKE_PROJECT_VERSION@
+Libs: -L${libdir} -licalvcard
+Requires: libical
+Cflags: -I${includedir}

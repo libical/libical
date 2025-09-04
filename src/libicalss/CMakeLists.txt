@@ -171,6 +171,9 @@ if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   install(TARGETS icalss-static EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif()
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libicalss.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libicalss.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libicalss.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+
 ########### next target ###############
 
 if(WITH_CXX_BINDINGS)
