@@ -5352,7 +5352,7 @@ static void test_builtin_compat_tzid(void)
 
     for (jj = 0; jj < 2; jj++) {
         if (jj == 1) {
-            icaltimezone_set_tzid_prefix("");
+            icaltimezone_set_tzid_prefix(NULL);
             icaltimezone_free_builtin_timezones();
         }
 
@@ -5830,6 +5830,35 @@ void test_icalcomponent_with_lastmodified(void)
                                icalproperty_new_name("name1"),
                                (void *)0);
     icalcomponent_free(comp);
+}
+
+void test_tzid_setter(void)
+{
+    char *saveTzid, *builtinTzid;
+
+    /* save current tzid for restoring later */
+    saveTzid = icalmemory_strdup(icaltimezone_tzid_prefix());
+
+    /* reset to library builtin tzid */
+    icaltimezone_set_tzid_prefix(NULL);
+    builtinTzid = icalmemory_strdup(icaltimezone_tzid_prefix());
+
+    /* setting/unsetting the testing tzid */
+    icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
+    str_is("new tzid is set correctly", icaltimezone_tzid_prefix(), TESTS_TZID_PREFIX);
+    icaltimezone_set_tzid_prefix(NULL);
+    str_is("reset tzid to default value", icaltimezone_tzid_prefix(), builtinTzid);
+
+    /* Allow erasing the current tzid */
+    icaltimezone_set_tzid_prefix("");
+    str_is("reset tzid to default", icaltimezone_tzid_prefix(), "");
+
+    /* restore to original tzid */
+    icaltimezone_set_tzid_prefix(saveTzid);
+    str_is("reset tzid to initial value", icaltimezone_tzid_prefix(), saveTzid);
+
+    icalmemory_free_buffer(saveTzid);
+    icalmemory_free_buffer(builtinTzid);
 }
 
 static void verify_comp_attendee(icalcomponent *comp)
@@ -6727,6 +6756,7 @@ int main(int argc, char *argv[])
     test_run("Test serializing x-component", test_xcomponent_as_string, do_test, do_header);
     test_run("Test cloning x-component", test_clone_xcomponent, do_test, do_header);
 
+    test_run("Test manipulating tzid", test_tzid_setter, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(WITH_CXX_BINDINGS)
