@@ -30,7 +30,7 @@ The pvl unit always compiles the inline `pvl_data` function.
 ## ICAL_SETERROR_ISFUNC
 
 The `ICAL_SETERROR_ISFUNC` conditional compile macro is removed.
-The icalerror unit always compiles the inline `icalerror_set_errno` function.
+The icalerror unit always compiles the `icalerror_set_errno` function.
 
 ## C library
 

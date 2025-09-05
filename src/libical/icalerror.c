@@ -111,7 +111,7 @@ int icalerror_get_errors_are_fatal(void)
     return icalerror_errors_are_fatal;
 }
 
-inline void icalerror_set_errno(icalerrorenum x)
+void icalerror_set_errno(icalerrorenum x)
 {
     icalerrno = x;
     if (icalerror_get_error_state(x) == ICAL_ERROR_FATAL ||
