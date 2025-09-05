@@ -6,7 +6,7 @@
 set(
   COMBINEDHEADERSICAL
   ${TOPB}/src/libical/icalversion.h
-  ${TOPB}/src/libical/icaltime.h
+  ${TOPS}/src/libical/icaltime.h
   ${TOPS}/src/libical/icalduration.h
   ${TOPS}/src/libical/icalperiod.h
   ${TOPS}/src/libical/icalenums.h

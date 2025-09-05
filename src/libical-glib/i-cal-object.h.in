@@ -15,6 +15,7 @@
 #include <glib-object.h>
 #include <libical/ical.h>
 #include <libical/libical_ical_export.h>
+#include <libical/icaltime_p.h>
 
 #define I_CAL_TYPE_OBJECT \
     (i_cal_object_get_type ())

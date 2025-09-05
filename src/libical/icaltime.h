@@ -72,9 +72,10 @@
 
 #include "libical_ical_export.h"
 
+#include "icaltime_p.h"
+
 #include <stdbool.h>
 #include <time.h>
-#define icaltime_t ${ICAL_ICALTIME_T_TYPE}
 
 /* An opaque struct representing a timezone. We declare this here to avoid
    a circular dependency. */
@@ -83,35 +84,24 @@
 typedef struct _icaltimezone icaltimezone;
 #endif
 
-/** icaltime_span is returned by icalcomponent_get_span() */
-struct icaltime_span
-{
-    icaltime_t start;       /**< in UTC */
-    icaltime_t end;         /**< in UTC */
-    int is_busy;            /**< 1->busy time, 0-> free time */
-};
-
-typedef struct icaltime_span icaltime_span;
-
-struct icaltimetype
-{
-    int year;           /**< Actual year, e.g. 2001. */
-    int month;          /**< 1 (Jan) to 12 (Dec). */
+struct icaltimetype {
+    int year;  /**< Actual year, e.g. 2001. */
+    int month; /**< 1 (Jan) to 12 (Dec). */
     int day;
     int hour;
     int minute;
     int second;
 
-    int is_date;        /**< 1 -> interpret this as date. */
+    int is_date; /**< 1 -> interpret this as date. */
 
-    int is_daylight;    /**< 1 -> time is in daylight savings time. */
+    int is_daylight; /**< 1 -> time is in daylight savings time. */
 
-    const icaltimezone *zone;  /**< timezone */
+    const icaltimezone *zone; /**< timezone */
 };
 
 typedef struct icaltimetype icaltimetype;
 
-#define ICALTIMETYPE_INITIALIZER { 0, 0, 0, 0, 0, 0, 0, 0, 0}
+#define ICALTIMETYPE_INITIALIZER {0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 /**     @brief Constructor.
  *
@@ -205,7 +195,7 @@ LIBICAL_ICAL_EXPORT icaltime_t icaltime_as_timet(const struct icaltimetype);
  *      time is simply returned as icaltime_t in its native timezone.
  */
 LIBICAL_ICAL_EXPORT icaltime_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
-                                                       const icaltimezone *zone);
+                                                           const icaltimezone *zone);
 
 /**
  * @brief Returns a string representation of the time, in RFC5545 format.
@@ -323,20 +313,6 @@ LIBICAL_ICAL_EXPORT int icaltime_compare_date_only_tz(const struct icaltimetype 
                                                       const struct icaltimetype b,
                                                       icaltimezone *tz);
 
-/** Adds or subtracts a number of days, hours, minutes and seconds. */
-/**     @brief Internal, shouldn't be part of the public API
- *
- *      Adds or subtracts a time from an icaltimetype. This time is given
- *      as a number of days, hours, minutes and seconds.
- *
- *      @note This function is exactly the same as
- *      icaltimezone_adjust_change() except for the type of the first
- *      parameter.
- */
-LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt,
-                                         const int days, const int hours,
-                                         const int minutes, const int seconds);
-
 /**
  *      @brief Normalizes the icaltime, so all of the time components
  *      are in their normal ranges.
@@ -380,43 +356,6 @@ LIBICAL_ICAL_EXPORT bool icaltime_is_leap_year(const int year);
 
 /** Returns the number of days in this year. */
 LIBICAL_ICAL_EXPORT int icaltime_days_in_year(const int year);
-
-/**
- *  @brief Builds an icaltimespan given a start time, end time and busy value.
- *
- *  @param dtstart   The beginning time of the span, can be a date-time
- *                   or just a date.
- *  @param dtend     The end time of the span.
- *  @param is_busy   A boolean value, false/true.
- *  @returns         A span using the supplied values. The times are specified in UTC.
- */
-LIBICAL_ICAL_EXPORT struct icaltime_span icaltime_span_new(struct icaltimetype dtstart,
-                                                           struct icaltimetype dtend, bool is_busy);
-
-/** @brief Returns true if the two spans overlap.
- *
- *  @param s1         First span to test
- *  @param s2         Second span to test
- *  @return           boolean value
- *
- *  The result is calculated by testing if the start time of s1 is contained
- *  by the s2 span, or if the end time of s1 is contained by the s2 span.
- *
- *  Also returns true if the spans are equal.
- *
- *  Note, this will return false if the spans are adjacent.
- */
-LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(const icaltime_span *s1, const icaltime_span *s2);
-
-/** @brief Returns true if the span is totally within the containing
- *  span.
- *
- *  @param s          The span to test for.
- *  @param container  The span to test against.
- *  @return           boolean value.
- *
- */
-LIBICAL_ICAL_EXPORT bool icaltime_span_contains(const icaltime_span *s, const icaltime_span *container);
 
 #endif /* !ICALTIME_H */
 

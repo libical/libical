@@ -14,6 +14,7 @@
 #include <stdint.h>
 
 #include "libical/ical.h"
+#include "libical/icaltime_p.h"
 
 typedef uint8_t u8;
 typedef uint16_t u16;
