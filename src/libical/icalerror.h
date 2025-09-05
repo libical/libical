@@ -25,8 +25,6 @@
  * get a string describing the current error set in ::icalerrno.
  */
 
-#define ICAL_SETERROR_ISFUNC
-
 /**
  * @brief Triggered before any error is called
  *
@@ -313,33 +311,6 @@ LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state(icalerrorenum error
 LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
 
 /**
- * @def icalerror_set_errno(x)
- * @brief Sets the ::icalerrno to a given error
- * @param x The error to set ::icalerrno to
- *
- * Sets ::icalerrno to the error given in @a x. Additionally, if
- * the error is an ::ICAL_ERROR_FATAL or if it's an ::ICAL_ERROR_DEFAULT
- * and ::ICAL_ERRORS_ARE_FATAL is true, it prints a warning to @a stderr
- * and aborts the process.
- *
- * @par Usage
- * ```c
- * icalerror_set_errno(ICAL_PARSE_ERROR);
- * ```
- */
-#if !defined(ICAL_SETERROR_ISFUNC)
-#define icalerror_set_errno(x)                                 \
-    icalerrno = x;                                             \
-    if (icalerror_get_error_state(x) == ICAL_ERROR_FATAL ||    \
-        (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && \
-         icalerror_get_errors_are_fatal() == 1)) {             \
-        icalerror_warn(icalerror_strerror(x));                 \
-        ical_bt();                                             \
-        icalassert(0);                                         \
-    }                                                          \
-    }
-#else
-/**
  * @brief Sets the ::icalerrno to a given error
  * @param x The error to set ::icalerrno to
  *
@@ -354,7 +325,6 @@ LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
  * ```
  */
 LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
-#endif
 
 /**
  * @def ICAL_ERRORS_ARE_FATAL
