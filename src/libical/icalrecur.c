@@ -1985,12 +1985,12 @@ static void set_day_of_year(icalrecur_iterator *impl, int doy)
     impl->last.year = next.year;
 }
 
-static int get_start_of_week(icalrecur_iterator *impl)
+static int get_start_of_week(const icalrecur_iterator *impl)
 {
     return icaltime_start_doy_week(impl->last, (int)impl->rule->week_start);
 }
 
-static int get_day_of_week(icalrecur_iterator *impl)
+static int get_day_of_week(const icalrecur_iterator *impl)
 {
     return icaltime_day_of_week(impl->last);
 }
