@@ -40,7 +40,7 @@ for details about API changes since libical 3.x.
    before including <libical-glib/libical-glib.h>
 - CMake option -DGOBJECT_INTROSPECTION=True by default.
 - `icaltzutil_get_zone_directory()` can use the TZDIR environment to find system zoneinfo
-- `icaltimezone_se_tzid_prefix()` now allows setting an empty tzid prefix.
+- `icaltimezone_set_tzid_prefix()` now allows setting an empty tzid prefix.
 
 ### Deprecated
 
