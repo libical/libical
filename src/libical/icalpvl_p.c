@@ -521,7 +521,7 @@ icalpvl_elem icalpvl_tail(icalpvl_list L)
     return (icalpvl_elem)L->tail;
 }
 
-inline void *icalpvl_data(icalpvl_elem E)
+void *icalpvl_data(icalpvl_elem E)
 {
     if (E == 0) {
         return 0;

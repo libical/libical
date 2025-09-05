@@ -25,7 +25,7 @@ you can handle code that no longer exists in 4.0 with:
 ## PVL_USE_MACROS
 
 The `PVL_USE_MACROS` conditional compile macro is removed.
-The pvl unit always compiles the inline `pvl_data` function.
+The pvl unit always compiles the `pvl_data` function.
 
 ## ICAL_SETERROR_ISFUNC
 
