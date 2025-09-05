@@ -215,11 +215,31 @@ void ret_free(Ret *ret)
     g_free(ret);
 }
 
+EnumerationItem *enumeration_item_new(const gchar *nativeName, const gchar *alias)
+{
+    EnumerationItem *item = g_new0(EnumerationItem, 1);
+
+    item->nativeName = g_strdup(nativeName);
+    item->alias = g_strdup(alias);
+
+    return item;
+}
+
+void enumeration_item_free(EnumerationItem *item)
+{
+    if (item == NULL)
+        return;
+
+    g_free(item->nativeName);
+    g_free(item->alias);
+    g_free(item);
+}
+
 Enumeration *enumeration_new(void)
 {
     Enumeration *enumeration = g_new0(Enumeration, 1);
 
-    enumeration->elements = NULL;
+    enumeration->items = NULL;
     enumeration->name = NULL;
     enumeration->nativeName = NULL;
     enumeration->defaultNative = NULL;
@@ -230,15 +250,10 @@ Enumeration *enumeration_new(void)
 
 void enumeration_free(Enumeration *enumeration)
 {
-    GList *iter;
-
     if (enumeration == NULL)
         return;
 
-    for (iter = g_list_first(enumeration->elements); iter != NULL; iter = g_list_next(iter)) {
-        g_free(iter->data);
-    }
-    g_list_free(enumeration->elements);
+    g_clear_pointer(&enumeration->items, g_ptr_array_unref);
     g_free(enumeration->name);
     g_free(enumeration->nativeName);
     g_free(enumeration->defaultNative);
@@ -486,7 +501,6 @@ gboolean parse_enumeration(xmlNode *node, Enumeration *enumeration)
 {
     xmlAttr *attr;
     xmlNode *child;
-    gchar *elementName;
 
     g_return_val_if_fail(node != NULL && enumeration != NULL, FALSE);
     if (xmlStrcmp(node->name, (xmlChar *)"enum") != 0) {
@@ -510,15 +524,26 @@ gboolean parse_enumeration(xmlNode *node, Enumeration *enumeration)
     }
 
     for (child = xmlFirstElementChild(node); child != NULL; child = xmlNextElementSibling(child)) {
+        xmlChar *name, *alias;
         if (xmlStrcmp(child->name, (xmlChar *)"element") != 0) {
             fprintf(stderr,
                     "The child node named '%s' is not an element in enumeration '%s'\n",
                     (char *)child->name, enumeration->name);
             continue;
         }
-        elementName = dup_attribute_value(child->properties->doc, child->properties->children, 1);
-        enumeration->elements = g_list_append(enumeration->elements, elementName);
-        elementName = NULL;
+        name = xmlGetProp(child, (const xmlChar *)"name");
+        if (name == NULL) {
+            fprintf(stderr,
+                    "The element node does not have a 'name' attribute in enumeration '%s'\n",
+                    enumeration->name);
+            continue;
+        }
+        alias = xmlGetProp(child, (const xmlChar *)"alias");
+        if (enumeration->items == NULL)
+            enumeration->items = g_ptr_array_new_with_free_func((GDestroyNotify)enumeration_item_free);
+        g_ptr_array_add(enumeration->items, enumeration_item_new((const gchar *)name, (const gchar *)alias));
+        g_clear_pointer(&name, xmlFree);
+        g_clear_pointer(&alias, xmlFree);
     }
     return TRUE;
 }
