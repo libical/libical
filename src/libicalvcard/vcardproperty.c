@@ -16,7 +16,7 @@
 #include "vcardvalue.h"
 #include "icalerror.h"
 #include "icalmemory.h"
-#include "icalpvl_p.h"
+#include "icalpvl.h"
 
 #include <stdlib.h>
 

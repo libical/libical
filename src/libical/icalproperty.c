@@ -17,7 +17,7 @@
 #include "icalparser.h"
 #include "icaltimezone.h"
 #include "icalvalue.h"
-#include "icalpvl_p.h"
+#include "icalpvl.h"
 
 #include <stdlib.h>
 

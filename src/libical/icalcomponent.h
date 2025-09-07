@@ -17,7 +17,7 @@
 #include "libical_ical_export.h"
 #include "icalenums.h" /* Defines icalcomponent_kind */
 #include "icalproperty.h"
-#include "icalpvl_p.h"
+#include "icalpvl.h"
 
 typedef struct icalcomponent_impl icalcomponent;
 

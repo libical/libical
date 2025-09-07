@@ -249,8 +249,8 @@ set(
   icalvalue.c
   icalvalue.h
   icalvalueimpl.h
-  icalpvl_p.c
-  icalpvl_p.h
+  icalpvl.c
+  icalpvl.h
   sspm.c
   sspm.h
   qsort_gen.c
@@ -494,7 +494,7 @@ install(
     libical_deprecated.h
     libical_sentinel.h
     libical_ical_export.h
-    icalpvl_p.h
+    icalpvl.h
     sspm.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
