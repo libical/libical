@@ -13,27 +13,12 @@
 #include <config.h>
 #endif
 
+#include "icalduration_p.h"
 #include "icalduration.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icaltime.h"
 #include "icaltimezone.h"
-
-/* From Seth Alves, <alves@hungry.com>   */
-struct icaldurationtype icaldurationtype_from_int(int t)
-{
-    struct icaldurationtype dur;
-
-    dur = icaldurationtype_null_duration();
-
-    if (t < 0) {
-        dur.is_neg = 1;
-        t = -t;
-    }
-    dur.seconds = (unsigned int)t;
-
-    return dur;
-}
 
 struct icaldurationtype icaldurationtype_from_string(const char *str)
 {
@@ -228,19 +213,6 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
     }
 
     return buf;
-}
-
-int icaldurationtype_as_int(struct icaldurationtype dur)
-{
-    if (dur.days != 0 || dur.weeks != 0) {
-        /* The length of a day is position-dependent */
-        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        return 0;
-    }
-    return (int)(((int)dur.seconds +
-                  60 * ((int)dur.minutes +
-                        60 * ((int)dur.hours))) *
-                 (dur.is_neg == 1 ? -1 : 1));
 }
 
 struct icaldurationtype icaldurationtype_null_duration(void)
