@@ -11,7 +11,7 @@
 #endif
 
 #include "vcardcomponent.h"
-#include "icalpvl_p.h"
+#include "icalpvl.h"
 #include "vcardparser.h"
 #include "vcardproperty_p.h"
 #include "vcardrestriction.h"

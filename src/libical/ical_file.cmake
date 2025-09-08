@@ -21,6 +21,7 @@ set(
   ${TOPS}/src/libical/icalvalue.h
   ${TOPS}/src/libical/icalparameter.h
   ${TOPB}/src/libical/icalderivedproperty.h
+  ${TOPS}/src/libical/icalpvl.h
   ${TOPS}/src/libical/icalproperty.h
   ${TOPS}/src/libical/icalcomponent.h
   ${TOPS}/src/libical/icaltimezone.h

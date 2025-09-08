@@ -11,7 +11,7 @@
 
 #include "libical_ical_export.h"
 #include "icalderivedproperty.h" /* To get icalproperty_kind enumerations */
-#include "icalpvl_p.h"
+#include "icalpvl.h"
 
 #include <stdarg.h> /* for va_... */
 

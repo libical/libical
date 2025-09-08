@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: icalpvl_p.c
+ FILE: icalpvl.c
  CREATOR: eric November, 1995
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
@@ -18,7 +18,8 @@
 #include <config.h>
 #endif
 
-#include "icalpvl_p.h"
+#include "icalpvl.h"
+
 #include "icalmemory.h"
 
 #include <assert.h>

@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: icalpvl_p.h
+ FILE: icalpvl.h
  CREATOR: eric November, 1995
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
