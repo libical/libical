@@ -567,71 +567,7 @@ void vcardcomponent_strip_errors(vcardcomponent *comp)
         }
     }
 }
-#if 0
-/* Hack. This will change the state of the iterators */
-void vcardcomponent_convert_errors(vcardcomponent *comp)
-{
-    vcardproperty *p, *next_p;
-    vcardcomponent *c;
 
-    for (p = vcardcomponent_get_first_property(card, VCARD_ANY_PROPERTY); p != 0; p = next_p) {
-
-        next_p = vcardcomponent_get_next_property(card, VCARD_ANY_PROPERTY);
-
-        if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
-            struct icalreqstattype rst;
-            icalparameter *param =
-                vcardproperty_get_first_parameter(p, VCARD_XLICERRORTYPE_PARAMETER);
-
-            rst.code = ICAL_UNKNOWN_STATUS;
-            rst.desc = 0;
-
-            switch (vcardparameter_get_xlicerrortype(param)) {
-
-            case ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR:{
-                    rst.code = ICAL_3_2_INVPARAM_STATUS;
-                    break;
-                }
-            case ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR:{
-                    rst.code = ICAL_3_3_INVPARAMVAL_STATUS;
-                    break;
-                }
-            case ICAL_XLICERRORTYPE_PROPERTYPARSEERROR:{
-                    rst.code = ICAL_3_0_INVPROPNAME_STATUS;
-                    break;
-                }
-            case ICAL_XLICERRORTYPE_VALUEPARSEERROR:{
-                    rst.code = ICAL_3_1_INVPROPVAL_STATUS;
-                    break;
-                }
-            case ICAL_XLICERRORTYPE_CARDPARSEERROR:{
-                    rst.code = ICAL_3_4_INVCOMP_STATUS;
-                    break;
-                }
-
-            default:{
-                    break;
-                }
-            }
-            if (rst.code != ICAL_UNKNOWN_STATUS) {
-
-                rst.debug = vcardproperty_get_xlicerror(p);
-                vcardcomponent_add_property(card, vcardproperty_new_requeststatus(rst));
-
-                vcardcomponent_remove_property(card, p);
-                vcardproperty_free(p);
-                p = NULL;
-            }
-        }
-    }
-
-    for (c = vcardcomponent_get_first_card(card, ICAL_ANY_CARD);
-         c != 0; c = vcardcomponent_get_next_card(card, ICAL_ANY_CARD)) {
-
-        vcardcomponent_convert_errors(c);
-    }
-}
-#endif
 struct vcardcomponent_kind_map {
     vcardcomponent_kind kind;
     char name[20];
