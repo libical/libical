@@ -471,7 +471,6 @@ install(
     icalattach.h
     icalcomponent.h
     ${BUILT_HEADERS}
-    icaldate_p.h
     icalduration.h
     icalenumarray.h
     icalenums.h
