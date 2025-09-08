@@ -90,13 +90,6 @@ LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_string_to_kind(const cha
 
 LIBICAL_VCARD_EXPORT const char *vcardcomponent_kind_to_string(vcardcomponent_kind kind);
 
-/**
- *  This takes 2 VCARD components and merges the second one into the first.
- *  comp_to_merge will no longer exist after calling this function.
- */
-LIBICAL_VCARD_EXPORT void vcardcomponent_merge_component(vcardcomponent *comp,
-                                                         vcardcomponent *comp_to_merge);
-
 /* Iteration Routines. There are two forms of iterators, internal and
 external. The internal ones came first, and are almost completely
 sufficient, but they fail badly when you want to construct a loop that
@@ -130,13 +123,6 @@ LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_first_property(vcardcompo
 LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_next_property(vcardcomponent *component,
                                                                      vcardproperty_kind kind);
 
-/**
- *  This takes 2 VCARD components and merges the second one into the first.
- *  comp_to_merge will no longer exist after calling this function.
- */
-LIBICAL_VCARD_EXPORT void vcardcomponent_merge_card(vcardcomponent *card,
-                                                    vcardcomponent *card_to_merge);
-
 /***** Working with embedded error properties *****/
 
 /* Check the component against itip rules and insert error properties*/
@@ -152,9 +138,6 @@ LIBICAL_VCARD_EXPORT int vcardcomponent_count_errors(vcardcomponent *card);
 
 /** @brief Removes all X-LIC-ERROR properties*/
 LIBICAL_VCARD_EXPORT void vcardcomponent_strip_errors(vcardcomponent *card);
-
-/** @brief Converts some X-LIC-ERROR properties into RETURN-STATUS properties*/
-LIBICAL_VCARD_EXPORT void vcardcomponent_convert_errors(vcardcomponent *card);
 
 /**
  * @brief Normalizes (reorders and sorts the properties) the specified vcard @p comp.

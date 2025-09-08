@@ -43,16 +43,6 @@ LIBICAL_VCARD_EXPORT const char *vcardvalue_kind_to_string(const vcardvalue_kind
 /** Check validity of a specific vcardvalue_kind **/
 LIBICAL_VCARD_EXPORT bool vcardvalue_kind_is_valid(const vcardvalue_kind kind);
 
-/** Encode a character string in ical format, escape certain characters, etc. */
-LIBICAL_VCARD_EXPORT int vcardvalue_encode_ical_string(const char *szText,
-                                                       char *szEncText,
-                                                       int MaxBufferLen);
-
-/** Extract the original character string encoded by the above function **/
-LIBICAL_VCARD_EXPORT int vcardvalue_decode_ical_string(const char *szText,
-                                                       char *szDecText,
-                                                       int nMaxBufferLen);
-
 /* Duplicate and dequote a TEXT value */
 LIBICAL_VCARD_EXPORT char *vcardvalue_strdup_and_dequote_text(const char **str,
                                                               const char *sep);

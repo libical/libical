@@ -62,7 +62,7 @@ typedef enum vcard_clientpidmap_field {
     VCARD_CLIENTPIDMAP_ID = 0,
     VCARD_CLIENTPIDMAP_URI,
     VCARD_NUM_CLIENTPIDMAP_FIELDS
-} vcard_clientidmap_field;
+} vcard_clientpidmap_field;
 
 typedef struct vcardvalue_impl vcardvalue;
 
