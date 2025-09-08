@@ -6573,6 +6573,38 @@ static void test_clone_xcomponent(void)
     icalcomponent_free(ical);
 }
 
+static void test_icaltime_proper_zone(void)
+{
+    icaltimetype first, second;
+    icaltimezone *utc = icaltimezone_get_utc_timezone();
+    icaltimezone *first_zone = icaltimezone_get_builtin_timezone("Europe/Brussels");
+    icaltimezone *second_zone = icaltimezone_get_builtin_timezone("America/New_York");
+
+    first = icaltime_current_time_with_zone(first_zone);
+    ok("first::zone is not NULL", (icaltime_get_timezone(first) != NULL));
+    ok("first::zone is not UTC", (icaltime_get_timezone(first) != utc));
+    ok("first::zone preserves zone", (icaltime_get_timezone(first) == first_zone));
+
+    second = icaltime_current_time_with_zone(second_zone);
+    ok("second::zone is not NULL", (icaltime_get_timezone(second) != NULL));
+    ok("second::zone is not UTC", (icaltime_get_timezone(second) != utc));
+    ok("second::zone preserves zone", (icaltime_get_timezone(second) == second_zone));
+
+    ok("first is before or same with the second", (icaltime_compare(first, second) <= 0));
+
+    second = first;
+    ok("first is the same as the second after assignment", (icaltime_compare(first, second) == 0));
+    ok("second::zone is first zone", (icaltime_get_timezone(second) == first_zone));
+
+    icaltimezone_convert_time(&first, first_zone, second_zone);
+    ok("converted first::zone is second zone", (icaltime_get_timezone(first) == second_zone));
+    ok("first is the same as the second after first's convert", (icaltime_compare(first, second) == 0));
+
+    second = icaltime_convert_to_zone(second, utc);
+    ok("converted second::zone is UTC", (icaltime_get_timezone(second) == utc));
+    ok("first is the same as the second after second's convert", (icaltime_compare(first, second) == 0));
+}
+
 int main(int argc, char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -6754,8 +6786,9 @@ int main(int argc, char *argv[])
     test_run("Test enum arrays", test_icalenumarray, do_test, do_header);
     test_run("Test serializing x-component", test_xcomponent_as_string, do_test, do_header);
     test_run("Test cloning x-component", test_clone_xcomponent, do_test, do_header);
-
     test_run("Test manipulating tzid", test_tzid_setter, do_test, do_header);
+    test_run("Test icaltime proper zone set", test_icaltime_proper_zone, do_test, do_header);
+
     /** OPTIONAL TESTS go here... **/
 
 #if defined(WITH_CXX_BINDINGS)
