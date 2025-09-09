@@ -49,7 +49,7 @@
 #  Requires GObject Introspection development package (version MIN_GOBJECT_INTROSPECTION)
 #  Default=false (do not generate the introspection files)
 #
-# -DICAL_BUILD_DOCS=[true|false]
+# -DLIBICAL_BUILD_DOCS=[true|false]
 #  Configure for the API documentation and User Manual.  The 'docs' target will not be available.
 #  Default=true
 #
@@ -66,7 +66,7 @@
 #
 # -DICAL_GLIB_BUILD_DOCS=[true|false]
 #  Set to build libical-glib developer documentation
-#  Requires gi-docgen, GOBJECT_INTROSPECTION and ICAL_BUILD_DOCS options to be true.
+#  Requires gi-docgen, GOBJECT_INTROSPECTION and LIBICAL_BUILD_DOCS options to be true.
 #  Default=true (build libical-glib developer documentation)
 #
 # -DLIBICAL_ENABLE_MSVC_32BIT_TIME_T=[true|false]
@@ -1047,8 +1047,8 @@ if(USE_BUILTIN_TZDATA)
   add_subdirectory(zoneinfo)
 endif()
 
-libical_option(ICAL_BUILD_DOCS "Build documentation" True)
-if(ICAL_BUILD_DOCS)
+libical_deprecated_option(ICAL_BUILD_DOCS LIBICAL_BUILD_DOCS "Build documentation" True)
+if(LIBICAL_BUILD_DOCS)
   libical_option(ICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
   if(ICAL_GLIB_BUILD_DOCS)
     if(STATIC_ONLY)

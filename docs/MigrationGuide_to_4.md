@@ -10,6 +10,7 @@ Please change your build scripts to use the new names before the next major rele
 
 | Old Name          | New Name                         |
 |-------------------|----------------------------------|
+| ICAL_BUILD_DOCS   | LIBICAL_BUILD_DOCS               |
 | WITH_CXX_BINDINGS | LIBICAL_CXX_BINDINGS             |
 | USE_32BIT_TIME_T  | LIBICAL_ENABLE_MSVC_32BIT_TIME_T |
 
