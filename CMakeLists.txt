@@ -69,7 +69,7 @@
 #  Requires gi-docgen, GOBJECT_INTROSPECTION and ICAL_BUILD_DOCS options to be true.
 #  Default=true (build libical-glib developer documentation)
 #
-# -DUSE_32BIT_TIME_T=[true|false]
+# -DLIBICAL_ENABLE_MSVC_32BIT_TIME_T=[true|false]
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
 #
@@ -442,8 +442,17 @@ if(WIN32)
       -D_CRT_NONSTDC_NO_DEPRECATE
       -DYY_NO_UNISTD_H
     )
-    libical_option(USE_32BIT_TIME_T "Build using a 32bit time_t (ignored unless building with MSVC on Windows)." False)
-    if(USE_32BIT_TIME_T)
+    # From https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/time-time32-time64?view=msvc-170
+    # If you need to force the compiler to interpret time_t as the old 32-bit time_t, you can define _USE_32BIT_TIME_T.
+    # We don't recommend _USE_32BIT_TIME_T, because your application may fail after January 18, 2038;
+    # the use of this macro isn't allowed on 64-bit platforms.
+    libical_deprecated_option(
+      USE_32BIT_TIME_T
+      LIBICAL_ENABLE_MSVC_32BIT_TIME_T
+      "Build using the MSVC 32bit time_t (ignored unless building with MSVC on Windows)."
+      False
+    )
+    if(LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
       add_definitions(-D_USE_32BIT_TIME_T)
     endif()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3")
@@ -816,7 +825,7 @@ endif()
 
 #some test programs need to know if we are using 32-bit time
 if(SIZEOF_TIME_T EQUAL 4)
-  set(USE_32BIT_TIME_T TRUE)
+  set(LIBICAL_ENABLE_MSVC_32BIT_TIME_T TRUE)
 endif()
 
 ################ Developer Options #####################

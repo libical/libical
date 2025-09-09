@@ -8,9 +8,10 @@ Some CMake option names have been renamed (deprecated) to the LIBICAL namespace.
 
 Please change your build scripts to use the new names before the next major release.
 
-| Old Name          | New Name             |
-|-------------------|----------------------|
-| WITH_CXX_BINDINGS | LIBICAL_CXX_BINDINGS |
+| Old Name          | New Name                         |
+|-------------------|----------------------------------|
+| WITH_CXX_BINDINGS | LIBICAL_CXX_BINDINGS             |
+| USE_32BIT_TIME_T  | LIBICAL_ENABLE_MSVC_32BIT_TIME_T |
 
 ## Conditional compilation
 
