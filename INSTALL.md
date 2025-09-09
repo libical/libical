@@ -172,7 +172,7 @@ For instance:
 This C library can be built with bindings for these other languages:
 
 - C++. If a C++ compiler is found the buildsystem will create and install the C++ bindings API.
-  Turn off the C++ bindings by passing -DWITH_CXX_BINDINGS=False to cmake.
+  Turn off the C++ bindings by passing -DLIBICAL_CXX_BINDINGS=False to cmake.
   Don't mix ABI from C and C++ compilers.
 
 - Python bindings are built using gobject-introspection, which is enabled

@@ -2,6 +2,16 @@
 
 A guide to help developers port their code from libical v3.x to libical 4.0.
 
+## CMake options
+
+Some CMake option names have been renamed (deprecated) to the LIBICAL namespace.
+
+Please change your build scripts to use the new names before the next major release.
+
+| Old Name          | New Name             |
+|-------------------|----------------------|
+| WITH_CXX_BINDINGS | LIBICAL_CXX_BINDINGS |
+
 ## Conditional compilation
 
 To continue supporting the 3.0 version you can use conditional compilation, like so:

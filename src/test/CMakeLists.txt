@@ -88,7 +88,7 @@ macro(buildme _name _srcs)
     icalvcal
   )
 
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     add_dependencies(
       ${_name}
       ical_cxx
@@ -153,7 +153,7 @@ set(
   test-malloc.c
   test-malloc.h
 )
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   list(APPEND regression_SRCS regression-cxx.cpp)
 endif()
 testme(regression "${regression_SRCS}")
@@ -243,7 +243,7 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
     icalss
     icalvcal
   )
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     # https://github.com/libical/libical/pull/656
     set_property(
       TARGET
@@ -311,7 +311,7 @@ testme(parser_ctrl "${icalparser_ctrl_test_SRCS}")
 
 ########### next target ###############
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   testme(vcf_leak vcf_leak.cpp)
 endif()
 

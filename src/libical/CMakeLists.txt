@@ -368,7 +368,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_D
 
 ########### next target ###############
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   set(
     icalcxx_LIB_SRCS
     icalparameter_cxx.cpp
@@ -498,7 +498,7 @@ install(
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   install(
     FILES
       icalparameter_cxx.h
