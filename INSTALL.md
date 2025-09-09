@@ -42,7 +42,7 @@ From a command prompt for the version of MSVC you want to use
 ```
 
 NOTE: Some MSVC 32bit compilers (like MSVC2005) use a 64bit version of time_t.
-In these cases you must pass -DUSE_32BIT_TIME_T=true to cmake to make sure
+In these cases you must pass -DLIBICAL_ENABLE_MSVC_32BIT_TIME_T=true to cmake to make sure
 the 32bit version of time_t is used instead.
 
 Building on Windows with mingw:

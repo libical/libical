@@ -230,7 +230,7 @@ set(builtin_timezones_SRCS builtin_timezones.c)
 testme(builtin_timezones "${builtin_timezones_SRCS}")
 
 ########### next target ###############
-if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
+if(NOT CYGWIN AND NOT LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
   set(icalrecurtest_SRCS icalrecur_test.c)
   configure_file(icalrecur_test.txt icalrecur_test.txt COPYONLY)
   configure_file(icalrecur_test_rscale.txt icalrecur_test_rscale.txt COPYONLY)
