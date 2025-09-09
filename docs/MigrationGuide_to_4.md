@@ -10,21 +10,22 @@ Please change your build scripts to use the new names before the next major rele
 
 User-specific:
 
-| Old Name            | New Name                            |
-|---------------------|-------------------------------------|
-| ICAL_BUILD_DOCS     | LIBICAL_BUILD_DOCS                  |
+| Old Name             | New Name                            |
+|----------------------|-------------------------------------|
+| ICAL_BUILD_DOCS      | LIBICAL_BUILD_DOCS                  |
 | ICAL_GLIB_VAPI      | LIBICAL_GLIB_VAPI                   |
-| USE_32BIT_TIME_T    | LIBICAL_ENABLE_MSVC_32BIT_TIME_T    |
-| WITH_CXX_BINDINGS   | LIBICAL_CXX_BINDINGS                |
+| ICAL_GLIB_BUILD_DOCS | LIBICAL_GLIB_BUILD_DOCS             |
+| USE_32BIT_TIME_T     | LIBICAL_ENABLE_MSVC_32BIT_TIME_T    |
+| WITH_CXX_BINDINGS    | LIBICAL_CXX_BINDINGS                |
 
 Developer-specific:
 
-| Old Name            | New Name                            |
-|---------------------|-------------------------------------|
-| ABI_DUMPER          | LIBICAL_DEVMODE_ABI_DUMPER          |
-| ADDRESS_SANITIZER   | LIBICAL_DEVMODE_ADDRESS_SANITIZER   |
-| THREAD_SANITIZER    | LIBICAL_DEVMODE_THREAD_SANITIZER    |
-| UNDEFINED_SANITIZER | LIBICAL_DEVMODE_UNDEFINED_SANITIZER |
+| Old Name             | New Name                            |
+|----------------------|-------------------------------------|
+| ABI_DUMPER           | LIBICAL_DEVMODE_ABI_DUMPER          |
+| ADDRESS_SANITIZER    | LIBICAL_DEVMODE_ADDRESS_SANITIZER   |
+| THREAD_SANITIZER     | LIBICAL_DEVMODE_THREAD_SANITIZER    |
+| UNDEFINED_SANITIZER  | LIBICAL_DEVMODE_UNDEFINED_SANITIZER |
 
 ## Conditional compilation
 
