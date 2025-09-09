@@ -592,6 +592,7 @@ set(
 find_package(PkgConfig QUIET)
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
+# GOBJECT_INTROSPECTION might be disabled later by some devmode options
 libical_option(
   GOBJECT_INTROSPECTION
   "Build GObject introspection \"typelib\" files. \
@@ -640,6 +641,7 @@ if(GOBJECT_INTROSPECTION)
   endif()
 endif()
 
+# LIBICAL_GLIB_VAPI might be disabled later by some devmode options
 libical_deprecated_option(ICAL_GLIB_VAPI LIBICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
 if(LIBICAL_GLIB_VAPI)
   if(STATIC_ONLY)
@@ -745,6 +747,8 @@ if(ICAL_GLIB)
     )
   endif()
 endif()
+# LIBICAL_GLIB_BUILD_DOCS might be disabled later by some devmode options
+libical_deprecated_option(ICAL_GLIB_BUILD_DOCS LIBICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
 
 #
 # Compiler settings
@@ -1049,7 +1053,6 @@ endif()
 
 libical_deprecated_option(ICAL_BUILD_DOCS LIBICAL_BUILD_DOCS "Build documentation" True)
 if(LIBICAL_BUILD_DOCS)
-  libical_deprecated_option(ICAL_GLIB_BUILD_DOCS LIBICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
   if(LIBICAL_GLIB_BUILD_DOCS)
     if(STATIC_ONLY)
       message(
