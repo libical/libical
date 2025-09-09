@@ -225,7 +225,7 @@ for example: `cmake -DCMAKE_INSTALL_PREFIX=/opt -DCMAKE_INSTALL_LIBDIR=/opt/lib3
 Run `make docs` to build the API documentation and reference.
 
 Disable the docs make target by running cmake with -DLIBICAL_BUILD_DOCS=False option.
-Disable the libical-glib developer documentation by running cmake with -DICAL_GLIB_BUILD_DOCS=False.
+Disable the libical-glib developer documentation by running cmake with -DLIBICAL_GLIB_BUILD_DOCS=False.
 
 ## Using vcpkg to install dependencies
 

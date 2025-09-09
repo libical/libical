@@ -64,7 +64,7 @@
 #  Requires libxml2.0 development package (version MIN_LIBXML).
 #  Default=true (build the libical-glib interface)
 #
-# -DICAL_GLIB_BUILD_DOCS=[true|false]
+# -DLIBICAL_GLIB_BUILD_DOCS=[true|false]
 #  Set to build libical-glib developer documentation
 #  Requires gi-docgen, GOBJECT_INTROSPECTION and LIBICAL_BUILD_DOCS options to be true.
 #  Default=true (build libical-glib developer documentation)
@@ -882,7 +882,7 @@ if(LIBICAL_DEVMODE_LEAK_SANITIZER)
     )
     set(ICAL_GLIB False)
     set(GOBJECT_INTROSPECTION False)
-    set(ICAL_GLIB_BUILD_DOCS False)
+    set(LIBICAL_GLIB_BUILD_DOCS False)
     set(LIBICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the leak sanitizer using a non-GCC or Clang compiler.")
@@ -912,7 +912,7 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
     )
     set(ICAL_GLIB False)
     set(GOBJECT_INTROSPECTION False)
-    set(ICAL_GLIB_BUILD_DOCS False)
+    set(LIBICAL_GLIB_BUILD_DOCS False)
     set(LIBICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the memory sanitizer using a non-Clang compiler.")
@@ -940,7 +940,7 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     )
     set(ICAL_GLIB False)
     set(GOBJECT_INTROSPECTION False)
-    set(ICAL_GLIB_BUILD_DOCS False)
+    set(LIBICAL_GLIB_BUILD_DOCS False)
     set(LIBICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")
@@ -1049,8 +1049,8 @@ endif()
 
 libical_deprecated_option(ICAL_BUILD_DOCS LIBICAL_BUILD_DOCS "Build documentation" True)
 if(LIBICAL_BUILD_DOCS)
-  libical_option(ICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
-  if(ICAL_GLIB_BUILD_DOCS)
+  libical_deprecated_option(ICAL_GLIB_BUILD_DOCS LIBICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
+  if(LIBICAL_GLIB_BUILD_DOCS)
     if(STATIC_ONLY)
       message(
         FATAL_ERROR
@@ -1058,7 +1058,7 @@ if(LIBICAL_BUILD_DOCS)
         "however that option is not supported when building static libraries only. "
         "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
         "if you really want to build with the glib documentation. Alternatively, "
-        "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
+        "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
     if(NOT ICAL_GLIB)
@@ -1066,7 +1066,7 @@ if(LIBICAL_BUILD_DOCS)
         FATAL_ERROR
         "You requested to build the libical-glib documentation but have not enabled libical-glib itself. "
         "Please try again also passing -DICAL_GLIB=True to cmake. Alternatively, "
-        "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
+        "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
     if(NOT GOBJECT_INTROSPECTION)
@@ -1074,14 +1074,14 @@ if(LIBICAL_BUILD_DOCS)
         FATAL_ERROR
         "You requested to build the libical-glib documentation but have not enabled the GObject Introspection. "
         "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake. Alternatively, "
-        "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
+        "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
     include(GIDocgen)
   endif()
   add_subdirectory(docs) # needs to go last, for the build source files
 else()
-  set(ICAL_GLIB_BUILD_DOCS)
+  set(LIBICAL_GLIB_BUILD_DOCS)
 endif()
 
 ########### Create and install the CMake Config files ##########
