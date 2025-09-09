@@ -202,13 +202,13 @@ LIBICAL_ICAL_EXPORT void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
  */
 
 /** Gets the directory to look for the zonefiles */
-LIBICAL_ICAL_EXPORT const char *get_zone_directory(void);
+LIBICAL_ICAL_EXPORT const char *icaltimezone_get_zone_directory(void);
 
 /** Sets the directory to look for the zonefiles */
-LIBICAL_ICAL_EXPORT void set_zone_directory(const char *path);
+LIBICAL_ICAL_EXPORT void icaltimezone_set_zone_directory(const char *path);
 
 /** Frees the memory dedicated to the zonefile directory */
-LIBICAL_ICAL_EXPORT void free_zone_directory(void);
+LIBICAL_ICAL_EXPORT void icaltimezone_free_zone_directory(void);
 
 LIBICAL_ICAL_EXPORT void icaltimezone_release_zone_tab(void);
 

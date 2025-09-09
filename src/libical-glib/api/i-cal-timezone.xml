@@ -172,15 +172,15 @@
         <returns type="gchar *" annotation="transfer full, nullable" comment="The name of vtimezone." translator="i_cal_memory_str_to_glib"/>
         <comment xml:space="preserve">Gets the name of the vtimezone in component.</comment>
     </method>
-    <method name="i_cal_timezone_get_zone_directory" corresponds="get_zone_directory" kind="others" since="3.0.17">
+    <method name="i_cal_timezone_get_zone_directory" corresponds="icaltimezone_get_zone_directory" kind="others" since="3.0.17">
         <returns type="const gchar *" comment="The path to look for the zonefiles"/>
         <comment xml:space="preserve">Gets the directory to look for the zonefiles.</comment>
     </method>
-    <method name="i_cal_timezone_set_zone_directory" corresponds="set_zone_directory" kind="others" since="1.0">
+    <method name="i_cal_timezone_set_zone_directory" corresponds="icaltimezone_set_zone_directory" kind="others" since="1.0">
         <parameter type="const gchar *" name="path" comment="The path to look for the zonefiles"/>
         <comment xml:space="preserve">Sets the directory to look for the zonefiles.</comment>
     </method>
-    <method name="i_cal_timezone_free_zone_directory" corresponds="free_zone_directory" kind="others" since="1.0">
+    <method name="i_cal_timezone_free_zone_directory" corresponds="icaltimezone_free_zone_directory" kind="others" since="1.0">
         <comment xml:space="preserve">Frees memory dedicated to the zonefile directory.</comment>
     </method>
     <method name="i_cal_timezone_release_zone_tab" corresponds="icaltimezone_release_zone_tab" kind="others" since="1.0">

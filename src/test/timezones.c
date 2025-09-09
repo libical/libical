@@ -39,7 +39,7 @@ int main(void)
     static char new_tz[256];
 #endif
 
-    set_zone_directory("../../zoneinfo");
+    icaltimezone_set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
     timezones = icaltimezone_get_builtin_timezones();
