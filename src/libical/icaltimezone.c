@@ -697,8 +697,8 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
 
 #ifdef ICALTIMEZONE_DEBUG_PRINT
                 printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
-                    change.year, change.month, change.day,
-                    change.hour, change.minute, change.second);
+                       change.year, change.month, change.day,
+                       change.hour, change.minute, change.second);
 #endif
 
                 icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
@@ -724,8 +724,8 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
 
 #ifdef ICALTIMEZONE_DEBUG_PRINT
                     printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
-                        change.year, change.month, change.day,
-                        change.hour, change.minute, change.second);
+                           change.year, change.month, change.day,
+                           change.hour, change.minute, change.second);
 #endif
 
                     icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
