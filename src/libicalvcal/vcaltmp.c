@@ -193,7 +193,7 @@ VObject* vcsAddPAlarm(
 
 #ifdef _TEST
 
-#if 0
+/*
 This testcase would generate a file call "frankcal.vcf" with
 the following content:
 
@@ -225,8 +225,7 @@ DESCRIPTION:Review VCalendar helper API.
 END:VTODO
 
 END:VCALENDAR
-
-#endif
+*/
 
 void testVcalAPIs() {
     FILE *fp;

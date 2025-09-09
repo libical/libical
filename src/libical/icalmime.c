@@ -315,37 +315,3 @@ icalcomponent *icalmime_parse(char *(*get_string)(char *s, size_t size, void *d)
 
     return root;
 }
-
-#if 0
-bool icalmime_test(char *(*get_string)(char *s, size_t size, void *d), void *data)
-{
-    char *out;
-    struct sspm_part *parts;
-    int i;
-
-    if ((parts = (struct sspm_part *)icalmemory_new_buffer(NUM_PARTS * sizeof(struct sspm_part))) == 0) {
-        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-        return false;
-    }
-
-    memset(parts, 0, NUM_PARTS * sizeof(struct sspm_part));
-
-    sspm_parse_mime(parts, NUM_PARTS,          /* Max parts */
-                    icalmime_local_action_map, /* Actions */
-                    get_string, data,          /* data for get_string */
-                    0 /* First header */);
-
-    for (i = 0; i < NUM_PARTS && parts[i].header.major != SSPM_NO_MAJOR_TYPE; i++) {
-        if (parts[i].header.minor == SSPM_CALENDAR_MINOR_TYPE) {
-            parts[i].data = icalcomponent_as_ical_string_r((icalcomponent *)parts[i].data);
-        }
-    }
-
-    sspm_write_mime(parts, NUM_PARTS, &out, "To: bob@bob.org");
-
-    printf("%s\n", out);
-    icalmemory_free_buffer(out);
-
-    return false;
-}
-#endif

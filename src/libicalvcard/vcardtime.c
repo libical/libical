@@ -487,14 +487,6 @@ vcardtimetype vcardtime_from_string(const char *str, int is_bare_time)
         }
         str = sscanf_time(str, &t);
     }
-#if 0
-    /* XXX  Note that this won't parse standalone, undesignated time */
-    if (str && *str != 'T') {
-        str = sscanf_date(str, &t);
-    }
-    if (str && *str == 'T') {
-        str = sscanf_time(++str, &t);
-    }
-#endif
+
     return (str && !*str) ? t : vcardtime_null_datetime();
 }
