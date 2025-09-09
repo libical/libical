@@ -53,7 +53,7 @@
 #  Configure for the API documentation and User Manual.  The 'docs' target will not be available.
 #  Default=true
 #
-# -DICAL_GLIB_VAPI=[true|false]
+# -DLIBICAL_GLIB_VAPI=[true|false]
 #  Set to build Vala "vapi" files
 #  Requires Vala package
 #  Default=false (build the libical-glib interface)
@@ -640,8 +640,8 @@ if(GOBJECT_INTROSPECTION)
   endif()
 endif()
 
-libical_option(ICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
-if(ICAL_GLIB_VAPI)
+libical_deprecated_option(ICAL_GLIB_VAPI LIBICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
+if(LIBICAL_GLIB_VAPI)
   if(STATIC_ONLY)
     message(
       FATAL_ERROR
@@ -649,7 +649,7 @@ if(ICAL_GLIB_VAPI)
       "when building static libraries only. "
       "Please disable the static only option (-DSTATIC_ONLY=False) "
       "if you really want to build the Vala api. Alternatively, "
-      "you can disable this feature (by passing -DICAL_GLIB_VAPI=False to cmake)."
+      "you can disable this feature (by passing -DLIBICAL_GLIB_VAPI=False to cmake)."
     )
   endif()
   if(NOT GOBJECT_INTROSPECTION)
@@ -665,7 +665,7 @@ if(ICAL_GLIB_VAPI)
     message(
       FATAL_ERROR
       "valac, the Vala compiler was not found. "
-      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False."
+      "Install it or disable Vala bindings with -DLIBICAL_GLIB_VAPI=False."
     )
   endif()
 
@@ -674,7 +674,7 @@ if(ICAL_GLIB_VAPI)
     message(
       FATAL_ERROR
       "vapigen, the tool for generating the Vala API was not found. "
-      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False."
+      "Install it or disable Vala bindings with -DLIBICAL_GLIB_VAPI=False."
     )
   endif()
 endif()
@@ -883,7 +883,7 @@ if(LIBICAL_DEVMODE_LEAK_SANITIZER)
     set(ICAL_GLIB False)
     set(GOBJECT_INTROSPECTION False)
     set(ICAL_GLIB_BUILD_DOCS False)
-    set(ICAL_GLIB_VAPI False)
+    set(LIBICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the leak sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -913,7 +913,7 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
     set(ICAL_GLIB False)
     set(GOBJECT_INTROSPECTION False)
     set(ICAL_GLIB_BUILD_DOCS False)
-    set(ICAL_GLIB_VAPI False)
+    set(LIBICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the memory sanitizer using a non-Clang compiler.")
   endif()
@@ -941,7 +941,7 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     set(ICAL_GLIB False)
     set(GOBJECT_INTROSPECTION False)
     set(ICAL_GLIB_BUILD_DOCS False)
-    set(ICAL_GLIB_VAPI False)
+    set(LIBICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")
   endif()
