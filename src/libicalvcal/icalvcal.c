@@ -158,13 +158,6 @@ icalcomponent *icalvcal_convert_with_defaults(VObject *object, icalvcal_defaults
         icalcomponent_free(container);
         return 0; /* HACK. Should return an error */
     }
-#if 0
-    /* Just for testing. */
-    printf("This is the internal VObject representation:\n");
-    printf("===========================================\n");
-    printVObject(stdout, object);
-    printf("===========================================\n");
-#endif
 
     icalvcal_traverse_objects(object, container, 0, defaults);
 
@@ -1620,50 +1613,3 @@ static void icalvcal_traverse_objects(VObject *object,
         }
     }
 }
-
-#if 0
-switch (vObjectValueType(object)) {
-case VCVT_USTRINGZ:
-{
-    char c;
-    char *t, *s;
-
-    s = t = fakeCString(vObjectUStringZValue(object));
-    printf(" ustringzstring:%s\n", s);
-    deleteStr(s);
-    break;
-}
-case VCVT_STRINGZ:
-{
-    char c;
-    const char *s = vObjectStringZValue(object);
-
-    printf(" stringzstring:%s\n", s);
-    break;
-}
-case VCVT_UINT:
-{
-    int i = vObjectIntegerValue(object);
-
-    printf(" int:%d\n", i);
-    break;
-}
-case VCVT_ULONG:
-{
-    long l = vObjectLongValue(object);
-
-    printf(" int:%d\n", l);
-    break;
-}
-case VCVT_VOBJECT:
-{
-    printf("ERROR, should not get here\n");
-    break;
-}
-case VCVT_RAW:
-case 0:
-default:
-    break;
-}
-
-#endif

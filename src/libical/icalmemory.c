@@ -83,19 +83,6 @@ static void ring_key_alloc(void)
 
 #endif
 
-#if 0
-/*keep for historical sake*/
-static void icalmemory_free_tmp_buffer(void *buf)
-{
-    if (buf == 0) {
-        return;
-    }
-
-    icalmemory_free_buffer(buf);
-}
-
-#endif
-
 /**
  * @private
  */

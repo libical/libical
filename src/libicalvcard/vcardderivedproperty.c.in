@@ -213,52 +213,7 @@ bool vcardproperty_is_multivalued(vcardproperty_kind pkind)
 
     return false;
 }
-#if 0
-bool vcardproperty_value_kind_is_multivalued(vcardproperty_kind pkind,
-                                             vcardvalue_kind *vkind)
-{
-    int i, num_props;
 
-    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
-    for (i = 0; i < num_props; i++) {
-        const struct vcardproperty_map *map = &property_map[i];
-
-        if (map->kind == pkind) {
-            if ((map->flags & VCARD_PROPERTY_IS_STRUCTURED) &&
-                *vkind == map->default_value) {
-                /* Normalize structured property VALUE type for proper parsing */
-                *vkind = map->libical_value;
-            }
-            if ((map->flags & VCARD_PROPERTY_IS_MULTIVALUED)) {
-                /* Property is defined as multi-valued.
-                   Make sure the VALUE type is also defined as multi-valued. */
-                switch (*vkind) {
-                case VCARD_DATE_VALUE:
-                case VCARD_DATETIME_VALUE:
-                case VCARD_DATETIMEDATE_VALUE:
-                case VCARD_DATETIMEPERIOD_VALUE:
-                case VCARD_DURATION_VALUE:
-                case VCARD_FLOAT_VALUE:
-                case VCARD_INTEGER_VALUE:
-                case VCARD_PERIOD_VALUE:
-                case VCARD_TEXT_VALUE:
-              //case VCARD_TIME_VALUE:
-                case VCARD_X_VALUE:
-                    return true;
-                    break;
-
-                default:
-                    break;
-                }
-            }
-
-            break;
-        }
-    }
-
-    return false;
-}
-#endif
 bool vcardproperty_value_kind_is_default(vcardproperty_kind pkind,
                                          vcardvalue_kind vkind)
 {

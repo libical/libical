@@ -352,12 +352,6 @@ void test_bdbset(void)
 
         assert(icalcomponent_get_first_property(event, ICAL_LOCATION_PROPERTY) != 0);
 
-#if 0
-        /* change the uid to include the month */
-        sprintf(uid, "%s_%d", icalcomponent_get_uid(clone), month);
-        icalcomponent_set_uid(clone, uid);
-#endif
-
         (void)icalbdbset_add_component(cout, clone);
 
         /* commit changes */
@@ -372,12 +366,6 @@ void test_bdbset(void)
     memset(&key, 0, sizeof(DBT));
     memset(&data, 0, sizeof(DBT));
 
-#if 0
-    ret = icalbdbset_acquire_cursor(dbp, &dbcp);
-    ret = icalbdbset_get_first(dbcp, &key, &data);
-    ret = icalbdbset_get_next(dbcp, &key, &data);
-    ret = icalbdbset_get_last(dbcp, &key, &data);
-#endif
     /* Print them out */
 
     for (month = 1, count = 0; month < 10; month++) {
