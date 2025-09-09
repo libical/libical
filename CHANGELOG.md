@@ -47,6 +47,11 @@ for details about API changes since libical 3.x.
 - The icalvcal library is deprecated and will be removed sometime in the 4.x series.
    Please port your icalvcal code to use icalvcard instead.
 
+- Several CMake options are renamed in favor of a "namespaced" equivalent.
+  Please port your buildscripts to the new CMake option names.
+  A complete list is provided in this "CMake options" section of the
+  [Version 4 Migration Guide](docs/MigrationGuide_to_4.md)
+
 ### Removed
 
 - The old src/python code is removed in favor of the glib-introspection generated
