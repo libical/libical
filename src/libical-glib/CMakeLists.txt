@@ -283,7 +283,7 @@ if(GOBJECT_INTROSPECTION)
   gir_add_introspections(GObjectIntrospection_GIRS)
 endif()
 
-if(ICAL_GLIB_VAPI)
+if(LIBICAL_GLIB_VAPI)
   add_custom_target(vala ALL COMMENT "Target to run vala")
   set(gir_fullname ${PROJECT_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
   set(typelib_fullname ${PROJECT_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.typelib)

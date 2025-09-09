@@ -13,8 +13,9 @@ User-specific:
 | Old Name            | New Name                            |
 |---------------------|-------------------------------------|
 | ICAL_BUILD_DOCS     | LIBICAL_BUILD_DOCS                  |
-| WITH_CXX_BINDINGS   | LIBICAL_CXX_BINDINGS                |
+| ICAL_GLIB_VAPI      | LIBICAL_GLIB_VAPI                   |
 | USE_32BIT_TIME_T    | LIBICAL_ENABLE_MSVC_32BIT_TIME_T    |
+| WITH_CXX_BINDINGS   | LIBICAL_CXX_BINDINGS                |
 
 Developer-specific:
 
