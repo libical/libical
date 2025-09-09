@@ -802,6 +802,7 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
        of our UTC time and adding it. */
     utc_offset = icaltimezone_get_utc_offset_of_utc_time(to_zone, tt, &is_daylight);
     tt->is_daylight = is_daylight;
+    tt->zone = to_zone;
     icaltime_adjust(tt, 0, 0, 0, utc_offset);
 }
 
