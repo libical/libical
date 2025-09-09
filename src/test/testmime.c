@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
 
             size = strlen(str);
             memset(conv, 0, 4096);
-            (void)decode_quoted_printable(conv, str, &size);
+            (void)sspm_decode_quoted_printable(conv, str, &size);
 
             conv[size] = '\0';
             printf("%s", conv);
@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
 
             size = strlen(str);
             memset(conv, 0, 4096);
-            (void)decode_base64(conv, str, &size);
+            (void)sspm_decode_base64(conv, str, &size);
 
             conv[size] = '\0';
             printf("%s", conv);
