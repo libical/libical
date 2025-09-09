@@ -6,7 +6,7 @@
 # Pass the following variables to cmake to control the build:
 # (See docs/UsingLibical.md for more information)
 #
-# -DWITH_CXX_BINDINGS=[true|false]
+# -DLIBICAL_CXX_BINDINGS=[true|false]
 #  Build the C++ bindings.
 #  Default=true
 #
@@ -235,25 +235,25 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   )
 endif()
 
-option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
-if(WITH_CXX_BINDINGS)
+libical_deprecated_option(WITH_CXX_BINDINGS LIBICAL_CXX_BINDINGS "Build the C++ bindings." True)
+if(LIBICAL_CXX_BINDINGS)
   enable_language(CXX)
   set(CMAKE_CXX_STANDARD 11)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   if(CMAKE_CXX_COMPILER)
-    add_definitions(-DWITH_CXX_BINDINGS)
+    add_definitions(-DLIBICAL_CXX_BINDINGS)
   else()
     message(
       NOTICE
       "Building the C++ bindings is not possible since a C++ compiler could not be found. "
       "Turning-off C++ bindings."
     )
-    set(WITH_CXX_BINDINGS False)
+    set(LIBICAL_CXX_BINDINGS False)
   endif()
 endif()
 add_feature_info(
-  "Option WITH_CXX_BINDINGS"
-  WITH_CXX_BINDINGS
+  "Option LIBICAL_CXX_BINDINGS"
+  LIBICAL_CXX_BINDINGS
   "build the C++ bindings. Requires a C++ compiler"
 )
 
@@ -848,7 +848,7 @@ mark_as_advanced(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
 if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
-    if(WITH_CXX_BINDINGS)
+    if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
     endif()
     set(SHARED_ONLY True)
@@ -862,7 +862,7 @@ mark_as_advanced(LIBICAL_DEVMODE_LEAK_SANITIZER)
 if(LIBICAL_DEVMODE_LEAK_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
-    if(WITH_CXX_BINDINGS)
+    if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
     endif()
     set(SHARED_ONLY True)
@@ -888,7 +888,7 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
       CMAKE_C_FLAGS
       "${CMAKE_C_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
     )
-    if(WITH_CXX_BINDINGS)
+    if(LIBICAL_CXX_BINDINGS)
       set(
         CMAKE_CXX_FLAGS
         "${CMAKE_CXX_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
@@ -920,7 +920,7 @@ mark_as_advanced(LIBICAL_DEVMODE_THREAD_SANITIZER)
 if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
-    if(WITH_CXX_BINDINGS)
+    if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     endif()
     set(SHARED_ONLY True)
@@ -948,7 +948,7 @@ mark_as_advanced(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
 if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
-    if(WITH_CXX_BINDINGS)
+    if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
     endif()
     set(SHARED_ONLY True)
@@ -971,7 +971,7 @@ if(ENABLE_LTO_BUILD)
     else()
       message(FATAL_ERROR "Your C compiler ${CMAKE_C_COMPILER_ID} does not support the LTO building.")
     endif()
-    if(WITH_CXX_BINDINGS AND CMAKE_CXX_COMPILER_IS_GCC)
+    if(LIBICAL_CXX_BINDINGS AND CMAKE_CXX_COMPILER_IS_GCC)
       include(CheckCXXCompilerFlag)
       libical_add_cxxflag(-flto LTO)
       if(CXX_SUPPORTS_LTO)
@@ -1022,7 +1022,7 @@ endif()
 
 if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   include(openssf-c) #hardening
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     include(openssf-cpp) #hardening
   endif()
 endif()

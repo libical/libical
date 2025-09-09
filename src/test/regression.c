@@ -6791,7 +6791,7 @@ int main(int argc, char *argv[])
 
     /** OPTIONAL TESTS go here... **/
 
-#if defined(WITH_CXX_BINDINGS)
+#if defined(LIBICAL_CXX_BINDINGS)
     test_run("Test C++ API", test_cxx, do_test, do_header);
 #endif
 
