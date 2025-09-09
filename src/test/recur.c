@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
 
     icalmemory_free_ring();
 
-    free_zone_directory();
+    icaltimezone_free_zone_directory();
 
     return 0;
 }

@@ -6630,7 +6630,7 @@ int main(int argc, char *argv[])
     icalmemory_set_mem_alloc_funcs(&test_malloc, &test_realloc, &test_free);
 #endif
 
-    set_zone_directory(TEST_ZONEDIR);
+    icaltimezone_set_zone_directory(TEST_ZONEDIR);
     icaltimezone_set_tzid_prefix(TESTS_TZID_PREFIX);
 
     test_start(0);
@@ -6800,8 +6800,8 @@ int main(int argc, char *argv[])
 #endif
 
     icaltimezone_free_builtin_timezones();
+    icaltimezone_free_zone_directory();
     icalmemory_free_ring();
-    free_zone_directory();
 
     failed_count = test_end();
 

@@ -77,7 +77,7 @@ int main(void)
     int dd, hh, zz, tried = 0;
     long zz2 = -1;
 
-    set_zone_directory("../../zoneinfo");
+    icaltimezone_set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
