@@ -25,6 +25,7 @@ Structure *structure_new(void)
     structure->defaultNative = NULL;
     structure->dependencies = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
     structure->declarations = NULL;
+    structure->skips = NULL;
     return structure;
 }
 
@@ -62,6 +63,7 @@ void structure_free(Structure *structure)
     g_free(structure->defaultNative);
     g_free(structure->new_full_extraCode);
     g_hash_table_destroy(structure->dependencies);
+    g_clear_pointer(&structure->skips, g_ptr_array_unref);
     g_free(structure);
 }
 
@@ -603,6 +605,13 @@ gboolean parse_structure(xmlNode *node, Structure *structure)
                 structure->enumerations = g_list_append(structure->enumerations, enumeration);
             }
             enumeration = NULL;
+        } else if (g_strcmp0((const gchar *)child->name, "skip") == 0) {
+            gchar *symbol = dup_node_content(child);
+            if (symbol != NULL) {
+                if (structure->skips == NULL)
+                    structure->skips = g_ptr_array_new_with_free_func(g_free);
+                g_ptr_array_add(structure->skips, symbol);
+            }
         }
     }
 

@@ -61,11 +61,11 @@
 	<returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="Array of calendars. Currently always NULL."/>
 	<comment xml:space="preserve">Gets an array of calendars supporting rscale (currently always return NULL).</comment>
     </method>
-    <method name="i_cal_recurrence_new_default" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
+    <method name="i_cal_recurrence_new_default" corresponds="icalrecurrencetype_new" annotation="skip" kind="private" since="1.0">
         <returns type="struct icalrecurrencetype *" comment="The default value."/>
         <custom>	return icalrecurrencetype_new();</custom>
     </method>
-    <method name="i_cal_recurrence_new" corresponds="CUSTOM" kind="constructor" since="1.0">
+    <method name="i_cal_recurrence_new" corresponds="icalrecurrencetype_new" kind="constructor" since="1.0">
         <returns type="ICalRecurrence *" annotation="transfer full" comment="The newly created #ICalRecurrence." />
         <comment xml:space="preserve">Creates a new #ICalRecurrence.</comment>
         <custom>	return i_cal_recurrence_new_full(i_cal_recurrence_new_default(), NULL);</custom>
@@ -125,14 +125,14 @@
         <returns type="gchar *" annotation="transfer full" comment="The string representation of @recur." translator="i_cal_memory_str_to_glib"/>
         <comment xml:space="preserve">Converts a #ICalRecurrence to a string.</comment>
     </method>
-    <method name="i_cal_recurrence_get_until" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_recurrence_get_until" corresponds="none" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="ICalTime *" annotation="transfer full" comment="The until of #ICalRecurrence."/>
         <comment>Gets the until from #ICalRecurrence.</comment>
         <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
 	return i_cal_time_new_full (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->until);</custom>
     </method>
-    <method name="i_cal_recurrence_set_until" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_recurrence_set_until" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="ICalTime *" name="until" comment="The until of #ICalRecurrence"/>
         <comment>Sets the until from #ICalRecurrence.</comment>
@@ -140,63 +140,63 @@
 	g_return_if_fail (until != NULL &amp;&amp; I_CAL_IS_TIME(until));
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->until = *(icaltimetype *)i_cal_object_get_native ((ICalObject *)until);</custom>
     </method>
-    <method name="i_cal_recurrence_get_freq" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_recurrence_get_freq" corresponds="none" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="ICalRecurrenceFrequency" comment="The freq of #ICalRecurrence."/>
         <comment>Gets the freq from #ICalRecurrence.</comment>
         <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_NO_RECURRENCE);
 	return (ICalRecurrenceFrequency) (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->freq);</custom>
     </method>
-    <method name="i_cal_recurrence_set_freq" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_recurrence_set_freq" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="ICalRecurrenceFrequency" name="freq" comment="The freq of #ICalRecurrence"/>
         <comment>Sets the freq from #ICalRecurrence.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
 	((struct icalrecurrencetype *) i_cal_object_get_native ((ICalObject *)recur))->freq = (icalrecurrencetype_frequency) freq;</custom>
     </method>
-    <method name="i_cal_recurrence_get_count" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_recurrence_get_count" corresponds="none" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="gint" comment="The count of #ICalRecurrence."/>
         <comment>Gets the count from #ICalRecurrence.</comment>
         <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), 0);
 	return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->count;</custom>
     </method>
-    <method name="i_cal_recurrence_set_count" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_recurrence_set_count" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="gint" name="count" comment="The count of #ICalRecurrence"/>
         <comment>Sets the count from #ICalRecurrence.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->count = count;</custom>
     </method>
-    <method name="i_cal_recurrence_get_interval" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_recurrence_get_interval" corresponds="none" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="gshort" comment="The interval of #ICalRecurrence."/>
         <comment>Gets the interval from #ICalRecurrence.</comment>
         <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), 0);
 	return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->interval;</custom>
     </method>
-    <method name="i_cal_recurrence_set_interval" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_recurrence_set_interval" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="gshort" name="interval" comment="The interval of #ICalRecurrence"/>
         <comment>Sets the interval from #ICalRecurrence.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->interval = interval;</custom>
     </method>
-    <method name="i_cal_recurrence_get_week_start" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_recurrence_get_week_start" corresponds="none" kind="get" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <returns type="ICalRecurrenceWeekday" comment="The week_start of #ICalRecurrence."/>
         <comment>Gets the week_start from #ICalRecurrence.</comment>
         <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_NO_WEEKDAY);
 	return (ICalRecurrenceWeekday) (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->week_start);</custom>
     </method>
-    <method name="i_cal_recurrence_set_week_start" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_recurrence_set_week_start" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="ICalRecurrenceWeekday" name="week_start" comment="The week_start of #ICalRecurrence"/>
         <comment>Sets the week_start from #ICalRecurrence.</comment>
         <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
 	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->week_start = (icalrecurrencetype_weekday) week_start;</custom>
     </method>
-    <method name="i_cal_recurrence_get_by_array" corresponds="CUSTOM" kind="get" since="4.0">
+    <method name="i_cal_recurrence_get_by_array" corresponds="none" kind="get" since="4.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
         <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by[byrule] of #ICalRecurrence."/>
@@ -208,7 +208,7 @@
     if (by->size) g_array_append_vals (array, by->data, by->size);
 	return array;</custom>
     </method>
-    <method name="i_cal_recurrence_get_by_array_size" corresponds="CUSTOM" kind="get" since="4.0">
+    <method name="i_cal_recurrence_get_by_array_size" corresponds="none" kind="get" since="4.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
         <returns type="guint" comment="The current size of the given 'by' array."/>
@@ -218,7 +218,7 @@
     icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by[byrule];
 	return by->size;</custom>
     </method>
-    <method name="i_cal_recurrence_set_by_array" corresponds="CUSTOM" kind="set" since="4.0">
+    <method name="i_cal_recurrence_set_by_array" corresponds="none" kind="set" since="4.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
         <parameter type="GArray *" name="values" annotation="element-type gshort" comment="The array of values"/>
@@ -230,7 +230,7 @@
     g_return_if_fail(icalrecur_resize_by(by, values->len));
     memcpy(by->data, values->data, values->len * sizeof(by->data[0]));</custom>
     </method>
-    <method name="i_cal_recurrence_get_by" corresponds="CUSTOM" kind="get" since="4.0">
+    <method name="i_cal_recurrence_get_by" corresponds="none" kind="get" since="4.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
         <parameter type="guint" name="index" comment="The index in the by[byrule] array of #ICalRecurrence."/>
@@ -242,7 +242,7 @@
     g_return_val_if_fail (index &lt; (guint)by->size, 0);
 	return by->data[index];</custom>
     </method>
-    <method name="i_cal_recurrence_set_by" corresponds="CUSTOM" kind="set" since="4.0">
+    <method name="i_cal_recurrence_set_by" corresponds="none" kind="set" since="4.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
         <parameter type="guint" name="index" comment="The index in the 'by' array"/>
@@ -254,7 +254,7 @@
     if (((guint)by->size) &lt; (index + 1)) g_return_if_fail (icalrecur_resize_by(by, index + 1));
 	by->data[index] = value;</custom>
     </method>
-    <method name="i_cal_recurrence_resize_by_array" corresponds="CUSTOM" kind="others" since="4.0">
+    <method name="i_cal_recurrence_resize_by_array" corresponds="icalrecur_resize_by" kind="custom" since="4.0">
         <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
         <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
         <parameter type="guint" name="size" comment="The new size of the 'by' array"/>

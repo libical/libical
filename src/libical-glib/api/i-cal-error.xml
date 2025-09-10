@@ -6,6 +6,17 @@
 
 -->
 <structure namespace="ICal" name="Error">
+    <skip>icalerror_assert</skip>
+    <skip>icalerror_check_arg</skip>
+    <skip>icalerror_check_arg_re</skip>
+    <skip>icalerror_check_arg_rv</skip>
+    <skip>icalerror_check_arg_rx</skip>
+    <skip>icalerror_check_arg_rz</skip>
+    <skip>icalerror_check_component_type</skip>
+    <skip>icalerror_check_parameter_type</skip>
+    <skip>icalerror_check_property_type</skip>
+    <skip>icalerror_check_value_type</skip>
+    <skip>icalerror_warn</skip>
     <enum name="ICalErrorEnum" native_name="icalerrorenum" default_native="I_CAL_UNKNOWN_ERROR">
         <element name="ICAL_NO_ERROR"/>
         <element name="ICAL_BADARG_ERROR"/>
@@ -67,5 +78,18 @@
         <parameter type="const gchar *" name="error" comment="The error to be restored"/>
         <parameter type="ICalErrorState" name="es" comment="The error state to be restored"/>
         <comment xml:space="preserve">Restores the error to specified state.</comment>
+    </method>
+    <method name="i_cal_error_error_from_string" corresponds="icalerror_error_from_string" since="4.0">
+        <parameter type="const gchar *" name="str" comment="The error name string"/>
+        <returns type="ICalErrorEnum" comment="An #ICalErrorEnum representation of the error @str" />
+        <comment xml:space="preserve">Reads an error from a string.</comment>
+    </method>
+    <method name="i_cal_error_get_errors_are_fatal" corresponds="icalerror_get_errors_are_fatal" since="4.0">
+        <returns type="gboolean" comment="whether errors are fatal" />
+        <comment xml:space="preserve">Determine whether errors are fatal.</comment>
+    </method>
+    <method name="i_cal_error_set_errors_are_fatal" corresponds="icalerror_set_errors_are_fatal" since="4.0">
+        <parameter type="gboolean" name="value" comment="value to set"/>
+        <comment xml:space="preserve">Sets whether errors are fatal, that is, whether libical aborts after any processing reports an error.</comment>
     </method>
 </structure>

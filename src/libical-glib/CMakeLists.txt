@@ -16,6 +16,8 @@ add_executable(
   ical-glib-src-generator
   tools/generator.c
   tools/generator.h
+  tools/header-parser.c
+  tools/header-parser.h
   tools/xml-parser.c
   tools/xml-parser.h
 )
@@ -182,6 +184,17 @@ if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
       -DLIBICAL_GLIB_COMPILATION
   )
   target_link_libraries(ical-glib-static ${GLIB_LIBRARIES})
+endif()
+
+if(LIBICAL_GLIB_CHECK_API_FILES)
+  add_custom_command(
+    TARGET ical-glib
+    POST_BUILD
+    COMMAND
+      ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
+      "--check-api-files" "${CMAKE_CURRENT_BINARY_DIR}/../libical/ical.h" "LIBICAL_ICAL_EXPORT"
+    COMMENT "Check the libical-glib API files for completeness"
+  )
 endif()
 
 include(CheckCCompilerFlag)

@@ -60,6 +60,7 @@ typedef struct Structure {
     gchar *cloneFunc;
     gchar *defaultNative;
     GList *declarations;
+    GPtrArray *skips; /* gchar * */
 } Structure;
 
 typedef struct Declaration {

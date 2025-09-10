@@ -11,7 +11,7 @@
         <returns type="ICalAttach *" annotation="transfer full" comment="The newly created #ICalAttach from the @url" />
         <comment xml:space="preserve">Creates a new #ICalAttach from the url.</comment>
     </method>
-    <method name="i_cal_attach_new_from_data" corresponds="CUSTOM" kind="constructor" since="1.0">
+    <method name="i_cal_attach_new_from_data" corresponds="icalattach_new_from_data" kind="custom" since="1.0">
         <parameter type="const gchar *" name="data" comment="The data used to create the #ICalAttach"/>
         <parameter type="GFunc" name="free_fn" translator="(icalattach_free_fn_t)" annotation="scope call, nullable" comment="The function used to free the data when the create #ICalAttach is destroyed"/>
         <parameter type="void *" name="free_fn_data" annotation="nullable" comment="The userdata used for the free function @free_fn"/>
@@ -31,7 +31,7 @@ static void unref_g_bytes(char *data, void *user_data)
 
     g_bytes_unref(bytes);
 }</declaration>
-    <method name="i_cal_attach_new_from_bytes" corresponds="CUSTOM" kind="constructor" since="1.0">
+    <method name="i_cal_attach_new_from_bytes" corresponds="icalattach_new_from_data" kind="custom" since="1.0">
         <parameter type="GBytes *" annotation="transfer full" name="bytes" comment="The #GBytes holding the data used to create the #ICalAttach"/>
         <returns type="ICalAttach *" annotation="transfer full" comment="The newly created #ICalAttach" />
         <comment xml:space="preserve">Creates a new #ICalAttach from the data in bytes. Takes a reference of @bytes, increase the reference before calling this function if you with to use it afterward. The stored bytes should be already encoded with used encoding (like base64).</comment>
@@ -57,7 +57,7 @@ static void unref_g_bytes(char *data, void *user_data)
         <returns type="const gchar *" annotation="nullable, transfer none" comment="The url component of the @attach. %NULL if it is built from data or there is an error." />
         <comment xml:space="preserve">Gets the url, if the #ICalAttach is built from the url.</comment>
     </method>
-    <method name="i_cal_attach_get_data" corresponds="CUSTOM" kind="others" since="1.0">
+    <method name="i_cal_attach_get_data" corresponds="icalattach_get_data" kind="custom" since="1.0">
         <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be queried"/>
         <returns type="const gchar *" annotation="nullable, transfer none" comment="The data component of the @attach. %NULL if it is built from url or there is an error." />
         <comment xml:space="preserve">Gets the data, if the #ICalAttach is built from the data.</comment>

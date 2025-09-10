@@ -69,6 +69,11 @@
 #  Requires gi-docgen, GOBJECT_INTROSPECTION and LIBICAL_BUILD_DOCS options to be true.
 #  Default=true (build libical-glib developer documentation)
 #
+# -DLIBICAL_GLIB_CHECK_API_FILES=[true|false]
+#  Set to check whether API files for the libical-glib contain all symbols exported
+#  in the corresponding header files; requires ICAL_GLIB to be set to True
+#  Default=false (always true if LIBICAL_DEVMODE is on)
+#
 # -DLIBICAL_ENABLE_MSVC_32BIT_TIME_T=[true|false]
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
@@ -747,6 +752,11 @@ if(LIBICAL_GLIB)
       "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
     )
   endif()
+endif()
+libical_option(LIBICAL_GLIB_CHECK_API_FILES "Check libical-glib API files for completeness." False)
+# Always check the API files in developer-mode (when libical-glib is enabled)
+if(LIBICAL_DEVMODE)
+  set(LIBICAL_GLIB_CHECK_API_FILES True)
 endif()
 # LIBICAL_GLIB_BUILD_DOCS might be disabled later by some devmode options
 libical_deprecated_option(ICAL_GLIB_BUILD_DOCS LIBICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
