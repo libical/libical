@@ -43,7 +43,7 @@ assert end.get_minute() == 16
 assert end.get_second() == 25
 
 duration = period.get_duration()
-assert duration.as_int() == 0
+assert duration.is_bad_duration() == 0
 
 string = '19970101T182346Z/PT5H30M'
 period = ICalGLib.Period.new_from_string(string)

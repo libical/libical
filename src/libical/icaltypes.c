@@ -10,6 +10,7 @@
 #endif
 
 #include "icaltypes.h"
+#include "icalduration_p.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 
