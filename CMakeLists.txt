@@ -58,7 +58,7 @@
 #  Requires Vala package
 #  Default=false (build the libical-glib interface)
 #
-# -DICAL_GLIB=[true|false]
+# -DLIBICAL_GLIB=[true|false]
 #  Set to build libical-glib (GObject) interface
 #  Requires glib 2.0 development package (version MIN_GLIB).
 #  Requires libxml2.0 development package (version MIN_LIBXML).
@@ -683,19 +683,20 @@ endif()
 
 set(MIN_GLIB "2.44")
 set(MIN_LIBXML "2.7.3")
-libical_option(
+libical_deprecated_option(
   ICAL_GLIB
+  LIBICAL_GLIB
   "Build libical-glib interface. \
   Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher."
   True
 )
-if(ICAL_GLIB)
+if(LIBICAL_GLIB)
   if(NOT PKG_CONFIG_FOUND)
     message(
       FATAL_ERROR
       "You requested to build libical-glib, however that option is not supported "
       "unless pkg-config can be found. Please install pkg-config and try again. "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
     )
   endif()
 
@@ -728,14 +729,14 @@ if(ICAL_GLIB)
       FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
       "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
     )
   elseif(LIBXML_FOUND)
     message(
       FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
       "is missing or too low a version (glib ${MIN_GLIB} or higher is required. "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
     )
   else()
     message(
@@ -743,7 +744,7 @@ if(ICAL_GLIB)
       "You requested to build libical-glib, but the necessary development packages "
       "are missing or too low a version "
       "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required). "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
     )
   endif()
 endif()
@@ -884,7 +885,7 @@ if(LIBICAL_DEVMODE_LEAK_SANITIZER)
       "Currently unable to build leak sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
-    set(ICAL_GLIB False)
+    set(LIBICAL_GLIB False)
     set(GOBJECT_INTROSPECTION False)
     set(LIBICAL_GLIB_BUILD_DOCS False)
     set(LIBICAL_GLIB_VAPI False)
@@ -914,7 +915,7 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
       "Currently unable to build memory sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
-    set(ICAL_GLIB False)
+    set(LIBICAL_GLIB False)
     set(GOBJECT_INTROSPECTION False)
     set(LIBICAL_GLIB_BUILD_DOCS False)
     set(LIBICAL_GLIB_VAPI False)
@@ -942,7 +943,7 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
       "Currently unable to build thread sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
-    set(ICAL_GLIB False)
+    set(LIBICAL_GLIB False)
     set(GOBJECT_INTROSPECTION False)
     set(LIBICAL_GLIB_BUILD_DOCS False)
     set(LIBICAL_GLIB_VAPI False)
@@ -1064,11 +1065,11 @@ if(LIBICAL_BUILD_DOCS)
         "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
-    if(NOT ICAL_GLIB)
+    if(NOT LIBICAL_GLIB)
       message(
         FATAL_ERROR
         "You requested to build the libical-glib documentation but have not enabled libical-glib itself. "
-        "Please try again also passing -DICAL_GLIB=True to cmake. Alternatively, "
+        "Please try again also passing -DLIBICAL_GLIB=True to cmake. Alternatively, "
         "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
