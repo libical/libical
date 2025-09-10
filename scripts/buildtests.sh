@@ -37,6 +37,7 @@ HELP() {
   echo " -s, --no-splint            Don't run any splint tests"
   echo " -b, --no-scan              Don't run any scan-build tests"
   echo " -t, --no-tidy              Don't run any clang-tidy tests"
+  echo " -w, --no-iwyu              Don't run any include-what-you-use tests"
   echo " -c, --no-cppcheck          Don't run any cppcheck tests"
   echo " -g, --no-gcc-build         Don't run any gcc-build tests with Unix Makefiles"
   echo " -n, --no-ninja-gcc-build   Don't run any gcc build tests with ninja"
@@ -599,6 +600,26 @@ CLANGTIDY() {
   echo "===== END CLANG-TIDY: $1 ====="
 }
 
+#function IWYU
+# runs an include-what-you-use test, which means: configure, compile, link and run include-what-you-use
+# $1 = the name of the test (which will have "-iwyu" appended)
+# $2 = CMake options
+IWYU() {
+  if (test -z "$(REVERSE $runiwyu)"); then
+    echo "===== INCLUDE-WHAT-YOU-USE TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  COMMAND_EXISTS "include-what-you-use" "-w"
+  echo "===== START INCLUDE-WHAT-YOU-USE: $1 ====="
+  cd "$TOP" || exit 1
+  SET_CLANG
+  CONFIGURE "$1-iwyu" "$2 -DCMAKE_C_INCLUDE_WHAT_YOU_USE=include-what-you-use"
+  cmake --build . 2>&1 | tee make-iwyu.out || exit 1
+  TIDY_WARNINGS make-iwyu.out
+  CLEAN
+  echo "===== END INCLUDE-WHAT-YOU-USE: $1 ====="
+}
+
 #function CLANGSCAN
 # runs a scan-build, which means: configure, compile and link using scan-build
 # $1 = the name of the test (which will have "-scan" appended)
@@ -671,7 +692,7 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hCpksbtcgnzxalmdufrR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse" -- "$@")
+options=$(getopt -o "hCpksbtwcgnzxalmdufrR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse" -- "$@")
 eval set -- "$options"
 
 reverse=0
@@ -680,6 +701,7 @@ runkrazy=1
 runprecommit=1
 runcppcheck=1
 runtidy=1
+runiwyu=1
 runsplint=1
 runscan=1
 runninja=1
@@ -717,6 +739,10 @@ while true; do
     ;;
   -t | --no-tidy)
     runtidy=0
+    shift
+    ;;
+  -w | --no-iwyu)
+    runiwyu=0
     shift
     ;;
   -b | --no-scan)
@@ -856,6 +882,7 @@ KRAZY
 SPLINT test "$STATICCCHECKOPTS"
 CLANGSCAN test "$STATICCCHECKOPTS"
 CLANGTIDY test "$STATICCCHECKOPTS"
+IWYU test "$STATICCCHECKOPTS"
 CPPCHECK test "$STATICCCHECKOPTS"
 
 #GCC based build tests
