@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: Corentin Noël <corentin.noel@collabora.com>
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+option('allow_empty_properties', type : 'boolean', value : false, description: 'Set to prevent empty properties from being replaced with X-LIC-ERROR properties.')
+option('errors_are_fatal', type : 'boolean', value : false, description: 'icalerror_* calls will abort instead of internally signaling an error.')
+option('64bit_icaltime_t', type : 'boolean', value : false, description: 'Redirect icaltime_t and related functions to a 64-bit version of time_t rather than to the C standard library time_t. Intended for use on 32-bit systems which have a 64-bit time_t available. May not be implemented on all platforms yet.')
+option('cxx_bindings', type : 'feature', value : 'auto', description: 'Build the C++ bindings.')

@@ -3,6 +3,6 @@ indent_style = space
 indent_size = 2
 max_line_length = 120
 
-[{*.cmake,CMakeLists.txt}]
+[{*.cmake,CMakeLists.txt,meson.build,meson.options}]
 indent_style = space
 indent_size = 2
