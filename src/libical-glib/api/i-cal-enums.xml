@@ -6,27 +6,6 @@
 
 -->
 <structure namespace="ICal" name="Enums">
-    <skip>icalenum_property_kind_to_string</skip>
-    <skip>icalenum_string_to_property_kind</skip>
-    <skip>icalenum_property_kind_to_value_kind</skip>
-    <skip>icalenum_method_to_string</skip>
-    <skip>icalenum_string_to_method</skip>
-    <skip>icalenum_status_to_string</skip>
-    <skip>icalenum_string_to_status</skip>
-    <skip>icalenum_string_to_value_kind</skip>
-    <skip>icalenum_value_kind_to_string</skip>
-    <skip>icalenum_component_kind_to_string</skip>
-    <skip>icalenum_string_to_component_kind</skip>
-    <skip>icalenum_action_to_string</skip>
-    <skip>icalenum_string_to_action</skip>
-    <skip>icalenum_transp_to_string</skip>
-    <skip>icalenum_string_to_transp</skip>
-    <skip>icalenum_class_to_string</skip>
-    <skip>icalenum_string_to_class</skip>
-    <skip>icalenum_participanttype_to_string</skip>
-    <skip>icalenum_string_to_participanttype</skip>
-    <skip>icalenum_resourcetype_to_string</skip>
-    <skip>icalenum_string_to_resourcetype</skip>
     <enum name="ICalComponentKind" native_name="icalcomponent_kind" default_native="I_CAL_NO_COMPONENT">
         <element name="ICAL_NO_COMPONENT"/>
         <element name="ICAL_ANY_COMPONENT"/>

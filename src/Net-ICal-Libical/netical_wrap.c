@@ -1096,7 +1096,7 @@ XS(_wrap_icalerror_get_error_state) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalenum_property_kind_to_string) {
+XS(_wrap_icalproperty_kind_to_string) {
 
     char * _result;
     icalproperty_kind * _arg0;
@@ -1105,18 +1105,18 @@ XS(_wrap_icalenum_property_kind_to_string) {
 
     cv = cv;
     if ((items < 1) || (items > 1))
-        croak("Usage: icalenum_property_kind_to_string(kind);");
+        croak("Usage: icalproperty_kind_to_string(kind);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalproperty_kindPtr")) {
-        croak("Type error in argument 1 of icalenum_property_kind_to_string. Expected icalproperty_kindPtr.");
+        croak("Type error in argument 1 of icalproperty_kind_to_string. Expected icalproperty_kindPtr.");
         XSRETURN(1);
     }
-    _result = (char *)icalenum_property_kind_to_string(*_arg0);
+    _result = (char *)icalproperty_kind_to_string(*_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalenum_string_to_property_kind) {
+XS(_wrap_icalproperty_string_to_kind) {
 
     icalproperty_kind * _result;
     char * _arg0;
@@ -1125,16 +1125,16 @@ XS(_wrap_icalenum_string_to_property_kind) {
 
     cv = cv;
     if ((items < 1) || (items > 1))
-        croak("Usage: icalenum_string_to_property_kind(string);");
+        croak("Usage: icalproperty_string_to_kind(string);");
     _arg0 = (char *) SvPV(ST(0),na);
     _result = (icalproperty_kind *) malloc(sizeof(icalproperty_kind ));
-    *(_result) = icalenum_string_to_property_kind(_arg0);
+    *(_result) = icalproperty_string_to_kind(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"icalproperty_kindPtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalenum_value_kind_to_string) {
+XS(_wrap_icalvalue_kind_to_string) {
 
     char * _result;
     icalvalue_kind * _arg0;
@@ -1143,12 +1143,12 @@ XS(_wrap_icalenum_value_kind_to_string) {
 
     cv = cv;
     if ((items < 1) || (items > 1))
-        croak("Usage: icalenum_value_kind_to_string(kind);");
+        croak("Usage: icalvalue_kind_to_string(kind);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalvalue_kindPtr")) {
-        croak("Type error in argument 1 of icalenum_value_kind_to_string. Expected icalvalue_kindPtr.");
+        croak("Type error in argument 1 of icalvalue_kind_to_string. Expected icalvalue_kindPtr.");
         XSRETURN(1);
     }
-    _result = (char *)icalenum_value_kind_to_string(*_arg0);
+    _result = (char *)icalvalue_kind_to_string(*_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
@@ -1192,7 +1192,7 @@ XS(_wrap_icalenum_string_to_parameter_kind) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalenum_component_kind_to_string) {
+XS(_wrap_icalcomponent_kind_to_string) {
 
     char * _result;
     icalcomponent_kind * _arg0;
@@ -1201,18 +1201,18 @@ XS(_wrap_icalenum_component_kind_to_string) {
 
     cv = cv;
     if ((items < 1) || (items > 1))
-        croak("Usage: icalenum_component_kind_to_string(kind);");
+        croak("Usage: icalcomponent_kind_to_string(kind);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalcomponent_kindPtr")) {
-        croak("Type error in argument 1 of icalenum_component_kind_to_string. Expected icalcomponent_kindPtr.");
+        croak("Type error in argument 1 of icalcomponent_kind_to_string. Expected icalcomponent_kindPtr.");
         XSRETURN(1);
     }
-    _result = (char *)icalenum_component_kind_to_string(*_arg0);
+    _result = (char *)icalcomponent_kind_to_string(*_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalenum_string_to_component_kind) {
+XS(_wrap_icalcomponent_string_to_kind) {
 
     icalcomponent_kind * _result;
     char * _arg0;
@@ -1221,16 +1221,16 @@ XS(_wrap_icalenum_string_to_component_kind) {
 
     cv = cv;
     if ((items < 1) || (items > 1))
-        croak("Usage: icalenum_string_to_component_kind(string);");
+        croak("Usage: icalcomponent_string_to_kind(string);");
     _arg0 = (char *) SvPV(ST(0),na);
     _result = (icalcomponent_kind *) malloc(sizeof(icalcomponent_kind ));
-    *(_result) = icalenum_string_to_component_kind(_arg0);
+    *(_result) = icalcomponent_string_to_kind(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"icalcomponent_kindPtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalenum_property_kind_to_value_kind) {
+XS(_wrap_icalproperty_kind_to_value_kind) {
 
     icalvalue_kind * _result;
     icalproperty_kind * _arg0;
@@ -1239,13 +1239,13 @@ XS(_wrap_icalenum_property_kind_to_value_kind) {
 
     cv = cv;
     if ((items < 1) || (items > 1))
-        croak("Usage: icalenum_property_kind_to_value_kind(kind);");
+        croak("Usage: icalproperty_kind_to_value_kind(kind);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalproperty_kindPtr")) {
-        croak("Type error in argument 1 of icalenum_property_kind_to_value_kind. Expected icalproperty_kindPtr.");
+        croak("Type error in argument 1 of icalproperty_kind_to_value_kind. Expected icalproperty_kindPtr.");
         XSRETURN(1);
     }
     _result = (icalvalue_kind *) malloc(sizeof(icalvalue_kind ));
-    *(_result) = icalenum_property_kind_to_value_kind(*_arg0);
+    *(_result) = icalproperty_kind_to_value_kind(*_arg0);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"icalvalue_kindPtr", (void *) _result);
     XSRETURN(argvi);
@@ -2930,14 +2930,14 @@ XS(boot_Net__ICal__Libical) {
 	 newXS("Net::ICal::Libical::icalproperty_get_parent", _wrap_icalproperty_get_parent, file);
 	 newXS("Net::ICal::Libical::icalerror_set_error_state", _wrap_icalerror_set_error_state, file);
 	 newXS("Net::ICal::Libical::icalerror_get_error_state", _wrap_icalerror_get_error_state, file);
-	 newXS("Net::ICal::Libical::icalenum_property_kind_to_string", _wrap_icalenum_property_kind_to_string, file);
-	 newXS("Net::ICal::Libical::icalenum_string_to_property_kind", _wrap_icalenum_string_to_property_kind, file);
-	 newXS("Net::ICal::Libical::icalenum_value_kind_to_string", _wrap_icalenum_value_kind_to_string, file);
+	 newXS("Net::ICal::Libical::icalproperty_kind_to_string", _wrap_icalproperty_kind_to_string, file);
+	 newXS("Net::ICal::Libical::icalproperty_string_to_kind", _wrap_icalproperty_string_to_kind, file);
+	 newXS("Net::ICal::Libical::icalvalue_kind_to_string", _wrap_icalvalue_kind_to_string, file);
 	 newXS("Net::ICal::Libical::icalenum_parameter_kind_to_string", _wrap_icalenum_parameter_kind_to_string, file);
 	 newXS("Net::ICal::Libical::icalenum_string_to_parameter_kind", _wrap_icalenum_string_to_parameter_kind, file);
-	 newXS("Net::ICal::Libical::icalenum_component_kind_to_string", _wrap_icalenum_component_kind_to_string, file);
-	 newXS("Net::ICal::Libical::icalenum_string_to_component_kind", _wrap_icalenum_string_to_component_kind, file);
-	 newXS("Net::ICal::Libical::icalenum_property_kind_to_value_kind", _wrap_icalenum_property_kind_to_value_kind, file);
+	 newXS("Net::ICal::Libical::icalcomponent_kind_to_string", _wrap_icalcomponent_kind_to_string, file);
+	 newXS("Net::ICal::Libical::icalcomponent_string_to_kind", _wrap_icalcomponent_string_to_kind, file);
+	 newXS("Net::ICal::Libical::icalproperty_kind_to_value_kind", _wrap_icalproperty_kind_to_value_kind, file);
 	 newXS("Net::ICal::Libical::icallangbind_new_array", _wrap_icallangbind_new_array, file);
 	 newXS("Net::ICal::Libical::icallangbind_free_array", _wrap_icallangbind_free_array, file);
 	 newXS("Net::ICal::Libical::icallangbind_access_array", _wrap_icallangbind_access_array, file);

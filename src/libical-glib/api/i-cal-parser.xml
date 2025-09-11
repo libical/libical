@@ -15,7 +15,7 @@
         <element name="ICALPARSER_END_COMP"/>
         <element name="ICALPARSER_IN_PROGRESS"/>
     </enum>
-    <enum name="ICalParserCtrl" native_name="enum icalparser_ctrl" default_native="I_CAL_PARSER_CTRL_KEEP">
+    <enum name="ICalParserCtrl" native_name="icalparser_ctrl" default_native="I_CAL_PARSER_CTRL_KEEP">
         <element name="ICALPARSER_CTRL_KEEP"/>
         <element name="ICALPARSER_CTRL_OMIT"/>
         <element name="ICALPARSER_CTRL_ERROR"/>
