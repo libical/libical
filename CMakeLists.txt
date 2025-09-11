@@ -133,9 +133,9 @@
 #  Build with the undefined sanitizer (requires gcc or clang)
 #  Default=false
 #
-# -DLIBICAL_SYNCMODE_THREADLOCAL=[true|false]
-#  Experimental: If set to true, global variables are marked as thread-local. This allows accessing
-#  libical from multiple threads without the need for synchronization. However, any global settings
+# -DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=[true|false]
+#  If set to true, global variables are marked as thread-local. This allows accessing libical
+#  from multiple threads without the need for synchronization. However, any global settings
 #  must be applied per thread. Note that in this mode, any global variables and cached data are
 #  allocated per thread, including the cache for the built-in timezone data. This can lead to a
 #  significant overhead in memory usage and initialization time. It's therefore recommended to limit
@@ -971,8 +971,13 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   endif()
 endif()
 
-mark_as_advanced(LIBICAL_SYNCMODE_THREADLOCAL)
-libical_option(LIBICAL_SYNCMODE_THREADLOCAL "Experimental: Mark global variables as thread-local." False)
+mark_as_advanced(LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL)
+libical_deprecated_option(
+  LIBICAL_SYNCMODE_THREADLOCAL
+  LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL
+  "Mark global variables as thread-local."
+  False
+)
 
 libical_option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
 if(ENABLE_LTO_BUILD)
