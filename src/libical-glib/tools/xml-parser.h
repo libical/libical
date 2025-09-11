@@ -68,10 +68,15 @@ typedef struct Declaration {
     gchar *content;
 } Declaration;
 
+typedef struct EnumerationItem {
+    gchar *nativeName;
+    gchar *alias;
+} EnumerationItem;
+
 typedef struct Enumeration {
     gchar *name;
     gchar *nativeName;
-    GList *elements;
+    GPtrArray *items; /* EnumerationItem * */
     gchar *defaultNative;
     gchar *comment;
 } Enumeration;
@@ -84,6 +89,8 @@ Parameter *parameter_new(void);
 void parameter_free(Parameter *para);
 Ret *ret_new(void);
 void ret_free(Ret *ret);
+EnumerationItem *enumeration_item_new(const gchar *nativeName, const gchar *alias);
+void enumeration_item_free(EnumerationItem *item);
 Enumeration *enumeration_new(void);
 void enumeration_free(Enumeration *enumeration);
 Declaration *declaration_new(void);

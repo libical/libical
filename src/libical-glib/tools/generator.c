@@ -1909,6 +1909,7 @@ static void initialize_default_value_table(void)
     (void)g_hash_table_insert(defaultValues, g_strdup("gboolean"), g_strdup("FALSE"));
     (void)g_hash_table_insert(defaultValues, g_strdup("gdouble"), g_strdup("0"));
     (void)g_hash_table_insert(defaultValues, g_strdup("gint"), g_strdup("0"));
+    (void)g_hash_table_insert(defaultValues, g_strdup("gsize"), g_strdup("0"));
     (void)g_hash_table_insert(defaultValues, g_strdup("gpointer"), g_strdup("NULL"));
     (void)g_hash_table_insert(defaultValues, g_strdup("time_t"), g_strdup("0"));
 }
@@ -1969,13 +1970,10 @@ void generate_header_enums(FILE *out, Structure *structure)
 
 void generate_header_enum(FILE *out, Enumeration *enumeration)
 {
-    GList *iter;
-    gchar *nativeName;
-    guint i;
+    guint ii;
     gchar *newName;
     gchar *comment;
     gchar *tmp;
-    const guint enum_header_len = (guint)strlen(ENUM_HEADER);
 
     g_return_if_fail(out != NULL && enumeration != NULL);
 
@@ -2010,34 +2008,35 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
     /* Generate the declaration */
     write_str(out, "typedef enum {");
 
-    for (iter = g_list_first(enumeration->elements); iter != NULL; iter = g_list_next(iter)) {
-        nativeName = (gchar *)iter->data;
-        if (iter != g_list_first(enumeration->elements)) {
+    for (ii = 0; enumeration->items != NULL && ii < enumeration->items->len; ii++) {
+        const EnumerationItem *item = g_ptr_array_index(enumeration->items, ii);
+        int prefix_len = 0;
+        const gchar *use_prefix = NULL;
+        const gchar *use_name = item->alias ? item->alias : item->nativeName;
+
+        if (ii > 0) {
             write_str(out, ",");
         }
-        if (enum_header_len >= (guint)strlen(nativeName)) {
-            printf("The enum name %s is longer than the enum header %s\n", nativeName, ENUM_HEADER);
-            continue;
-        }
-        for (i = 0; i < enum_header_len; i++) {
-            if (ENUM_HEADER[i] != nativeName[i]) {
-                break;
-            }
-        }
-        if (i != enum_header_len) {
-            printf("The enum name %s cannot be processed\n", nativeName);
-            continue;
-        }
-        if (nativeName[i] == '_') {
-            newName = g_strconcat("I_CAL", nativeName + i, NULL);
+        if (g_str_has_prefix(use_name, ENUM_HEADER_ICAL)) {
+            prefix_len = strlen(ENUM_HEADER_ICAL);
+            use_prefix = "I_CAL_";
+        } else if (g_str_has_prefix(use_name, ENUM_HEADER_VCARD)) {
+            prefix_len = strlen(ENUM_HEADER_VCARD);
+            use_prefix = "I_CAL_VCARD_";
         } else {
-            newName = g_strconcat("I_CAL_", nativeName + i, NULL);
+            fprintf(stderr, "The enum name '%s' in '%s' cannot be processed, it has no known prefix\n", use_name, enumeration->name);
+            continue;
+        }
+        if (use_name[prefix_len] == '_') {
+            newName = g_strconcat(use_prefix, use_name + prefix_len + 1, NULL);
+        } else {
+            newName = g_strconcat(use_prefix, use_name + prefix_len, NULL);
         }
 
         write_str(out, "\n\t");
         write_str(out, newName);
         write_str(out, " = ");
-        write_str(out, nativeName);
+        write_str(out, item->nativeName);
 
         g_free(newName);
     }
@@ -2178,7 +2177,7 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
 {
     FILE *file;
     GString *calls;
-    GList *link, *link2, *link3;
+    GList *link, *link2;
 
     file = fopen(filename, "wt");
     if (!file) {
@@ -2195,15 +2194,16 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
 
         for (link2 = str->enumerations; link2; link2 = g_list_next(link2)) {
             Enumeration *enumeration = link2->data;
+            guint ii;
             if (g_str_equal(enumeration->nativeName, "CUSTOM")) {
                 continue;
             }
             fprintf(file, "static void test_%s(%s value)\n", enumeration->name, enumeration->nativeName);
             fprintf(file, "{\n"
                           "    switch(value){\n");
-            for (link3 = enumeration->elements; link3; link3 = g_list_next(link3)) {
-                const gchar *nativeName = link3->data;
-                fprintf(file, "    case %s: break;\n", nativeName);
+            for (ii = 0; enumeration->items != NULL && ii < enumeration->items->len; ii++) {
+                const EnumerationItem *item = g_ptr_array_index(enumeration->items, ii);
+                fprintf(file, "    case %s: break;\n", item->nativeName);
             }
             fprintf(file, "    }\n"
                           "}\n");
