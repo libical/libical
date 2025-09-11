@@ -6,12 +6,19 @@
 
 -->
 <structure namespace="ICal" name="Parser" native="icalparser" destroy_func="icalparser_free">
+    <skip>icalparser_set_gen_data</skip>
+    <skip>icalparser_string_line_generator</skip>
     <enum name="ICalParserState" native_name="icalparser_state" default_native="I_CAL_PARSER_ERROR">
         <element name="ICALPARSER_ERROR"/>
         <element name="ICALPARSER_SUCCESS"/>
         <element name="ICALPARSER_BEGIN_COMP"/>
         <element name="ICALPARSER_END_COMP"/>
         <element name="ICALPARSER_IN_PROGRESS"/>
+    </enum>
+    <enum name="ICalParserCtrl" native_name="enum icalparser_ctrl" default_native="I_CAL_PARSER_CTRL_KEEP">
+        <element name="ICALPARSER_CTRL_KEEP"/>
+        <element name="ICALPARSER_CTRL_OMIT"/>
+        <element name="ICALPARSER_CTRL_ERROR"/>
     </enum>
     <declaration position="header">/**
  * ICalParserLineGenFunc:
@@ -46,7 +53,7 @@ typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user
         <parameter type="ICalParser *" name="parser" comment="The #ICalParser to be freed"/>
         <comment xml:space="preserve">Frees a #ICalParser.</comment>
     </method>
-    <method name="i_cal_parser_parse" corresponds="CUSTOM" since="1.0">
+    <method name="i_cal_parser_parse" corresponds="icalparser_parse" kind="custom" since="1.0">
         <parameter type="ICalParser *" name="parser" comment="The parser used to parse the string and output the #ICalComponent"/>
         <parameter type="ICalParserLineGenFunc" name="func" annotation="scope call,closure user_data" comment="The function used to parse"/>
         <parameter type="gpointer" name="user_data" comment="The data given to @func"/>
@@ -62,7 +69,7 @@ typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user
         <returns type="ICalComponent *" annotation="transfer full" comment="The #ICalComponent parsed from str."/>
         <comment xml:space="preserve">Parses the string into a #ICalComponent.</comment>
     </method>
-    <method name="i_cal_parser_get_line" corresponds="CUSTOM" since="1.0">
+    <method name="i_cal_parser_get_line" corresponds="icalparser_get_line" kind="custom" since="1.0">
         <parameter type="ICalParser *" name="parser" comment="The parser to be queried"/>
         <parameter type="ICalParserLineGenFunc" name="func" annotation="scope call,closure user_data" comment="A line generator function"/>
         <parameter type="gpointer" name="user_data" comment="The data given to @func"/>
@@ -76,5 +83,13 @@ typedef gchar *(*ICalParserLineGenFunc)(gchar *bytes, size_t size, gpointer user
 	linecopy = g_strdup(line);
 	i_cal_memory_free_buffer(line);
 	return linecopy;</custom>
+    </method>
+    <method name="i_cal_parser_get_ctrl" corresponds="icalparser_get_ctrl" kind="get" since="4.0">
+        <returns type="ICalParserCtrl" comment="Get the current parser setting how to handle CONTROL characters."/>
+        <comment xml:space="preserve">Gets the current parser setting how to handle CONTROL characters. @I_CAL_PARSER_CTRL_KEEP keeps CONTROL characters in content-line, @I_CAL_PARSER_CTRL_OMIT omits CONTROL characters from content-line and @I_CAL_PARSER_CTRL_ERROR inserts an X-LIC-ERROR instead of content-line</comment>
+    </method>
+    <method name="i_cal_parser_set_ctrl" corresponds="icalparser_set_ctrl" kind="set" since="4.0">
+        <parameter type="ICalParserCtrl" name="value" comment="an #ICalParserCtrl"/>
+        <comment xml:space="preserve">Sets the parser setting how to handle CONTROL characters. @I_CAL_PARSER_CTRL_KEEP keeps CONTROL characters in content-line, @I_CAL_PARSER_CTRL_OMIT omits CONTROL characters from content-line and @I_CAL_PARSER_CTRL_ERROR inserts an X-LIC-ERROR instead of content-line</comment>
     </method>
 </structure>

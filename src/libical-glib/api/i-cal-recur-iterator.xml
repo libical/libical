@@ -17,6 +17,11 @@
         <returns type="ICalTime *" annotation="transfer full" comment="The next occurrence according to this recurrence rule."/>
         <comment xml:space="preserve">Gets the next occurrence from an iterator.</comment>
     </method>
+    <method name="i_cal_recur_iterator_prev" corresponds="icalrecur_iterator_prev" since="4.0">
+        <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator"/>
+        <returns type="ICalTime *" annotation="transfer full" comment="The previous occurrence according to this recurrence rule."/>
+        <comment xml:space="preserve">Gets the previous occurrence from an iterator.</comment>
+    </method>
     <method name="i_cal_recur_iterator_set_start" corresponds="icalrecur_iterator_set_start" since="3.0">
         <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator"/>
         <parameter type="ICalTime *" name="start" comment="The date-time to move the iterator to"/>
@@ -29,6 +34,26 @@ Note: CAN NOT be used with RRULEs that contain COUNT.</comment>
         <parameter type="ICalTime *" name="end" comment="The date-time at which the iterator will stop"/>
         <returns type="gboolean" comment="true if succeeded, false if failed"/>
         <comment xml:space="preserve">Sets the date-time at which the iterator will stop at the latest. Values equal to or greater than end will not be returned by the iterator.</comment>
+    </method>
+    <method name="i_cal_recur_iterator_set_range" corresponds="icalrecur_iterator_set_range" since="4.0">
+        <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator"/>
+        <parameter type="const ICalTime *" name="from" comment="The start date-time for the iterator"/>
+        <parameter type="const ICalTime *" name="to" comment="The end date-time for the iterator"/>
+        <returns type="gboolean" comment="%TRUE if succeeded, %FALSE failed, like when the recurrence type is unsupported."/>
+        <comment xml:space="preserve">Sets the date-times over which the iterator will run,
+where @from is a value between DTSTART and UNTIL.
+
+If @to is a null time, the forward iterator will return values
+up to and including UNTIL (if present), otherwise up to the year 2582.
+
+If @to is non-null time and later than @from,
+the forward iterator will return values up to and including @to.
+
+If @to is non-null time and earlier than @from,
+the reverse iterator will be set to start at @from
+and will return values down to and including @to.
+
+Note: CAN NOT be used with RRULEs that contain COUNT.</comment>
     </method>
     <method name="i_cal_recur_iterator_free" corresponds="icalrecur_iterator_free" annotation="skip" kind="destructor" since="1.0">
         <parameter type="ICalRecurIterator *" name="iterator" comment="The iterator to be freed"/>
