@@ -650,7 +650,7 @@ static void *multivalued_prop(int icaltype, VObject *object, const icalcomponent
     if (tmp_copy) {
         prop = icalproperty_new(kind);
 
-        value_kind = icalenum_property_kind_to_value_kind(icalproperty_isa(prop));
+        value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
 
         for (p = tmp_copy; *p; p++) {
             if (*p == ';')
@@ -1304,7 +1304,7 @@ void *dc_prop(int icaltype, VObject *object, const icalcomponent *comp, icalvcal
 
     prop = icalproperty_new(kind);
 
-    value_kind = icalenum_property_kind_to_value_kind(icalproperty_isa(prop));
+    value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
 
     s = get_string_value(object, &free_string);
 

@@ -324,7 +324,7 @@ icalproperty_method icalproperty_string_to_method(const char *str)
     return ICAL_METHOD_NONE;
 }
 
-const char *icalenum_status_to_string(icalproperty_status status)
+const char *icalproperty_status_to_string(icalproperty_status status)
 {
     icalerror_check_arg_rz(status >= ICAL_STATUS_X, "status");
     icalerror_check_arg_rz(status <= ICAL_STATUS_NONE, "status");
@@ -332,7 +332,7 @@ const char *icalenum_status_to_string(icalproperty_status status)
     return enum_map[status - ICALPROPERTY_FIRST_ENUM].str;
 }
 
-icalproperty_status icalenum_string_to_status(const char *str)
+icalproperty_status icalproperty_string_to_status(const char *str)
 {
     int i;
 
@@ -352,7 +352,7 @@ icalproperty_status icalenum_string_to_status(const char *str)
     return ICAL_STATUS_NONE;
 }
 
-const char *icalenum_action_to_string(icalproperty_action action)
+const char *icalproperty_action_to_string(icalproperty_action action)
 {
     icalerror_check_arg_rz(action >= ICAL_ACTION_X, "action");
     icalerror_check_arg_rz(action <= ICAL_ACTION_NONE, "action");
@@ -360,7 +360,7 @@ const char *icalenum_action_to_string(icalproperty_action action)
     return enum_map[action - ICALPROPERTY_FIRST_ENUM].str;
 }
 
-icalproperty_action icalenum_string_to_action(const char *str)
+icalproperty_action icalproperty_string_to_action(const char *str)
 {
     int i;
 
@@ -380,7 +380,7 @@ icalproperty_action icalenum_string_to_action(const char *str)
     return ICAL_ACTION_NONE;
 }
 
-const char *icalenum_transp_to_string(icalproperty_transp transp)
+const char *icalproperty_transp_to_string(icalproperty_transp transp)
 {
     icalerror_check_arg_rz(transp >= ICAL_TRANSP_X, "transp");
     icalerror_check_arg_rz(transp <= ICAL_TRANSP_NONE, "transp");
@@ -388,7 +388,7 @@ const char *icalenum_transp_to_string(icalproperty_transp transp)
     return enum_map[transp - ICALPROPERTY_FIRST_ENUM].str;
 }
 
-icalproperty_transp icalenum_string_to_transp(const char *str)
+icalproperty_transp icalproperty_string_to_transp(const char *str)
 {
     int i;
 
@@ -408,7 +408,7 @@ icalproperty_transp icalenum_string_to_transp(const char *str)
     return ICAL_TRANSP_NONE;
 }
 
-const char *icalenum_class_to_string(icalproperty_class class)
+const char *icalproperty_class_to_string(icalproperty_class class)
 {
     icalerror_check_arg_rz(class >= ICAL_CLASS_X, "class");
     icalerror_check_arg_rz(class <= ICAL_CLASS_NONE, "class");
@@ -416,7 +416,7 @@ const char *icalenum_class_to_string(icalproperty_class class)
     return enum_map[class - ICALPROPERTY_FIRST_ENUM].str;
 }
 
-icalproperty_class icalenum_string_to_class(const char *str)
+icalproperty_class icalproperty_string_to_class(const char *str)
 {
     int i;
 
@@ -436,7 +436,7 @@ icalproperty_class icalenum_string_to_class(const char *str)
     return ICAL_CLASS_NONE;
 }
 
-const char *icalenum_participanttype_to_string(icalproperty_participanttype participanttype)
+const char *icalproperty_participanttype_to_string(icalproperty_participanttype participanttype)
 {
     icalerror_check_arg_rz(participanttype >= ICAL_PARTICIPANTTYPE_X,
             "participanttype");
@@ -446,7 +446,7 @@ const char *icalenum_participanttype_to_string(icalproperty_participanttype part
     return enum_map[participanttype - ICALPROPERTY_FIRST_ENUM].str;
 }
 
-icalproperty_participanttype icalenum_string_to_participanttype(const char *str)
+icalproperty_participanttype icalproperty_string_to_participanttype(const char *str)
 {
     int i;
 
@@ -466,7 +466,7 @@ icalproperty_participanttype icalenum_string_to_participanttype(const char *str)
     return ICAL_PARTICIPANTTYPE_NONE;
 }
 
-const char *icalenum_resourcetype_to_string(icalproperty_resourcetype resourcetype)
+const char *icalproperty_resourcetype_to_string(icalproperty_resourcetype resourcetype)
 {
     icalerror_check_arg_rz(resourcetype >= ICAL_RESOURCETYPE_X,
             "resourcetype");
@@ -476,7 +476,7 @@ const char *icalenum_resourcetype_to_string(icalproperty_resourcetype resourcety
     return enum_map[resourcetype - ICALPROPERTY_FIRST_ENUM].str;
 }
 
-icalproperty_resourcetype icalenum_string_to_resourcetype(const char *str)
+icalproperty_resourcetype icalproperty_string_to_resourcetype(const char *str)
 {
     int i;
 

@@ -763,7 +763,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         icalmemory_free_buffer(str);
         str = parser_get_next_value(end, &end, value_kind);
 
-        comp_kind = icalenum_string_to_component_kind(str);
+        comp_kind = icalcomponent_string_to_kind(str);
 
         if (comp_kind == ICAL_X_COMPONENT) {
             c = icalcomponent_new_x(str);
