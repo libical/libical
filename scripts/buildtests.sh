@@ -192,7 +192,7 @@ CONFIGURE() {
   mkdir "$BDIR"
   cd "$BDIR" || exit 1
   # shellcheck disable=SC2086
-  cmake --warn-uninitialized -Werror=dev .. $2 2>&1 | tee cmake.out || exit 1
+  cmake .. $2 2>&1 | tee cmake.out || exit 1
   declare -i numWarnings
   declare -i numDeprecates
   set +e
@@ -856,13 +856,14 @@ fi
 #use non-Ninja cmake generator by-default
 UNSET_NINJA
 
+STRICT="--warn-uninitialized -Werror=dev"
 DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DNDEBUG=1"
-CMAKEOPTS="-DLIBICAL_DEVMODE=True -DGOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+CMAKEOPTS="$STRICT -DLIBICAL_DEVMODE=True -DGOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DUSE_BUILTIN_TZDATA=True"
 LTOCMAKEOPTS="$CMAKEOPTS -DENABLE_LTO_BUILD=True"
-GLIBOPTS="-DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DGOBJECT_INTROSPECTION=True -DUSE_BUILTIN_TZDATA=OFF -DLIBICAL_GLIB_VAPI=ON"
-FUZZOPTS="-DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True"
+GLIBOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DGOBJECT_INTROSPECTION=True -DUSE_BUILTIN_TZDATA=OFF -DLIBICAL_GLIB_VAPI=ON"
+FUZZOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True"
 
 #Static code checkers
 STATICCCHECKOPTS="\
@@ -895,9 +896,9 @@ fi
 GCC_BUILD testgcc4glib "$GLIBOPTS"
 GCC_BUILD testgccnocxx "$CMAKEOPTS -DLIBICAL_CXX_BINDINGS=off -DLIBICAL_JAVA_BINDINGS=off"
 if (test "$(uname -s)" = "Linux"); then
-  echo "Temporarily disable cross-compile tests"
-#  GCC_BUILD testgcc1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-#  GCC_BUILD testgcc2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+  # Fedora: dnf install libstdc++-*.i686 glibc-*.i686 libgcc.i686 libdb-devel.i686
+  CMAKEOPTS_NONSTRICT="-DLIBICAL_DEVMODE=True -DGOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+  GCC_BUILD testgcc1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS_NONSTRICT -DLIBICAL_JAVA_BINDINGS=False"
 fi
 GCC_BUILD testgcc1builtin "-DUSE_BUILTIN_TZDATA=True"
 GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
@@ -917,9 +918,9 @@ CLANG_BUILD testclang3 "$UUCCMAKEOPTS"
 #not supported with clang yet CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
 CLANG_BUILD testclang4glib "$GLIBOPTS"
 if (test "$(uname -s)" = "Linux"); then
-  echo "Temporarily disable cross-compile tests"
-#  CLANG_BUILD testclang1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-#  CLANG_BUILD testclang2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+  # Fedora: dnf install libstdc++-*.i686 glibc-*.i686 libgcc.i686 libdb-devel.i686
+  CMAKEOPTS_NONSTRICT="-DLIBICAL_DEVMODE=True -DGOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+  CLANG_BUILD testclang1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS_NONSTRICT -DLIBICAL_JAVA_BINDINGS=off"
 fi
 
 #Memory consistency check
