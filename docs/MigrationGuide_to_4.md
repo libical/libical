@@ -146,6 +146,36 @@ The following functions have been added:
   * `icaltzutil_fetch_timezone()`
   * `icalrecurrencetype_clear()`
 
+### Removed macros
+
+These convenience macros were added in version 3 to ease porting from older versions.
+They have been removed in version 4 and should be replaced with their actual function
+names as follows:
+
+| Old Macro Name                       | Actual Function Name                   |
+|--------------------------------------|----------------------------------------|
+| icalenum_action_to_string            | icalproperty_action_to_string          |
+| icalenum_class_to_string             | icalproperty_class_to_string           |
+| icalenum_component_kind_to_string    | icalcomponent_kind_to_string           |
+| icalenum_method_to_string            | icalproperty_method_to_string          |
+| icalenum_participanttype_to_string   | icalproperty_participanttype_to_string |
+| icalenum_property_kind_to_string     | icalproperty_kind_to_string            |
+| icalenum_property_kind_to_value_kind | icalproperty_kind_to_value_kind        |
+| icalenum_resourcetype_to_string      | icalproperty_resourcetype_to_string    |
+| icalenum_status_to_string            | icalproperty_status_to_string          |
+| icalenum_string_to_action            | icalproperty_string_to_action          |
+| icalenum_string_to_class             | icalproperty_string_to_class           |
+| icalenum_string_to_component_kind    | icalcomponent_string_to_kind           |
+| icalenum_string_to_method            | icalproperty_string_to_method          |
+| icalenum_string_to_participanttype   | icalproperty_string_to_participanttype |
+| icalenum_string_to_property_kind     | icalproperty_string_to_kind            |
+| icalenum_string_to_resourcetype      | icalproperty_string_to_resourcetype    |
+| icalenum_string_to_status            | icalproperty_string_to_status          |
+| icalenum_string_to_transp            | icalproperty_string_to_transp          |
+| icalenum_string_to_value_kind        | icalvalue_string_to_kind               |
+| icalenum_transp_to_string            | icalproperty_transp_to_string          |
+| icalenum_value_kind_to_string        | icalvalue_kind_to_string               |
+
 ### Added data types
 
 * These data types have been added:
