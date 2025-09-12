@@ -1576,7 +1576,7 @@ gchar *get_translator_for_return(Ret *ret)
     return res;
 }
 
-static gboolean parameter_is_out(Parameter *para)
+static gboolean parameter_is_out(const Parameter *para)
 {
     GList *link;
     for (link = para->annotations; link; link = g_list_next(link)) {
