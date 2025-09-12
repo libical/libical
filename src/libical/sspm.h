@@ -17,7 +17,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-enum sspm_major_type
+typedef enum sspm_major_type
 {
     SSPM_NO_MAJOR_TYPE,
     SSPM_TEXT_MAJOR_TYPE,
@@ -28,9 +28,9 @@ enum sspm_major_type
     SSPM_MULTIPART_MAJOR_TYPE,
     SSPM_MESSAGE_MAJOR_TYPE,
     SSPM_UNKNOWN_MAJOR_TYPE
-};
+} sspm_major_type;
 
-enum sspm_minor_type
+typedef enum sspm_minor_type
 {
     SSPM_NO_MINOR_TYPE,
     SSPM_ANY_MINOR_TYPE,
@@ -43,9 +43,9 @@ enum sspm_minor_type
     SSPM_ALTERNATIVE_MINOR_TYPE,
     SSPM_PARALLEL_MINOR_TYPE,
     SSPM_UNKNOWN_MINOR_TYPE
-};
+} sspm_minor_type;
 
-enum sspm_encoding
+typedef enum sspm_encoding
 {
     SSPM_NO_ENCODING,
     SSPM_QUOTED_PRINTABLE_ENCODING,
@@ -54,9 +54,9 @@ enum sspm_encoding
     SSPM_BINARY_ENCODING,
     SSPM_BASE64_ENCODING,
     SSPM_UNKNOWN_ENCODING
-};
+} sspm_encoding;
 
-enum sspm_error
+typedef enum sspm_error
 {
     SSPM_NO_ERROR,
     SSPM_UNEXPECTED_BOUNDARY_ERROR,
@@ -64,7 +64,7 @@ enum sspm_error
     SSPM_NO_BOUNDARY_ERROR,
     SSPM_NO_HEADER_ERROR,
     SSPM_MALFORMED_HEADER_ERROR
-};
+} sspm_error;
 
 struct sspm_header {
     int def;

@@ -6178,29 +6178,29 @@ static void test_icalparamiter(void)
 
 static void test_icalproperty_enum_convert_string(void)
 {
-    icalproperty_action action = icalenum_string_to_action("DISPLAY");
+    icalproperty_action action = icalproperty_string_to_action("DISPLAY");
     ok("action", action == ICAL_ACTION_DISPLAY);
-    str_is("action", icalenum_action_to_string(action), "DISPLAY");
+    str_is("action", icalproperty_action_to_string(action), "DISPLAY");
 
-    icalproperty_transp transp = icalenum_string_to_transp("OPAQUE");
+    icalproperty_transp transp = icalproperty_string_to_transp("OPAQUE");
     ok("transp", transp == ICAL_TRANSP_OPAQUE);
-    str_is("transp", icalenum_transp_to_string(transp), "OPAQUE");
+    str_is("transp", icalproperty_transp_to_string(transp), "OPAQUE");
 
-    icalproperty_class class = icalenum_string_to_class("PRIVATE");
+    icalproperty_class class = icalproperty_string_to_class("PRIVATE");
     ok("class", class == ICAL_CLASS_PRIVATE);
-    str_is("class", icalenum_class_to_string(class), "PRIVATE");
+    str_is("class", icalproperty_class_to_string(class), "PRIVATE");
 
     icalproperty_participanttype ptype =
-        icalenum_string_to_participanttype("CONTACT");
+        icalproperty_string_to_participanttype("CONTACT");
     ok("participanttype", ptype == ICAL_PARTICIPANTTYPE_CONTACT);
     str_is("participanttype",
-           icalenum_participanttype_to_string(ptype), "CONTACT");
+           icalproperty_participanttype_to_string(ptype), "CONTACT");
 
     icalproperty_resourcetype rtype =
-        icalenum_string_to_resourcetype("PROJECTOR");
+        icalproperty_string_to_resourcetype("PROJECTOR");
     ok("resourcetype", rtype == ICAL_RESOURCETYPE_PROJECTOR);
     str_is("resourcetype",
-           icalenum_resourcetype_to_string(rtype), "PROJECTOR");
+           icalproperty_resourcetype_to_string(rtype), "PROJECTOR");
 }
 
 static void test_icalparameter_parse_multivalued(void)

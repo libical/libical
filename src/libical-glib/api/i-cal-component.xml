@@ -6,6 +6,14 @@
 
 -->
 <structure namespace="ICal" name="Component" native="icalcomponent" destroy_func="icalcomponent_free" includes="libical-glib/i-cal-parameter.h">
+    <!-- write here any symbols to skip, which do not fit anywhere else -->
+    <skip>ICAL_CHECK_VERSION</skip>
+    <skip>icalpvl_*</skip>
+    <skip>icallangbind_*</skip>
+    <skip>sspm_*</skip>
+    <skip>enum sspm_*</skip>
+    <!-- follows symbols related to the icalcomponent itself -->
+    <skip>icalcomponent_vanew</skip>
     <method name="i_cal_component_new" corresponds="icalcomponent_new" kind="constructor" since="1.0">
         <parameter type="ICalComponentKind" name="kind" comment="The #ICalComponentKind"/>
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
@@ -55,7 +63,7 @@
         <parameter type="ICalProperty *" name="property" translator_argus="component" comment="An #ICalProperty"/>
         <comment xml:space="preserve">Adds an #ICalProperty into #ICalComponent.</comment>
     </method>
-    <method name="i_cal_component_take_property" corresponds="CUSTOM" annotation="skip" since="1.0">
+    <method name="i_cal_component_take_property" corresponds="icalcomponent_add_property" annotation="skip" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="An #ICalComponent"/>
         <parameter type="ICalProperty *" name="property" annotation="transfer full" comment="An #ICalProperty"/>
         <comment xml:space="preserve">Adds the @property into the @component and unrefs the @property.</comment>
@@ -121,7 +129,7 @@
         <parameter type="ICalComponent *" name="child" translator_argus="(GObject*) parent" comment="A child #ICalComponent"/>
         <comment xml:space="preserve">Adds a #ICalComponent into another #ICalComponent as a child component.</comment>
     </method>
-    <method name="i_cal_component_take_component" corresponds="CUSTOM" annotation="skip" since="1.0">
+    <method name="i_cal_component_take_component" corresponds="icalcomponent_add_component" annotation="skip" since="1.0">
         <parameter type="ICalComponent *" name="parent" comment="A #ICalComponent"/>
         <parameter type="ICalComponent *" name="child" annotation="transfer full" comment="A child #ICalComponent"/>
         <comment xml:space="preserve">Adds the @child into the @parent as a child component and unrefs the @child.</comment>
@@ -174,7 +182,7 @@
         <returns type="ICalComponent *" annotation="transfer full, nullable" translator_argus="(GObject *)component" comment="The next #ICalComponent."/>
         <comment xml:space="preserve">Gets the next #ICalComponent with specific kind in #ICalComponent.</comment>
     </method>
-    <method name="i_cal_component_begin_component" corresponds="CUSTOM" since="1.0">
+    <method name="i_cal_component_begin_component" corresponds="icalcomponent_begin_component" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent"/>
         <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind"/>
         <returns type="ICalCompIter *" annotation="transfer full" comment="A #ICalCompIter"/>
@@ -191,7 +199,7 @@
 
     return iter;</custom>
     </method>
-    <method name="i_cal_component_end_component" corresponds="CUSTOM" since="1.0">
+    <method name="i_cal_component_end_component" corresponds="icalcomponent_end_component" since="1.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent"/>
         <parameter type="ICalComponentKind" name="kind" comment="A #ICalComponentKind"/>
         <returns type="ICalCompIter *" annotation="transfer full" comment="A #ICalCompIter"/>
@@ -207,7 +215,7 @@
 
     return iter;</custom>
     </method>
-    <method name="i_cal_comp_iter_next" corresponds="CUSTOM" since="1.0">
+    <method name="i_cal_comp_iter_next" corresponds="icalcompiter_next" since="1.0">
         <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter"/>
         <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalComponent"/>
         <comment xml:space="preserve">Gets the next #ICalComponent pointed by #ICalCompIter.</comment>
@@ -224,7 +232,7 @@
 
     return comp;</custom>
     </method>
-    <method name="i_cal_comp_iter_prior" corresponds="CUSTOM" since="1.0">
+    <method name="i_cal_comp_iter_prior" corresponds="icalcompiter_prior" since="1.0">
         <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter"/>
         <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalComponent"/>
         <comment xml:space="preserve">Gets the prior #ICalComponent pointed by #ICalCompIter.</comment>
@@ -241,7 +249,7 @@
 
     return comp;</custom>
     </method>
-    <method name="i_cal_comp_iter_deref" corresponds="CUSTOM" since="1.0">
+    <method name="i_cal_comp_iter_deref" corresponds="icalcompiter_deref" since="1.0">
         <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter"/>
         <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalComponent"/>
         <comment xml:space="preserve">Gets the current #ICalComponent pointed by #ICalCompIter.</comment>
@@ -258,7 +266,7 @@
 
     return comp;</custom>
     </method>
-    <method name="i_cal_component_begin_property" corresponds="CUSTOM" since="4.0">
+    <method name="i_cal_component_begin_property" corresponds="icalcomponent_begin_property" since="4.0">
         <parameter type="ICalComponent *" name="component" comment="A #ICalComponent"/>
         <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind"/>
         <returns type="ICalPropIter *" annotation="transfer full" comment="A #ICalPropIter"/>
@@ -275,7 +283,7 @@
 
     return iter;</custom>
     </method>
-    <method name="i_cal_prop_iter_next" corresponds="CUSTOM" since="4.0">
+    <method name="i_cal_prop_iter_next" corresponds="icalpropiter_next" since="4.0">
         <parameter type="ICalPropIter *" name="i" native_op="POINTER" comment="A #ICalPropIter"/>
         <returns type="ICalProperty *" annotation="transfer full" comment="A #ICalProperty"/>
         <comment xml:space="preserve">Gets the next #ICalProperty pointed by #ICalPropIter.</comment>
@@ -292,7 +300,7 @@
 
     return prop;</custom>
     </method>
-    <method name="i_cal_prop_iter_deref" corresponds="CUSTOM" since="4.0">
+    <method name="i_cal_prop_iter_deref" corresponds="icalpropiter_deref" since="4.0">
         <parameter type="ICalPropIter *" name="i" native_op="POINTER" comment="A #ICalPropIter"/>
         <returns type="ICalProperty *" annotation="transfer full" comment="A #ICalProperty"/>
         <comment xml:space="preserve">Gets the current #ICalProperty pointed by #ICalPropIter.</comment>
@@ -521,7 +529,7 @@ static void foreach_tzid_cb(icalparameter *in_param, void *user_data)
     i_cal_object_steal_native((ICalObject *) param);
     g_object_unref(param);
 }</declaration>
-    <method name="i_cal_component_foreach_tzid" corresponds="CUSTOM" kind="other" since="3.0.5">
+    <method name="i_cal_component_foreach_tzid" corresponds="icalcomponent_foreach_tzid" kind="other" since="3.0.5">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be queried"/>
         <parameter type="ICalComponentForeachTZIDFunc" name="callback" annotation="scope call,closure user_data" comment="The callback function"/>
         <parameter type="gpointer" name="user_data" annotation="nullable" comment="The user data for callback function"/>
@@ -561,7 +569,7 @@ static void foreach_recurrence_cb(const icalcomponent *in_comp, const struct ica
     (*(data->callback))(data->comp, span, data->user_data);
     g_object_unref(span);
 }</declaration>
-    <method name="i_cal_component_foreach_recurrence" corresponds="CUSTOM" kind="other" since="3.0.5">
+    <method name="i_cal_component_foreach_recurrence" corresponds="icalcomponent_foreach_recurrence" kind="other" since="3.0.5">
         <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be queried"/>
         <parameter type="ICalTime *" name="start" comment="Ignore timespans before this"/>
         <parameter type="ICalTime *" name="end" comment="Ignore timespans after this"/>
@@ -686,5 +694,24 @@ static void foreach_recurrence_cb(const icalcomponent *in_comp, const struct ica
     <method name="i_cal_component_new_vresource" corresponds="icalcomponent_new_vresource" kind="constructor" since="4.0">
         <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
         <comment xml:space="preserve">Creates a #ICalComponent of type %I_CAL_VRESOURCE_COMPONENT.</comment>
+    </method>
+    <method name="i_cal_component_get_component_name" corresponds="icalcomponent_get_component_name_r" since="4.0">
+        <parameter type="const ICalComponent *" name="component" comment="an #ICalComponent"/>
+        <returns type="gchar *" annotation="transfer full" comment="name of the @component" translator="i_cal_memory_str_to_glib"/>
+        <comment xml:space="preserve">Returns the name of the @component as string.</comment>
+    </method>
+    <method name="i_cal_component_get_x_name" corresponds="icalcomponent_get_x_name" since="4.0">
+        <parameter type="const ICalComponent *" name="component" comment="an #ICalComponent"/>
+        <returns type="const gchar *" annotation="transfer full,nullable" comment="X (custom) name of the @component, or %NULL, when it's not a X component"/>
+        <comment xml:space="preserve">Returns the X (custom) name of the @component as string, or %NULL.</comment>
+    </method>
+    <method name="i_cal_component_set_x_name" corresponds="icalcomponent_set_x_name" since="4.0">
+        <parameter type="ICalComponent *" name="component" comment="an #ICalComponent"/>
+        <parameter type="const gchar *" name="xname" comment="an X (custom) name for the @component"/>
+        <comment xml:space="preserve">Sets an X (custom) name of the @component.</comment>
+    </method>
+    <method name="i_cal_component_normalize" corresponds="icalcomponent_normalize" since="4.0">
+        <parameter type="ICalComponent *" name="component" comment="an #ICalComponent"/>
+        <comment xml:space="preserve">Normalizes (reorders and sorts the properties) the @component.</comment>
     </method>
 </structure>

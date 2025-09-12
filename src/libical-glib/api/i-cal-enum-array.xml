@@ -10,7 +10,57 @@
 		<returns type="ICalEnumArray *" annotation="transfer full" comment="a new #ICalEnumArray."/>
 		<comment>Creates a new #ICalEnumArray.</comment>
 	</method>
-	<method name="i_cal_enum_array_get_value_at" corresponds="CUSTOM" annotation="skip" kind="other" since="4.0">
+	<method name="i_cal_enumarray_clone" corresponds="icalenumarray_clone" kind="clone" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" annotation="in" comment="The #ICalEnumArray to be cloned"/>
+		<returns type="ICalEnumArray *" annotation="transfer full" translator_argus="NULL" comment="The newly cloned #ICalEnumArray with the same value as the @array"/>
+		<comment xml:space="preserve">Creates a deep copy of #ICalEnumArray with the same properties as the @array.</comment>
+	</method>
+	<method name="i_cal_enumarray_free" corresponds="icalenumarray_free" annotation="skip" kind="destructor" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray to be freed"/>
+		<comment xml:space="preserve">Frees the #ICalEnumArray.</comment>
+	</method>
+	<method name="i_cal_enum_array_element_append_value" corresponds="icalenumarray_append" annotation="skip" kind="custom" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
+		<parameter type="gint" name="value" comment="The integer value to append"/>
+		<comment xml:space="preserve">Appends an integer value to the @array. See also i_cal_enum_array_element_add_value(), i_cal_enum_array_element_append_x_value()</comment>
+		<custom>    icalenumarray_element elem = { 0 };
+    g_return_if_fail(I_CAL_IS_ENUM_ARRAY(array));
+    elem.val = value;
+    icalenumarray_append((icalenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
+	</method>
+	<method name="i_cal_enum_array_element_append_x_value" corresponds="icalenumarray_append" annotation="skip" kind="custom" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
+		<parameter type="const gchar *" name="xvalue" comment="The X (custom) value to append"/>
+		<comment xml:space="preserve">Appends an X (custom) value to the @array. See also i_cal_enum_array_element_add_x_value(), i_cal_enum_array_element_append_value()</comment>
+		<custom>    icalenumarray_element elem = { 0 };
+    g_return_if_fail(I_CAL_IS_ENUM_ARRAY(array));
+    elem.xvalue = xvalue;
+    icalenumarray_append((icalenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
+	</method>
+	<method name="i_cal_enum_array_element_add_value" corresponds="icalenumarray_add" annotation="skip" kind="custom" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
+		<parameter type="gint" name="value" comment="The integer value to append"/>
+		<comment xml:space="preserve">Adds an integer value to the @array, omitting duplicates. See also i_cal_enum_array_element_append_value(), i_cal_enum_array_element_add_x_value()</comment>
+		<custom>    icalenumarray_element elem = { 0 };
+    g_return_if_fail(I_CAL_IS_ENUM_ARRAY(array));
+    elem.val = value;
+    icalenumarray_add((icalenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
+	</method>
+	<method name="i_cal_enum_array_element_add_x_value" corresponds="icalenumarray_add" annotation="skip" kind="custom" since="4.0">
+		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
+		<parameter type="const gchar *" name="xvalue" comment="The X (custom) value to append"/>
+		<comment xml:space="preserve">Adds an X (custom) value to the @array, omitting duplicates. See also i_cal_enum_array_element_append_x_value(), i_cal_enum_array_element_add_value()</comment>
+		<custom>    icalenumarray_element elem = { 0 };
+    g_return_if_fail(I_CAL_IS_ENUM_ARRAY(array));
+    elem.xvalue = xvalue;
+    icalenumarray_add((icalenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
+	</method>
+	<method name="i_cal_enumarray_remove_element_at" corresponds="icalenumarray_remove_element_at" kind="custom" since="4.0">
+		<parameter type="ICalEnumArray *" name="array"  comment="The #ICalEnumArray to be modified"/>
+		<parameter type="gint" name="position" comment="The position in which the element will be removed from the array"/>
+		<comment xml:space="preserve">Removes the element at the @position from the array.</comment>
+	</method>
+	<method name="i_cal_enum_array_element_get_value_at" corresponds="icalenumarray_element_at" annotation="skip" kind="other" since="4.0">
 		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray to be queried"/>
 		<parameter type="gsize" name="position" comment="The position the target element is located"/>
 		<returns type="gint" comment="The element integer value located at the @position in the @array"/>
@@ -22,7 +72,7 @@
         return 0;
     return elem->val;</custom>
 	</method>
-	<method name="i_cal_enum_array_get_xvalue_at" corresponds="CUSTOM" annotation="skip" kind="other" since="4.0">
+	<method name="i_cal_enum_array_element_get_xvalue_at" corresponds="icalenumarray_element_at" annotation="skip" kind="custom" since="4.0">
 		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray to be queried"/>
 		<parameter type="gsize" name="position" comment="The position the target element is located"/>
 		<returns type="const gchar *" annotation="transfer none,nullable" comment="The element X value located at the @position in the @array"/>
@@ -39,7 +89,7 @@
 		<returns type="gsize" error_return_value="((gsize)-1)" comment="The size of current array."/>
 		<comment>Gets the size of the array.</comment>
 	</method>
-	<method name="i_cal_enum_array_find_value" corresponds="CUSTOM" annotation="skip" kind="other" since="4.0">
+	<method name="i_cal_enum_array_find_value" corresponds="icalenumarray_find" annotation="skip" kind="custom" since="4.0">
 		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
 		<parameter type="gint" name="value" comment="The integer value to search for"/>
 		<returns type="gsize" error_return_value="((gsize)-1)" comment="The index of the value in the @array, or an index out of bounds, if not found."/>
@@ -49,7 +99,7 @@
     elem.val = value;
     return icalenumarray_find((icalenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
 	</method>
-	<method name="i_cal_enum_array_find_x_value" corresponds="CUSTOM" annotation="skip" kind="other" since="4.0">
+	<method name="i_cal_enum_array_find_x_value" corresponds="icalenumarray_find" annotation="skip" kind="custom" since="4.0">
 		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
 		<parameter type="const gchar *" name="xvalue" comment="The X (custom) value to search for"/>
 		<returns type="gsize" error_return_value="((gsize)-1)" comment="The index of the value in the @array, or an index out of bounds, if not found."/>
@@ -59,7 +109,7 @@
     elem.xvalue = xvalue;
     return icalenumarray_find((icalenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
 	</method>
-	<method name="i_cal_enum_array_append_value" corresponds="CUSTOM" annotation="skip" kind="other" since="4.0">
+	<method name="i_cal_enum_array_append_value" corresponds="icalenumarray_append" annotation="skip" kind="custom" since="4.0">
 		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
 		<parameter type="gint" name="value" comment="The integer value to append"/>
 		<comment xml:space="preserve">Appends an integer value to the @array. See also i_cal_enum_array_add_value(), i_cal_enum_array_append_x_value()</comment>
@@ -68,7 +118,7 @@
     elem.val = value;
     icalenumarray_append((icalenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
 	</method>
-	<method name="i_cal_enum_array_append_x_value" corresponds="CUSTOM" annotation="skip" kind="other" since="4.0">
+	<method name="i_cal_enum_array_append_x_value" corresponds="icalenumarray_append" annotation="skip" kind="custom" since="4.0">
 		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
 		<parameter type="const gchar *" name="xvalue" comment="The X (custom) value to append"/>
 		<comment xml:space="preserve">Appends an X (custom) value to the @array. See also i_cal_enum_array_add_x_value(), i_cal_enum_array_append_value()</comment>
@@ -77,7 +127,7 @@
     elem.xvalue = xvalue;
     icalenumarray_append((icalenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
 	</method>
-	<method name="i_cal_enum_array_add_value" corresponds="CUSTOM" annotation="skip" kind="other" since="4.0">
+	<method name="i_cal_enum_array_add_value" corresponds="icalenumarray_add" annotation="skip" kind="custom" since="4.0">
 		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
 		<parameter type="gint" name="value" comment="The integer value to append"/>
 		<comment xml:space="preserve">Adds an integer value to the @array, omitting duplicates. See also i_cal_enum_array_append_value(), i_cal_enum_array_add_x_value()</comment>
@@ -86,7 +136,7 @@
     elem.val = value;
     icalenumarray_add((icalenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
 	</method>
-	<method name="i_cal_enum_array_add_x_value" corresponds="CUSTOM" annotation="skip" kind="other" since="4.0">
+	<method name="i_cal_enum_array_add_x_value" corresponds="icalenumarray_add" annotation="skip" kind="custom" since="4.0">
 		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
 		<parameter type="const gchar *" name="xvalue" comment="The X (custom) value to append"/>
 		<comment xml:space="preserve">Adds an X (custom) value to the @array, omitting duplicates. See also i_cal_enum_array_append_x_value(), i_cal_enum_array_add_value()</comment>
@@ -100,7 +150,7 @@
 		<parameter type="gsize" name="position" comment="The position in which the element will be removed from the array"/>
 		<comment xml:space="preserve">Removes the element at the @position from the array.</comment>
 	</method>
-	<method name="i_cal_enum_array_remove_value" corresponds="CUSTOM" annotation="skip" kind="other" since="4.0">
+	<method name="i_cal_enum_array_remove_value" corresponds="icalenumarray_remove" annotation="skip" kind="custom" since="4.0">
 		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
 		<parameter type="gint" name="value" comment="The integer value to remove"/>
 		<comment xml:space="preserve">Removes all occurrences of an integer value from the @array. See also i_cal_enum_array_remove_x_value()</comment>
@@ -109,7 +159,7 @@
     elem.val = value;
     icalenumarray_remove((icalenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
 	</method>
-	<method name="i_cal_enum_array_remove_x_value" corresponds="CUSTOM" annotation="skip" kind="other" since="4.0">
+	<method name="i_cal_enum_array_remove_x_value" corresponds="icalenumarray_remove" annotation="skip" kind="custom" since="4.0">
 		<parameter type="ICalEnumArray *" name="array" comment="The #ICalEnumArray"/>
 		<parameter type="const gchar *" name="xvalue" comment="The X (custom) value to remove"/>
 		<comment xml:space="preserve">Removes all occurrences of an X (custom) value from the @array. See also i_cal_enum_array_remove_value()</comment>

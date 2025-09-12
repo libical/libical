@@ -10,7 +10,7 @@
         <returns type="ICalTimezone *" annotation="transfer full, nullable" translator="i_cal_timezone_new_full" translator_argus="NULL, FALSE" comment="The newly created object of the type #ICalTimezone." />
         <comment xml:space="preserve">The constructor of the type #ICalTimezone.</comment>
     </method>
-    <method name="i_cal_timezone_destroy" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
+    <method name="i_cal_timezone_destroy" corresponds="icaltimezone_free" annotation="skip" kind="private" since="1.0">
         <parameter type="icaltimezone *" name="zone" comment="The #ICalTimezone to be freed"/>
         <comment xml:space="preserve">The destructor of the type #ICalTimezone to fully destroy the object by providing 1 as the second argument of i_cal_time_zone_free. The method is used as a default destructor for introspection.</comment>
         <custom>        icaltimezone_free (zone, 1);</custom>
@@ -28,6 +28,10 @@
     <method name="i_cal_timezone_set_tzid_prefix" corresponds="icaltimezone_set_tzid_prefix" kind="set" since="1.0">
         <parameter type="const gchar *" name="new_prefix" comment="The #ICalTimezone to be set"/>
         <comment xml:space="preserve">Sets the prefix to be used for tzid's generated from system tzdata. Must be globally unique (such as a domain name owned by the developer of the calling application), and begin and end with forward slashes. Do not change or de-allocate the string buffer after calling this.</comment>
+    </method>
+    <method name="i_cal_timezone_get_tzid_prefix" corresponds="icaltimezone_tzid_prefix" kind="get" since="4.0">
+        <returns type="const gchar *" annotation="transfer none" comment="the current timezone ID prefix used by the libical"/>
+        <comment xml:space="preserve">Returns the current timezone ID prefix used by the libical. See i_cal_timezone_set_tzid_prefix().</comment>
     </method>
     <method name="i_cal_timezone_free_builtin_timezones" corresponds="icaltimezone_free_builtin_timezones" kind="others" since="1.0">
         <comment xml:space="preserve">Frees any builtin timezone information.</comment>
@@ -86,7 +90,7 @@
         <returns type="ICalComponent *" annotation="transfer full" translator_argus="(GObject *)zone" comment="The VTIMEZONE component of the @zone."/>
         <comment xml:space="preserve">Returns the VTIMEZONE component of a timezone.</comment>
     </method>
-    <method name="i_cal_timezone_set_component" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_timezone_set_component" corresponds="icaltimezone_set_component" kind="custom" since="1.0">
         <parameter type="ICalTimezone *" name="zone" comment="The #ICalTimezone to be set"/>
         <parameter type="ICalComponent *" name="comp" comment="The VTIMEZONE component of an #ICalTimezone, initializing the tzid, location and tzname fields"/>
         <returns type="gint" comment="Whether the action is successful. 1 for success, 0 for failure."/>
@@ -125,7 +129,7 @@
         <returns type="gint" comment="UTC offset of the @zone"/>
         <comment>Calculates the UTC offset of a given UTC time in the given timezone.  It is the number of seconds to add to UTC to get local time.  The is_daylight flag is set to 1 if the time is in daylight-savings time.</comment>
     </method>
-    <method name="i_cal_timezone_array_new" corresponds="CUSTOM" kind="other" since="1.0">
+    <method name="i_cal_timezone_array_new" corresponds="icaltimezone_array_new" kind="custom" since="1.0">
         <returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="Create a new array."/>
         <comment xml:space="preserve">Creates a new array of timezones.</comment>
         <custom>    ICalArray *zones_array;
@@ -134,12 +138,12 @@
     i_cal_object_set_native_destroy_func(I_CAL_OBJECT (zones_array), (GDestroyNotify) i_cal_timezone_array_destroy);
     return zones_array;</custom>
     </method>
-    <method name="i_cal_timezone_array_destroy" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
+    <method name="i_cal_timezone_array_destroy" corresponds="icaltimezone_array_free" annotation="skip" kind="private" since="1.0">
         <parameter type="icalarray *" name="zones_array" annotation="nullable" comment="The icalarray created by i_cal_timezone_array_new() to be freed"/>
         <comment xml:space="preserve">The destructor of the icalarray of icaltimezone elements to fully destroy the native object.</comment>
         <custom>        icaltimezone_array_free (zones_array);</custom>
     </method>
-    <method name="i_cal_timezone_array_append_from_vtimezone" corresponds="CUSTOM" kind="other" since="1.0">
+    <method name="i_cal_timezone_array_append_from_vtimezone" corresponds="icaltimezone_array_append_from_vtimezone" kind="other" since="1.0">
         <parameter type="ICalArray *" name="timezones" comment="The timezones to be populated"/>
         <parameter type="ICalComponent *" name="child" comment="The component to be appended to @timezones"/>
         <comment>Populate the array of timezones with a component.
@@ -201,11 +205,30 @@
         <returns type="gboolean" comment="true if success."/>
         <comment>Outputs a list of timezone changes for the given timezone to the given file, up to the maximum year given.</comment>
     </method>
-    <method name="i_cal_timezone_array_element_at" corresponds="CUSTOM" kind="other" since="1.0">
+    <method name="i_cal_timezone_array_element_at" corresponds="none" kind="custom" since="1.0">
         <parameter type="ICalArray *" name="timezones" comment="The array to be visited"/>
         <parameter type="guint" name="index" comment="The index"/>
         <returns type="ICalTimezone *" annotation="transfer full" translator_argus="timezones, FALSE" comment="The #ICalTimezone at the position @index in @timezones."/>
         <comment>Gets the #ICalTimezone at specified position in array.</comment>
         <custom>        return i_cal_timezone_new_full ((gpointer)i_cal_array_element_at (timezones, index), (GObject *)timezones, FALSE);</custom>
+    </method>
+    <method name="i_cal_timezone_truncate_vtimezone" corresponds="icaltimezone_truncate_vtimezone" kind="other" since="4.0">
+        <parameter type="ICalComponent *" name="comp" comment="an #ICalComponent"/>
+        <parameter type="const ICalTime *" name="start" comment="a start #ICalTime"/>
+        <parameter type="const ICalTime *" name="end" comment="an end #ICalTime"/>
+        <parameter type="gboolean" name="ms_compatible" comment="whether to truncate the timezoen in a Microsoft-compatible way"/>
+        <comment xml:space="preserve">Truncate a VTIMEZONE component to the given start and end times.
+If either time is null, then no truncation will occur at that point.
+If either time is non-null, then it MUST be specified as UTC.
+If the start time is non-null and ms_compatible is zero,
+then the DTSTART of RRULEs will be adjusted to occur after the start time.</comment>
+    </method>
+    <method name="i_cal_tzutil_get_zone_directory" corresponds="icaltzutil_get_zone_directory" kind="others" since="4.0">
+        <returns type="const gchar *" comment="The path to look for the zonefiles"/>
+        <comment xml:space="preserve">Returns the full path to the system zoneinfo directory (where zone.tab lives).</comment>
+    </method>
+    <method name="i_cal_tzutil_set_zone_directory" corresponds="icaltzutil_set_zone_directory" kind="others" since="4.0">
+        <parameter type="const gchar *" name="path" comment="The path to look for the zonefiles"/>
+        <comment xml:space="preserve">Sets the full path to the system zoneinfo directory (where zone.tab lives).</comment>
     </method>
 </structure>

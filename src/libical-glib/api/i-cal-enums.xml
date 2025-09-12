@@ -84,7 +84,7 @@
         <element name="ICAL_5_2_NOSERVICE_STATUS"/>
         <element name="ICAL_5_3_NOSCHED_STATUS"/>
         <element name="ICAL_6_1_CONTAINER_NOT_FOUND"/>
-		<element name="ICAL_9_0_UNRECOGNIZED_COMMAND"/>
+	<element name="ICAL_9_0_UNRECOGNIZED_COMMAND"/>
     </enum>
     <method name="i_cal_request_status_desc" corresponds="icalenum_reqstat_desc" since="1.0">
         <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be translated"/>

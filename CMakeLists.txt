@@ -40,10 +40,6 @@
 #  Default=false (build shared and static libs)
 #  Takes precedence over STATIC_ONLY
 #
-# -DENABLE_LTO_BUILD=[true|false]
-#  Build a link-time optimized version (requires gcc or clang)
-#  Default=false (do not build a link time optimized version)
-#
 # -DGOBJECT_INTROSPECTION=[true|false]
 #  Set to build GObject introspection "typelib" files
 #  Requires GObject Introspection development package (version MIN_GOBJECT_INTROSPECTION)
@@ -68,6 +64,11 @@
 #  Set to build libical-glib developer documentation
 #  Requires gi-docgen, GOBJECT_INTROSPECTION and LIBICAL_BUILD_DOCS options to be true.
 #  Default=true (build libical-glib developer documentation)
+#
+# -DLIBICAL_GLIB_CHECK_API_FILES=[true|false]
+#  Set to check whether API files for the libical-glib contain all symbols exported
+#  in the corresponding header files; requires ICAL_GLIB to be set to True
+#  Default=false (always true if LIBICAL_DEVMODE is on)
 #
 # -DLIBICAL_ENABLE_MSVC_32BIT_TIME_T=[true|false]
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
@@ -133,9 +134,9 @@
 #  Build with the undefined sanitizer (requires gcc or clang)
 #  Default=false
 #
-# -DLIBICAL_SYNCMODE_THREADLOCAL=[true|false]
-#  Experimental: If set to true, global variables are marked as thread-local. This allows accessing
-#  libical from multiple threads without the need for synchronization. However, any global settings
+# -DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=[true|false]
+#  If set to true, global variables are marked as thread-local. This allows accessing libical
+#  from multiple threads without the need for synchronization. However, any global settings
 #  must be applied per thread. Note that in this mode, any global variables and cached data are
 #  allocated per thread, including the cache for the built-in timezone data. This can lead to a
 #  significant overhead in memory usage and initialization time. It's therefore recommended to limit
@@ -748,6 +749,11 @@ if(LIBICAL_GLIB)
     )
   endif()
 endif()
+libical_option(LIBICAL_GLIB_CHECK_API_FILES "Check libical-glib API files for completeness." False)
+# Always check the API files in developer-mode (when libical-glib is enabled)
+if(LIBICAL_DEVMODE)
+  set(LIBICAL_GLIB_CHECK_API_FILES True)
+endif()
 # LIBICAL_GLIB_BUILD_DOCS might be disabled later by some devmode options
 libical_deprecated_option(ICAL_GLIB_BUILD_DOCS LIBICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
 
@@ -971,32 +977,24 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   endif()
 endif()
 
-mark_as_advanced(LIBICAL_SYNCMODE_THREADLOCAL)
-libical_option(LIBICAL_SYNCMODE_THREADLOCAL "Experimental: Mark global variables as thread-local." False)
+mark_as_advanced(LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL)
+libical_deprecated_option(
+  LIBICAL_SYNCMODE_THREADLOCAL
+  LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL
+  "Mark global variables as thread-local."
+  False
+)
 
-libical_option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
-if(ENABLE_LTO_BUILD)
-  if(CMAKE_C_COMPILER_IS_GCC)
-    libical_add_cflag(-flto LTO)
-    if(C_SUPPORTS_LTO)
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlto-type-mismatch -fuse-linker-plugin")
-      set(CMAKE_AR "gcc-ar")
-      set(CMAKE_RANLIB "gcc-ranlib")
-    else()
-      message(FATAL_ERROR "Your C compiler ${CMAKE_C_COMPILER_ID} does not support the LTO building.")
-    endif()
-    if(LIBICAL_CXX_BINDINGS AND CMAKE_CXX_COMPILER_IS_GCC)
-      include(CheckCXXCompilerFlag)
-      libical_add_cxxflag(-flto LTO)
-      if(CXX_SUPPORTS_LTO)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlto-type-mismatch -fuse-linker-plugin")
-      else()
-        message(FATAL_ERROR "Your C++ compiler ${CMAKE_CXX_COMPILER_ID} does not support LTO building.")
-      endif()
-    endif()
-  else()
-    message(FATAL_ERROR "Build link-time optimization using a non-GCC compiler is currently not supported.")
-  endif()
+libical_deprecated_option(
+  ENABLE_LTO_BUILD
+  CMAKE_INTERPROCEDURAL_OPTIMIZATION
+  "Build a link-time optimized version."
+  False
+)
+if(CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+  include(CheckIPOSupported)
+  # A fatal error is issued if IPO not supported by the compiler
+  check_ipo_supported()
 endif()
 
 libical_option(LIBICAL_BUILD_TESTING "Build tests." False)
