@@ -177,9 +177,11 @@ gchar *get_source_method_comment(Method *method)
     }
 
     /* Processing the since */
-    buffer = g_strconcat(res, "\n *\n * Since: ", method->since, "\n *", NULL);
-    g_free(res);
-    res = buffer;
+    if (method->since != NULL && *method->since != '\0') {
+        buffer = g_strconcat(res, "\n *\n * Since: ", method->since, "\n *", NULL);
+        g_free(res);
+        res = buffer;
+    }
 
     buffer = g_strconcat(res, "\n **/", NULL);
     g_free(res);
@@ -2223,6 +2225,83 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
     (void)g_string_free(calls, TRUE);
 }
 
+static GHashTable * /* gchar *name ~> TemplateData * */
+parse_api_templates(void)
+{
+    GHashTable *api_templates;
+    xmlDoc *doc;
+    xmlNode *node, *child;
+    gchar *filename;
+
+    filename = g_build_filename(templates_dir, API_TEMPLATES_FILENAME, NULL);
+    doc = xmlParseFile(filename);
+    if (doc == NULL) {
+        g_warning("Failed to read '%s'", filename);
+        g_free(filename);
+        return NULL;
+    }
+
+    node = xmlDocGetRootElement(doc);
+    if (node == NULL) {
+        g_warning("An api-templates file '%s' has not content", filename);
+        g_free(filename);
+        xmlFreeDoc(doc);
+        return NULL;
+    }
+
+    if (xmlStrcmp(node->name, (xmlChar *)"templates") != 0) {
+        g_warning("Unexpected api-templates file '%s' root node '%s', expected was 'templates'", filename, (const char *)node->name);
+        g_free(filename);
+        xmlFreeDoc(doc);
+        return NULL;
+    }
+
+    api_templates = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, (GDestroyNotify)g_ptr_array_unref);
+
+    for (child = xmlFirstElementChild(node); child != NULL; child = xmlNextElementSibling(child)) {
+        if (xmlStrcmp(child->name, (const xmlChar *)"method-template") == 0) {
+            GPtrArray *methods = g_ptr_array_new_with_free_func((GDestroyNotify)method_free);
+            xmlNode *kid;
+            for (kid = xmlFirstElementChild(child); kid != NULL; kid = xmlNextElementSibling(kid)) {
+                if (xmlStrcmp(kid->name, (xmlChar *)"method") == 0) {
+                    Method *method = method_new();
+                    if (!parse_method(kid, method)) {
+                        method_free(method);
+                    } else {
+                        g_ptr_array_add(methods, method);
+                    }
+                }
+            }
+            if (methods->len > 0) {
+                xmlChar *name = xmlGetProp(child, (const xmlChar *)"name");
+                xmlChar *requires = xmlGetProp(child, (const xmlChar *)"requires");
+                xmlChar *optional = xmlGetProp(child, (const xmlChar *)"optional");
+                TemplateData *data = template_data_new((const gchar *)name, (const gchar *)requires, (const gchar *)optional);
+                if (data != NULL) {
+                    data->methods = methods;
+                    if (g_hash_table_contains(api_templates, data->name))
+                        g_warning("Warning: API template file '%s' already contains template with name '%s'", filename, data->name);
+                    g_hash_table_insert(api_templates, data->name, data);
+                } else {
+                    g_ptr_array_unref(methods);
+                }
+                g_clear_pointer(&name, xmlFree);
+                g_clear_pointer(&requires, xmlFree);
+                g_clear_pointer(&optional, xmlFree);
+            } else {
+                g_ptr_array_unref(methods);
+            }
+        } else {
+            g_warning("File '%s' contains unexpected element '%s'", filename, (const char *)child->name);
+        }
+    }
+
+    g_free(filename);
+    xmlFreeDoc(doc);
+
+    return api_templates;
+}
+
 static GList * /* Structure * */
 parse_api_files(const gchar *apis_dir,
                 GHashTable *type2kind,      /* nullable */
@@ -2230,6 +2309,7 @@ parse_api_files(const gchar *apis_dir,
 {
     GDir *dir;
     GError *local_error = NULL;
+    GHashTable *api_templates;
     GList *filenames = NULL, *iter_filenames;
     GList *structures = NULL;
     Structure *structure;
@@ -2243,6 +2323,8 @@ parse_api_files(const gchar *apis_dir,
         g_clear_error(&local_error);
         return NULL;
     }
+
+    api_templates = parse_api_templates();
 
     /* Parse the all the XML files into the Structure */
     while (filename = g_dir_read_name(dir), filename) {
@@ -2282,7 +2364,7 @@ parse_api_files(const gchar *apis_dir,
         }
 
         structure = structure_new();
-        if (!parse_structure(node, structure)) {
+        if (!parse_structure(node, structure, api_templates)) {
             printf("The node cannot be parsed into a structure.\n");
             xmlFreeDoc(doc);
             success = FALSE;
@@ -2339,6 +2421,7 @@ parse_api_files(const gchar *apis_dir,
         xmlFreeDoc(doc);
     }
 
+    g_clear_pointer(&api_templates, g_hash_table_unref);
     g_list_free_full(filenames, g_free);
     g_dir_close(dir);
 
