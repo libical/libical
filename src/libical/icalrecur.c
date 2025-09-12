@@ -2757,7 +2757,7 @@ static void expand_by_day(icalrecur_iterator *impl, int year,
             if (valid) {
                 int new_val = is_limiting
                                   /* "Filter" the year days bitmask with the bydays bitmask */
-                                  ? daysmask_getbit(bydays, day + doy_offset)
+                                  ? (int)daysmask_getbit(bydays, day + doy_offset)
                                   /* Add each BYDAY to the year days bitmask */
                                   : 1;
 
