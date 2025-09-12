@@ -1626,7 +1626,7 @@ static void ssyacc_add_where(struct icalgauge_impl *impl, char *str1,
     /* Is there a period in str1 ? If so, the string specified both a */
     /* component and a property                                       */
     if ((c = strrchr(str1, '.')) != 0) {
-        where->comp = icalenum_string_to_component_kind(str1);
+        where->comp = icalcomponent_string_to_kind(str1);
         propstr = c + 1;
         *c = '\0';
     } else {
@@ -1634,7 +1634,7 @@ static void ssyacc_add_where(struct icalgauge_impl *impl, char *str1,
         propstr = str1;
     }
 
-    where->prop = icalenum_string_to_property_kind(propstr);
+    where->prop = icalproperty_string_to_kind(propstr);
 
     where->compare = compare;
 
@@ -1675,7 +1675,7 @@ static void ssyacc_add_select(struct icalgauge_impl *impl, char *str1)
     /* Is there a period in str1 ? If so, the string specified both a */
     /* component and a property */
     if ((c = strrchr(str1, '.')) != 0) {
-        where->comp = icalenum_string_to_component_kind(str1);
+        where->comp = icalcomponent_string_to_kind(str1);
         propstr = c + 1;
         *c = '\0';
     } else {
@@ -1687,7 +1687,7 @@ static void ssyacc_add_select(struct icalgauge_impl *impl, char *str1)
     if (strcmp("*", propstr) == 0) {
         where->prop = ICAL_ANY_PROPERTY;
     } else {
-        where->prop = icalenum_string_to_property_kind(propstr);
+        where->prop = icalproperty_string_to_kind(propstr);
     }
 
     if (where->prop == ICAL_NO_PROPERTY) {
@@ -1703,7 +1703,7 @@ static void ssyacc_add_from(struct icalgauge_impl *impl, char *str1)
 {
     icalcomponent_kind ckind;
 
-    ckind = icalenum_string_to_component_kind(str1);
+    ckind = icalcomponent_string_to_kind(str1);
 
     if (ckind == ICAL_NO_COMPONENT) {
         assert(0);

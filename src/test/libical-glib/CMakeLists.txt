@@ -19,6 +19,7 @@ add_feature_info(
 list(
   APPEND
   TEST_FILES
+  # iCalendar tests
   array.py
   attach.py
   component.py
@@ -32,6 +33,8 @@ list(
   recurrence.py
   timezone.py
   value.py
+  # vCard tests
+  vcard-component.py
 )
 
 if(PYTHON3)

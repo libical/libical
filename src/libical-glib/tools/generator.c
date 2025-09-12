@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "header-parser.h"
+
 #include "generator.h"
 
 #include <errno.h>
@@ -1570,7 +1576,7 @@ gchar *get_translator_for_return(Ret *ret)
     return res;
 }
 
-static gboolean parameter_is_out(Parameter *para)
+static gboolean parameter_is_out(const Parameter *para)
 {
     GList *link;
     for (link = para->annotations; link; link = g_list_next(link)) {
@@ -1697,7 +1703,9 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
 
     (void)g_stpcpy(buffer + strlen(buffer), "\n{\n");
 
-    if (g_strcmp0(method->corresponds, (gchar *)"CUSTOM") != 0) {
+    if (method->custom != NULL) {
+        (void)g_stpcpy(buffer + strlen(buffer), method->custom);
+    } else {
         checkers = get_source_run_time_checkers(method, nameSpace);
         if (checkers != NULL) {
             (void)g_stpcpy(buffer + strlen(buffer), checkers);
@@ -1774,10 +1782,6 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
             g_free(translator);
         }
         (void)g_stpcpy(buffer + strlen(buffer), ";");
-    } else if (method->custom != NULL) {
-        (void)g_stpcpy(buffer + strlen(buffer), method->custom);
-    } else {
-        printf("WARNING: No function body for the method: %s\n", method->name);
     }
     (void)g_stpcpy(buffer + strlen(buffer), "\n}");
 
@@ -1905,6 +1909,7 @@ static void initialize_default_value_table(void)
     (void)g_hash_table_insert(defaultValues, g_strdup("gboolean"), g_strdup("FALSE"));
     (void)g_hash_table_insert(defaultValues, g_strdup("gdouble"), g_strdup("0"));
     (void)g_hash_table_insert(defaultValues, g_strdup("gint"), g_strdup("0"));
+    (void)g_hash_table_insert(defaultValues, g_strdup("gsize"), g_strdup("0"));
     (void)g_hash_table_insert(defaultValues, g_strdup("gpointer"), g_strdup("NULL"));
     (void)g_hash_table_insert(defaultValues, g_strdup("time_t"), g_strdup("0"));
 }
@@ -1965,13 +1970,10 @@ void generate_header_enums(FILE *out, Structure *structure)
 
 void generate_header_enum(FILE *out, Enumeration *enumeration)
 {
-    GList *iter;
-    gchar *nativeName;
-    guint i;
+    guint ii;
     gchar *newName;
     gchar *comment;
     gchar *tmp;
-    const guint enum_header_len = (guint)strlen(ENUM_HEADER);
 
     g_return_if_fail(out != NULL && enumeration != NULL);
 
@@ -2006,34 +2008,35 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
     /* Generate the declaration */
     write_str(out, "typedef enum {");
 
-    for (iter = g_list_first(enumeration->elements); iter != NULL; iter = g_list_next(iter)) {
-        nativeName = (gchar *)iter->data;
-        if (iter != g_list_first(enumeration->elements)) {
+    for (ii = 0; enumeration->items != NULL && ii < enumeration->items->len; ii++) {
+        const EnumerationItem *item = g_ptr_array_index(enumeration->items, ii);
+        int prefix_len = 0;
+        const gchar *use_prefix = NULL;
+        const gchar *use_name = item->alias ? item->alias : item->nativeName;
+
+        if (ii > 0) {
             write_str(out, ",");
         }
-        if (enum_header_len >= (guint)strlen(nativeName)) {
-            printf("The enum name %s is longer than the enum header %s\n", nativeName, ENUM_HEADER);
-            continue;
-        }
-        for (i = 0; i < enum_header_len; i++) {
-            if (ENUM_HEADER[i] != nativeName[i]) {
-                break;
-            }
-        }
-        if (i != enum_header_len) {
-            printf("The enum name %s cannot be processed\n", nativeName);
-            continue;
-        }
-        if (nativeName[i] == '_') {
-            newName = g_strconcat("I_CAL", nativeName + i, NULL);
+        if (g_str_has_prefix(use_name, ENUM_HEADER_ICAL)) {
+            prefix_len = strlen(ENUM_HEADER_ICAL);
+            use_prefix = "I_CAL_";
+        } else if (g_str_has_prefix(use_name, ENUM_HEADER_VCARD)) {
+            prefix_len = strlen(ENUM_HEADER_VCARD);
+            use_prefix = "I_CAL_VCARD_";
         } else {
-            newName = g_strconcat("I_CAL_", nativeName + i, NULL);
+            fprintf(stderr, "The enum name '%s' in '%s' cannot be processed, it has no known prefix\n", use_name, enumeration->name);
+            continue;
+        }
+        if (use_name[prefix_len] == '_') {
+            newName = g_strconcat(use_prefix, use_name + prefix_len + 1, NULL);
+        } else {
+            newName = g_strconcat(use_prefix, use_name + prefix_len, NULL);
         }
 
         write_str(out, "\n\t");
         write_str(out, newName);
         write_str(out, " = ");
-        write_str(out, nativeName);
+        write_str(out, item->nativeName);
 
         g_free(newName);
     }
@@ -2174,7 +2177,7 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
 {
     FILE *file;
     GString *calls;
-    GList *link, *link2, *link3;
+    GList *link, *link2;
 
     file = fopen(filename, "wt");
     if (!file) {
@@ -2191,15 +2194,16 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
 
         for (link2 = str->enumerations; link2; link2 = g_list_next(link2)) {
             Enumeration *enumeration = link2->data;
+            guint ii;
             if (g_str_equal(enumeration->nativeName, "CUSTOM")) {
                 continue;
             }
             fprintf(file, "static void test_%s(%s value)\n", enumeration->name, enumeration->nativeName);
             fprintf(file, "{\n"
                           "    switch(value){\n");
-            for (link3 = enumeration->elements; link3; link3 = g_list_next(link3)) {
-                const gchar *nativeName = link3->data;
-                fprintf(file, "    case %s: break;\n", nativeName);
+            for (ii = 0; enumeration->items != NULL && ii < enumeration->items->len; ii++) {
+                const EnumerationItem *item = g_ptr_array_index(enumeration->items, ii);
+                fprintf(file, "    case %s: break;\n", item->nativeName);
             }
             fprintf(file, "    }\n"
                           "}\n");
@@ -2219,46 +2223,25 @@ static void generate_checks_file(const gchar *filename, GList *structures /* Str
     (void)g_string_free(calls, TRUE);
 }
 
-static gint generate_library(const gchar *apis_dir)
+static GList * /* Structure * */
+parse_api_files(const gchar *apis_dir,
+                GHashTable *type2kind,      /* nullable */
+                GHashTable *type2structure) /* nullable */
 {
-    xmlDoc *doc;
-    xmlNode *node;
-    Structure *structure;
-    gchar *path;
-    const gchar *filename;
-    Enumeration *enumeration;
-    gchar *buffer;
-    GList *structures;
-    GList *iter_list;
-    GList *filenames = NULL;
-    GList *iter_filenames;
     GDir *dir;
     GError *local_error = NULL;
-    gint res = 0;
-    gint len;
-
-    g_return_val_if_fail(apis_dir != NULL, 1);
-    g_return_val_if_fail(g_file_test(apis_dir, G_FILE_TEST_IS_DIR), 1);
-
-    buffer = g_new(gchar, BUFFER_SIZE);
-    *buffer = '\0';
-
-    /* Cache the type and its kind, like ICalComponnet--->std or ICalPropertyKind--->enum */
-    type2kind = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
-    /* Cache the type and the structure where it is defined,
-       like ICalComponent--->Structure_storing_ICalComponent */
-    type2structure = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
-
-    initialize_default_value_table();
-    structures = NULL;
+    GList *filenames = NULL, *iter_filenames;
+    GList *structures = NULL;
+    Structure *structure;
+    const gchar *filename;
+    gboolean success = TRUE;
 
     dir = g_dir_open(apis_dir, 0, &local_error);
     if (!dir) {
         g_warning("Failed to open API directory '%s': %s", apis_dir,
                   local_error ? local_error->message : "Unknown error");
         g_clear_error(&local_error);
-        g_free(buffer);
-        return 1;
+        return NULL;
     }
 
     /* Parse the all the XML files into the Structure */
@@ -2266,10 +2249,15 @@ static gint generate_library(const gchar *apis_dir)
         filenames = g_list_prepend(filenames, g_strdup(filename));
     }
     filenames = g_list_sort(filenames, (GCompareFunc)g_strcmp0);
-    for (iter_filenames = g_list_first(filenames); iter_filenames != NULL;
+    for (iter_filenames = g_list_first(filenames); iter_filenames != NULL && success;
          iter_filenames = g_list_next(iter_filenames)) {
+        xmlDoc *doc;
+        xmlNode *node;
+        gchar *path;
+        guint len;
+
         filename = iter_filenames->data;
-        len = (gint)strlen(filename);
+        len = strlen(filename);
 
         if (len <= 4 || g_ascii_strncasecmp(filename + len - 4, ".xml", 4) != 0)
             continue;
@@ -2279,8 +2267,8 @@ static gint generate_library(const gchar *apis_dir)
         if (doc == NULL) {
             printf("The doc %s cannot be parsed.\n", path);
             g_free(path);
-            res = 1;
-            goto out;
+            success = FALSE;
+            break;
         }
 
         g_free(path);
@@ -2289,20 +2277,20 @@ static gint generate_library(const gchar *apis_dir)
         if (node == NULL) {
             printf("The root node cannot be retrieved from the doc\n");
             xmlFreeDoc(doc);
-            res = 1;
-            goto out;
+            success = FALSE;
+            break;
         }
 
         structure = structure_new();
         if (!parse_structure(node, structure)) {
             printf("The node cannot be parsed into a structure.\n");
             xmlFreeDoc(doc);
-            res = 1;
+            success = FALSE;
             structure_free(structure);
-            goto out;
+            break;
         }
 
-        if (structure->native != NULL) {
+        if (structure->native != NULL && type2kind != NULL && type2structure != NULL) {
             (void)g_hash_table_insert(type2kind,
                                       g_strconcat(structure->nameSpace, structure->name, NULL),
                                       (void *)"std");
@@ -2319,32 +2307,74 @@ static gint generate_library(const gchar *apis_dir)
                     printf("Please supply a default value for the bare structure %s\n",
                            structure->name);
                     xmlFreeDoc(doc);
-                    res = 1;
+                    success = FALSE;
                     structure_free(structure);
-                    goto out;
+                    break;
                 }
             }
         }
 
-        for (iter_list = g_list_first(structure->enumerations); iter_list != NULL;
-             iter_list = g_list_next(iter_list)) {
-            enumeration = (Enumeration *)iter_list->data;
-            (void)g_hash_table_insert(type2kind, g_strdup(enumeration->name), (void *)"enum");
-            (void)g_hash_table_insert(type2structure, g_strdup(enumeration->name), structure);
+        if (type2kind != NULL && type2structure != NULL) {
+            GList *iter_list;
 
-            if (enumeration->defaultNative != NULL) {
-                (void)g_hash_table_insert(defaultValues, g_strdup(enumeration->name),
-                                          g_strdup(enumeration->defaultNative));
-            } else {
-                printf("Please supply a default value for enum %s\n", enumeration->name);
-                xmlFreeDoc(doc);
-                res = 1;
-                structure_free(structure);
-                goto out;
+            for (iter_list = g_list_first(structure->enumerations); iter_list != NULL;
+                 iter_list = g_list_next(iter_list)) {
+                Enumeration *enumeration = (Enumeration *)iter_list->data;
+                (void)g_hash_table_insert(type2kind, g_strdup(enumeration->name), (void *)"enum");
+                (void)g_hash_table_insert(type2structure, g_strdup(enumeration->name), structure);
+
+                if (enumeration->defaultNative != NULL) {
+                    (void)g_hash_table_insert(defaultValues, g_strdup(enumeration->name),
+                                              g_strdup(enumeration->defaultNative));
+                } else {
+                    printf("Please supply a default value for enum %s\n", enumeration->name);
+                    xmlFreeDoc(doc);
+                    success = FALSE;
+                    structure_free(structure);
+                    break;
+                }
             }
         }
         structures = g_list_append(structures, structure);
         xmlFreeDoc(doc);
+    }
+
+    g_list_free_full(filenames, g_free);
+    g_dir_close(dir);
+
+    if (!success) {
+        g_list_free_full(structures, (GDestroyNotify)structure_free);
+        structures = NULL;
+    }
+
+    return structures;
+}
+
+static gint generate_library(const gchar *apis_dir)
+{
+    gchar *buffer;
+    GList *structures;
+    GList *iter_list;
+    gint res = 0;
+
+    g_return_val_if_fail(apis_dir != NULL, 1);
+    g_return_val_if_fail(g_file_test(apis_dir, G_FILE_TEST_IS_DIR), 1);
+
+    buffer = g_new(gchar, BUFFER_SIZE);
+    *buffer = '\0';
+
+    /* Cache the type and its kind, like ICalComponnet--->std or ICalPropertyKind--->enum */
+    type2kind = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
+    /* Cache the type and the structure where it is defined,
+       like ICalComponent--->Structure_storing_ICalComponent */
+    type2structure = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
+
+    initialize_default_value_table();
+
+    structures = parse_api_files(apis_dir, type2kind, type2structure);
+    if (structures == NULL) {
+        res = 1;
+        goto out;
     }
 
     /* Generate the forward declarations header file */
@@ -2356,18 +2386,16 @@ static gint generate_library(const gchar *apis_dir)
     /* Generate all the header and source files for each structure */
     for (iter_list = g_list_first(structures); iter_list != NULL;
          iter_list = g_list_next(iter_list)) {
-        structure = (Structure *)iter_list->data;
+        Structure *structure = (Structure *)iter_list->data;
         generate_header_and_source(structure, (char *)"");
     }
 
     generate_checks_file("ical-glib-build-check.c", structures);
 out:
-    g_dir_close(dir);
     g_hash_table_destroy(type2kind);
     g_hash_table_destroy(type2structure);
     g_hash_table_destroy(defaultValues);
     g_list_free_full(structures, (GDestroyNotify)structure_free);
-    g_list_free_full(filenames, g_free);
     g_free(buffer);
 
     return res;
@@ -2479,12 +2507,116 @@ void generate_header_header_file(GList *structures)
     g_free(buffer);
 }
 
+static gboolean
+remove_symbols_with_prefix_cb(gpointer key,
+                              gpointer value,
+                              gpointer user_data)
+{
+    const gchar *symbol = key;
+    const gchar *prefix = user_data;
+
+    _unused(value);
+
+    return prefix != NULL && *prefix != '\0' && g_str_has_prefix(symbol, prefix);
+}
+
+static gint
+sort_symbols_by_name_cb(gconstpointer aa,
+                        gconstpointer bb)
+{
+    const char *symbol_a = *((const char **)aa);
+    const char *symbol_b = *((const char **)bb);
+    return g_strcmp0(symbol_a, symbol_b);
+}
+
+static gboolean
+check_api_files(const gchar *apis_dir,
+                GHashTable *symbols)
+{
+    GList *structures, *link;
+    gboolean success = TRUE;
+
+    structures = parse_api_files(apis_dir, NULL, NULL);
+
+    for (link = structures; link != NULL; link = g_list_next(link)) {
+        const Structure *structure = link->data;
+        GList *iter;
+
+        for (iter = structure->methods; iter != NULL; iter = g_list_next(iter)) {
+            const Method *method = iter->data;
+            /* do not check whether the 'corresponds' exists, it can be CUSTOM or sometimes repeated */
+            if (method->corresponds != NULL) {
+                g_hash_table_remove(symbols, method->corresponds);
+                /* some methods have their counter parts without the"_r" suffix, cover them too */
+                if (g_str_has_suffix(method->corresponds, "_r")) {
+                    gchar *stripped = g_strndup(method->corresponds, strlen(method->corresponds) - 2);
+                    g_hash_table_remove(symbols, stripped);
+                    g_free(stripped);
+                }
+            }
+        }
+
+        for (iter = structure->enumerations; iter != NULL; iter = g_list_next(iter)) {
+            const Enumeration *enumr = iter->data;
+            if (enumr->nativeName != NULL)
+                g_hash_table_remove(symbols, enumr->nativeName);
+        }
+
+        if (structure->skips != NULL) {
+            guint ii;
+            for (ii = 0; ii < structure->skips->len; ii++) {
+                gchar *skip_symbol = g_ptr_array_index(structure->skips, ii);
+                if (g_str_has_suffix(skip_symbol, "*")) {
+                    gchar *prefix = g_strndup(skip_symbol, strlen(skip_symbol) - 1);
+                    g_hash_table_foreach_remove(symbols, remove_symbols_with_prefix_cb, prefix);
+                    g_free(prefix);
+                } else {
+                    g_hash_table_remove(symbols, skip_symbol);
+                }
+            }
+        }
+    }
+
+    g_list_free_full(structures, (GDestroyNotify)structure_free);
+
+    success = g_hash_table_size(symbols) == 0;
+    if (!success) {
+        GHashTableIter iter;
+        GPtrArray *sorted;
+        gpointer key = NULL;
+        guint ii;
+
+        fprintf(stderr,
+                "The following %u symbols are not covered by the libical-glib API files. "
+                "Either add the definitions for them or declare them as <skip>symbol</skip> under <structure/>\n",
+                g_hash_table_size(symbols));
+
+        sorted = g_ptr_array_sized_new(g_hash_table_size(symbols));
+        g_hash_table_iter_init(&iter, symbols);
+        while (g_hash_table_iter_next(&iter, &key, NULL)) {
+            const gchar *symbol = key;
+            g_ptr_array_add(sorted, (gpointer)symbol);
+        }
+        g_ptr_array_sort(sorted, sort_symbols_by_name_cb);
+        for (ii = 0; ii < sorted->len; ii++) {
+            const gchar *symbol = g_ptr_array_index(sorted, ii);
+            if (ii > 0)
+                fprintf(stderr, " ");
+            fprintf(stderr, "%s", symbol);
+        }
+        fprintf(stderr, "\n");
+        g_ptr_array_unref(sorted);
+    }
+
+    return success;
+}
+
 int main(int argc, char *argv[])
 {
     const gchar *apis_dir;
     gint res;
 
-    if (argc != 3) {
+    if (argc < 3) {
         fprintf(stderr,
                 "Requires two arguments, the first is path to templates, "
                 "the second is a path to XML files with an API description\n");
@@ -2495,6 +2627,40 @@ int main(int argc, char *argv[])
     templates_dir = argv[1];
     /* The directory to search for XML files */
     apis_dir = argv[2];
+
+    if (argc > 3) {
+        GHashTable *symbols;
+        int ii;
+
+        if (strcmp(argv[3], "--check-api-files") != 0) {
+            fprintf(stderr, "Unknown argument '%s', expects '--check-api-files'\n", argv[3]);
+            return 2;
+        }
+        if (((argc - 4) & 1) != 0) {
+            fprintf(stderr, "Expects pair of arguments, path to a header file and export token\n");
+            return 3;
+        }
+
+        symbols = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
+
+        for (ii = 4; ii < argc; ii += 2) {
+            GError *error = NULL;
+            if (!parse_header_file(symbols, argv[ii], argv[ii + 1], &error)) {
+                fprintf(stderr, "Failed to parse header file '%s': %s\n",
+                        argv[ii], error ? error->message : "Unknown error");
+                g_hash_table_unref(symbols);
+                g_clear_error(&error);
+                return 4;
+            }
+        }
+
+        if (check_api_files(apis_dir, symbols))
+            ii = 0;
+        else
+            ii = 5;
+        g_hash_table_unref(symbols);
+        return ii;
+    }
 
     res = generate_library(apis_dir);
     close_private_header();

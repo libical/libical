@@ -138,12 +138,12 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
 
     /* Handle the case where a component was specified */
     if(compstr != 0){
-    where->comp = icalenum_string_to_component_kind(compstr);
+    where->comp = icalcomponent_string_to_kind(compstr);
     } else {
     where->comp = ICAL_NO_COMPONENT;
     }
 
-    where->prop = icalenum_string_to_property_kind(propstr);
+    where->prop = icalproperty_string_to_kind(propstr);
 
     where->compare = compare;
 
@@ -198,7 +198,7 @@ static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
 
     /* Handle the case where a component was specified */
     if(compstr != 0){
-    where->comp = icalenum_string_to_component_kind(compstr);
+    where->comp = icalcomponent_string_to_kind(compstr);
     } else {
     where->comp = ICAL_NO_COMPONENT;
     }
@@ -208,7 +208,7 @@ static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
     if(strcmp("*",propstr) == 0) {
     where->prop = ICAL_ANY_PROPERTY;
     } else {
-    where->prop = icalenum_string_to_property_kind(propstr);
+    where->prop = icalproperty_string_to_kind(propstr);
     }
 
 
@@ -225,7 +225,7 @@ static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
 {
     icalcomponent_kind ckind;
 
-    ckind = icalenum_string_to_component_kind(str1);
+    ckind = icalcomponent_string_to_kind(str1);
 
     if(ckind == ICAL_NO_COMPONENT){
     assert(0);

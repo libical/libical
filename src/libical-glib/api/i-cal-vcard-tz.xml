@@ -1,0 +1,137 @@
+<!--
+  SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<structure namespace="ICalVcard" name="Tz" native="vcardtztype" is_bare="true" default_native="priv_i_cal_vcard_null_tz()">
+	<declaration position="body">
+    #define TZ_KEY_TZID "i-cal-vcard-tz-key-tzid"
+    #define TZ_KEY_URI "i-cal-vcard-tz-key-uri"
+	</declaration>
+	<method name="priv_i_cal_vcard_null_tz" corresponds="none" annotation="skip" kind="others" since="1.0">
+		<returns type="vcardtztype" comment="null/empty vcardtztype structure"/>
+		<comment xml:space="preserve">Returns null/empty vcardtztype structure.</comment>
+		<custom>vcardtztype tz = { 0, };
+    return tz;</custom>
+	</method>
+	<method name="i_cal_vcard_tz_new_tzid" corresponds="none" kind="constructor" since="4.0">
+		<parameter type="const gchar *" name="tzid" comment="The timezone ID"/>
+		<returns type="ICalVcardTz *" annotation="transfer full" comment="The newly created #ICalVcardTz holding the TZID value"/>
+		<comment xml:space="preserve">Creates a new #ICalVcardTz holding the TZID value.</comment>
+		<custom>    vcardtztype tz = { 0, };
+    gchar *tzid_copy = g_strdup(tzid);
+    ICalVcardTz *obj;
+    tz.tzid = tzid_copy;
+    obj = i_cal_vcard_tz_new_full(tz);
+    g_object_set_data_full(G_OBJECT(obj), TZ_KEY_TZID, tzid_copy, g_free);
+    return obj;</custom>
+	</method>
+	<method name="i_cal_vcard_tz_new_uri" corresponds="none" kind="constructor" since="4.0">
+		<parameter type="const gchar *" name="uri" comment="The URI value for the TZ"/>
+		<returns type="ICalVcardTz *" annotation="transfer full" comment="The newly created #ICalVcardTz holding the URI value"/>
+		<comment xml:space="preserve">Creates a new #ICalVcardTz holding the URI value.</comment>
+		<custom>    vcardtztype tz = { 0, };
+    gchar *uri_copy = g_strdup(uri);
+    ICalVcardTz *obj;
+    tz.uri = uri_copy;
+    obj = i_cal_vcard_tz_new_full(tz);
+    g_object_set_data_full(G_OBJECT(obj), TZ_KEY_URI, uri_copy, g_free);
+    return obj;</custom>
+	</method>
+	<method name="i_cal_vcard_tz_new_utc_offset" corresponds="none" kind="constructor" since="4.0">
+		<parameter type="gint" name="utc_offset" comment="a UTC offset"/>
+		<returns type="ICalVcardTz *" annotation="transfer full" comment="The newly created #ICalVcardTz holding the UTC offset"/>
+		<comment xml:space="preserve">Creates a new #ICalVcardTz holding the UTC offset.</comment>
+		<custom>    vcardtztype tz = { 0, };
+    tz.utcoffset = utc_offset;
+    return i_cal_vcard_tz_new_full(tz);</custom>
+	</method>
+	<method name="i_cal_vcard_tz_clone" corresponds="none" kind="constructor" since="4.0">
+		<parameter type="const ICalVcardTz *" name="self" comment="The #ICalVcardTz to clone"/>
+		<returns type="ICalVcardTz *" annotation="transfer full" comment="The newly created #ICalVcardTz, copy of @self."/>
+		<comment xml:space="preserve">Creates a new #ICalVcardTz, copy of @self.</comment>
+		<custom>    vcardtztype *tt, tz;
+    gchar *tzid_copy = NULL, *uri_copy = NULL;
+    ICalVcardTz *obj;
+
+    g_return_val_if_fail(I_CAL_VCARD_IS_TZ((ICalVcardTz *)self), NULL);
+
+    tt = (vcardtztype *)i_cal_object_get_native((ICalObject *)self);
+    g_return_val_if_fail(tt != NULL, NULL);
+
+    tz = *tt;
+    tzid_copy = g_strdup(tz.tzid);
+    uri_copy = g_strdup(tz.uri);
+    tz.tzid = tzid_copy;
+    tz.uri = uri_copy;
+    obj = i_cal_vcard_tz_new_full(tz);
+    g_object_set_data_full(G_OBJECT(obj), TZ_KEY_TZID, tzid_copy, g_free);
+    g_object_set_data_full(G_OBJECT(obj), TZ_KEY_URI, uri_copy, g_free);
+    return obj;</custom>
+	</method>
+	<method name="i_cal_vcard_tz_get_tzid" corresponds="none" kind="get" since="4.0">
+		<parameter type="const ICalVcardTz *" name="self" comment="an #ICalVcardTz"/>
+		<returns type="const gchar *" annotation="nullable" comment="a URI"/>
+		<comment xml:space="preserve">Gets the timezone ID value of the @self. It can return %NULL when not set or when the @self is not of type timezone ID.</comment>
+		<custom>    g_return_val_if_fail(I_CAL_VCARD_IS_TZ((ICalVcardTz *)self), NULL);
+    return ((vcardtztype *)i_cal_object_get_native((ICalObject *)self))->tzid;</custom>
+	</method>
+	<method name="i_cal_vcard_tz_set_tzid" corresponds="none" kind="set" since="4.0">
+		<parameter type="ICalVcardTz *" name="self" comment="an #ICalVcardTz"/>
+		<parameter type="const gchar *" name="tzid" comment="a URI"/>
+		<comment xml:space="preserve">Sets the URI value of the @self.</comment>
+		<custom>    vcardtztype *tz;
+    gchar *tzid_copy;
+    g_return_if_fail(I_CAL_VCARD_IS_TZ((ICalVcardTz *)self));
+    g_return_if_fail(tzid != NULL);
+    tz = ((vcardtztype *)i_cal_object_get_native((ICalObject *)self));
+    tzid_copy = g_strdup(tzid);
+    tz->tzid = tzid_copy;
+    tz->uri = NULL;
+    tz->utcoffset = 0;
+    g_object_set_data_full(G_OBJECT(self), TZ_KEY_TZID, tzid_copy, g_free);
+    g_object_set_data_full(G_OBJECT(self), TZ_KEY_URI, NULL, NULL);</custom>
+	</method>
+	<method name="i_cal_vcard_tz_get_uri" corresponds="none" kind="get" since="4.0">
+		<parameter type="const ICalVcardTz *" name="self" comment="an #ICalVcardTz"/>
+		<returns type="const gchar *" annotation="nullable" comment="a URI"/>
+		<comment xml:space="preserve">Gets the URI value of the @self. It can return %NULL when not set or when the @self is not of type URI.</comment>
+		<custom>    g_return_val_if_fail(I_CAL_VCARD_IS_TZ((ICalVcardTz *)self), NULL);
+    return ((vcardtztype *)i_cal_object_get_native((ICalObject *)self))->uri;</custom>
+	</method>
+	<method name="i_cal_vcard_tz_set_uri" corresponds="none" kind="set" since="4.0">
+		<parameter type="ICalVcardTz *" name="self" comment="an #ICalVcardTz"/>
+		<parameter type="const gchar *" name="uri" comment="a URI"/>
+		<comment xml:space="preserve">Sets the URI value of the @self.</comment>
+		<custom>    vcardtztype *tz;
+    gchar *uri_copy;
+    g_return_if_fail(I_CAL_VCARD_IS_TZ(self));
+    g_return_if_fail(uri != NULL);
+    tz = ((vcardtztype *)i_cal_object_get_native((ICalObject *)self));
+    uri_copy = g_strdup(uri);
+    tz->tzid = NULL;
+    tz->uri = uri_copy;
+    tz->utcoffset = 0;
+    g_object_set_data_full(G_OBJECT(self), TZ_KEY_TZID, NULL, NULL);
+    g_object_set_data_full(G_OBJECT(self), TZ_KEY_URI, uri_copy, g_free);</custom>
+	</method>
+	<method name="i_cal_vcard_tz_get_utc_offset" corresponds="none" kind="get" since="4.0">
+		<parameter type="const ICalVcardTz *" name="self" comment="an #ICalVcardTz"/>
+		<returns type="gint" comment="a UTC offset"/>
+		<comment xml:space="preserve">Gets the UTC offset value of the @self. It can return 0 when not set or when the @self is not of UTC offset type.</comment>
+		<custom>    g_return_val_if_fail(I_CAL_VCARD_IS_TZ((ICalVcardTz *)self), 0);
+    return ((vcardtztype *)i_cal_object_get_native((ICalObject *)self))->utcoffset;</custom>
+	</method>
+	<method name="i_cal_vcard_tz_set_utc_offset" corresponds="none" kind="set" since="4.0">
+		<parameter type="ICalVcardTz *" name="self" comment="an #ICalVcardTz"/>
+		<parameter type="gint" name="utc_offset" comment="a UTC offset"/>
+		<comment xml:space="preserve">Sets the UTC offset value of the @self.</comment>
+		<custom>    vcardtztype *tz;
+    g_return_if_fail(I_CAL_VCARD_IS_TZ(self));
+    tz = ((vcardtztype *)i_cal_object_get_native((ICalObject *)self));
+    tz->tzid = NULL;
+    tz->uri = NULL;
+    tz->utcoffset = utc_offset;
+    g_object_set_data_full(G_OBJECT(self), TZ_KEY_TZID, NULL, NULL);
+    g_object_set_data_full(G_OBJECT(self), TZ_KEY_URI, NULL, NULL);</custom>
+	</method>
+</structure>

@@ -6,7 +6,7 @@
 
 -->
 <structure namespace="ICal" name="Recur">
-    <method name="i_cal_recur_expand_recurrence" corresponds="CUSTOM" since="1.0">
+    <method name="i_cal_recur_expand_recurrence" corresponds="icalrecur_expand_recurrence" kind="custom" since="1.0">
         <parameter type="const gchar *" name="rule" comment="The rule of the recurrence"/>
         <parameter type="time_t" name="start" comment="The start seconds past the POSIX epoch"/>
         <parameter type="gint" name="count" comment="The number of elements to be filled up in the @array"/>
@@ -57,5 +57,17 @@
         <parameter type="ICalRecurrenceSkip" name="kind" comment="The frequency enum"/>
         <returns type="const gchar *" comment="The string representation of skip"/>
         <comment xml:space="preserve">Converts an enum representation to a string representation for the skip.</comment>
-        </method>
+    </method>
+    <enum name="ICalInvalidRruleHandling" native_name="ical_invalid_rrule_handling" default_native="I_CAL_RRULE_TREAT_AS_ERROR">
+        <element name="ICAL_RRULE_TREAT_AS_ERROR"/>
+        <element name="ICAL_RRULE_IGNORE_INVALID"/>
+    </enum>
+    <method name="i_cal_recur_get_invalid_rrule_handling_setting" corresponds="ical_get_invalid_rrule_handling_setting" since="4.0">
+        <returns type="ICalInvalidRruleHandling" comment="The current setting"/>
+        <comment xml:space="preserve">Returns the current behaviour what to do when an RRULE is invalid.</comment>
+    </method>
+    <method name="i_cal_recur_set_invalid_rrule_handling_setting" corresponds="ical_set_invalid_rrule_handling_setting" since="4.0">
+        <parameter type="ICalInvalidRruleHandling" name="value" comment="the setting"/>
+        <comment xml:space="preserve">Sets what to do when an invalid RRULE is recognized.</comment>
+    </method>
 </structure>
