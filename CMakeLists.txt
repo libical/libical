@@ -40,10 +40,6 @@
 #  Default=false (build shared and static libs)
 #  Takes precedence over STATIC_ONLY
 #
-# -DENABLE_LTO_BUILD=[true|false]
-#  Build a link-time optimized version (requires gcc or clang)
-#  Default=false (do not build a link time optimized version)
-#
 # -DGOBJECT_INTROSPECTION=[true|false]
 #  Set to build GObject introspection "typelib" files
 #  Requires GObject Introspection development package (version MIN_GOBJECT_INTROSPECTION)
@@ -989,29 +985,16 @@ libical_deprecated_option(
   False
 )
 
-libical_option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
-if(ENABLE_LTO_BUILD)
-  if(CMAKE_C_COMPILER_IS_GCC)
-    libical_add_cflag(-flto LTO)
-    if(C_SUPPORTS_LTO)
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlto-type-mismatch -fuse-linker-plugin")
-      set(CMAKE_AR "gcc-ar")
-      set(CMAKE_RANLIB "gcc-ranlib")
-    else()
-      message(FATAL_ERROR "Your C compiler ${CMAKE_C_COMPILER_ID} does not support the LTO building.")
-    endif()
-    if(LIBICAL_CXX_BINDINGS AND CMAKE_CXX_COMPILER_IS_GCC)
-      include(CheckCXXCompilerFlag)
-      libical_add_cxxflag(-flto LTO)
-      if(CXX_SUPPORTS_LTO)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlto-type-mismatch -fuse-linker-plugin")
-      else()
-        message(FATAL_ERROR "Your C++ compiler ${CMAKE_CXX_COMPILER_ID} does not support LTO building.")
-      endif()
-    endif()
-  else()
-    message(FATAL_ERROR "Build link-time optimization using a non-GCC compiler is currently not supported.")
-  endif()
+libical_deprecated_option(
+  ENABLE_LTO_BUILD
+  CMAKE_INTERPROCEDURAL_OPTIMIZATION
+  "Build a link-time optimized version."
+  False
+)
+if(CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+  include(CheckIPOSupported)
+  # A fatal error is issued if IPO not supported by the compiler
+  check_ipo_supported()
 endif()
 
 libical_option(LIBICAL_BUILD_TESTING "Build tests." False)
