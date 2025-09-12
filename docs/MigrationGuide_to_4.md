@@ -18,6 +18,7 @@ User-specific:
 | ICAL_GLIB_BUILD_DOCS         | LIBICAL_GLIB_BUILD_DOCS              |
 | USE_32BIT_TIME_T             | LIBICAL_ENABLE_MSVC_32BIT_TIME_T     |
 | WITH_CXX_BINDINGS            | LIBICAL_CXX_BINDINGS                 |
+| ENABLE_LTO_BUILD             | CMAKE_INTERPROCEDURAL_OPTIMIZATION   |
 
 Developer-specific:
 
