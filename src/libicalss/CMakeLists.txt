@@ -176,7 +176,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libicalss.pc DESTINATION ${LIB_INSTALL
 
 ########### next target ###############
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   set(
     icalsscxx_LIB_SRCS
     icalspanlist_cxx.cpp
@@ -290,6 +290,6 @@ install(
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   install(FILES icalspanlist_cxx.h DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
 endif()

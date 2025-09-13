@@ -74,7 +74,7 @@
 "LABEL","49","const char*",
 
 "#VPATCH Extension Parameters","draft-daboo-icalendar-vpatch"
-"PATCH-ACTION","51","icalparameter_patchaction",X=22200;CREATE;BYNAME;BYVALUE;BYPARAM;NONE=22299",
+"PATCH-ACTION","51","icalparameter_patchaction","X=22200;CREATE;BYNAME;BYVALUE;BYPARAM;NONE=22299",
 
 "#Event Publishing Extensions Parameters","RFC 9073 Section 5"
 "ORDER","52","int",

@@ -81,7 +81,7 @@ icalproperty *icallangbind_get_first_property(icalcomponent *c, const char *prop
 
 icalproperty *icallangbind_get_next_property(icalcomponent *c, const char *prop)
 {
-    icalproperty_kind kind = icalenum_string_to_property_kind(prop);
+    icalproperty_kind kind = icalproperty_string_to_kind(prop);
     icalproperty *p;
 
     if (kind == ICAL_NO_PROPERTY) {
@@ -106,7 +106,7 @@ icalproperty *icallangbind_get_next_property(icalcomponent *c, const char *prop)
 
 icalcomponent *icallangbind_get_first_component(icalcomponent *c, const char *comp)
 {
-    icalcomponent_kind kind = icalenum_string_to_component_kind(comp);
+    icalcomponent_kind kind = icalcomponent_string_to_kind(comp);
 
     if (kind == ICAL_NO_COMPONENT) {
         return 0;
@@ -116,7 +116,7 @@ icalcomponent *icallangbind_get_first_component(icalcomponent *c, const char *co
 
 icalcomponent *icallangbind_get_next_component(icalcomponent *c, const char *comp)
 {
-    icalcomponent_kind kind = icalenum_string_to_component_kind(comp);
+    icalcomponent_kind kind = icalcomponent_string_to_kind(comp);
 
     if (kind == ICAL_NO_COMPONENT) {
         return 0;

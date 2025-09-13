@@ -68,7 +68,7 @@ be cloned."/>
         <returns type="gboolean" comment="true if yes, false if not."/>
         <comment xml:space="preserve">Checks whether the #ICalValueKind is valid.</comment>
     </method>
-    <method name="i_cal_value_encode_ical_string" corresponds="CUSTOM" since="1.0">
+    <method name="i_cal_value_encode_ical_string" corresponds="icalvalue_encode_ical_string" kind="custom" since="1.0">
         <parameter type="const gchar *" name="szText" comment="A string"/>
         <returns type="gchar *" annotation="nullable, transfer full" comment="The encoded string. NULL if fail."/>
         <comment xml:space="preserve">Encodes a character string in ical format, escape certain characters, etc.</comment>
@@ -89,7 +89,7 @@ be cloned."/>
 
     return buffer;</custom>
     </method>
-    <method name="i_cal_value_decode_ical_string" corresponds="CUSTOM" since="1.0">
+    <method name="i_cal_value_decode_ical_string" corresponds="icalvalue_decode_ical_string" since="1.0">
         <parameter type="const gchar *" name="szText" comment="A string"/>
         <returns type="gchar *" annotation="nullable, transfer full" comment="The decoded string. NULL if fail."/>
         <comment xml:space="preserve">Extracts the original character string encoded by the above function.</comment>

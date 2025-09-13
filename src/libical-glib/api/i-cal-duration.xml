@@ -6,84 +6,84 @@
 
 -->
 <structure namespace="ICal" name="Duration" native="struct icaldurationtype" is_bare="true" default_native="icaldurationtype_null_duration()">
-    <method name="i_cal_duration_is_neg" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_duration_is_neg" corresponds="none" kind="get" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
         <returns type="gboolean" comment="The is_neg." />
         <comment xml:space="preserve">Gets the is_neg of #ICalDuration.</comment>
         <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return (((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->is_neg) ? TRUE : FALSE;</custom>
     </method>
-    <method name="i_cal_duration_set_is_neg" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_duration_set_is_neg" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
         <parameter type="gboolean" name="is_neg" comment="The is_neg"/>
         <comment>Sets the is_neg of #ICalDuration.</comment>
         <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->is_neg = is_neg ? 1 : 0;</custom>
     </method>
-    <method name="i_cal_duration_get_days" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_duration_get_days" corresponds="none" kind="get" since="1.0">
 	<parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
         <returns type="guint" comment="The days." />
         <comment xml:space="preserve">Gets the days of #ICalDuration.</comment>
         <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return ((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->days;</custom>
     </method>
-    <method name="i_cal_duration_set_days" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_duration_set_days" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
         <parameter type="guint" name="days" comment="The days"/>
         <comment>Sets the days of #ICalDuration.</comment>
         <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->days = days;</custom>
     </method>
-    <method name="i_cal_duration_get_weeks" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_duration_get_weeks" corresponds="none" kind="get" since="1.0">
 	<parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
         <returns type="guint" comment="The weeks." />
         <comment xml:space="preserve">Gets the weeks of #ICalDuration.</comment>
         <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return ((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->weeks;</custom>
     </method>
-    <method name="i_cal_duration_set_weeks" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_duration_set_weeks" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
         <parameter type="guint" name="weeks" comment="The weeks"/>
         <comment>Sets the weeks of #ICalDuration.</comment>
         <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->weeks = weeks;</custom>
     </method>
-    <method name="i_cal_duration_get_hours" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_duration_get_hours" corresponds="none" kind="get" since="1.0">
 	<parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
         <returns type="guint" comment="The hours." />
         <comment xml:space="preserve">Gets the hours of #ICalDuration.</comment>
         <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return ((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->hours;</custom>
     </method>
-    <method name="i_cal_duration_set_hours" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_duration_set_hours" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
         <parameter type="guint" name="hours" comment="The hours"/>
         <comment>Sets the hours of #ICalDuration.</comment>
         <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->hours = hours;</custom>
     </method>
-    <method name="i_cal_duration_get_minutes" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_duration_get_minutes" corresponds="none" kind="get" since="1.0">
 	<parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
         <returns type="guint" comment="The minutes." />
         <comment xml:space="preserve">Gets the minutes of #ICalDuration.</comment>
         <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return ((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->minutes;</custom>
     </method>
-    <method name="i_cal_duration_set_minutes" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_duration_set_minutes" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
         <parameter type="guint" name="minutes" comment="The minutes"/>
         <comment>Sets the minutes of #ICalDuration.</comment>
         <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->minutes = minutes;</custom>
     </method>
-    <method name="i_cal_duration_get_seconds" corresponds="CUSTOM" kind="get" since="1.0">
+    <method name="i_cal_duration_get_seconds" corresponds="none" kind="get" since="1.0">
 	<parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
         <returns type="guint" comment="The seconds." />
         <comment xml:space="preserve">Gets the seconds of #ICalDuration.</comment>
         <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return ((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->seconds;</custom>
     </method>
-    <method name="i_cal_duration_set_seconds" corresponds="CUSTOM" kind="set" since="1.0">
+    <method name="i_cal_duration_set_seconds" corresponds="none" kind="set" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
         <parameter type="guint" name="seconds" comment="The seconds"/>
         <comment>Sets the seconds of #ICalDuration.</comment>

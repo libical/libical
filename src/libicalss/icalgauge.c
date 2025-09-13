@@ -301,7 +301,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
         }
 
         /* First, create a value from the gauge */
-        vk = icalenum_property_kind_to_value_kind(w->prop);
+        vk = icalproperty_kind_to_value_kind(w->prop);
 
         if (vk == ICAL_NO_VALUE) {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
@@ -422,11 +422,11 @@ void icalgauge_dump(icalgauge *gauge)
             continue;
 
         if (w->comp != ICAL_NO_COMPONENT) {
-            printf("%s ", icalenum_component_kind_to_string(w->comp));
+            printf("%s ", icalcomponent_kind_to_string(w->comp));
         }
 
         if (w->prop != ICAL_NO_PROPERTY) {
-            printf("%s ", icalenum_property_kind_to_string(w->prop));
+            printf("%s ", icalproperty_kind_to_string(w->prop));
         }
 
         if (w->compare != ICALGAUGECOMPARE_NONE) {
@@ -444,7 +444,7 @@ void icalgauge_dump(icalgauge *gauge)
     for (p = icalpvl_head(gauge->from); p != 0; p = icalpvl_next(p)) {
         icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)icalpvl_data(p);
 
-        printf("%s\n", icalenum_component_kind_to_string(k));
+        printf("%s\n", icalcomponent_kind_to_string(k));
     }
 
     printf("--- Where ---\n");
@@ -459,11 +459,11 @@ void icalgauge_dump(icalgauge *gauge)
         }
 
         if (w->comp != ICAL_NO_COMPONENT) {
-            printf("%s ", icalenum_component_kind_to_string(w->comp));
+            printf("%s ", icalcomponent_kind_to_string(w->comp));
         }
 
         if (w->prop != ICAL_NO_PROPERTY) {
-            printf("%s ", icalenum_property_kind_to_string(w->prop));
+            printf("%s ", icalproperty_kind_to_string(w->prop));
         }
 
         if (w->compare != ICALGAUGECOMPARE_NONE) {

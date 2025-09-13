@@ -103,8 +103,23 @@
         <comment xml:space="preserve">Converts a string to the #ICalParameterKind.</comment>
     </method>
     <method name="i_cal_parameter_kind_is_valid" corresponds="icalparameter_kind_is_valid" since="3.0.5">
-        <parameter type="const ICalParameterKind" name="kind" comment="The #ICalPropertyKind"/>
+        <parameter type="ICalParameterKind" name="kind" comment="The #ICalParameterKind"/>
         <returns type="gboolean" comment="true if valid, false if not."/>
         <comment xml:space="preserve">Checks whether #ICalParameterKind is valid.</comment>
+    </method>
+    <method name="i_cal_parameter_kind_value_kind" corresponds="icalparameter_kind_value_kind" since="4.0">
+        <parameter type="ICalParameterKind" name="kind" comment="The #ICalParameterKind"/>
+        <parameter type="gboolean *" name="out_is_multivalued" annotation="out,optional" comment="location to store whether the parameter is multivalued, or %NULL to ignore"/>
+        <returns type="ICalValueKind" comment="an #ICalValueKind corresponding to the @kind"/>
+        <comment xml:space="preserve">Converts the @kind into an #ICalValueKind and optionally returns whether the @kind is a multivalued parameter.</comment>
+    </method>
+    <method name="i_cal_parameter_is_multivalued" corresponds="icalparameter_is_multivalued" since="4.0">
+        <parameter type="const ICalParameter *" name="param" comment="an #ICalParameter"/>
+        <returns type="gboolean" comment="whether the@param is a multivalued parameter"/>
+        <comment xml:space="preserve">Returns whether the @param is a multivalued parameter.</comment>
+    </method>
+    <method name="i_cal_parameter_decode_value" corresponds="icalparameter_decode_value" since="4.0">
+        <parameter type="gchar *" name="value" annotation="inout" comment="an #ICalParameter"/>
+        <comment xml:space="preserve">Converts the @value according to RFC 6868, changing the @value itself.</comment>
     </method>
 </structure>

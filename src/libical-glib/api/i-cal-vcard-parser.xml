@@ -1,0 +1,16 @@
+<!--
+  SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<structure namespace="ICalVcard" name="Parser">
+	<method name="i_cal_vcard_parser_parse_string" corresponds="vcardparser_parse_string" kind="get" since="4.0">
+		<parameter type="const char *" name="str" comment="A vCard string to parse"/>
+		<returns type="ICalVcardComponent *" annotation="transfer full,nullable" comment="A newly created #ICalVcardComponent, or %NULL on error."/>
+		<comment xml:space="preserve">Parses the vCard string @str and returns an #ICalVcardComponent, or %NULL when the parse failed.</comment>
+	</method>
+	<method name="i_cal_vcard_parser_errstr" corresponds="vcardparser_errstr" since="4.0">
+		<parameter type="int" name="err" comment="error code"/>
+		<returns type="const char *" comment="Text representation of the @err code."/>
+		<comment xml:space="preserve">Converts an error code into its text representation.</comment>
+	</method>
+</structure>

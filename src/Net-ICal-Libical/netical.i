@@ -115,19 +115,19 @@ void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
 icalerrorstate icalerror_get_error_state( icalerrorenum error);
 
 
-const char* icalenum_property_kind_to_string(icalproperty_kind kind);
-icalproperty_kind icalenum_string_to_property_kind(const char* string);
+const char* icalproperty_kind_to_string(icalproperty_kind kind);
+icalproperty_kind icalproperty_string_to_kind(const char* string);
 
-const char* icalenum_value_kind_to_string(icalvalue_kind kind);
+const char* icalvalue_kind_to_string(icalvalue_kind kind);
 /*icalvalue_kind icalenum_value_kind_by_prop(icalproperty_kind kind);*/
 
 const char* icalenum_parameter_kind_to_string(icalparameter_kind kind);
 icalparameter_kind icalenum_string_to_parameter_kind(const char* string);
 
-const char* icalenum_component_kind_to_string(icalcomponent_kind kind);
-icalcomponent_kind icalenum_string_to_component_kind(const char* string);
+const char* icalcomponent_kind_to_string(icalcomponent_kind kind);
+icalcomponent_kind icalcomponent_string_to_kind(const char* string);
 
-icalvalue_kind icalenum_property_kind_to_value_kind(icalproperty_kind kind);
+icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);
 
 
 int* icallangbind_new_array(int size);

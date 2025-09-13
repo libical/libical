@@ -304,7 +304,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
  * @enum icalparser_ctrl
  * @brief Defines how to handle invalid CONTROL characters in content lines
  */
-enum icalparser_ctrl
+typedef enum icalparser_ctrl
 {
     /** Keep CONTROL characters in content-line */
     ICALPARSER_CTRL_KEEP,
@@ -312,7 +312,7 @@ enum icalparser_ctrl
     ICALPARSER_CTRL_OMIT,
     /** Insert a X-LIC-ERROR instead of content-line */
     ICALPARSER_CTRL_ERROR
-};
+} icalparser_ctrl;
 
 /**
  * @brief Get the current parser setting how to handle CONTROL characters

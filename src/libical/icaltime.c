@@ -294,7 +294,8 @@ icaltime_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icalt
     local_tt.is_date = 0;
 
     /* Use our timezone functions to convert to UTC. */
-    icaltimezone_convert_time(&local_tt, (icaltimezone *)zone, utc_zone);
+    if (tt.zone != utc_zone)
+        icaltimezone_convert_time(&local_tt, (icaltimezone *)zone, utc_zone);
 
     /* Copy the icaltimetype to a struct tm. */
     memset(&stm, 0, sizeof(struct tm));

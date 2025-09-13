@@ -772,9 +772,9 @@ static void sspm_make_part(struct mime_impl *impl,
             data = (char *)icalmemory_new_buffer(*size + 2);
             icalassert(data != 0);
             if (header->encoding == SSPM_BASE64_ENCODING) {
-                rtrn = decode_base64(data, line, size);
+                rtrn = sspm_decode_base64(data, line, size);
             } else if (header->encoding == SSPM_QUOTED_PRINTABLE_ENCODING) {
-                rtrn = decode_quoted_printable(data, line, size);
+                rtrn = sspm_decode_quoted_printable(data, line, size);
             }
 
             if (rtrn == 0) {
@@ -1036,7 +1036,7 @@ The code is heavily modified by Eric Busboom.
 
 ***********************************************************************/
 
-char *decode_quoted_printable(char *dest, const char *src, size_t *size)
+char *sspm_decode_quoted_printable(char *dest, const char *src, size_t *size)
 {
     int cc;
     size_t i = 0;
@@ -1082,7 +1082,7 @@ char *decode_quoted_printable(char *dest, const char *src, size_t *size)
     return (dest);
 }
 
-char *decode_base64(char *dest, const char *src, size_t *size)
+char *sspm_decode_base64(char *dest, const char *src, size_t *size)
 {
     int cc = 0;
     char buf[4] = {0, 0, 0, 0};

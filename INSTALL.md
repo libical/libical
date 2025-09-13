@@ -42,7 +42,7 @@ From a command prompt for the version of MSVC you want to use
 ```
 
 NOTE: Some MSVC 32bit compilers (like MSVC2005) use a 64bit version of time_t.
-In these cases you must pass -DUSE_32BIT_TIME_T=true to cmake to make sure
+In these cases you must pass -DLIBICAL_ENABLE_MSVC_32BIT_TIME_T=true to cmake to make sure
 the 32bit version of time_t is used instead.
 
 Building on Windows with mingw:
@@ -172,7 +172,7 @@ For instance:
 This C library can be built with bindings for these other languages:
 
 - C++. If a C++ compiler is found the buildsystem will create and install the C++ bindings API.
-  Turn off the C++ bindings by passing -DWITH_CXX_BINDINGS=False to cmake.
+  Turn off the C++ bindings by passing -DLIBICAL_CXX_BINDINGS=False to cmake.
   Don't mix ABI from C and C++ compilers.
 
 - Python bindings are built using gobject-introspection, which is enabled
@@ -224,8 +224,8 @@ for example: `cmake -DCMAKE_INSTALL_PREFIX=/opt -DCMAKE_INSTALL_LIBDIR=/opt/lib3
 
 Run `make docs` to build the API documentation and reference.
 
-Disable the docs make target by running cmake with -DICAL_BUILD_DOCS=False option.
-Disable the libical-glib developer documentation by running cmake with -DICAL_GLIB_BUILD_DOCS=False.
+Disable the docs make target by running cmake with -DLIBICAL_BUILD_DOCS=False option.
+Disable the libical-glib developer documentation by running cmake with -DLIBICAL_GLIB_BUILD_DOCS=False.
 
 ## Using vcpkg to install dependencies
 

@@ -6,7 +6,7 @@
 
 -->
 <structure namespace="ICal" name="Period" native="struct icalperiodtype" is_bare="true" default_native="icalperiodtype_null_period ()">
-	<method name="i_cal_period_get_start" corresponds="CUSTOM" kind="get" since="1.0">
+	<method name="i_cal_period_get_start" corresponds="none" kind="get" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried"/>
 		<returns type="ICalTime *" annotation="transfer full" comment="The start of @period."/>
 		<comment>Gets the start time from an #ICalPeriod.</comment>
@@ -15,7 +15,7 @@
 
 	return i_cal_time_new_full ((* (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period)).start);</custom>
 	</method>
-	<method name="i_cal_period_set_start" corresponds="CUSTOM" kind="set" since="1.0">
+	<method name="i_cal_period_set_start" corresponds="none" kind="set" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set"/>
 		<parameter type="ICalTime *" name="start" comment="The start of @period"/>
 		<comment>Sets the start time of an #ICalPeriod.</comment>
@@ -28,7 +28,7 @@
 	periodtype = (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period);
 	periodtype->start = * (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)start);</custom>
 	</method>
-	<method name="i_cal_period_get_end" corresponds="CUSTOM" kind="get" since="1.0">
+	<method name="i_cal_period_get_end" corresponds="none" kind="get" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried"/>
 		<returns type="ICalTime *" annotation="transfer full" comment="The end of @period."/>
 		<comment>Gets the end time from an #ICalPeriod.</comment>
@@ -37,7 +37,7 @@
 
 	return i_cal_time_new_full ((* (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period)).end);</custom>
 	</method>
-	<method name="i_cal_period_set_end" corresponds="CUSTOM" kind="set" since="1.0">
+	<method name="i_cal_period_set_end" corresponds="none" kind="set" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set"/>
 		<parameter type="ICalTime *" name="end" comment="The end of @period"/>
 		<comment>Sets the end time of an #ICalPeriod.</comment>
@@ -50,7 +50,7 @@
 	periodtype = (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period);
 	periodtype->end = (* (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)end));</custom>
 	</method>
-	<method name="i_cal_period_get_duration" corresponds="CUSTOM" kind="get" since="1.0">
+	<method name="i_cal_period_get_duration" corresponds="none" kind="get" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried"/>
 		<returns type="ICalDuration *" annotation="transfer full" comment="The duration of @period."/>
 		<comment>Gets the duration from an #ICalPeriod.</comment>
@@ -59,7 +59,7 @@
 
 	return i_cal_duration_new_full ((* (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period)).duration);</custom>
 	</method>
-	<method name="i_cal_period_set_duration" corresponds="CUSTOM" kind="set" since="1.0">
+	<method name="i_cal_period_set_duration" corresponds="none" kind="set" since="1.0">
 		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set"/>
 		<parameter type="ICalDuration *" name="duration" comment="The duration of @period"/>
 		<comment>Sets the duration of an #ICalPeriod.</comment>

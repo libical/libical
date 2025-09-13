@@ -20,7 +20,8 @@
 #define COMMON_HEADER "libical-glib/i-cal-object"
 #define HEADER_STRUCTURE_BOILERPLATE_TEMPLATE "header-structure-boilerplate-template"
 #define SOURCE_STRUCTURE_BOILERPLATE_TEMPLATE "source-structure-boilerplate-template"
-#define ENUM_HEADER "ICAL"
+#define ENUM_HEADER_ICAL "ICAL"
+#define ENUM_HEADER_VCARD "VCARD"
 #define BUFFER_SIZE 4000
 #define TAB_SIZE 8
 #define RET_TAB_COUNT 2

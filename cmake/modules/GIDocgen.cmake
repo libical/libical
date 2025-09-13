@@ -15,7 +15,7 @@ find_program(GI_DOCGEN gi-docgen)
 if(NOT GI_DOCGEN)
   message(
     FATAL_ERROR
-    "Cannot find gi-docgen. Install it or disable documentation generation with -DICAL_GLIB_BUILD_DOCS=False"
+    "Cannot find gi-docgen. Install it or disable documentation generation with -DLIBICAL_GLIB_BUILD_DOCS=False"
   )
 endif(NOT GI_DOCGEN)
 

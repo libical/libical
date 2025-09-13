@@ -805,6 +805,7 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
        of our UTC time and adding it. */
     utc_offset = icaltimezone_get_utc_offset_of_utc_time(to_zone, tt, &is_daylight);
     tt->is_daylight = is_daylight;
+    tt->zone = to_zone;
     icaltime_adjust(tt, 0, 0, 0, utc_offset);
 }
 
@@ -2115,7 +2116,7 @@ static const char *get_zone_directory_builtin(void)
 #endif
 }
 
-const char *get_zone_directory(void)
+const char *icaltimezone_get_zone_directory(void)
 {
     if (use_builtin_tzdata) {
         return get_zone_directory_builtin();
@@ -2124,10 +2125,10 @@ const char *get_zone_directory(void)
     }
 }
 
-void set_zone_directory(const char *path)
+void icaltimezone_set_zone_directory(const char *path)
 {
     if (zone_files_directory)
-        free_zone_directory();
+        icaltimezone_free_zone_directory();
 
     zone_files_directory = icalmemory_new_buffer(strlen(path) + 1);
 
@@ -2135,7 +2136,7 @@ void set_zone_directory(const char *path)
         strcpy(zone_files_directory, path);
 }
 
-void free_zone_directory(void)
+void icaltimezone_free_zone_directory(void)
 {
     if (zone_files_directory != NULL) {
         icalmemory_free_buffer(zone_files_directory);

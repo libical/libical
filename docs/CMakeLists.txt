@@ -88,7 +88,7 @@ if(DOXYGEN_FOUND)
     icalss
     icalvcal
   )
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     add_dependencies(
       docs
       ical_cxx

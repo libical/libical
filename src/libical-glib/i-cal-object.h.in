@@ -15,6 +15,13 @@
 #include <glib-object.h>
 #include <libical/ical.h>
 #include <libical/libical_ical_export.h>
+#if defined(LIBICAL_GLIB_COMPILATION)
+#include "libicalvcard/vcard.h"
+#include "libicalvcard/libical_vcard_export.h"
+#else
+#include <libical/vcard.h>
+#include <libical/libical_vcard_export.h>
+#endif
 
 #define I_CAL_TYPE_OBJECT \
     (i_cal_object_get_type ())

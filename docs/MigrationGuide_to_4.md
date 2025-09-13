@@ -2,6 +2,34 @@
 
 A guide to help developers port their code from libical v3.x to libical 4.0.
 
+## CMake options
+
+Some CMake option names have been renamed (deprecated) to the LIBICAL namespace.
+
+Please change your build scripts to use the new names before the next major release.
+
+User-specific:
+
+| Old Name                     | New Name                             |
+|------------------------------|--------------------------------------|
+| ICAL_BUILD_DOCS              | LIBICAL_BUILD_DOCS                   |
+| ICAL_GLIB                    | LIBICAL_GLIB                         |
+| ICAL_GLIB_VAPI               | LIBICAL_GLIB_VAPI                    |
+| ICAL_GLIB_BUILD_DOCS         | LIBICAL_GLIB_BUILD_DOCS              |
+| USE_32BIT_TIME_T             | LIBICAL_ENABLE_MSVC_32BIT_TIME_T     |
+| WITH_CXX_BINDINGS            | LIBICAL_CXX_BINDINGS                 |
+| ENABLE_LTO_BUILD             | CMAKE_INTERPROCEDURAL_OPTIMIZATION   |
+
+Developer-specific:
+
+| Old Name                     | New Name                             |
+|------------------------------|--------------------------------------|
+| ABI_DUMPER                   | LIBICAL_DEVMODE_ABI_DUMPER           |
+| ADDRESS_SANITIZER            | LIBICAL_DEVMODE_ADDRESS_SANITIZER    |
+| LIBICAL_SYNCMODE_THREADLOCAL | LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL |
+| THREAD_SANITIZER             | LIBICAL_DEVMODE_THREAD_SANITIZER     |
+| UNDEFINED_SANITIZER          | LIBICAL_DEVMODE_UNDEFINED_SANITIZER  |
+
 ## Conditional compilation
 
 To continue supporting the 3.0 version you can use conditional compilation, like so:
@@ -117,6 +145,36 @@ The following functions have been added:
 * No longer publicly visible functions:
   * `icaltzutil_fetch_timezone()`
   * `icalrecurrencetype_clear()`
+
+### Removed macros
+
+These convenience macros were added in version 3 to ease porting from older versions.
+They have been removed in version 4 and should be replaced with their actual function
+names as follows:
+
+| Old Macro Name                       | Actual Function Name                   |
+|--------------------------------------|----------------------------------------|
+| icalenum_action_to_string            | icalproperty_action_to_string          |
+| icalenum_class_to_string             | icalproperty_class_to_string           |
+| icalenum_component_kind_to_string    | icalcomponent_kind_to_string           |
+| icalenum_method_to_string            | icalproperty_method_to_string          |
+| icalenum_participanttype_to_string   | icalproperty_participanttype_to_string |
+| icalenum_property_kind_to_string     | icalproperty_kind_to_string            |
+| icalenum_property_kind_to_value_kind | icalproperty_kind_to_value_kind        |
+| icalenum_resourcetype_to_string      | icalproperty_resourcetype_to_string    |
+| icalenum_status_to_string            | icalproperty_status_to_string          |
+| icalenum_string_to_action            | icalproperty_string_to_action          |
+| icalenum_string_to_class             | icalproperty_string_to_class           |
+| icalenum_string_to_component_kind    | icalcomponent_string_to_kind           |
+| icalenum_string_to_method            | icalproperty_string_to_method          |
+| icalenum_string_to_participanttype   | icalproperty_string_to_participanttype |
+| icalenum_string_to_property_kind     | icalproperty_string_to_kind            |
+| icalenum_string_to_resourcetype      | icalproperty_string_to_resourcetype    |
+| icalenum_string_to_status            | icalproperty_string_to_status          |
+| icalenum_string_to_transp            | icalproperty_string_to_transp          |
+| icalenum_string_to_value_kind        | icalvalue_string_to_kind               |
+| icalenum_transp_to_string            | icalproperty_transp_to_string          |
+| icalenum_value_kind_to_string        | icalvalue_kind_to_string               |
 
 ### Added data types
 

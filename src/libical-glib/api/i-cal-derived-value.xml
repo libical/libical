@@ -6,6 +6,7 @@
 
 -->
 <structure namespace="ICal" name="DerivedValue">
+	<skip>icalvalue_vanew_*</skip>
 	<enum name="ICalValueKind" native_name="icalvalue_kind" default_native="I_CAL_NO_VALUE">
 	    <element name="ICAL_ANY_VALUE"/>
 	    <element name="ICAL_ACTION_VALUE"/>
@@ -74,7 +75,7 @@
 	    <element name="ICAL_CARLEVEL_CARFULL1"/>
 	    <element name="ICAL_CARLEVEL_NONE"/>
 	</enum>
-	<enum name="ICalProperty_Class" native_name="icalproperty_class" default_native="I_CAL_CLASS_NONE">
+	<enum name="ICalPropertyClassenum" native_name="icalproperty_class" default_native="I_CAL_CLASS_NONE">
 	    <element name="ICAL_CLASS_X"/>
 	    <element name="ICAL_CLASS_PUBLIC"/>
 	    <element name="ICAL_CLASS_PRIVATE"/>
@@ -624,6 +625,21 @@
 		<returns type="gint" comment="The integer within #ICalValue"/>
 		<comment>Gets the integer of #ICalValue.</comment>
 	</method>
+	<method name="i_cal_value_set_uid" corresponds="icalvalue_set_uid" kind="set" since="4.0">
+		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
+		<parameter type="const gchar *" name="v" comment="The UID value"/>
+		<comment>Sets the UID in the #ICalValue.</comment>
+	</method>
+	<method name="i_cal_value_new_uid" corresponds="icalvalue_new_uid" kind="constructor" since="4.0">
+		<parameter type="const gchar *" name="v" comment="The UID value"/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
+		<comment>Creates a new #ICalValue with the type UID.</comment>
+	</method>
+	<method name="i_cal_value_get_uid" corresponds="icalvalue_get_uid" kind="get" since="4.0">
+		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
+		<returns type="const gchar *" annotation="nullable, transfer none" comment="The UID within #ICalValue"/>
+		<comment>Gets the UID of #ICalValue.</comment>
+	</method>
 	<method name="i_cal_value_set_uri" corresponds="icalvalue_set_uri" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
 		<parameter type="const gchar *" name="v" comment="The uri value"/>
@@ -641,17 +657,17 @@
 	</method>
 	<method name="i_cal_value_set_class" corresponds="icalvalue_set_class" kind="set" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalProperty_Class" name="v" comment="The class value"/>
+		<parameter type="ICalPropertyClassenum" name="v" comment="The class value"/>
 		<comment>Sets the class in the #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_new_class" corresponds="icalvalue_new_class" kind="constructor" since="1.0">
-		<parameter type="ICalProperty_Class" name="v" comment="The class value"/>
+		<parameter type="ICalPropertyClassenum" name="v" comment="The class value"/>
 		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
 		<comment>Creates a new #ICalValue with the type class.</comment>
 	</method>
 	<method name="i_cal_value_get_class" corresponds="icalvalue_get_class" kind="get" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalProperty_Class" comment="The class within #ICalValue"/>
+		<returns type="ICalPropertyClassenum" comment="The class within #ICalValue"/>
 		<comment>Gets the class of #ICalValue.</comment>
 	</method>
 	<method name="i_cal_value_set_float" corresponds="icalvalue_set_float" kind="set" since="1.0">
@@ -803,5 +819,20 @@
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
 		<returns type="ICalPropertyCarlevel" comment="The carlevel within #ICalValue"/>
 		<comment>Gets the carlevel of #ICalValue.</comment>
+	</method>
+	<method name="i_cal_value_set_xmlreference" corresponds="icalvalue_set_xmlreference" kind="set" since="4.0">
+		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
+		<parameter type="const gchar *" name="v" comment="The XMLREFERENCE value"/>
+		<comment>Sets the XMLREFERENCE in the #ICalValue.</comment>
+	</method>
+	<method name="i_cal_value_new_xmlreference" corresponds="icalvalue_new_xmlreference" kind="constructor" since="4.0">
+		<parameter type="const gchar *" name="v" comment="The XMLREFERENCE value"/>
+		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
+		<comment>Creates a new #ICalValue with the type XMLREFERENCE.</comment>
+	</method>
+	<method name="i_cal_value_get_xmlreference" corresponds="icalvalue_get_xmlreference" kind="get" since="4.0">
+		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
+		<returns type="const gchar *" annotation="nullable, transfer none" comment="The XMLREFERENCE within #ICalValue"/>
+		<comment>Gets the XMLREFERENCE of #ICalValue.</comment>
 	</method>
 </structure>

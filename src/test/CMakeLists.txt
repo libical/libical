@@ -88,7 +88,7 @@ macro(buildme _name _srcs)
     icalvcal
   )
 
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     add_dependencies(
       ${_name}
       ical_cxx
@@ -127,7 +127,7 @@ macro(testme _name _srcs)
 endmacro()
 
 ########## libical-glib tests #########
-if(ICAL_GLIB AND GOBJECT_INTROSPECTION)
+if(LIBICAL_GLIB AND GOBJECT_INTROSPECTION)
   add_subdirectory(libical-glib)
 endif()
 
@@ -153,7 +153,7 @@ set(
   test-malloc.c
   test-malloc.h
 )
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   list(APPEND regression_SRCS regression-cxx.cpp)
 endif()
 testme(regression "${regression_SRCS}")
@@ -230,7 +230,7 @@ set(builtin_timezones_SRCS builtin_timezones.c)
 testme(builtin_timezones "${builtin_timezones_SRCS}")
 
 ########### next target ###############
-if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
+if(NOT CYGWIN AND NOT LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
   set(icalrecurtest_SRCS icalrecur_test.c)
   configure_file(icalrecur_test.txt icalrecur_test.txt COPYONLY)
   configure_file(icalrecur_test_rscale.txt icalrecur_test_rscale.txt COPYONLY)
@@ -243,7 +243,7 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
     icalss
     icalvcal
   )
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     # https://github.com/libical/libical/pull/656
     set_property(
       TARGET
@@ -311,7 +311,7 @@ testme(parser_ctrl "${icalparser_ctrl_test_SRCS}")
 
 ########### next target ###############
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   testme(vcf_leak vcf_leak.cpp)
 endif()
 

@@ -6,7 +6,7 @@
 
 -->
 <structure namespace="ICal" name="CompIter" native="struct icalcompiter" is_bare="true" default_native="i_cal_comp_iter_new_default ()">
-        <method name="i_cal_comp_iter_new_default" corresponds="CUSTOM" kind="private" since="1.0" annotation="skip">
+        <method name="i_cal_comp_iter_new_default" corresponds="custom" kind="private" since="1.0" annotation="skip">
                 <returns type="struct icalcompiter" annotation="transfer none" comment="The newly created default native icalcompiter"/>
                 <custom>        icalcompiter compiter;
         compiter.iter = 0;

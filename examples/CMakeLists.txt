@@ -28,7 +28,7 @@ add_dependencies(
   icalss
   icalvcal
 )
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   # https://github.com/libical/libical/pull/656
   set_property(
     TARGET
