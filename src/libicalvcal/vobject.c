@@ -960,60 +960,6 @@ typedef struct OFile {
     unsigned int fail:1;
     } OFile;
 
-#if 0
-static void appendsOFile(OFile *fp, const char *s)
-{
-    int slen;
-    if (fp->fail) return;
-    slen  = strlen(s);
-    if (fp->fp) {
-        fwrite(s,1,slen,fp->fp);
-        }
-    else {
-stuff:
-        if (fp->len + slen < fp->limit) {
-            memcpy(fp->s+fp->len,s,slen);
-            fp->len += slen;
-            return;
-            }
-        else if (fp->alloc) {
-            fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-            if (OFILE_REALLOC_SIZE <= slen) fp->limit += slen;
-            fp->s = (char *) realloc(fp->s,(size_t)fp->limit);
-            if (fp->s) goto stuff;
-            }
-        if (fp->alloc)
-            free(fp->s);
-        fp->s = 0;
-        fp->fail = 1;
-        }
-}
-
-static void appendcOFile(OFile *fp, char c)
-{
-    if (fp->fail) return;
-    if (fp->fp) {
-        fputc(c,fp->fp);
-        }
-    else {
-stuff:
-        if (fp->len+1 < fp->limit) {
-            fp->s[fp->len] = c;
-            fp->len++;
-            return;
-            }
-        else if (fp->alloc) {
-            fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-            fp->s = (char *) realloc(fp->s,fp->limit);
-            if (fp->s) goto stuff;
-            }
-        if (fp->alloc)
-            free(fp->s);
-        fp->s = 0;
-        fp->fail = 1;
-        }
-}
-#else
 static void appendcOFile_(OFile *fp, char c)
 {
     if (fp->fail) return;
@@ -1058,8 +1004,6 @@ static void appendsOFile(OFile *fp, const char *s)
         appendcOFile(fp,s[i]);
         }
 }
-
-#endif
 
 static void initOFile(OFile *fp, FILE *ofp)
 {

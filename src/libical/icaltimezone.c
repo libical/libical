@@ -24,6 +24,9 @@
 #include <stdlib.h>
 #include <limits.h>
 
+/* uncomment, to enable debug prints for the timezone code */
+/* #define ICALTIMEZONE_DEBUG_PRINT 1 */
+
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 #if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP)
@@ -501,7 +504,7 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
     icalarray *changes;
     icalcomponent *comp;
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
     printf("\nExpanding changes for: %s to year: %i\n", zone->tzid, end_year);
 #endif
 
@@ -597,7 +600,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
     if (!found_dtstart || !found_tzoffsetto || !found_tzoffsetfrom)
         return;
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
     printf("\n Expanding component DTSTART (Y/M/D): %i/%i/%i %i:%02i:%02i\n",
            dtstart.year, dtstart.month, dtstart.day, dtstart.hour, dtstart.minute, dtstart.second);
 #endif
@@ -615,7 +618,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
         /* Convert to UTC. */
         icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
         printf("  Appending single DTSTART (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
                change.year, change.month, change.day, change.hour, change.minute, change.second);
 #endif
@@ -627,7 +630,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
     /* The component has recurrence data, so we expand that now. */
     prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
     while (prop && (has_rdate || has_rrule)) {
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
         printf("Expanding property...\n");
 #endif
         switch (icalproperty_isa(prop)) {
@@ -654,7 +657,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                     icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
             }
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
             printf("  Appending RDATE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
                    change.year, change.month, change.day,
                    change.hour, change.minute, change.second);
@@ -672,7 +675,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 a local time, since the recurrence code has no way to convert
                 it itself. */
                 if (!icaltime_is_null_time(rrule->until) && icaltime_is_utc(rrule->until)) {
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
                     printf("  Found RRULE UNTIL in UTC.\n");
 #endif
 
@@ -692,10 +695,10 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 change.minute = dtstart.minute;
                 change.second = dtstart.second;
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
                 printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
-                    change.year, change.month, change.day,
-                    change.hour, change.minute, change.second);
+                       change.year, change.month, change.day,
+                       change.hour, change.minute, change.second);
 #endif
 
                 icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
@@ -719,10 +722,10 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                     change.minute = occ.minute;
                     change.second = occ.second;
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
                     printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
-                        change.year, change.month, change.day,
-                        change.hour, change.minute, change.second);
+                           change.year, change.month, change.day,
+                           change.hour, change.minute, change.second);
 #endif
 
                     icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
@@ -939,7 +942,7 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
                standard time instead. */
             want_daylight = (tt->is_daylight == 1) ? 1 : 0;
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
             if (zone_change->is_daylight == prev_zone_change->is_daylight) {
                 printf(" **** Same is_daylight setting\n");
             }
@@ -1351,26 +1354,6 @@ icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
     if (strcmp(location, "UTC") == 0 || strcmp(location, "GMT") == 0)
         return &utc_timezone;
 
-#if 0
-    /* Do a simple binary search. */
-    lower = middle = 0;
-    upper = builtin_timezones->num_elements;
-
-    while (lower < upper) {
-        middle = (lower + upper) / 2;
-        zone = icalarray_element_at(builtin_timezones, middle);
-        zone_location = icaltimezone_get_location(zone);
-        cmp = strcmp(location, zone_location);
-        if (cmp == 0) {
-            return zone;
-        } else if (cmp < 0) {
-            upper = middle;
-        } else {
-            lower = middle + 1;
-        }
-    }
-#endif
-
     /* The zones from the system are not stored in alphabetical order,
        so we just do a sequential search */
     for (lower = 0; lower < builtin_timezones->num_elements; lower++) {
@@ -1761,7 +1744,7 @@ static void icaltimezone_parse_zone_tab(void)
 
         icalarray_append(builtin_timezones, &zone);
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
         printf("Found zone: %s %f %f\n", location, zone.latitude, zone.longitude);
 #endif
     }
@@ -1928,7 +1911,7 @@ bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
     /* Make sure the changes array is expanded up to the given time. */
     icaltimezone_ensure_coverage(zone, max_year);
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
     printf("Num changes: %i\n", zone->changes->num_elements);
 #endif
 
