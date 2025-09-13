@@ -62,7 +62,6 @@ list(
   api/i-cal-error.xml
   api/i-cal-geo.xml
   api/i-cal-memory.xml
-  api/i-cal-mime.xml
   api/i-cal-parameter.xml
   api/i-cal-param-iter.xml
   api/i-cal-parser.xml
