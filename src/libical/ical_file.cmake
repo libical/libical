@@ -30,8 +30,6 @@ set(
   ${TOPS}/src/libical/icalmemory.h
   ${TOPS}/src/libical/icalerror.h
   ${TOPS}/src/libical/icalrestriction.h
-  ${TOPS}/src/libical/sspm.h
-  ${TOPS}/src/libical/icalmime.h
   ${TOPS}/src/libical/icallangbind.h
 )
 

@@ -176,14 +176,6 @@ endforeach()
 
 ########### next target ###############
 
-if(NOT WIN32 AND NOT ANDROID)
-  #stow is very Unix specific
-  set(stow_SRCS stow.c)
-  buildme(stow "${stow_SRCS}")
-endif()
-
-########### next target ###############
-
 set(recur_SRCS recur.c)
 testme(recur "${recur_SRCS}")
 
@@ -198,13 +190,6 @@ endif()
 if(CMAKE_USE_PTHREADS_INIT)
   set(icaltm_test_SRCS icaltm_test.c)
   testme(icaltm_test "${icaltm_test_SRCS}")
-endif()
-
-########### next target ###############
-
-if(HAVE_GETOPT) #getopt is required
-  set(testmime_SRCS testmime.c)
-  testme(testmime "${testmime_SRCS}")
 endif()
 
 ########### next target ###############
@@ -316,13 +301,6 @@ if(LIBICAL_CXX_BINDINGS)
 endif()
 
 ########### next target ###############
-
-if(NOT LIBICAL_DEVMODE_LEAK_SANITIZER)
-  set(mime_doublefree_SRCS mime_doublefree.c)
-  testme(mime_doublefree "${mime_doublefree_SRCS}")
-endif()
-
-############# fuzzer tests ############
 
 testme(icalcomponent_fuzz1 icalcomponent_fuzz1.c)
 testme(icalcomponent_fuzz2 icalcomponent_fuzz2.c)

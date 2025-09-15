@@ -219,8 +219,6 @@ set(
   icalerror.h
   icalmemory.c
   icalmemory.h
-  icalmime.c
-  icalmime.h
   icalparameter.c
   icalparameter.h
   icalparameterimpl.h
@@ -251,8 +249,6 @@ set(
   icalvalueimpl.h
   icalpvl.c
   icalpvl.h
-  sspm.c
-  sspm.h
   qsort_gen.c
   qsort_gen.h
   icallangbind.h
@@ -477,7 +473,6 @@ install(
     icalerror.h
     icallangbind.h
     icalmemory.h
-    icalmime.h
     icalparameter.h
     icalparser.h
     icalperiod.h
@@ -494,7 +489,6 @@ install(
     libical_sentinel.h
     libical_ical_export.h
     icalpvl.h
-    sspm.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
 

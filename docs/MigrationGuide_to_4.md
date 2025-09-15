@@ -127,6 +127,8 @@ The following functions have been added:
 
 ### Removed functions
 
+* `icalmime_parse()` has been removed. Please use another library if you need a MIME parser.
+
 * `icalrecurrencetype_clear()` has been removed.
 
 * `icalrecurrencetype_rscale_is_supported()` has been removed as

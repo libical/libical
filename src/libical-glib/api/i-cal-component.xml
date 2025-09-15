@@ -10,8 +10,6 @@
     <skip>ICAL_CHECK_VERSION</skip>
     <skip>icalpvl_*</skip>
     <skip>icallangbind_*</skip>
-    <skip>sspm_*</skip>
-    <skip>enum sspm_*</skip>
     <!-- follows symbols related to the icalcomponent itself -->
     <skip>icalcomponent_vanew</skip>
     <method name="i_cal_component_new" corresponds="icalcomponent_new" kind="constructor" since="1.0">
