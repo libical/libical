@@ -12,6 +12,7 @@
 #include <glib.h>
 #include "xml-parser.h"
 
+#define API_TEMPLATES_FILENAME "api-templates.xml"
 #define HEADER_TEMPLATE "header-template"
 #define HEADER_HEADER_TEMPLATE "header-header-template"
 #define HEADER_FORWARD_DECLARATIONS_TEMPLATE "header-forward-declarations-template"

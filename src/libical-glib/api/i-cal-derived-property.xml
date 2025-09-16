@@ -144,2011 +144,403 @@
         <element name="ICAL_XLICMIMEOPTINFO_PROPERTY"/>
         <element name="ICAL_NO_PROPERTY"/>
     </enum>
-    <method name="i_cal_property_new_acceptresponse" corresponds="icalproperty_new_acceptresponse" kind="constructor" since="2.0">
-        <parameter type="const gchar *" name="v" comment="The acceptresponse"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_acceptresponse" corresponds="icalproperty_set_acceptresponse" kind="set" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The acceptresponse"/>
-        <comment>Sets the acceptresponse for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_acceptresponse" corresponds="icalproperty_get_acceptresponse" kind="get" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the acceptresponse of #ICalProperty."/>
-        <comment>Gets the acceptresponse of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_acknowledged" corresponds="icalproperty_new_acknowledged" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of acknowledgement"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_acknowledged" corresponds="icalproperty_set_acknowledged" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The acknowledgement time"/>
-        <comment>Sets the acknowledged time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_acknowledged" corresponds="icalproperty_get_acknowledged" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the acknowledged time of #ICalProperty."/>
-        <comment>Gets the acknowledged time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_action" corresponds="icalproperty_new_action" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyAction" name="v" comment="The action"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_action" corresponds="icalproperty_set_action" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyAction" name="v" comment="The action"/>
-        <comment>Sets the action for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_action" corresponds="icalproperty_get_action" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyAction" comment="Get the action of #ICalProperty."/>
-        <comment>Gets the action of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_allowconflict" corresponds="icalproperty_new_allowconflict" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The allowconflict"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_allowconflict" corresponds="icalproperty_set_allowconflict" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The allowconflict"/>
-        <comment>Sets the allowconflict for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_allowconflict" corresponds="icalproperty_get_allowconflict" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the allowconflict of #ICalProperty."/>
-        <comment>Gets the allowconflict of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_attach" corresponds="icalproperty_new_attach" kind="constructor" since="1.0">
-        <parameter type="ICalAttach *" name="v" comment="The #ICalAttach"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-        <custom>	ICalProperty *property;
-	g_return_val_if_fail (I_CAL_IS_ATTACH (v), NULL);
-	property = i_cal_property_new_full (icalproperty_new_attach (i_cal_object_get_native ((ICalObject *)v)), NULL);
-	return property;</custom>
-    </method>
-    <method name="i_cal_property_set_attach" corresponds="icalproperty_set_attach" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalAttach *" name="v" annotation="transfer none" comment="The attach"/>
-        <comment>Sets the attach for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_attach" corresponds="icalproperty_get_attach" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalAttach *" annotation="transfer full" translator_argus="(GObject *)prop" comment="Get the attach of #ICalProperty."/>
-        <comment>Gets the attach of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_attendee" corresponds="icalproperty_new_attendee" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The attendee"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_attendee" corresponds="icalproperty_set_attendee" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The attendee"/>
-        <comment>Sets the attendee for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_attendee" corresponds="icalproperty_get_attendee" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the attendee of #ICalProperty."/>
-        <comment>Gets the attendee of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_busytype" corresponds="icalproperty_new_busytype" kind="constructor" since="2.0">
-        <parameter type="ICalPropertyBusytype" name="v" comment="The busytype"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_busytype" corresponds="icalproperty_set_busytype" kind="set" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyBusytype" name="v" comment="The busytype"/>
-        <comment>Sets the busytype for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_busytype" corresponds="icalproperty_get_busytype" kind="get" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyBusytype" comment="Get the busytype of #ICalProperty."/>
-        <comment>Gets the busytype of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_calendaraddress" corresponds="icalproperty_new_calendaraddress" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_CALENDARADDRESS_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_calendaraddress" corresponds="icalproperty_get_calendaraddress" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="const gchar *" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_CALENDARADDRESS_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_calendaraddress" corresponds="icalproperty_set_calendaraddress" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="const gchar *" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_CALENDARADDRESS_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_calid" corresponds="icalproperty_new_calid" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The calid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_calid" corresponds="icalproperty_set_calid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The calid"/>
-        <comment>Sets the calid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_calid" corresponds="icalproperty_get_calid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the calid of #ICalProperty."/>
-        <comment>Gets the calid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_calmaster" corresponds="icalproperty_new_calmaster" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The calmaster"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_calmaster" corresponds="icalproperty_set_calmaster" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The calmaster"/>
-        <comment>Sets the calmaster for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_calmaster" corresponds="icalproperty_get_calmaster" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the calmaster of #ICalProperty."/>
-        <comment>Gets the calmaster of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_calscale" corresponds="icalproperty_new_calscale" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The calscale"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_calscale" corresponds="icalproperty_set_calscale" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The calscale"/>
-        <comment>Sets the calscale for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_calscale" corresponds="icalproperty_get_calscale" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the calscale of #ICalProperty."/>
-        <comment>Gets the calscale of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_capversion" corresponds="icalproperty_new_capversion" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The capversion"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_capversion" corresponds="icalproperty_set_capversion" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The capversion"/>
-        <comment>Sets the capversion for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_capversion" corresponds="icalproperty_get_capversion" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the capversion of #ICalProperty."/>
-        <comment>Gets the capversion of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_carlevel" corresponds="icalproperty_new_carlevel" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyCarlevel" name="v" comment="The carlevel"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_carlevel" corresponds="icalproperty_set_carlevel" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyCarlevel" name="v" comment="The carlevel"/>
-        <comment>Sets the carlevel for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_carlevel" corresponds="icalproperty_get_carlevel" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyCarlevel" comment="Get the carlevel of #ICalProperty."/>
-        <comment>Gets the carlevel of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_carid" corresponds="icalproperty_new_carid" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The carid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_carid" corresponds="icalproperty_set_carid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The carid"/>
-        <comment>Sets the carid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_carid" corresponds="icalproperty_get_carid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the carid of #ICalProperty."/>
-        <comment>Gets the carid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_categories" corresponds="icalproperty_new_categories" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The categories"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_categories" corresponds="icalproperty_set_categories" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The categories"/>
-        <comment>Sets the categories for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_categories" corresponds="icalproperty_get_categories" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the categories of #ICalProperty."/>
-        <comment>Gets the categories of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_class" corresponds="icalproperty_new_class" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyClassenum" name="v" comment="The class"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_class" corresponds="icalproperty_set_class" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyClassenum" name="v" comment="The class"/>
-        <comment>Sets the class for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_class" corresponds="icalproperty_get_class" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyClassenum" comment="Get the class of #ICalProperty."/>
-        <comment>Gets the class of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_cmd" corresponds="icalproperty_new_cmd" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyCmd" name="v" comment="The cmd"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_cmd" corresponds="icalproperty_set_cmd" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyCmd" name="v" comment="The cmd"/>
-        <comment>Sets the cmd for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_cmd" corresponds="icalproperty_get_cmd" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyCmd" comment="Get the cmd of #ICalProperty."/>
-        <comment>Gets the cmd of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_comment" corresponds="icalproperty_new_comment" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The comment"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_comment" corresponds="icalproperty_set_comment" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The comment"/>
-        <comment>Sets the comment for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_color" corresponds="icalproperty_get_color" kind="get" since="3.0.5">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the color property."/>
-        <comment>Gets the color property of the @prop.</comment>
-    </method>
-    <method name="i_cal_property_new_color" corresponds="icalproperty_new_color" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The color"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new color #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_color" corresponds="icalproperty_set_color" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The color"/>
-        <comment>Sets the color for the @prop.</comment>
-    </method>
-    <method name="i_cal_property_get_comment" corresponds="icalproperty_get_comment" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the comment of #ICalProperty."/>
-        <comment>Gets the comment of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_completed" corresponds="icalproperty_new_completed" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of completed"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_completed" corresponds="icalproperty_set_completed" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The completed time"/>
-        <comment>Sets the completed time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_completed" corresponds="icalproperty_get_completed" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the completed time of #ICalProperty."/>
-        <comment>Gets the completed time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_components" corresponds="icalproperty_new_components" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The components"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_components" corresponds="icalproperty_set_components" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The components"/>
-        <comment>Sets the components for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_components" corresponds="icalproperty_get_components" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the components of #ICalProperty."/>
-        <comment>Gets the components of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_concept" corresponds="icalproperty_new_concept" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="the value"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new CONCEPT #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_concept" corresponds="icalproperty_set_concept" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="the value"/>
-        <comment>Sets the value of the CONCEPT @prop.</comment>
-    </method>
-    <method name="i_cal_property_get_concept" corresponds="icalproperty_get_concept" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="the value of the CONCEPT @prop."/>
-        <comment>Gets the value of the CONCEPT @prop.</comment>
-    </method>
-    <method name="i_cal_property_new_conference" corresponds="icalproperty_new_conference" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_CONFERENCE_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_conference" corresponds="icalproperty_get_conference" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="const gchar *" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_CONFERENCE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_conference" corresponds="icalproperty_set_conference" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="const gchar *" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_CONFERENCE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_contact" corresponds="icalproperty_new_contact" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The contact"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_contact" corresponds="icalproperty_set_contact" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The contact"/>
-        <comment>Sets the contact for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_contact" corresponds="icalproperty_get_contact" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the contact of #ICalProperty."/>
-        <comment>Gets the contact of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_created" corresponds="icalproperty_new_created" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of created"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_created" corresponds="icalproperty_set_created" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The created time"/>
-        <comment>Sets the created time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_created" corresponds="icalproperty_get_created" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the created time of #ICalProperty."/>
-        <comment>Gets the created time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_csid" corresponds="icalproperty_new_csid" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The csid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_csid" corresponds="icalproperty_set_csid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The csid"/>
-        <comment>Sets the csid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_csid" corresponds="icalproperty_get_csid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the csid of #ICalProperty."/>
-        <comment>Gets the csid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_datemax" corresponds="icalproperty_new_datemax" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of datemax"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_datemax" corresponds="icalproperty_set_datemax" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The datemax time"/>
-        <comment>Sets the datemax time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_datemax" corresponds="icalproperty_get_datemax" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the datemax time of #ICalProperty."/>
-        <comment>Gets the datemax time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_datemin" corresponds="icalproperty_new_datemin" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of datemin"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_datemin" corresponds="icalproperty_set_datemin" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The datemin time"/>
-        <comment>Sets the datemin time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_datemin" corresponds="icalproperty_get_datemin" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the datemin time of #ICalProperty."/>
-        <comment>Gets the datemin time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_decreed" corresponds="icalproperty_new_decreed" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The decreed"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_decreed" corresponds="icalproperty_set_decreed" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The decreed"/>
-        <comment>Sets the decreed for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_decreed" corresponds="icalproperty_get_decreed" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the decreed of #ICalProperty."/>
-        <comment>Gets the decreed of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_defaultcharset" corresponds="icalproperty_new_defaultcharset" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The defaultcharset"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_defaultcharset" corresponds="icalproperty_set_defaultcharset" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The defaultcharset"/>
-        <comment>Sets the defaultcharset for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_defaultcharset" corresponds="icalproperty_get_defaultcharset" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the defaultcharset of #ICalProperty."/>
-        <comment>Gets the defaultcharset of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_defaultlocale" corresponds="icalproperty_new_defaultlocale" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The defaultlocale"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_defaultlocale" corresponds="icalproperty_set_defaultlocale" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The defaultlocale"/>
-        <comment>Sets the defaultlocale for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_defaultlocale" corresponds="icalproperty_get_defaultlocale" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the defaultlocale of #ICalProperty."/>
-        <comment>Gets the defaultlocale of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_defaulttzid" corresponds="icalproperty_new_defaulttzid" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The defaulttzid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_defaulttzid" corresponds="icalproperty_set_defaulttzid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The defaulttzid"/>
-        <comment>Sets the defaulttzid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_defaulttzid" corresponds="icalproperty_get_defaulttzid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the defaulttzid of #ICalProperty."/>
-        <comment>Gets the defaulttzid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_defaultvcars" corresponds="icalproperty_new_defaultvcars" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The defaultvcars"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_defaultvcars" corresponds="icalproperty_set_defaultvcars" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The defaultvcars"/>
-        <comment>Sets the defaultvcars for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_defaultvcars" corresponds="icalproperty_get_defaultvcars" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the defaultvcars of #ICalProperty."/>
-        <comment>Gets the defaultvcars of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_deny" corresponds="icalproperty_new_deny" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The deny"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_deny" corresponds="icalproperty_set_deny" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The deny"/>
-        <comment>Sets the deny for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_deny" corresponds="icalproperty_get_deny" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the deny of #ICalProperty."/>
-        <comment>Gets the deny of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_description" corresponds="icalproperty_new_description" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The description"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_description" corresponds="icalproperty_set_description" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The description"/>
-        <comment>Sets the description for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_description" corresponds="icalproperty_get_description" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the description of #ICalProperty."/>
-        <comment>Gets the description of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_dtend" corresponds="icalproperty_new_dtend" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of dtend"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_dtend" corresponds="icalproperty_set_dtend" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The dtend time"/>
-        <comment>Sets the dtend time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_dtend" corresponds="icalproperty_get_dtend" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the dtend time of #ICalProperty."/>
-        <comment>Gets the dtend time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_dtstamp" corresponds="icalproperty_new_dtstamp" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of dtstamp"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_dtstamp" corresponds="icalproperty_set_dtstamp" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The dtstamp time"/>
-        <comment>Sets the dtstamp time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_dtstamp" corresponds="icalproperty_get_dtstamp" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the dtstamp time of #ICalProperty."/>
-        <comment>Gets the dtstamp time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_dtstart" corresponds="icalproperty_new_dtstart" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of dtstart"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_dtstart" corresponds="icalproperty_set_dtstart" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The dtstart time"/>
-        <comment>Sets the dtstart time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_dtstart" corresponds="icalproperty_get_dtstart" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the dtstart time of #ICalProperty."/>
-        <comment>Gets the dtstart time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_due" corresponds="icalproperty_new_due" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of due"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_due" corresponds="icalproperty_set_due" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The due time"/>
-        <comment>Sets the due time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_due" corresponds="icalproperty_get_due" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the due time of #ICalProperty."/>
-        <comment>Gets the due time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_duration" corresponds="icalproperty_new_duration" kind="constructor" since="1.0">
-        <parameter type="ICalDuration *" name="v" comment="The duration"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_duration" corresponds="icalproperty_set_duration" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalDuration *" name="v" comment="The duration"/>
-        <comment>Sets the duration for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_duration" corresponds="icalproperty_get_duration" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalDuration *" annotation="transfer full" comment="Get the duration of #ICalProperty."/>
-        <comment>Gets the duration of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_estimatedduration" corresponds="icalproperty_new_estimatedduration" kind="constructor" since="1.0">
-        <parameter type="ICalDuration *" name="v" comment="The estimatedduration"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_estimatedduration" corresponds="icalproperty_set_estimatedduration" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalDuration *" name="v" comment="The estimatedduration"/>
-        <comment>Sets the estimatedduration for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_estimatedduration" corresponds="icalproperty_get_estimatedduration" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalDuration *" annotation="transfer full" comment="Get the estimatedduration of #ICalProperty."/>
-        <comment>Gets the estimatedduration of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_exdate" corresponds="icalproperty_new_exdate" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of exdate"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_exdate" corresponds="icalproperty_set_exdate" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The exdate time"/>
-        <comment>Sets the exdate time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_exdate" corresponds="icalproperty_get_exdate" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the exdate time of #ICalProperty."/>
-        <comment>Gets the exdate time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_expand" corresponds="icalproperty_new_expand" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The expand"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_expand" corresponds="icalproperty_set_expand" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The expand"/>
-        <comment>Sets the expand for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_expand" corresponds="icalproperty_get_expand" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the expand of #ICalProperty."/>
-        <comment>Gets the expand of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_exrule" corresponds="icalproperty_new_exrule" kind="constructor" since="1.0">
-        <parameter type="ICalRecurrence *" name="v" comment="The exrule recurrence type"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_exrule" corresponds="icalproperty_set_exrule" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalRecurrence *" name="v" comment="The exrule recurrence type"/>
-        <comment>Sets the exrule time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_exrule" corresponds="icalproperty_get_exrule" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalRecurrence *" annotation="transfer full" translator_argus="(GObject *)prop" comment="Get the exrule recurrence type of #ICalProperty."/>
-        <comment>Gets the exrule recurrence type of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_freebusy" corresponds="icalproperty_new_freebusy" kind="constructor" since="1.0">
-        <parameter type="ICalPeriod *" name="v" comment="The freebusy period type"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_freebusy" corresponds="icalproperty_set_freebusy" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPeriod *" name="v" comment="The freebusy period type"/>
-        <comment>Sets the freebusy time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_freebusy" corresponds="icalproperty_get_freebusy" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPeriod *" annotation="transfer full" comment="Get the freebusy period type of #ICalProperty."/>
-        <comment>Gets the freebusy period type of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_geo" corresponds="icalproperty_new_geo" kind="constructor" since="1.0">
-        <parameter type="ICalGeo *" name="v" comment="The geo type"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_geo" corresponds="icalproperty_set_geo" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalGeo *" name="v" comment="The geo type"/>
-        <comment>Sets the geo for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_geo" corresponds="icalproperty_get_geo" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalGeo *" annotation="transfer full" comment="Get the geo type of #ICalProperty."/>
-        <comment>Gets the geo type of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_grant" corresponds="icalproperty_new_grant" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The grant"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_grant" corresponds="icalproperty_set_grant" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The grant"/>
-        <comment>Sets the grant for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_grant" corresponds="icalproperty_get_grant" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the grant of #ICalProperty."/>
-        <comment>Gets the grant of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_image" corresponds="icalproperty_new_image" kind="constructor" since="4.0">
-        <parameter type="ICalAttach *" name="v" annotation="transfer none" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_IMAGE_PROPERTY holding value @v of type #ICalAttach</comment>
-        <custom>	ICalProperty *property;
-	g_return_val_if_fail (I_CAL_IS_ATTACH (v), NULL);
-	property = i_cal_property_new_full (icalproperty_new_image (i_cal_object_get_native ((ICalObject *)v)), NULL);
-	return property;</custom>
-    </method>
-    <method name="i_cal_property_get_image" corresponds="icalproperty_get_image" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="ICalAttach *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The value of the @prop of type #ICalAttach"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_IMAGE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_image" corresponds="icalproperty_set_image" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="ICalAttach *" name="v" annotation="transfer none" comment="The value of type #ICalAttach to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_IMAGE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_itipversion" corresponds="icalproperty_new_itipversion" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The itipversion"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_itipversion" corresponds="icalproperty_set_itipversion" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The itipversion"/>
-        <comment>Sets the itipversion for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_itipversion" corresponds="icalproperty_get_itipversion" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the itipversion of #ICalProperty."/>
-        <comment>Gets the itipversion of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_lastmodified" corresponds="icalproperty_new_lastmodified" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of lastmodified"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_lastmodified" corresponds="icalproperty_set_lastmodified" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The lastmodified time"/>
-        <comment>Sets the lastmodified time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_lastmodified" corresponds="icalproperty_get_lastmodified" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the lastmodified time of #ICalProperty."/>
-        <comment>Gets the lastmodified time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_link" corresponds="icalproperty_new_link" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="the value"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new LINK #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_link" corresponds="icalproperty_set_link" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="the value"/>
-        <comment>Sets the value of the LINK @prop.</comment>
-    </method>
-    <method name="i_cal_property_get_link" corresponds="icalproperty_get_link" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="the value of the LINK @prop"/>
-        <comment>Gets the value of the LINK @prop.</comment>
-    </method>
-    <method name="i_cal_property_new_location" corresponds="icalproperty_new_location" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The location"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_location" corresponds="icalproperty_set_location" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The location"/>
-        <comment>Sets the location for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_location" corresponds="icalproperty_get_location" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the location of #ICalProperty."/>
-        <comment>Gets the location of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_locationtype" corresponds="icalproperty_new_locationtype" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_LOCATIONTYPE_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_locationtype" corresponds="icalproperty_get_locationtype" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="const gchar *" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_LOCATIONTYPE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_locationtype" corresponds="icalproperty_set_locationtype" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="const gchar *" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_LOCATIONTYPE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_maxcomponentsize" corresponds="icalproperty_new_maxcomponentsize" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The maxcomponentsize"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_maxcomponentsize" corresponds="icalproperty_set_maxcomponentsize" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The maxcomponentsize"/>
-        <comment>Sets the maxcomponentsize for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_maxcomponentsize" corresponds="icalproperty_get_maxcomponentsize" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the maxcomponentsize of #ICalProperty."/>
-        <comment>Gets the maxcomponentsize of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_maxdate" corresponds="icalproperty_new_maxdate" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of maxdate"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_maxdate" corresponds="icalproperty_set_maxdate" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The maxdate time"/>
-        <comment>Sets the maxdate time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_maxdate" corresponds="icalproperty_get_maxdate" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the maxdate time of #ICalProperty."/>
-        <comment>Gets the maxdate time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_maxresults" corresponds="icalproperty_new_maxresults" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The maxresults"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_maxresults" corresponds="icalproperty_set_maxresults" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The maxresults"/>
-        <comment>Sets the maxresults for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_maxresults" corresponds="icalproperty_get_maxresults" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the maxresults of #ICalProperty."/>
-        <comment>Gets the maxresults of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_maxresultssize" corresponds="icalproperty_new_maxresultssize" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The maxresultssize"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_maxresultssize" corresponds="icalproperty_set_maxresultssize" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The maxresultssize"/>
-        <comment>Sets the maxresultssize for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_maxresultssize" corresponds="icalproperty_get_maxresultssize" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the maxresultssize of #ICalProperty."/>
-        <comment>Gets the maxresultssize of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_method" corresponds="icalproperty_new_method" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyMethod" name="v" comment="The method"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_method" corresponds="icalproperty_set_method" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyMethod" name="v" comment="The method"/>
-        <comment>Sets the method for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_method" corresponds="icalproperty_get_method" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyMethod" comment="Get the method of #ICalProperty."/>
-        <comment>Gets the method of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_mindate" corresponds="icalproperty_new_mindate" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of mindate"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_mindate" corresponds="icalproperty_set_mindate" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The mindate time"/>
-        <comment>Sets the mindate time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_mindate" corresponds="icalproperty_get_mindate" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the mindate time of #ICalProperty."/>
-        <comment>Gets the mindate time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_multipart" corresponds="icalproperty_new_multipart" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The multipart"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_multipart" corresponds="icalproperty_set_multipart" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The multipart"/>
-        <comment>Sets the multipart for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_multipart" corresponds="icalproperty_get_multipart" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the multipart of #ICalProperty."/>
-        <comment>Gets the multipart of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_name" corresponds="icalproperty_new_name" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The name"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_name" corresponds="icalproperty_set_name" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The name"/>
-        <comment>Sets the name for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_name" corresponds="icalproperty_get_name" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the name of #ICalProperty."/>
-        <comment>Gets the name of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_organizer" corresponds="icalproperty_new_organizer" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The organizer"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_organizer" corresponds="icalproperty_set_organizer" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The organizer"/>
-        <comment>Sets the organizer for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_organizer" corresponds="icalproperty_get_organizer" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the organizer of #ICalProperty."/>
-        <comment>Gets the organizer of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_owner" corresponds="icalproperty_new_owner" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The owner"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_owner" corresponds="icalproperty_set_owner" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The owner"/>
-        <comment>Sets the owner for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_owner" corresponds="icalproperty_get_owner" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the owner of #ICalProperty."/>
-        <comment>Gets the owner of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_participanttype" corresponds="icalproperty_new_participanttype" kind="constructor" since="4.0">
-        <parameter type="ICalPropertyParticipanttype" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PARTICIPANTTYPE_PROPERTY holding value @v of type #ICalPropertyParticipanttype</comment>
-    </method>
-    <method name="i_cal_property_get_participanttype" corresponds="icalproperty_get_participanttype" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="ICalPropertyParticipanttype" comment="The value of the @prop of type #ICalPropertyParticipanttype"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PARTICIPANTTYPE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_participanttype" corresponds="icalproperty_set_participanttype" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="ICalPropertyParticipanttype" name="v" comment="The value of type #ICalPropertyParticipanttype to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PARTICIPANTTYPE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_patchdelete" corresponds="icalproperty_new_patchdelete" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PATCHDELETE_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_patchdelete" corresponds="icalproperty_get_patchdelete" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="const gchar *" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PATCHDELETE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_patchdelete" corresponds="icalproperty_set_patchdelete" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="const gchar *" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PATCHDELETE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_patchorder" corresponds="icalproperty_new_patchorder" kind="constructor" since="4.0">
-        <parameter type="gint" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PATCHORDER_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_patchorder" corresponds="icalproperty_get_patchorder" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="gint" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PATCHORDER_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_patchorder" corresponds="icalproperty_set_patchorder" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="gint" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PATCHORDER_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_patchparameter" corresponds="icalproperty_new_patchparameter" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PATCHPARAMETER_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_patchparameter" corresponds="icalproperty_get_patchparameter" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="const gchar *" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PATCHPARAMETER_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_patchparameter" corresponds="icalproperty_set_patchparameter" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="const gchar *" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PATCHPARAMETER_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_patchtarget" corresponds="icalproperty_new_patchtarget" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PATCHTARGET_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_patchtarget" corresponds="icalproperty_get_patchtarget" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="const gchar *" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PATCHTARGET_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_patchtarget" corresponds="icalproperty_set_patchtarget" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="const gchar *" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PATCHTARGET_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_patchversion" corresponds="icalproperty_new_patchversion" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PATCHVERSION_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_patchversion" corresponds="icalproperty_get_patchversion" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="const gchar *" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PATCHVERSION_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_patchversion" corresponds="icalproperty_set_patchversion" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="const gchar *" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PATCHVERSION_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_percentcomplete" corresponds="icalproperty_new_percentcomplete" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The percentcomplete"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_percentcomplete" corresponds="icalproperty_set_percentcomplete" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The percentcomplete"/>
-        <comment>Sets the percentcomplete for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_percentcomplete" corresponds="icalproperty_get_percentcomplete" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the percentcomplete of #ICalProperty."/>
-        <comment>Gets the percentcomplete of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_permission" corresponds="icalproperty_new_permission" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The permission"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_permission" corresponds="icalproperty_set_permission" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The permission"/>
-        <comment>Sets the permission for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_permission" corresponds="icalproperty_get_permission" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the permission of #ICalProperty."/>
-        <comment>Gets the permission of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_pollcompletion" corresponds="icalproperty_new_pollcompletion" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyPollcompletion" name="v" comment="The pollcompletion"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_pollcompletion" corresponds="icalproperty_set_pollcompletion" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyPollcompletion" name="v" comment="The pollcompletion"/>
-        <comment>Sets the pollcompletion for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_pollcompletion" corresponds="icalproperty_get_pollcompletion" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyPollcompletion" comment="Get the pollcompletion of #ICalProperty."/>
-        <comment>Gets the pollcompletion of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_pollitemid" corresponds="icalproperty_new_pollitemid" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The pollitemid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_pollitemid" corresponds="icalproperty_set_pollitemid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The pollitemid"/>
-        <comment>Sets the pollitemid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_pollitemid" corresponds="icalproperty_get_pollitemid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the pollitemid of #ICalProperty."/>
-        <comment>Gets the pollitemid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_pollmode" corresponds="icalproperty_new_pollmode" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyPollmode" name="v" comment="The pollmode"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_pollmode" corresponds="icalproperty_set_pollmode" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyPollmode" name="v" comment="The pollmode"/>
-        <comment>Sets the pollmode for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_pollmode" corresponds="icalproperty_get_pollmode" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyPollmode" comment="Get the pollmode of #ICalProperty."/>
-        <comment>Gets the pollmode of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_pollproperties" corresponds="icalproperty_new_pollproperties" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The pollproperties"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_pollproperties" corresponds="icalproperty_set_pollproperties" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The pollproperties"/>
-        <comment>Sets the pollproperties for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_pollproperties" corresponds="icalproperty_get_pollproperties" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" comment="Get the pollproperties of #ICalProperty."/>
-        <comment>Gets the pollproperties of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_pollwinner" corresponds="icalproperty_new_pollwinner" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The pollwinner"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_pollwinner" corresponds="icalproperty_set_pollwinner" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The pollwinner"/>
-        <comment>Sets the pollwinner for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_pollwinner" corresponds="icalproperty_get_pollwinner" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the pollwinner of #ICalProperty."/>
-        <comment>Gets the pollwinner of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_priority" corresponds="icalproperty_new_priority" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The priority"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_priority" corresponds="icalproperty_set_priority" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The priority"/>
-        <comment>Sets the priority for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_priority" corresponds="icalproperty_get_priority" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the priority of #ICalProperty."/>
-        <comment>Gets the priority of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_prodid" corresponds="icalproperty_new_prodid" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The prodid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_prodid" corresponds="icalproperty_set_prodid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The prodid"/>
-        <comment>Sets the prodid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_prodid" corresponds="icalproperty_get_prodid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the prodid of #ICalProperty."/>
-        <comment>Gets the prodid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_proximity" corresponds="icalproperty_new_proximity" kind="constructor" since="4.0">
-        <parameter type="ICalPropertyProximity" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_PROXIMITY_PROPERTY holding value @v of type #ICalPropertyProximity</comment>
-    </method>
-    <method name="i_cal_property_get_proximity" corresponds="icalproperty_get_proximity" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="ICalPropertyProximity" comment="The value of the @prop of type #ICalPropertyProximity"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_PROXIMITY_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_proximity" corresponds="icalproperty_set_proximity" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="ICalPropertyProximity" name="v" comment="The value of type #ICalPropertyProximity to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_PROXIMITY_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_query" corresponds="icalproperty_new_query" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The query"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_query" corresponds="icalproperty_set_query" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The query"/>
-        <comment>Sets the query for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_query" corresponds="icalproperty_get_query" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the query of #ICalProperty."/>
-        <comment>Gets the query of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_querylevel" corresponds="icalproperty_new_querylevel" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyQuerylevel" name="v" comment="The querylevel"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_querylevel" corresponds="icalproperty_set_querylevel" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyQuerylevel" name="v" comment="The querylevel"/>
-        <comment>Sets the querylevel for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_querylevel" corresponds="icalproperty_get_querylevel" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyQuerylevel" comment="Get the querylevel of #ICalProperty."/>
-        <comment>Gets the querylevel of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_queryid" corresponds="icalproperty_new_queryid" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The queryid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_queryid" corresponds="icalproperty_set_queryid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The queryid"/>
-        <comment>Sets the queryid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_queryid" corresponds="icalproperty_get_queryid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the queryid of #ICalProperty."/>
-        <comment>Gets the queryid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_queryname" corresponds="icalproperty_new_queryname" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The queryname"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_queryname" corresponds="icalproperty_set_queryname" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The queryname"/>
-        <comment>Sets the queryname for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_queryname" corresponds="icalproperty_get_queryname" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the queryname of #ICalProperty."/>
-        <comment>Gets the queryname of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_rdate" corresponds="icalproperty_new_rdate" kind="constructor" since="1.0">
-        <parameter type="ICalDatetimeperiod *" name="v" comment="The rdate"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_rdate" corresponds="icalproperty_set_rdate" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalDatetimeperiod *" name="v" comment="The rdate"/>
-        <comment>Sets the rdate for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_rdate" corresponds="icalproperty_get_rdate" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalDatetimeperiod *" annotation="transfer full" comment="Get the rdate  of #ICalProperty."/>
-        <comment>Gets the rdate  of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_recuraccepted" corresponds="icalproperty_new_recuraccepted" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The recuraccepted"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_recuraccepted" corresponds="icalproperty_set_recuraccepted" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The recuraccepted"/>
-        <comment>Sets the recuraccepted for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_recuraccepted" corresponds="icalproperty_get_recuraccepted" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the recuraccepted of #ICalProperty."/>
-        <comment>Gets the recuraccepted of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_recurexpand" corresponds="icalproperty_new_recurexpand" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The recurexpand"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_recurexpand" corresponds="icalproperty_set_recurexpand" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The recurexpand"/>
-        <comment>Sets the recurexpand for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_recurexpand" corresponds="icalproperty_get_recurexpand" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the recurexpand of #ICalProperty."/>
-        <comment>Gets the recurexpand of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_recurlimit" corresponds="icalproperty_new_recurlimit" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The recurlimit"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_recurlimit" corresponds="icalproperty_set_recurlimit" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The recurlimit"/>
-        <comment>Sets the recurlimit for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_recurlimit" corresponds="icalproperty_get_recurlimit" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the recurlimit of #ICalProperty."/>
-        <comment>Gets the recurlimit of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_recurrenceid" corresponds="icalproperty_new_recurrenceid" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="v" comment="The time of recurrenceid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_recurrenceid" corresponds="icalproperty_set_recurrenceid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The recurrenceid time"/>
-        <comment>Sets the recurrenceid time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_recurrenceid" corresponds="icalproperty_get_recurrenceid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the recurrenceid time of #ICalProperty."/>
-        <comment>Gets the recurrenceid time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_refid" corresponds="icalproperty_new_refid" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="the value"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new REFID #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_refid" corresponds="icalproperty_set_refid" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="the value"/>
-        <comment>Sets the value of the REFID @prop.</comment>
-    </method>
-    <method name="i_cal_property_get_refid" corresponds="icalproperty_get_refid" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="the value of the REFID @prop"/>
-        <comment>Gets the value of the REFID @prop.</comment>
-    </method>
-    <method name="i_cal_property_new_refreshinterval" corresponds="icalproperty_new_refreshinterval" kind="constructor" since="4.0">
-        <parameter type="ICalDuration *" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_REFRESHINTERVAL_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_refreshinterval" corresponds="icalproperty_get_refreshinterval" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="ICalDuration *" annotation="transfer full" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_REFRESHINTERVAL_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_refreshinterval" corresponds="icalproperty_set_refreshinterval" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="ICalDuration *" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_REFRESHINTERVAL_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_relatedto" corresponds="icalproperty_new_relatedto" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The relatedto"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_relatedto" corresponds="icalproperty_set_relatedto" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The relatedto"/>
-        <comment>Sets the relatedto for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_relatedto" corresponds="icalproperty_get_relatedto" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the relatedto of #ICalProperty."/>
-        <comment>Gets the relatedto of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_relcalid" corresponds="icalproperty_new_relcalid" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The relcalid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_relcalid" corresponds="icalproperty_set_relcalid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The relcalid"/>
-        <comment>Sets the relcalid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_relcalid" corresponds="icalproperty_get_relcalid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the relcalid of #ICalProperty."/>
-        <comment>Gets the relcalid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_repeat" corresponds="icalproperty_new_repeat" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The repeat"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_repeat" corresponds="icalproperty_set_repeat" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The repeat"/>
-        <comment>Sets the repeat for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_repeat" corresponds="icalproperty_get_repeat" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the repeat of #ICalProperty."/>
-        <comment>Gets the repeat of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_replyurl" corresponds="icalproperty_new_replyurl" kind="constructor" since="2.0">
-        <parameter type="const gchar *" name="v" comment="The replyurl"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_replyurl" corresponds="icalproperty_set_replyurl" kind="set" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The replyurl"/>
-        <comment>Sets the replyurl for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_replyurl" corresponds="icalproperty_get_replyurl" kind="get" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the replyurl of #ICalProperty."/>
-        <comment>Gets the replyurl of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_requeststatus" corresponds="icalproperty_new_requeststatus" kind="constructor" since="1.0">
-        <parameter type="ICalReqstat *" name="v" comment="The requeststatus"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_requeststatus" corresponds="icalproperty_set_requeststatus" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalReqstat *" name="v" comment="The requeststatus"/>
-        <comment>Sets the requeststatus for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_requeststatus" corresponds="icalproperty_get_requeststatus" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalReqstat *" annotation="transfer full" comment="Get the requeststatus of #ICalProperty."/>
-        <comment>Gets the requeststatus of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_resources" corresponds="icalproperty_new_resources" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The resources"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_resources" corresponds="icalproperty_set_resources" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The resources"/>
-        <comment>Sets the resources for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_resources" corresponds="icalproperty_get_resources" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the resources of #ICalProperty."/>
-        <comment>Gets the resources of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_resourcetype" corresponds="icalproperty_new_resourcetype" kind="constructor" since="4.0">
-        <parameter type="ICalPropertyResourcetype" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_RESOURCETYPE_PROPERTY holding value @v of type #ICalPropertyResourcetype</comment>
-    </method>
-    <method name="i_cal_property_get_resourcetype" corresponds="icalproperty_get_resourcetype" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="ICalPropertyResourcetype" comment="The value of the @prop of type #ICalPropertyResourcetype"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_RESOURCETYPE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_resourcetype" corresponds="icalproperty_set_resourcetype" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="ICalPropertyResourcetype" name="v" comment="The value of type #ICalPropertyResourcetype to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_RESOURCETYPE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_response" corresponds="icalproperty_new_response" kind="constructor" since="2.0">
-        <parameter type="gint" name="v" comment="The response"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_response" corresponds="icalproperty_set_response" kind="set" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The response"/>
-        <comment>Sets the response for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_response" corresponds="icalproperty_get_response" kind="get" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the response of #ICalProperty."/>
-        <comment>Gets the response of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_restriction" corresponds="icalproperty_new_restriction" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The restriction"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_restriction" corresponds="icalproperty_set_restriction" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The restriction"/>
-        <comment>Sets the restriction for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_restriction" corresponds="icalproperty_get_restriction" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the restriction of #ICalProperty."/>
-        <comment>Gets the restriction of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_rrule" corresponds="icalproperty_new_rrule" kind="constructor" since="1.0">
-        <parameter type="ICalRecurrence *" name="v" comment="The rrule recurrence type"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_rrule" corresponds="icalproperty_set_rrule" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalRecurrence *" name="v" comment="The rrule recurrence type"/>
-        <comment>Sets the rrule for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_rrule" corresponds="icalproperty_get_rrule" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalRecurrence *" annotation="transfer full" translator_argus="(GObject *)prop" comment="Get the rrule recurrence type of #ICalProperty."/>
-        <comment>Gets the rrule recurrence type of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_scope" corresponds="icalproperty_new_scope" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The scope"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_scope" corresponds="icalproperty_set_scope" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The scope"/>
-        <comment>Sets the scope for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_scope" corresponds="icalproperty_get_scope" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the scope of #ICalProperty."/>
-        <comment>Gets the scope of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_sequence" corresponds="icalproperty_new_sequence" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The sequence"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_sequence" corresponds="icalproperty_set_sequence" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The sequence"/>
-        <comment>Sets the sequence for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_sequence" corresponds="icalproperty_get_sequence" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the sequence of #ICalProperty."/>
-        <comment>Gets the sequence of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_source" corresponds="icalproperty_new_source" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_SOURCE_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_source" corresponds="icalproperty_get_source" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="const gchar *" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_SOURCE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_source" corresponds="icalproperty_set_source" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="const gchar *" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_SOURCE_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_status" corresponds="icalproperty_new_status" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyStatus" name="v" comment="The status"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_status" corresponds="icalproperty_set_status" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyStatus" name="v" comment="The status"/>
-        <comment>Sets the status for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_status" corresponds="icalproperty_get_status" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyStatus" comment="Get the status of #ICalProperty."/>
-        <comment>Gets the status of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_storesexpanded" corresponds="icalproperty_new_storesexpanded" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The storesexpanded"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_storesexpanded" corresponds="icalproperty_set_storesexpanded" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The storesexpanded"/>
-        <comment>Sets the storesexpanded for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_storesexpanded" corresponds="icalproperty_get_storesexpanded" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the storesexpanded of #ICalProperty."/>
-        <comment>Gets the storesexpanded of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_structureddata" corresponds="icalproperty_new_structureddata" kind="constructor" since="4.0">
-        <parameter type="ICalAttach *" name="v" annotation="transfer none" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_STRUCTUREDDATA_PROPERTY holding value @v of type #ICalAttach</comment>
-        <custom>	ICalProperty *property;
-	g_return_val_if_fail (I_CAL_IS_ATTACH (v), NULL);
-	property = i_cal_property_new_full (icalproperty_new_structureddata (i_cal_object_get_native ((ICalObject *)v)), NULL);
-	return property;</custom>
-    </method>
-    <method name="i_cal_property_get_structureddata" corresponds="icalproperty_get_structureddata" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="ICalAttach *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The value of the @prop of type #ICalAttach"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_STRUCTUREDDATA_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_structureddata" corresponds="icalproperty_set_structureddata" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="ICalAttach *" name="v" annotation="transfer none" comment="The value of type #ICalAttach to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_STRUCTUREDDATA_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_styleddescription" corresponds="icalproperty_new_styleddescription" kind="constructor" since="4.0">
-        <parameter type="const gchar *" name="v" comment="An initial value for the new #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty." />
-        <comment xml:space="preserve">Creates a new #ICalProperty of kind %I_CAL_STYLEDDESCRIPTION_PROPERTY holding value @v</comment>
-    </method>
-    <method name="i_cal_property_get_styleddescription" corresponds="icalproperty_get_styleddescription" kind="get" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="An #ICalProperty to be queried"/>
-        <returns type="const gchar *" comment="The value of the @prop"/>
-        <comment xml:space="preserve">Gets value of the @prop of kind %I_CAL_STYLEDDESCRIPTION_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_set_styleddescription" corresponds="icalproperty_set_styleddescription" kind="set" since="4.0">
-        <parameter type="ICalProperty *" name="prop" comment="An #ICalProperty"/>
-        <parameter type="const gchar *" name="v" comment="The value to be set"/>
-        <comment xml:space="preserve">Sets value @v to @prop of kind %I_CAL_STYLEDDESCRIPTION_PROPERTY</comment>
-    </method>
-    <method name="i_cal_property_new_summary" corresponds="icalproperty_new_summary" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The summary"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_summary" corresponds="icalproperty_set_summary" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The summary"/>
-        <comment>Sets the summary for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_summary" corresponds="icalproperty_get_summary" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the summary of #ICalProperty."/>
-        <comment>Gets the summary of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_target" corresponds="icalproperty_new_target" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The target"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_target" corresponds="icalproperty_set_target" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The target"/>
-        <comment>Sets the target for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_target" corresponds="icalproperty_get_target" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the target of #ICalProperty."/>
-        <comment>Gets the target of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_taskmode" corresponds="icalproperty_new_taskmode" kind="constructor" since="2.0">
-        <parameter type="ICalPropertyTaskmode" name="v" comment="The taskmode"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_taskmode" corresponds="icalproperty_set_taskmode" kind="set" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyTaskmode" name="v" comment="The taskmode"/>
-        <comment>Sets the taskmode for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_taskmode" corresponds="icalproperty_get_taskmode" kind="get" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyTaskmode" comment="Get the taskmode of #ICalProperty."/>
-        <comment>Gets the taskmode of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_transp" corresponds="icalproperty_new_transp" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyTransp" name="v" comment="The transp"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_transp" corresponds="icalproperty_set_transp" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyTransp" name="v" comment="The transp"/>
-        <comment>Sets the transp for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_transp" corresponds="icalproperty_get_transp" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyTransp" comment="Get the transp of #ICalProperty."/>
-        <comment>Gets the transp of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_trigger" corresponds="icalproperty_new_trigger" kind="constructor" since="1.0">
-        <parameter type="ICalTrigger *" name="v" comment="The trigger period type"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_trigger" corresponds="icalproperty_set_trigger" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTrigger *" name="v" comment="The trigger period type"/>
-        <comment>Sets the trigger time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_trigger" corresponds="icalproperty_get_trigger" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTrigger *" annotation="transfer full" comment="Get the trigger period type of #ICalProperty."/>
-        <comment>Gets the trigger period type of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_tzid" corresponds="icalproperty_new_tzid" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The tzid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_tzid" corresponds="icalproperty_set_tzid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The tzid"/>
-        <comment>Sets the tzid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_tzid" corresponds="icalproperty_get_tzid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the tzid of #ICalProperty."/>
-        <comment>Gets the tzid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_tzidaliasof" corresponds="icalproperty_new_tzidaliasof" kind="constructor" since="2.0">
-        <parameter type="const gchar *" name="v" comment="The tzidaliasof"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_tzidaliasof" corresponds="icalproperty_set_tzidaliasof" kind="set" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The tzidaliasof"/>
-        <comment>Sets the tzidaliasof for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_tzidaliasof" corresponds="icalproperty_get_tzidaliasof" kind="get" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the tzidaliasof of #ICalProperty."/>
-        <comment>Gets the tzidaliasof of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_tzname" corresponds="icalproperty_new_tzname" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The tzname"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_tzname" corresponds="icalproperty_set_tzname" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The tzname"/>
-        <comment>Sets the tzname for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_tzname" corresponds="icalproperty_get_tzname" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the tzname of #ICalProperty."/>
-        <comment>Gets the tzname of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_tzoffsetfrom" corresponds="icalproperty_new_tzoffsetfrom" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The tzoffsetfrom"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_tzoffsetfrom" corresponds="icalproperty_set_tzoffsetfrom" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The tzoffsetfrom"/>
-        <comment>Sets the tzoffsetfrom for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_tzoffsetfrom" corresponds="icalproperty_get_tzoffsetfrom" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the tzoffsetfrom of #ICalProperty."/>
-        <comment>Gets the tzoffsetfrom of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_tzoffsetto" corresponds="icalproperty_new_tzoffsetto" kind="constructor" since="1.0">
-        <parameter type="gint" name="v" comment="The tzoffsetto"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_tzoffsetto" corresponds="icalproperty_set_tzoffsetto" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="gint" name="v" comment="The tzoffsetto"/>
-        <comment>Sets the tzoffsetto for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_tzoffsetto" corresponds="icalproperty_get_tzoffsetto" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gint" comment="Get the tzoffsetto of #ICalProperty."/>
-        <comment>Gets the tzoffsetto of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_tzuntil" corresponds="icalproperty_new_tzuntil" kind="constructor" since="2.0">
-        <parameter type="ICalTime *" name="v" comment="The time of acknowledgement"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_tzuntil" corresponds="icalproperty_set_tzuntil" kind="set" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalTime *" name="v" comment="The acknowledgement time"/>
-        <comment>Sets the tzuntil time for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_tzuntil" corresponds="icalproperty_get_tzuntil" kind="get" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="Get the tzuntil time of #ICalProperty."/>
-        <comment>Gets the tzuntil time of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_tzurl" corresponds="icalproperty_new_tzurl" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The tzurl"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_tzurl" corresponds="icalproperty_set_tzurl" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The tzurl"/>
-        <comment>Sets the tzurl for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_tzurl" corresponds="icalproperty_get_tzurl" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the tzurl of #ICalProperty."/>
-        <comment>Gets the tzurl of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_uid" corresponds="icalproperty_new_uid" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The uid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_uid" corresponds="icalproperty_set_uid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The uid"/>
-        <comment>Sets the uid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_uid" corresponds="icalproperty_get_uid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the uid of #ICalProperty."/>
-        <comment>Gets the uid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_url" corresponds="icalproperty_new_url" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The url"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_url" corresponds="icalproperty_set_url" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The url"/>
-        <comment>Sets the url for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_url" corresponds="icalproperty_get_url" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the url of #ICalProperty."/>
-        <comment>Gets the url of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_version" corresponds="icalproperty_new_version" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The version"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_version" corresponds="icalproperty_set_version" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The version"/>
-        <comment>Sets the version for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_version" corresponds="icalproperty_get_version" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the version of #ICalProperty."/>
-        <comment>Gets the version of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_voter" corresponds="icalproperty_new_voter" kind="constructor" since="2.0">
-        <parameter type="const gchar *" name="v" comment="The voter"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_voter" corresponds="icalproperty_set_voter" kind="set" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The voter"/>
-        <comment>Sets the voter for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_voter" corresponds="icalproperty_get_voter" kind="get" since="2.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the voter of #ICalProperty."/>
-        <comment>Gets the voter of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_x" corresponds="icalproperty_new_x" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The x"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_x" corresponds="icalproperty_set_x" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The x"/>
-        <comment>Sets the x for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_x" corresponds="icalproperty_get_x" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the x of #ICalProperty."/>
-        <comment>Gets the x of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_xlicclass" corresponds="icalproperty_new_xlicclass" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyXlicclass" name="v" comment="The xlicclass"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_xlicclass" corresponds="icalproperty_set_xlicclass" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalPropertyXlicclass" name="v" comment="The xlicclass"/>
-        <comment>Sets the xlicclass for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_xlicclass" corresponds="icalproperty_get_xlicclass" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalPropertyXlicclass" comment="Get the xlicclass of #ICalProperty."/>
-        <comment>Gets the xlicclass of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_xlicclustercount" corresponds="icalproperty_new_xlicclustercount" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The xlicclustercount"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_xlicclustercount" corresponds="icalproperty_set_xlicclustercount" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The xlicclustercount"/>
-        <comment>Sets the xlicclustercount for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_xlicclustercount" corresponds="icalproperty_get_xlicclustercount" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the xlicclustercount of #ICalProperty."/>
-        <comment>Gets the xlicclustercount of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_xlicerror" corresponds="icalproperty_new_xlicerror" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The xlicerror"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_xlicerror" corresponds="icalproperty_set_xlicerror" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The xlicerror"/>
-        <comment>Sets the xlicerror for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_xlicerror" corresponds="icalproperty_get_xlicerror" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the xlicerror of #ICalProperty."/>
-        <comment>Gets the xlicerror of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_xlicmimecharset" corresponds="icalproperty_new_xlicmimecharset" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The xlicmimecharset"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_xlicmimecharset" corresponds="icalproperty_set_xlicmimecharset" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The xlicmimecharset"/>
-        <comment>Sets the xlicmimecharset for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_xlicmimecharset" corresponds="icalproperty_get_xlicmimecharset" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the xlicmimecharset of #ICalProperty."/>
-        <comment>Gets the xlicmimecharset of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_xlicmimecid" corresponds="icalproperty_new_xlicmimecid" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The xlicmimecid"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_xlicmimecid" corresponds="icalproperty_set_xlicmimecid" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The xlicmimecid"/>
-        <comment>Sets the xlicmimecid for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_xlicmimecid" corresponds="icalproperty_get_xlicmimecid" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the xlicmimecid of #ICalProperty."/>
-        <comment>Gets the xlicmimecid of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_xlicmimecontenttype" corresponds="icalproperty_new_xlicmimecontenttype" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The xlicmimecontenttype"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_xlicmimecontenttype" corresponds="icalproperty_set_xlicmimecontenttype" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The xlicmimecontenttype"/>
-        <comment>Sets the xlicmimecontenttype for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_xlicmimecontenttype" corresponds="icalproperty_get_xlicmimecontenttype" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the xlicmimecontenttype of #ICalProperty."/>
-        <comment>Gets the xlicmimecontenttype of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_xlicmimeencoding" corresponds="icalproperty_new_xlicmimeencoding" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The xlicmimeencoding"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_xlicmimeencoding" corresponds="icalproperty_set_xlicmimeencoding" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The xlicmimeencoding"/>
-        <comment>Sets the xlicmimeencoding for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_xlicmimeencoding" corresponds="icalproperty_get_xlicmimeencoding" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the xlicmimeencoding of #ICalProperty."/>
-        <comment>Gets the xlicmimeencoding of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_xlicmimefilename" corresponds="icalproperty_new_xlicmimefilename" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The xlicmimefilename"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_xlicmimefilename" corresponds="icalproperty_set_xlicmimefilename" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The xlicmimefilename"/>
-        <comment>Sets the xlicmimefilename for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_xlicmimefilename" corresponds="icalproperty_get_xlicmimefilename" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the xlicmimefilename of #ICalProperty."/>
-        <comment>Gets the xlicmimefilename of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_xlicmimeoptinfo" corresponds="icalproperty_new_xlicmimeoptinfo" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="v" comment="The xlicmimeoptinfo"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty"/>
-        <comment xml:space="preserve">Creates a new #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_xlicmimeoptinfo" corresponds="icalproperty_set_xlicmimeoptinfo" kind="set" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="v" comment="The xlicmimeoptinfo"/>
-        <comment>Sets the xlicmimeoptinfo for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_xlicmimeoptinfo" corresponds="icalproperty_get_xlicmimeoptinfo" kind="get" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="const gchar *" annotation="transfer none" comment="Get the xlicmimeoptinfo of #ICalProperty."/>
-        <comment>Gets the xlicmimeoptinfo of #ICalProperty.</comment>
-    </method>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ACCEPTRESPONSE" since="2.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="acceptresponse"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ACKNOWLEDGED" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="acknowledged"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ACTION" since="1.0"
+	value-get-type="ICalPropertyAction" value-set-type="ICalPropertyAction" value-set-type-ref="#ICalPropertyAction"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="action"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ALLOWCONFLICT" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="allowconflict"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ATTACH" since="1.0"
+	value-get-type="const ICalAttach *" value-set-type="const ICalAttach *" value-set-type-ref="#ICalAttach" value-get-annotation="transfer full" value-get-translator-argus="(GObject *)self"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="attach"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ATTENDEE" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="attendee"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="BUSYTYPE" since="2.0"
+	value-get-type="ICalPropertyBusytype" value-set-type="ICalPropertyBusytype" value-set-type-ref="#ICalPropertyBusytype"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="busytype"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CALENDARADDRESS" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="calendaraddress"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CALID" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="calid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CALMASTER" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="calmaster"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CALSCALE" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="calscale"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CAPVERSION" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="capversion"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CARLEVEL" since="1.0"
+	value-get-type="ICalPropertyCarlevel" value-set-type="ICalPropertyCarlevel" value-set-type-ref="#ICalPropertyCarlevel"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="carlevel"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CARID" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="carid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CATEGORIES" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="categories"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CLASS" since="1.0"
+	value-get-type="ICalPropertyClassenum" value-set-type="ICalPropertyClassenum" value-set-type-ref="#ICalPropertyClassenum"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="class"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CMD" since="1.0"
+	value-get-type="ICalPropertyCmd" value-set-type="ICalPropertyCmd" value-set-type-ref="#ICalPropertyCmd"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="cmd"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="COMMENT" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="comment"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="COLOR" since="3.0.5"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="color"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="COMPLETED" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="completed"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="COMPONENTS" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="components"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CONCEPT" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="concept"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CONFERENCE" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="conference"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CONTACT" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="contact"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CREATED" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="created"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="CSID" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="csid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DATEMAX" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="datemax"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DATEMIN" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="datemin"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DECREED" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="decreed"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DEFAULTCHARSET" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="defaultcharset"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DEFAULTLOCALE" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="defaultlocale"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DEFAULTTZID" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="defaulttzid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DEFAULTVCARS" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="defaultvcars"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="deny" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="deny"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="description" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="description"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DTEND" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="dtend"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DTSTAMP" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="dtstamp"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DTSTART" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="dtstart"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DUE" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="due"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="DURATION" since="1.0"
+	value-get-type="ICalDuration *" value-set-type="const ICalDuration *" value-set-type-ref="#ICalDuration" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="duration"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ESTIMATEDDURATION" since="1.0"
+	value-get-type="ICalDuration *" value-set-type="const ICalDuration *" value-set-type-ref="#ICalDuration" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="estimatedduration"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="EXDATE" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="exdate"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="EXPAND" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="expand"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="EXRULE" since="1.0"
+	value-get-type="ICalRecurrence *" value-set-type="const ICalRecurrence *" value-set-type-ref="#ICalRecurrence" value-get-annotation="transfer full" value-get-translator-argus="(GObject *)self"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="exrule"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="FREEBUSY" since="1.0"
+	value-get-type="ICalPeriod *" value-set-type="const ICalPeriod *" value-set-type-ref="#ICalPeriod" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="freebusy"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="GEO" since="1.0"
+	value-get-type="ICalGeo *" value-set-type="const ICalGeo *" value-set-type-ref="#ICalGeo" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="geo"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="GRANT" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="grant"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="IMAGE" since="4.0"
+	value-get-type="ICalAttach *" value-set-type="const ICalAttach *" value-set-type-ref="#ICalAttach" value-get-annotation="transfer full" value-get-translator-argus="(GObject *)self"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="image"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ITIPVERSION" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="itipversion"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="LASTMODIFIED" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="lastmodified"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="LINK" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="link"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="LOCATION" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="location"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="LOCATIONTYPE" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="locationtype"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="MAXCOMPONENTSIZE" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="maxcomponentsize"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="MAXDATE" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="maxdate"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="MAXRESULTS" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="maxresults"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="MAXRESULTSSIZE" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="maxresultssize"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="METHOD" since="1.0"
+	value-get-type="ICalPropertyMethod" value-set-type="ICalPropertyMethod" value-set-type-ref="#ICalPropertyMethod"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="method"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="MINDATE" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="mindate"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="MULTIPART" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="multipart"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="NAME" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="name"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ORGANIZER" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="organizer"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="OWNER" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="owner"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PARTICIPANTTYPE" since="4.0"
+	value-get-type="ICalPropertyParticipanttype" value-set-type="ICalPropertyParticipanttype" value-set-type-ref="#ICalPropertyParticipanttype"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="participanttype"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PATCHDELETE" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="patchdelete"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PATCHORDER" since="4.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="patchorder"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PATCHPARAMETER" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="patchparameter"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PATCHTARGET" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="patchtarget"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PATCHVERSION" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="patchversion"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PERCENTCOMPLETE" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="percentcomplete"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PERMISSION" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="permission"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="POLLCOMPLETION" since="1.0"
+	value-get-type="ICalPropertyPollcompletion" value-set-type="ICalPropertyPollcompletion" value-set-type-ref="#ICalPropertyPollcompletion"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="pollcompletion"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="POLLITEMID" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="pollitemid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="POLLMODE" since="1.0"
+	value-get-type="ICalPropertyPollmode" value-set-type="ICalPropertyPollmode" value-set-type-ref="#ICalPropertyPollmode"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="pollmode"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="POLLPROPERTIES" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="pollproperties"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="POLLWINNER" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="pollwinner"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PRIORITY" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="priority"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PRODID" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="prodid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="PROXIMITY" since="4.0"
+	value-get-type="ICalPropertyProximity" value-set-type="ICalPropertyProximity" value-set-type-ref="#ICalPropertyProximity"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="proximity"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="QUERY" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="query"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="QUERYLEVEL" since="1.0"
+	value-get-type="ICalPropertyQuerylevel" value-set-type="ICalPropertyQuerylevel" value-set-type-ref="#ICalPropertyQuerylevel"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="querylevel"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="QUERYID" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="queryid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="QUERYNAME" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="queryname"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RDATE" since="1.0"
+	value-get-type="ICalDatetimeperiod *" value-set-type="const ICalDatetimeperiod *" value-set-type-ref="#ICalDatetimeperiod" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="rdate"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RECURACCEPTED" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="recuraccepted"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RECUREXPAND" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="recurexpand"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RECURLIMIT" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="recurlimit"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RECURRENCEID" since="1.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="recurrenceid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="REFID" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="refid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="REFRESHINTERVAL" since="4.0"
+	value-get-type="ICalDuration *" value-set-type="const ICalDuration *" value-set-type-ref="#ICalDuration" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="refreshinterval"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RELATEDTO" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="relatedto"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RELCALID" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="relcalid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="REPEAT" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="repeat"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="REPLYURL" since="2.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="replyurl"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="REQUESTSTATUS" since="1.0"
+	value-get-type="ICalReqstat *" value-set-type="const ICalReqstat *" value-set-type-ref="#ICalReqstat" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="requeststatus"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RESOURCES" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="resources"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RESOURCETYPE" since="4.0"
+	value-get-type="ICalPropertyResourcetype" value-set-type="ICalPropertyResourcetype" value-set-type-ref="#ICalPropertyResourcetype"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="resourcetype"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RESPONSE" since="2.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="response"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RESTRICTION" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="restriction"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="RRULE" since="1.0"
+	value-get-type="ICalRecurrence *" value-set-type="const ICalRecurrence *" value-set-type-ref="#ICalRecurrence" value-get-annotation="transfer full" value-get-translator-argus="(GObject *)self"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="rrule"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="SCOPE" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="scope"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="SEQUENCE" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="sequence"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="SOURCE" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="source"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="STATUS" since="1.0"
+	value-get-type="ICalPropertyStatus" value-set-type="ICalPropertyStatus" value-set-type-ref="#ICalPropertyStatus"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="status"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="STORESEXPANDED" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="storesexpanded"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="STRUCTUREDDATA" since="4.0"
+	value-get-type="ICalAttach *" value-set-type="const ICalAttach *" value-set-type-ref="#ICalAttach" value-get-annotation="transfer full" value-get-translator-argus="(GObject *)self"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="structureddata"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="STYLEDDESCRIPTION" since="4.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="styleddescription"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="SUMMARY" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="summary"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TARGET" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="target"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TASKMODE" since="2.0"
+	value-get-type="ICalPropertyTaskmode" value-set-type="ICalPropertyTaskmode" value-set-type-ref="#ICalPropertyTaskmode"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="taskmode"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TRANSP" since="1.0"
+	value-get-type="ICalPropertyTransp" value-set-type="ICalPropertyTransp" value-set-type-ref="#ICalPropertyTransp"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="transp"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TRIGGER" since="1.0"
+	value-get-type="ICalTrigger *" value-set-type="const ICalTrigger *" value-set-type-ref="#ICalTrigger" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="trigger"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TZID" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="tzid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TZIDALIASOF" since="2.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="tzidaliasof"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TZNAME" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="tzname"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TZOFFSETFROM" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="tzoffsetfrom"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TZOFFSETTO" since="1.0"
+	value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="tzoffsetto"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TZUNTIL" since="2.0"
+	value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="tzuntil"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="TZURL" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="tzurl"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="UID" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="uid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="URL" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="url"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="VERSION" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="version"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="VOTER" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="voter"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="X" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="x"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="XLICCLASS" since="1.0"
+	value-get-type="ICalPropertyXlicclass" value-set-type="ICalPropertyXlicclass" value-set-type-ref="#ICalPropertyXlicclass"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="xlicclass"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="XLICCLUSTERCOUNT" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="xlicclustercount"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="XLICERROR" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="xlicerror"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="XLICMIMECHARSET" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="xlicmimecharset"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="XLICMIMECID" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="xlicmimecid"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="XLICMIMECONTENTTYPE" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="xlicmimecontenttype"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="XLICMIMEENCODING" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="xlicmimeencoding"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="XLICMIMEFILENAME" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="xlicmimefilename"/>
+    <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="XLICMIMEOPTINFO" since="1.0"
+	value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+	binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="xlicmimeoptinfo"/>
 </structure>
