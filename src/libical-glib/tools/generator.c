@@ -2670,8 +2670,7 @@ check_api_files(const gchar *apis_dir,
         guint ii;
 
         fprintf(stderr,
-                "The following %u symbols are not covered by the libical-glib API files. "
-                "Either add the definitions for them or declare them as <skip>symbol</skip> under <structure/>\n",
+                "Error: The following %u symbols are not covered by the libical-glib API files: ",
                 g_hash_table_size(symbols));
 
         sorted = g_ptr_array_sized_new(g_hash_table_size(symbols));
@@ -2688,6 +2687,8 @@ check_api_files(const gchar *apis_dir,
             fprintf(stderr, "%s", symbol);
         }
         fprintf(stderr, "\n");
+        fprintf(stderr,
+                "Hint: Either add the definitions for them or declare them as <skip>symbol</skip> under <structure/>\n");
         g_ptr_array_unref(sorted);
     }
 
