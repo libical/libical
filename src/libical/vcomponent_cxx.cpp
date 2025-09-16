@@ -44,10 +44,12 @@ VComponent &VComponent::operator=(const VComponent &v)
 
     if (imp != NULL) {
         icalcomponent_free(imp);
-        imp = icalcomponent_clone(v.imp);
-        if (imp == NULL) {
-            throw icalerrno;
-        }
+        imp = NULL;
+    }
+
+    imp = icalcomponent_clone(v.imp);
+    if (imp == NULL) {
+        throw icalerrno;
     }
 
     return *this;
