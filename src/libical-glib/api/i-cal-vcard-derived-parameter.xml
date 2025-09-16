@@ -160,634 +160,101 @@
 		<returns type="gint" comment="an integer representation of the string enum value @str." />
 		<comment xml:space="preserve">Converts a string representation of a parameter enum to a its numeric value.</comment>
 	</method>
-	<method name="i_cal_vcard_parameter_new_altid" corresponds="vcardparameter_new_altid" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_altid" corresponds="vcardparameter_get_altid" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_altid" corresponds="vcardparameter_set_altid" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_author" corresponds="vcardparameter_new_author" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_author" corresponds="vcardparameter_get_author" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_author" corresponds="vcardparameter_set_author" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_authorname" corresponds="vcardparameter_new_authorname" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_authorname" corresponds="vcardparameter_get_authorname" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_authorname" corresponds="vcardparameter_set_authorname" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_cascale" corresponds="vcardparameter_new_calscale" kind="constructor" since="4.0">
-		<parameter type="ICalVcardParameterCalscale" name="v" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_calscale" corresponds="vcardparameter_get_calscale" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardParameterCalscale" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_calscale" corresponds="vcardparameter_set_calscale" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="ICalVcardParameterCalscale" name="v" comment="The #ICalVcardParameterCalscale used to set @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_cc" corresponds="vcardparameter_new_cc" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_cc" corresponds="vcardparameter_get_cc" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_cc" corresponds="vcardparameter_set_cc" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_context" corresponds="vcardparameter_new_context" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_context" corresponds="vcardparameter_get_context" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_context" corresponds="vcardparameter_set_context" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_created" corresponds="vcardparameter_new_created" kind="constructor" since="4.0">
-		<parameter type="const ICalVcardTime *" name="v" comment="The #ICalVcardTime to create the new #ICalVcardParameter with"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_created" corresponds="vcardparameter_get_created" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardTime *" annotation="nullable,transfer full" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_created" corresponds="vcardparameter_set_created" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const ICalVcardTime *" name="v" comment="The #ICalVcardTime to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_derived" corresponds="vcardparameter_new_derived" kind="constructor" since="4.0">
-		<parameter type="ICalVcardParameterDerived" name="v" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_derived" corresponds="vcardparameter_get_derived" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardParameterDerived" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_derived" corresponds="vcardparameter_set_derived" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="ICalVcardParameterDerived" name="v" comment="The #ICalVcardParameterDerived used to set @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_encoding" corresponds="vcardparameter_new_encoding" kind="constructor" since="4.0">
-		<parameter type="ICalVcardParameterEncoding" name="v" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_encoding" corresponds="vcardparameter_get_encoding" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardParameterEncoding" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_encoding" corresponds="vcardparameter_set_encoding" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="ICalVcardParameterEncoding" name="v" comment="The #ICalVcardParameterEncoding used to set @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_geo" corresponds="vcardparameter_new_geo" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_geo" corresponds="vcardparameter_get_geo" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_geo" corresponds="vcardparameter_set_geo" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_iana" corresponds="vcardparameter_new_iana" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_iana" corresponds="vcardparameter_get_iana" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_iana" corresponds="vcardparameter_set_iana" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_index" corresponds="vcardparameter_new_index" kind="constructor" since="4.0">
-		<parameter type="gint" name="v" comment="The value to have the #ICalVcardParameter created with"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_index" corresponds="vcardparameter_get_index" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="gint" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_index" corresponds="vcardparameter_set_index" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="gint" name="v" comment="The integer used to set @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_jscomps" corresponds="vcardparameter_new_jscomps" kind="constructor" since="4.0">
-		<parameter type="const ICalVcardStructured *" name="v" annotation="transfer none" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve">Note: this uses a copy of the structured type, not the one stored in the @v</comment>
-		<custom>    vcardstructuredtype *val;
-    g_return_val_if_fail(v != NULL, NULL);
-    val = (vcardstructuredtype *)i_cal_object_get_native ((ICalObject *)v);
-    if (val == NULL)
-        return NULL;
-    return i_cal_vcard_parameter_new_full(vcardparameter_new_jscomps(priv_i_cal_vcardstructuredtype_clone(val)), NULL);</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_get_jscomps" corresponds="vcardparameter_get_jscomps" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardStructured *" annotation="transfer full" comment="The property of the @param" />
-		<comment xml:space="preserve">Note: this uses a copy of the structured type, not the one stored in the @v</comment>
-		<custom>    vcardstructuredtype *val;
-    g_return_val_if_fail(param != NULL, NULL);
-    val = vcardparameter_get_jscomps((vcardparameter *)i_cal_object_get_native ((ICalObject *)param));
-    if (val == NULL)
-        return NULL;
-    return i_cal_vcard_structured_new_full(priv_i_cal_vcardstructuredtype_clone(val), NULL);</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_set_jscomps" corresponds="vcardparameter_set_jscomps" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const ICalVcardStructured *" name="v" annotation="transfer none" comment="The #ICalVcardStructured used to set @param"/>
-		<comment xml:space="preserve"></comment>
-		<custom>    g_return_if_fail(param != NULL);
-    vcardparameter_set_jscomps((vcardparameter *)i_cal_object_get_native ((ICalObject *)param),
-        priv_i_cal_vcardstructuredtype_clone((vcardstructuredtype *)i_cal_object_get_native ((ICalObject *)v)));</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_new_jsptr" corresponds="vcardparameter_new_jsptr" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_jsptr" corresponds="vcardparameter_get_jsptr" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_jsptr" corresponds="vcardparameter_set_jsptr" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_label" corresponds="vcardparameter_new_label" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_label" corresponds="vcardparameter_get_label" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_label" corresponds="vcardparameter_set_label" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_language" corresponds="vcardparameter_new_language" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_language" corresponds="vcardparameter_get_language" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_language" corresponds="vcardparameter_set_language" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_level" corresponds="vcardparameter_new_level" kind="constructor" since="4.0">
-		<parameter type="ICalVcardParameterLevel" name="v" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_level" corresponds="vcardparameter_get_level" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardParameterLevel" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_level" corresponds="vcardparameter_set_level" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="ICalVcardParameterLevel" name="v" comment="The #ICalVcardParameterLevel used to set @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_mediatype" corresponds="vcardparameter_new_mediatype" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_mediatype" corresponds="vcardparameter_get_mediatype" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_mediatype" corresponds="vcardparameter_set_mediatype" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_phonetic" corresponds="vcardparameter_new_phonetic" kind="constructor" since="4.0">
-		<parameter type="ICalVcardParameterPhonetic" name="v" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_phonetic" corresponds="vcardparameter_get_phonetic" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardParameterPhonetic" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_phonetic" corresponds="vcardparameter_set_phonetic" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="ICalVcardParameterPhonetic" name="v" comment="The #ICalVcardParameterPhonetic used to set @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_pid_list" corresponds="vcardparameter_new_pid_list" kind="constructor" since="4.0">
-		<parameter type="const ICalVcardStrArray *" name="v" annotation="transfer none" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve">Note: this uses a copy of the string array, not the one stored in the @v</comment>
-		<custom>    vcardstrarray *val;
-    g_return_val_if_fail(v != NULL, NULL);
-    val = (vcardstrarray *)i_cal_object_get_native ((ICalObject *)v);
-    if (val == NULL)
-        return NULL;
-    return i_cal_vcard_parameter_new_full(vcardparameter_new_pid_list(vcardstrarray_clone(val)), NULL);</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_get_pid" corresponds="vcardparameter_get_pid" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardStrArray *" annotation="transfer full" comment="The property of the @param" />
-		<comment xml:space="preserve">Note: this returns copy of the string array, not the one stored in the @param</comment>
-		<custom>    vcardstrarray *val;
-    g_return_val_if_fail(param != NULL, NULL);
-    val = vcardparameter_get_pid((vcardparameter *)i_cal_object_get_native ((ICalObject *)param));
-    if (val == NULL)
-        return NULL;
-    return i_cal_vcard_str_array_new_full(vcardstrarray_clone(val), NULL);</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_set_pid" corresponds="vcardparameter_set_pid" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const ICalVcardStrArray *" name="v" annotation="transfer none" comment="The #ICalVcardStrArray used to set @param"/>
-		<comment xml:space="preserve">Note: this uses a copy of the string array, not the one stored in the @v</comment>
-		<custom>    g_return_if_fail(param != NULL);
-    vcardparameter_set_pid((vcardparameter *)i_cal_object_get_native ((ICalObject *)param),
-        vcardstrarray_clone((vcardstrarray *)i_cal_object_get_native ((ICalObject *)v)));</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_new_pid" corresponds="vcardparameter_new_pid" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_pid_size" corresponds="vcardparameter_get_pid_size" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="gsize" error_return_value="0" comment="Number of PID elements in the @param"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_pid_nth" corresponds="vcardparameter_get_pid_nth" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
-		<parameter type="gsize" name="position" comment="Position of the PID item to get"/>
-		<returns type="const gchar *" annotation="nullable" comment="n-th item of the PID @param" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_add_pid" corresponds="vcardparameter_add_pid" kind="other" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="pid" comment="The string used to add into the @param"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_remove_pid" corresponds="vcardparameter_remove_pid" kind="other" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="pid" comment="The string used to remove from the @param"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_pref" corresponds="vcardparameter_new_pref" kind="constructor" since="4.0">
-		<parameter type="gint" name="v" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_pref" corresponds="vcardparameter_get_pref" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="gint" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_pref" corresponds="vcardparameter_set_pref" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="gint" name="v" comment="The value used to set to the @param"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_propid" corresponds="vcardparameter_new_propid" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_propid" corresponds="vcardparameter_get_propid" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_propid" corresponds="vcardparameter_set_propid" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_script" corresponds="vcardparameter_new_script" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_script" corresponds="vcardparameter_get_script" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_script" corresponds="vcardparameter_set_script" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_servicetype" corresponds="vcardparameter_new_servicetype" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_servicetype" corresponds="vcardparameter_get_servicetype" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_servicetype" corresponds="vcardparameter_set_servicetype" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_sortas_list" corresponds="vcardparameter_new_sortas_list" kind="constructor" since="4.0">
-		<parameter type="const ICalVcardStrArray *" name="v" annotation="transfer none" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve">Note: this uses a copy of the string array, not the one stored in the @v</comment>
-		<custom>    vcardstrarray *val;
-    g_return_val_if_fail(v != NULL, NULL);
-    val = (vcardstrarray *)i_cal_object_get_native ((ICalObject *)v);
-    if (val == NULL)
-        return NULL;
-    return i_cal_vcard_parameter_new_full(vcardparameter_new_sortas_list(vcardstrarray_clone(val)), NULL);</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_get_sortas" corresponds="vcardparameter_get_sortas" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardStrArray *" annotation="transfer full" comment="The property of the @param" />
-		<comment xml:space="preserve">Note: this returns copy of the string array, not the one stored in the @param</comment>
-		<custom>    vcardstrarray *val;
-    g_return_val_if_fail(param != NULL, NULL);
-    val = vcardparameter_get_sortas((vcardparameter *)i_cal_object_get_native ((ICalObject *)param));
-    if (val == NULL)
-        return NULL;
-    return i_cal_vcard_str_array_new_full(vcardstrarray_clone(val), NULL);</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_set_sortas" corresponds="vcardparameter_set_sortas" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const ICalVcardStrArray *" name="v" annotation="transfer none" comment="The #ICalVcardStrArray used to set @param"/>
-		<comment xml:space="preserve">Note: this uses a copy of the string array, not the one stored in the @v</comment>
-		<custom>    g_return_if_fail(param != NULL);
-    vcardparameter_set_sortas((vcardparameter *)i_cal_object_get_native ((ICalObject *)param),
-        vcardstrarray_clone((vcardstrarray *)i_cal_object_get_native ((ICalObject *)v)));</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_new_sortas" corresponds="vcardparameter_new_sortas" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_sortas_size" corresponds="vcardparameter_get_sortas_size" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="gsize" error_return_value="0" comment="Number of SORT-AS elements in the @param" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_sortas_nth" corresponds="vcardparameter_get_sortas_nth" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
-		<parameter type="gsize" name="position" comment="Position of the PID item to get"/>
-		<returns type="const gchar *" annotation="nullable" comment="n-th item of the SORT-AS @param" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_add_sortas" corresponds="vcardparameter_add_sortas" kind="other" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="sortas" comment="The string used to add into the @param"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_remove_sortas" corresponds="vcardparameter_remove_sortas" kind="other" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="sortas" comment="The string used to remove from the @param"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_type_list" corresponds="vcardparameter_new_type_list" kind="constructor" since="4.0">
-		<parameter type="const ICalVcardEnumArray *" name="v" annotation="transfer none" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve">Note: this uses a copy of the array, not the one stored in the @v</comment>
-		<custom>    vcardenumarray *val;
-    g_return_val_if_fail(v != NULL, NULL);
-    val = (vcardenumarray *)i_cal_object_get_native ((ICalObject *)v);
-    if (val == NULL)
-        return NULL;
-    return i_cal_vcard_parameter_new_full(vcardparameter_new_type_list(vcardenumarray_clone(val)), NULL);</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_get_type_value" corresponds="vcardparameter_get_type" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardEnumArray *" annotation="transfer full" comment="The property of the @param" />
-		<comment xml:space="preserve">Note: this returns copy of the array, not the one stored in the @param</comment>
-		<custom>    vcardenumarray *val;
-    g_return_val_if_fail(param != NULL, NULL);
-    val = vcardparameter_get_type((vcardparameter *)i_cal_object_get_native ((ICalObject *)param));
-    if (val == NULL)
-        return NULL;
-    return i_cal_vcard_enum_array_new_full(vcardenumarray_clone(val), NULL);</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_set_type" corresponds="vcardparameter_set_type" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const ICalVcardEnumArray *" name="v" annotation="transfer none" comment="The #ICalVcardEnumArray used to set @param"/>
-		<comment xml:space="preserve">Note: this uses a copy of the array, not the one stored in the @v</comment>
-		<custom>    g_return_if_fail(param != NULL);
-    vcardparameter_set_type((vcardparameter *)i_cal_object_get_native ((ICalObject *)param),
-        vcardenumarray_clone((vcardenumarray *)i_cal_object_get_native ((ICalObject *)v)));</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_new_type" corresponds="vcardparameter_new_type" kind="constructor" since="4.0">
-		<parameter type="ICalVcardParameterType" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_type_size" corresponds="vcardparameter_get_type_size" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="gsize" error_return_value="0" comment="Number of TYPE elements in the @param" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_type_nth" corresponds="vcardparameter_get_type_nth" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
-		<parameter type="gsize" name="position" comment="Position of the TYPE item to get"/>
-		<returns type="ICalVcardParameterType" comment="n-th item of the TYPE @param" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_add_type" corresponds="vcardparameter_add_type" kind="other" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="ICalVcardParameterType" name="param_type" comment="an #ICalVcardParameterType"/>
-		<parameter type="const gchar *" name="x_value" annotation="nullable" comment="An X name, or %NULL; when set, the @param_type should be I_CAL_VCARD_X_PARAMETER"/>
-		<comment xml:space="preserve"></comment>
-		<custom>    vcardenumarray_element elem = { 0, };
-    g_return_if_fail(param != NULL);
-    elem.val = param_type;
-    elem.xvalue = x_value;
-    vcardparameter_add_type((vcardparameter *)i_cal_object_get_native ((ICalObject *)param), &amp;elem);</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_remove_type" corresponds="vcardparameter_remove_type" kind="other" since="4.0">
-		<parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="ICalVcardParameterType" name="param_type" comment="an #ICalVcardParameterType"/>
-		<parameter type="const gchar *" name="x_value" annotation="nullable" comment="An X name, or %NULL; when set, the @param_type should be I_CAL_VCARD_X_PARAMETER"/>
-		<comment xml:space="preserve"></comment>
-		<custom>    vcardenumarray_element elem = { 0, };
-    g_return_if_fail(param != NULL);
-    elem.val = param_type;
-    elem.xvalue = x_value;
-    vcardparameter_remove_type((vcardparameter *)i_cal_object_get_native ((ICalObject *)param), &amp;elem);</custom>
-	</method>
-	<method name="i_cal_vcard_parameter_new_tz" corresponds="vcardparameter_new_tz" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_tz" corresponds="vcardparameter_get_tz" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_tz" corresponds="vcardparameter_set_tz" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_username" corresponds="vcardparameter_new_username" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_username" corresponds="vcardparameter_get_username" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_username" corresponds="vcardparameter_set_username" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_value" corresponds="vcardparameter_new_value" kind="constructor" since="4.0">
-		<parameter type="ICalVcardParameterValue" name="v" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_value" corresponds="vcardparameter_get_value" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardParameterValue" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_value" corresponds="vcardparameter_set_value" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="ICalVcardParameterValue" name="v" comment="The #ICalVcardParameterValue used to set @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_x" corresponds="vcardparameter_new_x" kind="constructor" since="4.0">
-		<parameter type="const gchar *" name="v" comment="The string used to create the new #ICalVcardParameter"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_x" corresponds="vcardparameter_get_x" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="const gchar *" annotation="nullable" comment="The property of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_x" corresponds="vcardparameter_set_x" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="const gchar *" name="v" comment="The string used to set into the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_xliccomparetype" corresponds="vcardparameter_new_xliccomparetype" kind="constructor" since="4.0">
-		<parameter type="ICalVcardParameterXliccomparetype" name="v" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve">Creates a new #ICalVcardParameter according to the xliccomparetype type.</comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_xliccomparetype" corresponds="vcardparameter_get_xliccomparetype" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardParameterXliccomparetype" comment="The type of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_xliccomparetype" corresponds="vcardparameter_set_xliccomparetype" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="ICalVcardParameterXliccomparetype" name="v" comment="The type of #ICalVcardParameter to be set in the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_new_xlicerrortype" corresponds="vcardparameter_new_xlicerrortype" kind="constructor" since="4.0">
-		<parameter type="ICalVcardParameterXlicerrortype" name="v" comment="The type of #ICalVcardParameter to be created"/>
-		<returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter." />
-		<comment xml:space="preserve">Creates a new #ICalVcardParameter according to the xlicerrortype type.</comment>
-	</method>
-	<method name="i_cal_vcard_parameter_get_xlicerrortype" corresponds="vcardparameter_get_xlicerrortype" kind="get" since="4.0">
-		<parameter type="const ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be queried"/>
-		<returns type="ICalVcardParameterXlicerrortype" comment="The type of the @value" />
-		<comment xml:space="preserve"></comment>
-	</method>
-	<method name="i_cal_vcard_parameter_set_xlicerrortype" corresponds="vcardparameter_set_xlicerrortype" kind="set" since="4.0">
-		<parameter type="ICalVcardParameter *" name="value" comment="The #ICalVcardParameter to be set"/>
-		<parameter type="ICalVcardParameterXlicerrortype" name="v" comment="The type of #ICalVcardParameter to be set in the @value"/>
-		<comment xml:space="preserve"></comment>
-	</method>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="ALTID" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="altid"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="AUTHOR" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="author"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="AUTHORNAME" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="authorname"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="CALSCALE" since="4.0"
+		value-get-type="ICalVcardParameterCalscale" value-set-type="ICalVcardParameterCalscale" value-set-type-ref="#ICalVcardParameterCalscale"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="calscale"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="CC" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="cc"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="CONTEXT" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="context"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="CREATED" since="4.0"
+		value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="created"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="DERIVED" since="4.0"
+		value-get-type="ICalVcardParameterDerived" value-set-type="ICalVcardParameterDerived" value-set-type-ref="#ICalVcardParameterDerived"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="derived"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="ENCODING" since="4.0"
+		value-get-type="ICalVcardParameterEncoding" value-set-type="ICalVcardParameterEncoding" value-set-type-ref="#ICalVcardParameterEncoding"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="encoding"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="GEO" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="geo"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="IANA" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="iana"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="INDEX" since="4.0"
+		value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="index"/>
+	<method-from-template name="vcardstructured" obj-type="ICalVcardParameter" native-type="vcardparameter" value-name="JSCOMPS" since="4.0"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="jscomps"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="JSPTR" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="jsptr"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="LABEL" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="label"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="LANGUAGE" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="language"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="LEVEL" since="4.0"
+		value-get-type="ICalVcardParameterLevel" value-set-type="ICalVcardParameterLevel" value-set-type-ref="#ICalVcardParameterLevel"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="level"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="MEDIATYPE" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="mediatype"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="PHONETIC" since="4.0"
+		value-get-type="ICalVcardParameterPhonetic" value-set-type="ICalVcardParameterPhonetic" value-set-type-ref="#ICalVcardParameterPhonetic"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="phonetic"/>
+	<method-from-template name="strarray" obj-type="ICalVcardParameter" value-name="PID" since="4.0"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="pid" native-type="vcardparameter"
+		binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="PREF" since="4.0"
+		value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="pref"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="PROPID" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="propid"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="SCRIPT" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="script"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="SERVICETYPE" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="servicetype"/>
+	<method-from-template name="strarray" obj-type="ICalVcardParameter" value-name="SORTAS" since="4.0"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="sortas" native-type="vcardparameter"
+		binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
+	<method-from-template name="enumarray" obj-type="ICalVcardParameter" value-name="TYPE" since="4.0"
+		value-get-type="ICalVcardParameterType" value-set-type="ICalVcardParameterType" value-set-type-ref="#ICalVcardParameterType"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="type" native-type="vcardparameter"
+		binding-array-type="ICalVcardEnumArray" binding-array-new-prefix="i_cal_vcard_enum_array" native-array-type="vcardenumarray"
+		native-elem-type="vcardenumarray_element" binding-get-set-suffix="_value"/>  <!-- because ..._get_type() clashes with glib functions -->
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="TZ" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="tz"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="USERNAME" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="username"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="VALUE" since="4.0"
+		value-get-type="ICalVcardParameterValue" value-set-type="ICalVcardParameterValue" value-set-type-ref="#ICalVcardParameterValue"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="value"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="X" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="x"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="XLICCOMPARETYPE" since="4.0"
+		value-get-type="ICalVcardParameterXliccomparetype" value-set-type="ICalVcardParameterXliccomparetype" value-set-type-ref="#ICalVcardParameterXliccomparetype"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="xliccomparetype"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="XLICERRORTYPE" since="4.0"
+		value-get-type="ICalVcardParameterXlicerrortype" value-set-type="ICalVcardParameterXlicerrortype" value-set-type-ref="#ICalVcardParameterXlicerrortype"
+		binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="xlicerrortype"/>
 </structure>
