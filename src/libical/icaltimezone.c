@@ -1912,7 +1912,7 @@ bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
     icaltimezone_ensure_coverage(zone, max_year);
 
 #ifdef ICALTIMEZONE_DEBUG_PRINT
-    printf("Num changes: %i\n", zone->changes->num_elements);
+    printf("Num changes: %zu\n", zone->changes->num_elements);
 #endif
 
     icaltimezone_changes_lock();
