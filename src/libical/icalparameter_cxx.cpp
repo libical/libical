@@ -31,10 +31,12 @@ ICalParameter &ICalParameter::operator=(const ICalParameter &v)
 
     if (imp != NULL) {
         icalparameter_free(imp);
-        imp = icalparameter_clone(v.imp);
-        if (imp == NULL) {
-            throw icalerrno;
-        }
+        imp = NULL;
+    }
+
+    imp = icalparameter_clone(v.imp);
+    if (imp == NULL) {
+        throw icalerrno;
     }
 
     return *this;

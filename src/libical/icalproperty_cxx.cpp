@@ -33,10 +33,12 @@ ICalProperty &ICalProperty::operator=(const ICalProperty &v)
 
     if (imp != NULL) {
         icalproperty_free(imp);
-        imp = icalproperty_clone(v.imp);
-        if (imp == NULL) {
-            throw icalerrno;
-        }
+        imp = NULL;
+    }
+
+    imp = icalproperty_clone(v.imp);
+    if (imp == NULL) {
+        throw icalerrno;
     }
 
     return *this;
