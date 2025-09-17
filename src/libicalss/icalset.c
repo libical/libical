@@ -158,45 +158,6 @@ static bool load(const char *file)
     return true;
 }
 
-#if 0
-/**
- * Look in the given directory for files called mod_*.o and try to load them.
- */
-bool icalset_loaddir(const char *path)
-{
-    DIR *d;
-    struct dirent *dp;
-    char buf[PATH_MAX], *bufptr;
-    int tot = 0;
-
-    strcpy(buf, path);
-    bufptr = buf + strlen(buf);
-
-    if (*(bufptr - 1) != '/') {
-        *bufptr++ = '/';
-    }
-
-    if ((d = opendir(path)) == 0) {
-        perror("opendir");
-        return false;
-    }
-
-    while ((dp = readdir(d)) != 0) {
-        if (strncmp(dp->d_name, "mod_", 4)) {
-            continue;
-        }
-
-        strcpy(bufptr, dp->d_name);
-
-        load(buf);
-        tot++;
-    }
-    (void)closedir(d);
-
-    return true;
-}
-#endif
-
 static void icalset_init(void)
 {
     assert(icalset_kinds == 0);

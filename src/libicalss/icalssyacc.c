@@ -949,16 +949,6 @@ yysyntax_error(char *yyresult, int yystate, int yychar)
         };
         char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
         int yyx;
-
-#if 0
-      /* This is so xgettext sees the translatable formats that are
-         constructed on the fly.  */
-      YY_("syntax error, unexpected %s");
-      YY_("syntax error, unexpected %s, expecting %s");
-      YY_("syntax error, unexpected %s, expecting %s or %s");
-      YY_("syntax error, unexpected %s, expecting %s or %s or %s");
-      YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s");
-#endif
         char *yyfmt;
         char const *yyf;
         static char const yyunexpected[] = "libical: syntax error, unexpected %s";

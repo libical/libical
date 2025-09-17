@@ -308,30 +308,6 @@ static char *parser_get_param_name_heap(char *line, char **end)
     return str;
 }
 
-#if 0
-/*keep for historical sake*/
-static char *parser_get_next_paramvalue(char *line, char **end)
-{
-    char *next;
-    char *str;
-
-    next = parser_get_next_char(',', line, 1);
-
-    if (next == 0) {
-        next = (char *)(size_t) line + (size_t) strlen(line);
-    }
-
-    if (next == line) {
-        return 0;
-    } else {
-        str = make_segment(line, next);
-        *end = next + 1;
-        return str;
-    }
-}
-
-#endif
-
 static char *icalparser_get_value(char *line, char **end, icalvalue_kind kind)
 {
     char *str;

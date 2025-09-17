@@ -2433,39 +2433,6 @@ static void increment_month(icalrecur_iterator *impl, int inc)
     }
 }
 
-#if 0
-#include "ical.h"
-void test_increment()
-{
-    icalrecur_iterator impl;
-
-    impl.last = icaltime_from_string("20000101T000000Z");
-
-    printf("Orig: %s\n", icaltime_as_ctime(impl.last));
-
-    increment_second(&impl, 5);
-    printf("+ 5 sec    : %s\n", icaltime_as_ctime(impl.last));
-
-    increment_second(&impl, 355);
-    printf("+ 355 sec  : %s\n", icaltime_as_ctime(impl.last));
-
-    increment_minute(&impl, 5);
-    printf("+ 5 min    : %s\n", icaltime_as_ctime(impl.last));
-
-    increment_minute(&impl, 360);
-    printf("+ 360 min  : %s\n", icaltime_as_ctime(impl.last));
-    increment_hour(&impl, 5);
-    printf("+ 5 hours  : %s\n", icaltime_as_ctime(impl.last));
-    increment_hour(&impl, 43);
-    printf("+ 43 hours : %s\n", icaltime_as_ctime(impl.last));
-    increment_monthday(&impl, 3);
-    printf("+ 3 days   : %s\n", icaltime_as_ctime(impl.last));
-    increment_monthday(&impl, 600);
-    printf("+ 600 days  : %s\n", icaltime_as_ctime(impl.last));
-}
-
-#endif
-
 static int next_unit(icalrecur_iterator *impl,
                      int by_unit, icalrecurrencetype_frequency frequency,
                      int (*next_sub_unit)(icalrecur_iterator *),
@@ -3693,18 +3660,6 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
     if (!impl || icaltime_compare(impl->last, impl->dtstart) < 0) {
         return icaltime_null_time();
     }
-
-#if 0 //  Mostly for testing -- users probably don't want/expect this
-    /* If last time is valid, return it */
-    if (impl->rule->count != 0 && impl->occurrence_no == impl->rule->count &&
-        (icaltime_is_null_time(impl->iend) ||
-         icaltime_compare(impl->last, impl->iend) <= 0) &&
-        check_contracting_rules(impl)) {
-
-        impl->occurrence_no--;
-        return impl->last;
-    }
-#endif
 
     int period_change = 1, prev_index;
     icalrecur_iterator impl_last = *impl;
