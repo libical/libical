@@ -1640,7 +1640,7 @@ static void icaltimezone_parse_zone_tab(void)
 
     icalerror_assert(builtin_timezones == NULL, "Parsing zones.tab file multiple times");
 
-    builtin_timezones = icalarray_new(sizeof(icaltimezone), 1024);
+    icalarray *timezones = icalarray_new(sizeof(icaltimezone), 1024);
 
     if (!use_builtin_tzdata) {
         zonedir = icaltzutil_get_zone_directory();
@@ -1657,6 +1657,9 @@ static void icaltimezone_parse_zone_tab(void)
 
     icalerror_assert(filename_len > 0, "Unable to locate a zoneinfo dir");
     if (filename_len == 0) {
+        // Set an empty builtin_timezones array if there's an error
+        builtin_timezones = timezones;
+
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
         return;
     }
@@ -1666,6 +1669,9 @@ static void icaltimezone_parse_zone_tab(void)
 
     filename = (char *)icalmemory_new_buffer(filename_len);
     if (!filename) {
+        // Set an empty builtin_timezones array if there's an error
+        builtin_timezones = timezones;
+
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return;
     }
@@ -1675,6 +1681,9 @@ static void icaltimezone_parse_zone_tab(void)
     icalmemory_free_buffer(filename);
     icalerror_assert(fp, "Cannot open the zonetab file for reading");
     if (!fp) {
+        // Set an empty builtin_timezones array if there's an error
+        builtin_timezones = timezones;
+
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
         return;
     }
@@ -1744,13 +1753,16 @@ static void icaltimezone_parse_zone_tab(void)
                 (double)longitude_seconds / 3600;
         }
 
-        icalarray_append(builtin_timezones, &zone);
+        icalarray_append(timezones, &zone);
 
 #ifdef ICALTIMEZONE_DEBUG_PRINT
         printf("Found zone: %s %f %f\n", location, zone.latitude, zone.longitude);
 #endif
     }
 #endif // __clang_analyzer__
+
+    builtin_timezones = timezones;
+
     fclose(fp);
 }
 
