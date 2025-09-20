@@ -330,8 +330,10 @@ struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype 
 struct icaldurationtype icaltime_subtract(struct icaltimetype t1, struct icaltimetype t2)
 {
     if ((!t1.is_date && t2.is_date) ||
-        (t1.is_date && !t2.is_date))
+        (t1.is_date && !t2.is_date)) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return icaldurationtype_bad_duration();
+    }
 
     struct icaldurationtype ret;
     if (t1.is_date) {

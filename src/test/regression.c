@@ -780,6 +780,30 @@ void test_component_foreach(void)
 
     icalcomponent_free(calendar);
 
+    calStr =
+        "BEGIN:VCALENDAR\n"
+        "BEGIN:VEVENT\n"
+        "DTSTART;20020402T114500Z\n"
+        "DTEND;20020402T124500Z\n"
+        "RRULE:FREQ=WEEKLY;INTERVAL=1;COUNT=6;BYDAY=TU,WE\n"
+        "RDATE;20020404T114500Z,20020403T014500Z,20020403T014500Z,\n"
+        " 20020403T114500Z,20020402T114500Z\n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n";
+
+    calendar = icalparser_parse_string(calStr);
+    event = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+
+    t_start = icaltime_from_string("20020402T114500Z");
+    t_end = icaltime_from_string("20020502T114500Z");
+
+    foundExpectedCnt = 0;
+    icalcomponent_foreach_recurrence(event, t_start, t_end, test_component_foreach_callback, &foundExpectedCnt);
+    printf("foundExpectedCnt: %d\n", foundExpectedCnt);
+    ok("Exactly eight instances were returned for an event with RRULE and duplicate RDATEs.", foundExpectedCnt == 8);
+
+    icalcomponent_free(calendar);
+
     for (i = 0; i < 3; i++) {
         /* Add one week with every run, so the first run will address the
         first recurrence instance, the second run the second instance,

@@ -850,6 +850,62 @@ static struct icaltimetype icaltime_at_midnight(const struct icaltimetype t)
     return icaltime_with_time(t, 0, 0, 0);
 }
 
+static icaltime_span icaltime_span_from_time(const struct icaltimetype t, const struct icaldurationtype d)
+{
+    icaltime_span ret;
+    ret.start =
+        icaltime_as_timet_with_zone(t,
+                                    t.zone ? t.zone : icaltimezone_get_utc_timezone());
+    ret.end =
+        icaltime_as_timet_with_zone(
+            icaltime_add(t, d),
+            t.zone ? t.zone : icaltimezone_get_utc_timezone());
+    return ret;
+}
+
+static icaltime_span icaltime_span_from_datetimeperiod(const struct icaldatetimeperiodtype p, const struct icaldurationtype d)
+{
+    struct icaltimetype start = p.time;
+    struct icaldurationtype dur = icaldurationtype_null_duration();
+
+    icaltime_span ret;
+    if (icaltime_is_null_time(start)) {
+        start = p.period.start;
+
+        if (icaltime_is_null_time(p.period.end)) {
+            dur = p.period.duration;
+        } else {
+            ret.end =
+                icaltime_as_timet_with_zone(
+                    p.period.end,
+                    start.zone ? start.zone : icaltimezone_get_utc_timezone());
+        }
+    } else {
+        dur = d;
+    }
+
+    ret.start =
+        icaltime_as_timet_with_zone(
+            start,
+            start.zone ? start.zone : icaltimezone_get_utc_timezone());
+
+    if (!icaldurationtype_is_null_duration(dur)) {
+        ret.end = icaltime_as_timet_with_zone(
+            icaltime_add(start, dur),
+            start.zone ? start.zone : icaltimezone_get_utc_timezone());
+    }
+    return ret;
+}
+
+static int icaldatetimeperiod_start_compare(const void *a, const void *b)
+{
+    const struct icaldatetimeperiodtype *adtp = a, *bdtp = b;
+    const struct icaltimetype
+        at = (!icaltime_is_null_time(adtp->time) ? adtp->time : adtp->period.start),
+        bt = (!icaltime_is_null_time(bdtp->time) ? bdtp->time : bdtp->period.start);
+    return icaltime_compare(at, bt);
+}
+
 void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                       struct icaltimetype start,
                                       struct icaltimetype end,
@@ -858,10 +914,15 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                        void *data),
                                       void *callback_data)
 {
-    struct icaltimetype dtstart, dtend;
-    icaltime_span recurspan, basespan, limit_span;
-    icaltime_t limit_start, limit_end;
+    struct icaltimetype dtstart, dtend, recur_time;
+    icaltime_span recurspan, basespan, limit_span,
+        rrule_span, rdate_span;
+    icaltime_t limit_start, limit_end, last_start;
     struct icaldurationtype dtduration;
+    time_t end_timet = icaltime_as_timet_with_zone(
+        end, end.zone ? end.zone : icaltimezone_get_utc_timezone());
+    icalarray *rdates;
+    size_t rdate_idx = 0;
 
     icalproperty *rrule, *rdate;
     icalpvl_elem property_iterator; /* for saving the iterator */
@@ -919,120 +980,114 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     limit_span.start = limit_start;
     limit_span.end = limit_end;
 
+    recurspan = basespan;
+    rrule_span.start = rdate_span.start =
+        last_start = end_timet + 1;
+
     /* Do the callback for the DTSTART entry, ONLY if there is no RRULE.
        Otherwise, the initial occurrence will be handled by the RRULE. */
     rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
     if ((rrule == NULL) &&
         !icalproperty_recurrence_is_excluded(comp, &dtstart, &dtstart)) {
+        last_start = basespan.start;
         /* call callback action */
         if (icaltime_span_overlaps(&basespan, &limit_span))
             (*callback)(comp, &basespan, callback_data);
     }
 
-    recurspan = basespan;
+    /* Now cycle through the rrule and rdate entries */
 
-    /* Now cycle through the rrule entries */
-    for (; rrule != NULL;
-         rrule = icalcomponent_get_next_property(comp, ICAL_RRULE_PROPERTY)) {
+    struct icaltimetype rrule_time = icaltime_null_time();
+    icalrecur_iterator *rrule_itr = NULL;
+    if (rrule != NULL) {
         struct icalrecurrencetype *recur = icalproperty_get_rrule(rrule);
         if (recur) {
-            icalrecur_iterator *rrule_itr = icalrecur_iterator_new(recur, dtstart);
-            struct icaltimetype rrule_time;
+            rrule_itr = icalrecur_iterator_new(recur, dtstart);
 
-            if (!rrule_itr)
-                continue;
+            if (rrule_itr) {
+                if (recur->count == 0) {
+                    icaltimetype mystart = start;
 
-            if (recur->count == 0) {
-                icaltimetype mystart = start;
+                    /* make sure we include any recurrence that ends in timespan */
+                    /* duration should be positive */
+                    dtduration.is_neg = 1;
+                    mystart = icaltime_add(mystart, dtduration);
+                    dtduration.is_neg = 0;
 
-                /* make sure we include any recurrence that ends in timespan */
-                /* duration should be positive */
-                dtduration.is_neg = 1;
-                mystart = icaltime_add(mystart, dtduration);
-                dtduration.is_neg = 0;
-
-                icalrecur_iterator_set_start(rrule_itr, mystart);
-            }
-
-            for (rrule_time = icalrecur_iterator_next(rrule_itr);
-                 !icaltime_is_null_time(rrule_time);
-                 rrule_time = icalrecur_iterator_next(rrule_itr)) {
-                /* if we have iterated past end time,
-                then no need to check any further */
-                if (icaltime_compare(rrule_time, end) > 0)
-                    break;
-
-                recurspan.start =
-                    icaltime_as_timet_with_zone(rrule_time,
-                                                rrule_time.zone ? rrule_time.zone : icaltimezone_get_utc_timezone());
-                recurspan.end =
-                    icaltime_as_timet_with_zone(
-                        icaltime_add(rrule_time, dtduration),
-                        rrule_time.zone ? rrule_time.zone : icaltimezone_get_utc_timezone());
-
-                /* save the iterator ICK! */
-                property_iterator = comp->property_iterator;
-
-                if (!icalproperty_recurrence_is_excluded(comp,
-                                                         &dtstart, &rrule_time)) {
-                    /* call callback action */
-                    if (icaltime_span_overlaps(&recurspan, &limit_span))
-                        (*callback)(comp, &recurspan, callback_data);
+                    icalrecur_iterator_set_start(rrule_itr, mystart);
                 }
-                comp->property_iterator = property_iterator;
-            } /* end of iteration over a specific RRULE */
-
-            icalrecur_iterator_free(rrule_itr);
+                rrule_time = icalrecur_iterator_next(rrule_itr);
+                if (!icaltime_is_null_time(rrule_time)) {
+                    rrule_span = icaltime_span_from_time(rrule_time, dtduration);
+                }
+            }
         }
-    } /* end of RRULE loop */
+    }
 
-    /* Now process RDATE entries */
+    struct icaldatetimeperiodtype rdate_period;
+    rdates = icalarray_new(sizeof(struct icaldatetimeperiodtype), 16);
     for (rdate = icalcomponent_get_first_property(comp, ICAL_RDATE_PROPERTY);
          rdate != NULL;
          rdate = icalcomponent_get_next_property(comp, ICAL_RDATE_PROPERTY)) {
-        struct icaldatetimeperiodtype rdate_period =
-            icalproperty_get_rdate(rdate);
-        struct icaltimetype rdate_start = rdate_period.time;
-        struct icaldurationtype rdate_duration = icaldurationtype_null_duration();
+        rdate_period = icalproperty_get_rdate(rdate);
+        icalarray_append(rdates, &rdate_period);
+    }
+    if (rdates->num_elements > 0) {
+        icalarray_sort(rdates, icaldatetimeperiod_start_compare);
+        rdate_period = *((struct icaldatetimeperiodtype *)icalarray_element_at(rdates, rdate_idx));
+        rdate_span = icaltime_span_from_datetimeperiod(rdate_period, dtduration);
+    }
 
-        /* RDATES can specify raw datetimes, periods, or dates. */
+    while (rdate_idx < rdates->num_elements || !icaltime_is_null_time(rrule_time)) {
+        if (rdate_idx >= rdates->num_elements ||
+            (!icaltime_is_null_time(rrule_time) &&
+             rrule_span.start < rdate_span.start)) {
+            /* use rrule time */
+            recurspan = rrule_span;
+            recur_time = rrule_time;
 
-        if (icaltime_is_null_time(rdate_start)) {
-            rdate_start = rdate_period.period.start;
-
-            if (icaltime_is_null_time(rdate_period.period.end)) {
-                rdate_duration = rdate_period.period.duration;
-            } else {
-                recurspan.end =
-                    icaltime_as_timet_with_zone(
-                        rdate_period.period.end,
-                        rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
+            rrule_time = icalrecur_iterator_next(rrule_itr);
+            if (!icaltime_is_null_time(rrule_time)) {
+                rrule_span = icaltime_span_from_time(rrule_time, dtduration);
             }
         } else {
-            rdate_duration = dtduration;
+            /* use rdate time */
+            recurspan = rdate_span;
+            recur_time = rdate_period.time;
+            if (icaltime_is_null_time(recur_time)) {
+                recur_time = rdate_period.period.start;
+            }
+
+            rdate_idx++;
+            if (rdate_idx < rdates->num_elements) {
+                rdate_period = *((struct icaldatetimeperiodtype *)icalarray_element_at(rdates, rdate_idx));
+                rdate_span = icaltime_span_from_datetimeperiod(rdate_period, dtduration);
+            }
         }
 
-        recurspan.start =
-            icaltime_as_timet_with_zone(
-                rdate_start,
-                rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
+        if (recurspan.start > end_timet)
+            break;
 
-        if (!icaldurationtype_is_null_duration(rdate_duration)) {
-            recurspan.end = icaltime_as_timet_with_zone(
-                icaltime_add(rdate_start, rdate_duration),
-                rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
-        }
+        if (last_start == recurspan.start)
+            continue;
+        last_start = recurspan.start;
 
         /* save the iterator ICK! */
         property_iterator = comp->property_iterator;
 
         if (!icalproperty_recurrence_is_excluded(comp,
-                                                 &dtstart, &rdate_start)) {
+                                                 &dtstart, &recur_time)) {
             /* call callback action */
             if (icaltime_span_overlaps(&recurspan, &limit_span))
                 (*callback)(comp, &recurspan, callback_data);
         }
         comp->property_iterator = property_iterator;
+    }
+
+    icalarray_free(rdates);
+
+    if (rrule_itr != NULL) {
+        icalrecur_iterator_free(rrule_itr);
     }
 }
 
