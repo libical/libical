@@ -64,6 +64,8 @@ for details about API changes since libical 3.x.
 - Improved handling of BYWEEKNO when BYDAY is not present
 - Fixed `icalcomponent_get_dtend()` and `icalcomponent_foreach_recurrence()`
     to correctly handle nominal durations
+- Fixed `icalcomponent_foreach_recurrence` to filter out duplicate
+    instances
 
 ## [3.0.21] - Unreleased
 
