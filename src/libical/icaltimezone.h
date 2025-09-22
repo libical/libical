@@ -210,8 +210,6 @@ LIBICAL_ICAL_EXPORT void icaltimezone_set_zone_directory(const char *path);
 /** Frees the memory dedicated to the zonefile directory */
 LIBICAL_ICAL_EXPORT void icaltimezone_free_zone_directory(void);
 
-LIBICAL_ICAL_EXPORT void icaltimezone_release_zone_tab(void);
-
 /*
  * @par Handling whether to use builtin timezone files
  */
