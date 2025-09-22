@@ -1334,8 +1334,10 @@ icalarray *icaltimezone_get_builtin_timezones(void)
 
 void icaltimezone_free_builtin_timezones(void)
 {
+    icaltimezone_builtin_lock();
     icaltimezone_array_free(builtin_timezones);
     builtin_timezones = 0;
+    icaltimezone_builtin_unlock();
 }
 
 icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
