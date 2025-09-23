@@ -1766,21 +1766,6 @@ static void icaltimezone_parse_zone_tab(void)
     fclose(fp);
 }
 
-void icaltimezone_release_zone_tab(void)
-{
-    size_t i;
-    icalarray *mybuiltin_timezones = builtin_timezones;
-
-    if (builtin_timezones == NULL)
-        return;
-
-    builtin_timezones = NULL;
-    for (i = 0; i < mybuiltin_timezones->num_elements; i++) {
-        icalmemory_free_buffer(((icaltimezone *)icalarray_element_at(mybuiltin_timezones, i))->location);
-    }
-    icalarray_free(mybuiltin_timezones);
-}
-
 /** @brief Loads the builtin VTIMEZONE data for the given timezone. */
 static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 {

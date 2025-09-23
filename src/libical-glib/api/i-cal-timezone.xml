@@ -187,9 +187,6 @@
     <method name="i_cal_timezone_free_zone_directory" corresponds="icaltimezone_free_zone_directory" kind="others" since="1.0">
         <comment xml:space="preserve">Frees memory dedicated to the zonefile directory.</comment>
     </method>
-    <method name="i_cal_timezone_release_zone_tab" corresponds="icaltimezone_release_zone_tab" kind="others" since="1.0">
-        <comment xml:space="preserve">Frees memory dedicated to the zonefile directory.</comment>
-    </method>
     <method name="i_cal_timezone_set_builtin_tzdata" corresponds="icaltimezone_set_builtin_tzdata" kind="set" since="2.0">
         <parameter type="gboolean" name="set" comment="Whether to use builtin timezones files"/>
         <comment xml:space="preserve">Sets whether to use builtin timezones files.</comment>

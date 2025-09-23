@@ -132,6 +132,9 @@ The following functions have been added:
 
 * `icalrecurrencetype_clear()` has been removed.
 
+* `icaltimezone_release_zone_tab()` has been removed.
+   Use `icaltimezone_free_builtin_timezones()  instead.
+
 * `icalrecurrencetype_rscale_is_supported()` has been removed as
    RSCALE=GREGORIAN is supported without libicu now.
    Replace `icalrecurrencetype_rscale_is_supported()` calls with a true condition.
