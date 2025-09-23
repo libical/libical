@@ -148,7 +148,7 @@ For more information about building CMake projects on Android see
   **Do NOT use for production code.**
 
 - GObject Introspection.  To generate GObject introspection "typelib"
-  files pass the -DGOBJECT_INTROSPECTION=True option to cmake.  You'll
+  files pass the -DLIBICAL_GOBJECT_INTROSPECTION=True option to cmake.  You'll
   need to have the GObject Introspection development package v0.6.7 or higher
   installed beforehand.
 
@@ -176,7 +176,7 @@ This C library can be built with bindings for these other languages:
   Don't mix ABI from C and C++ compilers.
 
 - Python bindings are built using gobject-introspection, which is enabled
-  by passing -DGOBJECT_INTROSPECTION=True to cmake.
+  by passing -DLIBICAL_GOBJECT_INTROSPECTION=True to cmake.
 
   Requires the GObject Introspection development package (see above).
 

@@ -40,7 +40,7 @@
 #  Default=false (build shared and static libs)
 #  Takes precedence over STATIC_ONLY
 #
-# -DGOBJECT_INTROSPECTION=[true|false]
+# -DLIBICAL_GOBJECT_INTROSPECTION=[true|false]
 #  Set to build GObject introspection "typelib" files
 #  Requires GObject Introspection development package (version MIN_GOBJECT_INTROSPECTION)
 #  Default=false (do not generate the introspection files)
@@ -62,7 +62,7 @@
 #
 # -DLIBICAL_GLIB_BUILD_DOCS=[true|false]
 #  Set to build libical-glib developer documentation
-#  Requires gi-docgen, GOBJECT_INTROSPECTION and LIBICAL_BUILD_DOCS options to be true.
+#  Requires gi-docgen, LIBICAL_GOBJECT_INTROSPECTION and LIBICAL_BUILD_DOCS options to be true.
 #  Default=true (build libical-glib developer documentation)
 #
 # -DLIBICAL_GLIB_CHECK_API_FILES=[true|false]
@@ -593,20 +593,21 @@ set(
 find_package(PkgConfig QUIET)
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
-# GOBJECT_INTROSPECTION might be disabled later by some devmode options
-libical_option(
+# LIBICAL_GOBJECT_INTROSPECTION might be disabled later by some devmode options
+libical_deprecated_option(
   GOBJECT_INTROSPECTION
+  LIBICAL_GOBJECT_INTROSPECTION
   "Build GObject introspection \"typelib\" files. \
   Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher."
   True
 )
-if(GOBJECT_INTROSPECTION)
+if(LIBICAL_GOBJECT_INTROSPECTION)
   if(NOT PKG_CONFIG_FOUND)
     message(
       FATAL_ERROR
       "You are attempting to build with GObject Introspection enabled, however that option is "
       "not supported unless pkg-config can be found.  Please install pkg-config and try again. "
-      "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake."
+      "You can disable GObject Introspection by passing -DLIBICAL_GOBJECT_INTROSPECTION=False to cmake."
     )
   endif()
 
@@ -629,7 +630,7 @@ if(GOBJECT_INTROSPECTION)
         "however that option is not supported when building static libraries only. "
         "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
         "if you really want to build with GObject Introspection. Alternatively, "
-        "you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to cmake)."
+        "you can disable GObject Introspection (by passing -DLIBICAL_GOBJECT_INTROSPECTION=False to cmake)."
       )
     endif()
   else()
@@ -637,7 +638,7 @@ if(GOBJECT_INTROSPECTION)
       FATAL_ERROR
       "You requested to build with GObject introspection, but the necessary development package "
       "is missing or too low a version (GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION} or higher is required). "
-      "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake."
+      "You can disable GObject Introspection by passing -DLIBICAL_GOBJECT_INTROSPECTION=False to cmake."
     )
   endif()
 endif()
@@ -655,11 +656,11 @@ if(LIBICAL_GLIB_VAPI)
       "you can disable this feature (by passing -DLIBICAL_GLIB_VAPI=False to cmake)."
     )
   endif()
-  if(NOT GOBJECT_INTROSPECTION)
+  if(NOT LIBICAL_GOBJECT_INTROSPECTION)
     message(
       FATAL_ERROR
       "You requested to build the Vala vapi but have not enabled the GObject Introspection. "
-      "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake."
+      "Please try again also passing -DLIBICAL_GOBJECT_INTROSPECTION=True to cmake."
     )
   endif()
 
@@ -892,7 +893,7 @@ if(LIBICAL_DEVMODE_LEAK_SANITIZER)
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
     set(LIBICAL_GLIB False)
-    set(GOBJECT_INTROSPECTION False)
+    set(LIBICAL_GOBJECT_INTROSPECTION False)
     set(LIBICAL_GLIB_BUILD_DOCS False)
     set(LIBICAL_GLIB_VAPI False)
   else()
@@ -922,7 +923,7 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
     set(LIBICAL_GLIB False)
-    set(GOBJECT_INTROSPECTION False)
+    set(LIBICAL_GOBJECT_INTROSPECTION False)
     set(LIBICAL_GLIB_BUILD_DOCS False)
     set(LIBICAL_GLIB_VAPI False)
   else()
@@ -950,7 +951,7 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
     set(LIBICAL_GLIB False)
-    set(GOBJECT_INTROSPECTION False)
+    set(LIBICAL_GOBJECT_INTROSPECTION False)
     set(LIBICAL_GLIB_BUILD_DOCS False)
     set(LIBICAL_GLIB_VAPI False)
   else()
@@ -1071,11 +1072,11 @@ if(LIBICAL_BUILD_DOCS)
         "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
-    if(NOT GOBJECT_INTROSPECTION)
+    if(NOT LIBICAL_GOBJECT_INTROSPECTION)
       message(
         FATAL_ERROR
         "You requested to build the libical-glib documentation but have not enabled the GObject Introspection. "
-        "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake. Alternatively, "
+        "Please try again also passing -DLIBICAL_GOBJECT_INTROSPECTION=True to cmake. Alternatively, "
         "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
