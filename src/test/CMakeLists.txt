@@ -127,7 +127,7 @@ macro(testme _name _srcs)
 endmacro()
 
 ########## libical-glib tests #########
-if(LIBICAL_GLIB AND GOBJECT_INTROSPECTION)
+if(LIBICAL_GLIB AND LIBICAL_GOBJECT_INTROSPECTION)
   add_subdirectory(libical-glib)
 endif()
 
