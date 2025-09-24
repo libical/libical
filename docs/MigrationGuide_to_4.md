@@ -16,6 +16,7 @@ User-specific:
 | ICAL_GLIB                    | LIBICAL_GLIB                         |
 | ICAL_GLIB_VAPI               | LIBICAL_GLIB_VAPI                    |
 | ICAL_GLIB_BUILD_DOCS         | LIBICAL_GLIB_BUILD_DOCS              |
+| USE_BUILTIN_TZDATA           | LIBICAL_ENABLE_BUILTIN_TZDATA        |
 | USE_32BIT_TIME_T             | LIBICAL_ENABLE_MSVC_32BIT_TIME_T     |
 | GOBJECT_INTROSPECTION        | LIBICAL_GOBJECT_INTROSPECTION        |
 | WITH_CXX_BINDINGS            | LIBICAL_CXX_BINDINGS                 |
