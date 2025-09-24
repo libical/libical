@@ -25,7 +25,7 @@
 #  Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
 #  Default=false
 #
-# -DUSE_BUILTIN_TZDATA=[true|false]
+# -DLIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
 #  Set to build using our own timezone data.
 #  Default=false (use the system timezone data on non-Windows systems)
 #  ALWAYS true on Windows systems
@@ -545,15 +545,16 @@ if(WIN32 OR WINCE)
 else()
   set(DEF_USE_BUILTIN_TZDATA False)
 endif()
-libical_option(
+libical_deprecated_option(
   USE_BUILTIN_TZDATA
+  LIBICAL_ENABLE_BUILTIN_TZDATA
   "(Careful) Build using libical's built-in timezone data, else use the system timezone data on non-Windows systems. \
   ALWAYS true on Windows. Non-Windows users should know what they're doing if they choose not to use system provided \
   timezone data. The libical project does not guarantee that the built-in timezone data is up-to-date."
   ${DEF_USE_BUILTIN_TZDATA}
 )
-mark_as_advanced(USE_BUILTIN_TZDATA)
-if(USE_BUILTIN_TZDATA)
+mark_as_advanced(LIBICAL_ENABLE_BUILTIN_TZDATA)
+if(LIBICAL_ENABLE_BUILTIN_TZDATA)
   set(USE_BUILTIN_TZDATA 1)
 else()
   set(USE_BUILTIN_TZDATA 0)
@@ -1047,7 +1048,7 @@ if(LIBICAL_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 if(USE_BUILTIN_TZDATA)
-  # use our zoneinfo if cmake is passed -DUSE_BUILTIN_TZDATA
+  # use our zoneinfo if cmake is passed -DLIBICAL_ENABLE_BUILTIN_TZDATA
   add_subdirectory(zoneinfo)
 endif()
 

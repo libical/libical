@@ -202,7 +202,7 @@ Use these CMake options to adjust the library behavior as follows:
   Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
   Default=false
 
-- USE_BUILTIN_TZDATA=[true|false]
+- LIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
   Set to build using our own (instead of the system's) timezone data.
   Default=false (use the system timezone data on non-Windows systems)
   ALWAYS true on Windows systems
