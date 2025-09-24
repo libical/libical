@@ -4273,6 +4273,58 @@ void test_x_parameter(void)
     icalcomponent_free(c);
 }
 
+void test_empty_property(void)
+{
+    icalcomponent *c;
+    icalproperty *p;
+    struct icaltimetype tt;
+
+    int estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(0);
+
+    static const char test_icalcomp_str[] =
+        "BEGIN:VEVENT\n"
+        "DESCRIPTION:\n"
+        "DTSTART;TZID=America/New_York:\n"
+        "END:VEVENT\n";
+
+#if ICAL_ALLOW_EMPTY_PROPERTIES == 0
+    static const char *test_icalcomp_str_out =
+        "BEGIN:VEVENT\r\n"
+        "X-LIC-ERROR;X-LIC-ERRORTYPE=VALUE-PARSE-ERROR:No value for DESCRIPTION \r\n"
+        " property. Removing entire property:\r\n"
+        "X-LIC-ERROR;X-LIC-ERRORTYPE=VALUE-PARSE-ERROR:No value for DTSTART \r\n"
+        " property. Removing entire property:\r\n"
+        "END:VEVENT\r\n";
+#else
+    static const char *test_icalcomp_str_out =
+        "BEGIN:VEVENT\r\n"
+        "DESCRIPTION:\r\n"
+        "DTSTART;TZID=America/New_York:\r\n"
+        "END:VEVENT\r\n";
+#endif
+    c = icalparser_parse_string((char *)test_icalcomp_str);
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+        exit(EXIT_FAILURE);
+    }
+
+    if (VERBOSE) {
+        printf("%s", icalcomponent_as_ical_string(c));
+    }
+
+    str_is("test results empty property", icalcomponent_as_ical_string(c), test_icalcomp_str_out);
+
+    p = icalcomponent_get_first_property(c, ICAL_DESCRIPTION_PROPERTY);
+    ok("description is empty", icalproperty_get_description(p) == NULL);
+    p = icalcomponent_get_first_property(c, ICAL_DTSTART_PROPERTY);
+    tt = icalproperty_get_dtstart(p);
+    ok("dtstart is empty", icaltime_is_null_time(tt));
+
+    icalcomponent_free(c);
+    icalerror_set_errors_are_fatal(estate);
+}
+
 void test_x_property(void)
 {
     icalcomponent *c;
@@ -6732,6 +6784,7 @@ int main(int argc, char *argv[])
     test_run("Test Action", test_action, do_test, do_header);
     test_run("Test Value Parameter", test_value_parameter, do_test, do_header);
     test_run("Test Empty Parameter", test_empty_parameter, do_test, do_header);
+    test_run("Test Empty property", test_empty_property, do_test, do_header);
     test_run("Test X property", test_x_property, do_test, do_header);
     test_run("Test X parameter", test_x_parameter, do_test, do_header);
     test_run("Test request status", test_requeststat, do_test, do_header);
