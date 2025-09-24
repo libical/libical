@@ -13,6 +13,7 @@ User-specific:
 | Old Name                     | New Name                             |
 |------------------------------|--------------------------------------|
 | ICAL_BUILD_DOCS              | LIBICAL_BUILD_DOCS                   |
+| ICAL_ERRORS_ARE_FATAL        | LIBICAL_ENABLE_ERRORS_ARE_FATAL      |
 | ICAL_GLIB                    | LIBICAL_GLIB                         |
 | ICAL_GLIB_VAPI               | LIBICAL_GLIB_VAPI                    |
 | ICAL_GLIB_BUILD_DOCS         | LIBICAL_GLIB_BUILD_DOCS              |
