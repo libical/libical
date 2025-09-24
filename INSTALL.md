@@ -194,7 +194,7 @@ This C library can be built with bindings for these other languages:
 
 Use these CMake options to adjust the library behavior as follows:
 
-- ICAL_ERRORS_ARE_FATAL=[true|false]
+- LIBICAL_ENABLE_ERRORS_ARE_FATAL=[true|false]
   Set to make icalerror_* calls abort instead of internally signaling an error.
   Default=false
 

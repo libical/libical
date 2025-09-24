@@ -14,7 +14,7 @@
 #  Build the Java bindings.
 #  Default=true
 #
-# -DICAL_ERRORS_ARE_FATAL=[true|false]
+# -DLIBICAL_ENABLE_ERRORS_ARE_FATAL=[true|false]
 #  Set to make icalerror_* calls abort instead of internally signaling an error
 #  Default=false
 #  Notes:
@@ -522,8 +522,13 @@ else()
   set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 endif()
 
-libical_option(ICAL_ERRORS_ARE_FATAL "icalerror_* calls will abort instead of internally signaling an error." False)
-if(ICAL_ERRORS_ARE_FATAL)
+libical_deprecated_option(
+  ICAL_ERRORS_ARE_FATAL
+  LIBICAL_ENABLE_ERRORS_ARE_FATAL
+  "icalerror_* calls will abort instead of internally signaling an error."
+  False
+)
+if(LIBICAL_ENABLE_ERRORS_ARE_FATAL)
   set(ICAL_ERRORS_ARE_FATAL 1)
 else()
   set(ICAL_ERRORS_ARE_FATAL 0)
