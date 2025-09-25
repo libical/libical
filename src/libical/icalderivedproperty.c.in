@@ -175,6 +175,22 @@ bool icalproperty_value_kind_is_valid(icalproperty_kind pkind, icalvalue_kind vk
     return false;
 }
 
+bool icalproperty_is_structured(icalproperty_kind pkind)
+{
+    int i, num_props;
+
+    num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
+    for (i = 0; i < num_props; i++) {
+        const struct icalproperty_map *map = &property_map[i];
+
+        if (map->kind == pkind) {
+            return (map->flags & ICAL_PROPERTY_IS_STRUCTURED);
+        }
+    }
+
+    return false;
+}
+
 bool icalproperty_value_kind_is_multivalued(icalproperty_kind pkind, icalvalue_kind *vkind)
 {
     int i, num_props;
