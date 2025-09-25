@@ -202,4 +202,6 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparamiter_next(icalparamiter *i);
 
 LIBICAL_ICAL_EXPORT icalparameter *icalparamiter_deref(icalparamiter *i);
 
+LIBICAL_ICAL_EXPORT bool icalproperty_is_structured(icalproperty_kind pkind);
+
 #endif /*ICALPROPERTY_H */

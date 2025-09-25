@@ -104,6 +104,7 @@ The following functions have been added:
 * `icaltzutil_set_zone_directory()`
 * `icalcomponent_clone()`
 * `icalproperty_clone()`
+* `icalproperty_is_structured()`
 * `icalparameter_clone()`
 * `icalparameter_kind_value_kind()`
 * `icalparameter_is_multivalued()`

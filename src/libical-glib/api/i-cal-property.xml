@@ -344,4 +344,9 @@
         <returns type="const gchar *" comment="The string representation of #ICalPropertyResourcetype."/>
         <comment xml:space="preserve">Converts the #ICalPropertyResourcetype to string.</comment>
     </method>
+    <method name="i_cal_property_is_structured" corresponds="icalproperty_is_structured" since="4.0">
+        <parameter type="ICalPropertyKind" name="kind" comment="The kind of #ICalProperty"/>
+        <returns type="gboolean" comment="true if structured, false if not."/>
+        <comment xml:space="preserve">Determine if the #ICalPropertyKind is a structured kind.</comment>
+    </method>
 </structure>
