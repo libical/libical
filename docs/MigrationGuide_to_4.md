@@ -4,7 +4,7 @@ A guide to help developers port their code from libical v3.x to libical 4.0.
 
 ## CMake options
 
-Some CMake option names have been renamed (deprecated) to the LIBICAL namespace.
+Some CMake option names have been removed or renamed (deprecated) to the LIBICAL namespace.
 
 Please change your build scripts to use the new names before the next major release.
 
@@ -12,6 +12,7 @@ User-specific:
 
 | Old Name                     | New Name                             |
 |------------------------------|--------------------------------------|
+| ICAL_ALLOW_EMPTY_PROPERTIES  | removed                              |
 | ICAL_BUILD_DOCS              | LIBICAL_BUILD_DOCS                   |
 | ICAL_ERRORS_ARE_FATAL        | LIBICAL_ENABLE_ERRORS_ARE_FATAL      |
 | ICAL_GLIB                    | LIBICAL_GLIB                         |
@@ -52,6 +53,14 @@ you can handle code that no longer exists in 4.0 with:
      <...old code for the libical 3.0 version ...>
      #endif
 ```
+
+## ICAL_ALLOW_EMPTY_PROPERTIES
+
+The `ICAL_ALLOW_EMPTY_PROPERTIES` conditional compile macro and accompanying CMake option `ICAL_ALLOW_EMPTY_PROPERTIES`
+are removed.
+
+To allow empty properties you can use the new runtime functions `icalproperty_set_allow_empty_properties()`
+and `icalproperty_get_allow_empty_properties()`.
 
 ## PVL_USE_MACROS
 
@@ -104,6 +113,8 @@ The following functions have been added:
 * `icaltzutil_set_zone_directory()`
 * `icalcomponent_clone()`
 * `icalproperty_clone()`
+* `icalproperty_set_allow_empty_properties()`
+* `icalproperty_get_allow_empty_properties()`
 * `icalparameter_clone()`
 * `icalparameter_kind_value_kind()`
 * `icalparameter_is_multivalued()`

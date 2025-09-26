@@ -180,9 +180,6 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
    error */
 #define ICAL_ERRORS_ARE_FATAL ${ICAL_ERRORS_ARE_FATAL}
 
-/* Define to prevent empty properties from being replaced with X-LIC-ERROR properties */
-#define ICAL_ALLOW_EMPTY_PROPERTIES ${ICAL_ALLOW_EMPTY_PROPERTIES}
-
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "${CMAKE_PROJECT_HOMEPAGE_URL}"
 

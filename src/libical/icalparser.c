@@ -1184,37 +1184,36 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             str = NULL;
 
         } else {
-#if ICAL_ALLOW_EMPTY_PROPERTIES
-            /* Don't replace empty properties with an error.
-               Set an empty length string (not null) as the value instead */
-            if (vcount == 0) {
-                icalproperty_set_value(prop, icalvalue_new(ICAL_NO_VALUE));
-            }
-
-            break;
-#else
-            if (vcount == 0) {
-                char temp[200]; /* HACK */
-
-                icalproperty_kind isa_prop_kind = icalproperty_isa(prop);
-                icalcomponent *tail = icalpvl_data(icalpvl_tail(parser->components));
-
-                snprintf(temp, sizeof(temp), "No value for %s property. Removing entire property",
-                         icalproperty_kind_to_string(isa_prop_kind));
-
-                insert_error(parser, tail, str, temp, ICAL_XLICERRORTYPE_VALUEPARSEERROR);
-
-                /* Remove the troublesome property */
-                icalcomponent_remove_property(tail, prop);
-                icalproperty_free(prop);
-                prop = 0;
-                tail = 0;
-                parser->state = ICALPARSER_ERROR;
-                return 0;
-            } else {
+            if (icalproperty_get_allow_empty_properties()) {
+                /* Don't replace empty properties with an error.
+                   Set an empty length string (not null) as the value instead */
+                if (vcount == 0) {
+                    icalproperty_set_value(prop, icalvalue_new(ICAL_NO_VALUE));
+                }
                 break;
+            } else {
+                if (vcount == 0) {
+                    char temp[200]; /* HACK */
+
+                    icalproperty_kind isa_prop_kind = icalproperty_isa(prop);
+                    icalcomponent *tail = icalpvl_data(icalpvl_tail(parser->components));
+
+                    snprintf(temp, sizeof(temp), "No value for %s property. Removing entire property",
+                             icalproperty_kind_to_string(isa_prop_kind));
+
+                    insert_error(parser, tail, str, temp, ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+
+                    /* Remove the troublesome property */
+                    icalcomponent_remove_property(tail, prop);
+                    icalproperty_free(prop);
+                    prop = 0;
+                    tail = 0;
+                    parser->state = ICALPARSER_ERROR;
+                    return 0;
+                } else {
+                    break;
+                }
             }
-#endif
         }
     }
 

@@ -16,6 +16,7 @@
 #include "vcardvalue.h"
 #include "icalerror.h"
 #include "icalmemory.h"
+#include "icalproperty.h"
 #include "icalpvl.h"
 
 #include <stdlib.h>
@@ -503,16 +504,12 @@ char *vcardproperty_as_vcard_string_r(vcardproperty *prop)
 
         if (str != 0) {
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
-#if ICAL_ALLOW_EMPTY_PROPERTIES == 0
-        } else {
+        } else if (!icalproperty_get_allow_empty_properties()) {
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, "ERROR: No Value");
-#endif
         }
         icalmemory_free_buffer(str);
-    } else {
-#if ICAL_ALLOW_EMPTY_PROPERTIES == 0
+    } else if (!icalproperty_get_allow_empty_properties()) {
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, "ERROR: No Value");
-#endif
     }
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
