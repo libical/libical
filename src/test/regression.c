@@ -552,7 +552,7 @@ void test_components(void)
     icalcomponent_free(c);
 
     estate = icalerror_get_errors_are_fatal();
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
     c = icalcomponent_new_from_string(bad_child);
     ok("parse failed as expected", (c == NULL));
     icalcomponent_free(c);
@@ -1709,7 +1709,7 @@ void test_duration(void)
     }
     int_is("PT10H10M10S", icaldurationtype_as_int(d), 36610);
 
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
 
     /* Test conversion of bad input */
 
@@ -1749,7 +1749,7 @@ void test_duration(void)
     }
     int_is("T10H", icaldurationtype_as_int(d), 0);
 
-    icalerror_set_errors_are_fatal(1);
+    icalerror_set_errors_are_fatal(true);
 
     d = icaldurationtype_from_int(4233600);
     if (VERBOSE) {
@@ -2000,7 +2000,7 @@ void do_test_time(const char *zone)
     icaltimezone *azone, *utczone;
     char msg[256];
 
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
 
     azone = icaltimezone_get_builtin_timezone(zone);
     utczone = icaltimezone_get_utc_timezone();
@@ -2312,7 +2312,7 @@ void do_test_time(const char *zone)
     ok("Converted time +200d in zone America/Los_Angeles is 2001-05-22 11:30:30",
        (strncmp(ictt_as_string(icttla), "2001-05-22 11:30:30", 19) == 0));
 
-    icalerror_set_errors_are_fatal(1);
+    icalerror_set_errors_are_fatal(true);
 
     /* Do some checks for icaltime_compare */
     if (VERBOSE) {
@@ -2799,7 +2799,7 @@ void test_convenience(void)
 
     icalcomponent_free(c);
 
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
 
     c = icalcomponent_vanew(
         ICAL_VCALENDAR_COMPONENT,
@@ -2849,7 +2849,7 @@ void test_convenience(void)
        (0 == strcmp("1997-08-01 13:30:00 Z UTC", ictt_as_string(icalcomponent_get_dtend(c)))));
     ok("Duration is 90 m", (duration == 90));
 
-    icalerror_set_errors_are_fatal(1);
+    icalerror_set_errors_are_fatal(true);
 
     icalcomponent_free(c);
 
@@ -2971,7 +2971,7 @@ void test_time_parser(void)
 {
     struct icaltimetype tt;
 
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
 
     tt = icaltime_from_string("19970101T1000");
     ok("19970101T1000 is null time", icaltime_is_null_time(tt));
@@ -3000,7 +3000,7 @@ void test_time_parser(void)
         printf("%s\n", icaltime_as_ctime(tt));
     }
 
-    icalerror_set_errors_are_fatal(1);
+    icalerror_set_errors_are_fatal(true);
 }
 
 void test_recur_parser(void)
@@ -4382,8 +4382,8 @@ void test_empty_property(void)
     icalproperty *p;
     struct icaltimetype tt;
 
-    int estate = icalerror_get_errors_are_fatal();
-    icalerror_set_errors_are_fatal(0);
+    bool estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(false);
 
     static const char test_icalcomp_str[] =
         "BEGIN:VEVENT\n"
@@ -4860,7 +4860,7 @@ void test_geo_props(void)
 
     /* failure situations */
     estate = icalerror_get_errors_are_fatal();
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
     c = icalparser_parse_string("BEGIN:VEVENT\n"
                                 "GEO:-0a;+0\n"
                                 "END:VEVENT\n");
@@ -5838,7 +5838,7 @@ test_icalvalue_resets_timezone_on_set(void)
     int estate;
 
     estate = icalerror_get_errors_are_fatal();
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
 
     /* First try without calling 'set' */
     comp = icalcomponent_new_from_string(strcomp);

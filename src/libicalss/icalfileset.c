@@ -123,9 +123,9 @@ icalcluster *icalfileset_produce_icalcluster(const char *path)
     icalset *fileset;
     icalcluster *ret;
 
-    int errstate = icalerror_get_errors_are_fatal();
+    bool errstate = icalerror_get_errors_are_fatal();
 
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
 
     fileset = icalfileset_new_reader(path);
 
