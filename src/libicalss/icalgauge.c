@@ -418,8 +418,9 @@ void icalgauge_dump(icalgauge *gauge)
     for (p = icalpvl_head(gauge->select); p != 0; p = icalpvl_next(p)) {
         struct icalgauge_where *w = icalpvl_data(p);
 
-        if (!w)
+        if (!w) {
             continue;
+        }
 
         if (w->comp != ICAL_NO_COMPONENT) {
             printf("%s ", icalcomponent_kind_to_string(w->comp));
@@ -451,8 +452,9 @@ void icalgauge_dump(icalgauge *gauge)
     for (p = icalpvl_head(gauge->where); p != 0; p = icalpvl_next(p)) {
         struct icalgauge_where *w = icalpvl_data(p);
 
-        if (!w)
+        if (!w) {
             continue;
+        }
 
         if (w->logic != ICALGAUGELOGIC_NONE) {
             printf("%d ", w->logic);

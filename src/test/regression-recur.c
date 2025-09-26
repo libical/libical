@@ -89,8 +89,9 @@ void test_recur_file(void)
     (void)signal(SIGALRM, sig_alrm);
 #endif
     file = getenv("ICAL_RECUR_FILE");
-    if (!file)
+    if (!file) {
         file = TEST_DATADIR "/recur.txt";
+    }
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
     alarm(15); /* to get file lock */
@@ -141,8 +142,9 @@ void test_recur_file(void)
 
         tt = icaltime_as_timet(start);
 
-        if (VERBOSE)
+        if (VERBOSE) {
             printf("#### %s\n", icalctime(&tt));
+        }
 
         icalrecur_iterator_free(ritr);
 
@@ -151,8 +153,9 @@ void test_recur_file(void)
              !icaltime_is_null_time(next);
              next = icalrecur_iterator_next(ritr)) {
             tt = icaltime_as_timet(next);
-            if (VERBOSE)
+            if (VERBOSE) {
                 printf("  %s", icalctime(&tt));
+            }
         }
 
         icalrecur_iterator_free(ritr);

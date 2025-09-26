@@ -34,22 +34,25 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
 
     null_p = p;
 
-    if (s == 0)
+    if (s == 0) {
         goto error;
+    }
 
     start = s;
     end = strchr(s, '/');
 
-    if (end == 0)
+    if (end == 0) {
         goto error;
+    }
 
     *end = 0;
     end++;
 
     p.start = icaltime_from_string(start);
 
-    if (icaltime_is_null_time(p.start))
+    if (icaltime_is_null_time(p.start)) {
         goto error;
+    }
 
     es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
@@ -61,8 +64,9 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
     if (icaltime_is_null_time(p.end)) {
         p.duration = icaldurationtype_from_string(end);
 
-        if (icaldurationtype_is_null_duration(p.duration))
+        if (icaldurationtype_is_null_duration(p.duration)) {
             goto error;
+        }
     }
 
     icalerrno = e;

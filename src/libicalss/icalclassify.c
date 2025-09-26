@@ -125,8 +125,9 @@ icalproperty *icalclassify_find_attendee(const icalcomponent *c, const char *att
         char *this_upn;
         char *this_attendee = icalclassify_lowercase(icalproperty_get_attendee(p));
 
-        if (!this_attendee)
+        if (!this_attendee) {
             continue;
+        }
 
         this_upn = strchr(this_attendee, ':');
 
@@ -242,8 +243,9 @@ void icalssutil_get_parts(icalcomponent *c, struct icalclassify_parts *parts)
                 parts->reply_partstat = icalparameter_get_partstat(param);
             }
             attendee = icalproperty_get_attendee(p);
-            if (attendee)
+            if (attendee) {
                 parts->reply_attendee = strdup(attendee);
+            }
         }
     }
 }
@@ -279,8 +281,9 @@ static bool icalssutil_is_rescheduled(const icalcomponent *a, const icalcomponen
             /* Return true if the property exists in one component and not
                the other */
             return true;
-        } else if (!p1 && !p2)
+        } else if (!p1 && !p2) {
             continue;
+        }
 
         temp1 = icalproperty_as_ical_string_r(p1);
         temp2 = icalproperty_as_ical_string_r(p2);

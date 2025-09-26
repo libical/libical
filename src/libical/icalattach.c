@@ -94,8 +94,9 @@ void icalattach_unref(icalattach *attach)
 
     attach->refcount--;
 
-    if (attach->refcount != 0)
+    if (attach->refcount != 0) {
         return;
+    }
 
     if (attach->is_url) {
         icalmemory_free_buffer(attach->u.url.url);

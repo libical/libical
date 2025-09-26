@@ -75,8 +75,9 @@ static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind)
 {
     icalcomponent *comp;
 
-    if (!icalcomponent_kind_is_valid(kind))
+    if (!icalcomponent_kind_is_valid(kind)) {
         return NULL;
+    }
 
     if ((comp = (icalcomponent *)icalmemory_new_buffer(sizeof(icalcomponent))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -254,8 +255,9 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
 
     buf = icalmemory_new_buffer(buf_size);
-    if (buf == NULL)
+    if (buf == NULL) {
         return NULL;
+    }
 
     buf_ptr = buf;
 
@@ -513,11 +515,13 @@ void icalcomponent_add_component(icalcomponent *parent, icalcomponent *child)
         /* Add the VTIMEZONE to our array. */
         /* FIXME: Currently we are also creating this array when loading in
            a builtin VTIMEZONE, when we don't need it. */
-        if (!parent->timezones)
+        if (!parent->timezones) {
             parent->timezones = icaltimezone_array_new();
+        }
 
-        if (parent->timezones)
+        if (parent->timezones) {
             icaltimezone_array_append_from_vtimezone(parent->timezones, child);
+        }
 
         /* Flag that we need to sort it before doing any binary searches. */
         parent->timezones_sorted = 0;
@@ -760,8 +764,9 @@ bool icalproperty_recurrence_is_excluded(icalcomponent *comp,
 
                 exrule_time = icalrecur_iterator_next(exrule_itr);
 
-                if (icaltime_is_null_time(exrule_time))
+                if (icaltime_is_null_time(exrule_time)) {
                     break;
+                }
 
                 result = icaltime_compare(exrule_time, *recurtime);
                 if (result == 0) {
@@ -770,13 +775,15 @@ bool icalproperty_recurrence_is_excluded(icalcomponent *comp,
                     return true;
                     /** MATCH **/
                 }
-                if (result == 1)
+                if (result == 1) {
                     break;
+                }
                 /** exrule_time > recurtime **/
             }
 
-            if (exrule_itr)
+            if (exrule_itr) {
                 icalrecur_iterator_free(exrule_itr);
+            }
         }
     }
     comp->property_iterator = property_iterator;
@@ -927,8 +934,9 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     icalproperty *rrule, *rdate;
     icalpvl_elem property_iterator; /* for saving the iterator */
 
-    if (comp == NULL || callback == NULL)
+    if (comp == NULL || callback == NULL) {
         return;
+    }
 
     dtstart = icalcomponent_get_dtstart(comp);
 
@@ -937,8 +945,9 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         /* VTODO with no DTSTART - use DUE */
         dtstart = icalcomponent_get_due(comp);
     }
-    if (icaltime_is_null_time(dtstart))
+    if (icaltime_is_null_time(dtstart)) {
         return;
+    }
 
     /* The end time could be specified as either a DTEND, a DURATION or be missing */
     /* icalcomponent_get_dtend takes care of these cases. */
@@ -991,8 +1000,9 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         !icalproperty_recurrence_is_excluded(comp, &dtstart, &dtstart)) {
         last_start = basespan.start;
         /* call callback action */
-        if (icaltime_span_overlaps(&basespan, &limit_span))
+        if (icaltime_span_overlaps(&basespan, &limit_span)) {
             (*callback)(comp, &basespan, callback_data);
+        }
     }
 
     /* Now cycle through the rrule and rdate entries */
@@ -1065,11 +1075,13 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
             }
         }
 
-        if (recurspan.start > end_timet)
+        if (recurspan.start > end_timet) {
             break;
+        }
 
-        if (last_start == recurspan.start)
+        if (last_start == recurspan.start) {
             continue;
+        }
         last_start = recurspan.start;
 
         /* save the iterator ICK! */
@@ -1078,8 +1090,9 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         if (!icalproperty_recurrence_is_excluded(comp,
                                                  &dtstart, &recur_time)) {
             /* call callback action */
-            if (icaltime_span_overlaps(&recurspan, &limit_span))
+            if (icaltime_span_overlaps(&recurspan, &limit_span)) {
                 (*callback)(comp, &recurspan, callback_data);
+            }
         }
         comp->property_iterator = property_iterator;
     }
@@ -2121,8 +2134,9 @@ void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_m
        For each VTIMEZONE found, check if we need to add it to comp and if we
        need to rename it and all TZID references to it. */
     tzids_to_rename = icalarray_new(sizeof(char *), 16);
-    if (!tzids_to_rename)
+    if (!tzids_to_rename) {
         return;
+    }
 
     subcomp = icalcomponent_get_first_component(comp_to_merge, ICAL_VTIMEZONE_COMPONENT);
     while (subcomp) {
@@ -2173,12 +2187,14 @@ static void icalcomponent_merge_vtimezone(icalcomponent *comp,
 
     /* Get the TZID of the VTIMEZONE. */
     tzid_prop = icalcomponent_get_first_property(vtimezone, ICAL_TZID_PROPERTY);
-    if (!tzid_prop)
+    if (!tzid_prop) {
         return;
+    }
 
     tzid = icalproperty_get_tzid(tzid_prop);
-    if (!tzid)
+    if (!tzid) {
         return;
+    }
 
     /* See if there is already a VTIMEZONE in comp with the same TZID. */
     existing_vtimezone = icalcomponent_get_timezone(comp, tzid);
@@ -2193,8 +2209,9 @@ static void icalcomponent_merge_vtimezone(icalcomponent *comp,
 
     /* If the TZID has a '/' prefix, then we don't have to worry about the
        clashing TZIDs, as they are supposed to be exactly the same VTIMEZONE. */
-    if (tzid[0] == '/')
+    if (tzid[0] == '/') {
         return;
+    }
 
     /* Now we have two VTIMEZONEs with the same TZID (which isn't a globally
        unique one), so we compare the VTIMEZONE components to see if they are
@@ -2279,8 +2296,9 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
                 /* Convert the suffix to an integer and remember the maximum numeric
                    suffix found. */
                 suffix = atoi(existing_tzid + existing_tzid_len);
-                if (max_suffix < suffix)
+                if (max_suffix < suffix) {
                     max_suffix = suffix;
+                }
             }
         }
     }
@@ -2342,8 +2360,9 @@ static void icalcomponent_rename_tzids_callback(icalparameter *param, void *data
     size_t i;
 
     tzid = icalparameter_get_tzid(param);
-    if (!tzid)
+    if (!tzid) {
         return;
+    }
 
     /* Step through the rename table to see if the current TZID matches
        any of the ones we want to rename. */
@@ -2377,8 +2396,9 @@ void icalcomponent_foreach_tzid(icalcomponent *comp,
             kind == ICAL_EXDATE_PROPERTY ||
             kind == ICAL_RDATE_PROPERTY) {
             param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER);
-            if (param)
+            if (param) {
                 (*callback)(param, callback_data);
+            }
         }
 
         prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
@@ -2399,8 +2419,9 @@ icaltimezone *icalcomponent_get_timezone(icalcomponent *comp, const char *tzid)
     int cmp;
     const char *zone_tzid;
 
-    if (!comp->timezones)
+    if (!comp->timezones) {
         return NULL;
+    }
 
     /* Sort the array if necessary (by the TZID string). */
     if (!comp->timezones_sorted) {
@@ -2461,21 +2482,25 @@ static int icalcomponent_compare_vtimezones(icalcomponent *vtimezone1, icalcompo
 
     /* Get the TZID property of the first VTIMEZONE. */
     prop1 = icalcomponent_get_first_property(vtimezone1, ICAL_TZID_PROPERTY);
-    if (!prop1)
+    if (!prop1) {
         return -1;
+    }
 
     tzid1 = icalproperty_get_tzid(prop1);
-    if (!tzid1)
+    if (!tzid1) {
         return -1;
+    }
 
     /* Get the TZID property of the second VTIMEZONE. */
     prop2 = icalcomponent_get_first_property(vtimezone2, ICAL_TZID_PROPERTY);
-    if (!prop2)
+    if (!prop2) {
         return -1;
+    }
 
     tzid2 = icalproperty_get_tzid(prop2);
-    if (!tzid2)
+    if (!tzid2) {
         return -1;
+    }
 
     /* Copy the second TZID, and set the property to the same as the first
        TZID, since we don't care if these match of not. */
@@ -2643,8 +2668,9 @@ static int prop_compare(void *a, void *b)
 
 static inline int compare_nullptr(const void *a, const void *b)
 {
-    if (!a == !b)
+    if (!a == !b) {
         return 0;
+    }
 
     // non-NULL sorts before NULL
     return a ? -1 : 1;
@@ -2786,8 +2812,9 @@ void icalcomponent_normalize(icalcomponent *comp)
     icalpvl_list sorted_comps;
 
     icalerror_check_arg(comp != 0, "comp");
-    if (!comp)
+    if (!comp) {
         return;
+    }
 
     sorted_props = icalpvl_newlist();
     sorted_comps = icalpvl_newlist();

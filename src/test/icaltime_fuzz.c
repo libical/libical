@@ -45,8 +45,9 @@ int main(void)
     }; // dtstart
 
     v1 = icaltimezone_new(); // zone
-    if (v1 == NULL)
+    if (v1 == NULL) {
         return 0;
+    }
 
     icaltimetype v3 = {
         3,

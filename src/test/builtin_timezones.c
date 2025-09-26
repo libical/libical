@@ -135,8 +135,9 @@ int main(void)
                     tried++;
 
                     zz2++;
-                    if (zz2 >= (long)builtin_timezones->num_elements)
+                    if (zz2 >= (long)builtin_timezones->num_elements) {
                         zz2 = -1;
+                    }
                 }
             }
         }

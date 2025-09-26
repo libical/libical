@@ -50,8 +50,9 @@ int main(void)
         zone = (icaltimezone *)icalarray_element_at(timezones, i);
         zone_location = icaltimezone_get_location(zone);
         zonedef_printed = 0;
-        if (!zone_location)
+        if (!zone_location) {
             continue;
+        }
 
         /*
          * select this location for glibc: needs support for TZ=<location>
@@ -104,8 +105,9 @@ int main(void)
                 struct tm utc_tm;
 
                 memset(&utc_tm, 0, sizeof(struct tm));
-                if (!icalgmtime_r(&curr_time, &utc_tm))
+                if (!icalgmtime_r(&curr_time, &utc_tm)) {
                     memset(&utc_tm, 0, sizeof(utc_tm));
+                }
 
                 printf(
                     "%s: day %03d: %s: %04d-%02d-%02d %02d:%02d:%02d UTC = "

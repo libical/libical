@@ -393,8 +393,9 @@ static char *parse_posix_rule(char *p,
         error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH_DAY], doy_t.day);
     }
 
-    if (error)
+    if (error) {
         return NULL;
+    }
 
     return p;
 }
@@ -995,20 +996,25 @@ error:
         icalrecurrencetype_unref(daylight.final_recur);
     }
 
-    if (f)
+    if (f) {
         fclose(f);
+    }
 
-    if (full_path)
+    if (full_path) {
         icalmemory_free_buffer(full_path);
+    }
 
-    if (transitions)
+    if (transitions) {
         icalmemory_free_buffer(transitions);
+    }
 
-    if (r_trans)
+    if (r_trans) {
         icalmemory_free_buffer(r_trans);
+    }
 
-    if (trans_idx)
+    if (trans_idx) {
         icalmemory_free_buffer(trans_idx);
+    }
 
     if (types) {
         for (i = 0; i < num_types; i++) {
@@ -1019,14 +1025,17 @@ error:
         icalmemory_free_buffer(types);
     }
 
-    if (znames)
+    if (znames) {
         icalmemory_free_buffer(znames);
+    }
 
-    if (leaps)
+    if (leaps) {
         icalmemory_free_buffer(leaps);
+    }
 
-    if (tzid)
+    if (tzid) {
         icalmemory_free_buffer(tzid);
+    }
 
     return tz_comp;
 }

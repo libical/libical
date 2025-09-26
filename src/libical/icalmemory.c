@@ -70,8 +70,9 @@ static pthread_once_t ring_key_once = PTHREAD_ONCE_INIT;
 
 static void ring_destroy(void *buf)
 {
-    if (buf)
+    if (buf) {
         icalmemory_free_ring_byval((buffer_ring *)buf);
+    }
 
     pthread_setspecific(ring_key, NULL);
 }
@@ -92,8 +93,9 @@ static buffer_ring *buffer_ring_new(void)
     int i;
 
     br = (buffer_ring *)icalmemory_new_buffer(sizeof(buffer_ring));
-    if (!br)
+    if (!br) {
         return NULL;
+    }
 
     for (i = 0; i < BUFFER_RING_SIZE; i++) {
         br->ring[i] = 0;
@@ -203,8 +205,9 @@ void icalmemory_free_ring(void)
     buffer_ring *br;
 
     br = get_buffer_ring();
-    if (!br)
+    if (!br) {
         return;
+    }
 
     icalmemory_free_ring_byval(br);
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
@@ -219,13 +222,15 @@ char *icalmemory_tmp_copy(const char *str)
 {
     char *b;
 
-    if (!str || str[0] == '\0')
+    if (!str || str[0] == '\0') {
         return NULL;
+    }
 
     b = icalmemory_tmp_buffer(strlen(str) + 1);
 
-    if (!b)
+    if (!b) {
         return NULL;
+    }
 
     strcpy(b, str);
 
@@ -237,13 +242,15 @@ char *icalmemory_strdup(const char *s)
     size_t l;
     char *res;
 
-    if (!s)
+    if (!s) {
         return NULL;
+    }
 
     l = (strlen(s) + 1) * sizeof(char);
     res = (char *)icalmemory_new_buffer(l);
-    if (res == NULL)
+    if (res == NULL) {
         return NULL;
+    }
 
     memcpy(res, s, l);
 

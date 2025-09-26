@@ -81,8 +81,10 @@ void vcardstructured_free(vcardstructuredtype *s)
 {
     unsigned i;
 
-    for (i = 0; i < s->num_fields; i++)
-        if (s->field[i])
+    for (i = 0; i < s->num_fields; i++) {
+        if (s->field[i]) {
             vcardstrarray_free(s->field[i]);
+        }
+    }
     icalmemory_free_buffer((void *)s);
 }

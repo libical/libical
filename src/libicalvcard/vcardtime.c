@@ -107,16 +107,18 @@ bool vcardtime_is_valid_time(const struct vcardtimetype t)
         return false;
     }
 
-    if (t.minute == -1 && t.hour != -1 && t.second != -1)
+    if (t.minute == -1 && t.hour != -1 && t.second != -1) {
         return false;
+    }
 
     switch (t.month) {
     case 0:
         return false;
 
     case -1:
-        if (t.year != -1 && t.day != -1)
+        if (t.year != -1 && t.day != -1) {
             return false;
+        }
 
         days = 31;
         break;
@@ -126,15 +128,17 @@ bool vcardtime_is_valid_time(const struct vcardtimetype t)
         break;
 
     default:
-        if (t.month > 12)
+        if (t.month > 12) {
             return false;
+        }
 
         days = days_in_month[t.month];
         break;
     }
 
-    if (t.day > days)
+    if (t.day > days) {
         return false;
+    }
 
     return true;
 }
@@ -392,8 +396,9 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
     }
 
     t->utcoffset = (int)(60 * offset_h + offset_m);
-    if (*sign == '-')
+    if (*sign == '-') {
         t->utcoffset = -t->utcoffset;
+    }
 
     newstr = (char *)str + nchar;
     return newstr;
