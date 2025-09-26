@@ -581,11 +581,13 @@ static int icalrecur_add_byrules(struct icalrecur_parser *parser, icalrecurrence
      */
     if (by == &parser->rt->by[ICAL_BY_HOUR] ||
         by == &parser->rt->by[ICAL_BY_MINUTE] ||
-        by == &parser->rt->by[ICAL_BY_SECOND])
+        by == &parser->rt->by[ICAL_BY_SECOND]) {
         sort_byrules(by);
+    }
     /* BYSETPOS is sorted specially */
-    else if (by == &parser->rt->by[ICAL_BY_SET_POS])
+    else if (by == &parser->rt->by[ICAL_BY_SET_POS]) {
         sort_bysetpos(by);
+    }
 
     return 0;
 }
@@ -749,8 +751,9 @@ void icalrecurrencetype_unref(struct icalrecurrencetype *recur)
 
     recur->refcount--;
 
-    if (recur->refcount != 0)
+    if (recur->refcount != 0) {
         return;
+    }
 
     icalrecurrencetype_free(recur, 1);
 }
@@ -896,8 +899,9 @@ struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
             } else {
                 parser.rt->count = atoi(value);
                 /* don't allow count to be less than 1 */
-                if (parser.rt->count < 1)
+                if (parser.rt->count < 1) {
                     r = -1;
+                }
             }
         } else if (strcasecmp(name, "UNTIL") == 0) {
             if (parser.rt->count > 0 || !icaltime_is_null_time(parser.rt->until)) {
@@ -905,8 +909,9 @@ struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
                 r = -1;
             } else {
                 parser.rt->until = icaltime_from_string(value);
-                if (icaltime_is_null_time(parser.rt->until))
+                if (icaltime_is_null_time(parser.rt->until)) {
                     r = -1;
+                }
             }
         } else if (strcasecmp(name, "INTERVAL") == 0) {
             if (parser.rt->interval > 1) {
@@ -916,8 +921,9 @@ struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
                 parser.rt->interval = (short)atoi(value);
                 /* don't allow an interval to be less than 1
                    (RFC specifies an interval must be a positive integer) */
-                if (parser.rt->interval < 1)
+                if (parser.rt->interval < 1) {
                     r = -1;
+                }
             }
         } else if (strcasecmp(name, "WKST") == 0) {
             if (parser.rt->week_start != ICAL_MONDAY_WEEKDAY) {
@@ -1372,8 +1378,9 @@ static void __set_month(icalrecur_iterator *impl, int month)
     month = icalrecurrencetype_month_month(month) - 1; /* UCal is 0-based */
 
     ucal_set(impl->rscale, UCAL_MONTH, (int32_t)month);
-    if (is_leap_month)
+    if (is_leap_month) {
         ucal_set(impl->rscale, UCAL_IS_LEAP_MONTH, 1);
+    }
 }
 
 static int set_month(icalrecur_iterator *impl, int month)
@@ -1658,8 +1665,9 @@ static int validate_byrule(icalrecur_iterator *impl,
         for (idx = 0; idx < by_ptr->size; idx++) {
             short val = decode_val ? decode_val(&by_ptr->data[idx], decode_flags) : by_ptr->data[idx];
 
-            if (abs(val) > max)
+            if (abs(val) > max) {
                 return 0;
+            }
         }
     }
 
@@ -2005,8 +2013,9 @@ static int get_week_number(icalrecur_iterator *impl, struct icaltimetype tt)
 
     /* Normalize day of week so that week_start day is 1 */
     dow = icaltime_day_of_week(tt) - (int)(impl->rule->week_start - 1);
-    if (dow <= 0)
+    if (dow <= 0) {
         dow += 7;
+    }
 
     week = (icaltime_day_of_year(tt) - dow + 10) / 7;
     if (week < 1) {
@@ -2217,8 +2226,9 @@ static void adjust_to_byday(icalrecur_iterator *impl)
     short dow = (short)(impl->bydata[ICAL_BY_DAY].by.data[0] - this_dow);
 
     /* Normalize day of week around week start */
-    if (dow != 0 && this_dow < (short)impl->rule->week_start)
+    if (dow != 0 && this_dow < (short)impl->rule->week_start) {
         dow -= 7;
+    }
 
     if ((this_dow < impl->bydata[ICAL_BY_DAY].by.data[0] && dow >= 0) || dow < 0) {
         /* initial time is after first day of ICAL_BY_DAY data */
@@ -2396,8 +2406,9 @@ static int __day_diff(icalrecur_iterator *impl, icaltimetype a, icaltimetype b)
 
         diff = get_days_in_year(impl, year) -
                get_day_of_year(impl, a.year, a.month, a.day);
-        while (++year < b.year)
+        while (++year < b.year) {
             diff += get_days_in_year(impl, year);
+        }
         diff += get_day_of_year(impl, b.year, b.month, b.day);
 
         if (flipped) {
@@ -2423,8 +2434,9 @@ static void increment_month(icalrecur_iterator *impl, int inc)
             icalrecurrence_iterator_by_data *bydata = &impl->bydata[ICAL_BY_MONTH];
             for (bydata->index = 0;
                  bydata->index < bydata->by.size; bydata->index++) {
-                if (this.month == bydata->by.data[bydata->index])
+                if (this.month == bydata->by.data[bydata->index]) {
                     return;
+                }
             }
 
             __increment_month(impl, inc);
@@ -2608,8 +2620,9 @@ static void expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
                 continue;
 
             case ICAL_SKIP_FORWARD:
-                if (mday > 0)
+                if (mday > 0) {
                     this_month++; /* Next month */
+                }
 
                 if (this_month > get_months_in_year(impl, year)) {
                     doy = days_in_year + 1; /* First day of next year */
@@ -2637,8 +2650,9 @@ static void expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
         }
 
         daysmask_setbit(impl->days, doy, 1);
-        if (doy < impl->days_index)
+        if (doy < impl->days_index) {
             impl->days_index = doy;
+        }
     }
 }
 
@@ -2709,8 +2723,9 @@ static void expand_by_day(icalrecur_iterator *impl, int year,
                 for (j = 0; j < impl->bydata[ICAL_BY_WEEK_NO].by.size; j++) {
                     int weekno = impl->bydata[ICAL_BY_WEEK_NO].by.data[j];
 
-                    if (weekno < 0)
+                    if (weekno < 0) {
                         weekno += nweeks + 1;
+                    }
 
                     if (weekno == this_weekno) {
                         valid = 1;
@@ -2729,8 +2744,9 @@ static void expand_by_day(icalrecur_iterator *impl, int year,
                                   : 1;
 
                 if (!daysmask_setbit(impl->days, day + doy_offset, new_val) && new_val) {
-                    if (day + doy_offset < impl->days_index)
+                    if (day + doy_offset < impl->days_index) {
                         impl->days_index = day + doy_offset;
+                    }
                 }
             }
 
@@ -2978,8 +2994,9 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
             }
 
             daysmask_setbit(impl->days, doy, 1);
-            if (doy < impl->days_index)
+            if (doy < impl->days_index) {
                 impl->days_index = doy;
+            }
         }
     } else if (has_by_data(impl, ICAL_BY_WEEK_NO)) {
         int weekno, start_doy;
@@ -3026,8 +3043,9 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
                 doy = start_doy + 7 * (weekno - 1);
 
                 daysmask_setbit(impl->days, doy, 1);
-                if (doy < impl->days_index)
+                if (doy < impl->days_index) {
                     impl->days_index = doy;
+                }
             }
         }
     } else {
@@ -3035,8 +3053,9 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
         for (i = 0; i < impl->bydata[ICAL_BY_MONTH].by.size; i++) {
             int month = set_month(impl, impl->bydata[ICAL_BY_MONTH].by.data[i]);
 
-            if (month)
+            if (month) {
                 expand_bymonth_days(impl, year, month);
+            }
         }
     }
 
@@ -3132,8 +3151,9 @@ static short daymask_find_next_bit(const unsigned long *days, short start_index)
     short startBitIndex;
     unsigned short wordIdx, maxWordIdx;
 
-    if (days_index >= ICAL_YEARDAYS_MASK_SIZE)
+    if (days_index >= ICAL_YEARDAYS_MASK_SIZE) {
         return ICAL_YEARDAYS_MASK_SIZE;
+    }
 
     // Prepare the first word, where searching might not start at the beginning
     startBitIndex = days_index + ICAL_YEARDAYS_MASK_OFFSET;
@@ -3151,8 +3171,9 @@ static short daymask_find_next_bit(const unsigned long *days, short start_index)
             wordIdx++;
             v = days[wordIdx];
 
-            if (v)
+            if (v) {
                 break;
+            }
 
             days_index += BITS_PER_LONG;
         }
@@ -3186,8 +3207,9 @@ static short daymask_find_prev_bit(const unsigned long *days, short start_index)
     short startBitIndex;
     int wordIdx;
 
-    if (days_index <= -ICAL_YEARDAYS_MASK_OFFSET)
+    if (days_index <= -ICAL_YEARDAYS_MASK_OFFSET) {
         return -ICAL_YEARDAYS_MASK_OFFSET;
+    }
 
     // Prepare the first word, where searching might not start at the beginning
     startBitIndex = days_index + ICAL_YEARDAYS_MASK_OFFSET;
@@ -3204,8 +3226,9 @@ static short daymask_find_prev_bit(const unsigned long *days, short start_index)
             wordIdx--;
             v = days[wordIdx];
 
-            if (v)
+            if (v) {
                 break;
+            }
 
             days_index -= BITS_PER_LONG;
         }
@@ -3500,10 +3523,11 @@ static void setup_setpos(icalrecur_iterator *impl, int next)
  */
 static inline int setpos_cmp(int s1, int s2, int next)
 {
-    if (s1 < s2)
+    if (s1 < s2) {
         return (next ? -1 : 1);
-    else if (s2 < s1)
+    } else if (s2 < s1) {
         return (next ? 1 : -1);
+    }
     return 0;
 }
 
@@ -3515,8 +3539,9 @@ static inline int setpos_cmp(int s1, int s2, int next)
  */
 static int check_setpos(icalrecur_iterator *impl, int next)
 {
-    if (!has_by_data(impl, ICAL_BY_SET_POS))
+    if (!has_by_data(impl, ICAL_BY_SET_POS)) {
         return 1;
+    }
     icalrecurrence_by_data *by = &(impl->bydata[ICAL_BY_SET_POS].by);
     int32_t set_pos;
 
@@ -3525,31 +3550,35 @@ static int check_setpos(icalrecur_iterator *impl, int next)
         set_pos = by->data[impl->sp_idxp];
         /* Increment positive index while set_pos is before impl->set_pos */
         while (setpos_cmp(set_pos, impl->set_pos, next) < 0) {
-            if (next && impl->sp_idxp < impl->sp_pmax)
+            if (next && impl->sp_idxp < impl->sp_pmax) {
                 impl->sp_idxp++;
-            else if (!next && impl->sp_idxp > 0)
+            } else if (!next && impl->sp_idxp > 0) {
                 impl->sp_idxp--;
-            else
+            } else {
                 break;
+            }
             set_pos = by->data[impl->sp_idxp];
         }
-        if (impl->set_pos == set_pos)
+        if (impl->set_pos == set_pos) {
             return 1;
+        }
     }
 
     if (impl->sp_pmax < by->size - 1) {
         set_pos = by->data[impl->sp_idxn] + impl->recurrence_set_size + 1;
         while (setpos_cmp(set_pos, impl->set_pos, next) < 0) {
-            if (next && impl->sp_idxn > impl->sp_pmax + 1)
+            if (next && impl->sp_idxn > impl->sp_pmax + 1) {
                 impl->sp_idxn--;
-            else if (!next && impl->sp_idxn < by->size - 1)
+            } else if (!next && impl->sp_idxn < by->size - 1) {
                 impl->sp_idxn++;
-            else
+            } else {
                 break;
+            }
             set_pos = by->data[impl->sp_idxn] + impl->recurrence_set_size + 1;
         }
-        if (impl->set_pos == set_pos)
+        if (impl->set_pos == set_pos) {
             return 1;
+        }
     }
     return 0;
 }
@@ -3741,11 +3770,12 @@ static void set_bydata_start(icalrecurrence_iterator_by_data *bydata, int tfield
 {
     int bdi;
     for (bdi = 0;
-         bdi < bydata->by.size; bdi++)
+         bdi < bydata->by.size; bdi++) {
         if (bydata->by.data[bdi] == tfield) {
             bydata->index = bdi;
             return;
         }
+    }
 }
 
 static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
@@ -3984,8 +4014,9 @@ bool icalrecur_iterator_set_range(icalrecur_iterator *impl,
             return true;
         }
 
-        if (!__iterator_set_start(impl, from))
+        if (!__iterator_set_start(impl, from)) {
             return false;
+        }
 
         /* __iterator_set_start() may back us up earlier than 'from'
            Iterate forward until we are later than 'from'.
@@ -4006,8 +4037,9 @@ bool icalrecur_iterator_set_range(icalrecur_iterator *impl,
         impl->iend = from;
         impl->days_index = 0;
     } else {
-        if (!icalrecur_iterator_set_start(impl, from))
+        if (!icalrecur_iterator_set_start(impl, from)) {
             return false;
+        }
 
         icalrecur_iterator_set_end(impl, to);
     }

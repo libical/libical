@@ -260,8 +260,9 @@ static bool parser_get_param_name_stack(char *line, char *name, size_t name_leng
     memcpy(value, next, requested_value_length);
     value[requested_value_length] = 0;
 
-    if (!is_multivalued)
+    if (!is_multivalued) {
         icalparameter_decode_value(value);
+    }
 
     return true;
 }
@@ -302,8 +303,9 @@ static char *parser_get_param_name_heap(char *line, char **end)
         *end = make_segment(*end, *end + strlen(*end));
     }
 
-    if (!is_multivalued)
+    if (!is_multivalued) {
         icalparameter_decode_value(*end);
+    }
 
     return str;
 }
@@ -1347,8 +1349,9 @@ icalcomponent *icalparser_parse_string(const char *str)
     d.str = str;
 
     p = icalparser_new();
-    if (!p)
+    if (!p) {
         return NULL;
+    }
 
     icalparser_set_gen_data(p, &d);
 

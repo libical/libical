@@ -49,8 +49,9 @@ icalproperty *icalproperty_new_impl(icalproperty_kind kind)
 {
     icalproperty *prop;
 
-    if (!icalproperty_kind_is_valid(kind))
+    if (!icalproperty_kind_is_valid(kind)) {
         return NULL;
+    }
 
     if ((prop = (icalproperty *)icalmemory_new_buffer(sizeof(icalproperty))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -226,12 +227,14 @@ static char *get_next_line_start(char *line_start, size_t chars_left)
     pos = line_start + MAX_LINE_LEN - 1;
     while (pos > line_start) {
         /* plain ascii */
-        if ((*pos & 128) == 0)
+        if ((*pos & 128) == 0) {
             return pos;
+        }
 
         /* utf8 escape byte */
-        if ((*pos & 192) == 192)
+        if ((*pos & 192) == 192) {
             return pos;
+        }
 
         pos--;
     }
@@ -268,8 +271,9 @@ static char *fold_property_line(char *text)
     chars_left = (ssize_t)len;
     first_line = 1;
     for (;;) {
-        if (chars_left <= 0)
+        if (chars_left <= 0) {
             break;
+        }
 
         /* This returns the first character for the next line. */
         next_line_start = get_next_line_start(line_start, (size_t)chars_left);
@@ -647,8 +651,9 @@ void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
             kind_string = icalparameter_kind_to_string(icalparameter_isa(param));
         }
 
-        if (!kind_string)
+        if (!kind_string) {
             continue;
+        }
 
         if (0 == strcmp(kind_string, name)) {
             (void)icalpvl_remove(prop->parameters, p);
@@ -1049,30 +1054,36 @@ struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop,
 
     ret = icalvalue_get_datetime(icalproperty_get_value(prop));
 
-    if (icaltime_is_utc(ret))
+    if (icaltime_is_utc(ret)) {
         return ret;
+    }
 
     if ((param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER)) != NULL) {
         const char *tzid = icalparameter_get_tzid(param);
         icaltimezone *tz = NULL;
 
-        if (!comp)
+        if (!comp) {
             comp = icalproperty_get_parent(prop);
+        }
 
         for (c = comp; c != NULL; c = icalcomponent_get_parent(c)) {
             tz = icalcomponent_get_timezone(c, tzid);
-            if (tz != NULL)
+            if (tz != NULL) {
                 break;
+            }
         }
 
-        if (tz == NULL)
+        if (tz == NULL) {
             tz = icaltimezone_get_builtin_timezone_from_tzid(tzid);
+        }
 
-        if (tz == NULL)
+        if (tz == NULL) {
             tz = icaltimezone_get_builtin_timezone(tzid);
+        }
 
-        if (tz != NULL)
+        if (tz != NULL) {
             ret = icaltime_set_timezone(&ret, tz);
+        }
     }
 
     return ret;

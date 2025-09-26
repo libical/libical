@@ -50,8 +50,9 @@ vcardproperty *vcardproperty_new_impl(vcardproperty_kind kind)
 {
     vcardproperty *prop;
 
-    if (!vcardproperty_kind_is_valid(kind))
+    if (!vcardproperty_kind_is_valid(kind)) {
         return NULL;
+    }
 
     if ((prop = (vcardproperty *)icalmemory_new_buffer(sizeof(vcardproperty))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -231,12 +232,14 @@ static char *get_next_line_start(char *line_start, size_t chars_left)
     pos = line_start + MAX_LINE_LEN - 1;
     while (pos > line_start) {
         /* plain ascii */
-        if ((*pos & 128) == 0)
+        if ((*pos & 128) == 0) {
             return pos;
+        }
 
         /* utf8 escape byte */
-        if ((*pos & 192) == 192)
+        if ((*pos & 192) == 192) {
             return pos;
+        }
 
         pos--;
     }
@@ -273,8 +276,9 @@ static char *fold_property_line(char *text)
     chars_left = (ssize_t)len;
     first_line = 1;
     for (;;) {
-        if (chars_left <= 0)
+        if (chars_left <= 0) {
             break;
+        }
 
         /* This returns the first character for the next line. */
         next_line_start = get_next_line_start(line_start, (size_t)chars_left);
@@ -721,8 +725,9 @@ void vcardproperty_remove_parameter_by_name(vcardproperty *prop, const char *nam
             kind_string = vcardparameter_kind_to_string(vcardparameter_isa(param));
         }
 
-        if (!kind_string)
+        if (!kind_string) {
             continue;
+        }
 
         if (0 == strcmp(kind_string, name)) {
             (void)icalpvl_remove(prop->parameters, p);
@@ -1076,8 +1081,9 @@ void vcardproperty_normalize(vcardproperty *prop)
                 }
             }
 
-            if (!remove)
+            if (!remove) {
                 vcardenumarray_sort(vcardparameter_get_type(param));
+            }
             break;
 
         case VCARD_PID_PARAMETER:

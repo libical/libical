@@ -471,11 +471,13 @@ int vcalendar_init(struct calendar **rcal, const char *vcalendar, const char *ti
     cal->vcalendar_size = vcalendar_size;
     cal->title_size = title_size;
 
-    if (*vcalendar) /* we know that vcalendar is not NULL here */
+    if (*vcalendar) { /* we know that vcalendar is not NULL here */
         cal->vcalendar = strdup(vcalendar);
+    }
 
-    if (*title) /* we know that title is not NULL here */
+    if (*title) { /* we know that title is not NULL here */
         cal->title = strdup(title);
+    }
 
     *rcal = cal;
 
@@ -513,8 +515,9 @@ char *pack_calendar(struct calendar *cal, size_t size)
 {
     char *str;
 
-    if ((str = (char *)malloc(sizeof(char) * size)) == NULL)
+    if ((str = (char *)malloc(sizeof(char) * size)) == NULL) {
         return 0;
+    }
 
     /* ID */
     memcpy(str, &cal->ID, sizeof(cal->ID));
@@ -688,8 +691,9 @@ void test_dirset_extended(void)
             ok("Setting DTEND property", (icalerrno == ICAL_NO_ERROR));
             assert(icalerrno == ICAL_NO_ERROR);
 
-            if (VERBOSE)
+            if (VERBOSE) {
                 printf("\n----------\n%s\n---------\n", icalcomponent_as_ical_string(inner));
+            }
 
             error = icaldirset_add_component(s, icalcomponent_clone(itr));
 

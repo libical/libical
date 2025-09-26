@@ -60,10 +60,11 @@ void icalparameter_free(icalparameter *param)
     if (param->string != 0) {
         icalmemory_free_buffer((void *)param->string);
     } else if (param->values != 0) {
-        if (param->value_kind == ICAL_TEXT_VALUE)
+        if (param->value_kind == ICAL_TEXT_VALUE) {
             icalstrarray_free(param->values);
-        else
+        } else {
             icalenumarray_free(param->values);
+        }
     }
 
     if (param->x_name != 0) {
@@ -468,8 +469,9 @@ bool icalparameter_has_same_name(const icalparameter *param1, const icalparamete
     kind1 = icalparameter_isa(param1);
     kind2 = icalparameter_isa(param2);
 
-    if (kind1 != kind2)
+    if (kind1 != kind2) {
         return false;
+    }
 
     if (kind1 == ICAL_X_PARAMETER) {
         name1 = icalparameter_get_xname(param1);
@@ -527,8 +529,9 @@ void icalparameter_decode_value(char *value)
         }
     }
 
-    while (*out)
+    while (*out) {
         *out++ = '\0';
+    }
 }
 
 /* Everything below this line is machine generated. Do not edit. */

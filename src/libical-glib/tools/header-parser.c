@@ -19,8 +19,9 @@ skip_white_spaces(gchar *ptr,
                   gboolean *out_was_new_line)
 {
     while (*ptr == '\t' || *ptr == '\r' || *ptr == '\n' || *ptr == ' ') {
-        if (out_was_new_line)
+        if (out_was_new_line) {
             *out_was_new_line = (*out_was_new_line) || *ptr == '\r' || *ptr == '\n';
+        }
         ptr++;
     }
 
@@ -33,13 +34,15 @@ skip_after(gchar *ptr,
            gchar *out_last_char)
 {
     while (*ptr && !strchr(after, *ptr)) {
-        if (out_last_char)
+        if (out_last_char) {
             *out_last_char = *ptr;
+        }
         ptr++;
     }
 
-    while (*ptr && strchr(after, *ptr))
+    while (*ptr && strchr(after, *ptr)) {
         ptr++;
+    }
 
     return ptr;
 }
@@ -47,8 +50,9 @@ skip_after(gchar *ptr,
 static gchar *
 skip_ident(gchar *ptr)
 {
-    while (*ptr && ((*ptr >= '0' && *ptr <= '9') || (*ptr >= 'a' && *ptr <= 'z') || (*ptr >= 'A' && *ptr <= 'Z') || *ptr == '_'))
+    while (*ptr && ((*ptr >= '0' && *ptr <= '9') || (*ptr >= 'a' && *ptr <= 'z') || (*ptr >= 'A' && *ptr <= 'Z') || *ptr == '_')) {
         ptr++;
+    }
 
     return ptr;
 }
@@ -63,11 +67,13 @@ parse_header_file(GHashTable *symbols, /* caller allocates, char * ~> itself */
     gboolean is_new_line = TRUE, read_func_name = FALSE;
     guint export_token_len = export_token ? strlen(export_token) : 0;
 
-    if (!g_file_get_contents(filename, &content, NULL, error))
+    if (!g_file_get_contents(filename, &content, NULL, error)) {
         return FALSE;
+    }
 
-    if (export_token != NULL && !*export_token)
+    if (export_token != NULL && !*export_token) {
         export_token = NULL;
+    }
 
     start = content;
     ptr = content;
@@ -82,12 +88,14 @@ parse_header_file(GHashTable *symbols, /* caller allocates, char * ~> itself */
                 is_new_line = TRUE;
             } else if (ptr[1] == '*') {
                 while (ptr[0] && ptr[1] && !(ptr[0] == '*' && ptr[1] == '/')) {
-                    if (!is_new_line && (*ptr == '\n' || *ptr == '\r'))
+                    if (!is_new_line && (*ptr == '\n' || *ptr == '\r')) {
                         is_new_line = TRUE;
+                    }
                     ptr++;
                 }
-                if (ptr[0] == '*' && ptr[1] == '/')
+                if (ptr[0] == '*' && ptr[1] == '/') {
                     ptr += 2;
+                }
             }
         } else if (*ptr == '#') {
             gboolean done = FALSE;
@@ -98,8 +106,9 @@ parse_header_file(GHashTable *symbols, /* caller allocates, char * ~> itself */
                 ptr = skip_white_spaces(ptr, NULL);
                 start = ptr;
                 ptr = skip_ident(ptr);
-                if (*ptr == '(')
+                if (*ptr == '(') {
                     g_hash_table_add(symbols, g_strndup(start, ptr - start));
+                }
             }
 
             while (!done) {

@@ -27,8 +27,9 @@ LIBICAL_VCARD_EXPORT struct vcardvalue_impl *vcardvalue_new_impl(vcardvalue_kind
 {
     struct vcardvalue_impl *v;
 
-    if (!vcardvalue_kind_is_valid(kind))
+    if (!vcardvalue_kind_is_valid(kind)) {
         return NULL;
+    }
 
     if ((v = (struct vcardvalue_impl *)icalmemory_new_buffer(sizeof(struct vcardvalue_impl))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -348,8 +349,9 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         if (len && (len == nchar)) {
             int utcoffset = (int)(hour * 3600 + min * 60);
 
-            if (*sign == '-')
+            if (*sign == '-') {
                 utcoffset = -utcoffset;
+            }
             value = vcardvalue_new_utcoffset(utcoffset);
         } else if (error != 0) {
             char temp[TMP_BUF_SIZE];
@@ -508,8 +510,9 @@ void vcardvalue_free(vcardvalue *v)
         int i;
         for (i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
             vcardstrarray *array = v->data.v_structured.field[i];
-            if (array)
+            if (array) {
                 vcardstrarray_free(array);
+            }
         }
         break;
     }
@@ -690,11 +693,12 @@ char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_pa
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
         }
 
-        if (array)
+        if (array) {
             _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size,
                                              array, ',', is_param);
-        else
+        } else {
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, '\0');
+        }
     }
 
     return buf;
@@ -762,8 +766,9 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     if (value->parent) {
         vcardcomponent *comp = vcardproperty_get_parent(value->parent);
-        if (comp)
+        if (comp) {
             version = vcardcomponent_get_version(comp);
+        }
     }
 
     if (version == VCARD_VERSION_NONE) {

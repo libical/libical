@@ -83,17 +83,20 @@ static bool make_time(const struct tm *tm, int tzm, icaltime_t *out_time_t)
 
     /* check that month specification within range */
 
-    if (tm->tm_mon < 0 || tm->tm_mon > 11)
+    if (tm->tm_mon < 0 || tm->tm_mon > 11) {
         return false;
+    }
 
-    if (tm->tm_year < 2)
+    if (tm->tm_year < 2) {
         return false;
+    }
 
 #if (SIZEOF_ICALTIME_T == 4)
     /* check that year specification within range */
 
-    if (tm->tm_year > 138)
+    if (tm->tm_year > 138) {
         return false;
+    }
 
     /* check for upper bound of Jan 17, 2038 (to avoid possibility of 32-bit arithmetic overflow) */
     if (tm->tm_year == 138) {
@@ -130,8 +133,9 @@ static bool make_time(const struct tm *tm, int tzm, icaltime_t *out_time_t)
 
     /* check and adjust for leap years */
 
-    if ((tm->tm_year & 3) == 0 && tm->tm_mon > 1)
+    if ((tm->tm_year & 3) == 0 && tm->tm_mon > 1) {
         tim += 1;
+    }
 
     /* elapsed days to current date */
 
@@ -155,8 +159,9 @@ static bool make_time(const struct tm *tm, int tzm, icaltime_t *out_time_t)
 
     /* return number of seconds since start of the epoch */
 
-    if (out_time_t)
+    if (out_time_t) {
         *out_time_t = tim;
+    }
 
     return true;
 }
@@ -182,8 +187,9 @@ static icaltime_t icaltime_timegm(const struct tm *tm)
     days = (icaltime_t)(365 * (year - 1970) + icaltime_leap_days(1970, year));
     days += days_in_year_passed_month[0][tm->tm_mon];
 
-    if (tm->tm_mon > 1 && icaltime_is_leap_year(year))
+    if (tm->tm_mon > 1 && icaltime_is_leap_year(year)) {
         ++days;
+    }
 
     days += tm->tm_mday - 1;
     hours = days * 24 + tm->tm_hour;
@@ -204,8 +210,9 @@ struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const boo
 
     /* Convert the icaltime_t to a struct tm in UTC time. We can trust gmtime for this. */
     memset(&t, 0, sizeof(struct tm));
-    if (!icalgmtime_r(&tm, &t))
+    if (!icalgmtime_r(&tm, &t)) {
         return is_date ? icaltime_null_date() : icaltime_null_time();
+    }
 
     tt.year = t.tm_year + 1900;
     tt.month = t.tm_mon + 1;
@@ -268,8 +275,9 @@ icaltime_t icaltime_as_timet(const struct icaltimetype tt)
     stm.tm_year = tt.year - 1900;
     stm.tm_isdst = -1;
 
-    if (!make_time(&stm, 0, &t))
+    if (!make_time(&stm, 0, &t)) {
         t = ((icaltime_t)-1);
+    }
 
     return t;
 }
@@ -294,8 +302,9 @@ icaltime_t icaltime_as_timet_with_zone(const struct icaltimetype tt, const icalt
     local_tt.is_date = 0;
 
     /* Use our timezone functions to convert to UTC. */
-    if (tt.zone != utc_zone)
+    if (tt.zone != utc_zone) {
         icaltimezone_convert_time(&local_tt, (icaltimezone *)zone, utc_zone);
+    }
 
     /* Copy the icaltimetype to a struct tm. */
     memset(&stm, 0, sizeof(struct tm));
@@ -367,8 +376,9 @@ struct icaltimetype icaltime_from_string(const char *str)
     if ((size == 15) || (size == 19)) { /* floating time with/without separators */
         tt.is_date = 0;
     } else if ((size == 16) || (size == 20)) { /* UTC time, ends in 'Z' */
-        if ((str[size - 1] != 'Z'))
+        if ((str[size - 1] != 'Z')) {
             goto FAIL;
+        }
 
         tt.zone = icaltimezone_get_utc_timezone();
         tt.is_date = 0;
@@ -761,8 +771,9 @@ void icaltime_adjust(struct icaltimetype *tt,
     int days_in_month;
 
     /* If we are passed a date make sure to ignore hour minute and second */
-    if (tt->is_date)
+    if (tt->is_date) {
         goto IS_DATE;
+    }
 
     /* Add on the seconds. */
     second = tt->second + seconds;
@@ -811,8 +822,9 @@ IS_DATE:
     if (day > 0) {
         for (;;) {
             days_in_month = icaltime_days_in_month(tt->month, tt->year);
-            if (day <= days_in_month)
+            if (day <= days_in_month) {
                 break;
+            }
 
             tt->month++;
             if (tt->month >= 13) {
@@ -908,23 +920,28 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
 bool icaltime_span_overlaps(const icaltime_span *s1, const icaltime_span *s2)
 {
     /* s1->start in s2 */
-    if (s1->start > s2->start && s1->start < s2->end)
+    if (s1->start > s2->start && s1->start < s2->end) {
         return true;
+    }
 
     /* s1->end in s2 */
-    if (s1->end > s2->start && s1->end < s2->end)
+    if (s1->end > s2->start && s1->end < s2->end) {
         return true;
+    }
 
     /* s2->start in s1 */
-    if (s2->start > s1->start && s2->start < s1->end)
+    if (s2->start > s1->start && s2->start < s1->end) {
         return true;
+    }
 
     /* s2->end in s1 */
-    if (s2->end > s1->start && s2->end < s1->end)
+    if (s2->end > s1->start && s2->end < s1->end) {
         return true;
+    }
 
-    if (s1->start == s2->start && s1->end == s2->end)
+    if (s1->start == s2->start && s1->end == s2->end) {
         return true;
+    }
 
     return false;
 }

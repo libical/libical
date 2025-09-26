@@ -29,8 +29,9 @@ LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kin
 {
     struct icalvalue_impl *v;
 
-    if (!icalvalue_kind_is_valid(kind))
+    if (!icalvalue_kind_is_valid(kind)) {
         return NULL;
+    }
 
     if ((v = (struct icalvalue_impl *)icalmemory_new_buffer(sizeof(struct icalvalue_impl))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -75,8 +76,9 @@ icalvalue *icalvalue_clone(const icalvalue *old)
              * don't know how long it is.
              */
         clone->data.v_attach = old->data.v_attach;
-        if (clone->data.v_attach)
+        if (clone->data.v_attach) {
             icalattach_ref(clone->data.v_attach);
+        }
 
         break;
     }
@@ -375,8 +377,9 @@ static bool simple_str_to_doublestr(const char *from, char *result, int result_l
     }
 
     /*skip the white spaces at the beginning */
-    while (*cur && isspace((int)*cur))
+    while (*cur && isspace((int)*cur)) {
         cur++;
+    }
 
     start = cur;
     /* copy the part that looks like a double into result.
@@ -439,8 +442,9 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         icalattach *attach;
 
         attach = icalattach_new_from_url(str);
-        if (!attach)
+        if (!attach) {
             break;
+        }
 
         value = icalvalue_new_attach(attach);
         icalattach_unref(attach);
@@ -1520,17 +1524,20 @@ bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxB
     char *ptr;
     icalvalue *value = 0;
 
-    if ((szText == 0) || (szEncText == 0))
+    if ((szText == 0) || (szEncText == 0)) {
         return false;
+    }
 
     value = icalvalue_new_from_string(ICAL_STRING_VALUE, szText);
 
-    if (value == 0)
+    if (value == 0) {
         return false;
+    }
 
     ptr = icalvalue_text_as_ical_string_r(value);
-    if (ptr == 0)
+    if (ptr == 0) {
         return false;
+    }
 
     if ((int)strlen(ptr) >= nMaxBufferLen) {
         icalvalue_free(value);
@@ -1552,8 +1559,9 @@ bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxB
     const char *p;
     size_t buf_sz;
 
-    if ((szText == 0) || (szDecText == 0))
+    if ((szText == 0) || (szDecText == 0)) {
         return false;
+    }
 
     buf_sz = strlen(szText) + 1;
     str_p = str = (char *)icalmemory_new_buffer(buf_sz);
@@ -1570,8 +1578,9 @@ bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxB
             icalmemory_append_char(&str, &str_p, &buf_sz, *p);
         }
 
-        if (str_p - str > nMaxBufferLen)
+        if (str_p - str > nMaxBufferLen) {
             break;
+        }
     }
 
     icalmemory_append_char(&str, &str_p, &buf_sz, '\0');

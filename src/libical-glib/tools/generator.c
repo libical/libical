@@ -24,8 +24,9 @@ static FILE *open_file(const gchar *dir, const gchar *filename)
     path = g_build_filename(dir, filename, NULL);
     if (path) {
         tmpl = fopen(path, "rb");
-        if (!tmpl)
+        if (!tmpl) {
             fprintf(stderr, "generator: Failed to open %s: %s\n", path, strerror(errno));
+        }
 
         g_free(path);
     }
@@ -307,8 +308,9 @@ gchar *get_lower_train_from_lower_snake(const gchar *lowerSnake)
 
     ret = g_strdup(lowerSnake);
     for (i = 0; i < len; i++) {
-        if (lowerSnake[i] == '_')
+        if (lowerSnake[i] == '_') {
             ret[i] = '-';
+        }
     }
 
     return ret;
@@ -324,8 +326,9 @@ gchar *get_lower_train_from_upper_camel(const gchar *upperCamel)
     ret = get_lower_snake_from_upper_camel(upperCamel);
     len = (guint)strlen(ret);
     for (i = 0; i < len; i++) {
-        if (ret[i] == '_')
+        if (ret[i] == '_') {
             ret[i] = '-';
+        }
     }
 
     return ret;
@@ -631,8 +634,9 @@ static void write_str(FILE *fp, const gchar *str)
 
     len = strlen(str);
 
-    if (fwrite(str, sizeof(gchar), len, fp) != len)
+    if (fwrite(str, sizeof(gchar), len, fp) != len) {
         g_error("Failed to write %d bytes to file: %s", (gint)len, g_strerror(errno));
+    }
 }
 
 static FILE *open_private_header(void)
@@ -891,21 +895,24 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                     write_str(out, val);
                     val = NULL;
 
-                    if (g_strcmp0(buffer, "new_full_extraCode") == 0)
+                    if (g_strcmp0(buffer, "new_full_extraCode") == 0) {
                         write_str(out, "\n    ");
+                    }
                 } else if (g_strcmp0(buffer, "new_full_extraCode") == 0) {
                     /* For simplicity, after lookup in the 'table', to
                        not force declaration of it in every .xml file */
                 } else if (g_strcmp0(buffer, "structure_boilerplate") == 0) {
-                    if (structure->native != NULL)
+                    if (structure->native != NULL) {
                         generate_header_structure_boilerplate(out, structure, table);
+                    }
                 } else if (g_hash_table_contains(table, buffer)) {
                     val = g_hash_table_lookup(table, buffer);
                     write_str(out, val);
                     val = NULL;
                 } else if (g_strcmp0(buffer, "source_boilerplate") == 0) {
-                    if (structure->native != NULL)
+                    if (structure->native != NULL) {
                         generate_source_structure_boilerplate(out, structure, table);
+                    }
                 } else {
                     printf("The string %s is not recognized, please check the template\n", buffer);
                     fflush(NULL);
@@ -1093,8 +1100,9 @@ void generate_forward_declarations_header_file(GList *structures)
     g_return_if_fail(structures != NULL);
 
     in = open_file(templates_dir, HEADER_FORWARD_DECLARATIONS_TEMPLATE);
-    if (!in)
+    if (!in) {
         return;
+    }
 
     out = fopen(FORWARD_DECLARATIONS_HEADER, "wb");
     if (!out) {
@@ -1108,8 +1116,9 @@ void generate_forward_declarations_header_file(GList *structures)
     for (link = structures; link; link = g_list_next(link)) {
         Structure *structure = link->data;
 
-        if (!structure)
+        if (!structure) {
             continue;
+        }
 
         for (g_hash_table_iter_init(&iter_table, structure->dependencies);
              g_hash_table_iter_next(&iter_table, &key, &value);) {
@@ -1457,8 +1466,9 @@ gchar *get_translator_for_parameter(Parameter *para)
     is_bare = FALSE;
 
     if (para->translator != NULL) {
-        if (g_strcmp0(para->translator, (gchar *)"NONE") != 0)
+        if (g_strcmp0(para->translator, (gchar *)"NONE") != 0) {
             res = g_strdup(para->translator);
+        }
     } else {
         trueType = get_true_type(para->type);
         if (g_hash_table_contains(type2kind, trueType)) {
@@ -1536,8 +1546,9 @@ gchar *get_translator_for_return(Ret *ret)
     res = NULL;
 
     if (ret->translator != NULL) {
-        if (g_strcmp0(ret->translator, (gchar *)"NONE") != 0)
+        if (g_strcmp0(ret->translator, (gchar *)"NONE") != 0) {
             res = g_strdup(ret->translator);
+        }
     } else {
         trueType = get_true_type(ret->type);
         if (g_hash_table_contains(type2kind, trueType)) {
@@ -1647,8 +1658,9 @@ gchar *get_inline_parameter(Parameter *para)
         }
         (void)g_stpcpy(buffer + strlen(buffer), translator);
         (void)g_stpcpy(buffer + strlen(buffer), " (");
-        if (para->translator == NULL && !is_enum_type(para->type))
+        if (para->translator == NULL && !is_enum_type(para->type)) {
             (void)g_stpcpy(buffer + strlen(buffer), "I_CAL_OBJECT ((ICalObject *)");
+        }
     }
 
     (void)g_stpcpy(buffer + strlen(buffer), para->name);
@@ -2279,8 +2291,9 @@ parse_api_templates(void)
                 TemplateData *data = template_data_new((const gchar *)name, (const gchar *)requires, (const gchar *)optional);
                 if (data != NULL) {
                     data->methods = methods;
-                    if (g_hash_table_contains(api_templates, data->name))
+                    if (g_hash_table_contains(api_templates, data->name)) {
                         g_warning("Warning: API template file '%s' already contains template with name '%s'", filename, data->name);
+                    }
                     g_hash_table_insert(api_templates, data->name, data);
                 } else {
                     g_ptr_array_unref(methods);
@@ -2341,8 +2354,9 @@ parse_api_files(const gchar *apis_dir,
         filename = iter_filenames->data;
         len = strlen(filename);
 
-        if (len <= 4 || g_ascii_strncasecmp(filename + len - 4, ".xml", 4) != 0)
+        if (len <= 4 || g_ascii_strncasecmp(filename + len - 4, ".xml", 4) != 0) {
             continue;
+        }
 
         path = g_build_filename(apis_dir, filename, NULL);
         doc = xmlParseFile(path);
@@ -2529,8 +2543,9 @@ void generate_header_header_file(GList *structures)
     g_return_if_fail(structures != NULL);
 
     in = open_file(templates_dir, HEADER_HEADER_TEMPLATE);
-    if (!in)
+    if (!in) {
         return;
+    }
 
     out = fopen("libical-glib.h", "w");
     if (!out) {
@@ -2641,8 +2656,9 @@ check_api_files(const gchar *apis_dir,
 
         for (iter = structure->enumerations; iter != NULL; iter = g_list_next(iter)) {
             const Enumeration *enumr = iter->data;
-            if (enumr->nativeName != NULL)
+            if (enumr->nativeName != NULL) {
                 g_hash_table_remove(symbols, enumr->nativeName);
+            }
         }
 
         if (structure->skips != NULL) {
@@ -2682,8 +2698,9 @@ check_api_files(const gchar *apis_dir,
         g_ptr_array_sort(sorted, sort_symbols_by_name_cb);
         for (ii = 0; ii < sorted->len; ii++) {
             const gchar *symbol = g_ptr_array_index(sorted, ii);
-            if (ii > 0)
+            if (ii > 0) {
                 fprintf(stderr, " ");
+            }
             fprintf(stderr, "%s", symbol);
         }
         fprintf(stderr, "\n");
@@ -2738,10 +2755,11 @@ int main(int argc, char *argv[])
             }
         }
 
-        if (check_api_files(apis_dir, symbols))
+        if (check_api_files(apis_dir, symbols)) {
             ii = 0;
-        else
+        } else {
             ii = 5;
+        }
         g_hash_table_unref(symbols);
         return ii;
     }

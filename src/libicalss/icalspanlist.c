@@ -63,8 +63,9 @@ static void icalspanlist_new_callback(const icalcomponent *comp, const struct ic
 
     _unused(comp);
 
-    if (span->is_busy == 0)
+    if (span->is_busy == 0) {
         return;
+    }
 
     if ((s = (icaltime_span *)malloc(sizeof(icaltime_span))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -106,13 +107,15 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
         kind = icalcomponent_isa(c);
         inner = icalcomponent_get_inner(c);
 
-        if (!inner)
+        if (!inner) {
             continue;
+        }
 
         inner_kind = icalcomponent_isa(inner);
 
-        if (kind != ICAL_VEVENT_COMPONENT && inner_kind != ICAL_VEVENT_COMPONENT)
+        if (kind != ICAL_VEVENT_COMPONENT && inner_kind != ICAL_VEVENT_COMPONENT) {
             continue;
+        }
 
         icalerror_clear_errno();
 
@@ -127,8 +130,9 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
         struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
 
-        if (!s)
+        if (!s) {
             continue;
+        }
 
         if ((freetime = (struct icaltime_span *)malloc(sizeof(struct icaltime_span))) == 0) {
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -180,8 +184,9 @@ void icalspanlist_free(icalspanlist *sl)
 {
     struct icaltime_span *span;
 
-    if (sl == NULL)
+    if (sl == NULL) {
         return;
+    }
 
     while ((span = icalpvl_pop(sl->spans)) != 0) {
         free(span);
@@ -251,8 +256,9 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
     for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
         s = (struct icaltime_span *)icalpvl_data(itr);
 
-        if (!s)
+        if (!s) {
             continue;
+        }
 
         if (s->is_busy == 0 && s->start >= rangett && (rangett < s->end || s->end == s->start)) {
             if (rangett < s->start) {
@@ -283,8 +289,9 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
 
     icalerror_check_arg_rz((sl != 0), "spanlist");
 
-    if (!delta_t)
+    if (!delta_t) {
         delta_t = 3600;
+    }
 
     /* calculate the start and end time as icaltime_t **/
     sl_start = icaltime_as_timet_with_zone(sl->start, icaltimezone_get_utc_timezone());
@@ -323,8 +330,9 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
             icaltime_t offset_end = (s->end - 1) / delta_t - sl_start / delta_t + 1;
             icaltime_t i;
 
-            if (offset_end >= matrix_slots)
+            if (offset_end >= matrix_slots) {
                 offset_end = matrix_slots - 1;
+            }
 
             for (i = offset_start; i < offset_end; i++) {
                 matrix[i]++;
@@ -393,8 +401,9 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
     icalerror_check_arg_rz((comp != NULL), "comp");
 
     inner = icalcomponent_get_inner(comp);
-    if (!inner)
+    if (!inner) {
         return NULL;
+    }
 
     if ((sl = (icalspanlist *)malloc(sizeof(icalspanlist))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);

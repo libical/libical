@@ -76,26 +76,30 @@ void ical_caldat(struct ut_instant_int *date)
     kd = (long)((kc * 36525LL) / 100LL);
     ke = (long)((kb - kd) * 10000LL / 306001LL);
     date->day = kb - kd - ((long)((ke * 306001LL) / 10000LL));
-    if (ke > 13L)
+    if (ke > 13L) {
         date->month = ke - 13L;
-    else
+    } else {
         date->month = ke - 1L;
-    if ((date->month == 2) && (date->day > 28))
+    }
+    if ((date->month == 2) && (date->day > 28)) {
         date->day = 29;
-    if ((date->month == 2) && (date->day == 29) && (ke == 3L))
+    }
+    if ((date->month == 2) && (date->day == 29) && (ke == 3L)) {
         date->year = kc - 4716L;
-    else if (date->month > 2)
+    } else if (date->month > 2) {
         date->year = kc - 4716L;
-    else
+    } else {
         date->year = kc - 4715L;
+    }
     date->weekday = (jd + 1L) % 7L; /* day of week */
     // if ( date->year == ((date->year >> 2) << 2) ) // ubsan "runtime error: left shift of negative value -1179"
-    if (date->year == ((date->year >> 2) * 4))
+    if (date->year == ((date->year >> 2) * 4)) {
         date->day_of_year =
             ((275 * date->month) / 9) - ((date->month + 9) / 12) + date->day - 30;
-    else
+    } else {
         date->day_of_year =
             ((275 * date->month) / 9) - (((date->month + 9) / 12) << 1) + date->day - 30;
+    }
 }
 
 void ical_juldat(struct ut_instant_int *date)
@@ -115,10 +119,11 @@ void ical_juldat(struct ut_instant_int *date)
     ia = iy0 / 100L;
     ib = 2L - ia + (ia >> 2);
     /* calculate julian date	*/
-    if (date->year < 0L)
+    if (date->year < 0L) {
         jd = (long)(((36525LL * iy0) - 75) / 100) + (long)((306001LL * (im0 + 1L)) / 10000) + (long)date->day + 1720994L;
-    else
+    } else {
         jd = (long)((36525LL * iy0) / 100) + (long)((306001LL * (im0 + 1L)) / 10000) + (long)date->day + 1720994L;
+    }
 
     /* on or after 15 October 1582	*/
     if ((date->year > 1582) || ((date->year == 1582) && (((date->month * 100) + date->day) >= 1015))) {

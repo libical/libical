@@ -33,8 +33,9 @@ int check_and_copy_field(const char *line, const char *pref, char *field, size_t
     }
 
     size_t data_size = strlen(line) - l;
-    if (data_size >= field_size)
+    if (data_size >= field_size) {
         return 1;
+    }
 
     memcpy(field, &line[l], data_size + 1);
     return 0;
@@ -45,8 +46,9 @@ static void print_error_hdr(const struct recur *r)
     fprintf(stderr, "Test case at line %d failed.\n", r->line_no);
     fprintf(stderr, "RRULE:%s\n", r->rrule);
     fprintf(stderr, "DTSTART:%s\n", r->dtstart);
-    if (r->start_at[0])
+    if (r->start_at[0]) {
         fprintf(stderr, "START-AT:%s\n", r->start_at);
+    }
 }
 
 static void reverse_array(char *str, size_t len)
@@ -82,8 +84,9 @@ static char *skip_first(char *instances)
         instances++;
     }
 
-    if (*instances)
+    if (*instances) {
         instances++;
+    }
 
     return instances;
 }
@@ -93,17 +96,20 @@ static char *skip_until(char *instances, icaltimetype t, int order)
     char *start = instances;
     while (1) {
         char *next = skip_first(start);
-        if (!next)
+        if (!next) {
             return 0;
+        }
 
         char tmp = next[-1];
-        if (next[-1] == ',')
+        if (next[-1] == ',') {
             next[-1] = 0;
+        }
         icaltimetype current = icaltime_from_string(start);
         next[-1] = tmp;
 
-        if ((icaltime_compare(current, t) * order) >= 0)
+        if ((icaltime_compare(current, t) * order) >= 0) {
             return start;
+        }
 
         start = next;
     }
@@ -171,8 +177,9 @@ int main(int argc, char *argv[])
             } else {
                 int parse_err = 0;
 
-                if (r.rrule[0] == 0)
+                if (r.rrule[0] == 0) {
                     r.line_no = line_no;
+                }
 
                 parse_err = parse_err || check_and_copy_field(line, "RRULE:", r.rrule, sizeof(r.rrule));
                 parse_err = parse_err || check_and_copy_field(line, "DTSTART:", r.dtstart, sizeof(r.dtstart));
@@ -278,8 +285,9 @@ int main(int argc, char *argv[])
                 if (strcmp(instances, actual_instances)) {
                     nof_errors++;
 
-                    if (!test_error)
+                    if (!test_error) {
                         print_error_hdr(&r);
+                    }
 
                     test_error = 1;
 
@@ -292,8 +300,9 @@ int main(int argc, char *argv[])
             icalrecur_iterator_free(ritr);
             icalrecurrencetype_unref(rrule);
 
-            if (test_error)
+            if (test_error) {
                 nof_failed_tests++;
+            }
 
             memset(&r, 0, sizeof(r));
         }

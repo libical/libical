@@ -53,10 +53,11 @@ void vcardparameter_free(vcardparameter *param)
     if (param->string != 0) {
         icalmemory_free_buffer((void *)param->string);
     } else if (param->values != 0) {
-        if (param->value_kind == VCARD_TEXT_VALUE)
+        if (param->value_kind == VCARD_TEXT_VALUE) {
             vcardstrarray_free(param->values);
-        else
+        } else {
             vcardenumarray_free(param->values);
+        }
     } else if (param->structured != 0) {
         vcardstructured_free(param->structured);
     }
@@ -482,8 +483,9 @@ bool vcardparameter_has_same_name(const vcardparameter *param1, const vcardparam
     kind1 = vcardparameter_isa(param1);
     kind2 = vcardparameter_isa(param2);
 
-    if (kind1 != kind2)
+    if (kind1 != kind2) {
         return false;
+    }
 
     if (kind1 == VCARD_X_PARAMETER) {
         name1 = vcardparameter_get_xname(param1);

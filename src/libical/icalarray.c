@@ -34,8 +34,9 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
         return NULL;
     }
 
-    if (!increment_size)
+    if (!increment_size) {
         increment_size = ICALARRAY_DEFAULT_INCREMENT_SIZE;
+    }
 
     array->element_size = element_size;
     array->increment_size = increment_size;

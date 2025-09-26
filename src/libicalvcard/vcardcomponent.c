@@ -209,8 +209,9 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
 
     buf = icalmemory_new_buffer(buf_size);
-    if (buf == NULL)
+    if (buf == NULL) {
         return NULL;
+    }
 
     buf_ptr = buf;
 
@@ -334,8 +335,9 @@ int vcardcomponent_count_properties(vcardcomponent *comp,
 
     icalerror_check_arg_rz((comp != 0), "component");
 
-    if (ignore_alts)
+    if (ignore_alts) {
         altids = vcardstrarray_new(2);
+    }
 
     for (itr = icalpvl_head(comp->properties); itr != 0; itr = icalpvl_next(itr)) {
         vcardproperty *prop = (vcardproperty *)icalpvl_data(itr);
@@ -349,8 +351,9 @@ int vcardcomponent_count_properties(vcardcomponent *comp,
                 if (param) {
                     const char *altid = vcardparameter_get_altid(param);
 
-                    if (vcardstrarray_find(altids, altid) >= vcardstrarray_size(altids))
+                    if (vcardstrarray_find(altids, altid) >= vcardstrarray_size(altids)) {
                         continue;
+                    }
 
                     vcardstrarray_append(altids, altid);
                 }
@@ -359,8 +362,9 @@ int vcardcomponent_count_properties(vcardcomponent *comp,
         }
     }
 
-    if (ignore_alts)
+    if (ignore_alts) {
         vcardstrarray_free(altids);
+    }
 
     return count;
 }
@@ -669,10 +673,11 @@ static int prop_kind_compare(vcardproperty_kind kind,
     if (p1 && p2) {
         return strcmpsafe(vcardproperty_get_value_as_string(p1),
                           vcardproperty_get_value_as_string(p2));
-    } else if (p1)
+    } else if (p1) {
         return -1;
-    else if (p2)
+    } else if (p2) {
         return 1;
+    }
 
     return 0;
 }
@@ -967,8 +972,9 @@ static void comp_to_v4(vcardcomponent *impl)
             break;
         }
 
-        if (buf)
+        if (buf) {
             icalmemory_free_buffer(buf);
+        }
     }
 }
 
@@ -1172,8 +1178,9 @@ static void comp_to_v3(vcardcomponent *impl)
             break;
         }
 
-        if (buf)
+        if (buf) {
             icalmemory_free_buffer(buf);
+        }
     }
 
     /* Add TYPE=PREF for each most preferred property */

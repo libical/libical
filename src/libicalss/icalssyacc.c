@@ -701,11 +701,13 @@ int yytype;
 YYSTYPE const *const yyvaluep;
 #endif
 {
-    if (!yyvaluep)
+    if (!yyvaluep) {
         return;
+    }
 #ifdef YYPRINT
-    if (yytype < YYNTOKENS)
+    if (yytype < YYNTOKENS) {
         YYPRINT(yyoutput, yytoknum[yytype], *yyvaluep);
+    }
 #else
     YYUSE(yyoutput);
 #endif
@@ -730,10 +732,11 @@ int yytype;
 YYSTYPE const *const yyvaluep;
 #endif
 {
-    if (yytype < YYNTOKENS)
+    if (yytype < YYNTOKENS) {
         YYFPRINTF(yyoutput, "token %s (", yytname[yytype]);
-    else
+    } else {
         YYFPRINTF(yyoutput, "nterm %s (", yytname[yytype]);
+    }
 
     yy_symbol_value_print(yyoutput, yytype, yyvaluep);
     YYFPRINTF(yyoutput, ")");
@@ -755,8 +758,9 @@ yytype_int16 *top;
 #endif
 {
     YYFPRINTF(stderr, "Stack now");
-    for (; bottom <= top; ++bottom)
+    for (; bottom <= top; ++bottom) {
         YYFPRINTF(stderr, " %d", *bottom);
+    }
     YYFPRINTF(stderr, "\n");
 }
 
@@ -843,8 +847,9 @@ static YYSIZE_T
 #endif
 {
     YYSIZE_T yylen;
-    for (yylen = 0; yystr[yylen]; yylen++)
+    for (yylen = 0; yystr[yylen]; yylen++) {
         continue;
+    }
     return yylen;
 }
 #endif
@@ -869,8 +874,9 @@ const char *yysrc;
     char *yyd = yydest;
     const char *yys = yysrc;
 
-    while ((*yyd++ = *yys++) != '\0')
+    while ((*yyd++ = *yys++) != '\0') {
         continue;
+    }
 
     return yyd - 1;
 }
@@ -892,32 +898,37 @@ yytnamerr(char *yyres, const char *yystr)
         YYSIZE_T yyn = 0;
         char const *yyp = yystr;
 
-        for (;;)
+        for (;;) {
             switch (*++yyp) {
             case '\'':
             case ',':
                 goto do_not_strip_quotes;
 
             case '\\':
-                if (*++yyp != '\\')
+                if (*++yyp != '\\') {
                     goto do_not_strip_quotes;
+                }
                 /* Fall through.  */
             default:
-                if (yyres)
+                if (yyres) {
                     yyres[yyn] = *yyp;
+                }
                 yyn++;
                 break;
 
             case '"':
-                if (yyres)
+                if (yyres) {
                     yyres[yyn] = '\0';
+                }
                 return yyn;
             }
+        }
     do_not_strip_quotes:;
     }
 
-    if (!yyres)
+    if (!yyres) {
         return yystrlen(yystr);
+    }
 
     return yystpcpy(yyres, yystr) - yyres;
 }
@@ -935,9 +946,9 @@ yysyntax_error(char *yyresult, int yystate, int yychar)
 {
     int yyn = yypact[yystate];
 
-    if (!(YYPACT_NINF < yyn && yyn <= YYLAST))
+    if (!(YYPACT_NINF < yyn && yyn <= YYLAST)) {
         return 0;
-    else {
+    } else {
         int yytype = YYTRANSLATE(yychar);
         YYSIZE_T yysize0 = yytnamerr(0, yytname[yytype]);
         YYSIZE_T yysize = yysize0;
@@ -969,7 +980,7 @@ yysyntax_error(char *yyresult, int yystate, int yychar)
         yyarg[0] = yytname[yytype];
         yyfmt = yystpcpy(yyformat, yyunexpected);
 
-        for (yyx = yyxbegin; yyx < yyxend; ++yyx)
+        for (yyx = yyxbegin; yyx < yyxend; ++yyx) {
             if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR) {
                 if (yycount == YYERROR_VERBOSE_ARGS_MAXIMUM) {
                     yycount = 1;
@@ -984,14 +995,16 @@ yysyntax_error(char *yyresult, int yystate, int yychar)
                 yyfmt = yystpcpy(yyfmt, yyprefix);
                 yyprefix = yyor;
             }
+        }
 
         yyf = YY_(yyformat);
         yysize1 = yysize + yystrlen(yyf);
         yysize_overflow |= (yysize1 < yysize);
         yysize = yysize1;
 
-        if (yysize_overflow)
+        if (yysize_overflow) {
             return YYSIZE_MAXIMUM;
+        }
 
         if (yyresult) {
             /* Avoid sprintf, as that infringes on the user's name space.
@@ -1032,8 +1045,9 @@ YYSTYPE *yyvaluep;
 {
     YYUSE(yyvaluep);
 
-    if (!yymsg)
+    if (!yymsg) {
         yymsg = "Deleting";
+    }
     YY_SYMBOL_PRINT(yymsg, yytype, yyvaluep, yylocationp);
 
     switch (yytype) {
@@ -1189,24 +1203,28 @@ yysetstate:
         goto yyexhaustedlab;
 #else
         /* Extend the stack our own way.  */
-        if (YYMAXDEPTH <= yystacksize)
+        if (YYMAXDEPTH <= yystacksize) {
             goto yyexhaustedlab;
+        }
         yystacksize *= 2;
-        if (YYMAXDEPTH < yystacksize)
+        if (YYMAXDEPTH < yystacksize) {
             yystacksize = YYMAXDEPTH;
+        }
 
         {
             yytype_int16 *yyss1 = yyss;
             union yyalloc *yyptr =
                 (union yyalloc *)YYSTACK_ALLOC(YYSTACK_BYTES(yystacksize));
-            if (!yyptr)
+            if (!yyptr) {
                 goto yyexhaustedlab;
+            }
             YYSTACK_RELOCATE(yyss);
             YYSTACK_RELOCATE(yyvs);
 
 #undef YYSTACK_RELOCATE
-            if (yyss1 != yyssa)
+            if (yyss1 != yyssa) {
                 YYSTACK_FREE(yyss1);
+            }
         }
 #endif
 #endif /* no yyoverflow */
@@ -1218,8 +1236,9 @@ yysetstate:
                    (unsigned long int)yystacksize));
 
         /* coverity[OVERRUN] */
-        if (yyss + yystacksize - 1 <= yyssp)
+        if (yyss + yystacksize - 1 <= yyssp) {
             YYABORT;
+        }
     }
 
     YYDPRINTF((stderr, "Entering state %d\n", yystate));
@@ -1236,8 +1255,9 @@ yybackup:
 
     /* First try to decide what to do without reference to look-ahead token.  */
     yyn = yypact[yystate];
-    if (yyn == YYPACT_NINF)
+    if (yyn == YYPACT_NINF) {
         goto yydefault;
+    }
 
     /* Not known => get a look-ahead token if don't already have one.  */
 
@@ -1258,30 +1278,35 @@ yybackup:
     /* If the proper action on seeing token YYTOKEN is to reduce or to
      detect an error, take that action.  */
     yyn += yytoken;
-    if (yyn < 0 || YYLAST < yyn || yycheck[yyn] != yytoken)
+    if (yyn < 0 || YYLAST < yyn || yycheck[yyn] != yytoken) {
         goto yydefault;
+    }
     yyn = yytable[yyn];
     if (yyn <= 0) {
-        if (yyn == 0 || yyn == YYTABLE_NINF)
+        if (yyn == 0 || yyn == YYTABLE_NINF) {
             goto yyerrlab;
+        }
         yyn = -yyn;
         goto yyreduce;
     }
 
-    if (yyn == YYFINAL)
+    if (yyn == YYFINAL) {
         YYACCEPT;
+    }
 
     /* Count tokens shifted since error; after three, turn off error
      status.  */
-    if (yyerrstatus)
+    if (yyerrstatus) {
         yyerrstatus--;
+    }
 
     /* Shift the look-ahead token.  */
     YY_SYMBOL_PRINT("Shifting", yytoken, &yylval, &yylloc);
 
     /* Discard the shifted token unless it is eof.  */
-    if (yychar != YYEOF)
+    if (yychar != YYEOF) {
         yychar = YYEMPTY;
+    }
 
     yystate = yyn;
     *++yyvsp = yylval;
@@ -1293,8 +1318,9 @@ yybackup:
 `-----------------------------------------------------------*/
 yydefault:
     yyn = yydefact[yystate];
-    if (yyn == 0)
+    if (yyn == 0) {
         goto yyerrlab;
+    }
     goto yyreduce;
 
 /*-----------------------------.
@@ -1401,10 +1427,11 @@ yyreduce:
     yyn = yyr1[yyn];
 
     yystate = yypgoto[yyn - YYNTOKENS] + *yyssp;
-    if (0 <= yystate && yystate <= YYLAST && yycheck[yystate] == *yyssp)
+    if (0 <= yystate && yystate <= YYLAST && yycheck[yystate] == *yyssp) {
         yystate = yytable[yystate];
-    else
+    } else {
         yystate = yydefgoto[yyn - YYNTOKENS];
+    }
 
     goto yynewstate;
 
@@ -1422,14 +1449,16 @@ yyerrlab:
             YYSIZE_T yysize = yysyntax_error(0, yystate, yychar);
             if (yymsg_alloc < yysize && yymsg_alloc < YYSTACK_ALLOC_MAXIMUM) {
                 YYSIZE_T yyalloc = 2 * yysize;
-                if (!(yysize <= yyalloc && yyalloc <= YYSTACK_ALLOC_MAXIMUM))
+                if (!(yysize <= yyalloc && yyalloc <= YYSTACK_ALLOC_MAXIMUM)) {
                     yyalloc = YYSTACK_ALLOC_MAXIMUM;
-                if (yymsg != yymsgbuf)
+                }
+                if (yymsg != yymsgbuf) {
                     YYSTACK_FREE(yymsg);
+                }
                 yymsg = (char *)YYSTACK_ALLOC(yyalloc);
-                if (yymsg)
+                if (yymsg) {
                     yymsg_alloc = yyalloc;
-                else {
+                } else {
                     yymsg = yymsgbuf;
                     yymsg_alloc = sizeof yymsgbuf;
                 }
@@ -1440,8 +1469,9 @@ yyerrlab:
                 yyerror(yymsg);
             } else {
                 yyerror(YY_("syntax error"));
-                if (yysize != 0)
+                if (yysize != 0) {
                     goto yyexhaustedlab;
+                }
             }
         }
 #endif
@@ -1453,8 +1483,9 @@ yyerrlab:
 
         if (yychar <= YYEOF) {
             /* Return failure if at end of input.  */
-            if (yychar == YYEOF)
+            if (yychar == YYEOF) {
                 YYABORT;
+            }
         } else {
             yydestruct("Error: discarding",
                        yytoken, &yylval);
@@ -1478,8 +1509,9 @@ yyerrorlab:
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunreachable-code"
 #endif
-    if (/*CONSTCOND*/ 0)
+    if (/*CONSTCOND*/ 0) {
         goto yyerrorlab;
+    }
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
@@ -1503,14 +1535,16 @@ yyerrlab1:
             yyn += YYTERROR;
             if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR) {
                 yyn = yytable[yyn];
-                if (0 < yyn)
+                if (0 < yyn) {
                     break;
+                }
             }
         }
 
         /* Pop the current state because it cannot handle the error token.  */
-        if (yyssp == yyss)
+        if (yyssp == yyss) {
             YYABORT;
+        }
 
         yydestruct("Error: popping",
                    yystos[yystate], yyvsp);
@@ -1519,8 +1553,9 @@ yyerrlab1:
         YY_STACK_PRINT(yyss, yyssp);
     }
 
-    if (yyn == YYFINAL)
+    if (yyn == YYFINAL) {
         YYACCEPT;
+    }
 
     *++yyvsp = yylval;
 
@@ -1555,9 +1590,10 @@ yyexhaustedlab:
 #endif
 
 yyreturn:
-    if (yychar != YYEOF && yychar != YYEMPTY)
+    if (yychar != YYEOF && yychar != YYEMPTY) {
         yydestruct("Cleanup: discarding lookahead",
                    yytoken, &yylval);
+    }
     /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
     YYPOPSTACK(yylen);
@@ -1568,12 +1604,14 @@ yyreturn:
         YYPOPSTACK(1);
     }
 #ifndef yyoverflow
-    if (yyss != yyssa)
+    if (yyss != yyssa) {
         YYSTACK_FREE(yyss);
+    }
 #endif
 #if YYERROR_VERBOSE
-    if (yymsg != yymsgbuf)
+    if (yymsg != yymsgbuf) {
         YYSTACK_FREE(yymsg);
+    }
 #endif
     /* Make sure YYID is used.  */
     return YYID(yyresult);

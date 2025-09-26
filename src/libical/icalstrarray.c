@@ -18,23 +18,26 @@
 
 size_t icalstrarray_size(const icalstrarray *array)
 {
-    if (!array)
+    if (!array) {
         return 0;
+    }
     return array->num_elements;
 }
 
 const char *icalstrarray_element_at(icalstrarray *array, size_t position)
 {
-    if (position >= icalstrarray_size(array))
+    if (position >= icalstrarray_size(array)) {
         return NULL;
+    }
     return *((const char **)icalarray_element_at(array, position));
 }
 
 size_t icalstrarray_find(icalstrarray *array,
                          const char *needle)
 {
-    if (!array || !needle)
+    if (!array || !needle) {
         return icalstrarray_size(array);
+    }
 
     size_t i;
 
@@ -50,8 +53,9 @@ size_t icalstrarray_find(icalstrarray *array,
 
 void icalstrarray_append(icalstrarray *array, const char *elem)
 {
-    if (!array || !elem)
+    if (!array || !elem) {
         return;
+    }
 
     char *copy = icalmemory_strdup(elem);
 
@@ -60,29 +64,34 @@ void icalstrarray_append(icalstrarray *array, const char *elem)
 
 void icalstrarray_add(icalstrarray *array, const char *add)
 {
-    if (!array || !add)
+    if (!array || !add) {
         return;
+    }
 
-    if (icalstrarray_find(array, add) >= icalstrarray_size(array))
+    if (icalstrarray_find(array, add) >= icalstrarray_size(array)) {
         icalstrarray_append(array, add);
+    }
 }
 
 void icalstrarray_remove_element_at(icalstrarray *array, size_t position)
 {
-    if (position >= icalstrarray_size(array))
+    if (position >= icalstrarray_size(array)) {
         return;
+    }
 
     char **del = icalarray_element_at(array, position);
 
-    if (del && *del)
+    if (del && *del) {
         icalmemory_free_buffer(*del);
+    }
     icalarray_remove_element_at(array, position);
 }
 
 void icalstrarray_remove(icalstrarray *array, const char *del)
 {
-    if (!array || !del)
+    if (!array || !del) {
         return;
+    }
 
     size_t j = 0;
 
@@ -100,13 +109,15 @@ void icalstrarray_remove(icalstrarray *array, const char *del)
 
 void icalstrarray_free(icalstrarray *array)
 {
-    if (!array)
+    if (!array) {
         return;
+    }
 
     for (size_t i = 0; i < array->num_elements; i++) {
         char **del = icalarray_element_at(array, i);
-        if (del && *del)
+        if (del && *del) {
             icalmemory_free_buffer(*del);
+        }
     }
 
     icalarray_free(array);
@@ -119,15 +130,17 @@ static int strpcmp(const char **a, const char **b)
 
 void icalstrarray_sort(icalstrarray *array)
 {
-    if (!array)
+    if (!array) {
         return;
+    }
     icalarray_sort(array, (int (*)(const void *, const void *))&strpcmp);
 }
 
 icalstrarray *icalstrarray_clone(icalstrarray *array)
 {
-    if (!array)
+    if (!array) {
         return NULL;
+    }
 
     icalstrarray *clone = icalstrarray_new(array->increment_size);
     size_t i;
