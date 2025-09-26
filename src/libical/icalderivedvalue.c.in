@@ -14,6 +14,7 @@
 #endif
 
 #include "icalderivedvalue.h"
+#include "icalduration_p.h"
 #include "icalvalue.h"
 #include "icalvalueimpl.h"
 #include "icalerror.h"

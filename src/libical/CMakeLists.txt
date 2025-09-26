@@ -238,6 +238,8 @@ set(
   icaltimezone.c
   icaltimezone.h
   icaltimezoneimpl.h
+  icalduration_p.h
+  icalduration_p.c
   icalduration.h
   icalduration.c
   icalperiod.h
