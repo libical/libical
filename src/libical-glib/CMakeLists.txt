@@ -24,15 +24,16 @@ add_executable(
 
 target_compile_options(
   ical-glib-src-generator
-  PUBLIC
+  PRIVATE
     ${GLIB_CFLAGS}
     ${LIBXML_CFLAGS}
     -DG_LOG_DOMAIN=\"src-generator\"
 )
 target_link_libraries(
   ical-glib-src-generator
-  ${GLIB_LIBRARIES}
-  ${LIBXML_LIBRARIES}
+  PRIVATE
+    ${GLIB_LIBRARIES}
+    ${LIBXML_LIBRARIES}
 )
 
 install(
@@ -206,7 +207,7 @@ if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   add_dependencies(ical-glib-static ical-header)
   target_compile_options(
     ical-glib-static
-    PUBLIC
+    PRIVATE
       ${GLIB_CFLAGS}
       -DG_LOG_DOMAIN="libical-glib"
       -DLIBICAL_GLIB_COMPILATION
