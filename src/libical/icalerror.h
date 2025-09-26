@@ -10,7 +10,9 @@
 #define ICALERROR_H
 
 #include "libical_ical_export.h"
+
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 /**
@@ -141,7 +143,7 @@ LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
  * icalerror_set_errors_are_fatal(false);
  * ```
  */
-LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(int fatal);
+LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(bool fatal);
 
 /**
  * @brief Determine if errors are fatal
@@ -156,7 +158,7 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(int fatal);
  * }
  * ```
  */
-LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
+LIBICAL_ICAL_EXPORT bool icalerror_get_errors_are_fatal(void);
 
 /* Warning messages */
 

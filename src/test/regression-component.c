@@ -433,7 +433,7 @@ void test_icalcomponent_get_span(void)
     int_is("America/Los_Angeles w/ duration", span.end, 973351800);
 #endif
 
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
     /** test 6
      *  We specify only start time, should return a null span with no error
      */
@@ -500,5 +500,5 @@ void test_icalcomponent_get_span(void)
     icalcomponent_free(c);
 
     /* assert(icalerrno == ICAL_MALFORMEDDATA_ERROR); */
-    icalerror_set_errors_are_fatal(1);
+    icalerror_set_errors_are_fatal(true);
 }

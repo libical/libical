@@ -101,12 +101,12 @@ static ICAL_GLOBAL_VAR int icalerror_errors_are_fatal = 1;
 static ICAL_GLOBAL_VAR int icalerror_errors_are_fatal = 0;
 #endif
 
-void icalerror_set_errors_are_fatal(int fatal)
+void icalerror_set_errors_are_fatal(bool fatal)
 {
     icalerror_errors_are_fatal = (fatal != 0);
 }
 
-int icalerror_get_errors_are_fatal(void)
+bool icalerror_get_errors_are_fatal(void)
 {
     return icalerror_errors_are_fatal;
 }
