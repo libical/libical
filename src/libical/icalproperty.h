@@ -189,6 +189,31 @@ LIBICAL_ICAL_EXPORT bool icalproperty_enum_belongs_to_property(icalproperty_kind
  */
 LIBICAL_ICAL_EXPORT void icalproperty_normalize(icalproperty *prop);
 
+/**
+ * Sets if empty properties are permitted.
+ *
+ * Determines the library behavior whenever an empty property is encountered.
+ * When not set (the default) empty properties are replaced with X-LIC-ERROR properties.
+ * Otherwise, processing proceeds normally and the property value will be empty.
+ *
+ * @param enable If true, libical allows empty properties; otherwise empty properties
+ *               are replaced by X-LIC-ERROR properties.
+ *
+ * Note that if icalerror_get_errors_are_fatal is also true a SIGABRT will be raised
+ * whenever an empty property is encountered.
+ * @since 4.0
+ */
+LIBICAL_ICAL_EXPORT void icalproperty_set_allow_empty_properties(bool enable);
+
+/**
+ * Returns if empty properties are allowed; else are replaced with X-LIC-ERROR properties.
+ *
+ * @return true if empty properties are allowed; else returns false
+ * @since 4.0
+ *
+ */
+LIBICAL_ICAL_EXPORT bool icalproperty_get_allow_empty_properties(void);
+
 /* This is exposed so that callers will not have to allocate and
    deallocate iterators. Pretend that you can't see it. */
 typedef struct icalparamiter {

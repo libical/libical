@@ -31,6 +31,18 @@ struct icalproperty_impl {
     icalcomponent *parent;
 };
 
+static ICAL_GLOBAL_VAR bool icalprop_allow_empty_properties = false;
+
+void icalproperty_set_allow_empty_properties(bool enable)
+{
+    icalprop_allow_empty_properties = enable;
+}
+
+bool icalproperty_get_allow_empty_properties(void)
+{
+    return icalprop_allow_empty_properties;
+}
+
 void icalproperty_add_parameters(icalproperty *prop, va_list args)
 {
     void *vp;
@@ -429,16 +441,12 @@ char *icalproperty_as_ical_string_r(icalproperty *prop)
 
         if (str != 0) {
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
-#if ICAL_ALLOW_EMPTY_PROPERTIES == 0
-        } else {
+        } else if (!icalproperty_get_allow_empty_properties()) {
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, "ERROR: No Value");
-#endif
         }
         icalmemory_free_buffer(str);
-    } else {
-#if ICAL_ALLOW_EMPTY_PROPERTIES == 0
+    } else if (!icalproperty_get_allow_empty_properties()) {
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, "ERROR: No Value");
-#endif
     }
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);

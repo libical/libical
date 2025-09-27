@@ -198,10 +198,6 @@ Use these CMake options to adjust the library behavior as follows:
   Set to make icalerror_* calls abort instead of internally signaling an error.
   Default=false
 
-- ICAL_ALLOW_EMPTY_PROPERTIES=[true|false]
-  Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
-  Default=false
-
 - LIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
   Set to build using our own (instead of the system's) timezone data.
   Default=false (use the system timezone data on non-Windows systems)

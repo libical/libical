@@ -344,4 +344,12 @@
         <returns type="const gchar *" comment="The string representation of #ICalPropertyResourcetype."/>
         <comment xml:space="preserve">Converts the #ICalPropertyResourcetype to string.</comment>
     </method>
+    <method name="i_cal_property_set_allow_empty_properties" corresponds="icalproperty_set_allow_empty_properties" since="4.0">
+        <parameter type="gboolean" name="value" comment="value to set"/>
+        <comment xml:space="preserve">Sets if empty properties are allowed.</comment>
+    </method>
+    <method name="i_cal_property_get_allow_empty_properties" corresponds="icalproperty_get_allow_empty_properties" since="4.0">
+        <returns type="gboolean" comment="whether empty properties are allowed" />
+        <comment xml:space="preserve">Returns true if empty properties are allowed.</comment>
+    </method>
 </structure>

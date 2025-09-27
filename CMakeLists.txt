@@ -21,10 +21,6 @@
 #   Change the behavior at runtime using the icalerror_set_errors_are_fatal() function.
 #   Query the behavior at runtime using the icalerror_get_errors_are_fatal() function.
 #
-# -DICAL_ALLOW_EMPTY_PROPERTIES=[true|false]
-#  Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
-#  Default=false
-#
 # -DLIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
 #  Set to build using our own timezone data.
 #  Default=false (use the system timezone data on non-Windows systems)
@@ -532,17 +528,6 @@ if(LIBICAL_ENABLE_ERRORS_ARE_FATAL)
   set(ICAL_ERRORS_ARE_FATAL 1)
 else()
   set(ICAL_ERRORS_ARE_FATAL 0)
-endif()
-
-libical_option(
-  ICAL_ALLOW_EMPTY_PROPERTIES
-  "Prevents empty properties from being replaced with X-LIC-ERROR properties."
-  False
-)
-if(ICAL_ALLOW_EMPTY_PROPERTIES)
-  set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
-else()
-  set(ICAL_ALLOW_EMPTY_PROPERTIES 0)
 endif()
 
 if(WIN32 OR WINCE)

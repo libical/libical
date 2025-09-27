@@ -4382,30 +4382,31 @@ void test_empty_property(void)
     icalproperty *p;
     struct icaltimetype tt;
 
-    bool estate = icalerror_get_errors_are_fatal();
-    icalerror_set_errors_are_fatal(false);
-
     static const char test_icalcomp_str[] =
         "BEGIN:VEVENT\n"
         "DESCRIPTION:\n"
         "DTSTART;TZID=America/New_York:\n"
+        "GEO:\n" //structured
         "END:VEVENT\n";
 
-#if ICAL_ALLOW_EMPTY_PROPERTIES == 0
+    int estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(0);
+
+    int pstate = icalproperty_get_allow_empty_properties();
+
+    /* First test: do not allow empty properties */
+    icalproperty_set_allow_empty_properties(false);
+
     static const char *test_icalcomp_str_out =
         "BEGIN:VEVENT\r\n"
         "X-LIC-ERROR;X-LIC-ERRORTYPE=VALUE-PARSE-ERROR:No value for DESCRIPTION \r\n"
         " property. Removing entire property:\r\n"
         "X-LIC-ERROR;X-LIC-ERRORTYPE=VALUE-PARSE-ERROR:No value for DTSTART \r\n"
         " property. Removing entire property:\r\n"
+        "X-LIC-ERROR;X-LIC-ERRORTYPE=VALUE-PARSE-ERROR:No value for GEO property. \r\n"
+        " Removing entire property:\r\n"
         "END:VEVENT\r\n";
-#else
-    static const char *test_icalcomp_str_out =
-        "BEGIN:VEVENT\r\n"
-        "DESCRIPTION:\r\n"
-        "DTSTART;TZID=America/New_York:\r\n"
-        "END:VEVENT\r\n";
-#endif
+
     c = icalparser_parse_string((char *)test_icalcomp_str);
     ok("icalparser_parse_string()", (c != NULL));
     if (!c) {
@@ -4425,6 +4426,38 @@ void test_empty_property(void)
     ok("dtstart is empty", icaltime_is_null_time(tt));
 
     icalcomponent_free(c);
+
+    /* Second test: allow empty properties */
+    icalproperty_set_allow_empty_properties(true);
+
+    static const char *test_icalcomp_str_out_allow =
+        "BEGIN:VEVENT\r\n"
+        "DESCRIPTION:\r\n"
+        "DTSTART;TZID=America/New_York:\r\n"
+        "GEO:\r\n"
+        "END:VEVENT\r\n";
+
+    c = icalparser_parse_string((char *)test_icalcomp_str);
+    ok("icalparser_parse_string()", (c != NULL));
+    if (!c) {
+        exit(EXIT_FAILURE);
+    }
+
+    if (VERBOSE) {
+        printf("%s", icalcomponent_as_ical_string(c));
+    }
+
+    str_is("test results empty property", icalcomponent_as_ical_string(c), test_icalcomp_str_out_allow);
+
+    p = icalcomponent_get_first_property(c, ICAL_DESCRIPTION_PROPERTY);
+    ok("description is empty", icalproperty_get_description(p) == NULL);
+    p = icalcomponent_get_first_property(c, ICAL_DTSTART_PROPERTY);
+    tt = icalproperty_get_dtstart(p);
+    ok("dtstart is empty", icaltime_is_null_time(tt));
+
+    icalcomponent_free(c);
+
+    icalproperty_set_allow_empty_properties(pstate);
     icalerror_set_errors_are_fatal(estate);
 }
 
