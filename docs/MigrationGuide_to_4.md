@@ -78,6 +78,7 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
 
 * `icalrecurrencetype_from_string()` was replaced by `icalrecurrencetype_new_from_string()`,
    which returns a `struct icalrecurrencetype *` rather than a `struct icalrecurrencetype`.
+
 * The following functions now take arguments of type `struct icalrecurrencetype *` rather than
   `struct icalrecurrencetype`:
   * `icalproperty_new_rrule()`
@@ -98,6 +99,10 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
   * `icalproperty_get_rrule()`
   * `icalproperty_get_exrule()`
   * `icalvalue_get_recur()`
+
+* To more clearly illustrate their intended purpose, the `icaldurationtype_from_int()` and `icaldurationtype_as_int()`
+  have been renamed to `icaldurationtype_from_seconds()` and `icaldurationtype_as_seconds()`, respectively.
+  Their functionality has not changed.
 
 ### New functions
 

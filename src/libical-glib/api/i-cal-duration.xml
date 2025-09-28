@@ -90,7 +90,7 @@
         <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))->seconds = seconds;</custom>
     </method>
-    <method name="i_cal_duration_new_from_seconds" corresponds="icaldurationtype_from_seconds" kind="constructor" since="1.0">
+    <method name="i_cal_duration_new_from_seconds" corresponds="icaldurationtype_from_seconds" kind="constructor" since="4.0">
         <parameter type="gint" name="t" comment="The duration in second"/>
         <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration" />
         <comment xml:space="preserve">Creates a #ICalDuration from the duration in second.</comment>
@@ -100,10 +100,10 @@
         <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration" />
         <comment xml:space="preserve">Creates a #ICalDuration from the duration in string.</comment>
     </method>
-    <method name="i_cal_duration_as_seconds" corresponds="icaldurationtype_as_seconds" kind="others" since="1.0">
+    <method name="i_cal_duration_as_seconds" corresponds="icaldurationtype_as_seconds" kind="others" since="4.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>
         <returns type="gint" comment="The duration in second" />
-        <comment xml:space="preserve">Converts the #ICalDuration to the representation in second.</comment>
+        <comment xml:space="preserve">Extracts the duration in seconds from an #ICalDuration. Does not consider negative durations.</comment>
     </method>
     <method name="i_cal_duration_as_ical_string" corresponds="icaldurationtype_as_ical_string_r" kind="others" since="1.0">
         <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>

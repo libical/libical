@@ -20,17 +20,17 @@
 #include "icaltimezone.h"
 
 /* From Seth Alves, <alves@hungry.com>   */
-struct icaldurationtype icaldurationtype_from_seconds(int t)
+struct icaldurationtype icaldurationtype_from_seconds(int seconds)
 {
     struct icaldurationtype dur;
 
     dur = icaldurationtype_null_duration();
 
-    if (t < 0) {
+    if (seconds < 0) {
         dur.is_neg = 1;
-        t = -t;
+        seconds = -seconds;
     }
-    dur.seconds = (unsigned int)t;
+    dur.seconds = (unsigned int)seconds;
 
     return dur;
 }

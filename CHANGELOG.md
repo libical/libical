@@ -41,8 +41,8 @@ for details about API changes since libical 3.x.
 - CMake option -DGOBJECT_INTROSPECTION=True by default.
 - `icaltzutil_get_zone_directory()` can use the TZDIR environment to find system zoneinfo
 - `icaltimezone_set_tzid_prefix()` now allows setting an empty tzid prefix.
-- `icalduration_from_int` and `icalduration_as_int` have been renamed to
-    `icalduration_from_seconds` and `icalduration_as_seconds`, respectively.
+- `icaldurationtype_from_int` and `icaldurationtype_as_int` have been renamed to
+    `icaldurationtype_from_seconds` and `icaldurationtype_as_seconds`, respectively.
 
 ### Deprecated
 
