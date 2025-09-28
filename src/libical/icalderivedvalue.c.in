@@ -195,19 +195,19 @@ struct icaltriggertype icalvalue_get_trigger(const icalvalue *impl)
 {
     struct icaltriggertype tr;
 
-    tr.duration = icaldurationtype_from_int(0);
+    tr.duration = icaldurationtype_from_seconds(0);
     tr.time = icaltime_null_time();
 
     icalerror_check_arg_rx((impl != 0), "value", tr);
 
     if (impl->kind == ICAL_DATETIME_VALUE) {
-        tr.duration = icaldurationtype_from_int(0);
+        tr.duration = icaldurationtype_from_seconds(0);
         tr.time = impl->data.v_time;
     } else if (impl->kind == ICAL_DURATION_VALUE) {
         tr.time = icaltime_null_time();
         tr.duration = impl->data.v_duration;
     } else {
-        tr.duration = icaldurationtype_from_int(0);
+        tr.duration = icaldurationtype_from_seconds(0);
         tr.time = icaltime_null_time();
         icalerror_set_errno(ICAL_BADARG_ERROR);
     }

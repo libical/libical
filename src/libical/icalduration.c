@@ -20,7 +20,7 @@
 #include "icaltimezone.h"
 
 /* From Seth Alves, <alves@hungry.com>   */
-struct icaldurationtype icaldurationtype_from_int(int t)
+struct icaldurationtype icaldurationtype_from_seconds(int t)
 {
     struct icaldurationtype dur;
 
@@ -230,7 +230,7 @@ char *icaldurationtype_as_ical_string_r(struct icaldurationtype d)
     return buf;
 }
 
-int icaldurationtype_as_int(struct icaldurationtype dur)
+int icaldurationtype_as_seconds(struct icaldurationtype dur)
 {
     if (dur.days != 0 || dur.weeks != 0) {
         /* The length of a day is position-dependent */
@@ -345,7 +345,7 @@ struct icaldurationtype icaltime_subtract(struct icaltimetype t1, struct icaltim
         icaltime_t t1t = icaltime_as_timet_with_zone(t1, t1.zone);
         icaltime_t t2t = icaltime_as_timet_with_zone(t2, t2.zone);
 
-        ret = icaldurationtype_from_int((int)(t1t - t2t));
+        ret = icaldurationtype_from_seconds((int)(t1t - t2t));
     }
     return ret;
 }

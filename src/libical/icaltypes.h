@@ -32,7 +32,7 @@ struct icaltriggertype {
     struct icaldurationtype duration;
 };
 
-LIBICAL_ICAL_EXPORT struct icaltriggertype icaltriggertype_from_int(const int reltime);
+LIBICAL_ICAL_EXPORT struct icaltriggertype icaltriggertype_from_seconds(const int reltime);
 
 LIBICAL_ICAL_EXPORT struct icaltriggertype icaltriggertype_from_string(const char *str);
 

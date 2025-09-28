@@ -270,9 +270,9 @@ struct icaldurationtype
     unsigned int seconds;
 };
 
-struct icaldurationtype icaldurationtype_from_int(int t);
+struct icaldurationtype icaldurationtype_from_seconds(int t);
 struct icaldurationtype icaldurationtype_from_string(const char*);
-int icaldurationtype_as_int(struct icaldurationtype duration);
+int icaldurationtype_as_seconds(struct icaldurationtype duration);
 char* icaldurationtype_as_ical_string(struct icaldurationtype d);
 struct icaldurationtype icaldurationtype_null_duration();
 int icaldurationtype_is_null_duration(struct icaldurationtype d);

@@ -5,8 +5,8 @@
 
 
 -->
-<structure namespace="ICal" name="Trigger" native="struct icaltriggertype" is_bare="true" default_native="icaltriggertype_from_int (0)">
-    <method name="i_cal_trigger_new_from_int" corresponds="icaltriggertype_from_int" kind="constructor" since="1.0">
+<structure namespace="ICal" name="Trigger" native="struct icaltriggertype" is_bare="true" default_native="icaltriggertype_from_seconds (0)">
+    <method name="i_cal_trigger_new_from_seconds" corresponds="icaltriggertype_from_seconds" kind="constructor" since="1.0">
         <parameter type="const gint" name="reltime" comment="An integer"/>
         <returns type="ICalTrigger *" annotation="transfer full" comment="The newly created #ICalTrigger."/>
         <comment xml:space="preserve">Creates a #ICalTrigger from integer.</comment>

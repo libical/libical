@@ -40,12 +40,12 @@ bool icaltriggertype_is_bad_trigger(struct icaltriggertype tr)
     return false;
 }
 
-struct icaltriggertype icaltriggertype_from_int(const int reltime)
+struct icaltriggertype icaltriggertype_from_seconds(const int reltime)
 {
     struct icaltriggertype tr;
 
     tr.time = icaltime_null_time();
-    tr.duration = icaldurationtype_from_int(reltime);
+    tr.duration = icaldurationtype_from_seconds(reltime);
 
     return tr;
 }
@@ -57,7 +57,7 @@ struct icaltriggertype icaltriggertype_from_string(const char *str)
     icalerrorenum e;
 
     tr.time = icaltime_null_time();
-    tr.duration = icaldurationtype_from_int(0);
+    tr.duration = icaldurationtype_from_seconds(0);
 
     /* Suppress errors so a failure in icaltime_from_string() does not cause an abort */
     es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);

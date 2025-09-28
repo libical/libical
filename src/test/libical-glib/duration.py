@@ -16,12 +16,12 @@ from gi.repository import ICalGLib  # noqa E402
 length = 1000000000
 badString = 'This is a bad string'
 
-duration = ICalGLib.Duration.new_from_int(length)
-assert duration.as_int() == length
+duration = ICalGLib.Duration.new_from_seconds(length)
+assert duration.as_seconds() == length
 length_in_string = duration.as_ical_string()
 duration1 = ICalGLib.Duration.new_from_string(length_in_string)
 assert duration1.as_ical_string() == length_in_string
-assert length == duration1.as_int()
+assert length == duration1.as_seconds()
 
 duration = ICalGLib.Duration.new_from_string(badString)
 durationBad = ICalGLib.Duration.new_bad_duration()

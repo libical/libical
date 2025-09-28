@@ -1398,15 +1398,32 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
     }
 
     case ICAL_DURATION_VALUE: {
-        int dur_a = icaldurationtype_as_int(a->data.v_duration);
-        int dur_b = icaldurationtype_as_int(b->data.v_duration);
+        struct icaldurationtype dur_a = a->data.v_duration,
+                                dur_b = b->data.v_duration;
+        int a_days = (int)(7 * dur_a.weeks + dur_a.days) * (dur_a.is_neg == 1 ? -1 : 1),
+            b_days = (int)(7 * dur_b.weeks + dur_b.days) * (dur_a.is_neg == 1 ? -1 : 1);
+        int a_secs = (int)(dur_a.seconds + 60 * (dur_a.minutes + 60 * dur_a.hours)) *
+                     (dur_a.is_neg == 1 ? -1 : 1),
+            b_secs = (int)(dur_b.seconds + 60 * (dur_b.minutes + 60 * dur_b.hours)) *
+                     (dur_b.is_neg == 1 ? -1 : 1);
 
-        if (dur_a > dur_b) {
-            return ICAL_XLICCOMPARETYPE_GREATER;
-        } else if (dur_a < dur_b) {
-            return ICAL_XLICCOMPARETYPE_LESS;
+        if (a_secs == b_secs) {
+            if (a_days > b_days) {
+                return ICAL_XLICCOMPARETYPE_GREATER;
+            } else if (a_days < b_days) {
+                return ICAL_XLICCOMPARETYPE_LESS;
+            } else {
+                return ICAL_XLICCOMPARETYPE_EQUAL;
+            }
+        } else if (a_days == b_days) {
+            if (a_secs > b_secs) {
+                return ICAL_XLICCOMPARETYPE_GREATER;
+            } else {
+                return ICAL_XLICCOMPARETYPE_LESS;
+            }
         } else {
-            return ICAL_XLICCOMPARETYPE_EQUAL;
+            /* We can't compare a mix of nominal and accurate durations */
+            return ICAL_XLICCOMPARETYPE_NOTEQUAL;
         }
     }
 

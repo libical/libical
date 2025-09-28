@@ -49,13 +49,10 @@ struct icaldurationtype {
  * ```c
  * // create a new icaldurationtype with a duration of 60 seconds
  * struct icaldurationtype duration;
- * duration = icaldurationtype_from_int(60);
- *
- * // verify that the duration is one minute
- * assert(duration.minutes == 1);
+ * duration = icaldurationtype_from_seconds(60);
  * ```
  */
-LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_int(int t);
+LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_seconds(int t);
 
 /**
  * @brief Creates a new ::icaldurationtype from a duration given as a string.
@@ -87,13 +84,13 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
  * ```c
  * // create icaldurationtype with given duration
  * struct icaldurationtype duration;
- * duration = icaldurationtype_from_int(3532342);
+ * duration = icaldurationtype_from_seconds(3532342);
  *
  * // get the duration in seconds and verify it
- * assert(icaldurationtype_as_int(duration) == 3532342);
+ * assert(icaldurationtype_as_seconds(duration) == 3532342);
  * ```
  */
-LIBICAL_ICAL_EXPORT int icaldurationtype_as_int(struct icaldurationtype duration);
+LIBICAL_ICAL_EXPORT int icaldurationtype_as_seconds(struct icaldurationtype duration);
 
 /**
  * Converts an icaldurationtype into the iCal format as string.
@@ -109,7 +106,7 @@ LIBICAL_ICAL_EXPORT int icaldurationtype_as_int(struct icaldurationtype duration
  * ```c
  * // create new duration
  * struct icaldurationtype duration;
- * duration = icaldurationtype_from_int(3424224);
+ * duration = icaldurationtype_from_seconds(3424224);
  *
  * // print as ical-formatted string
  * char *ical = icaldurationtype_as_ical_string(duration);
@@ -135,7 +132,7 @@ LIBICAL_ICAL_EXPORT char *icaldurationtype_as_ical_string(struct icaldurationtyp
  * ```c
  * // create new duration
  * struct icaldurationtype duration;
- * duration = icaldurationtype_from_int(3424224);
+ * duration = icaldurationtype_from_seconds(3424224);
  *
  * // print as ical-formatted string
  * printf("%s\n", icaldurationtype_as_ical_string(duration));
@@ -161,7 +158,7 @@ LIBICAL_ICAL_EXPORT char *icaldurationtype_as_ical_string_r(struct icaldurationt
  * assert(duration.minutes  == 0);
  * assert(duration.seconds  == 0);
  * assert(icalduration_is_null_duration(duration));
- * assert(icalduration_as_int(duration) == 0);
+ * assert(icalduration_as_seconds(duration) == 0);
  * ```
  */
 LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_null_duration(void);
@@ -232,7 +229,7 @@ LIBICAL_ICAL_EXPORT bool icaldurationtype_is_bad_duration(struct icaldurationtyp
  *
  * // create time and duration objects
  * time = icaltime_today();
- * duration = icaldurationtype_from_int(60);
+ * duration = icaldurationtype_from_seconds(60);
  *
  * // add the duration to the time object
  * time = icaltime_add(time, duration);
