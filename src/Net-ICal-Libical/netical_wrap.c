@@ -1855,7 +1855,7 @@ XS(_wrap_icaltime_days_in_month) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icaldurationtype_from_int) {
+XS(_wrap_icaldurationtype_from_seconds) {
 
     struct icaldurationtype * _result;
     int  _arg0;
@@ -1864,10 +1864,10 @@ XS(_wrap_icaldurationtype_from_int) {
 
     cv = cv;
     if ((items < 1) || (items > 1))
-        croak("Usage: icaldurationtype_from_int(t);");
+        croak("Usage: icaldurationtype_from_seconds(t);");
     _arg0 = (int )SvIV(ST(0));
     _result = (struct icaldurationtype *) malloc(sizeof(struct icaldurationtype ));
-    *(_result) = icaldurationtype_from_int(_arg0);
+    *(_result) = icaldurationtype_from_seconds(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
     XSRETURN(argvi);
@@ -1891,7 +1891,7 @@ XS(_wrap_icaldurationtype_from_string) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icaldurationtype_as_int) {
+XS(_wrap_icaldurationtype_as_seconds) {
 
     int  _result;
     struct icaldurationtype * _arg0;
@@ -1900,12 +1900,12 @@ XS(_wrap_icaldurationtype_as_int) {
 
     cv = cv;
     if ((items < 1) || (items > 1))
-        croak("Usage: icaldurationtype_as_int(duration);");
+        croak("Usage: icaldurationtype_as_seconds(duration);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_as_int. Expected struct icaldurationtypePtr.");
+        croak("Type error in argument 1 of icaldurationtype_as_seconds. Expected struct icaldurationtypePtr.");
         XSRETURN(1);
     }
-    _result = (int )icaldurationtype_as_int(*_arg0);
+    _result = (int )icaldurationtype_as_seconds(*_arg0);
     ST(argvi) = sv_newmortal();
     sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
@@ -2967,9 +2967,9 @@ XS(boot_Net__ICal__Libical) {
 	 newXS("Net::ICal::Libical::icaltime_compare", _wrap_icaltime_compare, file);
 	 newXS("Net::ICal::Libical::icaltime_compare_date_only", _wrap_icaltime_compare_date_only, file);
 	 newXS("Net::ICal::Libical::icaltime_days_in_month", _wrap_icaltime_days_in_month, file);
-	 newXS("Net::ICal::Libical::icaldurationtype_from_int", _wrap_icaldurationtype_from_int, file);
+	 newXS("Net::ICal::Libical::icaldurationtype_from_seconds", _wrap_icaldurationtype_from_seconds, file);
 	 newXS("Net::ICal::Libical::icaldurationtype_from_string", _wrap_icaldurationtype_from_string, file);
-	 newXS("Net::ICal::Libical::icaldurationtype_as_int", _wrap_icaldurationtype_as_int, file);
+	 newXS("Net::ICal::Libical::icaldurationtype_as_seconds", _wrap_icaldurationtype_as_seconds, file);
 	 newXS("Net::ICal::Libical::icaldurationtype_as_ical_string", _wrap_icaldurationtype_as_ical_string, file);
 	 newXS("Net::ICal::Libical::icaldurationtype_null_duration", _wrap_icaldurationtype_null_duration, file);
 	 newXS("Net::ICal::Libical::icaldurationtype_is_null_duration", _wrap_icaldurationtype_is_null_duration, file);

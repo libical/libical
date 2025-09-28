@@ -1695,19 +1695,19 @@ void test_duration(void)
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("PT8H30M", icaldurationtype_as_int(d), 30600);
+    int_is("PT8H30M", icaldurationtype_as_seconds(d), 30600);
 
     d = icaldurationtype_from_string("-PT8H30M");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("-PT8H30M", icaldurationtype_as_int(d), -30600);
+    int_is("-PT8H30M", icaldurationtype_as_seconds(d), -30600);
 
     d = icaldurationtype_from_string("PT10H10M10S");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("PT10H10M10S", icaldurationtype_as_int(d), 36610);
+    int_is("PT10H10M10S", icaldurationtype_as_seconds(d), 36610);
 
     icalerror_set_errors_are_fatal(false);
 
@@ -1717,47 +1717,47 @@ void test_duration(void)
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("P7W", icaldurationtype_as_int(d), 0);
+    int_is("P7W", icaldurationtype_as_seconds(d), 0);
 
     d = icaldurationtype_from_string("P2DT8H30M");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("P2DT8H30M", icaldurationtype_as_int(d), 0);
+    int_is("P2DT8H30M", icaldurationtype_as_seconds(d), 0);
 
     d = icaldurationtype_from_string("P2W1DT5H");
     if (VERBOSE) {
-        printf("%s %d\n", icaldurationtype_as_ical_string(d), icaldurationtype_as_int(d));
+        printf("%s %d\n", icaldurationtype_as_ical_string(d), icaldurationtype_as_seconds(d));
     }
-    int_is("P2W1DT5H", icaldurationtype_as_int(d), 0);
+    int_is("P2W1DT5H", icaldurationtype_as_seconds(d), 0);
 
     d = icaldurationtype_from_string("P-2DT8H30M");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("P-2DT8H30M", icaldurationtype_as_int(d), 0);
+    int_is("P-2DT8H30M", icaldurationtype_as_seconds(d), 0);
 
     d = icaldurationtype_from_string("P7W8H");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("P7W8H", icaldurationtype_as_int(d), 0);
+    int_is("P7W8H", icaldurationtype_as_seconds(d), 0);
 
     d = icaldurationtype_from_string("T10H");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("T10H", icaldurationtype_as_int(d), 0);
+    int_is("T10H", icaldurationtype_as_seconds(d), 0);
 
     icalerror_set_errors_are_fatal(true);
 
-    d = icaldurationtype_from_int(4233600);
+    d = icaldurationtype_from_seconds(4233600);
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     str_is("PT4233600S", icaldurationtype_as_ical_string(d), "PT4233600S");
 
-    d = icaldurationtype_from_int(4424400);
+    d = icaldurationtype_from_seconds(4424400);
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
@@ -2766,7 +2766,7 @@ void test_convenience(void)
         printf("\n%s\n", icalcomponent_as_ical_string(c));
     }
 
-    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 60;
+    duration = icaldurationtype_as_seconds(icalcomponent_get_duration(c)) / 60;
 
     str_is("Start is 1997-08-01 12:00:00 (floating)",
            ictt_as_string(icalcomponent_get_dtstart(c)), "1997-08-01 12:00:00 (floating)");
@@ -2789,7 +2789,7 @@ void test_convenience(void)
         printf("\n%s\n", icalcomponent_as_ical_string(c));
     }
 
-    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 60;
+    duration = icaldurationtype_as_seconds(icalcomponent_get_duration(c)) / 60;
 
     str_is("Start is 1997-08-01 12:00:00 Z UTC",
            ictt_as_string(icalcomponent_get_dtstart(c)), "1997-08-01 12:00:00 Z UTC");
@@ -2816,7 +2816,7 @@ void test_convenience(void)
         printf("\n%s\n", icalcomponent_as_ical_string(c));
     }
 
-    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 60;
+    duration = icaldurationtype_as_seconds(icalcomponent_get_duration(c)) / 60;
 
     str_is("Start is 1997-08-01 12:00:00 (floating)",
            ictt_as_string(icalcomponent_get_dtstart(c)), "1997-08-01 12:00:00 (floating)");
@@ -2841,7 +2841,7 @@ void test_convenience(void)
         printf("\n%s\n", icalcomponent_as_ical_string(c));
     }
 
-    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 60;
+    duration = icaldurationtype_as_seconds(icalcomponent_get_duration(c)) / 60;
 
     ok("Start is 1997-08-01 12:00:00 Z UTC",
        (0 == strcmp("1997-08-01 12:00:00 Z UTC", ictt_as_string(icalcomponent_get_dtstart(c)))));
@@ -2864,7 +2864,7 @@ void test_convenience(void)
         printf("\n%s\n", icalcomponent_as_ical_string(c));
     }
 
-    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 60;
+    duration = icaldurationtype_as_seconds(icalcomponent_get_duration(c)) / 60;
 
     ok("Start is 1997-08-01 12:00:00 Z UTC",
        (0 == strcmp("1997-08-01 12:00:00 Z UTC", ictt_as_string(icalcomponent_get_dtstart(c)))));
@@ -2885,7 +2885,7 @@ void test_convenience(void)
         printf("\n%s\n", icalcomponent_as_ical_string(c));
     }
 
-    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 60;
+    duration = icaldurationtype_as_seconds(icalcomponent_get_duration(c)) / 60;
 
     ok("Start is 1997-08-01 12:00:00 Z UTC",
        (0 == strcmp("1997-08-01 12:00:00 Z UTC", ictt_as_string(icalcomponent_get_dtstart(c)))));
@@ -2908,7 +2908,7 @@ void test_convenience(void)
     }
 
     icalcomponent_set_duration(c, icaldurationtype_from_string("PT1H30M"));
-    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 60;
+    duration = icaldurationtype_as_seconds(icalcomponent_get_duration(c)) / 60;
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     ok("Start is 1997-08-01 12:00:00 Europe/Rome",
@@ -2938,7 +2938,7 @@ void test_convenience(void)
         printf("\n%s\n", icalcomponent_as_ical_string(c));
     }
 
-    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 3600;
+    duration = icaldurationtype_as_seconds(icalcomponent_get_duration(c)) / 3600;
 
     ok("Duration is 7 h", (duration == 7));
 
@@ -2960,7 +2960,7 @@ void test_convenience(void)
         printf("\n%s\n", icalcomponent_as_ical_string(c));
     }
 
-    duration = icaldurationtype_as_int(icalcomponent_get_duration(c)) / 3600;
+    duration = icaldurationtype_as_seconds(icalcomponent_get_duration(c)) / 3600;
 
     ok("Duration is 7 h", (duration == 7));
 
@@ -3788,7 +3788,7 @@ void test_file_locks(void)
     if (icalfileset_get_first_component(fs) == 0) {
         c = make_component(0);
 
-        d = icaldurationtype_from_int(1);
+        d = icaldurationtype_from_seconds(1);
 
         icalcomponent_set_duration(c, d);
 
@@ -3825,7 +3825,7 @@ void test_file_locks(void)
             assert(c != 0);
 
             d = icalcomponent_get_duration(c);
-            d = icaldurationtype_from_int(icaldurationtype_as_int(d) + 1);
+            d = icaldurationtype_from_seconds(icaldurationtype_as_seconds(d) + 1);
 
             icalcomponent_set_duration(c, d);
             icalcomponent_set_summary(c, "Child");
@@ -3858,7 +3858,7 @@ void test_file_locks(void)
             assert(c != 0);
 
             d = icalcomponent_get_duration(c);
-            d = icaldurationtype_from_int(icaldurationtype_as_int(d) + 1);
+            d = icaldurationtype_from_seconds(icaldurationtype_as_seconds(d) + 1);
 
             icalcomponent_set_duration(c, d);
             icalcomponent_set_summary(c, "Parent");
@@ -3883,11 +3883,11 @@ void test_file_locks(void)
     i = 1;
 
     c = icalfileset_get_first_component(fs);
-    final = icaldurationtype_as_int(icalcomponent_get_duration(c));
+    final = icaldurationtype_as_seconds(icalcomponent_get_duration(c));
     for (c = icalfileset_get_next_component(fs); c != 0; c = icalfileset_get_next_component(fs)) {
         struct icaldurationtype d = icalcomponent_get_duration(c);
 
-        sec = icaldurationtype_as_int(d);
+        sec = icaldurationtype_as_seconds(d);
 
         /*printf("%d,%d ",i,sec); */
         assert(i == sec);
@@ -5772,7 +5772,7 @@ static void test_implicit_dtend_duration(void)
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("icaldurationtype_as_int(d)", 0, icaldurationtype_as_int(d));
+    int_is("icaldurationtype_as_seconds(d)", 0, icaldurationtype_as_seconds(d));
 
     if (VERBOSE) {
         printf("%s\n", icaltime_as_ical_string(end));

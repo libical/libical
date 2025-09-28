@@ -333,13 +333,13 @@ icaldurationtype_seconds_get(struct icaldurationtype *);
 
 ----------
 
-icaldurationtype_from_int(t);
+icaldurationtype_from_seconds(t);
         [ returns struct icaldurationtype  ]
 
 icaldurationtype_from_string(char *);
         [ returns struct icaldurationtype  ]
 
-icaldurationtype_as_int(duration);
+icaldurationtype_as_seconds(duration);
         [ returns int  ]
 
 icaldurationtype_as_ical_string(d);
