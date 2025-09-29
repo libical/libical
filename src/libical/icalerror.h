@@ -318,8 +318,8 @@ LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
  *
  * Sets ::icalerrno to the error given in @a x. Additionally, if
  * the error is an ::ICAL_ERROR_FATAL or if it's an ::ICAL_ERROR_DEFAULT
- * and ::ICAL_ERRORS_ARE_FATAL is true, it prints a warning to @a stderr
- * and aborts the process.
+ * and icalerror_get_errors_are_fatal() is true, it prints a warning to
+ * @a stderr and aborts the process.
  *
  * @par Usage
  * ```c
@@ -327,26 +327,6 @@ LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
  * ```
  */
 LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
-
-/**
- * @def ICAL_ERRORS_ARE_FATAL
- * @brief Determines if all libical errors are fatal and lead to
- *  the process aborting.
- *
- * If set to 1, all libical errors are fatal and lead to the
- * process aborting upon encountering on. Otherwise, errors
- * are nonfatal.
- *
- * Can be checked with libical_get_errors_are_fatal().
- */
-
-#if !defined(ICAL_ERRORS_ARE_FATAL)
-#define ICAL_ERRORS_ARE_FATAL 0
-#endif
-
-#if ICAL_ERRORS_ARE_FATAL == 1
-#undef NDEBUG
-#endif
 
 #define icalerror_check_value_type(value, type) ;
 #define icalerror_check_property_type(value, type) ;
@@ -362,30 +342,25 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
  *
  * Tests the given assertion @a test, and if it fails, prints the
  * @a message given on @a stderr as a warning and aborts the process.
- * This only works if ::ICAL_ERRORS_ARE_FATAL is true, otherwise
+ * This only works if icalerror_get_errors_are_fatal() is true, otherwise
  * does nothing.
  */
-#if ICAL_ERRORS_ARE_FATAL == 1
 
 #ifdef __GNUC__
 #define icalerror_assert(test, message)                                                \
-    if (!(test)) {                                                                     \
+    if (icalerror_get_errors_are_fatal() && !(test)) {                                 \
         icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
         icalerror_stop_here();                                                         \
         abort();                                                                       \
     }
 #else /*__GNUC__*/
 #define icalerror_assert(test, message)                            \
-    if (!(test)) {                                                 \
+    if (icalerror_get_errors_are_fatal() && !(test)) {             \
         icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message); \
         icalerror_stop_here();                                     \
         abort();                                                   \
     }
 #endif /*__GNUC__*/
-
-#else /* ICAL_ERRORS_ARE_FATAL */
-#define icalerror_assert(test, message)
-#endif /* ICAL_ERRORS_ARE_FATAL */
 
 /**
  * @brief Checks the assertion @a test and raises error on failure
