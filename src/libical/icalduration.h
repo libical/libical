@@ -45,14 +45,24 @@ struct icaldurationtype {
  * @param t The duration in seconds
  * @return An ::icaldurationtype representing the duration @a t in seconds
  *
+ * The number of seconds stored in the ::icaldurationtype structure is always a positive integer.
+ * If the @p seconds argument is negative, then the `is_neg` structure member is set to 1 (true).
+ *
+ * Also note that the number of seconds is not in any way refactored into days, hours, or minutes.
+ * This function simply assigns the ::icaldurationtype seconds structure member from the integer provided.
+ *
  * @par Example
  * ```c
  * // create a new icaldurationtype with a duration of 60 seconds
  * struct icaldurationtype duration;
  * duration = icaldurationtype_from_seconds(60);
+ * // create a new icaldurationtype with a duration of 60 seconds pointing back in time
+ * duration = icaldurationtype_from_seconds(-60);
  * ```
+ *
+ * @since 4.0 previously known as icaldurationtype_from_int
  */
-LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_seconds(int t);
+LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_seconds(int seconds);
 
 /**
  * @brief Creates a new ::icaldurationtype from a duration given as a string.
@@ -76,9 +86,15 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_seconds(int t)
 LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const char *dur);
 
 /**
- * @brief Converts an ::icaldurationtype into the duration in seconds as `int`.
- * @param duration The duration to convert to seconds
- * @return An `int` representing the duration in seconds
+ * @brief Extracts the duration in integer seconds from an ::icaldurationtype.
+ * @param duration A valid duration type.
+ * @return An `int` representing the number of seconds in the duration.
+ *
+ * The number of seconds returned from the specified ::icaldurationtype can be a positive or negative integer
+ * depending if the duration points forward or backward in time.
+ *
+ * Additionally, a ::icaldurationtype that has a non-zero days or weeks value is considered an error.
+ * ie. only the ::icaldurationtype seconds, minutes and hours structure members are converted.
  *
  * @par Usage
  * ```c
@@ -89,6 +105,8 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
  * // get the duration in seconds and verify it
  * assert(icaldurationtype_as_seconds(duration) == 3532342);
  * ```
+ *
+ * @since 4.0 previously known as icaldurationtype_as_int
  */
 LIBICAL_ICAL_EXPORT int icaldurationtype_as_seconds(struct icaldurationtype duration);
 
