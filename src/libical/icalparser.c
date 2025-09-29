@@ -1013,35 +1013,35 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
                 /* Change for mozilla */
                 /* have the option of being flexible towards unsupported parameters */
-#if ICAL_ERRORS_ARE_FATAL == 1
-                insert_error(parser, tail, str, "Can't parse parameter name",
-                             ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
-                tail = 0;
-                parser->state = ICALPARSER_ERROR;
-                if (pvalue_heap) {
-                    icalmemory_free_buffer(pvalue_heap);
-                    pvalue = 0;
+                if (icalerror_get_errors_are_fatal()) {
+                    insert_error(parser, tail, str, "Can't parse parameter name",
+                                 ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
+                    tail = 0;
+                    parser->state = ICALPARSER_ERROR;
+                    if (pvalue_heap) {
+                        icalmemory_free_buffer(pvalue_heap);
+                        pvalue = 0;
+                    }
+                    if (name_heap) {
+                        icalmemory_free_buffer(name_heap);
+                        name = 0;
+                    }
+                    icalmemory_free_buffer(str);
+                    str = NULL;
+                    return 0;
+                } else {
+                    if (name_heap) {
+                        icalmemory_free_buffer(name_heap);
+                        name_heap = 0;
+                    }
+                    if (pvalue_heap) {
+                        icalmemory_free_buffer(pvalue_heap);
+                        pvalue_heap = 0;
+                    }
+                    icalmemory_free_buffer(str);
+                    str = NULL;
+                    continue;
                 }
-                if (name_heap) {
-                    icalmemory_free_buffer(name_heap);
-                    name = 0;
-                }
-                icalmemory_free_buffer(str);
-                str = NULL;
-                return 0;
-#else
-                if (name_heap) {
-                    icalmemory_free_buffer(name_heap);
-                    name_heap = 0;
-                }
-                if (pvalue_heap) {
-                    icalmemory_free_buffer(pvalue_heap);
-                    pvalue_heap = 0;
-                }
-                icalmemory_free_buffer(str);
-                str = NULL;
-                continue;
-#endif
             }
 
             if (pvalue_heap) {

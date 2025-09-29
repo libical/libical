@@ -450,7 +450,6 @@ CPPCHECK() {
     --template='{file}:{line},{severity},{id},{message}' \
     --checkers-report=cppcheck-report.txt \
     -D __cppcheck__ \
-    -D ICAL_ERRORS_ARE_FATAL=0 \
     -D ICAL_PACKAGE="\"x\"" \
     -D ICAL_VERSION="\"y\"" \
     -D _unused="(void)" \

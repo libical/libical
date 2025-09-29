@@ -176,10 +176,6 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 /* Define to 1 if you have the <wctype.h> header file. */
 #cmakedefine HAVE_WCTYPE_H 1
 
-/* Define to make icalerror_* calls abort instead of internally signalling an
-   error */
-#define ICAL_ERRORS_ARE_FATAL ${ICAL_ERRORS_ARE_FATAL}
-
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "${CMAKE_PROJECT_HOMEPAGE_URL}"
 

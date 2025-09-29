@@ -14,13 +14,6 @@
 #  Build the Java bindings.
 #  Default=true
 #
-# -DLIBICAL_ENABLE_ERRORS_ARE_FATAL=[true|false]
-#  Set to make icalerror_* calls abort instead of internally signaling an error
-#  Default=false
-#  Notes:
-#   Change the behavior at runtime using the icalerror_set_errors_are_fatal() function.
-#   Query the behavior at runtime using the icalerror_get_errors_are_fatal() function.
-#
 # -DLIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
 #  Set to build using our own timezone data.
 #  Default=false (use the system timezone data on non-Windows systems)
@@ -516,18 +509,6 @@ if(WIN32)
   set(BIN_INSTALL_DIR bin)
 else()
   set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
-endif()
-
-libical_deprecated_option(
-  ICAL_ERRORS_ARE_FATAL
-  LIBICAL_ENABLE_ERRORS_ARE_FATAL
-  "icalerror_* calls will abort instead of internally signaling an error."
-  False
-)
-if(LIBICAL_ENABLE_ERRORS_ARE_FATAL)
-  set(ICAL_ERRORS_ARE_FATAL 1)
-else()
-  set(ICAL_ERRORS_ARE_FATAL 0)
 endif()
 
 if(WIN32 OR WINCE)
