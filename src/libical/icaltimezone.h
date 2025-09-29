@@ -115,9 +115,9 @@ LIBICAL_ICAL_EXPORT icalcomponent *icaltimezone_get_component(icaltimezone *zone
 /** @brief Sets the VTIMEZONE component of an icaltimezone, initializing the
  * tzid, location & tzname fields.
  *
- * @returns 1 on success or 0 on failure, i.e.  no TZID was found.
+ * @returns true on success or false on failure, i.e.  no TZID was found.
  */
-LIBICAL_ICAL_EXPORT int icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp);
+LIBICAL_ICAL_EXPORT bool icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp);
 
 /** @brief Returns the timezone name to display to the user.
  *
