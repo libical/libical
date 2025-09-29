@@ -14,7 +14,7 @@ User-specific:
 |------------------------------|--------------------------------------|
 | ICAL_ALLOW_EMPTY_PROPERTIES  | removed                              |
 | ICAL_BUILD_DOCS              | LIBICAL_BUILD_DOCS                   |
-| ICAL_ERRORS_ARE_FATAL        | LIBICAL_ENABLE_ERRORS_ARE_FATAL      |
+| ICAL_ERRORS_ARE_FATAL        | removed                              |
 | ICAL_GLIB                    | LIBICAL_GLIB                         |
 | ICAL_GLIB_VAPI               | LIBICAL_GLIB_VAPI                    |
 | ICAL_GLIB_BUILD_DOCS         | LIBICAL_GLIB_BUILD_DOCS              |
@@ -53,6 +53,14 @@ you can handle code that no longer exists in 4.0 with:
      <...old code for the libical 3.0 version ...>
      #endif
 ```
+
+## ICAL_ENABLE_ERRORS_ARE_FATAL
+
+The `ICAL_ENABLE_ERRORS_ARE_FATAL` conditional compile macro and accompanying CMake option  `ICAL_ENABLE_ERRORS_ARE_FATAL`
+are removed.
+
+To abort whenever an error is encountered use the `icalerror_set_errors_are_fatal()` and `icalerror_get_errors_are_fatal()`
+functions.
 
 ## ICAL_ALLOW_EMPTY_PROPERTIES
 
