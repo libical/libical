@@ -4390,7 +4390,7 @@ void test_empty_property(void)
         "END:VEVENT\n";
 
     int estate = icalerror_get_errors_are_fatal();
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
 
     int pstate = icalproperty_get_allow_empty_properties();
 
