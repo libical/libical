@@ -1278,7 +1278,7 @@ icalcomponent *icaltimezone_get_component(icaltimezone *zone)
     return zone->component;
 }
 
-int icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp)
+bool icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp)
 {
     icaltimezone_reset(zone);
     return icaltimezone_get_vtimezone_properties(zone, comp);
