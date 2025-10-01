@@ -51,7 +51,7 @@ assert utc.get_display_name() == 'UTC'
 utc2 = ICalGLib.Timezone.get_utc_timezone()
 assert utc == utc2
 
-time = ICalGLib.Time.new()
+time = ICalGLib.Time.new_from_timet_with_zone(1494096400, 0, utc)
 before = time.get_hour()
 ICalGLib.Time.convert_timezone(time, la, chicago)
 after = time.get_hour()
