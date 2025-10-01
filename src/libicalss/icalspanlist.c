@@ -15,12 +15,6 @@
 
 #include <stdlib.h>
 
-struct icalspanlist_impl {
-    icalpvl_list spans;        /**< list of icaltime_span data **/
-    struct icaltimetype start; /**< start time of span **/
-    struct icaltimetype end;   /**< end time of span **/
-};
-
 /** @brief Internal comparison function for two spans
  *
  *  @param  a   a spanlist.
