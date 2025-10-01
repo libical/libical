@@ -4272,6 +4272,19 @@ void test_property_parse(void)
     icalcomponent_free(c);
 }
 
+void test_value_from_string(void)
+{
+    icalproperty *p = icalproperty_new_from_string("SUMMARY:foo");
+    ok("value_from_string(), SUMMARY FOO", (p != 0));
+
+    icalproperty_set_value_from_string(p, "not_a_boolean", "BOOLEAN");
+    str_is("summary boolean value", icalproperty_as_ical_string(p), "SUMMARY:foo\r\n");
+
+    icalproperty_set_value_from_string(p, "0.0;a", "GEO");
+    str_is("summary geo value", icalproperty_as_ical_string(p), "SUMMARY:foo\r\n");
+    icalproperty_free(p);
+}
+
 void test_value_parameter(void)
 {
     icalcomponent *c;
@@ -7019,7 +7032,7 @@ int main(int argc, char *argv[])
     test_run("Test cloning x-component", test_clone_xcomponent, do_test, do_header);
     test_run("Test manipulating tzid", test_tzid_setter, do_test, do_header);
     test_run("Test icaltime proper zone set", test_icaltime_proper_zone, do_test, do_header);
-
+    test_run("Test property values from string", test_value_from_string, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)

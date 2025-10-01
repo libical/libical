@@ -429,6 +429,9 @@ static void free_icalvalue_attach_data(char *data, void *user_data)
 static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                                                        const char *str, icalproperty **error)
 {
+    char temp[TMP_BUF_SIZE] = {};
+    icalparameter *errParam;
+
     struct icalvalue_impl *value = 0;
 
     icalerror_check_arg_rz(str != 0, "str");
@@ -480,15 +483,19 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
             value = icalvalue_new_boolean(1);
         } else if (!strcmp(str, "FALSE")) {
             value = icalvalue_new_boolean(0);
-        } else if (error != 0) {
-            char temp[TMP_BUF_SIZE];
-            icalparameter *errParam;
-
-            snprintf(temp, sizeof(temp),
-                     "Could not parse %s as a %s property",
-                     str, icalvalue_kind_to_string(kind));
-            errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
-            *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
+        } else {
+            if (error != 0) {
+                snprintf(temp, sizeof(temp),
+                         "Could not parse %s as a %s property",
+                         str, icalvalue_kind_to_string(kind));
+                errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+                *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
+            }
+            snprintf(temp, TMP_BUF_SIZE,
+                     "icalvalue_new_from_string cannot parse value string (%s) for \'%s\'",
+                     icalvalue_kind_to_string(kind), str);
+            icalerror_warn(temp);
+            icalerror_set_errno(ICAL_PARSE_ERROR);
         }
         break;
     }
@@ -625,15 +632,17 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
     geo_parsing_error:
         if (error != 0) {
-            char temp[TMP_BUF_SIZE];
-            icalparameter *errParam;
-
             snprintf(temp, sizeof(temp),
                      "Could not parse %s as a %s property",
                      str, icalvalue_kind_to_string(kind));
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
             *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
         }
+        snprintf(temp, TMP_BUF_SIZE,
+                 "icalvalue_new_from_string cannot parse value string (%s) for \'%s\'",
+                 icalvalue_kind_to_string(kind), str);
+        icalerror_warn(temp);
+        icalerror_set_errno(ICAL_PARSE_ERROR);
     } break;
 
     case ICAL_RECUR_VALUE: {
@@ -739,9 +748,6 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
     } break;
 
     default: {
-        char temp[TMP_BUF_SIZE];
-        icalparameter *errParam;
-
         if (error != 0) {
             snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
 
@@ -753,7 +759,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                  "icalvalue_new_from_string got an unknown value type (%s) for \'%s\'",
                  icalvalue_kind_to_string(kind), str);
         icalerror_warn(temp);
-        value = 0;
+        icalerror_set_errno(ICAL_PARSE_ERROR);
     }
     }
 
@@ -762,9 +768,6 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 #pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
 #endif
     if (error != 0 && *error == 0 && value == 0) {
-        char temp[TMP_BUF_SIZE];
-        icalparameter *errParam;
-
         snprintf(temp, TMP_BUF_SIZE, "Failed to parse value: \'%s\'", str);
 
         errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
