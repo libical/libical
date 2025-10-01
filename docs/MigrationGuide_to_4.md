@@ -112,6 +112,9 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
   have been renamed to `icaldurationtype_from_seconds()` and `icaldurationtype_as_seconds()`, respectively.
   Their functionality has not changed.
 
+* Similarly, the `icaltime_add()` and `icaltime_subtract()` functions are now called
+  `icalduration_extend()` and `icalduration_from_times()`.  Their functionality has not changed.
+
 ### New functions
 
 The following functions have been added:

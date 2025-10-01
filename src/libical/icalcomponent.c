@@ -865,7 +865,7 @@ static icaltime_span icaltime_span_from_time(const struct icaltimetype t, const 
                                     t.zone ? t.zone : icaltimezone_get_utc_timezone());
     ret.end =
         icaltime_as_timet_with_zone(
-            icaltime_add(t, d),
+            icalduration_extend(t, d),
             t.zone ? t.zone : icaltimezone_get_utc_timezone());
     return ret;
 }
@@ -898,7 +898,7 @@ static icaltime_span icaltime_span_from_datetimeperiod(const struct icaldatetime
 
     if (!icaldurationtype_is_null_duration(dur)) {
         ret.end = icaltime_as_timet_with_zone(
-            icaltime_add(start, dur),
+            icalduration_extend(start, dur),
             start.zone ? start.zone : icaltimezone_get_utc_timezone());
     }
     return ret;
@@ -1021,7 +1021,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                     /* make sure we include any recurrence that ends in timespan */
                     /* duration should be positive */
                     dtduration.is_neg = 1;
-                    mystart = icaltime_add(mystart, dtduration);
+                    mystart = icalduration_extend(mystart, dtduration);
                     dtduration.is_neg = 0;
 
                     icalrecur_iterator_set_start(rrule_itr, mystart);
@@ -1580,14 +1580,14 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
             duration = icaldurationtype_null_duration();
         }
 
-        ret = icaltime_add(start, duration);
+        ret = icalduration_extend(start, duration);
     } else if (end_prop == 0 && dur_prop == 0) {
         if (kind == ICAL_VEVENT_COMPONENT) {
             struct icaltimetype start = icalcomponent_get_dtstart(inner);
             if (icaltime_is_date(start)) {
                 struct icaldurationtype duration = icaldurationtype_null_duration();
                 duration.days = 1;
-                ret = icaltime_add(start, duration);
+                ret = icalduration_extend(start, duration);
             } else {
                 ret = start;
             }
@@ -1676,7 +1676,7 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         struct icaltimetype end = icalproperty_get_datetime_with_component(end_prop, comp);
 
-        ret = icaltime_subtract(end, start);
+        ret = icalduration_from_times(end, start);
     } else if (end_prop == 0 && dur_prop == 0) {
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         ret = icaldurationtype_null_duration();
@@ -2599,7 +2599,7 @@ struct icaltimetype icalcomponent_get_due(icalcomponent *comp)
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         struct icaldurationtype duration = icalproperty_get_duration(dur_prop);
 
-        struct icaltimetype due = icaltime_add(start, duration);
+        struct icaltimetype due = icalduration_extend(start, duration);
 
         return due;
     }
@@ -2627,7 +2627,7 @@ void icalcomponent_set_due(icalcomponent *comp, struct icaltimetype v)
 
         struct icaltimetype due = icalcomponent_get_due(inner);
 
-        struct icaldurationtype dur = icaltime_subtract(due, start);
+        struct icaldurationtype dur = icalduration_from_times(due, start);
 
         icalproperty_set_duration(dur_prop, dur);
     }
