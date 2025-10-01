@@ -430,6 +430,24 @@ void test_icaltime_compare_utc_zone(void)
     int_is("a < b", icaltime_compare(a, b), -1);
 }
 
+void test_icaltime_normalize(void)
+{
+    icalcomponent *comp = icalcomponent_new_vpatch();
+    ok("icaltime_normalize new vpatch", (comp != 0));
+    struct icaltimetype t = icalcomponent_get_dtstamp(comp);
+    ok("icaltime_normalize dtstamp time is valid", icaltime_is_valid_time(t));
+    if (VERBOSE) {
+        printf("Time: %d-%d-%d %d:%d:%d (is_valid: %d)\n", t.year, t.month, t.day, t.hour, t.minute, t.second, icaltime_is_valid_time(t));
+    }
+
+    struct icaltimetype norm = icaltime_normalize(t);
+    ok("icaltime_normalize normalize normalized dtstamp time is valid", icaltime_is_valid_time(norm));
+    if (VERBOSE) {
+        printf("Normalized Time: %d-%d-%d %d:%d:%d (is_valid: %d)\n", norm.year, norm.month, norm.day, norm.hour, norm.minute, norm.second, icaltime_is_valid_time(norm));
+    }
+    icalcomponent_free(comp);
+}
+
 void test_parameters(void)
 {
     icalparameter *p;
@@ -7033,6 +7051,7 @@ int main(int argc, char *argv[])
     test_run("Test manipulating tzid", test_tzid_setter, do_test, do_header);
     test_run("Test icaltime proper zone set", test_icaltime_proper_zone, do_test, do_header);
     test_run("Test property values from string", test_value_from_string, do_test, do_header);
+    test_run("Test normalizing time", test_icaltime_normalize, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)

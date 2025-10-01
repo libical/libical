@@ -306,6 +306,10 @@ becomes
     sscanf(geo.lon, "%lf", &lon);
 ```
 
+## icaltime_adjust
+
+The `icaltime_adjust` function no longer adjusts null icaltimetypes.
+
 ### Working with `icalvalue` and `icalproperty`
 
 Code like this in libical 3.0:
