@@ -277,11 +277,11 @@ char* icaldurationtype_as_ical_string(struct icaldurationtype d);
 struct icaldurationtype icaldurationtype_null_duration();
 int icaldurationtype_is_null_duration(struct icaldurationtype d);
 
-struct icaltimetype  icaltime_add(struct icaltimetype t,
-                  struct icaldurationtype  d);
+struct icaltimetype icalduration_extend(struct icaltimetype t,
+                                        struct icaldurationtype  d);
 
-struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
-                       struct icaltimetype t2);
+struct icaldurationtype icalduration_from_times(struct icaltimetype t1,
+                                            struct icaltimetype t2);
 
 
 /***********************************************************************
