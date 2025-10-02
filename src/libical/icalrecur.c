@@ -3053,7 +3053,7 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
         for (i = 0; i < impl->bydata[ICAL_BY_MONTH].by.size; i++) {
             int month = set_month(impl, impl->bydata[ICAL_BY_MONTH].by.data[i]);
 
-            if (month) {
+            if (month > 0 && month < ICAL_BY_MONTH_SIZE) {
                 expand_bymonth_days(impl, year, month);
             }
         }
