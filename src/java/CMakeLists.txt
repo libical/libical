@@ -39,8 +39,8 @@ add_library(
 target_include_directories(
   ical_jni
   PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/libical
-    ${CMAKE_BINARY_DIR}/src/libical
+    ${PROJECT_SOURCE_DIR}/src/libical
+    ${PROJECT_BINARY_DIR}/src/libical
     ${JNI_INCLUDE_DIRS}
 )
 
@@ -57,7 +57,7 @@ if(NOT ANDROID)
   )
 endif()
 
-file(GLOB JAVA_SOURCES ${CMAKE_SOURCE_DIR}/src/java/*.java)
+file(GLOB JAVA_SOURCES ${PROJECT_SOURCE_DIR}/src/java/*.java)
 
 file(
   WRITE
@@ -91,7 +91,7 @@ if(LIBICAL_BUILD_TESTING)
         ${JUnit_JAR}
     )
 
-    set(_test_results_dir "${CMAKE_BINARY_DIR}/test-results/java")
+    set(_test_results_dir "${PROJECT_BINARY_DIR}/test-results/java")
     file(MAKE_DIRECTORY "${_test_results_dir}")
 
     if(WIN32)
@@ -134,4 +134,4 @@ install(TARGETS ical_jni EXPORT icalTargets DESTINATION lib)
 
 ########### install files ###############
 
-install(FILES ${CMAKE_BINARY_DIR}/src/java/libical.jar DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
+install(FILES ${PROJECT_BINARY_DIR}/src/java/libical.jar DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
