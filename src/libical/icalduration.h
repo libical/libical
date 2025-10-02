@@ -235,7 +235,7 @@ LIBICAL_ICAL_EXPORT bool icaldurationtype_is_null_duration(struct icaldurationty
 LIBICAL_ICAL_EXPORT bool icaldurationtype_is_bad_duration(struct icaldurationtype d);
 
 /**
- * @brief Adds a duration to an icaltime object and returns the result.
+ * @brief Extends a time duration.
  * @param t The time object to add the duration to
  * @param d The duration to add to the time object
  * @return The new ::icaltimetype which has been added the duration to
@@ -250,17 +250,17 @@ LIBICAL_ICAL_EXPORT bool icaldurationtype_is_bad_duration(struct icaldurationtyp
  * duration = icaldurationtype_from_seconds(60);
  *
  * // add the duration to the time object
- * time = icaltime_add(time, duration);
+ * time = icalduration_extend(time, duration);
  * ```
  */
-LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_add(struct icaltimetype t,
-                                                     struct icaldurationtype d);
+LIBICAL_ICAL_EXPORT struct icaltimetype icalduration_extend(struct icaltimetype t,
+                                                            struct icaldurationtype d);
 
 /**
- * @brief Returns the difference between two ::icaltimetype as a duration.
+ * @brief Creates a duration from two ::icaltimetype endpoints.
  * @param t1 The first point in time
  * @param t2 The second point in time
- * @return An ::icaldurationtype representing the duration the elapsed between
+ * @return An ::icaldurationtype representing the duration elapsed between
  * @a t1 and @a t2
  *
  * @par Usage
@@ -270,10 +270,10 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_add(struct icaltimetype t,
  * struct icaldurationtype duration;
  *
  * // calculate duration between time points
- * duration = icaltime_subtract(t1, t2);
+ * duration = icalduration_from_times(t1, t2);
  * ```
  */
-LIBICAL_ICAL_EXPORT struct icaldurationtype icaltime_subtract(struct icaltimetype t1,
-                                                              struct icaltimetype t2);
+LIBICAL_ICAL_EXPORT struct icaldurationtype icalduration_from_times(struct icaltimetype t1,
+                                                                    struct icaltimetype t2);
 
 #endif /* !ICALDURATION_H */

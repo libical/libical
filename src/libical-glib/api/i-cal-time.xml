@@ -232,18 +232,6 @@
         <returns type="gint" comment="Whether one #ICalTimeSpan is contained in another #ICalTimeSpan."/>
         <comment xml:space="preserve">Checks whether one #ICalTimeSpan is contained in another #ICalTimeSpan.</comment>
     </method>
-    <method name="i_cal_time_add" corresponds="icaltime_add" kind="other" since="2.0">
-        <parameter type="ICalTime *" name="t" comment="A #ICalTime to be operated on"/>
-        <parameter type="ICalDuration *" name="d" comment="A #ICalDuration as the difference"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The #ICalTime results. The native object is the same. But since it is a bare object, so it won't cause segmentation."/>
-        <comment xml:space="preserve">Adds a time duration on the time.</comment>
-    </method>
-    <method name="i_cal_time_subtract" corresponds="icaltime_subtract" kind="other" since="2.0">
-        <parameter type="ICalTime *" name="t1" comment="The subtracted #ICalTime"/>
-        <parameter type="ICalTime *" name="t2" comment="The subtracting #ICalTime"/>
-        <returns type="ICalDuration *" annotation="transfer full" comment="The #ICalDuration between two #ICalTime."/>
-        <comment xml:space="preserve">Gets the duration between two time.</comment>
-	</method>
     <method name="i_cal_time_get_year" corresponds="none" kind="get" since="1.0">
         <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
         <returns type="gint" comment="The year."/>

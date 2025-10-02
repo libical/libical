@@ -611,6 +611,7 @@ struct icaltimetype icaltime_null_date(void)
 
 bool icaltime_is_valid_time(const struct icaltimetype t)
 {
+    // Note that we allow year, month and day to be zero to support null times
     if (t.year < 0 || t.year > 9999 ||
         t.month < 0 || t.month > 12 ||
         t.day < 0 || t.day > 31 ||
@@ -755,13 +756,6 @@ int icaltime_compare_date_only_tz(const struct icaltimetype a_in,
     return 0;
 }
 
-/* These are defined in icalduration.c:
-struct icaltimetype  icaltime_add(struct icaltimetype t,
-                                  struct icaldurationtype  d)
-struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
-                                           struct icaltimetype t2)
-*/
-
 void icaltime_adjust(struct icaltimetype *tt,
                      const int days, const int hours,
                      const int minutes, const int seconds)
@@ -769,6 +763,10 @@ void icaltime_adjust(struct icaltimetype *tt,
     int second, minute, hour, day;
     int minutes_overflow, hours_overflow, days_overflow = 0, years_overflow;
     int days_in_month;
+
+    if (icaltime_is_null_time(*tt)) { // do not attempt to adjust null times
+        return;
+    }
 
     /* If we are passed a date make sure to ignore hour minute and second */
     if (tt->is_date) {
