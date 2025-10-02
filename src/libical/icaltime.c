@@ -756,13 +756,6 @@ int icaltime_compare_date_only_tz(const struct icaltimetype a_in,
     return 0;
 }
 
-/* These are defined in icalduration.c:
-struct icaltimetype  icaltime_add(struct icaltimetype t,
-                                  struct icaldurationtype  d)
-struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
-                                           struct icaltimetype t2)
-*/
-
 void icaltime_adjust(struct icaltimetype *tt,
                      const int days, const int hours,
                      const int minutes, const int seconds)

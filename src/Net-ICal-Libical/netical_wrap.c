@@ -1967,7 +1967,7 @@ XS(_wrap_icaldurationtype_is_null_duration) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icaltime_add) {
+XS(_wrap_icalduration_extend) {
 
     struct icaltimetype * _result;
     struct icaltimetype * _arg0;
@@ -1977,23 +1977,23 @@ XS(_wrap_icaltime_add) {
 
     cv = cv;
     if ((items < 2) || (items > 2))
-        croak("Usage: icaltime_add(t,d);");
+        croak("Usage: icalduration_extend(t,d);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltime_add. Expected struct icaltimetypePtr.");
+        croak("Type error in argument 1 of icalduration_extend. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
     if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 2 of icaltime_add. Expected struct icaldurationtypePtr.");
+        croak("Type error in argument 2 of icalduration_extend. Expected struct icaldurationtypePtr.");
         XSRETURN(1);
     }
     _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
-    *(_result) = icaltime_add(*_arg0,*_arg1);
+    *(_result) = icalduration_extend(*_arg0,*_arg1);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icaltime_subtract) {
+XS(_wrap_icalduration_from_times) {
 
     struct icaldurationtype * _result;
     struct icaltimetype * _arg0;
@@ -2003,17 +2003,17 @@ XS(_wrap_icaltime_subtract) {
 
     cv = cv;
     if ((items < 2) || (items > 2))
-        croak("Usage: icaltime_subtract(t1,t2);");
+        croak("Usage: icalduration_from_times(t1,t2);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltime_subtract. Expected struct icaltimetypePtr.");
+        croak("Type error in argument 1 of icalduration_from_times. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
     if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
-        croak("Type error in argument 2 of icaltime_subtract. Expected struct icaltimetypePtr.");
+        croak("Type error in argument 2 of icalduration_from_times. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
     _result = (struct icaldurationtype *) malloc(sizeof(struct icaldurationtype ));
-    *(_result) = icaltime_subtract(*_arg0,*_arg1);
+    *(_result) = icalduration_from_times(*_arg0,*_arg1);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
     XSRETURN(argvi);
@@ -2973,8 +2973,8 @@ XS(boot_Net__ICal__Libical) {
 	 newXS("Net::ICal::Libical::icaldurationtype_as_ical_string", _wrap_icaldurationtype_as_ical_string, file);
 	 newXS("Net::ICal::Libical::icaldurationtype_null_duration", _wrap_icaldurationtype_null_duration, file);
 	 newXS("Net::ICal::Libical::icaldurationtype_is_null_duration", _wrap_icaldurationtype_is_null_duration, file);
-	 newXS("Net::ICal::Libical::icaltime_add", _wrap_icaltime_add, file);
-	 newXS("Net::ICal::Libical::icaltime_subtract", _wrap_icaltime_subtract, file);
+	 newXS("Net::ICal::Libical::icalduration_extend, _wrap_icalduration_extend, file);
+	 newXS("Net::ICal::Libical::icalduration_from_times", _wrap_icalduration_from_times, file);
 	 newXS("Net::ICal::Libical::icalperiodtype_from_string", _wrap_icalperiodtype_from_string, file);
 	 newXS("Net::ICal::Libical::icalperiodtype_as_ical_string", _wrap_icalperiodtype_as_ical_string, file);
 	 newXS("Net::ICal::Libical::icalperiodtype_null_period", _wrap_icalperiodtype_null_period, file);

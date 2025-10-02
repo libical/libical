@@ -279,7 +279,7 @@ bool icaldurationtype_is_bad_duration(struct icaldurationtype d)
     return (d.is_neg == -1);
 }
 
-struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype d)
+struct icaltimetype icalduration_extend(struct icaltimetype t, struct icaldurationtype d)
 {
     struct icaltimetype t_days;
     if (t.is_date &&
@@ -327,7 +327,7 @@ struct icaltimetype icaltime_add(struct icaltimetype t, struct icaldurationtype 
     return t;
 }
 
-struct icaldurationtype icaltime_subtract(struct icaltimetype t1, struct icaltimetype t2)
+struct icaldurationtype icalduration_from_times(struct icaltimetype t1, struct icaltimetype t2)
 {
     if ((!t1.is_date && t2.is_date) ||
         (t1.is_date && !t2.is_date)) {

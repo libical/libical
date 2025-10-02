@@ -927,8 +927,8 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
                         // dtend from the dtstart.
                         struct icaltimetype recur_time = c.get_recurrenceid();
                         if (icaltime_is_null_time(recur_time) != 1) {
-                            struct icaldurationtype dur = icaltime_subtract(c.get_dtstart(), tt);
-                            tt = icaltime_add(recur_time, dur);
+                            struct icaldurationtype dur = icalduration_from_times(c.get_dtstart(), tt);
+                            tt = icalduration_extend(recur_time, dur);
                         }
                     } else if (c.isa() == ICAL_VTODO_COMPONENT) {
                         tt = c.get_due();
@@ -974,7 +974,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
         };
 
         // now offset using tr.duration
-        tr->time = icaltime_add(tt, tr->duration);
+        tr->time = icalduration_extend(tt, tr->duration);
     }
     // else absolute time trigger
 

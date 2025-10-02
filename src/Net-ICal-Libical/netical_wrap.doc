@@ -351,10 +351,10 @@ icaldurationtype_null_duration();
 icaldurationtype_is_null_duration(d);
         [ returns int  ]
 
-icaltime_add(t,d);
+icalduration_extend(t,d);
         [ returns struct icaltimetype  ]
 
-icaltime_subtract(t1,t2);
+icalduration_from_times(t1,t2);
         [ returns struct icaldurationtype  ]
 
 3.  class icalperiodtype
