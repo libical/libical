@@ -1217,14 +1217,28 @@ static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilD
 
 static int daysmask_setbit(unsigned long mask[], short n, int v)
 {
-    n += ICAL_YEARDAYS_MASK_OFFSET;
-    int prev = (mask[n / BITS_PER_LONG] & (1UL << (n % BITS_PER_LONG))) ? 1 : 0;
+    int prev;
 
+    n += ICAL_YEARDAYS_MASK_OFFSET;
+
+    if (n >= 0) {
+        prev = (mask[n / BITS_PER_LONG] & (1UL << (n % BITS_PER_LONG))) ? 1 : 0;
+    } else {
+        prev = (mask[n / BITS_PER_LONG] & (1UL >> (-n % BITS_PER_LONG))) ? 1 : 0;
+    }
     if (v != prev) {
         if (v) {
-            mask[n / BITS_PER_LONG] |= (1UL << (n % BITS_PER_LONG));
+            if (n >= 0) {
+                mask[n / BITS_PER_LONG] |= (1UL << (n % BITS_PER_LONG));
+            } else {
+                mask[n / BITS_PER_LONG] |= (1UL >> (-n % BITS_PER_LONG));
+            }
         } else {
-            mask[n / BITS_PER_LONG] &= ~(1UL << (n % BITS_PER_LONG));
+            if (n >= 0) {
+                mask[n / BITS_PER_LONG] &= ~(1UL << (n % BITS_PER_LONG));
+            } else {
+                mask[n / BITS_PER_LONG] &= ~(1UL >> (-n % BITS_PER_LONG));
+            }
         }
     }
 
@@ -3159,7 +3173,11 @@ static short daymask_find_next_bit(const unsigned long *days, short start_index)
     startBitIndex = days_index + ICAL_YEARDAYS_MASK_OFFSET;
     wordIdx = (unsigned short)(startBitIndex / BITS_PER_LONG);
     v = days[wordIdx];
-    v >>= startBitIndex % BITS_PER_LONG;
+    if (startBitIndex >= 0) {
+        v >>= startBitIndex % BITS_PER_LONG;
+    } else {
+        v <<= -startBitIndex % BITS_PER_LONG;
+    }
 
     if (!v) {
         // so the first word didn't contain any bits of interest.
