@@ -833,9 +833,9 @@ void vcardcomponent_normalize(vcardcomponent *comp)
 
 static void comp_to_v4(vcardcomponent *impl)
 {
-    pvl_elem itr;
+    pvl_elem itr, next;
 
-    for (itr = pvl_head(impl->properties); itr != 0; itr = pvl_next(itr)) {
+    for (itr = pvl_head(impl->properties); itr != 0; itr = next) {
         vcardproperty *prop = (vcardproperty *)pvl_data(itr);
         vcardproperty_kind pkind = vcardproperty_isa(prop);
         vcardvalue *value = vcardproperty_get_value(prop);
@@ -845,6 +845,8 @@ static void comp_to_v4(vcardcomponent *impl)
         char *mediatype = NULL, *buf = NULL, *buf_ptr;
         const char *data;
         size_t size = 0;
+
+        next = pvl_next(itr);
 
         /* Remove TYPE=PREF and replace with PREF=1 (if no existing (PREF=) */
         param = vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER);
@@ -1027,6 +1029,19 @@ static void comp_to_v4(vcardcomponent *impl)
             }
             break;
 
+        case VCARD_X_PROPERTY: {
+            /* Rename X-ADDRESSBOOKSERVER-KIND, X-ADDRESSBOOKSERVER-MEMBER */
+            const char *xprop = vcardproperty_as_vcard_string(prop);
+            if (!strncasecmp(xprop, "X-ADDRESSBOOKSERVER-", 20) &&
+                (!strncasecmp(xprop+20, "KIND:", 5) ||
+                 !strncasecmp(xprop+20, "MEMBER:", 7))) {
+                vcardproperty *new = vcardproperty_new_from_string(xprop+20);
+                vcardcomponent_add_property(impl, new);
+                vcardcomponent_remove_property(impl, prop);
+            }
+            break;
+        }
+
         default:
             break;
         }
@@ -1046,17 +1061,20 @@ static void comp_to_v3(vcardcomponent *impl)
     struct pref_prop *pref_props[VCARD_NO_PROPERTY] = {0};
     vcardenumarray_element type;
     vcardproperty_kind pkind;
-    pvl_elem itr;
+    pvl_elem itr, next;
 
-    for (itr = pvl_head(impl->properties); itr != 0; itr = pvl_next(itr)) {
+    for (itr = pvl_head(impl->properties); itr != 0; itr = next) {
         vcardproperty *prop = (vcardproperty *)pvl_data(itr);
+        vcardproperty *xprop;
         vcardparameter *val_param =
             vcardproperty_get_first_parameter(prop, VCARD_VALUE_PARAMETER);
         vcardvalue *value = vcardproperty_get_value(prop);
         vcardvalue_kind vkind = vcardvalue_isa(value);
         vcardparameter *param;
         char *subtype = NULL, *buf = NULL;
-        const char *mediatype, *uri;
+        const char *mediatype, *uri, *xname = NULL;
+
+        next = pvl_next(itr);
 
         /* Find prop with lowest PREF= for each set of like properties */
         pkind = vcardproperty_isa(prop);
@@ -1200,6 +1218,20 @@ static void comp_to_v3(vcardcomponent *impl)
                 value->kind = VCARD_TEXT_VALUE;
                 vcardvalue_set_text(value, data ? data : "");
             }
+            break;
+
+        case VCARD_KIND_PROPERTY:
+            /* Rename KIND, MEMBER */
+            xname = "X-ADDRESSBOOKSERVER-KIND";
+
+            _fallthrough();
+
+        case VCARD_MEMBER_PROPERTY:
+            if (!xname) xname = "X-ADDRESSBOOKSERVER-MEMBER";
+            xprop = vcardproperty_new_x(vcardvalue_as_vcard_string(value));
+            vcardproperty_set_x_name(xprop, xname);
+            vcardcomponent_add_property(impl, xprop);
+            vcardcomponent_remove_property(impl, prop);
             break;
 
         case VCARD_TEL_PROPERTY:
