@@ -73,14 +73,6 @@ macro(buildme _name _srcs)
     icalss
     icalvcal
   )
-  if(NOT SHARED_ONLY)
-    add_dependencies(
-      ${_name}
-      ical-static
-      icalss-static
-      icalvcal-static
-    )
-  endif()
   target_link_libraries(
     ${_name}
     ical
@@ -94,13 +86,6 @@ macro(buildme _name _srcs)
       ical_cxx
       icalss_cxx
     )
-    if(NOT SHARED_ONLY)
-      add_dependencies(
-        ${_name}
-        ical_cxx-static
-        icalss_cxx-static
-      )
-    endif()
     target_link_libraries(
       ${_name}
       ical_cxx
