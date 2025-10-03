@@ -2,7 +2,6 @@
  FILE: regression-utils.c
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original author is Eric Busboom
@@ -90,8 +89,10 @@ void _ok(const char *test_name, int success, const char *file, int linenum, cons
 {
     testnumber++;
 
-    if (!QUIET || (QUIET && !success))
+    /* cppcheck-suppress redundantCondition */
+    if (!QUIET || (QUIET && !success)) {
         printf("%sok %d - %s\n", (success) ? "" : "not ", testnumber, test_name);
+    }
 
     if (!success) {
         failed_tests[failed].set = current_set;
@@ -117,8 +118,9 @@ void _is(const char *test_name, const char *str1, const char *str2, const char *
         diff = strcmp(str1, str2);
     }
 
-    if (!test_name)
+    if (!test_name) {
         test_name = "()";
+    }
 
     _ok(test_name, (diff == 0), file, linenum, "");
 
@@ -146,18 +148,21 @@ void verbose(int newval)
 void test_start(int numtests)
 {
     if (numtests) {
-        if (!QUIET)
+        if (!QUIET) {
             printf("1..%-d\n", numtests);
+        }
     } else {
-        if (!QUIET)
+        if (!QUIET) {
             printf("1..\n");
+        }
     }
 }
 
 void test_header(const char *header, int set)
 {
-    if (!QUIET)
+    if (!QUIET) {
         printf("########## %-40s (%d) ##########\n", header, set);
+    }
 
     current_set = set;
 }
@@ -218,8 +223,9 @@ void test_run(const char *test_name, void (*test_fcn)(void), int do_test, int he
 {
     static int test_set = 1;
 
-    if (headeronly || do_test == 0 || do_test == test_set)
+    if (headeronly || do_test == 0 || do_test == test_set) {
         test_header(test_name, test_set);
+    }
 
     if (!headeronly && (do_test == 0 || do_test == test_set)) {
         struct testmalloc_statistics mem_statistics;
@@ -244,8 +250,9 @@ void test_run(const char *test_name, void (*test_fcn)(void), int do_test, int he
            (mem_statistics.mem_allocated_current == 0) &&
                (mem_statistics.blocks_allocated == 0));
 
-        if (!QUIET)
+        if (!QUIET) {
             printf("\n");
+        }
     }
     test_set++;
 }

@@ -17,6 +17,7 @@ For RSCALE support the libicu development package is needed.
 - pkgconfig
 - gobject-introspection (-devel)
 - libxml2 (-devel)
+- python3
 
 and to build the associated GLib bindings documentation you'll need;
 
@@ -29,3 +30,5 @@ in addition, to build the Vala support you'll also need:
 ## Optional dependencies
 
 - berkeleydb (-devel) for Berkeley DB storage support in libicalss
+- doxygen for building the API documentation
+- mdbook for building the manual

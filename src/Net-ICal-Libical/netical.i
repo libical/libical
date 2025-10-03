@@ -1,8 +1,7 @@
 /*======================================================================
-  FILE: ical.i
+  FILE: netical.i
 
   SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
   The original author is Eric Busboom
@@ -116,19 +115,19 @@ void icalerror_set_error_state( icalerrorenum error, icalerrorstate);
 icalerrorstate icalerror_get_error_state( icalerrorenum error);
 
 
-const char* icalenum_property_kind_to_string(icalproperty_kind kind);
-icalproperty_kind icalenum_string_to_property_kind(const char* string);
+const char* icalproperty_kind_to_string(icalproperty_kind kind);
+icalproperty_kind icalproperty_string_to_kind(const char* string);
 
-const char* icalenum_value_kind_to_string(icalvalue_kind kind);
+const char* icalvalue_kind_to_string(icalvalue_kind kind);
 /*icalvalue_kind icalenum_value_kind_by_prop(icalproperty_kind kind);*/
 
 const char* icalenum_parameter_kind_to_string(icalparameter_kind kind);
 icalparameter_kind icalenum_string_to_parameter_kind(const char* string);
 
-const char* icalenum_component_kind_to_string(icalcomponent_kind kind);
-icalcomponent_kind icalenum_string_to_component_kind(const char* string);
+const char* icalcomponent_kind_to_string(icalcomponent_kind kind);
+icalcomponent_kind icalcomponent_string_to_kind(const char* string);
 
-icalvalue_kind icalenum_property_kind_to_value_kind(icalproperty_kind kind);
+icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);
 
 
 int* icallangbind_new_array(int size);
@@ -271,18 +270,18 @@ struct icaldurationtype
     unsigned int seconds;
 };
 
-struct icaldurationtype icaldurationtype_from_int(int t);
+struct icaldurationtype icaldurationtype_from_seconds(int t);
 struct icaldurationtype icaldurationtype_from_string(const char*);
-int icaldurationtype_as_int(struct icaldurationtype duration);
+int icaldurationtype_as_seconds(struct icaldurationtype duration);
 char* icaldurationtype_as_ical_string(struct icaldurationtype d);
 struct icaldurationtype icaldurationtype_null_duration();
 int icaldurationtype_is_null_duration(struct icaldurationtype d);
 
-struct icaltimetype  icaltime_add(struct icaltimetype t,
-                  struct icaldurationtype  d);
+struct icaltimetype icalduration_extend(struct icaltimetype t,
+                                        struct icaldurationtype  d);
 
-struct icaldurationtype  icaltime_subtract(struct icaltimetype t1,
-                       struct icaltimetype t2);
+struct icaldurationtype icalduration_from_times(struct icaltimetype t1,
+                                            struct icaltimetype t2);
 
 
 /***********************************************************************

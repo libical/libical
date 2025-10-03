@@ -3,9 +3,7 @@
  CREATOR: eric 09 Aug 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALGAUGEIMPL_H
@@ -43,9 +41,9 @@ struct icalgauge_where {
 };
 
 struct icalgauge_impl {
-    pvl_list select; /**< Of icalgaugecompare, using only prop and comp fields*/
-    pvl_list from;   /**< List of component_kinds, as integers */
-    pvl_list where;  /**< List of icalgaugecompare */
+    icalpvl_list select; /**< Of icalgaugecompare, using only prop and comp fields*/
+    icalpvl_list from;   /**< List of component_kinds, as integers */
+    icalpvl_list where;  /**< List of icalgaugecompare */
     int expand;
 };
 

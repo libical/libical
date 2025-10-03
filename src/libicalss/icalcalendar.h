@@ -3,7 +3,6 @@
  CREATOR: eric 23 December 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -31,13 +30,13 @@ LIBICAL_ICALSS_EXPORT icalcalendar *icalcalendar_new(const char *dir);
 
 LIBICAL_ICALSS_EXPORT void icalcalendar_free(icalcalendar *calendar);
 
-LIBICAL_ICALSS_EXPORT int icalcalendar_lock(icalcalendar *calendar);
+LIBICAL_ICALSS_EXPORT int icalcalendar_lock(const icalcalendar *calendar);
 
-LIBICAL_ICALSS_EXPORT int icalcalendar_unlock(icalcalendar *calendar);
+LIBICAL_ICALSS_EXPORT int icalcalendar_unlock(const icalcalendar *calendar);
 
-LIBICAL_ICALSS_EXPORT int icalcalendar_islocked(icalcalendar *calendar);
+LIBICAL_ICALSS_EXPORT int icalcalendar_islocked(const icalcalendar *calendar);
 
-LIBICAL_ICALSS_EXPORT int icalcalendar_ownlock(icalcalendar *calendar);
+LIBICAL_ICALSS_EXPORT int icalcalendar_ownlock(const icalcalendar *calendar);
 
 LIBICAL_ICALSS_EXPORT icalset *icalcalendar_get_booked(icalcalendar *calendar);
 

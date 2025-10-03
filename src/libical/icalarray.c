@@ -3,9 +3,7 @@
  CREATOR: Damon Chaplin 07 March 2001
 
  SPDX-FileCopyrightText: 2001, Ximian, Inc.
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -20,6 +18,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef ICALARRAY_DEFAULT_INCREMENT_SIZE
+#define ICALARRAY_DEFAULT_INCREMENT_SIZE 4
+#endif
+
 static void icalarray_expand(icalarray *array, size_t space_needed);
 
 icalarray *icalarray_new(size_t element_size, size_t increment_size)
@@ -32,6 +34,10 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
         return NULL;
     }
 
+    if (!increment_size) {
+        increment_size = ICALARRAY_DEFAULT_INCREMENT_SIZE;
+    }
+
     array->element_size = element_size;
     array->increment_size = increment_size;
     array->num_elements = 0;
@@ -41,7 +47,7 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
     return array;
 }
 
-static void *icalarray_alloc_chunk(icalarray *array)
+static void *icalarray_alloc_chunk(const icalarray *array)
 {
     void *chunk = icalmemory_new_buffer(array->element_size * array->increment_size);
 
@@ -51,7 +57,7 @@ static void *icalarray_alloc_chunk(icalarray *array)
     return chunk;
 }
 
-icalarray *icalarray_copy(icalarray *originalarray)
+icalarray *icalarray_copy(const icalarray *originalarray)
 {
     icalarray *array = icalarray_new(originalarray->element_size, originalarray->increment_size);
     size_t chunks = originalarray->space_allocated / originalarray->increment_size;
@@ -125,6 +131,11 @@ void *icalarray_element_at(icalarray *array, size_t position)
     size_t offset = position % array->increment_size;
 
     return (char *)(array->chunks[chunk]) + (offset * array->element_size);
+}
+
+void icalarray_set_element_at(icalarray *array, const void *element, size_t position)
+{
+    memcpy(icalarray_element_at(array, position), element, array->element_size);
 }
 
 void icalarray_remove_element_at(icalarray *array, size_t position)

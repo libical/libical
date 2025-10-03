@@ -1,14 +1,17 @@
 /*======================================================================
-FILE: test-malloc.c
+ FILE: test-malloc.c
 
-SPDX-FileCopyrightText: 2018-2022, Markus Minichmayr <markus@tapkey.com>
-
+ SPDX-FileCopyrightText: 2018-2022, Markus Minichmayr <markus@tapkey.com>
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
 #endif
 
 #include "test-malloc.h"
@@ -177,3 +180,7 @@ void testmalloc_get_statistics(struct testmalloc_statistics *statistics)
         *statistics = global_testmalloc_statistics;
     }
 }
+
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif

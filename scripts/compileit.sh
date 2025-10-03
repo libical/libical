@@ -22,7 +22,7 @@ if (test "$BRANCH" != "3.0"); then
   CMAKE_VERSION4_OPTIONS="\
     -DLIBICAL_DEVMODE=ON \
     -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=ON \
-    -DLIBICAL_SYNCMODE_THREADLOCAL=ON \
+    -DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=ON \
   "
 fi
 
@@ -38,15 +38,21 @@ cmake -S .. \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Debug \
   -DLIBICAL_BUILD_TESTING=ON \
-  -DICAL_BUILD_DOCS=ON \
+  -DLIBICAL_BUILD_DOCS=ON \
   -DLIBICAL_BUILD_EXAMPLES=ON \
-  -DWITH_CXX_BINDINGS=ON \
-  -DGOBJECT_INTROSPECTION=ON \
-  -DICAL_GLIB_VAPI=ON \
-  -DICAL_GLIB_BUILD_DOCS=ON \
+  -DLIBICAL_CXX_BINDINGS=ON \
+  -DLIBICAL_GOBJECT_INTROSPECTION=ON \
+  -DLIBICAL_GLIB_VAPI=ON \
+  -DLIBICAL_GLIB_BUILD_DOCS=ON \
   $CMAKE_VERSION4_OPTIONS \
   -DLIBICAL_BUILD_TESTING_BIGFUZZ=ON \
   -DCMAKE_INSTALL_PREFIX="$HOME/tmp/libical-$BRANCH" &&
-  ninja && ninja test && ninja install && ninja uninstall
+  (cd "$TOP" && ln -sf $BDIR/compile_commands.json) &&
+  ninja &&
+  ninja test &&
+  ninja install &&
+  ninja docs &&
+  ninja build-book &&
+  ninja uninstall
 
 rm -rf "$HOME/tmp/libical-$BRANCH"

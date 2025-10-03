@@ -2,5 +2,5 @@
 authors = ["Allen Winter"]
 language = "en"
 multilingual = false
-src = "docs"
+src = "docs/"
 title = "Libical Manual"

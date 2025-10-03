@@ -1,12 +1,9 @@
 /*======================================================================
  FILE: vcardcomponent.c
-
  CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
 
  SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -14,6 +11,7 @@
 #endif
 
 #include "vcardcomponent.h"
+#include "icalpvl.h"
 #include "vcardparser.h"
 #include "vcardproperty_p.h"
 #include "vcardrestriction.h"
@@ -31,10 +29,10 @@ struct vcardcomponent_impl {
     vcardcomponent_kind kind;
     vcardproperty *versionp;
     char *x_name;
-    pvl_list properties;
-    pvl_elem property_iterator;
-    pvl_list components;
-    pvl_elem component_iterator;
+    icalpvl_list properties;
+    icalpvl_elem property_iterator;
+    icalpvl_list components;
+    icalpvl_elem component_iterator;
     struct vcardcomponent_impl *parent;
 };
 
@@ -67,8 +65,8 @@ static vcardcomponent *vcardcomponent_new_impl(vcardcomponent_kind kind)
     strcpy(comp->id, "comp");
 
     comp->kind = kind;
-    comp->properties = pvl_newlist();
-    comp->components = pvl_newlist();
+    comp->properties = icalpvl_newlist();
+    comp->components = icalpvl_newlist();
 
     return comp;
 }
@@ -78,8 +76,10 @@ vcardcomponent *vcardcomponent_new(vcardcomponent_kind kind)
     return vcardcomponent_new_impl(kind);
 }
 
+#if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wvarargs"
+#endif
 vcardcomponent *vcardcomponent_vanew(vcardcomponent_kind kind, ...)
 {
     va_list args;
@@ -96,7 +96,9 @@ vcardcomponent *vcardcomponent_vanew(vcardcomponent_kind kind, ...)
 
     return impl;
 }
+#if defined(__clang__)
 #pragma clang diagnostic pop
+#endif
 
 vcardcomponent *vcardcomponent_new_from_string(const char *str)
 {
@@ -107,7 +109,7 @@ vcardcomponent *vcardcomponent_clone(const vcardcomponent *old)
 {
     vcardcomponent *clone;
     vcardproperty *p;
-    pvl_elem itr;
+    icalpvl_elem itr;
 
     icalerror_check_arg_rz((old != 0), "component");
 
@@ -117,8 +119,8 @@ vcardcomponent *vcardcomponent_clone(const vcardcomponent *old)
         return 0;
     }
 
-    for (itr = pvl_head(old->properties); itr != 0; itr = pvl_next(itr)) {
-        p = (vcardproperty *)pvl_data(itr);
+    for (itr = icalpvl_head(old->properties); itr != 0; itr = icalpvl_next(itr)) {
+        p = (vcardproperty *)icalpvl_data(itr);
         vcardcomponent_add_property(clone, vcardproperty_clone(p));
     }
 
@@ -132,40 +134,38 @@ void vcardcomponent_free(vcardcomponent *c)
 
     icalerror_check_arg_rv((c != 0), "component");
 
-    if (c != 0) {
-        if (c->parent != 0) {
-            return;
-        }
-
-        if (c->properties != 0) {
-            while ((prop = pvl_pop(c->properties)) != 0) {
-                vcardproperty_set_parent(prop, 0);
-                vcardproperty_free(prop);
-            }
-            pvl_free(c->properties);
-        }
-
-        while ((comp = pvl_data(pvl_head(c->components))) != 0) {
-            vcardcomponent_remove_component(c, comp);
-            vcardcomponent_free(comp);
-        }
-
-        pvl_free(c->components);
-
-        if (c->x_name != 0) {
-            icalmemory_free_buffer(c->x_name);
-        }
-
-        c->kind = VCARD_NO_COMPONENT;
-        c->properties = 0;
-        c->property_iterator = 0;
-        c->components = 0;
-        c->component_iterator = 0;
-        c->x_name = 0;
-        c->id[0] = 'X';
-
-        icalmemory_free_buffer(c);
+    if (c->parent != 0) {
+        return;
     }
+
+    if (c->properties != 0) {
+        while ((prop = icalpvl_pop(c->properties)) != 0) {
+            vcardproperty_set_parent(prop, 0);
+            vcardproperty_free(prop);
+        }
+        icalpvl_free(c->properties);
+    }
+
+    while ((comp = icalpvl_data(icalpvl_head(c->components))) != 0) {
+        vcardcomponent_remove_component(c, comp);
+        vcardcomponent_free(comp);
+    }
+
+    icalpvl_free(c->components);
+
+    if (c->x_name != 0) {
+        icalmemory_free_buffer(c->x_name);
+    }
+
+    c->kind = VCARD_NO_COMPONENT;
+    c->properties = 0;
+    c->property_iterator = 0;
+    c->components = 0;
+    c->component_iterator = 0;
+    c->x_name = 0;
+    c->id[0] = 'X';
+
+    icalmemory_free_buffer(c);
 }
 
 char *vcardcomponent_as_vcard_string(vcardcomponent *impl)
@@ -185,7 +185,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
     char *tmp_buf;
     size_t buf_size = 1024;
     char *buf_ptr = 0;
-    pvl_elem itr;
+    icalpvl_elem itr;
 
     /* RFC6350 explicitly says that the newline is *ALWAYS* a \r\n (CRLF)!!!! */
     const char newline[] = "\r\n";
@@ -209,8 +209,9 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
 
     buf = icalmemory_new_buffer(buf_size);
-    if (buf == NULL)
+    if (buf == NULL) {
         return NULL;
+    }
 
     buf_ptr = buf;
 
@@ -219,8 +220,8 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
-        for (itr = pvl_head(impl->properties); itr != 0; itr = pvl_next(itr)) {
-            p = (vcardproperty *)pvl_data(itr);
+        for (itr = icalpvl_head(impl->properties); itr != 0; itr = icalpvl_next(itr)) {
+            p = (vcardproperty *)icalpvl_data(itr);
 
             icalerror_assert((p != 0), "Got a null property");
             tmp_buf = vcardproperty_as_vcard_string_r(p);
@@ -230,8 +231,8 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
         }
     }
 
-    for (itr = pvl_head(impl->components); itr != 0; itr = pvl_next(itr)) {
-        c = (vcardcomponent *)pvl_data(itr);
+    for (itr = icalpvl_head(impl->components); itr != 0; itr = icalpvl_next(itr)) {
+        c = (vcardcomponent *)icalpvl_data(itr);
 
         tmp_buf = vcardcomponent_as_vcard_string_r(c);
         if (tmp_buf != NULL) {
@@ -249,7 +250,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
     return buf;
 }
 
-bool vcardcomponent_is_valid(vcardcomponent *component)
+bool vcardcomponent_is_valid(const vcardcomponent *component)
 {
     return ((strcmp(component->id, "comp") == 0) &&
             (component->kind != VCARD_NO_COMPONENT));
@@ -283,7 +284,7 @@ void vcardcomponent_add_property(vcardcomponent *comp, vcardproperty *property)
 
     vcardproperty_set_parent(property, comp);
 
-    pvl_push(comp->properties, property);
+    icalpvl_push(comp->properties, property);
 
     if (vcardproperty_isa(property) == VCARD_VERSION_PROPERTY) {
         comp->versionp = property;
@@ -292,7 +293,7 @@ void vcardcomponent_add_property(vcardcomponent *comp, vcardproperty *property)
 
 void vcardcomponent_remove_property(vcardcomponent *comp, vcardproperty *property)
 {
-    pvl_elem itr, next_itr;
+    icalpvl_elem itr, next_itr;
 
     icalerror_check_arg_rv((comp != 0), "component");
     icalerror_check_arg_rv((property != 0), "property");
@@ -310,15 +311,15 @@ void vcardcomponent_remove_property(vcardcomponent *comp, vcardproperty *propert
         comp->versionp = 0;
     }
 
-    for (itr = pvl_head(comp->properties); itr != 0; itr = next_itr) {
-        next_itr = pvl_next(itr);
+    for (itr = icalpvl_head(comp->properties); itr != 0; itr = next_itr) {
+        next_itr = icalpvl_next(itr);
 
-        if (pvl_data(itr) == (void *)property) {
+        if (icalpvl_data(itr) == (void *)property) {
             if (comp->property_iterator == itr) {
-                comp->property_iterator = pvl_next(itr);
+                comp->property_iterator = icalpvl_next(itr);
             }
 
-            (void)pvl_remove(comp->properties, itr);
+            (void)icalpvl_remove(comp->properties, itr);
             vcardproperty_set_parent(property, 0);
         }
     }
@@ -329,16 +330,17 @@ int vcardcomponent_count_properties(vcardcomponent *comp,
                                     int ignore_alts)
 {
     int count = 0;
-    pvl_elem itr;
+    icalpvl_elem itr;
     vcardstrarray *altids = NULL;
 
     icalerror_check_arg_rz((comp != 0), "component");
 
-    if (ignore_alts)
+    if (ignore_alts) {
         altids = vcardstrarray_new(2);
+    }
 
-    for (itr = pvl_head(comp->properties); itr != 0; itr = pvl_next(itr)) {
-        vcardproperty *prop = (vcardproperty *)pvl_data(itr);
+    for (itr = icalpvl_head(comp->properties); itr != 0; itr = icalpvl_next(itr)) {
+        vcardproperty *prop = (vcardproperty *)icalpvl_data(itr);
 
         if (kind == VCARD_ANY_PROPERTY || kind == vcardproperty_isa(prop)) {
             if (ignore_alts) {
@@ -349,8 +351,9 @@ int vcardcomponent_count_properties(vcardcomponent *comp,
                 if (param) {
                     const char *altid = vcardparameter_get_altid(param);
 
-                    if (vcardstrarray_find(altids, altid) != -1)
+                    if (vcardstrarray_find(altids, altid) >= vcardstrarray_size(altids)) {
                         continue;
+                    }
 
                     vcardstrarray_append(altids, altid);
                 }
@@ -359,8 +362,9 @@ int vcardcomponent_count_properties(vcardcomponent *comp,
         }
     }
 
-    if (ignore_alts)
+    if (ignore_alts) {
         vcardstrarray_free(altids);
+    }
 
     return count;
 }
@@ -373,7 +377,7 @@ vcardproperty *vcardcomponent_get_current_property(vcardcomponent *comp)
         return 0;
     }
 
-    return (vcardproperty *)pvl_data(comp->property_iterator);
+    return (vcardproperty *)icalpvl_data(comp->property_iterator);
 }
 
 vcardproperty *vcardcomponent_get_first_property(vcardcomponent *c,
@@ -381,10 +385,10 @@ vcardproperty *vcardcomponent_get_first_property(vcardcomponent *c,
 {
     icalerror_check_arg_rz((c != 0), "card");
 
-    for (c->property_iterator = pvl_head(c->properties);
+    for (c->property_iterator = icalpvl_head(c->properties);
          c->property_iterator != 0;
-         c->property_iterator = pvl_next(c->property_iterator)) {
-        vcardproperty *p = (vcardproperty *)pvl_data(c->property_iterator);
+         c->property_iterator = icalpvl_next(c->property_iterator)) {
+        vcardproperty *p = (vcardproperty *)icalpvl_data(c->property_iterator);
 
         if (vcardproperty_isa(p) == kind || kind == VCARD_ANY_PROPERTY) {
             return p;
@@ -402,10 +406,10 @@ vcardproperty *vcardcomponent_get_next_property(vcardcomponent *c,
         return 0;
     }
 
-    for (c->property_iterator = pvl_next(c->property_iterator);
+    for (c->property_iterator = icalpvl_next(c->property_iterator);
          c->property_iterator != 0;
-         c->property_iterator = pvl_next(c->property_iterator)) {
-        vcardproperty *p = (vcardproperty *)pvl_data(c->property_iterator);
+         c->property_iterator = icalpvl_next(c->property_iterator)) {
+        vcardproperty *p = (vcardproperty *)icalpvl_data(c->property_iterator);
 
         if (vcardproperty_isa(p) == kind || kind == VCARD_ANY_PROPERTY) {
             return p;
@@ -429,28 +433,28 @@ void vcardcomponent_add_component(vcardcomponent *parent, vcardcomponent *child)
 
     child->parent = parent;
 
-    pvl_push(parent->components, child);
+    icalpvl_push(parent->components, child);
 }
 
 void vcardcomponent_remove_component(vcardcomponent *parent,
                                      vcardcomponent *child)
 {
-    pvl_elem itr, next_itr;
+    icalpvl_elem itr, next_itr;
 
     icalerror_check_arg_rv((parent != 0), "parent");
     icalerror_check_arg_rv((child != 0), "child");
 
-    for (itr = pvl_head(parent->components); itr != 0; itr = next_itr) {
-        next_itr = pvl_next(itr);
+    for (itr = icalpvl_head(parent->components); itr != 0; itr = next_itr) {
+        next_itr = icalpvl_next(itr);
 
-        if (pvl_data(itr) == (void *)child) {
+        if (icalpvl_data(itr) == (void *)child) {
             if (parent->component_iterator == itr) {
                 /* Don't let the current iterator become invalid */
 
                 /* HACK. The semantics for this are troubling. */
-                parent->component_iterator = pvl_next(parent->component_iterator);
+                parent->component_iterator = icalpvl_next(parent->component_iterator);
             }
-            (void)pvl_remove(parent->components, itr);
+            (void)icalpvl_remove(parent->components, itr);
             child->parent = 0;
             break;
         }
@@ -461,13 +465,13 @@ int vcardcomponent_count_components(vcardcomponent *component,
                                     vcardcomponent_kind kind)
 {
     int count = 0;
-    pvl_elem itr;
+    icalpvl_elem itr;
 
     icalerror_check_arg_rz((component != 0), "component");
 
-    for (itr = pvl_head(component->components); itr != 0; itr = pvl_next(itr)) {
+    for (itr = icalpvl_head(component->components); itr != 0; itr = icalpvl_next(itr)) {
         if (kind == VCARD_ANY_COMPONENT ||
-            kind == vcardcomponent_isa((vcardcomponent *)pvl_data(itr))) {
+            kind == vcardcomponent_isa((vcardcomponent *)icalpvl_data(itr))) {
             count++;
         }
     }
@@ -483,7 +487,7 @@ vcardcomponent *vcardcomponent_get_current_component(vcardcomponent *component)
         return 0;
     }
 
-    return (vcardcomponent *)pvl_data(component->component_iterator);
+    return (vcardcomponent *)icalpvl_data(component->component_iterator);
 }
 
 vcardcomponent *vcardcomponent_get_first_component(vcardcomponent *c,
@@ -491,10 +495,10 @@ vcardcomponent *vcardcomponent_get_first_component(vcardcomponent *c,
 {
     icalerror_check_arg_rz((c != 0), "component");
 
-    for (c->component_iterator = pvl_head(c->components);
+    for (c->component_iterator = icalpvl_head(c->components);
          c->component_iterator != 0;
-         c->component_iterator = pvl_next(c->component_iterator)) {
-        vcardcomponent *p = (vcardcomponent *)pvl_data(c->component_iterator);
+         c->component_iterator = icalpvl_next(c->component_iterator)) {
+        vcardcomponent *p = (vcardcomponent *)icalpvl_data(c->component_iterator);
 
         if (vcardcomponent_isa(p) == kind || kind == VCARD_ANY_COMPONENT) {
             return p;
@@ -513,10 +517,10 @@ vcardcomponent *vcardcomponent_get_next_component(vcardcomponent *c,
         return 0;
     }
 
-    for (c->component_iterator = pvl_next(c->component_iterator);
+    for (c->component_iterator = icalpvl_next(c->component_iterator);
          c->component_iterator != 0;
-         c->component_iterator = pvl_next(c->component_iterator)) {
-        vcardcomponent *p = (vcardcomponent *)pvl_data(c->component_iterator);
+         c->component_iterator = icalpvl_next(c->component_iterator)) {
+        vcardcomponent *p = (vcardcomponent *)icalpvl_data(c->component_iterator);
 
         if (vcardcomponent_isa(p) == kind || kind == VCARD_ANY_COMPONENT) {
             return p;
@@ -536,12 +540,12 @@ int vcardcomponent_count_errors(vcardcomponent *comp)
 {
     int errors = 0;
     vcardproperty *p;
-    pvl_elem itr;
+    icalpvl_elem itr;
 
     icalerror_check_arg_rz((comp != 0), "card");
 
-    for (itr = pvl_head(comp->properties); itr != 0; itr = pvl_next(itr)) {
-        p = (vcardproperty *)pvl_data(itr);
+    for (itr = icalpvl_head(comp->properties); itr != 0; itr = icalpvl_next(itr)) {
+        p = (vcardproperty *)icalpvl_data(itr);
 
         if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
             errors++;
@@ -554,13 +558,13 @@ int vcardcomponent_count_errors(vcardcomponent *comp)
 void vcardcomponent_strip_errors(vcardcomponent *comp)
 {
     vcardproperty *p;
-    pvl_elem itr, next_itr;
+    icalpvl_elem itr, next_itr;
 
     icalerror_check_arg_rv((comp != 0), "comp");
 
-    for (itr = pvl_head(comp->properties); itr != 0; itr = next_itr) {
-        p = (vcardproperty *)pvl_data(itr);
-        next_itr = pvl_next(itr);
+    for (itr = icalpvl_head(comp->properties); itr != 0; itr = next_itr) {
+        p = (vcardproperty *)icalpvl_data(itr);
+        next_itr = icalpvl_next(itr);
 
         if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
             vcardcomponent_remove_property(comp, p);
@@ -568,71 +572,7 @@ void vcardcomponent_strip_errors(vcardcomponent *comp)
         }
     }
 }
-#if 0
-/* Hack. This will change the state of the iterators */
-void vcardcomponent_convert_errors(vcardcomponent *comp)
-{
-    vcardproperty *p, *next_p;
-    vcardcomponent *c;
 
-    for (p = vcardcomponent_get_first_property(card, VCARD_ANY_PROPERTY); p != 0; p = next_p) {
-
-        next_p = vcardcomponent_get_next_property(card, VCARD_ANY_PROPERTY);
-
-        if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
-            struct icalreqstattype rst;
-            icalparameter *param =
-                vcardproperty_get_first_parameter(p, VCARD_XLICERRORTYPE_PARAMETER);
-
-            rst.code = ICAL_UNKNOWN_STATUS;
-            rst.desc = 0;
-
-            switch (vcardparameter_get_xlicerrortype(param)) {
-
-            case ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR:{
-                    rst.code = ICAL_3_2_INVPARAM_STATUS;
-                    break;
-                }
-            case ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR:{
-                    rst.code = ICAL_3_3_INVPARAMVAL_STATUS;
-                    break;
-                }
-            case ICAL_XLICERRORTYPE_PROPERTYPARSEERROR:{
-                    rst.code = ICAL_3_0_INVPROPNAME_STATUS;
-                    break;
-                }
-            case ICAL_XLICERRORTYPE_VALUEPARSEERROR:{
-                    rst.code = ICAL_3_1_INVPROPVAL_STATUS;
-                    break;
-                }
-            case ICAL_XLICERRORTYPE_CARDPARSEERROR:{
-                    rst.code = ICAL_3_4_INVCOMP_STATUS;
-                    break;
-                }
-
-            default:{
-                    break;
-                }
-            }
-            if (rst.code != ICAL_UNKNOWN_STATUS) {
-
-                rst.debug = vcardproperty_get_xlicerror(p);
-                vcardcomponent_add_property(card, vcardproperty_new_requeststatus(rst));
-
-                vcardcomponent_remove_property(card, p);
-                vcardproperty_free(p);
-                p = NULL;
-            }
-        }
-    }
-
-    for (c = vcardcomponent_get_first_card(card, ICAL_ANY_CARD);
-         c != 0; c = vcardcomponent_get_next_card(card, ICAL_ANY_CARD)) {
-
-        vcardcomponent_convert_errors(c);
-    }
-}
-#endif
 struct vcardcomponent_kind_map {
     vcardcomponent_kind kind;
     char name[20];
@@ -733,10 +673,11 @@ static int prop_kind_compare(vcardproperty_kind kind,
     if (p1 && p2) {
         return strcmpsafe(vcardproperty_get_value_as_string(p1),
                           vcardproperty_get_value_as_string(p2));
-    } else if (p1)
+    } else if (p1) {
         return -1;
-    else if (p2)
+    } else if (p2) {
         return 1;
+    }
 
     return 0;
 }
@@ -783,13 +724,13 @@ static int comp_compare(void *a, void *b)
 
 void vcardcomponent_normalize(vcardcomponent *comp)
 {
-    pvl_list sorted_props = pvl_newlist();
-    pvl_list sorted_comps = pvl_newlist();
+    icalpvl_list sorted_props = icalpvl_newlist();
+    icalpvl_list sorted_comps = icalpvl_newlist();
     vcardproperty *prop;
     vcardcomponent *sub;
 
     /* Normalize properties into sorted list */
-    while ((prop = pvl_pop(comp->properties)) != 0) {
+    while ((prop = icalpvl_pop(comp->properties)) != 0) {
         int nparams, remove = 0;
 
         vcardproperty_normalize(prop);
@@ -814,29 +755,29 @@ void vcardcomponent_normalize(vcardcomponent *comp)
             vcardproperty_set_parent(prop, 0); // MUST NOT have a parent to free
             vcardproperty_free(prop);
         } else {
-            pvl_insert_ordered(sorted_props, prop_compare, prop);
+            icalpvl_insert_ordered(sorted_props, prop_compare, prop);
         }
     }
 
-    pvl_free(comp->properties);
+    icalpvl_free(comp->properties);
     comp->properties = sorted_props;
 
     /* Normalize sub-components into sorted list */
-    while ((sub = pvl_pop(comp->components)) != 0) {
+    while ((sub = icalpvl_pop(comp->components)) != 0) {
         vcardcomponent_normalize(sub);
-        pvl_insert_ordered(sorted_comps, comp_compare, sub);
+        icalpvl_insert_ordered(sorted_comps, comp_compare, sub);
     }
 
-    pvl_free(comp->components);
+    icalpvl_free(comp->components);
     comp->components = sorted_comps;
 }
 
 static void comp_to_v4(vcardcomponent *impl)
 {
-    pvl_elem itr, next;
+    icalpvl_elem itr, next;
 
-    for (itr = pvl_head(impl->properties); itr != 0; itr = next) {
-        vcardproperty *prop = (vcardproperty *)pvl_data(itr);
+    for (itr = icalpvl_head(impl->properties); itr != 0; itr = next) {
+        vcardproperty *prop = (vcardproperty *)icalpvl_data(itr);
         vcardproperty_kind pkind = vcardproperty_isa(prop);
         vcardvalue *value = vcardproperty_get_value(prop);
         vcardvalue_kind vkind = vcardvalue_isa(value);
@@ -846,17 +787,17 @@ static void comp_to_v4(vcardcomponent *impl)
         const char *data;
         size_t size = 0;
 
-        next = pvl_next(itr);
+        next = icalpvl_next(itr);
 
         /* Remove TYPE=PREF and replace with PREF=1 (if no existing (PREF=) */
         param = vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER);
         if (param) {
             vcardenumarray_element pref = {VCARD_TYPE_PREF, NULL};
-            ssize_t i;
+            size_t i;
 
             types = vcardparameter_get_type(param);
             i = vcardenumarray_find(types, &pref);
-            if (i >= 0) {
+            if (i < vcardenumarray_size(types)) {
                 vcardenumarray_remove_element_at(types, i);
                 if (!vcardenumarray_size(types)) {
                     vcardproperty_remove_parameter_by_ref(prop, param);
@@ -960,7 +901,7 @@ static void comp_to_v4(vcardcomponent *impl)
                         }
 
                         /* Remove this TYPE */
-                        vcardenumarray_remove_element_at(types, (ssize_t)i);
+                        vcardenumarray_remove_element_at(types, i);
                         if (!vcardenumarray_size(types)) {
                             vcardproperty_remove_parameter_by_ref(prop, param);
                         }
@@ -1046,8 +987,9 @@ static void comp_to_v4(vcardcomponent *impl)
             break;
         }
 
-        if (buf)
+        if (buf) {
             icalmemory_free_buffer(buf);
+        }
     }
 }
 
@@ -1061,10 +1003,10 @@ static void comp_to_v3(vcardcomponent *impl)
     struct pref_prop *pref_props[VCARD_NO_PROPERTY] = {0};
     vcardenumarray_element type;
     vcardproperty_kind pkind;
-    pvl_elem itr, next;
+    icalpvl_elem itr, next;
 
-    for (itr = pvl_head(impl->properties); itr != 0; itr = next) {
-        vcardproperty *prop = (vcardproperty *)pvl_data(itr);
+    for (itr = icalpvl_head(impl->properties); itr != 0; itr = next) {
+        vcardproperty *prop = (vcardproperty *)icalpvl_data(itr);
         vcardproperty *xprop;
         vcardparameter *val_param =
             vcardproperty_get_first_parameter(prop, VCARD_VALUE_PARAMETER);
@@ -1074,7 +1016,7 @@ static void comp_to_v3(vcardcomponent *impl)
         char *subtype = NULL, *buf = NULL;
         const char *mediatype, *uri, *xname = NULL;
 
-        next = pvl_next(itr);
+        next = icalpvl_next(itr);
 
         /* Find prop with lowest PREF= for each set of like properties */
         pkind = vcardproperty_isa(prop);
@@ -1268,8 +1210,9 @@ static void comp_to_v3(vcardcomponent *impl)
             break;
         }
 
-        if (buf)
+        if (buf) {
             icalmemory_free_buffer(buf);
+        }
     }
 
     /* Add TYPE=PREF for each most preferred property */
@@ -1289,7 +1232,7 @@ static void comp_to_v3(vcardcomponent *impl)
 void vcardcomponent_transform(vcardcomponent *impl,
                               vcardproperty_version version)
 {
-    pvl_elem itr;
+    icalpvl_elem itr;
     vcardcomponent *c;
     vcardcomponent_kind kind = vcardcomponent_isa(impl);
 
@@ -1305,8 +1248,8 @@ void vcardcomponent_transform(vcardcomponent *impl,
         }
     }
 
-    for (itr = pvl_head(impl->components); itr != 0; itr = pvl_next(itr)) {
-        c = (vcardcomponent *)pvl_data(itr);
+    for (itr = icalpvl_head(impl->components); itr != 0; itr = icalpvl_next(itr)) {
+        c = (vcardcomponent *)icalpvl_data(itr);
 
         vcardcomponent_transform(c, version);
     }

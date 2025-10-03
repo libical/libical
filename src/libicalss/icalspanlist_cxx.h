@@ -4,7 +4,6 @@
  * @brief    C++ class wrapping the icalspanlist data structure
  *
  * SPDX-FileCopyrightText: 2001, Critical Path
- *
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 

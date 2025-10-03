@@ -1,12 +1,9 @@
 /*======================================================================
  FILE: vcardderivedvalue.h
-
  CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
 
  SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifndef VCARDDERIVEDVALUE_H
@@ -65,7 +62,7 @@ typedef enum vcard_clientpidmap_field {
     VCARD_CLIENTPIDMAP_ID = 0,
     VCARD_CLIENTPIDMAP_URI,
     VCARD_NUM_CLIENTPIDMAP_FIELDS
-} vcard_clientidmap_field;
+} vcard_clientpidmap_field;
 
 typedef struct vcardvalue_impl vcardvalue;
 

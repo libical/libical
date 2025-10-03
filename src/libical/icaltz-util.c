@@ -3,7 +3,6 @@
  *  Chenthill Palanisamy <pchenthill@novell.com>
  *
  * SPDX-FileCopyrightText: 2007, Novell, Inc.
- *
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 //krazy:excludeall=cpp
@@ -141,7 +140,7 @@ static int decode(const void *ptr)
 #endif
     } else {
         const unsigned char *p = ptr;
-        int result = *p & (1 << (CHAR_BIT - 1)) ? ~0 : 0;
+        int result = (*p & (1 << (CHAR_BIT - 1))) ? ~0 : 0;
 
         /* cppcheck-suppress shiftNegativeLHS */
         result = (result << 8) | *p++;
@@ -337,10 +336,12 @@ static char *parse_posix_rule(char *p,
 
     if (*p == '/') {
         t->hour = strtol(++p, &p, 10);
-        if (*p == ':')
+        if (*p == ':') {
             t->minute = strtol(++p, &p, 10);
-        if (*p == ':')
+        }
+        if (*p == ':') {
             t->second = strtol(++p, &p, 10);
+        }
     }
 
     /* Do adjustments for extended TZ strings */
@@ -386,14 +387,15 @@ static char *parse_posix_rule(char *p,
         error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_YEAR_DAY], day - 1000);
     } else {
         /* Convert day-of-non-leap-year into month/day */
-        icaltimetype t = icaltime_from_day_of_year(day, 1 /* non-leap */);
+        icaltimetype doy_t = icaltime_from_day_of_year(day, 1 /* non-leap */);
 
-        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH], t.month);
-        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH_DAY], t.day);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH], doy_t.month);
+        error |= !icalrecur_set_single_by(&recur->by[ICAL_BY_MONTH_DAY], doy_t.day);
     }
 
-    if (error)
+    if (error) {
         return NULL;
+    }
 
     return p;
 }
@@ -425,7 +427,8 @@ static void terminate_rrule(struct zone_context *zone)
         zone->recur->until.zone = icaltimezone_get_utc_timezone();
 
         // Remove BYMONTHDAY if BYDAY week != 0
-        if ((zone->recur->by[ICAL_BY_DAY].size >= 1) && icalrecurrencetype_day_position(zone->recur->by[ICAL_BY_DAY].data[0])) {
+        if ((zone->recur->by[ICAL_BY_DAY].size >= 1) &&
+            icalrecurrencetype_day_position(zone->recur->by[ICAL_BY_DAY].data[0])) {
             // Don't bother dealing with success/failure since we're simply removing
             (void)icalrecur_resize_by(&zone->recur->by[ICAL_BY_MONTH_DAY], 0);
         }
@@ -444,7 +447,7 @@ static void terminate_rrule(struct zone_context *zone)
 
 icalcomponent *icaltzutil_fetch_timezone(const char *location)
 {
-    tzinfo header;
+    tzinfo header = {0};
     size_t i, num_trans, num_chars, num_leaps, num_isstd, num_isgmt;
     size_t num_types = 0;
     size_t size;
@@ -820,9 +823,13 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                      icaltime.second == zone->time.second) {
                 if ((zone->recur->by[ICAL_BY_DAY].size >= 1) && (by_day == zone->recur->by[ICAL_BY_DAY].data[0])) {
                     // Same nth weekday of the month - continue
-                } else if ((zone->recur->by[ICAL_BY_DAY].size >= 1) && (dow == icalrecurrencetype_day_day_of_week(zone->recur->by[ICAL_BY_DAY].data[0]))) {
+                } else if ((zone->recur->by[ICAL_BY_DAY].size >= 1) &&
+                           (dow == icalrecurrencetype_day_day_of_week(zone->recur->by[ICAL_BY_DAY].data[0]))) {
                     // Same weekday in the month
-                    if (((zone->recur->by[ICAL_BY_MONTH_DAY].size >= 1) && (icaltime.day >= zone->recur->by[ICAL_BY_MONTH_DAY].data[0] + 7)) || (zone->recur->by[ICAL_BY_MONTH_DAY].size <= zone->num_monthdays - 1) || (icaltime.day + 7 <= zone->recur->by[ICAL_BY_MONTH_DAY].data[zone->num_monthdays - 1])) {
+                    if (((zone->recur->by[ICAL_BY_MONTH_DAY].size >= 1) &&
+                         (icaltime.day >= zone->recur->by[ICAL_BY_MONTH_DAY].data[0] + 7)) ||
+                        (zone->recur->by[ICAL_BY_MONTH_DAY].size <= zone->num_monthdays - 1) ||
+                        (icaltime.day + 7 <= zone->recur->by[ICAL_BY_MONTH_DAY].data[zone->num_monthdays - 1])) {
                         // Don't allow two month days with the same weekday -
                         // possible RDATE
                         rdate = terminate = 1;
@@ -862,7 +869,8 @@ icalcomponent *icaltzutil_fetch_timezone(const char *location)
                         // zone->recur->by[ICAL_BY_DAY].size cannot be < 1 here
                         zone->recur->by[ICAL_BY_DAY].data[0] = nth_weekday(0, dow);
                     }
-                } else if ((zone->recur->by[ICAL_BY_MONTH_DAY].size >= 1) && (icaltime.day == zone->recur->by[ICAL_BY_MONTH_DAY].data[0])) {
+                } else if ((zone->recur->by[ICAL_BY_MONTH_DAY].size >= 1) &&
+                           (icaltime.day == zone->recur->by[ICAL_BY_MONTH_DAY].data[0])) {
                     // Same day of the month - remove BYDAY
                     if (zone->recur->by[ICAL_BY_DAY].data) {
                         icalrecur_resize_by(&zone->recur->by[ICAL_BY_DAY], 0);
@@ -988,20 +996,25 @@ error:
         icalrecurrencetype_unref(daylight.final_recur);
     }
 
-    if (f)
+    if (f) {
         fclose(f);
+    }
 
-    if (full_path)
+    if (full_path) {
         icalmemory_free_buffer(full_path);
+    }
 
-    if (transitions)
+    if (transitions) {
         icalmemory_free_buffer(transitions);
+    }
 
-    if (r_trans)
+    if (r_trans) {
         icalmemory_free_buffer(r_trans);
+    }
 
-    if (trans_idx)
+    if (trans_idx) {
         icalmemory_free_buffer(trans_idx);
+    }
 
     if (types) {
         for (i = 0; i < num_types; i++) {
@@ -1012,14 +1025,17 @@ error:
         icalmemory_free_buffer(types);
     }
 
-    if (znames)
+    if (znames) {
         icalmemory_free_buffer(znames);
+    }
 
-    if (leaps)
+    if (leaps) {
         icalmemory_free_buffer(leaps);
+    }
 
-    if (tzid)
+    if (tzid) {
         icalmemory_free_buffer(tzid);
+    }
 
     return tz_comp;
 }

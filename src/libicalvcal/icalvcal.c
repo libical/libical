@@ -3,10 +3,7 @@
  CREATOR: eric 25 May 00
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
- The original code is icalvcal.c
 
  The icalvcal_convert routine calls icalvcal_traverse_objects to do
  its work.s his routine steps through all of the properties
@@ -60,12 +57,12 @@ static const int weekday_codes[] = {
 struct conversion_table_struct {
     const char *vcalname;
     enum datatype type;
-    void *(*conversion_func)(int icaltype, VObject *o, icalcomponent *comp,
+    void *(*conversion_func)(int icaltype, VObject *o, const icalcomponent *comp,
                              icalvcal_defaults *defaults);
     int icaltype;
 };
 
-static void *dc_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *dc_prop(int icaltype, VObject *object, const icalcomponent *comp,
                      icalvcal_defaults *defaults);
 
 /* Creates an error property with the given message. */
@@ -161,13 +158,6 @@ icalcomponent *icalvcal_convert_with_defaults(VObject *object, icalvcal_defaults
         icalcomponent_free(container);
         return 0; /* HACK. Should return an error */
     }
-#if 0
-    /* Just for testing. */
-    printf("This is the internal VObject representation:\n");
-    printf("===========================================\n");
-    printVObject(stdout, object);
-    printf("===========================================\n");
-#endif
 
     icalvcal_traverse_objects(object, container, 0, defaults);
 
@@ -204,7 +194,7 @@ icalcomponent *icalvcal_convert(VObject *object)
  * timezone_comp() may not really be necessary, I think it would be
  * easier to use them. */
 
-static void *comp(int icaltype, VObject *o, icalcomponent *comp, icalvcal_defaults *defaults)
+static void *comp(int icaltype, VObject *o, const icalcomponent *comp, icalvcal_defaults *defaults)
 {
     icalcomponent_kind kind = (icalcomponent_kind)icaltype;
     icalcomponent *c = icalcomponent_new(kind);
@@ -293,8 +283,9 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
                 t.duration = icaldurationtype_null_duration();
 
                 /* If it is a floating time, convert it to a UTC time. */
-                if (t.time.zone == NULL)
+                if (t.time.zone == NULL) {
                     convert_floating_time_to_utc(&t.time);
+                }
 
                 /* Create a TRIGGER property. */
                 trigger_prop = icalproperty_new_trigger(t);
@@ -344,8 +335,9 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
 
                 /* We output a "application/binary" FMTTYPE for Procedure
                    alarms. */
-                if (!strcmp(name, VCProcedureNameProp) && !fmttype_param)
+                if (!strcmp(name, VCProcedureNameProp) && !fmttype_param) {
                     fmttype_param = icalparameter_new_fmttype("application/binary");
+                }
             }
 
         } else if (!strcmp(name, "TYPE")) {
@@ -396,8 +388,9 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
             }
         }
 
-        if (free_string)
+        if (free_string) {
             deleteStr(s);
+        }
     }
 
     /* Add the FMTTYPE parameter to the ATTACH property if it exists. */
@@ -413,8 +406,9 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
        according to its type. */
 
     /* All alarms must have a trigger. */
-    if (!trigger_prop)
+    if (!trigger_prop) {
         is_valid_alarm = 0;
+    }
 
     /* If there is a Duration but not a Repeat Count, we just remove the
        Duration so the alarm only occurs once. */
@@ -490,8 +484,9 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
                 icalcomponent_add_property(comp, description_prop);
             }
 
-            if (!summary_prop || !description_prop)
+            if (!summary_prop || !description_prop) {
                 is_valid_alarm = 0;
+            }
         }
         break;
 
@@ -519,14 +514,18 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
                 len = strlen(url) + 12;
 
                 new_url = malloc(len);
-                strcpy(new_url, "file://");
-                strcat(new_url, url);
+                if (new_url) {
+                    strcpy(new_url, "file://");
+                    strcat(new_url, url);
 
-                new_attach = icalattach_new_from_url(new_url);
-                free(new_url);
+                    new_attach = icalattach_new_from_url(new_url);
+                    free(new_url);
 
-                icalproperty_set_attach(attach_prop, new_attach);
-                icalattach_unref(attach);
+                    icalproperty_set_attach(attach_prop, new_attach);
+                    icalattach_unref(attach);
+                } else {
+                    is_valid_alarm = 0;
+                }
 
             } else {
                 is_valid_alarm = 0;
@@ -546,7 +545,7 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
     return is_valid_alarm;
 }
 
-static void *alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
+static void *alarm_comp(int icaltype, VObject *o, const icalcomponent *comp,
                         icalvcal_defaults *defaults)
 {
     /*    icalcomponent_kind kind = (icalcomponent_kind)icaltype; */
@@ -570,7 +569,7 @@ static void *alarm_comp(int icaltype, VObject *o, icalcomponent *comp,
 #define parameter NULL
 #define rsvp_parameter NULL
 
-static void *transp_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *transp_prop(int icaltype, VObject *object, const icalcomponent *comp,
                          icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
@@ -590,13 +589,14 @@ static void *transp_prop(int icaltype, VObject *object, icalcomponent *comp,
         prop = icalproperty_new_transp(ICAL_TRANSP_TRANSPARENT);
     }
 
-    if (free_string)
+    if (free_string) {
         deleteStr(s);
+    }
 
     return (void *)prop;
 }
 
-static void *sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *sequence_prop(int icaltype, VObject *object, const icalcomponent *comp,
                            icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
@@ -612,20 +612,22 @@ static void *sequence_prop(int icaltype, VObject *object, icalcomponent *comp,
     /* GnomeCalendar outputs '-1' for this. I have no idea why.
        So we just check it is a valid +ve integer, and output 0 if it isn't. */
     sequence = atoi(s);
-    if (sequence < 0)
+    if (sequence < 0) {
         sequence = 0;
+    }
 
     prop = icalproperty_new_sequence(sequence);
 
-    if (free_string)
+    if (free_string) {
         deleteStr(s);
+    }
 
     return (void *)prop;
 }
 
 /* This handles properties which have multiple values, which are separated by
    ';' in vCalendar but ',' in iCalendar. So we just switch those. */
-static void *multivalued_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *multivalued_prop(int icaltype, VObject *object, const icalcomponent *comp,
                               icalvcal_defaults *defaults)
 {
     icalproperty_kind kind = (icalproperty_kind)icaltype;
@@ -643,17 +645,19 @@ static void *multivalued_prop(int icaltype, VObject *object, icalcomponent *comp
 
     tmp_copy = strdup(s);
 
-    if (free_string)
+    if (free_string) {
         deleteStr(s);
+    }
 
     if (tmp_copy) {
         prop = icalproperty_new(kind);
 
-        value_kind = icalenum_property_kind_to_value_kind(icalproperty_isa(prop));
+        value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
 
         for (p = tmp_copy; *p; p++) {
-            if (*p == ';')
+            if (*p == ';') {
                 *p = ',';
+            }
         }
 
         value = icalvalue_new_from_string(value_kind, tmp_copy);
@@ -665,7 +669,7 @@ static void *multivalued_prop(int icaltype, VObject *object, icalcomponent *comp
     return (void *)prop;
 }
 
-static void *status_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *status_prop(int icaltype, VObject *object, const icalcomponent *comp,
                          icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
@@ -711,13 +715,14 @@ static void *status_prop(int icaltype, VObject *object, icalcomponent *comp,
         }
     }
 
-    if (free_string)
+    if (free_string) {
         deleteStr(s);
+    }
 
     return (void *)prop;
 }
 
-static void *utc_datetime_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *utc_datetime_prop(int icaltype, VObject *object, const icalcomponent *comp,
                                icalvcal_defaults *defaults)
 {
     icalproperty_kind kind = (icalproperty_kind)icaltype;
@@ -738,14 +743,16 @@ static void *utc_datetime_prop(int icaltype, VObject *object, icalcomponent *com
     itt = icaltime_from_string(s);
 
     /* If it is a floating time, convert it to a UTC time. */
-    if (itt.zone == NULL)
+    if (itt.zone == NULL) {
         convert_floating_time_to_utc(&itt);
+    }
 
     value = icalvalue_new_datetime(itt);
     icalproperty_set_value(prop, value);
 
-    if (free_string)
+    if (free_string) {
         deleteStr(s);
+    }
 
     return (void *)prop;
 }
@@ -764,8 +771,9 @@ static const char *rrule_parse_interval(const char *s, struct icalrecurrencetype
         return NULL;
     }
 
-    while (*s >= '0' && *s <= '9')
+    while (*s >= '0' && *s <= '9') {
         interval = (interval * 10) + (*s++ - '0');
+    }
 
     /* It must be followed by whitespace. I'm not sure if anything else is
        allowed. */
@@ -775,8 +783,9 @@ static const char *rrule_parse_interval(const char *s, struct icalrecurrencetype
     }
 
     /* Skip any whitespace. */
-    while (*s == ' ' || *s == '\t')
+    while (*s == ' ' || *s == '\t') {
         s++;
+    }
 
     recur->interval = interval;
     return s;
@@ -789,8 +798,9 @@ static const char *rrule_parse_duration(const char *s, struct icalrecurrencetype
                                         const char **error_message)
 {
     /* If we've already found an error, just return. */
-    if (*error_message)
+    if (*error_message) {
         return NULL;
+    }
 
     if (!s || *s == '\0') {
         /* If we are at the end of the string, assume '#2'. */
@@ -802,8 +812,9 @@ static const char *rrule_parse_duration(const char *s, struct icalrecurrencetype
         int count = 0;
 
         s++;
-        while (*s >= '0' && *s <= '9')
+        while (*s >= '0' && *s <= '9') {
             count = (count * 10) + (*s++ - '0');
+        }
 
         recur->count = count;
 
@@ -815,8 +826,9 @@ static const char *rrule_parse_duration(const char *s, struct icalrecurrencetype
 
         /* Find the end of the date. */
         e = s;
-        while ((*e >= '0' && *e <= '9') || *e == 'T' || *e == 'Z')
+        while ((*e >= '0' && *e <= '9') || *e == 'T' || *e == 'Z') {
             e++;
+        }
 
         /* Check it is a suitable length. */
         len = (ptrdiff_t)(e - s);
@@ -870,8 +882,9 @@ static const char *rrule_parse_weekly_days(const char *s,
     int i;
 
     /* If we've already found an error, just return. */
-    if (*error_message)
+    if (*error_message) {
         return NULL;
+    }
 
     if (!icalrecur_resize_by(&recur->by[ICAL_BY_DAY], ICAL_BY_DAY_SIZE)) {
         return NULL;
@@ -893,16 +906,18 @@ static const char *rrule_parse_weekly_days(const char *s,
             }
         }
 
-        if (found_day == -1)
+        if (found_day == -1) {
             break;
+        }
 
         /* cppcheck-suppress arrayIndexOutOfBounds; since 'day' can't be >6 */
         recur->by[ICAL_BY_DAY].data[i] = weekday_codes[day];
 
         s = e;
         /* Skip any whitespace. */
-        while (*s == ' ' || *s == '\t')
+        while (*s == ' ' || *s == '\t') {
             s++;
+        }
     }
 
     if (!icalrecur_resize_by(&recur->by[ICAL_BY_DAY], i)) {
@@ -919,8 +934,9 @@ static const char *rrule_parse_monthly_days(const char *s,
     short i;
 
     /* If we've already found an error, just return. */
-    if (*error_message)
+    if (*error_message) {
         return NULL;
+    }
 
     if (!icalrecur_resize_by(&recur->by[ICAL_BY_MONTH_DAY], ICAL_BY_MONTHDAY_SIZE)) {
         return NULL;
@@ -937,8 +953,9 @@ static const char *rrule_parse_monthly_days(const char *s,
             month_day = strtol(s, (char **)&e, 10);
 
             /* Check we got a valid day. */
-            if (month_day < 1 || month_day > 31)
+            if (month_day < 1 || month_day > 31) {
                 break;
+            }
 
             /* See if it is followed by a '+' or '-'. */
             if (*e == '+') {
@@ -950,15 +967,17 @@ static const char *rrule_parse_monthly_days(const char *s,
         }
 
         /* Check the next char is whitespace or the end of the string. */
-        if (*e != ' ' && *e != '\t' && *e != '\0')
+        if (*e != ' ' && *e != '\t' && *e != '\0') {
             break;
+        }
 
         recur->by[ICAL_BY_MONTH_DAY].data[i] = month_day;
 
         s = e;
         /* Skip any whitespace. */
-        while (*s == ' ' || *s == '\t')
+        while (*s == ' ' || *s == '\t') {
             s++;
+        }
     }
 
     if (!icalrecur_resize_by(&recur->by[ICAL_BY_MONTH_DAY], i)) {
@@ -991,17 +1010,19 @@ static const char *rrule_parse_monthly_positions(const char *s,
     const char *e;
 
     /* If we've already found an error, just return. */
-    if (*error_message)
+    if (*error_message) {
         return NULL;
+    }
 
     /* First read the month position into our local occurrences array. */
     for (i = 0; i < ICAL_BY_DAY_SIZE; i++) {
-        int month_position;
+        int pos;
 
         /* Check we got a valid position number. */
-        month_position = *s - '0';
-        if (month_position < 0 || month_position > 5)
+        pos = *s - '0';
+        if (pos < 0 || pos > 5) {
             break;
+        }
 
         /* See if it is followed by a '+' or '-'. */
         e = s + 1;
@@ -1009,48 +1030,52 @@ static const char *rrule_parse_monthly_positions(const char *s,
             e++;
         } else if (*e == '-') {
             e++;
-            month_position = -month_position;
+            pos = -pos;
         }
 
         /* Check the next char is whitespace or the end of the string. */
-        if (*e != ' ' && *e != '\t' && *e != '\0')
+        if (*e != ' ' && *e != '\t' && *e != '\0') {
             break;
+        }
 
-        occurrences[i] = month_position;
+        occurrences[i] = pos;
 
         s = e;
         /* Skip any whitespace. */
-        while (*s == ' ' || *s == '\t')
+        while (*s == ' ' || *s == '\t') {
             s++;
+        }
     }
     num_positions = i;
 
     /* Now read the weekdays in. */
     for (;;) {
-        const char *e = s;
-        int found_day, day;
+        const char *t_s = s;
+        int found_day;
 
         found_day = -1;
         for (day = 0; day < 7; day++) {
             if (!strncmp(weekdays[day], s, 2)) {
                 /* Check the next char is whitespace or the end of string. */
-                e = s + 2;
-                if (*e == ' ' || *e == '\t' || *e == '\0') {
+                t_s = s + 2;
+                if (*t_s == ' ' || *t_s == '\t' || *t_s == '\0') {
                     found_day = day;
                     break;
                 }
             }
         }
 
-        if (found_day == -1)
+        if (found_day == -1) {
             break;
+        }
 
         found_weekdays[found_day] = 1;
 
-        s = e;
+        s = t_s;
         /* Skip any whitespace. */
-        while (*s == ' ' || *s == '\t')
+        while (*s == ' ' || *s == '\t') {
             s++;
+        }
     }
 
     /* Now merge them together into the recur->by[ICAL_BY_DAY] array. If there is a
@@ -1087,13 +1112,15 @@ static const char *rrule_parse_monthly_positions(const char *s,
                          weekday_codes[day]) *
                         ((month_position < 0) ? -1 : 1);
 
-                    if (elems == ICAL_BY_DAY_SIZE)
+                    if (elems == ICAL_BY_DAY_SIZE) {
                         break;
+                    }
                 }
             }
 
-            if (elems == ICAL_BY_DAY_SIZE)
+            if (elems == ICAL_BY_DAY_SIZE) {
                 break;
+            }
         }
     }
 
@@ -1107,8 +1134,9 @@ static const char *rrule_parse_yearly_months(const char *s,
     int i;
 
     /* If we've already found an error, just return. */
-    if (*error_message)
+    if (*error_message) {
         return NULL;
+    }
 
     if (!icalrecur_resize_by(&recur->by[ICAL_BY_MONTH], ICAL_BY_MONTH_SIZE)) {
         return NULL;
@@ -1121,19 +1149,22 @@ static const char *rrule_parse_yearly_months(const char *s,
         month = strtol(s, (char **)&e, 10);
 
         /* Check we got a valid month. */
-        if (month < 1 || month > 12)
+        if (month < 1 || month > 12) {
             break;
+        }
 
         /* Check the next char is whitespace or the end of the string. */
-        if (*e != ' ' && *e != '\t' && *e != '\0')
+        if (*e != ' ' && *e != '\t' && *e != '\0') {
             break;
+        }
 
         recur->by[ICAL_BY_MONTH].data[i] = month;
 
         s = e;
         /* Skip any whitespace. */
-        while (*s == ' ' || *s == '\t')
+        while (*s == ' ' || *s == '\t') {
             s++;
+        }
     }
 
     if (!icalrecur_resize_by(&recur->by[ICAL_BY_MONTH], i)) {
@@ -1150,8 +1181,9 @@ static const char *rrule_parse_yearly_days(const char *s,
     int i;
 
     /* If we've already found an error, just return. */
-    if (*error_message)
+    if (*error_message) {
         return NULL;
+    }
 
     if (!icalrecur_resize_by(&recur->by[ICAL_BY_YEAR_DAY], ICAL_BY_YEARDAY_SIZE)) {
         return NULL;
@@ -1164,19 +1196,22 @@ static const char *rrule_parse_yearly_days(const char *s,
         year_day = strtol(s, &e, 10);
 
         /* Check we got a valid year_day. */
-        if (year_day < 1 || year_day > 366)
+        if (year_day < 1 || year_day > 366) {
             break;
+        }
 
         /* Check the next char is whitespace or the end of the string. */
-        if (*e != ' ' && *e != '\t' && *e != '\0')
+        if (*e != ' ' && *e != '\t' && *e != '\0') {
             break;
+        }
 
         recur->by[ICAL_BY_YEAR_DAY].data[i] = year_day;
 
         s = e;
         /* Skip any whitespace. */
-        while (*s == ' ' || *s == '\t')
+        while (*s == ' ' || *s == '\t') {
             s++;
+        }
     }
 
     if (!icalrecur_resize_by(&recur->by[ICAL_BY_YEAR_DAY], i)) {
@@ -1201,7 +1236,7 @@ static const char *rrule_parse_yearly_days(const char *s,
         recurrences, time modifiers in DAILY rules and maybe other stuff.
 */
 
-static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
+static void *rule_prop(int icaltype, VObject *object, const icalcomponent *comp,
                        icalvcal_defaults *defaults)
 {
     icalproperty *prop = NULL;
@@ -1275,11 +1310,13 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
         }
     }
 
-    if (free_string)
+    if (free_string) {
         deleteStr(s);
+    }
 
-    if (recur)
+    if (recur) {
         icalrecurrencetype_unref(recur);
+    }
 
     return (void *)prop;
 }
@@ -1287,7 +1324,7 @@ static void *rule_prop(int icaltype, VObject *object, icalcomponent *comp,
 /* directly convertible property. The string representation of vcal is
    the same as ical */
 
-void *dc_prop(int icaltype, VObject *object, icalcomponent *comp, icalvcal_defaults *defaults)
+void *dc_prop(int icaltype, VObject *object, const icalcomponent *comp, icalvcal_defaults *defaults)
 {
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop;
@@ -1303,14 +1340,15 @@ void *dc_prop(int icaltype, VObject *object, icalcomponent *comp, icalvcal_defau
 
     prop = icalproperty_new(kind);
 
-    value_kind = icalenum_property_kind_to_value_kind(icalproperty_isa(prop));
+    value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
 
     s = get_string_value(object, &free_string);
 
     value = icalvalue_new_from_string(value_kind, s);
 
-    if (free_string)
+    if (free_string) {
         deleteStr(s);
+    }
 
     icalproperty_set_value(prop, value);
 
@@ -1562,8 +1600,9 @@ static void icalvcal_traverse_objects(VObject *object,
                     (icalproperty *)(conversion_table[i].conversion_func(
                         conversion_table[i].icaltype, object, last_comp, defaults));
 
-                if (prop)
+                if (prop) {
                     icalcomponent_add_property(last_comp, prop);
+                }
 
                 last_prop = prop;
             }
@@ -1619,50 +1658,3 @@ static void icalvcal_traverse_objects(VObject *object,
         }
     }
 }
-
-#if 0
-switch (vObjectValueType(object)) {
-case VCVT_USTRINGZ:
-{
-    char c;
-    char *t, *s;
-
-    s = t = fakeCString(vObjectUStringZValue(object));
-    printf(" ustringzstring:%s\n", s);
-    deleteStr(s);
-    break;
-}
-case VCVT_STRINGZ:
-{
-    char c;
-    const char *s = vObjectStringZValue(object);
-
-    printf(" stringzstring:%s\n", s);
-    break;
-}
-case VCVT_UINT:
-{
-    int i = vObjectIntegerValue(object);
-
-    printf(" int:%d\n", i);
-    break;
-}
-case VCVT_ULONG:
-{
-    long l = vObjectLongValue(object);
-
-    printf(" int:%d\n", l);
-    break;
-}
-case VCVT_VOBJECT:
-{
-    printf("ERROR, should not get here\n");
-    break;
-}
-case VCVT_RAW:
-case 0:
-default:
-    break;
-}
-
-#endif

@@ -3,10 +3,7 @@
  CREATOR: eric 16 May 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
-  The original code is icalerror.c
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -75,6 +72,10 @@ void icalerror_stop_here(void)
 
 void icalerror_crash_here(void)
 {
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-null-dereference"
+#endif
 #if !defined(__clang_analyzer__)
     int *p = 0;
     /* coverity[var_deref_op] */
@@ -84,6 +85,9 @@ void icalerror_crash_here(void)
     /* cppcheck-suppress nullPointer */
     icalassert(*p);
 #endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 void icalerror_clear_errno(void)
@@ -91,23 +95,18 @@ void icalerror_clear_errno(void)
     icalerrno = ICAL_NO_ERROR;
 }
 
-#if ICAL_ERRORS_ARE_FATAL == 1
-static ICAL_GLOBAL_VAR int icalerror_errors_are_fatal = 1;
-#else
-static ICAL_GLOBAL_VAR int icalerror_errors_are_fatal = 0;
-#endif
+static ICAL_GLOBAL_VAR bool icalerror_errors_are_fatal = false;
 
-void icalerror_set_errors_are_fatal(int fatal)
+void icalerror_set_errors_are_fatal(bool fatal)
 {
-    icalerror_errors_are_fatal = (fatal != 0);
+    icalerror_errors_are_fatal = fatal;
 }
 
-int icalerror_get_errors_are_fatal(void)
+bool icalerror_get_errors_are_fatal(void)
 {
     return icalerror_errors_are_fatal;
 }
 
-#if defined(ICAL_SETERROR_ISFUNC)
 void icalerror_set_errno(icalerrorenum x)
 {
     icalerrno = x;
@@ -118,8 +117,6 @@ void icalerror_set_errno(icalerrorenum x)
         icalassert(0);
     }
 }
-
-#endif
 
 struct icalerror_state {
     icalerrorenum error;

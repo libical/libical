@@ -3,9 +3,7 @@
  CREATOR: eric 20 March 1999
 
  SPDX-FileCopyrightText: 1999, Eric Busboom  <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALDERIVEDVALUE_H
@@ -88,6 +86,10 @@ LIBICAL_ICAL_EXPORT void icalvalue_reset_kind(icalvalue *value);
 #define icalvalue_new_relatedto icalvalue_new_text
 #define icalvalue_set_relatedto icalvalue_set_text
 #define icalvalue_get_relatedto icalvalue_get_text
+
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_requeststatus(struct icalreqstattype v);
+LIBICAL_ICAL_EXPORT struct icalreqstattype icalvalue_get_requeststatus(const icalvalue *value);
+LIBICAL_ICAL_EXPORT void icalvalue_set_requeststatus(icalvalue *value, struct icalreqstattype v);
 
 <insert_code_here>
 

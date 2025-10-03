@@ -146,7 +146,7 @@ if(NOT ANDROID)
     icalss
     PROPERTIES
       VERSION
-        ${LIBICAL_LIB_VERSION_STRING}
+        ${CMAKE_PROJECT_VERSION}
       SOVERSION
         ${LIBICAL_LIB_SOVERSION_STRING}
   )
@@ -166,34 +166,22 @@ if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   )
 endif()
 
-install(
-  TARGETS
-    icalss
-  EXPORT icalTargets
-  DESTINATION
-  ${INSTALL_TARGETS_DEFAULT_ARGS}
-)
+install(TARGETS icalss EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  install(
-    TARGETS
-      icalss-static
-    EXPORT icalTargets
-    DESTINATION
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
-  )
+  install(TARGETS icalss-static EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif()
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libicalss.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libicalss.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libicalss.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 ########### next target ###############
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   set(
     icalsscxx_LIB_SRCS
     icalspanlist_cxx.cpp
     icalspanlist_cxx.h
   )
-  if(BDB_FOUND)
-    list(APPEND icalsscxx_LIB_SRCS icalbdbset_cxx.h)
-  endif()
   add_library(
     icalss_cxx
     ${LIBRARY_TYPE}
@@ -254,7 +242,7 @@ if(WITH_CXX_BINDINGS)
       icalss_cxx
       PROPERTIES
         VERSION
-          ${LIBICAL_LIB_VERSION_STRING}
+          ${CMAKE_PROJECT_VERSION}
         SOVERSION
           ${LIBICAL_LIB_SOVERSION_STRING}
     )
@@ -274,21 +262,9 @@ if(WITH_CXX_BINDINGS)
     )
   endif()
 
-  install(
-    TARGETS
-      icalss_cxx
-    EXPORT icalTargets
-    DESTINATION
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
-  )
+  install(TARGETS icalss_cxx EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
   if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    install(
-      TARGETS
-        icalss_cxx-static
-      EXPORT icalTargets
-      DESTINATION
-      ${INSTALL_TARGETS_DEFAULT_ARGS}
-    )
+    install(TARGETS icalss_cxx-static EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
   endif()
 endif()
 
@@ -314,9 +290,6 @@ install(
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   install(FILES icalspanlist_cxx.h DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
-  if(BDB_FOUND)
-    install(FILES icalbdbset_cxx.h DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
-  endif()
 endif()

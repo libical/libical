@@ -3,9 +3,7 @@
  CREATOR: Milan Crha 26 November 2014
 
  SPDX-FileCopyrightText: 2014 Milan Crha <mcrha@redhat.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -79,7 +77,7 @@ int main(void)
     int dd, hh, zz, tried = 0;
     long zz2 = -1;
 
-    set_zone_directory("../../zoneinfo");
+    icaltimezone_set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
@@ -137,8 +135,9 @@ int main(void)
                     tried++;
 
                     zz2++;
-                    if (zz2 >= (long)builtin_timezones->num_elements)
+                    if (zz2 >= (long)builtin_timezones->num_elements) {
                         zz2 = -1;
+                    }
                 }
             }
         }

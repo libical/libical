@@ -1,12 +1,9 @@
 /*======================================================================
  FILE: vcardcomponent.h
-
  CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
 
  SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifndef VCARDCOMPONENT_H
@@ -15,7 +12,6 @@
 #include "libical_sentinel.h"
 #include "libical_vcard_export.h"
 #include "vcardproperty.h"
-#include "pvl.h"
 
 #include <stdbool.h>
 
@@ -58,7 +54,7 @@ LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string(vcardcomponent *card);
 
 LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string_r(vcardcomponent *card);
 
-LIBICAL_VCARD_EXPORT bool vcardcomponent_is_valid(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT bool vcardcomponent_is_valid(const vcardcomponent *card);
 
 LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component);
 
@@ -94,13 +90,6 @@ LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_string_to_kind(const cha
 
 LIBICAL_VCARD_EXPORT const char *vcardcomponent_kind_to_string(vcardcomponent_kind kind);
 
-/**
- *  This takes 2 VCARD components and merges the second one into the first.
- *  comp_to_merge will no longer exist after calling this function.
- */
-LIBICAL_VCARD_EXPORT void vcardcomponent_merge_component(vcardcomponent *comp,
-                                                         vcardcomponent *comp_to_merge);
-
 /* Iteration Routines. There are two forms of iterators, internal and
 external. The internal ones came first, and are almost completely
 sufficient, but they fail badly when you want to construct a loop that
@@ -134,13 +123,6 @@ LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_first_property(vcardcompo
 LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_next_property(vcardcomponent *component,
                                                                      vcardproperty_kind kind);
 
-/**
- *  This takes 2 VCARD components and merges the second one into the first.
- *  comp_to_merge will no longer exist after calling this function.
- */
-LIBICAL_VCARD_EXPORT void vcardcomponent_merge_card(vcardcomponent *card,
-                                                    vcardcomponent *card_to_merge);
-
 /***** Working with embedded error properties *****/
 
 /* Check the component against itip rules and insert error properties*/
@@ -156,9 +138,6 @@ LIBICAL_VCARD_EXPORT int vcardcomponent_count_errors(vcardcomponent *card);
 
 /** @brief Removes all X-LIC-ERROR properties*/
 LIBICAL_VCARD_EXPORT void vcardcomponent_strip_errors(vcardcomponent *card);
-
-/** @brief Converts some X-LIC-ERROR properties into RETURN-STATUS properties*/
-LIBICAL_VCARD_EXPORT void vcardcomponent_convert_errors(vcardcomponent *card);
 
 /**
  * @brief Normalizes (reorders and sorts the properties) the specified vcard @p comp.

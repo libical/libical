@@ -3,7 +3,6 @@
  CREATOR: eric 30 June 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Initial Developer of the Original Code is Eric Busboom
@@ -34,6 +33,8 @@
  */
 
 #include "libical_ical_export.h"
+
+#include <stddef.h>
 
 /**
  * @brief Creates a new temporary buffer on the ring and returns it.

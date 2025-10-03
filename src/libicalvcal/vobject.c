@@ -1,13 +1,11 @@
 /***************************************************************************
 SPDX-FileCopyrightText: 1996 Apple Computer, Inc., AT&T Corp., International
 Business Machines Corporation and Siemens Rolm Communications Inc.
-
 SPDX-License-Identifier: LicenseRef-APPLEMIT
 
 The software is provided with RESTRICTED RIGHTS.  Use, duplication, or
 disclosure by the government are subject to restrictions set forth in
 DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
-
 ***************************************************************************/
 
 /*
@@ -71,11 +69,13 @@ const char** fieldedProp;
 static VObject* newVObject_(const char *id)
 {
     VObject *p = (VObject*)malloc(sizeof(VObject));
-    p->next = 0;
-    p->id = id;
-    p->prop = 0;
-    VALUE_TYPE(p) = 0;
-    ANY_VALUE_OF(p) = 0;
+    if (p) {
+        p->next = 0;
+        p->id = id;
+        p->prop = 0;
+        VALUE_TYPE(p) = 0;
+        ANY_VALUE_OF(p) = 0;
+    }
     return p;
 }
 
@@ -120,9 +120,11 @@ void deleteStr(const char *p)
 static StrItem* newStrItem(const char *s, StrItem *next)
 {
     StrItem *p = (StrItem*)malloc(sizeof(StrItem));
-    p->next = next;
-    p->s = s;
-    p->refCnt = 1;
+    if (p) {
+        p->next = next;
+        p->s = s;
+        p->refCnt = 1;
+    }
     return p;
 }
 
@@ -136,7 +138,7 @@ static void deleteStrItem(StrItem *p)
   The following function provide accesses to VObject's value.
   ----------------------------------------------------------------------*/
 
-const char* vObjectName(VObject *o)
+const char* vObjectName(const VObject *o)
 {
     return NAME_OF(o);
 }
@@ -225,7 +227,7 @@ void setVObjectVObjectValue(VObject *o, VObject *p)
     VALUE_TYPE(o) = VCVT_VOBJECT;
 }
 
-int vObjectValueType(VObject *o)
+int vObjectValueType(const VObject *o)
 {
     return (int)VALUE_TYPE(o);
 }
@@ -294,7 +296,7 @@ void addList(VObject **o, VObject *p)
         }
 }
 
-VObject* nextVObjectInList(VObject *o)
+VObject* nextVObjectInList(const VObject *o)
 {
     return o->next;
 }
@@ -326,7 +328,7 @@ void initVObjectIterator(VObjectIterator *i, VObject *o)
     i->next = 0;
 }
 
-int moreIteration(VObjectIterator *i)
+int moreIteration(const VObjectIterator *i)
 {
     return (i->start && (i->next==0 || i->next!=i->start));
 }
@@ -520,7 +522,7 @@ void printVObject(FILE *fp,VObject *o)
     printVObject_(fp,o,0);
 }
 
-void printVObjectToFile(char *fname,VObject *o)
+void printVObjectToFile(const char *fname, VObject *o)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -529,7 +531,7 @@ void printVObjectToFile(char *fname,VObject *o)
         }
 }
 
-void printVObjectsToFile(char *fname,VObject *list)
+void printVObjectsToFile(const char *fname, VObject *list)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -958,60 +960,6 @@ typedef struct OFile {
     unsigned int fail:1;
     } OFile;
 
-#if 0
-static void appendsOFile(OFile *fp, const char *s)
-{
-    int slen;
-    if (fp->fail) return;
-    slen  = strlen(s);
-    if (fp->fp) {
-        fwrite(s,1,slen,fp->fp);
-        }
-    else {
-stuff:
-        if (fp->len + slen < fp->limit) {
-            memcpy(fp->s+fp->len,s,slen);
-            fp->len += slen;
-            return;
-            }
-        else if (fp->alloc) {
-            fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-            if (OFILE_REALLOC_SIZE <= slen) fp->limit += slen;
-            fp->s = (char *) realloc(fp->s,(size_t)fp->limit);
-            if (fp->s) goto stuff;
-            }
-        if (fp->alloc)
-            free(fp->s);
-        fp->s = 0;
-        fp->fail = 1;
-        }
-}
-
-static void appendcOFile(OFile *fp, char c)
-{
-    if (fp->fail) return;
-    if (fp->fp) {
-        fputc(c,fp->fp);
-        }
-    else {
-stuff:
-        if (fp->len+1 < fp->limit) {
-            fp->s[fp->len] = c;
-            fp->len++;
-            return;
-            }
-        else if (fp->alloc) {
-            fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-            fp->s = (char *) realloc(fp->s,fp->limit);
-            if (fp->s) goto stuff;
-            }
-        if (fp->alloc)
-            free(fp->s);
-        fp->s = 0;
-        fp->fail = 1;
-        }
-}
-#else
 static void appendcOFile_(OFile *fp, char c)
 {
     if (fp->fail) return;
@@ -1030,7 +978,7 @@ stuff:
             fp->s = realloc(fp->s,(size_t)fp->limit);
             if (fp->s) goto stuff;
             }
-        if (fp->alloc)
+        if (fp->s)
             free(fp->s);
         fp->s = 0;
         fp->fail = 1;
@@ -1056,8 +1004,6 @@ static void appendsOFile(OFile *fp, const char *s)
         appendcOFile(fp,s[i]);
         }
 }
-
-#endif
 
 static void initOFile(OFile *fp, FILE *ofp)
 {
@@ -1336,7 +1282,7 @@ void writeVObject(FILE *fp, VObject *o)
     writeVObject_(&ofp,o);
 }
 
-void writeVObjectToFile(char *fname, VObject *o)
+void writeVObjectToFile(const char *fname, VObject *o)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -1345,7 +1291,7 @@ void writeVObjectToFile(char *fname, VObject *o)
         }
 }
 
-void writeVObjectsToFile(char *fname, VObject *list)
+void writeVObjectsToFile(const char *fname, VObject *list)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -1389,6 +1335,8 @@ wchar_t* fakeUnicode(const char *ps, size_t *bytes)
     size_t len = strlen(ps)+1;
 
     pw = r = (wchar_t*)malloc(sizeof(wchar_t)*len);
+    if(!r)
+        return (wchar_t *)0;
     if (bytes)
         *bytes = len * sizeof(wchar_t);
 
@@ -1428,6 +1376,8 @@ char* fakeCString(const wchar_t *u)
 
     len = (size_t)(uStrLen(u) + 1);
     t = s = (char*)malloc(len);
+    if(!s)
+        return (char *)0;
     while (*u) {
         if (*u == (wchar_t)0x2028)
             *t = '\n';

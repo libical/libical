@@ -1,15 +1,15 @@
 /*======================================================================
- FILE: icalfilesetimpl.h
+ FILE: icalclusterimpl.h
  CREATOR: acampi 13 March 2002
 
  SPDX-FileCopyrightText: 2002 Andrea Campi <a.campi@inet.it>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALCLUSTERIMPL_H
 #define ICALCLUSTERIMPL_H
+
+#include "icalcomponent.h"
 
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icaldirset*/

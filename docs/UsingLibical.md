@@ -51,8 +51,8 @@ Libical uses CMake to generate makefiles. It should build with no adjustments on
 MacOS and Windows using `gcc`, `clang` and Microsoft Visual.  Please report build problems
 to the [Libical issue tracker](https://github.com/libical/libical/issues).
 
-For a more complete guide to building the library, see the `Install.txt` file
-in the distribution.
+For a more complete guide to building the library, see the
+[Building Libical](INSTALL.md) instructions.
 
 ## 3 Structure
 
@@ -300,7 +300,7 @@ If any of the constructors fail, they will return 0. If you try to
 insert 0 into a property or component, or use a zero-valued object
 reference, libical will either silently ignore the error or will abort
 with an error message. This behavior is controlled by a compile time
-flag (`ICAL_ERRORS_ARE_FATAL`), and will abort by default.
+flag (`LIBICAL_ENABLE_ERRORS_ARE_FATAL`), and will abort by default.
 
 #### 5.1.2 varargs Constructors
 
@@ -1388,19 +1388,19 @@ As of libical version 0.18, this routine only converts `PARSEERROR` errors
 and it always generates a 3.x (failure) code. This makes it more
 of a good idea than a really useful bit of code.
 
-#### 5.6.4 `ICAL_ERRORS_ARE_FATAL` and `icalerror_errors_are_fatal`
+#### 5.6.4 `LIBICAL_ENABLE_ERRORS_ARE_FATAL` and `icalerror_errors_are_fatal`
 
-If `icalerror_get_errors_are_fatal()` returns 1, then any error
+If `icalerror_get_errors_are_fatal()` returns true, then any error
 condition will cause the program to abort. The abort occurs
 in `icalerror_set_errno()`, and is done with an assert(0) if NDEBUG
 is undefined, and with `icalerror_crash_here()` if NDEBUG is defined.
-Initially, `icalerror_get_errors_are_fatal()` is 1 when `ICAL_ERRORS_ARE_FATAL`
-is defined, and 0 otherwise. Since `ICAL_ERRORS_ARE_FATAL` is defined
-by default, `icalerror_get_errors_are_fatal()` is also set to 1 by default.
+Initially, `icalerror_get_errors_are_fatal()` is true when `LIBICAL_ENABLE_ERRORS_ARE_FATAL`
+is defined, and false otherwise. Since `LIBICAL_ENABLE_ERRORS_ARE_FATAL` is defined
+by default, `icalerror_get_errors_are_fatal()` is also set to true by default.
 
-You can change the compiled-in `ICAL_ERRORS_ARE_FATAL` behavior at runtime
-by calling `icalerror_set_errors_are_fatal(0)` (i.e, errors are not fatal)
-or `icalerror_set_errors_are_fatal(1)` (i.e, errors are fatal).
+You can change the compiled-in `LIBICAL_ENABLE_ERRORS_ARE_FATAL` behavior at runtime
+by calling `icalerror_set_errors_are_fatal(false)` (i.e, errors are not fatal)
+or `icalerror_set_errors_are_fatal(true)` (i.e, errors are fatal).
 
 ### 5.7 Naming Standard
 

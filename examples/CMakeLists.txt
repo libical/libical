@@ -28,6 +28,16 @@ add_dependencies(
   icalss
   icalvcal
 )
+if(LIBICAL_CXX_BINDINGS)
+  # https://github.com/libical/libical/pull/656
+  set_property(
+    TARGET
+      doesnothing
+    PROPERTY
+      LINKER_LANGUAGE
+        CXX
+  )
+endif()
 
 if(NOT STATIC_ONLY)
   target_link_libraries(

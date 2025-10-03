@@ -171,7 +171,6 @@ set(
   libical_vcard_export.h
   vcardcomponent.c
   vcardcomponent.h
-  vcardenumarray.c
   vcardenumarray.h
   vcardparameter.c
   vcardparameter.h
@@ -180,7 +179,6 @@ set(
   vcardparser.h
   vcardproperty.c
   vcardproperty.h
-  vcardstrarray.c
   vcardstrarray.h
   vcardstructured.c
   vcardstructured.h
@@ -257,7 +255,7 @@ set_target_properties(
   icalvcard
   PROPERTIES
     VERSION
-      ${LIBICAL_LIB_VERSION_STRING}
+      ${CMAKE_PROJECT_VERSION}
     SOVERSION
       ${LIBICAL_LIB_SOVERSION_STRING}
 )
@@ -276,22 +274,13 @@ if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
   )
 endif()
 
-install(
-  TARGETS
-    icalvcard
-  EXPORT icalTargets
-  DESTINATION
-  ${INSTALL_TARGETS_DEFAULT_ARGS}
-)
+install(TARGETS icalvcard EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  install(
-    TARGETS
-      icalvcard-static
-    EXPORT icalTargets
-    DESTINATION
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
-  )
+  install(TARGETS icalvcard-static EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif()
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libicalvcard.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libicalvcard.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libicalvcard.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 ########### install files ###############
 

@@ -1,12 +1,9 @@
 /*======================================================================
  FILE: vcardtime.c
-
  CREATOR: Ken Murchison 24 Aug 2022
 
  SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -110,16 +107,18 @@ bool vcardtime_is_valid_time(const struct vcardtimetype t)
         return false;
     }
 
-    if (t.minute == -1 && t.hour != -1 && t.second != -1)
+    if (t.minute == -1 && t.hour != -1 && t.second != -1) {
         return false;
+    }
 
     switch (t.month) {
     case 0:
         return false;
 
     case -1:
-        if (t.year != -1 && t.day != -1)
+        if (t.year != -1 && t.day != -1) {
             return false;
+        }
 
         days = 31;
         break;
@@ -129,15 +128,17 @@ bool vcardtime_is_valid_time(const struct vcardtimetype t)
         break;
 
     default:
-        if (t.month > 12)
+        if (t.month > 12) {
             return false;
+        }
 
         days = days_in_month[t.month];
         break;
     }
 
-    if (t.day > days)
+    if (t.day > days) {
         return false;
+    }
 
     return true;
 }
@@ -395,8 +396,9 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
     }
 
     t->utcoffset = (int)(60 * offset_h + offset_m);
-    if (*sign == '-')
+    if (*sign == '-') {
         t->utcoffset = -t->utcoffset;
+    }
 
     newstr = (char *)str + nchar;
     return newstr;
@@ -490,14 +492,6 @@ vcardtimetype vcardtime_from_string(const char *str, int is_bare_time)
         }
         str = sscanf_time(str, &t);
     }
-#if 0
-    /* XXX  Note that this won't parse standalone, undesignated time */
-    if (str && *str != 'T') {
-        str = sscanf_date(str, &t);
-    }
-    if (str && *str == 'T') {
-        str = sscanf_time(++str, &t);
-    }
-#endif
+
     return (str && !*str) ? t : vcardtime_null_datetime();
 }

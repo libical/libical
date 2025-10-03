@@ -45,7 +45,7 @@ void  jni_SetDays_in_ICalDurationType(struct ICalDurationType* __ICalDurationTyp
 
 void jni_GetDays_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
-    __ICalDurationType_->days = env->GetLongField(thisICalDurationType, ICalDurationType_Days_FID);
+    __ICalDurationType_->days = static_cast<unsigned int>(env->GetLongField(thisICalDurationType, ICalDurationType_Days_FID));
 }
 
 void  jni_SetWeeks_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
@@ -55,7 +55,7 @@ void  jni_SetWeeks_in_ICalDurationType(struct ICalDurationType* __ICalDurationTy
 
 void jni_GetWeeks_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
-    __ICalDurationType_->weeks = env->GetLongField(thisICalDurationType, ICalDurationType_Weeks_FID);
+    __ICalDurationType_->weeks = static_cast<unsigned int>(env->GetLongField(thisICalDurationType, ICalDurationType_Weeks_FID));
 }
 
 void  jni_SetHours_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
@@ -65,7 +65,7 @@ void  jni_SetHours_in_ICalDurationType(struct ICalDurationType* __ICalDurationTy
 
 void jni_GetHours_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
-    __ICalDurationType_->hours = env->GetLongField(thisICalDurationType, ICalDurationType_Hours_FID);
+    __ICalDurationType_->hours = static_cast<unsigned int>(env->GetLongField(thisICalDurationType, ICalDurationType_Hours_FID));
 }
 
 void  jni_SetMinutes_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
@@ -75,7 +75,7 @@ void  jni_SetMinutes_in_ICalDurationType(struct ICalDurationType* __ICalDuration
 
 void jni_GetMinutes_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
-    __ICalDurationType_->minutes = env->GetLongField(thisICalDurationType, ICalDurationType_Minutes_FID);
+    __ICalDurationType_->minutes = static_cast<unsigned int>(env->GetLongField(thisICalDurationType, ICalDurationType_Minutes_FID));
 }
 
 void  jni_SetSeconds_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
@@ -85,7 +85,7 @@ void  jni_SetSeconds_in_ICalDurationType(struct ICalDurationType* __ICalDuration
 
 void jni_GetSeconds_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
-    __ICalDurationType_->seconds = env->GetLongField(thisICalDurationType, ICalDurationType_Seconds_FID);
+    __ICalDurationType_->seconds = static_cast<unsigned int>(env->GetLongField(thisICalDurationType, ICalDurationType_Seconds_FID));
 }
 
 // copy all fields from the c struct (ICalDurationType) to the java object (thisICalDurationType).

@@ -3,7 +3,6 @@
  CREATOR: eric 02 June 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -324,15 +323,14 @@ LIBICAL_ICAL_EXPORT int icaltime_compare_date_only_tz(const struct icaltimetype 
                                                       const struct icaltimetype b,
                                                       icaltimezone *tz);
 
-/** Adds or subtracts a number of days, hours, minutes and seconds. */
-/**     @brief Internal, shouldn't be part of the public API
+/**
+ * @brief Adds or subtracts a number of days, hours, minutes and seconds.
  *
- *      Adds or subtracts a time from an icaltimetype. This time is given
- *      as a number of days, hours, minutes and seconds.
+ * Adds or subtracts a time from an icaltimetype. This time is given
+ * as a number of days, hours, minutes and seconds.
  *
- *      @note This function is exactly the same as
- *      icaltimezone_adjust_change() except for the type of the first
- *      parameter.
+ * @note This function is exactly the same as icaltimezone_adjust_change()
+ * except for the type of the first parameter.
  */
 LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt,
                                          const int days, const int hours,
@@ -407,7 +405,7 @@ LIBICAL_ICAL_EXPORT struct icaltime_span icaltime_span_new(struct icaltimetype d
  *
  *  Note, this will return false if the spans are adjacent.
  */
-LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2);
+LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(const icaltime_span *s1, const icaltime_span *s2);
 
 /** @brief Returns true if the span is totally within the containing
  *  span.
@@ -417,7 +415,7 @@ LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(icaltime_span *s1, icaltime_span
  *  @return           boolean value.
  *
  */
-LIBICAL_ICAL_EXPORT bool icaltime_span_contains(icaltime_span *s, icaltime_span *container);
+LIBICAL_ICAL_EXPORT bool icaltime_span_contains(const icaltime_span *s, const icaltime_span *container);
 
 #endif /* !ICALTIME_H */
 

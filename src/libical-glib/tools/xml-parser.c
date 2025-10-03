@@ -25,6 +25,7 @@ Structure *structure_new(void)
     structure->defaultNative = NULL;
     structure->dependencies = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
     structure->declarations = NULL;
+    structure->skips = NULL;
     return structure;
 }
 
@@ -33,8 +34,9 @@ void structure_free(Structure *structure)
     GList *list;
     Enumeration *enumeration;
 
-    if (structure == NULL)
+    if (structure == NULL) {
         return;
+    }
 
     for (list = g_list_first(structure->methods); list != NULL; list = list->next) {
         method_free((Method *)list->data);
@@ -62,6 +64,7 @@ void structure_free(Structure *structure)
     g_free(structure->defaultNative);
     g_free(structure->new_full_extraCode);
     g_hash_table_destroy(structure->dependencies);
+    g_clear_pointer(&structure->skips, g_ptr_array_unref);
     g_free(structure);
 }
 
@@ -77,14 +80,17 @@ Declaration *declaration_new(void)
 
 void declaration_free(Declaration *declaration)
 {
-    if (declaration == NULL)
+    if (declaration == NULL) {
         return;
+    }
 
-    if (declaration->position != NULL)
+    if (declaration->position != NULL) {
         g_free(declaration->position);
+    }
 
-    if (declaration->content != NULL)
+    if (declaration->content != NULL) {
         g_free(declaration->content);
+    }
 
     g_free(declaration);
 }
@@ -111,8 +117,9 @@ void method_free(Method *method)
 {
     GList *list;
 
-    if (method == NULL)
+    if (method == NULL) {
         return;
+    }
 
     for (list = method->parameters; list != NULL; list = list->next) {
         parameter_free((Parameter *)list->data);
@@ -153,8 +160,9 @@ void parameter_free(Parameter *para)
 {
     GList *list;
 
-    if (para == NULL)
+    if (para == NULL) {
         return;
+    }
 
     for (list = para->annotations; list != NULL; list = list->next) {
         g_free(list->data);
@@ -193,8 +201,9 @@ void ret_free(Ret *ret)
 {
     GList *list;
 
-    if (ret == NULL)
+    if (ret == NULL) {
         return;
+    }
 
     for (list = g_list_first(ret->annotations); list != NULL; list = g_list_next(list)) {
         g_free(list->data);
@@ -213,11 +222,32 @@ void ret_free(Ret *ret)
     g_free(ret);
 }
 
+EnumerationItem *enumeration_item_new(const gchar *nativeName, const gchar *alias)
+{
+    EnumerationItem *item = g_new0(EnumerationItem, 1);
+
+    item->nativeName = g_strdup(nativeName);
+    item->alias = g_strdup(alias);
+
+    return item;
+}
+
+void enumeration_item_free(EnumerationItem *item)
+{
+    if (item == NULL) {
+        return;
+    }
+
+    g_free(item->nativeName);
+    g_free(item->alias);
+    g_free(item);
+}
+
 Enumeration *enumeration_new(void)
 {
     Enumeration *enumeration = g_new0(Enumeration, 1);
 
-    enumeration->elements = NULL;
+    enumeration->items = NULL;
     enumeration->name = NULL;
     enumeration->nativeName = NULL;
     enumeration->defaultNative = NULL;
@@ -228,20 +258,65 @@ Enumeration *enumeration_new(void)
 
 void enumeration_free(Enumeration *enumeration)
 {
-    GList *iter;
-
-    if (enumeration == NULL)
+    if (enumeration == NULL) {
         return;
-
-    for (iter = g_list_first(enumeration->elements); iter != NULL; iter = g_list_next(iter)) {
-        g_free(iter->data);
     }
-    g_list_free(enumeration->elements);
+
+    g_clear_pointer(&enumeration->items, g_ptr_array_unref);
     g_free(enumeration->name);
     g_free(enumeration->nativeName);
     g_free(enumeration->defaultNative);
     g_free(enumeration->comment);
     g_free(enumeration);
+}
+
+TemplateData *template_data_new(const char *name,
+                                const char *requires_attrs, /* comma-separated list of required attributes */
+                                const char *optional_attrs) /* comma-separated list of optional attributes */
+{
+    TemplateData *data;
+    guint ii;
+
+    if (name == NULL) {
+        g_warning("Cannot create API template without name");
+        return NULL;
+    }
+    if (requires_attrs == NULL) {
+        g_warning("API template '%s' does not have set 'requires' attribute", name);
+        return NULL;
+    }
+
+    data = g_new0(TemplateData, 1);
+    data->name = g_strdup(name);
+    data->requires_attrs = g_strsplit(requires_attrs, ",", 0);
+    data->requires_variables = g_new0(gchar *, g_strv_length(data->requires_attrs) + 1);
+    for (ii = 0; data->requires_attrs[ii] != NULL; ii++) {
+        data->requires_variables[ii] = g_strconcat("${", data->requires_attrs[ii], "}", NULL);
+    }
+    if (optional_attrs != NULL && *optional_attrs != '\0') {
+        data->optional_attrs = g_strsplit(optional_attrs, ",", 0);
+        data->optional_variables = g_new0(gchar *, g_strv_length(data->optional_attrs) + 1);
+        for (ii = 0; data->optional_attrs[ii] != NULL; ii++) {
+            data->optional_variables[ii] = g_strconcat("${", data->optional_attrs[ii], "}", NULL);
+        }
+    }
+
+    return data;
+}
+
+void template_data_free(TemplateData *data)
+{
+    if (data == NULL) {
+        return;
+    }
+
+    g_free(data->name);
+    g_strfreev(data->requires_attrs);
+    g_strfreev(data->requires_variables);
+    g_strfreev(data->optional_attrs);
+    g_strfreev(data->optional_variables);
+    g_clear_pointer(&data->methods, g_ptr_array_unref);
+    g_free(data);
 }
 
 static gchar *dup_attribute_value(xmlDocPtr doc, const xmlNode *list, int inLine)
@@ -250,8 +325,9 @@ static gchar *dup_attribute_value(xmlDocPtr doc, const xmlNode *list, int inLine
     gchar *glib_value;
 
     xml_value = xmlNodeListGetString(doc, list, inLine);
-    if (!xml_value)
+    if (!xml_value) {
         return NULL;
+    }
 
     glib_value = g_strdup((const gchar *)xml_value);
 
@@ -267,8 +343,9 @@ static gchar *dup_node_content(xmlNodePtr node)
 
     xml_value = xmlNodeGetContent(node);
 
-    if (!xml_value)
+    if (!xml_value) {
         return NULL;
+    }
 
     glib_value = g_strdup((const gchar *)xml_value);
 
@@ -300,8 +377,9 @@ gboolean parse_parameters(xmlNode *node, Method *method)
     xmlAttr *attr;
     Parameter *para;
 
-    if (xmlStrcmp(node->name, (xmlChar *)"parameter") != 0)
+    if (xmlStrcmp(node->name, (xmlChar *)"parameter") != 0) {
         return FALSE;
+    }
 
     for (; xmlStrcmp(node->name, (xmlChar *)"parameter") == 0; node = node->next) {
         para = parameter_new();
@@ -484,7 +562,6 @@ gboolean parse_enumeration(xmlNode *node, Enumeration *enumeration)
 {
     xmlAttr *attr;
     xmlNode *child;
-    gchar *elementName;
 
     g_return_val_if_fail(node != NULL && enumeration != NULL, FALSE);
     if (xmlStrcmp(node->name, (xmlChar *)"enum") != 0) {
@@ -508,20 +585,209 @@ gboolean parse_enumeration(xmlNode *node, Enumeration *enumeration)
     }
 
     for (child = xmlFirstElementChild(node); child != NULL; child = xmlNextElementSibling(child)) {
+        xmlChar *name, *alias;
         if (xmlStrcmp(child->name, (xmlChar *)"element") != 0) {
             fprintf(stderr,
                     "The child node named '%s' is not an element in enumeration '%s'\n",
                     (char *)child->name, enumeration->name);
             continue;
         }
-        elementName = dup_attribute_value(child->properties->doc, child->properties->children, 1);
-        enumeration->elements = g_list_append(enumeration->elements, elementName);
-        elementName = NULL;
+        name = xmlGetProp(child, (const xmlChar *)"name");
+        if (name == NULL) {
+            fprintf(stderr,
+                    "The element node does not have a 'name' attribute in enumeration '%s'\n",
+                    enumeration->name);
+            continue;
+        }
+        alias = xmlGetProp(child, (const xmlChar *)"alias");
+        if (enumeration->items == NULL) {
+            enumeration->items = g_ptr_array_new_with_free_func((GDestroyNotify)enumeration_item_free);
+        }
+        g_ptr_array_add(enumeration->items, enumeration_item_new((const gchar *)name, (const gchar *)alias));
+        g_clear_pointer(&name, xmlFree);
+        g_clear_pointer(&alias, xmlFree);
     }
     return TRUE;
 }
 
-gboolean parse_structure(xmlNode *node, Structure *structure)
+static char *
+replace_variables_in_string(const char *str,
+                            GHashTable *variables)
+{
+    GString *tmp;
+    guint ii;
+
+    if (str == NULL || !strstr(str, "${")) {
+        return g_strdup(str);
+    }
+
+    tmp = g_string_new(str);
+    for (ii = 0; ii < tmp->len; ii++) {
+        if (tmp->str[ii] == '$' && tmp->str[ii + 1] == '{') {
+            char *end = strchr(tmp->str + ii + 1, '}');
+            if (end != NULL) {
+                const gchar *value;
+                char last = end[1];
+                end[1] = '\0';
+                value = g_hash_table_lookup(variables, tmp->str + ii);
+                if (value) {
+                    end[1] = last;
+                    g_string_erase(tmp, ii, end - tmp->str - ii + 1);
+                    g_string_insert(tmp, ii, value);
+                    ii += strlen(value) - 1;
+                } else {
+                    g_warning("Cannot find variable '%s'", tmp->str + ii);
+                    end[1] = last;
+                }
+            }
+        }
+    }
+
+    return g_string_free(tmp, tmp->len == 0);
+}
+
+static GList *
+replace_variables_in_list(/*const*/ GList *src,
+                          GHashTable *variables)
+{
+    GList *des = NULL, *link;
+
+    for (link = src; link != NULL; link = g_list_next(link)) {
+        const char *str = link->data;
+        char *text = replace_variables_in_string(str, variables);
+        if (text != NULL && *text != '\0') {
+            if (strchr(text, ',')) {
+                char **strv = g_strsplit(text, ",", 0);
+                if (strv != NULL) {
+                    guint ii;
+                    for (ii = 0; strv[ii]; ii++) {
+                        const char *item = strv[ii];
+                        if (*item != '\0') {
+                            des = g_list_prepend(des, g_strstrip(g_strdup(item)));
+                        }
+                    }
+                    g_strfreev(strv);
+                } else {
+                    des = g_list_prepend(des, text);
+                }
+            } else {
+                des = g_list_prepend(des, text);
+            }
+        } else {
+            g_free(text);
+        }
+    }
+
+    return g_list_reverse(des);
+}
+
+static void
+parse_method_from_template(xmlNode *node,
+                           GHashTable *api_templates,
+                           Structure *structure)
+{
+    TemplateData *data;
+    xmlChar *name;
+
+    if (xmlStrcmp(node->name, (const xmlChar *)"method-from-template") != 0) {
+        return;
+    }
+
+    name = xmlGetProp(node, (const xmlChar *)"name");
+    if (name == NULL) {
+        g_warning("Missing 'name' attribute on 'method-from-template'");
+        return;
+    }
+
+    data = g_hash_table_lookup(api_templates, (const char *)name);
+    if (data != NULL) {
+        xmlChar *since = xmlGetProp(node, (const xmlChar *)"since");
+        GHashTable *variables; /* char * "${name}"~>value */
+        guint ii;
+
+        variables = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, (GDestroyNotify)xmlFree);
+        for (ii = 0; data->requires_attrs[ii] != NULL; ii++) {
+            xmlChar *value = xmlGetProp(node, (const xmlChar *)data->requires_attrs[ii]);
+            if (value != NULL) {
+                g_hash_table_insert(variables, data->requires_variables[ii], value);
+            } else {
+                g_warning("Required attribute '%s' for template '%s' not found in structure '%s'", data->requires_attrs[ii], (const char *)name, structure->name);
+            }
+        }
+        for (ii = 0; data->optional_attrs != NULL && data->optional_attrs[ii] != NULL; ii++) {
+            xmlChar *value = xmlGetProp(node, (const xmlChar *)data->optional_attrs[ii]);
+            if (value == NULL) {
+                value = xmlStrdup((const xmlChar *)"");
+            }
+            g_hash_table_insert(variables, data->optional_variables[ii], value);
+        }
+
+        for (ii = 0; data->methods != NULL && ii < data->methods->len; ii++) {
+            const Method *tmp_method = g_ptr_array_index(data->methods, ii);
+            Method *method = method_new();
+            GList *link;
+
+#define fill_str_member(_out_str, _in_str, _member) (_out_str)->_member = replace_variables_in_string((_in_str)->_member, variables)
+#define copy_str_list(_out_str, _in_str, _member) (_out_str)->_member = replace_variables_in_list((_in_str)->_member, variables)
+
+            fill_str_member(method, tmp_method, name);
+            fill_str_member(method, tmp_method, corresponds);
+            fill_str_member(method, tmp_method, kind);
+            fill_str_member(method, tmp_method, since);
+            fill_str_member(method, tmp_method, comment);
+            fill_str_member(method, tmp_method, custom);
+            copy_str_list(method, tmp_method, annotations);
+
+            if (tmp_method->ret != NULL) {
+                method->ret = ret_new();
+                fill_str_member(method->ret, tmp_method->ret, type);
+                copy_str_list(method->ret, tmp_method->ret, annotations);
+                fill_str_member(method->ret, tmp_method->ret, comment);
+                fill_str_member(method->ret, tmp_method->ret, translator);
+                copy_str_list(method->ret, tmp_method->ret, translatorArgus);
+                fill_str_member(method->ret, tmp_method->ret, errorReturnValue);
+            }
+
+            for (link = tmp_method->parameters; link != NULL; link = g_list_next(link)) {
+                const Parameter *tmp_param = link->data;
+                Parameter *param = parameter_new();
+
+                fill_str_member(param, tmp_param, type);
+                copy_str_list(param, tmp_param, annotations);
+                fill_str_member(param, tmp_param, comment);
+                fill_str_member(param, tmp_param, name);
+                fill_str_member(param, tmp_param, autofill);
+                fill_str_member(param, tmp_param, translator);
+                copy_str_list(param, tmp_param, translatorArgus);
+                fill_str_member(param, tmp_param, native_op);
+                fill_str_member(param, tmp_param, owner_op);
+
+                method->parameters = g_list_prepend(method->parameters, param);
+            }
+
+#undef fill_str_member
+#undef copy_str_list
+
+            method->parameters = g_list_reverse(method->parameters);
+            if (method->since == NULL && since != NULL) {
+                method->since = g_strdup((const char *)since);
+            }
+            if (method->since == NULL) {
+                method->since = g_strdup("4.0"); /* get it from somewhere */
+            }
+
+            structure->methods = g_list_prepend(structure->methods, method);
+        }
+
+        g_hash_table_unref(variables);
+        g_clear_pointer(&since, xmlFree);
+    } else {
+        g_warning("No method template named '%s' found", (const char *)name);
+    }
+    g_clear_pointer(&name, xmlFree);
+}
+
+gboolean parse_structure(xmlNode *node, Structure *structure, GHashTable *api_templates)
 {
     xmlAttr *attr;
     xmlNode *child;
@@ -583,9 +849,11 @@ gboolean parse_structure(xmlNode *node, Structure *structure)
             if (!parse_method(child, method)) {
                 method_free(method);
             } else {
-                structure->methods = g_list_append(structure->methods, method);
+                structure->methods = g_list_prepend(structure->methods, method);
             }
             method = NULL;
+        } else if (g_strcmp0((gchar *)child->name, "method-from-template") == 0) {
+            parse_method_from_template(child, api_templates, structure);
         }
         if (g_strcmp0((gchar *)child->name, "declaration") == 0) {
             declaration = declaration_new();
@@ -603,10 +871,19 @@ gboolean parse_structure(xmlNode *node, Structure *structure)
                 structure->enumerations = g_list_append(structure->enumerations, enumeration);
             }
             enumeration = NULL;
+        } else if (g_strcmp0((const gchar *)child->name, "skip") == 0) {
+            gchar *symbol = dup_node_content(child);
+            if (symbol != NULL) {
+                if (structure->skips == NULL) {
+                    structure->skips = g_ptr_array_new_with_free_func(g_free);
+                }
+                g_ptr_array_add(structure->skips, symbol);
+            }
         }
     }
 
     populate_dependencies(structure);
+    structure->methods = g_list_reverse(structure->methods);
 
     return TRUE;
 }

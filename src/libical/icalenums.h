@@ -2,7 +2,6 @@
  FILE: icalenums.h
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  Contributions from:
@@ -130,45 +129,5 @@ LIBICAL_ICAL_EXPORT char *icalenum_reqstat_code(icalrequeststatus stat);
 /** @brief Returns the code for a request status.
  */
 LIBICAL_ICAL_EXPORT char *icalenum_reqstat_code_r(icalrequeststatus stat);
-
-/***********************************************************************
- * Conversion functions
-**********************************************************************/
-
-/* These routines used to be in icalenums.c, but were moved into the
-   icalproperty, icalparameter, icalvalue, or icalcomponent modules. */
-
-/*const char* icalproperty_kind_to_string(icalproperty_kind kind);*/
-#define icalenum_property_kind_to_string(x) icalproperty_kind_to_string(x)
-
-/*icalproperty_kind icalproperty_string_to_kind(const char* string)*/
-#define icalenum_string_to_property_kind(x) icalproperty_string_to_kind(x)
-
-/*icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);*/
-#define icalenum_property_kind_to_value_kind(x) icalproperty_kind_to_value_kind(x)
-
-/*const char* icalenum_method_to_string(icalproperty_method);*/
-#define icalenum_method_to_string(x) icalproperty_method_to_string(x)
-
-/*icalproperty_method icalenum_string_to_method(const char* string);*/
-#define icalenum_string_to_method(x) icalproperty_string_to_method(x)
-
-/*const char* icalenum_status_to_string(icalproperty_status);*/
-#define icalenum_status_to_string(x) icalproperty_status_to_string(x)
-
-/*icalproperty_status icalenum_string_to_status(const char* string);*/
-#define icalenum_string_to_status(x) icalproperty_string_to_status(x)
-
-/*icalvalue_kind icalenum_string_to_value_kind(const char* str);*/
-#define icalenum_string_to_value_kind(x) icalvalue_string_to_kind(x)
-
-/*const char* icalenum_value_kind_to_string(icalvalue_kind kind);*/
-#define icalenum_value_kind_to_string(x) icalvalue_kind_to_string(x)
-
-/*const char* icalenum_component_kind_to_string(icalcomponent_kind kind);*/
-#define icalenum_component_kind_to_string(x) icalcomponent_kind_to_string(x)
-
-/*icalcomponent_kind icalenum_string_to_component_kind(const char* string);*/
-#define icalenum_string_to_component_kind(x) icalcomponent_string_to_kind(x)
 
 #endif /* !ICALENUMS_H */

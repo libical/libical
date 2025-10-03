@@ -1,12 +1,9 @@
 /*======================================================================
  FILE: vcardproperty.h
-
  CREATOR: Ken Murchison 24 Aug 2022
 
  SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifndef VCARDPROPERTY_H
@@ -121,17 +118,17 @@ LIBICAL_VCARD_EXPORT void vcardvalue_set_parent(vcardvalue *value, vcardproperty
  * Returns the parent @p vcardproperty for the specified @p vcardvalue.
  * @since 3.0
  */
-LIBICAL_VCARD_EXPORT vcardproperty *vcardvalue_get_parent(vcardvalue *value);
+LIBICAL_VCARD_EXPORT vcardproperty *vcardvalue_get_parent(const vcardvalue *value);
 
 /* Deal with X properties */
 
 LIBICAL_VCARD_EXPORT void vcardproperty_set_x_name(vcardproperty *prop, const char *name);
-LIBICAL_VCARD_EXPORT const char *vcardproperty_get_x_name(vcardproperty *prop);
+LIBICAL_VCARD_EXPORT const char *vcardproperty_get_x_name(const vcardproperty *prop);
 
 /* Deal with grouped properties */
 
 LIBICAL_VCARD_EXPORT void vcardproperty_set_group(vcardproperty *prop, const char *group);
-LIBICAL_VCARD_EXPORT const char *vcardproperty_get_group(vcardproperty *prop);
+LIBICAL_VCARD_EXPORT const char *vcardproperty_get_group(const vcardproperty *prop);
 
 /** Returns the name of the property -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X
@@ -152,7 +149,7 @@ LIBICAL_VCARD_EXPORT void vcardparameter_set_parent(vcardparameter *param, vcard
  * Returns the parent @p vcardproperty for the specified @p vcardparameter.
  * @since 3.0
  */
-LIBICAL_VCARD_EXPORT vcardproperty *vcardparameter_get_parent(vcardparameter *param);
+LIBICAL_VCARD_EXPORT vcardproperty *vcardparameter_get_parent(const vcardparameter *param);
 
 /* Convert kinds to string and get default value type */
 LIBICAL_VCARD_EXPORT vcardvalue_kind vcardproperty_kind_to_value_kind(vcardproperty_kind kind);

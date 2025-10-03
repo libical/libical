@@ -3,9 +3,7 @@
  CREATOR: eric 20 March 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALPROPERTY_H
@@ -13,7 +11,7 @@
 
 #include "libical_ical_export.h"
 #include "icalderivedproperty.h" /* To get icalproperty_kind enumerations */
-#include "pvl.h"
+#include "icalpvl.h"
 
 #include <stdarg.h> /* for va_... */
 
@@ -121,12 +119,12 @@ LIBICAL_ICAL_EXPORT void icalvalue_set_parent(icalvalue *value, icalproperty *pr
  * Returns the parent @p icalproperty for the specified @p icalvalue.
  * @since 3.0
  */
-LIBICAL_ICAL_EXPORT icalproperty *icalvalue_get_parent(icalvalue *value);
+LIBICAL_ICAL_EXPORT icalproperty *icalvalue_get_parent(const icalvalue *value);
 
 /* Deal with X properties */
 
 LIBICAL_ICAL_EXPORT void icalproperty_set_x_name(icalproperty *prop, const char *name);
-LIBICAL_ICAL_EXPORT const char *icalproperty_get_x_name(icalproperty *prop);
+LIBICAL_ICAL_EXPORT const char *icalproperty_get_x_name(const icalproperty *prop);
 
 /** Returns the name of the property -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X
@@ -147,7 +145,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_parent(icalparameter *param, icalprop
  * Returns the parent @p icalproperty for the specified @p icalparameter.
  * @since 3.0
  */
-LIBICAL_ICAL_EXPORT icalproperty *icalparameter_get_parent(icalparameter *param);
+LIBICAL_ICAL_EXPORT icalproperty *icalparameter_get_parent(const icalparameter *param);
 
 /* Convert kinds to string and get default value type */
 LIBICAL_ICAL_EXPORT icalvalue_kind icalproperty_kind_to_value_kind(icalproperty_kind kind);
@@ -168,6 +166,21 @@ LIBICAL_ICAL_EXPORT int icalproperty_kind_and_string_to_enum(const int kind, con
 LIBICAL_ICAL_EXPORT const char *icalproperty_status_to_string(icalproperty_status);
 LIBICAL_ICAL_EXPORT icalproperty_status icalproperty_string_to_status(const char *string);
 
+LIBICAL_ICAL_EXPORT const char *icalproperty_action_to_string(icalproperty_action);
+LIBICAL_ICAL_EXPORT icalproperty_action icalproperty_string_to_action(const char *string);
+
+LIBICAL_ICAL_EXPORT const char *icalproperty_transp_to_string(icalproperty_transp);
+LIBICAL_ICAL_EXPORT icalproperty_transp icalproperty_string_to_transp(const char *string);
+
+LIBICAL_ICAL_EXPORT const char *icalproperty_class_to_string(icalproperty_class);
+LIBICAL_ICAL_EXPORT icalproperty_class icalproperty_string_to_class(const char *string);
+
+LIBICAL_ICAL_EXPORT const char *icalproperty_participanttype_to_string(icalproperty_participanttype);
+LIBICAL_ICAL_EXPORT icalproperty_participanttype icalproperty_string_to_participanttype(const char *string);
+
+LIBICAL_ICAL_EXPORT const char *icalproperty_resourcetype_to_string(icalproperty_resourcetype);
+LIBICAL_ICAL_EXPORT icalproperty_resourcetype icalproperty_string_to_resourcetype(const char *string);
+
 LIBICAL_ICAL_EXPORT bool icalproperty_enum_belongs_to_property(icalproperty_kind kind, int e);
 
 /**
@@ -176,11 +189,36 @@ LIBICAL_ICAL_EXPORT bool icalproperty_enum_belongs_to_property(icalproperty_kind
  */
 LIBICAL_ICAL_EXPORT void icalproperty_normalize(icalproperty *prop);
 
+/**
+ * Sets if empty properties are permitted.
+ *
+ * Determines the library behavior whenever an empty property is encountered.
+ * When not set (the default) empty properties are replaced with X-LIC-ERROR properties.
+ * Otherwise, processing proceeds normally and the property value will be empty.
+ *
+ * @param enable If true, libical allows empty properties; otherwise empty properties
+ *               are replaced by X-LIC-ERROR properties.
+ *
+ * Note that if icalerror_get_errors_are_fatal is also true a SIGABRT will be raised
+ * whenever an empty property is encountered.
+ * @since 4.0
+ */
+LIBICAL_ICAL_EXPORT void icalproperty_set_allow_empty_properties(bool enable);
+
+/**
+ * Returns if empty properties are allowed; else are replaced with X-LIC-ERROR properties.
+ *
+ * @return true if empty properties are allowed; else returns false
+ * @since 4.0
+ *
+ */
+LIBICAL_ICAL_EXPORT bool icalproperty_get_allow_empty_properties(void);
+
 /* This is exposed so that callers will not have to allocate and
    deallocate iterators. Pretend that you can't see it. */
 typedef struct icalparamiter {
     icalparameter_kind kind;
-    pvl_elem iter;
+    icalpvl_elem iter;
 } icalparamiter;
 
 LIBICAL_ICAL_EXPORT icalparamiter icalproperty_begin_parameter(icalproperty *property, icalparameter_kind kind);

@@ -3,9 +3,7 @@
  CREATOR: eric 15 dec 2000
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -31,7 +29,7 @@ void icallangbind_free_array(int *array)
     icalmemory_free_buffer(array);
 }
 
-int icallangbind_access_array(int *array, int index)
+int icallangbind_access_array(const int *array, int index)
 {
     return array[index];
 }
@@ -83,7 +81,7 @@ icalproperty *icallangbind_get_first_property(icalcomponent *c, const char *prop
 
 icalproperty *icallangbind_get_next_property(icalcomponent *c, const char *prop)
 {
-    icalproperty_kind kind = icalenum_string_to_property_kind(prop);
+    icalproperty_kind kind = icalproperty_string_to_kind(prop);
     icalproperty *p;
 
     if (kind == ICAL_NO_PROPERTY) {
@@ -108,7 +106,7 @@ icalproperty *icallangbind_get_next_property(icalcomponent *c, const char *prop)
 
 icalcomponent *icallangbind_get_first_component(icalcomponent *c, const char *comp)
 {
-    icalcomponent_kind kind = icalenum_string_to_component_kind(comp);
+    icalcomponent_kind kind = icalcomponent_string_to_kind(comp);
 
     if (kind == ICAL_NO_COMPONENT) {
         return 0;
@@ -118,7 +116,7 @@ icalcomponent *icallangbind_get_first_component(icalcomponent *c, const char *co
 
 icalcomponent *icallangbind_get_next_component(icalcomponent *c, const char *comp)
 {
-    icalcomponent_kind kind = icalenum_string_to_component_kind(comp);
+    icalcomponent_kind kind = icalcomponent_string_to_kind(comp);
 
     if (kind == ICAL_NO_COMPONENT) {
         return 0;

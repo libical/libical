@@ -9,11 +9,10 @@
 
 #include <ctype.h>
 #include <stdio.h>
-#include <string.h>
-#include <libxml/xmlreader.h>
 #include <glib.h>
 #include "xml-parser.h"
 
+#define API_TEMPLATES_FILENAME "api-templates.xml"
 #define HEADER_TEMPLATE "header-template"
 #define HEADER_HEADER_TEMPLATE "header-header-template"
 #define HEADER_FORWARD_DECLARATIONS_TEMPLATE "header-forward-declarations-template"
@@ -22,7 +21,8 @@
 #define COMMON_HEADER "libical-glib/i-cal-object"
 #define HEADER_STRUCTURE_BOILERPLATE_TEMPLATE "header-structure-boilerplate-template"
 #define SOURCE_STRUCTURE_BOILERPLATE_TEMPLATE "source-structure-boilerplate-template"
-#define ENUM_HEADER "ICAL"
+#define ENUM_HEADER_ICAL "ICAL"
+#define ENUM_HEADER_VCARD "VCARD"
 #define BUFFER_SIZE 4000
 #define TAB_SIZE 8
 #define RET_TAB_COUNT 2
@@ -51,7 +51,7 @@ gchar *get_source_method_comment(Method *method);
 gchar *get_source_method_proto(Method *method);
 gchar *get_source_method_body(Method *method, const gchar *nameSpace);
 gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace);
-gchar *get_translator_name_for_return(gchar *upperCamel);
+gchar *get_translator_name_for_return(const gchar *upperCamel);
 gchar *get_translator_for_parameter(Parameter *para);
 gchar *get_translator_for_return(Ret *ret);
 

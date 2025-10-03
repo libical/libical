@@ -1,11 +1,9 @@
 /*======================================================================
-  FILE: icalparam.h
+  FILE: icalparameter.h
   CREATOR: eric 20 March 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 /**
@@ -20,6 +18,7 @@
 
 #include "libical_ical_export.h"
 #include "icalderivedparameter.h"
+#include "icalderivedvalue.h"
 
 /* Declared in icalderivedparameter.h */
 /*typedef struct icalparameter_impl icalparameter;*/
@@ -256,7 +255,7 @@ LIBICAL_ICAL_EXPORT char *icalparameter_as_ical_string_r(icalparameter *paramete
  * icalparameter_free(param);
  * @endcode
  */
-LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(icalparameter *parameter);
+LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_isa(const icalparameter *parameter);
 
 /**
  * Determines if the given param is an icalparameter
@@ -343,7 +342,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_xname(icalparameter *param, const cha
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_xname(icalparameter *param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_xname(const icalparameter *param);
 
 /**
  * @brief Sets the X-value of @a param to @a v
@@ -405,7 +404,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_xvalue(icalparameter *param, const ch
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_xvalue(icalparameter *param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_xvalue(const icalparameter *param);
 
 /* Access the name of an IANA parameter */
 
@@ -467,7 +466,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_iana_name(icalparameter *param, const
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_name(icalparameter *param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_name(const icalparameter *param);
 
 /**
  * @brief Sets the IANA value of @a param to @a v
@@ -529,7 +528,7 @@ LIBICAL_ICAL_EXPORT void icalparameter_set_iana_value(icalparameter *param, cons
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(icalparameter *param);
+LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(const icalparameter *param);
 
 /**
  * @brief Determines if two parameters have the same name
@@ -558,7 +557,7 @@ LIBICAL_ICAL_EXPORT const char *icalparameter_get_iana_value(icalparameter *para
  * icalparameter_free(param2);
  * ```
  */
-LIBICAL_ICAL_EXPORT bool icalparameter_has_same_name(icalparameter *param1, icalparameter *param2);
+LIBICAL_ICAL_EXPORT bool icalparameter_has_same_name(const icalparameter *param1, const icalparameter *param2);
 
 /* Convert enumerations */
 
@@ -618,5 +617,23 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *
  * @since 3.0.4
  */
 LIBICAL_ICAL_EXPORT bool icalparameter_kind_is_valid(const icalparameter_kind kind);
+
+/**
+ * @since 4.0
+ */
+LIBICAL_ICAL_EXPORT icalvalue_kind icalparameter_kind_value_kind(const icalparameter_kind kind, int *is_multivalued);
+
+/**
+ * Return true if the specified parameter is multivalued.
+ *
+ * @since 4.0
+ */
+LIBICAL_ICAL_EXPORT bool icalparameter_is_multivalued(const icalparameter *param);
+
+/** Decode parameter value per RFC6868
+ *
+ * @since 4.0
+ */
+LIBICAL_ICAL_EXPORT void icalparameter_decode_value(char *value);
 
 #endif

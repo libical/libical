@@ -1,12 +1,9 @@
 /*======================================================================
  FILE: vcardvalue.c
-
  CREATOR: Ken Murchison 24 Aug 2022
 
  SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -30,8 +27,9 @@ LIBICAL_VCARD_EXPORT struct vcardvalue_impl *vcardvalue_new_impl(vcardvalue_kind
 {
     struct vcardvalue_impl *v;
 
-    if (!vcardvalue_kind_is_valid(kind))
+    if (!vcardvalue_kind_is_valid(kind)) {
         return NULL;
+    }
 
     if ((v = (struct vcardvalue_impl *)icalmemory_new_buffer(sizeof(struct vcardvalue_impl))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -299,7 +297,6 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                      str, vcardvalue_kind_to_string(kind));
             errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
             *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            vcardparameter_free(errParam);
         }
         break;
     }
@@ -352,8 +349,9 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         if (len && (len == nchar)) {
             int utcoffset = (int)(hour * 3600 + min * 60);
 
-            if (*sign == '-')
+            if (*sign == '-') {
                 utcoffset = -utcoffset;
+            }
             value = vcardvalue_new_utcoffset(utcoffset);
         } else if (error != 0) {
             char temp[TMP_BUF_SIZE];
@@ -364,7 +362,6 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                      str, vcardvalue_kind_to_string(kind));
             errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
             *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            vcardparameter_free(errParam);
         }
         break;
     }
@@ -457,7 +454,6 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
             errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
             *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            vcardparameter_free(errParam);
         }
 
         snprintf(temp, TMP_BUF_SIZE,
@@ -476,7 +472,6 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
         errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
         *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
-        vcardparameter_free(errParam);
     }
 
     return value;
@@ -515,8 +510,9 @@ void vcardvalue_free(vcardvalue *v)
         int i;
         for (i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
             vcardstrarray *array = v->data.v_structured.field[i];
-            if (array)
+            if (array) {
                 vcardstrarray_free(array);
+            }
         }
         break;
     }
@@ -604,6 +600,7 @@ static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value,
     s = MIN(abs(s), 59);
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
+    /* cppcheck-suppress knownConditionTrueFalse */
     if (s != 0) {
         if (version == VCARD_VERSION_40) {
             fmt = "%c%02d%02d%02d";
@@ -696,11 +693,12 @@ char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_pa
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
         }
 
-        if (array)
+        if (array) {
             _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size,
                                              array, ',', is_param);
-        else
+        } else {
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, '\0');
+        }
     }
 
     return buf;
@@ -768,8 +766,9 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     if (value->parent) {
         vcardcomponent *comp = vcardproperty_get_parent(value->parent);
-        if (comp)
+        if (comp) {
             version = vcardcomponent_get_version(comp);
+        }
     }
 
     if (version == VCARD_VERSION_NONE) {
@@ -875,183 +874,7 @@ bool vcardvalue_isa_value(void *value)
         return false;
     }
 }
-#if 0
-static bool vcardvalue_is_time(const vcardvalue *a)
-{
-    vcardvalue_kind kind = vcardvalue_isa(a);
 
-    if (kind == VCARD_DATETIME_VALUE || kind == VCARD_DATE_VALUE) {
-        return true;
-    }
-
-    return false;
-}
-
-/*
- * In case of error, this function returns 0. This is partly bogus, as 0 is
- * not part of the returned enum.
- * FIXME We should probably add an error value to the enum.
- */
-vcardparameter_xliccomparetype vcardvalue_compare(const vcardvalue *a, const vcardvalue *b)
-{
-    icalerror_check_arg_rz((a != 0), "a");
-    icalerror_check_arg_rz((b != 0), "b");
-
-    /* Not the same type; they can only be unequal */
-    if (!(vcardvalue_is_time(a) && vcardvalue_is_time(b)) && vcardvalue_isa(a) != vcardvalue_isa(b)) {
-        return VCARD_XLICCOMPARETYPE_NOTEQUAL;
-    }
-
-    switch (vcardvalue_isa(a)) {
-
-    case VCARD_ATTACH_VALUE:
-        {
-            if (icalattach_get_is_url(a->data.v_attach) &&
-                icalattach_get_is_url(b->data.v_attach)) {
-                if (strcasecmp(icalattach_get_url(a->data.v_attach),
-                               icalattach_get_url(b->data.v_attach)) == 0) {
-                    return VCARD_XLICCOMPARETYPE_EQUAL;
-                } else {
-                    return VCARD_XLICCOMPARETYPE_NOTEQUAL;
-                }
-            } else {
-                if (a->data.v_attach == b->data.v_attach) {
-                    return VCARD_XLICCOMPARETYPE_EQUAL;
-                } else {
-                    return VCARD_XLICCOMPARETYPE_NOTEQUAL;
-                }
-            }
-        }
-    case VCARD_BINARY_VALUE:
-        {
-            if (a->data.v_attach == b->data.v_attach) {
-                return VCARD_XLICCOMPARETYPE_EQUAL;
-            } else {
-                return VCARD_XLICCOMPARETYPE_NOTEQUAL;
-            }
-        }
-
-    case VCARD_BOOLEAN_VALUE:
-        {
-            if (vcardvalue_get_boolean(a) == vcardvalue_get_boolean(b)) {
-                return VCARD_XLICCOMPARETYPE_EQUAL;
-            } else {
-                return VCARD_XLICCOMPARETYPE_NOTEQUAL;
-            }
-        }
-
-    case VCARD_FLOAT_VALUE:
-        {
-            if (a->data.v_float > b->data.v_float) {
-                return VCARD_XLICCOMPARETYPE_GREATER;
-            } else if (a->data.v_float < b->data.v_float) {
-                return VCARD_XLICCOMPARETYPE_LESS;
-            } else {
-                return VCARD_XLICCOMPARETYPE_EQUAL;
-            }
-        }
-
-    case VCARD_INTEGER_VALUE:
-    case VCARD_UTCOFFSET_VALUE:
-        {
-            if (a->data.v_int > b->data.v_int) {
-                return VCARD_XLICCOMPARETYPE_GREATER;
-            } else if (a->data.v_int < b->data.v_int) {
-                return VCARD_XLICCOMPARETYPE_LESS;
-            } else {
-                return VCARD_XLICCOMPARETYPE_EQUAL;
-            }
-        }
-
-    case VCARD_DURATION_VALUE:
-        {
-            int dur_a = icaldurationtype_as_int(a->data.v_duration);
-            int dur_b = icaldurationtype_as_int(b->data.v_duration);
-
-            if (dur_a > dur_b) {
-                return VCARD_XLICCOMPARETYPE_GREATER;
-            } else if (dur_a < dur_b) {
-                return VCARD_XLICCOMPARETYPE_LESS;
-            } else {
-                return VCARD_XLICCOMPARETYPE_EQUAL;
-            }
-        }
-
-    case VCARD_TEXT_VALUE:
-    case VCARD_URI_VALUE:
-    case VCARD_VCARDADDRESS_VALUE:
-    case VCARD_TRIGGER_VALUE:
-    case VCARD_DATE_VALUE:
-    case VCARD_DATETIME_VALUE:
-    case VCARD_DATETIMEPERIOD_VALUE:
-    case VCARD_QUERY_VALUE:
-    case VCARD_RECUR_VALUE:
-        {
-            int r;
-            char *temp1, *temp2;
-
-            temp1 = vcardvalue_as_vcard_string_r(a);
-            temp2 = vcardvalue_as_vcard_string_r(b);
-            r = strcmp(temp1, temp2);
-            icalmemory_free_buffer(temp1);
-            icalmemory_free_buffer(temp2);
-
-            if (r > 0) {
-                return VCARD_XLICCOMPARETYPE_GREATER;
-            } else if (r < 0) {
-                return VCARD_XLICCOMPARETYPE_LESS;
-            } else {
-                return VCARD_XLICCOMPARETYPE_EQUAL;
-            }
-        }
-
-    case VCARD_METHOD_VALUE:
-        {
-            if (vcardvalue_get_method(a) == vcardvalue_get_method(b)) {
-                return VCARD_XLICCOMPARETYPE_EQUAL;
-            } else {
-                return VCARD_XLICCOMPARETYPE_NOTEQUAL;
-            }
-        }
-
-    case VCARD_STATUS_VALUE:
-        {
-            if (vcardvalue_get_status(a) == vcardvalue_get_status(b)) {
-                return VCARD_XLICCOMPARETYPE_EQUAL;
-            } else {
-                return VCARD_XLICCOMPARETYPE_NOTEQUAL;
-            }
-        }
-
-    case VCARD_TRANSP_VALUE:
-        {
-            if (vcardvalue_get_transp(a) == vcardvalue_get_transp(b)) {
-                return VCARD_XLICCOMPARETYPE_EQUAL;
-            } else {
-                return VCARD_XLICCOMPARETYPE_NOTEQUAL;
-            }
-        }
-
-    case VCARD_ACTION_VALUE:
-        {
-            if (vcardvalue_get_action(a) == vcardvalue_get_action(b)) {
-                return VCARD_XLICCOMPARETYPE_EQUAL;
-            } else {
-                return VCARD_XLICCOMPARETYPE_NOTEQUAL;
-            }
-        }
-
-    case VCARD_PERIOD_VALUE:
-    case VCARD_GEO_VALUE:
-    case VCARD_NO_VALUE:
-    default:
-        {
-            icalerror_warn("Comparison not implemented for value type");
-            return 0;
-        }
-    }
-}
-#endif
 /** Examine the value and possibly change the kind to agree with the
  *  value
  */
@@ -1087,7 +910,7 @@ void vcardvalue_set_parent(vcardvalue *value, vcardproperty *property)
     value->parent = property;
 }
 
-vcardproperty *vcardvalue_get_parent(vcardvalue *value)
+vcardproperty *vcardvalue_get_parent(const vcardvalue *value)
 {
     return value->parent;
 }

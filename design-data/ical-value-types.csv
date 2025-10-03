@@ -30,7 +30,7 @@
 "CLASS","5019","(m)enum icalproperty_class","string","unitary","X=10300;PUBLIC;PRIVATE;CONFIDENTIAL;NONE=10399"
 
 "#Other non-standard",,,,
-"REQUEST-STATUS","5009","(a)struct icalreqstattype","string","unitary"
+"REQUEST-STATUS","5009","(m)struct icalreqstattype","string","unitary"
 "GEO","5004","(m)struct icalgeotype","tuple","unitary",
 "STRING","5007","(a)const char*","string","unitary",
 "X","5022","(m)const char*","string","unitary",

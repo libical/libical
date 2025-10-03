@@ -4,9 +4,7 @@
  * @brief   C++ classes for the icalcomponent wrapper (VToDo VEvent, etc..).
  *
  * SPDX-FileCopyrightText: 2001, Critical Path
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifndef ICAL_VCOMPONENT_CXX_H
@@ -202,13 +200,6 @@ public:
     bool add(VComponent &);
 
 private:
-    /* Internal operations. They are private, and you should not be using them. */
-    VComponent *get_parent();
-    void set_parent(VComponent *parent);
-
-    char *quote_ical_string(char *str);
-
-private:
     icalcomponent *imp;
 };
 
@@ -218,7 +209,7 @@ public:
     VCalendar();
     VCalendar(const VCalendar &);
     VCalendar &operator=(const VCalendar &);
-    ~VCalendar();
+    ~VCalendar() override;
 
     explicit VCalendar(icalcomponent *v);
     explicit VCalendar(const std::string &str);
@@ -230,7 +221,7 @@ public:
     VEvent();
     VEvent(const VEvent &);
     VEvent &operator=(const VEvent &);
-    ~VEvent();
+    ~VEvent() override;
 
     explicit VEvent(icalcomponent *v);
     explicit VEvent(const std::string &str);
@@ -242,7 +233,7 @@ public:
     VToDo();
     VToDo(const VToDo &);
     VToDo &operator=(const VToDo &);
-    ~VToDo();
+    ~VToDo() override;
 
     explicit VToDo(icalcomponent *v);
     explicit VToDo(const std::string &str);
@@ -254,7 +245,7 @@ public:
     VAgenda();
     VAgenda(const VAgenda &);
     VAgenda &operator=(const VAgenda &);
-    ~VAgenda();
+    ~VAgenda() override;
 
     explicit VAgenda(icalcomponent *v);
     explicit VAgenda(const std::string &str);
@@ -266,7 +257,7 @@ public:
     VQuery();
     VQuery(const VQuery &);
     VQuery &operator=(const VQuery &);
-    ~VQuery();
+    ~VQuery() override;
 
     explicit VQuery(icalcomponent *v);
     explicit VQuery(const std::string &str);
@@ -278,7 +269,7 @@ public:
     VJournal();
     VJournal(const VJournal &);
     VJournal &operator=(const VJournal &);
-    ~VJournal();
+    ~VJournal() override;
 
     explicit VJournal(icalcomponent *v);
     explicit VJournal(const std::string &str);
@@ -290,7 +281,7 @@ public:
     VAlarm();
     VAlarm(const VAlarm &);
     VAlarm &operator=(const VAlarm &);
-    ~VAlarm();
+    ~VAlarm() override;
 
     explicit VAlarm(icalcomponent *v);
     explicit VAlarm(const std::string &str);
@@ -309,7 +300,7 @@ public:
     VFreeBusy();
     VFreeBusy(const VFreeBusy &);
     VFreeBusy &operator=(const VFreeBusy &);
-    ~VFreeBusy();
+    ~VFreeBusy() override;
 
     explicit VFreeBusy(icalcomponent *v);
     explicit VFreeBusy(const std::string &str);
@@ -321,7 +312,7 @@ public:
     VTimezone();
     VTimezone(const VTimezone &);
     VTimezone &operator=(const VTimezone &);
-    ~VTimezone();
+    ~VTimezone() override;
 
     explicit VTimezone(icalcomponent *v);
     explicit VTimezone(const std::string &str);
@@ -333,7 +324,7 @@ public:
     XStandard();
     XStandard(const XStandard &);
     XStandard &operator=(const XStandard &);
-    ~XStandard();
+    ~XStandard() override;
 
     explicit XStandard(icalcomponent *v);
     explicit XStandard(const std::string &str);
@@ -345,7 +336,7 @@ public:
     XDaylight();
     XDaylight(const XDaylight &);
     XDaylight &operator=(const XDaylight &);
-    ~XDaylight();
+    ~XDaylight() override;
 
     explicit XDaylight(icalcomponent *v);
     explicit XDaylight(const std::string &str);

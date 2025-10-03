@@ -2,9 +2,7 @@
  FILE: icalbdbset.c
 
  SPDX-FileCopyrightText: 2001, Critical Path
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -674,6 +672,7 @@ int icalbdbset_get(DB *dbp, DB_TXN *tid, DBT *key, DBT *data, u_int32_t flags)
 
 /** Returns the path of the database file **/
 
+/* cppcheck-suppress constParameterPointer */
 const char *icalbdbset_path(icalset *set)
 {
     icalerror_check_arg_rz((set != 0), "set");
@@ -1066,7 +1065,7 @@ static void icalbdbset_id_free(struct icalbdbset_id *id)
     }
 }
 
-struct icalbdbset_id icalbdbset_get_id(icalcomponent *comp)
+struct icalbdbset_id icalbdbset_get_id(const icalcomponent *comp)
 {
     icalcomponent *inner;
     struct icalbdbset_id id;
@@ -1123,7 +1122,7 @@ static int _compare_ids(const char *compid, const char *matchid)
     return 0;
 }
 
-icalcomponent *icalbdbset_fetch_match(icalset *set, icalcomponent *comp)
+icalcomponent *icalbdbset_fetch_match(icalset *set, const icalcomponent *comp)
 {
     icalbdbset *bset = (icalbdbset *)set;
     icalcompiter i;
@@ -1552,7 +1551,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
             }
         }
         /* end of recurring event with expand query */
-        if (comp != 0 && (i->gauge == 0 || icalgauge_compare(i->gauge, comp) == 1)) {
+        if ((i->gauge == 0 || icalgauge_compare(i->gauge, comp) == 1)) {
             /* found a matched, return it */
             return comp;
         }

@@ -3,7 +3,6 @@
  CREATOR: eric 23 December 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -100,6 +99,7 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
     (void)icalfileset_lock(fset);
 
     if (cluster_file_size > 0) {
+        /* cppcheck-suppress knownConditionTrueFalse; we might want to return an error some day */
         if (icalfileset_read_file(fset, mode) != ICAL_NO_ERROR) {
             icalfileset_free(set);
             return 0;
@@ -123,9 +123,9 @@ icalcluster *icalfileset_produce_icalcluster(const char *path)
     icalset *fileset;
     icalcluster *ret;
 
-    int errstate = icalerror_get_errors_are_fatal();
+    bool errstate = icalerror_get_errors_are_fatal();
 
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
 
     fileset = icalfileset_new_reader(path);
 
@@ -144,7 +144,7 @@ icalcluster *icalfileset_produce_icalcluster(const char *path)
 
 static char *icalfileset_read_from_file(char *s, size_t size, void *d)
 {
-    char *p = s;
+    char *p;
     icalfileset *set = d;
 
     /* Simulate fgets -- read single characters and stop at '\n' */
@@ -198,6 +198,10 @@ long icalfileset_filesize(icalfileset *fset)
 {
     struct stat sbuf;
 
+    if (!fset || !fset->path || fset->path[0] == '\0') {
+        return -1;
+    }
+
     if (stat(fset->path, &sbuf) != 0) {
         /* A file by the given name does not exist, or there was
            another error */
@@ -221,8 +225,6 @@ long icalfileset_filesize(icalfileset *fset)
             return (long)sbuf.st_size;
         }
     }
-
-    /*return -1; not reached */
 }
 
 void icalfileset_free(icalset *set)
@@ -305,6 +307,7 @@ int icalfileset_unlock(icalfileset *set)
 }
 
 /* Lifted from https://stackoverflow.com/questions/29079011/copy-file-function-in-c */
+/* cppcheck-suppress constParameter */
 static int file_copy(char fileSource[], char fileDestination[])
 {
     char c[1024]; // or any other constant you like
@@ -546,7 +549,7 @@ static void icalfileset_id_free(struct icalfileset_id *id)
     }
 }
 
-static struct icalfileset_id icalfileset_get_id(icalcomponent *comp)
+static struct icalfileset_id icalfileset_get_id(const icalcomponent *comp)
 {
     icalcomponent *inner;
     struct icalfileset_id id;
@@ -603,7 +606,7 @@ static int _compare_ids(const char *compid, const char *matchid)
     return 0;
 }
 
-icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *comp)
+icalcomponent *icalfileset_fetch_match(icalset *set, const icalcomponent *comp)
 {
     icalfileset *fset = (icalfileset *)set;
     icalcompiter i;
@@ -800,7 +803,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
             icalcomponent_add_property(comp, icalproperty_new_recurrenceid(next));
         }
 
-        if (gauge == 0 || icalgauge_compare(itr.gauge, comp) == 1) {
+        if (icalgauge_compare(itr.gauge, comp) == 1) {
             /* matches and returns */
             itr.iter = citr;
             return itr;
@@ -948,10 +951,10 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
         }
         icalcomponent_add_property(c, icalproperty_new_recurrenceid(next));
 
-        if (c != 0 && (i->gauge == 0 || icalgauge_compare(i->gauge, c) == 1)) {
+        if ((i->gauge == 0 || icalgauge_compare(i->gauge, c) == 1)) {
             return c;
         }
-    } while (c != 0);
+    } while (true);
 
     return 0;
 }

@@ -1,11 +1,9 @@
 /*======================================================================
- FILE: jlibical_consts_cxx/h
+ FILE: jlibical_consts_cxx.h
  CREATOR: Srinivasa Boppana/George Norman
 
  SPDX-FileCopyrightText: 2002, Critical Path
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 #ifndef JLIBICAL_CONSTS_CXX_H
 #define JLIBICAL_CONSTS_CXX_H

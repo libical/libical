@@ -3,9 +3,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
  SPDX-FileCopyrightText: 2001, Damon Chaplin <damon@ximian.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 /**
  * @file icaltimezone.h
@@ -36,7 +34,7 @@ typedef struct _icaltimezone icaltimezone;
 /** @brief Creates a new icaltimezone. */
 LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_new(void);
 
-LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_copy(icaltimezone *originalzone);
+LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_copy(const icaltimezone *originalzone);
 
 /** @brief Frees all memory used for the icaltimezone.
  * @param zone The icaltimezone to be freed
@@ -44,12 +42,25 @@ LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_copy(icaltimezone *originalzone);
  */
 LIBICAL_ICAL_EXPORT void icaltimezone_free(icaltimezone *zone, int free_struct);
 
-/** Sets the prefix to be used for tzid's generated from system tzdata.
-    Must be globally unique (such as a domain name owned by the developer
-    of the calling application), and begin and end with forward slashes.
-    Do not change or de-allocate the string buffer after calling this.
+/**
+ * Sets the prefix to be used for tzid's generated from system tzdata.
+ * Must be globally unique (such as a domain name owned by the developer
+ * of the calling application), and begin and end with forward slashes.
+ * The string must be less than 256 chars long.
+ *
+ * No error or sanity checking is performed in this function; the caller is
+ * entirely responsible for using a proper tzid string.
+ *
+ * Do not change or de-allocate the string buffer after calling this.
+ *
+ * @param new_prefix a string (properly formatted and less then 256 characters long)
+ * representing the tzid for the system tzdata. If not specified, the library default
+ * "/freeassociation.sourceforge.net/" is used.
  */
 LIBICAL_ICAL_EXPORT void icaltimezone_set_tzid_prefix(const char *new_prefix);
+
+/** Returns the current setting of the tzid prefix. */
+LIBICAL_ICAL_EXPORT const char *icaltimezone_tzid_prefix(void);
 
 /*
  * Accessing timezones.
@@ -84,7 +95,7 @@ LIBICAL_ICAL_EXPORT icaltimezone *icaltimezone_get_utc_timezone(void);
 LIBICAL_ICAL_EXPORT const char *icaltimezone_get_tzid(icaltimezone *zone);
 
 /** Returns the city name of a timezone. */
-LIBICAL_ICAL_EXPORT const char *icaltimezone_get_location(icaltimezone *zone);
+LIBICAL_ICAL_EXPORT const char *icaltimezone_get_location(const icaltimezone *zone);
 
 /** Returns the TZNAME properties used in the latest STANDARD and DAYLIGHT
    components. If they are the same it will return just one, e.g. "LMT".
@@ -93,10 +104,10 @@ LIBICAL_ICAL_EXPORT const char *icaltimezone_get_location(icaltimezone *zone);
 LIBICAL_ICAL_EXPORT const char *icaltimezone_get_tznames(icaltimezone *zone);
 
 /** @brief Returns the latitude of a builtin timezone. */
-LIBICAL_ICAL_EXPORT double icaltimezone_get_latitude(icaltimezone *zone);
+LIBICAL_ICAL_EXPORT double icaltimezone_get_latitude(const icaltimezone *zone);
 
 /** @brief Returns the longitude of a builtin timezone. */
-LIBICAL_ICAL_EXPORT double icaltimezone_get_longitude(icaltimezone *zone);
+LIBICAL_ICAL_EXPORT double icaltimezone_get_longitude(const icaltimezone *zone);
 
 /** @brief Returns the VTIMEZONE component of a timezone. */
 LIBICAL_ICAL_EXPORT icalcomponent *icaltimezone_get_component(icaltimezone *zone);
@@ -104,9 +115,9 @@ LIBICAL_ICAL_EXPORT icalcomponent *icaltimezone_get_component(icaltimezone *zone
 /** @brief Sets the VTIMEZONE component of an icaltimezone, initializing the
  * tzid, location & tzname fields.
  *
- * @returns 1 on success or 0 on failure, i.e.  no TZID was found.
+ * @returns true on success or false on failure, i.e.  no TZID was found.
  */
-LIBICAL_ICAL_EXPORT int icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp);
+LIBICAL_ICAL_EXPORT bool icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp);
 
 /** @brief Returns the timezone name to display to the user.
  *
@@ -135,7 +146,7 @@ LIBICAL_ICAL_EXPORT void icaltimezone_convert_time(struct icaltimetype *tt,
  * The is_daylight flag is set to 1 (true) if the time is in daylight-savings time.
  */
 LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset(icaltimezone *zone,
-                                                    struct icaltimetype *tt, int *is_daylight);
+                                                    const struct icaltimetype *tt, int *is_daylight);
 
 /** @brief Calculates the UTC offset of a given UTC time in the given timezone.
  *
@@ -143,7 +154,7 @@ LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset(icaltimezone *zone,
  * The @p is_daylight flag is set to 1 (true) if the time is in daylight-savings time.
  */
 LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
-                                                                struct icaltimetype *tt,
+                                                                const struct icaltimetype *tt,
                                                                 int *is_daylight);
 
 /*
@@ -191,15 +202,13 @@ LIBICAL_ICAL_EXPORT void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
  */
 
 /** Gets the directory to look for the zonefiles */
-LIBICAL_ICAL_EXPORT const char *get_zone_directory(void);
+LIBICAL_ICAL_EXPORT const char *icaltimezone_get_zone_directory(void);
 
 /** Sets the directory to look for the zonefiles */
-LIBICAL_ICAL_EXPORT void set_zone_directory(const char *path);
+LIBICAL_ICAL_EXPORT void icaltimezone_set_zone_directory(const char *path);
 
 /** Frees the memory dedicated to the zonefile directory */
-LIBICAL_ICAL_EXPORT void free_zone_directory(void);
-
-LIBICAL_ICAL_EXPORT void icaltimezone_release_zone_tab(void);
+LIBICAL_ICAL_EXPORT void icaltimezone_free_zone_directory(void);
 
 /*
  * @par Handling whether to use builtin timezone files
@@ -230,8 +239,5 @@ LIBICAL_ICAL_EXPORT bool icaltimezone_get_builtin_tzdata(void);
  * to add to UTC to get local time.
  */
 LIBICAL_ICAL_EXPORT bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp);
-
-/* For the library only -- do not make visible */
-extern const char *icaltimezone_tzid_prefix(void);
 
 #endif /* ICALTIMEZONE_H */

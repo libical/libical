@@ -3,9 +3,7 @@
  CREATOR: acampi 28 May 02
 
  SPDX-FileCopyrightText: 2002, Andrea Campi <a.campi@inet.it>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -96,8 +94,9 @@ void icalattach_unref(icalattach *attach)
 
     attach->refcount--;
 
-    if (attach->refcount != 0)
+    if (attach->refcount != 0) {
         return;
+    }
 
     if (attach->is_url) {
         icalmemory_free_buffer(attach->u.url.url);

@@ -3,9 +3,7 @@
  CREATOR: Siam.Smeets 18 Nov 24
 
  SPDX-FileCopyrightText: 2024, Siam Smeets <siam.smeets@dataaccess.eu>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 // There are multiple languages that only support pointers but not structures directly as interop.

@@ -1,14 +1,10 @@
 /*======================================================================
- FILE: vcardproperty.c
-
+ FILE: vcardparser.c
  CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
-
  CONTRIBUTOR: Bron Gondwana <brong@fastmailteam.com>
 
  SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -96,7 +92,7 @@ void buf_init(struct buf *buf, size_t size)
     buf->s = icalmemory_new_buffer(buf->alloc);
 }
 
-static size_t buf_len(struct buf *buf)
+static size_t buf_len(const struct buf *buf)
 {
     return buf->len;
 }
@@ -147,8 +143,9 @@ static void buf_trim(struct buf *buf)
     const char *s = buf_cstring(buf);
 
     for (buf->len = 0; *s; s++) {
-        if (isspace((int)*s))
+        if (isspace((int)*s)) {
             continue;
+        }
         buf->s[buf->len++] = *s;
     }
 }
@@ -229,8 +226,9 @@ static int _parse_param_name(struct vcardparser_state *state)
             INC(1);
             break; /* just skip */
         case '\n':
-            if (state->p[1] != ' ' && state->p[1] != '\t')
+            if (state->p[1] != ' ' && state->p[1] != '\t') {
                 return PE_KEY_EOL;
+            }
             INC(2);
             break;
 
@@ -266,29 +264,35 @@ static int _parse_param_quoted(struct vcardparser_state *state,
          * allows \n, so we have to handle that anyway */
         case '\\':
             /* seen in the wild - \n split by line wrapping */
-            if (state->p[1] == '\r')
+            if (state->p[1] == '\r') {
                 INC(1);
+            }
             if (state->p[1] == '\n') {
-                if (state->p[2] != ' ' && state->p[2] != '\t')
+                if (state->p[2] != ' ' && state->p[2] != '\t') {
                     return PE_QSTRING_EOL;
+                }
                 INC(2);
             }
-            if (!state->p[1])
+            if (!state->p[1]) {
                 return PE_BACKQUOTE_EOF;
-            if (state->p[1] == 'n' || state->p[1] == 'N')
+            }
+            if (state->p[1] == 'n' || state->p[1] == 'N') {
                 PUTC('\n');
-            else
+            } else {
                 PUTC(state->p[1]);
+            }
             INC(2);
             break;
 
         /* special value quoting for doublequote and endline (RFC 6868) */
         case '^':
-            if (state->p[1] == '\r')
+            if (state->p[1] == '\r') {
                 INC(1);
+            }
             if (state->p[1] == '\n') {
-                if (state->p[2] != ' ' && state->p[2] != '\t')
+                if (state->p[2] != ' ' && state->p[2] != '\t') {
                     return PE_QSTRING_EOL;
+                }
                 INC(2);
             }
             if (state->p[1] == '\'') {
@@ -310,20 +314,23 @@ static int _parse_param_quoted(struct vcardparser_state *state,
             INC(1);
             break; /* just skip */
         case '\n':
-            if (state->p[1] != ' ' && state->p[1] != '\t')
+            if (state->p[1] != ' ' && state->p[1] != '\t') {
                 return PE_QSTRING_EOL;
+            }
             INC(2);
             break;
 
         case ',':
-            if (multivalued)
+            if (multivalued) {
                 return PE_QSTRING_EOV;
+            }
             /* or fall through, comma isn't special */
             _fallthrough();
 
         case ';':
-            if (structured)
+            if (structured) {
                 return PE_QSTRING_EOV;
+            }
             /* or fall through, semi-colon isn't special */
             _fallthrough();
 
@@ -359,29 +366,35 @@ static int _parse_param_value(struct vcardparser_state *state)
         switch (*state->p) {
         case '\\': /* normal backslash quoting */
             /* seen in the wild - \n split by line wrapping */
-            if (state->p[1] == '\r')
+            if (state->p[1] == '\r') {
                 INC(1);
+            }
             if (state->p[1] == '\n') {
-                if (state->p[2] != ' ' && state->p[2] != '\t')
+                if (state->p[2] != ' ' && state->p[2] != '\t') {
                     return PE_PARAMVALUE_EOL;
+                }
                 INC(2);
             }
-            if (!state->p[1])
+            if (!state->p[1]) {
                 return PE_BACKQUOTE_EOF;
-            if (state->p[1] == 'n' || state->p[1] == 'N')
+            }
+            if (state->p[1] == 'n' || state->p[1] == 'N') {
                 PUTC('\n');
-            else
+            } else {
                 PUTC(state->p[1]);
+            }
             INC(2);
             break;
 
         case '^': /* special value quoting for doublequote (RFC 6868) */
             /* seen in the wild - \n split by line wrapping */
-            if (state->p[1] == '\r')
+            if (state->p[1] == '\r') {
                 INC(1);
+            }
             if (state->p[1] == '\n') {
-                if (state->p[2] != ' ' && state->p[2] != '\t')
+                if (state->p[2] != ' ' && state->p[2] != '\t') {
                     return PE_PARAMVALUE_EOL;
+                }
                 INC(2);
             }
             if (state->p[1] == '\'') {
@@ -419,8 +432,9 @@ static int _parse_param_value(struct vcardparser_state *state)
                 buf_reset(&state->buf);
                 INC(1);
             }
-            if (r)
+            if (r) {
                 return r;
+            }
             break;
 
         case ':':
@@ -439,8 +453,9 @@ static int _parse_param_value(struct vcardparser_state *state)
                 if (vcardparameter_isa(state->param) == VCARD_VALUE_PARAMETER) {
                     vcardvalue_kind kind =
                         vcardvalue_string_to_kind(buf_cstring(&state->buf));
-                    if (kind != VCARD_NO_VALUE)
+                    if (kind != VCARD_NO_VALUE) {
                         state->value_kind = kind;
+                    }
                 }
             }
 
@@ -453,8 +468,9 @@ static int _parse_param_value(struct vcardparser_state *state)
             break; /* just skip */
 
         case '\n':
-            if (state->p[1] != ' ' && state->p[1] != '\t')
+            if (state->p[1] != ' ' && state->p[1] != '\t') {
                 return PE_PARAMVALUE_EOL;
+            }
             INC(2);
             break;
 
@@ -490,8 +506,9 @@ static void _parse_error(struct vcardparser_state *state,
     buf_vprintf(&state->errbuf, fmt, ap);
     va_end(ap);
 
-    if (state->prop)
+    if (state->prop) {
         vcardproperty_free(state->prop);
+    }
 
     state->prop =
         vcardproperty_vanew_xlicerror(buf_cstring(&state->errbuf),
@@ -567,17 +584,21 @@ static int _parse_prop_name(struct vcardparser_state *state)
             kind = vcardproperty_string_to_kind(name);
 
             state->prop = vcardproperty_new(kind);
-            if (!state->prop)
+            if (!state->prop) {
                 return PE_NAME_INVALID;
+            }
 
-            if (kind == VCARD_X_PROPERTY)
+            if (kind == VCARD_X_PROPERTY) {
                 vcardproperty_set_x_name(state->prop, name);
+            }
 
-            if (group)
+            if (group) {
                 vcardproperty_set_group(state->prop, group);
+            }
 
-            if (state->version)
+            if (state->version) {
                 version = vcardproperty_get_version(state->version);
+            }
 
             /* set default value kind */
             switch (kind) {
@@ -628,13 +649,14 @@ static int _parse_prop_name(struct vcardparser_state *state)
             INC(1);
             break; /* just skip */
         case '\n':
-            if (state->p[1] == ' ' || state->p[1] == '\t') /* wrapped line */
+            if (state->p[1] == ' ' || state->p[1] == '\t') { /* wrapped line */
                 INC(2);
-            else if (!state->buf.len) {
+            } else if (!state->buf.len) {
                 /* no key yet?  blank intermediate lines are OK */
                 INC(1);
-            } else
+            } else {
                 return PE_NAME_EOL;
+            }
             break;
 
         default:
@@ -688,20 +710,23 @@ static int _parse_prop_value(struct vcardparser_state *state)
                 }
                 if (state->p[1] == '\n') {
                     if (state->p[2] != ' ' && state->p[2] != '\t') {
-                        vcardstrarray_free(textlist);
-                        return PE_BACKQUOTE_EOF;
+                        /* ignore unescaped backslash at end of line */
+                        INC(2);
+                        goto out;
                     }
                     INC(2);
                 }
             }
-            if (!state->p[1]) {
-                vcardstrarray_free(textlist);
-                return PE_BACKQUOTE_EOF;
+            if (state->p[1]) {
+                /* preserve escape sequences */
+                PUTC('\\');
+                PUTC(state->p[1]);
+                INC(2);
+            } else {
+                /* ignore unescaped backslash at end of line */
+                INC(1);
+                goto out;
             }
-            /* preserve escape sequences */
-            PUTC('\\');
-            PUTC(state->p[1]);
-            INC(2);
             break;
         case '\r':
             INC(1);
@@ -717,16 +742,17 @@ static int _parse_prop_value(struct vcardparser_state *state)
 
         case ',':
         case ';':
-            if (is_structured || (is_multivalued && strchr(text_sep, *state->p))) {
+            if (is_structured || (is_multivalued && text_sep && strchr(text_sep, *state->p))) {
                 const char *str = buf_cstring(&state->buf);
                 char *dequot_str =
                     vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
                 /* repair critical property values */
-                if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0')
+                if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0') {
                     vcardstrarray_append(textlist, "0.0");
-                else
+                } else {
                     vcardstrarray_append(textlist, dequot_str);
+                }
 
                 buf_reset(&state->buf);
                 icalmemory_free_buffer(dequot_str);
@@ -758,10 +784,11 @@ out:
             vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
         /* repair critical property values */
-        if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0')
+        if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0') {
             vcardstrarray_append(textlist, "0.0");
-        else
+        } else {
             vcardstrarray_append(textlist, dequot_str);
+        }
 
         buf_reset(&state->buf);
         icalmemory_free_buffer(dequot_str);
@@ -775,8 +802,9 @@ out:
             }
 
             value = vcardvalue_new_structured(&structured);
-        } else
+        } else {
             value = vcardvalue_new_textlist(textlist);
+        }
     } else {
         /* repair critical property values */
         if (prop_kind == VCARD_VERSION_PROPERTY) {
@@ -788,8 +816,9 @@ out:
                                            buf_cstring(&state->buf));
     }
 
-    if (!value)
+    if (!value) {
         return PE_VALUE_INVALID;
+    }
 
     vcardproperty_set_value(state->prop, value);
     buf_reset(&state->buf);
@@ -917,8 +946,9 @@ static int _parse_vcard(struct vcardparser_state *state,
             sub = vcardcomponent_new(kind);
             vcardcomponent_add_component(comp, sub);
             r = _parse_vcard(state, sub, /*only_one*/ 0);
-            if (r || only_one)
+            if (r || only_one) {
                 break;
+            }
         } else if (!comp) {
             /* no comp means we're at the top level, haven't seen a BEGIN! */
             state->itemstart = cardstart;
@@ -974,8 +1004,9 @@ static void _free_state(struct vcardparser_state *state)
     buf_free(&state->buf);
     buf_free(&state->errbuf);
 
-    if (state->root)
+    if (state->root) {
         vcardcomponent_free(state->root);
+    }
 
     memset(state, 0, sizeof(struct vcardparser_state));
 }

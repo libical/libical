@@ -3,9 +3,7 @@
  CREATOR: eric 11 February 2000
 
  SPDX-FileCopyrightText: 2000 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -317,27 +315,6 @@ int main(int argc, char *argv[])
         }
         }
 
-#if 0
-        if (reply != 0) {
-
-            /* Don't send the reply if the RSVP parameter indicates not to */
-            icalcomponent *reply_inner;
-            icalproperty *attendee;
-            icalparameter *rsvp;
-
-            reply_inner = icalcomponent_get_first_real_component(reply);
-            attendee = icalcomponent_get_first_property(reply_inner, ICAL_ATTENDEE_PROPERTY);
-            rsvp = icalproperty_get_first_parameter(attendee, ICAL_RSVP_PARAMETER);
-
-            if (rsvp == 0 || icalparameter_get_rsvp(rsvp) == 1) {
-                icalrestriction_check(reply);
-                send_message(reply, this_user);
-            }
-
-            icalcomponent_free(reply);
-        }
-#endif
-
         if (reply != 0) {
             printf("%s\n", icalcomponent_as_ical_string(reply));
         }
@@ -349,14 +326,6 @@ int main(int argc, char *argv[])
                icalset_add_component(trash,c); */
         }
     }
-
-#if 0
-
-    for (c = icalset_get_first_component(out); c != 0; c = icalset_get_next_component(out)) {
-
-        printf("%s", icalcomponent_as_ical_string(c));
-    }
-#endif
 
     icalset_free(f);
     icalset_free(trash);

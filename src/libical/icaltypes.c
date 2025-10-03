@@ -3,9 +3,7 @@
  CREATOR: eric 16 May 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -42,12 +40,12 @@ bool icaltriggertype_is_bad_trigger(struct icaltriggertype tr)
     return false;
 }
 
-struct icaltriggertype icaltriggertype_from_int(const int reltime)
+struct icaltriggertype icaltriggertype_from_seconds(const int reltime)
 {
     struct icaltriggertype tr;
 
     tr.time = icaltime_null_time();
-    tr.duration = icaldurationtype_from_int(reltime);
+    tr.duration = icaldurationtype_from_seconds(reltime);
 
     return tr;
 }
@@ -59,7 +57,7 @@ struct icaltriggertype icaltriggertype_from_string(const char *str)
     icalerrorenum e;
 
     tr.time = icaltime_null_time();
-    tr.duration = icaldurationtype_from_int(0);
+    tr.duration = icaldurationtype_from_seconds(0);
 
     /* Suppress errors so a failure in icaltime_from_string() does not cause an abort */
     es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
@@ -140,7 +138,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
      */
 
     p2 = strchr(p1 + 1, ';');
-    if (p2 != 0 && *p2 != 0 && *p2 != ';') { // skipping empty debug strings
+    if (p2 != 0 && *(p2 + 1) != 0) { // skipping empty debug strings
         stat.debug = icalmemory_tmp_copy(p2 + 1);
     }
 

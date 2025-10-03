@@ -26,9 +26,7 @@
  *   for (p=component.get_first_component; p!= 0; p=component.get_next_component) {
  *
  * SPDX-FileCopyrightText: 2001, Critical Path
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifndef ICPTRHOLDER_CXX_H
@@ -45,6 +43,7 @@ public:
     {
     }
 
+    /* cppcheck-suppress noExplicitConstructor */
     ICPointerHolder(T *p)
         : ptr(p)
     {
@@ -82,11 +81,13 @@ public:
         return *this;
     }
 
+    /* cppcheck-suppress constParameterPointer */
     bool operator!=(T *p)
     {
         return (ptr != p);
     }
 
+    /* cppcheck-suppress constParameterPointer */
     bool operator==(T *p)
     {
         return (ptr == p);

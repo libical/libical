@@ -6,6 +6,7 @@
 
 -->
 <structure namespace="ICal" name="DerivedValue">
+	<skip>icalvalue_vanew_*</skip>
 	<enum name="ICalValueKind" native_name="icalvalue_kind" default_native="I_CAL_NO_VALUE">
 	    <element name="ICAL_ANY_VALUE"/>
 	    <element name="ICAL_ACTION_VALUE"/>
@@ -74,7 +75,7 @@
 	    <element name="ICAL_CARLEVEL_CARFULL1"/>
 	    <element name="ICAL_CARLEVEL_NONE"/>
 	</enum>
-	<enum name="ICalProperty_Class" native_name="icalproperty_class" default_native="I_CAL_CLASS_NONE">
+	<enum name="ICalPropertyClassenum" native_name="icalproperty_class" default_native="I_CAL_CLASS_NONE">
 	    <element name="ICAL_CLASS_X"/>
 	    <element name="ICAL_CLASS_PUBLIC"/>
 	    <element name="ICAL_CLASS_PRIVATE"/>
@@ -230,578 +231,128 @@
 	    <element name="ICAL_XLICCLASS_UNKNOWN"/>
 	    <element name="ICAL_XLICCLASS_NONE"/>
 	</enum>
-	<method name="i_cal_value_set_x" corresponds="icalvalue_set_x" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="const gchar *" name="v" comment="The x value"/>
-		<comment>Sets the x in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_x" corresponds="icalvalue_new_x" kind="constructor" since="1.0">
-		<parameter type="const gchar *" name="v" comment="The x value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type x.</comment>
-	</method>
-	<method name="i_cal_value_get_x" corresponds="icalvalue_get_x" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="nullable, transfer none" comment="The x within #ICalValue"/>
-		<comment>Gets the x of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_recur" corresponds="icalvalue_set_recur" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalRecurrence *" name="v" comment="The recur value"/>
-		<comment>Sets the recur in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_recur" corresponds="icalvalue_new_recur" kind="constructor" since="1.0">
-		<parameter type="ICalRecurrence *" name="v" comment="The recur value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type recur.</comment>
-	</method>
-	<method name="i_cal_value_get_recur" corresponds="icalvalue_get_recur" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalRecurrence *" annotation="nullable, transfer full" translator_argus="(GObject *)value" comment="The recur within #ICalValue"/>
-		<comment>Gets the recur of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_trigger" corresponds="icalvalue_set_trigger" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalTrigger *" name="v" comment="The trigger value"/>
-		<comment>Sets the trigger in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_trigger" corresponds="icalvalue_new_trigger" kind="constructor" since="1.0">
-		<parameter type="ICalTrigger *" name="v" comment="The trigger value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type trigger.</comment>
-	</method>
-	<method name="i_cal_value_get_trigger" corresponds="icalvalue_get_trigger" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalTrigger *" annotation="nullable, transfer full" comment="The trigger within #ICalValue"/>
-		<comment>Gets the trigger of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_datetime" corresponds="icalvalue_set_datetime" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalTime *" name="v" comment="The datetime value"/>
-		<comment>Sets the datetime in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_datetime" corresponds="icalvalue_new_datetime" kind="constructor" since="1.0">
-		<parameter type="ICalTime *" name="v" comment="The datetime value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type datetime.</comment>
-	</method>
-	<method name="i_cal_value_get_datetime" corresponds="icalvalue_get_datetime" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalTime *" annotation="nullable, transfer full" comment="The datetime within #ICalValue"/>
-		<comment>Gets the datetime of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_datetimedate" corresponds="icalvalue_set_datetimedate" kind="set" since="3.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalTime *" name="v" comment="The datetimedate (DATE-TIME or DATE) value"/>
-		<comment>Sets the datetimedate (DATE-TIME or DATE) in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_datetimedate" corresponds="icalvalue_new_datetimedate" kind="constructor" since="3.0">
-		<parameter type="ICalTime *" name="v" comment="The DATE-TIME or DATE value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type datetimedate (DATE-TIME or DATE).</comment>
-	</method>
-	<method name="i_cal_value_get_datetimedate" corresponds="icalvalue_get_datetimedate" kind="get" since="3.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalTime *" annotation="nullable, transfer full" comment="The datetimedate within #ICalValue"/>
-		<comment>Gets the datetimedate (DATE-TIME or DATE) of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_datetimeperiod" corresponds="icalvalue_set_datetimeperiod" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalDatetimeperiod *" name="v" comment="The datetimeperiod value"/>
-		<comment>Sets the datetimeperiod in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_datetimeperiod" corresponds="icalvalue_new_datetimeperiod" kind="constructor" since="1.0">
-		<parameter type="ICalDatetimeperiod *" name="v" comment="The datetimeperiod value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type datetimeperiod.</comment>
-	</method>
-	<method name="i_cal_value_get_datetimeperiod" corresponds="icalvalue_get_datetimeperiod" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalDatetimeperiod *" annotation="nullable, transfer full" comment="The datetimeperiod within #ICalValue"/>
-		<comment>Gets the datetimeperiod of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_geo" corresponds="icalvalue_set_geo" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalGeo *" name="v" comment="The geo value"/>
-		<comment>Sets the geo in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_geo" corresponds="icalvalue_new_geo" kind="constructor" since="1.0">
-		<parameter type="ICalGeo *" name="v" comment="The geo value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type geo.</comment>
-	</method>
-	<method name="i_cal_value_get_geo" corresponds="icalvalue_get_geo" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalGeo *" annotation="nullable, transfer full" comment="The geo within #ICalValue"/>
-		<comment>Gets the geo of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_attach" corresponds="icalvalue_set_attach" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalAttach *" name="v" translator_argus="value" comment="The attach value"/>
-		<comment>Sets the attach in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_attach" corresponds="icalvalue_new_attach" kind="constructor" since="1.0">
-		<parameter type="ICalAttach *" name="v" comment="The attach value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type attach.</comment>
-	</method>
-	<method name="i_cal_value_get_attach" corresponds="icalvalue_get_attach" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalAttach *" annotation="nullable, transfer full" translator_argus="(GObject *)value" comment="The attach within #ICalValue"/>
-		<comment>Gets the attach of #ICalValue.</comment>
-	</method>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="X" since="1.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="x"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="RECUR" since="1.0"
+		value-get-type="ICalRecurrence *" value-set-type="const ICalRecurrence *" value-set-type-ref="#ICalRecurrence" value-get-annotation="transfer full" value-get-translator-argus="(GObject *)self"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="recur"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TRIGGER" since="1.0"
+		value-get-type="ICalTrigger *" value-set-type="const ICalTrigger *" value-set-type-ref="#ICalTrigger" value-get-annotation="transfer full"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="trigger"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATETIME" since="1.0"
+		value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="datetime"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATETIMEDATE" since="3.0"
+		value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="datetimedate"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATETIMEPERIOD" since="1.0"
+		value-get-type="ICalDatetimeperiod *" value-set-type="const ICalDatetimeperiod *" value-set-type-ref="#ICalDatetimeperiod" value-get-annotation="transfer full"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="datetimeperiod"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="GEO" since="1.0"
+		value-get-type="ICalGeo *" value-set-type="const ICalGeo *" value-set-type-ref="#ICalGeo" value-get-annotation="transfer full"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="geo"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="ATTACH" since="1.0"
+		value-get-type="ICalAttach *" value-set-type="const ICalAttach *" value-set-type-ref="#ICalAttach" value-get-annotation="transfer full"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="attach"/>
 	<method name="i_cal_value_reset_kind" corresponds="icalvalue_reset_kind" kind="other" since="1.0">
 		<parameter type="ICalValue *" name="value" comment="The #ICalValue's kind to be reset"/>
 		<comment>Resets the kind of #ICalValue.</comment>
 	</method>
-	<method name="i_cal_value_set_xlicclass" corresponds="icalvalue_set_xlicclass" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyXlicclass" name="v" comment="The xlicclass value"/>
-		<comment>Sets the xlicclass in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_xlicclass" corresponds="icalvalue_new_xlicclass" kind="constructor" since="1.0">
-		<parameter type="ICalPropertyXlicclass" name="v" comment="The xlicclass value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type xlicclass.</comment>
-	</method>
-	<method name="i_cal_value_get_xlicclass" corresponds="icalvalue_get_xlicclass" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyXlicclass" comment="The xlicclass within #ICalValue"/>
-		<comment>Gets the xlicclass of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_boolean" corresponds="icalvalue_set_boolean" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="gint" name="v" comment="The boolean value"/>
-		<comment>Sets the boolean in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_boolean" corresponds="icalvalue_new_boolean" kind="constructor" since="1.0">
-		<parameter type="gint" name="v" comment="The boolean value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type boolean.</comment>
-	</method>
-	<method name="i_cal_value_get_boolean" corresponds="icalvalue_get_boolean" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="gint" comment="The boolean within #ICalValue"/>
-		<comment>Gets the boolean of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_busytype" corresponds="icalvalue_set_busytype" kind="set" since="2.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyBusytype" name="v" comment="The busytype value"/>
-		<comment>Sets the busytype in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_busytype" corresponds="icalvalue_new_busytype" kind="constructor" since="2.0">
-		<parameter type="ICalPropertyBusytype" name="v" comment="The busytype value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type busytype.</comment>
-	</method>
-	<method name="i_cal_value_get_busytype" corresponds="icalvalue_get_busytype" kind="get" since="2.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyBusytype" comment="The busytype within #ICalValue"/>
-		<comment>Gets the busytype of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_pollcompletion" corresponds="icalvalue_set_pollcompletion" kind="set" since="2.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyPollcompletion" name="v" comment="The pollcompletion value"/>
-		<comment>Sets the pollcompletion in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_pollcompletion" corresponds="icalvalue_new_pollcompletion" kind="constructor" since="2.0">
-		<parameter type="ICalPropertyPollcompletion" name="v" comment="The pollcompletion value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type pollcompletion.</comment>
-	</method>
-	<method name="i_cal_value_get_pollcompletion" corresponds="icalvalue_get_pollcompletion" kind="get" since="2.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyPollcompletion" comment="The pollcompletion within #ICalValue"/>
-		<comment>Gets the pollcompletion of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_taskmode" corresponds="icalvalue_set_taskmode" kind="set" since="2.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyTaskmode" name="v" comment="The taskmode value"/>
-		<comment>Sets the taskmode in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_taskmode" corresponds="icalvalue_new_taskmode" kind="constructor" since="2.0">
-		<parameter type="ICalPropertyTaskmode" name="v" comment="The taskmode value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type taskmode.</comment>
-	</method>
-	<method name="i_cal_value_get_taskmode" corresponds="icalvalue_get_taskmode" kind="get" since="2.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyTaskmode" comment="The taskmode within #ICalValue"/>
-		<comment>Gets the taskmode of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_pollmode" corresponds="icalvalue_set_pollmode" kind="set" since="2.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyPollmode" name="v" comment="The pollmode value"/>
-		<comment>Sets the pollmode in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_pollmode" corresponds="icalvalue_new_pollmode" kind="constructor" since="2.0">
-		<parameter type="ICalPropertyPollmode" name="v" comment="The pollmode value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type pollmode.</comment>
-	</method>
-	<method name="i_cal_value_get_pollmode" corresponds="icalvalue_get_pollmode" kind="get" since="2.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyPollmode" comment="The pollmode within #ICalValue"/>
-		<comment>Gets the pollmode of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_utcoffset" corresponds="icalvalue_set_utcoffset" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="gint" name="v" comment="The utcoffset value"/>
-		<comment>Sets the utcoffset in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_utcoffset" corresponds="icalvalue_new_utcoffset" kind="constructor" since="1.0">
-		<parameter type="gint" name="v" comment="The utcoffset value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type utcoffset.</comment>
-	</method>
-	<method name="i_cal_value_get_utcoffset" corresponds="icalvalue_get_utcoffset" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="gint" comment="The utcoffset within #ICalValue"/>
-		<comment>Gets the utcoffset of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_method" corresponds="icalvalue_set_method" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyMethod" name="v" comment="The method value"/>
-		<comment>Sets the method in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_method" corresponds="icalvalue_new_method" kind="constructor" since="1.0">
-		<parameter type="ICalPropertyMethod" name="v" comment="The method value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type method.</comment>
-	</method>
-	<method name="i_cal_value_get_method" corresponds="icalvalue_get_method" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyMethod" comment="The method within #ICalValue"/>
-		<comment>Gets the method of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_participanttype" corresponds="icalvalue_new_participanttype" kind="constructor" since="4.0">
-		<parameter type="ICalPropertyParticipanttype" name="v" comment="An initial value for the new #ICalValue"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue." />
-		<comment xml:space="preserve">Creates a new #ICalValue of kind %I_CAL_PARTICIPANTTYPE_VALUE holding value @v of type #ICalPropertyParticipanttype</comment>
-	</method>
-	<method name="i_cal_value_get_participanttype" corresponds="icalvalue_get_participanttype" kind="get" since="4.0">
-		<parameter type="const ICalValue *" name="val" comment="An #ICalValue to be queried"/>
-		<returns type="ICalPropertyParticipanttype" comment="The value of the @val of type #ICalPropertyParticipanttype"/>
-		<comment xml:space="preserve">Gets value of the @val of kind %I_CAL_PARTICIPANTTYPE_VALUE</comment>
-	</method>
-	<method name="i_cal_value_set_participanttype" corresponds="icalvalue_set_participanttype" kind="set" since="4.0">
-		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
-		<parameter type="ICalPropertyParticipanttype" name="v" comment="The value of type #ICalPropertyParticipanttype to be set"/>
-		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_PARTICIPANTTYPE_VALUE</comment>
-	</method>
-	<method name="i_cal_value_new_proximity" corresponds="icalvalue_new_proximity" kind="constructor" since="4.0">
-		<parameter type="ICalPropertyProximity" name="v" comment="An initial value for the new #ICalValue"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue." />
-		<comment xml:space="preserve">Creates a new #ICalValue of kind %I_CAL_PROXIMITY_VALUE holding value @v of type #ICalPropertyProximity</comment>
-	</method>
-	<method name="i_cal_value_get_proximity" corresponds="icalvalue_get_proximity" kind="get" since="4.0">
-		<parameter type="const ICalValue *" name="val" comment="An #ICalValue to be queried"/>
-		<returns type="ICalPropertyProximity" comment="The value of the @val of type #ICalPropertyProximity"/>
-		<comment xml:space="preserve">Gets value of the @val of kind %I_CAL_PROXIMITY_VALUE</comment>
-	</method>
-	<method name="i_cal_value_set_proximity" corresponds="icalvalue_set_proximity" kind="set" since="4.0">
-		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
-		<parameter type="ICalPropertyProximity" name="v" comment="The value of type #ICalPropertyProximity to be set"/>
-		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_PROXIMITY_VALUE</comment>
-	</method>
-	<method name="i_cal_value_new_resourcetype" corresponds="icalvalue_new_resourcetype" kind="constructor" since="4.0">
-		<parameter type="ICalPropertyResourcetype" name="v" comment="An initial value for the new #ICalValue"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue." />
-		<comment xml:space="preserve">Creates a new #ICalValue of kind %I_CAL_RESOURCETYPE_VALUE holding value @v of type #ICalPropertyResourcetype</comment>
-	</method>
-	<method name="i_cal_value_get_resourcetype" corresponds="icalvalue_get_resourcetype" kind="get" since="4.0">
-		<parameter type="const ICalValue *" name="val" comment="An #ICalValue to be queried"/>
-		<returns type="ICalPropertyResourcetype" comment="The value of the @val of type #ICalPropertyResourcetype"/>
-		<comment xml:space="preserve">Gets value of the @val of kind %I_CAL_RESOURCETYPE_VALUE</comment>
-	</method>
-	<method name="i_cal_value_set_resourcetype" corresponds="icalvalue_set_resourcetype" kind="set" since="4.0">
-		<parameter type="ICalValue *" name="val" comment="An #ICalValue"/>
-		<parameter type="ICalPropertyResourcetype" name="v" comment="The value of type #ICalPropertyResourcetype to be set"/>
-		<comment xml:space="preserve">Sets value @v to @val of kind %I_CAL_RESOURCETYPE_VALUE</comment>
-	</method>
-	<method name="i_cal_value_set_caladdress" corresponds="icalvalue_set_caladdress" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="const gchar *" name="v" comment="The caladdress value"/>
-		<comment>Sets the caladdress in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_caladdress" corresponds="icalvalue_new_caladdress" kind="constructor" since="1.0">
-		<parameter type="const gchar *" name="v" comment="The caladdress value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type caladdress.</comment>
-	</method>
-	<method name="i_cal_value_get_caladdress" corresponds="icalvalue_get_caladdress" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="nullable, transfer none" comment="The caladdress within #ICalValue"/>
-		<comment>Gets the caladdress of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_period" corresponds="icalvalue_set_period" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPeriod *" name="v" comment="The period value"/>
-		<comment>Sets the period in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_period" corresponds="icalvalue_new_period" kind="constructor" since="1.0">
-		<parameter type="ICalPeriod *" name="v" comment="The period value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type period.</comment>
-	</method>
-	<method name="i_cal_value_get_period" corresponds="icalvalue_get_period" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPeriod *" annotation="nullable, transfer full" comment="The period within #ICalValue"/>
-		<comment>Gets the period of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_status" corresponds="icalvalue_set_status" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyStatus" name="v" comment="The status value"/>
-		<comment>Sets the status in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_status" corresponds="icalvalue_new_status" kind="constructor" since="1.0">
-		<parameter type="ICalPropertyStatus" name="v" comment="The status value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type status.</comment>
-	</method>
-	<method name="i_cal_value_get_status" corresponds="icalvalue_get_status" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyStatus" comment="The status within #ICalValue"/>
-		<comment>Gets the status of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_binary" corresponds="icalvalue_set_binary" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="const gchar *" name="v" comment="The binary value"/>
-		<comment>Sets the binary in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_binary" corresponds="icalvalue_new_binary" kind="constructor" since="1.0">
-		<parameter type="const gchar *" name="v" comment="The binary value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type binary.</comment>
-	</method>
-	<method name="i_cal_value_get_binary" corresponds="icalvalue_get_binary" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="nullable, transfer none" comment="The binary within #ICalValue"/>
-		<comment>Gets the binary of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_text" corresponds="icalvalue_set_text" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="const gchar *" name="v" comment="The text value"/>
-		<comment>Sets the text in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_text" corresponds="icalvalue_new_text" kind="constructor" since="1.0">
-		<parameter type="const gchar *" name="v" comment="The text value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type text.</comment>
-	</method>
-	<method name="i_cal_value_get_text" corresponds="icalvalue_get_text" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="nullable, transfer none" comment="The text within #ICalValue"/>
-		<comment>Gets the text of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_duration" corresponds="icalvalue_set_duration" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalDuration *" name="v" comment="The duration value"/>
-		<comment>Sets the duration in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_duration" corresponds="icalvalue_new_duration" kind="constructor" since="1.0">
-		<parameter type="ICalDuration *" name="v" comment="The duration value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type duration.</comment>
-	</method>
-	<method name="i_cal_value_get_duration" corresponds="icalvalue_get_duration" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalDuration *" annotation="nullable, transfer full" comment="The duration within #ICalValue"/>
-		<comment>Gets the duration of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_integer" corresponds="icalvalue_set_integer" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="gint" name="v" comment="The integer value"/>
-		<comment>Sets the integer in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_integer" corresponds="icalvalue_new_integer" kind="constructor" since="1.0">
-		<parameter type="gint" name="v" comment="The integer value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type integer.</comment>
-	</method>
-	<method name="i_cal_value_get_integer" corresponds="icalvalue_get_integer" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="gint" comment="The integer within #ICalValue"/>
-		<comment>Gets the integer of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_uri" corresponds="icalvalue_set_uri" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="const gchar *" name="v" comment="The uri value"/>
-		<comment>Sets the uri in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_uri" corresponds="icalvalue_new_uri" kind="constructor" since="1.0">
-		<parameter type="const gchar *" name="v" comment="The uri value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type uri.</comment>
-	</method>
-	<method name="i_cal_value_get_uri" corresponds="icalvalue_get_uri" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="nullable, transfer none" comment="The uri within #ICalValue"/>
-		<comment>Gets the uri of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_class" corresponds="icalvalue_set_class" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalProperty_Class" name="v" comment="The class value"/>
-		<comment>Sets the class in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_class" corresponds="icalvalue_new_class" kind="constructor" since="1.0">
-		<parameter type="ICalProperty_Class" name="v" comment="The class value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type class.</comment>
-	</method>
-	<method name="i_cal_value_get_class" corresponds="icalvalue_get_class" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalProperty_Class" comment="The class within #ICalValue"/>
-		<comment>Gets the class of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_float" corresponds="icalvalue_set_float" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="gdouble" name="v" comment="The float value"/>
-		<comment>Sets the float in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_float" corresponds="icalvalue_new_float" kind="constructor" since="1.0">
-		<parameter type="gdouble" name="v" comment="The float value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type float.</comment>
-	</method>
-	<method name="i_cal_value_get_float" corresponds="icalvalue_get_float" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="gdouble" comment="The float within #ICalValue"/>
-		<comment>Gets the float of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_query" corresponds="icalvalue_set_query" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="const gchar *" name="v" comment="The query value"/>
-		<comment>Sets the query in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_query" corresponds="icalvalue_new_query" kind="constructor" since="1.0">
-		<parameter type="const gchar *" name="v" comment="The query value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type query.</comment>
-	</method>
-	<method name="i_cal_value_get_query" corresponds="icalvalue_get_query" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="nullable, transfer none" comment="The query within #ICalValue"/>
-		<comment>Gets the query of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_string" corresponds="icalvalue_set_string" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="const gchar *" name="v" comment="The string value"/>
-		<comment>Sets the string in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_string" corresponds="icalvalue_new_string" kind="constructor" since="1.0">
-		<parameter type="const gchar *" name="v" comment="The string value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type string.</comment>
-	</method>
-	<method name="i_cal_value_get_string" corresponds="icalvalue_get_string" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="const gchar *" annotation="nullable, transfer none" comment="The string within #ICalValue"/>
-		<comment>Gets the string of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_transp" corresponds="icalvalue_set_transp" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyTransp" name="v" comment="The transp value"/>
-		<comment>Sets the transp in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_transp" corresponds="icalvalue_new_transp" kind="constructor" since="1.0">
-		<parameter type="ICalPropertyTransp" name="v" comment="The transp value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type transp.</comment>
-	</method>
-	<method name="i_cal_value_get_transp" corresponds="icalvalue_get_transp" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyTransp" comment="The transp within #ICalValue"/>
-		<comment>Gets the transp of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_requeststatus" corresponds="icalvalue_set_requeststatus" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalReqstat *" name="v" comment="The requeststatus value"/>
-		<comment>Sets the requeststatus in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_requeststatus" corresponds="icalvalue_new_requeststatus" kind="constructor" since="1.0">
-		<parameter type="ICalReqstat *" name="v" comment="The requeststatus value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type requeststatus.</comment>
-	</method>
-	<method name="i_cal_value_get_requeststatus" corresponds="icalvalue_get_requeststatus" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalReqstat *" annotation="nullable, transfer full" comment="The requeststatus within #ICalValue"/>
-		<comment>Gets the requeststatus of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_date" corresponds="icalvalue_set_date" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalTime *" name="v" comment="The date value"/>
-		<comment>Sets the date in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_date" corresponds="icalvalue_new_date" kind="constructor" since="1.0">
-		<parameter type="ICalTime *" name="v" comment="The date value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type date.</comment>
-	</method>
-	<method name="i_cal_value_get_date" corresponds="icalvalue_get_date" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalTime *" annotation="nullable, transfer full" comment="The date within #ICalValue"/>
-		<comment>Gets the date of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_action" corresponds="icalvalue_set_action" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyAction" name="v" comment="The action value"/>
-		<comment>Sets the action in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_action" corresponds="icalvalue_new_action" kind="constructor" since="1.0">
-		<parameter type="ICalPropertyAction" name="v" comment="The action value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type action.</comment>
-	</method>
-	<method name="i_cal_value_get_action" corresponds="icalvalue_get_action" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyAction" comment="The action within #ICalValue"/>
-		<comment>Gets the action of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_cmd" corresponds="icalvalue_set_cmd" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyCmd" name="v" comment="The cmd value"/>
-		<comment>Sets the cmd in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_cmd" corresponds="icalvalue_new_cmd" kind="constructor" since="1.0">
-		<parameter type="ICalPropertyCmd" name="v" comment="The cmd value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type cmd.</comment>
-	</method>
-	<method name="i_cal_value_get_cmd" corresponds="icalvalue_get_cmd" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyCmd" comment="The cmd within #ICalValue"/>
-		<comment>Gets the cmd of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_querylevel" corresponds="icalvalue_set_querylevel" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyQuerylevel" name="v" comment="The querylevel value"/>
-		<comment>Sets the querylevel in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_querylevel" corresponds="icalvalue_new_querylevel" kind="constructor" since="1.0">
-		<parameter type="ICalPropertyQuerylevel" name="v" comment="The querylevel value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type querylevel.</comment>
-	</method>
-	<method name="i_cal_value_get_querylevel" corresponds="icalvalue_get_querylevel" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyQuerylevel" comment="The querylevel within #ICalValue"/>
-		<comment>Gets the querylevel of #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_set_carlevel" corresponds="icalvalue_set_carlevel" kind="set" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue"/>
-		<parameter type="ICalPropertyCarlevel" name="v" comment="The carlevel value"/>
-		<comment>Sets the carlevel in the #ICalValue.</comment>
-	</method>
-	<method name="i_cal_value_new_carlevel" corresponds="icalvalue_new_carlevel" kind="constructor" since="1.0">
-		<parameter type="ICalPropertyCarlevel" name="v" comment="The carlevel value"/>
-		<returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-		<comment>Creates a new #ICalValue with the type carlevel.</comment>
-	</method>
-	<method name="i_cal_value_get_carlevel" corresponds="icalvalue_get_carlevel" kind="get" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue to be queried"/>
-		<returns type="ICalPropertyCarlevel" comment="The carlevel within #ICalValue"/>
-		<comment>Gets the carlevel of #ICalValue.</comment>
-	</method>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="XLICCLASS" since="1.0"
+		value-get-type="ICalPropertyXlicclass" value-set-type="ICalPropertyXlicclass" value-set-type-ref="#ICalPropertyXlicclass"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="xlicclass"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BOOLEAN" since="1.0"
+		value-get-type="gboolean" value-set-type="gboolean" value-set-type-ref="boolean"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="boolean"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BUSYTYPE" since="2.0"
+		value-get-type="ICalPropertyBusytype" value-set-type="ICalPropertyBusytype" value-set-type-ref="#ICalPropertyBusytype"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="busytype"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="POLLCOMPLETION" since="2.0"
+		value-get-type="ICalPropertyPollcompletion" value-set-type="ICalPropertyPollcompletion" value-set-type-ref="#ICalPropertyPollcompletion"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="pollcompletion"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TASKMODE" since="2.0"
+		value-get-type="ICalPropertyTaskmode" value-set-type="ICalPropertyTaskmode" value-set-type-ref="#ICalPropertyTaskmode"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="taskmode"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="POLLMODE" since="2.0"
+		value-get-type="ICalPropertyPollmode" value-set-type="ICalPropertyPollmode" value-set-type-ref="#ICalPropertyPollmode"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="pollmode"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="UTCOFFSET" since="1.0"
+		value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="utcoffset"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="METHOD" since="1.0"
+		value-get-type="ICalPropertyMethod" value-set-type="ICalPropertyMethod" value-set-type-ref="#ICalPropertyMethod"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="method"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="PARTICIPANTTYPE" since="4.0"
+		value-get-type="ICalPropertyParticipanttype" value-set-type="ICalPropertyParticipanttype" value-set-type-ref="#ICalPropertyParticipanttype"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="participanttype"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="PROXIMITY" since="4.0"
+		value-get-type="ICalPropertyProximity" value-set-type="ICalPropertyProximity" value-set-type-ref="#ICalPropertyProximity"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="proximity"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="RESOURCETYPE" since="4.0"
+		value-get-type="ICalPropertyResourcetype" value-set-type="ICalPropertyResourcetype" value-set-type-ref="#ICalPropertyResourcetype"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="resourcetype"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CALADDRESS" since="1.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="caladdress"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="PERIOD" since="1.0"
+		value-get-type="ICalPeriod *" value-set-type="const ICalPeriod *" value-set-type-ref="#ICalPeriod" value-get-annotation="transfer full"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="period"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="STATUS" since="1.0"
+		value-get-type="ICalPropertyStatus" value-set-type="ICalPropertyStatus" value-set-type-ref="#ICalPropertyStatus"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="status"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BINARY" since="1.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="binary"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TEXT" since="1.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="text"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DURATION" since="1.0"
+		value-get-type="ICalDuration *" value-set-type="const ICalDuration *" value-set-type-ref="#ICalDuration" value-get-annotation="transfer full"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="duration"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="INTEGER" since="1.0"
+		value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="integer"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="UID" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="uid"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="URI" since="1.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="uri"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CLASS" since="1.0"
+		value-get-type="ICalPropertyClassenum" value-set-type="ICalPropertyClassenum" value-set-type-ref="#ICalPropertyClassenum"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="class"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="FLOAT" since="1.0"
+		value-get-type="gdouble" value-set-type="gdouble" value-set-type-ref="float"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="float"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="QUERY" since="1.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="query"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="STRING" since="1.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="string"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TRANSP" since="1.0"
+		value-get-type="ICalPropertyTransp" value-set-type="ICalPropertyTransp" value-set-type-ref="#ICalPropertyTransp"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="transp"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="REQUESTSTATUS" since="1.0"
+		value-get-type="ICalReqstat *" value-set-type="const ICalReqstat *" value-set-type-ref="#ICalReqstat" value-get-annotation="transfer full"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="requeststatus"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATE" since="1.0"
+		value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="date"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="ACTION" since="1.0"
+		value-get-type="ICalPropertyAction" value-set-type="ICalPropertyAction" value-set-type-ref="#ICalPropertyAction"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="action"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CMD" since="1.0"
+		value-get-type="ICalPropertyCmd" value-set-type="ICalPropertyCmd" value-set-type-ref="#ICalPropertyCmd"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="cmd"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="QUERYLEVEL" since="1.0"
+		value-get-type="ICalPropertyQuerylevel" value-set-type="ICalPropertyQuerylevel" value-set-type-ref="#ICalPropertyQuerylevel"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="querylevel"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CARLEVEL" since="1.0"
+		value-get-type="ICalPropertyCarlevel" value-set-type="ICalPropertyCarlevel" value-set-type-ref="#ICalPropertyCarlevel"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="carlevel"/>
+	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="XMLREFERENCE" since="4.0"
+		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
+		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="xmlreference"/>
 </structure>

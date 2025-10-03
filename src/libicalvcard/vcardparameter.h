@@ -1,12 +1,9 @@
 /*======================================================================
  FILE: vcardparameter.h
-
  CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
 
  SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifndef VCARDPARAMETER_H
@@ -256,7 +253,7 @@ LIBICAL_VCARD_EXPORT char *vcardparameter_as_vcard_string_r(vcardparameter *para
  * vcardparameter_free(param);
  * @endcode
  */
-LIBICAL_VCARD_EXPORT vcardparameter_kind vcardparameter_isa(vcardparameter *parameter);
+LIBICAL_VCARD_EXPORT vcardparameter_kind vcardparameter_isa(const vcardparameter *parameter);
 
 /**
  * Determines if the given param is an vcardparameter
@@ -343,7 +340,7 @@ LIBICAL_VCARD_EXPORT void vcardparameter_set_xname(vcardparameter *param, const 
  * vcardparameter_free(param);
  * ```
  */
-LIBICAL_VCARD_EXPORT const char *vcardparameter_get_xname(vcardparameter *param);
+LIBICAL_VCARD_EXPORT const char *vcardparameter_get_xname(const vcardparameter *param);
 
 /**
  * @brief Sets the X-value of @a param to @a v
@@ -405,7 +402,7 @@ LIBICAL_VCARD_EXPORT void vcardparameter_set_xvalue(vcardparameter *param, const
  * vcardparameter_free(param);
  * ```
  */
-LIBICAL_VCARD_EXPORT const char *vcardparameter_get_xvalue(vcardparameter *param);
+LIBICAL_VCARD_EXPORT const char *vcardparameter_get_xvalue(const vcardparameter *param);
 
 /* Access the name of an IANA parameter */
 
@@ -467,7 +464,7 @@ LIBICAL_VCARD_EXPORT void vcardparameter_set_iana_name(vcardparameter *param, co
  * vcardparameter_free(param);
  * ```
  */
-LIBICAL_VCARD_EXPORT const char *vcardparameter_get_iana_name(vcardparameter *param);
+LIBICAL_VCARD_EXPORT const char *vcardparameter_get_iana_name(const vcardparameter *param);
 
 /**
  * @brief Sets the IANA value of @a param to @a v
@@ -529,7 +526,7 @@ LIBICAL_VCARD_EXPORT void vcardparameter_set_iana_value(vcardparameter *param, c
  * vcardparameter_free(param);
  * ```
  */
-LIBICAL_VCARD_EXPORT const char *vcardparameter_get_iana_value(vcardparameter *param);
+LIBICAL_VCARD_EXPORT const char *vcardparameter_get_iana_value(const vcardparameter *param);
 
 /**
  * @brief Determines if two parameters have the same name
@@ -558,7 +555,7 @@ LIBICAL_VCARD_EXPORT const char *vcardparameter_get_iana_value(vcardparameter *p
  * vcardparameter_free(param2);
  * ```
  */
-LIBICAL_VCARD_EXPORT bool vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2);
+LIBICAL_VCARD_EXPORT bool vcardparameter_has_same_name(const vcardparameter *param1, const vcardparameter *param2);
 
 /* Convert enumerations */
 
@@ -622,8 +619,8 @@ LIBICAL_VCARD_EXPORT bool vcardparameter_kind_is_valid(const vcardparameter_kind
 LIBICAL_VCARD_EXPORT vcardvalue_kind vcardparameter_kind_value_kind(const vcardparameter_kind kind,
                                                                     int *is_multivalued);
 
-LIBICAL_VCARD_EXPORT bool vcardparameter_is_multivalued(vcardparameter *param);
+LIBICAL_VCARD_EXPORT bool vcardparameter_is_multivalued(const vcardparameter *param);
 
-LIBICAL_VCARD_EXPORT bool vcardparameter_is_structured(vcardparameter *param);
+LIBICAL_VCARD_EXPORT bool vcardparameter_is_structured(const vcardparameter *param);
 
 #endif

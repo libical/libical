@@ -1,0 +1,28 @@
+<!--
+  SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<structure namespace="ICalVcard" name="Restriction">
+	<enum name="ICalVcardRestrictionKind" native_name="vcardrestriction_kind" default_native="I_CAL_VCARD_RESTRICTION_UNKNOWN">
+		<element name="VCARD_RESTRICTION_NONE"/>
+		<element name="VCARD_RESTRICTION_ZERO"/>
+		<element name="VCARD_RESTRICTION_ONE"/>
+		<element name="VCARD_RESTRICTION_ZEROPLUS"/>
+		<element name="VCARD_RESTRICTION_ONEPLUS"/>
+		<element name="VCARD_RESTRICTION_ZEROORONE"/>
+		<element name="VCARD_RESTRICTION_ONEEXCLUSIVE"/>
+		<element name="VCARD_RESTRICTION_ONEMUTUAL"/>
+		<element name="VCARD_RESTRICTION_UNKNOWN"/>
+	</enum>
+	<method name="i_cal_vcard_restriction_compare" corresponds="vcardrestriction_compare" kind="" since="1.0">
+		<parameter type="ICalVcardRestrictionKind" name="restr" comment="The restriction kind"/>
+		<parameter type="gint" name="count" comment="The number of restrictions"/>
+		<returns type="gint" comment="1 if the restriction is met, 0 if not."/>
+		<comment xml:space="preserve">Checks if the given @count is in accordance with the given restriction, @restr.</comment>
+	</method>
+	<method name="i_cal_vcard_restriction_check" corresponds="vcardrestriction_check" since="1.0">
+		<parameter type="ICalVcardComponent *" name="comp" comment="The component to be checked"/>
+		<returns type="gint" comment="Whether the @comp is valid."/>
+		<comment xml:space="preserve">Checks whether the @comp is valid.</comment>
+	</method>
+</structure>

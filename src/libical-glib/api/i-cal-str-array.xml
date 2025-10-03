@@ -1,0 +1,62 @@
+<!--
+  SPDX-FileCopyrightText: 2025 Allen Winter <winter@kde.org>
+
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+
+ <structure namespace="ICal" name="StrArray" native="icalstrarray" destroy_func="icalstrarray_free">
+	<method name="i_cal_str_array_new" corresponds="icalstrarray_new" kind="constructor" since="4.0">
+		<parameter type="gint" name="increment_size" comment="how many slots to allocate on array expansion"/>
+		<returns type="ICalStrArray *" annotation="transfer full" comment="a new #ICalStrArray."/>
+		<comment>Creates a new #ICalStrArray.</comment>
+	</method>
+	<method name="i_cal_str_array_get_element_at" corresponds="icalstrarray_element_at" annotation="skip" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray to be queried"/>
+		<parameter type="gsize" name="position" comment="The position the target element is located"/>
+		<returns type="const gchar *" annotation="transfer none, nullable" comment="The element located at the @position in the @array"/>
+		<comment xml:space="preserve">Gets the element located in the @position in the @array. NULL if position if out of bound.</comment>
+	</method>
+	<method name="i_cal_str_array_size" corresponds="icalstrarray_size" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray"/>
+		<returns type="gsize" error_return_value="((gsize)-1)" comment="The size of current array."/>
+		<comment>Gets the size of the array.</comment>
+	</method>
+	<method name="i_cal_str_array_find" corresponds="icalstrarray_find" annotation="skip" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray"/>
+		<parameter type="const gchar *" name="value" comment="The value to search for"/>
+		<returns type="gsize" error_return_value="((gsize)-1)" comment="The index of the value in the @array, or an index out of bounds, if not found."/>
+		<comment xml:space="preserve">Searches for a value in the @array and returns its first index.</comment>
+	</method>
+	<method name="i_cal_str_array_append" corresponds="icalstrarray_append" annotation="skip" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray"/>
+		<parameter type="const gchar *" name="value" comment="The value to append"/>
+		<comment xml:space="preserve">Appends the @value into the @array, not checking for duplicates. See also i_cal_str_array_add().</comment>
+	</method>
+	<method name="i_cal_str_array_add" corresponds="icalstrarray_add" annotation="skip" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray"/>
+		<parameter type="const gchar *" name="value" comment="The value to add"/>
+		<comment xml:space="preserve">Adds the @value into the @array, omitting duplicates. See also i_cal_str_array_append().</comment>
+	</method>
+	<method name="i_cal_str_array_remove_element_at" corresponds="icalstrarray_remove_element_at" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array"  comment="The #ICalStrArray to be modified"/>
+		<parameter type="gsize" name="position" comment="The position in which the element will be removed from the array"/>
+		<comment xml:space="preserve">Removes the element at the @position from the @array.</comment>
+	</method>
+	<method name="i_cal_str_array_remove" corresponds="icalstrarray_remove" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array"  comment="The #ICalStrArray to be modified"/>
+		<parameter type="const gchar *" name="value" comment="The value to remove."/>
+		<comment xml:space="preserve">Removes all the occurrences of the @value in the @array.</comment>
+	</method>
+	<method name="i_cal_str_array_free" corresponds="icalstrarray_free" annotation="skip" kind="destructor" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray to be freed"/>
+		<comment xml:space="preserve">Frees the #ICalStrArray.</comment>
+	</method>
+	<method name="i_cal_str_array_sort" corresponds="icalstrarray_sort" annotation="skip" kind="other" since="4.0">
+		<parameter type="ICalStrArray *" name="array" comment="The #ICalStrArray to be sorted"/>
+	</method>
+	<method name="i_cal_str_array_clone" corresponds="icalstrarray_clone" kind="clone" since="4.0">
+		<parameter type="ICalStrArray *" name="array" annotation="in" comment="The #ICalStrArray to be cloned"/>
+		<returns type="ICalStrArray *" annotation="transfer full" translator_argus="NULL" comment="The newly cloned #ICalStrArray with the same value as the @array"/>
+		<comment xml:space="preserve">Creates a deep copy of #ICalStrArray with the same properties as the @array.</comment>
+	</method>
+</structure>

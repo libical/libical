@@ -3,9 +3,6 @@
  CREATOR: eric 03 April 1999
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
- DESCRIPTION:
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original author is Eric Busboom
@@ -49,10 +46,12 @@ int vcalendar_init(struct calendar **cal, const char *vcalendar, const char *tit
 #if defined(HAVE_BDB)
 #include <db.h>
 
+/*
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey);
+*/
 char *parse_vcalendar(const DBT *dbt);
 char *pack_calendar(struct calendar *cal, size_t size);
-struct calendar *unpack_calendar(char *str, size_t size);
+struct calendar *unpack_calendar(const char *str, size_t size);
 #endif
 
 /*
@@ -291,8 +290,10 @@ void test_bdbset(void)
 
     return; // for now... TODO fix these broken tests..
 
+#if defined(__clang__)
 #pragma clang diagnostic push /* remove when/if we remove the proceeding return statement */
 #pragma clang diagnostic ignored "-Wunreachable-code"
+#endif
     start = icaltime_from_timet_with_zone(time(0), 0, NULL);
     end = start;
     end.hour++;
@@ -351,12 +352,6 @@ void test_bdbset(void)
 
         assert(icalcomponent_get_first_property(event, ICAL_LOCATION_PROPERTY) != 0);
 
-#if 0
-        /* change the uid to include the month */
-        sprintf(uid, "%s_%d", icalcomponent_get_uid(clone), month);
-        icalcomponent_set_uid(clone, uid);
-#endif
-
         (void)icalbdbset_add_component(cout, clone);
 
         /* commit changes */
@@ -371,12 +366,6 @@ void test_bdbset(void)
     memset(&key, 0, sizeof(DBT));
     memset(&data, 0, sizeof(DBT));
 
-#if 0
-    ret = icalbdbset_acquire_cursor(dbp, &dbcp);
-    ret = icalbdbset_get_first(dbcp, &key, &data);
-    ret = icalbdbset_get_next(dbcp, &key, &data);
-    ret = icalbdbset_get_last(dbcp, &key, &data);
-#endif
     /* Print them out */
 
     for (month = 1, count = 0; month < 10; month++) {
@@ -437,7 +426,9 @@ void test_bdbset(void)
         }
         icalset_free(cout);
     }
+#if defined(__clang__)
 #pragma clang diagnostic pop
+#endif
 }
 
 #endif
@@ -480,11 +471,13 @@ int vcalendar_init(struct calendar **rcal, const char *vcalendar, const char *ti
     cal->vcalendar_size = vcalendar_size;
     cal->title_size = title_size;
 
-    if (*vcalendar) /* we know that vcalendar is not NULL here */
+    if (*vcalendar) { /* we know that vcalendar is not NULL here */
         cal->vcalendar = strdup(vcalendar);
+    }
 
-    if (*title) /* we know that title is not NULL here */
+    if (*title) { /* we know that title is not NULL here */
         cal->title = strdup(title);
+    }
 
     *rcal = cal;
 
@@ -496,7 +489,7 @@ int vcalendar_init(struct calendar **rcal, const char *vcalendar, const char *ti
 
 /* just create a random title for now */
 #if defined(HAVE_BDB)
-
+/*
 int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
 {
     icalcomponent *cl;
@@ -505,6 +498,9 @@ int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
     _unused(dbp);
     _unused(pkey);
 
+    if (!skey) {
+        return -1;
+    }
     memset(skey, 0, sizeof(DBT));
 
     cl = icalparser_parse_string((char *)pdata->data);
@@ -512,15 +508,16 @@ int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
 
     skey->data = strdup(title);
     skey->size = (u_int32_t)strlen(skey->data);
-    return (0);
+    return 0;
 }
-
+*/
 char *pack_calendar(struct calendar *cal, size_t size)
 {
     char *str;
 
-    if ((str = (char *)malloc(sizeof(char) * size)) == NULL)
+    if ((str = (char *)malloc(sizeof(char) * size)) == NULL) {
         return 0;
+    }
 
     /* ID */
     memcpy(str, &cal->ID, sizeof(cal->ID));
@@ -543,7 +540,7 @@ char *pack_calendar(struct calendar *cal, size_t size)
     return str;
 }
 
-struct calendar *unpack_calendar(char *str, size_t size)
+struct calendar *unpack_calendar(const char *str, size_t size)
 {
     struct calendar *cal;
 
@@ -600,9 +597,12 @@ char *parse_vcalendar(const DBT *dbt)
     str = (char *)dbt->data;
     cal = unpack_calendar(str, dbt->size);
 
-    str = cal->vcalendar;
-    free(cal);
-    return str;
+    if (cal) {
+        str = cal->vcalendar;
+        free(cal);
+        return str;
+    }
+    return NULL;
 }
 
 #endif
@@ -691,8 +691,9 @@ void test_dirset_extended(void)
             ok("Setting DTEND property", (icalerrno == ICAL_NO_ERROR));
             assert(icalerrno == ICAL_NO_ERROR);
 
-            if (VERBOSE)
+            if (VERBOSE) {
                 printf("\n----------\n%s\n---------\n", icalcomponent_as_ical_string(inner));
+            }
 
             error = icaldirset_add_component(s, icalcomponent_clone(itr));
 

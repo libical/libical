@@ -144,13 +144,13 @@ icalerror_set_error_state(error,icalerrorstate );
 icalerror_get_error_state(error);
         [ returns icalerrorstate  ]
 
-icalenum_property_kind_to_string(kind);
+icalproperty_kind_to_string(kind);
         [ returns char * ]
 
-icalenum_string_to_property_kind(string);
+icalproperty_string_to_kind(string);
         [ returns icalproperty_kind  ]
 
-icalenum_value_kind_to_string(kind);
+icalvalue_kind_to_string(kind);
         [ returns char * ]
         icalvalue_kind icalenum_value_kind_by_prop(icalproperty_kind kind);
 
@@ -161,13 +161,13 @@ icalenum_parameter_kind_to_string(kind);
 icalenum_string_to_parameter_kind(string);
         [ returns icalparameter_kind  ]
 
-icalenum_component_kind_to_string(kind);
+icalcomponent_kind_to_string(kind);
         [ returns char * ]
 
-icalenum_string_to_component_kind(string);
+icalcomponent_string_to_kind(string);
         [ returns icalcomponent_kind  ]
 
-icalenum_property_kind_to_value_kind(kind);
+icalproperty_kind_to_value_kind(kind);
         [ returns icalvalue_kind  ]
 
 icallangbind_new_array(size);
@@ -333,13 +333,13 @@ icaldurationtype_seconds_get(struct icaldurationtype *);
 
 ----------
 
-icaldurationtype_from_int(t);
+icaldurationtype_from_seconds(t);
         [ returns struct icaldurationtype  ]
 
 icaldurationtype_from_string(char *);
         [ returns struct icaldurationtype  ]
 
-icaldurationtype_as_int(duration);
+icaldurationtype_as_seconds(duration);
         [ returns int  ]
 
 icaldurationtype_as_ical_string(d);
@@ -351,10 +351,10 @@ icaldurationtype_null_duration();
 icaldurationtype_is_null_duration(d);
         [ returns int  ]
 
-icaltime_add(t,d);
+icalduration_extend(t,d);
         [ returns struct icaltimetype  ]
 
-icaltime_subtract(t1,t2);
+icalduration_from_times(t1,t2);
         [ returns struct icaldurationtype  ]
 
 3.  class icalperiodtype

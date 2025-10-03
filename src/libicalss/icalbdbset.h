@@ -2,9 +2,7 @@
  FILE: icalbdbset.h
 
  SPDX-FileCopyrightText: 2001, Critical Path
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALBDBSET_H
@@ -111,7 +109,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch(icalset *set,
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_has_uid(icalset *set, const char *uid);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch_match(icalset *set, icalcomponent *c);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch_match(icalset *set, const icalcomponent *c);
 
 LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_modify(icalset *set, icalcomponent *old,
                                                       icalcomponent *newc);

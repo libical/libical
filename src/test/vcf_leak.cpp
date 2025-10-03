@@ -1,12 +1,10 @@
 /*======================================================================
  *
  * SPDX-FileCopyrightText: 2024 Contributors to the libical project <git@github.com:libical/libical>
- *
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  *
  * Based on the original code by Vladyslav in
  * https://github.com/libical/libical/issues/692
- *
  * ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -21,12 +19,11 @@
 #include <iostream>
 #include <sstream>
 #include <memory>
-#include <vector>
 
-#include "libical/ical.h"
 #include "vcc.h"
 #include "vobject.h"
 
+/* cppcheck-suppress constParameter */
 int main(int argc, char *argv[])
 {
     const char *fname;

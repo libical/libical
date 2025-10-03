@@ -2,14 +2,13 @@
 FILE: test-malloc.h
 
 SPDX-FileCopyrightText: 2018-2022, Markus Minichmayr <markus@tapkey.com>
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
+SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
 #ifndef TESTMALLOC_H
 #define TESTMALLOC_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 struct testmalloc_statistics {

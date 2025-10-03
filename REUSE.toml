@@ -5,14 +5,14 @@ SPDX-PackageDownloadLocation = "https://github.com/libical/libical"
 
 #misc documentation
 [[annotations]]
-path = ["Install.txt", "README.md", "CONTRIBUTORS.md","ReleaseNotes.txt", "book.toml", "docs/**.md", "examples/access-usecases.txt", "src/Net-ICal-Libical/README.txt", "src/php/README.txt", "src/Net-ICal-Libical/MANIFEST", "src/Net-ICal-Libical/netical_wrap.doc"]
+path = ["INSTALL.md", "README.md", "CHANGELOG.md", "CONTRIBUTORS.md", "3RDPARTY.md", "book.toml", "docs/**.md", "examples/access-usecases.txt", "src/Net-ICal-Libical/README.txt", "src/php/README.txt", "src/Net-ICal-Libical/MANIFEST", "src/Net-ICal-Libical/netical_wrap.doc"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
 
 #tool configuration files
 [[annotations]]
-path = ["REUSE.toml", ".clang-format", ".clang-tidy", ".codespellrc", ".editorconfig", ".dir-locals.el", ".gersemirc", ".gitattributes", ".gitignore", ".krazy", ".markdownlint.json", ".pre-commit-config.yaml", ".ruff.toml", ".github/workflows/*.yml", ".shellcheckrc", "vcpkg.json", "docs/reference/libical-glib/libical-glib.toml.in", "docs/Doxyfile.cmake"]
+path = ["REUSE.toml", "cppcheck-suppressions.xml", ".clangd", ".clang-format", ".clang-tidy", ".codespellrc", ".editorconfig", ".dir-locals.el", ".gersemirc", ".gitattributes", ".gitignore", ".krazy", ".markdownlint.json", ".pre-commit-config.yaml", ".ruff.toml", ".github/workflows/*.yml", ".shellcheckrc", "vcpkg.json", "docs/reference/libical-glib/libical-glib.toml.in", "docs/Doxyfile.cmake"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "BSD-3-Clause"
@@ -44,3 +44,14 @@ path = ["test-data/**", "src/test/**.out", "src/test/**.ics", "src/test/**.txt",
 precedence = "aggregate"
 SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
 SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
+
+### 3rdparty
+
+# Hiram Clawson BSD-3-Clause (see src/libical/icaldate_p.[c,h])
+
+# doxygen awesome
+[[annotations]]
+path = "docs/doxygen-awesome.css"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021 - 2023 jothepro"
+SPDX-License-Identifier = "MIT"

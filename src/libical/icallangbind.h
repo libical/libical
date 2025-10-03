@@ -3,9 +3,7 @@
  CREATOR: eric 25 jan 2001
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALLANGBIND_H
@@ -13,13 +11,12 @@
 
 #include "libical_ical_export.h"
 #include "icalcomponent.h"
-#include "icalproperty.h"
 
 LIBICAL_ICAL_EXPORT int *icallangbind_new_array(unsigned int size);
 
 LIBICAL_ICAL_EXPORT void icallangbind_free_array(int *array);
 
-LIBICAL_ICAL_EXPORT int icallangbind_access_array(int *array, int index);
+LIBICAL_ICAL_EXPORT int icallangbind_access_array(const int *array, int index);
 
 LIBICAL_ICAL_EXPORT icalproperty *icallangbind_get_first_property(icalcomponent *c,
                                                                   const char *prop);

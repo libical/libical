@@ -3,7 +3,6 @@
  CREATOR: eric 28 November 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -88,7 +87,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch(icalset *store,
 
 LIBICAL_ICALSS_EXPORT int icaldirset_has_uid(icalset *store, const char *uid);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch_match(icalset *set, icalcomponent *c);
+LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch_match(icalset *set, const icalcomponent *c);
 
 /* Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */
