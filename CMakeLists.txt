@@ -19,15 +19,10 @@
 #  Default=false (use the system timezone data on non-Windows systems)
 #  ALWAYS true on Windows systems
 #
-# -DSTATIC_ONLY=[true|false]
-#  Set to build static libraries only.
+# -DLIBICAL_STATIC=[true|false]
+#  Build static versions of the libraries.
 #  Not available for GObject Introspection and Vala "vapi"
-#  Default=false (build shared and static libs)
-#
-# -DSHARED_ONLY=[true|false]
-#  Set to build shared (dynamic) libraries only.
-#  Default=false (build shared and static libs)
-#  Takes precedence over STATIC_ONLY
+#  Default=false (build shared libraries)
 #
 # -DLIBICAL_GOBJECT_INTROSPECTION=[true|false]
 #  Set to build GObject introspection "typelib" files
@@ -225,6 +220,26 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   )
 endif()
 
+libical_deprecated_option(STATIC_ONLY LIBICAL_STATIC "Build static versions of the libraries." False)
+if(LIBICAL_STATIC)
+  set(LIBRARY_TYPE STATIC)
+endif()
+
+add_feature_info(
+  "Build type"
+  ${LIBICAL_STATIC}
+  "build static libraries"
+)
+
+if(LIBICAL_STATIC)
+  add_definitions(
+    -DLIBICAL_ICAL_STATIC_DEFINE
+    -DLIBICAL_ICALSS_STATIC_DEFINE
+    -DLIBICAL_VCAL_STATIC_DEFINE
+    -DLIBICAL_VCARD_STATIC_DEFINE
+  )
+endif()
+
 libical_deprecated_option(WITH_CXX_BINDINGS LIBICAL_CXX_BINDINGS "Build the C++ bindings." True)
 if(LIBICAL_CXX_BINDINGS)
   enable_language(CXX)
@@ -277,40 +292,22 @@ if(LIBICAL_JAVA_BINDINGS)
     )
     set(LIBICAL_JAVA_BINDINGS False)
   endif()
+  if(LIBICAL_STATIC)
+    message(
+      FATAL_ERROR
+      "You are attempting to build with Java bindings enabled, "
+      "however that option is not supported when building static libraries. "
+      "Please disable the static build option to cmake (-DLIBICAL_STATIC=False) "
+      "if you really want to build with Java bindings. Alternatively, you can disable "
+      "the Java bindings (by passing -DLIBICAL_JAVA_BINDINGS=False to cmake)."
+    )
+  endif()
 endif()
 add_feature_info(
   "Option LIBICAL_JAVA_BINDINGS"
   LIBICAL_JAVA_BINDINGS
   "build the Java bindings. Requires a java compiler"
 )
-
-libical_option(STATIC_ONLY "Build static libraries only." False)
-if(STATIC_ONLY)
-  set(LIBRARY_TYPE STATIC)
-endif()
-
-libical_option(SHARED_ONLY "Build shared (dynamic) libraries only. Takes precedence over STATIC_ONLY." False)
-if(SHARED_ONLY)
-  set(STATIC_ONLY False)
-  set(LIBRARY_TYPE SHARED)
-endif()
-
-if(NOT STATIC_ONLY AND NOT SHARED_ONLY)
-  add_feature_info(
-    "Build types"
-    TRUE
-    "build both shared and static libraries"
-  )
-endif()
-
-if(STATIC_ONLY)
-  add_definitions(
-    -DLIBICAL_ICAL_STATIC_DEFINE
-    -DLIBICAL_ICALSS_STATIC_DEFINE
-    -DLIBICAL_VCAL_STATIC_DEFINE
-    -DLIBICAL_VCARD_STATIC_DEFINE
-  )
-endif()
 
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
@@ -595,12 +592,12 @@ if(LIBICAL_GOBJECT_INTROSPECTION)
         "Needed in order to build the GObject introspection \"typelib\" files."
   )
   if(GObjectIntrospection_FOUND)
-    if(STATIC_ONLY)
+    if(LIBICAL_STATIC)
       message(
         FATAL_ERROR
         "You are attempting to build with GObject Introspection enabled, "
-        "however that option is not supported when building static libraries only. "
-        "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
+        "however that option is not supported when building static libraries. "
+        "Please disable the static build option to cmake (-DLIBICAL_STATIC=False) "
         "if you really want to build with GObject Introspection. Alternatively, "
         "you can disable GObject Introspection (by passing -DLIBICAL_GOBJECT_INTROSPECTION=False to cmake)."
       )
@@ -618,12 +615,12 @@ endif()
 # LIBICAL_GLIB_VAPI might be disabled later by some devmode options
 libical_deprecated_option(ICAL_GLIB_VAPI LIBICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
 if(LIBICAL_GLIB_VAPI)
-  if(STATIC_ONLY)
+  if(LIBICAL_STATIC)
     message(
       FATAL_ERROR
       "You are attempting to build the Vala api, however that option is not supported "
-      "when building static libraries only. "
-      "Please disable the static only option (-DSTATIC_ONLY=False) "
+      "when building static libraries. "
+      "Please disable the static build option (-DLIBICAL_STATIC=False) "
       "if you really want to build the Vala api. Alternatively, "
       "you can disable this feature (by passing -DLIBICAL_GLIB_VAPI=False to cmake)."
     )
@@ -844,7 +841,7 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
     endif()
-    set(SHARED_ONLY True)
+    set(LIBRARY_TYPE SHARED)
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -858,7 +855,7 @@ if(LIBICAL_DEVMODE_LEAK_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
     endif()
-    set(SHARED_ONLY True)
+    set(LIBRARY_TYPE SHARED)
     message(
       NOTICE
       "Currently unable to build leak sanitizer for glib-based configurations."
@@ -887,7 +884,7 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
         "${CMAKE_CXX_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
       )
     endif()
-    set(SHARED_ONLY True)
+    set(LIBRARY_TYPE SHARED)
     #currently unavailable for glib-based code
     message(
       NOTICE
@@ -916,7 +913,7 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     endif()
-    set(SHARED_ONLY True)
+    set(LIBRARY_TYPE SHARED)
     message(
       NOTICE
       "Currently unable to build thread sanitizer for glib-based configurations."
@@ -944,7 +941,7 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
     endif()
-    set(SHARED_ONLY True)
+    set(LIBRARY_TYPE SHARED)
   else()
     message(FATAL_ERROR "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -1026,12 +1023,12 @@ endif()
 libical_deprecated_option(ICAL_BUILD_DOCS LIBICAL_BUILD_DOCS "Build documentation" True)
 if(LIBICAL_BUILD_DOCS)
   if(LIBICAL_GLIB_BUILD_DOCS)
-    if(STATIC_ONLY)
+    if(LIBICAL_STATIC)
       message(
         FATAL_ERROR
         "You are attempting to build the glib docs, "
-        "however that option is not supported when building static libraries only. "
-        "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
+        "however that option is not supported when building static libraries. "
+        "Please disable the static build option to cmake (-DLIBICAL_STATIC_ONLY=False) "
         "if you really want to build with the glib documentation. Alternatively, "
         "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )

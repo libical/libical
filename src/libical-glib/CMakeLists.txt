@@ -201,18 +201,6 @@ target_link_libraries(
     icalvcard
     ${GLIB_LIBRARIES}
 )
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  add_library(ical-glib-static STATIC ${LIBICAL_GLIB_SOURCES})
-  add_dependencies(ical-glib-static ical-header)
-  target_compile_options(
-    ical-glib-static
-    PUBLIC
-      ${GLIB_CFLAGS}
-      -DG_LOG_DOMAIN="libical-glib"
-      -DLIBICAL_GLIB_COMPILATION
-  )
-  target_link_libraries(ical-glib-static ${GLIB_LIBRARIES})
-endif()
 
 if(LIBICAL_GLIB_CHECK_API_FILES)
   add_custom_command(
@@ -372,23 +360,6 @@ if(MSVC)
       PREFIX
         "lib"
   )
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      ical-glib-static
-      PROPERTIES
-        PREFIX
-          "lib"
-    )
-  endif()
-else()
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      ical-glib-static
-      PROPERTIES
-        OUTPUT_NAME
-          "ical-glib"
-    )
-  endif()
 endif()
 if(NOT ANDROID)
   set_target_properties(
@@ -406,19 +377,8 @@ set_target_properties(
     CLEAN_DIRECT_OUTPUT
       1
 )
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  set_target_properties(
-    ical-glib-static
-    PROPERTIES
-      CLEAN_DIRECT_OUTPUT
-        1
-  )
-endif()
 
 install(TARGETS ical-glib EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  install(TARGETS ical-glib-static EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
-endif()
 
 ########### install files ###############
 
