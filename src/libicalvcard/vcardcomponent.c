@@ -974,9 +974,9 @@ static void comp_to_v4(vcardcomponent *impl)
             /* Rename X-ADDRESSBOOKSERVER-KIND, X-ADDRESSBOOKSERVER-MEMBER */
             const char *xprop = vcardproperty_as_vcard_string(prop);
             if (!strncasecmp(xprop, "X-ADDRESSBOOKSERVER-", 20) &&
-                (!strncasecmp(xprop+20, "KIND:", 5) ||
-                 !strncasecmp(xprop+20, "MEMBER:", 7))) {
-                vcardproperty *new = vcardproperty_new_from_string(xprop+20);
+                (!strncasecmp(xprop + 20, "KIND:", 5) ||
+                 !strncasecmp(xprop + 20, "MEMBER:", 7))) {
+                vcardproperty *new = vcardproperty_new_from_string(xprop + 20);
                 vcardcomponent_add_property(impl, new);
                 vcardcomponent_remove_property(impl, prop);
             }
@@ -1169,7 +1169,9 @@ static void comp_to_v3(vcardcomponent *impl)
             _fallthrough();
 
         case VCARD_MEMBER_PROPERTY:
-            if (!xname) xname = "X-ADDRESSBOOKSERVER-MEMBER";
+            if (!xname) {
+                xname = "X-ADDRESSBOOKSERVER-MEMBER";
+            }
             xprop = vcardproperty_new_x(vcardvalue_as_vcard_string(value));
             vcardproperty_set_x_name(xprop, xname);
             vcardcomponent_add_property(impl, xprop);
