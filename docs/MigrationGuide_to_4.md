@@ -23,6 +23,8 @@ User-specific:
 | GOBJECT_INTROSPECTION        | LIBICAL_GOBJECT_INTROSPECTION        |
 | WITH_CXX_BINDINGS            | LIBICAL_CXX_BINDINGS                 |
 | ENABLE_LTO_BUILD             | CMAKE_INTERPROCEDURAL_OPTIMIZATION   |
+| SHARED_ONLY                  | removed                              |
+| STATIC_ONLY                  | LIBICAL_STATIC                       |
 
 Developer-specific:
 

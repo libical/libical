@@ -279,12 +279,6 @@ add_library(
   ${ical_LIB_SRCS}
 )
 add_dependencies(ical ical-header)
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  add_library(ical-static STATIC ${ical_LIB_SRCS})
-  add_dependencies(ical-static ical-header)
-elseif(STATIC_ONLY)
-  add_library(ical-static ALIAS ical)
-endif()
 
 target_include_directories(ical INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
 
@@ -311,23 +305,6 @@ if(MSVC)
       PREFIX
         "lib"
   )
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      ical-static
-      PROPERTIES
-        PREFIX
-          "lib"
-    )
-  endif()
-else()
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      ical-static
-      PROPERTIES
-        OUTPUT_NAME
-          "ical"
-    )
-  endif()
 endif()
 if(NOT ANDROID)
   set_target_properties(
@@ -345,21 +322,11 @@ set_target_properties(
     CLEAN_DIRECT_OUTPUT
       1
 )
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  set_target_properties(
-    ical-static
-    PROPERTIES
-      CLEAN_DIRECT_OUTPUT
-        1
-  )
-endif()
 
 install(TARGETS ical EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  install(TARGETS ical-static EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
-endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 ########### next target ###############
@@ -386,12 +353,6 @@ if(LIBICAL_CXX_BINDINGS)
     ${icalcxx_LIB_SRCS}
   )
   add_dependencies(ical_cxx ical-header)
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    add_library(ical_cxx-static STATIC ${icalcxx_LIB_SRCS})
-    add_dependencies(ical_cxx-static ical-header)
-  elseif(STATIC_ONLY)
-    add_library(ical_cxx-static ALIAS ical_cxx)
-  endif()
   target_link_libraries(ical_cxx ical)
   if(DEFINED CMAKE_THREAD_LIBS_INIT)
     target_link_libraries(ical_cxx ${CMAKE_THREAD_LIBS_INIT})
@@ -404,23 +365,6 @@ if(LIBICAL_CXX_BINDINGS)
         PREFIX
           "lib"
     )
-    if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-      set_target_properties(
-        ical_cxx-static
-        PROPERTIES
-          PREFIX
-            "lib"
-      )
-    endif()
-  else()
-    if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-      set_target_properties(
-        ical_cxx-static
-        PROPERTIES
-          OUTPUT_NAME
-            "ical_cxx"
-      )
-    endif()
   endif()
 
   if(NOT ANDROID)
@@ -439,19 +383,8 @@ if(LIBICAL_CXX_BINDINGS)
       CLEAN_DIRECT_OUTPUT
         1
   )
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      ical_cxx-static
-      PROPERTIES
-        CLEAN_DIRECT_OUTPUT
-          1
-    )
-  endif()
 
   install(TARGETS ical_cxx EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    install(TARGETS ical_cxx-static EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
-  endif()
 
   if(MSVC)
     remove_definitions(-DBUILD_LIBICALDLL)
