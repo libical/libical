@@ -66,6 +66,16 @@ static const struct _compat_tzids {
     {"/citadel.org/", 3}, /* Full TZID for this can be: "/citadel.org/20190914_1/" */
     {NULL, -1}};
 
+/* fullpath to the system zoneinfo directory (where zone.tab lives) */
+static ICAL_GLOBAL_VAR char s_zoneinfopath[MAXPATHLEN] = {0};
+
+/* A few well-known locations for system zoneinfo; can be overridden with TZDIR environment */
+static const char *s_zoneinfo_search_paths[] = {
+    "/usr/share/zoneinfo",
+    "/usr/lib/zoneinfo",
+    "/etc/zoneinfo",
+    "/usr/share/lib/zoneinfo"};
+
 /* The prefix to be used for tzid's generated from system tzdata */
 static ICAL_GLOBAL_VAR char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = BUILTIN_TZID_PREFIX;
 
@@ -1699,7 +1709,7 @@ static void icaltimezone_parse_zone_tab(void)
     icalarray *timezones = icalarray_new(sizeof(icaltimezone), 1024);
 
     if (!use_builtin_tzdata) {
-        zonedir = icaltzutil_get_zone_directory();
+        zonedir = icaltimezone_get_system_zone_directory();
         zonetab = ZONES_TAB_SYSTEM_FILENAME;
     } else {
         zonedir = get_zone_directory_builtin();
@@ -2178,12 +2188,56 @@ static const char *get_zone_directory_builtin(void)
 #endif
 }
 
+void icaltimezone_set_system_zone_directory(const char *zonepath)
+{
+    if ((zonepath == NULL) || (zonepath[0] == '\0')) {
+        memset(s_zoneinfopath, 0, MAXPATHLEN);
+    } else {
+        strncpy(s_zoneinfopath, zonepath, MAXPATHLEN - 1);
+    }
+}
+
+static void set_zoneinfopath(void)
+{
+    char file_path[MAXPATHLEN] = {0};
+    const char *fname = ZONES_TAB_SYSTEM_FILENAME;
+    size_t i, num_zi_search_paths;
+
+    /* Search for the zone.tab file in the dir specified by the TZDIR environment */
+    const char *env_tzdir = getenv("TZDIR");
+    if (env_tzdir != NULL) {
+        snprintf(file_path, MAXPATHLEN, "%s/%s", env_tzdir, fname);
+        if (!access(file_path, F_OK | R_OK)) {
+            strncpy(s_zoneinfopath, env_tzdir, MAXPATHLEN - 1);
+            return;
+        }
+    }
+
+    /* Else, search for zone.tab in a list of well-known locations */
+    num_zi_search_paths = sizeof(s_zoneinfo_search_paths) / sizeof(s_zoneinfo_search_paths[0]);
+    for (i = 0; i < num_zi_search_paths; i++) {
+        snprintf(file_path, MAXPATHLEN, "%s/%s", s_zoneinfo_search_paths[i], fname);
+        if (!access(file_path, F_OK | R_OK)) {
+            strncpy(s_zoneinfopath, s_zoneinfo_search_paths[i], MAXPATHLEN - 1);
+            break;
+        }
+    }
+}
+const char *icaltimezone_get_system_zone_directory(void)
+{
+    if (s_zoneinfopath[0] == '\0') {
+        set_zoneinfopath();
+    }
+
+    return s_zoneinfopath;
+}
+
 const char *icaltimezone_get_zone_directory(void)
 {
     if (use_builtin_tzdata) {
         return get_zone_directory_builtin();
     } else {
-        return icaltzutil_get_zone_directory();
+        return icaltimezone_get_system_zone_directory();
     }
 }
 
