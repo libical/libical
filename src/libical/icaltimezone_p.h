@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
-#ifndef ICALTZUTIL_H
-#define ICALTZUTIL_H
+#ifndef ICALTIMEZONE_P_H
+#define ICALTIMEZONE_P_H
 
 #include "libical_ical_export.h"
 #include "icalcomponent.h"
@@ -23,6 +23,6 @@
  *
  * @since 4.0 no longer publicly accessible
  */
-LIBICAL_ICAL_NO_EXPORT icalcomponent *icaltzutil_fetch_timezone(const char *location);
+LIBICAL_ICAL_NO_EXPORT icalcomponent *icaltimezone_fetch_timezone(const char *location);
 
 #endif
