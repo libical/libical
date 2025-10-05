@@ -38,6 +38,8 @@ for details about API changes since libical 3.x.
 - Replace gtk-doc with gi-docgen to produce libical-glib developer documentation
 - libical-glib API is considered stable; no longer need to define LIBICAL_GLIB_UNSTABLE_API=1
    before including <libical-glib/libical-glib.h>
+- By default, only shared libraries are built; to get static libraries one must invoke
+  separate build using the CMake `-DLIBICAL_STATIC=True` option.
 - CMake option -DGOBJECT_INTROSPECTION=True by default.
 - `icaltzutil_get_zone_directory()` can use the TZDIR environment to find system zoneinfo
 - `icaltimezone_set_tzid_prefix()` now allows setting an empty tzid prefix.
