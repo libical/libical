@@ -208,6 +208,13 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
         "RelWithDebInfo"
   )
 endif()
+string(TOUPPER "${CMAKE_BUILD_TYPE}" UPPERCASE_CMAKE_BUILD_TYPE)
+if(UPPERCASE_CMAKE_BUILD_TYPE MATCHES "^REL" AND LIBICAL_DEVMODE)
+  message(
+    FATAL_ERROR
+    "Cannot combine LIBICAL_DEVMODE with release builds. Either build in debug mode or disable LIBICAL_DEVMODE."
+  )
+endif()
 
 libical_deprecated_option(STATIC_ONLY LIBICAL_STATIC "Build static versions of the libraries." False)
 if(LIBICAL_STATIC)
