@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -7,7 +8,7 @@
 -->
 <structure namespace="ICal" name="Timezone" native="icaltimezone" is_possible_global="true" destroy_func="i_cal_timezone_destroy">
     <method name="i_cal_timezone_new" corresponds="icaltimezone_new" kind="constructor" since="1.0">
-        <returns type="ICalTimezone *" annotation="transfer full, nullable" translator="i_cal_timezone_new_full" translator_argus="NULL, FALSE" comment="The newly created object of the type #ICalTimezone." />
+        <returns type="ICalTimezone *" annotation="transfer full, nullable" translator="i_cal_timezone_new_full" translator_argus="NULL, FALSE" comment="The newly created object of the type #ICalTimezone."/>
         <comment xml:space="preserve">The constructor of the type #ICalTimezone.</comment>
     </method>
     <method name="i_cal_timezone_destroy" corresponds="icaltimezone_free" annotation="skip" kind="private" since="1.0">
@@ -97,7 +98,7 @@
         <comment xml:space="preserve">Sets the VTIMEZONE component of #ICalTimezone, initializing the tzid, location and tzname fields. It returns 1 on success or 0 on failure, i.e. no TZID was found.
  *
  * @note The @zone assumes ownership of the @comp, thus make sure you pass an unowned #ICalComponent.</comment>
-	<custom xml:space="preserve">    g_return_val_if_fail(I_CAL_IS_TIMEZONE(zone), 0);
+        <custom xml:space="preserve">    g_return_val_if_fail(I_CAL_IS_TIMEZONE(zone), 0);
     g_return_val_if_fail(I_CAL_IS_COMPONENT(comp), 0);
 
     i_cal_object_set_owner(I_CAL_OBJECT(comp), G_OBJECT(zone));
@@ -149,7 +150,7 @@
         <comment>Populate the array of timezones with a component.
  *
  * @note The @timezones assumes ownership of the @child, thus make sure you pass an unowned #ICalComponent.</comment>
-	<custom xml:space="preserve">    g_return_if_fail(I_CAL_IS_ARRAY(timezones));
+        <custom xml:space="preserve">    g_return_if_fail(I_CAL_IS_ARRAY(timezones));
     g_return_if_fail(I_CAL_IS_COMPONENT(child));
 
     i_cal_object_set_owner(I_CAL_OBJECT(child), G_OBJECT(timezones));
@@ -220,11 +221,11 @@ If either time is non-null, then it MUST be specified as UTC.
 If the start time is non-null and ms_compatible is zero,
 then the DTSTART of RRULEs will be adjusted to occur after the start time.</comment>
     </method>
-    <method name="i_cal_tzutil_get_zone_directory" corresponds="icaltzutil_get_zone_directory" kind="others" since="4.0">
+    <method name="i_cal_timezone_get_system_zone_directory" corresponds="icaltimezone_get_system_zone_directory" kind="others" since="4.0">
         <returns type="const gchar *" comment="The path to look for the zonefiles"/>
         <comment xml:space="preserve">Returns the full path to the system zoneinfo directory (where zone.tab lives).</comment>
     </method>
-    <method name="i_cal_tzutil_set_zone_directory" corresponds="icaltzutil_set_zone_directory" kind="others" since="4.0">
+    <method name="i_cal_timezone_set_system_zone_directory" corresponds="icaltimezone_set_system_zone_directory" kind="others" since="4.0">
         <parameter type="const gchar *" name="path" comment="The path to look for the zonefiles"/>
         <comment xml:space="preserve">Sets the full path to the system zoneinfo directory (where zone.tab lives).</comment>
     </method>

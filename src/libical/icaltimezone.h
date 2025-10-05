@@ -201,10 +201,31 @@ LIBICAL_ICAL_EXPORT void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
  * @par Handling the default location the timezone files
  */
 
-/** Gets the directory to look for the zonefiles */
+/**
+ * Returns the fullpath to the system zoneinfo directory (where zone.tab lives).
+ * The returned value points to static memory inside the library and should not try to be freed.
+ *
+ * If the TZDIR variable appears in the environment, it will be searched first for zone.tab.
+ * If zone.tab is not located in TZDIR (or if TZDIR is not in the environment), then a
+ * list of well-known paths where the system zone.tab typically is installed is searched.
+ *
+ * @since 4.0 previously known as icaltzutil_get_zone_directory
+ */
+LIBICAL_ICAL_EXPORT const char *icaltimezone_get_system_zone_directory(void);
+
+/**
+ * Sets the fullpath to the system zoneinfo directory (zone.tab must reside in there).
+ * @param A const character string containing the fullpath to the zoneinfo directory.
+ *
+ * The internal zoneinfo path can be cleared if @p zonepath is empty or NULL.
+ * @since 4.0 previously known as icaltzutil_set_zone_directory
+ */
+LIBICAL_ICAL_EXPORT void icaltimezone_set_system_zone_directory(const char *zonepath);
+
+/** Gets the directory to look for the zonefiles, either system or builtin */
 LIBICAL_ICAL_EXPORT const char *icaltimezone_get_zone_directory(void);
 
-/** Sets the directory to look for the zonefiles */
+/** Sets the directory to look for the zonefiles, either system or builting */
 LIBICAL_ICAL_EXPORT void icaltimezone_set_zone_directory(const char *path);
 
 /** Frees the memory dedicated to the zonefile directory */
