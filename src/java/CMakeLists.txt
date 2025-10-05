@@ -130,7 +130,7 @@ if(LIBICAL_BUILD_TESTING)
   endif()
 endif()
 
-install(TARGETS ical_jni EXPORT icalTargets DESTINATION lib)
+install(TARGETS ical_jni EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

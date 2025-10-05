@@ -252,6 +252,8 @@ LIBICAL_ICAL_EXPORT bool icaldurationtype_is_bad_duration(struct icaldurationtyp
  * // add the duration to the time object
  * time = icalduration_extend(time, duration);
  * ```
+ *
+ * @since 4.0 previously known as icaltime_add
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icalduration_extend(struct icaltimetype t,
                                                             struct icaldurationtype d);
@@ -272,6 +274,8 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalduration_extend(struct icaltimetype 
  * // calculate duration between time points
  * duration = icalduration_from_times(t1, t2);
  * ```
+ *
+ * * @since 4.0 previously known as icaltime_subtract
  */
 LIBICAL_ICAL_EXPORT struct icaldurationtype icalduration_from_times(struct icaltimetype t1,
                                                                     struct icaltimetype t2);

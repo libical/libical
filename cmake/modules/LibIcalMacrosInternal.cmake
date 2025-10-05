@@ -17,6 +17,19 @@ function(libical_option option description)
   )
 endfunction()
 
+# Warn and exit if old cmake options are encountered
+function(libical_removed_option option)
+  if(DEFINED ${option})
+    if(${PROJECT_VERSION} VERSION_LESS "4.1.0")
+      message(
+        FATAL_ERROR
+        "The CMake option ${option} has been removed. "
+        "Please refer to docs/MigrationGuide_to_4.md for more information."
+      )
+    endif()
+  endif()
+endfunction()
+
 # Warn about deprecated cmake options then call libical_option
 function(libical_deprecated_option deprecated_option option description)
   set(extra_option_arguments ${ARGN})
