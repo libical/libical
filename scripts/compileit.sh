@@ -86,4 +86,4 @@ cmake -S .. \
   ninja install &&
   ninja docs &&
   ninja build-book
-ninja uninstall rm -rf "$INSTALLDIR"
+ninja uninstall && rm -rf "$INSTALLDIR"
