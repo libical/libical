@@ -198,7 +198,11 @@ set(PROJECT_VERSION "4.0")
 # library build types
 set(LIBRARY_TYPE SHARED)
 
+# Print message and error exit for these options that are no longer supported
+libical_removed_option(ICAL_ALLOW_EMPTY_PROPERTIES)
+libical_removed_option(ICAL_ERRORS_ARE_FATAL)
 ########################################################
+
 libical_option(LIBICAL_DEVMODE "Developer mode" False)
 if(LIBICAL_DEVMODE)
   # generate compile_commands.json
