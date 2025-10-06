@@ -74,11 +74,7 @@
 
 #include <stdbool.h>
 #include <time.h>
-#define icaltime_t           \
-    $                        \
-    {                        \
-        ICAL_ICALTIME_T_TYPE \
-    }
+#define icaltime_t ${ICAL_ICALTIME_T_TYPE}
 
 /* An opaque struct representing a timezone. We declare this here to avoid
    a circular dependency. */
