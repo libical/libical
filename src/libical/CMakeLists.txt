@@ -224,6 +224,7 @@ set(
   icalparameterimpl.h
   icalparser.c
   icalparser.h
+  icalproperty_p.h
   icalproperty.c
   icalproperty.h
   icalrecur.c
