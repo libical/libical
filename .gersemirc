@@ -1,4 +1,4 @@
-definitions: [./cmake,./src/test,./docs]
+definitions: [./cmake,./src/libical/,./src/test,./docs]
 indent: 2
 line_length: 120
 list_expansion: favour-expansion
