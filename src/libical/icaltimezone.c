@@ -12,12 +12,12 @@
 #endif
 
 #include "icaltimezone.h"
+#include "icaltimezone_p.h"
 #include "icaltimezoneimpl.h"
 #include "icalarray.h"
 #include "icalerror.h"
 #include "icalparser.h"
 #include "icalmemory.h"
-#include "icaltz-util.h"
 
 #include <ctype.h>
 #include <stddef.h> /* for ptrdiff_t */
@@ -1423,7 +1423,7 @@ icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
 
     /* Check whether file exists, but is not mentioned in zone.tab.
        It means it's a deprecated timezone, but still available. */
-    comp = icaltzutil_fetch_timezone(location);
+    comp = icaltimezone_fetch_timezone(location);
     if (comp) {
         icaltimezone tz;
 
@@ -1938,7 +1938,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
             }
         }
     } else {
-        subcomp = icaltzutil_fetch_timezone(zone->location);
+        subcomp = icaltimezone_fetch_timezone(zone->location);
     }
 
     if (!subcomp) {

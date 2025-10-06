@@ -233,8 +233,8 @@ set(
   icalstrarray.h
   icaltime.c
   icaltime.h
-  icaltz-util.c
-  icaltz-util.h
+  icaltimezone_p.c
+  icaltimezone_p.h
   icaltimezone.c
   icaltimezone.h
   icaltimezoneimpl.h
@@ -414,7 +414,6 @@ install(
     icalrestriction.h
     icalstrarray.h
     ${PROJECT_BINARY_DIR}/src/libical/icaltime.h
-    icaltz-util.h
     icaltimezone.h
     icaltypes.h
     icalvalue.h

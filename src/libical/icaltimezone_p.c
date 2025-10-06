@@ -11,7 +11,7 @@
 #include <config.h>
 #endif
 
-#include "icaltz-util.h"
+#include "icaltimezone_p.h"
 #include "icalerror.h"
 #include "icaltimezone.h"
 #include "icalmemory.h"
@@ -390,7 +390,7 @@ static void terminate_rrule(struct zone_context *zone)
     }
 }
 
-icalcomponent *icaltzutil_fetch_timezone(const char *location)
+icalcomponent *icaltimezone_fetch_timezone(const char *location)
 {
     tzinfo header = {0};
     size_t i, num_trans, num_chars, num_leaps, num_isstd, num_isgmt;
