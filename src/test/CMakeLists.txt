@@ -227,7 +227,7 @@ if(NOT CYGWIN AND NOT LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
 
   #test non-rscale rrules
   set(reference_data "icalrecur_test.txt")
-  set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+  set(test_args "-f \"${PROJECT_BINARY_DIR}/src/test/${reference_data}\"")
   add_test(
     NAME icalrecurtest
     COMMAND
@@ -238,7 +238,7 @@ if(NOT CYGWIN AND NOT LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
 
   #test rscale rrules without ICU
   set(reference_data "icalrecur_test_rscale.txt")
-  set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+  set(test_args "-f \"${PROJECT_BINARY_DIR}/src/test/${reference_data}\"")
   add_test(
     NAME icalrecurtest-rscale
     COMMAND
@@ -250,7 +250,7 @@ if(NOT CYGWIN AND NOT LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
   if(ICU_FOUND)
     #test rscale rrules with ICU
     set(reference_data "icalrecur_test_rscale_withicu.txt")
-    set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+    set(test_args "-f \"${PROJECT_BINARY_DIR}/src/test/${reference_data}\"")
     add_test(
       NAME icalrecurtest-rscale-withicu
       COMMAND
@@ -262,7 +262,7 @@ if(NOT CYGWIN AND NOT LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
     if(HAVE_ICU_DANGI)
       #test rscale rrules with ICU and DANGI
       set(reference_data "icalrecur_test_rscale_withicu_dangi.txt")
-      set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+      set(test_args "-f \"${PROJECT_BINARY_DIR}/src/test/${reference_data}\"")
       add_test(
         NAME icalrecurtest-rscale-withicu-dangi
         COMMAND
