@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -7,138 +7,138 @@
 
 -->
 <structure namespace="ICal" name="Duration" native="struct icaldurationtype" is_bare="true" default_native="icaldurationtype_null_duration()">
-    <method name="i_cal_duration_is_neg" corresponds="none" kind="get" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
-        <returns type="gboolean" comment="The is_neg."/>
-        <comment xml:space="preserve">Gets the is_neg of #ICalDuration.</comment>
-        <custom>	g_return_val_if_fail (duration != NULL, 0);
+  <method name="i_cal_duration_is_neg" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
+    <returns type="gboolean" comment="The is_neg."/>
+    <comment xml:space="preserve">Gets the is_neg of #ICalDuration.</comment>
+    <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return (((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;is_neg) ? TRUE : FALSE;</custom>
-    </method>
-    <method name="i_cal_duration_set_is_neg" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
-        <parameter type="gboolean" name="is_neg" comment="The is_neg"/>
-        <comment>Sets the is_neg of #ICalDuration.</comment>
-        <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
+  </method>
+  <method name="i_cal_duration_set_is_neg" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
+    <parameter type="gboolean" name="is_neg" comment="The is_neg"/>
+    <comment>Sets the is_neg of #ICalDuration.</comment>
+    <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;is_neg = is_neg ? 1 : 0;</custom>
-    </method>
-    <method name="i_cal_duration_get_days" corresponds="none" kind="get" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
-        <returns type="guint" comment="The days."/>
-        <comment xml:space="preserve">Gets the days of #ICalDuration.</comment>
-        <custom>	g_return_val_if_fail (duration != NULL, 0);
+  </method>
+  <method name="i_cal_duration_get_days" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
+    <returns type="guint" comment="The days."/>
+    <comment xml:space="preserve">Gets the days of #ICalDuration.</comment>
+    <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return ((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;days;</custom>
-    </method>
-    <method name="i_cal_duration_set_days" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
-        <parameter type="guint" name="days" comment="The days"/>
-        <comment>Sets the days of #ICalDuration.</comment>
-        <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
+  </method>
+  <method name="i_cal_duration_set_days" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
+    <parameter type="guint" name="days" comment="The days"/>
+    <comment>Sets the days of #ICalDuration.</comment>
+    <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;days = days;</custom>
-    </method>
-    <method name="i_cal_duration_get_weeks" corresponds="none" kind="get" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
-        <returns type="guint" comment="The weeks."/>
-        <comment xml:space="preserve">Gets the weeks of #ICalDuration.</comment>
-        <custom>	g_return_val_if_fail (duration != NULL, 0);
+  </method>
+  <method name="i_cal_duration_get_weeks" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
+    <returns type="guint" comment="The weeks."/>
+    <comment xml:space="preserve">Gets the weeks of #ICalDuration.</comment>
+    <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return ((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;weeks;</custom>
-    </method>
-    <method name="i_cal_duration_set_weeks" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
-        <parameter type="guint" name="weeks" comment="The weeks"/>
-        <comment>Sets the weeks of #ICalDuration.</comment>
-        <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
+  </method>
+  <method name="i_cal_duration_set_weeks" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
+    <parameter type="guint" name="weeks" comment="The weeks"/>
+    <comment>Sets the weeks of #ICalDuration.</comment>
+    <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;weeks = weeks;</custom>
-    </method>
-    <method name="i_cal_duration_get_hours" corresponds="none" kind="get" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
-        <returns type="guint" comment="The hours."/>
-        <comment xml:space="preserve">Gets the hours of #ICalDuration.</comment>
-        <custom>	g_return_val_if_fail (duration != NULL, 0);
+  </method>
+  <method name="i_cal_duration_get_hours" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
+    <returns type="guint" comment="The hours."/>
+    <comment xml:space="preserve">Gets the hours of #ICalDuration.</comment>
+    <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return ((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;hours;</custom>
-    </method>
-    <method name="i_cal_duration_set_hours" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
-        <parameter type="guint" name="hours" comment="The hours"/>
-        <comment>Sets the hours of #ICalDuration.</comment>
-        <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
+  </method>
+  <method name="i_cal_duration_set_hours" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
+    <parameter type="guint" name="hours" comment="The hours"/>
+    <comment>Sets the hours of #ICalDuration.</comment>
+    <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;hours = hours;</custom>
-    </method>
-    <method name="i_cal_duration_get_minutes" corresponds="none" kind="get" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
-        <returns type="guint" comment="The minutes."/>
-        <comment xml:space="preserve">Gets the minutes of #ICalDuration.</comment>
-        <custom>	g_return_val_if_fail (duration != NULL, 0);
+  </method>
+  <method name="i_cal_duration_get_minutes" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
+    <returns type="guint" comment="The minutes."/>
+    <comment xml:space="preserve">Gets the minutes of #ICalDuration.</comment>
+    <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return ((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;minutes;</custom>
-    </method>
-    <method name="i_cal_duration_set_minutes" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
-        <parameter type="guint" name="minutes" comment="The minutes"/>
-        <comment>Sets the minutes of #ICalDuration.</comment>
-        <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
+  </method>
+  <method name="i_cal_duration_set_minutes" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
+    <parameter type="guint" name="minutes" comment="The minutes"/>
+    <comment>Sets the minutes of #ICalDuration.</comment>
+    <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;minutes = minutes;</custom>
-    </method>
-    <method name="i_cal_duration_get_seconds" corresponds="none" kind="get" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
-        <returns type="guint" comment="The seconds."/>
-        <comment xml:space="preserve">Gets the seconds of #ICalDuration.</comment>
-        <custom>	g_return_val_if_fail (duration != NULL, 0);
+  </method>
+  <method name="i_cal_duration_get_seconds" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be queried"/>
+    <returns type="guint" comment="The seconds."/>
+    <comment xml:space="preserve">Gets the seconds of #ICalDuration.</comment>
+    <custom>	g_return_val_if_fail (duration != NULL, 0);
 	return ((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;seconds;</custom>
-    </method>
-    <method name="i_cal_duration_set_seconds" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
-        <parameter type="guint" name="seconds" comment="The seconds"/>
-        <comment>Sets the seconds of #ICalDuration.</comment>
-        <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
+  </method>
+  <method name="i_cal_duration_set_seconds" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be set"/>
+    <parameter type="guint" name="seconds" comment="The seconds"/>
+    <comment>Sets the seconds of #ICalDuration.</comment>
+    <custom>	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
 	((struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration))-&gt;seconds = seconds;</custom>
-    </method>
-    <method name="i_cal_duration_new_from_seconds" corresponds="icaldurationtype_from_seconds" kind="constructor" since="4.0">
-        <parameter type="gint" name="t" comment="The duration in second"/>
-        <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration"/>
-        <comment xml:space="preserve">Creates a #ICalDuration from the duration in second.</comment>
-    </method>
-    <method name="i_cal_duration_new_from_string" corresponds="icaldurationtype_from_string" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="str" comment="The string representation of the duration"/>
-        <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration"/>
-        <comment xml:space="preserve">Creates a #ICalDuration from the duration in string.</comment>
-    </method>
-    <method name="i_cal_duration_as_seconds" corresponds="icaldurationtype_as_seconds" kind="others" since="4.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>
-        <returns type="gint" comment="The duration in second"/>
-        <comment xml:space="preserve">Extracts the duration in seconds from an #ICalDuration. Does not consider negative durations.</comment>
-    </method>
-    <method name="i_cal_duration_as_ical_string" corresponds="icaldurationtype_as_ical_string_r" kind="others" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>
-        <returns type="gchar *" annotation="transfer full" comment="The duration in string" translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Converts the #ICalDuration to the representation in string</comment>
-    </method>
-    <method name="i_cal_duration_new_null_duration" corresponds="icaldurationtype_null_duration" kind="constructor" since="1.0">
-        <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration"/>
-        <comment xml:space="preserve">Creates a #ICalDuration with all the fields to be zero.</comment>
-    </method>
-    <method name="i_cal_duration_new_bad_duration" corresponds="icaldurationtype_bad_duration" kind="constructor" since="1.0">
-        <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration"/>
-        <comment xml:space="preserve">Creates a bad #ICalDuration.</comment>
-    </method>
-    <method name="i_cal_duration_is_null_duration" corresponds="icaldurationtype_is_null_duration" kind="others" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be checked"/>
-        <returns type="gboolean" comment="true if @duration is the null_duration, false if not."/>
-        <comment xml:space="preserve">Checks whether the #ICalDuration is the null_duration.</comment>
-    </method>
-    <method name="i_cal_duration_is_bad_duration" corresponds="icaldurationtype_is_bad_duration" kind="others" since="1.0">
-        <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be checked"/>
-        <returns type="gboolean" comment="true if @duration is the bad_duration, false if not."/>
-        <comment xml:space="preserve">Checks whether the #ICalDuration is the bad_duration.</comment>
-    </method>
-    <method name="i_cal_duration_extend" corresponds="icalduration_extend" kind="other" since="4.0">
-        <parameter type="ICalTime *" name="t" comment="A #ICalTime to be operated on"/>
-        <parameter type="ICalDuration *" name="d" comment="A #ICalDuration as the difference"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The #ICalTime results. The native object is the same. But since it is a bare object, so it won't cause segmentation."/>
-        <comment xml:space="preserve">Extends a time duration.</comment>
-    </method>
-    <method name="i_cal_duration_from_times" corresponds="icalduration_from_times" kind="other" since="4.0">
-        <parameter type="ICalTime *" name="t1" comment="The subtracted #ICalTime"/>
-        <parameter type="ICalTime *" name="t2" comment="The subtracting #ICalTime"/>
-        <returns type="ICalDuration *" annotation="transfer full" comment="The #ICalDuration between two #ICalTime."/>
-        <comment xml:space="preserve">Creates a duration between two time endpoints.</comment>
-    </method>
+  </method>
+  <method name="i_cal_duration_new_from_seconds" corresponds="icaldurationtype_from_seconds" kind="constructor" since="4.0">
+    <parameter type="gint" name="t" comment="The duration in second"/>
+    <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration"/>
+    <comment xml:space="preserve">Creates a #ICalDuration from the duration in second.</comment>
+  </method>
+  <method name="i_cal_duration_new_from_string" corresponds="icaldurationtype_from_string" kind="constructor" since="1.0">
+    <parameter type="const gchar *" name="str" comment="The string representation of the duration"/>
+    <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration"/>
+    <comment xml:space="preserve">Creates a #ICalDuration from the duration in string.</comment>
+  </method>
+  <method name="i_cal_duration_as_seconds" corresponds="icaldurationtype_as_seconds" kind="others" since="4.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>
+    <returns type="gint" comment="The duration in second"/>
+    <comment xml:space="preserve">Extracts the duration in seconds from an #ICalDuration. Does not consider negative durations.</comment>
+  </method>
+  <method name="i_cal_duration_as_ical_string" corresponds="icaldurationtype_as_ical_string_r" kind="others" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>
+    <returns type="gchar *" annotation="transfer full" comment="The duration in string" translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts the #ICalDuration to the representation in string</comment>
+  </method>
+  <method name="i_cal_duration_new_null_duration" corresponds="icaldurationtype_null_duration" kind="constructor" since="1.0">
+    <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration"/>
+    <comment xml:space="preserve">Creates a #ICalDuration with all the fields to be zero.</comment>
+  </method>
+  <method name="i_cal_duration_new_bad_duration" corresponds="icaldurationtype_bad_duration" kind="constructor" since="1.0">
+    <returns type="ICalDuration *" annotation="transfer full" comment="The newly created #ICalDuration"/>
+    <comment xml:space="preserve">Creates a bad #ICalDuration.</comment>
+  </method>
+  <method name="i_cal_duration_is_null_duration" corresponds="icaldurationtype_is_null_duration" kind="others" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be checked"/>
+    <returns type="gboolean" comment="true if @duration is the null_duration, false if not."/>
+    <comment xml:space="preserve">Checks whether the #ICalDuration is the null_duration.</comment>
+  </method>
+  <method name="i_cal_duration_is_bad_duration" corresponds="icaldurationtype_is_bad_duration" kind="others" since="1.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be checked"/>
+    <returns type="gboolean" comment="true if @duration is the bad_duration, false if not."/>
+    <comment xml:space="preserve">Checks whether the #ICalDuration is the bad_duration.</comment>
+  </method>
+  <method name="i_cal_duration_extend" corresponds="icalduration_extend" kind="other" since="4.0">
+    <parameter type="ICalTime *" name="t" comment="A #ICalTime to be operated on"/>
+    <parameter type="ICalDuration *" name="d" comment="A #ICalDuration as the difference"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The #ICalTime results. The native object is the same. But since it is a bare object, so it won't cause segmentation."/>
+    <comment xml:space="preserve">Extends a time duration.</comment>
+  </method>
+  <method name="i_cal_duration_from_times" corresponds="icalduration_from_times" kind="other" since="4.0">
+    <parameter type="ICalTime *" name="t1" comment="The subtracted #ICalTime"/>
+    <parameter type="ICalTime *" name="t2" comment="The subtracting #ICalTime"/>
+    <returns type="ICalDuration *" annotation="transfer full" comment="The #ICalDuration between two #ICalTime."/>
+    <comment xml:space="preserve">Creates a duration between two time endpoints.</comment>
+  </method>
 </structure>

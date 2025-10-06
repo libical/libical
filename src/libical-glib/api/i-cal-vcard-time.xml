@@ -1,18 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 -->
 <structure namespace="ICalVcard" name="Time" native="vcardtimetype" is_bare="true" default_native="vcardtime_null_datetime()">
-	<method name="i_cal_vcard_time_new" corresponds="vcardtime_null_datetime" kind="constructor" since="4.0">
-		<returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime. It is a null time" />
-		<comment xml:space="preserve">Creates a new #ICalVcardTime.</comment>
-		<custom>    return i_cal_vcard_time_new_full(vcardtime_null_datetime());</custom>
-	</method>
-	<method name="i_cal_vcard_time_clone" corresponds="none" kind="constructor" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to clone"/>
-		<returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime, copy of @self." />
-		<comment xml:space="preserve">Creates a new #ICalVcardTime, copy of @self.</comment>
-		<custom>    vcardtimetype *vtt;
+  <method name="i_cal_vcard_time_new" corresponds="vcardtime_null_datetime" kind="constructor" since="4.0">
+    <returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime. It is a null time"/>
+    <comment xml:space="preserve">Creates a new #ICalVcardTime.</comment>
+    <custom>    return i_cal_vcard_time_new_full(vcardtime_null_datetime());</custom>
+  </method>
+  <method name="i_cal_vcard_time_clone" corresponds="none" kind="constructor" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to clone"/>
+    <returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime, copy of @self."/>
+    <comment xml:space="preserve">Creates a new #ICalVcardTime, copy of @self.</comment>
+    <custom>    vcardtimetype *vtt;
 
     g_return_val_if_fail(I_CAL_VCARD_IS_TIME((ICalVcardTime *)self), NULL);
 
@@ -20,241 +21,241 @@
     g_return_val_if_fail(vtt != NULL, NULL);
 
     return i_cal_vcard_time_new_full(*vtt);</custom>
-	</method>
-	<method name="i_cal_vcard_time_new_null_date" corresponds="vcardtime_null_date" kind="constructor" since="4.0">
-		<returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime" />
-		<comment xml:space="preserve">Creates a new empty ("null") date.</comment>
-	</method>
-	<method name="i_cal_vcard_time_new_null_time" corresponds="vcardtime_null_time" kind="constructor" since="4.0">
-		<returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime" />
-		<comment xml:space="preserve">Creates a new empty ("null") time.</comment>
-	</method>
-	<method name="i_cal_vcard_time_new_null_timestamp" corresponds="vcardtime_null_timestamp" kind="constructor" since="4.0">
-		<returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime" />
-		<comment xml:space="preserve">Creates a new empty ("null") timestamp.</comment>
-	</method>
-	<method name="i_cal_vcard_time_new_null_datetime" corresponds="vcardtime_null_datetime" kind="constructor" since="4.0">
-		<returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime" />
-		<comment xml:space="preserve">Creates a new empty ("null") datetime.</comment>
-	</method>
-	<method name="i_cal_vcard_time_new_current_utc_time" corresponds="vcardtime_current_utc_time" kind="others" since="4.0">
-		<returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime" />
-		<comment xml:space="preserve">Creates a new #ICalVcardTime with the current time in UTC zone.</comment>
-	</method>
-	<method name="i_cal_vcard_time_is_null_datetime" corresponds="vcardtime_is_null_datetime" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
-		<returns type="gboolean" comment="Whether @self is null datetime." />
-		<comment xml:space="preserve">Returns true if the datetime is null.</comment>
-	</method>
-	<method name="i_cal_vcard_time_is_time" corresponds="vcardtime_is_time" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
-		<returns type="gboolean" comment="Whether @self represents a time." />
-		<comment xml:space="preserve">Returns whether @self represents a time.</comment>
-	</method>
-	<method name="i_cal_vcard_time_is_date" corresponds="vcardtime_is_date" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
-		<returns type="gboolean" comment="Whether @self represents a date." />
-		<comment xml:space="preserve">Returns whether @self represents a date.</comment>
-	</method>
-	<method name="i_cal_vcard_time_is_datetime" corresponds="vcardtime_is_datetime" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
-		<returns type="gboolean" comment="Whether @self represents a datetime." />
-		<comment xml:space="preserve">Returns whether @self represents a datetime.</comment>
-	</method>
-	<method name="i_cal_vcard_time_is_timestamp" corresponds="vcardtime_is_timestamp" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
-		<returns type="gboolean" comment="Whether @self represents a timestamp." />
-		<comment xml:space="preserve">Returns whether @self represents a timestamp.</comment>
-	</method>
-	<method name="i_cal_vcard_time_is_utc" corresponds="vcardtime_is_utc" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
-		<returns type="gboolean" comment="Whether @self is in UTC zone." />
-		<comment xml:space="preserve">Returns whether @self is in UTC zone.</comment>
-	</method>
-	<method name="i_cal_vcard_time_is_leap_year" corresponds="vcardtime_is_leap_year" since="4.0">
-		<parameter type="gint" name="year" comment="a year"/>
-		<returns type="gboolean" comment="Whether the @year is a leap year." />
-		<comment xml:space="preserve">Returns whether the @year is a leap year.</comment>
-	</method>
-	<method name="i_cal_vcard_time_is_valid_time" corresponds="vcardtime_is_valid_time" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
-		<returns type="gboolean" comment="Whether @self represents a valid time." />
-		<comment xml:space="preserve">Returns whether @self represents a valid time.</comment>
-	</method>
-	<enum name="ICalVcardTimeConvertFlags" native_name="CUSTOM" default_native="0">
-		<element name="VCARDTIME_BARE_TIME"/>
-		<element name="VCARDTIME_AS_V4"/>
-	</enum>
-	<method name="i_cal_vcard_time_as_vcard_string" corresponds="vcardtime_as_vcard_string_r" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be converted"/>
-		<parameter type="guint" name="flags" comment="bit-or of #ICalVcardTimeConvertFlags"/>
-		<returns type="gchar *" annotation="transfer full" comment="The string representation" translator="i_cal_memory_str_to_glib" />
-		<comment xml:space="preserve">Returns a string representation of the @self.</comment>
-	</method>
-	<method name="i_cal_vcard_time_new_from_string" corresponds="vcardtime_from_string" kind="others" since="4.0">
-		<parameter type="const gchar *" name="str" comment="The time string"/>
-		<parameter type="gboolean" name="is_bare_time" comment="Whether the string contains a bare time, not date/time"/>
-		<returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime" />
-		<comment xml:space="preserve">Creates a time from the @str.</comment>
-	</method>
-	<method name="i_cal_vcard_time_get_year" corresponds="none" kind="get" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
-		<returns type="gint" comment="The year."/>
-		<comment xml:space="preserve">Gets the year of #ICalVcardTime.</comment>
-		<custom>    g_return_val_if_fail (self != NULL, 0);
-    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->year;</custom>
-	</method>
-	<method name="i_cal_vcard_time_set_year" corresponds="none" kind="set" since="4.0">
-		<parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
-		<parameter type="gint" name="year" comment="The year"/>
-		<comment>Sets the year of #ICalVcardTime.</comment>
-		<custom>    g_return_if_fail (self != NULL);
-    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->year = year;</custom>
-	</method>
-	<method name="i_cal_vcard_time_get_month" corresponds="none" kind="get" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
-		<returns type="gint" comment="The month." />
-		<comment xml:space="preserve">Gets the month of #ICalVcardTime.</comment>
-		<custom>    g_return_val_if_fail (self != NULL, 0);
-    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->month;</custom>
-	</method>
-	<method name="i_cal_vcard_time_set_month" corresponds="none" kind="set" since="4.0">
-		<parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
-		<parameter type="gint" name="month" comment="The month"/>
-		<comment>Sets the month of #ICalVcardTime.</comment>
-		<custom>    g_return_if_fail (self != NULL);
-    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->month = month;</custom>
-	</method>
-	<method name="i_cal_vcard_time_get_day" corresponds="none" kind="get" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
-		<returns type="gint" comment="The day." />
-		<comment xml:space="preserve">Gets the day of #ICalVcardTime.</comment>
-		<custom>    g_return_val_if_fail (self != NULL, 0);
-    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->day;</custom>
-	</method>
-	<method name="i_cal_vcard_time_set_day" corresponds="none" kind="set" since="4.0">
-		<parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
-		<parameter type="gint" name="day" comment="The day"/>
-		<comment>Sets the day of #ICalVcardTime.</comment>
-		<custom>    g_return_if_fail (self != NULL);
-    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->day = day;</custom>
-	</method>
-	<method name="i_cal_vcard_time_get_hour" corresponds="none" kind="get" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
-		<returns type="gint" comment="The hour." />
-		<comment xml:space="preserve">Gets the hour of #ICalVcardTime.</comment>
-		<custom>    g_return_val_if_fail (self != NULL, 0);
-    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->hour;</custom>
-	</method>
-	<method name="i_cal_vcard_time_set_hour" corresponds="none" kind="set" since="4.0">
-		<parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
-		<parameter type="gint" name="hour" comment="The hour"/>
-		<comment>Sets the hour of #ICalVcardTime.</comment>
-		<custom>    g_return_if_fail (self != NULL);
-    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->hour = hour;</custom>
-	</method>
-	<method name="i_cal_vcard_time_get_minute" corresponds="none" kind="get" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
-		<returns type="gint" comment="The minute." />
-		<comment xml:space="preserve">Gets the minute of #ICalVcardTime.</comment>
-		<custom>    g_return_val_if_fail (self != NULL, 0);
-    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->minute;</custom>
-	</method>
-	<method name="i_cal_vcard_time_set_minute" corresponds="none" kind="set" since="4.0">
-		<parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
-		<parameter type="gint" name="minute" comment="The minute"/>
-		<comment>Sets the minute of #ICalVcardTime.</comment>
-		<custom>    g_return_if_fail (self != NULL);
-    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->minute = minute;</custom>
-	</method>
-	<method name="i_cal_vcard_time_get_second" corresponds="none" kind="get" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
-		<returns type="gint" comment="The second." />
-		<comment xml:space="preserve">Gets the second of #ICalVcardTime.</comment>
-		<custom>    g_return_val_if_fail (self != NULL, 0);
-    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->second;</custom>
-	</method>
-	<method name="i_cal_vcard_time_set_second" corresponds="none" kind="set" since="4.0">
-		<parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
-		<parameter type="gint" name="second" comment="The second"/>
-		<comment>Sets the second of #ICalVcardTime.</comment>
-		<custom>    g_return_if_fail (self != NULL);
-    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->second = second;</custom>
-	</method>
-	<method name="i_cal_vcard_time_get_utc_offset" corresponds="none" kind="get" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
-		<returns type="gint" comment="The UTC offset" />
-		<comment xml:space="preserve">Gets the UTC offset of #ICalVcardTime.</comment>
-		<custom>    g_return_val_if_fail (self != NULL, 0);
-    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->utcoffset;</custom>
-	</method>
-	<method name="i_cal_vcard_time_set_utc_offset" corresponds="none" kind="set" since="4.0">
-		<parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
-		<parameter type="gint" name="utc_offset" comment="The UTC offset"/>
-		<comment>Sets the UTC offset of #ICalVcardTime.</comment>
-		<custom>    g_return_if_fail (self != NULL);
-    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))->utcoffset = utc_offset;</custom>
-	</method>
-	<method name="i_cal_vcard_time_get_date" corresponds="none" kind="get" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
-		<parameter type="gint *" name="year" annotation="out caller-allocates, optional" comment="Out parameter for the 'year' part of the date"/>
-		<parameter type="gint *" name="month" annotation="out caller-allocates, optional" comment="Out parameter for the 'month' part of the date"/>
-		<parameter type="gint *" name="day" annotation="out caller-allocates, optional" comment="Out parameter for the 'day' part of the date"/>
-		<comment xml:space="preserve">Gets the year/month/date parts of the @timetype in one call.</comment>
-		<custom>    vcardtimetype *itt;
+  </method>
+  <method name="i_cal_vcard_time_new_null_date" corresponds="vcardtime_null_date" kind="constructor" since="4.0">
+    <returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime"/>
+    <comment xml:space="preserve">Creates a new empty ("null") date.</comment>
+  </method>
+  <method name="i_cal_vcard_time_new_null_time" corresponds="vcardtime_null_time" kind="constructor" since="4.0">
+    <returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime"/>
+    <comment xml:space="preserve">Creates a new empty ("null") time.</comment>
+  </method>
+  <method name="i_cal_vcard_time_new_null_timestamp" corresponds="vcardtime_null_timestamp" kind="constructor" since="4.0">
+    <returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime"/>
+    <comment xml:space="preserve">Creates a new empty ("null") timestamp.</comment>
+  </method>
+  <method name="i_cal_vcard_time_new_null_datetime" corresponds="vcardtime_null_datetime" kind="constructor" since="4.0">
+    <returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime"/>
+    <comment xml:space="preserve">Creates a new empty ("null") datetime.</comment>
+  </method>
+  <method name="i_cal_vcard_time_new_current_utc_time" corresponds="vcardtime_current_utc_time" kind="others" since="4.0">
+    <returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime"/>
+    <comment xml:space="preserve">Creates a new #ICalVcardTime with the current time in UTC zone.</comment>
+  </method>
+  <method name="i_cal_vcard_time_is_null_datetime" corresponds="vcardtime_is_null_datetime" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
+    <returns type="gboolean" comment="Whether @self is null datetime."/>
+    <comment xml:space="preserve">Returns true if the datetime is null.</comment>
+  </method>
+  <method name="i_cal_vcard_time_is_time" corresponds="vcardtime_is_time" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
+    <returns type="gboolean" comment="Whether @self represents a time."/>
+    <comment xml:space="preserve">Returns whether @self represents a time.</comment>
+  </method>
+  <method name="i_cal_vcard_time_is_date" corresponds="vcardtime_is_date" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
+    <returns type="gboolean" comment="Whether @self represents a date."/>
+    <comment xml:space="preserve">Returns whether @self represents a date.</comment>
+  </method>
+  <method name="i_cal_vcard_time_is_datetime" corresponds="vcardtime_is_datetime" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
+    <returns type="gboolean" comment="Whether @self represents a datetime."/>
+    <comment xml:space="preserve">Returns whether @self represents a datetime.</comment>
+  </method>
+  <method name="i_cal_vcard_time_is_timestamp" corresponds="vcardtime_is_timestamp" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
+    <returns type="gboolean" comment="Whether @self represents a timestamp."/>
+    <comment xml:space="preserve">Returns whether @self represents a timestamp.</comment>
+  </method>
+  <method name="i_cal_vcard_time_is_utc" corresponds="vcardtime_is_utc" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
+    <returns type="gboolean" comment="Whether @self is in UTC zone."/>
+    <comment xml:space="preserve">Returns whether @self is in UTC zone.</comment>
+  </method>
+  <method name="i_cal_vcard_time_is_leap_year" corresponds="vcardtime_is_leap_year" since="4.0">
+    <parameter type="gint" name="year" comment="a year"/>
+    <returns type="gboolean" comment="Whether the @year is a leap year."/>
+    <comment xml:space="preserve">Returns whether the @year is a leap year.</comment>
+  </method>
+  <method name="i_cal_vcard_time_is_valid_time" corresponds="vcardtime_is_valid_time" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be checked"/>
+    <returns type="gboolean" comment="Whether @self represents a valid time."/>
+    <comment xml:space="preserve">Returns whether @self represents a valid time.</comment>
+  </method>
+  <enum name="ICalVcardTimeConvertFlags" native_name="CUSTOM" default_native="0">
+    <element name="VCARDTIME_BARE_TIME"/>
+    <element name="VCARDTIME_AS_V4"/>
+  </enum>
+  <method name="i_cal_vcard_time_as_vcard_string" corresponds="vcardtime_as_vcard_string_r" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be converted"/>
+    <parameter type="guint" name="flags" comment="bit-or of #ICalVcardTimeConvertFlags"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation" translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Returns a string representation of the @self.</comment>
+  </method>
+  <method name="i_cal_vcard_time_new_from_string" corresponds="vcardtime_from_string" kind="others" since="4.0">
+    <parameter type="const gchar *" name="str" comment="The time string"/>
+    <parameter type="gboolean" name="is_bare_time" comment="Whether the string contains a bare time, not date/time"/>
+    <returns type="ICalVcardTime *" annotation="transfer full" comment="The newly created #ICalVcardTime"/>
+    <comment xml:space="preserve">Creates a time from the @str.</comment>
+  </method>
+  <method name="i_cal_vcard_time_get_year" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
+    <returns type="gint" comment="The year."/>
+    <comment xml:space="preserve">Gets the year of #ICalVcardTime.</comment>
+    <custom>    g_return_val_if_fail (self != NULL, 0);
+    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;year;</custom>
+  </method>
+  <method name="i_cal_vcard_time_set_year" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
+    <parameter type="gint" name="year" comment="The year"/>
+    <comment>Sets the year of #ICalVcardTime.</comment>
+    <custom>    g_return_if_fail (self != NULL);
+    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;year = year;</custom>
+  </method>
+  <method name="i_cal_vcard_time_get_month" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
+    <returns type="gint" comment="The month."/>
+    <comment xml:space="preserve">Gets the month of #ICalVcardTime.</comment>
+    <custom>    g_return_val_if_fail (self != NULL, 0);
+    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;month;</custom>
+  </method>
+  <method name="i_cal_vcard_time_set_month" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
+    <parameter type="gint" name="month" comment="The month"/>
+    <comment>Sets the month of #ICalVcardTime.</comment>
+    <custom>    g_return_if_fail (self != NULL);
+    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;month = month;</custom>
+  </method>
+  <method name="i_cal_vcard_time_get_day" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
+    <returns type="gint" comment="The day."/>
+    <comment xml:space="preserve">Gets the day of #ICalVcardTime.</comment>
+    <custom>    g_return_val_if_fail (self != NULL, 0);
+    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;day;</custom>
+  </method>
+  <method name="i_cal_vcard_time_set_day" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
+    <parameter type="gint" name="day" comment="The day"/>
+    <comment>Sets the day of #ICalVcardTime.</comment>
+    <custom>    g_return_if_fail (self != NULL);
+    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;day = day;</custom>
+  </method>
+  <method name="i_cal_vcard_time_get_hour" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
+    <returns type="gint" comment="The hour."/>
+    <comment xml:space="preserve">Gets the hour of #ICalVcardTime.</comment>
+    <custom>    g_return_val_if_fail (self != NULL, 0);
+    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;hour;</custom>
+  </method>
+  <method name="i_cal_vcard_time_set_hour" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
+    <parameter type="gint" name="hour" comment="The hour"/>
+    <comment>Sets the hour of #ICalVcardTime.</comment>
+    <custom>    g_return_if_fail (self != NULL);
+    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;hour = hour;</custom>
+  </method>
+  <method name="i_cal_vcard_time_get_minute" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
+    <returns type="gint" comment="The minute."/>
+    <comment xml:space="preserve">Gets the minute of #ICalVcardTime.</comment>
+    <custom>    g_return_val_if_fail (self != NULL, 0);
+    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;minute;</custom>
+  </method>
+  <method name="i_cal_vcard_time_set_minute" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
+    <parameter type="gint" name="minute" comment="The minute"/>
+    <comment>Sets the minute of #ICalVcardTime.</comment>
+    <custom>    g_return_if_fail (self != NULL);
+    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;minute = minute;</custom>
+  </method>
+  <method name="i_cal_vcard_time_get_second" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
+    <returns type="gint" comment="The second."/>
+    <comment xml:space="preserve">Gets the second of #ICalVcardTime.</comment>
+    <custom>    g_return_val_if_fail (self != NULL, 0);
+    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;second;</custom>
+  </method>
+  <method name="i_cal_vcard_time_set_second" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
+    <parameter type="gint" name="second" comment="The second"/>
+    <comment>Sets the second of #ICalVcardTime.</comment>
+    <custom>    g_return_if_fail (self != NULL);
+    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;second = second;</custom>
+  </method>
+  <method name="i_cal_vcard_time_get_utc_offset" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
+    <returns type="gint" comment="The UTC offset"/>
+    <comment xml:space="preserve">Gets the UTC offset of #ICalVcardTime.</comment>
+    <custom>    g_return_val_if_fail (self != NULL, 0);
+    return ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;utcoffset;</custom>
+  </method>
+  <method name="i_cal_vcard_time_set_utc_offset" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set"/>
+    <parameter type="gint" name="utc_offset" comment="The UTC offset"/>
+    <comment>Sets the UTC offset of #ICalVcardTime.</comment>
+    <custom>    g_return_if_fail (self != NULL);
+    ((struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self))-&gt;utcoffset = utc_offset;</custom>
+  </method>
+  <method name="i_cal_vcard_time_get_date" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
+    <parameter type="gint *" name="year" annotation="out caller-allocates, optional" comment="Out parameter for the 'year' part of the date"/>
+    <parameter type="gint *" name="month" annotation="out caller-allocates, optional" comment="Out parameter for the 'month' part of the date"/>
+    <parameter type="gint *" name="day" annotation="out caller-allocates, optional" comment="Out parameter for the 'day' part of the date"/>
+    <comment xml:space="preserve">Gets the year/month/date parts of the @timetype in one call.</comment>
+    <custom>    vcardtimetype *itt;
     g_return_if_fail(self != NULL);
     itt = (struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self);
     g_return_if_fail(itt != NULL);
     if(year)
-        *year = itt->year;
+        *year = itt-&gt;year;
     if(month)
-        *month = itt->month;
+        *month = itt-&gt;month;
     if(day)
-        *day = itt->day; </custom>
-	</method>
-	<method name="i_cal_vcard_time_set_date" corresponds="none" kind="set" since="4.0">
-		<parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set to"/>
-		<parameter type="gint" name="year" comment="The 'year' part of the date" />
-		<parameter type="gint" name="month" comment="The 'month' part of the date" />
-		<parameter type="gint" name="day" comment="The 'day' part of the date" />
-		<comment xml:space="preserve">Sets the year/month/date parts of the @timetype in one call. This doesn't verify validity of the given date.</comment>
-		<custom>    vcardtimetype *itt;
+        *day = itt-&gt;day; </custom>
+  </method>
+  <method name="i_cal_vcard_time_set_date" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set to"/>
+    <parameter type="gint" name="year" comment="The 'year' part of the date"/>
+    <parameter type="gint" name="month" comment="The 'month' part of the date"/>
+    <parameter type="gint" name="day" comment="The 'day' part of the date"/>
+    <comment xml:space="preserve">Sets the year/month/date parts of the @timetype in one call. This doesn't verify validity of the given date.</comment>
+    <custom>    vcardtimetype *itt;
     g_return_if_fail(self != NULL);
     itt = (struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self);
     g_return_if_fail(itt != NULL);
-    itt->year = year;
-    itt->month = month;
-    itt->day = day; </custom>
-	</method>
-	<method name="i_cal_vcard_time_get_time" corresponds="none" kind="get" since="4.0">
-		<parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
-		<parameter type="gint *" name="hour" annotation="out caller-allocates, optional" comment="Out parameter for the 'hour' part of the time"/>
-		<parameter type="gint *" name="minute" annotation="out caller-allocates, optional" comment="Out parameter for the 'minute' part of the time"/>
-		<parameter type="gint *" name="second" annotation="out caller-allocates, optional" comment="Out parameter for the 'second' part of the time"/>
-		<comment xml:space="preserve">Gets the hour/minute/second parts of the @timetype in one call.</comment>
-		<custom>    vcardtimetype *itt;
+    itt-&gt;year = year;
+    itt-&gt;month = month;
+    itt-&gt;day = day; </custom>
+  </method>
+  <method name="i_cal_vcard_time_get_time" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be queried"/>
+    <parameter type="gint *" name="hour" annotation="out caller-allocates, optional" comment="Out parameter for the 'hour' part of the time"/>
+    <parameter type="gint *" name="minute" annotation="out caller-allocates, optional" comment="Out parameter for the 'minute' part of the time"/>
+    <parameter type="gint *" name="second" annotation="out caller-allocates, optional" comment="Out parameter for the 'second' part of the time"/>
+    <comment xml:space="preserve">Gets the hour/minute/second parts of the @timetype in one call.</comment>
+    <custom>    vcardtimetype *itt;
     g_return_if_fail(self != NULL);
     itt = (struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self);
     g_return_if_fail(itt != NULL);
     if(hour)
-        *hour = itt->hour;
+        *hour = itt-&gt;hour;
     if(minute)
-        *minute = itt->minute;
+        *minute = itt-&gt;minute;
     if(second)
-        *second = itt->second; </custom>
-	</method>
-	<method name="i_cal_vcard_time_set_time" corresponds="none" kind="set" since="4.0">
-		<parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set to"/>
-		<parameter type="gint" name="hour" comment="The 'hour' part of the time" />
-		<parameter type="gint" name="minute" comment="The 'minute' part of the time" />
-		<parameter type="gint" name="second" comment="The 'second' part of the time" />
-		<comment xml:space="preserve">Sets the hour/minute/second parts of the @timetype in one call. This doesn't verify validity of the given time.</comment>
-		<custom>    vcardtimetype *itt;
+        *second = itt-&gt;second; </custom>
+  </method>
+  <method name="i_cal_vcard_time_set_time" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardTime *" name="self" comment="The #ICalVcardTime to be set to"/>
+    <parameter type="gint" name="hour" comment="The 'hour' part of the time"/>
+    <parameter type="gint" name="minute" comment="The 'minute' part of the time"/>
+    <parameter type="gint" name="second" comment="The 'second' part of the time"/>
+    <comment xml:space="preserve">Sets the hour/minute/second parts of the @timetype in one call. This doesn't verify validity of the given time.</comment>
+    <custom>    vcardtimetype *itt;
     g_return_if_fail(self != NULL);
     itt = (struct vcardtimetype *)i_cal_object_get_native ((ICalObject *)self);
     g_return_if_fail(itt != NULL);
-    itt->hour = hour;
-    itt->minute = minute;
-    itt->second = second; </custom>
-	</method>
+    itt-&gt;hour = hour;
+    itt-&gt;minute = minute;
+    itt-&gt;second = second; </custom>
+  </method>
 </structure>

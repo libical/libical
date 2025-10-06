@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,54 +7,54 @@
 
 -->
 <structure namespace="ICal" name="Trigger" native="struct icaltriggertype" is_bare="true" default_native="icaltriggertype_from_seconds (0)">
-    <method name="i_cal_trigger_new_from_seconds" corresponds="icaltriggertype_from_seconds" kind="constructor" since="1.0">
-        <parameter type="const gint" name="reltime" comment="An integer"/>
-        <returns type="ICalTrigger *" annotation="transfer full" comment="The newly created #ICalTrigger."/>
-        <comment xml:space="preserve">Creates a #ICalTrigger from integer.</comment>
-    </method>
-    <method name="i_cal_trigger_new_from_string" corresponds="icaltriggertype_from_string" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="str" comment="A string"/>
-        <returns type="ICalTrigger *" annotation="transfer full" comment="The newly created #ICalTrigger."/>
-        <comment xml:space="preserve">Creates a #ICalTrigger from a string.</comment>
-    </method>
-    <method name="i_cal_trigger_is_null_trigger" corresponds="icaltriggertype_is_null_trigger" since="1.0">
-        <parameter type="ICalTrigger *" name="tr" comment="A #ICalTrigger"/>
-        <returns type="gboolean" comment="true if yes, false if not."/>
-        <comment xml:space="preserve">Checks if a #ICalTrigger is a null trigger.</comment>
-    </method>
-    <method name="i_cal_trigger_is_bad_trigger" corresponds="icaltriggertype_is_bad_trigger" since="1.0">
-        <parameter type="ICalTrigger *" name="tr" comment="A #ICalTrigger"/>
-        <returns type="gboolean" comment="true if yes, false if not."/>
-        <comment xml:space="preserve">Checks if a #ICalTrigger is a bad trigger.</comment>
-    </method>
-    <method name="i_cal_trigger_get_time" corresponds="none" kind="get" since="1.0">
-        <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The time of #ICalTrigger."/>
-        <comment>Gets the time from #ICalTrigger.</comment>
-        <custom>	g_return_val_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger), NULL);
-	return i_cal_time_new_full (((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->time);</custom>
-    </method>
-    <method name="i_cal_trigger_set_time" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger"/>
-        <parameter type="ICalTime *" name="time" comment="The time of #ICalTrigger"/>
-        <comment>Sets the time from #ICalTrigger.</comment>
-        <custom>	g_return_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger));
+  <method name="i_cal_trigger_new_from_seconds" corresponds="icaltriggertype_from_seconds" kind="constructor" since="1.0">
+    <parameter type="const gint" name="reltime" comment="An integer"/>
+    <returns type="ICalTrigger *" annotation="transfer full" comment="The newly created #ICalTrigger."/>
+    <comment xml:space="preserve">Creates a #ICalTrigger from integer.</comment>
+  </method>
+  <method name="i_cal_trigger_new_from_string" corresponds="icaltriggertype_from_string" kind="constructor" since="1.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalTrigger *" annotation="transfer full" comment="The newly created #ICalTrigger."/>
+    <comment xml:space="preserve">Creates a #ICalTrigger from a string.</comment>
+  </method>
+  <method name="i_cal_trigger_is_null_trigger" corresponds="icaltriggertype_is_null_trigger" since="1.0">
+    <parameter type="ICalTrigger *" name="tr" comment="A #ICalTrigger"/>
+    <returns type="gboolean" comment="true if yes, false if not."/>
+    <comment xml:space="preserve">Checks if a #ICalTrigger is a null trigger.</comment>
+  </method>
+  <method name="i_cal_trigger_is_bad_trigger" corresponds="icaltriggertype_is_bad_trigger" since="1.0">
+    <parameter type="ICalTrigger *" name="tr" comment="A #ICalTrigger"/>
+    <returns type="gboolean" comment="true if yes, false if not."/>
+    <comment xml:space="preserve">Checks if a #ICalTrigger is a bad trigger.</comment>
+  </method>
+  <method name="i_cal_trigger_get_time" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The time of #ICalTrigger."/>
+    <comment>Gets the time from #ICalTrigger.</comment>
+    <custom>	g_return_val_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger), NULL);
+	return i_cal_time_new_full (((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))-&gt;time);</custom>
+  </method>
+  <method name="i_cal_trigger_set_time" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger"/>
+    <parameter type="ICalTime *" name="time" comment="The time of #ICalTrigger"/>
+    <comment>Sets the time from #ICalTrigger.</comment>
+    <custom>	g_return_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger));
 	g_return_if_fail (time != NULL &amp;&amp; I_CAL_IS_TIME(time));
-	((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->time = *(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)time);</custom>
-    </method>
-    <method name="i_cal_trigger_get_duration" corresponds="none" kind="get" since="1.0">
-        <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger"/>
-        <returns type="ICalDuration *" annotation="transfer full" comment="The duration of #ICalTrigger."/>
-        <comment>Gets the duration from #ICalTrigger.</comment>
-        <custom>	g_return_val_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger), NULL);
-	return i_cal_duration_new_full (((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->duration);</custom>
-    </method>
-    <method name="i_cal_trigger_set_duration" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger"/>
-        <parameter type="ICalDuration *" name="duration" comment="The duration of #ICalTrigger"/>
-        <comment>Sets the duration from #ICalTrigger.</comment>
-        <custom>	g_return_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger));
+	((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))-&gt;time = *(struct icaltimetype *)i_cal_object_get_native ((ICalObject *)time);</custom>
+  </method>
+  <method name="i_cal_trigger_get_duration" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger"/>
+    <returns type="ICalDuration *" annotation="transfer full" comment="The duration of #ICalTrigger."/>
+    <comment>Gets the duration from #ICalTrigger.</comment>
+    <custom>	g_return_val_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger), NULL);
+	return i_cal_duration_new_full (((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))-&gt;duration);</custom>
+  </method>
+  <method name="i_cal_trigger_set_duration" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTrigger *" name="trigger" comment="The #ICalTrigger"/>
+    <parameter type="ICalDuration *" name="duration" comment="The duration of #ICalTrigger"/>
+    <comment>Sets the duration from #ICalTrigger.</comment>
+    <custom>	g_return_if_fail (trigger != NULL &amp;&amp; I_CAL_IS_TRIGGER (trigger));
 	g_return_if_fail (duration != NULL &amp;&amp; I_CAL_IS_DURATION (duration));
-	((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))->duration = *(struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration);</custom>
-    </method>
+	((struct icaltriggertype *)i_cal_object_get_native ((ICalObject *)trigger))-&gt;duration = *(struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration);</custom>
+  </method>
 </structure>

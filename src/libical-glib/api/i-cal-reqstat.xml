@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,51 +7,51 @@
 
 -->
 <structure namespace="ICal" name="Reqstat" native="struct icalreqstattype" is_bare="true" default_native="i_cal_reqstat_new_default ()">
-    <method name="i_cal_reqstat_new_from_string" corresponds="icalreqstattype_from_string" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="str" comment="A string"/>
-        <returns type="ICalReqstat *" annotation="transfer full" comment="The newly created #ICalReqstat."/>
-        <comment xml:space="preserve">Creates a #ICalReqstat from string.</comment>
-    </method>
-    <method name="i_cal_reqstat_to_string" corresponds="icalreqstattype_as_string_r" since="1.0">
-        <parameter type="ICalReqstat *" name="stat" comment="A #ICalReqstat"/>
-        <returns type="gchar *" annotation="transfer full" comment="A string." translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Converts #ICalReqstat to a string representation.</comment>
-    </method>
-    <method name="i_cal_reqstat_new_default" corresponds="none" kind="private" annotation="skip" since="1.0">
-        <returns type="struct icalreqstattype" annotation="transfer full" comment="The newly created #ICalReqstat" />
-        <comment xml:space="preserve">Creates a new default #ICalReqstat.</comment>
-        <custom>        struct icalreqstattype reqstattype;
+  <method name="i_cal_reqstat_new_from_string" corresponds="icalreqstattype_from_string" kind="constructor" since="1.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalReqstat *" annotation="transfer full" comment="The newly created #ICalReqstat."/>
+    <comment xml:space="preserve">Creates a #ICalReqstat from string.</comment>
+  </method>
+  <method name="i_cal_reqstat_to_string" corresponds="icalreqstattype_as_string_r" since="1.0">
+    <parameter type="ICalReqstat *" name="stat" comment="A #ICalReqstat"/>
+    <returns type="gchar *" annotation="transfer full" comment="A string." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts #ICalReqstat to a string representation.</comment>
+  </method>
+  <method name="i_cal_reqstat_new_default" corresponds="none" kind="private" annotation="skip" since="1.0">
+    <returns type="struct icalreqstattype" annotation="transfer full" comment="The newly created #ICalReqstat"/>
+    <comment xml:space="preserve">Creates a new default #ICalReqstat.</comment>
+    <custom>        struct icalreqstattype reqstattype;
         reqstattype.code = ICAL_UNKNOWN_STATUS;
         reqstattype.desc = NULL;
         reqstattype.debug = NULL;
         return reqstattype;</custom>
-    </method>
-    <method name="i_cal_reqstat_get_code" corresponds="none" kind="get" since="1.0">
-        <parameter type="ICalReqstat *" name="reqstat" comment="The #ICalReqstat"/>
-        <returns type="ICalRequestStatus" comment="The code of @reqstat."/>
-        <comment>Gets the code of #ICalReqstat.</comment>
-        <custom>        g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT (reqstat), I_CAL_UNKNOWN_STATUS);
-        return (ICalRequestStatus) (((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))->code);</custom>
-    </method>
-    <method name="i_cal_reqstat_set_code" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalReqstat *" name="reqstat" comment="The #ICalReqstat"/>
-        <parameter type="ICalRequestStatus" name="code" comment="The code of @reqstat"/>
-        <comment>Sets the code of #ICalReqstat.</comment>
-        <custom>        g_return_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT (reqstat));
-        ((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))->code = (icalrequeststatus) (code);</custom>
-    </method>
-    <method name="i_cal_reqstat_get_desc" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalReqstat *" name="reqstat" comment="The #ICalReqstat"/>
-        <returns type="const gchar *" annotation="transfer none" comment="The desc of @reqstat."/>
-        <comment>Gets the desc of #ICalReqstat.</comment>
-        <custom>        g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT ((ICalReqstat *)reqstat), NULL);
-        return ((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))->desc;</custom>
-    </method>
-    <method name="i_cal_reqstat_get_debug" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalReqstat *" name="reqstat" comment="The #ICalReqstat"/>
-        <returns type="const gchar *" annotation="transfer none" comment="The debug of @reqstat."/>
-        <comment>Gets the debug of #ICalReqstat.</comment>
-        <custom>        g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT ((ICalReqstat *)reqstat), NULL);
-        return ((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))->debug;</custom>
-    </method>
+  </method>
+  <method name="i_cal_reqstat_get_code" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalReqstat *" name="reqstat" comment="The #ICalReqstat"/>
+    <returns type="ICalRequestStatus" comment="The code of @reqstat."/>
+    <comment>Gets the code of #ICalReqstat.</comment>
+    <custom>        g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT (reqstat), I_CAL_UNKNOWN_STATUS);
+        return (ICalRequestStatus) (((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))-&gt;code);</custom>
+  </method>
+  <method name="i_cal_reqstat_set_code" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalReqstat *" name="reqstat" comment="The #ICalReqstat"/>
+    <parameter type="ICalRequestStatus" name="code" comment="The code of @reqstat"/>
+    <comment>Sets the code of #ICalReqstat.</comment>
+    <custom>        g_return_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT (reqstat));
+        ((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))-&gt;code = (icalrequeststatus) (code);</custom>
+  </method>
+  <method name="i_cal_reqstat_get_desc" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalReqstat *" name="reqstat" comment="The #ICalReqstat"/>
+    <returns type="const gchar *" annotation="transfer none" comment="The desc of @reqstat."/>
+    <comment>Gets the desc of #ICalReqstat.</comment>
+    <custom>        g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT ((ICalReqstat *)reqstat), NULL);
+        return ((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))-&gt;desc;</custom>
+  </method>
+  <method name="i_cal_reqstat_get_debug" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalReqstat *" name="reqstat" comment="The #ICalReqstat"/>
+    <returns type="const gchar *" annotation="transfer none" comment="The debug of @reqstat."/>
+    <comment>Gets the debug of #ICalReqstat.</comment>
+    <custom>        g_return_val_if_fail (reqstat != NULL &amp;&amp; I_CAL_IS_REQSTAT ((ICalReqstat *)reqstat), NULL);
+        return ((struct icalreqstattype *)i_cal_object_get_native ((ICalObject *)reqstat))-&gt;debug;</custom>
+  </method>
 </structure>
