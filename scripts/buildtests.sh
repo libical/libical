@@ -121,7 +121,7 @@ SET_CLANG() {
 # set the name of the build directory for the current test
 # $1 = the name of the current test
 SET_BDIR() {
-  BDIR=$TOP/build-$1
+  BDIR="$TOP/build-$1"
 }
 
 #function CHECK_WARNINGS:
@@ -192,7 +192,7 @@ CONFIGURE() {
   mkdir "$BDIR"
   cd "$BDIR" || exit 1
   # shellcheck disable=SC2086
-  cmake .. $2 2>&1 | tee cmake.out || exit 1
+  eval cmake .. $2 2>&1 | tee cmake.out || exit 1
   declare -i numWarnings
   declare -i numDeprecates
   set +e
@@ -863,6 +863,7 @@ TZCMAKEOPTS="$CMAKEOPTS -DLIBICAL_ENABLE_BUILTIN_TZDATA=True"
 LTOCMAKEOPTS="$CMAKEOPTS -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=True"
 GLIBOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=OFF -DLIBICAL_GLIB_VAPI=ON"
 FUZZOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True"
+TOOLCHAIN="-DCMAKE_TOOLCHAIN_FILE=\"$TOP/cmake/Toolchain-Linux-GCC-i686.cmake\""
 
 #Static code checkers
 STATICCCHECKOPTS="\
@@ -894,7 +895,7 @@ GCC_BUILD testgccnocxx "$CMAKEOPTS -DLIBICAL_CXX_BINDINGS=off -DLIBICAL_JAVA_BIN
 if (test "$(uname -s)" = "Linux"); then
   # Fedora: dnf install libstdc++-*.i686 glibc-*.i686 libgcc.i686 libdb-devel.i686
   CMAKEOPTS_NONSTRICT="-DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
-  GCC_BUILD testgcc1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS_NONSTRICT -DLIBICAL_JAVA_BINDINGS=False"
+  GCC_BUILD testgcc1cross "$TOOLCHAIN $CMAKEOPTS_NONSTRICT -DLIBICAL_JAVA_BINDINGS=False"
 fi
 GCC_BUILD testgcc1builtin "-DLIBICAL_ENABLE_BUILTIN_TZDATA=True"
 GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
@@ -910,7 +911,7 @@ GCC_BUILD testgcc5static-nocxx "$CMAKEOPTS -DLIBICAL_JAVA_BINDINGS=False -DLIBIC
 if (test "$(uname -s)" = "Linux"); then
   # Fedora: dnf install libstdc++-*.i686 glibc-*.i686 libgcc.i686 libdb-devel.i686
   CMAKEOPTS_NONSTRICT="-DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
-  GCC_BUILD testgcc1static-cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS_NONSTRICT $STATIC_OPTS"
+  GCC_BUILD testgcc1static-cross "$TOOLCHAIN $CMAKEOPTS_NONSTRICT $STATIC_OPTS"
 fi
 GCC_BUILD testgcc1static-builtin "-DLIBICAL_ENABLE_BUILTIN_TZDATA=True $STATIC_OPTS"
 GCC_BUILD testgcc2static-builtin "$TZCMAKEOPTS $STATIC_OPTS"
@@ -940,7 +941,7 @@ CLANG_BUILD testclang4glib "$GLIBOPTS"
 if (test "$(uname -s)" = "Linux"); then
   # Fedora: dnf install libstdc++-*.i686 glibc-*.i686 libgcc.i686 libdb-devel.i686
   CMAKEOPTS_NONSTRICT="-DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
-  CLANG_BUILD testclang1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS_NONSTRICT -DLIBICAL_JAVA_BINDINGS=off"
+  CLANG_BUILD testclang1cross "$TOOLCHAIN $CMAKEOPTS_NONSTRICT -DLIBICAL_JAVA_BINDINGS=off"
 fi
 
 #Memory consistency check

@@ -1,243 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 -->
 <structure namespace="ICalVcard" name="DerivedProperty">
-	<skip>vcardproperty_vanew_*</skip>
-	<enum name="ICalVcardPropertyKind" native_name="vcardproperty_kind" default_native="I_CAL_VCARD_NO_PROPERTY">
-		<element name="VCARD_ANY_PROPERTY"/>
-		<element name="VCARD_ADR_PROPERTY"/>
-		<element name="VCARD_AGENT_PROPERTY"/>
-		<element name="VCARD_ANNIVERSARY_PROPERTY"/>
-		<element name="VCARD_BDAY_PROPERTY"/>
-		<element name="VCARD_BEGIN_PROPERTY"/>
-		<element name="VCARD_BIRTHPLACE_PROPERTY"/>
-		<element name="VCARD_CALADRURI_PROPERTY"/>
-		<element name="VCARD_CALURI_PROPERTY"/>
-		<element name="VCARD_CATEGORIES_PROPERTY"/>
-		<element name="VCARD_CLASS_PROPERTY"/>
-		<element name="VCARD_CLIENTPIDMAP_PROPERTY"/>
-		<element name="VCARD_CONTACTURI_PROPERTY"/>
-		<element name="VCARD_CREATED_PROPERTY"/>
-		<element name="VCARD_DEATHDATE_PROPERTY"/>
-		<element name="VCARD_DEATHPLACE_PROPERTY"/>
-		<element name="VCARD_EMAIL_PROPERTY"/>
-		<element name="VCARD_END_PROPERTY"/>
-		<element name="VCARD_EXPERTISE_PROPERTY"/>
-		<element name="VCARD_FBURL_PROPERTY"/>
-		<element name="VCARD_FN_PROPERTY"/>
-		<element name="VCARD_GENDER_PROPERTY"/>
-		<element name="VCARD_GEO_PROPERTY"/>
-		<element name="VCARD_GRAMGENDER_PROPERTY"/>
-		<element name="VCARD_HOBBY_PROPERTY"/>
-		<element name="VCARD_IMPP_PROPERTY"/>
-		<element name="VCARD_INTEREST_PROPERTY"/>
-		<element name="VCARD_JSPROP_PROPERTY"/>
-		<element name="VCARD_KEY_PROPERTY"/>
-		<element name="VCARD_KIND_PROPERTY"/>
-		<element name="VCARD_LABEL_PROPERTY"/>
-		<element name="VCARD_LANG_PROPERTY"/>
-		<element name="VCARD_LANGUAGE_PROPERTY"/>
-		<element name="VCARD_LOGO_PROPERTY"/>
-		<element name="VCARD_MAILER_PROPERTY"/>
-		<element name="VCARD_MEMBER_PROPERTY"/>
-		<element name="VCARD_N_PROPERTY"/>
-		<element name="VCARD_NAME_PROPERTY"/>
-		<element name="VCARD_NICKNAME_PROPERTY"/>
-		<element name="VCARD_NOTE_PROPERTY"/>
-		<element name="VCARD_ORG_PROPERTY"/>
-		<element name="VCARD_ORGDIRECTORY_PROPERTY"/>
-		<element name="VCARD_PHOTO_PROPERTY"/>
-		<element name="VCARD_PRODID_PROPERTY"/>
-		<element name="VCARD_PRONOUNS_PROPERTY"/>
-		<element name="VCARD_RELATED_PROPERTY"/>
-		<element name="VCARD_REV_PROPERTY"/>
-		<element name="VCARD_ROLE_PROPERTY"/>
-		<element name="VCARD_SOCIALPROFILE_PROPERTY"/>
-		<element name="VCARD_SORTSTRING_PROPERTY"/>
-		<element name="VCARD_SOUND_PROPERTY"/>
-		<element name="VCARD_SOURCE_PROPERTY"/>
-		<element name="VCARD_TEL_PROPERTY"/>
-		<element name="VCARD_TITLE_PROPERTY"/>
-		<element name="VCARD_TZ_PROPERTY"/>
-		<element name="VCARD_UID_PROPERTY"/>
-		<element name="VCARD_URL_PROPERTY"/>
-		<element name="VCARD_VERSION_PROPERTY"/>
-		<element name="VCARD_X_PROPERTY"/>
-		<element name="VCARD_XLICERROR_PROPERTY"/>
-		<element name="VCARD_XML_PROPERTY"/>
-		<element name="VCARD_NO_PROPERTY"/>
-	</enum>
-	<method-from-template name="vcardstructured" obj-type="ICalVcardProperty" native-type="vcardproperty" value-name="ADR" since="4.0"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="adr"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="AGENT" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="agent"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="ANNIVERSARY" since="4.0"
-		value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="anniversary"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="BDAY" since="4.0"
-		value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="bday"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="BIRTHPLACE" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="birthplace"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="CALADRURI" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="caladruri"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="CALURI" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="caluri"/>
-	<method-from-template name="strarray-new-get-set" obj-type="ICalVcardProperty" value-name="CATEGORIES" since="4.0"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="categories" native-type="vcardproperty"
-		binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="CLASS" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="class"/>
-	<method-from-template name="strarray-new-get-set" obj-type="ICalVcardProperty" value-name="CLIENTPIDMAP" since="4.0"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="clientpidmap" native-type="vcardproperty"
-		binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="CONTACTURI" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="contacturi"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="CREATED" since="4.0"
-		value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="created"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="DEATHDATE" since="4.0"
-		value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="deathdate"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="DEATHPLACE" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="deathplace"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="EMAIL" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="email"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="EXPERTISE" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="expertise"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="FBURL" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="fburl"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="FN" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="fn"/>
-	<method-from-template name="strarray-new-get-set" obj-type="ICalVcardProperty" value-name="GENDER" since="4.0"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="gender" native-type="vcardproperty"
-		binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="GEO" since="4.0"
-		value-get-type="ICalVcardGeo *" value-set-type="const ICalVcardGeo *" value-set-type-ref="#ICalVcardGeo" value-get-annotation="transfer full"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="geo"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="GRAMGENDER" since="4.0"
-		value-get-type="ICalVcardPropertyGramgender" value-set-type="ICalVcardPropertyGramgender" value-set-type-ref="#ICalVcardPropertyGramgender"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="gramgender"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="HOBBY" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="hobby"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="IMPP" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="impp"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="INTEREST" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="interest"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="JSPROP" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="jsprop"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="KEY" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="key"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="KIND" since="4.0"
-		value-get-type="ICalVcardPropertyKindenum" value-set-type="ICalVcardPropertyKindenum" value-set-type-ref="#ICalVcardPropertyKindenum"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="kind"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="LABEL" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="label"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="LANG" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="lang"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="LANGUAGE" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="language"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="LOGO" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="logo"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="MAILER" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="mailer"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="MEMBER" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="member"/>
-	<method-from-template name="vcardstructured" obj-type="ICalVcardProperty" native-type="vcardproperty" value-name="N" since="4.0"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="n"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="NAME" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="name"/>
-	<method-from-template name="strarray-new-get-set" obj-type="ICalVcardProperty" value-name="NICKNAME" since="4.0"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="nickname" native-type="vcardproperty"
-		binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="NOTE" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="note"/>
-	<method-from-template name="strarray-new-get-set" obj-type="ICalVcardProperty" value-name="ORG" since="4.0"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="org" native-type="vcardproperty"
-		binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="ORGDIRECTORY" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="orgdirectory"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="PHOTO" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="photo"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="PRODID" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="prodid"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="PRONOUNS" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="pronouns"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="RELATED" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="related"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="REV" since="4.0"
-		value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="rev"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="ROLE" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="role"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="SOCIALPROFILE" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="socialprofile"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="SORTSTRING" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="sortstring"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="SOUND" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="sound"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="SOURCE" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="source"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="TEL" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="tel"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="TITLE" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="title"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="TZ" since="4.0"
-		value-get-type="ICalVcardTz *" value-set-type="const ICalVcardTz *" value-set-type-ref="#ICalVcardTz" value-get-annotation="transfer full"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="tz"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="UID" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="uid"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="URL" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="url"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="VERSION" since="4.0"
-		value-get-type="ICalVcardPropertyVersion" value-set-type="ICalVcardPropertyVersion" value-set-type-ref="#ICalVcardPropertyVersion"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="version"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="X" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="x"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="XLICERROR" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="xlicerror"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="XML" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="xml"/>
+  <skip>vcardproperty_vanew_*</skip>
+  <enum name="ICalVcardPropertyKind" native_name="vcardproperty_kind" default_native="I_CAL_VCARD_NO_PROPERTY">
+    <element name="VCARD_ANY_PROPERTY"/>
+    <element name="VCARD_ADR_PROPERTY"/>
+    <element name="VCARD_AGENT_PROPERTY"/>
+    <element name="VCARD_ANNIVERSARY_PROPERTY"/>
+    <element name="VCARD_BDAY_PROPERTY"/>
+    <element name="VCARD_BEGIN_PROPERTY"/>
+    <element name="VCARD_BIRTHPLACE_PROPERTY"/>
+    <element name="VCARD_CALADRURI_PROPERTY"/>
+    <element name="VCARD_CALURI_PROPERTY"/>
+    <element name="VCARD_CATEGORIES_PROPERTY"/>
+    <element name="VCARD_CLASS_PROPERTY"/>
+    <element name="VCARD_CLIENTPIDMAP_PROPERTY"/>
+    <element name="VCARD_CONTACTURI_PROPERTY"/>
+    <element name="VCARD_CREATED_PROPERTY"/>
+    <element name="VCARD_DEATHDATE_PROPERTY"/>
+    <element name="VCARD_DEATHPLACE_PROPERTY"/>
+    <element name="VCARD_EMAIL_PROPERTY"/>
+    <element name="VCARD_END_PROPERTY"/>
+    <element name="VCARD_EXPERTISE_PROPERTY"/>
+    <element name="VCARD_FBURL_PROPERTY"/>
+    <element name="VCARD_FN_PROPERTY"/>
+    <element name="VCARD_GENDER_PROPERTY"/>
+    <element name="VCARD_GEO_PROPERTY"/>
+    <element name="VCARD_GRAMGENDER_PROPERTY"/>
+    <element name="VCARD_HOBBY_PROPERTY"/>
+    <element name="VCARD_IMPP_PROPERTY"/>
+    <element name="VCARD_INTEREST_PROPERTY"/>
+    <element name="VCARD_JSPROP_PROPERTY"/>
+    <element name="VCARD_KEY_PROPERTY"/>
+    <element name="VCARD_KIND_PROPERTY"/>
+    <element name="VCARD_LABEL_PROPERTY"/>
+    <element name="VCARD_LANG_PROPERTY"/>
+    <element name="VCARD_LANGUAGE_PROPERTY"/>
+    <element name="VCARD_LOGO_PROPERTY"/>
+    <element name="VCARD_MAILER_PROPERTY"/>
+    <element name="VCARD_MEMBER_PROPERTY"/>
+    <element name="VCARD_N_PROPERTY"/>
+    <element name="VCARD_NAME_PROPERTY"/>
+    <element name="VCARD_NICKNAME_PROPERTY"/>
+    <element name="VCARD_NOTE_PROPERTY"/>
+    <element name="VCARD_ORG_PROPERTY"/>
+    <element name="VCARD_ORGDIRECTORY_PROPERTY"/>
+    <element name="VCARD_PHOTO_PROPERTY"/>
+    <element name="VCARD_PRODID_PROPERTY"/>
+    <element name="VCARD_PRONOUNS_PROPERTY"/>
+    <element name="VCARD_RELATED_PROPERTY"/>
+    <element name="VCARD_REV_PROPERTY"/>
+    <element name="VCARD_ROLE_PROPERTY"/>
+    <element name="VCARD_SOCIALPROFILE_PROPERTY"/>
+    <element name="VCARD_SORTSTRING_PROPERTY"/>
+    <element name="VCARD_SOUND_PROPERTY"/>
+    <element name="VCARD_SOURCE_PROPERTY"/>
+    <element name="VCARD_TEL_PROPERTY"/>
+    <element name="VCARD_TITLE_PROPERTY"/>
+    <element name="VCARD_TZ_PROPERTY"/>
+    <element name="VCARD_UID_PROPERTY"/>
+    <element name="VCARD_URL_PROPERTY"/>
+    <element name="VCARD_VERSION_PROPERTY"/>
+    <element name="VCARD_X_PROPERTY"/>
+    <element name="VCARD_XLICERROR_PROPERTY"/>
+    <element name="VCARD_XML_PROPERTY"/>
+    <element name="VCARD_NO_PROPERTY"/>
+  </enum>
+  <method-from-template name="vcardstructured" obj-type="ICalVcardProperty" native-type="vcardproperty" value-name="ADR" since="4.0" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="adr"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="AGENT" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="agent"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="ANNIVERSARY" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="anniversary"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="BDAY" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="bday"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="BIRTHPLACE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="birthplace"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="CALADRURI" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="caladruri"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="CALURI" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="caluri"/>
+  <method-from-template name="strarray-new-get-set" obj-type="ICalVcardProperty" value-name="CATEGORIES" since="4.0" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="categories" native-type="vcardproperty" binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="CLASS" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="class"/>
+  <method-from-template name="strarray-new-get-set" obj-type="ICalVcardProperty" value-name="CLIENTPIDMAP" since="4.0" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="clientpidmap" native-type="vcardproperty" binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="CONTACTURI" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="contacturi"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="CREATED" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="created"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="DEATHDATE" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="deathdate"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="DEATHPLACE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="deathplace"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="EMAIL" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="email"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="EXPERTISE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="expertise"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="FBURL" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="fburl"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="FN" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="fn"/>
+  <method-from-template name="strarray-new-get-set" obj-type="ICalVcardProperty" value-name="GENDER" since="4.0" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="gender" native-type="vcardproperty" binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="GEO" since="4.0" value-get-type="ICalVcardGeo *" value-set-type="const ICalVcardGeo *" value-set-type-ref="#ICalVcardGeo" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="geo"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="GRAMGENDER" since="4.0" value-get-type="ICalVcardPropertyGramgender" value-set-type="ICalVcardPropertyGramgender" value-set-type-ref="#ICalVcardPropertyGramgender" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="gramgender"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="HOBBY" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="hobby"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="IMPP" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="impp"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="INTEREST" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="interest"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="JSPROP" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="jsprop"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="KEY" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="key"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="KIND" since="4.0" value-get-type="ICalVcardPropertyKindenum" value-set-type="ICalVcardPropertyKindenum" value-set-type-ref="#ICalVcardPropertyKindenum" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="kind"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="LABEL" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="label"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="LANG" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="lang"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="LANGUAGE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="language"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="LOGO" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="logo"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="MAILER" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="mailer"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="MEMBER" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="member"/>
+  <method-from-template name="vcardstructured" obj-type="ICalVcardProperty" native-type="vcardproperty" value-name="N" since="4.0" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="n"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="NAME" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="name"/>
+  <method-from-template name="strarray-new-get-set" obj-type="ICalVcardProperty" value-name="NICKNAME" since="4.0" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="nickname" native-type="vcardproperty" binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="NOTE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="note"/>
+  <method-from-template name="strarray-new-get-set" obj-type="ICalVcardProperty" value-name="ORG" since="4.0" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="org" native-type="vcardproperty" binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="ORGDIRECTORY" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="orgdirectory"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="PHOTO" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="photo"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="PRODID" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="prodid"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="PRONOUNS" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="pronouns"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="RELATED" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="related"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="REV" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="rev"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="ROLE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="role"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="SOCIALPROFILE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="socialprofile"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="SORTSTRING" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="sortstring"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="SOUND" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="sound"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="SOURCE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="source"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="TEL" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="tel"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="TITLE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="title"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="TZ" since="4.0" value-get-type="ICalVcardTz *" value-set-type="const ICalVcardTz *" value-set-type-ref="#ICalVcardTz" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="tz"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="UID" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="uid"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="URL" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="url"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="VERSION" since="4.0" value-get-type="ICalVcardPropertyVersion" value-set-type="ICalVcardPropertyVersion" value-set-type-ref="#ICalVcardPropertyVersion" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="version"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="X" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="x"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="XLICERROR" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="xlicerror"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardProperty" value-name="XML" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_property" native-prefix="vcardproperty" suffix="xml"/>
 </structure>

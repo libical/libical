@@ -151,22 +151,6 @@ if(NOT PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
   file(GENERATE OUTPUT .gitignore CONTENT "*")
 endif()
 
-# Exit for blacklisted compilers that don't support necessary C standards
-#  MSVC++ < 2013 aka 1800
-set(BAD_C_MESSAGE "")
-if(MSVC)
-  if(MSVC_VERSION LESS 1800)
-    set(BAD_C_MESSAGE "MSVC 2013 or higher")
-  endif()
-endif()
-if(BAD_C_MESSAGE)
-  message(
-    FATAL_ERROR
-    "\nSorry, ${BAD_C_MESSAGE} is required to build this software. "
-    "Please retry using a modern C compiler that supports the C99 standard."
-  )
-endif()
-
 # Enable the test harness
 enable_testing()
 
@@ -222,6 +206,13 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
         "Release"
         "MinSizeRel"
         "RelWithDebInfo"
+  )
+endif()
+string(TOUPPER "${CMAKE_BUILD_TYPE}" UPPERCASE_CMAKE_BUILD_TYPE)
+if(UPPERCASE_CMAKE_BUILD_TYPE MATCHES "^REL" AND LIBICAL_DEVMODE)
+  message(
+    FATAL_ERROR
+    "Cannot combine LIBICAL_DEVMODE with release builds. Either build in debug mode or disable LIBICAL_DEVMODE."
   )
 endif()
 

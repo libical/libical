@@ -33,7 +33,7 @@ endfunction()
 # Warn about deprecated cmake options then call libical_option
 function(libical_deprecated_option deprecated_option option description)
   set(extra_option_arguments ${ARGN})
-  if(${deprecated_option})
+  if(DEFINED ${deprecated_option})
     message(WARNING "${deprecated_option} is deprecated. Use ${option} instead")
     set(${option} ${deprecated_option} CACHE BOOL "${description}")
   endif()

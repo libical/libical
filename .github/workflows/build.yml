@@ -10,7 +10,6 @@ jobs:
       matrix:
         configuration:
           - Debug
-          - Release
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v2
@@ -34,7 +33,6 @@ jobs:
       matrix:
         configuration:
           - Debug
-          - Release
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
@@ -54,7 +52,6 @@ jobs:
       matrix:
         configuration:
           - Debug
-          - Release
     runs-on: macos-13
     env:
       XML_CATALOG_FILES: /usr/local/etc/xml/catalog

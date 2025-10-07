@@ -117,6 +117,9 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
 * Similarly, the `icaltime_add()` and `icaltime_subtract()` functions are now called
   `icalduration_extend()` and `icalduration_from_times()`.  Their functionality has not changed.
 
+* The `icaltzutil_set_zone_directory()` and `icaltzutil_get_zone_directory()` functions are now called
+  `icaltimezone_set_system_zone_directory()` and `icaltimezone_get_system_zone_directory()` respectively.
+
 ### New functions
 
 The following functions have been added:

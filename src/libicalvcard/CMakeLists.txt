@@ -177,6 +177,7 @@ set(
   vcardparameterimpl.h
   vcardparser.c
   vcardparser.h
+  vcardproperty_p.h
   vcardproperty.c
   vcardproperty.h
   vcardstrarray.h

@@ -1,6 +1,13 @@
 # SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
+# Write a "#error" block if the user has defined a macro that is no longer supported
+function(libical_removed_macros option)
+  file(APPEND ${ICAL_FILE_H_FILE} "#if defined(${option})\n")
+  file(APPEND ${ICAL_FILE_H_FILE} "#error You are specifying the ${option} macro which is no longer supported\n")
+  file(APPEND ${ICAL_FILE_H_FILE} "#endif\n")
+endfunction()
+
 # ORDERING OF HEADERS IS SIGNIFICANT. Don't change this ordering.
 # It is required to make the combined header ical.h properly.
 set(
@@ -25,7 +32,6 @@ set(
   ${TOPS}/src/libical/icalproperty.h
   ${TOPS}/src/libical/icalcomponent.h
   ${TOPS}/src/libical/icaltimezone.h
-  ${TOPS}/src/libical/icaltz-util.h
   ${TOPS}/src/libical/icalparser.h
   ${TOPS}/src/libical/icalmemory.h
   ${TOPS}/src/libical/icalerror.h
@@ -39,6 +45,11 @@ file(APPEND ${ICAL_FILE_H_FILE} "#ifndef S_SPLINT_S\n")
 file(APPEND ${ICAL_FILE_H_FILE} "#ifdef __cplusplus\n")
 file(APPEND ${ICAL_FILE_H_FILE} "extern \"C\" {\n")
 file(APPEND ${ICAL_FILE_H_FILE} "#endif\n")
+
+libical_removed_macros(ICAL_ENABLE_ERRORS_ARE_FATAL)
+libical_removed_macros(ICAL_ALLOW_EMPTY_PROPERTIES)
+libical_removed_macros(PVL_USE_MACROS)
+libical_removed_macros(ICAL_SETERROR_ISFUNC)
 
 foreach(_current_FILE ${COMBINEDHEADERSICAL})
   file(STRINGS ${_current_FILE} _lines NEWLINE_CONSUME)

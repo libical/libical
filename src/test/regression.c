@@ -4966,10 +4966,10 @@ void test_zoneinfo_stuff(void)
     strncat(tzdir, "TZDIR=" TEST_DATADIR, 255);
     putenv(tzdir);
 #endif
-    icaltzutil_set_zone_directory(NULL); /*resets to empty */
-    str_is("icaltzutil_get_zone_directory by TZDIR", icaltzutil_get_zone_directory(), TEST_DATADIR);
-    icaltzutil_set_zone_directory("foo");
-    str_is("icaltzutil_get_zone_directory", icaltzutil_get_zone_directory(), "foo");
+    icaltimezone_set_system_zone_directory(NULL); /*resets to empty */
+    str_is("icaltimezone_get_system_zone_directory by TZDIR", icaltimezone_get_system_zone_directory(), TEST_DATADIR);
+    icaltimezone_set_system_zone_directory("foo");
+    str_is("icaltimezone_get_system_zone_directory", icaltimezone_get_system_zone_directory(), "foo");
 
     /* reset the environment */
 #if defined(HAVE_SETENV)
@@ -4978,7 +4978,7 @@ void test_zoneinfo_stuff(void)
     strcpy(tzdir, "TZDIR=");
     putenv(tzdir);
 #endif
-    icaltzutil_set_zone_directory(NULL);
+    icaltimezone_set_system_zone_directory(NULL);
 }
 
 void test_tzid_with_utc_time(void)
