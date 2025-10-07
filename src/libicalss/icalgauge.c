@@ -21,7 +21,7 @@
 #include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
 
-extern int ssparse(void);
+extern int yyparse(void);
 extern char *input_buffer;
 extern char *input_buffer_p;
 
@@ -45,7 +45,7 @@ icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
     icalss_yy_gauge = impl;
     input_buffer = input_buffer_p = (char *)sql;
 
-    r = ssparse();
+    r = yyparse();
 
     if (r == 0) {
         return impl;

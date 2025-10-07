@@ -93,4 +93,4 @@ YYSTYPE;
 #define YYSTYPE_IS_TRIVIAL 1
 #endif
 
-extern YYSTYPE sslval;
+extern YYSTYPE yylval;

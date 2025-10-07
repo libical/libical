@@ -13,6 +13,7 @@
 
 #include "icalssyacc.h"
 #include "icalgaugeimpl.h"
+#include "icalmemory.h"
 #include "assert.h"
 
 const char* input_buffer;
@@ -28,7 +29,7 @@ int icalss_input(char* buf, int max_size)
     else n = l;
 
     if (n > 0){
-        memcpy(buf, input_buffer_p, n);
+        memcpy(buf, input_buffer_p, (size_t)n);
         input_buffer_p += n;
         return n;
     } else {
@@ -40,7 +41,7 @@ int icalss_input(char* buf, int max_size)
 #define YY_INPUT(b,r,ms) ( r= icalss_input(b,ms))
 
 #undef SS_FATAL_ERROR
-#define SS_FATAL_ERROR(msg) sserror(msg)
+#define SS_FATAL_ERROR(msg) yyerror(msg)
 
 %}
 
@@ -97,7 +98,7 @@ NULL                    { return SQLNULL; }
                 unput(c);
         }
         if(c!='\''){
-                sslval.v_string= icalmemory_tmp_copy(yytext);
+                yylval.v_string= icalmemory_tmp_copy(yytext);
                 return STRING;
         } else {
                 /*ssmore();*/
@@ -105,7 +106,7 @@ NULL                    { return SQLNULL; }
 }
 
 [\@\*A-Za-z0-9\-\.]+ {
-        sslval.v_string= icalmemory_tmp_copy(yytext);
+        yylval.v_string= icalmemory_tmp_copy(yytext);
         return STRING;
 }
 
@@ -114,7 +115,7 @@ NULL                    { return SQLNULL; }
 
 %%
 
-int yywrap()
+int yywrap(void)
 {
      return 1;
 }
