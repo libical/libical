@@ -34,7 +34,7 @@ fi
 rm -rf "$BDIR"
 mkdir -p "$BDIR" &&
   cd "$BDIR"
-# shellcheck disable=SC2086
+# shellcheck disable=SC2086,SC2226
 cmake -S .. \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Debug \
@@ -49,7 +49,7 @@ cmake -S .. \
   $CMAKE_VERSION4_OPTIONS \
   -DLIBICAL_BUILD_TESTING_BIGFUZZ=ON \
   -DCMAKE_INSTALL_PREFIX="$INSTALLDIR" &&
-  (cd "$TOP" && ln -sf $BDIR/compile_commands.json) &&
+  (cd "$TOP" && ln -sf "$BDIR/compile_commands.json") &&
   ninja &&
   ninja test &&
   ninja install &&
@@ -64,7 +64,7 @@ INSTALLDIR="$INSTALLDIR-static"
 #rm -rf "$BDIR"
 mkdir -p "$BDIR" &&
   cd "$BDIR"
-# shellcheck disable=SC2086
+# shellcheck disable=SC2086,SC2226
 cmake -S .. \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Debug \
@@ -80,7 +80,7 @@ cmake -S .. \
   $CMAKE_VERSION4_OPTIONS \
   -DLIBICAL_BUILD_TESTING_BIGFUZZ=ON \
   -DCMAKE_INSTALL_PREFIX="$INSTALLDIR" &&
-  (cd "$TOP" && ln -sf $BDIR/compile_commands.json) &&
+  (cd "$TOP" && ln -sf "$BDIR/compile_commands.json") &&
   ninja &&
   ninja test &&
   ninja install &&
