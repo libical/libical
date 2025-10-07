@@ -113,7 +113,9 @@ static buffer_ring *get_buffer_ring_pthread(void)
 
     if (!br) {
         br = buffer_ring_new();
-        pthread_setspecific(ring_key, br);
+        if (br) {
+            pthread_setspecific(ring_key, br);
+        }
     }
     return (br);
 }
