@@ -1,69 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 -->
 <structure namespace="ICalVcard" name="Value" native="vcardvalue" destroy_func="vcardvalue_free" includes="string.h">
-	<method name="i_cal_vcard_value_new" corresponds="vcardvalue_new" kind="constructor" since="4.0">
-		<parameter type="ICalVcardValueKind" name="kind" comment="A #ICalVcardValueKind"/>
-		<returns type="ICalVcardValue *" annotation="transfer full" comment="The newly created #ICalVcardValue."/>
-		<comment xml:space="preserve">Creates a new #ICalVcardValue with the specified @kind.</comment>
-	</method>
-	<method name="i_cal_vcard_value_clone" corresponds="vcardvalue_clone" kind="clone" since="4.0">
-		<parameter type="const ICalVcardValue *" name="value" comment="The #ICalVcardValue to be cloned."/>
-		<returns type="ICalVcardValue *" annotation="transfer full" comment="The newly created #ICalVcardValue with the same property as @value."/>
-		<comment xml:space="preserve">Deeply clones an #ICalVcardValue.</comment>
-	</method>
-	<method name="i_cal_vcard_value_new_from_string" corresponds="vcardvalue_new_from_string" kind="constructor" since="4.0">
-		<parameter type="ICalVcardValueKind" name="kind" comment="A #ICalVcardValueKind"/>
-		<parameter type="const gchar *" name="str" comment="A string"/>
-		<returns type="ICalVcardValue *" annotation="transfer full" comment="The newly created #ICalVcardValue based on the @kind and @str."/>
-		<comment xml:space="preserve">Creates a new #ICalVcardValue based on the #ICalVcardValueKind and a string.</comment>
-	</method>
-	<method name="i_cal_vcard_value_free" corresponds="vcardvalue_free" annotation="skip" kind="destructor" since="4.0">
-		<parameter type="ICalVcardValue *" name="value" comment="The #ICalVcardValue to be freed"/>
-		<comment xml:space="preserve">Frees an #ICalVcardValue.</comment>
-	</method>
-	<method name="i_cal_vcard_value_is_valid" corresponds="vcardvalue_is_valid" since="4.0">
-		<parameter type="const ICalVcardValue *" name="value" comment="The #ICalVcardValue to be checked"/>
-		<returns type="gboolean" comment="true if valid, false if not."/>
-		<comment xml:space="preserve">Checks if #ICalVcardValue is valid.</comment>
-	</method>
-	<method name="i_cal_vcard_value_as_vcard_string" corresponds="vcardvalue_as_vcard_string_r" since="4.0">
-		<parameter type="const ICalVcardValue *" name="value" comment="A #ICalVcardValue"/>
-		<returns type="gchar *" annotation="transfer full" comment="The string representation." translator="i_cal_memory_str_to_glib"/>
-		<comment xml:space="preserve">Converts the #ICalVcardValue to a string.</comment>
-	</method>
-	<method name="i_cal_vcard_value_isa" corresponds="vcardvalue_isa" since="4.0">
-		<parameter type="const ICalVcardValue *" name="value" comment="A #ICalVcardValue"/>
-		<returns type="ICalVcardValueKind" comment="The kind of @value."/>
-		<comment xml:space="preserve">Gets the kind of #ICalVcardValue.</comment>
-	</method>
-	<method name="i_cal_vcard_value_isa_value" corresponds="vcardvalue_isa_value" since="4.0">
-		<parameter type="ICalVcardValue *" name="value" comment="A #ICalVcardValue"/>
-		<returns type="gboolean" comment="true if yes, false if not."/>
-		<comment xml:space="preserve">Checks whether the native part of #ICalVcardValue is an ical;s vcardvalue.</comment>
-	</method>
-	<method name="i_cal_vcard_value_kind_from_string" corresponds="vcardvalue_string_to_kind" since="4.0">
-		<parameter type="const gchar *" name="str" comment="A string"/>
-		<returns type="ICalVcardValueKind" comment="A #ICalVcardValueKind."/>
-		<comment xml:space="preserve">Converts a string to #ICalVcardValueKind.</comment>
-	</method>
-	<method name="i_cal_vcard_value_kind_to_string" corresponds="vcardvalue_kind_to_string" since="4.0">
-		<parameter type="ICalVcardValueKind" name="kind" comment="A #ICalVcardValueKind"/>
-		<returns type="const gchar *" comment="The string representation of #ICalVcardValueKind."/>
-		<comment xml:space="preserve">Converts the #ICalVcardValueKind to a string.</comment>
-	</method>
-	<method name="i_cal_vcard_value_kind_is_valid" corresponds="vcardvalue_kind_is_valid" since="4.0">
-		<parameter type="ICalVcardValueKind" name="kind" comment="The #ICalVcardValueKind to be checked"/>
-		<returns type="gboolean" comment="true if yes, false if not."/>
-		<comment xml:space="preserve">Checks whether the @kind is a valid #ICalVcardValueKind.</comment>
-	</method>
-	<method name="i_cal_vcard_value_dequote_text" corresponds="vcardvalue_strdup_and_dequote_text" annotation="skip" since="4.0">
-		<parameter type="const gchar **" name="text" annotation="inout" comment="pointer to a string to dequote"/>
-		<parameter type="const gchar *" name="separators" annotation="nullable" comment="a string with separators, or %NULL"/>
-		<returns type="gchar *" annotation="nullable, transfer full" comment="a TEXT property, dequoted from the @text, or %NULL if failed"/>
-		<comment xml:space="preserve">Dequotes the text in @text and advanced the pointer after the end of the read text. The reading stops either at the end of the @text or when any of the letters from the @separators is reached unescaped.</comment>
-		<custom>    gchar *res, *dequoted;
+  <method name="i_cal_vcard_value_new" corresponds="vcardvalue_new" kind="constructor" since="4.0">
+    <parameter type="ICalVcardValueKind" name="kind" comment="A #ICalVcardValueKind"/>
+    <returns type="ICalVcardValue *" annotation="transfer full" comment="The newly created #ICalVcardValue."/>
+    <comment xml:space="preserve">Creates a new #ICalVcardValue with the specified @kind.</comment>
+  </method>
+  <method name="i_cal_vcard_value_clone" corresponds="vcardvalue_clone" kind="clone" since="4.0">
+    <parameter type="const ICalVcardValue *" name="value" comment="The #ICalVcardValue to be cloned."/>
+    <returns type="ICalVcardValue *" annotation="transfer full" comment="The newly created #ICalVcardValue with the same property as @value."/>
+    <comment xml:space="preserve">Deeply clones an #ICalVcardValue.</comment>
+  </method>
+  <method name="i_cal_vcard_value_new_from_string" corresponds="vcardvalue_new_from_string" kind="constructor" since="4.0">
+    <parameter type="ICalVcardValueKind" name="kind" comment="A #ICalVcardValueKind"/>
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalVcardValue *" annotation="transfer full" comment="The newly created #ICalVcardValue based on the @kind and @str."/>
+    <comment xml:space="preserve">Creates a new #ICalVcardValue based on the #ICalVcardValueKind and a string.</comment>
+  </method>
+  <method name="i_cal_vcard_value_free" corresponds="vcardvalue_free" annotation="skip" kind="destructor" since="4.0">
+    <parameter type="ICalVcardValue *" name="value" comment="The #ICalVcardValue to be freed"/>
+    <comment xml:space="preserve">Frees an #ICalVcardValue.</comment>
+  </method>
+  <method name="i_cal_vcard_value_is_valid" corresponds="vcardvalue_is_valid" since="4.0">
+    <parameter type="const ICalVcardValue *" name="value" comment="The #ICalVcardValue to be checked"/>
+    <returns type="gboolean" comment="true if valid, false if not."/>
+    <comment xml:space="preserve">Checks if #ICalVcardValue is valid.</comment>
+  </method>
+  <method name="i_cal_vcard_value_as_vcard_string" corresponds="vcardvalue_as_vcard_string_r" since="4.0">
+    <parameter type="const ICalVcardValue *" name="value" comment="A #ICalVcardValue"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts the #ICalVcardValue to a string.</comment>
+  </method>
+  <method name="i_cal_vcard_value_isa" corresponds="vcardvalue_isa" since="4.0">
+    <parameter type="const ICalVcardValue *" name="value" comment="A #ICalVcardValue"/>
+    <returns type="ICalVcardValueKind" comment="The kind of @value."/>
+    <comment xml:space="preserve">Gets the kind of #ICalVcardValue.</comment>
+  </method>
+  <method name="i_cal_vcard_value_isa_value" corresponds="vcardvalue_isa_value" since="4.0">
+    <parameter type="ICalVcardValue *" name="value" comment="A #ICalVcardValue"/>
+    <returns type="gboolean" comment="true if yes, false if not."/>
+    <comment xml:space="preserve">Checks whether the native part of #ICalVcardValue is an ical;s vcardvalue.</comment>
+  </method>
+  <method name="i_cal_vcard_value_kind_from_string" corresponds="vcardvalue_string_to_kind" since="4.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalVcardValueKind" comment="A #ICalVcardValueKind."/>
+    <comment xml:space="preserve">Converts a string to #ICalVcardValueKind.</comment>
+  </method>
+  <method name="i_cal_vcard_value_kind_to_string" corresponds="vcardvalue_kind_to_string" since="4.0">
+    <parameter type="ICalVcardValueKind" name="kind" comment="A #ICalVcardValueKind"/>
+    <returns type="const gchar *" comment="The string representation of #ICalVcardValueKind."/>
+    <comment xml:space="preserve">Converts the #ICalVcardValueKind to a string.</comment>
+  </method>
+  <method name="i_cal_vcard_value_kind_is_valid" corresponds="vcardvalue_kind_is_valid" since="4.0">
+    <parameter type="ICalVcardValueKind" name="kind" comment="The #ICalVcardValueKind to be checked"/>
+    <returns type="gboolean" comment="true if yes, false if not."/>
+    <comment xml:space="preserve">Checks whether the @kind is a valid #ICalVcardValueKind.</comment>
+  </method>
+  <method name="i_cal_vcard_value_dequote_text" corresponds="vcardvalue_strdup_and_dequote_text" annotation="skip" since="4.0">
+    <parameter type="const gchar **" name="text" annotation="inout" comment="pointer to a string to dequote"/>
+    <parameter type="const gchar *" name="separators" annotation="nullable" comment="a string with separators, or %NULL"/>
+    <returns type="gchar *" annotation="nullable, transfer full" comment="a TEXT property, dequoted from the @text, or %NULL if failed"/>
+    <comment xml:space="preserve">Dequotes the text in @text and advanced the pointer after the end of the read text. The reading stops either at the end of the @text or when any of the letters from the @separators is reached unescaped.</comment>
+    <custom>    gchar *res, *dequoted;
 
     g_return_val_if_fail(text != NULL, NULL);
 
@@ -74,5 +75,5 @@
     icalmemory_free_buffer(dequoted);
 
     return res;</custom>
-	</method>
+  </method>
 </structure>

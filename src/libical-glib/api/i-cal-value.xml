@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,73 +7,72 @@
 
 -->
 <structure namespace="ICal" name="Value" native="icalvalue" destroy_func="icalvalue_free" includes="string.h">
-    <method name="i_cal_value_new" corresponds="icalvalue_new" kind="constructor" since="1.0">
-        <parameter type="ICalValueKind" name="kind" comment="A #ICalValueKind"/>
-        <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
-        <comment xml:space="preserve">Creates a new #ICalValue with specific kind.</comment>
-    </method>
-    <method name="i_cal_value_clone" corresponds="icalvalue_clone" kind="clone" since="4.0">
-        <parameter type="const ICalValue *" name="value" comment="The #ICalValue to
-be cloned."/>
-        <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue with the same property as @value."/>
-        <comment xml:space="preserve">Deeply clone a #ICalValue.</comment>
-    </method>
-    <method name="i_cal_value_new_from_string" corresponds="icalvalue_new_from_string" kind="constructor" since="1.0">
-        <parameter type="ICalValueKind" name="kind" comment="A #ICalValueKind"/>
-        <parameter type="const gchar *" name="str" comment="A string"/>
-        <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue based on the @kind and @str."/>
-        <comment xml:space="preserve">Creates a new #ICalValue based on the #ICalValueKind and a string.</comment>
-    </method>
-    <method name="i_cal_value_free" corresponds="icalvalue_free" annotation="skip" kind="destructor" since="1.0">
-        <parameter type="ICalValue *" name="value" comment="The #ICalValue to be freed"/>
-        <comment xml:space="preserve">Frees a #ICalValue.</comment>
-    </method>
-    <method name="i_cal_value_is_valid" corresponds="icalvalue_is_valid" since="1.0">
-        <parameter type="const ICalValue *" name="value" comment="The #ICalValue to be checked"/>
-        <returns type="gboolean" comment="true if valid, false if not."/>
-        <comment xml:space="preserve">Checks if #ICalValue is valid.</comment>
-    </method>
-    <method name="i_cal_value_as_ical_string" corresponds="icalvalue_as_ical_string_r" since="1.0">
-        <parameter type="const ICalValue *" name="value" comment="A #ICalValue"/>
-        <returns type="gchar *" annotation="transfer full" comment="The string representation." translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Converts the #ICalValue to a string.</comment>
-    </method>
-    <method name="i_cal_value_isa" corresponds="icalvalue_isa" since="1.0">
-        <parameter type="const ICalValue *" name="value" comment="A #ICalValue"/>
-        <returns type="ICalValueKind" comment="The kind of @value."/>
-        <comment xml:space="preserve">Gets the kind of #ICalValue.</comment>
-    </method>
-    <method name="i_cal_value_isa_value" corresponds="icalvalue_isa_value" since="1.0">
-        <parameter type="ICalValue *" name="value" comment="A #ICalValue"/>
-        <returns type="gboolean" comment="true if yes, false if not."/>
-        <comment xml:space="preserve">Checks whether the native part of #ICalValue is an icalvalue.</comment>
-    </method>
-    <method name="i_cal_value_compare" corresponds="icalvalue_compare" since="1.0">
-        <parameter type="const ICalValue *" name="a" comment="A #ICalValue"/>
-        <parameter type="const ICalValue *" name="b" comment="A #ICalValue"/>
-        <returns type="ICalParameterXliccomparetype" comment="The compare result."/>
-        <comment xml:space="preserve">Compares two #ICalValue.</comment>
-    </method>
-    <method name="i_cal_value_kind_from_string" corresponds="icalvalue_string_to_kind" since="1.0">
-        <parameter type="const gchar *" name="str" comment="A string"/>
-        <returns type="ICalValueKind" comment="A #ICalValueKind."/>
-        <comment xml:space="preserve">Converts a string to #ICalValueKind.</comment>
-    </method>
-    <method name="i_cal_value_kind_to_string" corresponds="icalvalue_kind_to_string" since="1.0">
-        <parameter type="const ICalValueKind" name="kind" comment="A #ICalValueKind"/>
-        <returns type="const gchar *" comment="The string representation of #ICalValueKind."/>
-        <comment xml:space="preserve">Converts the #ICalValueKind to a string.</comment>
-    </method>
-    <method name="i_cal_value_kind_is_valid" corresponds="icalvalue_kind_is_valid" since="1.0">
-        <parameter type="const ICalValueKind" name="kind" comment="The #ICalValueKind to be checked"/>
-        <returns type="gboolean" comment="true if yes, false if not."/>
-        <comment xml:space="preserve">Checks whether the #ICalValueKind is valid.</comment>
-    </method>
-    <method name="i_cal_value_encode_ical_string" corresponds="icalvalue_encode_ical_string" kind="custom" since="1.0">
-        <parameter type="const gchar *" name="szText" comment="A string"/>
-        <returns type="gchar *" annotation="nullable, transfer full" comment="The encoded string. NULL if fail."/>
-        <comment xml:space="preserve">Encodes a character string in ical format, escape certain characters, etc.</comment>
-        <custom>    gchar *szEncText;
+  <method name="i_cal_value_new" corresponds="icalvalue_new" kind="constructor" since="1.0">
+    <parameter type="ICalValueKind" name="kind" comment="A #ICalValueKind"/>
+    <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue."/>
+    <comment xml:space="preserve">Creates a new #ICalValue with specific kind.</comment>
+  </method>
+  <method name="i_cal_value_clone" corresponds="icalvalue_clone" kind="clone" since="4.0">
+    <parameter type="const ICalValue *" name="value" comment="The #ICalValue to be cloned."/>
+    <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue with the same property as @value."/>
+    <comment xml:space="preserve">Deeply clone a #ICalValue.</comment>
+  </method>
+  <method name="i_cal_value_new_from_string" corresponds="icalvalue_new_from_string" kind="constructor" since="1.0">
+    <parameter type="ICalValueKind" name="kind" comment="A #ICalValueKind"/>
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalValue *" annotation="transfer full" comment="The newly created #ICalValue based on the @kind and @str."/>
+    <comment xml:space="preserve">Creates a new #ICalValue based on the #ICalValueKind and a string.</comment>
+  </method>
+  <method name="i_cal_value_free" corresponds="icalvalue_free" annotation="skip" kind="destructor" since="1.0">
+    <parameter type="ICalValue *" name="value" comment="The #ICalValue to be freed"/>
+    <comment xml:space="preserve">Frees a #ICalValue.</comment>
+  </method>
+  <method name="i_cal_value_is_valid" corresponds="icalvalue_is_valid" since="1.0">
+    <parameter type="const ICalValue *" name="value" comment="The #ICalValue to be checked"/>
+    <returns type="gboolean" comment="true if valid, false if not."/>
+    <comment xml:space="preserve">Checks if #ICalValue is valid.</comment>
+  </method>
+  <method name="i_cal_value_as_ical_string" corresponds="icalvalue_as_ical_string_r" since="1.0">
+    <parameter type="const ICalValue *" name="value" comment="A #ICalValue"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts the #ICalValue to a string.</comment>
+  </method>
+  <method name="i_cal_value_isa" corresponds="icalvalue_isa" since="1.0">
+    <parameter type="const ICalValue *" name="value" comment="A #ICalValue"/>
+    <returns type="ICalValueKind" comment="The kind of @value."/>
+    <comment xml:space="preserve">Gets the kind of #ICalValue.</comment>
+  </method>
+  <method name="i_cal_value_isa_value" corresponds="icalvalue_isa_value" since="1.0">
+    <parameter type="ICalValue *" name="value" comment="A #ICalValue"/>
+    <returns type="gboolean" comment="true if yes, false if not."/>
+    <comment xml:space="preserve">Checks whether the native part of #ICalValue is an icalvalue.</comment>
+  </method>
+  <method name="i_cal_value_compare" corresponds="icalvalue_compare" since="1.0">
+    <parameter type="const ICalValue *" name="a" comment="A #ICalValue"/>
+    <parameter type="const ICalValue *" name="b" comment="A #ICalValue"/>
+    <returns type="ICalParameterXliccomparetype" comment="The compare result."/>
+    <comment xml:space="preserve">Compares two #ICalValue.</comment>
+  </method>
+  <method name="i_cal_value_kind_from_string" corresponds="icalvalue_string_to_kind" since="1.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalValueKind" comment="A #ICalValueKind."/>
+    <comment xml:space="preserve">Converts a string to #ICalValueKind.</comment>
+  </method>
+  <method name="i_cal_value_kind_to_string" corresponds="icalvalue_kind_to_string" since="1.0">
+    <parameter type="const ICalValueKind" name="kind" comment="A #ICalValueKind"/>
+    <returns type="const gchar *" comment="The string representation of #ICalValueKind."/>
+    <comment xml:space="preserve">Converts the #ICalValueKind to a string.</comment>
+  </method>
+  <method name="i_cal_value_kind_is_valid" corresponds="icalvalue_kind_is_valid" since="1.0">
+    <parameter type="const ICalValueKind" name="kind" comment="The #ICalValueKind to be checked"/>
+    <returns type="gboolean" comment="true if yes, false if not."/>
+    <comment xml:space="preserve">Checks whether the #ICalValueKind is valid.</comment>
+  </method>
+  <method name="i_cal_value_encode_ical_string" corresponds="icalvalue_encode_ical_string" kind="custom" since="1.0">
+    <parameter type="const gchar *" name="szText" comment="A string"/>
+    <returns type="gchar *" annotation="nullable, transfer full" comment="The encoded string. NULL if fail."/>
+    <comment xml:space="preserve">Encodes a character string in ical format, escape certain characters, etc.</comment>
+    <custom>    gchar *szEncText;
     gchar *buffer = NULL;
     gsize bufSize;
     gint result;
@@ -88,12 +88,12 @@ be cloned."/>
     g_free(szEncText);
 
     return buffer;</custom>
-    </method>
-    <method name="i_cal_value_decode_ical_string" corresponds="icalvalue_decode_ical_string" since="1.0">
-        <parameter type="const gchar *" name="szText" comment="A string"/>
-        <returns type="gchar *" annotation="nullable, transfer full" comment="The decoded string. NULL if fail."/>
-        <comment xml:space="preserve">Extracts the original character string encoded by the above function.</comment>
-        <custom>    gchar *szDecText;
+  </method>
+  <method name="i_cal_value_decode_ical_string" corresponds="icalvalue_decode_ical_string" since="1.0">
+    <parameter type="const gchar *" name="szText" comment="A string"/>
+    <returns type="gchar *" annotation="nullable, transfer full" comment="The decoded string. NULL if fail."/>
+    <comment xml:space="preserve">Extracts the original character string encoded by the above function.</comment>
+    <custom>    gchar *szDecText;
     gchar *buffer = NULL;
     gsize bufSize;
     gint result;
@@ -109,5 +109,5 @@ be cloned."/>
     g_free (szDecText);
 
     return buffer;</custom>
-    </method>
+  </method>
 </structure>

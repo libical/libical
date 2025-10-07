@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,353 +7,273 @@
 
 -->
 <structure namespace="ICal" name="DerivedValue">
-	<skip>icalvalue_vanew_*</skip>
-	<enum name="ICalValueKind" native_name="icalvalue_kind" default_native="I_CAL_NO_VALUE">
-	    <element name="ICAL_ANY_VALUE"/>
-	    <element name="ICAL_ACTION_VALUE"/>
-	    <element name="ICAL_ATTACH_VALUE"/>
-	    <element name="ICAL_BINARY_VALUE"/>
-	    <element name="ICAL_BOOLEAN_VALUE"/>
-	    <element name="ICAL_BUSYTYPE_VALUE"/>
-	    <element name="ICAL_CALADDRESS_VALUE"/>
-	    <element name="ICAL_CARLEVEL_VALUE"/>
-	    <element name="ICAL_CLASS_VALUE"/>
-	    <element name="ICAL_CMD_VALUE"/>
-	    <element name="ICAL_DATE_VALUE"/>
-	    <element name="ICAL_DATETIME_VALUE"/>
-	    <element name="ICAL_DATETIMEDATE_VALUE"/>
-	    <element name="ICAL_DATETIMEPERIOD_VALUE"/>
-	    <element name="ICAL_DURATION_VALUE"/>
-	    <element name="ICAL_FLOAT_VALUE"/>
-	    <element name="ICAL_GEO_VALUE"/>
-	    <element name="ICAL_INTEGER_VALUE"/>
-	    <element name="ICAL_LINK_VALUE"/>
-	    <element name="ICAL_METHOD_VALUE"/>
-	    <element name="ICAL_PARTICIPANTTYPE_VALUE"/>
-	    <element name="ICAL_PERIOD_VALUE"/>
-	    <element name="ICAL_POLLCOMPLETION_VALUE"/>
-	    <element name="ICAL_POLLMODE_VALUE"/>
-	    <element name="ICAL_PROXIMITY_VALUE"/>
-	    <element name="ICAL_RESOURCETYPE_VALUE"/>
-	    <element name="ICAL_QUERY_VALUE"/>
-	    <element name="ICAL_QUERYLEVEL_VALUE"/>
-	    <element name="ICAL_RECUR_VALUE"/>
-	    <element name="ICAL_RELATEDTO_VALUE"/>
-	    <element name="ICAL_REQUESTSTATUS_VALUE"/>
-	    <element name="ICAL_STATUS_VALUE"/>
-	    <element name="ICAL_STRING_VALUE"/>
-	    <element name="ICAL_TASKMODE_VALUE"/>
-	    <element name="ICAL_TEXT_VALUE"/>
-	    <element name="ICAL_TRANSP_VALUE"/>
-	    <element name="ICAL_TRIGGER_VALUE"/>
-	    <element name="ICAL_UID_VALUE"/>
-	    <element name="ICAL_URI_VALUE"/>
-	    <element name="ICAL_UTCOFFSET_VALUE"/>
-	    <element name="ICAL_XMLREFERENCE_VALUE"/>
-	    <element name="ICAL_X_VALUE"/>
-	    <element name="ICAL_XLICCLASS_VALUE"/>
-	    <element name="ICAL_NO_VALUE"/>
-	</enum>
-	<enum name="ICalPropertyAction" native_name="icalproperty_action" default_native="I_CAL_ACTION_NONE">
-	    <element name="ICAL_ACTION_X"/>
-	    <element name="ICAL_ACTION_AUDIO"/>
-	    <element name="ICAL_ACTION_DISPLAY"/>
-	    <element name="ICAL_ACTION_EMAIL"/>
-	    <element name="ICAL_ACTION_PROCEDURE"/>
-	    <element name="ICAL_ACTION_NONE"/>
-	</enum>
-	<enum name="ICalPropertyBusytype" native_name="icalproperty_busytype" default_native="I_CAL_BUSYTYPE_NONE">
-	    <element name="ICAL_BUSYTYPE_X"/>
-	    <element name="ICAL_BUSYTYPE_BUSY"/>
-	    <element name="ICAL_BUSYTYPE_BUSYUNAVAILABLE"/>
-	    <element name="ICAL_BUSYTYPE_BUSYTENTATIVE"/>
-	    <element name="ICAL_BUSYTYPE_NONE"/>
-	</enum>
-	<enum name="ICalPropertyCarlevel" native_name="icalproperty_carlevel" default_native="I_CAL_CARLEVEL_NONE">
-	    <element name="ICAL_CARLEVEL_X"/>
-	    <element name="ICAL_CARLEVEL_CARNONE"/>
-	    <element name="ICAL_CARLEVEL_CARMIN"/>
-	    <element name="ICAL_CARLEVEL_CARFULL1"/>
-	    <element name="ICAL_CARLEVEL_NONE"/>
-	</enum>
-	<enum name="ICalPropertyClassenum" native_name="icalproperty_class" default_native="I_CAL_CLASS_NONE">
-	    <element name="ICAL_CLASS_X"/>
-	    <element name="ICAL_CLASS_PUBLIC"/>
-	    <element name="ICAL_CLASS_PRIVATE"/>
-	    <element name="ICAL_CLASS_CONFIDENTIAL"/>
-	    <element name="ICAL_CLASS_NONE"/>
-	</enum>
-	<enum name="ICalPropertyCmd" native_name="icalproperty_cmd" default_native="I_CAL_CMD_NONE">
-	    <element name="ICAL_CMD_X"/>
-	    <element name="ICAL_CMD_ABORT"/>
-	    <element name="ICAL_CMD_CONTINUE"/>
-	    <element name="ICAL_CMD_CREATE"/>
-	    <element name="ICAL_CMD_DELETE"/>
-	    <element name="ICAL_CMD_GENERATEUID"/>
-	    <element name="ICAL_CMD_GETCAPABILITY"/>
-	    <element name="ICAL_CMD_IDENTIFY"/>
-	    <element name="ICAL_CMD_MODIFY"/>
-	    <element name="ICAL_CMD_MOVE"/>
-	    <element name="ICAL_CMD_REPLY"/>
-	    <element name="ICAL_CMD_SEARCH"/>
-	    <element name="ICAL_CMD_SETLOCALE"/>
-	    <element name="ICAL_CMD_NONE"/>
-	</enum>
-	<enum name="ICalPropertyMethod" native_name="icalproperty_method" default_native="I_CAL_METHOD_NONE">
-	    <element name="ICAL_METHOD_X"/>
-	    <element name="ICAL_METHOD_PUBLISH"/>
-	    <element name="ICAL_METHOD_REQUEST"/>
-	    <element name="ICAL_METHOD_REPLY"/>
-	    <element name="ICAL_METHOD_ADD"/>
-	    <element name="ICAL_METHOD_CANCEL"/>
-	    <element name="ICAL_METHOD_REFRESH"/>
-	    <element name="ICAL_METHOD_COUNTER"/>
-	    <element name="ICAL_METHOD_DECLINECOUNTER"/>
-	    <element name="ICAL_METHOD_CREATE"/>
-	    <element name="ICAL_METHOD_READ"/>
-	    <element name="ICAL_METHOD_RESPONSE"/>
-	    <element name="ICAL_METHOD_MOVE"/>
-	    <element name="ICAL_METHOD_MODIFY"/>
-	    <element name="ICAL_METHOD_GENERATEUID"/>
-	    <element name="ICAL_METHOD_DELETE"/>
-	    <element name="ICAL_METHOD_POLLSTATUS"/>
-	    <element name="ICAL_METHOD_NONE"/>
-	</enum>
-	<enum name="ICalPropertyParticipanttype" native_name="icalproperty_participanttype" default_native="I_CAL_PARTICIPANTTYPE_NONE">
-	    "/>
+  <skip>icalvalue_vanew_*</skip>
+  <enum name="ICalValueKind" native_name="icalvalue_kind" default_native="I_CAL_NO_VALUE">
+    <element name="ICAL_ANY_VALUE"/>
+    <element name="ICAL_ACTION_VALUE"/>
+    <element name="ICAL_ATTACH_VALUE"/>
+    <element name="ICAL_BINARY_VALUE"/>
+    <element name="ICAL_BOOLEAN_VALUE"/>
+    <element name="ICAL_BUSYTYPE_VALUE"/>
+    <element name="ICAL_CALADDRESS_VALUE"/>
+    <element name="ICAL_CARLEVEL_VALUE"/>
+    <element name="ICAL_CLASS_VALUE"/>
+    <element name="ICAL_CMD_VALUE"/>
+    <element name="ICAL_DATE_VALUE"/>
+    <element name="ICAL_DATETIME_VALUE"/>
+    <element name="ICAL_DATETIMEDATE_VALUE"/>
+    <element name="ICAL_DATETIMEPERIOD_VALUE"/>
+    <element name="ICAL_DURATION_VALUE"/>
+    <element name="ICAL_FLOAT_VALUE"/>
+    <element name="ICAL_GEO_VALUE"/>
+    <element name="ICAL_INTEGER_VALUE"/>
+    <element name="ICAL_LINK_VALUE"/>
+    <element name="ICAL_METHOD_VALUE"/>
+    <element name="ICAL_PARTICIPANTTYPE_VALUE"/>
+    <element name="ICAL_PERIOD_VALUE"/>
+    <element name="ICAL_POLLCOMPLETION_VALUE"/>
+    <element name="ICAL_POLLMODE_VALUE"/>
+    <element name="ICAL_PROXIMITY_VALUE"/>
+    <element name="ICAL_RESOURCETYPE_VALUE"/>
+    <element name="ICAL_QUERY_VALUE"/>
+    <element name="ICAL_QUERYLEVEL_VALUE"/>
+    <element name="ICAL_RECUR_VALUE"/>
+    <element name="ICAL_RELATEDTO_VALUE"/>
+    <element name="ICAL_REQUESTSTATUS_VALUE"/>
+    <element name="ICAL_STATUS_VALUE"/>
+    <element name="ICAL_STRING_VALUE"/>
+    <element name="ICAL_TASKMODE_VALUE"/>
+    <element name="ICAL_TEXT_VALUE"/>
+    <element name="ICAL_TRANSP_VALUE"/>
+    <element name="ICAL_TRIGGER_VALUE"/>
+    <element name="ICAL_UID_VALUE"/>
+    <element name="ICAL_URI_VALUE"/>
+    <element name="ICAL_UTCOFFSET_VALUE"/>
+    <element name="ICAL_XMLREFERENCE_VALUE"/>
+    <element name="ICAL_X_VALUE"/>
+    <element name="ICAL_XLICCLASS_VALUE"/>
+    <element name="ICAL_NO_VALUE"/>
+  </enum>
+  <enum name="ICalPropertyAction" native_name="icalproperty_action" default_native="I_CAL_ACTION_NONE">
+    <element name="ICAL_ACTION_X"/>
+    <element name="ICAL_ACTION_AUDIO"/>
+    <element name="ICAL_ACTION_DISPLAY"/>
+    <element name="ICAL_ACTION_EMAIL"/>
+    <element name="ICAL_ACTION_PROCEDURE"/>
+    <element name="ICAL_ACTION_NONE"/>
+  </enum>
+  <enum name="ICalPropertyBusytype" native_name="icalproperty_busytype" default_native="I_CAL_BUSYTYPE_NONE">
+    <element name="ICAL_BUSYTYPE_X"/>
+    <element name="ICAL_BUSYTYPE_BUSY"/>
+    <element name="ICAL_BUSYTYPE_BUSYUNAVAILABLE"/>
+    <element name="ICAL_BUSYTYPE_BUSYTENTATIVE"/>
+    <element name="ICAL_BUSYTYPE_NONE"/>
+  </enum>
+  <enum name="ICalPropertyCarlevel" native_name="icalproperty_carlevel" default_native="I_CAL_CARLEVEL_NONE">
+    <element name="ICAL_CARLEVEL_X"/>
+    <element name="ICAL_CARLEVEL_CARNONE"/>
+    <element name="ICAL_CARLEVEL_CARMIN"/>
+    <element name="ICAL_CARLEVEL_CARFULL1"/>
+    <element name="ICAL_CARLEVEL_NONE"/>
+  </enum>
+  <enum name="ICalPropertyClassenum" native_name="icalproperty_class" default_native="I_CAL_CLASS_NONE">
+    <element name="ICAL_CLASS_X"/>
+    <element name="ICAL_CLASS_PUBLIC"/>
+    <element name="ICAL_CLASS_PRIVATE"/>
+    <element name="ICAL_CLASS_CONFIDENTIAL"/>
+    <element name="ICAL_CLASS_NONE"/>
+  </enum>
+  <enum name="ICalPropertyCmd" native_name="icalproperty_cmd" default_native="I_CAL_CMD_NONE">
+    <element name="ICAL_CMD_X"/>
+    <element name="ICAL_CMD_ABORT"/>
+    <element name="ICAL_CMD_CONTINUE"/>
+    <element name="ICAL_CMD_CREATE"/>
+    <element name="ICAL_CMD_DELETE"/>
+    <element name="ICAL_CMD_GENERATEUID"/>
+    <element name="ICAL_CMD_GETCAPABILITY"/>
+    <element name="ICAL_CMD_IDENTIFY"/>
+    <element name="ICAL_CMD_MODIFY"/>
+    <element name="ICAL_CMD_MOVE"/>
+    <element name="ICAL_CMD_REPLY"/>
+    <element name="ICAL_CMD_SEARCH"/>
+    <element name="ICAL_CMD_SETLOCALE"/>
+    <element name="ICAL_CMD_NONE"/>
+  </enum>
+  <enum name="ICalPropertyMethod" native_name="icalproperty_method" default_native="I_CAL_METHOD_NONE">
+    <element name="ICAL_METHOD_X"/>
+    <element name="ICAL_METHOD_PUBLISH"/>
+    <element name="ICAL_METHOD_REQUEST"/>
+    <element name="ICAL_METHOD_REPLY"/>
+    <element name="ICAL_METHOD_ADD"/>
+    <element name="ICAL_METHOD_CANCEL"/>
+    <element name="ICAL_METHOD_REFRESH"/>
+    <element name="ICAL_METHOD_COUNTER"/>
+    <element name="ICAL_METHOD_DECLINECOUNTER"/>
+    <element name="ICAL_METHOD_CREATE"/>
+    <element name="ICAL_METHOD_READ"/>
+    <element name="ICAL_METHOD_RESPONSE"/>
+    <element name="ICAL_METHOD_MOVE"/>
+    <element name="ICAL_METHOD_MODIFY"/>
+    <element name="ICAL_METHOD_GENERATEUID"/>
+    <element name="ICAL_METHOD_DELETE"/>
+    <element name="ICAL_METHOD_POLLSTATUS"/>
+    <element name="ICAL_METHOD_NONE"/>
+  </enum>
+  <enum name="ICalPropertyParticipanttype" native_name="icalproperty_participanttype" default_native="I_CAL_PARTICIPANTTYPE_NONE">
+	    "/&gt;
 	    <element name="ICAL_PARTICIPANTTYPE_X"/>
-	    <element name="ICAL_PARTICIPANTTYPE_ACTIVE"/>
-	    <element name="ICAL_PARTICIPANTTYPE_INACTIVE"/>
-	    <element name="ICAL_PARTICIPANTTYPE_SPONSOR"/>
-	    <element name="ICAL_PARTICIPANTTYPE_CONTACT"/>
-	    <element name="ICAL_PARTICIPANTTYPE_BOOKINGCONTACT"/>
-	    <element name="ICAL_PARTICIPANTTYPE_EMERGENCYCONTACT"/>
-	    <element name="ICAL_PARTICIPANTTYPE_PUBLICITYCONTACT"/>
-	    <element name="ICAL_PARTICIPANTTYPE_PLANNERCONTACT"/>
-	    <element name="ICAL_PARTICIPANTTYPE_PERFORMER"/>
-	    <element name="ICAL_PARTICIPANTTYPE_SPEAKER"/>
-	    <element name="ICAL_PARTICIPANTTYPE_VOTER"/>
-	    <element name="ICAL_PARTICIPANTTYPE_NONE"/>
-	</enum>
-	<enum name="ICalPropertyPollcompletion" native_name="icalproperty_pollcompletion" default_native="I_CAL_POLLCOMPLETION_NONE">
-	    <element name="ICAL_POLLCOMPLETION_X"/>
-	    <element name="ICAL_POLLCOMPLETION_SERVER"/>
-	    <element name="ICAL_POLLCOMPLETION_SERVERSUBMIT"/>
-	    <element name="ICAL_POLLCOMPLETION_SERVERCHOICE"/>
-	    <element name="ICAL_POLLCOMPLETION_CLIENT"/>
-	    <element name="ICAL_POLLCOMPLETION_NONE"/>
-	</enum>
-	<enum name="ICalPropertyPollmode" native_name="icalproperty_pollmode" default_native="I_CAL_POLLMODE_NONE">
-	    <element name="ICAL_POLLMODE_X"/>
-	    <element name="ICAL_POLLMODE_BASIC"/>
-	    <element name="ICAL_POLLMODE_NONE"/>
-	</enum>
-	<enum name="ICalPropertyProximity" native_name="icalproperty_proximity" default_native="I_CAL_PROXIMITY_NONE">
-	    <element name="ICAL_PROXIMITY_X"/>
-	    <element name="ICAL_PROXIMITY_ARRIVE"/>
-	    <element name="ICAL_PROXIMITY_DEPART"/>
-	    <element name="ICAL_PROXIMITY_CONNECT"/>
-	    <element name="ICAL_PROXIMITY_DISCONNECT"/>
-	    <element name="ICAL_PROXIMITY_NONE"/>
-	</enum>
-	<enum name="ICalPropertyQuerylevel" native_name="icalproperty_querylevel" default_native="I_CAL_QUERYLEVEL_NONE">
-	    <element name="ICAL_QUERYLEVEL_X"/>
-	    <element name="ICAL_QUERYLEVEL_CALQL1"/>
-	    <element name="ICAL_QUERYLEVEL_CALQLNONE"/>
-	    <element name="ICAL_QUERYLEVEL_NONE"/>
-	</enum>
-	<enum name="ICalPropertyResourcetype" native_name="icalproperty_resourcetype" default_native="I_CAL_RESOURCETYPE_NONE">
-	    <element name="ICAL_RESOURCETYPE_X"/>
-	    <element name="ICAL_RESOURCETYPE_ROOM"/>
-	    <element name="ICAL_RESOURCETYPE_PROJECTOR"/>
-	    <element name="ICAL_RESOURCETYPE_REMOTECONFERENCEAUDIO"/>
-	    <element name="ICAL_RESOURCETYPE_REMOTECONFERENCEVIDEO"/>
-	    <element name="ICAL_RESOURCETYPE_NONE"/>
-	</enum>
-	<enum name="ICalPropertyStatus" native_name="icalproperty_status" default_native="I_CAL_STATUS_NONE">
-	    <element name="ICAL_STATUS_X"/>
-	    <element name="ICAL_STATUS_TENTATIVE"/>
-	    <element name="ICAL_STATUS_CONFIRMED"/>
-	    <element name="ICAL_STATUS_COMPLETED"/>
-	    <element name="ICAL_STATUS_NEEDSACTION"/>
-	    <element name="ICAL_STATUS_CANCELLED"/>
-	    <element name="ICAL_STATUS_INPROCESS"/>
-	    <element name="ICAL_STATUS_DRAFT"/>
-	    <element name="ICAL_STATUS_FINAL"/>
-	    <element name="ICAL_STATUS_SUBMITTED"/>
-	    <element name="ICAL_STATUS_PENDING"/>
-	    <element name="ICAL_STATUS_FAILED"/>
-	    <element name="ICAL_STATUS_DELETED"/>
-	    <element name="ICAL_STATUS_NONE"/>
-	</enum>
-	<enum name="ICalPropertyTaskmode" native_name="icalproperty_taskmode" default_native="I_CAL_TASKMODE_NONE">
-	    <element name="ICAL_TASKMODE_X"/>
-	    <element name="ICAL_TASKMODE_AUTOMATICCOMPLETION"/>
-	    <element name="ICAL_TASKMODE_AUTOMATICFAILURE"/>
-	    <element name="ICAL_TASKMODE_AUTOMATICSTATUS"/>
-	    <element name="ICAL_TASKMODE_NONE"/>
-	</enum>
-	<enum name="ICalPropertyTransp" native_name="icalproperty_transp" default_native="I_CAL_TRANSP_NONE">
-	    <element name="ICAL_TRANSP_X"/>
-	    <element name="ICAL_TRANSP_OPAQUE"/>
-	    <element name="ICAL_TRANSP_OPAQUENOCONFLICT"/>
-	    <element name="ICAL_TRANSP_TRANSPARENT"/>
-	    <element name="ICAL_TRANSP_TRANSPARENTNOCONFLICT"/>
-	    <element name="ICAL_TRANSP_NONE"/>
-	</enum>
-	<enum name="ICalPropertyXlicclass" native_name="icalproperty_xlicclass" default_native="I_CAL_XLICCLASS_NONE">
-	    <element name="ICAL_XLICCLASS_X"/>
-	    <element name="ICAL_XLICCLASS_PUBLISHNEW"/>
-	    <element name="ICAL_XLICCLASS_PUBLISHUPDATE"/>
-	    <element name="ICAL_XLICCLASS_PUBLISHFREEBUSY"/>
-	    <element name="ICAL_XLICCLASS_REQUESTNEW"/>
-	    <element name="ICAL_XLICCLASS_REQUESTUPDATE"/>
-	    <element name="ICAL_XLICCLASS_REQUESTRESCHEDULE"/>
-	    <element name="ICAL_XLICCLASS_REQUESTDELEGATE"/>
-	    <element name="ICAL_XLICCLASS_REQUESTNEWORGANIZER"/>
-	    <element name="ICAL_XLICCLASS_REQUESTFORWARD"/>
-	    <element name="ICAL_XLICCLASS_REQUESTSTATUS"/>
-	    <element name="ICAL_XLICCLASS_REQUESTFREEBUSY"/>
-	    <element name="ICAL_XLICCLASS_REPLYACCEPT"/>
-	    <element name="ICAL_XLICCLASS_REPLYDECLINE"/>
-	    <element name="ICAL_XLICCLASS_REPLYDELEGATE"/>
-	    <element name="ICAL_XLICCLASS_REPLYCRASHERACCEPT"/>
-	    <element name="ICAL_XLICCLASS_REPLYCRASHERDECLINE"/>
-	    <element name="ICAL_XLICCLASS_ADDINSTANCE"/>
-	    <element name="ICAL_XLICCLASS_CANCELEVENT"/>
-	    <element name="ICAL_XLICCLASS_CANCELINSTANCE"/>
-	    <element name="ICAL_XLICCLASS_CANCELALL"/>
-	    <element name="ICAL_XLICCLASS_REFRESH"/>
-	    <element name="ICAL_XLICCLASS_COUNTER"/>
-	    <element name="ICAL_XLICCLASS_DECLINECOUNTER"/>
-	    <element name="ICAL_XLICCLASS_MALFORMED"/>
-	    <element name="ICAL_XLICCLASS_OBSOLETE"/>
-	    <element name="ICAL_XLICCLASS_MISSEQUENCED"/>
-	    <element name="ICAL_XLICCLASS_UNKNOWN"/>
-	    <element name="ICAL_XLICCLASS_NONE"/>
-	</enum>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="X" since="1.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="x"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="RECUR" since="1.0"
-		value-get-type="ICalRecurrence *" value-set-type="const ICalRecurrence *" value-set-type-ref="#ICalRecurrence" value-get-annotation="transfer full" value-get-translator-argus="(GObject *)self"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="recur"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TRIGGER" since="1.0"
-		value-get-type="ICalTrigger *" value-set-type="const ICalTrigger *" value-set-type-ref="#ICalTrigger" value-get-annotation="transfer full"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="trigger"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATETIME" since="1.0"
-		value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="datetime"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATETIMEDATE" since="3.0"
-		value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="datetimedate"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATETIMEPERIOD" since="1.0"
-		value-get-type="ICalDatetimeperiod *" value-set-type="const ICalDatetimeperiod *" value-set-type-ref="#ICalDatetimeperiod" value-get-annotation="transfer full"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="datetimeperiod"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="GEO" since="1.0"
-		value-get-type="ICalGeo *" value-set-type="const ICalGeo *" value-set-type-ref="#ICalGeo" value-get-annotation="transfer full"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="geo"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="ATTACH" since="1.0"
-		value-get-type="ICalAttach *" value-set-type="const ICalAttach *" value-set-type-ref="#ICalAttach" value-get-annotation="transfer full"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="attach"/>
-	<method name="i_cal_value_reset_kind" corresponds="icalvalue_reset_kind" kind="other" since="1.0">
-		<parameter type="ICalValue *" name="value" comment="The #ICalValue's kind to be reset"/>
-		<comment>Resets the kind of #ICalValue.</comment>
-	</method>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="XLICCLASS" since="1.0"
-		value-get-type="ICalPropertyXlicclass" value-set-type="ICalPropertyXlicclass" value-set-type-ref="#ICalPropertyXlicclass"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="xlicclass"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BOOLEAN" since="1.0"
-		value-get-type="gboolean" value-set-type="gboolean" value-set-type-ref="boolean"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="boolean"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BUSYTYPE" since="2.0"
-		value-get-type="ICalPropertyBusytype" value-set-type="ICalPropertyBusytype" value-set-type-ref="#ICalPropertyBusytype"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="busytype"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="POLLCOMPLETION" since="2.0"
-		value-get-type="ICalPropertyPollcompletion" value-set-type="ICalPropertyPollcompletion" value-set-type-ref="#ICalPropertyPollcompletion"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="pollcompletion"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TASKMODE" since="2.0"
-		value-get-type="ICalPropertyTaskmode" value-set-type="ICalPropertyTaskmode" value-set-type-ref="#ICalPropertyTaskmode"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="taskmode"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="POLLMODE" since="2.0"
-		value-get-type="ICalPropertyPollmode" value-set-type="ICalPropertyPollmode" value-set-type-ref="#ICalPropertyPollmode"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="pollmode"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="UTCOFFSET" since="1.0"
-		value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="utcoffset"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="METHOD" since="1.0"
-		value-get-type="ICalPropertyMethod" value-set-type="ICalPropertyMethod" value-set-type-ref="#ICalPropertyMethod"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="method"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="PARTICIPANTTYPE" since="4.0"
-		value-get-type="ICalPropertyParticipanttype" value-set-type="ICalPropertyParticipanttype" value-set-type-ref="#ICalPropertyParticipanttype"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="participanttype"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="PROXIMITY" since="4.0"
-		value-get-type="ICalPropertyProximity" value-set-type="ICalPropertyProximity" value-set-type-ref="#ICalPropertyProximity"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="proximity"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="RESOURCETYPE" since="4.0"
-		value-get-type="ICalPropertyResourcetype" value-set-type="ICalPropertyResourcetype" value-set-type-ref="#ICalPropertyResourcetype"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="resourcetype"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CALADDRESS" since="1.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="caladdress"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="PERIOD" since="1.0"
-		value-get-type="ICalPeriod *" value-set-type="const ICalPeriod *" value-set-type-ref="#ICalPeriod" value-get-annotation="transfer full"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="period"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="STATUS" since="1.0"
-		value-get-type="ICalPropertyStatus" value-set-type="ICalPropertyStatus" value-set-type-ref="#ICalPropertyStatus"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="status"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BINARY" since="1.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="binary"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TEXT" since="1.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="text"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DURATION" since="1.0"
-		value-get-type="ICalDuration *" value-set-type="const ICalDuration *" value-set-type-ref="#ICalDuration" value-get-annotation="transfer full"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="duration"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="INTEGER" since="1.0"
-		value-get-type="gint" value-set-type="gint" value-set-type-ref="integer"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="integer"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="UID" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="uid"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="URI" since="1.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="uri"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CLASS" since="1.0"
-		value-get-type="ICalPropertyClassenum" value-set-type="ICalPropertyClassenum" value-set-type-ref="#ICalPropertyClassenum"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="class"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="FLOAT" since="1.0"
-		value-get-type="gdouble" value-set-type="gdouble" value-set-type-ref="float"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="float"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="QUERY" since="1.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="query"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="STRING" since="1.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="string"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TRANSP" since="1.0"
-		value-get-type="ICalPropertyTransp" value-set-type="ICalPropertyTransp" value-set-type-ref="#ICalPropertyTransp"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="transp"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="REQUESTSTATUS" since="1.0"
-		value-get-type="ICalReqstat *" value-set-type="const ICalReqstat *" value-set-type-ref="#ICalReqstat" value-get-annotation="transfer full"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="requeststatus"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATE" since="1.0"
-		value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="date"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="ACTION" since="1.0"
-		value-get-type="ICalPropertyAction" value-set-type="ICalPropertyAction" value-set-type-ref="#ICalPropertyAction"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="action"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CMD" since="1.0"
-		value-get-type="ICalPropertyCmd" value-set-type="ICalPropertyCmd" value-set-type-ref="#ICalPropertyCmd"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="cmd"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="QUERYLEVEL" since="1.0"
-		value-get-type="ICalPropertyQuerylevel" value-set-type="ICalPropertyQuerylevel" value-set-type-ref="#ICalPropertyQuerylevel"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="querylevel"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CARLEVEL" since="1.0"
-		value-get-type="ICalPropertyCarlevel" value-set-type="ICalPropertyCarlevel" value-set-type-ref="#ICalPropertyCarlevel"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="carlevel"/>
-	<method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="XMLREFERENCE" since="4.0"
-		value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text"
-		binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="xmlreference"/>
+    <element name="ICAL_PARTICIPANTTYPE_ACTIVE"/>
+    <element name="ICAL_PARTICIPANTTYPE_INACTIVE"/>
+    <element name="ICAL_PARTICIPANTTYPE_SPONSOR"/>
+    <element name="ICAL_PARTICIPANTTYPE_CONTACT"/>
+    <element name="ICAL_PARTICIPANTTYPE_BOOKINGCONTACT"/>
+    <element name="ICAL_PARTICIPANTTYPE_EMERGENCYCONTACT"/>
+    <element name="ICAL_PARTICIPANTTYPE_PUBLICITYCONTACT"/>
+    <element name="ICAL_PARTICIPANTTYPE_PLANNERCONTACT"/>
+    <element name="ICAL_PARTICIPANTTYPE_PERFORMER"/>
+    <element name="ICAL_PARTICIPANTTYPE_SPEAKER"/>
+    <element name="ICAL_PARTICIPANTTYPE_VOTER"/>
+    <element name="ICAL_PARTICIPANTTYPE_NONE"/>
+  </enum>
+  <enum name="ICalPropertyPollcompletion" native_name="icalproperty_pollcompletion" default_native="I_CAL_POLLCOMPLETION_NONE">
+    <element name="ICAL_POLLCOMPLETION_X"/>
+    <element name="ICAL_POLLCOMPLETION_SERVER"/>
+    <element name="ICAL_POLLCOMPLETION_SERVERSUBMIT"/>
+    <element name="ICAL_POLLCOMPLETION_SERVERCHOICE"/>
+    <element name="ICAL_POLLCOMPLETION_CLIENT"/>
+    <element name="ICAL_POLLCOMPLETION_NONE"/>
+  </enum>
+  <enum name="ICalPropertyPollmode" native_name="icalproperty_pollmode" default_native="I_CAL_POLLMODE_NONE">
+    <element name="ICAL_POLLMODE_X"/>
+    <element name="ICAL_POLLMODE_BASIC"/>
+    <element name="ICAL_POLLMODE_NONE"/>
+  </enum>
+  <enum name="ICalPropertyProximity" native_name="icalproperty_proximity" default_native="I_CAL_PROXIMITY_NONE">
+    <element name="ICAL_PROXIMITY_X"/>
+    <element name="ICAL_PROXIMITY_ARRIVE"/>
+    <element name="ICAL_PROXIMITY_DEPART"/>
+    <element name="ICAL_PROXIMITY_CONNECT"/>
+    <element name="ICAL_PROXIMITY_DISCONNECT"/>
+    <element name="ICAL_PROXIMITY_NONE"/>
+  </enum>
+  <enum name="ICalPropertyQuerylevel" native_name="icalproperty_querylevel" default_native="I_CAL_QUERYLEVEL_NONE">
+    <element name="ICAL_QUERYLEVEL_X"/>
+    <element name="ICAL_QUERYLEVEL_CALQL1"/>
+    <element name="ICAL_QUERYLEVEL_CALQLNONE"/>
+    <element name="ICAL_QUERYLEVEL_NONE"/>
+  </enum>
+  <enum name="ICalPropertyResourcetype" native_name="icalproperty_resourcetype" default_native="I_CAL_RESOURCETYPE_NONE">
+    <element name="ICAL_RESOURCETYPE_X"/>
+    <element name="ICAL_RESOURCETYPE_ROOM"/>
+    <element name="ICAL_RESOURCETYPE_PROJECTOR"/>
+    <element name="ICAL_RESOURCETYPE_REMOTECONFERENCEAUDIO"/>
+    <element name="ICAL_RESOURCETYPE_REMOTECONFERENCEVIDEO"/>
+    <element name="ICAL_RESOURCETYPE_NONE"/>
+  </enum>
+  <enum name="ICalPropertyStatus" native_name="icalproperty_status" default_native="I_CAL_STATUS_NONE">
+    <element name="ICAL_STATUS_X"/>
+    <element name="ICAL_STATUS_TENTATIVE"/>
+    <element name="ICAL_STATUS_CONFIRMED"/>
+    <element name="ICAL_STATUS_COMPLETED"/>
+    <element name="ICAL_STATUS_NEEDSACTION"/>
+    <element name="ICAL_STATUS_CANCELLED"/>
+    <element name="ICAL_STATUS_INPROCESS"/>
+    <element name="ICAL_STATUS_DRAFT"/>
+    <element name="ICAL_STATUS_FINAL"/>
+    <element name="ICAL_STATUS_SUBMITTED"/>
+    <element name="ICAL_STATUS_PENDING"/>
+    <element name="ICAL_STATUS_FAILED"/>
+    <element name="ICAL_STATUS_DELETED"/>
+    <element name="ICAL_STATUS_NONE"/>
+  </enum>
+  <enum name="ICalPropertyTaskmode" native_name="icalproperty_taskmode" default_native="I_CAL_TASKMODE_NONE">
+    <element name="ICAL_TASKMODE_X"/>
+    <element name="ICAL_TASKMODE_AUTOMATICCOMPLETION"/>
+    <element name="ICAL_TASKMODE_AUTOMATICFAILURE"/>
+    <element name="ICAL_TASKMODE_AUTOMATICSTATUS"/>
+    <element name="ICAL_TASKMODE_NONE"/>
+  </enum>
+  <enum name="ICalPropertyTransp" native_name="icalproperty_transp" default_native="I_CAL_TRANSP_NONE">
+    <element name="ICAL_TRANSP_X"/>
+    <element name="ICAL_TRANSP_OPAQUE"/>
+    <element name="ICAL_TRANSP_OPAQUENOCONFLICT"/>
+    <element name="ICAL_TRANSP_TRANSPARENT"/>
+    <element name="ICAL_TRANSP_TRANSPARENTNOCONFLICT"/>
+    <element name="ICAL_TRANSP_NONE"/>
+  </enum>
+  <enum name="ICalPropertyXlicclass" native_name="icalproperty_xlicclass" default_native="I_CAL_XLICCLASS_NONE">
+    <element name="ICAL_XLICCLASS_X"/>
+    <element name="ICAL_XLICCLASS_PUBLISHNEW"/>
+    <element name="ICAL_XLICCLASS_PUBLISHUPDATE"/>
+    <element name="ICAL_XLICCLASS_PUBLISHFREEBUSY"/>
+    <element name="ICAL_XLICCLASS_REQUESTNEW"/>
+    <element name="ICAL_XLICCLASS_REQUESTUPDATE"/>
+    <element name="ICAL_XLICCLASS_REQUESTRESCHEDULE"/>
+    <element name="ICAL_XLICCLASS_REQUESTDELEGATE"/>
+    <element name="ICAL_XLICCLASS_REQUESTNEWORGANIZER"/>
+    <element name="ICAL_XLICCLASS_REQUESTFORWARD"/>
+    <element name="ICAL_XLICCLASS_REQUESTSTATUS"/>
+    <element name="ICAL_XLICCLASS_REQUESTFREEBUSY"/>
+    <element name="ICAL_XLICCLASS_REPLYACCEPT"/>
+    <element name="ICAL_XLICCLASS_REPLYDECLINE"/>
+    <element name="ICAL_XLICCLASS_REPLYDELEGATE"/>
+    <element name="ICAL_XLICCLASS_REPLYCRASHERACCEPT"/>
+    <element name="ICAL_XLICCLASS_REPLYCRASHERDECLINE"/>
+    <element name="ICAL_XLICCLASS_ADDINSTANCE"/>
+    <element name="ICAL_XLICCLASS_CANCELEVENT"/>
+    <element name="ICAL_XLICCLASS_CANCELINSTANCE"/>
+    <element name="ICAL_XLICCLASS_CANCELALL"/>
+    <element name="ICAL_XLICCLASS_REFRESH"/>
+    <element name="ICAL_XLICCLASS_COUNTER"/>
+    <element name="ICAL_XLICCLASS_DECLINECOUNTER"/>
+    <element name="ICAL_XLICCLASS_MALFORMED"/>
+    <element name="ICAL_XLICCLASS_OBSOLETE"/>
+    <element name="ICAL_XLICCLASS_MISSEQUENCED"/>
+    <element name="ICAL_XLICCLASS_UNKNOWN"/>
+    <element name="ICAL_XLICCLASS_NONE"/>
+  </enum>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="X" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="x"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="RECUR" since="1.0" value-get-type="ICalRecurrence *" value-set-type="const ICalRecurrence *" value-set-type-ref="#ICalRecurrence" value-get-annotation="transfer full" value-get-translator-argus="(GObject *)self" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="recur"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TRIGGER" since="1.0" value-get-type="ICalTrigger *" value-set-type="const ICalTrigger *" value-set-type-ref="#ICalTrigger" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="trigger"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATETIME" since="1.0" value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="datetime"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATETIMEDATE" since="3.0" value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="datetimedate"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATETIMEPERIOD" since="1.0" value-get-type="ICalDatetimeperiod *" value-set-type="const ICalDatetimeperiod *" value-set-type-ref="#ICalDatetimeperiod" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="datetimeperiod"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="GEO" since="1.0" value-get-type="ICalGeo *" value-set-type="const ICalGeo *" value-set-type-ref="#ICalGeo" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="geo"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="ATTACH" since="1.0" value-get-type="ICalAttach *" value-set-type="const ICalAttach *" value-set-type-ref="#ICalAttach" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="attach"/>
+  <method name="i_cal_value_reset_kind" corresponds="icalvalue_reset_kind" kind="other" since="1.0">
+    <parameter type="ICalValue *" name="value" comment="The #ICalValue's kind to be reset"/>
+    <comment>Resets the kind of #ICalValue.</comment>
+  </method>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="XLICCLASS" since="1.0" value-get-type="ICalPropertyXlicclass" value-set-type="ICalPropertyXlicclass" value-set-type-ref="#ICalPropertyXlicclass" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="xlicclass"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BOOLEAN" since="1.0" value-get-type="gboolean" value-set-type="gboolean" value-set-type-ref="boolean" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="boolean"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BUSYTYPE" since="2.0" value-get-type="ICalPropertyBusytype" value-set-type="ICalPropertyBusytype" value-set-type-ref="#ICalPropertyBusytype" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="busytype"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="POLLCOMPLETION" since="2.0" value-get-type="ICalPropertyPollcompletion" value-set-type="ICalPropertyPollcompletion" value-set-type-ref="#ICalPropertyPollcompletion" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="pollcompletion"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TASKMODE" since="2.0" value-get-type="ICalPropertyTaskmode" value-set-type="ICalPropertyTaskmode" value-set-type-ref="#ICalPropertyTaskmode" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="taskmode"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="POLLMODE" since="2.0" value-get-type="ICalPropertyPollmode" value-set-type="ICalPropertyPollmode" value-set-type-ref="#ICalPropertyPollmode" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="pollmode"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="UTCOFFSET" since="1.0" value-get-type="gint" value-set-type="gint" value-set-type-ref="integer" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="utcoffset"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="METHOD" since="1.0" value-get-type="ICalPropertyMethod" value-set-type="ICalPropertyMethod" value-set-type-ref="#ICalPropertyMethod" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="method"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="PARTICIPANTTYPE" since="4.0" value-get-type="ICalPropertyParticipanttype" value-set-type="ICalPropertyParticipanttype" value-set-type-ref="#ICalPropertyParticipanttype" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="participanttype"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="PROXIMITY" since="4.0" value-get-type="ICalPropertyProximity" value-set-type="ICalPropertyProximity" value-set-type-ref="#ICalPropertyProximity" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="proximity"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="RESOURCETYPE" since="4.0" value-get-type="ICalPropertyResourcetype" value-set-type="ICalPropertyResourcetype" value-set-type-ref="#ICalPropertyResourcetype" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="resourcetype"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CALADDRESS" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="caladdress"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="PERIOD" since="1.0" value-get-type="ICalPeriod *" value-set-type="const ICalPeriod *" value-set-type-ref="#ICalPeriod" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="period"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="STATUS" since="1.0" value-get-type="ICalPropertyStatus" value-set-type="ICalPropertyStatus" value-set-type-ref="#ICalPropertyStatus" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="status"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BINARY" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="binary"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TEXT" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="text"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DURATION" since="1.0" value-get-type="ICalDuration *" value-set-type="const ICalDuration *" value-set-type-ref="#ICalDuration" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="duration"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="INTEGER" since="1.0" value-get-type="gint" value-set-type="gint" value-set-type-ref="integer" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="integer"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="UID" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="uid"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="URI" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="uri"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CLASS" since="1.0" value-get-type="ICalPropertyClassenum" value-set-type="ICalPropertyClassenum" value-set-type-ref="#ICalPropertyClassenum" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="class"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="FLOAT" since="1.0" value-get-type="gdouble" value-set-type="gdouble" value-set-type-ref="float" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="float"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="QUERY" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="query"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="STRING" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="string"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TRANSP" since="1.0" value-get-type="ICalPropertyTransp" value-set-type="ICalPropertyTransp" value-set-type-ref="#ICalPropertyTransp" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="transp"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="REQUESTSTATUS" since="1.0" value-get-type="ICalReqstat *" value-set-type="const ICalReqstat *" value-set-type-ref="#ICalReqstat" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="requeststatus"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATE" since="1.0" value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="date"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="ACTION" since="1.0" value-get-type="ICalPropertyAction" value-set-type="ICalPropertyAction" value-set-type-ref="#ICalPropertyAction" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="action"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CMD" since="1.0" value-get-type="ICalPropertyCmd" value-set-type="ICalPropertyCmd" value-set-type-ref="#ICalPropertyCmd" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="cmd"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="QUERYLEVEL" since="1.0" value-get-type="ICalPropertyQuerylevel" value-set-type="ICalPropertyQuerylevel" value-set-type-ref="#ICalPropertyQuerylevel" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="querylevel"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="CARLEVEL" since="1.0" value-get-type="ICalPropertyCarlevel" value-set-type="ICalPropertyCarlevel" value-set-type-ref="#ICalPropertyCarlevel" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="carlevel"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="XMLREFERENCE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="xmlreference"/>
 </structure>

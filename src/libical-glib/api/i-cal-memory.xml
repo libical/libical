@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,68 +7,68 @@
 
 -->
 <structure namespace="ICal" name="Memory">
-    <skip>icalmemory_get_mem_alloc_funcs</skip>
-    <skip>icalmemory_set_mem_alloc_funcs</skip>
-    <method name="i_cal_memory_tmp_buffer" corresponds="icalmemory_tmp_buffer" since="1.0">
-        <parameter type="size_t" name="size" comment="The size of the buffer to be created"/>
-        <returns type="void *" annotation="transfer full" comment="The newly created buffer"/>
-        <comment xml:space="preserve">Creates a buffer with target size.</comment>
-    </method>
-    <method name="i_cal_memory_tmp_copy" corresponds="icalmemory_tmp_copy" since="1.0">
-        <parameter type="const gchar *" name="str" comment="The string to be copied"/>
-        <returns type="gchar *" annotation="transfer full" comment="The new copy of the @str."/>
-        <comment xml:space="preserve">Like strdup, but the buffer is on the ring.</comment>
-    </method>
-    <method name="i_cal_memory_add_tmp_buffer" corresponds="icalmemory_add_tmp_buffer" since="1.0">
-        <parameter type="void *" name="buf" annotation="transfer full" comment="The existing buffer to be added into the ical"/>
-        <comment xml:space="preserve">Adds an existing buffer to the buffer ring.</comment>
-    </method>
-    <method name="i_cal_memory_free_ring" annotation="skip" corresponds="icalmemory_free_ring" since="1.0">
-        <comment xml:space="preserve">Frees all the memory used in the ring.</comment>
-    </method>
-    <method name="i_cal_memory_new_buffer" corresponds="icalmemory_new_buffer" since="1.0">
-        <parameter type="size_t" name="size" comment="The size of the new buffer to be created"/>
-        <returns type="void *" annotation="transfer full" comment="The newly created buffer with the target size."/>
-        <comment xml:space="preserve">Creates a new buffer with target size. The caller should deallocate it when necessary.</comment>
-    </method>
-    <method name="i_cal_memory_resize_buffer" corresponds="icalmemory_resize_buffer" since="1.0">
-        <parameter type="void *" name="buf" annotation="transfer full" comment="The buffer needs to be resized"/>
-        <parameter type="size_t" name="size" comment="The target size the buffer to be resized to"/>
-        <returns type="void *" annotation="transfer full" comment="The buffer after being resized."/>
-        <comment xml:space="preserve">Resizes the buffer to the target size.</comment>
-    </method>
-    <method name="i_cal_memory_free_buffer" corresponds="icalmemory_free_buffer" since="1.0">
-        <parameter type="void *" name="buf" annotation="transfer full" comment="The buffer to be freed"/>
-        <comment xml:space="preserve">Frees the buffer.</comment>
-    </method>
-    <method name="i_cal_memory_append_string" corresponds="icalmemory_append_string" since="1.0">
-        <parameter type="gchar **" name="buf" annotation="array length=buf_size, element-type gchar, inout" comment="The buffer to be appended. It should not be the memory in ical."/>
-        <parameter type="gchar **" name="pos" annotation="array, element-type gchar, inout" comment="The position at which the new string to be appended"/>
-        <parameter type="size_t *" name="buf_size" comment="The size of the buffer before appended"/>
-        <parameter type="const gchar *" name="str" comment="The string to be allocated"/>
-        <comment xml:space="preserve">Appends the string to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_string has to resize a buffer on the ring, the ring will loose track of it and you will have memory problems.</comment>
-    </method>
-    <method name="i_cal_memory_append_char" corresponds="icalmemory_append_char" since="1.0">
-        <parameter type="gchar **" name="buf" annotation="array length=buf_size, element-type gchar, inout" comment="The buffer to be appended. It should not be the memory in ical."/>
-        <parameter type="gchar **" name="pos" annotation="array, element-type gchar, inout" comment="The position at which the new string to be appended"/>
-        <parameter type="size_t *" name="buf_size" comment="The size of the buffer before appended"/>
-        <parameter type="gchar" name="ch" comment="The character to be allocated"/>
-        <comment xml:space="preserve">Append the character to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_string has to resize a buffer on the ring, the ring will loose track of it and you will have memory problems.</comment>
-    </method>
-    <method name="i_cal_memory_strdup" corresponds="icalmemory_strdup" since="1.0">
-        <parameter type="const gchar *" name="s" comment="The string to be cloned"/>
-        <returns type="gchar *" annotation="transfer full" comment="The cloned string."/>
-        <comment xml:space="preserve">A wrapper around strdup. Partly to trap calls to strdup, partly because in -ansi, gcc on Red Hat claims that strdup is undeclared.</comment>
-    </method>
-    <method name="i_cal_memory_str_to_glib" corresponds="none" annotation="skip" kind="private" since="1.0">
-        <parameter type="char *" annotation="transfer full, nullable" name="buffer" comment="The ical memory string to transform"/>
-        <returns type="gchar *" annotation="transfer full, nullable" comment="The same string that can be freed with g_free"/>
-        <comment xml:space="preserve">Transform a string allocated with icalmemory into one that can be freed with g_free.</comment>
-        <custom>    gchar *buffer_copy;
+  <skip>icalmemory_get_mem_alloc_funcs</skip>
+  <skip>icalmemory_set_mem_alloc_funcs</skip>
+  <method name="i_cal_memory_tmp_buffer" corresponds="icalmemory_tmp_buffer" since="1.0">
+    <parameter type="size_t" name="size" comment="The size of the buffer to be created"/>
+    <returns type="void *" annotation="transfer full" comment="The newly created buffer"/>
+    <comment xml:space="preserve">Creates a buffer with target size.</comment>
+  </method>
+  <method name="i_cal_memory_tmp_copy" corresponds="icalmemory_tmp_copy" since="1.0">
+    <parameter type="const gchar *" name="str" comment="The string to be copied"/>
+    <returns type="gchar *" annotation="transfer full" comment="The new copy of the @str."/>
+    <comment xml:space="preserve">Like strdup, but the buffer is on the ring.</comment>
+  </method>
+  <method name="i_cal_memory_add_tmp_buffer" corresponds="icalmemory_add_tmp_buffer" since="1.0">
+    <parameter type="void *" name="buf" annotation="transfer full" comment="The existing buffer to be added into the ical"/>
+    <comment xml:space="preserve">Adds an existing buffer to the buffer ring.</comment>
+  </method>
+  <method name="i_cal_memory_free_ring" annotation="skip" corresponds="icalmemory_free_ring" since="1.0">
+    <comment xml:space="preserve">Frees all the memory used in the ring.</comment>
+  </method>
+  <method name="i_cal_memory_new_buffer" corresponds="icalmemory_new_buffer" since="1.0">
+    <parameter type="size_t" name="size" comment="The size of the new buffer to be created"/>
+    <returns type="void *" annotation="transfer full" comment="The newly created buffer with the target size."/>
+    <comment xml:space="preserve">Creates a new buffer with target size. The caller should deallocate it when necessary.</comment>
+  </method>
+  <method name="i_cal_memory_resize_buffer" corresponds="icalmemory_resize_buffer" since="1.0">
+    <parameter type="void *" name="buf" annotation="transfer full" comment="The buffer needs to be resized"/>
+    <parameter type="size_t" name="size" comment="The target size the buffer to be resized to"/>
+    <returns type="void *" annotation="transfer full" comment="The buffer after being resized."/>
+    <comment xml:space="preserve">Resizes the buffer to the target size.</comment>
+  </method>
+  <method name="i_cal_memory_free_buffer" corresponds="icalmemory_free_buffer" since="1.0">
+    <parameter type="void *" name="buf" annotation="transfer full" comment="The buffer to be freed"/>
+    <comment xml:space="preserve">Frees the buffer.</comment>
+  </method>
+  <method name="i_cal_memory_append_string" corresponds="icalmemory_append_string" since="1.0">
+    <parameter type="gchar **" name="buf" annotation="array length=buf_size, element-type gchar, inout" comment="The buffer to be appended. It should not be the memory in ical."/>
+    <parameter type="gchar **" name="pos" annotation="array, element-type gchar, inout" comment="The position at which the new string to be appended"/>
+    <parameter type="size_t *" name="buf_size" comment="The size of the buffer before appended"/>
+    <parameter type="const gchar *" name="str" comment="The string to be allocated"/>
+    <comment xml:space="preserve">Appends the string to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_string has to resize a buffer on the ring, the ring will loose track of it and you will have memory problems.</comment>
+  </method>
+  <method name="i_cal_memory_append_char" corresponds="icalmemory_append_char" since="1.0">
+    <parameter type="gchar **" name="buf" annotation="array length=buf_size, element-type gchar, inout" comment="The buffer to be appended. It should not be the memory in ical."/>
+    <parameter type="gchar **" name="pos" annotation="array, element-type gchar, inout" comment="The position at which the new string to be appended"/>
+    <parameter type="size_t *" name="buf_size" comment="The size of the buffer before appended"/>
+    <parameter type="gchar" name="ch" comment="The character to be allocated"/>
+    <comment xml:space="preserve">Append the character to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_string has to resize a buffer on the ring, the ring will loose track of it and you will have memory problems.</comment>
+  </method>
+  <method name="i_cal_memory_strdup" corresponds="icalmemory_strdup" since="1.0">
+    <parameter type="const gchar *" name="s" comment="The string to be cloned"/>
+    <returns type="gchar *" annotation="transfer full" comment="The cloned string."/>
+    <comment xml:space="preserve">A wrapper around strdup. Partly to trap calls to strdup, partly because in -ansi, gcc on Red Hat claims that strdup is undeclared.</comment>
+  </method>
+  <method name="i_cal_memory_str_to_glib" corresponds="none" annotation="skip" kind="private" since="1.0">
+    <parameter type="char *" annotation="transfer full, nullable" name="buffer" comment="The ical memory string to transform"/>
+    <returns type="gchar *" annotation="transfer full, nullable" comment="The same string that can be freed with g_free"/>
+    <comment xml:space="preserve">Transform a string allocated with icalmemory into one that can be freed with g_free.</comment>
+    <custom>    gchar *buffer_copy;
 
     buffer_copy = g_strdup(buffer);
     icalmemory_free_buffer(buffer);
 
     return buffer_copy;</custom>
-    </method>
+  </method>
 </structure>
