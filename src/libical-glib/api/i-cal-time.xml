@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,17 +7,18 @@
 
 -->
 <structure namespace="ICal" name="Time" native="struct icaltimetype" is_bare="true" default_native="icaltime_null_time()">
-    <skip>icaltime_get_timezone</skip> <!-- it is used below, but casts a const return value to a (void *) to avoid compiler warning -->
-    <method name="i_cal_time_new" corresponds="icaltime_null_time" kind="constructor" since="1.0">
-        <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime. It is a null time" />
-        <comment xml:space="preserve">Creates a new #ICalTime.</comment>
-        <custom>	return i_cal_time_new_full(icaltime_null_time());</custom>
-    </method>
-    <method name="i_cal_time_clone" corresponds="none" kind="constructor" since="1.0">
-        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to clone"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime, copy of @timetype." />
-        <comment xml:space="preserve">Creates a new #ICalTime, copy of @timetype.</comment>
-        <custom>    struct icaltimetype *itt;
+  <skip>icaltime_get_timezone</skip>
+  <!-- it is used below, but casts a const return value to a (void *) to avoid compiler warning -->
+  <method name="i_cal_time_new" corresponds="icaltime_null_time" kind="constructor" since="1.0">
+    <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime. It is a null time"/>
+    <comment xml:space="preserve">Creates a new #ICalTime.</comment>
+    <custom>	return i_cal_time_new_full(icaltime_null_time());</custom>
+  </method>
+  <method name="i_cal_time_clone" corresponds="none" kind="constructor" since="1.0">
+    <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to clone"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime, copy of @timetype."/>
+    <comment xml:space="preserve">Creates a new #ICalTime, copy of @timetype.</comment>
+    <custom>    struct icaltimetype *itt;
 
     g_return_val_if_fail(I_CAL_IS_TIME((ICalTime *)timetype), NULL);
 
@@ -24,150 +26,150 @@
     g_return_val_if_fail(itt != NULL, NULL);
 
     return i_cal_time_new_full(*itt);</custom>
-    </method>
-    <method name="i_cal_time_new_null_time" corresponds="icaltime_null_time" kind="constructor" since="1.0">
-        <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Creates a default time which is an epoch time.</comment>
-    </method>
-    <method name="i_cal_time_new_null_date" corresponds="icaltime_null_date" kind="constructor" since="1.0">
-        <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Creates a null date, which indicates no time has been set.</comment>
-    </method>
-    <method name="i_cal_time_new_current_with_zone" corresponds="icaltime_current_time_with_zone" kind="others" since="1.0">
-        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The timezone used to create a #ICalTime according to the current time"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Creates a #ICalTime according to the timezone and current time.</comment>
-    </method>
-    <method name="i_cal_time_new_today" corresponds="icaltime_today" kind="others" since="1.0">
-        <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Creates a #ICalTime representing today.</comment>
-    </method>
-    <method name="i_cal_time_new_from_timet_with_zone" corresponds="icaltime_from_timet_with_zone" kind="others" since="1.0">
-        <parameter type="const time_t" name="v" comment="The seconds past since epoch time"/>
-        <parameter type="gboolean" name="is_date" comment="Whether it is a date type, true if yes, false if not"/>
-        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The timezone, or %NULL"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Converts seconds past UNIX epoch to a timetype, using timezones.</comment>
-    </method>
-    <method name="i_cal_time_new_from_string" corresponds="icaltime_from_string" kind="others" since="1.0">
-        <parameter type="const gchar *" name="str" comment="The datetime string in ISO-8601-2004 basic time format"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Creates a time from an ISO-8601-2004 basic time string.</comment>
-    </method>
-    <method name="i_cal_time_new_from_day_of_year" corresponds="icaltime_from_day_of_year" kind="constructor" since="1.0">
-        <parameter type="const gint" name="day" comment="The day of a year"/>
-        <parameter type="const gint" name="year" comment="The year"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime" />
-        <comment xml:space="preserve">Creates a new time, given a day of year and a year.</comment>
-    </method>
-    <method name="i_cal_time_as_timet" corresponds="icaltime_as_timet" since="1.0">
-        <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
-        <returns type="time_t" comment="The time as seconds past the UNIX epoch" />
-        <comment xml:space="preserve">Returns the time as seconds past the UNIX epoch.</comment>
-    </method>
-    <method name="i_cal_time_as_timet_with_zone" corresponds="icaltime_as_timet_with_zone" since="1.0">
-        <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
-        <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The timezone"/>
-        <returns type="time_t" comment="The time as seconds past the UNIX epoch" />
-        <comment xml:space="preserve">Returns the time as seconds past the UNIX epoch, using timezones.</comment>
-    </method>
-    <method name="i_cal_time_as_ical_string" corresponds="icaltime_as_ical_string_r" since="1.0">
-        <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
-        <returns type="gchar *" annotation="transfer full" comment="The string representation" translator="i_cal_memory_str_to_glib" />
-        <comment xml:space="preserve">Returns a string representation of the time, in RFC2445 format.</comment>
-    </method>
-    <method name="i_cal_time_get_timezone" corresponds="(void *)icaltime_get_timezone" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="ICalTimezone *" annotation="transfer none" translator_argus="(GObject *)tt, TRUE" comment="The timezone information" />
-        <comment xml:space="preserve">Returns the timezone, the #ICalTimezone object is cached and can be either unreferenced once the last instance is used or can be kept until i_cal_object_free_global_objects() is called (usually at the very end of the program).</comment>
-    </method>
-    <method name="i_cal_time_set_timezone" corresponds="icaltime_set_timezone" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime"/>
-        <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The timezone"/>
-        <comment xml:space="preserve">Sets the timezone of the @tt.</comment>
-    </method>
-    <method name="i_cal_time_get_tzid" corresponds="icaltime_get_tzid" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="const gchar *" annotation="nullable, transfer none" comment="The tzid of #ICalTime, or NULL if floating type" />
-        <comment xml:space="preserve">Returns the tzid, or NULL for a floating time.</comment>
-    </method>
-    <method name="i_cal_time_day_of_year" corresponds="icaltime_day_of_year" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="The day of the year of the given time" />
-        <comment xml:space="preserve">Returns the day of the year of the given time.</comment>
-    </method>
-    <method name="i_cal_time_day_of_week" corresponds="icaltime_day_of_week" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="The day of the week of the given time. Sunday is 1." />
-        <comment xml:space="preserve">Returns the day of the week of the given time. Sunday is 1.</comment>
-    </method>
-    <method name="i_cal_time_start_doy_week" corresponds="icaltime_start_doy_week" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <parameter type="gint" name="fdow" comment="The first day of the week" />
-        <returns type="gint" comment="The day of the year for the Sunday of the week that the given time is within." />
-        <comment xml:space="preserve">Returns the day of the year for the first day of the week that the given time is within.</comment>
-    </method>
-    <method name="i_cal_time_week_number" corresponds="icaltime_week_number" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="The week number for the week the given time is within." />
-        <comment xml:space="preserve">Returns the week number for the week the given time is within.</comment>
-    </method>
-    <method name="i_cal_time_is_null_time" corresponds="icaltime_is_null_time" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-        <returns type="gboolean" comment="Whether @tt is null_time. true if yes, false if not." />
-        <comment xml:space="preserve">Returns true if the time is null.</comment>
-    </method>
-    <method name="i_cal_time_is_valid_time" corresponds="icaltime_is_valid_time" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-        <returns type="gboolean" comment="Whether @tt is null_time. true if yes, false if not." />
-        <comment xml:space="preserve">Returns true if the time is null.</comment>
-    </method>
-    <method name="i_cal_time_is_date" corresponds="icaltime_is_date" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-        <returns type="gboolean" comment="True if time is of DATE type, false if DATE-TIME." />
-        <comment xml:space="preserve">Returns true if time is of DATE type, false if DATE-TIME.</comment>
-    </method>
-    <method name="i_cal_time_is_utc" corresponds="icaltime_is_utc" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-        <returns type="gboolean" comment="True if time is relative to UTC zone." />
-        <comment xml:space="preserve">Returns true if time is relative to UTC zone.</comment>
-    </method>
-    <method name="i_cal_time_compare" corresponds="icaltime_compare" since="1.0">
-        <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
-        <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
-        <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">i_cal_time_compare returns an integer indicating the result of the comparison, as follow:</comment>
-    </method>
-    <method name="i_cal_time_compare_date_only" corresponds="icaltime_compare_date_only" since="1.0">
-        <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
-        <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
-        <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">Like i_cal_time_compare(), but only use the date parts.</comment>
-    </method>
-    <method name="i_cal_time_compare_date_only_tz" corresponds="icaltime_compare_date_only_tz" since="1.0">
-        <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
-        <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
-	<parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
-        <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b." />
-        <comment xml:space="preserve">Like i_cal_time_compare_tz(), but only use the date parts; accepts timezone.</comment>
-    </method>
-    <method name="i_cal_time_adjust" corresponds="icaltime_adjust" since="1.0">
-        <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime to be set"/>
-        <parameter type="const gint" name="days" comment="Difference of days adjusted"/>
-        <parameter type="const gint" name="hours" comment="Difference of hours adjusted"/>
-        <parameter type="const gint" name="minutes" comment="Difference of minutes adjusted"/>
-        <parameter type="const gint" name="seconds" comment="Difference of seconds adjusted"/>
-        <comment xml:space="preserve">Adds or subtracts a number of days, hours, minutes and seconds from @tt.</comment>
-    </method>
-    <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">
-        <parameter type="const ICalTime *" name="t" annotation="in, transfer none" comment="The #ICalTime to be normalized"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The #ICalTime normalized"/>
-        <comment xml:space="preserve">Normalizes the icaltime, so that all fields are within the normal range.</comment>
-    </method>
-    <method name="i_cal_time_normalize_inplace" corresponds="icaltime_normalize" kind="custom" since="3.0.5">
-        <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be normalized"/>
-        <comment xml:space="preserve">Normalizes the @tt, so that all fields are within the normal range.</comment>
-        <custom xml:space="preserve">    icaltimetype *itt;
+  </method>
+  <method name="i_cal_time_new_null_time" corresponds="icaltime_null_time" kind="constructor" since="1.0">
+    <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime"/>
+    <comment xml:space="preserve">Creates a default time which is an epoch time.</comment>
+  </method>
+  <method name="i_cal_time_new_null_date" corresponds="icaltime_null_date" kind="constructor" since="1.0">
+    <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime"/>
+    <comment xml:space="preserve">Creates a null date, which indicates no time has been set.</comment>
+  </method>
+  <method name="i_cal_time_new_current_with_zone" corresponds="icaltime_current_time_with_zone" kind="others" since="1.0">
+    <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The timezone used to create a #ICalTime according to the current time"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime"/>
+    <comment xml:space="preserve">Creates a #ICalTime according to the timezone and current time.</comment>
+  </method>
+  <method name="i_cal_time_new_today" corresponds="icaltime_today" kind="others" since="1.0">
+    <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime"/>
+    <comment xml:space="preserve">Creates a #ICalTime representing today.</comment>
+  </method>
+  <method name="i_cal_time_new_from_timet_with_zone" corresponds="icaltime_from_timet_with_zone" kind="others" since="1.0">
+    <parameter type="const time_t" name="v" comment="The seconds past since epoch time"/>
+    <parameter type="gboolean" name="is_date" comment="Whether it is a date type, true if yes, false if not"/>
+    <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The timezone, or %NULL"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime"/>
+    <comment xml:space="preserve">Converts seconds past UNIX epoch to a timetype, using timezones.</comment>
+  </method>
+  <method name="i_cal_time_new_from_string" corresponds="icaltime_from_string" kind="others" since="1.0">
+    <parameter type="const gchar *" name="str" comment="The datetime string in ISO-8601-2004 basic time format"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime"/>
+    <comment xml:space="preserve">Creates a time from an ISO-8601-2004 basic time string.</comment>
+  </method>
+  <method name="i_cal_time_new_from_day_of_year" corresponds="icaltime_from_day_of_year" kind="constructor" since="1.0">
+    <parameter type="const gint" name="day" comment="The day of a year"/>
+    <parameter type="const gint" name="year" comment="The year"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The newly created #ICalTime"/>
+    <comment xml:space="preserve">Creates a new time, given a day of year and a year.</comment>
+  </method>
+  <method name="i_cal_time_as_timet" corresponds="icaltime_as_timet" since="1.0">
+    <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
+    <returns type="time_t" comment="The time as seconds past the UNIX epoch"/>
+    <comment xml:space="preserve">Returns the time as seconds past the UNIX epoch.</comment>
+  </method>
+  <method name="i_cal_time_as_timet_with_zone" corresponds="icaltime_as_timet_with_zone" since="1.0">
+    <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
+    <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The timezone"/>
+    <returns type="time_t" comment="The time as seconds past the UNIX epoch"/>
+    <comment xml:space="preserve">Returns the time as seconds past the UNIX epoch, using timezones.</comment>
+  </method>
+  <method name="i_cal_time_as_ical_string" corresponds="icaltime_as_ical_string_r" since="1.0">
+    <parameter type="const ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation" translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Returns a string representation of the time, in RFC2445 format.</comment>
+  </method>
+  <method name="i_cal_time_get_timezone" corresponds="(void *)icaltime_get_timezone" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
+    <returns type="ICalTimezone *" annotation="transfer none" translator_argus="(GObject *)tt, TRUE" comment="The timezone information"/>
+    <comment xml:space="preserve">Returns the timezone, the #ICalTimezone object is cached and can be either unreferenced once the last instance is used or can be kept until i_cal_object_free_global_objects() is called (usually at the very end of the program).</comment>
+  </method>
+  <method name="i_cal_time_set_timezone" corresponds="icaltime_set_timezone" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime"/>
+    <parameter type="const ICalTimezone *" name="zone" annotation="nullable" comment="The timezone"/>
+    <comment xml:space="preserve">Sets the timezone of the @tt.</comment>
+  </method>
+  <method name="i_cal_time_get_tzid" corresponds="icaltime_get_tzid" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
+    <returns type="const gchar *" annotation="nullable, transfer none" comment="The tzid of #ICalTime, or NULL if floating type"/>
+    <comment xml:space="preserve">Returns the tzid, or NULL for a floating time.</comment>
+  </method>
+  <method name="i_cal_time_day_of_year" corresponds="icaltime_day_of_year" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
+    <returns type="gint" comment="The day of the year of the given time"/>
+    <comment xml:space="preserve">Returns the day of the year of the given time.</comment>
+  </method>
+  <method name="i_cal_time_day_of_week" corresponds="icaltime_day_of_week" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
+    <returns type="gint" comment="The day of the week of the given time. Sunday is 1."/>
+    <comment xml:space="preserve">Returns the day of the week of the given time. Sunday is 1.</comment>
+  </method>
+  <method name="i_cal_time_start_doy_week" corresponds="icaltime_start_doy_week" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
+    <parameter type="gint" name="fdow" comment="The first day of the week"/>
+    <returns type="gint" comment="The day of the year for the Sunday of the week that the given time is within."/>
+    <comment xml:space="preserve">Returns the day of the year for the first day of the week that the given time is within.</comment>
+  </method>
+  <method name="i_cal_time_week_number" corresponds="icaltime_week_number" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
+    <returns type="gint" comment="The week number for the week the given time is within."/>
+    <comment xml:space="preserve">Returns the week number for the week the given time is within.</comment>
+  </method>
+  <method name="i_cal_time_is_null_time" corresponds="icaltime_is_null_time" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
+    <returns type="gboolean" comment="Whether @tt is null_time. true if yes, false if not."/>
+    <comment xml:space="preserve">Returns true if the time is null.</comment>
+  </method>
+  <method name="i_cal_time_is_valid_time" corresponds="icaltime_is_valid_time" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
+    <returns type="gboolean" comment="Whether @tt is null_time. true if yes, false if not."/>
+    <comment xml:space="preserve">Returns true if the time is null.</comment>
+  </method>
+  <method name="i_cal_time_is_date" corresponds="icaltime_is_date" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
+    <returns type="gboolean" comment="True if time is of DATE type, false if DATE-TIME."/>
+    <comment xml:space="preserve">Returns true if time is of DATE type, false if DATE-TIME.</comment>
+  </method>
+  <method name="i_cal_time_is_utc" corresponds="icaltime_is_utc" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
+    <returns type="gboolean" comment="True if time is relative to UTC zone."/>
+    <comment xml:space="preserve">Returns true if time is relative to UTC zone.</comment>
+  </method>
+  <method name="i_cal_time_compare" corresponds="icaltime_compare" since="1.0">
+    <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
+    <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
+    <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b."/>
+    <comment xml:space="preserve">i_cal_time_compare returns an integer indicating the result of the comparison, as follow:</comment>
+  </method>
+  <method name="i_cal_time_compare_date_only" corresponds="icaltime_compare_date_only" since="1.0">
+    <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
+    <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
+    <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b."/>
+    <comment xml:space="preserve">Like i_cal_time_compare(), but only use the date parts.</comment>
+  </method>
+  <method name="i_cal_time_compare_date_only_tz" corresponds="icaltime_compare_date_only_tz" since="1.0">
+    <parameter type="const ICalTime *" name="a" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
+    <parameter type="const ICalTime *" name="b" annotation="in, transfer none" comment="The #ICalTime to be compared"/>
+    <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
+    <returns type="gint" comment="-1, 0, or 1 to indicate that a less than b, a==b or a larger than b."/>
+    <comment xml:space="preserve">Like i_cal_time_compare_tz(), but only use the date parts; accepts timezone.</comment>
+  </method>
+  <method name="i_cal_time_adjust" corresponds="icaltime_adjust" since="1.0">
+    <parameter type="ICalTime *" name="tt" native_op="POINTER" comment="The #ICalTime to be set"/>
+    <parameter type="const gint" name="days" comment="Difference of days adjusted"/>
+    <parameter type="const gint" name="hours" comment="Difference of hours adjusted"/>
+    <parameter type="const gint" name="minutes" comment="Difference of minutes adjusted"/>
+    <parameter type="const gint" name="seconds" comment="Difference of seconds adjusted"/>
+    <comment xml:space="preserve">Adds or subtracts a number of days, hours, minutes and seconds from @tt.</comment>
+  </method>
+  <method name="i_cal_time_normalize" corresponds="icaltime_normalize" since="1.0">
+    <parameter type="const ICalTime *" name="t" annotation="in, transfer none" comment="The #ICalTime to be normalized"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The #ICalTime normalized"/>
+    <comment xml:space="preserve">Normalizes the icaltime, so that all fields are within the normal range.</comment>
+  </method>
+  <method name="i_cal_time_normalize_inplace" corresponds="icaltime_normalize" kind="custom" since="3.0.5">
+    <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be normalized"/>
+    <comment xml:space="preserve">Normalizes the @tt, so that all fields are within the normal range.</comment>
+    <custom xml:space="preserve">    icaltimetype *itt;
 
     g_return_if_fail(I_CAL_IS_TIME (tt));
 
@@ -175,18 +177,18 @@
     g_return_if_fail (itt != NULL);
 
     *itt = icaltime_normalize(*itt);</custom>
-    </method>
-    <method name="i_cal_time_convert_to_zone" corresponds="icaltime_convert_to_zone" since="1.0">
-        <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be converted"/>
-        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The converted #ICalTime" />
-        <comment xml:space="preserve">Converts @tt to @zone and return new #ICalTime object.</comment>
-    </method>
-    <method name="i_cal_time_convert_to_zone_inplace" corresponds="icaltime_convert_to_zone" since="3.0.5">
-        <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
-        <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
-        <comment xml:space="preserve">Converts @tt to @zone and store the result into @tt.</comment>
-	<custom xml:space="preserve">    icaltimetype *itt;
+  </method>
+  <method name="i_cal_time_convert_to_zone" corresponds="icaltime_convert_to_zone" since="1.0">
+    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be converted"/>
+    <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The converted #ICalTime"/>
+    <comment xml:space="preserve">Converts @tt to @zone and return new #ICalTime object.</comment>
+  </method>
+  <method name="i_cal_time_convert_to_zone_inplace" corresponds="icaltime_convert_to_zone" since="3.0.5">
+    <parameter type="ICalTime *" name="tt" comment="The #ICalTime to be converted"/>
+    <parameter type="ICalTimezone *" name="zone" annotation="nullable" comment="The target timezone"/>
+    <comment xml:space="preserve">Converts @tt to @zone and store the result into @tt.</comment>
+    <custom xml:space="preserve">    icaltimetype *itt;
 
     g_return_if_fail(I_CAL_IS_TIME(tt));
     if(zone)
@@ -196,207 +198,207 @@
     g_return_if_fail(itt != NULL);
 
     *itt = icaltime_convert_to_zone(*itt, ((zone)?((icaltimezone *)i_cal_object_get_native (I_CAL_OBJECT (zone))):NULL));</custom>
-    </method>
-    <method name="i_cal_time_days_in_month" corresponds="icaltime_days_in_month" since="1.0">
-        <parameter type="gint" name="month" comment="The target month"/>
-        <parameter type="gint" name="year" comment="The target year"/>
-        <returns type="gint" comment="The number of days in the target month in the target year." />
-        <comment xml:space="preserve">Gets the number of days in the target month in the target year.</comment>
-    </method>
-    <method name="i_cal_time_days_is_leap_year" corresponds="icaltime_is_leap_year" since="1.0">
-        <parameter type="gint" name="year" comment="The target year"/>
-        <returns type="gboolean" comment="Whether the @year is a leap year" />
-        <comment xml:space="preserve">Checks whether a year is a leap year.</comment>
-    </method>
-    <method name="i_cal_time_days_in_year" corresponds="icaltime_days_in_year" since="2.0">
-        <parameter type="gint" name="year" comment="The target year"/>
-        <returns type="gint" comment="Days in this year." />
-        <comment xml:space="preserve">Returns the number of days in this year.</comment>
-    </method>
-    <method name="i_cal_time_span_new" corresponds="icaltime_span_new" kind="constructor" since="1.0">
-        <parameter type="ICalTime *" name="dtstart" comment="The start of #ICalTimeSpan"/>
-        <parameter type="ICalTime *" name="dtend" comment="The end of #ICalTimeSpan"/>
-        <parameter type="gint" name="is_busy" comment="Whether this span is busy"/>
-        <returns type="ICalTimeSpan *" annotation="transfer full" comment="The newly created #ICalTimeSpan"/>
-        <comment xml:space="preserve">Creates a new #ICalTimeSpan.</comment>
-    </method>
-    <method name="i_cal_time_span_overlaps" corresponds="icaltime_span_overlaps" kind="other" since="1.0">
-        <parameter type="ICalTimeSpan *" name="s1" native_op="POINTER" comment="The first #ICalTimeSpan"/>
-        <parameter type="ICalTimeSpan *" name="s2" native_op="POINTER" comment="The second #ICalTimeSpan"/>
-        <returns type="gint" comment="Whether these two span are overlapped."/>
-        <comment xml:space="preserve">Checks whether two spans overlap.</comment>
-    </method>
-    <method name="i_cal_time_span_contains" corresponds="icaltime_span_contains" kind="other" since="1.0">
-        <parameter type="ICalTimeSpan *" name="s" native_op="POINTER" comment="The test #ICalTimeSpan"/>
-        <parameter type="ICalTimeSpan *" name="container" native_op="POINTER" comment="The target container of #ICalTimeSpan"/>
-        <returns type="gint" comment="Whether one #ICalTimeSpan is contained in another #ICalTimeSpan."/>
-        <comment xml:space="preserve">Checks whether one #ICalTimeSpan is contained in another #ICalTimeSpan.</comment>
-    </method>
-    <method name="i_cal_time_get_year" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="The year."/>
-        <comment xml:space="preserve">Gets the year of #ICalTime.</comment>
-        <custom>	g_return_val_if_fail (timetype != NULL, 0);
-	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->year;</custom>
-    </method>
-    <method name="i_cal_time_set_year" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
-        <parameter type="gint" name="year" comment="The year"/>
-        <comment>Sets the year of #ICalTime.</comment>
-        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->year = year;</custom>
-    </method>
-    <method name="i_cal_time_get_month" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="The month." />
-        <comment xml:space="preserve">Gets the month of #ICalTime.</comment>
-        <custom>	g_return_val_if_fail (timetype != NULL, 0);
-	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->month;</custom>
-    </method>
-    <method name="i_cal_time_set_month" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
-        <parameter type="gint" name="month" comment="The month"/>
-        <comment>Sets the month of #ICalTime.</comment>
-        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->month = month;</custom>
-    </method>
-    <method name="i_cal_time_get_day" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="The day." />
-        <comment xml:space="preserve">Gets the day of #ICalTime.</comment>
-        <custom>	g_return_val_if_fail (timetype != NULL, 0);
-	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->day;</custom>
-    </method>
-    <method name="i_cal_time_set_day" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
-        <parameter type="gint" name="day" comment="The day"/>
-        <comment>Sets the day of #ICalTime.</comment>
-        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->day = day;</custom>
-    </method>
-    <method name="i_cal_time_get_hour" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="The hour." />
-        <comment xml:space="preserve">Gets the hour of #ICalTime.</comment>
-        <custom>	g_return_val_if_fail (timetype != NULL, 0);
-	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->hour;</custom>
-    </method>
-    <method name="i_cal_time_set_hour" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
-        <parameter type="gint" name="hour" comment="The hour"/>
-        <comment>Sets the hour of #ICalTime.</comment>
-        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->hour = hour;</custom>
-    </method>
-    <method name="i_cal_time_get_minute" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="The minute." />
-        <comment xml:space="preserve">Gets the minute of #ICalTime.</comment>
-        <custom>	g_return_val_if_fail (timetype != NULL, 0);
-	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->minute;</custom>
-    </method>
-    <method name="i_cal_time_set_minute" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
-        <parameter type="gint" name="minute" comment="The minute"/>
-        <comment>Sets the minute of #ICalTime.</comment>
-        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->minute = minute;</custom>
-    </method>
-    <method name="i_cal_time_get_second" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
-        <returns type="gint" comment="The second." />
-        <comment xml:space="preserve">Gets the second of #ICalTime.</comment>
-        <custom>	g_return_val_if_fail (timetype != NULL, 0);
-	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->second;</custom>
-    </method>
-    <method name="i_cal_time_set_second" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
-        <parameter type="gint" name="second" comment="The second"/>
-        <comment>Sets the second of #ICalTime.</comment>
-        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->second = second;</custom>
-    </method>
-    <method name="i_cal_time_set_is_date" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
-        <parameter type="gboolean" name="is_date" comment="The is_date"/>
-        <comment>Sets the is_date of #ICalTime.</comment>
-        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_date = is_date ? 1 : 0;</custom>
-    </method>
-    <method name="i_cal_time_is_daylight" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
-        <returns type="gboolean" comment="The is_daylight." />
-        <comment xml:space="preserve">Gets the is_daylight of #ICalTime.</comment>
-        <custom>	g_return_val_if_fail (timetype != NULL, 0);
-	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_daylight;</custom>
-    </method>
-    <method name="i_cal_time_set_is_daylight" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
-        <parameter type="gboolean" name="is_daylight" comment="The is_daylight"/>
-        <comment>Sets the is_daylight of #ICalTime.</comment>
-        <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
-	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))->is_daylight = is_daylight ? 1 : 0;</custom>
-    </method>
-    <method name="i_cal_time_get_date" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
-        <parameter type="gint *" name="year" annotation="out caller-allocates, optional" comment="Out parameter for the 'year' part of the date"/>
-        <parameter type="gint *" name="month" annotation="out caller-allocates, optional" comment="Out parameter for the 'month' part of the date"/>
-        <parameter type="gint *" name="day" annotation="out caller-allocates, optional" comment="Out parameter for the 'day' part of the date"/>
-        <comment xml:space="preserve">Gets the year/month/date parts of the @timetype in one call.</comment>
-        <custom>    icaltimetype *itt;
+  </method>
+  <method name="i_cal_time_days_in_month" corresponds="icaltime_days_in_month" since="1.0">
+    <parameter type="gint" name="month" comment="The target month"/>
+    <parameter type="gint" name="year" comment="The target year"/>
+    <returns type="gint" comment="The number of days in the target month in the target year."/>
+    <comment xml:space="preserve">Gets the number of days in the target month in the target year.</comment>
+  </method>
+  <method name="i_cal_time_days_is_leap_year" corresponds="icaltime_is_leap_year" since="1.0">
+    <parameter type="gint" name="year" comment="The target year"/>
+    <returns type="gboolean" comment="Whether the @year is a leap year"/>
+    <comment xml:space="preserve">Checks whether a year is a leap year.</comment>
+  </method>
+  <method name="i_cal_time_days_in_year" corresponds="icaltime_days_in_year" since="2.0">
+    <parameter type="gint" name="year" comment="The target year"/>
+    <returns type="gint" comment="Days in this year."/>
+    <comment xml:space="preserve">Returns the number of days in this year.</comment>
+  </method>
+  <method name="i_cal_time_span_new" corresponds="icaltime_span_new" kind="constructor" since="1.0">
+    <parameter type="ICalTime *" name="dtstart" comment="The start of #ICalTimeSpan"/>
+    <parameter type="ICalTime *" name="dtend" comment="The end of #ICalTimeSpan"/>
+    <parameter type="gint" name="is_busy" comment="Whether this span is busy"/>
+    <returns type="ICalTimeSpan *" annotation="transfer full" comment="The newly created #ICalTimeSpan"/>
+    <comment xml:space="preserve">Creates a new #ICalTimeSpan.</comment>
+  </method>
+  <method name="i_cal_time_span_overlaps" corresponds="icaltime_span_overlaps" kind="other" since="1.0">
+    <parameter type="ICalTimeSpan *" name="s1" native_op="POINTER" comment="The first #ICalTimeSpan"/>
+    <parameter type="ICalTimeSpan *" name="s2" native_op="POINTER" comment="The second #ICalTimeSpan"/>
+    <returns type="gint" comment="Whether these two span are overlapped."/>
+    <comment xml:space="preserve">Checks whether two spans overlap.</comment>
+  </method>
+  <method name="i_cal_time_span_contains" corresponds="icaltime_span_contains" kind="other" since="1.0">
+    <parameter type="ICalTimeSpan *" name="s" native_op="POINTER" comment="The test #ICalTimeSpan"/>
+    <parameter type="ICalTimeSpan *" name="container" native_op="POINTER" comment="The target container of #ICalTimeSpan"/>
+    <returns type="gint" comment="Whether one #ICalTimeSpan is contained in another #ICalTimeSpan."/>
+    <comment xml:space="preserve">Checks whether one #ICalTimeSpan is contained in another #ICalTimeSpan.</comment>
+  </method>
+  <method name="i_cal_time_get_year" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
+    <returns type="gint" comment="The year."/>
+    <comment xml:space="preserve">Gets the year of #ICalTime.</comment>
+    <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;year;</custom>
+  </method>
+  <method name="i_cal_time_set_year" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
+    <parameter type="gint" name="year" comment="The year"/>
+    <comment>Sets the year of #ICalTime.</comment>
+    <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;year = year;</custom>
+  </method>
+  <method name="i_cal_time_get_month" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
+    <returns type="gint" comment="The month."/>
+    <comment xml:space="preserve">Gets the month of #ICalTime.</comment>
+    <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;month;</custom>
+  </method>
+  <method name="i_cal_time_set_month" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
+    <parameter type="gint" name="month" comment="The month"/>
+    <comment>Sets the month of #ICalTime.</comment>
+    <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;month = month;</custom>
+  </method>
+  <method name="i_cal_time_get_day" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
+    <returns type="gint" comment="The day."/>
+    <comment xml:space="preserve">Gets the day of #ICalTime.</comment>
+    <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;day;</custom>
+  </method>
+  <method name="i_cal_time_set_day" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
+    <parameter type="gint" name="day" comment="The day"/>
+    <comment>Sets the day of #ICalTime.</comment>
+    <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;day = day;</custom>
+  </method>
+  <method name="i_cal_time_get_hour" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
+    <returns type="gint" comment="The hour."/>
+    <comment xml:space="preserve">Gets the hour of #ICalTime.</comment>
+    <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;hour;</custom>
+  </method>
+  <method name="i_cal_time_set_hour" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
+    <parameter type="gint" name="hour" comment="The hour"/>
+    <comment>Sets the hour of #ICalTime.</comment>
+    <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;hour = hour;</custom>
+  </method>
+  <method name="i_cal_time_get_minute" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
+    <returns type="gint" comment="The minute."/>
+    <comment xml:space="preserve">Gets the minute of #ICalTime.</comment>
+    <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;minute;</custom>
+  </method>
+  <method name="i_cal_time_set_minute" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
+    <parameter type="gint" name="minute" comment="The minute"/>
+    <comment>Sets the minute of #ICalTime.</comment>
+    <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;minute = minute;</custom>
+  </method>
+  <method name="i_cal_time_get_second" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
+    <returns type="gint" comment="The second."/>
+    <comment xml:space="preserve">Gets the second of #ICalTime.</comment>
+    <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;second;</custom>
+  </method>
+  <method name="i_cal_time_set_second" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
+    <parameter type="gint" name="second" comment="The second"/>
+    <comment>Sets the second of #ICalTime.</comment>
+    <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;second = second;</custom>
+  </method>
+  <method name="i_cal_time_set_is_date" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
+    <parameter type="gboolean" name="is_date" comment="The is_date"/>
+    <comment>Sets the is_date of #ICalTime.</comment>
+    <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;is_date = is_date ? 1 : 0;</custom>
+  </method>
+  <method name="i_cal_time_is_daylight" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
+    <returns type="gboolean" comment="The is_daylight."/>
+    <comment xml:space="preserve">Gets the is_daylight of #ICalTime.</comment>
+    <custom>	g_return_val_if_fail (timetype != NULL, 0);
+	return ((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;is_daylight;</custom>
+  </method>
+  <method name="i_cal_time_set_is_daylight" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set"/>
+    <parameter type="gboolean" name="is_daylight" comment="The is_daylight"/>
+    <comment>Sets the is_daylight of #ICalTime.</comment>
+    <custom>	g_return_if_fail (timetype != NULL &amp;&amp; I_CAL_IS_TIME(timetype));
+	((struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype))-&gt;is_daylight = is_daylight ? 1 : 0;</custom>
+  </method>
+  <method name="i_cal_time_get_date" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
+    <parameter type="gint *" name="year" annotation="out caller-allocates, optional" comment="Out parameter for the 'year' part of the date"/>
+    <parameter type="gint *" name="month" annotation="out caller-allocates, optional" comment="Out parameter for the 'month' part of the date"/>
+    <parameter type="gint *" name="day" annotation="out caller-allocates, optional" comment="Out parameter for the 'day' part of the date"/>
+    <comment xml:space="preserve">Gets the year/month/date parts of the @timetype in one call.</comment>
+    <custom>    icaltimetype *itt;
     g_return_if_fail(timetype != NULL);
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
     g_return_if_fail(itt != NULL);
     if(year)
-        *year = itt->year;
+        *year = itt-&gt;year;
     if(month)
-        *month = itt->month;
+        *month = itt-&gt;month;
     if(day)
-        *day = itt->day; </custom>
-    </method>
-    <method name="i_cal_time_set_date" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set to"/>
-        <parameter type="gint" name="year" comment="The 'year' part of the date" />
-        <parameter type="gint" name="month" comment="The 'month' part of the date" />
-        <parameter type="gint" name="day" comment="The 'day' part of the date" />
-        <comment xml:space="preserve">Sets the year/month/date parts of the @timetype in one call. This doesn't verify validity of the given date.</comment>
-        <custom>    icaltimetype *itt;
+        *day = itt-&gt;day; </custom>
+  </method>
+  <method name="i_cal_time_set_date" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set to"/>
+    <parameter type="gint" name="year" comment="The 'year' part of the date"/>
+    <parameter type="gint" name="month" comment="The 'month' part of the date"/>
+    <parameter type="gint" name="day" comment="The 'day' part of the date"/>
+    <comment xml:space="preserve">Sets the year/month/date parts of the @timetype in one call. This doesn't verify validity of the given date.</comment>
+    <custom>    icaltimetype *itt;
     g_return_if_fail(timetype != NULL);
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
     g_return_if_fail(itt != NULL);
-    itt->year = year;
-    itt->month = month;
-    itt->day = day; </custom>
-    </method>
-    <method name="i_cal_time_get_time" corresponds="none" kind="get" since="1.0">
-        <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
-        <parameter type="gint *" name="hour" annotation="out caller-allocates, optional" comment="Out parameter for the 'hour' part of the time"/>
-        <parameter type="gint *" name="minute" annotation="out caller-allocates, optional" comment="Out parameter for the 'minute' part of the time"/>
-        <parameter type="gint *" name="second" annotation="out caller-allocates, optional" comment="Out parameter for the 'second' part of the time"/>
-        <comment xml:space="preserve">Gets the hour/minute/second parts of the @timetype in one call.</comment>
-        <custom>    icaltimetype *itt;
+    itt-&gt;year = year;
+    itt-&gt;month = month;
+    itt-&gt;day = day; </custom>
+  </method>
+  <method name="i_cal_time_get_time" corresponds="none" kind="get" since="1.0">
+    <parameter type="const ICalTime *" name="timetype" comment="The #ICalTime to be queried"/>
+    <parameter type="gint *" name="hour" annotation="out caller-allocates, optional" comment="Out parameter for the 'hour' part of the time"/>
+    <parameter type="gint *" name="minute" annotation="out caller-allocates, optional" comment="Out parameter for the 'minute' part of the time"/>
+    <parameter type="gint *" name="second" annotation="out caller-allocates, optional" comment="Out parameter for the 'second' part of the time"/>
+    <comment xml:space="preserve">Gets the hour/minute/second parts of the @timetype in one call.</comment>
+    <custom>    icaltimetype *itt;
     g_return_if_fail(timetype != NULL);
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
     g_return_if_fail(itt != NULL);
     if(hour)
-        *hour = itt->hour;
+        *hour = itt-&gt;hour;
     if(minute)
-        *minute = itt->minute;
+        *minute = itt-&gt;minute;
     if(second)
-        *second = itt->second; </custom>
-    </method>
-    <method name="i_cal_time_set_time" corresponds="none" kind="set" since="1.0">
-        <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set to"/>
-        <parameter type="gint" name="hour" comment="The 'hour' part of the time" />
-        <parameter type="gint" name="minute" comment="The 'minute' part of the time" />
-        <parameter type="gint" name="second" comment="The 'second' part of the time" />
-        <comment xml:space="preserve">Sets the hour/minute/second parts of the @timetype in one call. This doesn't verify validity of the given time.</comment>
-        <custom>    icaltimetype *itt;
+        *second = itt-&gt;second; </custom>
+  </method>
+  <method name="i_cal_time_set_time" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set to"/>
+    <parameter type="gint" name="hour" comment="The 'hour' part of the time"/>
+    <parameter type="gint" name="minute" comment="The 'minute' part of the time"/>
+    <parameter type="gint" name="second" comment="The 'second' part of the time"/>
+    <comment xml:space="preserve">Sets the hour/minute/second parts of the @timetype in one call. This doesn't verify validity of the given time.</comment>
+    <custom>    icaltimetype *itt;
     g_return_if_fail(timetype != NULL);
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
     g_return_if_fail(itt != NULL);
-    itt->hour = hour;
-    itt->minute = minute;
-    itt->second = second; </custom>
-    </method>
+    itt-&gt;hour = hour;
+    itt-&gt;minute = minute;
+    itt-&gt;second = second; </custom>
+  </method>
 </structure>

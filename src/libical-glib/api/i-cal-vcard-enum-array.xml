@@ -1,132 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2025 Allen Winter <winter@kde.org>
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 -->
 <!-- 'vcardenumarray_free' is a define, which cannot be used as a callback; it points to 'icalenumarray_free' thus use it directly -->
 <structure namespace="ICalVcard" name="EnumArray" native="vcardenumarray" destroy_func="icalenumarray_free">
-	<method name="i_cal_vcard_enum_array_new" corresponds="vcardenumarray_new" kind="constructor" since="4.0">
-		<parameter type="gint" name="increment_size" comment="how many slots to allocate on array expansion"/>
-		<returns type="ICalVcardEnumArray *" annotation="transfer full" comment="a new #ICalVcardEnumArray."/>
-		<comment>Creates a new #ICalVcardEnumArray.</comment>
-	</method>
-	<method name="i_cal_vcard_enum_array_get_value_at" corresponds="vcardenumarray_element_at" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray to be queried"/>
-		<parameter type="gint" name="position" comment="The position the target element is located"/>
-		<returns type="gint" comment="The element integer value located at the @position in the @array"/>
-		<comment xml:space="preserve">Gets the element integer value located in the @position in the @array. Zero if position is out of bounds. See also i_cal_vcard_enum_array_get_xvalue_at()</comment>
-		<custom>    const vcardenumarray_element *elem;
+  <method name="i_cal_vcard_enum_array_new" corresponds="vcardenumarray_new" kind="constructor" since="4.0">
+    <parameter type="gint" name="increment_size" comment="how many slots to allocate on array expansion"/>
+    <returns type="ICalVcardEnumArray *" annotation="transfer full" comment="a new #ICalVcardEnumArray."/>
+    <comment>Creates a new #ICalVcardEnumArray.</comment>
+  </method>
+  <method name="i_cal_vcard_enum_array_get_value_at" corresponds="vcardenumarray_element_at" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray to be queried"/>
+    <parameter type="gint" name="position" comment="The position the target element is located"/>
+    <returns type="gint" comment="The element integer value located at the @position in the @array"/>
+    <comment xml:space="preserve">Gets the element integer value located in the @position in the @array. Zero if position is out of bounds. See also i_cal_vcard_enum_array_get_xvalue_at()</comment>
+    <custom>    const vcardenumarray_element *elem;
     g_return_val_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array), 0);
     elem = vcardenumarray_element_at((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), position);
     if (elem == NULL)
         return 0;
-    return elem->val;</custom>
-	</method>
-	<method name="i_cal_vcard_enum_array_get_xvalue_at" corresponds="vcardenumarray_element_at" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray to be queried"/>
-		<parameter type="gint" name="position" comment="The position the target element is located"/>
-		<returns type="const gchar *" annotation="transfer none,nullable" comment="The element X value located at the @position in the @array"/>
-		<comment xml:space="preserve">Gets the element X value located in the @position in the @array. %NULL if position is out of bounds. See also i_cal_vcard_enum_array_get_value_at().</comment>
-		<custom>    const vcardenumarray_element *elem;
+    return elem-&gt;val;</custom>
+  </method>
+  <method name="i_cal_vcard_enum_array_get_xvalue_at" corresponds="vcardenumarray_element_at" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray to be queried"/>
+    <parameter type="gint" name="position" comment="The position the target element is located"/>
+    <returns type="const gchar *" annotation="transfer none,nullable" comment="The element X value located at the @position in the @array"/>
+    <comment xml:space="preserve">Gets the element X value located in the @position in the @array. %NULL if position is out of bounds. See also i_cal_vcard_enum_array_get_value_at().</comment>
+    <custom>    const vcardenumarray_element *elem;
     g_return_val_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array), 0);
     elem = vcardenumarray_element_at((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), position);
     if (elem == NULL)
         return 0;
-    return elem->xvalue;</custom>
-	</method>
-	<method name="i_cal_vcard_enum_array_size" corresponds="vcardenumarray_size" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
-		<returns type="gsize" comment="The size of current array."/>
-		<comment>Gets the size of the array.</comment>
-	</method>
-	<method name="i_cal_vcard_enum_array_find_value" corresponds="vcardenumarray_find" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
-		<parameter type="gint" name="value" comment="The integer value to search for"/>
-		<returns type="gsize" error_return_value="((gsize)-1)" comment="The index of the value in the @array, or an index out of bounds, if not found."/>
-		<comment xml:space="preserve">Searches for an integer value in the @array. See also i_cal_vcard_enum_array_find_x_value()</comment>
-		<custom>    vcardenumarray_element elem = { 0 };
+    return elem-&gt;xvalue;</custom>
+  </method>
+  <method name="i_cal_vcard_enum_array_size" corresponds="vcardenumarray_size" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
+    <returns type="gsize" comment="The size of current array."/>
+    <comment>Gets the size of the array.</comment>
+  </method>
+  <method name="i_cal_vcard_enum_array_find_value" corresponds="vcardenumarray_find" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
+    <parameter type="gint" name="value" comment="The integer value to search for"/>
+    <returns type="gsize" error_return_value="((gsize)-1)" comment="The index of the value in the @array, or an index out of bounds, if not found."/>
+    <comment xml:space="preserve">Searches for an integer value in the @array. See also i_cal_vcard_enum_array_find_x_value()</comment>
+    <custom>    vcardenumarray_element elem = { 0 };
     g_return_val_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array), (gsize) -1);
     elem.val = value;
     return vcardenumarray_find((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
-	</method>
-	<method name="i_cal_vcard_enum_array_find_x_value" corresponds="vcardenumarray_find" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
-		<parameter type="const gchar *" name="xvalue" comment="The X (custom) value to search for"/>
-		<returns type="gsize" error_return_value="((gsize)-1)" comment="The index of the value in the @array, or an index out of bounds, if not found."/>
-		<comment xml:space="preserve">Searches for an integer value in the @array. See also i_cal_vcard_enum_array_find_value()</comment>
-		<custom>    vcardenumarray_element elem = { 0 };
+  </method>
+  <method name="i_cal_vcard_enum_array_find_x_value" corresponds="vcardenumarray_find" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
+    <parameter type="const gchar *" name="xvalue" comment="The X (custom) value to search for"/>
+    <returns type="gsize" error_return_value="((gsize)-1)" comment="The index of the value in the @array, or an index out of bounds, if not found."/>
+    <comment xml:space="preserve">Searches for an integer value in the @array. See also i_cal_vcard_enum_array_find_value()</comment>
+    <custom>    vcardenumarray_element elem = { 0 };
     g_return_val_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array), (gsize) -1);
     elem.xvalue = xvalue;
     return vcardenumarray_find((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
-	</method>
-	<method name="i_cal_vcard_enum_array_append_value" corresponds="vcardenumarray_append" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
-		<parameter type="gint" name="value" comment="The integer value to append"/>
-		<comment xml:space="preserve">Appends an integer value to the @array. See also i_cal_vcard_enum_array_add_value(), i_cal_vcard_enum_array_append_x_value()</comment>
-		<custom>    vcardenumarray_element elem = { 0 };
+  </method>
+  <method name="i_cal_vcard_enum_array_append_value" corresponds="vcardenumarray_append" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
+    <parameter type="gint" name="value" comment="The integer value to append"/>
+    <comment xml:space="preserve">Appends an integer value to the @array. See also i_cal_vcard_enum_array_add_value(), i_cal_vcard_enum_array_append_x_value()</comment>
+    <custom>    vcardenumarray_element elem = { 0 };
     g_return_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array));
     elem.val = value;
     vcardenumarray_append((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
-	</method>
-	<method name="i_cal_vcard_enum_array_append_x_value" corresponds="vcardenumarray_append" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
-		<parameter type="const gchar *" name="xvalue" comment="The X (custom) value to append"/>
-		<comment xml:space="preserve">Appends an X (custom) value to the @array. See also i_cal_vcard_enum_array_add_x_value(), i_cal_vcard_enum_array_append_value()</comment>
-		<custom>    vcardenumarray_element elem = { 0 };
+  </method>
+  <method name="i_cal_vcard_enum_array_append_x_value" corresponds="vcardenumarray_append" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
+    <parameter type="const gchar *" name="xvalue" comment="The X (custom) value to append"/>
+    <comment xml:space="preserve">Appends an X (custom) value to the @array. See also i_cal_vcard_enum_array_add_x_value(), i_cal_vcard_enum_array_append_value()</comment>
+    <custom>    vcardenumarray_element elem = { 0 };
     g_return_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array));
     elem.xvalue = xvalue;
     vcardenumarray_append((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
-	</method>
-	<method name="i_cal_vcard_enum_array_add_value" corresponds="vcardenumarray_add" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
-		<parameter type="gint" name="value" comment="The integer value to append"/>
-		<comment xml:space="preserve">Adds an integer value to the @array, omitting duplicates. See also i_cal_vcard_enum_array_append_value(), i_cal_vcard_enum_array_add_x_value()</comment>
-		<custom>    vcardenumarray_element elem = { 0 };
+  </method>
+  <method name="i_cal_vcard_enum_array_add_value" corresponds="vcardenumarray_add" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
+    <parameter type="gint" name="value" comment="The integer value to append"/>
+    <comment xml:space="preserve">Adds an integer value to the @array, omitting duplicates. See also i_cal_vcard_enum_array_append_value(), i_cal_vcard_enum_array_add_x_value()</comment>
+    <custom>    vcardenumarray_element elem = { 0 };
     g_return_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array));
     elem.val = value;
     vcardenumarray_add((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
-	</method>
-	<method name="i_cal_vcard_enum_array_add_x_value" corresponds="vcardenumarray_add" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
-		<parameter type="const gchar *" name="xvalue" comment="The X (custom) value to append"/>
-		<comment xml:space="preserve">Adds an X (custom) value to the @array, omitting duplicates. See also i_cal_vcard_enum_array_append_x_value(), i_cal_vcard_enum_array_add_value()</comment>
-		<custom>    vcardenumarray_element elem = { 0 };
+  </method>
+  <method name="i_cal_vcard_enum_array_add_x_value" corresponds="vcardenumarray_add" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
+    <parameter type="const gchar *" name="xvalue" comment="The X (custom) value to append"/>
+    <comment xml:space="preserve">Adds an X (custom) value to the @array, omitting duplicates. See also i_cal_vcard_enum_array_append_x_value(), i_cal_vcard_enum_array_add_value()</comment>
+    <custom>    vcardenumarray_element elem = { 0 };
     g_return_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array));
     elem.xvalue = xvalue;
     vcardenumarray_add((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
-	</method>
-	<method name="i_cal_vcard_enum_array_remove_element_at" corresponds="vcardenumarray_remove_element_at" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array"  comment="The #ICalVcardEnumArray to be modified"/>
-		<parameter type="gsize" name="position" comment="The position in which the element will be removed from the array"/>
-		<comment xml:space="preserve">Removes the element at the @position from the array.</comment>
-	</method>
-	<method name="i_cal_vcard_enum_array_remove_value" corresponds="vcardenumarray_remove" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
-		<parameter type="gint" name="value" comment="The integer value to remove"/>
-		<comment xml:space="preserve">Removes all occurrences of an integer value from the @array. See also i_cal_vcard_enum_array_remove_x_value()</comment>
-		<custom>    vcardenumarray_element elem = { 0 };
+  </method>
+  <method name="i_cal_vcard_enum_array_remove_element_at" corresponds="vcardenumarray_remove_element_at" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray to be modified"/>
+    <parameter type="gsize" name="position" comment="The position in which the element will be removed from the array"/>
+    <comment xml:space="preserve">Removes the element at the @position from the array.</comment>
+  </method>
+  <method name="i_cal_vcard_enum_array_remove_value" corresponds="vcardenumarray_remove" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
+    <parameter type="gint" name="value" comment="The integer value to remove"/>
+    <comment xml:space="preserve">Removes all occurrences of an integer value from the @array. See also i_cal_vcard_enum_array_remove_x_value()</comment>
+    <custom>    vcardenumarray_element elem = { 0 };
     g_return_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array));
     elem.val = value;
     vcardenumarray_remove((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
-	</method>
-	<method name="i_cal_vcard_enum_array_remove_x_value" corresponds="vcardenumarray_remove" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
-		<parameter type="const gchar *" name="xvalue" comment="The X (custom) value to remove"/>
-		<comment xml:space="preserve">Removes all occurrences of an X (custom) value from the @array. See also i_cal_vcard_enum_array_remove_value()</comment>
-		<custom>    vcardenumarray_element elem = { 0 };
+  </method>
+  <method name="i_cal_vcard_enum_array_remove_x_value" corresponds="vcardenumarray_remove" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray"/>
+    <parameter type="const gchar *" name="xvalue" comment="The X (custom) value to remove"/>
+    <comment xml:space="preserve">Removes all occurrences of an X (custom) value from the @array. See also i_cal_vcard_enum_array_remove_value()</comment>
+    <custom>    vcardenumarray_element elem = { 0 };
     g_return_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array));
     elem.xvalue = xvalue;
     vcardenumarray_remove((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), &amp;elem);</custom>
-	</method>
-	<method name="i_cal_vcard_enum_array_free" corresponds="vcardenumarray_free" annotation="skip" kind="destructor" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray to be freed"/>
-		<comment xml:space="preserve">Frees the #ICalVcardEnumArray.</comment>
-	</method>
-	<method name="i_cal_vcard_enum_array_sort" corresponds="vcardenumarray_sort" annotation="skip" kind="other" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray to be sorted"/>
-	</method>
-	<method name="i_cal_vcard_enum_array_clone" corresponds="vcardenumarray_clone" kind="clone" since="4.0">
-		<parameter type="ICalVcardEnumArray *" name="array" annotation="in" comment="The #ICalVcardEnumArray to be cloned"/>
-		<returns type="ICalVcardEnumArray *" annotation="transfer full" translator_argus="NULL" comment="The newly cloned #ICalVcardEnumArray with the same value as the @array"/>
-		<comment xml:space="preserve">Creates a deep copy of #ICalVcardEnumArray with the same properties as the @array.</comment>
-	</method>
+  </method>
+  <method name="i_cal_vcard_enum_array_free" corresponds="vcardenumarray_free" annotation="skip" kind="destructor" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray to be freed"/>
+    <comment xml:space="preserve">Frees the #ICalVcardEnumArray.</comment>
+  </method>
+  <method name="i_cal_vcard_enum_array_sort" corresponds="vcardenumarray_sort" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" comment="The #ICalVcardEnumArray to be sorted"/>
+  </method>
+  <method name="i_cal_vcard_enum_array_clone" corresponds="vcardenumarray_clone" kind="clone" since="4.0">
+    <parameter type="ICalVcardEnumArray *" name="array" annotation="in" comment="The #ICalVcardEnumArray to be cloned"/>
+    <returns type="ICalVcardEnumArray *" annotation="transfer full" translator_argus="NULL" comment="The newly cloned #ICalVcardEnumArray with the same value as the @array"/>
+    <comment xml:space="preserve">Creates a deep copy of #ICalVcardEnumArray with the same properties as the @array.</comment>
+  </method>
 </structure>

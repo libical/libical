@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,90 +7,90 @@
 
 -->
 <structure namespace="ICal" name="Error">
-    <skip>icalerror_assert</skip>
-    <skip>icalerror_check_arg</skip>
-    <skip>icalerror_check_arg_re</skip>
-    <skip>icalerror_check_arg_rv</skip>
-    <skip>icalerror_check_arg_rx</skip>
-    <skip>icalerror_check_arg_rz</skip>
-    <skip>icalerror_check_component_type</skip>
-    <skip>icalerror_check_parameter_type</skip>
-    <skip>icalerror_check_property_type</skip>
-    <skip>icalerror_check_value_type</skip>
-    <skip>icalerror_warn</skip>
-    <enum name="ICalErrorEnum" native_name="icalerrorenum" default_native="I_CAL_UNKNOWN_ERROR">
-        <element name="ICAL_NO_ERROR"/>
-        <element name="ICAL_BADARG_ERROR"/>
-        <element name="ICAL_NEWFAILED_ERROR"/>
-        <element name="ICAL_ALLOCATION_ERROR"/>
-        <element name="ICAL_MALFORMEDDATA_ERROR"/>
-        <element name="ICAL_PARSE_ERROR"/>
-        <element name="ICAL_INTERNAL_ERROR"/>
-        <element name="ICAL_FILE_ERROR"/>
-        <element name="ICAL_USAGE_ERROR"/>
-        <element name="ICAL_UNIMPLEMENTED_ERROR"/>
-        <element name="ICAL_UNKNOWN_ERROR"/>
-    </enum>
-    <enum name="ICalErrorState" native_name="icalerrorstate" default_native="I_CAL_ERROR_UNKNOWN">
-        <element name="ICAL_ERROR_FATAL"/>
-        <element name="ICAL_ERROR_NONFATAL"/>
-        <element name="ICAL_ERROR_DEFAULT"/>
-        <element name="ICAL_ERROR_UNKNOWN"/>
-    </enum>
-    <method name="i_cal_error_stop_here" corresponds="icalerror_stop_here" since="1.0"></method>
-    <method name="i_cal_error_crash_here" corresponds="icalerror_crash_here" since="1.0">
-        <comment xml:space="preserve">Shout out the errors to the compiler.</comment>
-    </method>
-    <method name="i_cal_errno_return" corresponds="icalerrno_return" since="1.0">
-        <returns type="ICalErrorEnum" annotation="transfer full" translator="(ICalErrorEnum) *" translator_argus="NONE" comment="Return the error happened" />
-        <comment xml:space="preserve">Returns the error stored in the library. If no error, return I_CAL_NO_ERROR.</comment>
-    </method>
-    <method name="i_cal_error_clear_errno" corresponds="icalerror_clear_errno" since="1.0"></method>
-    <method name="i_cal_error_strerror" corresponds="icalerror_strerror" since="1.0">
-        <parameter type="ICalErrorEnum" name="e" comment="The #ICalErrorEnum to be translated"/>
-        <returns type="const gchar *" annotation="transfer none" comment="The string representation of @e" />
-        <comment xml:space="preserve">Translates the #ICalErrorEnum to the string representation.</comment>
-    </method>
-    <method name="i_cal_error_perror" corresponds="icalerror_perror" since="1.0">
-        <returns type="const gchar *" annotation="transfer none" comment="The string representation of the current error" />
-        <comment xml:space="preserve">Gets the #ICalErrorEnum in the string representation. This method called the icalerrorno_return to get the current error.</comment>
-    </method>
-    <method name="i_cal_bt" corresponds="ical_bt" kind="other" since="1.0"></method>
-    <method name="i_cal_error_set_error_state" corresponds="icalerror_set_error_state" kind="set" since="1.0">
-        <parameter type="ICalErrorEnum" name="error" comment="The error enum"/>
-        <parameter type="ICalErrorState" name="state" comment="The error state"/>
-        <comment xml:space="preserve">Sets the state to the corresponding error in the library.</comment>
-    </method>
-    <method name="i_cal_error_get_error_state" corresponds="icalerror_get_error_state" kind="get" since="1.0">
-        <parameter type="ICalErrorEnum" name="error" comment="The error to be checked"/>
-        <returns type="ICalErrorState" comment="The state of the @error" />
-        <comment xml:space="preserve">Gets the state of an error.</comment>
-    </method>
-    <method name="i_cal_error_set_errno" corresponds="icalerror_set_errno" kind="set" since="1.0">
-        <parameter type="ICalErrorEnum" name="x" comment="The error to be set"/>
-        <comment xml:space="preserve">Sets the errno.</comment>
-    </method>
-    <method name="i_cal_error_supress" corresponds="icalerror_supress" since="1.0">
-        <parameter type="const gchar *" name="error" comment="The error to be suppressed"/>
-        <returns type="ICalErrorState" comment="The error state suppressed" />
-        <comment xml:space="preserve">Suppresses the error.</comment>
-    </method>
-    <method name="i_cal_error_restore" corresponds="icalerror_restore" since="1.0">
-        <parameter type="const gchar *" name="error" comment="The error to be restored"/>
-        <parameter type="ICalErrorState" name="es" comment="The error state to be restored"/>
-        <comment xml:space="preserve">Restores the error to specified state.</comment>
-    </method>
-    <method name="i_cal_error_error_from_string" corresponds="icalerror_error_from_string" since="4.0">
-        <parameter type="const gchar *" name="str" comment="The error name string"/>
-        <returns type="ICalErrorEnum" comment="An #ICalErrorEnum representation of the error @str" />
-        <comment xml:space="preserve">Reads an error from a string.</comment>
-    </method>
-    <method name="i_cal_error_get_errors_are_fatal" corresponds="icalerror_get_errors_are_fatal" since="4.0">
-        <returns type="gboolean" comment="whether errors are fatal" />
-        <comment xml:space="preserve">Determine whether errors are fatal.</comment>
-    </method>
-    <method name="i_cal_error_set_errors_are_fatal" corresponds="icalerror_set_errors_are_fatal" since="4.0">
-        <parameter type="gboolean" name="value" comment="value to set"/>
-        <comment xml:space="preserve">Sets whether errors are fatal, that is, whether libical aborts after any processing reports an error.</comment>
-    </method>
+  <skip>icalerror_assert</skip>
+  <skip>icalerror_check_arg</skip>
+  <skip>icalerror_check_arg_re</skip>
+  <skip>icalerror_check_arg_rv</skip>
+  <skip>icalerror_check_arg_rx</skip>
+  <skip>icalerror_check_arg_rz</skip>
+  <skip>icalerror_check_component_type</skip>
+  <skip>icalerror_check_parameter_type</skip>
+  <skip>icalerror_check_property_type</skip>
+  <skip>icalerror_check_value_type</skip>
+  <skip>icalerror_warn</skip>
+  <enum name="ICalErrorEnum" native_name="icalerrorenum" default_native="I_CAL_UNKNOWN_ERROR">
+    <element name="ICAL_NO_ERROR"/>
+    <element name="ICAL_BADARG_ERROR"/>
+    <element name="ICAL_NEWFAILED_ERROR"/>
+    <element name="ICAL_ALLOCATION_ERROR"/>
+    <element name="ICAL_MALFORMEDDATA_ERROR"/>
+    <element name="ICAL_PARSE_ERROR"/>
+    <element name="ICAL_INTERNAL_ERROR"/>
+    <element name="ICAL_FILE_ERROR"/>
+    <element name="ICAL_USAGE_ERROR"/>
+    <element name="ICAL_UNIMPLEMENTED_ERROR"/>
+    <element name="ICAL_UNKNOWN_ERROR"/>
+  </enum>
+  <enum name="ICalErrorState" native_name="icalerrorstate" default_native="I_CAL_ERROR_UNKNOWN">
+    <element name="ICAL_ERROR_FATAL"/>
+    <element name="ICAL_ERROR_NONFATAL"/>
+    <element name="ICAL_ERROR_DEFAULT"/>
+    <element name="ICAL_ERROR_UNKNOWN"/>
+  </enum>
+  <method name="i_cal_error_stop_here" corresponds="icalerror_stop_here" since="1.0"/>
+  <method name="i_cal_error_crash_here" corresponds="icalerror_crash_here" since="1.0">
+    <comment xml:space="preserve">Shout out the errors to the compiler.</comment>
+  </method>
+  <method name="i_cal_errno_return" corresponds="icalerrno_return" since="1.0">
+    <returns type="ICalErrorEnum" annotation="transfer full" translator="(ICalErrorEnum) *" translator_argus="NONE" comment="Return the error happened"/>
+    <comment xml:space="preserve">Returns the error stored in the library. If no error, return I_CAL_NO_ERROR.</comment>
+  </method>
+  <method name="i_cal_error_clear_errno" corresponds="icalerror_clear_errno" since="1.0"/>
+  <method name="i_cal_error_strerror" corresponds="icalerror_strerror" since="1.0">
+    <parameter type="ICalErrorEnum" name="e" comment="The #ICalErrorEnum to be translated"/>
+    <returns type="const gchar *" annotation="transfer none" comment="The string representation of @e"/>
+    <comment xml:space="preserve">Translates the #ICalErrorEnum to the string representation.</comment>
+  </method>
+  <method name="i_cal_error_perror" corresponds="icalerror_perror" since="1.0">
+    <returns type="const gchar *" annotation="transfer none" comment="The string representation of the current error"/>
+    <comment xml:space="preserve">Gets the #ICalErrorEnum in the string representation. This method called the icalerrorno_return to get the current error.</comment>
+  </method>
+  <method name="i_cal_bt" corresponds="ical_bt" kind="other" since="1.0"/>
+  <method name="i_cal_error_set_error_state" corresponds="icalerror_set_error_state" kind="set" since="1.0">
+    <parameter type="ICalErrorEnum" name="error" comment="The error enum"/>
+    <parameter type="ICalErrorState" name="state" comment="The error state"/>
+    <comment xml:space="preserve">Sets the state to the corresponding error in the library.</comment>
+  </method>
+  <method name="i_cal_error_get_error_state" corresponds="icalerror_get_error_state" kind="get" since="1.0">
+    <parameter type="ICalErrorEnum" name="error" comment="The error to be checked"/>
+    <returns type="ICalErrorState" comment="The state of the @error"/>
+    <comment xml:space="preserve">Gets the state of an error.</comment>
+  </method>
+  <method name="i_cal_error_set_errno" corresponds="icalerror_set_errno" kind="set" since="1.0">
+    <parameter type="ICalErrorEnum" name="x" comment="The error to be set"/>
+    <comment xml:space="preserve">Sets the errno.</comment>
+  </method>
+  <method name="i_cal_error_supress" corresponds="icalerror_supress" since="1.0">
+    <parameter type="const gchar *" name="error" comment="The error to be suppressed"/>
+    <returns type="ICalErrorState" comment="The error state suppressed"/>
+    <comment xml:space="preserve">Suppresses the error.</comment>
+  </method>
+  <method name="i_cal_error_restore" corresponds="icalerror_restore" since="1.0">
+    <parameter type="const gchar *" name="error" comment="The error to be restored"/>
+    <parameter type="ICalErrorState" name="es" comment="The error state to be restored"/>
+    <comment xml:space="preserve">Restores the error to specified state.</comment>
+  </method>
+  <method name="i_cal_error_error_from_string" corresponds="icalerror_error_from_string" since="4.0">
+    <parameter type="const gchar *" name="str" comment="The error name string"/>
+    <returns type="ICalErrorEnum" comment="An #ICalErrorEnum representation of the error @str"/>
+    <comment xml:space="preserve">Reads an error from a string.</comment>
+  </method>
+  <method name="i_cal_error_get_errors_are_fatal" corresponds="icalerror_get_errors_are_fatal" since="4.0">
+    <returns type="gboolean" comment="whether errors are fatal"/>
+    <comment xml:space="preserve">Determine whether errors are fatal.</comment>
+  </method>
+  <method name="i_cal_error_set_errors_are_fatal" corresponds="icalerror_set_errors_are_fatal" since="4.0">
+    <parameter type="gboolean" name="value" comment="value to set"/>
+    <comment xml:space="preserve">Sets whether errors are fatal, that is, whether libical aborts after any processing reports an error.</comment>
+  </method>
 </structure>

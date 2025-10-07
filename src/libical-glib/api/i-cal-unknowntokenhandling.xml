@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,17 +7,17 @@
 
 -->
 <structure namespace="ICal" name="Unknowntokenhandling">
-    <enum name="ICalUnknowntokenhandling" native_name="ical_unknown_token_handling" default_native="0">
-        <element name="ICAL_ASSUME_IANA_TOKEN"/>
-        <element name="ICAL_DISCARD_TOKEN"/>
-        <element name="ICAL_TREAT_AS_ERROR"/>
-    </enum>
-    <method name="i_cal_get_unknown_token_handling_setting" corresponds="ical_get_unknown_token_handling_setting" kind="get" since="1.0">
-        <returns type="ICalUnknowntokenhandling" comment="The setting of #ICalUnknowntokenhandling"/>
-        <comment>Gets the setting of #ICalUnknowntokenhandling.</comment>
-    </method>
-    <method name="i_cal_set_unknown_token_handling_setting" corresponds="ical_set_unknown_token_handling_setting" kind="set" since="1.0">
-        <parameter type="ICalUnknowntokenhandling" name="newSetting" comment="A #ICalUnknowntokenhandling"/>
-        <comment>Sets #ICalUnknowntokenhandling.</comment>
-    </method>
+  <enum name="ICalUnknowntokenhandling" native_name="ical_unknown_token_handling" default_native="0">
+    <element name="ICAL_ASSUME_IANA_TOKEN"/>
+    <element name="ICAL_DISCARD_TOKEN"/>
+    <element name="ICAL_TREAT_AS_ERROR"/>
+  </enum>
+  <method name="i_cal_get_unknown_token_handling_setting" corresponds="ical_get_unknown_token_handling_setting" kind="get" since="1.0">
+    <returns type="ICalUnknowntokenhandling" comment="The setting of #ICalUnknowntokenhandling"/>
+    <comment>Gets the setting of #ICalUnknowntokenhandling.</comment>
+  </method>
+  <method name="i_cal_set_unknown_token_handling_setting" corresponds="ical_set_unknown_token_handling_setting" kind="set" since="1.0">
+    <parameter type="ICalUnknowntokenhandling" name="newSetting" comment="A #ICalUnknowntokenhandling"/>
+    <comment>Sets #ICalUnknowntokenhandling.</comment>
+  </method>
 </structure>

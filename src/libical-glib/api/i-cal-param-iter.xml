@@ -1,13 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2025 Corentin Noël <corentin.noel@collabora.com>
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 -->
 <structure namespace="ICal" name="ParamIter" native="struct icalparamiter" is_bare="true" default_native="i_cal_param_iter_new_default ()">
-        <method name="i_cal_param_iter_new_default" corresponds="none" kind="private" since="1.0" annotation="skip">
-                <returns type="struct icalparamiter" annotation="transfer none" comment="The newly created default native icalparamiter"/>
-                <custom>        icalparamiter paramiter;
+  <method name="i_cal_param_iter_new_default" corresponds="none" kind="private" since="1.0" annotation="skip">
+    <returns type="struct icalparamiter" annotation="transfer none" comment="The newly created default native icalparamiter"/>
+    <custom>        icalparamiter paramiter;
         paramiter.iter = 0;
         paramiter.kind = ICAL_NO_PARAMETER;
         return paramiter;</custom>
-        </method>
+  </method>
 </structure>

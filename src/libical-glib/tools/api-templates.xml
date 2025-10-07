@@ -1,237 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 -->
 <templates>
-	<method-template name="simple-new-get-set" requires="obj-type,value-name,value-get-type,value-set-type,value-set-type-ref,binding-prefix,native-prefix,suffix" optional="value-get-annotation,value-set-annotation,value-get-translator-argus">
-		<method name="${binding-prefix}_new_${suffix}" corresponds="${native-prefix}_new_${suffix}" kind="constructor">
-			<parameter type="${value-set-type}" name="value" comment="the ${value-set-type-ref} value"/>
-			<returns type="${obj-type} *" annotation="transfer full" comment="a new #${obj-type} holding ${value-name}"/>
-			<comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.</comment>
-		</method>
-		<method name="${binding-prefix}_get_${suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
-			<parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<returns type="${value-get-type}" annotation="${value-get-annotation}" translator_argus="${value-get-translator-argus}" comment="the ${value-name} value"/>
-			<comment xml:space="preserve">Returns value of the ${value-name} @self</comment>
-		</method>
-		<method name="${binding-prefix}_set_${suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
-			<parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="${value-set-type}" name="value" annotation="${value-set-annotation}" comment="the ${value-name} value"/>
-			<comment xml:space="preserve">Sets value to the ${value-name} @self</comment>
-		</method>
-	</method-template>
-	<method-template name="vcardstructured" requires="obj-type,value-name,native-type,binding-prefix,native-prefix,suffix">
-		<method name="${binding-prefix}_new_${suffix}" corresponds="${native-prefix}_new_${suffix}" kind="constructor">
-			<parameter type="const ICalVcardStructured *" name="value" comment="the #ICalVcardStructured value"/>
-			<returns type="${obj-type} *" annotation="transfer full" comment="a new #${obj-type} holding ${value-name}"/>
-			<comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.
+  <method-template name="simple-new-get-set" requires="obj-type,value-name,value-get-type,value-set-type,value-set-type-ref,binding-prefix,native-prefix,suffix" optional="value-get-annotation,value-set-annotation,value-get-translator-argus">
+    <method name="${binding-prefix}_new_${suffix}" corresponds="${native-prefix}_new_${suffix}" kind="constructor">
+      <parameter type="${value-set-type}" name="value" comment="the ${value-set-type-ref} value"/>
+      <returns type="${obj-type} *" annotation="transfer full" comment="a new #${obj-type} holding ${value-name}"/>
+      <comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.</comment>
+    </method>
+    <method name="${binding-prefix}_get_${suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
+      <parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <returns type="${value-get-type}" annotation="${value-get-annotation}" translator_argus="${value-get-translator-argus}" comment="the ${value-name} value"/>
+      <comment xml:space="preserve">Returns value of the ${value-name} @self</comment>
+    </method>
+    <method name="${binding-prefix}_set_${suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
+      <parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="${value-set-type}" name="value" annotation="${value-set-annotation}" comment="the ${value-name} value"/>
+      <comment xml:space="preserve">Sets value to the ${value-name} @self</comment>
+    </method>
+  </method-template>
+  <method-template name="vcardstructured" requires="obj-type,value-name,native-type,binding-prefix,native-prefix,suffix">
+    <method name="${binding-prefix}_new_${suffix}" corresponds="${native-prefix}_new_${suffix}" kind="constructor">
+      <parameter type="const ICalVcardStructured *" name="value" comment="the #ICalVcardStructured value"/>
+      <returns type="${obj-type} *" annotation="transfer full" comment="a new #${obj-type} holding ${value-name}"/>
+      <comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.
  *
  * Note: this uses a copy of the structured type, not the one stored in the @value</comment>
-			<custom>    vcardstructuredtype *val;
+      <custom>    vcardstructuredtype *val;
     g_return_val_if_fail(value != NULL, NULL);
     val = (vcardstructuredtype *)i_cal_object_get_native((ICalObject *)value);
     if (val == NULL)
         return NULL;
     return ${binding-prefix}_new_full(${native-prefix}_new_${suffix}(priv_i_cal_vcardstructuredtype_clone(val)), NULL);</custom>
-		</method>
-		<method name="${binding-prefix}_get_${suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
-			<parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<returns type="ICalVcardStructured *" annotation="transfer full" comment="the ${value-name} value"/>
-			<comment xml:space="preserve">Returns value of the ${value-name} @self
+    </method>
+    <method name="${binding-prefix}_get_${suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
+      <parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <returns type="ICalVcardStructured *" annotation="transfer full" comment="the ${value-name} value"/>
+      <comment xml:space="preserve">Returns value of the ${value-name} @self
  *
  * Note: this uses a copy of the structured type, not the one stored in the @self</comment>
-			<custom>    vcardstructuredtype *val;
+      <custom>    vcardstructuredtype *val;
     g_return_val_if_fail(self != NULL, NULL);
     val = ${native-prefix}_get_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self));
     if (val == NULL)
         return NULL;
     return i_cal_vcard_structured_new_full(priv_i_cal_vcardstructuredtype_clone(val), NULL);</custom>
-		</method>
-		<method name="${binding-prefix}_set_${suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
-			<parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="const ICalVcardStructured *" name="value" comment="the ${value-name} value"/>
-			<comment xml:space="preserve">Sets value to the ${value-name} @self
+    </method>
+    <method name="${binding-prefix}_set_${suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
+      <parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="const ICalVcardStructured *" name="value" comment="the ${value-name} value"/>
+      <comment xml:space="preserve">Sets value to the ${value-name} @self
  *
  * Note: this uses a copy of the structured type, not the one stored in the @self</comment>
-			<custom>    g_return_if_fail(self != NULL);
+      <custom>    g_return_if_fail(self != NULL);
     ${native-prefix}_set_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self),
         priv_i_cal_vcardstructuredtype_clone((vcardstructuredtype *)i_cal_object_get_native((ICalObject *)value)));</custom>
-		</method>
-	</method-template>
-	<method-template name="enumarray" requires="obj-type,value-name,value-get-type,value-set-type,value-set-type-ref,binding-prefix,binding-array-type,binding-array-new-prefix,native-prefix,native-type,native-array-type,native-elem-type,suffix" optional="binding-get-set-suffix">
-		<method name="${binding-prefix}_new_${suffix}" corresponds="${native-prefix}_new_${suffix}" kind="constructor">
-			<parameter type="${value-set-type}" name="value" comment="the ${value-set-type-ref} value of the new #${obj-type}"/>
-			<returns type="${obj-type} *" annotation="transfer full,nullable" comment="a new #${obj-type} holding ${value-name}"/>
-			<comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.</comment>
-		</method>
-		<method name="${binding-prefix}_new_${suffix}_list" corresponds="${native-prefix}_new_${suffix}_list" kind="constructor">
-			<parameter type="const ${binding-array-type} *" name="value" comment="the array value to use for the new #${obj-type}"/>
-			<returns type="${obj-type} *" annotation="transfer full,nullable" comment="a new #${obj-type} holding ${value-name}"/>
-			<comment xml:space="preserve">Note: this uses a copy of the array, not the one stored in the @value</comment>
-			<custom>    ${native-array-type} *val;
+    </method>
+  </method-template>
+  <method-template name="enumarray" requires="obj-type,value-name,value-get-type,value-set-type,value-set-type-ref,binding-prefix,binding-array-type,binding-array-new-prefix,native-prefix,native-type,native-array-type,native-elem-type,suffix" optional="binding-get-set-suffix">
+    <method name="${binding-prefix}_new_${suffix}" corresponds="${native-prefix}_new_${suffix}" kind="constructor">
+      <parameter type="${value-set-type}" name="value" comment="the ${value-set-type-ref} value of the new #${obj-type}"/>
+      <returns type="${obj-type} *" annotation="transfer full,nullable" comment="a new #${obj-type} holding ${value-name}"/>
+      <comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.</comment>
+    </method>
+    <method name="${binding-prefix}_new_${suffix}_list" corresponds="${native-prefix}_new_${suffix}_list" kind="constructor">
+      <parameter type="const ${binding-array-type} *" name="value" comment="the array value to use for the new #${obj-type}"/>
+      <returns type="${obj-type} *" annotation="transfer full,nullable" comment="a new #${obj-type} holding ${value-name}"/>
+      <comment xml:space="preserve">Note: this uses a copy of the array, not the one stored in the @value</comment>
+      <custom>    ${native-array-type} *val;
     g_return_val_if_fail(value != NULL, NULL);
     val = (${native-array-type} *)i_cal_object_get_native((ICalObject *)value);
     if (val == NULL)
         return NULL;
     return ${binding-prefix}_new_full(${native-prefix}_new_${suffix}_list(${native-array-type}_clone(val)), NULL);</custom>
-		</method>
-		<method name="${binding-prefix}_get_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
-			<parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<returns type="${binding-array-type} *" annotation="transfer full" comment="the #${binding-array-type} value of the @self"/>
-			<comment xml:space="preserve">Gets the value of the @self of ${value-name}.
+    </method>
+    <method name="${binding-prefix}_get_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
+      <parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <returns type="${binding-array-type} *" annotation="transfer full" comment="the #${binding-array-type} value of the @self"/>
+      <comment xml:space="preserve">Gets the value of the @self of ${value-name}.
  *
  * Note: this returns copy of the array, not the one stored in the @self</comment>
-			<custom>    ${native-array-type} *val;
+      <custom>    ${native-array-type} *val;
     g_return_val_if_fail(self != NULL, NULL);
     val = ${native-prefix}_get_${suffix}((${native-prefix} *)i_cal_object_get_native((ICalObject *)self));
     if (val == NULL)
         return NULL;
     return ${binding-array-new-prefix}_new_full(${native-array-type}_clone(val), NULL);</custom>
-		</method>
-		<method name="${binding-prefix}_set_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
-			<parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="const ${binding-array-type} *" name="value" comment="the array value"/>
-			<comment xml:space="preserve">Sets the value of the @self of ${value-name}.
+    </method>
+    <method name="${binding-prefix}_set_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
+      <parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="const ${binding-array-type} *" name="value" comment="the array value"/>
+      <comment xml:space="preserve">Sets the value of the @self of ${value-name}.
  *
  * Note: this uses a copy of the array, not the one stored in the @value</comment>
-			<custom>    g_return_if_fail(self != NULL);
+      <custom>    g_return_if_fail(self != NULL);
     ${native-prefix}_set_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self),
         ${native-array-type}_clone((${native-array-type} *)i_cal_object_get_native((ICalObject *)value)));</custom>
-		</method>
-		<method name="${binding-prefix}_get_${suffix}_size" corresponds="${native-prefix}_get_${suffix}_size" kind="get">
-			<parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<returns type="gsize" error_return_value="0" comment="number of elements"/>
-			<comment xml:space="preserve">Returns number of elements in the @self of ${value-name}</comment>
-		</method>
-		<method name="${binding-prefix}_get_${suffix}_nth" corresponds="${native-prefix}_get_${suffix}_nth" kind="get">
-			<parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="gsize" name="position" comment="the position of the element"/>
-			<returns type="${value-get-type}" comment="the n-th element"/>
-			<comment xml:space="preserve">Returns the n-th element of the @self of ${value-name}</comment>
-		</method>
-		<method name="${binding-prefix}_add_${suffix}" corresponds="${native-prefix}_add_${suffix}" kind="other">
-			<parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="${value-set-type}" name="value" comment="the ${value-set-type-ref}"/>
-			<parameter type="const gchar *" name="x_value" annotation="nullable" comment="an X name, or %NULL; when set, the @value should a corresponding X value"/>
-			<comment xml:space="preserve">Adds an element.</comment>
-			<custom>    ${native-elem-type} elem = { 0, };
+    </method>
+    <method name="${binding-prefix}_get_${suffix}_size" corresponds="${native-prefix}_get_${suffix}_size" kind="get">
+      <parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <returns type="gsize" error_return_value="0" comment="number of elements"/>
+      <comment xml:space="preserve">Returns number of elements in the @self of ${value-name}</comment>
+    </method>
+    <method name="${binding-prefix}_get_${suffix}_nth" corresponds="${native-prefix}_get_${suffix}_nth" kind="get">
+      <parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="gsize" name="position" comment="the position of the element"/>
+      <returns type="${value-get-type}" comment="the n-th element"/>
+      <comment xml:space="preserve">Returns the n-th element of the @self of ${value-name}</comment>
+    </method>
+    <method name="${binding-prefix}_add_${suffix}" corresponds="${native-prefix}_add_${suffix}" kind="other">
+      <parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="${value-set-type}" name="value" comment="the ${value-set-type-ref}"/>
+      <parameter type="const gchar *" name="x_value" annotation="nullable" comment="an X name, or %NULL; when set, the @value should a corresponding X value"/>
+      <comment xml:space="preserve">Adds an element.</comment>
+      <custom>    ${native-elem-type} elem = { 0, };
     g_return_if_fail(self != NULL);
     elem.val = value;
     elem.xvalue = x_value;
     ${native-prefix}_add_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self), &amp;elem);</custom>
-		</method>
-		<method name="${binding-prefix}_remove_${suffix}" corresponds="${native-prefix}_remove_${suffix}" kind="other">
-			<parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="${value-set-type}" name="value" comment="the ${value-set-type-ref}"/>
-			<parameter type="const gchar *" name="x_value" annotation="nullable" comment="an X name, or %NULL; when set, the @value should be a corresponding X value"/>
-			<comment xml:space="preserve">Removes an element with the provided value.</comment>
-			<custom>    ${native-elem-type} elem = { 0, };
+    </method>
+    <method name="${binding-prefix}_remove_${suffix}" corresponds="${native-prefix}_remove_${suffix}" kind="other">
+      <parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="${value-set-type}" name="value" comment="the ${value-set-type-ref}"/>
+      <parameter type="const gchar *" name="x_value" annotation="nullable" comment="an X name, or %NULL; when set, the @value should be a corresponding X value"/>
+      <comment xml:space="preserve">Removes an element with the provided value.</comment>
+      <custom>    ${native-elem-type} elem = { 0, };
     g_return_if_fail(self != NULL);
     elem.val = value;
     elem.xvalue = x_value;
     ${native-prefix}_remove_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self), &amp;elem);</custom>
-		</method>
-	</method-template>
-	<method-template name="strarray" requires="obj-type,value-name,binding-prefix,binding-array-type,binding-array-new-prefix,native-prefix,native-type,native-array-type,suffix" optional="binding-get-set-suffix">
-		<method name="${binding-prefix}_new_${suffix}" corresponds="${native-prefix}_new_${suffix}" kind="constructor">
-			<parameter type="const gchar *" name="value" comment="the value of the new #${obj-type}"/>
-			<returns type="${obj-type} *" annotation="transfer full" comment="a new #${obj-type} holding ${value-name}"/>
-			<comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.</comment>
-		</method>
-		<method name="${binding-prefix}_new_${suffix}_list" corresponds="${native-prefix}_new_${suffix}_list" kind="constructor">
-			<parameter type="const ${binding-array-type} *" name="value" annotation="transfer none" comment="the string array as a value for the new ${obj-type} holding ${value-name}"/>
-			<returns type="${obj-type} *" annotation="transfer full,nullable" comment="a new #${obj-type} holding ${value-name}"/>
-			<comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.
+    </method>
+  </method-template>
+  <method-template name="strarray" requires="obj-type,value-name,binding-prefix,binding-array-type,binding-array-new-prefix,native-prefix,native-type,native-array-type,suffix" optional="binding-get-set-suffix">
+    <method name="${binding-prefix}_new_${suffix}" corresponds="${native-prefix}_new_${suffix}" kind="constructor">
+      <parameter type="const gchar *" name="value" comment="the value of the new #${obj-type}"/>
+      <returns type="${obj-type} *" annotation="transfer full" comment="a new #${obj-type} holding ${value-name}"/>
+      <comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.</comment>
+    </method>
+    <method name="${binding-prefix}_new_${suffix}_list" corresponds="${native-prefix}_new_${suffix}_list" kind="constructor">
+      <parameter type="const ${binding-array-type} *" name="value" annotation="transfer none" comment="the string array as a value for the new ${obj-type} holding ${value-name}"/>
+      <returns type="${obj-type} *" annotation="transfer full,nullable" comment="a new #${obj-type} holding ${value-name}"/>
+      <comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.
  *
  * Note: this uses a copy of the string array, not the one stored in the @value</comment>
-			<custom>    ${native-array-type} *val;
+      <custom>    ${native-array-type} *val;
     g_return_val_if_fail(value != NULL, NULL);
     val = (${native-array-type} *)i_cal_object_get_native((ICalObject *)value);
     if (val == NULL)
         return NULL;
     return ${binding-prefix}_new_full(${native-prefix}_new_${suffix}_list(${native-array-type}_clone(val)), NULL);</custom>
-		</method>
-		<method name="${binding-prefix}_get_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
-			<parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<returns type="${binding-array-type} *" annotation="transfer full" comment="the #${binding-array-type} value of the @self"/>
-			<comment xml:space="preserve">Gets the value of the @self of ${value-name}.
+    </method>
+    <method name="${binding-prefix}_get_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
+      <parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <returns type="${binding-array-type} *" annotation="transfer full" comment="the #${binding-array-type} value of the @self"/>
+      <comment xml:space="preserve">Gets the value of the @self of ${value-name}.
  *
  * Note: this returns copy of the string array, not the one stored in the @self</comment>
-			<custom>    ${native-array-type} *val;
+      <custom>    ${native-array-type} *val;
     g_return_val_if_fail(self != NULL, NULL);
     val = ${native-prefix}_get_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self));
     if (val == NULL)
         return NULL;
     return ${binding-array-new-prefix}_new_full(${native-array-type}_clone(val), NULL);</custom>
-		</method>
-		<method name="${binding-prefix}_set_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
-			<parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="const ${binding-array-type} *" name="value" comment="the string array value"/>
-			<comment xml:space="preserve">Sets the value of the @self of ${value-name}.
+    </method>
+    <method name="${binding-prefix}_set_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
+      <parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="const ${binding-array-type} *" name="value" comment="the string array value"/>
+      <comment xml:space="preserve">Sets the value of the @self of ${value-name}.
  *
  * Note: this uses a copy of the string array, not the one stored in the @value</comment>
-			<custom>    g_return_if_fail(self != NULL);
+      <custom>    g_return_if_fail(self != NULL);
     ${native-prefix}_set_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self),
         ${native-array-type}_clone((${native-array-type} *)i_cal_object_get_native((ICalObject *)value)));</custom>
-		</method>
-		<method name="${binding-prefix}_get_${suffix}_size" corresponds="${native-prefix}_get_${suffix}_size" kind="get">
-			<parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<returns type="gsize" error_return_value="0" comment="number of elements"/>
-			<comment xml:space="preserve">Returns number of elements in the @self of ${value-name}</comment>
-		</method>
-		<method name="${binding-prefix}_get_${suffix}_nth" corresponds="${native-prefix}_get_${suffix}_nth" kind="get">
-			<parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="gsize" name="position" comment="Position of the ${value-name} item to get"/>
-			<returns type="const gchar *" annotation="nullable" comment="n-th element of the ${value-name} @self"/>
-			<comment xml:space="preserve">Returns the n-th element of the @self of ${value-name}</comment>
-		</method>
-		<method name="${binding-prefix}_add_${suffix}" corresponds="${native-prefix}_add_${suffix}" kind="other">
-			<parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="const gchar *" name="value" comment="the string to add into the @self"/>
-			<comment xml:space="preserve">Adds a string into the @self of ${value-name}.</comment>
-		</method>
-		<method name="${binding-prefix}_remove_${suffix}" corresponds="${native-prefix}_remove_${suffix}" kind="other">
-			<parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="const gchar *" name="value" comment="the string to remove from the @self"/>
-			<comment xml:space="preserve">Removes a string from the @self of ${value-name}.</comment>
-		</method>
-	</method-template>
-	<method-template name="strarray-new-get-set" requires="obj-type,value-name,binding-prefix,binding-array-type,binding-array-new-prefix,native-prefix,native-type,native-array-type,suffix" optional="binding-get-set-suffix">
-		<method name="${binding-prefix}_new_${suffix}" corresponds="${native-prefix}_new_${suffix}" kind="constructor">
-			<parameter type="const ${binding-array-type} *" name="value" annotation="transfer none" comment="the string array as a value for the new ${obj-type} holding ${value-name}"/>
-			<returns type="${obj-type} *" annotation="transfer full,nullable" comment="a new #${obj-type} holding ${value-name}"/>
-			<comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.
+    </method>
+    <method name="${binding-prefix}_get_${suffix}_size" corresponds="${native-prefix}_get_${suffix}_size" kind="get">
+      <parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <returns type="gsize" error_return_value="0" comment="number of elements"/>
+      <comment xml:space="preserve">Returns number of elements in the @self of ${value-name}</comment>
+    </method>
+    <method name="${binding-prefix}_get_${suffix}_nth" corresponds="${native-prefix}_get_${suffix}_nth" kind="get">
+      <parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="gsize" name="position" comment="Position of the ${value-name} item to get"/>
+      <returns type="const gchar *" annotation="nullable" comment="n-th element of the ${value-name} @self"/>
+      <comment xml:space="preserve">Returns the n-th element of the @self of ${value-name}</comment>
+    </method>
+    <method name="${binding-prefix}_add_${suffix}" corresponds="${native-prefix}_add_${suffix}" kind="other">
+      <parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="const gchar *" name="value" comment="the string to add into the @self"/>
+      <comment xml:space="preserve">Adds a string into the @self of ${value-name}.</comment>
+    </method>
+    <method name="${binding-prefix}_remove_${suffix}" corresponds="${native-prefix}_remove_${suffix}" kind="other">
+      <parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="const gchar *" name="value" comment="the string to remove from the @self"/>
+      <comment xml:space="preserve">Removes a string from the @self of ${value-name}.</comment>
+    </method>
+  </method-template>
+  <method-template name="strarray-new-get-set" requires="obj-type,value-name,binding-prefix,binding-array-type,binding-array-new-prefix,native-prefix,native-type,native-array-type,suffix" optional="binding-get-set-suffix">
+    <method name="${binding-prefix}_new_${suffix}" corresponds="${native-prefix}_new_${suffix}" kind="constructor">
+      <parameter type="const ${binding-array-type} *" name="value" annotation="transfer none" comment="the string array as a value for the new ${obj-type} holding ${value-name}"/>
+      <returns type="${obj-type} *" annotation="transfer full,nullable" comment="a new #${obj-type} holding ${value-name}"/>
+      <comment xml:space="preserve">Creates a new #${obj-type} holding ${value-name}.
  *
  * Note: this uses a copy of the string array, not the one stored in the @value</comment>
-			<custom>    ${native-array-type} *val;
+      <custom>    ${native-array-type} *val;
     g_return_val_if_fail(value != NULL, NULL);
     val = (${native-array-type} *)i_cal_object_get_native((ICalObject *)value);
     if (val == NULL)
         return NULL;
     return ${binding-prefix}_new_full(${native-prefix}_new_${suffix}(${native-array-type}_clone(val)), NULL);</custom>
-		</method>
-		<method name="${binding-prefix}_get_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
-			<parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<returns type="${binding-array-type} *" annotation="transfer full" comment="the #${binding-array-type} value of the @self"/>
-			<comment xml:space="preserve">Gets the value of the @self of ${value-name}.
+    </method>
+    <method name="${binding-prefix}_get_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
+      <parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <returns type="${binding-array-type} *" annotation="transfer full" comment="the #${binding-array-type} value of the @self"/>
+      <comment xml:space="preserve">Gets the value of the @self of ${value-name}.
  *
  * Note: this returns copy of the string array, not the one stored in the @self</comment>
-			<custom>    ${native-array-type} *val;
+      <custom>    ${native-array-type} *val;
     g_return_val_if_fail(self != NULL, NULL);
     val = ${native-prefix}_get_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self));
     if (val == NULL)
         return NULL;
     return ${binding-array-new-prefix}_new_full(${native-array-type}_clone(val), NULL);</custom>
-		</method>
-		<method name="${binding-prefix}_set_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
-			<parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
-			<parameter type="const ${binding-array-type} *" name="value" comment="the string array value"/>
-			<comment xml:space="preserve">Sets the value of the @self of ${value-name}.
+    </method>
+    <method name="${binding-prefix}_set_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
+      <parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
+      <parameter type="const ${binding-array-type} *" name="value" comment="the string array value"/>
+      <comment xml:space="preserve">Sets the value of the @self of ${value-name}.
  *
  * Note: this uses a copy of the string array, not the one stored in the @value</comment>
-			<custom>    g_return_if_fail(self != NULL);
+      <custom>    g_return_if_fail(self != NULL);
     ${native-prefix}_set_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self),
         ${native-array-type}_clone((${native-array-type} *)i_cal_object_get_native((ICalObject *)value)));</custom>
-		</method>
-	</method-template>
+    </method>
+  </method-template>
 </templates>
