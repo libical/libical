@@ -21,13 +21,13 @@ repos:
   - id: destroyed-symlinks
   - id: check-executables-have-shebangs
 - repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v21.1.0
+  rev: v21.1.2
   hooks:
   - id: clang-format
     exclude: ^(src/java/|src/Net-ICal-Libical|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
-  rev: v0.12.11
+  rev: v0.13.3
   hooks:
     # Run the linter.
     - id: ruff
@@ -39,7 +39,7 @@ repos:
   - id: codespell
     exclude: ^(CONTRIBUTORS.md)
 - repo: https://github.com/BlankSpruce/gersemi
-  rev: 0.22.1
+  rev: 0.22.3
   hooks:
   - id: gersemi
     exclude: (cmake/Toolchain-|.h.cmake|/Doxyfile.cmake)
@@ -62,6 +62,6 @@ repos:
   - id: format-xml
     args: [--self-closing=nospace,--indent=2,--write]
 - repo: https://github.com/fsfe/reuse-tool
-  rev: v5.0.2
+  rev: v6.0.0
   hooks:
   - id: reuse
