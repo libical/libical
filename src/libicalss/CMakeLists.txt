@@ -66,16 +66,26 @@ set(
   icalmessage.c
   icalmessage.h
 )
-flex_target(icalssLexer
+flex_target(
+  icalssLexer
   icalsslexer.l
   ${CMAKE_CURRENT_BINARY_DIR}/icalsslexer.c
 )
-bison_target(icalssParser
+bison_target(
+  icalssParser
   icalssyacc.y
   ${CMAKE_CURRENT_BINARY_DIR}/icalssyacc.c
 )
-add_flex_bison_dependency(icalssLexer icalssParser)
-list(APPEND icalss_LIB_SRCS ${BISON_icalssParser_OUTPUTS} ${FLEX_icalssLexer_OUTPUTS})
+add_flex_bison_dependency(
+  icalssLexer
+  icalssParser
+)
+list(
+  APPEND
+  icalss_LIB_SRCS
+  ${BISON_icalssParser_OUTPUTS}
+  ${FLEX_icalssLexer_OUTPUTS}
+)
 
 if(BDB_FOUND)
   list(
