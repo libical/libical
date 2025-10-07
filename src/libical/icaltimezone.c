@@ -156,15 +156,15 @@ static bool icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcompon
 #endif
     ;
 
-static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
+static bool icaltimezone_load_builtin_timezone(icaltimezone *zone)
 #if defined(THREAD_SANITIZER)
     __attribute__((no_sanitize("thread")))
 #endif
     ;
 
-static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year);
+static bool icaltimezone_ensure_coverage(icaltimezone *zone, int end_year);
 
-static void icaltimezone_init_builtin_timezones(void);
+static bool icaltimezone_init_builtin_timezones(void);
 
 static void icaltimezone_parse_zone_tab(void);
 
@@ -173,32 +173,48 @@ static char *icaltimezone_load_get_line_fn(char *s, size_t size, void *data);
 static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size);
 static const char *get_zone_directory_builtin(void);
 
-static void icaltimezone_builtin_lock(void)
+static bool icaltimezone_builtin_lock(void)
 {
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_lock(&builtin_mutex);
+    if (pthread_mutex_lock(&builtin_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return false;
+    }
 #endif
+    return true;
 }
 
-static void icaltimezone_builtin_unlock(void)
+static bool icaltimezone_builtin_unlock(void)
 {
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_unlock(&builtin_mutex);
+    if (pthread_mutex_unlock(&builtin_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return false;
+    }
 #endif
+    return true;
 }
 
-static void icaltimezone_changes_lock(void)
+static bool icaltimezone_changes_lock(void)
 {
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_lock(&changes_mutex);
+    if (pthread_mutex_lock(&changes_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return false;
+    }
 #endif
+    return true;
 }
 
-static void icaltimezone_changes_unlock(void)
+static bool icaltimezone_changes_unlock(void)
 {
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_unlock(&changes_mutex);
+    if (pthread_mutex_unlock(&changes_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return false;
+    }
 #endif
+    return true;
 }
 
 const char *icaltimezone_tzid_prefix(void)
@@ -242,11 +258,16 @@ icaltimezone *icaltimezone_copy(const icaltimezone *originalzone)
         zone->tznames = icalmemory_strdup(zone->tznames);
     }
 
-    icaltimezone_changes_lock();
+    if (!icaltimezone_changes_lock()) {
+        return NULL;
+    }
     if (zone->changes != NULL) {
         zone->changes = icalarray_copy(zone->changes);
     }
-    icaltimezone_changes_unlock();
+    if (!icaltimezone_changes_unlock()) {
+        icalmemory_free_buffer(zone);
+        return NULL;
+    }
 
     /* Let the caller set the component because then they will
        know to be careful not to free this reference twice. */
@@ -476,7 +497,7 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
     }
 }
 
-static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
+static bool icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
 {
     /* When we expand timezone changes we always expand at least up to this
        year, plus ICALTIMEZONE_EXTRA_COVERAGE. */
@@ -486,7 +507,9 @@ static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
         return;
     }
 
-    icaltimezone_load_builtin_timezone(zone);
+    if (!icaltimezone_load_builtin_timezone(zone)) {
+        return false;
+    }
 
     if (icaltimezone_minimum_expansion_year == -1) {
         struct icaltimetype today = icaltime_today();
@@ -508,6 +531,7 @@ static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
     if (!zone->changes || zone->end_year < end_year) {
         icaltimezone_expand_changes(zone, changes_end_year);
     }
+    return true;
 }
 
 /* Hold the icaltimezone_changes_lock(); before calling this function */
@@ -860,13 +884,17 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
         zone = zone->builtin_timezone;
     }
 
-    icaltimezone_changes_lock();
+    if (!icaltimezone_changes_lock()) {
+        return 0;
+    }
 
     /* Make sure the changes array is expanded up to the given time. */
-    icaltimezone_ensure_coverage(zone, tt->year);
+    if (!icaltimezone_ensure_coverage(zone, tt->year)) {
+        return 0;
+    }
 
     if (!zone->changes || zone->changes->num_elements == 0) {
-        icaltimezone_changes_unlock();
+        (void)icaltimezone_changes_unlock();
         return 0;
     }
 
@@ -933,7 +961,9 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
                 *is_daylight = !tmp_change.is_daylight;
             }
 
-            icaltimezone_changes_unlock();
+            if (!icaltimezone_changes_unlock()) {
+                return 0;
+            }
 
             return tmp_change.prev_utc_offset;
         }
@@ -992,7 +1022,9 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
     }
     utc_offset_change = zone_change->utc_offset;
 
-    icaltimezone_changes_unlock();
+    if (!icaltimezone_changes_unlock()) {
+        return 0;
+    }
 
     return utc_offset_change;
 }
@@ -1020,13 +1052,17 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
         zone = zone->builtin_timezone;
     }
 
-    icaltimezone_changes_lock();
+    if (!icaltimezone_changes_lock()) {
+        return 0;
+    }
 
     /* Make sure the changes array is expanded up to the given time. */
-    icaltimezone_ensure_coverage(zone, tt->year);
+    if (!icaltimezone_ensure_coverage(zone, tt->year)) {
+        return 0;
+    }
 
     if (!zone->changes || zone->changes->num_elements == 0) {
-        icaltimezone_changes_unlock();
+        (void)icaltimezone_changes_unlock();
         return 0;
     }
 
@@ -1079,7 +1115,9 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
                 *is_daylight = !tmp_change.is_daylight;
             }
 
-            icaltimezone_changes_unlock();
+            if (!icaltimezone_changes_unlock()) {
+                return 0;
+            }
 
             return tmp_change.prev_utc_offset;
         }
@@ -1104,7 +1142,9 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
     }
     utc_offset = zone_change->utc_offset;
 
-    icaltimezone_changes_unlock();
+    if (!icaltimezone_changes_unlock()) {
+        return 0;
+    }
 
     return utc_offset;
 }
@@ -1375,10 +1415,11 @@ icalarray *icaltimezone_get_builtin_timezones(void)
 
 void icaltimezone_free_builtin_timezones(void)
 {
-    icaltimezone_builtin_lock();
+    (void)icaltimezone_builtin_lock();
     icaltimezone_array_free(builtin_timezones);
     builtin_timezones = 0;
-    icaltimezone_builtin_unlock();
+    (void)icaltimezone_builtin_unlock();
+    return;
 }
 
 icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
@@ -1580,16 +1621,21 @@ icaltimezone *icaltimezone_get_utc_timezone(void)
  *
  * It should be called before any code that uses the timezone functions.
  */
-static void icaltimezone_init_builtin_timezones(void)
+static bool icaltimezone_init_builtin_timezones(void)
 {
     /* Initialize the special UTC timezone. */
     utc_timezone.tzid = (char *)"UTC";
 
-    icaltimezone_builtin_lock();
+    if (!icaltimezone_builtin_lock()) {
+        return false;
+    }
     if (!builtin_timezones) {
         icaltimezone_parse_zone_tab();
     }
-    icaltimezone_builtin_unlock();
+    if (!icaltimezone_builtin_unlock()) {
+        return false;
+    }
+    return true;
 }
 
 static bool parse_coord(char *coord, int len, int *degrees, int *minutes, int *seconds)
@@ -1849,27 +1895,33 @@ static void icaltimezone_parse_zone_tab(void)
 }
 
 /** @brief Loads the builtin VTIMEZONE data for the given timezone. */
-static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
+static bool icaltimezone_load_builtin_timezone(icaltimezone *zone)
 {
     icalcomponent *comp = 0, *subcomp;
 
     /* Prevent blocking on mutex lock caused by recursive calls */
     if (zone->component) {
-        return;
+        return true;
     }
 
-    icaltimezone_builtin_lock();
+    if (!icaltimezone_builtin_lock()) {
+        return false;
+    }
 
     /* Try again, maybe it had been set by other thread while waiting for the lock */
     if (zone->component) {
-        icaltimezone_builtin_unlock();
-        return;
+        if (!icaltimezone_builtin_unlock()) {
+            return false;
+        }
+        return true;
     }
 
     /* If the location isn't set, it isn't a builtin timezone. */
     if (!zone->location || !zone->location[0]) {
-        icaltimezone_builtin_unlock();
-        return;
+        if (!icaltimezone_builtin_unlock()) {
+            return false;
+        }
+        return true;
     }
 
     if (use_builtin_tzdata) {
@@ -1969,7 +2021,10 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
     }
 
 out:
-    icaltimezone_builtin_unlock();
+    if (!icaltimezone_builtin_unlock()) {
+        return false;
+    }
+    return true;
 }
 
 /** @brief Callback used from icalparser_parse() */
@@ -1991,13 +2046,17 @@ bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
     char buffer[8];
 
     /* Make sure the changes array is expanded up to the given time. */
-    icaltimezone_ensure_coverage(zone, max_year);
+    if (!icaltimezone_ensure_coverage(zone, max_year)) {
+        return false;
+    }
 
 #ifdef ICALTIMEZONE_DEBUG_PRINT
     printf("Num changes: %zu\n", zone->changes->num_elements);
 #endif
 
-    icaltimezone_changes_lock();
+    if (!icaltimezone_changes_lock()) {
+        return false;
+    }
 
     for (change_num = 0; change_num < zone->changes->num_elements; change_num++) {
         zone_change = icalarray_element_at(zone->changes, change_num);
@@ -2018,7 +2077,9 @@ bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
         fprintf(fp, "\n");
     }
 
-    icaltimezone_changes_unlock();
+    if (!icaltimezone_changes_unlock()) {
+        return false;
+    }
 
     return true;
 }

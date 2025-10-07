@@ -36,13 +36,19 @@ static void *thread_func(void *user_data)
     }
 
     icalcomp = icaltimezone_get_component(zone);
-    pthread_mutex_lock(&thread_comp_mutex);
+    if (pthread_mutex_lock(&thread_comp_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return NULL;
+    }
     if (!thread_comp) {
         thread_comp = icalcomp;
     } else {
         assert(thread_comp == icalcomp);
     }
-    pthread_mutex_unlock(&thread_comp_mutex);
+    if (pthread_mutex_unlock(&thread_comp_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return NULL;
+    }
     /* Do not call the clone, it confuses the Thread Sanitizer, which
        claims data race on the internal members of the icalcomp. */
     /* icalcomp = icalcomponent_clone(icalcomp);

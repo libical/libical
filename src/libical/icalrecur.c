@@ -4150,13 +4150,17 @@ ical_invalid_rrule_handling ical_get_invalid_rrule_handling_setting(void)
     ical_invalid_rrule_handling myHandling;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_lock(&invalid_rrule_mutex);
+    if (pthread_mutex_lock(&invalid_rrule_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     myHandling = invalidRruleHandling;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_unlock(&invalid_rrule_mutex);
+    if (pthread_mutex_unlock(&invalid_rrule_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     return myHandling;
@@ -4165,12 +4169,16 @@ ical_invalid_rrule_handling ical_get_invalid_rrule_handling_setting(void)
 void ical_set_invalid_rrule_handling_setting(ical_invalid_rrule_handling newSetting)
 {
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_lock(&invalid_rrule_mutex);
+    if (pthread_mutex_lock(&invalid_rrule_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     invalidRruleHandling = newSetting;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_unlock(&invalid_rrule_mutex);
+    if (pthread_mutex_unlock(&invalid_rrule_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 }
