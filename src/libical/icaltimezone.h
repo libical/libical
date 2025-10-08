@@ -127,8 +127,15 @@ LIBICAL_ICAL_EXPORT bool icaltimezone_set_component(icaltimezone *zone, icalcomp
  */
 LIBICAL_ICAL_EXPORT const char *icaltimezone_get_display_name(icaltimezone *zone);
 
-/*
- * Converting times between timezones.
+/**
+ * Rotate a time from one timezone to another.
+ *
+ * @param tt is a the icaltimetype to rotate. If @p tt represents a date (ie. there is no associated time)
+ * then no conversion is performed.
+ * @param from_zone is the timezone to rotate from. Any timezone specified inside the icaltimetype is ignored.
+ * If @p from_zone is NULL then no conversion is performed.
+ * @param to_zone is the timezone to rotate to.  If @p to_zone is NULL then the time is rotated to UTC.
+ *
  */
 
 LIBICAL_ICAL_EXPORT void icaltimezone_convert_time(struct icaltimetype *tt,
@@ -176,12 +183,12 @@ LIBICAL_ICAL_EXPORT void icaltimezone_expand_vtimezone(icalcomponent *comp,
 /** @brief Gets the LOCATION or X-LIC-LOCATION property from a VTIMEZONE. */
 LIBICAL_ICAL_EXPORT char *icaltimezone_get_location_from_vtimezone(icalcomponent *component);
 
-/** @brief Gets the TZNAMEs used for the last STANDARD & DAYLIGHT
- * components in a VTIMEZONE.
+/** @brief Gets the TZNAMEs used for the last STANDARD & DAYLIGHT components in a VTIMEZONE.
  *
  * If both STANDARD and DAYLIGHT components use the same TZNAME, it
  * returns that. If they use different TZNAMEs, it formats them like
- * "EST/EDT". The returned string should be freed by the caller. */
+ * "EST/EDT". The returned string should be freed by the caller.
+ */
 LIBICAL_ICAL_EXPORT char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component);
 
 /*
@@ -215,7 +222,7 @@ LIBICAL_ICAL_EXPORT const char *icaltimezone_get_system_zone_directory(void);
 
 /**
  * Sets the fullpath to the system zoneinfo directory (zone.tab must reside in there).
- * @param A const character string containing the fullpath to the zoneinfo directory.
+ * @param zonepath const character string containing the fullpath to the zoneinfo directory.
  *
  * The internal zoneinfo path can be cleared if @p zonepath is empty or NULL.
  * @since 4.0 previously known as icaltzutil_set_zone_directory

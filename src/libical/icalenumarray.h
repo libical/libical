@@ -105,7 +105,7 @@ LIBICAL_ICAL_EXPORT size_t icalenumarray_find(icalenumarray *array,
  * @param array The array object to which the element append to
  * @param elem The element to append
  *
- * Appends element @elem to @a array, not checking for duplicates.
+ * Appends element @p elem to @a array, not checking for duplicates.
  * Use icalenumarray_add() to only add elements that are not present
  * already in the array.
  *
@@ -123,7 +123,7 @@ LIBICAL_ICAL_EXPORT void icalenumarray_append(icalenumarray *array,
  * @param array The array object to which the element append to
  * @param elem The element to append
  *
- * Appends element @elem to @a array unless a byte-equal string
+ * Appends element @p elem to @a array unless a byte-equal string
  * already is present in the array.
  *
  * @par Error handling
@@ -138,7 +138,7 @@ LIBICAL_ICAL_EXPORT void icalenumarray_add(icalenumarray *array,
 /**
  * @brief Removes the element at an array position.
  * @param array The array object from which to remove the element
- * @param positione The array position of the element to remove
+ * @param position The array position of the element to remove
  *
  * Removes the element at @a position in the @a array.
  *

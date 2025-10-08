@@ -1031,7 +1031,8 @@ RECURSIVE              = YES
 
 EXCLUDE                = @PROJECT_SOURCE_DIR@/docs/SUMMARY.md \
                          @PROJECT_SOURCE_DIR@/src/java \
-                         @PROJECT_SOURCE_DIR@/src/php
+                         @PROJECT_SOURCE_DIR@/src/php \
+                         @PROJECT_SOURCE_DIR@/src/libicalss/icalsslexer.c
 EXCLUDE_SYMLINKS       = NO
 
 # If the value of the INPUT tag contains directories, you can use the
@@ -1087,7 +1088,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = @PROJECT_SOURCE_DIR@/doc
+IMAGE_PATH             = @PROJECT_SOURCE_DIR@/docs
 
 # The INPUT_FILTER tag can be used to specify a program that Doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program

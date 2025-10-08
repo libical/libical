@@ -99,7 +99,7 @@ LIBICAL_ICAL_EXPORT size_t icalstrarray_find(icalstrarray *array,
  * @param array The array object to which the string append to
  * @param elem The string to append
  *
- * Appends string @elem to @a array, not checking for duplicates.
+ * Appends string @p elem to @a array, not checking for duplicates.
  * Use icalstrarray_add() to only add strings that are not present
  * already in the array.
  *
@@ -116,7 +116,7 @@ LIBICAL_ICAL_EXPORT void icalstrarray_append(icalstrarray *array,
  * @param array The array object to which the string append to
  * @param elem The string to append
  *
- * Appends string @elem to @a array unless a byte-equal string
+ * Appends string @p elem to @a array unless a byte-equal string
  * already is present in the array.
  *
  * @par Error handling
@@ -125,12 +125,12 @@ LIBICAL_ICAL_EXPORT void icalstrarray_append(icalstrarray *array,
  * @since 4.0
  */
 LIBICAL_ICAL_EXPORT void icalstrarray_add(icalstrarray *array,
-                                          const char *add);
+                                          const char *elem);
 
 /**
  * @brief Removes the string at an array position.
  * @param array The array object from which to remove the string
- * @param positione The array position of the string to remove
+ * @param position The array position of the string to remove
  *
  * Removes the string at @a position in the @a array.
  *

@@ -42,7 +42,7 @@ struct icaldurationtype {
 
 /**
  * @brief Creates a new ::icaldurationtype from a duration in seconds.
- * @param t The duration in seconds
+ * @param seconds The duration in seconds
  * @return An ::icaldurationtype representing the duration @a t in seconds
  *
  * The number of seconds stored in the ::icaldurationtype structure is always a positive integer.
