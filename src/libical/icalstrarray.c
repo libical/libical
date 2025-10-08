@@ -62,14 +62,14 @@ void icalstrarray_append(icalstrarray *array, const char *elem)
     icalarray_append(array, &copy);
 }
 
-void icalstrarray_add(icalstrarray *array, const char *add)
+void icalstrarray_add(icalstrarray *array, const char *elem)
 {
-    if (!array || !add) {
+    if (!array || !elem) {
         return;
     }
 
-    if (icalstrarray_find(array, add) >= icalstrarray_size(array)) {
-        icalstrarray_append(array, add);
+    if (icalstrarray_find(array, elem) >= icalstrarray_size(array)) {
+        icalstrarray_append(array, elem);
     }
 }
 

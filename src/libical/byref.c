@@ -26,7 +26,7 @@
 
 /** @brief Convenience constructor (ret-wrapped)
  *
- * @returns The current time in the given timezone, as an icaltimetype, in the last parameter.
+ * The current time in the given timezone, as an icaltimetype, in the last parameter.
  */
 LIBICAL_ICAL_EXPORT void icaltime_current_time_with_zone_ex(const icaltimezone *zone, struct icaltimetype *ret)
 {

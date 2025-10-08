@@ -41,7 +41,7 @@ LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_datetime(struct icaltimetype v);
 
 /**
  * Returns the icaltimetype corresponding to the specified icalvalue.
- * @param a pointer to an icalvalue.
+ * @param value pointer to an icalvalue.
  * @returns the icaltimetype as datetime.
  * @since 3.0
  */
