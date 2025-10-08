@@ -1005,25 +1005,21 @@ static void comp_to_v4(vcardcomponent *impl)
         }
 
         case VCARD_UID_PROPERTY:
-            if (vkind == VCARD_TEXT_VALUE) {
-                unsigned t_low, t_mid, t_high, clock, node;
-
-                /* Does it look like a RFC 4122 UUID? */
-                data = vcardvalue_get_text(value);
-                if (data && strlen(data) == 36 &&
-                    sscanf(data, "%8X-%4X-%4X-%4X-%12X",
-                           &t_low, &t_mid, &t_high, &clock, &node) == 5) {
-                    /* Convert TEXT value kind to urn:uuid: URI */
-                    size = strlen(data) + 10; // "urn:uuid:" + NUL
-                    buf = icalmemory_new_buffer(size);
-                    buf_ptr = buf;
-
-                    icalmemory_append_string(&buf, &buf_ptr, &size, "urn:uuid:");
-                    icalmemory_append_string(&buf, &buf_ptr, &size, data);
-
-                    value->kind = VCARD_URI_VALUE;
-                    vcardvalue_set_uri(value, buf);
-                }
+            /* Does it look like a URI (the default)? */
+            data = vcardvalue_get_text(value);
+            if (!strncasecmp(data, "urn:uuid:", 9) ||
+                !strncasecmp(data, "mailto:", 7) ||
+                !strncasecmp(data, "http://", 7) ||
+                !strncasecmp(data, "https://", 8) ||
+                !strncasecmp(data, "ldap://", 7) ||
+                !strncasecmp(data, "ldaps://", 8)) {
+                value->kind = VCARD_URI_VALUE;
+                vcardproperty_remove_parameter_by_kind(prop,
+                                                       VCARD_VALUE_PARAMETER);
+            }
+            else {
+                /* Otherwise, treat it as TEXT */
+                value->kind = VCARD_TEXT_VALUE;
             }
             break;
 
@@ -1218,17 +1214,11 @@ static void comp_to_v3(vcardcomponent *impl)
             break;
 
         case VCARD_UID_PROPERTY:
-            uri = vcardvalue_get_uri(value);
-            if (uri && !strncmp(uri, "urn:uuid:", 9)) {
-                /* Convert urn:uuid: URI to TEXT value kind */
-                buf = icalmemory_strdup(uri + 9);
+            /* Treat all values as TEXT (the default) */
+            value->kind = VCARD_TEXT_VALUE;
 
-                value->kind = VCARD_TEXT_VALUE;
-                vcardvalue_set_text(value, buf);
-
-                if (val_param) {
-                    vcardproperty_remove_parameter_by_ref(prop, val_param);
-                }
+            if (val_param) {
+                vcardproperty_remove_parameter_by_ref(prop, val_param);
             }
             break;
 
