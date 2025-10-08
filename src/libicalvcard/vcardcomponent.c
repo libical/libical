@@ -1016,8 +1016,7 @@ static void comp_to_v4(vcardcomponent *impl)
                 value->kind = VCARD_URI_VALUE;
                 vcardproperty_remove_parameter_by_kind(prop,
                                                        VCARD_VALUE_PARAMETER);
-            }
-            else {
+            } else {
                 /* Otherwise, treat it as TEXT */
                 value->kind = VCARD_TEXT_VALUE;
             }
