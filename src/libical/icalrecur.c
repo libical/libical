@@ -292,11 +292,8 @@ icalrecurrencetype_weekday icalrecur_string_to_weekday(const char *str)
 
 static void icalrecur_free_by(icalrecurrence_by_data *by)
 {
-    if (by->data) {
-        icalmemory_free_buffer(by->data);
-        by->data = NULL;
-    }
-
+    icalmemory_free_buffer(by->data);
+    by->data = NULL;
     by->size = 0;
 }
 

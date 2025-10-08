@@ -31,10 +31,8 @@ ICalProperty &ICalProperty::operator=(const ICalProperty &v)
         return *this;
     }
 
-    if (imp != NULL) {
-        icalproperty_free(imp);
-        imp = NULL;
-    }
+    icalproperty_free(imp);
+    imp = NULL;
 
     imp = icalproperty_clone(v.imp);
     if (imp == NULL) {
@@ -51,9 +49,7 @@ void ICalProperty::detach()
 
 ICalProperty::~ICalProperty()
 {
-    if (imp != NULL) {
-        icalproperty_free(imp);
-    }
+    icalproperty_free(imp);
 }
 
 ICalProperty::ICalProperty(icalproperty *v)

@@ -104,10 +104,7 @@ void icalvalue_set_x(icalvalue *impl, const char *v)
     icalerror_check_arg_rv((impl != 0), "value");
     icalerror_check_arg_rv((v != 0), "v");
 
-    if (impl->x_value != 0) {
-        icalmemory_free_buffer((void *)impl->x_value);
-    }
-
+    icalmemory_free_buffer((void *)impl->x_value);
     impl->x_value = icalmemory_strdup(v);
 
     if (impl->x_value == 0) {

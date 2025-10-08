@@ -29,10 +29,8 @@ ICalParameter &ICalParameter::operator=(const ICalParameter &v)
         return *this;
     }
 
-    if (imp != NULL) {
-        icalparameter_free(imp);
-        imp = NULL;
-    }
+    icalparameter_free(imp);
+    imp = NULL;
 
     imp = icalparameter_clone(v.imp);
     if (imp == NULL) {
@@ -49,9 +47,7 @@ void ICalParameter::detach()
 
 ICalParameter::~ICalParameter()
 {
-    if (imp != NULL) {
-        icalparameter_free(imp);
-    }
+    icalparameter_free(imp);
 }
 
 ICalParameter::ICalParameter(icalparameter *v)
