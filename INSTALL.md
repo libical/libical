@@ -233,11 +233,11 @@ for example: if you have vcpkg installed in $HOME/vcpkg, then run
 `cmake -DCMAKE_TOOLCHAIN_FILE=$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake ..`
 
 Windows note:
-MSVC comes with vcpkg pre-installed and sets %VCPKG_ROOT% for you.
+MSVC comes with vcpkg pre-installed and sets `%VCPKG_ROOT%` for you.
 However, the only way to update that vcpkg version is by upgrading
 MSVC itself; which may not be what you want and may be too old.
 Consider installing your own vcpkg instead of relying on the MSVC vcpkg.
 
 Non-Windows note:
 You'll need to pre-install autoconf, automake and autoconf-archive for icu.
-See %VCPKG_ROOT%/p rts/icu/portfile.cmake for more info.
+See `%VCPKG_ROOT%/ports/icu/portfile.cmake` for more info.

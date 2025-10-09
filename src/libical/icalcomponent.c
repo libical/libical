@@ -194,14 +194,10 @@ void icalcomponent_free(icalcomponent *c)
 
     icalpvl_free(c->components);
 
-    if (c->x_name != 0) {
-        icalmemory_free_buffer(c->x_name);
-    }
+    icalmemory_free_buffer(c->x_name);
 
-    if (c->timezones) {
-        icaltimezone_array_free(c->timezones);
-        c->timezones = 0;
-    }
+    icaltimezone_array_free(c->timezones);
+    c->timezones = 0;
 
     c->kind = ICAL_NO_COMPONENT;
     c->properties = 0;
@@ -326,10 +322,7 @@ void icalcomponent_set_x_name(icalcomponent *comp, const char *name)
     icalerror_check_arg_rv((name != 0), "name");
     icalerror_check_arg_rv((comp != 0), "comp");
 
-    if (comp->x_name != 0) {
-        free(comp->x_name);
-    }
-
+    free(comp->x_name);
     comp->x_name = icalmemory_strdup(name);
 
     if (comp->x_name == 0) {

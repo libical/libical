@@ -235,7 +235,7 @@ for details about API changes since libical 3.x.
 - Fixed `icalcomponent_set_comment()` and `icalcomponent_set_uid()`
 - fix FREQ=MONTHLY;BYMONTH
 - Skip UTF-8 marker when parsing
-- Fix parsing <CR>?<LF> in VCF files produced by Outlook
+- Fix parsing "<CR>?<LF>" in VCF files produced by Outlook
 - Fix TZID on DATE-TIME value can override time specified in UTC
 - CMake discovery module for ICU uses pkg-config now
 - New publicly available function:

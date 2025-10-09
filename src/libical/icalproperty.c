@@ -193,10 +193,7 @@ void icalproperty_free(icalproperty *p)
     }
 
     icalpvl_free(p->parameters);
-
-    if (p->x_name != 0) {
-        icalmemory_free_buffer(p->x_name);
-    }
+    icalmemory_free_buffer(p->x_name);
 
     p->kind = ICAL_NO_PROPERTY;
     p->parameters = 0;
@@ -844,10 +841,7 @@ void icalproperty_set_x_name(icalproperty *prop, const char *name)
     icalerror_check_arg_rv((name != 0), "name");
     icalerror_check_arg_rv((prop != 0), "prop");
 
-    if (prop->x_name != 0) {
-        icalmemory_free_buffer(prop->x_name);
-    }
-
+    icalmemory_free_buffer(prop->x_name);
     prop->x_name = icalmemory_strdup(name);
 
     if (prop->x_name == 0) {

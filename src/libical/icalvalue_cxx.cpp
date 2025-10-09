@@ -32,12 +32,10 @@ ICalValue &ICalValue::operator=(const ICalValue &v)
         return *this;
     }
 
-    if (imp != NULL) {
-        icalvalue_free(imp);
-        imp = icalvalue_clone(v.imp);
-        if (imp == NULL) {
-            throw icalerrno;
-        }
+    icalvalue_free(imp);
+    imp = icalvalue_clone(v.imp);
+    if (imp == NULL) {
+        throw icalerrno;
     }
 
     return *this;
@@ -50,9 +48,7 @@ void ICalValue::detach()
 
 ICalValue::~ICalValue()
 {
-    if (imp != NULL) {
-        icalvalue_free(imp);
-    }
+    icalvalue_free(imp);
 }
 
 ICalValue::ICalValue(icalvalue *v)
