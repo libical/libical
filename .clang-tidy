@@ -1,2 +1,56 @@
----
-Checks: 'clang-diagnostic-*,clang-analyzer-*'
+Checks: -*,
+        bugprone-*,
+        -bugprone-easily-swappable-parameters,
+        -bugprone-implicit-widening-of-multiplication-result,
+        -bugprone-narrowing-conversions,
+        -bugprone-suspicious-include,
+        clang-analyzer-*,
+        -clang-analyzer-apiModeling.*,
+        -clang-analyzer-optin.osx.*,
+        -clang-analyzer-optin.cplusplus.VirtualCall,
+        -clang-analyzer-webkit.*,
+        -google-*,
+        misc-*,
+        -misc-definitions-in-headers,
+        -misc-include-cleaner,
+        -misc-no-recursion,
+        -misc-use-anonymous-namespace,
+        -*-non-private-member-variables-in-classes,
+        performance-*,
+        -performance-enum-size,
+        -performance-no-int-to-ptr,
+        readability-*,
+        -readability-avoid-const-params-in-decls,
+        -readability-avoid-nested-conditional-operator,
+        -readability-convert-member-functions-to-static,
+        -readability-else-after-return,
+        -readability-function-cognitive-complexity,
+        -readability-function-size,
+        -readability-identifier-length,
+        -readability-implicit-bool-conversion,
+        -readability-magic-numbers,
+        -readability-make-member-function-const,
+        -readability-math-missing-parentheses,
+        -readability-named-parameter,
+        -readability-qualified-auto,
+        -readability-redundant-casting,
+        -readability-simplify-boolean-expr,
+        -readability-static-accessed-through-instance,
+        -readability-use-std-min-max,
+CheckOptions:
+    - key:  bugprone-assert-side-effects.AssertMacros
+      value: 'Q_ASSERT;QVERIFY;QCOMPARE;AKVERIFY'
+    - key:  CheckFunctionCalls
+      value: true
+    - key:  StringCompareLikeFuctions
+      value: 'QString::compare;QString::localeAwareCompare'
+    - key: WarnOnSizeOfIntegerExpression
+      value: 1
+    - key: bugprone-dangling-handle.HandleClasses
+      value: 'std::string_view;QStringView'
+    - key: IgnoreClassesWithAllMemberVariablesBeingPublic
+      value: true
+    - key: VectorLikeClasses
+      value: 'std::vector;QList'
+    - key: bugprone-reserved-identifier.AllowedIdentifiers
+      value: '__ICalTriggerType_;__ICalTimeType_;__ICalRecurrenceType_;__ICalPeriodType_;__ICalDurationType_'
