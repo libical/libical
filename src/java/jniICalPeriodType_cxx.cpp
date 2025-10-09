@@ -18,7 +18,7 @@ static jfieldID ICalPeriodType_Start_FID;
 static jfieldID ICalPeriodType_End_FID;
 static jfieldID ICalPeriodType_Duration_FID;
 
-void initICalPeriodTypeFieldIDs(JNIEnv *env, jclass clazz)
+static void initICalPeriodTypeFieldIDs(JNIEnv *env, jclass clazz)
 {
     ICalPeriodType_Start_FID = env->GetFieldID(clazz, "start", "Lnet/cp/jlibical/ICalTimeType;");
     ICalPeriodType_End_FID = env->GetFieldID(clazz, "end", "Lnet/cp/jlibical/ICalTimeType;");

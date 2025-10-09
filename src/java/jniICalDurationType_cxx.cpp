@@ -18,7 +18,7 @@ static jfieldID ICalDurationType_Hours_FID;
 static jfieldID ICalDurationType_Minutes_FID;
 static jfieldID ICalDurationType_Seconds_FID;
 
-void initICalDurationTypeFieldIDs(JNIEnv *env, jclass clazz)
+static void initICalDurationTypeFieldIDs(JNIEnv *env, jclass clazz)
 {
     ICalDurationType_Is_neg_FID = env->GetFieldID(clazz, "is_neg", "I");
     ICalDurationType_Days_FID = env->GetFieldID(clazz, "days", "J");

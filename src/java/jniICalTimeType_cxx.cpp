@@ -22,7 +22,7 @@ static jfieldID ICalTimeType_Second_FID;
 static jfieldID ICalTimeType_Is_date_FID;
 static jfieldID ICalTimeType_Zone_FID;
 
-void initICalTimeTypeFieldIDs(JNIEnv *env, jclass clazz)
+static void initICalTimeTypeFieldIDs(JNIEnv *env, jclass clazz)
 {
     ICalTimeType_Year_FID = env->GetFieldID(clazz, "year", "I");
     ICalTimeType_Month_FID = env->GetFieldID(clazz, "month", "I");

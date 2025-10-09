@@ -16,7 +16,7 @@
 static jfieldID ICalTriggerType_Time_FID;
 static jfieldID ICalTriggerType_Duration_FID;
 
-void initICalTriggerTypeFieldIDs(JNIEnv *env, jclass clazz)
+static void initICalTriggerTypeFieldIDs(JNIEnv *env, jclass clazz)
 {
     ICalTriggerType_Time_FID = env->GetFieldID(clazz, "time", "Lnet/cp/jlibical/ICalTimeType;");
     ICalTriggerType_Duration_FID = env->GetFieldID(clazz, "duration", "Lnet/cp/jlibical/ICalDurationType;");
