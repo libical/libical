@@ -37,6 +37,7 @@ HELP() {
   echo " -s, --no-splint            Don't run any splint tests"
   echo " -b, --no-scan              Don't run any scan-build tests"
   echo " -t, --no-tidy              Don't run any clang-tidy tests"
+  echo " -w, --no-iwyu              Don't run any include-what-you-use tests"
   echo " -c, --no-cppcheck          Don't run any cppcheck tests"
   echo " -g, --no-gcc-build         Don't run any gcc-build tests with Unix Makefiles"
   echo " -n, --no-ninja-gcc-build   Don't run any gcc build tests with ninja"
@@ -47,6 +48,7 @@ HELP() {
   echo " -m, --no-msan-build        Don't run any MSAN-build (sanitize-memory) tests"
   echo " -d, --no-tsan-build        Don't run any TSAN-build (sanitize-threads) tests"
   echo " -u, --no-ubsan-build       Don't run any UBSAN-build (sanitize-undefined) tests"
+  echo " -f, --no-gcc-analyzer      Don't run any gcc analyzers tests"
   echo " -r, --no-threadlocal-build Don't run the THREADLOCAL-build tests"
   echo " -R, --reverse              Reverse polarity on the options"
   echo
@@ -119,7 +121,7 @@ SET_CLANG() {
 # set the name of the build directory for the current test
 # $1 = the name of the current test
 SET_BDIR() {
-  BDIR=$TOP/build-$1
+  BDIR="$TOP/build-$1"
 }
 
 #function CHECK_WARNINGS:
@@ -131,17 +133,17 @@ CHECK_WARNINGS() {
   set +e
   declare -i numIssues
   if (test -n "$3"); then
-    numIssues=$(grep "$2" <"$1" | grep -v "$3" | sort | uniq | wc -l | awk '{print $1}')
+    numIssues=$(grep -i "$2" <"$1" | grep -v "$3" | sort | uniq | wc -l | awk '{print $1}')
   else
-    numIssues=$(grep "$2" <"$1" | sort | uniq | wc -l | awk '{print $1}')
+    numIssues=$(grep -i "$2" <"$1" | sort | uniq | wc -l | awk '{print $1}')
   fi
   if (test $numIssues -gt 0); then
     echo "EXITING. $numIssues warnings encountered"
     echo
     if (test -n "$3"); then
-      grep "$2" <"$1" | grep -v "$3" | sort | uniq
+      grep -i "$2" <"$1" | grep -v "$3" | sort | uniq
     else
-      grep "$2" <"$1" | sort | uniq
+      grep -i "$2" <"$1" | sort | uniq
     fi
     exit 1
   fi
@@ -160,7 +162,8 @@ COMPILE_WARNINGS() {
 # print warnings found in the cppcheck output
 # $1 = file with the cppcheck output
 CPPCHECK_WARNINGS() {
-  CHECK_WARNINGS "$1" "\(warning\|error\|portability\)" ""
+  whitelist=''
+  CHECK_WARNINGS "$1" "\(warning\|error\|portability\|style\)" "$whitelist"
 }
 
 #function TIDY_WARNINGS:
@@ -175,7 +178,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='/vcc\.c\|/vobject\.c\|libical-glib-scan\.c\|/ICalGLib-3.0\.c\|ICal-3.0\.c\|Value[[:space:]]descriptions[[:space:]]\|g-ir-scanner:'
+  whitelist='ICalGLib-4.0\.c\|ICal-4.0\.c\|g-ir-scanner:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
@@ -189,7 +192,7 @@ CONFIGURE() {
   mkdir "$BDIR"
   cd "$BDIR" || exit 1
   # shellcheck disable=SC2086
-  cmake --warn-uninitialized -Werror=dev .. $2 2>&1 | tee cmake.out || exit 1
+  eval cmake .. $2 2>&1 | tee cmake.out || exit 1
   declare -i numWarnings
   declare -i numDeprecates
   set +e
@@ -218,7 +221,6 @@ BUILD() {
   CONFIGURE "$1" "$2"
   cmake --build . 2>&1 | tee make.out || exit 1
   COMPILE_WARNINGS make.out
-
   if (test "$(uname -s)" = "Darwin"); then
     export DYLD_LIBRARY_PATH=$BDIR/lib
   else
@@ -310,7 +312,8 @@ ASAN_BUILD() {
   echo "===== START ASAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libasan.so" "-a"
   SET_GCC
-  export ASAN_OPTIONS=verify_asan_link_order=0 #seems to be needed with different ld on Fedora (like gold)
+  #asan also does leak detection. do that in the specific leak sanitizer
+  export ASAN_OPTIONS="detect_leaks=0:verify_asan_link_order=0" #link_order is needed with different ld on Fedora (like gold)
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
   echo "===== END ASAN BUILD: $1 ======"
 }
@@ -388,6 +391,22 @@ UBSAN_BUILD() {
   echo "===== END UBSAN BUILD: $1 ======"
 }
 
+# function GCC_ANALYZER_BUILD:
+# runs a gcc analyzer build test
+# $1 = the name of the test (which will have "-gccanalyzer" appended to it)
+# $2 = CMake options
+function GCC_ANALYZER_BUILD() {
+  name="$1-gccanalyzer"
+  if (test -z "$(REVERSE $rungccanalyzer)"); then
+    echo "===== GCC ANALYZER BUILD TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START GCC_ANALYZER BUILD: $1 ======"
+  SET_GCC
+  BUILD "$name" "$2 -DLIBICAL_BUILD_TESTING=True -DLIBICAL_DEVMODE=False -DCMAKE_C_FLAGS=-fanalyzer" #TODO -DCMAKE_CXX_FLAGS=-fanalyzer
+  echo "===== END GCC_ANALYZER BUILD: $1 ======"
+}
+
 #function THREADLOCAL_BUILD() {
 # runs a THREADLOCAL test
 # $1 = the name of the test (which will have "-threadlocal" appended to it)
@@ -400,7 +419,7 @@ THREADLOCAL_BUILD() {
   fi
   echo "===== START THREADLOCAL BUILD: $1 ======"
   SET_GCC
-  BUILD "$name" "-DLIBICAL_SYNCMODE_THREADLOCAL=True $2"
+  BUILD "$name" "-DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=True $2"
   echo "===== END THREADLOCAL BUILD: $1 ======"
 }
 
@@ -417,12 +436,6 @@ CPPCHECK() {
   COMMAND_EXISTS "cppcheck" "-c"
   echo "===== START SETUP FOR CPPCHECK: $1 ======"
 
-  #first build it
-  cd "$TOP" || exit 1
-  SET_GCC
-  CONFIGURE "$name" "$2"
-  make 2>&1 | tee make.out || exit 1
-
   echo "===== START CPPCHECK: $1 ======"
   cd "$TOP" || exit 1
   rm -f cppcheck.out cppcheck-report.txt
@@ -431,34 +444,30 @@ CPPCHECK() {
     --language=c++ \
     --std=c++11 \
     --force --error-exitcode=1 --inline-suppr \
-    --enable=warning,performance,portability \
+    --enable=warning,performance,portability,style \
     --check-level=exhaustive \
-    --disable=missingInclude \
-    --suppress=passedByValue --suppress=ctuOneDefinitionRuleViolation \
+    --suppress-xml=cppcheck-suppressions.xml \
     --template='{file}:{line},{severity},{id},{message}' \
     --checkers-report=cppcheck-report.txt \
     -D __cppcheck__ \
+    -D ICAL_PACKAGE="\"x\"" \
+    -D ICAL_VERSION="\"y\"" \
     -D _unused="(void)" \
     -D _fallthrough="" \
     -D MIN="" \
     -D sleep="" \
-    -U PVL_USE_MACROS \
-    -I "$BDIR" \
-    -I "$BDIR/src/libical" \
-    -I "$BDIR/src/libicalss" \
-    -I "$BDIR/src/libicalvcal" \
-    -I "$BDIR/src/libicalvcard" \
-    -I "$BDIR/src/libical-glib" \
     -I "$TOP/src/libical" \
     -I "$TOP/src/libicalss" \
     -I "$TOP/src/libicalvcal" \
     -I "$TOP/src/libicalvcard" \
     -I "$TOP/src/libical-glib" \
     -i "$TOP/src/Net-ICal-Libical/" \
-    "$TOP/src" "$BDIR"/src/libical/icalderived* 2>&1 |
-    grep -v "icalssyacc.c:" |
-    grep -v "icalsslexer.c:" |
-    grep -v "vcc.c:" |
+    -i "$TOP/src/java/" \
+    -i "$TOP/src/libicalss/icalssyacc.c" \
+    -i "$TOP/src/libicalss/icalsslexer.c" \
+    -i "$TOP/src/libicalvcal/vcc.y" \
+    -i "$TOP/src/libicalvcal/vcc.c" \
+    "$TOP/src" 2>&1 |
     tee cppcheck.out
   set -e
   CPPCHECK_WARNINGS cppcheck.out
@@ -546,15 +555,23 @@ SPLINT() {
     -I "$TOP/src/libicalss" \
     -I "$TOP/src/libicalvcal" \
     -I "$TOP/src/libicalvcard" \
-    -I "$TOP/src/libical-glib" |
+    -I "$TOP/src/libical-glib" 2>&1 |
     grep -v '[[:space:]]Location[[:space:]]unknown[[:space:]]' |
     grep -v '[[:space:]]Code[[:space:]]cannot[[:space:]]be[[:space:]]parsed.' |
-    cat - 2>&1 | tee "splint-$name.out"
+    tee "splint-$name.out"
   set -e
   declare -i status
   status=${PIPESTATUS[0]}
   if (test $status -gt 0); then
     echo "Splint warnings encountered.  Exiting..."
+    exit 1
+  fi
+  set +e
+  declare -i parse
+  parse=$(grep -ci "Parse Error" "splint-$name.out")
+  set -e
+  if (test $parse -gt 0); then
+    echo "Splint parse error encountered.  Exiting..."
     exit 1
   fi
   CLEAN
@@ -580,6 +597,26 @@ CLANGTIDY() {
   TIDY_WARNINGS make-tidy.out
   CLEAN
   echo "===== END CLANG-TIDY: $1 ====="
+}
+
+#function IWYU
+# runs an include-what-you-use test, which means: configure, compile, link and run include-what-you-use
+# $1 = the name of the test (which will have "-iwyu" appended)
+# $2 = CMake options
+IWYU() {
+  if (test -z "$(REVERSE $runiwyu)"); then
+    echo "===== INCLUDE-WHAT-YOU-USE TEST $1 DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  COMMAND_EXISTS "include-what-you-use" "-w"
+  echo "===== START INCLUDE-WHAT-YOU-USE: $1 ====="
+  cd "$TOP" || exit 1
+  SET_CLANG
+  CONFIGURE "$1-iwyu" "$2 -DCMAKE_C_INCLUDE_WHAT_YOU_USE=include-what-you-use"
+  cmake --build . 2>&1 | tee make-iwyu.out || exit 1
+  TIDY_WARNINGS make-iwyu.out
+  CLEAN
+  echo "===== END INCLUDE-WHAT-YOU-USE: $1 ====="
 }
 
 #function CLANGSCAN
@@ -654,7 +691,7 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hCpksbtcgnzxalmdurR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-threadlocal-build,reverse" -- "$@")
+options=$(getopt -o "hCpksbtwcgnzxalmdufrR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse" -- "$@")
 eval set -- "$options"
 
 reverse=0
@@ -663,6 +700,7 @@ runkrazy=1
 runprecommit=1
 runcppcheck=1
 runtidy=1
+runiwyu=1
 runsplint=1
 runscan=1
 runninja=1
@@ -674,6 +712,7 @@ runmsanbuild=1
 runtsanbuild=1
 runubsanbuild=1
 runmemcbuild=1
+rungccanalyzer=1
 runthreadlocalbuild=1
 while true; do
   case "$1" in
@@ -701,6 +740,10 @@ while true; do
     runtidy=0
     shift
     ;;
+  -w | --no-iwyu)
+    runiwyu=0
+    shift
+    ;;
   -b | --no-scan)
     runscan=0
     shift
@@ -725,7 +768,7 @@ while true; do
     runasanbuild=0
     shift
     ;;
-  -e | --no-lsan-build)
+  -l | --no-lsan-build)
     runlsanbuild=0
     shift
     ;;
@@ -743,6 +786,10 @@ while true; do
     ;;
   -x | --no-memc-build)
     runmemcbuild=0
+    shift
+    ;;
+  -f | --no-gcc-analyzer)
+    rungccanalyzer=0
     shift
     ;;
   -r | --no-threadlocal-build)
@@ -808,24 +855,25 @@ fi
 #use non-Ninja cmake generator by-default
 UNSET_NINJA
 
+STRICT="--warn-uninitialized -Werror=dev"
 DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DNDEBUG=1"
-CMAKEOPTS="-DLIBICAL_DEVMODE=True -DGOBJECT_INTROSPECTION=False -DICAL_GLIB=False -DICAL_BUILD_DOCS=False"
+CMAKEOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
-TZCMAKEOPTS="$CMAKEOPTS -DUSE_BUILTIN_TZDATA=True"
-LTOCMAKEOPTS="$CMAKEOPTS -DENABLE_LTO_BUILD=True"
-GLIBOPTS="-DLIBICAL_DEVMODE=True -DICAL_GLIB=True -DGOBJECT_INTROSPECTION=True -DUSE_BUILTIN_TZDATA=OFF -DICAL_GLIB_VAPI=ON"
-FUZZOPTS="-DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True"
+TZCMAKEOPTS="$CMAKEOPTS -DLIBICAL_ENABLE_BUILTIN_TZDATA=True"
+LTOCMAKEOPTS="$CMAKEOPTS -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=True"
+GLIBOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=OFF -DLIBICAL_GLIB_VAPI=ON"
+FUZZOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True"
+TOOLCHAIN="-DCMAKE_TOOLCHAIN_FILE=\"$TOP/cmake/Toolchain-Linux-GCC-i686.cmake\""
 
 #Static code checkers
 STATICCCHECKOPTS="\
 -DCMAKE_BUILD_TYPE=Debug \
--DSHARED_ONLY=True \
--DWITH_CXX_BINDINGS=True \
--DUSE_BUILTIN_TZDATA=True \
--DICAL_GLIB=True \
--DGOBJECT_INTROSPECTION=True \
--DICAL_GLIB_VAPI=True \
--DICAL_GLIB_BUILD_DOCS=True \
+-DLIBICAL_CXX_BINDINGS=True \
+-DLIBICAL_ENABLE_BUILTIN_TZDATA=True \
+-DLIBICAL_GLIB=True \
+-DLIBICAL_GOBJECT_INTROSPECTION=True \
+-DLIBICAL_GLIB_VAPI=True \
+-DLIBICAL_GLIB_BUILD_DOCS=True \
 -DLIBICAL_BUILD_TESTING=True \
 -DLIBICAL_BUILD_EXAMPLES=True \
 "
@@ -834,43 +882,66 @@ KRAZY
 SPLINT test "$STATICCCHECKOPTS"
 CLANGSCAN test "$STATICCCHECKOPTS"
 CLANGTIDY test "$STATICCCHECKOPTS"
+IWYU test "$STATICCCHECKOPTS"
 CPPCHECK test "$STATICCCHECKOPTS"
 
-#GCC based build tests
+#GCC based build tests, with non-Ninja
 GCC_BUILD testgcc1 "$DEFCMAKEOPTS"
 GCC_BUILD testgcc2 "$CMAKEOPTS"
 GCC_BUILD testgcc3 "$UUCCMAKEOPTS"
-if (test "$(uname -s)" = "Linux"); then
-  GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
-fi
+GCC_BUILD testgcc4lto "$LTOCMAKEOPTS"
 GCC_BUILD testgcc4glib "$GLIBOPTS"
-GCC_BUILD testgccnocxx "$CMAKEOPTS -DWITH_CXX_BINDINGS=off"
+GCC_BUILD testgccnocxx "$CMAKEOPTS -DLIBICAL_CXX_BINDINGS=off -DLIBICAL_JAVA_BINDINGS=off"
 if (test "$(uname -s)" = "Linux"); then
-  echo "Temporarily disable cross-compile tests"
-#  GCC_BUILD testgcc1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-#  GCC_BUILD testgcc2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+  # Fedora: dnf install libstdc++-*.i686 glibc-*.i686 libgcc.i686 libdb-devel.i686
+  CMAKEOPTS_NONSTRICT="-DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+  GCC_BUILD testgcc1cross "$TOOLCHAIN $CMAKEOPTS_NONSTRICT -DLIBICAL_JAVA_BINDINGS=False"
 fi
-GCC_BUILD testgcc1builtin "-DUSE_BUILTIN_TZDATA=True"
+GCC_BUILD testgcc1builtin "-DLIBICAL_ENABLE_BUILTIN_TZDATA=True"
 GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
 
-#Ninja build tests
+#GCC based static build tests, with non-Ninja
+STATIC_OPTS="-DLIBICAL_STATIC=TRUE -DLIBICAL_JAVA_BINDINGS=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+GCC_BUILD testgcc1static "$DEFCMAKEOPTS $STATIC_OPTS"
+GCC_BUILD testgcc2static "$CMAKEOPTS $STATIC_OPTS"
+GCC_BUILD testgcc3static "$UUCCMAKEOPTS $STATIC_OPTS"
+GCC_BUILD testgcc4static-lto "$LTOCMAKEOPTS $STATIC_OPTS"
+#GCC_BUILD testgcc4static-glib "$GLIBOPTS $STATIC_OPTS"
+GCC_BUILD testgcc5static-nocxx "$CMAKEOPTS -DLIBICAL_JAVA_BINDINGS=False -DLIBICAL_CXX_BINDINGS=off -DLIBICAL_JAVA_BINDINGS=off -DLIBICAL_STATIC=True"
+if (test "$(uname -s)" = "Linux"); then
+  # Fedora: dnf install libstdc++-*.i686 glibc-*.i686 libgcc.i686 libdb-devel.i686
+  CMAKEOPTS_NONSTRICT="-DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+  GCC_BUILD testgcc1static-cross "$TOOLCHAIN $CMAKEOPTS_NONSTRICT $STATIC_OPTS"
+fi
+GCC_BUILD testgcc1static-builtin "-DLIBICAL_ENABLE_BUILTIN_TZDATA=True $STATIC_OPTS"
+GCC_BUILD testgcc2static-builtin "$TZCMAKEOPTS $STATIC_OPTS"
+
+#GCC based build tests, with Ninja
 NINJA_GCC_BUILD testninjagcc1 "$DEFCMAKEOPTS"
-NINJA_GCC_BUILD testninjagcc2 "-DICAL_GLIB=True"
-NINJA_GCC_BUILD testninjagcc3 "-DICAL_GLIB_VAPI=ON"
-NINJA_GCC_BUILD testninjagcc4 "-DSHARED_ONLY=True -DICAL_GLIB_BUILD_DOCS=False"
-NINJA_GCC_BUILD testninjagcc5 "-DSHARED_ONLY=True"
-NINJA_GCC_BUILD testninjagcc6 "-DSTATIC_ONLY=True -DGOBJECT_INTROSPECTION=False -DICAL_GLIB_BUILD_DOCS=False"
+NINJA_GCC_BUILD testninjagcc2 "-DLIBICAL_GLIB=True"
+NINJA_GCC_BUILD testninjagcc3 "-DLIBICAL_GLIB_VAPI=ON"
+NINJA_GCC_BUILD testninjagcc4 "-DLIBICAL_GLIB_BUILD_DOCS=False"
+NINJA_GCC_BUILD testninjagcc5 ""
+NINJA_GCC_BUILD testninjagcc6 "-DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_BUILD_DOCS=False"
+
+#GCC based static build tests, with Ninja
+NINJA_GCC_BUILD testninjagcc1static "$DEFCMAKEOPTS $STATIC_OPTS"
+NINJA_GCC_BUILD testninjagcc2static "-DLIBICAL_GLIB=True $STATIC_OPTS"
+#NINJA_GCC_BUILD testninjagcc3static "-DLIBICAL_GLIB_VAPI=ON  $STATIC_OPTS"
+NINJA_GCC_BUILD testninjagcc4static "-DLIBICAL_GLIB_BUILD_DOCS=False $STATIC_OPTS"
+NINJA_GCC_BUILD testninjagcc5static "$STATIC_OPTS"
+NINJA_GCC_BUILD testninjagcc6static "-DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_BUILD_DOCS=False $STATIC_OPTS"
 
 # Clang based build tests
 CLANG_BUILD testclang1 "$DEFCMAKEOPTS"
 CLANG_BUILD testclang2 "$CMAKEOPTS"
 CLANG_BUILD testclang3 "$UUCCMAKEOPTS"
-#not supported with clang yet CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
+CLANG_BUILD testclang4lto "$LTOCMAKEOPTS"
 CLANG_BUILD testclang4glib "$GLIBOPTS"
 if (test "$(uname -s)" = "Linux"); then
-  echo "Temporarily disable cross-compile tests"
-#  CLANG_BUILD testclang1cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake"
-#  CLANG_BUILD testclang2cross "-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake $CMAKEOPTS"
+  # Fedora: dnf install libstdc++-*.i686 glibc-*.i686 libgcc.i686 libdb-devel.i686
+  CMAKEOPTS_NONSTRICT="-DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+  CLANG_BUILD testclang1cross "$TOOLCHAIN $CMAKEOPTS_NONSTRICT -DLIBICAL_JAVA_BINDINGS=off"
 fi
 
 #Memory consistency check
@@ -882,40 +953,43 @@ MEMCONSIST_BUILD test5memc "$GLIBOPTS"
 MEMCONSIST_BUILD test6memc "$FUZZOPTS"
 
 #Address sanitizer
-ASAN_BUILD test1asan "$DEFCMAKEOPTS"
-ASAN_BUILD test2asan "$CMAKEOPTS"
-ASAN_BUILD test3asan "$TZCMAKEOPTS"
-ASAN_BUILD test4asan "$UUCCMAKEOPTS"
-ASAN_BUILD test5asan "$GLIBOPTS"
-ASAN_BUILD test6asan "$FUZZOPTS"
+ASAN_DISABLE="-DLIBICAL_JAVA_BINDINGS=OFF"
+ASAN_BUILD test1asan "$DEFCMAKEOPTS $ASAN_DISABLE"
+ASAN_BUILD test2asan "$CMAKEOPTS $ASAN_DISABLE"
+ASAN_BUILD test3asan "$TZCMAKEOPTS $ASAN_DISABLE"
+ASAN_BUILD test4asan "$UUCCMAKEOPTS $ASAN_DISABLE"
+ASAN_BUILD test5asan "$GLIBOPTS $ASAN_DISABLE"
+ASAN_BUILD test6asan "$FUZZOPTS $ASAN_DISABLE"
 
 #Leak sanitizer
 #libical-glib tests fail lsan
-#LSAN_BUILD test1lsan "$DEFCMAKEOPTS"
-LSAN_BUILD test2lsan "$CMAKEOPTS"
-LSAN_BUILD test3lsan "$TZCMAKEOPTS"
-LSAN_BUILD test4lsan "$UUCCMAKEOPTS"
-#LSAN_BUILD test5lsan "$GLIBOPTS"
-#LSAN_BUILD test6lsan "$FUZZOPTS"
+LSAN_DISABLE="-DLIBICAL_JAVA_BINDINGS=OFF -DLIBICAL_GLIB_VAPI=OFF -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+LSAN_BUILD test1lsan "$DEFCMAKEOPTS $LSAN_DISABLE"
+LSAN_BUILD test2lsan "$CMAKEOPTS $LSAN_DISABLE"
+LSAN_BUILD test3lsan "$TZCMAKEOPTS $LSAN_DISABLE"
+LSAN_BUILD test4lsan "$UUCCMAKEOPTS $LSAN_DISABLE"
+LSAN_BUILD test5lsan "$GLIBOPTS $LSAN_DISABLE"
+LSAN_BUILD test6lsan "$FUZZOPTS $LSAN_DISABLE"
 
 #Memory sanitizer
 # currently MSAN fails inside libicu and also isn't working with std:stringstreams properly
-SKIPOPTS="-DCMAKE_DISABLE_FIND_PACKAGE_ICU=True -DWITH_CXX_BINDINGS=False"
-#MSAN_BUILD test1msan "$DEFCMAKEOPTS $SKIPOPTS"
-MSAN_BUILD test2msan "$CMAKEOPTS $SKIPOPTS"
-MSAN_BUILD test3msan "$TZCMAKEOPTS $SKIPOPTS"
-MSAN_BUILD test4msan "$UUCCMAKEOPTS $SKIPOPTS"
-#MSAN_BUILD test5msan "$GLIBOPTS $SKIPOPTS"
-#MSAN_BUILD test6msan "$FUZZOPTS $SKIPOPTS"
+MSAN_DISABLE="-DCMAKE_DISABLE_FIND_PACKAGE_ICU=True -DLIBICAL_CXX_BINDINGS=False -DLIBICAL_JAVA_BINDINGS=OFF -DLIBICAL_GLIB_VAPI=OFF -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+MSAN_BUILD test1msan "$DEFCMAKEOPTS $MSAN_DISABLE"
+MSAN_BUILD test2msan "$CMAKEOPTS $MSAN_DISABLE"
+MSAN_BUILD test3msan "$TZCMAKEOPTS $MSAN_DISABLE"
+MSAN_BUILD test4msan "$UUCCMAKEOPTS $MSAN_DISABLE"
+MSAN_BUILD test5msan "$GLIBOPTS $MSAN_DISABLE"
+MSAN_BUILD test6msan "$FUZZOPTS $MSAN_DISABLE"
 
 #Thread sanitizer
 #libical-glib tests fail tsan with /lib64/libtsan.so.2: cannot allocate memory in static TLS block
-#TSAN_BUILD test1tsan "$DEFCMAKEOPTS"
-TSAN_BUILD test2tsan "$CMAKEOPTS"
-TSAN_BUILD test3tsan "$TZCMAKEOPTS"
-TSAN_BUILD test4tsan "$UUCCMAKEOPTS"
-#TSAN_BUILD test5tsan "$GLIBOPTS"
-#TSAN_BUILD test6tsan "$FUZZOPTS"
+TSAN_DISABLE="-DLIBICAL_JAVA_BINDINGS=OFF -DLIBICAL_GLIB_VAPI=OFF -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+TSAN_BUILD test1tsan "$DEFCMAKEOPTS $TSAN_DISABLE"
+TSAN_BUILD test2tsan "$CMAKEOPTS $TSAN_DISABLE"
+TSAN_BUILD test3tsan "$TZCMAKEOPTS $TSAN_DISABLE"
+TSAN_BUILD test4tsan "$UUCCMAKEOPTS $TSAN_DISABLE"
+TSAN_BUILD test5tsan "$GLIBOPTS $TSAN_DISABLE"
+TSAN_BUILD test6tsan "$FUZZOPTS $TSAN_DISABLE"
 
 #Undefined sanitizer
 UBSAN_BUILD test1ubsan "$DEFCMAKEOPTS"
@@ -924,6 +998,14 @@ UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
 UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
 UBSAN_BUILD test5ubsan "$GLIBOPTS"
 UBSAN_BUILD test6ubsan "$FUZZOPTS"
+
+#gcc analyzer
+GCC_ANALYZER_BUILD test1gccan "$DEFCMAKEOPTS"
+GCC_ANALYZER_BUILD test2gccan "$CMAKEOPTS"
+GCC_ANALYZER_BUILD test3gccan "$TZCMAKEOPTS"
+GCC_ANALYZER_BUILD test4gccan "$UUCCMAKEOPTS"
+GCC_ANALYZER_BUILD test5gccan "$GLIBOPTS"
+GCC_ANALYZER_BUILD test6gccan "$FUZZOPTS"
 
 #Threadlocal
 THREADLOCAL_BUILD test1threadlocal "$DEFCMAKEOPTS"

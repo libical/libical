@@ -2,9 +2,7 @@
  File: icalrestriction.c
 
  SPDX-FileCopyrightText: 2000, Eric Busboom  <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 /*#line 7 "icalrestriction.c.in"*/
 
@@ -259,10 +257,10 @@ static int _check_restriction(icalcomponent *comp,
 
         if (record->subcomponent != ICAL_NO_COMPONENT) {
             type = "component";
-            kind = icalenum_component_kind_to_string(record->subcomponent);
+            kind = icalcomponent_kind_to_string(record->subcomponent);
         } else {
             type = "property";
-            kind = icalenum_property_kind_to_string(record->property);
+            kind = icalproperty_kind_to_string(record->property);
         }
 
         snprintf(temp, TMP_BUF_SIZE,

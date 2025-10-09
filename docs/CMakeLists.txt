@@ -32,7 +32,7 @@ if(DOXYGEN_FOUND)
     *.dox
     *.html
     *.md
-    ${PROJECT_SOURCE_DIR}/README.md
+    ${PROJECT_SOURCE_DIR}/*.md
   )
   file(
     GLOB _all_hdrs
@@ -64,9 +64,6 @@ if(DOXYGEN_FOUND)
       ${DOXYGEN_OUTPUT_DIR}/index.html
     COMMAND
       ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-    #copy some files by-hand that are referred to by the markdown README
-    COMMAND
-      ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/Install.txt ${DOXYGEN_OUTPUT_DIR}
     COMMAND
       ${CMAKE_COMMAND} -E make_directory ${DOXYGEN_OUTPUT_DIR}/src/libicalvcal
     COMMAND
@@ -91,7 +88,7 @@ if(DOXYGEN_FOUND)
     icalss
     icalvcal
   )
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     add_dependencies(
       docs
       ical_cxx

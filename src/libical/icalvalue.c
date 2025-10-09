@@ -3,7 +3,6 @@
  CREATOR: eric 02 May 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
   Contributions from:
@@ -30,8 +29,9 @@ LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kin
 {
     struct icalvalue_impl *v;
 
-    if (!icalvalue_kind_is_valid(kind))
+    if (!icalvalue_kind_is_valid(kind)) {
         return NULL;
+    }
 
     if ((v = (struct icalvalue_impl *)icalmemory_new_buffer(sizeof(struct icalvalue_impl))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -76,8 +76,9 @@ icalvalue *icalvalue_clone(const icalvalue *old)
              * don't know how long it is.
              */
         clone->data.v_attach = old->data.v_attach;
-        if (clone->data.v_attach)
+        if (clone->data.v_attach) {
             icalattach_ref(clone->data.v_attach);
+        }
 
         break;
     }
@@ -138,6 +139,19 @@ icalvalue *icalvalue_clone(const icalvalue *old)
             }
         }
 
+        break;
+    }
+
+    case ICAL_REQUESTSTATUS_VALUE: {
+        clone->data = old->data;
+        if (old->data.v_requeststatus.debug != 0) {
+            clone->data.v_requeststatus.debug = icalmemory_strdup(old->data.v_requeststatus.debug);
+            if (clone->data.v_requeststatus.debug == 0) {
+                clone->parent = 0;
+                icalvalue_free(clone);
+                return 0;
+            }
+        }
         break;
     }
 
@@ -363,8 +377,9 @@ static bool simple_str_to_doublestr(const char *from, char *result, int result_l
     }
 
     /*skip the white spaces at the beginning */
-    while (*cur && isspace((int)*cur))
+    while (*cur && isspace((int)*cur)) {
         cur++;
+    }
 
     start = cur;
     /* copy the part that looks like a double into result.
@@ -386,7 +401,8 @@ static bool simple_str_to_doublestr(const char *from, char *result, int result_l
      * of the current locale.
      */
     for (i = 0; i < len; ++i) {
-        if (start[i] == '.' && loc_data && loc_data->decimal_point && loc_data->decimal_point[0] && loc_data->decimal_point[0] != '.') {
+        if (start[i] == '.' &&
+            loc_data && loc_data->decimal_point && loc_data->decimal_point[0] && loc_data->decimal_point[0] != '.') {
             /*replace '.' by the digit separator of the current locale */
             result[i] = loc_data->decimal_point[0];
         } else {
@@ -413,6 +429,9 @@ static void free_icalvalue_attach_data(char *data, void *user_data)
 static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
                                                        const char *str, icalproperty **error)
 {
+    char temp[TMP_BUF_SIZE] = {};
+    icalparameter *errParam;
+
     struct icalvalue_impl *value = 0;
 
     icalerror_check_arg_rz(str != 0, "str");
@@ -426,40 +445,57 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         icalattach *attach;
 
         attach = icalattach_new_from_url(str);
-        if (!attach)
+        if (!attach) {
             break;
+        }
 
         value = icalvalue_new_attach(attach);
         icalattach_unref(attach);
         break;
     }
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
+#endif
     case ICAL_BINARY_VALUE: {
         icalattach *attach;
 
-        attach = icalattach_new_from_data(strdup(str), free_icalvalue_attach_data, 0);
-        if (!attach)
-            break;
+        char *dupStr = strdup(str); // will be freed later on during unref
+        if (dupStr) {
+            attach = icalattach_new_from_data(dupStr, free_icalvalue_attach_data, 0);
+            if (!attach) {
+                free(dupStr);
+                break;
+            }
 
-        value = icalvalue_new_attach(attach);
-        icalattach_unref(attach);
+            value = icalvalue_new_attach(attach);
+            icalattach_unref(attach);
+        }
         break;
     }
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
+
     case ICAL_BOOLEAN_VALUE: {
         if (!strcmp(str, "TRUE")) {
             value = icalvalue_new_boolean(1);
         } else if (!strcmp(str, "FALSE")) {
             value = icalvalue_new_boolean(0);
-        } else if (error != 0) {
-            char temp[TMP_BUF_SIZE];
-            icalparameter *errParam;
-
-            snprintf(temp, sizeof(temp),
-                     "Could not parse %s as a %s property",
-                     str, icalvalue_kind_to_string(kind));
-            errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
-            *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            icalparameter_free(errParam);
+        } else {
+            if (error != 0) {
+                snprintf(temp, sizeof(temp),
+                         "Could not parse %s as a %s property",
+                         str, icalvalue_kind_to_string(kind));
+                errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+                *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
+            }
+            snprintf(temp, TMP_BUF_SIZE,
+                     "icalvalue_new_from_string cannot parse value string (%s) for \'%s\'",
+                     icalvalue_kind_to_string(kind), str);
+            icalerror_warn(temp);
+            icalerror_set_errno(ICAL_PARSE_ERROR);
         }
         break;
     }
@@ -596,16 +632,17 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
     geo_parsing_error:
         if (error != 0) {
-            char temp[TMP_BUF_SIZE];
-            icalparameter *errParam;
-
             snprintf(temp, sizeof(temp),
                      "Could not parse %s as a %s property",
                      str, icalvalue_kind_to_string(kind));
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
             *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            icalparameter_free(errParam);
         }
+        snprintf(temp, TMP_BUF_SIZE,
+                 "icalvalue_new_from_string cannot parse value string (%s) for \'%s\'",
+                 icalvalue_kind_to_string(kind), str);
+        icalerror_warn(temp);
+        icalerror_set_errno(ICAL_PARSE_ERROR);
     } break;
 
     case ICAL_RECUR_VALUE: {
@@ -711,36 +748,34 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
     } break;
 
     default: {
-        char temp[TMP_BUF_SIZE];
-        icalparameter *errParam;
-
         if (error != 0) {
             snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
 
             errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
             *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
-            icalparameter_free(errParam);
         }
 
         snprintf(temp, TMP_BUF_SIZE,
                  "icalvalue_new_from_string got an unknown value type (%s) for \'%s\'",
                  icalvalue_kind_to_string(kind), str);
         icalerror_warn(temp);
-        value = 0;
+        icalerror_set_errno(ICAL_PARSE_ERROR);
     }
     }
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
+#endif
     if (error != 0 && *error == 0 && value == 0) {
-        char temp[TMP_BUF_SIZE];
-        icalparameter *errParam;
-
         snprintf(temp, TMP_BUF_SIZE, "Failed to parse value: \'%s\'", str);
 
         errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
         *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
-        icalparameter_free(errParam);
     }
-
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
     return value;
 }
 
@@ -798,6 +833,14 @@ void icalvalue_free(icalvalue *v)
         if (v->data.v_recur != 0) {
             icalrecurrencetype_unref(v->data.v_recur);
             v->data.v_recur = NULL;
+        }
+        break;
+    }
+
+    case ICAL_REQUESTSTATUS_VALUE: {
+        if (v->data.v_requeststatus.debug != 0) {
+            icalmemory_free_buffer((void *)v->data.v_requeststatus.debug);
+            v->data.v_requeststatus.debug = 0;
         }
         break;
     }
@@ -892,6 +935,7 @@ static char *icalvalue_utcoffset_as_ical_string_r(const icalvalue *value)
     h = MIN(abs(h), 23);
     m = MIN(abs(m), 59);
     s = MIN(abs(s), 59);
+    /* cppcheck-suppress knownConditionTrueFalse */
     if (s != 0) {
         snprintf(str, 9, "%c%02d%02d%02d", sign, h, m, s);
     } else {
@@ -1239,8 +1283,9 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
         return icalproperty_enum_to_string_r(value->data.v_enum);
 
     case ICAL_X_VALUE:
-        if (value->x_value != 0)
+        if (value->x_value != 0) {
             return icalmemory_strdup_and_quote(value, value->x_value);
+        }
         _fallthrough();
 
     case ICAL_NO_VALUE:
@@ -1356,15 +1401,32 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
     }
 
     case ICAL_DURATION_VALUE: {
-        int dur_a = icaldurationtype_as_int(a->data.v_duration);
-        int dur_b = icaldurationtype_as_int(b->data.v_duration);
+        struct icaldurationtype dur_a = a->data.v_duration,
+                                dur_b = b->data.v_duration;
+        int a_days = (int)(7 * dur_a.weeks + dur_a.days) * (dur_a.is_neg == 1 ? -1 : 1),
+            b_days = (int)(7 * dur_b.weeks + dur_b.days) * (dur_a.is_neg == 1 ? -1 : 1);
+        int a_secs = (int)(dur_a.seconds + 60 * (dur_a.minutes + 60 * dur_a.hours)) *
+                     (dur_a.is_neg == 1 ? -1 : 1),
+            b_secs = (int)(dur_b.seconds + 60 * (dur_b.minutes + 60 * dur_b.hours)) *
+                     (dur_b.is_neg == 1 ? -1 : 1);
 
-        if (dur_a > dur_b) {
-            return ICAL_XLICCOMPARETYPE_GREATER;
-        } else if (dur_a < dur_b) {
-            return ICAL_XLICCOMPARETYPE_LESS;
+        if (a_secs == b_secs) {
+            if (a_days > b_days) {
+                return ICAL_XLICCOMPARETYPE_GREATER;
+            } else if (a_days < b_days) {
+                return ICAL_XLICCOMPARETYPE_LESS;
+            } else {
+                return ICAL_XLICCOMPARETYPE_EQUAL;
+            }
+        } else if (a_days == b_days) {
+            if (a_secs > b_secs) {
+                return ICAL_XLICCOMPARETYPE_GREATER;
+            } else {
+                return ICAL_XLICCOMPARETYPE_LESS;
+            }
         } else {
-            return ICAL_XLICCOMPARETYPE_EQUAL;
+            /* We can't compare a mix of nominal and accurate durations */
+            return ICAL_XLICCOMPARETYPE_NOTEQUAL;
         }
     }
 
@@ -1383,8 +1445,17 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
         char *temp1, *temp2;
 
         temp1 = icalvalue_as_ical_string_r(a);
-        temp2 = icalvalue_as_ical_string_r(b);
-        r = strcmp(temp1, temp2);
+        if (temp1) {
+            temp2 = icalvalue_as_ical_string_r(b);
+            if (temp2) {
+                r = strcmp(temp1, temp2);
+            } else {
+                icalmemory_free_buffer(temp1);
+                return ICAL_XLICCOMPARETYPE_GREATER;
+            }
+        } else {
+            return ICAL_XLICCOMPARETYPE_LESS;
+        }
         icalmemory_free_buffer(temp1);
         icalmemory_free_buffer(temp2);
 
@@ -1445,7 +1516,8 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
 
 void icalvalue_reset_kind(icalvalue *value)
 {
-    if ((value->kind == ICAL_DATETIME_VALUE || value->kind == ICAL_DATE_VALUE) &&
+    if (value &&
+        (value->kind == ICAL_DATETIME_VALUE || value->kind == ICAL_DATE_VALUE) &&
         !icaltime_is_null_time(value->data.v_time)) {
         if (icaltime_is_date(value->data.v_time)) {
             value->kind = ICAL_DATE_VALUE;
@@ -1462,7 +1534,7 @@ void icalvalue_set_parent(icalvalue *value, icalproperty *property)
     value->parent = property;
 }
 
-icalproperty *icalvalue_get_parent(icalvalue *value)
+icalproperty *icalvalue_get_parent(const icalvalue *value)
 {
     return value->parent;
 }
@@ -1472,17 +1544,20 @@ bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxB
     char *ptr;
     icalvalue *value = 0;
 
-    if ((szText == 0) || (szEncText == 0))
+    if ((szText == 0) || (szEncText == 0)) {
         return false;
+    }
 
     value = icalvalue_new_from_string(ICAL_STRING_VALUE, szText);
 
-    if (value == 0)
+    if (value == 0) {
         return false;
+    }
 
     ptr = icalvalue_text_as_ical_string_r(value);
-    if (ptr == 0)
+    if (ptr == 0) {
         return false;
+    }
 
     if ((int)strlen(ptr) >= nMaxBufferLen) {
         icalvalue_free(value);
@@ -1504,8 +1579,9 @@ bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxB
     const char *p;
     size_t buf_sz;
 
-    if ((szText == 0) || (szDecText == 0))
+    if ((szText == 0) || (szDecText == 0)) {
         return false;
+    }
 
     buf_sz = strlen(szText) + 1;
     str_p = str = (char *)icalmemory_new_buffer(buf_sz);
@@ -1522,8 +1598,9 @@ bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxB
             icalmemory_append_char(&str, &str_p, &buf_sz, *p);
         }
 
-        if (str_p - str > nMaxBufferLen)
+        if (str_p - str > nMaxBufferLen) {
             break;
+        }
     }
 
     icalmemory_append_char(&str, &str_p, &buf_sz, '\0');

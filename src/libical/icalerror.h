@@ -3,17 +3,16 @@
   CREATOR: eric 09 May 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
- The original code is icalerror.h
 ======================================================================*/
 
 #ifndef ICALERROR_H
 #define ICALERROR_H
 
 #include "libical_ical_export.h"
+
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 /**
@@ -27,8 +26,6 @@
  * to get a string that describes the error, or icalerror_perror() to
  * get a string describing the current error set in ::icalerrno.
  */
-
-#define ICAL_SETERROR_ISFUNC
 
 /**
  * @brief Triggered before any error is called
@@ -146,7 +143,7 @@ LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
  * icalerror_set_errors_are_fatal(false);
  * ```
  */
-LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(int fatal);
+LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(bool fatal);
 
 /**
  * @brief Determine if errors are fatal
@@ -161,7 +158,7 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(int fatal);
  * }
  * ```
  */
-LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
+LIBICAL_ICAL_EXPORT bool icalerror_get_errors_are_fatal(void);
 
 /* Warning messages */
 
@@ -176,7 +173,7 @@ LIBICAL_ICAL_EXPORT int icalerror_get_errors_are_fatal(void);
  * ```
  */
 
-#ifdef __GNUC__ca
+#ifdef __GNUC__
 #define icalerror_warn(message)                                                        \
     {                                                                                  \
         icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
@@ -316,40 +313,13 @@ LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state(icalerrorenum error
 LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
 
 /**
- * @def icalerror_set_errno(x)
  * @brief Sets the ::icalerrno to a given error
  * @param x The error to set ::icalerrno to
  *
  * Sets ::icalerrno to the error given in @a x. Additionally, if
  * the error is an ::ICAL_ERROR_FATAL or if it's an ::ICAL_ERROR_DEFAULT
- * and ::ICAL_ERRORS_ARE_FATAL is true, it prints a warning to @a stderr
- * and aborts the process.
- *
- * @par Usage
- * ```c
- * icalerror_set_errno(ICAL_PARSE_ERROR);
- * ```
- */
-#if !defined(ICAL_SETERROR_ISFUNC)
-#define icalerror_set_errno(x)                                 \
-    icalerrno = x;                                             \
-    if (icalerror_get_error_state(x) == ICAL_ERROR_FATAL ||    \
-        (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && \
-         icalerror_get_errors_are_fatal() == 1)) {             \
-        icalerror_warn(icalerror_strerror(x));                 \
-        ical_bt();                                             \
-        icalassert(0);                                         \
-    }                                                          \
-    }
-#else
-/**
- * @brief Sets the ::icalerrno to a given error
- * @param x The error to set ::icalerrno to
- *
- * Sets ::icalerrno to the error given in @a x. Additionally, if
- * the error is an ::ICAL_ERROR_FATAL or if it's an ::ICAL_ERROR_DEFAULT
- * and ::ICAL_ERRORS_ARE_FATAL is true, it prints a warning to @a stderr
- * and aborts the process.
+ * and icalerror_get_errors_are_fatal() is true, it prints a warning to
+ * @a stderr and aborts the process.
  *
  * @par Usage
  * ```c
@@ -357,27 +327,6 @@ LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
  * ```
  */
 LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
-#endif
-
-/**
- * @def ICAL_ERRORS_ARE_FATAL
- * @brief Determines if all libical errors are fatal and lead to
- *  the process aborting.
- *
- * If set to 1, all libical errors are fatal and lead to the
- * process aborting upon encountering on. Otherwise, errors
- * are nonfatal.
- *
- * Can be checked with libical_get_errors_are_fatal().
- */
-
-#if !defined(ICAL_ERRORS_ARE_FATAL)
-#define ICAL_ERRORS_ARE_FATAL 0
-#endif
-
-#if ICAL_ERRORS_ARE_FATAL == 1
-#undef NDEBUG
-#endif
 
 #define icalerror_check_value_type(value, type) ;
 #define icalerror_check_property_type(value, type) ;
@@ -393,30 +342,25 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
  *
  * Tests the given assertion @a test, and if it fails, prints the
  * @a message given on @a stderr as a warning and aborts the process.
- * This only works if ::ICAL_ERRORS_ARE_FATAL is true, otherwise
+ * This only works if icalerror_get_errors_are_fatal() is true, otherwise
  * does nothing.
  */
-#if ICAL_ERRORS_ARE_FATAL == 1
 
 #ifdef __GNUC__
 #define icalerror_assert(test, message)                                                \
-    if (!(test)) {                                                                     \
+    if (icalerror_get_errors_are_fatal() && !(test)) {                                 \
         icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
         icalerror_stop_here();                                                         \
         abort();                                                                       \
     }
 #else /*__GNUC__*/
 #define icalerror_assert(test, message)                            \
-    if (!(test)) {                                                 \
+    if (icalerror_get_errors_are_fatal() && !(test)) {             \
         icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message); \
         icalerror_stop_here();                                     \
         abort();                                                   \
     }
 #endif /*__GNUC__*/
-
-#else /* ICAL_ERRORS_ARE_FATAL */
-#define icalerror_assert(test, message)
-#endif /* ICAL_ERRORS_ARE_FATAL */
 
 /**
  * @brief Checks the assertion @a test and raises error on failure

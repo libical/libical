@@ -5,5 +5,5 @@ configure_file(libical-glib.toml.in libical-glib.toml @ONLY)
 generate_gi_documentation(
   libical-glib
   ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.toml
-  "${CMAKE_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_LIB_MAJOR_VERSION}.0.gir"
+  "${PROJECT_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_LIB_MAJOR_SOVERSION}.0.gir"
 )

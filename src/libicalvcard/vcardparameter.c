@@ -1,12 +1,9 @@
 /*======================================================================
  FILE: vcardparameter.c
-
  CREATOR: Ken Murchison 24 Aug 2022 <murch@fastmailteam.com>
 
  SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -49,20 +46,18 @@ vcardparameter *vcardparameter_new(vcardparameter_kind kind)
 
 void vcardparameter_free(vcardparameter *param)
 {
-    /*  Comment out the following as it always triggers, even when parameter is non-zero
-    icalerror_check_arg_rv((parameter==0),"parameter");*/
-
-    if (param->parent != 0) {
+    if (!param || param->parent != 0) {
         return;
     }
 
     if (param->string != 0) {
         icalmemory_free_buffer((void *)param->string);
     } else if (param->values != 0) {
-        if (param->value_kind == VCARD_TEXT_VALUE)
+        if (param->value_kind == VCARD_TEXT_VALUE) {
             vcardstrarray_free(param->values);
-        else
+        } else {
             vcardenumarray_free(param->values);
+        }
     } else if (param->structured != 0) {
         vcardstructured_free(param->structured);
     }
@@ -104,6 +99,15 @@ vcardparameter *vcardparameter_clone(const vcardparameter *old)
     if (old->x_name != 0) {
         clone->x_name = icalmemory_strdup(old->x_name);
         if (clone->x_name == 0) {
+            clone->parent = 0;
+            vcardparameter_free(clone);
+            return 0;
+        }
+    }
+
+    if (old->values != 0) {
+        clone->values = old->value_kind == VCARD_TEXT_VALUE ? vcardstrarray_clone(old->values) : vcardenumarray_clone(old->values);
+        if (clone->values == 0) {
             clone->parent = 0;
             vcardparameter_free(clone);
             return 0;
@@ -362,7 +366,7 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     return buf;
 }
 
-vcardparameter_kind vcardparameter_isa(vcardparameter *parameter)
+vcardparameter_kind vcardparameter_isa(const vcardparameter *parameter)
 {
     if (parameter == 0) {
         return VCARD_NO_PARAMETER;
@@ -402,7 +406,7 @@ void vcardparameter_set_xname(vcardparameter *param, const char *v)
     }
 }
 
-const char *vcardparameter_get_xname(vcardparameter *param)
+const char *vcardparameter_get_xname(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
@@ -425,7 +429,7 @@ void vcardparameter_set_xvalue(vcardparameter *param, const char *v)
     }
 }
 
-const char *vcardparameter_get_xvalue(vcardparameter *param)
+const char *vcardparameter_get_xvalue(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
@@ -437,7 +441,7 @@ void vcardparameter_set_iana_value(vcardparameter *param, const char *v)
     vcardparameter_set_xvalue(param, v);
 }
 
-const char *vcardparameter_get_iana_value(vcardparameter *param)
+const char *vcardparameter_get_iana_value(const vcardparameter *param)
 {
     return vcardparameter_get_xvalue(param);
 }
@@ -447,7 +451,7 @@ void vcardparameter_set_iana_name(vcardparameter *param, const char *v)
     vcardparameter_set_xname(param, v);
 }
 
-const char *vcardparameter_get_iana_name(vcardparameter *param)
+const char *vcardparameter_get_iana_name(const vcardparameter *param)
 {
     return vcardparameter_get_xname(param);
 }
@@ -459,14 +463,14 @@ void vcardparameter_set_parent(vcardparameter *param, vcardproperty *property)
     param->parent = property;
 }
 
-vcardproperty *vcardparameter_get_parent(vcardparameter *param)
+vcardproperty *vcardparameter_get_parent(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
     return param->parent;
 }
 
-bool vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2)
+bool vcardparameter_has_same_name(const vcardparameter *param1, const vcardparameter *param2)
 {
     vcardparameter_kind kind1;
     vcardparameter_kind kind2;
@@ -479,8 +483,9 @@ bool vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2
     kind1 = vcardparameter_isa(param1);
     kind2 = vcardparameter_isa(param2);
 
-    if (kind1 != kind2)
+    if (kind1 != kind2) {
         return false;
+    }
 
     if (kind1 == VCARD_X_PARAMETER) {
         name1 = vcardparameter_get_xname(param1);
@@ -498,14 +503,14 @@ bool vcardparameter_has_same_name(vcardparameter *param1, vcardparameter *param2
     return true;
 }
 
-bool vcardparameter_is_multivalued(vcardparameter *param)
+bool vcardparameter_is_multivalued(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
     return param->is_multivalued;
 }
 
-bool vcardparameter_is_structured(vcardparameter *param)
+bool vcardparameter_is_structured(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 

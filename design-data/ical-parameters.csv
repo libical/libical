@@ -3,14 +3,14 @@
 "CHARSET","3","const char*",
 "CN","4","const char*",
 "CUTYPE","5","icalparameter_cutype","X=20100;INDIVIDUAL;GROUP;RESOURCE;ROOM;UNKNOWN;NONE=20199"
-"DELEGATED-FROM","6","const char*",
-"DELEGATED-TO","7","const char*",
+"DELEGATED-FROM","6","const char*",,is_multivalued
+"DELEGATED-TO","7","const char*",,is_multivalued
 "DIR","8","const char*",
 "ENCODING","10","icalparameter_encoding","X=20300;8BIT;BASE64;NONE=20399"
 "FBTYPE","11","icalparameter_fbtype","X=20400;FREE;BUSY;BUSY-UNAVAILABLE;BUSY-TENTATIVE;NONE=20499"
 "FMTTYPE","12","const char*",
 "LANGUAGE","14","const char*",
-"MEMBER","18","const char*",
+"MEMBER","18","const char*",,is_multivalued
 "#PARTSTAT=FAILED from draft-apthorp-ical-tasks",,,
 "PARTSTAT","20","icalparameter_partstat","X=20600;NEEDS-ACTION;ACCEPTED;DECLINED;TENTATIVE;DELEGATED;COMPLETED;IN-PROCESS;FAILED;NONE=20699"
 "RANGE","21","icalparameter_range","X=20700;THISANDPRIOR;THISANDFUTURE;NONE=20799"
@@ -68,13 +68,13 @@
 "SUBSTATE","45","icalparameter_substate",X=21900;OK;ERROR;SUSPENDED;NONE=21999",
 
 "#Parameters from New Properties for iCalendar","RFC 7986 Section 6"
-"DISPLAY","46","icalparameter_display",X=22000;BADGE;GRAPHIC;FULLSIZE;THUMBNAIL;NONE=22099",
+"DISPLAY","46","icalparameter_display",X=22000;BADGE;GRAPHIC;FULLSIZE;THUMBNAIL;NONE=22099",is_multivalued
 "EMAIL","50","const char*",
-"FEATURE","48","icalparameter_feature",X=22100;AUDIO;CHAT;FEED;MODERATOR;PHONE;SCREEN;VIDEO;NONE=22199",
+"FEATURE","48","icalparameter_feature",X=22100;AUDIO;CHAT;FEED;MODERATOR;PHONE;SCREEN;VIDEO;NONE=22199",is_multivalued
 "LABEL","49","const char*",
 
 "#VPATCH Extension Parameters","draft-daboo-icalendar-vpatch"
-"PATCH-ACTION","51","icalparameter_patchaction",X=22200;CREATE;BYNAME;BYVALUE;BYPARAM;NONE=22299",
+"PATCH-ACTION","51","icalparameter_patchaction","X=22200;CREATE;BYNAME;BYVALUE;BYPARAM;NONE=22299",
 
 "#Event Publishing Extensions Parameters","RFC 9073 Section 5"
 "ORDER","52","int",

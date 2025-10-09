@@ -33,7 +33,7 @@ void parse_text(char *argv[])
 
     assert(stream != 0);
 
-    /* Tell the parser what input routie it should use. */
+    /* Tell the parser what input route it should use. */
     icalparser_set_gen_data(parser, stream);
 
     do {

@@ -3,7 +3,6 @@
  CREATOR: eric 26 May 2000
 
  SPDX-FileCopyrightText: 2000 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -28,6 +27,7 @@
 
 */
 
+/* cppcheck-suppress constParameter */
 int main(int argc, char *argv[])
 {
     VObject *vcal = 0;

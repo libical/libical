@@ -3,7 +3,6 @@
  CREATOR: eric 02 June 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -75,7 +74,9 @@
 
 #include <stdbool.h>
 #include <time.h>
+// clang-format off
 #define icaltime_t ${ICAL_ICALTIME_T_TYPE}
+// clang-format on
 
 /* An opaque struct representing a timezone. We declare this here to avoid
    a circular dependency. */
@@ -85,34 +86,32 @@ typedef struct _icaltimezone icaltimezone;
 #endif
 
 /** icaltime_span is returned by icalcomponent_get_span() */
-struct icaltime_span
-{
-    icaltime_t start;       /**< in UTC */
-    icaltime_t end;         /**< in UTC */
-    int is_busy;            /**< 1->busy time, 0-> free time */
+struct icaltime_span {
+    icaltime_t start; /**< in UTC */
+    icaltime_t end;   /**< in UTC */
+    int is_busy;      /**< 1->busy time, 0-> free time */
 };
 
 typedef struct icaltime_span icaltime_span;
 
-struct icaltimetype
-{
-    int year;           /**< Actual year, e.g. 2001. */
-    int month;          /**< 1 (Jan) to 12 (Dec). */
+struct icaltimetype {
+    int year;  /**< Actual year, e.g. 2001. */
+    int month; /**< 1 (Jan) to 12 (Dec). */
     int day;
     int hour;
     int minute;
     int second;
 
-    int is_date;        /**< 1 -> interpret this as date. */
+    int is_date; /**< 1 -> interpret this as date. */
 
-    int is_daylight;    /**< 1 -> time is in daylight savings time. */
+    int is_daylight; /**< 1 -> time is in daylight savings time. */
 
-    const icaltimezone *zone;  /**< timezone */
+    const icaltimezone *zone; /**< timezone */
 };
 
 typedef struct icaltimetype icaltimetype;
 
-#define ICALTIMETYPE_INITIALIZER { 0, 0, 0, 0, 0, 0, 0, 0, 0}
+#define ICALTIMETYPE_INITIALIZER {0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 /**     @brief Constructor.
  *
@@ -166,22 +165,25 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_timet_with_zone(const ical
                                                                       const bool is_date,
                                                                       const icaltimezone *zone);
 
-/**     @brief Constructor.
+/**
+ * Creates a time from a ISO-8601-2004 string, per https://tools.ietf.org/html/rfc5545#section-3.3.5.
  *
- * Creates a time from an ISO format string.
+ * @param str is a string containing a valid DATE-TIME per rfc5545 [ISO-8601-2004]
  *
- * @todo If the given string specifies a DATE-TIME not in UTC, there
- *       is no way to know if this is a floating time or really refers to a
- *       timezone. We should probably add a new constructor:
- *       icaltime_from_string_with_zone()
+ * The string format is based on the [ISO.8601.2004] spec in one of 3 legal forms:
+ *
+ *   - DATE WITH LOCAL TIME "19980118T230000"
+ *   - DATE WITH UTC TIME "19980119T070000Z"
+ *   - DATE WITH LOCAL TIME AND TIME ZONE REFERENCE "TZID=America/New_York:19980119T020000"
+ *
+ * That is to say, the basic format for time is T[hh][mm][ss] per ISO-8601-2004
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_string(const char *str);
 
-/**     @brief Constructor.
+/**
+ * Creates a new time, given a day of year and a year.
  *
- *      Creates a new time, given a day of year and a year.
- *
- *      Note that Jan 1 is day #1, not 0.
+ * @note that Jan 1 is day #1, not 0.
  */
 LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_from_day_of_year(const int doy, const int year);
 
@@ -206,7 +208,7 @@ LIBICAL_ICAL_EXPORT icaltime_t icaltime_as_timet(const struct icaltimetype);
  *      time is simply returned as icaltime_t in its native timezone.
  */
 LIBICAL_ICAL_EXPORT icaltime_t icaltime_as_timet_with_zone(const struct icaltimetype tt,
-                                                       const icaltimezone *zone);
+                                                           const icaltimezone *zone);
 
 /**
  * @brief Returns a string representation of the time, in RFC5545 format.
@@ -324,15 +326,14 @@ LIBICAL_ICAL_EXPORT int icaltime_compare_date_only_tz(const struct icaltimetype 
                                                       const struct icaltimetype b,
                                                       icaltimezone *tz);
 
-/** Adds or subtracts a number of days, hours, minutes and seconds. */
-/**     @brief Internal, shouldn't be part of the public API
+/**
+ * @brief Adds or subtracts a number of days, hours, minutes and seconds.
  *
- *      Adds or subtracts a time from an icaltimetype. This time is given
- *      as a number of days, hours, minutes and seconds.
+ * Adds or subtracts a time from an icaltimetype. This time is given
+ * as a number of days, hours, minutes and seconds.
  *
- *      @note This function is exactly the same as
- *      icaltimezone_adjust_change() except for the type of the first
- *      parameter.
+ * @note This function is exactly the same as icaltimezone_adjust_change()
+ * except for the type of the first parameter.
  */
 LIBICAL_ICAL_EXPORT void icaltime_adjust(struct icaltimetype *tt,
                                          const int days, const int hours,
@@ -407,7 +408,7 @@ LIBICAL_ICAL_EXPORT struct icaltime_span icaltime_span_new(struct icaltimetype d
  *
  *  Note, this will return false if the spans are adjacent.
  */
-LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(icaltime_span *s1, icaltime_span *s2);
+LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(const icaltime_span *s1, const icaltime_span *s2);
 
 /** @brief Returns true if the span is totally within the containing
  *  span.
@@ -417,7 +418,7 @@ LIBICAL_ICAL_EXPORT bool icaltime_span_overlaps(icaltime_span *s1, icaltime_span
  *  @return           boolean value.
  *
  */
-LIBICAL_ICAL_EXPORT bool icaltime_span_contains(icaltime_span *s, icaltime_span *container);
+LIBICAL_ICAL_EXPORT bool icaltime_span_contains(const icaltime_span *s, const icaltime_span *container);
 
 #endif /* !ICALTIME_H */
 

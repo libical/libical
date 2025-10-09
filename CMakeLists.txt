@@ -6,66 +6,55 @@
 # Pass the following variables to cmake to control the build:
 # (See docs/UsingLibical.md for more information)
 #
-# -DWITH_CXX_BINDINGS=[true|false]
+# -DLIBICAL_CXX_BINDINGS=[true|false]
 #  Build the C++ bindings.
 #  Default=true
 #
-# -DICAL_ERRORS_ARE_FATAL=[true|false]
-#  Set to make icalerror_* calls abort instead of internally signaling an error
-#  Default=false
-#  Notes:
-#   Change the behavior at runtime using the icalerror_set_errors_are_fatal() function.
-#   Query the behavior at runtime using the icalerror_get_errors_are_fatal() function.
+# -DLIBICAL_JAVA_BINDINGS=[true|false]
+#  Build the Java bindings.
+#  Default=true
 #
-# -DICAL_ALLOW_EMPTY_PROPERTIES=[true|false]
-#  Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
-#  Default=false
-#
-# -DUSE_BUILTIN_TZDATA=[true|false]
+# -DLIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
 #  Set to build using our own timezone data.
 #  Default=false (use the system timezone data on non-Windows systems)
 #  ALWAYS true on Windows systems
 #
-# -DSTATIC_ONLY=[true|false]
-#  Set to build static libraries only.
+# -DLIBICAL_STATIC=[true|false]
+#  Build static versions of the libraries.
 #  Not available for GObject Introspection and Vala "vapi"
-#  Default=false (build shared and static libs)
+#  Default=false (build shared libraries)
 #
-# -DSHARED_ONLY=[true|false]
-#  Set to build shared (dynamic) libraries only.
-#  Default=false (build shared and static libs)
-#  Takes precedence over STATIC_ONLY
-#
-# -DENABLE_LTO_BUILD=[true|false]
-#  Build a link-time optimized version (requires gcc or clang)
-#  Default=false (do not build a link time optimized version)
-#
-# -DGOBJECT_INTROSPECTION=[true|false]
+# -DLIBICAL_GOBJECT_INTROSPECTION=[true|false]
 #  Set to build GObject introspection "typelib" files
 #  Requires GObject Introspection development package (version MIN_GOBJECT_INTROSPECTION)
 #  Default=false (do not generate the introspection files)
 #
-# -DICAL_BUILD_DOCS=[true|false]
+# -DLIBICAL_BUILD_DOCS=[true|false]
 #  Configure for the API documentation and User Manual.  The 'docs' target will not be available.
 #  Default=true
 #
-# -DICAL_GLIB_VAPI=[true|false]
+# -DLIBICAL_GLIB_VAPI=[true|false]
 #  Set to build Vala "vapi" files
 #  Requires Vala package
 #  Default=false (build the libical-glib interface)
 #
-# -DICAL_GLIB=[true|false]
+# -DLIBICAL_GLIB=[true|false]
 #  Set to build libical-glib (GObject) interface
 #  Requires glib 2.0 development package (version MIN_GLIB).
 #  Requires libxml2.0 development package (version MIN_LIBXML).
 #  Default=true (build the libical-glib interface)
 #
-# -DICAL_GLIB_BUILD_DOCS=[true|false]
+# -DLIBICAL_GLIB_BUILD_DOCS=[true|false]
 #  Set to build libical-glib developer documentation
-#  Requires gi-docgen, GOBJECT_INTROSPECTION and ICAL_BUILD_DOCS options to be true.
+#  Requires gi-docgen, LIBICAL_GOBJECT_INTROSPECTION and LIBICAL_BUILD_DOCS options to be true.
 #  Default=true (build libical-glib developer documentation)
 #
-# -DUSE_32BIT_TIME_T=[true|false]
+# -DLIBICAL_GLIB_CHECK_API_FILES=[true|false]
+#  Set to check whether API files for the libical-glib contain all symbols exported
+#  in the corresponding header files; requires ICAL_GLIB to be set to True
+#  Default=false (always true if LIBICAL_DEVMODE is on)
+#
+# -DLIBICAL_ENABLE_MSVC_32BIT_TIME_T=[true|false]
 #  Set to build using a 32bit time_t (ignored unless building with MSVC on Windows)
 #  Default=false (use the default size of time_t)
 #
@@ -129,9 +118,9 @@
 #  Build with the undefined sanitizer (requires gcc or clang)
 #  Default=false
 #
-# -DLIBICAL_SYNCMODE_THREADLOCAL=[true|false]
-#  Experimental: If set to true, global variables are marked as thread-local. This allows accessing
-#  libical from multiple threads without the need for synchronization. However, any global settings
+# -DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=[true|false]
+#  If set to true, global variables are marked as thread-local. This allows accessing libical
+#  from multiple threads without the need for synchronization. However, any global settings
 #  must be applied per thread. Note that in this mode, any global variables and cached data are
 #  allocated per thread, including the cache for the built-in timezone data. This can lead to a
 #  significant overhead in memory usage and initialization time. It's therefore recommended to limit
@@ -142,18 +131,14 @@
 #  Default: false.
 
 cmake_minimum_required(VERSION 3.20.0)
-project(libical C) #CXX is optional for the bindings
-
-cmake_policy(SET CMP0003 NEW)
-if(POLICY CMP0042)
-  cmake_policy(SET CMP0042 NEW)
-endif()
-if(POLICY CMP0054)
-  cmake_policy(SET CMP0054 NEW)
-endif()
-if(POLICY CMP0074)
-  cmake_policy(SET CMP0074 NEW) #don't warn about ICU_ROOT envvar
-endif()
+project(
+  libical
+  VERSION 3.99.99
+  DESCRIPTION "An implementation of basic iCAL protocols"
+  HOMEPAGE_URL "https://libical.github.io/libical/"
+  LANGUAGES
+    C #CXX is optional for the bindings
+)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
@@ -161,20 +146,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 include(LibIcalMacrosInternal)
 include(FeatureSummary)
 
-# Exit for blacklisted compilers that don't support necessary C standards
-#  MSVC++ < 2013 aka 1800
-set(BAD_C_MESSAGE "")
-if(MSVC)
-  if(MSVC_VERSION LESS 1800)
-    set(BAD_C_MESSAGE "MSVC 2013 or higher")
-  endif()
-endif()
-if(BAD_C_MESSAGE)
-  message(
-    FATAL_ERROR
-    "\nSorry, ${BAD_C_MESSAGE} is required to build this software. "
-    "Please retry using a modern C compiler that supports the C99 standard."
-  )
+if(NOT PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
+  # Git auto-ignore out-of-source build directory
+  file(GENERATE OUTPUT .gitignore CONTENT "*")
 endif()
 
 # Enable the test harness
@@ -195,20 +169,25 @@ if(WINCE)
   )
 endif()
 
-set(LIBICAL_LIB_MAJOR_VERSION "3")
-set(LIBICAL_LIB_MINOR_VERSION "99")
-set(LIBICAL_LIB_PATCH_VERSION "99")
-set(LIBICAL_LIB_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.${LIBICAL_LIB_MINOR_VERSION}.${LIBICAL_LIB_PATCH_VERSION}")
-set(LIBICAL_LIB_SOVERSION_STRING "4.0")
+set(LIBICAL_LIB_MAJOR_SOVERSION "4")
+set(LIBICAL_LIB_SOVERSION_STRING "${LIBICAL_LIB_MAJOR_SOVERSION}.0")
 
 set(PROJECT_VERSION "4.0")
-set(PROJECT_URL "https://libical.github.io/libical/")
 
 # library build types
 set(LIBRARY_TYPE SHARED)
 
+# Print message and error exit for these options that are no longer supported
+libical_removed_option(SHARED_ONLY)
+libical_removed_option(ICAL_ALLOW_EMPTY_PROPERTIES)
+libical_removed_option(ICAL_ERRORS_ARE_FATAL)
 ########################################################
+
 libical_option(LIBICAL_DEVMODE "Developer mode" False)
+if(LIBICAL_DEVMODE)
+  # generate compile_commands.json
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+endif()
 # Set a default build type if none was specified
 set(default_build_type "Release")
 if(EXISTS "${CMAKE_SOURCE_DIR}/.git" OR LIBICAL_DEVMODE)
@@ -229,49 +208,26 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
         "RelWithDebInfo"
   )
 endif()
-
-option(WITH_CXX_BINDINGS "Build the C++ bindings." True)
-if(WITH_CXX_BINDINGS)
-  enable_language(CXX)
-  set(CMAKE_CXX_STANDARD 11)
-  set(CMAKE_CXX_STANDARD_REQUIRED ON)
-  if(CMAKE_CXX_COMPILER)
-    add_definitions(-DWITH_CXX_BINDINGS)
-  else()
-    message(
-      NOTICE
-      "Building the C++ bindings is not possible since a C++ compiler could not be found. "
-      "Turning-off C++ bindings."
-    )
-    set(WITH_CXX_BINDINGS False)
-  endif()
-endif()
-add_feature_info(
-  "Option WITH_CXX_BINDINGS"
-  WITH_CXX_BINDINGS
-  "build the C++ bindings. Requires a C++ compiler"
-)
-
-libical_option(STATIC_ONLY "Build static libraries only." False)
-if(STATIC_ONLY)
-  set(LIBRARY_TYPE STATIC)
-endif()
-
-libical_option(SHARED_ONLY "Build shared (dynamic) libraries only. Takes precedence over STATIC_ONLY." False)
-if(SHARED_ONLY)
-  set(STATIC_ONLY False)
-  set(LIBRARY_TYPE SHARED)
-endif()
-
-if(NOT STATIC_ONLY AND NOT SHARED_ONLY)
-  add_feature_info(
-    "Build types"
-    TRUE
-    "build both shared and static libraries"
+string(TOUPPER "${CMAKE_BUILD_TYPE}" UPPERCASE_CMAKE_BUILD_TYPE)
+if(UPPERCASE_CMAKE_BUILD_TYPE MATCHES "^REL" AND LIBICAL_DEVMODE)
+  message(
+    FATAL_ERROR
+    "Cannot combine LIBICAL_DEVMODE with release builds. Either build in debug mode or disable LIBICAL_DEVMODE."
   )
 endif()
 
-if(STATIC_ONLY)
+libical_deprecated_option(STATIC_ONLY LIBICAL_STATIC "Build static versions of the libraries." False)
+if(LIBICAL_STATIC)
+  set(LIBRARY_TYPE STATIC)
+endif()
+
+add_feature_info(
+  "Build type"
+  ${LIBICAL_STATIC}
+  "build static libraries"
+)
+
+if(LIBICAL_STATIC)
   add_definitions(
     -DLIBICAL_ICAL_STATIC_DEFINE
     -DLIBICAL_ICALSS_STATIC_DEFINE
@@ -279,6 +235,75 @@ if(STATIC_ONLY)
     -DLIBICAL_VCARD_STATIC_DEFINE
   )
 endif()
+
+libical_deprecated_option(WITH_CXX_BINDINGS LIBICAL_CXX_BINDINGS "Build the C++ bindings." True)
+if(LIBICAL_CXX_BINDINGS)
+  enable_language(CXX)
+  set(CMAKE_CXX_STANDARD 11)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+  if(CMAKE_CXX_COMPILER)
+    add_definitions(-DLIBICAL_CXX_BINDINGS)
+  else()
+    message(
+      NOTICE
+      "Building the C++ bindings is not possible since a C++ compiler could not be found. "
+      "Turning-off C++ bindings."
+    )
+    set(LIBICAL_CXX_BINDINGS False)
+  endif()
+endif()
+add_feature_info(
+  "Option LIBICAL_CXX_BINDINGS"
+  LIBICAL_CXX_BINDINGS
+  "build the C++ bindings. Requires a C++ compiler"
+)
+
+libical_option(LIBICAL_JAVA_BINDINGS "Build the Java bindings. Requires java compiler" True)
+if(LIBICAL_JAVA_BINDINGS)
+  enable_language(Java)
+  if(NOT CMAKE_CXX_COMPILER)
+    message(
+      FATAL_ERROR
+      "Building the Java bindings is not possible since a C++ compiler could not be found. "
+      "Please install a C++ compiler and try again. "
+      "Otherwise, disable Java binding generation using the -DLIBICAL_JAVA_BINDINGS=False CMake option."
+    )
+  endif()
+  find_package(Java)
+  find_package(JNI)
+  if(NOT JNI_FOUND)
+    message(
+      FATAL_ERROR
+      "Building the Java bindings is not possible since the JNI headers could not be found. "
+      "You might try setting the JAVA_HOME environment variable to help CMake locate java. "
+      "Otherwise, disable Java binding generation using the -DLIBICAL_JAVA_BINDINGS=False CMake option."
+    )
+  endif()
+  if(NOT Java_FOUND)
+    message(
+      FATAL_ERROR
+      "Building the Java bindings is not possible since a java compiler could not be found. "
+      "You might try setting the JAVA_HOME environment variable to help CMake locate java. "
+      "Otherwise, disable Java binding generation using the -DLIBICAL_JAVA_BINDINGS=False CMake option."
+    )
+    set(LIBICAL_JAVA_BINDINGS False)
+  endif()
+  if(LIBICAL_STATIC)
+    message(
+      FATAL_ERROR
+      "You are attempting to build with Java bindings enabled, "
+      "however that option is not supported when building static libraries. "
+      "Please disable the static build option to cmake (-DLIBICAL_STATIC=False) "
+      "if you really want to build with Java bindings. Alternatively, you can disable "
+      "the Java bindings (by passing -DLIBICAL_JAVA_BINDINGS=False to cmake)."
+    )
+  endif()
+endif()
+add_feature_info(
+  "Option LIBICAL_JAVA_BINDINGS"
+  LIBICAL_JAVA_BINDINGS
+  "build the Java bindings. Requires a java compiler"
+)
 
 # must have Perl to create the derived stuff
 find_package(Perl REQUIRED)
@@ -314,8 +339,8 @@ endif()
 find_package(
   ICU
   COMPONENTS
-    uc
     i18n
+    uc
     data
 )
 set_package_properties(
@@ -400,8 +425,17 @@ if(WIN32)
       -D_CRT_NONSTDC_NO_DEPRECATE
       -DYY_NO_UNISTD_H
     )
-    libical_option(USE_32BIT_TIME_T "Build using a 32bit time_t (ignored unless building with MSVC on Windows)." False)
-    if(USE_32BIT_TIME_T)
+    # From https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/time-time32-time64?view=msvc-170
+    # If you need to force the compiler to interpret time_t as the old 32-bit time_t, you can define _USE_32BIT_TIME_T.
+    # We don't recommend _USE_32BIT_TIME_T, because your application may fail after January 18, 2038;
+    # the use of this macro isn't allowed on 64-bit platforms.
+    libical_deprecated_option(
+      USE_32BIT_TIME_T
+      LIBICAL_ENABLE_MSVC_32BIT_TIME_T
+      "Build using the MSVC 32bit time_t (ignored unless building with MSVC on Windows)."
+      False
+    )
+    if(LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
       add_definitions(-D_USE_32BIT_TIME_T)
     endif()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3")
@@ -470,38 +504,21 @@ else()
   set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 endif()
 
-libical_option(ICAL_ERRORS_ARE_FATAL "icalerror_* calls will abort instead of internally signaling an error." False)
-if(ICAL_ERRORS_ARE_FATAL)
-  set(ICAL_ERRORS_ARE_FATAL 1)
-else()
-  set(ICAL_ERRORS_ARE_FATAL 0)
-endif()
-
-libical_option(
-  ICAL_ALLOW_EMPTY_PROPERTIES
-  "Prevents empty properties from being replaced with X-LIC-ERROR properties."
-  False
-)
-if(ICAL_ALLOW_EMPTY_PROPERTIES)
-  set(ICAL_ALLOW_EMPTY_PROPERTIES 1)
-else()
-  set(ICAL_ALLOW_EMPTY_PROPERTIES 0)
-endif()
-
 if(WIN32 OR WINCE)
   set(DEF_USE_BUILTIN_TZDATA True)
 else()
   set(DEF_USE_BUILTIN_TZDATA False)
 endif()
-libical_option(
+libical_deprecated_option(
   USE_BUILTIN_TZDATA
+  LIBICAL_ENABLE_BUILTIN_TZDATA
   "(Careful) Build using libical's built-in timezone data, else use the system timezone data on non-Windows systems. \
   ALWAYS true on Windows. Non-Windows users should know what they're doing if they choose not to use system provided \
   timezone data. The libical project does not guarantee that the built-in timezone data is up-to-date."
   ${DEF_USE_BUILTIN_TZDATA}
 )
-mark_as_advanced(USE_BUILTIN_TZDATA)
-if(USE_BUILTIN_TZDATA)
+mark_as_advanced(LIBICAL_ENABLE_BUILTIN_TZDATA)
+if(LIBICAL_ENABLE_BUILTIN_TZDATA)
   set(USE_BUILTIN_TZDATA 1)
 else()
   set(USE_BUILTIN_TZDATA 0)
@@ -541,19 +558,21 @@ set(
 find_package(PkgConfig QUIET)
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
-libical_option(
+# LIBICAL_GOBJECT_INTROSPECTION might be disabled later by some devmode options
+libical_deprecated_option(
   GOBJECT_INTROSPECTION
+  LIBICAL_GOBJECT_INTROSPECTION
   "Build GObject introspection \"typelib\" files. \
   Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher."
   True
 )
-if(GOBJECT_INTROSPECTION)
+if(LIBICAL_GOBJECT_INTROSPECTION)
   if(NOT PKG_CONFIG_FOUND)
     message(
       FATAL_ERROR
       "You are attempting to build with GObject Introspection enabled, however that option is "
       "not supported unless pkg-config can be found.  Please install pkg-config and try again. "
-      "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake."
+      "You can disable GObject Introspection by passing -DLIBICAL_GOBJECT_INTROSPECTION=False to cmake."
     )
   endif()
 
@@ -569,14 +588,14 @@ if(GOBJECT_INTROSPECTION)
         "Needed in order to build the GObject introspection \"typelib\" files."
   )
   if(GObjectIntrospection_FOUND)
-    if(STATIC_ONLY)
+    if(LIBICAL_STATIC)
       message(
         FATAL_ERROR
         "You are attempting to build with GObject Introspection enabled, "
-        "however that option is not supported when building static libraries only. "
-        "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
+        "however that option is not supported when building static libraries. "
+        "Please disable the static build option to cmake (-DLIBICAL_STATIC=False) "
         "if you really want to build with GObject Introspection. Alternatively, "
-        "you can disable GObject Introspection (by passing -DGOBJECT_INTROSPECTION=False to cmake)."
+        "you can disable GObject Introspection (by passing -DLIBICAL_GOBJECT_INTROSPECTION=False to cmake)."
       )
     endif()
   else()
@@ -584,28 +603,29 @@ if(GOBJECT_INTROSPECTION)
       FATAL_ERROR
       "You requested to build with GObject introspection, but the necessary development package "
       "is missing or too low a version (GObjectIntrospection ${MIN_GOBJECT_INTROSPECTION} or higher is required). "
-      "You can disable GObject Introspection by passing -DGOBJECT_INTROSPECTION=False to cmake."
+      "You can disable GObject Introspection by passing -DLIBICAL_GOBJECT_INTROSPECTION=False to cmake."
     )
   endif()
 endif()
 
-libical_option(ICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
-if(ICAL_GLIB_VAPI)
-  if(STATIC_ONLY)
+# LIBICAL_GLIB_VAPI might be disabled later by some devmode options
+libical_deprecated_option(ICAL_GLIB_VAPI LIBICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
+if(LIBICAL_GLIB_VAPI)
+  if(LIBICAL_STATIC)
     message(
       FATAL_ERROR
       "You are attempting to build the Vala api, however that option is not supported "
-      "when building static libraries only. "
-      "Please disable the static only option (-DSTATIC_ONLY=False) "
+      "when building static libraries. "
+      "Please disable the static build option (-DLIBICAL_STATIC=False) "
       "if you really want to build the Vala api. Alternatively, "
-      "you can disable this feature (by passing -DICAL_GLIB_VAPI=False to cmake)."
+      "you can disable this feature (by passing -DLIBICAL_GLIB_VAPI=False to cmake)."
     )
   endif()
-  if(NOT GOBJECT_INTROSPECTION)
+  if(NOT LIBICAL_GOBJECT_INTROSPECTION)
     message(
       FATAL_ERROR
       "You requested to build the Vala vapi but have not enabled the GObject Introspection. "
-      "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake."
+      "Please try again also passing -DLIBICAL_GOBJECT_INTROSPECTION=True to cmake."
     )
   endif()
 
@@ -614,7 +634,7 @@ if(ICAL_GLIB_VAPI)
     message(
       FATAL_ERROR
       "valac, the Vala compiler was not found. "
-      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False."
+      "Install it or disable Vala bindings with -DLIBICAL_GLIB_VAPI=False."
     )
   endif()
 
@@ -623,26 +643,27 @@ if(ICAL_GLIB_VAPI)
     message(
       FATAL_ERROR
       "vapigen, the tool for generating the Vala API was not found. "
-      "Install it or disable Vala bindings with -DICAL_GLIB_VAPI=False."
+      "Install it or disable Vala bindings with -DLIBICAL_GLIB_VAPI=False."
     )
   endif()
 endif()
 
 set(MIN_GLIB "2.44")
 set(MIN_LIBXML "2.7.3")
-libical_option(
+libical_deprecated_option(
   ICAL_GLIB
+  LIBICAL_GLIB
   "Build libical-glib interface. \
   Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher."
   True
 )
-if(ICAL_GLIB)
+if(LIBICAL_GLIB)
   if(NOT PKG_CONFIG_FOUND)
     message(
       FATAL_ERROR
       "You requested to build libical-glib, however that option is not supported "
       "unless pkg-config can be found. Please install pkg-config and try again. "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
     )
   endif()
 
@@ -675,14 +696,14 @@ if(ICAL_GLIB)
       FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
       "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
     )
   elseif(LIBXML_FOUND)
     message(
       FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
       "is missing or too low a version (glib ${MIN_GLIB} or higher is required. "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
     )
   else()
     message(
@@ -690,10 +711,17 @@ if(ICAL_GLIB)
       "You requested to build libical-glib, but the necessary development packages "
       "are missing or too low a version "
       "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required). "
-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
     )
   endif()
 endif()
+libical_option(LIBICAL_GLIB_CHECK_API_FILES "Check libical-glib API files for completeness." False)
+# Always check the API files in developer-mode (when libical-glib is enabled)
+if(LIBICAL_DEVMODE)
+  set(LIBICAL_GLIB_CHECK_API_FILES True)
+endif()
+# LIBICAL_GLIB_BUILD_DOCS might be disabled later by some devmode options
+libical_deprecated_option(ICAL_GLIB_BUILD_DOCS LIBICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
 
 #
 # Compiler settings
@@ -713,7 +741,7 @@ if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     "${CMAKE_C_FLAGS} \
       -O2 \
       -fvisibility=hidden \
-      -Wno-deprecated -Wall -Wno-unknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
+      -Wno-deprecated -Wall -Wunknown-pragmas -Wextra -Winit-self -Wunused -Wno-div-by-zero \
       -Wundef -Wpointer-arith -Wtype-limits -Wwrite-strings -Wreturn-type \
       -Wold-style-definition -Wstrict-prototypes"
   )
@@ -774,7 +802,7 @@ endif()
 
 #some test programs need to know if we are using 32-bit time
 if(SIZEOF_TIME_T EQUAL 4)
-  set(USE_32BIT_TIME_T TRUE)
+  set(LIBICAL_ENABLE_MSVC_32BIT_TIME_T TRUE)
 endif()
 
 ################ Developer Options #####################
@@ -806,10 +834,10 @@ mark_as_advanced(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
 if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
-    if(WITH_CXX_BINDINGS)
+    if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
     endif()
-    set(SHARED_ONLY True)
+    set(LIBRARY_TYPE SHARED)
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -820,19 +848,19 @@ mark_as_advanced(LIBICAL_DEVMODE_LEAK_SANITIZER)
 if(LIBICAL_DEVMODE_LEAK_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
-    if(WITH_CXX_BINDINGS)
+    if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
     endif()
-    set(SHARED_ONLY True)
+    set(LIBRARY_TYPE SHARED)
     message(
       NOTICE
       "Currently unable to build leak sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
-    set(ICAL_GLIB False)
-    set(GOBJECT_INTROSPECTION False)
-    set(ICAL_GLIB_BUILD_DOCS False)
-    set(ICAL_GLIB_VAPI False)
+    set(LIBICAL_GLIB False)
+    set(LIBICAL_GOBJECT_INTROSPECTION False)
+    set(LIBICAL_GLIB_BUILD_DOCS False)
+    set(LIBICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the leak sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -846,23 +874,23 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
       CMAKE_C_FLAGS
       "${CMAKE_C_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
     )
-    if(WITH_CXX_BINDINGS)
+    if(LIBICAL_CXX_BINDINGS)
       set(
         CMAKE_CXX_FLAGS
         "${CMAKE_CXX_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
       )
     endif()
-    set(SHARED_ONLY True)
+    set(LIBRARY_TYPE SHARED)
     #currently unavailable for glib-based code
     message(
       NOTICE
       "Currently unable to build memory sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
-    set(ICAL_GLIB False)
-    set(GOBJECT_INTROSPECTION False)
-    set(ICAL_GLIB_BUILD_DOCS False)
-    set(ICAL_GLIB_VAPI False)
+    set(LIBICAL_GLIB False)
+    set(LIBICAL_GOBJECT_INTROSPECTION False)
+    set(LIBICAL_GLIB_BUILD_DOCS False)
+    set(LIBICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the memory sanitizer using a non-Clang compiler.")
   endif()
@@ -878,19 +906,19 @@ mark_as_advanced(LIBICAL_DEVMODE_THREAD_SANITIZER)
 if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
-    if(WITH_CXX_BINDINGS)
+    if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     endif()
-    set(SHARED_ONLY True)
+    set(LIBRARY_TYPE SHARED)
     message(
       NOTICE
       "Currently unable to build thread sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
-    set(ICAL_GLIB False)
-    set(GOBJECT_INTROSPECTION False)
-    set(ICAL_GLIB_BUILD_DOCS False)
-    set(ICAL_GLIB_VAPI False)
+    set(LIBICAL_GLIB False)
+    set(LIBICAL_GOBJECT_INTROSPECTION False)
+    set(LIBICAL_GLIB_BUILD_DOCS False)
+    set(LIBICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the thread sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -906,41 +934,33 @@ mark_as_advanced(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
 if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
-    if(WITH_CXX_BINDINGS)
+    if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
     endif()
-    set(SHARED_ONLY True)
+    set(LIBRARY_TYPE SHARED)
   else()
     message(FATAL_ERROR "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
   endif()
 endif()
 
-mark_as_advanced(LIBICAL_SYNCMODE_THREADLOCAL)
-libical_option(LIBICAL_SYNCMODE_THREADLOCAL "Experimental: Mark global variables as thread-local." False)
+mark_as_advanced(LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL)
+libical_deprecated_option(
+  LIBICAL_SYNCMODE_THREADLOCAL
+  LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL
+  "Mark global variables as thread-local."
+  False
+)
 
-libical_option(ENABLE_LTO_BUILD "Build a link-time optimized version." False)
-if(ENABLE_LTO_BUILD)
-  if(CMAKE_C_COMPILER_IS_GCC)
-    libical_add_cflag(-flto LTO)
-    if(C_SUPPORTS_LTO)
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wlto-type-mismatch -fuse-linker-plugin")
-      set(CMAKE_AR "gcc-ar")
-      set(CMAKE_RANLIB "gcc-ranlib")
-    else()
-      message(FATAL_ERROR "Your C compiler ${CMAKE_C_COMPILER_ID} does not support the LTO building.")
-    endif()
-    if(WITH_CXX_BINDINGS AND CMAKE_CXX_COMPILER_IS_GCC)
-      include(CheckCXXCompilerFlag)
-      libical_add_cxxflag(-flto LTO)
-      if(CXX_SUPPORTS_LTO)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wlto-type-mismatch -fuse-linker-plugin")
-      else()
-        message(FATAL_ERROR "Your C++ compiler ${CMAKE_CXX_COMPILER_ID} does not support LTO building.")
-      endif()
-    endif()
-  else()
-    message(FATAL_ERROR "Build link-time optimization using a non-GCC compiler is currently not supported.")
-  endif()
+libical_deprecated_option(
+  ENABLE_LTO_BUILD
+  CMAKE_INTERPROCEDURAL_OPTIMIZATION
+  "Build a link-time optimized version."
+  False
+)
+if(CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+  include(CheckIPOSupported)
+  # A fatal error is issued if IPO not supported by the compiler
+  check_ipo_supported()
 endif()
 
 libical_option(LIBICAL_BUILD_TESTING "Build tests." False)
@@ -950,11 +970,37 @@ if(LIBICAL_DEVMODE)
 endif()
 libical_option(LIBICAL_BUILD_EXAMPLES "Build examples." True)
 
+########### Configure pkg-config variables #########
+
+set(VERSION "${CMAKE_PROJECT_VERSION}")
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(exec_prefix "\${prefix}")
+if(IS_ABSOLUTE ${LIB_INSTALL_DIR})
+  set(libdir "${LIB_INSTALL_DIR}")
+else()
+  set(libdir "\${prefix}/${LIB_INSTALL_DIR}")
+endif()
+if(IS_ABSOLUTE ${INCLUDE_INSTALL_DIR})
+  set(includedir "${INCLUDE_INSTALL_DIR}")
+else()
+  set(includedir "\${prefix}/include")
+endif()
+if(CMAKE_THREAD_LIBS_INIT)
+  set(PTHREAD_LIBS_PRIVATE "\nLibs.private: ${CMAKE_THREAD_LIBS_INIT}")
+else()
+  set(PTHREAD_LIBS_PRIVATE "")
+endif()
+if(ICU_FOUND)
+  set(REQUIRES_PRIVATE_ICU "\nRequires.private: icu-i18n")
+else()
+  set(REQUIRES_PRIVATE_ICU "")
+endif()
+
 ################# build subdirs ########################
 
 if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   include(openssf-c) #hardening
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     include(openssf-cpp) #hardening
   endif()
 endif()
@@ -966,75 +1012,45 @@ if(LIBICAL_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 if(USE_BUILTIN_TZDATA)
-  # use our zoneinfo if cmake is passed -DUSE_BUILTIN_TZDATA
+  # use our zoneinfo if cmake is passed -DLIBICAL_ENABLE_BUILTIN_TZDATA
   add_subdirectory(zoneinfo)
 endif()
 
-libical_option(ICAL_BUILD_DOCS "Build documentation" True)
-if(ICAL_BUILD_DOCS)
-  libical_option(ICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
-  if(ICAL_GLIB_BUILD_DOCS)
-    if(STATIC_ONLY)
+libical_deprecated_option(ICAL_BUILD_DOCS LIBICAL_BUILD_DOCS "Build documentation" True)
+if(LIBICAL_BUILD_DOCS)
+  if(LIBICAL_GLIB_BUILD_DOCS)
+    if(LIBICAL_STATIC)
       message(
         FATAL_ERROR
         "You are attempting to build the glib docs, "
-        "however that option is not supported when building static libraries only. "
-        "Please disable the static only option to cmake (-DSTATIC_ONLY=False) "
+        "however that option is not supported when building static libraries. "
+        "Please disable the static build option to cmake (-DLIBICAL_STATIC_ONLY=False) "
         "if you really want to build with the glib documentation. Alternatively, "
-        "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
+        "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
-    if(NOT ICAL_GLIB)
+    if(NOT LIBICAL_GLIB)
       message(
         FATAL_ERROR
         "You requested to build the libical-glib documentation but have not enabled libical-glib itself. "
-        "Please try again also passing -DICAL_GLIB=True to cmake. Alternatively, "
-        "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
+        "Please try again also passing -DLIBICAL_GLIB=True to cmake. Alternatively, "
+        "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
-    if(NOT GOBJECT_INTROSPECTION)
+    if(NOT LIBICAL_GOBJECT_INTROSPECTION)
       message(
         FATAL_ERROR
         "You requested to build the libical-glib documentation but have not enabled the GObject Introspection. "
-        "Please try again also passing -DGOBJECT_INTROSPECTION=True to cmake. Alternatively, "
-        "you can disable the glib documentation(by passing -DICAL_GLIB_BUILD_DOCS=False to cmake)."
+        "Please try again also passing -DLIBICAL_GOBJECT_INTROSPECTION=True to cmake. Alternatively, "
+        "you can disable the glib documentation(by passing -DLIBICAL_GLIB_BUILD_DOCS=False to cmake)."
       )
     endif()
     include(GIDocgen)
   endif()
   add_subdirectory(docs) # needs to go last, for the build source files
 else()
-  set(ICAL_GLIB_BUILD_DOCS)
+  set(LIBICAL_GLIB_BUILD_DOCS)
 endif()
-
-########### create and install pkg-config file #########
-
-set(VERSION "${LIBICAL_LIB_VERSION_STRING}")
-set(prefix "${CMAKE_INSTALL_PREFIX}")
-set(exec_prefix "\${prefix}")
-if(IS_ABSOLUTE ${LIB_INSTALL_DIR})
-  set(libdir "${LIB_INSTALL_DIR}")
-else()
-  set(libdir "\${exec_prefix}/${LIB_INSTALL_DIR}")
-endif()
-if(IS_ABSOLUTE ${INCLUDE_INSTALL_DIR})
-  set(includedir "${INCLUDE_INSTALL_DIR}")
-else()
-  set(includedir "\${prefix}/include")
-endif()
-if(DEFINED CMAKE_THREAD_LIBS_INIT)
-  set(PTHREAD_LIBS "${CMAKE_THREAD_LIBS_INIT}")
-else()
-  set(PTHREAD_LIBS "")
-endif()
-if(ICU_FOUND)
-  set(REQUIRES_PRIVATE_ICU "Requires.private: icu-i18n") #for libical.pc
-else()
-  set(REQUIRES_PRIVATE_ICU "")
-endif()
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 ########### Create and install the CMake Config files ##########
 include(CMakePackageConfigHelpers)
@@ -1051,7 +1067,7 @@ configure_package_config_file(
 # Create a version file
 write_basic_package_version_file(
   ${libical_BINARY_DIR}/LibIcalConfigVersion.cmake
-  VERSION ${LIBICAL_LIB_VERSION_STRING}
+  VERSION ${CMAKE_PROJECT_VERSION}
   COMPATIBILITY SameMajorVersion
 )
 
@@ -1063,6 +1079,14 @@ install(
 )
 
 install(EXPORT icalTargets DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal FILE LibIcalTargets.cmake)
+
+add_custom_target(
+  build-book
+  COMMAND
+    mdbook build --dest-dir ${CMAKE_CURRENT_BINARY_DIR}/book
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  COMMENT "Building the libical book"
+)
 
 ########## By popular demand, add an uninstall target ##########
 

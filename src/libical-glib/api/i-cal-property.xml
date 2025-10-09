@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,235 +7,350 @@
 
 -->
 <structure namespace="ICal" name="Property" native="icalproperty" destroy_func="icalproperty_free">
-    <method name="i_cal_property_new" corresponds="icalproperty_new" kind="constructor" since="1.0">
-        <parameter type="ICalPropertyKind" name="kind" comment="The kind of #ICalProperty to be created"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty with the type @kind."/>
-        <comment xml:space="preserve">Creates a #ICalProperty of the target type.</comment>
-    </method>
-    <method name="i_cal_property_clone" corresponds="icalproperty_clone" kind="clone" since="4.0">
-        <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be cloned."/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty deeply cloned from @prop."/>
-        <comment xml:space="preserve">Deeply clone a #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_new_from_string" corresponds="icalproperty_new_from_string" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="str" comment="The string used to construct a #ICalProperty"/>
-        <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty from @str."/>
-        <comment xml:space="preserve">Creates a #ICalProperty from a string.</comment>
-    </method>
-    <method name="i_cal_property_as_ical_string" corresponds="icalproperty_as_ical_string_r" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be converted"/>
-        <returns type="gchar *" annotation="transfer full" comment="The string representation of @prop." translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Converts a #ICalProperty to a string representation.</comment>
-    </method>
-    <method name="i_cal_property_free" corresponds="icalproperty_free" annotation="skip" kind="destructor" since="1.0">
-        <parameter type="ICalProperty *" name="prop" annotation="transfer full" comment="The #ICalProperty to be freed"/>
-        <comment xml:space="preserve">Frees a #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_isa" corresponds="icalproperty_isa" since="1.0">
-        <parameter type="ICalProperty *" name="property" comment="The #ICalProperty which type is to be determined"/>
-        <returns type="ICalPropertyKind" comment="The type of #ICalProperty."/>
-        <comment xml:space="preserve">Gets the kind of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_isa_property" corresponds="icalproperty_isa_property" since="1.0">
-        <parameter type="ICalProperty *" name="property" comment="The object whose native part to be checked"/>
-        <returns type="gboolean" comment="true if the native part of @property is of the type icalproperty, false if not."/>
-        <comment xml:space="preserve">Checks whether the native part of #ICalProperty is of the type icalproperty.</comment>
-    </method>
-    <method name="i_cal_property_add_parameter" corresponds="icalproperty_add_parameter" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalParameter *" name="parameter" annotation="transfer none" owner_op="prop" comment="The parameter to be added into @prop"/>
-        <comment xml:space="preserve">Adds a #ICalParameter into the #ICalProperty. It behaves like set the copy of the #ICalParameter. Upon completion the native part of #ICalParameter will be set to NULL.</comment>
-    </method>
-    <method name="i_cal_property_take_parameter" corresponds="CUSTOM" annotation="skip" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalParameter *" name="parameter" annotation="transfer full" comment="The parameter to be added into @prop"/>
-        <comment xml:space="preserve">Adds the @parameter into the @prop and free the @parameter.</comment>
-        <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
+  <skip>icalproperty_new_impl</skip>
+  <skip>icalproperty_add_parameters</skip>
+  <method name="i_cal_property_new" corresponds="icalproperty_new" kind="constructor" since="1.0">
+    <parameter type="ICalPropertyKind" name="kind" comment="The kind of #ICalProperty to be created"/>
+    <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty with the type @kind."/>
+    <comment xml:space="preserve">Creates a #ICalProperty of the target type.</comment>
+  </method>
+  <method name="i_cal_property_clone" corresponds="icalproperty_clone" kind="clone" since="4.0">
+    <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be cloned."/>
+    <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty deeply cloned from @prop."/>
+    <comment xml:space="preserve">Deeply clone a #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_property_new_from_string" corresponds="icalproperty_new_from_string" kind="constructor" since="1.0">
+    <parameter type="const gchar *" name="str" comment="The string used to construct a #ICalProperty"/>
+    <returns type="ICalProperty *" annotation="transfer full" comment="The newly created #ICalProperty from @str."/>
+    <comment xml:space="preserve">Creates a #ICalProperty from a string.</comment>
+  </method>
+  <method name="i_cal_property_as_ical_string" corresponds="icalproperty_as_ical_string_r" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be converted"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of @prop." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts a #ICalProperty to a string representation.</comment>
+  </method>
+  <method name="i_cal_property_free" corresponds="icalproperty_free" annotation="skip" kind="destructor" since="1.0">
+    <parameter type="ICalProperty *" name="prop" annotation="transfer full" comment="The #ICalProperty to be freed"/>
+    <comment xml:space="preserve">Frees a #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_property_isa" corresponds="icalproperty_isa" since="1.0">
+    <parameter type="ICalProperty *" name="property" comment="The #ICalProperty which type is to be determined"/>
+    <returns type="ICalPropertyKind" comment="The type of #ICalProperty."/>
+    <comment xml:space="preserve">Gets the kind of #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_property_isa_property" corresponds="icalproperty_isa_property" since="1.0">
+    <parameter type="ICalProperty *" name="property" comment="The object whose native part to be checked"/>
+    <returns type="gboolean" comment="true if the native part of @property is of the type icalproperty, false if not."/>
+    <comment xml:space="preserve">Checks whether the native part of #ICalProperty is of the type icalproperty.</comment>
+  </method>
+  <method name="i_cal_property_add_parameter" corresponds="icalproperty_add_parameter" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
+    <parameter type="ICalParameter *" name="parameter" annotation="transfer none" owner_op="prop" comment="The parameter to be added into @prop"/>
+    <comment xml:space="preserve">Adds a #ICalParameter into the #ICalProperty. It behaves like set the copy of the #ICalParameter. Upon completion the native part of #ICalParameter will be set to NULL.</comment>
+  </method>
+  <method name="i_cal_property_take_parameter" corresponds="icalproperty_add_parameter" kind="custom" annotation="skip" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
+    <parameter type="ICalParameter *" name="parameter" annotation="transfer full" comment="The parameter to be added into @prop"/>
+    <comment xml:space="preserve">Adds the @parameter into the @prop and free the @parameter.</comment>
+    <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
     g_return_if_fail(I_CAL_IS_PARAMETER(parameter));
 
     i_cal_property_add_parameter(prop, parameter);
     g_object_unref(parameter);</custom>
-    </method>
-    <method name="i_cal_property_set_parameter" corresponds="icalproperty_set_parameter" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="ICalParameter *" name="parameter" annotation="transfer none" owner_op="prop" comment="The parameter to be set into @prop"/>
-        <comment xml:space="preserve">Sets a #ICalParameter into the #ICalProperty. It behaves like set the copy of the #ICalParameter. Upon completion the native part of #ICalParameter will be set to NULL.</comment>
-    </method>
-    <method name="i_cal_property_set_parameter_from_string" corresponds="icalproperty_set_parameter_from_string" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="name" comment="The name of the parameter"/>
-        <parameter type="const gchar *" name="value" comment="The value of the parameter"/>
-        <comment xml:space="preserve">Sets the #ICalProperty with the parameter defined by the name and value.</comment>
-    </method>
-    <method name="i_cal_property_get_parameter_as_string" corresponds="icalproperty_get_parameter_as_string_r" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <parameter type="const gchar *" name="name" comment="The name of the target parameter"/>
-        <returns type="gchar *" annotation="transfer full" comment="The string representation of the parameter." translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Gets the string representation of the target parameter in the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_remove_parameter_by_kind" corresponds="icalproperty_remove_parameter_by_kind" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated"/>
-        <parameter type="ICalParameterKind" name="kind" comment="The #ICalParameterKind to be removed"/>
-        <comment xml:space="preserve">Removes the target kind of the parameters in the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_remove_parameter_by_name" corresponds="icalproperty_remove_parameter_by_name" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated"/>
-        <parameter type="const gchar *" name="name" comment="The name of the parameter to be removed"/>
-        <comment xml:space="preserve">Removes parameter in the #ICalProperty by name.</comment>
-    </method>
-    <method name="i_cal_property_remove_parameter_by_ref" corresponds="icalproperty_remove_parameter_by_ref" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated"/>
-        <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be removed"/>
-        <comment xml:space="preserve">Removes the parameter in the #ICalProperty by ref.</comment>
-    </method>
-    <method name="i_cal_property_count_parameters" corresponds="icalproperty_count_parameters" since="1.0">
-        <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be checked"/>
-        <returns type="gint" comment="The count of the parameters in the #ICalProperty."/>
-        <comment xml:space="preserve">Counts the parameters in the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_first_parameter" corresponds="icalproperty_get_first_parameter" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <parameter type="ICalParameterKind" name="kind" comment="The target kind of #ICalParameter to be retrieved"/>
-        <returns type="ICalParameter *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The first #ICalParameter of @prop."/>
-        <comment xml:space="preserve">Gets the first #ICalParameter from the parent #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_next_parameter" corresponds="icalproperty_get_next_parameter" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <parameter type="ICalParameterKind" name="kind" comment="The target kind of #ICalParameter to be retrieved"/>
-        <returns type="ICalParameter *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The next #ICalParameter of @prop."/>
-        <comment xml:space="preserve">Gets the next #ICalParameter from the parent #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_set_value" corresponds="icalproperty_set_value" since="1.0">
-        <parameter type="ICalProperty *" name="prop" translator_argus="value" comment="The target #ICalProperty"/>
-        <parameter type="ICalValue *" name="value" owner_op="prop" comment="The #ICalValue will be set as the property of @prop"/>
-        <comment xml:space="preserve">Sets the #ICalProperty with the #ICalValue.</comment>
-    </method>
-    <method name="i_cal_property_take_value" corresponds="CUSTOM" annotation="skip" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The target #ICalProperty"/>
-        <parameter type="ICalValue *" name="value" annotation="transfer full" comment="The #ICalValue will be set as the property of @prop"/>
-        <comment xml:space="preserve">Sets the @prop with the @value and unrefs the @value.</comment>
-        <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
+  </method>
+  <method name="i_cal_property_set_parameter" corresponds="icalproperty_set_parameter" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
+    <parameter type="ICalParameter *" name="parameter" annotation="transfer none" owner_op="prop" comment="The parameter to be set into @prop"/>
+    <comment xml:space="preserve">Sets a #ICalParameter into the #ICalProperty. It behaves like set the copy of the #ICalParameter. Upon completion the native part of #ICalParameter will be set to NULL.</comment>
+  </method>
+  <method name="i_cal_property_set_parameter_from_string" corresponds="icalproperty_set_parameter_from_string" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
+    <parameter type="const gchar *" name="name" comment="The name of the parameter"/>
+    <parameter type="const gchar *" name="value" comment="The value of the parameter"/>
+    <comment xml:space="preserve">Sets the #ICalProperty with the parameter defined by the name and value.</comment>
+  </method>
+  <method name="i_cal_property_get_parameter_as_string" corresponds="icalproperty_get_parameter_as_string_r" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
+    <parameter type="const gchar *" name="name" comment="The name of the target parameter"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of the parameter." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Gets the string representation of the target parameter in the #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_property_remove_parameter_by_kind" corresponds="icalproperty_remove_parameter_by_kind" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated"/>
+    <parameter type="ICalParameterKind" name="kind" comment="The #ICalParameterKind to be removed"/>
+    <comment xml:space="preserve">Removes the target kind of the parameters in the #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_property_remove_parameter_by_name" corresponds="icalproperty_remove_parameter_by_name" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated"/>
+    <parameter type="const gchar *" name="name" comment="The name of the parameter to be removed"/>
+    <comment xml:space="preserve">Removes parameter in the #ICalProperty by name.</comment>
+  </method>
+  <method name="i_cal_property_remove_parameter_by_ref" corresponds="icalproperty_remove_parameter_by_ref" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be manipulated"/>
+    <parameter type="ICalParameter *" name="param" comment="The #ICalParameter to be removed"/>
+    <comment xml:space="preserve">Removes the parameter in the #ICalProperty by ref.</comment>
+  </method>
+  <method name="i_cal_property_count_parameters" corresponds="icalproperty_count_parameters" since="1.0">
+    <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be checked"/>
+    <returns type="gint" comment="The count of the parameters in the #ICalProperty."/>
+    <comment xml:space="preserve">Counts the parameters in the #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_property_get_first_parameter" corresponds="icalproperty_get_first_parameter" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
+    <parameter type="ICalParameterKind" name="kind" comment="The target kind of #ICalParameter to be retrieved"/>
+    <returns type="ICalParameter *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The first #ICalParameter of @prop."/>
+    <comment xml:space="preserve">Gets the first #ICalParameter from the parent #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_property_get_next_parameter" corresponds="icalproperty_get_next_parameter" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
+    <parameter type="ICalParameterKind" name="kind" comment="The target kind of #ICalParameter to be retrieved"/>
+    <returns type="ICalParameter *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The next #ICalParameter of @prop."/>
+    <comment xml:space="preserve">Gets the next #ICalParameter from the parent #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_property_set_value" corresponds="icalproperty_set_value" since="1.0">
+    <parameter type="ICalProperty *" name="prop" translator_argus="value" comment="The target #ICalProperty"/>
+    <parameter type="ICalValue *" name="value" owner_op="prop" comment="The #ICalValue will be set as the property of @prop"/>
+    <comment xml:space="preserve">Sets the #ICalProperty with the #ICalValue.</comment>
+  </method>
+  <method name="i_cal_property_take_value" corresponds="icalproperty_set_value" kind="custom" annotation="skip" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The target #ICalProperty"/>
+    <parameter type="ICalValue *" name="value" annotation="transfer full" comment="The #ICalValue will be set as the property of @prop"/>
+    <comment xml:space="preserve">Sets the @prop with the @value and unrefs the @value.</comment>
+    <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
     g_return_if_fail(I_CAL_IS_VALUE(value));
 
     i_cal_property_set_value(prop, value);
     g_object_unref(value);</custom>
-    </method>
-    <method name="i_cal_property_set_value_from_string" corresponds="icalproperty_set_value_from_string" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
-        <parameter type="const gchar *" name="value" comment="The value used to construct the #ICalValue"/>
-        <parameter type="const gchar *" name="kind" comment="The kind used to construct the #ICalValue"/>
-        <comment xml:space="preserve">Sets the #ICalProperty with the #ICalValue constructed from string.</comment>
-    </method>
-    <method name="i_cal_property_get_value" corresponds="icalproperty_get_value" since="1.0">
-        <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="ICalValue *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The #ICalValue of @prop."/>
-        <comment xml:space="preserve">Gets the #ICalValue of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_value_as_string" corresponds="icalproperty_get_value_as_string_r" since="1.0">
-        <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-        <returns type="gchar *" annotation="transfer full" comment="The string representation of the value of the #ICalProperty." translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Gets the string representation of the value in #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_value_set_parent" corresponds="icalvalue_set_parent" since="2.0">
-        <parameter type="ICalValue *" name="value" comment="The child #ICalValue"/>
-        <parameter type="ICalProperty *" name="property" annotation="nullable" comment="The parent #ICalProperty"/>
-        <comment xml:space="preserve">Sets the parent property of a value.</comment>
-    </method>
-    <method name="i_cal_value_get_parent" corresponds="icalvalue_get_parent" since="3.0">
-        <parameter type="ICalValue *" name="value" comment="The child #ICalValue"/>
-        <returns type="ICalProperty *" annotation="transfer full, nullable" comment="The parent #ICalProperty"/>
-        <comment xml:space="preserve">Gets the parent #ICalProperty of the specified #ICalValue.</comment>
-    </method>
-    <method name="i_cal_parameter_set_parent" corresponds="icalparameter_set_parent" since="3.0">
-        <parameter type="ICalParameter *" name="param" comment="The child #ICalParameter"/>
-        <parameter type="ICalProperty *" name="property" annotation="nullable" comment="The parent #ICalProperty"/>
-        <comment xml:space="preserve">Sets the parent #ICalProperty of an #ICalParameter.</comment>
-    </method>
-    <method name="i_cal_parameter_get_parent" corresponds="icalparameter_get_parent" since="3.0">
-        <parameter type="ICalParameter *" name="param" comment="The child #ICalParameter"/>
-        <returns type="ICalProperty *" annotation="transfer full, nullable" comment="The parent #ICalProperty"/>
-        <comment xml:space="preserve">Gets the parent #ICalProperty of the specified #ICalParameter.</comment>
-    </method>
-    <method name="i_cal_property_set_x_name" corresponds="icalproperty_set_x_name" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="A #ICalProperty"/>
-        <parameter type="const gchar *" name="name" comment="The name string"/>
-        <comment xml:space="preserve">Sets the name of x property for the #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_property_get_x_name" corresponds="icalproperty_get_x_name" since="1.0">
-        <parameter type="ICalProperty *" name="prop" comment="A #ICalProperty"/>
-        <returns type="const gchar *" annotation="nullable" comment="The name of x property."/>
-        <comment xml:space="preserve">Gets the name of x property.</comment>
-    </method>
-    <method name="i_cal_property_get_property_name" corresponds="icalproperty_get_property_name_r" since="1.0">
-        <parameter type="const ICalProperty *" name="prop" comment="A #ICalProperty"/>
-        <returns type="gchar *" annotation="transfer full" comment="Property name of #ICalProperty." translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Gets the property name of #ICalProperty.</comment>
-    </method>
-    <method name="i_cal_parameter_value_to_value_kind" corresponds="icalparameter_value_to_value_kind" since="1.0">
-        <parameter type="ICalParameterValue" name="value" comment="A #ICalParameterValue"/>
-        <returns type="ICalValueKind" comment="#ICalValueKind"/>
-        <comment xml:space="preserve">Converts the #ICalParameterValue to #ICalValueKind.</comment>
-    </method>
-    <method name="i_cal_property_kind_to_value_kind" corresponds="icalproperty_kind_to_value_kind" since="1.0">
-        <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind"/>
-        <returns type="ICalValueKind" comment="The #ICalValueKind"/>
-        <comment xml:space="preserve">Converts the #ICalPropertyKind to #ICalValueKind.</comment>
-    </method>
-    <method name="i_cal_value_kind_to_property_kind" corresponds="icalproperty_value_kind_to_kind" since="1.0">
-        <parameter type="ICalValueKind" name="kind" comment="A #ICalValueKind"/>
-        <returns type="ICalPropertyKind" comment="The #ICalPropertyKind."/>
-        <comment xml:space="preserve">Converts a #ICalValueKind to a #ICalPropertyKind.</comment>
-    </method>
-    <method name="i_cal_property_kind_to_string" corresponds="icalproperty_kind_to_string" since="1.0">
-        <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind"/>
-        <returns type="const gchar *" comment="The string representation of @kind."/>
-        <comment xml:space="preserve">Converts the #ICalPropertyKind to a string.</comment>
-    </method>
-    <method name="i_cal_property_kind_from_string" corresponds="icalproperty_string_to_kind" since="1.0">
-        <parameter type="const gchar *" name="string" comment="A string representing #ICalPropertyKind"/>
-        <returns type="ICalPropertyKind" comment="The #ICalPropertyKind."/>
-        <comment xml:space="preserve">Converts the string to #ICalPropertyKind.</comment>
-    </method>
-    <method name="i_cal_property_kind_is_valid" corresponds="icalproperty_kind_is_valid" since="1.0">
-        <parameter type="const ICalPropertyKind" name="kind" comment="The #ICalPropertyKind"/>
-        <returns type="gboolean" comment="true if valid, false if not."/>
-        <comment xml:space="preserve">Checks whether #ICalPropertyKind is valid.</comment>
-    </method>
-    <method name="i_cal_property_method_from_string" corresponds="icalproperty_string_to_method" since="1.0">
-        <parameter type="const gchar *" name="str" comment="A string"/>
-        <returns type="ICalPropertyMethod" comment="The #ICalPropertyMethod."/>
-        <comment xml:space="preserve">Converts the string to #ICalPropertyKind.</comment>
-    </method>
-    <method name="i_cal_property_method_to_string" corresponds="icalproperty_method_to_string" since="1.0">
-        <parameter type="ICalPropertyMethod" name="method" comment="The #ICalPropertyMethod"/>
-        <returns type="const gchar *" comment="The string representation of #ICalPropertyMethod."/>
-        <comment xml:space="preserve">Converts the #ICalPropertyMethod to string.</comment>
-    </method>
-    <method name="i_cal_property_enum_to_string" corresponds="icalproperty_enum_to_string_r" since="1.0">
-        <parameter type="gint" name="e" comment="The enum to be converted"/>
-        <returns type="gchar *" annotation="transfer full" comment="The string representation of @e." translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Converts the enum to string.</comment>
-    </method>
-    <method name="i_cal_property_kind_and_string_to_enum" corresponds="icalproperty_kind_and_string_to_enum" since="1.0">
-        <parameter type="const gint" name="kind" comment="The kind"/>
-        <parameter type="const gchar *" name="str" comment="A string"/>
-        <returns type="gint" comment="The enum."/>
-        <comment xml:space="preserve">Converts an integer and string into an enum.</comment>
-    </method>
-    <method name="i_cal_property_status_from_string" corresponds="icalproperty_string_to_status" since="1.0">
-        <parameter type="const gchar *" name="str" comment="A string"/>
-        <returns type="ICalPropertyStatus" comment="The #ICalPropertyStatus."/>
-        <comment xml:space="preserve">Converts the string to #ICalPropertyKind.</comment>
-    </method>
-    <method name="i_cal_property_status_to_string" corresponds="icalproperty_status_to_string" since="1.0">
-        <parameter type="ICalPropertyStatus" name="method" comment="The #ICalPropertyStatus"/>
-        <returns type="const gchar *" comment="The string representation of #ICalPropertyStatus."/>
-        <comment xml:space="preserve">Converts the #ICalPropertyStatus to string.</comment>
-    </method>
-    <method name="i_cal_property_kind_has_property" corresponds="icalproperty_enum_belongs_to_property" since="1.0">
-        <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind"/>
-        <parameter type="gint" name="e" comment="The enum to be checked"/>
-        <returns type="gboolean" comment="true if yes, false if not."/>
-        <comment xml:space="preserve">Checks whether the enum belongs to the #ICalPropertyKind.</comment>
-    </method>
+  </method>
+  <method name="i_cal_property_set_value_from_string" corresponds="icalproperty_set_value_from_string" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be set"/>
+    <parameter type="const gchar *" name="value" comment="The value used to construct the #ICalValue"/>
+    <parameter type="const gchar *" name="kind" comment="The kind used to construct the #ICalValue"/>
+    <comment xml:space="preserve">Sets the #ICalProperty with the #ICalValue constructed from string.</comment>
+  </method>
+  <method name="i_cal_property_get_value" corresponds="icalproperty_get_value" since="1.0">
+    <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
+    <returns type="ICalValue *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The #ICalValue of @prop."/>
+    <comment xml:space="preserve">Gets the #ICalValue of #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_property_get_value_as_string" corresponds="icalproperty_get_value_as_string_r" since="1.0">
+    <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of the value of the #ICalProperty." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Gets the string representation of the value in #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_value_set_parent" corresponds="icalvalue_set_parent" since="2.0">
+    <parameter type="ICalValue *" name="value" comment="The child #ICalValue"/>
+    <parameter type="ICalProperty *" name="property" annotation="nullable" comment="The parent #ICalProperty"/>
+    <comment xml:space="preserve">Sets the parent property of a value.</comment>
+  </method>
+  <method name="i_cal_value_get_parent" corresponds="icalvalue_get_parent" since="3.0">
+    <parameter type="ICalValue *" name="value" comment="The child #ICalValue"/>
+    <returns type="ICalProperty *" annotation="transfer full, nullable" comment="The parent #ICalProperty"/>
+    <comment xml:space="preserve">Gets the parent #ICalProperty of the specified #ICalValue.</comment>
+  </method>
+  <method name="i_cal_parameter_set_parent" corresponds="icalparameter_set_parent" since="3.0">
+    <parameter type="ICalParameter *" name="param" comment="The child #ICalParameter"/>
+    <parameter type="ICalProperty *" name="property" annotation="nullable" comment="The parent #ICalProperty"/>
+    <comment xml:space="preserve">Sets the parent #ICalProperty of an #ICalParameter.</comment>
+  </method>
+  <method name="i_cal_parameter_get_parent" corresponds="icalparameter_get_parent" since="3.0">
+    <parameter type="ICalParameter *" name="param" comment="The child #ICalParameter"/>
+    <returns type="ICalProperty *" annotation="transfer full, nullable" comment="The parent #ICalProperty"/>
+    <comment xml:space="preserve">Gets the parent #ICalProperty of the specified #ICalParameter.</comment>
+  </method>
+  <method name="i_cal_property_set_x_name" corresponds="icalproperty_set_x_name" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="A #ICalProperty"/>
+    <parameter type="const gchar *" name="name" comment="The name string"/>
+    <comment xml:space="preserve">Sets the name of x property for the #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_property_get_x_name" corresponds="icalproperty_get_x_name" since="1.0">
+    <parameter type="ICalProperty *" name="prop" comment="A #ICalProperty"/>
+    <returns type="const gchar *" annotation="nullable" comment="The name of x property."/>
+    <comment xml:space="preserve">Gets the name of x property.</comment>
+  </method>
+  <method name="i_cal_property_get_property_name" corresponds="icalproperty_get_property_name_r" since="1.0">
+    <parameter type="const ICalProperty *" name="prop" comment="A #ICalProperty"/>
+    <returns type="gchar *" annotation="transfer full" comment="Property name of #ICalProperty." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Gets the property name of #ICalProperty.</comment>
+  </method>
+  <method name="i_cal_parameter_value_to_value_kind" corresponds="icalparameter_value_to_value_kind" since="1.0">
+    <parameter type="ICalParameterValue" name="value" comment="A #ICalParameterValue"/>
+    <returns type="ICalValueKind" comment="#ICalValueKind"/>
+    <comment xml:space="preserve">Converts the #ICalParameterValue to #ICalValueKind.</comment>
+  </method>
+  <method name="i_cal_property_kind_to_value_kind" corresponds="icalproperty_kind_to_value_kind" since="1.0">
+    <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind"/>
+    <returns type="ICalValueKind" comment="The #ICalValueKind"/>
+    <comment xml:space="preserve">Converts the #ICalPropertyKind to #ICalValueKind.</comment>
+  </method>
+  <method name="i_cal_value_kind_to_property_kind" corresponds="icalproperty_value_kind_to_kind" since="1.0">
+    <parameter type="ICalValueKind" name="kind" comment="A #ICalValueKind"/>
+    <returns type="ICalPropertyKind" comment="The #ICalPropertyKind."/>
+    <comment xml:space="preserve">Converts a #ICalValueKind to a #ICalPropertyKind.</comment>
+  </method>
+  <method name="i_cal_property_kind_to_string" corresponds="icalproperty_kind_to_string" since="1.0">
+    <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind"/>
+    <returns type="const gchar *" comment="The string representation of @kind."/>
+    <comment xml:space="preserve">Converts the #ICalPropertyKind to a string.</comment>
+  </method>
+  <method name="i_cal_property_kind_from_string" corresponds="icalproperty_string_to_kind" since="1.0">
+    <parameter type="const gchar *" name="string" comment="A string representing #ICalPropertyKind"/>
+    <returns type="ICalPropertyKind" comment="The #ICalPropertyKind."/>
+    <comment xml:space="preserve">Converts the string to #ICalPropertyKind.</comment>
+  </method>
+  <method name="i_cal_property_kind_is_valid" corresponds="icalproperty_kind_is_valid" since="1.0">
+    <parameter type="const ICalPropertyKind" name="kind" comment="The #ICalPropertyKind"/>
+    <returns type="gboolean" comment="true if valid, false if not."/>
+    <comment xml:space="preserve">Checks whether #ICalPropertyKind is valid.</comment>
+  </method>
+  <method name="i_cal_property_method_from_string" corresponds="icalproperty_string_to_method" since="1.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalPropertyMethod" comment="The #ICalPropertyMethod."/>
+    <comment xml:space="preserve">Converts the string to #ICalPropertyKind.</comment>
+  </method>
+  <method name="i_cal_property_method_to_string" corresponds="icalproperty_method_to_string" since="1.0">
+    <parameter type="ICalPropertyMethod" name="method" comment="The #ICalPropertyMethod"/>
+    <returns type="const gchar *" comment="The string representation of #ICalPropertyMethod."/>
+    <comment xml:space="preserve">Converts the #ICalPropertyMethod to string.</comment>
+  </method>
+  <method name="i_cal_property_enum_to_string" corresponds="icalproperty_enum_to_string_r" since="1.0">
+    <parameter type="gint" name="e" comment="The enum to be converted"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of @e." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts the enum to string.</comment>
+  </method>
+  <method name="i_cal_property_kind_and_string_to_enum" corresponds="icalproperty_kind_and_string_to_enum" since="1.0">
+    <parameter type="const gint" name="kind" comment="The kind"/>
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="gint" comment="The enum."/>
+    <comment xml:space="preserve">Converts an integer and string into an enum.</comment>
+  </method>
+  <method name="i_cal_property_status_from_string" corresponds="icalproperty_string_to_status" since="1.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalPropertyStatus" comment="The #ICalPropertyStatus."/>
+    <comment xml:space="preserve">Converts the string to #ICalPropertyKind.</comment>
+  </method>
+  <method name="i_cal_property_status_to_string" corresponds="icalproperty_status_to_string" since="1.0">
+    <parameter type="ICalPropertyStatus" name="method" comment="The #ICalPropertyStatus"/>
+    <returns type="const gchar *" comment="The string representation of #ICalPropertyStatus."/>
+    <comment xml:space="preserve">Converts the #ICalPropertyStatus to string.</comment>
+  </method>
+  <method name="i_cal_property_kind_has_property" corresponds="icalproperty_enum_belongs_to_property" since="1.0">
+    <parameter type="ICalPropertyKind" name="kind" comment="A #ICalPropertyKind"/>
+    <parameter type="gint" name="e" comment="The enum to be checked"/>
+    <returns type="gboolean" comment="true if yes, false if not."/>
+    <comment xml:space="preserve">Checks whether the enum belongs to the #ICalPropertyKind.</comment>
+  </method>
+  <method name="i_cal_property_normalize" corresponds="icalproperty_normalize" since="4.0">
+    <parameter type="ICalProperty *" name="prop" comment="an #ICalProperty"/>
+    <comment xml:space="preserve">Normalizes (reorders and sorts the parameters) the specified @prop.</comment>
+  </method>
+  <method name="i_cal_property_begin_parameter" corresponds="icalproperty_begin_parameter" kind="custom" since="4.0">
+    <parameter type="ICalProperty *" name="prop" comment="A #ICalProperty"/>
+    <parameter type="ICalParameterKind" name="kind" comment="A #ICalParameterKind"/>
+    <returns type="ICalParamIter *" annotation="transfer full" comment="A #ICalParamIter"/>
+    <comment xml:space="preserve">Gets the #ICalParamIter pointing to the first parameter of type @kind in #ICalComponent.</comment>
+    <custom>    ICalParamIter *iter;
+
+    g_return_val_if_fail (I_CAL_IS_PROPERTY (prop), NULL);
+
+    iter = i_cal_param_iter_new_full(icalproperty_begin_parameter((icalproperty *)i_cal_object_get_native(I_CAL_OBJECT (prop)), (icalparameter_kind) (kind)));
+    if (iter) {
+        i_cal_object_set_owner(I_CAL_OBJECT(iter), G_OBJECT(prop));
+        i_cal_object_set_always_destroy(I_CAL_OBJECT(iter), TRUE);
+    }
+
+    return iter;</custom>
+  </method>
+  <method name="i_cal_param_iter_next" corresponds="icalparamiter_next" kind="custom" since="4.0">
+    <parameter type="ICalParamIter *" name="i" native_op="POINTER" comment="A #ICalParamIter"/>
+    <returns type="ICalParameter *" annotation="transfer full" comment="A #ICalParameter"/>
+    <comment xml:space="preserve">Gets the next #ICalParameter pointed by #ICalParamIter.</comment>
+    <custom>    ICalParameter *param;
+
+    g_return_val_if_fail (I_CAL_IS_PARAM_ITER (i), NULL);
+
+    param = i_cal_parameter_new_full(icalparamiter_next((struct icalparamiter *)i_cal_object_get_native(I_CAL_OBJECT (i))), NULL);
+    if (param) {
+        GObject *owner = i_cal_object_ref_owner(I_CAL_OBJECT(i));
+        i_cal_object_set_owner(I_CAL_OBJECT(param), owner);
+        g_clear_object(&amp;owner);
+    }
+
+    return param;</custom>
+  </method>
+  <method name="i_cal_param_iter_deref" corresponds="icalparamiter_deref" kind="custom" since="4.0">
+    <parameter type="ICalParamIter *" name="i" native_op="POINTER" comment="A #ICalParamIter"/>
+    <returns type="ICalParameter *" annotation="transfer full" comment="A #ICalParameter"/>
+    <comment xml:space="preserve">Gets the current #ICalParameter pointed by #ICalParamIter.</comment>
+    <custom>    ICalParameter *param;
+
+    g_return_val_if_fail (I_CAL_IS_PARAM_ITER (i), NULL);
+
+    param = i_cal_parameter_new_full(icalparamiter_deref((struct icalparamiter *)i_cal_object_get_native(I_CAL_OBJECT (i))), NULL);
+    if (param) {
+        GObject *owner = i_cal_object_ref_owner(I_CAL_OBJECT(i));
+        i_cal_object_set_owner(I_CAL_OBJECT(param), owner);
+        g_clear_object(&amp;owner);
+    }
+
+    return param;</custom>
+  </method>
+  <method name="i_cal_property_action_from_string" corresponds="icalproperty_string_to_action" since="4.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalPropertyAction" comment="The #ICalPropertyAction."/>
+    <comment xml:space="preserve">Converts the string to #ICalPropertyAction.</comment>
+  </method>
+  <method name="i_cal_property_action_to_string" corresponds="icalproperty_action_to_string" since="4.0">
+    <parameter type="ICalPropertyAction" name="value" comment="The #ICalPropertyAction"/>
+    <returns type="const gchar *" comment="The string representation of #ICalPropertyAction."/>
+    <comment xml:space="preserve">Converts the #ICalPropertyAction to string.</comment>
+  </method>
+  <method name="i_cal_property_transp_from_string" corresponds="icalproperty_string_to_transp" since="4.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalPropertyTransp" comment="The #ICalPropertyTransp."/>
+    <comment xml:space="preserve">Converts the string to #ICalPropertyTransp.</comment>
+  </method>
+  <method name="i_cal_property_transp_to_string" corresponds="icalproperty_transp_to_string" since="4.0">
+    <parameter type="ICalPropertyTransp" name="value" comment="The #ICalPropertyTransp"/>
+    <returns type="const gchar *" comment="The string representation of #ICalPropertyTransp."/>
+    <comment xml:space="preserve">Converts the #ICalPropertyTransp to string.</comment>
+  </method>
+  <method name="i_cal_property_classenum_from_string" corresponds="icalproperty_string_to_class" since="4.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalPropertyClassenum" comment="The #ICalPropertyClassenum."/>
+    <comment xml:space="preserve">Converts the string to #ICalPropertyClassenum.</comment>
+  </method>
+  <method name="i_cal_property_classenum_to_string" corresponds="icalproperty_class_to_string" since="4.0">
+    <parameter type="ICalPropertyClassenum" name="value" comment="The #ICalPropertyClassenum"/>
+    <returns type="const gchar *" comment="The string representation of #ICalPropertyClassenum."/>
+    <comment xml:space="preserve">Converts the #ICalPropertyClassenum to string.</comment>
+  </method>
+  <method name="i_cal_property_participanttype_from_string" corresponds="icalproperty_string_to_participanttype" since="4.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalPropertyParticipanttype" comment="The #ICalPropertyParticipanttype."/>
+    <comment xml:space="preserve">Converts the string to #ICalPropertyParticipanttype.</comment>
+  </method>
+  <method name="i_cal_property_participanttype_to_string" corresponds="icalproperty_participanttype_to_string" since="4.0">
+    <parameter type="ICalPropertyParticipanttype" name="value" comment="The #ICalPropertyParticipanttype"/>
+    <returns type="const gchar *" comment="The string representation of #ICalPropertyParticipanttype."/>
+    <comment xml:space="preserve">Converts the #ICalPropertyParticipanttype to string.</comment>
+  </method>
+  <method name="i_cal_property_resourcetype_from_string" corresponds="icalproperty_string_to_resourcetype" since="4.0">
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="ICalPropertyResourcetype" comment="The #ICalPropertyResourcetype."/>
+    <comment xml:space="preserve">Converts the string to #ICalPropertyResourcetype.</comment>
+  </method>
+  <method name="i_cal_property_resourcetype_to_string" corresponds="icalproperty_resourcetype_to_string" since="4.0">
+    <parameter type="ICalPropertyResourcetype" name="value" comment="The #ICalPropertyResourcetype"/>
+    <returns type="const gchar *" comment="The string representation of #ICalPropertyResourcetype."/>
+    <comment xml:space="preserve">Converts the #ICalPropertyResourcetype to string.</comment>
+  </method>
+  <method name="i_cal_property_set_allow_empty_properties" corresponds="icalproperty_set_allow_empty_properties" since="4.0">
+    <parameter type="gboolean" name="value" comment="value to set"/>
+    <comment xml:space="preserve">Sets if empty properties are allowed.</comment>
+  </method>
+  <method name="i_cal_property_get_allow_empty_properties" corresponds="icalproperty_get_allow_empty_properties" since="4.0">
+    <returns type="gboolean" comment="whether empty properties are allowed"/>
+    <comment xml:space="preserve">Returns true if empty properties are allowed.</comment>
+  </method>
 </structure>

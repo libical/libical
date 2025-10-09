@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,94 +7,94 @@
 
 -->
 <structure namespace="ICal" name="Period" native="struct icalperiodtype" is_bare="true" default_native="icalperiodtype_null_period ()">
-	<method name="i_cal_period_get_start" corresponds="CUSTOM" kind="get" since="1.0">
-		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried"/>
-		<returns type="ICalTime *" annotation="transfer full" comment="The start of @period."/>
-		<comment>Gets the start time from an #ICalPeriod.</comment>
-		<custom>	g_return_val_if_fail (period != NULL, NULL);
+  <method name="i_cal_period_get_start" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The start of @period."/>
+    <comment>Gets the start time from an #ICalPeriod.</comment>
+    <custom>	g_return_val_if_fail (period != NULL, NULL);
 	g_return_val_if_fail (I_CAL_IS_PERIOD (period), NULL);
 
 	return i_cal_time_new_full ((* (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period)).start);</custom>
-	</method>
-	<method name="i_cal_period_set_start" corresponds="CUSTOM" kind="set" since="1.0">
-		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set"/>
-		<parameter type="ICalTime *" name="start" comment="The start of @period"/>
-		<comment>Sets the start time of an #ICalPeriod.</comment>
-		<custom>	struct icalperiodtype *periodtype;
+  </method>
+  <method name="i_cal_period_set_start" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set"/>
+    <parameter type="ICalTime *" name="start" comment="The start of @period"/>
+    <comment>Sets the start time of an #ICalPeriod.</comment>
+    <custom>	struct icalperiodtype *periodtype;
 	g_return_if_fail (period != NULL);
 	g_return_if_fail (I_CAL_IS_PERIOD (period));
 	g_return_if_fail (start != NULL);
 	g_return_if_fail (I_CAL_IS_TIME(start));
 
 	periodtype = (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period);
-	periodtype->start = * (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)start);</custom>
-	</method>
-	<method name="i_cal_period_get_end" corresponds="CUSTOM" kind="get" since="1.0">
-		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried"/>
-		<returns type="ICalTime *" annotation="transfer full" comment="The end of @period."/>
-		<comment>Gets the end time from an #ICalPeriod.</comment>
-		<custom>	g_return_val_if_fail (period != NULL, NULL);
+	periodtype-&gt;start = * (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)start);</custom>
+  </method>
+  <method name="i_cal_period_get_end" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The end of @period."/>
+    <comment>Gets the end time from an #ICalPeriod.</comment>
+    <custom>	g_return_val_if_fail (period != NULL, NULL);
 	g_return_val_if_fail (I_CAL_IS_PERIOD (period), NULL);
 
 	return i_cal_time_new_full ((* (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period)).end);</custom>
-	</method>
-	<method name="i_cal_period_set_end" corresponds="CUSTOM" kind="set" since="1.0">
-		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set"/>
-		<parameter type="ICalTime *" name="end" comment="The end of @period"/>
-		<comment>Sets the end time of an #ICalPeriod.</comment>
-		<custom>	struct icalperiodtype *periodtype;
+  </method>
+  <method name="i_cal_period_set_end" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set"/>
+    <parameter type="ICalTime *" name="end" comment="The end of @period"/>
+    <comment>Sets the end time of an #ICalPeriod.</comment>
+    <custom>	struct icalperiodtype *periodtype;
 	g_return_if_fail (period != NULL);
 	g_return_if_fail (I_CAL_IS_PERIOD (period));
 	g_return_if_fail (end != NULL);
 	g_return_if_fail (I_CAL_IS_TIME(end));
 
 	periodtype = (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period);
-	periodtype->end = (* (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)end));</custom>
-	</method>
-	<method name="i_cal_period_get_duration" corresponds="CUSTOM" kind="get" since="1.0">
-		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried"/>
-		<returns type="ICalDuration *" annotation="transfer full" comment="The duration of @period."/>
-		<comment>Gets the duration from an #ICalPeriod.</comment>
-		<custom>	g_return_val_if_fail (period != NULL, NULL);
+	periodtype-&gt;end = (* (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)end));</custom>
+  </method>
+  <method name="i_cal_period_get_duration" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be queried"/>
+    <returns type="ICalDuration *" annotation="transfer full" comment="The duration of @period."/>
+    <comment>Gets the duration from an #ICalPeriod.</comment>
+    <custom>	g_return_val_if_fail (period != NULL, NULL);
 	g_return_val_if_fail (I_CAL_IS_PERIOD (period), NULL);
 
 	return i_cal_duration_new_full ((* (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period)).duration);</custom>
-	</method>
-	<method name="i_cal_period_set_duration" corresponds="CUSTOM" kind="set" since="1.0">
-		<parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set"/>
-		<parameter type="ICalDuration *" name="duration" comment="The duration of @period"/>
-		<comment>Sets the duration of an #ICalPeriod.</comment>
-		<custom>	struct icalperiodtype *periodtype;
+  </method>
+  <method name="i_cal_period_set_duration" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalPeriod *" name="period" comment="The #ICalPeriod to be set"/>
+    <parameter type="ICalDuration *" name="duration" comment="The duration of @period"/>
+    <comment>Sets the duration of an #ICalPeriod.</comment>
+    <custom>	struct icalperiodtype *periodtype;
 	g_return_if_fail (period != NULL);
 	g_return_if_fail (I_CAL_IS_PERIOD (period));
 	g_return_if_fail (duration != NULL);
 	g_return_if_fail (I_CAL_IS_DURATION(duration));
 
 	periodtype = (struct icalperiodtype *)i_cal_object_get_native ((ICalObject *)period);
-	periodtype->duration = (* (struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration));</custom>
-	</method>
-    <method name="i_cal_period_new_from_string" corresponds="icalperiodtype_from_string" kind="constructor" since="1.0">
-        <parameter type="const gchar *" name="str" comment="The string used to create the #ICalPeriod"/>
-        <returns type="ICalPeriod *" annotation="transfer full" comment="The newly created #ICalPeriod"/>
-        <comment xml:space="preserve">Creates a #ICalPeriod from a string.</comment>
-    </method>
-    <method name="i_cal_period_as_ical_string" corresponds="icalperiodtype_as_ical_string_r" since="1.0">
-        <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be translated"/>
-        <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalPeriod." translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Translates #ICalPeriod to string.</comment>
-    </method>
-    <method name="i_cal_period_new_null_period" corresponds="icalperiodtype_null_period" kind="constructor" since="1.0">
-        <returns type="ICalPeriod *" annotation="transfer full" comment="The newly created default #ICalPeriod"/>
-        <comment xml:space="preserve">Creates a default #ICalPeriod.</comment>
-    </method>
-    <method name="i_cal_period_is_null_period" corresponds="icalperiodtype_is_null_period" since="1.0">
-        <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be checked"/>
-        <returns type="gboolean" comment="true if yes, false if not."/>
-        <comment xml:space="preserve">Checks the #ICalPeriod is null_period.</comment>
-    </method>
-    <method name="i_cal_period_is_valid_period" corresponds="icalperiodtype_is_valid_period" since="1.0">
-        <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be checked"/>
-        <returns type="gboolean" comment="true if yes, false if not."/>
-        <comment xml:space="preserve">Checks the #ICalPeriod is valid_period.</comment>
-    </method>
+	periodtype-&gt;duration = (* (struct icaldurationtype *)i_cal_object_get_native ((ICalObject *)duration));</custom>
+  </method>
+  <method name="i_cal_period_new_from_string" corresponds="icalperiodtype_from_string" kind="constructor" since="1.0">
+    <parameter type="const gchar *" name="str" comment="The string used to create the #ICalPeriod"/>
+    <returns type="ICalPeriod *" annotation="transfer full" comment="The newly created #ICalPeriod"/>
+    <comment xml:space="preserve">Creates a #ICalPeriod from a string.</comment>
+  </method>
+  <method name="i_cal_period_as_ical_string" corresponds="icalperiodtype_as_ical_string_r" since="1.0">
+    <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be translated"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalPeriod." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Translates #ICalPeriod to string.</comment>
+  </method>
+  <method name="i_cal_period_new_null_period" corresponds="icalperiodtype_null_period" kind="constructor" since="1.0">
+    <returns type="ICalPeriod *" annotation="transfer full" comment="The newly created default #ICalPeriod"/>
+    <comment xml:space="preserve">Creates a default #ICalPeriod.</comment>
+  </method>
+  <method name="i_cal_period_is_null_period" corresponds="icalperiodtype_is_null_period" since="1.0">
+    <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be checked"/>
+    <returns type="gboolean" comment="true if yes, false if not."/>
+    <comment xml:space="preserve">Checks the #ICalPeriod is null_period.</comment>
+  </method>
+  <method name="i_cal_period_is_valid_period" corresponds="icalperiodtype_is_valid_period" since="1.0">
+    <parameter type="ICalPeriod *" name="p" comment="The #ICalPeriod to be checked"/>
+    <returns type="gboolean" comment="true if yes, false if not."/>
+    <comment xml:space="preserve">Checks the #ICalPeriod is valid_period.</comment>
+  </method>
 </structure>

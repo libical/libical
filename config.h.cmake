@@ -176,15 +176,8 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 /* Define to 1 if you have the <wctype.h> header file. */
 #cmakedefine HAVE_WCTYPE_H 1
 
-/* Define to make icalerror_* calls abort instead of internally signalling an
-   error */
-#define ICAL_ERRORS_ARE_FATAL ${ICAL_ERRORS_ARE_FATAL}
-
-/* Define to prevent empty properties from being replaced with X-LIC-ERROR properties */
-#define ICAL_ALLOW_EMPTY_PROPERTIES ${ICAL_ALLOW_EMPTY_PROPERTIES}
-
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "${PROJECT_URL}"
+#define PACKAGE_BUGREPORT "${CMAKE_PROJECT_HOMEPAGE_URL}"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "${CMAKE_PROJECT_NAME}"
@@ -615,13 +608,13 @@ typedef ssize_t IO_SSIZE_T;
 #define ICALMEMORY_DEFAULT_FREE free
 
 
-#cmakedefine LIBICAL_SYNCMODE_THREADLOCAL 1
+#cmakedefine LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL 1
 
 #define ICAL_SYNC_MODE_NONE 1
 #define ICAL_SYNC_MODE_PTHREAD 2
 #define ICAL_SYNC_MODE_THREADLOCAL 3
 
-#ifdef LIBICAL_SYNCMODE_THREADLOCAL
+#ifdef LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL
 #define ICAL_SYNC_MODE ICAL_SYNC_MODE_THREADLOCAL
 #elif HAVE_PTHREAD == 1
 #define ICAL_SYNC_MODE ICAL_SYNC_MODE_PTHREAD
@@ -644,4 +637,8 @@ typedef ssize_t IO_SSIZE_T;
 #endif
 #else
 #define ICAL_GLOBAL_VAR
+#endif
+
+#if defined(__GNUC__)
+#define ICAL_GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #endif

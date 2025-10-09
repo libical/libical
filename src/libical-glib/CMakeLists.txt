@@ -16,6 +16,8 @@ add_executable(
   ical-glib-src-generator
   tools/generator.c
   tools/generator.h
+  tools/header-parser.c
+  tools/header-parser.h
   tools/xml-parser.c
   tools/xml-parser.h
 )
@@ -42,6 +44,7 @@ install(
 )
 install(EXPORT IcalGlibSrcGenerator NAMESPACE native- DESTINATION ${LIB_INSTALL_DIR}/cmake/LibIcal)
 
+# iCalendar files
 list(
   APPEND
   API_FILES
@@ -54,26 +57,50 @@ list(
   api/i-cal-derived-property.xml
   api/i-cal-derived-value.xml
   api/i-cal-duration.xml
+  api/i-cal-enum-array.xml
   api/i-cal-enums.xml
   api/i-cal-error.xml
   api/i-cal-geo.xml
   api/i-cal-memory.xml
-  api/i-cal-mime.xml
   api/i-cal-parameter.xml
+  api/i-cal-param-iter.xml
   api/i-cal-parser.xml
   api/i-cal-period.xml
   api/i-cal-property.xml
+  api/i-cal-prop-iter.xml
   api/i-cal-recur-iterator.xml
   api/i-cal-recurrence.xml
   api/i-cal-recur.xml
   api/i-cal-reqstat.xml
   api/i-cal-restriction.xml
+  api/i-cal-str-array.xml
   api/i-cal-time-span.xml
   api/i-cal-time.xml
   api/i-cal-timezone.xml
   api/i-cal-trigger.xml
   api/i-cal-unknowntokenhandling.xml
   api/i-cal-value.xml
+)
+
+# vCard files
+list(
+  APPEND
+  API_FILES
+  api/i-cal-vcard-component.xml
+  api/i-cal-vcard-derived-parameter.xml
+  api/i-cal-vcard-derived-property.xml
+  api/i-cal-vcard-derived-value.xml
+  api/i-cal-vcard-enum-array.xml
+  api/i-cal-vcard-geo.xml
+  api/i-cal-vcard-parameter.xml
+  api/i-cal-vcard-parser.xml
+  api/i-cal-vcard-property.xml
+  api/i-cal-vcard-restriction.xml
+  api/i-cal-vcard-str-array.xml
+  api/i-cal-vcard-structured.xml
+  api/i-cal-vcard-time.xml
+  api/i-cal-vcard-tz.xml
+  api/i-cal-vcard-value.xml
 )
 
 list(
@@ -146,6 +173,8 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_BINARY_DIR}/src/libical
   ${PROJECT_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}/src/libicalvcard
+  ${PROJECT_SOURCE_DIR}/src/libicalvcard
 )
 
 add_library(
@@ -153,7 +182,11 @@ add_library(
   ${LIBRARY_TYPE}
   ${LIBICAL_GLIB_SOURCES}
 )
-add_dependencies(ical-glib ical-header)
+add_dependencies(
+  ical-glib
+  ical-header
+  icalvcard-header
+)
 target_compile_options(ical-glib PRIVATE ${GLIB_CFLAGS})
 target_compile_definitions(
   ical-glib
@@ -165,19 +198,20 @@ target_link_libraries(
   ical-glib
   PRIVATE
     ical
+    icalvcard
     ${GLIB_LIBRARIES}
 )
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  add_library(ical-glib-static STATIC ${LIBICAL_GLIB_SOURCES})
-  add_dependencies(ical-glib-static ical-header)
-  target_compile_options(
-    ical-glib-static
-    PUBLIC
-      ${GLIB_CFLAGS}
-      -DG_LOG_DOMAIN="libical-glib"
-      -DLIBICAL_GLIB_COMPILATION
+
+if(LIBICAL_GLIB_CHECK_API_FILES)
+  add_custom_command(
+    TARGET ical-glib
+    POST_BUILD
+    COMMAND
+      ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
+      "--check-api-files" "${CMAKE_CURRENT_BINARY_DIR}/../libical/ical.h" "LIBICAL_ICAL_EXPORT"
+      "${CMAKE_CURRENT_BINARY_DIR}/../libicalvcard/vcard.h" "LIBICAL_VCARD_EXPORT"
+    COMMENT "Check the libical-glib API files for completeness"
   )
-  target_link_libraries(ical-glib-static ${GLIB_LIBRARIES})
 endif()
 
 include(CheckCCompilerFlag)
@@ -204,6 +238,7 @@ if(c_flag_Wswitch_enum_supported AND c_flag_Wswitch_supported)
     PRIVATE
       ${GLIB_CFLAGS}
       -DLIBICAL_GLIB_UNSTABLE_API=1
+      -DLIBICAL_GLIB_COMPILATION
       -Wswitch-enum
       -Wswitch
   )
@@ -212,7 +247,7 @@ else()
 endif()
 
 # GObject Introspection
-if(GOBJECT_INTROSPECTION)
+if(LIBICAL_GOBJECT_INTROSPECTION)
   # extract only file names without path for introspection
   foreach(file IN LISTS LIBICAL_GLIB_SOURCES)
     string(REPLACE "${CMAKE_CURRENT_BINARY_DIR}/" "" plain_file ${file})
@@ -220,8 +255,8 @@ if(GOBJECT_INTROSPECTION)
   endforeach()
 
   include(GObjectIntrospectionMacros)
-  set(LIBICAL_GLIB_GIR_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.0")
-  set(LIB_VERSION "${LIBICAL_LIB_MAJOR_VERSION}_0")
+  set(LIBICAL_GLIB_GIR_VERSION_STRING "${LIBICAL_LIB_MAJOR_SOVERSION}.0")
+  set(LIB_VERSION "${LIBICAL_LIB_MAJOR_SOVERSION}_0")
 
   set(GObjectIntrospection_GIRS)
   set(GObjectIntrospection_SCANNER_FLAGS)
@@ -234,8 +269,10 @@ if(GOBJECT_INTROSPECTION)
     --add-include-path=${CMAKE_CURRENT_SOURCE_DIR}
     --add-include-path=${PROJECT_BINARY_DIR}/src
     --add-include-path=${PROJECT_BINARY_DIR}/src/libical
+    --add-include-path=${PROJECT_BINARY_DIR}/src/libicalvcard
     --add-include-path=${PROJECT_SOURCE_DIR}/src
     --add-include-path=${PROJECT_SOURCE_DIR}/src/libical
+    --add-include-path=${PROJECT_SOURCE_DIR}/src/libicalvcard
     --library-path=${LIBRARY_OUTPUT_PATH}
     --identifier-prefix=ICal
     --pkg-export
@@ -244,10 +281,12 @@ if(GOBJECT_INTROSPECTION)
     --cflags-begin
     -I${PROJECT_BINARY_DIR}/src
     -I${PROJECT_BINARY_DIR}/src/libical
+    -I${PROJECT_BINARY_DIR}/src/libicalvcard
     -I${PROJECT_BINARY_DIR}/src/libical-glib
     -I${LIBRARY_OUTPUT_PATH}
     -I${PROJECT_SOURCE_DIR}/src
     -I${PROJECT_SOURCE_DIR}/src/libical
+    -I${PROJECT_SOURCE_DIR}/src/libicalvcard
     --cflags-end
     --verbose
   )
@@ -269,6 +308,8 @@ if(GOBJECT_INTROSPECTION)
     -I${CMAKE_CURRENT_SOURCE_DIR}
     -I${PROJECT_BINARY_DIR}/src/libical
     -I${PROJECT_SOURCE_DIR}/src/libical
+    -I${PROJECT_BINARY_DIR}/src/libicalvcard
+    -I${PROJECT_SOURCE_DIR}/src/libicalvcard
     -I${PROJECT_BINARY_DIR}/src/libical-glib
   )
   set(ICalGLib_${LIB_VERSION}_gir_LIBS ical-glib)
@@ -279,7 +320,7 @@ if(GOBJECT_INTROSPECTION)
   gir_add_introspections(GObjectIntrospection_GIRS)
 endif()
 
-if(ICAL_GLIB_VAPI)
+if(LIBICAL_GLIB_VAPI)
   add_custom_target(vala ALL COMMENT "Target to run vala")
   set(gir_fullname ${PROJECT_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.gir)
   set(typelib_fullname ${PROJECT_BINARY_DIR}/src/libical-glib/ICalGLib-${LIBICAL_GLIB_GIR_VERSION_STRING}.typelib)
@@ -296,7 +337,10 @@ if(ICAL_GLIB_VAPI)
       --girdir=${PROJECT_BINARY_DIR}/src/libical-glib --pkg gio-2.0 --library libical-glib
       --metadatadir=${CMAKE_CURRENT_SOURCE_DIR} --metadatadir=${CMAKE_CURRENT_BINARY_DIR} ${gir_fullname}
     DEPENDS
+      ical-glib
       ${gir_fullname}
+      ${LIBICAL_GLIB_GIR_SOURCES}
+      ${GObjectIntrospection_GIRS}
       ${typelib_fullname}
       ${metadata_fullname}
     COMMENT "Run the tool to generate the Vala API"
@@ -316,30 +360,13 @@ if(MSVC)
       PREFIX
         "lib"
   )
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      ical-glib-static
-      PROPERTIES
-        PREFIX
-          "lib"
-    )
-  endif()
-else()
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      ical-glib-static
-      PROPERTIES
-        OUTPUT_NAME
-          "ical-glib"
-    )
-  endif()
 endif()
 if(NOT ANDROID)
   set_target_properties(
     ical-glib
     PROPERTIES
       VERSION
-        ${LIBICAL_LIB_VERSION_STRING}
+        ${CMAKE_PROJECT_VERSION}
       SOVERSION
         ${LIBICAL_LIB_SOVERSION_STRING}
   )
@@ -350,31 +377,8 @@ set_target_properties(
     CLEAN_DIRECT_OUTPUT
       1
 )
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  set_target_properties(
-    ical-glib-static
-    PROPERTIES
-      CLEAN_DIRECT_OUTPUT
-        1
-  )
-endif()
 
-install(
-  TARGETS
-    ical-glib
-  EXPORT icalTargets
-  DESTINATION
-  ${INSTALL_TARGETS_DEFAULT_ARGS}
-)
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  install(
-    TARGETS
-      ical-glib-static
-    EXPORT icalTargets
-    DESTINATION
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
-  )
-endif()
+install(TARGETS ical-glib EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

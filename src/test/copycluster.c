@@ -3,7 +3,6 @@
  CREATOR: eric 15 January 2000
 
  SPDX-FileCopyrightText: 2000 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -20,18 +19,24 @@
 #include <stdlib.h>
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-unsafe-call-within-signal-handler"
+#endif
 static void sig_alrm(int i)
 {
     _unused(i);
     fprintf(stderr, "Could not get lock on file\n");
     exit(1);
 }
-
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 /* This program copies a file that holds iCal components to an other file. */
 
-void usage(char *arg0)
+void usage(const char *arg0)
 {
     printf("usage: %s cluster-file1 cluster-file2\n", arg0);
 }

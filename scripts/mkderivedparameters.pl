@@ -1,11 +1,7 @@
 #!/usr/bin/env perl
 ################################################################################
 # SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
-#
-#
 ################################################################################
 
 require "readvaluesfile.pl";
@@ -177,36 +173,34 @@ sub insert_code
       $count++;
       $out .= "    {${ucprefix}_${uc}_PARAMETER, \"$param\"";
 
-      if ($opt_v) {
-          my $type  = $params{$param}->{"C"};
-          if ($type =~ /char/) {
-              $out .= ", ${ucprefix}_TEXT_VALUE";
+      my $type  = $params{$param}->{"C"};
+      if ($type =~ /char/) {
+          $out .= ", ${ucprefix}_TEXT_VALUE";
 
-          } elsif ($type =~ /int/) {
-              $out .= ", ${ucprefix}_INTEGER_VALUE";
+      } elsif ($type =~ /int/) {
+          $out .= ", ${ucprefix}_INTEGER_VALUE";
 
-          } elsif ($type =~ /vcardtimetype/) {
-              $out .= ", ${ucprefix}_DATEANDORTIME_VALUE";
+      } elsif ($opt_v && $type =~ /vcardtimetype/) {
+          $out .= ", ${ucprefix}_DATEANDORTIME_VALUE";
 
-          } elsif ($type =~ /vcardstructured/) {
-              $out .= ", ${ucprefix}_STRUCTURED_VALUE";
+      } elsif ($opt_v && $type =~ /vcardstructured/) {
+          $out .= ", ${ucprefix}_STRUCTURED_VALUE";
 
-          } else {
-              $out .= ", ${ucprefix}_X_VALUE";
+      } else {
+          $out .= ", ${ucprefix}_X_VALUE";
+      }
+
+      my @flags = @{$params{$param}->{'flags'}};
+      if (@flags) {
+          my $sep = ", ";
+          foreach $flag (@flags) {
+              $flag =~ s/-//g;
+              $flag  = uc($flag);
+              $out .= "${sep}${ucprefix}_PARAMETER_${flag}";
+              $sep = " | ";
           }
-
-          my @flags = @{$params{$param}->{'flags'}};
-          if (@flags) {
-              my $sep = ", ";
-              foreach $flag (@flags) {
-                  $flag =~ s/-//g;
-                  $flag  = uc($flag);
-                  $out .= "${sep}${ucprefix}_PARAMETER_${flag}";
-                  $sep = " | ";
-              }
-          } else {
-              $out .= ", 0";
-          }
+      } else {
+          $out .= ", 0";
       }
 
       $out .= "},\n";
@@ -214,11 +208,7 @@ sub insert_code
     $count += 1;
     print "static const struct ${lcprefix}parameter_kind_map parameter_map[$count] = {\n";
     print $out;
-    if ($opt_v) {
-        print "    { ${ucprefix}_NO_PARAMETER, \"\", ${ucprefix}_NO_VALUE, 0}\n};\n\n";
-    } else {
-        print "    { ${ucprefix}_NO_PARAMETER, \"\"}\n};\n\n";
-    }
+    print "    { ${ucprefix}_NO_PARAMETER, \"\", ${ucprefix}_NO_VALUE, 0}\n};\n\n";
 
     # Create the parameter value map
     $out   = "";
@@ -270,39 +260,46 @@ sub insert_code
     my $uc = uc($lc);
 
     my $is_multivalued = 0;
-    if ($opt_v) {
-        my @flags = @{$params{$param}->{'flags'}};
-        if (@flags) {
-            foreach $flag (@flags) {
-                $flag =~ s/-//g;
-                $flag  = uc($flag);
-                if ($flag eq 'IS_MULTIVALUED') {
-                    $is_multivalued = 1;
-                    last;
-                }
+    my @flags = @{$params{$param}->{'flags'}};
+    if (@flags) {
+        foreach $flag (@flags) {
+            $flag =~ s/-//g;
+            $flag  = uc($flag);
+            if ($flag eq 'IS_MULTIVALUED') {
+                $is_multivalued = 1;
+                last;
             }
         }
     }
 
-    my $singletype;
     my $apitype;
     my $charorenum;
     my $set_code;
     my $pointer_check;
     my $pointer_check_v;
     my $xrange;
+    # Only relevant for multivalued
+    my $singletype;
+    my $elemtype;
+    my $charorenum_nth;
 
     if ($type =~ /char/) {
         $type =~ s/char\*/char \*/;
 
         if ($is_multivalued) {
+            $elemtype = $type;
             $singletype = $type;
-            $type = "vcardstrarray *";
-            $apitype = "vcardstrarray";
+            $type = "${lcprefix}strarray *";
+            $apitype = "${lcprefix}strarray";
             $charorenum =
                 "    icalerror_check_arg_rz((param != 0), \"param\");\n    return param->values;";
 
-            $set_code = "if (param->values != NULL) {\n        vcardstrarray_free(param->values);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->values = v;";
+            $charorenum_nth =
+                "   icalerror_check_arg_rz((param != 0), \"param\");\n    if (param->values && ${lcprefix}strarray_size(param->values)) {\n        return ${lcprefix}strarray_element_at(param->values, position);\n    } else {\n        return NULL;\n    }";
+
+            $charorenum_values_add_v = "icalstrarray_add(values, v)";
+
+            $set_code = "if (param->values != NULL) {\n        ${lcprefix}strarray_free(param->values);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->values = v;";
 
         } else {
             $charorenum =
@@ -349,13 +346,19 @@ sub insert_code
     } else {
 
         if ($is_multivalued) {
-            $singletype = "vcardenumarray_element *";
-            $type = "vcardenumarray *";
-            $apitype = "vcardenumarray";
+            $elemtype = $type;
+            $singletype = "${lcprefix}enumarray_element *";
+            $type = "${lcprefix}enumarray *";
+            $apitype = "${lcprefix}enumarray";
             $charorenum =
                 "    icalerror_check_arg_rz((param != 0), \"param\");\n    return param->values;";
 
-            $set_code = "if (param->values != NULL) {\n        vcardenumarray_free(param->values);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->values = v;";
+            $charorenum_nth =
+                "   icalerror_check_arg((param != 0), \"param\");\n    if (param && param->values && ${lcprefix}enumarray_size(param->values)) {\n        const $singletype v = ${lcprefix}enumarray_element_at(param->values, position);\n        return (${elemtype})v->val;\n    } else {\n        return ${ucprefix}_${uc}_NONE;\n    }";
+
+            $charorenum_values_add_v = "icalenumarray_element _elem = { (int)v, NULL };\n    icalenumarray_add(values, &_elem)";
+
+            $set_code = "if (param->values != NULL) {\n        ${lcprefix}enumarray_free(param->values);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->values = v;";
 
         } else {
             $xrange = "    if (param->string != 0) {\n        return ${ucprefix}_${uc}_X;\n    }\n"
@@ -374,12 +377,17 @@ sub insert_code
         }
     }
 
+    my $newfnsuffix;
+    if ($is_multivalued) {
+        $newfnsuffix = "_list";
+    }
+
     if ($opt_c) {
 
       print <<EOM;
 
 /* $param */
-${lcprefix}parameter *${lcprefix}parameter_new_${lc}($type v)
+${lcprefix}parameter *${lcprefix}parameter_new_${lc}${newfnsuffix}($type v)
 {
     struct ${lcprefix}parameter_impl *impl;
     icalerror_clear_errno();
@@ -416,24 +424,48 @@ EOM
       if ($is_multivalued) {
           print <<EOM;
 
+${lcprefix}parameter * ${lcprefix}parameter_new_${lc}($elemtype v)
+{
+    ${apitype} *values = ${apitype}_new(1);
+    $charorenum_values_add_v;
+    return ${lcprefix}parameter_new_${lc}${newfnsuffix}(values);
+}
+
+size_t ${lcprefix}parameter_get_${lc}_size(${lcprefix}parameter *param)
+{
+    icalerror_check_arg_rz((param != 0), "param");
+    if (param->values) {
+        return param->values->num_elements;
+    }
+    return 0;
+}
+
+${elemtype} ${lcprefix}parameter_get_${lc}_nth(${lcprefix}parameter *param, size_t position)
+{
+ $charorenum_nth
+}
+
 void ${lcprefix}parameter_add_${lc}(${lcprefix}parameter *param, ${singletype} v)
-{$pointer_check_v
+{${apitype} **values;
+    $pointer_check_v
     icalerror_check_arg_rv((param != 0), "param");
     icalerror_clear_errno();
 
-    ${apitype} **values = &((struct ${lcprefix}parameter_impl *)param)->values;
+   values = &((struct ${lcprefix}parameter_impl *)param)->values;
     if (*values == 0) *values = ${apitype}_new(5);
     ${apitype}_add(*values, v);
 }
 
 void ${lcprefix}parameter_remove_${lc}(${lcprefix}parameter *param, ${singletype} v)
-{$pointer_check_v
+{${apitype} *values;
+    $pointer_check_v
     icalerror_check_arg_rv((param != 0), "param");
     icalerror_clear_errno();
 
-    ${apitype} *values = ((struct ${lcprefix}parameter_impl *)param)->values;
+    values = ((struct ${lcprefix}parameter_impl *)param)->values;
     if (values != 0) ${apitype}_remove(values, v);
 }
+
 EOM
       }
 
@@ -442,13 +474,16 @@ EOM
       print <<EOM;
 
 /* $param */
-LIBICAL_${ucprefix}_EXPORT ${lcprefix}parameter * ${lcprefix}parameter_new_${lc}($type v);
+LIBICAL_${ucprefix}_EXPORT ${lcprefix}parameter * ${lcprefix}parameter_new_${lc}${newfnsuffix}($type v);
 LIBICAL_${ucprefix}_EXPORT ${type} ${lcprefix}parameter_get_${lc}(const ${lcprefix}parameter *value);
 LIBICAL_${ucprefix}_EXPORT void ${lcprefix}parameter_set_${lc}(${lcprefix}parameter *value, ${type} v);
 EOM
 
       if ($is_multivalued) {
       print <<EOM;
+LIBICAL_${ucprefix}_EXPORT ${lcprefix}parameter * ${lcprefix}parameter_new_${lc}($elemtype v);
+LIBICAL_${ucprefix}_EXPORT size_t ${lcprefix}parameter_get_${lc}_size(${lcprefix}parameter *param);
+LIBICAL_${ucprefix}_EXPORT ${elemtype} ${lcprefix}parameter_get_${lc}_nth(${lcprefix}parameter *param, size_t position);
 LIBICAL_${ucprefix}_EXPORT void ${lcprefix}parameter_add_${lc}(${lcprefix}parameter *value, ${singletype} v);
 LIBICAL_${ucprefix}_EXPORT void ${lcprefix}parameter_remove_${lc}(${lcprefix}parameter *value, ${singletype} v);
 EOM

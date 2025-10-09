@@ -3,9 +3,7 @@
  CREATOR: acampi 13 March 2002
 
  SPDX-FileCopyrightText: 2002 Andrea Campi <a.campi@inet.it>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 /**
@@ -47,6 +45,9 @@ icalcluster *icalcluster_new(const char *key, icalcomponent *data)
 {
     struct icalcluster_impl *impl = icalcluster_new_impl();
 
+    if (!impl) {
+        return NULL;
+    }
     assert(impl->data == 0);
 
     impl->key = strdup(key);
@@ -76,16 +77,20 @@ icalcluster *icalcluster_clone(const icalcluster *data)
     struct icalcluster_impl *old = (struct icalcluster_impl *)data;
     struct icalcluster_impl *impl = icalcluster_new_impl();
 
-    impl->key = strdup(old->key);
-    impl->data = icalcomponent_clone(old->data);
-    impl->changed = 0;
+    if (impl) {
+        impl->key = strdup(old->key);
+        impl->data = icalcomponent_clone(old->data);
+        impl->changed = 0;
+    }
 
     return impl;
 }
 
 void icalcluster_free(icalcluster *impl)
 {
-    icalerror_check_arg_rv((impl != 0), "cluster");
+    if (!impl) {
+        return;
+    }
 
     if (impl->key != 0) {
         free(impl->key);
@@ -100,14 +105,14 @@ void icalcluster_free(icalcluster *impl)
     free(impl);
 }
 
-const char *icalcluster_key(icalcluster *impl)
+const char *icalcluster_key(const icalcluster *impl)
 {
     icalerror_check_arg_rz((impl != 0), "cluster");
 
     return impl->key;
 }
 
-int icalcluster_is_changed(icalcluster *impl)
+int icalcluster_is_changed(const icalcluster *impl)
 {
     icalerror_check_arg_rz((impl != 0), "cluster");
 
@@ -128,7 +133,7 @@ void icalcluster_commit(icalcluster *impl)
     impl->changed = 0;
 }
 
-icalcomponent *icalcluster_get_component(icalcluster *impl)
+icalcomponent *icalcluster_get_component(const icalcluster *impl)
 {
     icalerror_check_arg_rz((impl != 0), "cluster");
 

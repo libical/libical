@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<structure namespace="ICalVcard" name="Geo" native="vcardgeotype" is_bare="true" default_native="priv_i_cal_vcard_null_geo()">
+  <declaration position="body">
+    #define GEO_KEY_URI "i-cal-vcard-geo-key-uri"
+    #define GEO_KEY_COORD_LAT "i-cal-vcard-geo-key-coord-lat"
+    #define GEO_KEY_COORD_LON "i-cal-vcard-geo-key-coord-lon"
+	</declaration>
+  <method name="priv_i_cal_vcard_null_geo" corresponds="none" annotation="skip" kind="others" since="1.0">
+    <returns type="vcardgeotype" comment="null/empty vcardgeotype structure"/>
+    <comment xml:space="preserve">Returns null/empty vcardgeotype structure.</comment>
+    <custom>vcardgeotype geo = { 0, };
+    return geo;</custom>
+  </method>
+  <method name="i_cal_vcard_geo_new_uri" corresponds="none" kind="constructor" since="4.0">
+    <parameter type="const gchar *" name="uri" comment="The URI value for the GEO"/>
+    <returns type="ICalVcardGeo *" annotation="transfer full" comment="The newly created #ICalVcardGeo holding the URI value"/>
+    <comment xml:space="preserve">Creates a new #ICalVcardGeo holding the URI value.</comment>
+    <custom>    vcardgeotype geo = { 0, };
+    gchar *uri_copy = g_strdup(uri);
+    ICalVcardGeo *obj;
+    geo.uri = uri_copy;
+    obj = i_cal_vcard_geo_new_full(geo);
+    g_object_set_data_full(G_OBJECT(obj), GEO_KEY_URI, uri_copy, g_free);
+    return obj;</custom>
+  </method>
+  <method name="i_cal_vcard_geo_new_coords" corresponds="none" kind="constructor" since="4.0">
+    <parameter type="const gchar *" name="lat" comment="a latitude coordinate"/>
+    <parameter type="const gchar *" name="lon" comment="a longitude coordinate"/>
+    <returns type="ICalVcardGeo *" annotation="transfer full" comment="The newly created #ICalVcardGeo holding the coordinates"/>
+    <comment xml:space="preserve">Creates a new #ICalVcardGeo holding the coordinates.</comment>
+    <custom>    vcardgeotype geo = { 0, };
+    gchar *lat_copy = g_strdup(lat), *lon_copy = g_strdup(lon);
+    ICalVcardGeo *obj;
+    geo.coords.lat = lat_copy;
+    geo.coords.lon = lon_copy;
+    obj = i_cal_vcard_geo_new_full(geo);
+    g_object_set_data_full(G_OBJECT(obj), GEO_KEY_COORD_LAT, lat_copy, g_free);
+    g_object_set_data_full(G_OBJECT(obj), GEO_KEY_COORD_LON, lon_copy, g_free);
+    return obj;</custom>
+  </method>
+  <method name="i_cal_vcard_geo_clone" corresponds="none" kind="constructor" since="4.0">
+    <parameter type="const ICalVcardGeo *" name="self" comment="The #ICalVcardGeo to clone"/>
+    <returns type="ICalVcardGeo *" annotation="transfer full" comment="The newly created #ICalVcardGeo, copy of @self."/>
+    <comment xml:space="preserve">Creates a new #ICalVcardGeo, copy of @self.</comment>
+    <custom>    vcardgeotype *gt, geo;
+    gchar *uri_copy = NULL, *lat_copy = NULL, *lon_copy = NULL;
+    ICalVcardGeo *obj;
+
+    g_return_val_if_fail(I_CAL_VCARD_IS_GEO((ICalVcardGeo *)self), NULL);
+
+    gt = (vcardgeotype *)i_cal_object_get_native((ICalObject *)self);
+    g_return_val_if_fail(gt != NULL, NULL);
+
+    geo = *gt;
+    if (geo.uri) {
+        uri_copy = g_strdup(geo.uri);
+        geo.uri = uri_copy;
+    } else {
+        lat_copy = g_strdup(geo.coords.lat);
+        lon_copy = g_strdup(geo.coords.lon);
+        geo.coords.lat = lat_copy;
+        geo.coords.lon = lon_copy;
+    }
+    obj = i_cal_vcard_geo_new_full(geo);
+    g_object_set_data_full(G_OBJECT(obj), GEO_KEY_URI, uri_copy, g_free);
+    g_object_set_data_full(G_OBJECT(obj), GEO_KEY_COORD_LAT, lat_copy, g_free);
+    g_object_set_data_full(G_OBJECT(obj), GEO_KEY_COORD_LON, lon_copy, g_free);
+    return obj;</custom>
+  </method>
+  <method name="i_cal_vcard_geo_get_uri" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardGeo *" name="self" comment="an #ICalVcardGeo"/>
+    <returns type="const gchar *" annotation="nullable" comment="a URI"/>
+    <comment xml:space="preserve">Gets the URI value of the @self. It can return %NULL when not set or when the @self is not of type URI.</comment>
+    <custom>    g_return_val_if_fail(I_CAL_VCARD_IS_GEO((ICalVcardGeo *)self), NULL);
+    return ((vcardgeotype *)i_cal_object_get_native((ICalObject *)self))-&gt;uri;</custom>
+  </method>
+  <method name="i_cal_vcard_geo_set_uri" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardGeo *" name="self" comment="an #ICalVcardGeo"/>
+    <parameter type="const gchar *" name="uri" comment="a URI"/>
+    <comment xml:space="preserve">Sets the URI value of the @self.</comment>
+    <custom>    vcardgeotype *geo;
+    gchar *uri_copy;
+    g_return_if_fail(I_CAL_VCARD_IS_GEO(self));
+    g_return_if_fail(uri != NULL);
+    geo = ((vcardgeotype *)i_cal_object_get_native((ICalObject *)self));
+    uri_copy = g_strdup(uri);
+    geo-&gt;uri = uri_copy;
+    geo-&gt;coords.lat = NULL;
+    geo-&gt;coords.lon = NULL;
+    g_object_set_data_full(G_OBJECT(self), GEO_KEY_URI, uri_copy, g_free);
+    g_object_set_data_full(G_OBJECT(self), GEO_KEY_COORD_LAT, NULL, NULL);
+    g_object_set_data_full(G_OBJECT(self), GEO_KEY_COORD_LON, NULL, NULL);</custom>
+  </method>
+  <method name="i_cal_vcard_geo_get_coords" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardGeo *" name="self" comment="an #ICalVcardGeo"/>
+    <parameter type="const gchar **" name="out_lat" annotation="out,optional" comment="a location to store latitude value, or %NULL to skip it"/>
+    <parameter type="const gchar **" name="out_lon" annotation="out,optional" comment="a location to store langitude value, or %NULL to skip it"/>
+    <comment xml:space="preserve">Gets the coordinates value of the @self. It can return %NULL when not set or when the @self is not of coordinates type. The returned strings are valid as long as the @self is not freed nor modified.</comment>
+    <custom>    vcardgeotype *geo;
+    g_return_if_fail(I_CAL_VCARD_IS_GEO((ICalVcardGeo *)self));
+    geo = ((vcardgeotype *)i_cal_object_get_native((ICalObject *)self));
+    if (out_lat)
+        *out_lat = geo-&gt;coords.lat;
+    if (out_lon)
+        *out_lon = geo-&gt;coords.lon;</custom>
+  </method>
+  <method name="i_cal_vcard_geo_get_coord_lat" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardGeo *" name="self" comment="an #ICalVcardGeo"/>
+    <returns type="const gchar *" annotation="nullable" comment="a latitude coordinate"/>
+    <comment xml:space="preserve">Gets the latitude coordinate of the @self. It can return %NULL when not set or when the @self is not of type coordinate.</comment>
+    <custom>    g_return_val_if_fail(I_CAL_VCARD_IS_GEO((ICalVcardGeo *)self), NULL);
+    return ((vcardgeotype *)i_cal_object_get_native((ICalObject *)self))-&gt;coords.lat;</custom>
+  </method>
+  <method name="i_cal_vcard_geo_get_coord_lon" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardGeo *" name="self" comment="an #ICalVcardGeo"/>
+    <returns type="const gchar *" annotation="nullable" comment="a longitude coordinate"/>
+    <comment xml:space="preserve">Gets the longitude coordinate of the @self. It can return %NULL when not set or when the @self is not of type coordinate.</comment>
+    <custom>    g_return_val_if_fail(I_CAL_VCARD_IS_GEO((ICalVcardGeo *)self), NULL);
+    return ((vcardgeotype *)i_cal_object_get_native((ICalObject *)self))-&gt;coords.lon;</custom>
+  </method>
+  <method name="i_cal_vcard_geo_set_coords" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardGeo *" name="self" comment="an #ICalVcardGeo"/>
+    <parameter type="const gchar *" name="lat" comment="a latitude"/>
+    <parameter type="const gchar *" name="lon" comment="a longitude"/>
+    <comment xml:space="preserve">Sets the coordinate value of the @self.</comment>
+    <custom>    vcardgeotype *geo;
+    gchar *lat_copy, *lon_copy;
+    g_return_if_fail(I_CAL_VCARD_IS_GEO(self));
+    g_return_if_fail(lat != NULL);
+    g_return_if_fail(lon != NULL);
+    geo = ((vcardgeotype *)i_cal_object_get_native((ICalObject *)self));
+    lat_copy = g_strdup(lat);
+    lon_copy = g_strdup(lon);
+    geo-&gt;uri = NULL;
+    geo-&gt;coords.lat = lat_copy;
+    geo-&gt;coords.lon = lon_copy;
+    g_object_set_data_full(G_OBJECT(self), GEO_KEY_URI, NULL, NULL);
+    g_object_set_data_full(G_OBJECT(self), GEO_KEY_COORD_LAT, lat_copy, g_free);
+    g_object_set_data_full(G_OBJECT(self), GEO_KEY_COORD_LON, lon_copy, g_free);</custom>
+  </method>
+</structure>

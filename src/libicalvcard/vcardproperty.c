@@ -1,12 +1,9 @@
 /*======================================================================
  FILE: vcardproperty.c
-
  CREATOR: Ken Murchison 24 Aug 2022
 
  SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -19,7 +16,8 @@
 #include "vcardvalue.h"
 #include "icalerror.h"
 #include "icalmemory.h"
-#include "pvl.h"
+#include "icalproperty.h"
+#include "icalpvl.h"
 
 #include <stdlib.h>
 
@@ -28,8 +26,8 @@ struct vcardproperty_impl {
     vcardproperty_kind kind;
     char *x_name;
     char *group;
-    pvl_list parameters;
-    pvl_elem parameter_iterator;
+    icalpvl_list parameters;
+    icalpvl_elem parameter_iterator;
     vcardvalue *value;
     vcardcomponent *parent;
 };
@@ -53,8 +51,9 @@ vcardproperty *vcardproperty_new_impl(vcardproperty_kind kind)
 {
     vcardproperty *prop;
 
-    if (!vcardproperty_kind_is_valid(kind))
+    if (!vcardproperty_kind_is_valid(kind)) {
         return NULL;
+    }
 
     if ((prop = (vcardproperty *)icalmemory_new_buffer(sizeof(vcardproperty))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -66,7 +65,7 @@ vcardproperty *vcardproperty_new_impl(vcardproperty_kind kind)
     strcpy(prop->id, "prop");
 
     prop->kind = kind;
-    prop->parameters = pvl_newlist();
+    prop->parameters = icalpvl_newlist();
 
     return prop;
 }
@@ -83,7 +82,7 @@ vcardproperty *vcardproperty_new(vcardproperty_kind kind)
 vcardproperty *vcardproperty_clone(const vcardproperty *old)
 {
     vcardproperty *clone;
-    pvl_elem p;
+    icalpvl_elem p;
 
     icalerror_check_arg_rz((old != 0), "old");
     clone = vcardproperty_new_impl(old->kind);
@@ -103,8 +102,8 @@ vcardproperty *vcardproperty_clone(const vcardproperty *old)
         }
     }
 
-    for (p = pvl_head(old->parameters); p != 0; p = pvl_next(p)) {
-        vcardparameter *param = vcardparameter_clone(pvl_data(p));
+    for (p = icalpvl_head(old->parameters); p != 0; p = icalpvl_next(p)) {
+        vcardparameter *param = vcardparameter_clone(icalpvl_data(p));
 
         if (param == 0) {
             vcardproperty_free(clone);
@@ -112,7 +111,7 @@ vcardproperty *vcardproperty_clone(const vcardproperty *old)
             return 0;
         }
 
-        pvl_push(clone->parameters, param);
+        icalpvl_push(clone->parameters, param);
     }
 
     return clone;
@@ -179,11 +178,11 @@ void vcardproperty_free(vcardproperty *p)
         vcardvalue_free(p->value);
     }
 
-    while ((param = pvl_pop(p->parameters)) != 0) {
+    while ((param = icalpvl_pop(p->parameters)) != 0) {
         vcardparameter_free(param);
     }
 
-    pvl_free(p->parameters);
+    icalpvl_free(p->parameters);
 
     if (p->x_name != 0) {
         icalmemory_free_buffer(p->x_name);
@@ -234,12 +233,14 @@ static char *get_next_line_start(char *line_start, size_t chars_left)
     pos = line_start + MAX_LINE_LEN - 1;
     while (pos > line_start) {
         /* plain ascii */
-        if ((*pos & 128) == 0)
+        if ((*pos & 128) == 0) {
             return pos;
+        }
 
         /* utf8 escape byte */
-        if ((*pos & 192) == 192)
+        if ((*pos & 192) == 192) {
             return pos;
+        }
 
         pos--;
     }
@@ -276,8 +277,9 @@ static char *fold_property_line(char *text)
     chars_left = (ssize_t)len;
     first_line = 1;
     for (;;) {
-        if (chars_left <= 0)
+        if (chars_left <= 0) {
             break;
+        }
 
         /* This returns the first character for the next line. */
         next_line_start = get_next_line_start(line_start, (size_t)chars_left);
@@ -308,9 +310,12 @@ static char *fold_property_line(char *text)
    are ignored in the normal parameter printing ( the block after
    this one, so we need to do it here */
 static const char *vcardproperty_get_value_kind(vcardproperty *prop,
-                                                vcardvalue *value)
+                                                const vcardvalue *value)
 {
     const char *kind_string = NULL;
+    if (!prop) {
+        return kind_string;
+    }
     vcardvalue_kind kind = VCARD_NO_VALUE;
     vcardparameter *val_param =
         vcardproperty_get_first_parameter(prop, VCARD_VALUE_PARAMETER);
@@ -499,16 +504,12 @@ char *vcardproperty_as_vcard_string_r(vcardproperty *prop)
 
         if (str != 0) {
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
-#if ICAL_ALLOW_EMPTY_PROPERTIES == 0
-        } else {
+        } else if (!icalproperty_get_allow_empty_properties()) {
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, "ERROR: No Value");
-#endif
         }
         icalmemory_free_buffer(str);
-    } else {
-#if ICAL_ALLOW_EMPTY_PROPERTIES == 0
+    } else if (!icalproperty_get_allow_empty_properties()) {
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, "ERROR: No Value");
-#endif
     }
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
@@ -548,7 +549,7 @@ void vcardproperty_add_parameter(vcardproperty *p, vcardparameter *parameter)
     icalerror_check_arg_rv((p != 0), "prop");
     icalerror_check_arg_rv((parameter != 0), "parameter");
 
-    pvl_push(p->parameters, parameter);
+    icalpvl_push(p->parameters, parameter);
 }
 
 void vcardproperty_set_parameter(vcardproperty *prop, vcardparameter *parameter)
@@ -688,15 +689,15 @@ char *vcardproperty_get_parameter_as_string_r(vcardproperty *prop, const char *n
 
 void vcardproperty_remove_parameter_by_kind(vcardproperty *prop, vcardparameter_kind kind)
 {
-    pvl_elem p;
+    icalpvl_elem p;
 
     icalerror_check_arg_rv((prop != 0), "prop");
 
-    for (p = pvl_head(prop->parameters); p != 0; p = pvl_next(p)) {
-        vcardparameter *param = (vcardparameter *)pvl_data(p);
+    for (p = icalpvl_head(prop->parameters); p != 0; p = icalpvl_next(p)) {
+        vcardparameter *param = (vcardparameter *)icalpvl_data(p);
 
         if (vcardparameter_isa(param) == kind) {
-            (void)pvl_remove(prop->parameters, p);
+            (void)icalpvl_remove(prop->parameters, p);
             vcardparameter_free(param);
             break;
         }
@@ -705,12 +706,12 @@ void vcardproperty_remove_parameter_by_kind(vcardproperty *prop, vcardparameter_
 
 void vcardproperty_remove_parameter_by_name(vcardproperty *prop, const char *name)
 {
-    pvl_elem p;
+    icalpvl_elem p;
 
     icalerror_check_arg_rv((prop != 0), "prop");
 
-    for (p = pvl_head(prop->parameters); p != 0; p = pvl_next(p)) {
-        vcardparameter *param = (vcardparameter *)pvl_data(p);
+    for (p = icalpvl_head(prop->parameters); p != 0; p = icalpvl_next(p)) {
+        vcardparameter *param = (vcardparameter *)icalpvl_data(p);
         const char *kind_string;
 
         if (vcardparameter_isa(param) == VCARD_X_PARAMETER) {
@@ -721,11 +722,12 @@ void vcardproperty_remove_parameter_by_name(vcardproperty *prop, const char *nam
             kind_string = vcardparameter_kind_to_string(vcardparameter_isa(param));
         }
 
-        if (!kind_string)
+        if (!kind_string) {
             continue;
+        }
 
         if (0 == strcmp(kind_string, name)) {
-            (void)pvl_remove(prop->parameters, p);
+            (void)icalpvl_remove(prop->parameters, p);
             vcardparameter_free(param);
             break;
         }
@@ -734,16 +736,16 @@ void vcardproperty_remove_parameter_by_name(vcardproperty *prop, const char *nam
 
 void vcardproperty_remove_parameter_by_ref(vcardproperty *prop, vcardparameter *parameter)
 {
-    pvl_elem p;
+    icalpvl_elem p;
 
     icalerror_check_arg_rv((prop != 0), "prop");
     icalerror_check_arg_rv((parameter != 0), "parameter");
 
-    for (p = pvl_head(prop->parameters); p != 0; p = pvl_next(p)) {
-        vcardparameter *p_param = (vcardparameter *)pvl_data(p);
+    for (p = icalpvl_head(prop->parameters); p != 0; p = icalpvl_next(p)) {
+        vcardparameter *p_param = (vcardparameter *)icalpvl_data(p);
 
         if (vcardparameter_has_same_name(parameter, p_param)) {
-            (void)pvl_remove(prop->parameters, p);
+            (void)icalpvl_remove(prop->parameters, p);
             vcardparameter_free(p_param);
             break;
         }
@@ -753,7 +755,7 @@ void vcardproperty_remove_parameter_by_ref(vcardproperty *prop, vcardparameter *
 int vcardproperty_count_parameters(const vcardproperty *prop)
 {
     if (prop != 0) {
-        return pvl_count(prop->parameters);
+        return icalpvl_count(prop->parameters);
     }
 
     icalerror_set_errno(ICAL_USAGE_ERROR);
@@ -764,15 +766,15 @@ vcardparameter *vcardproperty_get_first_parameter(vcardproperty *p, vcardparamet
 {
     icalerror_check_arg_rz((p != 0), "prop");
 
-    p->parameter_iterator = pvl_head(p->parameters);
+    p->parameter_iterator = icalpvl_head(p->parameters);
 
     if (p->parameter_iterator == 0) {
         return 0;
     }
 
-    for (p->parameter_iterator = pvl_head(p->parameters);
-         p->parameter_iterator != 0; p->parameter_iterator = pvl_next(p->parameter_iterator)) {
-        vcardparameter *param = (vcardparameter *)pvl_data(p->parameter_iterator);
+    for (p->parameter_iterator = icalpvl_head(p->parameters);
+         p->parameter_iterator != 0; p->parameter_iterator = icalpvl_next(p->parameter_iterator)) {
+        vcardparameter *param = (vcardparameter *)icalpvl_data(p->parameter_iterator);
 
         if (vcardparameter_isa(param) == kind || kind == VCARD_ANY_PARAMETER) {
             return param;
@@ -790,9 +792,9 @@ vcardparameter *vcardproperty_get_next_parameter(vcardproperty *p, vcardparamete
         return 0;
     }
 
-    for (p->parameter_iterator = pvl_next(p->parameter_iterator);
-         p->parameter_iterator != 0; p->parameter_iterator = pvl_next(p->parameter_iterator)) {
-        vcardparameter *param = (vcardparameter *)pvl_data(p->parameter_iterator);
+    for (p->parameter_iterator = icalpvl_next(p->parameter_iterator);
+         p->parameter_iterator != 0; p->parameter_iterator = icalpvl_next(p->parameter_iterator)) {
+        vcardparameter *param = (vcardparameter *)icalpvl_data(p->parameter_iterator);
 
         if (vcardparameter_isa(param) == kind || kind == VCARD_ANY_PARAMETER) {
             return param;
@@ -917,7 +919,7 @@ void vcardproperty_set_x_name(vcardproperty *prop, const char *name)
     }
 }
 
-const char *vcardproperty_get_x_name(vcardproperty *prop)
+const char *vcardproperty_get_x_name(const vcardproperty *prop)
 {
     icalerror_check_arg_rz((prop != 0), "prop");
 
@@ -940,7 +942,7 @@ void vcardproperty_set_group(vcardproperty *prop, const char *group)
     }
 }
 
-const char *vcardproperty_get_group(vcardproperty *prop)
+const char *vcardproperty_get_group(const vcardproperty *prop)
 {
     icalerror_check_arg_rz((prop != 0), "prop");
 
@@ -1011,11 +1013,11 @@ static int param_compare(void *a, void *b)
 void vcardproperty_normalize(vcardproperty *prop)
 {
     vcardproperty_kind prop_kind = vcardproperty_isa(prop);
-    pvl_list sorted_params = pvl_newlist();
+    icalpvl_list sorted_params = icalpvl_newlist();
     vcardparameter *param;
 
     /* Normalize parameters into sorted list */
-    while ((param = pvl_pop(prop->parameters)) != 0) {
+    while ((param = icalpvl_pop(prop->parameters)) != 0) {
         int remove = 0;
 
         /* Remove parameters having default values */
@@ -1076,8 +1078,9 @@ void vcardproperty_normalize(vcardproperty *prop)
                 }
             }
 
-            if (!remove)
+            if (!remove) {
                 vcardenumarray_sort(vcardparameter_get_type(param));
+            }
             break;
 
         case VCARD_PID_PARAMETER:
@@ -1096,11 +1099,11 @@ void vcardproperty_normalize(vcardproperty *prop)
             vcardparameter_set_parent(param, 0); // MUST NOT have a parent to free
             vcardparameter_free(param);
         } else {
-            pvl_insert_ordered(sorted_params, param_compare, param);
+            icalpvl_insert_ordered(sorted_params, param_compare, param);
         }
     }
 
-    pvl_free(prop->parameters);
+    icalpvl_free(prop->parameters);
     prop->parameters = sorted_params;
 
     switch (prop_kind) {
@@ -1128,9 +1131,10 @@ void vcardproperty_add_type_parameter(vcardproperty *prop,
         types = vcardparameter_get_type(param);
         vcardenumarray_add(types, type);
     } else {
-        types = vcardenumarray_new(1);
+        param = vcardparameter_new(VCARD_TYPE_PARAMETER);
+        types = vcardenumarray_new(0);
         vcardenumarray_add(types, type);
-        param = vcardparameter_new_type(types);
+        vcardparameter_set_type(param, types);
         vcardproperty_add_parameter(prop, param);
     }
 }

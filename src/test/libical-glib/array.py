@@ -2,11 +2,8 @@
 # GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./array.py
 
 ###############################################################################
-#
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
 ###############################################################################
 
 """Test Python bindings for libical arrays"""
@@ -16,7 +13,7 @@ import sys
 
 import gi
 
-gi.require_version('ICalGLib', '3.0')
+gi.require_version('ICalGLib', '4.0')
 from gi.repository import ICalGLib  # noqa E402
 
 try:

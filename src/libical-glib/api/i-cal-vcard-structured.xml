@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<structure namespace="ICalVcard" name="Structured" native="vcardstructuredtype" default_native="{ 0 }">
+  <method name="i_cal_vcard_structured_new" corresponds="vcardstructured_new" kind="constructor" since="4.0">
+    <returns type="ICalVcardStructured *" annotation="transfer full" comment="The newly created #ICalVcardStructured"/>
+    <comment xml:space="preserve">Creates a new #ICalVcardStructured.</comment>
+  </method>
+  <method name="i_cal_vcard_structured_get_max_fields" corresponds="none" kind="other" since="4.0">
+    <returns type="guint" comment="Maximum number of fields the #ICalVcardStructured fields can hold."/>
+    <comment xml:space="preserve">Gets maximum number of fields the #ICalVcardStructured fields can hold.</comment>
+    <custom>    return VCARD_MAX_STRUCTURED_FIELDS;</custom>
+  </method>
+  <method name="i_cal_vcard_structured_set_num_fields" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardStructured *" name="self" comment="an #ICalVcardStructured"/>
+    <parameter type="guint" name="num_fields" comment="number of fields"/>
+    <comment>Sets how many fields the @self will hold. It can only be less than i_cal_vcard_structured_get_max_fields().</comment>
+    <custom>    g_return_if_fail(self != NULL);
+    g_return_if_fail(num_fields &lt; i_cal_vcard_structured_get_max_fields());
+    ((vcardstructuredtype *)i_cal_object_get_native((ICalObject *)self))-&gt;num_fields = num_fields;</custom>
+  </method>
+  <method name="i_cal_vcard_structured_get_num_fields" corresponds="none" kind="get" since="4.0">
+    <parameter type="const ICalVcardStructured *" name="self" comment="an #ICalVcardStructured"/>
+    <returns type="guint" comment="number of fields"/>
+    <comment xml:space="preserve">Gets the number of fields used by @self.</comment>
+    <custom>    g_return_val_if_fail(self != NULL, 0);
+    return ((vcardstructuredtype *)i_cal_object_get_native((ICalObject *)self))-&gt;num_fields;</custom>
+  </method>
+  <method name="i_cal_vcard_structured_set_field" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalVcardStructured *" name="self" comment="an #ICalVcardStructured"/>
+    <parameter type="guint" name="index" comment="an index to which set the item"/>
+    <parameter type="const ICalVcardStrArray *" name="item" comment="an #ICalVcardStrArray"/>
+    <comment>Sets the @self @index item to @item. The @index can only be less than i_cal_vcard_structured_get_num_fields(). The @item is copied and overwrites any previously set value at the @index without freeing it.</comment>
+    <custom>    vcardstructuredtype *self_ical;
+    g_return_if_fail(self != NULL);
+    g_return_if_fail(item != NULL);
+    g_return_if_fail(index &lt; i_cal_vcard_structured_get_num_fields(self));
+    self_ical = (vcardstructuredtype *)i_cal_object_get_native((ICalObject *)self);
+    self_ical-&gt;field[index] = vcardstrarray_clone((vcardstrarray *)i_cal_object_get_native((ICalObject *)item));</custom>
+  </method>
+  <method name="i_cal_vcard_structured_dup_field" corresponds="none" kind="get" since="4.0">
+    <parameter type="ICalVcardStructured *" name="self" comment="an #ICalVcardStructured"/>
+    <parameter type="guint" name="index" comment="an index to which set the item"/>
+    <returns type="ICalVcardStrArray *" annotation="transfer full,nullable" comment="a new #ICalVcardStrArray at index @index"/>
+    <comment>Duplicates the @self @index field and returns it. The @index can only be less than i_cal_vcard_structured_get_num_fields(). The returned object holds a copy of the string array. A %NULL is return when the item is not set or when th eindex is out of bounds.</comment>
+    <custom>    vcardstructuredtype *self_ical;
+    g_return_val_if_fail(self != NULL, NULL);
+    g_return_val_if_fail(index &lt; i_cal_vcard_structured_get_num_fields(self), NULL);
+    self_ical = (vcardstructuredtype *)i_cal_object_get_native((ICalObject *)self);
+    if (self_ical-&gt;field[index] == NULL)
+        return NULL;
+    return i_cal_vcard_str_array_new_full(self_ical-&gt;field[index], NULL);</custom>
+  </method>
+  <method name="i_cal_vcard_structured_as_vcard_string" corresponds="vcardstructured_as_vcard_string_r" kind="other" since="4.0">
+    <parameter type="ICalVcardStructured *" name="self" comment="an #ICalVcardStructured"/>
+    <parameter type="gboolean" name="is_param" comment="whether the @self corresponds to a parameter"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of the @self." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts the @self into its string representation.</comment>
+  </method>
+  <method name="i_cal_vcard_structured_new_from_string" corresponds="vcardstructured_from_string" kind="constructor" since="4.0">
+    <parameter type="const gchar *" name="str" comment="The string used to create #ICalVcarStructured"/>
+    <returns type="ICalVcardStructured *" annotation="transfer full" comment="The newly created #ICalVcardStructured from the @str."/>
+    <comment xml:space="preserve">Creates a new #ICalVcardStructured from the @str.</comment>
+  </method>
+  <method name="i_cal_vcard_structured_free" corresponds="vcardstructured_free" annotation="skip" kind="destructor" since="4.0">
+    <parameter type="ICalVcardStructured *" name="self" annotation="transfer full" comment="an #ICalVcardStructured to free"/>
+    <comment xml:space="preserve">Frees the @self.</comment>
+  </method>
+</structure>

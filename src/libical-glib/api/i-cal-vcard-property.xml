@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<structure namespace="ICalVcard" name="Property" native="vcardproperty" destroy_func="vcardproperty_free">
+  <skip>vcardproperty_new_impl</skip>
+  <skip>vcardproperty_add_parameters</skip>
+  <method name="i_cal_vcard_property_new" corresponds="vcardproperty_new" kind="constructor" since="4.0">
+    <parameter type="ICalVcardPropertyKind" name="kind" comment="The kind of #ICalVcardProperty to be created"/>
+    <returns type="ICalVcardProperty *" annotation="transfer full" comment="The newly created #ICalVcardProperty with the type @kind."/>
+    <comment xml:space="preserve">Creates an #ICalVcardProperty of the @kind.</comment>
+  </method>
+  <method name="i_cal_vcard_property_clone" corresponds="vcardproperty_clone" kind="clone" since="4.0">
+    <parameter type="const ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be cloned."/>
+    <returns type="ICalVcardProperty *" annotation="transfer full" comment="The newly created #ICalVcardProperty deeply cloned from @prop."/>
+    <comment xml:space="preserve">Deeply clones the @prop.</comment>
+  </method>
+  <method name="i_cal_vcard_property_new_from_string" corresponds="vcardproperty_new_from_string" kind="constructor" since="4.0">
+    <parameter type="const gchar *" name="str" comment="The string used to construct an #ICalVcardProperty"/>
+    <returns type="ICalVcardProperty *" annotation="transfer full" comment="The newly created #ICalVcardProperty from @str."/>
+    <comment xml:space="preserve">Creates an #ICalVcardProperty from a string.</comment>
+  </method>
+  <method name="i_cal_vcard_property_as_vcard_string" corresponds="vcardproperty_as_vcard_string_r" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be converted"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of @prop." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts an #ICalVcardProperty to a string representation.</comment>
+  </method>
+  <method name="i_cal_vcard_property_free" corresponds="vcardproperty_free" annotation="skip" kind="destructor" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" annotation="transfer full" comment="The #ICalVcardProperty to be freed"/>
+    <comment xml:space="preserve">Frees the @prop.</comment>
+  </method>
+  <method name="i_cal_vcard_property_isa" corresponds="vcardproperty_isa" since="4.0">
+    <parameter type="ICalVcardProperty *" name="property" comment="The #ICalVcardProperty which type is to be determined"/>
+    <returns type="ICalVcardPropertyKind" comment="The type of #ICalVcardProperty."/>
+    <comment xml:space="preserve">Gets the kind of the @property.</comment>
+  </method>
+  <method name="i_cal_vcard_property_isa_property" corresponds="vcardproperty_isa_property" since="4.0">
+    <parameter type="ICalVcardProperty *" name="property" comment="The object whose native part to be checked"/>
+    <returns type="gboolean" comment="true if the native part of @property is of the type icalproperty, false if not."/>
+    <comment xml:space="preserve">Checks whether the native part of #ICalVcardProperty is valid vCard property.</comment>
+  </method>
+  <method name="i_cal_vcard_property_add_parameter" corresponds="vcardproperty_add_parameter" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be set"/>
+    <parameter type="ICalVcardParameter *" name="parameter" annotation="transfer none" owner_op="prop" comment="The parameter to be added into @prop"/>
+    <comment xml:space="preserve">Adds an #ICalVcardParameter into the #ICalVcardProperty. It behaves like set the copy of the #ICalVcardParameter. Upon completion the native part of #ICalVcardParameter will be set to %NULL.</comment>
+  </method>
+  <method name="i_cal_vcard_property_take_parameter" corresponds="vcardproperty_add_parameter" annotation="skip" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be set"/>
+    <parameter type="ICalVcardParameter *" name="parameter" annotation="transfer full" comment="The parameter to be added into @prop"/>
+    <comment xml:space="preserve">Adds the @parameter into the @prop and frees the @parameter.</comment>
+    <custom>    g_return_if_fail(I_CAL_VCARD_IS_PROPERTY(prop));
+    g_return_if_fail(I_CAL_VCARD_IS_PARAMETER(parameter));
+
+    i_cal_vcard_property_add_parameter(prop, parameter);
+    g_object_unref(parameter);</custom>
+  </method>
+  <method name="i_cal_vcard_property_set_parameter" corresponds="vcardproperty_set_parameter" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be set"/>
+    <parameter type="ICalVcardParameter *" name="parameter" annotation="transfer none" owner_op="prop" comment="The parameter to be set into @prop"/>
+    <comment xml:space="preserve">Sets an #ICalVcardParameter into the #ICalVcardProperty. It behaves like set the copy of the #ICalVcardParameter. Upon completion the native part of #ICalVcardParameter will be set to NULL.</comment>
+  </method>
+  <method name="i_cal_vcard_property_set_parameter_from_string" corresponds="vcardproperty_set_parameter_from_string" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be set"/>
+    <parameter type="const gchar *" name="name" comment="The name of the parameter"/>
+    <parameter type="const gchar *" name="value" comment="The value of the parameter"/>
+    <comment xml:space="preserve">Sets the #ICalVcardProperty with the parameter defined by the name and value.</comment>
+  </method>
+  <method name="i_cal_vcard_property_get_parameter_as_string" corresponds="vcardproperty_get_parameter_as_string_r" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be queried"/>
+    <parameter type="const gchar *" name="name" comment="The name of the target parameter"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of the parameter." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Gets the string representation of the target parameter in the #ICalVcardProperty.</comment>
+  </method>
+  <method name="i_cal_vcard_property_remove_parameter_by_kind" corresponds="vcardproperty_remove_parameter_by_kind" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be manipulated"/>
+    <parameter type="ICalVcardParameterKind" name="kind" comment="The #ICalVcardParameterKind to be removed"/>
+    <comment xml:space="preserve">Removes all parameters of kind @kind from the @prop.</comment>
+  </method>
+  <method name="i_cal_vcard_property_remove_parameter_by_name" corresponds="vcardproperty_remove_parameter_by_name" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be manipulated"/>
+    <parameter type="const gchar *" name="name" comment="The name of the parameter to be removed"/>
+    <comment xml:space="preserve">Removes all parameters of name @name from the @prop.</comment>
+  </method>
+  <method name="i_cal_vcard_property_remove_parameter_by_ref" corresponds="vcardproperty_remove_parameter_by_ref" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be manipulated"/>
+    <parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be removed"/>
+    <comment xml:space="preserve">Removes the parameter in the #ICalVcardProperty by ref.</comment>
+  </method>
+  <method name="i_cal_vcard_property_count_parameters" corresponds="vcardproperty_count_parameters" since="4.0">
+    <parameter type="const ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be checked"/>
+    <returns type="gint" comment="The count of the parameters in the #ICalVcardProperty."/>
+    <comment xml:space="preserve">Counts the parameters in the #ICalVcardProperty.</comment>
+  </method>
+  <method name="i_cal_vcard_property_get_first_parameter" corresponds="vcardproperty_get_first_parameter" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be queried"/>
+    <parameter type="ICalVcardParameterKind" name="kind" comment="The target kind of #ICalVcardParameter to be retrieved"/>
+    <returns type="ICalVcardParameter *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The first #ICalVcardParameter of @prop."/>
+    <comment xml:space="preserve">Gets the first #ICalVcardParameter from the parent #ICalVcardProperty.</comment>
+  </method>
+  <method name="i_cal_vcard_property_get_next_parameter" corresponds="vcardproperty_get_next_parameter" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be queried"/>
+    <parameter type="ICalVcardParameterKind" name="kind" comment="The target kind of #ICalVcardParameter to be retrieved"/>
+    <returns type="ICalVcardParameter *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The next #ICalVcardParameter of @prop."/>
+    <comment xml:space="preserve">Gets the next #ICalVcardParameter from the parent #ICalVcardProperty.</comment>
+  </method>
+  <method name="i_cal_vcard_property_set_value" corresponds="vcardproperty_set_value" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" translator_argus="value" comment="The target #ICalVcardProperty"/>
+    <parameter type="ICalVcardValue *" name="value" owner_op="prop" comment="The #ICalVcardValue will be set as the property of @prop"/>
+    <comment xml:space="preserve">Sets the #ICalVcardProperty with the #ICalVcardValue.</comment>
+  </method>
+  <method name="i_cal_vcard_property_take_value" corresponds="vcardproperty_set_value" annotation="skip" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The target #ICalVcardProperty"/>
+    <parameter type="ICalVcardValue *" name="value" annotation="transfer full" comment="The #ICalVcardValue will be set as the property of @prop"/>
+    <comment xml:space="preserve">Sets the @prop with the @value and unrefs the @value.</comment>
+    <custom>    g_return_if_fail(I_CAL_IS_PROPERTY(prop));
+    g_return_if_fail(I_CAL_IS_VALUE(value));
+
+    i_cal_vcard_property_set_value(prop, value);
+    g_object_unref(value);</custom>
+  </method>
+  <method name="i_cal_vcard_property_set_value_from_string" corresponds="vcardproperty_set_value_from_string" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be set"/>
+    <parameter type="const gchar *" name="value" comment="The value used to construct the #ICalVcardValue"/>
+    <parameter type="const gchar *" name="kind" comment="The kind used to construct the #ICalVcardValue"/>
+    <comment xml:space="preserve">Sets the #ICalVcardProperty with the #ICalVcardValue constructed from string.</comment>
+  </method>
+  <method name="i_cal_vcard_property_get_value" corresponds="vcardproperty_get_value" since="4.0">
+    <parameter type="const ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be queried"/>
+    <returns type="ICalVcardValue *" annotation="transfer full" translator_argus="(GObject *)prop" comment="The #ICalVcardValue of @prop."/>
+    <comment xml:space="preserve">Gets the #ICalVcardValue of #ICalVcardProperty.</comment>
+  </method>
+  <method name="i_cal_vcard_property_get_value_as_string" corresponds="vcardproperty_get_value_as_string_r" since="4.0">
+    <parameter type="const ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be queried"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of the value of the #ICalVcardProperty." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Gets the string representation of the value in #ICalVcardProperty.</comment>
+  </method>
+  <method name="i_cal_vcard_value_set_parent" corresponds="vcardvalue_set_parent" since="4.0">
+    <parameter type="ICalVcardValue *" name="value" comment="The child #ICalVcardValue"/>
+    <parameter type="ICalVcardProperty *" name="property" annotation="nullable" comment="The parent #ICalVcardProperty"/>
+    <comment xml:space="preserve">Sets the parent property of a value.</comment>
+  </method>
+  <method name="i_cal_vcard_value_get_parent" corresponds="vcardvalue_get_parent" since="4.0">
+    <parameter type="const ICalVcardValue *" name="value" comment="An #ICalVcardValue"/>
+    <returns type="ICalVcardProperty *" annotation="transfer full, nullable" comment="The parent #ICalVcardProperty"/>
+    <comment xml:space="preserve">Gets the parent #ICalVcardProperty of the specified #ICalVcardValue.</comment>
+  </method>
+  <method name="i_cal_vcard_property_set_x_name" corresponds="vcardproperty_set_x_name" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="An #ICalVcardProperty"/>
+    <parameter type="const gchar *" name="name" comment="The name string"/>
+    <comment xml:space="preserve">Sets the name of X property for the #ICalVcardProperty.</comment>
+  </method>
+  <method name="i_cal_vcard_property_get_x_name" corresponds="vcardproperty_get_x_name" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="An #ICalVcardProperty"/>
+    <returns type="const gchar *" annotation="nullable" comment="The name of x property."/>
+    <comment xml:space="preserve">Gets the name of X property.</comment>
+  </method>
+  <method name="i_cal_vcard_property_set_group" corresponds="vcardproperty_set_group" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="An #ICalVcardProperty"/>
+    <parameter type="const gchar *" name="group" comment="A group name"/>
+    <comment xml:space="preserve">Sets the group name of the @prop.</comment>
+  </method>
+  <method name="i_cal_vcard_property_get_group" corresponds="vcardproperty_get_group" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="An #ICalVcardProperty"/>
+    <returns type="const gchar *" annotation="nullable" comment="The group name of the @prop."/>
+    <comment xml:space="preserve">Gets the group name of the @prop.</comment>
+  </method>
+  <method name="i_cal_vcard_property_get_property_name" corresponds="vcardproperty_get_property_name_r" since="4.0">
+    <parameter type="const ICalVcardProperty *" name="prop" comment="An #ICalVcardProperty"/>
+    <returns type="gchar *" annotation="transfer full" comment="Property name of #ICalVcardProperty." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Gets the property name of #ICalVcardProperty.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_value_to_value_kind" corresponds="vcardparameter_value_to_value_kind" since="4.0">
+    <parameter type="ICalVcardParameterValue" name="value" comment="An #ICalVcardParameterValue"/>
+    <returns type="ICalVcardValueKind" comment="#ICalVcardValueKind"/>
+    <comment xml:space="preserve">Converts the #ICalVcardParameterValue to #ICalVcardValueKind.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_set_parent" corresponds="vcardparameter_set_parent" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="The child #ICalVcardParameter"/>
+    <parameter type="ICalVcardProperty *" name="property" annotation="nullable" comment="The parent #ICalVcardProperty"/>
+    <comment xml:space="preserve">Sets the parent #ICalVcardProperty of an #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_get_parent" corresponds="vcardparameter_get_parent" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="The child #ICalVcardParameter"/>
+    <returns type="ICalVcardProperty *" annotation="transfer full, nullable" comment="The parent #ICalVcardProperty"/>
+    <comment xml:space="preserve">Gets the parent #ICalVcardProperty of the specified #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_property_kind_to_value_kind" corresponds="vcardproperty_kind_to_value_kind" since="4.0">
+    <parameter type="ICalVcardPropertyKind" name="kind" comment="An #ICalVcardPropertyKind"/>
+    <returns type="ICalVcardValueKind" comment="The #ICalVcardValueKind"/>
+    <comment xml:space="preserve">Converts the #ICalVcardPropertyKind to #ICalVcardValueKind.</comment>
+  </method>
+  <method name="i_cal_vcard_value_kind_to_property_kind" corresponds="vcardproperty_value_kind_to_kind" since="4.0">
+    <parameter type="ICalVcardValueKind" name="kind" comment="An #ICalVcardValueKind"/>
+    <returns type="ICalVcardPropertyKind" comment="The #ICalVcardPropertyKind."/>
+    <comment xml:space="preserve">Converts an #ICalVcardValueKind to an #ICalVcardPropertyKind.</comment>
+  </method>
+  <method name="i_cal_vcard_property_kind_to_string" corresponds="vcardproperty_kind_to_string" since="4.0">
+    <parameter type="ICalVcardPropertyKind" name="kind" comment="An #ICalVcardPropertyKind"/>
+    <returns type="const gchar *" comment="The string representation of @kind."/>
+    <comment xml:space="preserve">Converts the #ICalVcardPropertyKind to a string.</comment>
+  </method>
+  <method name="i_cal_vcard_property_kind_from_string" corresponds="vcardproperty_string_to_kind" since="4.0">
+    <parameter type="const gchar *" name="string" comment="A string representing #ICalVcardPropertyKind"/>
+    <returns type="ICalVcardPropertyKind" comment="The #ICalVcardPropertyKind."/>
+    <comment xml:space="preserve">Converts the string to #ICalVcardPropertyKind.</comment>
+  </method>
+  <method name="i_cal_vcard_property_kind_is_valid" corresponds="vcardproperty_kind_is_valid" since="4.0">
+    <parameter type="ICalVcardPropertyKind" name="kind" comment="The #ICalVcardPropertyKind"/>
+    <returns type="gboolean" comment="true if valid, false if not."/>
+    <comment xml:space="preserve">Checks whether #ICalVcardPropertyKind is valid.</comment>
+  </method>
+  <method name="i_cal_vcard_property_enum_to_string" corresponds="vcardproperty_enum_to_string_r" since="4.0">
+    <parameter type="int" name="e" comment="An enum value"/>
+    <returns type="gchar *" annotation="transfer full,nullable" comment="String representation of the @e, or %NULL, when the @e is an unknown enum." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Gets string representation of the @e.</comment>
+  </method>
+  <method name="i_cal_vcard_property_kind_and_string_to_enum" corresponds="vcardproperty_kind_and_string_to_enum" since="4.0">
+    <parameter type="int" name="kind" comment="An #ICalVcardValueKind as integer"/>
+    <parameter type="const gchar *" name="str" comment="A string"/>
+    <returns type="gint" comment="enum value for the provided @kind and @str, or 0 for unknown kind."/>
+    <comment xml:space="preserve">Returns enum value for the provided @kind and @str, or 0 for unknown kind.</comment>
+  </method>
+  <method name="i_cal_vcard_property_enum_belongs_to_property" corresponds="vcardproperty_enum_belongs_to_property" since="4.0">
+    <parameter type="ICalVcardPropertyKind" name="kind" comment="an #ICalVcardPropertyKind"/>
+    <parameter type="int" name="e" comment="an enum value"/>
+    <returns type="gboolean" comment="true if the @kind can hold @e, false if not."/>
+    <comment xml:space="preserve">Checks whether the @kind can hold @e.</comment>
+  </method>
+  <method name="i_cal_vcard_property_normalize" corresponds="vcardproperty_normalize" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" annotation="nullable" comment="an #ICalVcardProperty"/>
+    <comment xml:space="preserve">Normalizes (reorder and sorts) the parameters of the @prop.</comment>
+  </method>
+  <method name="i_cal_vcard_property_kind_is_structured" corresponds="vcardproperty_is_structured" since="4.0">
+    <parameter type="ICalVcardPropertyKind" name="kind" comment="an #ICalVcardPropertyKind"/>
+    <returns type="gboolean" comment="whether the @kind is a structured property"/>
+    <comment xml:space="preserve">Returns whether the @kind is a structured property. Structured properties have their value encoded in a specific format.</comment>
+  </method>
+  <method name="i_cal_vcard_property_kind_is_multivalued" corresponds="vcardproperty_is_multivalued" since="4.0">
+    <parameter type="ICalVcardPropertyKind" name="kind" comment="an #ICalVcardPropertyKind"/>
+    <returns type="gboolean" comment="whether the @kind is a multivalued property"/>
+    <comment xml:space="preserve">Returns whether the @kind is a multivalued property. Multivalued properties can hold more than one value.</comment>
+  </method>
+  <method name="i_cal_vcard_property_add_type_parameter" corresponds="vcardproperty_add_type_parameter" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="an #ICalVcardProperty"/>
+    <parameter type="ICalVcardParameterType" name="type_param" comment="a TYPE parameter as #ICalVcardParameterType"/>
+    <comment xml:space="preserve">Adds an #ICalVcardParameterType TYPE parameter into the @prop. See also i_cal_vcard_property_add_type_x_parameter()</comment>
+    <custom>    vcardenumarray_element elem = { 0 };
+    g_return_if_fail(I_CAL_VCARD_IS_PROPERTY(prop));
+    elem.val = type_param;
+    vcardproperty_add_type_parameter((vcardproperty *)i_cal_object_get_native ((ICalObject *)prop), &amp;elem);</custom>
+  </method>
+  <method name="i_cal_vcard_property_add_type_x_parameter" corresponds="vcardproperty_add_type_parameter" since="4.0">
+    <parameter type="ICalVcardProperty *" name="prop" comment="an #ICalVcardProperty"/>
+    <parameter type="const gchar *" name="type_param" annotation="transfer none" comment="an X value of a TYPE parameter"/>
+    <comment xml:space="preserve">Adds an X (custom) TYPE parameter into the @prop. See also i_cal_vcard_property_add_type_parameter()</comment>
+    <custom>    vcardenumarray_element elem = { 0 };
+    g_return_if_fail(I_CAL_VCARD_IS_PROPERTY(prop));
+    elem.val = VCARD_X_PARAMETER;
+    elem.xvalue = type_param;
+    vcardproperty_add_type_parameter((vcardproperty *)i_cal_object_get_native ((ICalObject *)prop), &amp;elem);</custom>
+  </method>
+</structure>

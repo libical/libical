@@ -3,9 +3,7 @@
  CREATOR: acampi 13 March 2002
 
  SPDX-FileCopyrightText: 2002 Andrea Campi <a.campi@inet.it>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALCLUSTER_H
@@ -33,15 +31,15 @@ LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_clone(const icalcluster *cluster)
 
 LIBICAL_ICALSS_EXPORT void icalcluster_free(icalcluster *cluster);
 
-LIBICAL_ICALSS_EXPORT const char *icalcluster_key(icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT const char *icalcluster_key(const icalcluster *cluster);
 
-LIBICAL_ICALSS_EXPORT int icalcluster_is_changed(icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT int icalcluster_is_changed(const icalcluster *cluster);
 
 LIBICAL_ICALSS_EXPORT void icalcluster_mark(icalcluster *cluster);
 
 LIBICAL_ICALSS_EXPORT void icalcluster_commit(icalcluster *cluster);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_component(icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_component(const icalcluster *cluster);
 
 LIBICAL_ICALSS_EXPORT int icalcluster_count_components(icalcluster *cluster,
                                                        icalcomponent_kind kind);

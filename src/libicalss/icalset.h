@@ -15,7 +15,6 @@
 /*
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -40,7 +39,7 @@ typedef enum icalset_kind
 } icalset_kind;
 
 typedef struct icalsetiter {
-    icalcompiter iter; /* icalcomponent_kind, pvl_elem iter */
+    icalcompiter iter; /* icalcomponent_kind, icalpvl_elem iter */
     icalgauge *gauge;
     icalrecur_iterator *ritr;      /*the last iterator */
     icalcomponent *last_component; /*the pending recurring component to be processed  */
@@ -62,7 +61,7 @@ struct icalset_impl {
     icalerrorenum (*select)(icalset *set, icalgauge *gauge);
     void (*clear)(icalset *set);
     icalcomponent *(*fetch)(icalset *set, icalcomponent_kind kind, const char *uid);
-    icalcomponent *(*fetch_match)(icalset *set, icalcomponent *comp);
+    icalcomponent *(*fetch_match)(icalset *set, const icalcomponent *comp);
     int (*has_uid)(icalset *set, const char *uid);
     icalerrorenum (*modify)(icalset *set, icalcomponent *old, icalcomponent *newc);
     icalcomponent *(*get_current_component)(icalset *set);
@@ -129,7 +128,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch(icalset *set, const char *uid
 
 LIBICAL_ICALSS_EXPORT int icalset_has_uid(icalset *set, const char *uid);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch_match(icalset *set, icalcomponent *c);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalset_fetch_match(icalset *set, const icalcomponent *c);
 
 /** Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */

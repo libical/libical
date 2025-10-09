@@ -23,6 +23,8 @@
 #include "icalproperty_cxx.h"
 #endif
 
+using namespace LibICal;
+
 /*
  * Class:     net_cp_jlibical_ICalProperty
  * Method:    as_ical_string
@@ -36,14 +38,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_as_1ical_1string
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->as_ical_string();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->as_ical_string();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -154,7 +150,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1parameter_1from_1s
 
         if (szName != NULL && szValue != NULL)
         {
-            cObj->set_parameter_from_string((string)szName, (string)szValue);
+            cObj->set_parameter_from_string(szName, szValue);
         }
     }
 }
@@ -176,14 +172,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1parameter_1as_1
 
         if (szName != NULL)
         {
-            char* szValue = cObj->get_parameter_as_string((string)szName);
-
-            if (szValue == NULL)
-            {
-                szValue = "";
-            }
-
-            result = env->NewStringUTF(szValue);
+            std::string szValue = cObj->get_parameter_as_string(szName);
+            result = env->NewStringUTF(szValue.empty() ? "" : szValue.c_str());
         }
     }
 
@@ -305,7 +295,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1value_1from_1strin
 
         if (szName != NULL && szValue != NULL)
         {
-            cObj->set_value_from_string((string)szName, (string)szValue);
+            cObj->set_value_from_string(szName, szValue);
         }
     }
 }
@@ -346,14 +336,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1value_1as_1stri
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_value_as_string();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_value_as_string();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -372,14 +356,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1name
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_name();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_name();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -452,14 +430,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1attendee
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_attendee();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_attendee();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -497,14 +469,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1comment
 
     if (cObj != NULL)
     {
-        char* commentStr = cObj->get_comment();
-
-        if (commentStr == NULL)
-        {
-            commentStr = "";
-        }
-
-        result = env->NewStringUTF(commentStr);
+        std::string commentStr = cObj->get_comment();
+        result = env->NewStringUTF(commentStr.empty() ? "" : commentStr.c_str());
     }
     return(result);
 }
@@ -541,14 +507,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1description
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_description();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_description();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -806,14 +766,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1location
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_location();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_location();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -886,14 +840,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1organizer
 
     if (cObj != NULL)
     {
-        char* organizerStr = cObj->get_organizer();
-
-        if (organizerStr == NULL)
-        {
-            organizerStr = "";
-        }
-
-        result = env->NewStringUTF(organizerStr);
+        std::string organizerStr = cObj->get_organizer();
+        result = env->NewStringUTF(organizerStr.empty() ? "" : organizerStr.c_str());
     }
     return(result);
 }
@@ -930,14 +878,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1owner
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_owner();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_owner();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -975,14 +917,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1prodid
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_prodid();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_prodid();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -1020,14 +956,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1query
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_query();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_query();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -1065,14 +995,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1queryname
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_queryname();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_queryname();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -1145,14 +1069,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1summary
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_summary();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_summary();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -1190,14 +1108,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1target
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_target();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_target();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -1279,14 +1191,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1tzid
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_tzid();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_tzid();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -1324,14 +1230,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1uid
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_uid();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_uid();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -1449,14 +1349,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1relcalid
 
         if (cObj != NULL)
         {
-                char* icalStr = cObj->get_relcalid();
-
-                if (icalStr == NULL)
-                {
-                       icalStr = "";
-                }
-
-                result = env->NewStringUTF(icalStr);
+            auto icalStr = cObj->get_relcalid();
+            result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
         }
 
         return(result);
@@ -1520,8 +1414,8 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1exrule
     ICalProperty* cObj = getSubjectAsICalProperty(env,jobj,JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL)
     {
-        icalrecurrencetype aExRule;
-        if (copyObjToicalrecurrencetype(env,exrule,&aExRule))
+        auto aExRule = icalrecurrencetype_new();
+        if (copyObjToicalrecurrencetype(env,exrule,aExRule))
         {
             cObj->set_exrule(aExRule);
         }
@@ -1543,10 +1437,10 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1exrule
     if (cObj != NULL)
     {
         // get the exrule from CObj
-        icalrecurrencetype aExRule = cObj->get_exrule();
+        icalrecurrencetype* aExRule = cObj->get_exrule();
 
         // create a new surrogate, using aExRule as the subject.
-        result = createNewICalRecurrenceType(env,&aExRule);
+        result = createNewICalRecurrenceType(env,aExRule);
     }
 
     return(result);
@@ -1657,9 +1551,9 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1rrule
 
     if (cObj != NULL)
     {
-        icalrecurrencetype aRRule;
+        auto aRRule = icalrecurrencetype_new();
 
-        if (copyObjToicalrecurrencetype(env,rrule,&aRRule))
+        if (copyObjToicalrecurrencetype(env,rrule,aRRule))
         {
             cObj->set_rrule(aRRule);
         }
@@ -1681,10 +1575,10 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1rrule
     if (cObj != NULL)
     {
         // get the rrule from CObj
-        icalrecurrencetype aRRule = cObj->get_rrule();
+        auto aRRule = cObj->get_rrule();
 
         // create a new surrogate, using aExRule as the subject.
-        result = createNewICalRecurrenceType(env,&aRRule);
+        result = createNewICalRecurrenceType(env,aRRule);
     }
 
     return(result);

@@ -1,10 +1,7 @@
 /*
 ======================================================================
-
  SPDX-FileCopyrightText: 2008, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -42,7 +39,7 @@ int main(void)
     static char new_tz[256];
 #endif
 
-    set_zone_directory("../../zoneinfo");
+    icaltimezone_set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
     timezones = icaltimezone_get_builtin_timezones();
@@ -53,8 +50,9 @@ int main(void)
         zone = (icaltimezone *)icalarray_element_at(timezones, i);
         zone_location = icaltimezone_get_location(zone);
         zonedef_printed = 0;
-        if (!zone_location)
+        if (!zone_location) {
             continue;
+        }
 
         /*
          * select this location for glibc: needs support for TZ=<location>
@@ -107,8 +105,9 @@ int main(void)
                 struct tm utc_tm;
 
                 memset(&utc_tm, 0, sizeof(struct tm));
-                if (!icalgmtime_r(&curr_time, &utc_tm))
+                if (!icalgmtime_r(&curr_time, &utc_tm)) {
                     memset(&utc_tm, 0, sizeof(utc_tm));
+                }
 
                 printf(
                     "%s: day %03d: %s: %04d-%02d-%02d %02d:%02d:%02d UTC = "

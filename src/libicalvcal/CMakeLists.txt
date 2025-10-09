@@ -39,13 +39,6 @@ add_library(
   ${icalvcal_LIB_SRCS}
 )
 add_dependencies(icalvcal ical-header)
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  add_library(icalvcal-static STATIC ${icalvcal_LIB_SRCS})
-  add_dependencies(icalvcal-static ical-header)
-elseif(STATIC_ONLY)
-  add_library(icalvcal-static ALIAS icalvcal)
-endif()
-
 target_link_libraries(icalvcal ical)
 
 if(MSVC)
@@ -55,30 +48,13 @@ if(MSVC)
       PREFIX
         "lib"
   )
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      icalvcal-static
-      PROPERTIES
-        PREFIX
-          "lib"
-    )
-  endif()
-else()
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      icalvcal-static
-      PROPERTIES
-        OUTPUT_NAME
-          "icalvcal"
-    )
-  endif()
 endif()
 if(NOT ANDROID)
   set_target_properties(
     icalvcal
     PROPERTIES
       VERSION
-        ${LIBICAL_LIB_VERSION_STRING}
+        ${CMAKE_PROJECT_VERSION}
       SOVERSION
         ${LIBICAL_LIB_SOVERSION_STRING}
   )
@@ -89,31 +65,12 @@ set_target_properties(
     CLEAN_DIRECT_OUTPUT
       1
 )
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  set_target_properties(
-    icalvcal-static
-    PROPERTIES
-      CLEAN_DIRECT_OUTPUT
-        1
-  )
-endif()
 
-install(
-  TARGETS
-    icalvcal
-  EXPORT icalTargets
-  DESTINATION
-  ${INSTALL_TARGETS_DEFAULT_ARGS}
-)
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  install(
-    TARGETS
-      icalvcal-static
-    EXPORT icalTargets
-    DESTINATION
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
-  )
-endif()
+install(TARGETS icalvcal EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libicalvcal.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libicalvcal.pc @ONLY)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libicalvcal.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 ########### install files ###############
 

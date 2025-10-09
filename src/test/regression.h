@@ -1,16 +1,14 @@
 /*======================================================================
- FILE: regression.c
+ FILE: regression.h
  CREATOR: eric 03 April 1999
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 #ifndef TEST_REGRESSION_H
 #define TEST_REGRESSION_H
 
-#include "icaltypes.h"
+#include "icaltime.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -3,7 +3,6 @@
  CREATOR: eric 02 June 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -31,26 +30,29 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
     icalerrorenum e = icalerrno;
 
     p.start = p.end = icaltime_null_time();
-    p.duration = icaldurationtype_from_int(0);
+    p.duration = icaldurationtype_null_duration();
 
     null_p = p;
 
-    if (s == 0)
+    if (s == 0) {
         goto error;
+    }
 
     start = s;
     end = strchr(s, '/');
 
-    if (end == 0)
+    if (end == 0) {
         goto error;
+    }
 
     *end = 0;
     end++;
 
     p.start = icaltime_from_string(start);
 
-    if (icaltime_is_null_time(p.start))
+    if (icaltime_is_null_time(p.start)) {
         goto error;
+    }
 
     es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
@@ -62,8 +64,9 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
     if (icaltime_is_null_time(p.end)) {
         p.duration = icaldurationtype_from_string(end);
 
-        if (icaldurationtype_as_int(p.duration) == 0)
+        if (icaldurationtype_is_null_duration(p.duration)) {
             goto error;
+        }
     }
 
     icalerrno = e;

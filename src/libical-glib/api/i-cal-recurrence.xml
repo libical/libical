@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,266 +7,262 @@
 
 -->
 <structure namespace="ICal" name="Recurrence" native="struct icalrecurrencetype" default_native="i_cal_recurrence_new_default ()" destroy_func="icalrecurrencetype_unref" new_full_extra_code="if (owner) { icalrecurrencetype_ref (native); owner = NULL; }">
-     <enum name="ICalRecurrenceFrequency" native_name="icalrecurrencetype_frequency" default_native="I_CAL_NO_RECURRENCE">
-        <element name="ICAL_SECONDLY_RECURRENCE"/>
-        <element name="ICAL_MINUTELY_RECURRENCE"/>
-        <element name="ICAL_HOURLY_RECURRENCE"/>
-        <element name="ICAL_DAILY_RECURRENCE"/>
-        <element name="ICAL_WEEKLY_RECURRENCE"/>
-        <element name="ICAL_MONTHLY_RECURRENCE"/>
-        <element name="ICAL_YEARLY_RECURRENCE"/>
-        <element name="ICAL_NO_RECURRENCE"/>
-    </enum>
-    <enum name="ICalRecurrenceWeekday" native_name="icalrecurrencetype_weekday" default_native="I_CAL_NO_WEEKDAY">
-        <element name="ICAL_NO_WEEKDAY"/>
-        <element name="ICAL_SUNDAY_WEEKDAY"/>
-        <element name="ICAL_MONDAY_WEEKDAY"/>
-        <element name="ICAL_TUESDAY_WEEKDAY"/>
-        <element name="ICAL_WEDNESDAY_WEEKDAY"/>
-        <element name="ICAL_THURSDAY_WEEKDAY"/>
-        <element name="ICAL_FRIDAY_WEEKDAY"/>
-        <element name="ICAL_SATURDAY_WEEKDAY"/>
-    </enum>
-    <enum name="ICalRecurrenceSkip" native_name="icalrecurrencetype_skip" default_native="I_CAL_SKIP_UNDEFINED">
-        <element name="ICAL_SKIP_BACKWARD"/>
-        <element name="ICAL_SKIP_FORWARD"/>
-        <element name="ICAL_SKIP_OMIT"/>
-        <element name="ICAL_SKIP_UNDEFINED"/>
-	</enum>
-    <enum name="ICalRecurrenceByRule" native_name="icalrecurrencetype_byrule" default_native="ICAL_BYRULE_NO_CONTRACTION">
-        <element name="ICAL_BYRULE_NO_CONTRACTION"/>
-        <element name="ICAL_BY_MONTH"/>
-        <element name="ICAL_BY_WEEK_NO"/>
-        <element name="ICAL_BY_YEAR_DAY"/>
-        <element name="ICAL_BY_MONTH_DAY"/>
-        <element name="ICAL_BY_DAY"/>
-        <element name="ICAL_BY_HOUR"/>
-        <element name="ICAL_BY_MINUTE"/>
-        <element name="ICAL_BY_SECOND"/>
-        <element name="ICAL_BY_SET_POS"/>
-        <element name="ICAL_BY_NUM_PARTS"/>
-	</enum>
-    <!-- Not a real enum, those are defines in libical -->
-    <enum name="ICalRecurrenceArraySizes" native_name="CUSTOM" default_native="I_CAL_BY_SECOND_SIZE">
-        <element name="ICAL_BY_SECOND_SIZE"/>
-        <element name="ICAL_BY_MINUTE_SIZE"/>
-        <element name="ICAL_BY_HOUR_SIZE"/>
-        <element name="ICAL_BY_MONTH_SIZE"/>
-        <element name="ICAL_BY_MONTHDAY_SIZE"/>
-        <element name="ICAL_BY_WEEKNO_SIZE"/>
-        <element name="ICAL_BY_YEARDAY_SIZE"/>
-        <element name="ICAL_BY_SETPOS_SIZE"/>
-        <element name="ICAL_BY_DAY_SIZE"/>
-    </enum>
-    <method name="i_cal_recurrence_rscale_is_supported" corresponds="icalrecurrencetype_rscale_is_supported" kind="get" since="2.0">
-	<returns type="gboolean" comment="Whether rscale is supported"/>
-	<comment xml:space="preserve">Checks whether rscale is supported.</comment>
-    </method>
-    <method name="i_cal_recurrence_rscale_supported_calendars" corresponds="icalrecurrencetype_rscale_supported_calendars" kind="other" since="2.0">
-	<returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="Array of calendars. Currently always NULL."/>
-	<comment xml:space="preserve">Gets an array of calendars supporting rscale (currently always return NULL).</comment>
-    </method>
-    <method name="i_cal_recurrence_new_default" corresponds="CUSTOM" annotation="skip" kind="private" since="1.0">
-        <returns type="struct icalrecurrencetype *" comment="The default value."/>
-        <custom>	return icalrecurrencetype_new();</custom>
-    </method>
-    <method name="i_cal_recurrence_new" corresponds="CUSTOM" kind="constructor" since="1.0">
-        <returns type="ICalRecurrence *" annotation="transfer full" comment="The newly created #ICalRecurrence." />
-        <comment xml:space="preserve">Creates a new #ICalRecurrence.</comment>
-        <custom>	return i_cal_recurrence_new_full(i_cal_recurrence_new_default(), NULL);</custom>
-    </method>
-    <method name="i_cal_recurrence_clone" corresponds="icalrecurrencetype_clone" kind="others" since="4.0">
-        <parameter type="ICalRecurrence *" name="src" comment="The #ICalRecurrence to be cloned"/>
-        <returns type="ICalRecurrence *" annotation="transfer full" comment="The newly created #ICalRecurrence." />
-        <comment xml:space="preserve">Creates a copy of the @src.</comment>
-    </method>
-    <method name="i_cal_recurrence_ref" corresponds="icalrecurrencetype_ref" annotation="skip" kind="others" since="4.0">
-        <parameter type="ICalRecurrence *" name="self" comment="The #ICalRecurrence to be referenced"/>
-        <comment xml:space="preserve">Increases the reference counter by 1 for the @self.</comment>
-    </method>
-    <method name="i_cal_recurrence_unref" corresponds="icalrecurrencetype_unref" annotation="skip" kind="others" since="4.0">
-        <parameter type="ICalRecurrence *" name="self" comment="The #ICalRecurrence to be unreferenced"/>
-        <comment xml:space="preserve">Decreases the reference counter by 1 for the @self.</comment>
-    </method>
-    <method name="i_cal_recurrence_day_day_of_week" corresponds="icalrecurrencetype_day_day_of_week" since="1.0">
-        <parameter type="gshort" name="day" comment="The encoded day which represents the day of the week and Nth day of the week"/>
-        <returns type="ICalRecurrenceWeekday" comment="The decoded weekday with Monday to be 1."/>
-        <comment xml:space="preserve">Decodes a day to a weekday in a week.</comment>
-    </method>
-    <method name="i_cal_recurrence_day_position" corresponds="icalrecurrencetype_day_position" since="1.0">
-        <parameter type="gshort" name="day" comment="The encoded day which represents the day of the week and Nth day of the week"/>
-        <returns type="gint" comment="The decoded day of the week. 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc"/>
-        <comment xml:space="preserve">Decodes a day to a position of the weekday.</comment>
-    </method>
-    <method name="i_cal_recurrence_encode_day" corresponds="icalrecurrencetype_encode_day" since="3.0.5">
-        <parameter type="ICalRecurrenceWeekday" name="weekday" comment="The #ICalRecurrenceWeekday to use."/>
-        <parameter type="gint" name="position" comment="The position to use. 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc"/>
-        <returns type="gshort" comment="Encoded @weekday and @position into a single value"/>
-        <comment xml:space="preserve">Encodes the @weekday and @position into a single value, which can by split by i_cal_recurrence_day_day_of_week() and i_cal_recurrence_day_position().</comment>
-    </method>
-    <method name="i_cal_recurrence_month_is_leap" corresponds="icalrecurrencetype_month_is_leap" since="2.0">
-        <parameter type="gshort" name="month" comment="The month to be decoded"/>
-        <returns type="gboolean" comment="Whether this month is a leap month."/>
-        <comment xml:space="preserve">Decodes a month and check whether it is a leap month.</comment>
-    </method>
-    <method name="i_cal_recurrence_month_month" corresponds="icalrecurrencetype_month_month" since="2.0">
-        <parameter type="gshort" name="month" comment="The month to be decoded"/>
-        <returns type="gint" comment="The actual month number regardless of the leap flag."/>
-        <comment xml:space="preserve">Decode a month from an encoded value by i_cal_recurrence_encode_month().</comment>
-    </method>
-    <method name="i_cal_recurrence_encode_month" corresponds="icalrecurrencetype_encode_month" since="3.0.5">
-        <parameter type="gint" name="month" comment="The month to be encoded"/>
-        <parameter type="gboolean" name="is_leap" comment="%TRUE, when the month is leap, %FALSE otherwise"/>
-        <returns type="gshort" comment="Encoded @month and @is_leap"/>
-        <comment xml:space="preserve">Encodes the @month and the @is_leap flag into a single value, which can be split by i_cal_recurrence_month_is_leap() and i_cal_recurrence_month_month().</comment>
-    </method>
-    <method name="i_cal_recurrence_new_from_string" corresponds="icalrecurrencetype_new_from_string" since="1.0">
-        <parameter type="const gchar *" name="str" comment="The string representation of the #ICalRecurrence"/>
-        <returns type="ICalRecurrence *" annotation="transfer full" comment="The #ICalRecurrence converted from @str."/>
-        <comment xml:space="preserve">Converts a string to a #ICalRecurrence.</comment>
-    </method>
-    <method name="i_cal_recurrence_to_string" corresponds="icalrecurrencetype_as_string_r" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" native_op="POINTER" comment="The #ICalRecurrence to be converted"/>
-        <returns type="gchar *" annotation="transfer full" comment="The string representation of @recur." translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Converts a #ICalRecurrence to a string.</comment>
-    </method>
-    <method name="i_cal_recurrence_get_until" corresponds="CUSTOM" kind="get" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <returns type="ICalTime *" annotation="transfer full" comment="The until of #ICalRecurrence."/>
-        <comment>Gets the until from #ICalRecurrence.</comment>
-        <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
-	return i_cal_time_new_full (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->until);</custom>
-    </method>
-    <method name="i_cal_recurrence_set_until" corresponds="CUSTOM" kind="set" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="ICalTime *" name="until" comment="The until of #ICalRecurrence"/>
-        <comment>Sets the until from #ICalRecurrence.</comment>
-        <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
+  <enum name="ICalRecurrenceFrequency" native_name="icalrecurrencetype_frequency" default_native="I_CAL_NO_RECURRENCE">
+    <element name="ICAL_SECONDLY_RECURRENCE"/>
+    <element name="ICAL_MINUTELY_RECURRENCE"/>
+    <element name="ICAL_HOURLY_RECURRENCE"/>
+    <element name="ICAL_DAILY_RECURRENCE"/>
+    <element name="ICAL_WEEKLY_RECURRENCE"/>
+    <element name="ICAL_MONTHLY_RECURRENCE"/>
+    <element name="ICAL_YEARLY_RECURRENCE"/>
+    <element name="ICAL_NO_RECURRENCE"/>
+  </enum>
+  <enum name="ICalRecurrenceWeekday" native_name="icalrecurrencetype_weekday" default_native="I_CAL_NO_WEEKDAY">
+    <element name="ICAL_NO_WEEKDAY"/>
+    <element name="ICAL_SUNDAY_WEEKDAY"/>
+    <element name="ICAL_MONDAY_WEEKDAY"/>
+    <element name="ICAL_TUESDAY_WEEKDAY"/>
+    <element name="ICAL_WEDNESDAY_WEEKDAY"/>
+    <element name="ICAL_THURSDAY_WEEKDAY"/>
+    <element name="ICAL_FRIDAY_WEEKDAY"/>
+    <element name="ICAL_SATURDAY_WEEKDAY"/>
+  </enum>
+  <enum name="ICalRecurrenceSkip" native_name="icalrecurrencetype_skip" default_native="I_CAL_SKIP_UNDEFINED">
+    <element name="ICAL_SKIP_BACKWARD"/>
+    <element name="ICAL_SKIP_FORWARD"/>
+    <element name="ICAL_SKIP_OMIT"/>
+    <element name="ICAL_SKIP_UNDEFINED"/>
+  </enum>
+  <enum name="ICalRecurrenceByRule" native_name="icalrecurrencetype_byrule" default_native="ICAL_BYRULE_NO_CONTRACTION">
+    <element name="ICAL_BYRULE_NO_CONTRACTION"/>
+    <element name="ICAL_BY_MONTH"/>
+    <element name="ICAL_BY_WEEK_NO"/>
+    <element name="ICAL_BY_YEAR_DAY"/>
+    <element name="ICAL_BY_MONTH_DAY"/>
+    <element name="ICAL_BY_DAY"/>
+    <element name="ICAL_BY_HOUR"/>
+    <element name="ICAL_BY_MINUTE"/>
+    <element name="ICAL_BY_SECOND"/>
+    <element name="ICAL_BY_SET_POS"/>
+    <element name="ICAL_BY_NUM_PARTS"/>
+  </enum>
+  <!-- Not a real enum, those are defines in libical -->
+  <enum name="ICalRecurrenceArraySizes" native_name="CUSTOM" default_native="I_CAL_BY_SECOND_SIZE">
+    <element name="ICAL_BY_SECOND_SIZE"/>
+    <element name="ICAL_BY_MINUTE_SIZE"/>
+    <element name="ICAL_BY_HOUR_SIZE"/>
+    <element name="ICAL_BY_MONTH_SIZE"/>
+    <element name="ICAL_BY_MONTHDAY_SIZE"/>
+    <element name="ICAL_BY_WEEKNO_SIZE"/>
+    <element name="ICAL_BY_YEARDAY_SIZE"/>
+    <element name="ICAL_BY_SETPOS_SIZE"/>
+    <element name="ICAL_BY_DAY_SIZE"/>
+  </enum>
+  <method name="i_cal_recurrence_rscale_supported_calendars" corresponds="icalrecurrencetype_rscale_supported_calendars" kind="other" since="2.0">
+    <returns type="ICalArray *" annotation="transfer full" translator_argus="NULL, FALSE" comment="Array of calendars. Currently always NULL."/>
+    <comment xml:space="preserve">Gets an array of calendars supporting rscale (currently always return NULL).</comment>
+  </method>
+  <method name="i_cal_recurrence_new_default" corresponds="icalrecurrencetype_new" annotation="skip" kind="private" since="1.0">
+    <returns type="struct icalrecurrencetype *" comment="The default value."/>
+    <custom>	return icalrecurrencetype_new();</custom>
+  </method>
+  <method name="i_cal_recurrence_new" corresponds="icalrecurrencetype_new" kind="constructor" since="1.0">
+    <returns type="ICalRecurrence *" annotation="transfer full" comment="The newly created #ICalRecurrence."/>
+    <comment xml:space="preserve">Creates a new #ICalRecurrence.</comment>
+    <custom>	return i_cal_recurrence_new_full(i_cal_recurrence_new_default(), NULL);</custom>
+  </method>
+  <method name="i_cal_recurrence_clone" corresponds="icalrecurrencetype_clone" kind="others" since="4.0">
+    <parameter type="ICalRecurrence *" name="src" comment="The #ICalRecurrence to be cloned"/>
+    <returns type="ICalRecurrence *" annotation="transfer full" comment="The newly created #ICalRecurrence."/>
+    <comment xml:space="preserve">Creates a copy of the @src.</comment>
+  </method>
+  <method name="i_cal_recurrence_ref" corresponds="icalrecurrencetype_ref" annotation="skip" kind="others" since="4.0">
+    <parameter type="ICalRecurrence *" name="self" comment="The #ICalRecurrence to be referenced"/>
+    <comment xml:space="preserve">Increases the reference counter by 1 for the @self.</comment>
+  </method>
+  <method name="i_cal_recurrence_unref" corresponds="icalrecurrencetype_unref" annotation="skip" kind="others" since="4.0">
+    <parameter type="ICalRecurrence *" name="self" comment="The #ICalRecurrence to be unreferenced"/>
+    <comment xml:space="preserve">Decreases the reference counter by 1 for the @self.</comment>
+  </method>
+  <method name="i_cal_recurrence_day_day_of_week" corresponds="icalrecurrencetype_day_day_of_week" since="1.0">
+    <parameter type="gshort" name="day" comment="The encoded day which represents the day of the week and Nth day of the week"/>
+    <returns type="ICalRecurrenceWeekday" comment="The decoded weekday with Monday to be 1."/>
+    <comment xml:space="preserve">Decodes a day to a weekday in a week.</comment>
+  </method>
+  <method name="i_cal_recurrence_day_position" corresponds="icalrecurrencetype_day_position" since="1.0">
+    <parameter type="gshort" name="day" comment="The encoded day which represents the day of the week and Nth day of the week"/>
+    <returns type="gint" comment="The decoded day of the week. 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc"/>
+    <comment xml:space="preserve">Decodes a day to a position of the weekday.</comment>
+  </method>
+  <method name="i_cal_recurrence_encode_day" corresponds="icalrecurrencetype_encode_day" since="3.0.5">
+    <parameter type="ICalRecurrenceWeekday" name="weekday" comment="The #ICalRecurrenceWeekday to use."/>
+    <parameter type="gint" name="position" comment="The position to use. 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc"/>
+    <returns type="gshort" comment="Encoded @weekday and @position into a single value"/>
+    <comment xml:space="preserve">Encodes the @weekday and @position into a single value, which can by split by i_cal_recurrence_day_day_of_week() and i_cal_recurrence_day_position().</comment>
+  </method>
+  <method name="i_cal_recurrence_month_is_leap" corresponds="icalrecurrencetype_month_is_leap" since="2.0">
+    <parameter type="gshort" name="month" comment="The month to be decoded"/>
+    <returns type="gboolean" comment="Whether this month is a leap month."/>
+    <comment xml:space="preserve">Decodes a month and check whether it is a leap month.</comment>
+  </method>
+  <method name="i_cal_recurrence_month_month" corresponds="icalrecurrencetype_month_month" since="2.0">
+    <parameter type="gshort" name="month" comment="The month to be decoded"/>
+    <returns type="gint" comment="The actual month number regardless of the leap flag."/>
+    <comment xml:space="preserve">Decode a month from an encoded value by i_cal_recurrence_encode_month().</comment>
+  </method>
+  <method name="i_cal_recurrence_encode_month" corresponds="icalrecurrencetype_encode_month" since="3.0.5">
+    <parameter type="gint" name="month" comment="The month to be encoded"/>
+    <parameter type="gboolean" name="is_leap" comment="%TRUE, when the month is leap, %FALSE otherwise"/>
+    <returns type="gshort" comment="Encoded @month and @is_leap"/>
+    <comment xml:space="preserve">Encodes the @month and the @is_leap flag into a single value, which can be split by i_cal_recurrence_month_is_leap() and i_cal_recurrence_month_month().</comment>
+  </method>
+  <method name="i_cal_recurrence_new_from_string" corresponds="icalrecurrencetype_new_from_string" since="1.0">
+    <parameter type="const gchar *" name="str" comment="The string representation of the #ICalRecurrence"/>
+    <returns type="ICalRecurrence *" annotation="transfer full" comment="The #ICalRecurrence converted from @str."/>
+    <comment xml:space="preserve">Converts a string to a #ICalRecurrence.</comment>
+  </method>
+  <method name="i_cal_recurrence_to_string" corresponds="icalrecurrencetype_as_string_r" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" native_op="POINTER" comment="The #ICalRecurrence to be converted"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of @recur." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts a #ICalRecurrence to a string.</comment>
+  </method>
+  <method name="i_cal_recurrence_get_until" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <returns type="ICalTime *" annotation="transfer full" comment="The until of #ICalRecurrence."/>
+    <comment>Gets the until from #ICalRecurrence.</comment>
+    <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
+	return i_cal_time_new_full (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;until);</custom>
+  </method>
+  <method name="i_cal_recurrence_set_until" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="ICalTime *" name="until" comment="The until of #ICalRecurrence"/>
+    <comment>Sets the until from #ICalRecurrence.</comment>
+    <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
 	g_return_if_fail (until != NULL &amp;&amp; I_CAL_IS_TIME(until));
-	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->until = *(icaltimetype *)i_cal_object_get_native ((ICalObject *)until);</custom>
-    </method>
-    <method name="i_cal_recurrence_get_freq" corresponds="CUSTOM" kind="get" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <returns type="ICalRecurrenceFrequency" comment="The freq of #ICalRecurrence."/>
-        <comment>Gets the freq from #ICalRecurrence.</comment>
-        <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_NO_RECURRENCE);
-	return (ICalRecurrenceFrequency) (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->freq);</custom>
-    </method>
-    <method name="i_cal_recurrence_set_freq" corresponds="CUSTOM" kind="set" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="ICalRecurrenceFrequency" name="freq" comment="The freq of #ICalRecurrence"/>
-        <comment>Sets the freq from #ICalRecurrence.</comment>
-        <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	((struct icalrecurrencetype *) i_cal_object_get_native ((ICalObject *)recur))->freq = (icalrecurrencetype_frequency) freq;</custom>
-    </method>
-    <method name="i_cal_recurrence_get_count" corresponds="CUSTOM" kind="get" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <returns type="gint" comment="The count of #ICalRecurrence."/>
-        <comment>Gets the count from #ICalRecurrence.</comment>
-        <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), 0);
-	return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->count;</custom>
-    </method>
-    <method name="i_cal_recurrence_set_count" corresponds="CUSTOM" kind="set" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="gint" name="count" comment="The count of #ICalRecurrence"/>
-        <comment>Sets the count from #ICalRecurrence.</comment>
-        <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->count = count;</custom>
-    </method>
-    <method name="i_cal_recurrence_get_interval" corresponds="CUSTOM" kind="get" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <returns type="gshort" comment="The interval of #ICalRecurrence."/>
-        <comment>Gets the interval from #ICalRecurrence.</comment>
-        <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), 0);
-	return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->interval;</custom>
-    </method>
-    <method name="i_cal_recurrence_set_interval" corresponds="CUSTOM" kind="set" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="gshort" name="interval" comment="The interval of #ICalRecurrence"/>
-        <comment>Sets the interval from #ICalRecurrence.</comment>
-        <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->interval = interval;</custom>
-    </method>
-    <method name="i_cal_recurrence_get_week_start" corresponds="CUSTOM" kind="get" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <returns type="ICalRecurrenceWeekday" comment="The week_start of #ICalRecurrence."/>
-        <comment>Gets the week_start from #ICalRecurrence.</comment>
-        <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_NO_WEEKDAY);
-	return (ICalRecurrenceWeekday) (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->week_start);</custom>
-    </method>
-    <method name="i_cal_recurrence_set_week_start" corresponds="CUSTOM" kind="set" since="1.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="ICalRecurrenceWeekday" name="week_start" comment="The week_start of #ICalRecurrence"/>
-        <comment>Sets the week_start from #ICalRecurrence.</comment>
-        <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
-	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->week_start = (icalrecurrencetype_weekday) week_start;</custom>
-    </method>
-    <method name="i_cal_recurrence_get_by_array" corresponds="CUSTOM" kind="get" since="4.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
-        <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by[byrule] of #ICalRecurrence."/>
-        <comment>Gets the by[byrule] array from #ICalRecurrence.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
+	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;until = *(icaltimetype *)i_cal_object_get_native ((ICalObject *)until);</custom>
+  </method>
+  <method name="i_cal_recurrence_get_freq" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <returns type="ICalRecurrenceFrequency" comment="The freq of #ICalRecurrence."/>
+    <comment>Gets the freq from #ICalRecurrence.</comment>
+    <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_NO_RECURRENCE);
+	return (ICalRecurrenceFrequency) (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;freq);</custom>
+  </method>
+  <method name="i_cal_recurrence_set_freq" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="ICalRecurrenceFrequency" name="freq" comment="The freq of #ICalRecurrence"/>
+    <comment>Sets the freq from #ICalRecurrence.</comment>
+    <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
+	((struct icalrecurrencetype *) i_cal_object_get_native ((ICalObject *)recur))-&gt;freq = (icalrecurrencetype_frequency) freq;</custom>
+  </method>
+  <method name="i_cal_recurrence_get_count" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <returns type="gint" comment="The count of #ICalRecurrence."/>
+    <comment>Gets the count from #ICalRecurrence.</comment>
+    <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), 0);
+	return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;count;</custom>
+  </method>
+  <method name="i_cal_recurrence_set_count" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="gint" name="count" comment="The count of #ICalRecurrence"/>
+    <comment>Sets the count from #ICalRecurrence.</comment>
+    <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
+	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;count = count;</custom>
+  </method>
+  <method name="i_cal_recurrence_get_interval" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <returns type="gshort" comment="The interval of #ICalRecurrence."/>
+    <comment>Gets the interval from #ICalRecurrence.</comment>
+    <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), 0);
+	return ((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;interval;</custom>
+  </method>
+  <method name="i_cal_recurrence_set_interval" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="gshort" name="interval" comment="The interval of #ICalRecurrence"/>
+    <comment>Sets the interval from #ICalRecurrence.</comment>
+    <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
+	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;interval = interval;</custom>
+  </method>
+  <method name="i_cal_recurrence_get_week_start" corresponds="none" kind="get" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <returns type="ICalRecurrenceWeekday" comment="The week_start of #ICalRecurrence."/>
+    <comment>Gets the week_start from #ICalRecurrence.</comment>
+    <custom>	g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), I_CAL_NO_WEEKDAY);
+	return (ICalRecurrenceWeekday) (((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;week_start);</custom>
+  </method>
+  <method name="i_cal_recurrence_set_week_start" corresponds="none" kind="set" since="1.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="ICalRecurrenceWeekday" name="week_start" comment="The week_start of #ICalRecurrence"/>
+    <comment>Sets the week_start from #ICalRecurrence.</comment>
+    <custom>	g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
+	((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;week_start = (icalrecurrencetype_weekday) week_start;</custom>
+  </method>
+  <method name="i_cal_recurrence_get_by_array" corresponds="none" kind="get" since="4.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
+    <returns type="GArray *" annotation="transfer full, element-type gshort" comment="The by[byrule] of #ICalRecurrence."/>
+    <comment>Gets the by[byrule] array from #ICalRecurrence.</comment>
+    <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), NULL);
     g_return_val_if_fail ((byrule &gt;= 0) &amp;&amp; ((int)byrule &lt; (int)ICAL_BY_NUM_PARTS), NULL);
-    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by[byrule];
-    GArray *array = g_array_sized_new(FALSE, TRUE, sizeof (gshort), by->size);
-    if (by->size) g_array_append_vals (array, by->data, by->size);
+    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;by[byrule];
+    GArray *array = g_array_sized_new(FALSE, TRUE, sizeof (gshort), by-&gt;size);
+    if (by-&gt;size) g_array_append_vals (array, by-&gt;data, by-&gt;size);
 	return array;</custom>
-    </method>
-    <method name="i_cal_recurrence_get_by_array_size" corresponds="CUSTOM" kind="get" since="4.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
-        <returns type="guint" comment="The current size of the given 'by' array."/>
-        <comment>Returns the size of given 'by' array from #ICalRecurrence.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), 0);
+  </method>
+  <method name="i_cal_recurrence_get_by_array_size" corresponds="none" kind="get" since="4.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
+    <returns type="guint" comment="The current size of the given 'by' array."/>
+    <comment>Returns the size of given 'by' array from #ICalRecurrence.</comment>
+    <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), 0);
     g_return_val_if_fail ((byrule &gt;= 0) &amp;&amp; ((int)byrule &lt; (int)ICAL_BY_NUM_PARTS), 0);
-    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by[byrule];
-	return by->size;</custom>
-    </method>
-    <method name="i_cal_recurrence_set_by_array" corresponds="CUSTOM" kind="set" since="4.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
-        <parameter type="GArray *" name="values" annotation="element-type gshort" comment="The array of values"/>
-        <comment>Sets the given 'by' array.</comment>
-        <custom>    g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
+    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;by[byrule];
+	return by-&gt;size;</custom>
+  </method>
+  <method name="i_cal_recurrence_set_by_array" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
+    <parameter type="GArray *" name="values" annotation="element-type gshort" comment="The array of values"/>
+    <comment>Sets the given 'by' array.</comment>
+    <custom>    g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
     g_return_if_fail ((byrule &gt;= 0) &amp;&amp; ((int)byrule &lt; (int)ICAL_BY_NUM_PARTS));
     g_return_if_fail(values != NULL);
-    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by[byrule];
-    g_return_if_fail(icalrecur_resize_by(by, values->len));
-    memcpy(by->data, values->data, values->len * sizeof(by->data[0]));</custom>
-    </method>
-    <method name="i_cal_recurrence_get_by" corresponds="CUSTOM" kind="get" since="4.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
-        <parameter type="guint" name="index" comment="The index in the by[byrule] array of #ICalRecurrence."/>
-        <returns type="gshort" comment="The 'by' part at the given position."/>
-        <comment>Returns the element at the specified index of the 'by' array if it exists, 0 otherwise.</comment>
-        <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), 0);
+    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;by[byrule];
+    g_return_if_fail(icalrecur_resize_by(by, values-&gt;len));
+    memcpy(by-&gt;data, values-&gt;data, values-&gt;len * sizeof(by-&gt;data[0]));</custom>
+  </method>
+  <method name="i_cal_recurrence_get_by" corresponds="none" kind="get" since="4.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
+    <parameter type="guint" name="index" comment="The index in the by[byrule] array of #ICalRecurrence."/>
+    <returns type="gshort" comment="The 'by' part at the given position."/>
+    <comment>Returns the element at the specified index of the 'by' array if it exists, 0 otherwise.</comment>
+    <custom>    g_return_val_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur), 0);
     g_return_val_if_fail ((byrule &gt;= 0) &amp;&amp; ((int)byrule &lt; (int)ICAL_BY_NUM_PARTS), 0);
-    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by[byrule];
-    g_return_val_if_fail (index &lt; (guint)by->size, 0);
-	return by->data[index];</custom>
-    </method>
-    <method name="i_cal_recurrence_set_by" corresponds="CUSTOM" kind="set" since="4.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
-        <parameter type="guint" name="index" comment="The index in the 'by' array"/>
-        <parameter type="gshort" name="value" comment="The value to be set"/>
-        <comment>Sets the by array at the given index. Resizes the array to have a size of at least index+1 elements if necessary.</comment>
-        <custom>    g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
+    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;by[byrule];
+    g_return_val_if_fail (index &lt; (guint)by-&gt;size, 0);
+	return by-&gt;data[index];</custom>
+  </method>
+  <method name="i_cal_recurrence_set_by" corresponds="none" kind="set" since="4.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
+    <parameter type="guint" name="index" comment="The index in the 'by' array"/>
+    <parameter type="gshort" name="value" comment="The value to be set"/>
+    <comment>Sets the by array at the given index. Resizes the array to have a size of at least index+1 elements if necessary.</comment>
+    <custom>    g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
     g_return_if_fail ((byrule &gt;= 0) &amp;&amp; ((int)byrule &lt; (int)ICAL_BY_NUM_PARTS));
-    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by[byrule];
-    if (((guint)by->size) &lt; (index + 1)) g_return_if_fail (icalrecur_resize_by(by, index + 1));
-	by->data[index] = value;</custom>
-    </method>
-    <method name="i_cal_recurrence_resize_by_array" corresponds="CUSTOM" kind="others" since="4.0">
-        <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
-        <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
-        <parameter type="guint" name="size" comment="The new size of the 'by' array"/>
-        <comment>Resizes the 'by' array to the given size.</comment>
-        <custom>    g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
+    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;by[byrule];
+    if (((guint)by-&gt;size) &lt; (index + 1)) g_return_if_fail (icalrecur_resize_by(by, index + 1));
+	by-&gt;data[index] = value;</custom>
+  </method>
+  <method name="i_cal_recurrence_resize_by_array" corresponds="icalrecur_resize_by" kind="custom" since="4.0">
+    <parameter type="ICalRecurrence *" name="recur" comment="The #ICalRecurrence"/>
+    <parameter type="ICalRecurrenceByRule" name="byrule" comment="The 'by' part to use."/>
+    <parameter type="guint" name="size" comment="The new size of the 'by' array"/>
+    <comment>Resizes the 'by' array to the given size.</comment>
+    <custom>    g_return_if_fail (recur != NULL &amp;&amp; I_CAL_IS_RECURRENCE (recur));
     g_return_if_fail ((byrule &gt;= 0) &amp;&amp; ((int)byrule &lt; (int)ICAL_BY_NUM_PARTS));
-    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))->by[byrule];
+    icalrecurrence_by_data *by = &amp;((struct icalrecurrencetype *)i_cal_object_get_native ((ICalObject *)recur))-&gt;by[byrule];
     g_return_if_fail (icalrecur_resize_by(by, size));</custom>
-    </method>
+  </method>
 </structure>

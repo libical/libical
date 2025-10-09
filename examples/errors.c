@@ -44,7 +44,7 @@ void component_errors(icalcomponent *comp)
     }
 
     /* Check the component for iTIP compliance, and add more
-       X-LIC-ERROR properties if it is non-compilant. */
+       X-LIC-ERROR properties if it is non-compliant. */
     icalrestriction_check(comp);
 
     /* Count the new errors.  */

@@ -3,9 +3,7 @@
  CREATOR: Damon Chaplin 15 March 2001
 
  SPDX-FileCopyrightText: 2001, Damon Chaplin <damon@ximian.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 //krazy:excludeall=cpp
 
@@ -14,17 +12,20 @@
 #endif
 
 #include "icaltimezone.h"
+#include "icaltimezone_p.h"
 #include "icaltimezoneimpl.h"
 #include "icalarray.h"
 #include "icalerror.h"
 #include "icalparser.h"
 #include "icalmemory.h"
-#include "icaltz-util.h"
 
 #include <ctype.h>
 #include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
 #include <limits.h>
+
+/* uncomment, to enable debug prints for the timezone code */
+/* #define ICALTIMEZONE_DEBUG_PRINT 1 */
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
@@ -65,8 +66,18 @@ static const struct _compat_tzids {
     {"/citadel.org/", 3}, /* Full TZID for this can be: "/citadel.org/20190914_1/" */
     {NULL, -1}};
 
+/* fullpath to the system zoneinfo directory (where zone.tab lives) */
+static ICAL_GLOBAL_VAR char s_zoneinfopath[MAXPATHLEN] = {0};
+
+/* A few well-known locations for system zoneinfo; can be overridden with TZDIR environment */
+static const char *s_zoneinfo_search_paths[] = {
+    "/usr/share/zoneinfo",
+    "/usr/lib/zoneinfo",
+    "/etc/zoneinfo",
+    "/usr/share/lib/zoneinfo"};
+
 /* The prefix to be used for tzid's generated from system tzdata */
-static ICAL_GLOBAL_VAR char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = {0};
+static ICAL_GLOBAL_VAR char s_ical_tzid_prefix[BUILTIN_TZID_PREFIX_LEN] = BUILTIN_TZID_PREFIX;
 
 /** This is the filename of the file containing the city names and
     coordinates of all the builtin timezones. */
@@ -127,7 +138,7 @@ static void icaltimezone_reset(icaltimezone *zone);
 static void icaltimezone_expand_changes(icaltimezone *zone, int end_year);
 static int icaltimezone_compare_change_fn(const void *elem1, const void *elem2);
 
-static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonechange *change);
+static size_t icaltimezone_find_nearby_change(icaltimezone *zone, const icaltimezonechange *change);
 
 static void icaltimezone_adjust_change(icaltimezonechange *tt,
                                        int days, int hours, int minutes, int seconds);
@@ -192,9 +203,6 @@ static void icaltimezone_changes_unlock(void)
 
 const char *icaltimezone_tzid_prefix(void)
 {
-    if (s_ical_tzid_prefix[0] == '\0') {
-        strncpy(s_ical_tzid_prefix, BUILTIN_TZID_PREFIX, BUILTIN_TZID_PREFIX_LEN - 1);
-    }
     return s_ical_tzid_prefix;
 }
 
@@ -213,7 +221,7 @@ icaltimezone *icaltimezone_new(void)
     return zone;
 }
 
-icaltimezone *icaltimezone_copy(icaltimezone *originalzone)
+icaltimezone *icaltimezone_copy(const icaltimezone *originalzone)
 {
     icaltimezone *zone;
 
@@ -250,8 +258,9 @@ icaltimezone *icaltimezone_copy(icaltimezone *originalzone)
 void icaltimezone_free(icaltimezone *zone, int free_struct)
 {
     icaltimezone_reset(zone);
-    if (free_struct)
+    if (free_struct) {
         icalmemory_free_buffer(zone);
+    }
 }
 
 /** @brief Resets the icaltimezone to the initial state, freeing most of the
@@ -259,17 +268,21 @@ void icaltimezone_free(icaltimezone *zone, int free_struct)
  */
 static void icaltimezone_reset(icaltimezone *zone)
 {
-    if (zone->tzid)
+    if (zone->tzid) {
         icalmemory_free_buffer(zone->tzid);
+    }
 
-    if (zone->location)
+    if (zone->location) {
         icalmemory_free_buffer(zone->location);
+    }
 
-    if (zone->tznames)
+    if (zone->tznames) {
         icalmemory_free_buffer(zone->tznames);
+    }
 
-    if (zone->component)
+    if (zone->component) {
         icalcomponent_free(zone->component);
+    }
 
     //    icaltimezone_changes_lock();
     if (zone->changes) {
@@ -309,8 +322,9 @@ static bool icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcompon
     const char *tzid;
 
     prop = icalcomponent_get_first_property(component, ICAL_TZID_PROPERTY);
-    if (!prop)
+    if (!prop) {
         return false;
+    }
 
     /* A VTIMEZONE MUST have a TZID, or a lot of our code won't work. */
     tzid = icalproperty_get_tzid(prop);
@@ -350,8 +364,9 @@ char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
     prop = icalcomponent_get_first_property(component, ICAL_LOCATION_PROPERTY);
     if (prop) {
         location = icalproperty_get_location(prop);
-        if (location)
+        if (location) {
             return icalmemory_strdup(location);
+        }
     }
 
     prop = icalcomponent_get_first_property(component, ICAL_X_PROPERTY);
@@ -359,8 +374,9 @@ char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
         name = icalproperty_get_x_name(prop);
         if (name && !strcasecmp(name, "X-LIC-LOCATION")) {
             location = icalproperty_get_x(prop);
-            if (location)
+            if (location) {
                 return icalmemory_strdup(location);
+            }
         }
         prop = icalcomponent_get_next_property(component, ICAL_X_PROPERTY);
     }
@@ -402,15 +418,17 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 
                 case ICAL_DTSTART_PROPERTY:
                     dtstart = icalproperty_get_dtstart(prop);
-                    if (icaltime_compare(dtstart, current_max_date) > 0)
+                    if (icaltime_compare(dtstart, current_max_date) > 0) {
                         current_max_date = dtstart;
+                    }
 
                     break;
 
                 case ICAL_RDATE_PROPERTY:
                     rdate = icalproperty_get_rdate(prop);
-                    if (icaltime_compare(rdate.time, current_max_date) > 0)
+                    if (icaltime_compare(rdate.time, current_max_date) > 0) {
                         current_max_date = rdate.time;
+                    }
 
                     break;
 
@@ -443,8 +461,9 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 
     /* Outlook (2000) places "Standard Time" and "Daylight Time" in the TZNAME
        strings, which is totally useless. So we return NULL in that case. */
-    if (standard_tzname && !strcmp(standard_tzname, "Standard Time"))
+    if (standard_tzname && !strcmp(standard_tzname, "Standard Time")) {
         return NULL;
+    }
 
     /* If both standard and daylight TZNAMEs were found, if they are the same
        we return just one, else we format them like "EST/EDT". */
@@ -452,8 +471,9 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
         size_t standard_len, daylight_len;
         char *tznames;
 
-        if (!strcmp(standard_tzname, daylight_tzname))
+        if (!strcmp(standard_tzname, daylight_tzname)) {
             return icalmemory_strdup(standard_tzname);
+        }
 
         standard_len = strlen(standard_tzname);
         daylight_len = strlen(daylight_tzname);
@@ -488,16 +508,19 @@ static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
     }
 
     changes_end_year = end_year;
-    if (changes_end_year < icaltimezone_minimum_expansion_year)
+    if (changes_end_year < icaltimezone_minimum_expansion_year) {
         changes_end_year = icaltimezone_minimum_expansion_year;
+    }
 
     changes_end_year += ICALTIMEZONE_EXTRA_COVERAGE;
 
-    if (changes_end_year > ICALTIMEZONE_MAX_YEAR)
+    if (changes_end_year > ICALTIMEZONE_MAX_YEAR) {
         changes_end_year = ICALTIMEZONE_MAX_YEAR;
+    }
 
-    if (!zone->changes || zone->end_year < end_year)
+    if (!zone->changes || zone->end_year < end_year) {
         icaltimezone_expand_changes(zone, changes_end_year);
+    }
 }
 
 /* Hold the icaltimezone_changes_lock(); before calling this function */
@@ -506,13 +529,14 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
     icalarray *changes;
     icalcomponent *comp;
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
     printf("\nExpanding changes for: %s to year: %i\n", zone->tzid, end_year);
 #endif
 
     changes = icalarray_new(sizeof(icaltimezonechange), 32);
-    if (!changes)
+    if (!changes) {
         return;
+    }
 
     /* Scan the STANDARD and DAYLIGHT subcomponents. */
     comp = icalcomponent_get_first_component(zone->component, ICAL_ANY_COMPONENT);
@@ -599,10 +623,11 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
 
     /* If we didn't find a DTSTART, TZOFFSETTO and TZOFFSETFROM we have to
        ignore the component. FIXME: Add an error property? */
-    if (!found_dtstart || !found_tzoffsetto || !found_tzoffsetfrom)
+    if (!found_dtstart || !found_tzoffsetto || !found_tzoffsetfrom) {
         return;
+    }
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
     printf("\n Expanding component DTSTART (Y/M/D): %i/%i/%i %i:%02i:%02i\n",
            dtstart.year, dtstart.month, dtstart.day, dtstart.hour, dtstart.minute, dtstart.second);
 #endif
@@ -620,7 +645,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
         /* Convert to UTC. */
         icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
         printf("  Appending single DTSTART (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
                change.year, change.month, change.day, change.hour, change.minute, change.second);
 #endif
@@ -632,7 +657,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
     /* The component has recurrence data, so we expand that now. */
     prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
     while (prop && (has_rdate || has_rrule)) {
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
         printf("Expanding property...\n");
 #endif
         switch (icalproperty_isa(prop)) {
@@ -655,11 +680,12 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 /* The spec was a bit vague about whether RDATEs were in local
                    time or UTC so we support both to be safe. So if it is in
                    UTC we have to add the UTC offset to get a local time. */
-                if (!icaltime_is_utc(rdate.time))
+                if (!icaltime_is_utc(rdate.time)) {
                     icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
+                }
             }
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
             printf("  Appending RDATE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
                    change.year, change.month, change.day,
                    change.hour, change.minute, change.second);
@@ -669,15 +695,16 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
             break;
         case ICAL_RRULE_PROPERTY:
             rrule = icalproperty_get_rrule(prop);
-            if (rrule)
+            if (rrule) {
                 rrule = icalrecurrencetype_clone(rrule);
+            }
 
             if (rrule) {
                 /* If the rrule UNTIL value is set and is in UTC, we convert it to
                 a local time, since the recurrence code has no way to convert
                 it itself. */
                 if (!icaltime_is_null_time(rrule->until) && icaltime_is_utc(rrule->until)) {
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
                     printf("  Found RRULE UNTIL in UTC.\n");
 #endif
 
@@ -697,10 +724,10 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 change.minute = dtstart.minute;
                 change.second = dtstart.second;
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
                 printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
-                    change.year, change.month, change.day,
-                    change.hour, change.minute, change.second);
+                       change.year, change.month, change.day,
+                       change.hour, change.minute, change.second);
 #endif
 
                 icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
@@ -724,10 +751,10 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                     change.minute = occ.minute;
                     change.second = occ.second;
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
                     printf("  Appending RRULE element (Y/M/D): %i/%02i/%02i %i:%02i:%02i\n",
-                        change.year, change.month, change.day,
-                        change.hour, change.minute, change.second);
+                           change.year, change.month, change.day,
+                           change.hour, change.minute, change.second);
 #endif
 
                     icaltimezone_adjust_change(&change, 0, 0, 0, -change.prev_utc_offset);
@@ -796,8 +823,9 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
 
     /* If the time is a DATE value or both timezones are the same, or we are
        converting a floating time, we don't need to do anything. */
-    if (icaltime_is_date(*tt) || from_zone == to_zone || from_zone == NULL)
+    if (icaltime_is_date(*tt) || from_zone == to_zone || from_zone == NULL) {
         return;
+    }
 
     /* Convert the time to UTC by getting the UTC offset and subtracting it. */
     utc_offset = icaltimezone_get_utc_offset(from_zone, tt, NULL);
@@ -807,10 +835,11 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
        of our UTC time and adding it. */
     utc_offset = icaltimezone_get_utc_offset_of_utc_time(to_zone, tt, &is_daylight);
     tt->is_daylight = is_daylight;
+    tt->zone = to_zone;
     icaltime_adjust(tt, 0, 0, 0, utc_offset);
 }
 
-int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int *is_daylight)
+int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *tt, int *is_daylight)
 {
     icaltimezonechange *zone_change, *prev_zone_change;
     icaltimezonechange tt_change = {0}, tmp_change = {0};
@@ -819,19 +848,23 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
     int step, utc_offset_change, cmp;
     int want_daylight;
 
-    if (tt == NULL)
+    if (tt == NULL) {
         return 0;
+    }
 
-    if (is_daylight)
+    if (is_daylight) {
         *is_daylight = 0;
+    }
 
     /* For local times and UTC return 0. */
-    if (zone == NULL || zone == &utc_timezone)
+    if (zone == NULL || zone == &utc_timezone) {
         return 0;
+    }
 
     /* Use the builtin icaltimezone if possible. */
-    if (zone->builtin_timezone)
+    if (zone->builtin_timezone) {
         zone = zone->builtin_timezone;
+    }
 
     icaltimezone_changes_lock();
 
@@ -895,8 +928,9 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
         /* If we are stepping backwards through the changes and we have found
            a change that applies, then we know this is the change to use so
            we exit the loop. */
-        if (step == -1 && found_change == 1)
+        if (step == -1 && found_change == 1) {
             break;
+        }
 
         /* If we go past the start of the changes array, then we have no data
            for this time so we return the prev UTC offset. */
@@ -912,8 +946,9 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
 
         change_num += (size_t)step;
 
-        if (change_num >= zone->changes->num_elements)
+        if (change_num >= zone->changes->num_elements) {
             break;
+        }
 
         zone_change = icalarray_element_at(zone->changes, change_num);
     }
@@ -943,7 +978,7 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
                standard time instead. */
             want_daylight = (tt->is_daylight == 1) ? 1 : 0;
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
             if (zone_change->is_daylight == prev_zone_change->is_daylight) {
                 printf(" **** Same is_daylight setting\n");
             }
@@ -969,23 +1004,26 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, struct icaltimetype *tt, int
 }
 
 int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
-                                            struct icaltimetype *tt, int *is_daylight)
+                                            const struct icaltimetype *tt, int *is_daylight)
 {
     icaltimezonechange *zone_change, tt_change, tmp_change;
     size_t change_num, change_num_to_use;
     int found_change = 1;
     int step, utc_offset;
 
-    if (is_daylight)
+    if (is_daylight) {
         *is_daylight = 0;
+    }
 
     /* For local times and UTC return 0. */
-    if (zone == NULL || zone == &utc_timezone)
+    if (zone == NULL || zone == &utc_timezone) {
         return 0;
+    }
 
     /* Use the builtin icaltimezone if possible. */
-    if (zone->builtin_timezone)
+    if (zone->builtin_timezone) {
         zone = zone->builtin_timezone;
+    }
 
     icaltimezone_changes_lock();
 
@@ -1035,8 +1073,9 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
         /* If we are stepping backwards through the changes and we have found
            a change that applies, then we know this is the change to use so
            we exit the loop. */
-        if (step == -1 && found_change == 1)
+        if (step == -1 && found_change == 1) {
             break;
+        }
 
         /* If we go past the start of the changes array, then we have no data
            for this time so we return the prev UTC offset. */
@@ -1052,8 +1091,9 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
 
         change_num += (size_t)step;
 
-        if (change_num >= zone->changes->num_elements)
+        if (change_num >= zone->changes->num_elements) {
             break;
+        }
 
         zone_change = icalarray_element_at(zone->changes, change_num);
     }
@@ -1079,7 +1119,7 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
  *
  * Hold icaltimezone_changes_lock(); before calling this function.
 */
-static size_t icaltimezone_find_nearby_change(icaltimezone *zone, icaltimezonechange *change)
+static size_t icaltimezone_find_nearby_change(icaltimezone *zone, const icaltimezonechange *change)
 {
     icaltimezonechange *zone_change;
     size_t lower, middle, upper;
@@ -1149,8 +1189,9 @@ static void icaltimezone_adjust_change(icaltimezonechange *tt,
     if (day > 0) {
         for (;;) {
             days_in_month = icaltime_days_in_month(tt->month, tt->year);
-            if (day <= days_in_month)
+            if (day <= days_in_month) {
                 break;
+            }
 
             tt->month++;
             if (tt->month >= 13) {
@@ -1178,19 +1219,21 @@ static void icaltimezone_adjust_change(icaltimezonechange *tt,
 const char *icaltimezone_get_tzid(icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
-    if (!zone)
+    if (!zone) {
         return NULL;
+    }
 
     icaltimezone_load_builtin_timezone(zone);
 
     return zone->tzid;
 }
 
-const char *icaltimezone_get_location(icaltimezone *zone)
+const char *icaltimezone_get_location(const icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
-    if (!zone)
+    if (!zone) {
         return NULL;
+    }
 
     /* Note that for builtin timezones this comes from zones.tab so we don't
        need to check the timezone is loaded here. */
@@ -1200,30 +1243,33 @@ const char *icaltimezone_get_location(icaltimezone *zone)
 const char *icaltimezone_get_tznames(icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
-    if (!zone)
+    if (!zone) {
         return NULL;
+    }
 
     icaltimezone_load_builtin_timezone(zone);
 
     return zone->tznames;
 }
 
-double icaltimezone_get_latitude(icaltimezone *zone)
+double icaltimezone_get_latitude(const icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return 0. */
-    if (!zone)
+    if (!zone) {
         return 0.0;
+    }
 
     /* Note that for builtin timezones this comes from zones.tab so we don't
        need to check the timezone is loaded here. */
     return zone->latitude;
 }
 
-double icaltimezone_get_longitude(icaltimezone *zone)
+double icaltimezone_get_longitude(const icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return 0. */
-    if (!zone)
+    if (!zone) {
         return 0.0;
+    }
 
     /* Note that for builtin timezones this comes from zones.tab so we don't
        need to check the timezone is loaded here. */
@@ -1233,15 +1279,16 @@ double icaltimezone_get_longitude(icaltimezone *zone)
 icalcomponent *icaltimezone_get_component(icaltimezone *zone)
 {
     /* If this is a floating time, without a timezone, return NULL. */
-    if (!zone)
+    if (!zone) {
         return NULL;
+    }
 
     icaltimezone_load_builtin_timezone(zone);
 
     return zone->component;
 }
 
-int icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp)
+bool icaltimezone_set_component(icaltimezone *zone, icalcomponent *comp)
 {
     icaltimezone_reset(zone);
     return icaltimezone_get_vtimezone_properties(zone, comp);
@@ -1252,14 +1299,16 @@ static const char *skip_slashes(const char *text, int n_slashes)
     const char *pp;
     int num_slashes = 0;
 
-    if (!text)
+    if (!text) {
         return NULL;
+    }
 
     for (pp = text; *pp; pp++) {
         if (*pp == '/') {
             num_slashes++;
-            if (num_slashes == n_slashes)
+            if (num_slashes == n_slashes) {
                 return pp + 1;
+            }
         }
     }
 
@@ -1302,8 +1351,9 @@ void icaltimezone_array_append_from_vtimezone(icalarray *timezones, icalcomponen
     icaltimezone zone;
 
     icaltimezone_init(&zone);
-    if (icaltimezone_get_vtimezone_properties(&zone, child))
+    if (icaltimezone_get_vtimezone_properties(&zone, child)) {
         icalarray_append(timezones, &zone);
+    }
 }
 
 void icaltimezone_array_free(icalarray *timezones)
@@ -1327,16 +1377,19 @@ void icaltimezone_array_free(icalarray *timezones)
 
 icalarray *icaltimezone_get_builtin_timezones(void)
 {
-    if (!builtin_timezones)
+    if (!builtin_timezones) {
         icaltimezone_init_builtin_timezones();
+    }
 
     return builtin_timezones;
 }
 
 void icaltimezone_free_builtin_timezones(void)
 {
+    icaltimezone_builtin_lock();
     icaltimezone_array_free(builtin_timezones);
     builtin_timezones = 0;
+    icaltimezone_builtin_unlock();
 }
 
 icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
@@ -1346,47 +1399,31 @@ icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
     size_t lower;
     const char *zone_location;
 
-    if (!location || !location[0])
+    if (!location || !location[0]) {
         return NULL;
-
-    if (!builtin_timezones)
-        icaltimezone_init_builtin_timezones();
-
-    if (strcmp(location, "UTC") == 0 || strcmp(location, "GMT") == 0)
-        return &utc_timezone;
-
-#if 0
-    /* Do a simple binary search. */
-    lower = middle = 0;
-    upper = builtin_timezones->num_elements;
-
-    while (lower < upper) {
-        middle = (lower + upper) / 2;
-        zone = icalarray_element_at(builtin_timezones, middle);
-        zone_location = icaltimezone_get_location(zone);
-        cmp = strcmp(location, zone_location);
-        if (cmp == 0) {
-            return zone;
-        } else if (cmp < 0) {
-            upper = middle;
-        } else {
-            lower = middle + 1;
-        }
     }
-#endif
+
+    if (!builtin_timezones) {
+        icaltimezone_init_builtin_timezones();
+    }
+
+    if (strcmp(location, "UTC") == 0 || strcmp(location, "GMT") == 0) {
+        return &utc_timezone;
+    }
 
     /* The zones from the system are not stored in alphabetical order,
        so we just do a sequential search */
     for (lower = 0; lower < builtin_timezones->num_elements; lower++) {
         zone = icalarray_element_at(builtin_timezones, lower);
         zone_location = icaltimezone_get_location(zone);
-        if (strcmp(location, zone_location) == 0)
+        if (zone_location && strcmp(location, zone_location) == 0) {
             return zone;
+        }
     }
 
     /* Check whether file exists, but is not mentioned in zone.tab.
        It means it's a deprecated timezone, but still available. */
-    comp = icaltzutil_fetch_timezone(location);
+    comp = icaltimezone_fetch_timezone(location);
     if (comp) {
         icaltimezone tz;
 
@@ -1402,7 +1439,7 @@ icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
     return NULL;
 }
 
-static struct icaltimetype tm_to_icaltimetype(struct tm *tm)
+static struct icaltimetype tm_to_icaltimetype(const struct tm *tm)
 {
     struct icaltimetype itt;
 
@@ -1429,8 +1466,9 @@ static int get_offset(icaltimezone *zone)
     const icaltime_t now = icaltime(NULL);
 
     memset(&local, 0, sizeof(struct tm));
-    if (!icalgmtime_r(&now, &local))
+    if (!icalgmtime_r(&now, &local)) {
         return 0;
+    }
 
     tt = tm_to_icaltimetype(&local);
     offset = icaltimezone_get_utc_offset(zone, &tt, NULL);
@@ -1443,14 +1481,17 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset, const ch
     icaltimezone *zone = NULL;
     size_t i, count;
 
-    if (!builtin_timezones)
+    if (!builtin_timezones) {
         icaltimezone_init_builtin_timezones();
+    }
 
-    if (offset == 0)
+    if (offset == 0) {
         return &utc_timezone;
+    }
 
-    if (!tzname)
+    if (!tzname) {
         return NULL;
+    }
 
     count = builtin_timezones->num_elements;
 
@@ -1462,8 +1503,9 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset, const ch
 
         z_offset = get_offset(zone);
 
-        if (z_offset == offset && zone->tznames && !strcmp(tzname, zone->tznames))
+        if (z_offset == offset && zone->tznames && !strcmp(tzname, zone->tznames)) {
             return zone;
+        }
     }
 
     return NULL;
@@ -1475,8 +1517,9 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
     icaltimezone *zone;
     int compat = 0;
 
-    if (!tzid || !tzid[0])
+    if (!tzid || !tzid[0]) {
         return NULL;
+    }
 
     if (strcmp(tzid, "UTC") == 0 || strcmp(tzid, "GMT") == 0) {
         return icaltimezone_get_builtin_timezone(tzid);
@@ -1517,12 +1560,14 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
     /* Now we can use the function to get the builtin timezone from the
        location string. */
     zone = icaltimezone_get_builtin_timezone(p);
-    if (!zone || compat)
+    if (!zone || compat) {
         return zone;
+    }
 
 #if defined(USE_BUILTIN_TZDATA)
-    if (use_builtin_tzdata)
+    if (use_builtin_tzdata) {
         return zone;
+    }
 #endif
 
     /* Check that the builtin TZID matches exactly. We don't want to return
@@ -1537,8 +1582,9 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
 
 icaltimezone *icaltimezone_get_utc_timezone(void)
 {
-    if (!builtin_timezones)
+    if (!builtin_timezones) {
         icaltimezone_init_builtin_timezones();
+    }
 
     return &utc_timezone;
 }
@@ -1575,8 +1621,9 @@ static bool parse_coord(char *coord, int len, int *degrees, int *minutes, int *s
         return true;
     }
 
-    if (coord[0] == '-')
+    if (coord[0] == '-') {
         *degrees = -*degrees;
+    }
 
     return false;
 }
@@ -1656,14 +1703,13 @@ static void icaltimezone_parse_zone_tab(void)
     size_t filename_len;
     int latitude_degrees = 0, latitude_minutes = 0, latitude_seconds = 0;
     int longitude_degrees = 0, longitude_minutes = 0, longitude_seconds = 0;
-    icaltimezone zone;
 
     icalerror_assert(builtin_timezones == NULL, "Parsing zones.tab file multiple times");
 
-    builtin_timezones = icalarray_new(sizeof(icaltimezone), 1024);
+    icalarray *timezones = icalarray_new(sizeof(icaltimezone), 1024);
 
     if (!use_builtin_tzdata) {
-        zonedir = icaltzutil_get_zone_directory();
+        zonedir = icaltimezone_get_system_zone_directory();
         zonetab = ZONES_TAB_SYSTEM_FILENAME;
     } else {
         zonedir = get_zone_directory_builtin();
@@ -1677,6 +1723,9 @@ static void icaltimezone_parse_zone_tab(void)
 
     icalerror_assert(filename_len > 0, "Unable to locate a zoneinfo dir");
     if (filename_len == 0) {
+        // Set an empty builtin_timezones array if there's an error
+        builtin_timezones = timezones;
+
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
         return;
     }
@@ -1686,6 +1735,9 @@ static void icaltimezone_parse_zone_tab(void)
 
     filename = (char *)icalmemory_new_buffer(filename_len);
     if (!filename) {
+        // Set an empty builtin_timezones array if there's an error
+        builtin_timezones = timezones;
+
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return;
     }
@@ -1695,14 +1747,18 @@ static void icaltimezone_parse_zone_tab(void)
     icalmemory_free_buffer(filename);
     icalerror_assert(fp, "Cannot open the zonetab file for reading");
     if (!fp) {
+        // Set an empty builtin_timezones array if there's an error
+        builtin_timezones = timezones;
+
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
         return;
     }
 
 #if !defined(__clang_analyzer__)
     while (fgets(buf, (int)sizeof(buf), fp)) {
-        if (*buf == '#')
+        if (*buf == '#') {
             continue;
+        }
 
         if (use_builtin_tzdata) {
             /* The format of each line is: "[ latitude longitude ] location". */
@@ -1736,6 +1792,7 @@ static void icaltimezone_parse_zone_tab(void)
                 continue;
             }
         }
+        icaltimezone zone;
         icaltimezone_init(&zone);
         zone.location = icalmemory_strdup(location);
 
@@ -1763,29 +1820,17 @@ static void icaltimezone_parse_zone_tab(void)
                 (double)longitude_seconds / 3600;
         }
 
-        icalarray_append(builtin_timezones, &zone);
+        icalarray_append(timezones, &zone);
 
-#if 0
+#ifdef ICALTIMEZONE_DEBUG_PRINT
         printf("Found zone: %s %f %f\n", location, zone.latitude, zone.longitude);
 #endif
     }
 #endif // __clang_analyzer__
+
+    builtin_timezones = timezones;
+
     fclose(fp);
-}
-
-void icaltimezone_release_zone_tab(void)
-{
-    size_t i;
-    icalarray *mybuiltin_timezones = builtin_timezones;
-
-    if (builtin_timezones == NULL)
-        return;
-
-    builtin_timezones = NULL;
-    for (i = 0; i < mybuiltin_timezones->num_elements; i++) {
-        icalmemory_free_buffer(((icaltimezone *)icalarray_element_at(mybuiltin_timezones, i))->location);
-    }
-    icalarray_free(mybuiltin_timezones);
 }
 
 /** @brief Loads the builtin VTIMEZONE data for the given timezone. */
@@ -1794,8 +1839,9 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
     icalcomponent *comp = 0, *subcomp;
 
     /* Prevent blocking on mutex lock caused by recursive calls */
-    if (zone->component)
+    if (zone->component) {
         return;
+    }
 
     icaltimezone_builtin_lock();
 
@@ -1875,8 +1921,9 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
                This updates the properties, thus when the component is converted to
                the string and back to the component the Location will still match. */
             prop = icalcomponent_get_first_property(subcomp, ICAL_LOCATION_PROPERTY);
-            if (prop)
+            if (prop) {
                 icalproperty_set_location(prop, zone->location);
+            }
 
             for (prop = icalcomponent_get_first_property(subcomp, ICAL_X_PROPERTY);
                  prop;
@@ -1891,7 +1938,7 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
             }
         }
     } else {
-        subcomp = icaltzutil_fetch_timezone(zone->location);
+        subcomp = icaltimezone_fetch_timezone(zone->location);
     }
 
     if (!subcomp) {
@@ -1932,8 +1979,8 @@ bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
     /* Make sure the changes array is expanded up to the given time. */
     icaltimezone_ensure_coverage(zone, max_year);
 
-#if 0
-    printf("Num changes: %i\n", zone->changes->num_elements);
+#ifdef ICALTIMEZONE_DEBUG_PRINT
+    printf("Num changes: %zu\n", zone->changes->num_elements);
 #endif
 
     icaltimezone_changes_lock();
@@ -1941,8 +1988,9 @@ bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
     for (change_num = 0; change_num < zone->changes->num_elements; change_num++) {
         zone_change = icalarray_element_at(zone->changes, change_num);
 
-        if (zone_change->year > max_year)
+        if (zone_change->year > max_year) {
             break;
+        }
 
         fprintf(fp, "%s\t%2i %s %04i\t%2i:%02i:%02i",
                 zone->location,
@@ -1981,7 +2029,7 @@ static void format_utc_offset(int utc_offset, char *buffer, size_t buffer_size)
     /* Sanity check. Standard timezone offsets shouldn't be much more than 12
        hours, and daylight saving shouldn't change it by more than a few hours.
        (The maximum offset is 15 hours 56 minutes at present.) */
-    if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60) {
+    if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60 || seconds < 0) {
         icalerrprintf("Warning: Strange timezone offset: H:%i M:%i S:%i\n",
                       hours, minutes, seconds);
     }
@@ -2008,10 +2056,10 @@ static const char *get_zone_directory_builtin(void)
 
 #if !defined(_WIN32_WCE)
     char buffer[1000], zoneinfodir[1000], dirname[1000];
+    int used_default;
 #else
     wchar_t zoneinfodir[1000], dirname[1000];
 #endif
-    int used_default;
     static ICAL_GLOBAL_VAR char *cache = NULL;
 
 #if !defined(_WIN32_WCE)
@@ -2021,15 +2069,19 @@ static const char *get_zone_directory_builtin(void)
 #endif
     struct stat st;
 
-    if (zone_files_directory)
+    if (zone_files_directory) {
         return zone_files_directory;
+    }
 
-    if (cache)
+    /* cppcheck-suppress knownConditionTrueFalse */
+    if (cache) {
         return cache;
+    }
 
     /* Get the filename of the application */
-    if (!GetModuleFileNameW(NULL, wbuffer, sizeof(wbuffer) / sizeof(wbuffer[0])))
+    if (!GetModuleFileNameW(NULL, wbuffer, sizeof(wbuffer) / sizeof(wbuffer[0]))) {
         return ZONEINFO_DIRECTORY;
+    }
 
 /*wince supports only unicode*/
 #if !defined(_WIN32_WCE)
@@ -2136,27 +2188,73 @@ static const char *get_zone_directory_builtin(void)
 #endif
 }
 
-const char *get_zone_directory(void)
+void icaltimezone_set_system_zone_directory(const char *zonepath)
+{
+    if ((zonepath == NULL) || (zonepath[0] == '\0')) {
+        memset(s_zoneinfopath, 0, MAXPATHLEN);
+    } else {
+        strncpy(s_zoneinfopath, zonepath, MAXPATHLEN - 1);
+    }
+}
+
+static void set_zoneinfopath(void)
+{
+    char file_path[MAXPATHLEN] = {0};
+    const char *fname = ZONES_TAB_SYSTEM_FILENAME;
+    size_t i, num_zi_search_paths;
+
+    /* Search for the zone.tab file in the dir specified by the TZDIR environment */
+    const char *env_tzdir = getenv("TZDIR");
+    if (env_tzdir != NULL) {
+        snprintf(file_path, MAXPATHLEN, "%s/%s", env_tzdir, fname);
+        if (!access(file_path, F_OK | R_OK)) {
+            strncpy(s_zoneinfopath, env_tzdir, MAXPATHLEN - 1);
+            return;
+        }
+    }
+
+    /* Else, search for zone.tab in a list of well-known locations */
+    num_zi_search_paths = sizeof(s_zoneinfo_search_paths) / sizeof(s_zoneinfo_search_paths[0]);
+    for (i = 0; i < num_zi_search_paths; i++) {
+        snprintf(file_path, MAXPATHLEN, "%s/%s", s_zoneinfo_search_paths[i], fname);
+        if (!access(file_path, F_OK | R_OK)) {
+            strncpy(s_zoneinfopath, s_zoneinfo_search_paths[i], MAXPATHLEN - 1);
+            break;
+        }
+    }
+}
+const char *icaltimezone_get_system_zone_directory(void)
+{
+    if (s_zoneinfopath[0] == '\0') {
+        set_zoneinfopath();
+    }
+
+    return s_zoneinfopath;
+}
+
+const char *icaltimezone_get_zone_directory(void)
 {
     if (use_builtin_tzdata) {
         return get_zone_directory_builtin();
     } else {
-        return icaltzutil_get_zone_directory();
+        return icaltimezone_get_system_zone_directory();
     }
 }
 
-void set_zone_directory(const char *path)
+void icaltimezone_set_zone_directory(const char *path)
 {
-    if (zone_files_directory)
-        free_zone_directory();
+    if (zone_files_directory) {
+        icaltimezone_free_zone_directory();
+    }
 
     zone_files_directory = icalmemory_new_buffer(strlen(path) + 1);
 
-    if (zone_files_directory != NULL)
+    if (zone_files_directory != NULL) {
         strcpy(zone_files_directory, path);
+    }
 }
 
-void free_zone_directory(void)
+void icaltimezone_free_zone_directory(void)
 {
     if (zone_files_directory != NULL) {
         icalmemory_free_buffer(zone_files_directory);
@@ -2376,13 +2474,12 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
                     ritr = icalrecur_iterator_new(rrule, dtstart);
 
-                    if (trunc_dtstart) {
+                    if (ritr && trunc_dtstart) {
                         /* Bump RRULE start to 1 year prior to our window open */
                         icaltimetype newstart = dtstart;
                         newstart.year = start.year - 1;
                         newstart.month = start.month;
                         newstart.day = start.day;
-                        (void)icaltime_normalize(newstart);
                         icalrecur_iterator_set_start(ritr, newstart);
                     }
                 }
@@ -2453,8 +2550,9 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                             }
                         } else {
                             /* Observance is on/after our window open */
-                            if (r == 0)
+                            if (r == 0) {
                                 need_tomb = 0;
+                            }
 
                             if (trunc_dtstart) {
                                 /* Make this observance the new DTSTART */
@@ -2494,7 +2592,6 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                                 newstart.year = end.year - 1;
                                 newstart.month = end.month;
                                 newstart.day = end.day;
-                                (void)icaltime_normalize(newstart);
                                 icalrecur_iterator_set_start(ritr, newstart);
                             }
                         }
@@ -2552,8 +2649,9 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 icalproperty_free(rdate->prop);
             } else {
                 /* RDATE is on/after our window open */
-                if (r == 0)
+                if (r == 0) {
                     need_tomb = 0;
+                }
 
                 if (trunc_dtstart) {
                     /* Make this RDATE the new DTSTART */
@@ -2593,7 +2691,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         /* Need to add tombstone component/observance starting at window open
            as long as its not prior to start of TZ data */
         icalcomponent *tomb;
-        icalproperty *prop, *nextp;
+        icalproperty *tomb_prop, *nextp;
 
         /* Determine which tombstone component we need */
         if (tombstone.onset.is_daylight) {
@@ -2605,30 +2703,30 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
         }
 
         /* Set property values on our tombstone */
-        for (prop = icalcomponent_get_first_property(tomb, ICAL_ANY_PROPERTY);
-             prop; prop = nextp) {
+        for (tomb_prop = icalcomponent_get_first_property(tomb, ICAL_ANY_PROPERTY);
+             tomb_prop; tomb_prop = nextp) {
             nextp = icalcomponent_get_next_property(tomb, ICAL_ANY_PROPERTY);
 
-            switch (icalproperty_isa(prop)) {
+            switch (icalproperty_isa(tomb_prop)) {
             case ICAL_TZNAME_PROPERTY:
-                icalproperty_set_tzname(prop, tombstone.name);
+                icalproperty_set_tzname(tomb_prop, tombstone.name);
                 break;
             case ICAL_TZOFFSETFROM_PROPERTY:
-                icalproperty_set_tzoffsetfrom(prop, tombstone.offset_from);
+                icalproperty_set_tzoffsetfrom(tomb_prop, tombstone.offset_from);
                 break;
             case ICAL_TZOFFSETTO_PROPERTY:
-                icalproperty_set_tzoffsetto(prop, tombstone.offset_to);
+                icalproperty_set_tzoffsetto(tomb_prop, tombstone.offset_to);
                 break;
             case ICAL_DTSTART_PROPERTY:
                 /* Adjust window open to local time */
                 icaltime_adjust(&start, 0, 0, 0, tombstone.offset_from);
                 (void)icaltime_set_timezone(&start, NULL);
 
-                icalproperty_set_dtstart(prop, start);
+                icalproperty_set_dtstart(tomb_prop, start);
                 break;
             default:
-                icalcomponent_remove_property(tomb, prop);
-                icalproperty_free(prop);
+                icalcomponent_remove_property(tomb, tomb_prop);
+                icalproperty_free(tomb_prop);
                 break;
             }
         }

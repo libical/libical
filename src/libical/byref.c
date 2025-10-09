@@ -3,9 +3,7 @@
  CREATOR: Siam.Smeets 18 Nov 24
 
  SPDX-FileCopyrightText: 2024, Siam Smeets <siam.smeets@dataaccess.eu>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 // There are multiple languages that only support pointers but not structures directly as interop.
@@ -28,7 +26,7 @@
 
 /** @brief Convenience constructor (ret-wrapped)
  *
- * @returns The current time in the given timezone, as an icaltimetype, in the last parameter.
+ * The current time in the given timezone, as an icaltimetype, in the last parameter.
  */
 LIBICAL_ICAL_EXPORT void icaltime_current_time_with_zone_ex(const icaltimezone *zone, struct icaltimetype *ret)
 {

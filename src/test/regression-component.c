@@ -2,7 +2,6 @@
  FILE: regression-component.c
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original author is Eric Busboom
@@ -32,8 +31,9 @@ void create_simple_component(void)
     bogus = icalcomponent_get_first_property(calendar, ICAL_DTSTART_PROPERTY);
     ok("bogus dtstart not found", (bogus == NULL));
 
-    if (VERBOSE && calendar)
+    if (VERBOSE && calendar) {
         printf("%s\n", icalcomponent_as_ical_string(calendar));
+    }
 
     icalcomponent_free(calendar);
 }
@@ -197,11 +197,13 @@ void create_new_component(void)
 
     str_is("build large, complex component", calendar_as_string, create_new_component_str);
 
-    if (VERBOSE && calendar)
+    if (VERBOSE && calendar) {
         printf("%s\n", icalcomponent_as_ical_string(calendar));
+    }
 
-    if (calendar)
+    if (calendar) {
         icalcomponent_free(calendar);
+    }
 }
 
 /* Create a new component, using the va_args list */
@@ -271,8 +273,9 @@ void create_new_component_with_va_args(void)
                                 (void *)0),
             (void *)0);
 
-    if (VERBOSE && calendar)
+    if (VERBOSE && calendar) {
         printf("%s\n", icalcomponent_as_ical_string(calendar));
+    }
 
     icalcomponent_free(calendar);
     ok("creating a complex vcalendar", (calendar != NULL));
@@ -315,8 +318,9 @@ void test_icalcomponent_get_span(void)
     span.start = tm1;
     span.end = tm2;
     span.is_busy = 0;
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     /** test 1
      *  We specify times in a timezone, the returned span is in UTC
@@ -332,8 +336,9 @@ void test_icalcomponent_get_span(void)
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     int_is("America/Los_Angeles", span.start, 973350000);
@@ -350,8 +355,9 @@ void test_icalcomponent_get_span(void)
         (void *)0);
 
     span = icalcomponent_get_span(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     int_is("floating time", (int)(long)span.start, (int)(long)tm1);
 
@@ -371,8 +377,9 @@ void test_icalcomponent_get_span(void)
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     int_is("America/New_York", span.start, 973360800);
@@ -394,8 +401,9 @@ void test_icalcomponent_get_span(void)
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     int_is("America/New_York", span.start, 973360800);
@@ -417,14 +425,15 @@ void test_icalcomponent_get_span(void)
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
 #if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     int_is("America/Los_Angeles w/ duration", span.end, 973351800);
 #endif
 
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
     /** test 6
      *  We specify only start time, should return a null span with no error
      */
@@ -434,8 +443,9 @@ void test_icalcomponent_get_span(void)
         (void *)0);
 
     span = icalcomponent_get_span(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     int_is("start == end", (int)(long)span.start, (int)(long)span.end);
     icalcomponent_free(c);
@@ -450,8 +460,9 @@ void test_icalcomponent_get_span(void)
         (void *)0);
 
     span = icalcomponent_get_span(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     int_is("UTC", (int)(long)span.start, 973296000);
     icalcomponent_free(c);
@@ -466,8 +477,9 @@ void test_icalcomponent_get_span(void)
 
     span = icalcomponent_get_span(c);
     int_is("UTC #2", (int)(long)span.start, 973296000);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     icalcomponent_free(c);
 
@@ -479,13 +491,14 @@ void test_icalcomponent_get_span(void)
                             (void *)0);
 
     span = icalcomponent_get_span(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     int_is("start date only", (int)(long)span.end, 973382399);
 
     icalcomponent_free(c);
 
     /* assert(icalerrno == ICAL_MALFORMEDDATA_ERROR); */
-    icalerror_set_errors_are_fatal(1);
+    icalerror_set_errors_are_fatal(true);
 }

@@ -7,6 +7,7 @@ Libical implements the RFCS:
 * [RFC5546][] iCalendar Transport-Independent Interoperability Protocol (iTIP)
 * [RFC7529][] Non-Gregorian Recurrence Rules in the Internet Calendaring and
   Scheduling Core Object Specification (iCalendar)
+* [RFC6350][] vCard Format Specification
 
 as well as iCalendar extensions described in:
 
@@ -29,3 +30,4 @@ Plus:
 [RFC9073]: https://tools.ietf.org/html/rfc9073
 [RFC9074]: https://tools.ietf.org/html/rfc9074
 [RFC9253]: https://tools.ietf.org/html/rfc9253
+[RFC6350]: https://tools.ietf.org/html/rfc6350

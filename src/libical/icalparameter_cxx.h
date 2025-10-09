@@ -4,9 +4,7 @@
  * @brief   Definition of C++ Wrapper for icalparameter.c
  *
  * SPDX-FileCopyrightText: 2001, Critical Path
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifndef ICALPARAMETER_CXX_H
@@ -21,6 +19,7 @@ extern "C" {
 }
 
 #include <string>
+#include <vector>
 
 namespace LibICal
 {
@@ -68,8 +67,8 @@ public:
 
 public:
     /* DELEGATED-FROM */
-    std::string get_delegatedfrom() const;
-    void set_delegatedfrom(const std::string &v);
+    std::vector<std::string> get_delegatedfrom() const;
+    void set_delegatedfrom(const std::vector<std::string> &v);
 
     /* RELATED */
     icalparameter_related get_related() const;
@@ -112,8 +111,8 @@ public:
     void set_range(const icalparameter_range &v);
 
     /* DELEGATED-TO */
-    std::string get_delegatedto() const;
-    void set_delegatedto(const std::string &v);
+    std::vector<std::string> get_delegatedto() const;
+    void set_delegatedto(const std::vector<std::string> &v);
 
     /* CN */
     std::string get_cn() const;
@@ -136,8 +135,8 @@ public:
     void set_xlicerrortype(const icalparameter_xlicerrortype &v);
 
     /* MEMBER */
-    std::string get_member() const;
-    void set_member(const std::string &v);
+    std::vector<std::string> get_member() const;
+    void set_member(const std::vector<std::string> &v);
 
     /* X */
     std::string get_x() const;

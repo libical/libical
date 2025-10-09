@@ -2,11 +2,8 @@
 # GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./timezone.py
 
 ###############################################################################
-#
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
 ###############################################################################
 
 """Test Python bindings for libical timezone"""
@@ -16,7 +13,7 @@ import os
 
 import gi
 
-gi.require_version('ICalGLib', '3.0')
+gi.require_version('ICalGLib', '4.0')
 from gi.repository import ICalGLib  # noqa E402
 
 try:
@@ -54,7 +51,7 @@ assert utc.get_display_name() == 'UTC'
 utc2 = ICalGLib.Timezone.get_utc_timezone()
 assert utc == utc2
 
-time = ICalGLib.Time.new()
+time = ICalGLib.Time.new_from_timet_with_zone(1494096400, 0, utc)
 before = time.get_hour()
 ICalGLib.Time.convert_timezone(time, la, chicago)
 after = time.get_hour()

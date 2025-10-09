@@ -3,15 +3,13 @@
  CREATOR: ebusboom 8jun00
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  DESCRIPTION:
 
  Test program for expanding recurrences. Run as:
 
      ./recur ../../test-data/recur.txt
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -24,16 +22,22 @@
 #include <stdlib.h>
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-unsafe-call-within-signal-handler"
+#endif
 static void sig_alrm(int i)
 {
     _unused(i);
     fprintf(stderr, "Could not get lock on file\n");
     exit(1);
 }
-
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 #endif
 
-static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
+static void recur_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     _unused(comp);
     _unused(data);
@@ -41,6 +45,7 @@ static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void
     printf("    %s\n", icalctime(&span->end));
 }
 
+/* cppcheck-suppress constParameter */
 int main(int argc, char *argv[])
 {
     icalset *cin;
@@ -127,7 +132,7 @@ int main(int argc, char *argv[])
 
     icalmemory_free_ring();
 
-    free_zone_directory();
+    icaltimezone_free_zone_directory();
 
     return 0;
 }

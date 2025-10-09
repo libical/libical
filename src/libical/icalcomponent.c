@@ -3,9 +3,7 @@
  CREATOR: eric 28 April 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -16,7 +14,6 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icalparser.h"
-#include "icalproperty_p.h"
 #include "icalrestriction.h"
 #include "icaltimezone.h"
 
@@ -28,10 +25,10 @@ struct icalcomponent_impl {
     char id[5];
     icalcomponent_kind kind;
     char *x_name;
-    pvl_list properties;
-    pvl_elem property_iterator;
-    pvl_list components;
-    pvl_elem component_iterator;
+    icalpvl_list properties;
+    icalpvl_elem property_iterator;
+    icalpvl_list components;
+    icalpvl_elem component_iterator;
     struct icalcomponent_impl *parent;
 
     /** An array of icaltimezone structs. We use this so we can do fast
@@ -78,8 +75,9 @@ static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind)
 {
     icalcomponent *comp;
 
-    if (!icalcomponent_kind_is_valid(kind))
+    if (!icalcomponent_kind_is_valid(kind)) {
         return NULL;
+    }
 
     if ((comp = (icalcomponent *)icalmemory_new_buffer(sizeof(icalcomponent))) == 0) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
@@ -91,8 +89,8 @@ static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind)
     strcpy(comp->id, "comp");
 
     comp->kind = kind;
-    comp->properties = pvl_newlist();
-    comp->components = pvl_newlist();
+    comp->properties = icalpvl_newlist();
+    comp->components = icalpvl_newlist();
     comp->timezones_sorted = 1;
 
     return comp;
@@ -132,7 +130,7 @@ icalcomponent *icalcomponent_clone(const icalcomponent *old)
     icalcomponent *clone;
     icalproperty *p;
     icalcomponent *c;
-    pvl_elem itr;
+    icalpvl_elem itr;
 
     icalerror_check_arg_rz((old != 0), "component");
 
@@ -142,13 +140,17 @@ icalcomponent *icalcomponent_clone(const icalcomponent *old)
         return 0;
     }
 
-    for (itr = pvl_head(old->properties); itr != 0; itr = pvl_next(itr)) {
-        p = (icalproperty *)pvl_data(itr);
+    if (old->x_name) {
+        clone->x_name = icalmemory_strdup(old->x_name);
+    }
+
+    for (itr = icalpvl_head(old->properties); itr != 0; itr = icalpvl_next(itr)) {
+        p = (icalproperty *)icalpvl_data(itr);
         icalcomponent_add_property(clone, icalproperty_clone(p));
     }
 
-    for (itr = pvl_head(old->components); itr != 0; itr = pvl_next(itr)) {
-        c = (icalcomponent *)pvl_data(itr);
+    for (itr = icalpvl_head(old->components); itr != 0; itr = icalpvl_next(itr)) {
+        c = (icalcomponent *)icalpvl_data(itr);
         icalcomponent_add_component(clone, icalcomponent_clone(c));
     }
 
@@ -173,49 +175,47 @@ void icalcomponent_free(icalcomponent *c)
 
     icalerror_check_arg_rv((c != 0), "component");
 
-    if (c != 0) {
-        if (c->parent != 0) {
-            return;
-        }
-
-        if (c->properties != 0) {
-            while ((prop = pvl_pop(c->properties)) != 0) {
-                icalproperty_set_parent(prop, 0);
-                icalproperty_free(prop);
-            }
-            pvl_free(c->properties);
-        }
-
-        while ((comp = pvl_data(pvl_head(c->components))) != 0) {
-            icalcomponent_remove_component(c, comp);
-            icalcomponent_free(comp);
-        }
-
-        pvl_free(c->components);
-
-        if (c->x_name != 0) {
-            icalmemory_free_buffer(c->x_name);
-        }
-
-        if (c->timezones) {
-            icaltimezone_array_free(c->timezones);
-            c->timezones = 0;
-        }
-
-        c->kind = ICAL_NO_COMPONENT;
-        c->properties = 0;
-        c->property_iterator = 0;
-        c->components = 0;
-        c->component_iterator = 0;
-        c->x_name = 0;
-        c->id[0] = 'X';
-        c->timezones = NULL;
-
-        icalmemory_free_buffer(c);
+    if (c->parent != 0) {
+        return;
     }
+
+    if (c->properties != 0) {
+        while ((prop = icalpvl_pop(c->properties)) != 0) {
+            icalproperty_set_parent(prop, 0);
+            icalproperty_free(prop);
+        }
+        icalpvl_free(c->properties);
+    }
+
+    while ((comp = icalpvl_data(icalpvl_head(c->components))) != 0) {
+        icalcomponent_remove_component(c, comp);
+        icalcomponent_free(comp);
+    }
+
+    icalpvl_free(c->components);
+
+    if (c->x_name != 0) {
+        icalmemory_free_buffer(c->x_name);
+    }
+
+    if (c->timezones) {
+        icaltimezone_array_free(c->timezones);
+        c->timezones = 0;
+    }
+
+    c->kind = ICAL_NO_COMPONENT;
+    c->properties = 0;
+    c->property_iterator = 0;
+    c->components = 0;
+    c->component_iterator = 0;
+    c->x_name = 0;
+    c->id[0] = 'X';
+    c->timezones = NULL;
+
+    icalmemory_free_buffer(c);
 }
 
-char *icalcomponent_as_ical_string(icalcomponent *impl)
+char *icalcomponent_as_ical_string(const icalcomponent *impl)
 {
     char *buf;
 
@@ -226,13 +226,13 @@ char *icalcomponent_as_ical_string(icalcomponent *impl)
     return buf;
 }
 
-char *icalcomponent_as_ical_string_r(icalcomponent *impl)
+char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
 {
     char *buf;
     char *tmp_buf;
     size_t buf_size = 1024;
     char *buf_ptr = 0;
-    pvl_elem itr;
+    icalpvl_elem itr;
 
     /* RFC5545 explicitly says that the newline is *ALWAYS* a \r\n (CRLF)!!!! */
     const char newline[] = "\r\n";
@@ -255,8 +255,9 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
 
     buf = icalmemory_new_buffer(buf_size);
-    if (buf == NULL)
+    if (buf == NULL) {
         return NULL;
+    }
 
     buf_ptr = buf;
 
@@ -264,8 +265,8 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
-    for (itr = pvl_head(impl->properties); itr != 0; itr = pvl_next(itr)) {
-        p = (icalproperty *)pvl_data(itr);
+    for (itr = icalpvl_head(impl->properties); itr != 0; itr = icalpvl_next(itr)) {
+        p = (icalproperty *)icalpvl_data(itr);
 
         icalerror_assert((p != 0), "Got a null property");
         tmp_buf = icalproperty_as_ical_string_r(p);
@@ -274,8 +275,8 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
         icalmemory_free_buffer(tmp_buf);
     }
 
-    for (itr = pvl_head(impl->components); itr != 0; itr = pvl_next(itr)) {
-        c = (icalcomponent *)pvl_data(itr);
+    for (itr = icalpvl_head(impl->components); itr != 0; itr = icalpvl_next(itr)) {
+        c = (icalcomponent *)icalpvl_data(itr);
 
         tmp_buf = icalcomponent_as_ical_string_r(c);
         if (tmp_buf != NULL) {
@@ -285,13 +286,13 @@ char *icalcomponent_as_ical_string_r(icalcomponent *impl)
     }
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "END:");
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, icalcomponent_kind_to_string(kind));
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
     return buf;
 }
 
-bool icalcomponent_is_valid(icalcomponent *component)
+bool icalcomponent_is_valid(const icalcomponent *component)
 {
     if ((strcmp(component->id, "comp") == 0) && component->kind != ICAL_NO_COMPONENT) {
         return true;
@@ -336,7 +337,7 @@ void icalcomponent_set_x_name(icalcomponent *comp, const char *name)
     }
 }
 
-const char *icalcomponent_get_x_name(icalcomponent *comp)
+const char *icalcomponent_get_x_name(const icalcomponent *comp)
 {
     icalerror_check_arg_rz((comp != 0), "comp");
 
@@ -396,12 +397,12 @@ void icalcomponent_add_property(icalcomponent *component, icalproperty *property
 
     icalproperty_set_parent(property, component);
 
-    pvl_push(component->properties, property);
+    icalpvl_push(component->properties, property);
 }
 
 void icalcomponent_remove_property(icalcomponent *component, icalproperty *property)
 {
-    pvl_elem itr, next_itr;
+    icalpvl_elem itr, next_itr;
 
     icalerror_check_arg_rv((component != 0), "component");
     icalerror_check_arg_rv((property != 0), "property");
@@ -415,15 +416,15 @@ void icalcomponent_remove_property(icalcomponent *component, icalproperty *prope
     }
 #endif
 
-    for (itr = pvl_head(component->properties); itr != 0; itr = next_itr) {
-        next_itr = pvl_next(itr);
+    for (itr = icalpvl_head(component->properties); itr != 0; itr = next_itr) {
+        next_itr = icalpvl_next(itr);
 
-        if (pvl_data(itr) == (void *)property) {
+        if (icalpvl_data(itr) == (void *)property) {
             if (component->property_iterator == itr) {
-                component->property_iterator = pvl_next(itr);
+                component->property_iterator = icalpvl_next(itr);
             }
 
-            (void)pvl_remove(component->properties, itr);
+            (void)icalpvl_remove(component->properties, itr);
             icalproperty_set_parent(property, 0);
         }
     }
@@ -432,12 +433,12 @@ void icalcomponent_remove_property(icalcomponent *component, icalproperty *prope
 int icalcomponent_count_properties(icalcomponent *component, icalproperty_kind kind)
 {
     int count = 0;
-    pvl_elem itr;
+    icalpvl_elem itr;
 
     icalerror_check_arg_rz((component != 0), "component");
 
-    for (itr = pvl_head(component->properties); itr != 0; itr = pvl_next(itr)) {
-        if (kind == icalproperty_isa((icalproperty *)pvl_data(itr)) || kind == ICAL_ANY_PROPERTY) {
+    for (itr = icalpvl_head(component->properties); itr != 0; itr = icalpvl_next(itr)) {
+        if (kind == icalproperty_isa((icalproperty *)icalpvl_data(itr)) || kind == ICAL_ANY_PROPERTY) {
             count++;
         }
     }
@@ -453,16 +454,16 @@ icalproperty *icalcomponent_get_current_property(icalcomponent *component)
         return 0;
     }
 
-    return (icalproperty *)pvl_data(component->property_iterator);
+    return (icalproperty *)icalpvl_data(component->property_iterator);
 }
 
 icalproperty *icalcomponent_get_first_property(icalcomponent *c, icalproperty_kind kind)
 {
     icalerror_check_arg_rz((c != 0), "component");
 
-    for (c->property_iterator = pvl_head(c->properties);
-         c->property_iterator != 0; c->property_iterator = pvl_next(c->property_iterator)) {
-        icalproperty *p = (icalproperty *)pvl_data(c->property_iterator);
+    for (c->property_iterator = icalpvl_head(c->properties);
+         c->property_iterator != 0; c->property_iterator = icalpvl_next(c->property_iterator)) {
+        icalproperty *p = (icalproperty *)icalpvl_data(c->property_iterator);
 
         if (icalproperty_isa(p) == kind || kind == ICAL_ANY_PROPERTY) {
             return p;
@@ -479,9 +480,9 @@ icalproperty *icalcomponent_get_next_property(icalcomponent *c, icalproperty_kin
         return 0;
     }
 
-    for (c->property_iterator = pvl_next(c->property_iterator);
-         c->property_iterator != 0; c->property_iterator = pvl_next(c->property_iterator)) {
-        icalproperty *p = (icalproperty *)pvl_data(c->property_iterator);
+    for (c->property_iterator = icalpvl_next(c->property_iterator);
+         c->property_iterator != 0; c->property_iterator = icalpvl_next(c->property_iterator)) {
+        icalproperty *p = (icalproperty *)icalpvl_data(c->property_iterator);
 
         if (icalproperty_isa(p) == kind || kind == ICAL_ANY_PROPERTY) {
             return p;
@@ -506,19 +507,21 @@ void icalcomponent_add_component(icalcomponent *parent, icalcomponent *child)
 
     /* Fix for Mozilla - bug 327602 */
     if (child->kind != ICAL_VTIMEZONE_COMPONENT) {
-        pvl_push(parent->components, child);
+        icalpvl_push(parent->components, child);
     } else {
         /* VTIMEZONES should be first in the resulting VCALENDAR. */
-        pvl_unshift(parent->components, child);
+        icalpvl_unshift(parent->components, child);
 
         /* Add the VTIMEZONE to our array. */
         /* FIXME: Currently we are also creating this array when loading in
            a builtin VTIMEZONE, when we don't need it. */
-        if (!parent->timezones)
+        if (!parent->timezones) {
             parent->timezones = icaltimezone_array_new();
+        }
 
-        if (parent->timezones)
+        if (parent->timezones) {
             icaltimezone_array_append_from_vtimezone(parent->timezones, child);
+        }
 
         /* Flag that we need to sort it before doing any binary searches. */
         parent->timezones_sorted = 0;
@@ -527,7 +530,7 @@ void icalcomponent_add_component(icalcomponent *parent, icalcomponent *child)
 
 void icalcomponent_remove_component(icalcomponent *parent, icalcomponent *child)
 {
-    pvl_elem itr, next_itr;
+    icalpvl_elem itr, next_itr;
 
     icalerror_check_arg_rv((parent != 0), "parent");
     icalerror_check_arg_rv((child != 0), "child");
@@ -548,17 +551,17 @@ void icalcomponent_remove_component(icalcomponent *parent, icalcomponent *child)
         }
     }
 
-    for (itr = pvl_head(parent->components); itr != 0; itr = next_itr) {
-        next_itr = pvl_next(itr);
+    for (itr = icalpvl_head(parent->components); itr != 0; itr = next_itr) {
+        next_itr = icalpvl_next(itr);
 
-        if (pvl_data(itr) == (void *)child) {
+        if (icalpvl_data(itr) == (void *)child) {
             if (parent->component_iterator == itr) {
                 /* Don't let the current iterator become invalid */
 
                 /* HACK. The semantics for this are troubling. */
-                parent->component_iterator = pvl_next(parent->component_iterator);
+                parent->component_iterator = icalpvl_next(parent->component_iterator);
             }
-            (void)pvl_remove(parent->components, itr);
+            (void)icalpvl_remove(parent->components, itr);
             child->parent = 0;
             break;
         }
@@ -568,12 +571,12 @@ void icalcomponent_remove_component(icalcomponent *parent, icalcomponent *child)
 int icalcomponent_count_components(icalcomponent *component, icalcomponent_kind kind)
 {
     int count = 0;
-    pvl_elem itr;
+    icalpvl_elem itr;
 
     icalerror_check_arg_rz((component != 0), "component");
 
-    for (itr = pvl_head(component->components); itr != 0; itr = pvl_next(itr)) {
-        if (kind == icalcomponent_isa((icalcomponent *)pvl_data(itr)) ||
+    for (itr = icalpvl_head(component->components); itr != 0; itr = icalpvl_next(itr)) {
+        if (kind == icalcomponent_isa((icalcomponent *)icalpvl_data(itr)) ||
             kind == ICAL_ANY_COMPONENT) {
             count++;
         }
@@ -590,16 +593,16 @@ icalcomponent *icalcomponent_get_current_component(icalcomponent *component)
         return 0;
     }
 
-    return (icalcomponent *)pvl_data(component->component_iterator);
+    return (icalcomponent *)icalpvl_data(component->component_iterator);
 }
 
 icalcomponent *icalcomponent_get_first_component(icalcomponent *c, icalcomponent_kind kind)
 {
     icalerror_check_arg_rz((c != 0), "component");
 
-    for (c->component_iterator = pvl_head(c->components);
-         c->component_iterator != 0; c->component_iterator = pvl_next(c->component_iterator)) {
-        icalcomponent *p = (icalcomponent *)pvl_data(c->component_iterator);
+    for (c->component_iterator = icalpvl_head(c->components);
+         c->component_iterator != 0; c->component_iterator = icalpvl_next(c->component_iterator)) {
+        icalcomponent *p = (icalcomponent *)icalpvl_data(c->component_iterator);
 
         if (icalcomponent_isa(p) == kind || kind == ICAL_ANY_COMPONENT) {
             return p;
@@ -617,9 +620,9 @@ icalcomponent *icalcomponent_get_next_component(icalcomponent *c, icalcomponent_
         return 0;
     }
 
-    for (c->component_iterator = pvl_next(c->component_iterator);
-         c->component_iterator != 0; c->component_iterator = pvl_next(c->component_iterator)) {
-        icalcomponent *p = (icalcomponent *)pvl_data(c->component_iterator);
+    for (c->component_iterator = icalpvl_next(c->component_iterator);
+         c->component_iterator != 0; c->component_iterator = icalpvl_next(c->component_iterator)) {
+        icalcomponent *p = (icalcomponent *)icalpvl_data(c->component_iterator);
 
         if (icalcomponent_isa(p) == kind || kind == ICAL_ANY_COMPONENT) {
             return p;
@@ -629,12 +632,13 @@ icalcomponent *icalcomponent_get_next_component(icalcomponent *c, icalcomponent_
     return 0;
 }
 
-icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c)
+icalcomponent *icalcomponent_get_first_real_component(const icalcomponent *c)
 {
     icalcomponent *comp;
+    icalcomponent *cin = (icalcomponent *)c;
 
-    for (comp = icalcomponent_get_first_component(c, ICAL_ANY_COMPONENT);
-         comp != 0; comp = icalcomponent_get_next_component(c, ICAL_ANY_COMPONENT)) {
+    for (comp = icalcomponent_get_first_component(cin, ICAL_ANY_COMPONENT);
+         comp != 0; comp = icalcomponent_get_next_component(cin, ICAL_ANY_COMPONENT)) {
         icalcomponent_kind kind = icalcomponent_isa(comp);
 
         if (kind == ICAL_VEVENT_COMPONENT ||
@@ -724,7 +728,7 @@ bool icalproperty_recurrence_is_excluded(icalcomponent *comp,
                                          struct icaltimetype *recurtime)
 {
     icalproperty *exdate, *exrule;
-    pvl_elem property_iterator;
+    icalpvl_elem property_iterator;
 
     if (comp == NULL || dtstart == NULL || recurtime == NULL || icaltime_is_null_time(*recurtime)) {
         /* BAD DATA */
@@ -760,23 +764,26 @@ bool icalproperty_recurrence_is_excluded(icalcomponent *comp,
 
                 exrule_time = icalrecur_iterator_next(exrule_itr);
 
-                if (icaltime_is_null_time(exrule_time))
+                if (icaltime_is_null_time(exrule_time)) {
                     break;
+                }
 
-                result = icaltime_compare(*recurtime, exrule_time);
+                result = icaltime_compare(exrule_time, *recurtime);
                 if (result == 0) {
                     icalrecur_iterator_free(exrule_itr);
                     comp->property_iterator = property_iterator;
                     return true;
                     /** MATCH **/
                 }
-                if (result == 1)
+                if (result == 1) {
                     break;
+                }
                 /** exrule_time > recurtime **/
             }
 
-            if (exrule_itr)
+            if (exrule_itr) {
                 icalrecur_iterator_free(exrule_itr);
+            }
         }
     }
     comp->property_iterator = property_iterator;
@@ -850,23 +857,86 @@ static struct icaltimetype icaltime_at_midnight(const struct icaltimetype t)
     return icaltime_with_time(t, 0, 0, 0);
 }
 
+static icaltime_span icaltime_span_from_time(const struct icaltimetype t, const struct icaldurationtype d)
+{
+    icaltime_span ret;
+    ret.start =
+        icaltime_as_timet_with_zone(t,
+                                    t.zone ? t.zone : icaltimezone_get_utc_timezone());
+    ret.end =
+        icaltime_as_timet_with_zone(
+            icalduration_extend(t, d),
+            t.zone ? t.zone : icaltimezone_get_utc_timezone());
+    return ret;
+}
+
+static icaltime_span icaltime_span_from_datetimeperiod(const struct icaldatetimeperiodtype p, const struct icaldurationtype d)
+{
+    struct icaltimetype start = p.time;
+    struct icaldurationtype dur = icaldurationtype_null_duration();
+
+    icaltime_span ret;
+    if (icaltime_is_null_time(start)) {
+        start = p.period.start;
+
+        if (icaltime_is_null_time(p.period.end)) {
+            dur = p.period.duration;
+        } else {
+            ret.end =
+                icaltime_as_timet_with_zone(
+                    p.period.end,
+                    start.zone ? start.zone : icaltimezone_get_utc_timezone());
+        }
+    } else {
+        dur = d;
+    }
+
+    ret.start =
+        icaltime_as_timet_with_zone(
+            start,
+            start.zone ? start.zone : icaltimezone_get_utc_timezone());
+
+    if (!icaldurationtype_is_null_duration(dur)) {
+        ret.end = icaltime_as_timet_with_zone(
+            icalduration_extend(start, dur),
+            start.zone ? start.zone : icaltimezone_get_utc_timezone());
+    }
+    return ret;
+}
+
+static int icaldatetimeperiod_start_compare(const void *a, const void *b)
+{
+    const struct icaldatetimeperiodtype *adtp = a, *bdtp = b;
+    const struct icaltimetype
+        at = (!icaltime_is_null_time(adtp->time) ? adtp->time : adtp->period.start),
+        bt = (!icaltime_is_null_time(bdtp->time) ? bdtp->time : bdtp->period.start);
+    return icaltime_compare(at, bt);
+}
+
 void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                       struct icaltimetype start,
                                       struct icaltimetype end,
-                                      void (*callback)(icalcomponent *comp,
-                                                       struct icaltime_span *span,
+                                      void (*callback)(const icalcomponent *comp,
+                                                       const struct icaltime_span *span,
                                                        void *data),
                                       void *callback_data)
 {
-    struct icaltimetype dtstart, dtend;
-    icaltime_span recurspan, basespan, limit_span;
-    icaltime_t limit_start, limit_end;
-    icaltime_t dtduration;
-    icalproperty *rrule, *rdate;
-    pvl_elem property_iterator; /* for saving the iterator */
+    struct icaltimetype dtstart, dtend, recur_time;
+    icaltime_span recurspan, basespan, limit_span,
+        rrule_span, rdate_span;
+    icaltime_t limit_start, limit_end, last_start;
+    struct icaldurationtype dtduration;
+    time_t end_timet = icaltime_as_timet_with_zone(
+        end, end.zone ? end.zone : icaltimezone_get_utc_timezone());
+    icalarray *rdates;
+    size_t rdate_idx = 0;
 
-    if (comp == NULL || callback == NULL)
+    icalproperty *rrule, *rdate;
+    icalpvl_elem property_iterator; /* for saving the iterator */
+
+    if (comp == NULL || callback == NULL) {
         return;
+    }
 
     dtstart = icalcomponent_get_dtstart(comp);
 
@@ -875,12 +945,15 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
         /* VTODO with no DTSTART - use DUE */
         dtstart = icalcomponent_get_due(comp);
     }
-    if (icaltime_is_null_time(dtstart))
+    if (icaltime_is_null_time(dtstart)) {
         return;
+    }
 
     /* The end time could be specified as either a DTEND, a DURATION or be missing */
     /* icalcomponent_get_dtend takes care of these cases. */
     dtend = icalcomponent_get_dtend(comp);
+    /* Our duration may similarly be derived from DTSTART and DTEND */
+    dtduration = icalcomponent_get_duration(comp);
 
     /* Now set up the base span for this item, corresponding to the
        base DTSTART and DTEND */
@@ -916,113 +989,118 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     limit_span.start = limit_start;
     limit_span.end = limit_end;
 
+    recurspan = basespan;
+    rrule_span.start = rdate_span.start =
+        last_start = end_timet + 1;
+
     /* Do the callback for the DTSTART entry, ONLY if there is no RRULE.
        Otherwise, the initial occurrence will be handled by the RRULE. */
     rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
     if ((rrule == NULL) &&
         !icalproperty_recurrence_is_excluded(comp, &dtstart, &dtstart)) {
+        last_start = basespan.start;
         /* call callback action */
-        if (icaltime_span_overlaps(&basespan, &limit_span))
+        if (icaltime_span_overlaps(&basespan, &limit_span)) {
             (*callback)(comp, &basespan, callback_data);
+        }
     }
 
-    recurspan = basespan;
-    dtduration = basespan.end - basespan.start;
+    /* Now cycle through the rrule and rdate entries */
 
-    /* Now cycle through the rrule entries */
-    for (; rrule != NULL;
-         rrule = icalcomponent_get_next_property(comp, ICAL_RRULE_PROPERTY)) {
+    struct icaltimetype rrule_time = icaltime_null_time();
+    icalrecur_iterator *rrule_itr = NULL;
+    if (rrule != NULL) {
         struct icalrecurrencetype *recur = icalproperty_get_rrule(rrule);
         if (recur) {
-            icalrecur_iterator *rrule_itr = icalrecur_iterator_new(recur, dtstart);
-            struct icaltimetype rrule_time;
+            rrule_itr = icalrecur_iterator_new(recur, dtstart);
 
-            if (!rrule_itr)
-                continue;
+            if (rrule_itr) {
+                if (recur->count == 0) {
+                    icaltimetype mystart = start;
 
-            if (recur->count == 0) {
-                icaltimetype mystart = start;
+                    /* make sure we include any recurrence that ends in timespan */
+                    /* duration should be positive */
+                    dtduration.is_neg = 1;
+                    mystart = icalduration_extend(mystart, dtduration);
+                    dtduration.is_neg = 0;
 
-                /* make sure we include any recurrence that ends in timespan */
-                /* we ensured above that start is a date-time, so adding seconds is allowed. */
-                icaltime_adjust(&mystart, 0, 0, 0, -(int)(long)dtduration);
-                icalrecur_iterator_set_start(rrule_itr, mystart);
-            }
-
-            for (rrule_time = icalrecur_iterator_next(rrule_itr);
-                 !icaltime_is_null_time(rrule_time);
-                 rrule_time = icalrecur_iterator_next(rrule_itr)) {
-                /* if we have iterated past end time,
-                then no need to check any further */
-                if (icaltime_compare(rrule_time, end) > 0)
-                    break;
-
-                recurspan.start =
-                    icaltime_as_timet_with_zone(rrule_time,
-                                                rrule_time.zone ? rrule_time.zone : icaltimezone_get_utc_timezone());
-                recurspan.end = recurspan.start + dtduration;
-
-                /* save the iterator ICK! */
-                property_iterator = comp->property_iterator;
-
-                if (!icalproperty_recurrence_is_excluded(comp,
-                                                         &dtstart, &rrule_time)) {
-                    /* call callback action */
-                    if (icaltime_span_overlaps(&recurspan, &limit_span))
-                        (*callback)(comp, &recurspan, callback_data);
+                    icalrecur_iterator_set_start(rrule_itr, mystart);
                 }
-                comp->property_iterator = property_iterator;
-            } /* end of iteration over a specific RRULE */
-
-            icalrecur_iterator_free(rrule_itr);
+                rrule_time = icalrecur_iterator_next(rrule_itr);
+                if (!icaltime_is_null_time(rrule_time)) {
+                    rrule_span = icaltime_span_from_time(rrule_time, dtduration);
+                }
+            }
         }
-    } /* end of RRULE loop */
+    }
 
-    /* Now process RDATE entries */
+    struct icaldatetimeperiodtype rdate_period;
+    rdates = icalarray_new(sizeof(struct icaldatetimeperiodtype), 16);
     for (rdate = icalcomponent_get_first_property(comp, ICAL_RDATE_PROPERTY);
          rdate != NULL;
          rdate = icalcomponent_get_next_property(comp, ICAL_RDATE_PROPERTY)) {
-        struct icaldatetimeperiodtype rdate_period =
-            icalproperty_get_rdate(rdate);
-        struct icaltimetype rdate_start = rdate_period.time;
-        icaltime_t rdate_duration = 0;
+        rdate_period = icalproperty_get_rdate(rdate);
+        icalarray_append(rdates, &rdate_period);
+    }
+    if (rdates->num_elements > 0) {
+        icalarray_sort(rdates, icaldatetimeperiod_start_compare);
+        rdate_period = *((struct icaldatetimeperiodtype *)icalarray_element_at(rdates, rdate_idx));
+        rdate_span = icaltime_span_from_datetimeperiod(rdate_period, dtduration);
+    }
 
-        /* RDATES can specify raw datetimes, periods, or dates.
-            we only support raw datetimes and periods for now.
+    while (rdate_idx < rdates->num_elements || !icaltime_is_null_time(rrule_time)) {
+        if (rdate_idx >= rdates->num_elements ||
+            (!icaltime_is_null_time(rrule_time) &&
+             rrule_span.start < rdate_span.start)) {
+            /* use rrule time */
+            recurspan = rrule_span;
+            recur_time = rrule_time;
 
-            @todo Add support for other types */
-
-        if (icaltime_is_null_time(rdate_start)) {
-            rdate_start = rdate_period.period.start;
-
-            if (icaltime_is_null_time(rdate_period.period.end)) {
-                rdate_duration =
-                    (icaltime_t)icaldurationtype_as_int(rdate_period.period.duration);
-            } else {
-                recurspan.end =
-                    icaltime_as_timet_with_zone(rdate_period.period.end,
-                                                rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
+            rrule_time = icalrecur_iterator_next(rrule_itr);
+            if (!icaltime_is_null_time(rrule_time)) {
+                rrule_span = icaltime_span_from_time(rrule_time, dtduration);
             }
         } else {
-            rdate_duration = dtduration;
+            /* use rdate time */
+            recurspan = rdate_span;
+            recur_time = rdate_period.time;
+            if (icaltime_is_null_time(recur_time)) {
+                recur_time = rdate_period.period.start;
+            }
+
+            rdate_idx++;
+            if (rdate_idx < rdates->num_elements) {
+                rdate_period = *((struct icaldatetimeperiodtype *)icalarray_element_at(rdates, rdate_idx));
+                rdate_span = icaltime_span_from_datetimeperiod(rdate_period, dtduration);
+            }
         }
 
-        recurspan.start =
-            icaltime_as_timet_with_zone(rdate_start,
-                                        rdate_period.time.zone ? rdate_period.time.zone : icaltimezone_get_utc_timezone());
-        if (rdate_duration)
-            recurspan.end = recurspan.start + rdate_duration;
+        if (recurspan.start > end_timet) {
+            break;
+        }
+
+        if (last_start == recurspan.start) {
+            continue;
+        }
+        last_start = recurspan.start;
 
         /* save the iterator ICK! */
         property_iterator = comp->property_iterator;
 
         if (!icalproperty_recurrence_is_excluded(comp,
-                                                 &dtstart, &rdate_start)) {
+                                                 &dtstart, &recur_time)) {
             /* call callback action */
-            if (icaltime_span_overlaps(&recurspan, &limit_span))
+            if (icaltime_span_overlaps(&recurspan, &limit_span)) {
                 (*callback)(comp, &recurspan, callback_data);
+            }
         }
         comp->property_iterator = property_iterator;
+    }
+
+    icalarray_free(rdates);
+
+    if (rrule_itr != NULL) {
+        icalrecur_iterator_free(rrule_itr);
     }
 }
 
@@ -1037,20 +1115,20 @@ int icalcomponent_count_errors(icalcomponent *component)
     int errors = 0;
     icalproperty *p;
     icalcomponent *c;
-    pvl_elem itr;
+    icalpvl_elem itr;
 
     icalerror_check_arg_rz((component != 0), "component");
 
-    for (itr = pvl_head(component->properties); itr != 0; itr = pvl_next(itr)) {
-        p = (icalproperty *)pvl_data(itr);
+    for (itr = icalpvl_head(component->properties); itr != 0; itr = icalpvl_next(itr)) {
+        p = (icalproperty *)icalpvl_data(itr);
 
         if (icalproperty_isa(p) == ICAL_XLICERROR_PROPERTY) {
             errors++;
         }
     }
 
-    for (itr = pvl_head(component->components); itr != 0; itr = pvl_next(itr)) {
-        c = (icalcomponent *)pvl_data(itr);
+    for (itr = icalpvl_head(component->components); itr != 0; itr = icalpvl_next(itr)) {
+        c = (icalcomponent *)icalpvl_data(itr);
 
         errors += icalcomponent_count_errors(c);
     }
@@ -1062,13 +1140,13 @@ void icalcomponent_strip_errors(icalcomponent *component)
 {
     icalproperty *p;
     icalcomponent *c;
-    pvl_elem itr, next_itr;
+    icalpvl_elem itr, next_itr;
 
     icalerror_check_arg_rv((component != 0), "component");
 
-    for (itr = pvl_head(component->properties); itr != 0; itr = next_itr) {
-        p = (icalproperty *)pvl_data(itr);
-        next_itr = pvl_next(itr);
+    for (itr = icalpvl_head(component->properties); itr != 0; itr = next_itr) {
+        p = (icalproperty *)icalpvl_data(itr);
+        next_itr = icalpvl_next(itr);
 
         if (icalproperty_isa(p) == ICAL_XLICERROR_PROPERTY) {
             icalcomponent_remove_property(component, p);
@@ -1076,8 +1154,8 @@ void icalcomponent_strip_errors(icalcomponent *component)
         }
     }
 
-    for (itr = pvl_head(component->components); itr != 0; itr = pvl_next(itr)) {
-        c = (icalcomponent *)pvl_data(itr);
+    for (itr = icalpvl_head(component->components); itr != 0; itr = icalpvl_next(itr)) {
+        c = (icalcomponent *)icalpvl_data(itr);
         icalcomponent_strip_errors(c);
     }
 }
@@ -1141,7 +1219,7 @@ void icalcomponent_convert_errors(icalcomponent *component)
     }
 }
 
-icalcomponent *icalcomponent_get_parent(icalcomponent *component)
+icalcomponent *icalcomponent_get_parent(const icalcomponent *component)
 {
     return component->parent;
 }
@@ -1254,15 +1332,15 @@ icalcomponent_kind icalcomponent_string_to_kind(const char *string)
 icalcompiter icalcomponent_begin_component(icalcomponent *component, icalcomponent_kind kind)
 {
     icalcompiter itr;
-    pvl_elem i;
+    icalpvl_elem i;
 
     itr.kind = kind;
     itr.iter = NULL;
 
     icalerror_check_arg_re(component != 0, "component", icalcompiter_null);
 
-    for (i = pvl_head(component->components); i != 0; i = pvl_next(i)) {
-        icalcomponent *c = (icalcomponent *)pvl_data(i);
+    for (i = icalpvl_head(component->components); i != 0; i = icalpvl_next(i)) {
+        icalcomponent *c = (icalcomponent *)icalpvl_data(i);
 
         if (icalcomponent_isa(c) == kind || kind == ICAL_ANY_COMPONENT) {
             itr.iter = i;
@@ -1277,17 +1355,17 @@ icalcompiter icalcomponent_begin_component(icalcomponent *component, icalcompone
 icalcompiter icalcomponent_end_component(icalcomponent *component, icalcomponent_kind kind)
 {
     icalcompiter itr;
-    pvl_elem i;
+    icalpvl_elem i;
 
     itr.kind = kind;
 
     icalerror_check_arg_re(component != 0, "component", icalcompiter_null);
 
-    for (i = pvl_tail(component->components); i != 0; i = pvl_prior(i)) {
-        icalcomponent *c = (icalcomponent *)pvl_data(i);
+    for (i = icalpvl_tail(component->components); i != 0; i = icalpvl_prior(i)) {
+        icalcomponent *c = (icalcomponent *)icalpvl_data(i);
 
         if (icalcomponent_isa(c) == kind || kind == ICAL_ANY_COMPONENT) {
-            itr.iter = pvl_next(i);
+            itr.iter = icalpvl_next(i);
 
             return itr;
         }
@@ -1304,8 +1382,8 @@ icalcomponent *icalcompiter_next(icalcompiter *i)
         return 0;
     }
 
-    for (i->iter = pvl_next(i->iter); i->iter != 0; i->iter = pvl_next(i->iter)) {
-        icalcomponent *c = (icalcomponent *)pvl_data(i->iter);
+    for (i->iter = icalpvl_next(i->iter); i->iter != 0; i->iter = icalpvl_next(i->iter)) {
+        icalcomponent *c = (icalcomponent *)icalpvl_data(i->iter);
 
         if (icalcomponent_isa(c) == i->kind || i->kind == ICAL_ANY_COMPONENT) {
             return icalcompiter_deref(i);
@@ -1323,8 +1401,8 @@ icalcomponent *icalcompiter_prior(icalcompiter *i)
         return 0;
     }
 
-    for (i->iter = pvl_prior(i->iter); i->iter != 0; i->iter = pvl_prior(i->iter)) {
-        icalcomponent *c = (icalcomponent *)pvl_data(i->iter);
+    for (i->iter = icalpvl_prior(i->iter); i->iter != 0; i->iter = icalpvl_prior(i->iter)) {
+        icalcomponent *c = (icalcomponent *)icalpvl_data(i->iter);
 
         if (icalcomponent_isa(c) == i->kind || i->kind == ICAL_ANY_COMPONENT) {
             return icalcompiter_deref(i);
@@ -1342,17 +1420,17 @@ icalcomponent *icalcompiter_deref(icalcompiter *i)
         return 0;
     }
 
-    return pvl_data(i->iter);
+    return icalpvl_data(i->iter);
 }
 
 icalpropiter icalcomponent_begin_property(icalcomponent *component, icalproperty_kind kind)
 {
     icalerror_check_arg_re(component != 0, "component", icalpropiter_null);
 
-    pvl_elem i;
+    icalpvl_elem i;
 
-    for (i = pvl_head(component->properties); i != 0; i = pvl_next(i)) {
-        icalproperty *p = (icalproperty *)pvl_data(i);
+    for (i = icalpvl_head(component->properties); i != 0; i = icalpvl_next(i)) {
+        icalproperty *p = (icalproperty *)icalpvl_data(i);
 
         if (icalproperty_isa(p) == kind || kind == ICAL_ANY_PROPERTY) {
             icalpropiter itr = {kind, i};
@@ -1371,8 +1449,8 @@ icalproperty *icalpropiter_next(icalpropiter *i)
         return 0;
     }
 
-    for (i->iter = pvl_next(i->iter); i->iter != 0; i->iter = pvl_next(i->iter)) {
-        icalproperty *p = (icalproperty *)pvl_data(i->iter);
+    for (i->iter = icalpvl_next(i->iter); i->iter != 0; i->iter = icalpvl_next(i->iter)) {
+        icalproperty *p = (icalproperty *)icalpvl_data(i->iter);
 
         if (icalproperty_isa(p) == i->kind || i->kind == ICAL_ANY_PROPERTY) {
             return icalpropiter_deref(i);
@@ -1390,7 +1468,7 @@ icalproperty *icalpropiter_deref(icalpropiter *i)
         return 0;
     }
 
-    return pvl_data(i->iter);
+    return icalpvl_data(i->iter);
 }
 
 icalcomponent *icalcomponent_get_inner(icalcomponent *comp)
@@ -1502,14 +1580,14 @@ struct icaltimetype icalcomponent_get_dtend(icalcomponent *comp)
             duration = icaldurationtype_null_duration();
         }
 
-        ret = icaltime_add(start, duration);
+        ret = icalduration_extend(start, duration);
     } else if (end_prop == 0 && dur_prop == 0) {
         if (kind == ICAL_VEVENT_COMPONENT) {
             struct icaltimetype start = icalcomponent_get_dtstart(inner);
             if (icaltime_is_date(start)) {
                 struct icaldurationtype duration = icaldurationtype_null_duration();
                 duration.days = 1;
-                ret = icaltime_add(start, duration);
+                ret = icalduration_extend(start, duration);
             } else {
                 ret = start;
             }
@@ -1572,7 +1650,6 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
     icalcomponent *inner = icalcomponent_get_inner(comp);
     const icalcomponent_kind kind = icalcomponent_isa(inner);
     icalproperty *end_prop, *dur_prop;
-    struct icaltimetype end;
     struct icaldurationtype ret;
 
     switch (kind) {
@@ -1580,15 +1657,9 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
     case ICAL_VEVENT_COMPONENT:
     case ICAL_XAVAILABLE_COMPONENT:
         end_prop = icalcomponent_get_first_property(inner, ICAL_DTEND_PROPERTY);
-        if (end_prop) {
-            end = icalcomponent_get_dtend(inner);
-        }
         break;
     case ICAL_VTODO_COMPONENT:
         end_prop = icalcomponent_get_first_property(inner, ICAL_DUE_PROPERTY);
-        if (end_prop) {
-            end = icalcomponent_get_due(inner);
-        }
         break;
     default:
         /* The libical API is used incorrectly */
@@ -1601,14 +1672,11 @@ struct icaldurationtype icalcomponent_get_duration(icalcomponent *comp)
         ret = icalproperty_get_duration(dur_prop);
 
     } else if (end_prop != 0 && dur_prop == 0) {
-        /**
-         * FIXME
-         * We assume DTSTART and DTEND are not in different time zones.
-         * The standard actually allows different time zones.
-         */
+        /* Get exact duration */
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
+        struct icaltimetype end = icalproperty_get_datetime_with_component(end_prop, comp);
 
-        ret = icaltime_subtract(end, start);
+        ret = icalduration_from_times(end, start);
     } else if (end_prop == 0 && dur_prop == 0) {
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         ret = icaldurationtype_null_duration();
@@ -1754,14 +1822,22 @@ const char *icalcomponent_get_uid(icalcomponent *comp)
 
 void icalcomponent_set_recurrenceid(icalcomponent *comp, struct icaltimetype v)
 {
+    const char *tzid;
+
     ICALSETUPSET(ICAL_RECURRENCEID_PROPERTY);
 
     if (prop == 0) {
         prop = icalproperty_new_recurrenceid(v);
         icalcomponent_add_property(inner, prop);
+    } else {
+        icalproperty_remove_parameter_by_kind(prop, ICAL_TZID_PARAMETER);
     }
 
     icalproperty_set_recurrenceid(prop, v);
+
+    if ((tzid = icaltime_get_tzid(v)) != NULL && !icaltime_is_utc(v)) {
+        icalproperty_add_parameter(prop, icalparameter_new_tzid(tzid));
+    }
 }
 
 struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent *comp)
@@ -1787,7 +1863,7 @@ struct icaltimetype icalcomponent_get_recurrenceid(icalcomponent *comp)
         return icaltime_null_time();
     }
 
-    return icalproperty_get_recurrenceid(prop);
+    return icalproperty_get_datetime_with_component(prop, comp);
 }
 
 void icalcomponent_set_description(icalcomponent *comp, const char *v)
@@ -2058,8 +2134,9 @@ void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_m
        For each VTIMEZONE found, check if we need to add it to comp and if we
        need to rename it and all TZID references to it. */
     tzids_to_rename = icalarray_new(sizeof(char *), 16);
-    if (!tzids_to_rename)
+    if (!tzids_to_rename) {
         return;
+    }
 
     subcomp = icalcomponent_get_first_component(comp_to_merge, ICAL_VTIMEZONE_COMPONENT);
     while (subcomp) {
@@ -2110,12 +2187,14 @@ static void icalcomponent_merge_vtimezone(icalcomponent *comp,
 
     /* Get the TZID of the VTIMEZONE. */
     tzid_prop = icalcomponent_get_first_property(vtimezone, ICAL_TZID_PROPERTY);
-    if (!tzid_prop)
+    if (!tzid_prop) {
         return;
+    }
 
     tzid = icalproperty_get_tzid(tzid_prop);
-    if (!tzid)
+    if (!tzid) {
         return;
+    }
 
     /* See if there is already a VTIMEZONE in comp with the same TZID. */
     existing_vtimezone = icalcomponent_get_timezone(comp, tzid);
@@ -2130,8 +2209,9 @@ static void icalcomponent_merge_vtimezone(icalcomponent *comp,
 
     /* If the TZID has a '/' prefix, then we don't have to worry about the
        clashing TZIDs, as they are supposed to be exactly the same VTIMEZONE. */
-    if (tzid[0] == '/')
+    if (tzid[0] == '/') {
         return;
+    }
 
     /* Now we have two VTIMEZONEs with the same TZID (which isn't a globally
        unique one), so we compare the VTIMEZONE components to see if they are
@@ -2216,8 +2296,9 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
                 /* Convert the suffix to an integer and remember the maximum numeric
                    suffix found. */
                 suffix = atoi(existing_tzid + existing_tzid_len);
-                if (max_suffix < suffix)
+                if (max_suffix < suffix) {
                     max_suffix = suffix;
+                }
             }
         }
     }
@@ -2279,8 +2360,9 @@ static void icalcomponent_rename_tzids_callback(icalparameter *param, void *data
     size_t i;
 
     tzid = icalparameter_get_tzid(param);
-    if (!tzid)
+    if (!tzid) {
         return;
+    }
 
     /* Step through the rename table to see if the current TZID matches
        any of the ones we want to rename. */
@@ -2314,8 +2396,9 @@ void icalcomponent_foreach_tzid(icalcomponent *comp,
             kind == ICAL_EXDATE_PROPERTY ||
             kind == ICAL_RDATE_PROPERTY) {
             param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER);
-            if (param)
+            if (param) {
                 (*callback)(param, callback_data);
+            }
         }
 
         prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
@@ -2336,8 +2419,9 @@ icaltimezone *icalcomponent_get_timezone(icalcomponent *comp, const char *tzid)
     int cmp;
     const char *zone_tzid;
 
-    if (!comp->timezones)
+    if (!comp->timezones) {
         return NULL;
+    }
 
     /* Sort the array if necessary (by the TZID string). */
     if (!comp->timezones_sorted) {
@@ -2398,21 +2482,25 @@ static int icalcomponent_compare_vtimezones(icalcomponent *vtimezone1, icalcompo
 
     /* Get the TZID property of the first VTIMEZONE. */
     prop1 = icalcomponent_get_first_property(vtimezone1, ICAL_TZID_PROPERTY);
-    if (!prop1)
+    if (!prop1) {
         return -1;
+    }
 
     tzid1 = icalproperty_get_tzid(prop1);
-    if (!tzid1)
+    if (!tzid1) {
         return -1;
+    }
 
     /* Get the TZID property of the second VTIMEZONE. */
     prop2 = icalcomponent_get_first_property(vtimezone2, ICAL_TZID_PROPERTY);
-    if (!prop2)
+    if (!prop2) {
         return -1;
+    }
 
     tzid2 = icalproperty_get_tzid(prop2);
-    if (!tzid2)
+    if (!tzid2) {
         return -1;
+    }
 
     /* Copy the second TZID, and set the property to the same as the first
        TZID, since we don't care if these match of not. */
@@ -2511,7 +2599,7 @@ struct icaltimetype icalcomponent_get_due(icalcomponent *comp)
         struct icaltimetype start = icalcomponent_get_dtstart(inner);
         struct icaldurationtype duration = icalproperty_get_duration(dur_prop);
 
-        struct icaltimetype due = icaltime_add(start, duration);
+        struct icaltimetype due = icalduration_extend(start, duration);
 
         return due;
     }
@@ -2539,7 +2627,7 @@ void icalcomponent_set_due(icalcomponent *comp, struct icaltimetype v)
 
         struct icaltimetype due = icalcomponent_get_due(inner);
 
-        struct icaldurationtype dur = icaltime_subtract(due, start);
+        struct icaldurationtype dur = icalduration_from_times(due, start);
 
         icalproperty_set_duration(dur_prop, dur);
     }
@@ -2580,8 +2668,9 @@ static int prop_compare(void *a, void *b)
 
 static inline int compare_nullptr(const void *a, const void *b)
 {
-    if (!a == !b)
+    if (!a == !b) {
         return 0;
+    }
 
     // non-NULL sorts before NULL
     return a ? -1 : 1;
@@ -2719,18 +2808,19 @@ void icalcomponent_normalize(icalcomponent *comp)
 {
     icalproperty *prop;
     icalcomponent *sub;
-    pvl_list sorted_props;
-    pvl_list sorted_comps;
+    icalpvl_list sorted_props;
+    icalpvl_list sorted_comps;
 
     icalerror_check_arg(comp != 0, "comp");
-    if (!comp)
+    if (!comp) {
         return;
+    }
 
-    sorted_props = pvl_newlist();
-    sorted_comps = pvl_newlist();
+    sorted_props = icalpvl_newlist();
+    sorted_comps = icalpvl_newlist();
 
     /* Normalize properties into sorted list */
-    while ((prop = pvl_pop(comp->properties)) != 0) {
+    while ((prop = icalpvl_pop(comp->properties)) != 0) {
         int nparams, remove = 0;
 
         icalproperty_normalize(prop);
@@ -2785,19 +2875,19 @@ void icalcomponent_normalize(icalcomponent *comp)
             icalproperty_set_parent(prop, 0); // MUST NOT have a parent to free
             icalproperty_free(prop);
         } else {
-            pvl_insert_ordered(sorted_props, prop_compare, prop);
+            icalpvl_insert_ordered(sorted_props, prop_compare, prop);
         }
     }
 
-    pvl_free(comp->properties);
+    icalpvl_free(comp->properties);
     comp->properties = sorted_props;
 
     /* Normalize sub-components into sorted list */
-    while ((sub = pvl_pop(comp->components)) != 0) {
+    while ((sub = icalpvl_pop(comp->components)) != 0) {
         icalcomponent_normalize(sub);
-        pvl_insert_ordered(sorted_comps, comp_compare, sub);
+        icalpvl_insert_ordered(sorted_comps, comp_compare, sub);
     }
 
-    pvl_free(comp->components);
+    icalpvl_free(comp->components);
     comp->components = sorted_comps;
 }

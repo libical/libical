@@ -171,16 +171,15 @@ set(
   libical_vcard_export.h
   vcardcomponent.c
   vcardcomponent.h
-  vcardenumarray.c
   vcardenumarray.h
   vcardparameter.c
   vcardparameter.h
   vcardparameterimpl.h
   vcardparser.c
   vcardparser.h
+  vcardproperty_p.h
   vcardproperty.c
   vcardproperty.h
-  vcardstrarray.c
   vcardstrarray.h
   vcardstructured.c
   vcardstructured.h
@@ -215,17 +214,6 @@ add_dependencies(
   ical-header
   icalvcard-header
 )
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  add_library(icalvcard-static STATIC ${icalvcard_LIB_SRCS})
-  add_dependencies(
-    icalvcard-static
-    ical-header
-    icalvcard-header
-  )
-elseif(STATIC_ONLY)
-  add_library(icalvcard-static ALIAS icalvcard)
-endif()
-
 target_link_libraries(icalvcard ical)
 
 if(MSVC)
@@ -235,63 +223,29 @@ if(MSVC)
       PREFIX
         "lib"
   )
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      icalvcard-static
-      PROPERTIES
-        PREFIX
-          "lib"
-    )
-  endif()
-else()
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      icalvcard-static
-      PROPERTIES
-        OUTPUT_NAME
-          "icalvcard"
-    )
-  endif()
 endif()
-set_target_properties(
-  icalvcard
-  PROPERTIES
-    VERSION
-      ${LIBICAL_LIB_VERSION_STRING}
-    SOVERSION
-      ${LIBICAL_LIB_SOVERSION_STRING}
-)
+if(NOT ANDROID)
+  set_target_properties(
+    icalvcard
+    PROPERTIES
+      VERSION
+        ${CMAKE_PROJECT_VERSION}
+      SOVERSION
+        ${LIBICAL_LIB_SOVERSION_STRING}
+  )
+endif()
 set_target_properties(
   icalvcard
   PROPERTIES
     CLEAN_DIRECT_OUTPUT
       1
 )
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  set_target_properties(
-    icalvcard-static
-    PROPERTIES
-      CLEAN_DIRECT_OUTPUT
-        1
-  )
-endif()
 
-install(
-  TARGETS
-    icalvcard
-  EXPORT icalTargets
-  DESTINATION
-  ${INSTALL_TARGETS_DEFAULT_ARGS}
-)
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  install(
-    TARGETS
-      icalvcard-static
-    EXPORT icalTargets
-    DESTINATION
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
-  )
-endif()
+install(TARGETS icalvcard EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libicalvcard.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libicalvcard.pc @ONLY)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libicalvcard.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 ########### install files ###############
 

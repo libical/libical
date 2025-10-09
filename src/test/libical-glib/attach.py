@@ -2,18 +2,15 @@
 # GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./attach.py
 
 ###############################################################################
-#
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
 ###############################################################################
 
 """Test Python bindings for libical attachments"""
 
 import gi
 
-gi.require_version('ICalGLib', '3.0')
+gi.require_version('ICalGLib', '4.0')
 from gi.repository import ICalGLib  # noqa E402
 
 dummyUrl = 'https://people.gnome.org/~engagement/logos/GnomeLogoVertical.svg'

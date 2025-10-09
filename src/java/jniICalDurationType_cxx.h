@@ -20,7 +20,6 @@ extern "C" {
 
 #include "ical.h"
 
-static void initICalDurationTypeFieldIDs(JNIEnv* env, jclass clazz);
 
 void  jni_SetIs_neg_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
 void jni_GetIs_neg_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);

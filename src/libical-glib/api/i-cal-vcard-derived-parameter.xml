@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<structure namespace="ICalVcard" name="DerivedParameter">
+  <enum name="ICalVcardParameterKind" native_name="vcardparameter_kind" default_native="I_CAL_VCARD_NO_PARAMETER">
+    <element name="VCARD_ANY_PARAMETER"/>
+    <element name="VCARD_ALTID_PARAMETER"/>
+    <element name="VCARD_AUTHOR_PARAMETER"/>
+    <element name="VCARD_AUTHORNAME_PARAMETER"/>
+    <element name="VCARD_CALSCALE_PARAMETER"/>
+    <element name="VCARD_CC_PARAMETER"/>
+    <element name="VCARD_CONTEXT_PARAMETER"/>
+    <element name="VCARD_CREATED_PARAMETER"/>
+    <element name="VCARD_DERIVED_PARAMETER"/>
+    <element name="VCARD_ENCODING_PARAMETER"/>
+    <element name="VCARD_GEO_PARAMETER"/>
+    <element name="VCARD_IANA_PARAMETER"/>
+    <element name="VCARD_INDEX_PARAMETER"/>
+    <element name="VCARD_JSCOMPS_PARAMETER"/>
+    <element name="VCARD_JSPTR_PARAMETER"/>
+    <element name="VCARD_LABEL_PARAMETER"/>
+    <element name="VCARD_LANGUAGE_PARAMETER"/>
+    <element name="VCARD_LEVEL_PARAMETER"/>
+    <element name="VCARD_MEDIATYPE_PARAMETER"/>
+    <element name="VCARD_PHONETIC_PARAMETER"/>
+    <element name="VCARD_PID_PARAMETER"/>
+    <element name="VCARD_PREF_PARAMETER"/>
+    <element name="VCARD_PROPID_PARAMETER"/>
+    <element name="VCARD_SCRIPT_PARAMETER"/>
+    <element name="VCARD_SERVICETYPE_PARAMETER"/>
+    <element name="VCARD_SORTAS_PARAMETER"/>
+    <element name="VCARD_TYPE_PARAMETER"/>
+    <element name="VCARD_TZ_PARAMETER"/>
+    <element name="VCARD_USERNAME_PARAMETER"/>
+    <element name="VCARD_VALUE_PARAMETER"/>
+    <element name="VCARD_X_PARAMETER"/>
+    <element name="VCARD_XLICCOMPARETYPE_PARAMETER"/>
+    <element name="VCARD_XLICERRORTYPE_PARAMETER"/>
+    <element name="VCARD_NO_PARAMETER"/>
+  </enum>
+  <enum name="ICalVcardParameterCalscale" native_name="vcardparameter_calscale" default_native="I_CAL_VCARD_CALSCALE_NONE">
+    <element name="VCARD_CALSCALE_X"/>
+    <element name="VCARD_CALSCALE_GREGORIAN"/>
+    <element name="VCARD_CALSCALE_NONE"/>
+  </enum>
+  <enum name="ICalVcardParameterDerived" native_name="vcardparameter_derived" default_native="I_CAL_VCARD_DERIVED_NONE">
+    <element name="VCARD_DERIVED_X"/>
+    <element name="VCARD_DERIVED_TRUE"/>
+    <element name="VCARD_DERIVED_FALSE"/>
+    <element name="VCARD_DERIVED_NONE"/>
+  </enum>
+  <enum name="ICalVcardParameterEncoding" native_name="vcardparameter_encoding" default_native="I_CAL_VCARD_ENCODING_NONE">
+    <element name="VCARD_ENCODING_X"/>
+    <element name="VCARD_ENCODING_B"/>
+    <element name="VCARD_ENCODING_NONE"/>
+  </enum>
+  <enum name="ICalVcardParameterLevel" native_name="vcardparameter_level" default_native="I_CAL_VCARD_LEVEL_NONE">
+    <element name="VCARD_LEVEL_X"/>
+    <element name="VCARD_LEVEL_BEGINNER"/>
+    <element name="VCARD_LEVEL_AVERAGE"/>
+    <element name="VCARD_LEVEL_EXPERT"/>
+    <element name="VCARD_LEVEL_HIGH"/>
+    <element name="VCARD_LEVEL_MEDIUM"/>
+    <element name="VCARD_LEVEL_LOW"/>
+    <element name="VCARD_LEVEL_NONE"/>
+  </enum>
+  <enum name="ICalVcardParameterPhonetic" native_name="vcardparameter_phonetic" default_native="I_CAL_VCARD_PHONETIC_NONE">
+    <element name="VCARD_PHONETIC_X"/>
+    <element name="VCARD_PHONETIC_IPA"/>
+    <element name="VCARD_PHONETIC_PINY"/>
+    <element name="VCARD_PHONETIC_JYUT"/>
+    <element name="VCARD_PHONETIC_SCRIPT"/>
+    <element name="VCARD_PHONETIC_NONE"/>
+  </enum>
+  <enum name="ICalVcardParameterType" native_name="vcardparameter_type" default_native="I_CAL_VCARD_TYPE_NONE">
+    <element name="VCARD_TYPE_X"/>
+    <element name="VCARD_TYPE_WORK"/>
+    <element name="VCARD_TYPE_HOME"/>
+    <element name="VCARD_TYPE_TEXT"/>
+    <element name="VCARD_TYPE_VOICE"/>
+    <element name="VCARD_TYPE_FAX"/>
+    <element name="VCARD_TYPE_CELL"/>
+    <element name="VCARD_TYPE_VIDEO"/>
+    <element name="VCARD_TYPE_PAGER"/>
+    <element name="VCARD_TYPE_TEXTPHONE"/>
+    <element name="VCARD_TYPE_CONTACT"/>
+    <element name="VCARD_TYPE_ACQUAINTANCE"/>
+    <element name="VCARD_TYPE_FRIEND"/>
+    <element name="VCARD_TYPE_MET"/>
+    <element name="VCARD_TYPE_COWORKER"/>
+    <element name="VCARD_TYPE_COLLEAGUE"/>
+    <element name="VCARD_TYPE_CORESIDENT"/>
+    <element name="VCARD_TYPE_NEIGHBOR"/>
+    <element name="VCARD_TYPE_CHILD"/>
+    <element name="VCARD_TYPE_PARENT"/>
+    <element name="VCARD_TYPE_SIBLING"/>
+    <element name="VCARD_TYPE_SPOUSE"/>
+    <element name="VCARD_TYPE_KIN"/>
+    <element name="VCARD_TYPE_MUSE"/>
+    <element name="VCARD_TYPE_CRUSH"/>
+    <element name="VCARD_TYPE_DATE"/>
+    <element name="VCARD_TYPE_SWEETHEART"/>
+    <element name="VCARD_TYPE_ME"/>
+    <element name="VCARD_TYPE_AGENT"/>
+    <element name="VCARD_TYPE_EMERGENCY"/>
+    <element name="VCARD_TYPE_PREF"/>
+    <element name="VCARD_TYPE_MAINNUMBER"/>
+    <element name="VCARD_TYPE_BILLING"/>
+    <element name="VCARD_TYPE_DELIVERY"/>
+    <element name="VCARD_TYPE_NONE"/>
+  </enum>
+  <enum name="ICalVcardParameterValue" native_name="vcardparameter_value" default_native="I_CAL_VCARD_VALUE_NONE">
+    <element name="VCARD_VALUE_X"/>
+    <element name="VCARD_VALUE_TEXT"/>
+    <element name="VCARD_VALUE_URI"/>
+    <element name="VCARD_VALUE_DATE"/>
+    <element name="VCARD_VALUE_TIME"/>
+    <element name="VCARD_VALUE_DATETIME"/>
+    <element name="VCARD_VALUE_DATEANDORTIME"/>
+    <element name="VCARD_VALUE_TIMESTAMP"/>
+    <element name="VCARD_VALUE_BOOLEAN"/>
+    <element name="VCARD_VALUE_INTEGER"/>
+    <element name="VCARD_VALUE_FLOAT"/>
+    <element name="VCARD_VALUE_UTCOFFSET"/>
+    <element name="VCARD_VALUE_LANGUAGETAG"/>
+    <element name="VCARD_VALUE_STRUCTURED"/>
+    <element name="VCARD_VALUE_NONE"/>
+  </enum>
+  <enum name="ICalVcardParameterXliccomparetype" native_name="vcardparameter_xliccomparetype" default_native="I_CAL_VCARD_XLICCOMPARETYPE_NONE">
+    <element name="VCARD_XLICCOMPARETYPE_X"/>
+    <element name="VCARD_XLICCOMPARETYPE_EQUAL"/>
+    <element name="VCARD_XLICCOMPARETYPE_NOTEQUAL"/>
+    <element name="VCARD_XLICCOMPARETYPE_LESS"/>
+    <element name="VCARD_XLICCOMPARETYPE_GREATER"/>
+    <element name="VCARD_XLICCOMPARETYPE_LESSEQUAL"/>
+    <element name="VCARD_XLICCOMPARETYPE_GREATEREQUAL"/>
+    <element name="VCARD_XLICCOMPARETYPE_REGEX"/>
+    <element name="VCARD_XLICCOMPARETYPE_ISNULL"/>
+    <element name="VCARD_XLICCOMPARETYPE_ISNOTNULL"/>
+    <element name="VCARD_XLICCOMPARETYPE_NONE"/>
+  </enum>
+  <enum name="ICalVcardParameterXlicerrortype" native_name="vcardparameter_xlicerrortype" default_native="I_CAL_VCARD_XLICERRORTYPE_NONE">
+    <element name="VCARD_XLICERRORTYPE_X"/>
+    <element name="VCARD_XLICERRORTYPE_COMPONENTPARSEERROR"/>
+    <element name="VCARD_XLICERRORTYPE_PROPERTYPARSEERROR"/>
+    <element name="VCARD_XLICERRORTYPE_PARAMETERNAMEPARSEERROR"/>
+    <element name="VCARD_XLICERRORTYPE_PARAMETERVALUEPARSEERROR"/>
+    <element name="VCARD_XLICERRORTYPE_VALUEPARSEERROR"/>
+    <element name="VCARD_XLICERRORTYPE_RESTRICTIONCHECK"/>
+    <element name="VCARD_XLICERRORTYPE_NONE"/>
+  </enum>
+  <method name="i_cal_vcard_parameter_enum_to_string" corresponds="vcardparameter_enum_to_string" kind="other" since="4.0">
+    <parameter type="gint" name="e" comment="an enum numeric value"/>
+    <returns type="const gchar *" comment="string representation of the enum value @e."/>
+    <comment xml:space="preserve">Converts an integer representation of a parameter enum to a string.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_enum_from_string" corresponds="vcardparameter_string_to_enum" kind="other" since="4.0">
+    <parameter type="const gchar *" name="str" comment="a string enum value"/>
+    <returns type="gint" comment="an integer representation of the string enum value @str."/>
+    <comment xml:space="preserve">Converts a string representation of a parameter enum to a its numeric value.</comment>
+  </method>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="ALTID" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="altid"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="AUTHOR" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="author"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="AUTHORNAME" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="authorname"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="CALSCALE" since="4.0" value-get-type="ICalVcardParameterCalscale" value-set-type="ICalVcardParameterCalscale" value-set-type-ref="#ICalVcardParameterCalscale" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="calscale"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="CC" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="cc"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="CONTEXT" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="context"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="CREATED" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="created"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="DERIVED" since="4.0" value-get-type="ICalVcardParameterDerived" value-set-type="ICalVcardParameterDerived" value-set-type-ref="#ICalVcardParameterDerived" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="derived"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="ENCODING" since="4.0" value-get-type="ICalVcardParameterEncoding" value-set-type="ICalVcardParameterEncoding" value-set-type-ref="#ICalVcardParameterEncoding" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="encoding"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="GEO" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="geo"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="IANA" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="iana"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="INDEX" since="4.0" value-get-type="gint" value-set-type="gint" value-set-type-ref="integer" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="index"/>
+  <method-from-template name="vcardstructured" obj-type="ICalVcardParameter" native-type="vcardparameter" value-name="JSCOMPS" since="4.0" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="jscomps"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="JSPTR" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="jsptr"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="LABEL" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="label"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="LANGUAGE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="language"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="LEVEL" since="4.0" value-get-type="ICalVcardParameterLevel" value-set-type="ICalVcardParameterLevel" value-set-type-ref="#ICalVcardParameterLevel" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="level"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="MEDIATYPE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="mediatype"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="PHONETIC" since="4.0" value-get-type="ICalVcardParameterPhonetic" value-set-type="ICalVcardParameterPhonetic" value-set-type-ref="#ICalVcardParameterPhonetic" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="phonetic"/>
+  <method-from-template name="strarray" obj-type="ICalVcardParameter" value-name="PID" since="4.0" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="pid" native-type="vcardparameter" binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="PREF" since="4.0" value-get-type="gint" value-set-type="gint" value-set-type-ref="integer" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="pref"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="PROPID" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="propid"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="SCRIPT" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="script"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="SERVICETYPE" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="servicetype"/>
+  <method-from-template name="strarray" obj-type="ICalVcardParameter" value-name="SORTAS" since="4.0" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="sortas" native-type="vcardparameter" binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
+  <method-from-template name="enumarray" obj-type="ICalVcardParameter" value-name="TYPE" since="4.0" value-get-type="ICalVcardParameterType" value-set-type="ICalVcardParameterType" value-set-type-ref="#ICalVcardParameterType" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="type" native-type="vcardparameter" binding-array-type="ICalVcardEnumArray" binding-array-new-prefix="i_cal_vcard_enum_array" native-array-type="vcardenumarray" native-elem-type="vcardenumarray_element" binding-get-set-suffix="_value"/>
+  <!-- because ..._get_type() clashes with glib functions -->
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="TZ" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="tz"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="USERNAME" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="username"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="VALUE" since="4.0" value-get-type="ICalVcardParameterValue" value-set-type="ICalVcardParameterValue" value-set-type-ref="#ICalVcardParameterValue" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="value"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="X" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="x"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="XLICCOMPARETYPE" since="4.0" value-get-type="ICalVcardParameterXliccomparetype" value-set-type="ICalVcardParameterXliccomparetype" value-set-type-ref="#ICalVcardParameterXliccomparetype" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="xliccomparetype"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardParameter" value-name="XLICERRORTYPE" since="4.0" value-get-type="ICalVcardParameterXlicerrortype" value-set-type="ICalVcardParameterXlicerrortype" value-set-type-ref="#ICalVcardParameterXlicerrortype" binding-prefix="i_cal_vcard_parameter" native-prefix="vcardparameter" suffix="xlicerrortype"/>
+</structure>

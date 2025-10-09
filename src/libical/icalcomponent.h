@@ -3,9 +3,7 @@
  CREATOR: eric 20 March 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 /**
@@ -19,7 +17,7 @@
 #include "libical_ical_export.h"
 #include "icalenums.h" /* Defines icalcomponent_kind */
 #include "icalproperty.h"
-#include "pvl.h"
+#include "icalpvl.h"
 
 typedef struct icalcomponent_impl icalcomponent;
 
@@ -27,12 +25,12 @@ typedef struct icalcomponent_impl icalcomponent;
    deallocate iterators. Pretend that you can't see it. */
 typedef struct icalcompiter {
     icalcomponent_kind kind;
-    pvl_elem iter;
+    icalpvl_elem iter;
 } icalcompiter;
 
 typedef struct icalpropiter {
     icalproperty_kind kind;
-    pvl_elem iter;
+    icalpvl_elem iter;
 } icalpropiter;
 
 /** @brief Constructor
@@ -64,11 +62,11 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_x(const char *x_name);
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_free(icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string(icalcomponent *component);
+LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string(const icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string_r(icalcomponent *component);
+LIBICAL_ICAL_EXPORT char *icalcomponent_as_ical_string_r(const icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT bool icalcomponent_is_valid(icalcomponent *component);
+LIBICAL_ICAL_EXPORT bool icalcomponent_is_valid(const icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT icalcomponent_kind icalcomponent_isa(const icalcomponent *component);
 
@@ -77,7 +75,7 @@ LIBICAL_ICAL_EXPORT bool icalcomponent_isa_component(void *component);
 /* Deal with X components */
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_x_name(icalcomponent *comp, const char *name);
-LIBICAL_ICAL_EXPORT const char *icalcomponent_get_x_name(icalcomponent *comp);
+LIBICAL_ICAL_EXPORT const char *icalcomponent_get_x_name(const icalcomponent *comp);
 
 /** Returns the name of the component -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X component
@@ -191,7 +189,7 @@ LIBICAL_ICAL_EXPORT void icalcomponent_strip_errors(icalcomponent *component);
 LIBICAL_ICAL_EXPORT void icalcomponent_convert_errors(icalcomponent *component);
 
 /* Internal operations. They are private, and you should not be using them. */
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_parent(icalcomponent *component);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_parent(const icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_parent(icalcomponent *component,
                                                   icalcomponent *parent);
@@ -213,7 +211,7 @@ wrong component subtypes. */
 /** @brief Returns a reference to the first VEVENT, VTODO or
  * VJOURNAL in the component.
  */
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_first_real_component(icalcomponent *c);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_get_first_real_component(const icalcomponent *c);
 
 /**     @brief Gets the timespan covered by this component, in UTC.
  *
@@ -463,16 +461,12 @@ LIBICAL_ICAL_EXPORT bool icalproperty_recurrence_is_excluded(icalcomponent *comp
  * value.
  *
  * It will filter out events that are specified as an EXDATE or an EXRULE.
- *
- * TODO: We do not filter out duplicate RRULES/RDATES
- * TODO: We do not differentiate between nominal and exact durations.
  */
 LIBICAL_ICAL_EXPORT void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                           struct icaltimetype start,
                                                           struct icaltimetype end,
-                                                          void (*callback)(icalcomponent *comp,
-                                                                           struct icaltime_span *
-                                                                               span,
+                                                          void (*callback)(const icalcomponent *comp,
+                                                                           const struct icaltime_span *span,
                                                                            void *data),
                                                           void *callback_data);
 

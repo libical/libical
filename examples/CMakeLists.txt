@@ -28,28 +28,30 @@ add_dependencies(
   icalss
   icalvcal
 )
+if(LIBICAL_CXX_BINDINGS)
+  # https://github.com/libical/libical/pull/656
+  set_property(
+    TARGET
+      doesnothing
+    PROPERTY
+      LINKER_LANGUAGE
+        CXX
+  )
+endif()
 
-if(NOT STATIC_ONLY)
-  target_link_libraries(
-    doesnothing
-    ical
-    icalss
-    icalvcal
-  )
-else()
-  target_link_libraries(
-    doesnothing
-    ical-static
-    icalss-static
-    icalvcal-static
-  )
-  if(DEFINED CMAKE_THREAD_LIBS_INIT)
-    target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
-  endif()
-  if(ICU_FOUND)
-    target_link_libraries(doesnothing ${ICU_LIBRARIES})
-  endif()
-  if(BDB_FOUND)
-    target_link_libraries(doesnothing ${BDB_LIBRARY})
-  endif()
+target_link_libraries(
+  doesnothing
+  ical
+  icalss
+  icalvcal
+)
+
+if(DEFINED CMAKE_THREAD_LIBS_INIT)
+  target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
+endif()
+if(ICU_FOUND)
+  target_link_libraries(doesnothing ${ICU_LIBRARIES})
+endif()
+if(BDB_FOUND)
+  target_link_libraries(doesnothing ${BDB_LIBRARY})
 endif()

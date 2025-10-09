@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<structure namespace="ICalVcard" name="Parameter" native="vcardparameter" destroy_func="vcardparameter_free">
+  <method name="i_cal_vcard_parameter_new" corresponds="vcardparameter_new" kind="constructor" since="4.0">
+    <parameter type="ICalVcardParameterKind" name="kind" comment="The type of #ICalVcardParameter to be created"/>
+    <returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter."/>
+    <comment xml:space="preserve">Creates a new #ICalVcardParameter of the @kind type.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_clone" corresponds="vcardparameter_clone" kind="clone" since="4.0">
+    <parameter type="const ICalVcardParameter *" name="param" annotation="in" comment="The #ICalVcardParameter to be cloned"/>
+    <returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter as a clone of the @param."/>
+    <comment xml:space="preserve">Deep clones the @param.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_new_from_string" corresponds="vcardparameter_new_from_string" kind="constructor" since="4.0">
+    <parameter type="const gchar *" name="value" annotation="in, transfer none" comment="The string from which the #ICalVcardParameter is created"/>
+    <returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter with the properties specified in the @value."/>
+    <comment xml:space="preserve">Creates an #ICalVcardParameter from a string of form "PARAMNAME=VALUE".</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_new_from_value_string" corresponds="vcardparameter_new_from_value_string" kind="constructor" since="4.0">
+    <parameter type="ICalVcardParameterKind" name="kind" comment="The kind of #ICalVcardParameter to be created"/>
+    <parameter type="const gchar *" name="value" comment="The string value of the parameter"/>
+    <returns type="ICalVcardParameter *" annotation="transfer full" comment="The newly created #ICalVcardParameter"/>
+    <comment xml:space="preserve">Creates a new #ICalVcardParameter of @kind and @value</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_set_value_from_string" corresponds="vcardparameter_set_value_from_string" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="An #ICalVcardParameter"/>
+    <parameter type="const gchar *" name="value" comment="The string value to set"/>
+    <comment xml:space="preserve">Sets a @param value from string @value.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_add_value_from_string" corresponds="vcardparameter_add_value_from_string" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="An #ICalVcardParameter"/>
+    <parameter type="const gchar *" name="value" comment="The string value to add"/>
+    <comment xml:space="preserve">Adds a @param value from string @value. This can be used for parameters which can hold multiple values.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_free" corresponds="vcardparameter_free" annotation="skip" kind="destructor" since="4.0">
+    <parameter type="ICalVcardParameter *" name="parameter" annotation="in" comment="The #ICalVcardParameter to be freed"/>
+    <comment xml:space="preserve">Frees the native part of the #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_as_vcard_string" corresponds="vcardparameter_as_vcard_string_r" kind="others" since="4.0">
+    <parameter type="ICalVcardParameter *" name="parameter" annotation="in" comment="The #ICalVcardParameter to be converted"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of the @parameter." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts an #ICalVcardParameter to the string representation.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_isa" corresponds="vcardparameter_isa" kind="others" since="4.0">
+    <parameter type="ICalVcardParameter *" name="parameter" comment="The #ICalVcardParameter to be determined for the kind"/>
+    <returns type="ICalVcardParameterKind" comment="The kind of the @parameter."/>
+    <comment xml:space="preserve">Returns the kind of an #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_isa_parameter" corresponds="vcardparameter_isa_parameter" kind="others" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" annotation="in" comment="The #ICalVcardParameter to be checked"/>
+    <returns type="gboolean" comment="true if the native part is of type #ICalVcardParameter, false if not."/>
+    <comment xml:space="preserve">Checks whether the native part of the #ICalVcardParameter is of type #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_set_xname" corresponds="vcardparameter_set_xname" kind="set" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter of which the xname to be set"/>
+    <parameter type="const gchar *" name="v" comment="The name to be set into the @param"/>
+    <comment xml:space="preserve">Sets the xname property of the native part of the #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_get_xname" corresponds="vcardparameter_get_xname" kind="get" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
+    <returns type="const gchar *" annotation="nullable" comment="The property of the @value"/>
+    <comment xml:space="preserve">Gets the xname property of the native part of the #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_set_xvalue" corresponds="vcardparameter_set_xvalue" kind="set" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter of which the xvalue to be set"/>
+    <parameter type="const gchar *" name="v" comment="The value to be set into the @param"/>
+    <comment xml:space="preserve">Sets the xvalue property of the native part of the #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_get_xvalue" corresponds="vcardparameter_get_xvalue" kind="get" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
+    <returns type="const gchar *" annotation="nullable" comment="The property of the @value"/>
+    <comment xml:space="preserve">Gets the xvalue property of the native part of the #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_set_iana_name" corresponds="vcardparameter_set_iana_name" kind="set" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter of which the iana_name to be set"/>
+    <parameter type="const gchar *" name="v" comment="The name to be set into the @param"/>
+    <comment xml:space="preserve">Sets the iana_name property of the native part of the #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_get_iana_name" corresponds="vcardparameter_get_iana_name" kind="get" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
+    <returns type="const gchar *" annotation="nullable" comment="The property of the @value"/>
+    <comment xml:space="preserve">Gets the iana_name property of the native part of the #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_set_iana_value" corresponds="vcardparameter_set_iana_value" kind="set" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter of which the iana_value to be set"/>
+    <parameter type="const gchar *" name="v" comment="The value to be set into the @param"/>
+    <comment xml:space="preserve">Sets the iana_value property of the native part of the #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_get_iana_value" corresponds="vcardparameter_get_iana_value" kind="get" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param" comment="The #ICalVcardParameter to be queried"/>
+    <returns type="const gchar *" annotation="nullable" comment="The property of the @value"/>
+    <comment xml:space="preserve">Gets the iana_value property of the native part of the #ICalVcardParameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_has_same_name" corresponds="vcardparameter_has_same_name" kind="others" since="4.0">
+    <parameter type="ICalVcardParameter *" name="param1" comment="The #ICalVcardParameter to be checked"/>
+    <parameter type="ICalVcardParameter *" name="param2" comment="The #ICalVcardParameter to be checked"/>
+    <returns type="gboolean" comment="true if the parameters have the same name, false or not."/>
+    <comment xml:space="preserve">Checks whether native parts of two #ICalVcardParameters have the same name.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_kind_to_string" corresponds="vcardparameter_kind_to_string" kind="others" since="4.0">
+    <parameter type="ICalVcardParameterKind" name="kind" comment="The #ICalVcardParameterKind to be converted"/>
+    <returns type="const gchar *" comment="The string representation of @kind."/>
+    <comment xml:space="preserve">Converts the @kind to the string representation.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_string_to_kind" corresponds="vcardparameter_string_to_kind" kind="others" since="4.0">
+    <parameter type="const gchar *" name="string" comment="The string representation of the #ICalVcardParameterKind"/>
+    <returns type="ICalVcardParameterKind" comment="The #ICalVcardParameterKind converted from @string"/>
+    <comment xml:space="preserve">Converts a string to the #ICalVcardParameterKind.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_kind_is_valid" corresponds="vcardparameter_kind_is_valid" since="4.0">
+    <parameter type="const ICalVcardParameterKind" name="kind" comment="The #ICalVcardPropertyKind"/>
+    <returns type="gboolean" comment="true if valid, false if not."/>
+    <comment xml:space="preserve">Checks whether #ICalVcardParameterKind is valid.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_kind_value_kind" corresponds="vcardparameter_kind_value_kind" since="4.0">
+    <parameter type="ICalVcardParameterKind" name="kind" comment="The #ICalVcardPropertyKind"/>
+    <parameter type="gboolean *" name="out_is_multivalued" annotation="out" comment="an out argument to store whether the @kind is multivalued"/>
+    <returns type="ICalVcardValueKind" comment="an #ICalVcardValueKind for the parameter @kind"/>
+    <comment xml:space="preserve">Returns corresponding #ICalVcardValueKind for the given @kind and sets whether the @kind is a multivalued parameter.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_is_multivalued" corresponds="vcardparameter_is_multivalued" kind="others" since="4.0">
+    <parameter type="const ICalVcardParameter *" name="param" comment="An #ICalVcardParameter"/>
+    <returns type="gboolean" comment="true if the @param is a multivalued parameter."/>
+    <comment xml:space="preserve">Returns whether @param is a multivalued parameter. Multivalued parameters can hold more than one value.</comment>
+  </method>
+  <method name="i_cal_vcard_parameter_is_structured" corresponds="vcardparameter_is_structured" kind="others" since="4.0">
+    <parameter type="const ICalVcardParameter *" name="param" comment="An #ICalVcardParameter"/>
+    <returns type="gboolean" comment="true if the @param is a structured parameter."/>
+    <comment xml:space="preserve">Returns whether @param is a structured parameter. Structured parameters have their value encoded in a specific format.</comment>
+  </method>
+</structure>

@@ -3,9 +3,7 @@
  CREATOR: eric 23 December 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -46,7 +44,7 @@ struct icalcalendar_impl *icalcalendar_new_impl(void)
     return impl;
 }
 
-static icalerrorenum icalcalendar_create(struct icalcalendar_impl *impl)
+static icalerrorenum icalcalendar_create(const struct icalcalendar_impl *impl)
 {
     char path[MAXPATHLEN];
     struct stat sbuf;
@@ -131,25 +129,25 @@ void icalcalendar_free(icalcalendar *impl)
     free(impl);
 }
 
-int icalcalendar_lock(icalcalendar *impl)
+int icalcalendar_lock(const icalcalendar *impl)
 {
     icalerror_check_arg_rz((impl != 0), "impl");
     return 0;
 }
 
-int icalcalendar_unlock(icalcalendar *impl)
+int icalcalendar_unlock(const icalcalendar *impl)
 {
     icalerror_check_arg_rz((impl != 0), "impl");
     return 0;
 }
 
-int icalcalendar_islocked(icalcalendar *impl)
+int icalcalendar_islocked(const icalcalendar *impl)
 {
     icalerror_check_arg_rz((impl != 0), "impl");
     return 0;
 }
 
-int icalcalendar_ownlock(icalcalendar *impl)
+int icalcalendar_ownlock(const icalcalendar *impl)
 {
     icalerror_check_arg_rz((impl != 0), "impl");
     return 0;

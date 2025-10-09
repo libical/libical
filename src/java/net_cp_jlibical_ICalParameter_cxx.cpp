@@ -23,6 +23,8 @@
 #include "icalparameter_cxx.h"
 #endif
 
+using namespace LibICal;
+
 /*
  * Class:     net_cp_jlibical_ICalParameter
  * Method:    as_ical_string
@@ -36,14 +38,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalParameter_as_1ical_1string
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->as_ical_string();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->as_ical_string();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);
@@ -110,14 +106,8 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalParameter_get_1language
 
     if (cObj != NULL)
     {
-        char* icalStr = cObj->get_language();
-
-        if (icalStr == NULL)
-        {
-            icalStr = "";
-        }
-
-        result = env->NewStringUTF(icalStr);
+        auto icalStr = cObj->get_language();
+        result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
     return(result);

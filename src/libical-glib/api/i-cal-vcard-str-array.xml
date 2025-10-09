@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2025 Allen Winter <winter@kde.org>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<!-- 'vcardstrarray_free' is a define, which cannot be used as a callback; it points to 'icalstrarray_free' thus use it directly -->
+<structure namespace="ICalVcard" name="StrArray" native="vcardstrarray" destroy_func="icalstrarray_free">
+  <method name="i_cal_vcard_str_array_new" corresponds="vcardstrarray_new" kind="constructor" since="4.0">
+    <parameter type="gint" name="increment_size" comment="How many items preallocate in advance"/>
+    <returns type="ICalVcardStrArray *" annotation="transfer full" translator_argus="NULL" comment="The newly created #ICalVcardStrArray"/>
+    <comment>Creates a new #ICalVcardStrArray.</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_get_element_at" corresponds="vcardstrarray_element_at" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" comment="The #ICalVcardStrArray to be queried"/>
+    <parameter type="gsize" name="position" comment="The position the target element is located"/>
+    <returns type="const gchar *" annotation="transfer none, nullable" comment="The element located at the @position in the @array"/>
+    <comment xml:space="preserve">Gets the element located in the @position in the @array. NULL if position if out of bound.</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_size" corresponds="vcardstrarray_size" kind="other" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" comment="The #ICalVcardStrArray"/>
+    <returns type="gsize" comment="The size of current array."/>
+    <comment>Gets the size of the array.</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_find" corresponds="vcardstrarray_find" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" comment="The #ICalVcardStrArray"/>
+    <parameter type="const gchar *" name="value" comment="The value to search for"/>
+    <returns type="gsize" error_return_value="((gsize)-1)" comment="The index of the value in the @array, or an index out of bounds, if not found."/>
+    <comment xml:space="preserve">Searches for a value in the @array and returns its first index.</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_append" corresponds="vcardstrarray_append" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" comment="The #ICalVcardStrArray"/>
+    <parameter type="const gchar *" name="value" comment="The value to append"/>
+    <comment xml:space="preserve">Appends the @value into the @array, not checking for duplicates. See also i_cal_vcard_str_array_add().</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_add" corresponds="vcardstrarray_add" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" comment="The #ICalVcardStrArray"/>
+    <parameter type="const gchar *" name="value" comment="The value to add"/>
+    <comment xml:space="preserve">Adds the @value into the @array, omitting duplicates. See also i_cal_vcard_str_array_append().</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_remove_element_at" corresponds="vcardstrarray_remove_element_at" kind="other" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" comment="The #ICalVcardStrArray to be modified"/>
+    <parameter type="gsize" name="position" comment="The position in which the element will be removed from the array"/>
+    <comment xml:space="preserve">Removes the element at the @position from the array.</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_remove" corresponds="vcardstrarray_remove" kind="other" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" comment="The #ICalVcardStrArray to be modified"/>
+    <parameter type="const gchar *" name="value" comment="The value to remove."/>
+    <comment xml:space="preserve">Removes all the occurrences of the @value in the @array.</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_free" corresponds="vcardstrarray_free" annotation="skip" kind="destructor" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" comment="The #ICalVcardStrArray to be freed"/>
+    <comment xml:space="preserve">Frees the #ICalVcardStrArray.</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_sort" corresponds="vcardstrarray_sort" annotation="skip" kind="other" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" comment="The #ICalVcardStrArray to be sorted"/>
+    <comment xml:space="preserve">Sorts the @array.</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_clone" corresponds="vcardstrarray_clone" kind="clone" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" annotation="in" comment="The #ICalVcardStrArray to be cloned"/>
+    <returns type="ICalVcardStrArray *" annotation="transfer full" translator_argus="NULL" comment="The newly cloned #ICalVcardStrArray with the same value as the @array"/>
+    <comment xml:space="preserve">Creates a deep copy of #ICalVcardStrArray with the same properties as the @array.</comment>
+  </method>
+  <method name="i_cal_vcard_str_array_as_vcard_string" corresponds="vcardstrarray_as_vcard_string_r" kind="other" since="4.0">
+    <parameter type="ICalVcardStrArray *" name="array" comment="an #ICalVcardStrArray"/>
+    <parameter type="const char" name="sep" comment="separator character"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of the @array." translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Converts the @array into its string representation.</comment>
+  </method>
+</structure>

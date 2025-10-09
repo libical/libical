@@ -73,14 +73,6 @@ macro(buildme _name _srcs)
     icalss
     icalvcal
   )
-  if(NOT SHARED_ONLY)
-    add_dependencies(
-      ${_name}
-      ical-static
-      icalss-static
-      icalvcal-static
-    )
-  endif()
   target_link_libraries(
     ${_name}
     ical
@@ -88,19 +80,12 @@ macro(buildme _name _srcs)
     icalvcal
   )
 
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     add_dependencies(
       ${_name}
       ical_cxx
       icalss_cxx
     )
-    if(NOT SHARED_ONLY)
-      add_dependencies(
-        ${_name}
-        ical_cxx-static
-        icalss_cxx-static
-      )
-    endif()
     target_link_libraries(
       ${_name}
       ical_cxx
@@ -127,7 +112,7 @@ macro(testme _name _srcs)
 endmacro()
 
 ########## libical-glib tests #########
-if(ICAL_GLIB AND GOBJECT_INTROSPECTION)
+if(LIBICAL_GLIB AND LIBICAL_GOBJECT_INTROSPECTION)
   add_subdirectory(libical-glib)
 endif()
 
@@ -153,7 +138,7 @@ set(
   test-malloc.c
   test-malloc.h
 )
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   list(APPEND regression_SRCS regression-cxx.cpp)
 endif()
 testme(regression "${regression_SRCS}")
@@ -176,14 +161,6 @@ endforeach()
 
 ########### next target ###############
 
-if(NOT WIN32 AND NOT ANDROID)
-  #stow is very Unix specific
-  set(stow_SRCS stow.c)
-  buildme(stow "${stow_SRCS}")
-endif()
-
-########### next target ###############
-
 set(recur_SRCS recur.c)
 testme(recur "${recur_SRCS}")
 
@@ -198,13 +175,6 @@ endif()
 if(CMAKE_USE_PTHREADS_INIT)
   set(icaltm_test_SRCS icaltm_test.c)
   testme(icaltm_test "${icaltm_test_SRCS}")
-endif()
-
-########### next target ###############
-
-if(HAVE_GETOPT) #getopt is required
-  set(testmime_SRCS testmime.c)
-  testme(testmime "${testmime_SRCS}")
 endif()
 
 ########### next target ###############
@@ -230,7 +200,7 @@ set(builtin_timezones_SRCS builtin_timezones.c)
 testme(builtin_timezones "${builtin_timezones_SRCS}")
 
 ########### next target ###############
-if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
+if(NOT CYGWIN AND NOT LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
   set(icalrecurtest_SRCS icalrecur_test.c)
   configure_file(icalrecur_test.txt icalrecur_test.txt COPYONLY)
   configure_file(icalrecur_test_rscale.txt icalrecur_test_rscale.txt COPYONLY)
@@ -243,7 +213,7 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
     icalss
     icalvcal
   )
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     # https://github.com/libical/libical/pull/656
     set_property(
       TARGET
@@ -257,7 +227,7 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
 
   #test non-rscale rrules
   set(reference_data "icalrecur_test.txt")
-  set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+  set(test_args "-f \"${PROJECT_BINARY_DIR}/src/test/${reference_data}\"")
   add_test(
     NAME icalrecurtest
     COMMAND
@@ -268,7 +238,7 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
 
   #test rscale rrules without ICU
   set(reference_data "icalrecur_test_rscale.txt")
-  set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+  set(test_args "-f \"${PROJECT_BINARY_DIR}/src/test/${reference_data}\"")
   add_test(
     NAME icalrecurtest-rscale
     COMMAND
@@ -280,7 +250,7 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
   if(ICU_FOUND)
     #test rscale rrules with ICU
     set(reference_data "icalrecur_test_rscale_withicu.txt")
-    set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+    set(test_args "-f \"${PROJECT_BINARY_DIR}/src/test/${reference_data}\"")
     add_test(
       NAME icalrecurtest-rscale-withicu
       COMMAND
@@ -292,7 +262,7 @@ if(NOT CYGWIN AND NOT USE_32BIT_TIME_T)
     if(HAVE_ICU_DANGI)
       #test rscale rrules with ICU and DANGI
       set(reference_data "icalrecur_test_rscale_withicu_dangi.txt")
-      set(test_args "-f ${PROJECT_BINARY_DIR}/src/test/${reference_data}")
+      set(test_args "-f \"${PROJECT_BINARY_DIR}/src/test/${reference_data}\"")
       add_test(
         NAME icalrecurtest-rscale-withicu-dangi
         COMMAND
@@ -311,19 +281,20 @@ testme(parser_ctrl "${icalparser_ctrl_test_SRCS}")
 
 ########### next target ###############
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   testme(vcf_leak vcf_leak.cpp)
 endif()
 
-############# fuzzer tests ############
+########### next target ###############
 
-testme(icalcomponent_fuzz1 icalcomponent_fuzz1.c)
-testme(icalcomponent_fuzz2 icalcomponent_fuzz2.c)
+buildme(icalcomponent_fuzz1 icalcomponent_fuzz1.c)
+buildme(icalcomponent_fuzz2 icalcomponent_fuzz2.c)
 
 testme(icaltime_fuzz icaltime_fuzz.c)
 testme(icalcomponent_timefuzz icalcomponent_timefuzz.c)
+testme(icaltimezone_fuzz icaltimezone_fuzz.c)
 
-libical_option(LIBICAL_BUILD_TESTING_BIGFUZZ "Build big fuzzer tests." False)
+libical_option(LIBICAL_BUILD_TESTING_BIGFUZZ "Build fuzzer tests" False)
 if(LIBICAL_BUILD_TESTING_BIGFUZZ)
   foreach(
     fuzztest
@@ -336,6 +307,8 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     69888 # cpu timeout fails beyond 60s
     42536507 # cpu timeout fails beyond 60s
     42536390
+    448424495
+    448717854
     usban
     usban2
     usban3

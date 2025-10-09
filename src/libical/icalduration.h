@@ -3,7 +3,6 @@
  CREATOR: eric 26 Jan 2001
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -25,6 +24,8 @@
 
 /**
  * @brief A struct representing a duration
+ *
+ * Days and weeks are nominal; hours, minutes and seconds are exact
  */
 struct icaldurationtype {
     int is_neg;
@@ -41,20 +42,27 @@ struct icaldurationtype {
 
 /**
  * @brief Creates a new ::icaldurationtype from a duration in seconds.
- * @param t The duration in seconds
+ * @param seconds The duration in seconds
  * @return An ::icaldurationtype representing the duration @a t in seconds
+ *
+ * The number of seconds stored in the ::icaldurationtype structure is always a positive integer.
+ * If the @p seconds argument is negative, then the `is_neg` structure member is set to 1 (true).
+ *
+ * Also note that the number of seconds is not in any way refactored into days, hours, or minutes.
+ * This function simply assigns the ::icaldurationtype seconds structure member from the integer provided.
  *
  * @par Example
  * ```c
  * // create a new icaldurationtype with a duration of 60 seconds
  * struct icaldurationtype duration;
- * duration = icaldurationtype_from_int(60);
- *
- * // verify that the duration is one minute
- * assert(duration.minutes == 1);
+ * duration = icaldurationtype_from_seconds(60);
+ * // create a new icaldurationtype with a duration of 60 seconds pointing back in time
+ * duration = icaldurationtype_from_seconds(-60);
  * ```
+ *
+ * @since 4.0 previously known as icaldurationtype_from_int
  */
-LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_int(int t);
+LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_seconds(int seconds);
 
 /**
  * @brief Creates a new ::icaldurationtype from a duration given as a string.
@@ -78,21 +86,29 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_int(int t);
 LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const char *dur);
 
 /**
- * @brief Converts an ::icaldurationtype into the duration in seconds as `int`.
- * @param duration The duration to convert to seconds
- * @return An `int` representing the duration in seconds
+ * @brief Extracts the duration in integer seconds from an ::icaldurationtype.
+ * @param duration A valid duration type.
+ * @return An `int` representing the number of seconds in the duration.
+ *
+ * The number of seconds returned from the specified ::icaldurationtype can be a positive or negative integer
+ * depending if the duration points forward or backward in time.
+ *
+ * Additionally, a ::icaldurationtype that has a non-zero days or weeks value is considered an error.
+ * ie. only the ::icaldurationtype seconds, minutes and hours structure members are converted.
  *
  * @par Usage
  * ```c
  * // create icaldurationtype with given duration
  * struct icaldurationtype duration;
- * duration = icaldurationtype_from_int(3532342);
+ * duration = icaldurationtype_from_seconds(3532342);
  *
  * // get the duration in seconds and verify it
- * assert(icaldurationtype_as_int(duration) == 3532342);
+ * assert(icaldurationtype_as_seconds(duration) == 3532342);
  * ```
+ *
+ * @since 4.0 previously known as icaldurationtype_as_int
  */
-LIBICAL_ICAL_EXPORT int icaldurationtype_as_int(struct icaldurationtype duration);
+LIBICAL_ICAL_EXPORT int icaldurationtype_as_seconds(struct icaldurationtype duration);
 
 /**
  * Converts an icaldurationtype into the iCal format as string.
@@ -108,7 +124,7 @@ LIBICAL_ICAL_EXPORT int icaldurationtype_as_int(struct icaldurationtype duration
  * ```c
  * // create new duration
  * struct icaldurationtype duration;
- * duration = icaldurationtype_from_int(3424224);
+ * duration = icaldurationtype_from_seconds(3424224);
  *
  * // print as ical-formatted string
  * char *ical = icaldurationtype_as_ical_string(duration);
@@ -134,7 +150,7 @@ LIBICAL_ICAL_EXPORT char *icaldurationtype_as_ical_string(struct icaldurationtyp
  * ```c
  * // create new duration
  * struct icaldurationtype duration;
- * duration = icaldurationtype_from_int(3424224);
+ * duration = icaldurationtype_from_seconds(3424224);
  *
  * // print as ical-formatted string
  * printf("%s\n", icaldurationtype_as_ical_string(duration));
@@ -160,7 +176,7 @@ LIBICAL_ICAL_EXPORT char *icaldurationtype_as_ical_string_r(struct icaldurationt
  * assert(duration.minutes  == 0);
  * assert(duration.seconds  == 0);
  * assert(icalduration_is_null_duration(duration));
- * assert(icalduration_as_int(duration) == 0);
+ * assert(icalduration_as_seconds(duration) == 0);
  * ```
  */
 LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_null_duration(void);
@@ -219,7 +235,7 @@ LIBICAL_ICAL_EXPORT bool icaldurationtype_is_null_duration(struct icaldurationty
 LIBICAL_ICAL_EXPORT bool icaldurationtype_is_bad_duration(struct icaldurationtype d);
 
 /**
- * @brief Adds a duration to an icaltime object and returns the result.
+ * @brief Extends a time duration.
  * @param t The time object to add the duration to
  * @param d The duration to add to the time object
  * @return The new ::icaltimetype which has been added the duration to
@@ -231,20 +247,22 @@ LIBICAL_ICAL_EXPORT bool icaldurationtype_is_bad_duration(struct icaldurationtyp
  *
  * // create time and duration objects
  * time = icaltime_today();
- * duration = icaldurationtype_from_int(60);
+ * duration = icaldurationtype_from_seconds(60);
  *
  * // add the duration to the time object
- * time = icaltime_add(time, duration);
+ * time = icalduration_extend(time, duration);
  * ```
+ *
+ * @since 4.0 previously known as icaltime_add
  */
-LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_add(struct icaltimetype t,
-                                                     struct icaldurationtype d);
+LIBICAL_ICAL_EXPORT struct icaltimetype icalduration_extend(struct icaltimetype t,
+                                                            struct icaldurationtype d);
 
 /**
- * @brief Returns the difference between two ::icaltimetype as a duration.
+ * @brief Creates a duration from two ::icaltimetype endpoints.
  * @param t1 The first point in time
  * @param t2 The second point in time
- * @return An ::icaldurationtype representing the duration the elapsed between
+ * @return An ::icaldurationtype representing the duration elapsed between
  * @a t1 and @a t2
  *
  * @par Usage
@@ -254,10 +272,12 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_add(struct icaltimetype t,
  * struct icaldurationtype duration;
  *
  * // calculate duration between time points
- * duration = icaltime_subtract(t1, t2);
+ * duration = icalduration_from_times(t1, t2);
  * ```
+ *
+ * * @since 4.0 previously known as icaltime_subtract
  */
-LIBICAL_ICAL_EXPORT struct icaldurationtype icaltime_subtract(struct icaltimetype t1,
-                                                              struct icaltimetype t2);
+LIBICAL_ICAL_EXPORT struct icaldurationtype icalduration_from_times(struct icaltimetype t1,
+                                                                    struct icaltimetype t2);
 
 #endif /* !ICALDURATION_H */

@@ -3,9 +3,7 @@
  CREATOR: eric 20 March 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ========================================================================*/
 
 /**
@@ -220,8 +218,6 @@ LIBICAL_ICAL_EXPORT void icalrecurrencetype_ref(struct icalrecurrencetype *recur
  * and all referenced memory (i.e. rscale and 'by' arrays) are deallocated.
  */
 LIBICAL_ICAL_EXPORT void icalrecurrencetype_unref(struct icalrecurrencetype *recur);
-
-LIBICAL_ICAL_EXPORT bool icalrecurrencetype_rscale_is_supported(void);
 
 LIBICAL_ICAL_EXPORT icalarray *icalrecurrencetype_rscale_supported_calendars(void);
 

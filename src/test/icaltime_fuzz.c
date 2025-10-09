@@ -1,12 +1,10 @@
 /*======================================================================
  *
  * SPDX-FileCopyrightText: 2024 Contributors to the libical project <git@github.com:libical/libical>
- *
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  *
  * Based on the original code by Gabe Sherman in
  * https://github.com/libical/libical/issues/678
- *
  * ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -47,8 +45,9 @@ int main(void)
     }; // dtstart
 
     v1 = icaltimezone_new(); // zone
-    if (v1 == NULL)
+    if (v1 == NULL) {
         return 0;
+    }
 
     icaltimetype v3 = {
         3,

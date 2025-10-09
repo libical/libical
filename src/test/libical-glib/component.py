@@ -2,11 +2,8 @@
 # GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./component.py
 
 ###############################################################################
-#
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
 ###############################################################################
 
 """Test Python bindings for libical components"""
@@ -16,7 +13,7 @@ import sys
 
 import gi
 
-gi.require_version('ICalGLib', '3.0')
+gi.require_version('ICalGLib', '4.0')
 from gi.repository import ICalGLib  # noqa E402
 
 try:
@@ -313,6 +310,18 @@ def main():
     counter = TestCounter()
     comp.foreach_tzid(foreachTZIDCb, counter)
     assert counter.counter == 2
+
+    # Test propiter and paramiter
+    comp = ICalGLib.Component.new_from_string(eventStr1)
+    iter = comp.begin_property(ICalGLib.PropertyKind.ANY_PROPERTY)
+    assert iter.deref().as_ical_string().split('\n', 1)[0] == 'UID:event-uid-123\r'
+    iter.next()
+    prop = iter.deref()
+    assert prop.as_ical_string().split('\n', 1)[0] == 'SUMMARY;LANGUAGE=en-US:test1\r'
+    paramiter = prop.begin_parameter(ICalGLib.ParameterKind.ANY_PARAMETER)
+    assert paramiter.deref().as_ical_string().split('\n', 1)[0] == 'LANGUAGE=en-US'
+    paramiter.next()
+    assert paramiter.deref() is None
 
     counter = TestCounter()
     comp = ICalGLib.Component.new_from_string(recurringStr)

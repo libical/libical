@@ -3,16 +3,15 @@
  CREATOR: eric 20 March 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
-  The original code is icalparam.h
 ======================================================================*/
 #ifndef ICALDERIVEDPARAMETER_H
 #define ICALDERIVEDPARAMETER_H
 
 #include "libical_ical_export.h"
 #include "icalduration.h"
+#include "icalenumarray.h"
+#include "icalstrarray.h"
 
 #include <stdbool.h>
 

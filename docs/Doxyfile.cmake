@@ -1029,8 +1029,10 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which Doxygen is
 # run.
 
-EXCLUDE                = @PROJECT_SOURCE_DIR@/src/java \
-                         @PROJECT_SOURCE_DIR@/src/php
+EXCLUDE                = @PROJECT_SOURCE_DIR@/docs/SUMMARY.md \
+                         @PROJECT_SOURCE_DIR@/src/java \
+                         @PROJECT_SOURCE_DIR@/src/php \
+                         @PROJECT_SOURCE_DIR@/src/libicalss/icalsslexer.c
 EXCLUDE_SYMLINKS       = NO
 
 # If the value of the INPUT tag contains directories, you can use the
@@ -1050,6 +1052,8 @@ EXCLUDE_PATTERNS       = */.svn/* \
                          */test/* \
                          */tests/* \
                          *_p.cpp \
+                         *_p.c \
+                         *_p.h \
                          *_export.h
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
@@ -1084,7 +1088,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = @PROJECT_SOURCE_DIR@/doc
+IMAGE_PATH             = @PROJECT_SOURCE_DIR@/docs
 
 # The INPUT_FILTER tag can be used to specify a program that Doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
@@ -1327,7 +1331,7 @@ HTML_FOOTER            =
 # obsolete.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_STYLESHEET        =
+HTML_STYLESHEET        = @PROJECT_SOURCE_DIR@/docs/doxygen-awesome.css
 
 # The HTML_EXTRA_STYLESHEET tag can be used to specify additional user-defined
 # cascading style sheets that are included after the standard style sheets
@@ -1368,7 +1372,7 @@ HTML_EXTRA_FILES       =
 # The default value is: AUTO_LIGHT.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_COLORSTYLE        = AUTO_LIGHT
+HTML_COLORSTYLE        = LIGHT
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. Doxygen
 # will adjust the colors in the style sheet and background images according to

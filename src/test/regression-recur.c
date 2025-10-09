@@ -3,11 +3,7 @@
  CREATOR: ebusboom 8jun00
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
- DESCRIPTION:
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -21,12 +17,19 @@
 #include <stdlib.h>
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-unsafe-call-within-signal-handler"
+#endif
 static void sig_alrm(int i)
 {
     _unused(i);
     fprintf(stderr, "Could not get lock on file\n");
     exit(1);
 }
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif
 
@@ -54,7 +57,7 @@ static int get_expected_numevents(icalcomponent *c)
     return num_events;
 }
 
-static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
+static void recur_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     int *num_recurs = data;
 
@@ -86,8 +89,9 @@ void test_recur_file(void)
     (void)signal(SIGALRM, sig_alrm);
 #endif
     file = getenv("ICAL_RECUR_FILE");
-    if (!file)
+    if (!file) {
         file = TEST_DATADIR "/recur.txt";
+    }
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
     alarm(15); /* to get file lock */
@@ -107,7 +111,7 @@ void test_recur_file(void)
 
         struct icaltimetype start;
         struct icaltimetype startmin = icaltime_from_timet_with_zone(1, 0, NULL);
-        struct icaltimetype endmax = icaltime_null_time();
+        struct icaltimetype endmax = icaltime_from_timet_with_zone(1748497476, 0, NULL);
         const char *desc_str = "malformed component";
 
         desc = icalcomponent_get_first_property(itr, ICAL_DESCRIPTION_PROPERTY);
@@ -138,8 +142,9 @@ void test_recur_file(void)
 
         tt = icaltime_as_timet(start);
 
-        if (VERBOSE)
+        if (VERBOSE) {
             printf("#### %s\n", icalctime(&tt));
+        }
 
         icalrecur_iterator_free(ritr);
 
@@ -148,8 +153,9 @@ void test_recur_file(void)
              !icaltime_is_null_time(next);
              next = icalrecur_iterator_next(ritr)) {
             tt = icaltime_as_timet(next);
-            if (VERBOSE)
+            if (VERBOSE) {
                 printf("  %s", icalctime(&tt));
+            }
         }
 
         icalrecur_iterator_free(ritr);
@@ -159,9 +165,7 @@ void test_recur_file(void)
         icalcomponent_foreach_recurrence(itr, startmin, endmax, recur_callback, &num_recurs_found);
 
         snprintf(msg, sizeof(msg), "   expecting total of %d events", expected_events);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
         int_is(msg, num_recurs_found, expected_events);
-#endif
     }
 
     icalset_free(cin);

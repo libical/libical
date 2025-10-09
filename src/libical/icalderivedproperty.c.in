@@ -3,9 +3,7 @@
  CREATOR: eric 09 May 1999
 
  SPDX-FileCopyrightText: 1999, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -326,7 +324,7 @@ icalproperty_method icalproperty_string_to_method(const char *str)
     return ICAL_METHOD_NONE;
 }
 
-const char *icalenum_status_to_string(icalproperty_status status)
+const char *icalproperty_status_to_string(icalproperty_status status)
 {
     icalerror_check_arg_rz(status >= ICAL_STATUS_X, "status");
     icalerror_check_arg_rz(status <= ICAL_STATUS_NONE, "status");
@@ -334,7 +332,7 @@ const char *icalenum_status_to_string(icalproperty_status status)
     return enum_map[status - ICALPROPERTY_FIRST_ENUM].str;
 }
 
-icalproperty_status icalenum_string_to_status(const char *str)
+icalproperty_status icalproperty_string_to_status(const char *str)
 {
     int i;
 
@@ -352,4 +350,148 @@ icalproperty_status icalenum_string_to_status(const char *str)
     }
 
     return ICAL_STATUS_NONE;
+}
+
+const char *icalproperty_action_to_string(icalproperty_action action)
+{
+    icalerror_check_arg_rz(action >= ICAL_ACTION_X, "action");
+    icalerror_check_arg_rz(action <= ICAL_ACTION_NONE, "action");
+
+    return enum_map[action - ICALPROPERTY_FIRST_ENUM].str;
+}
+
+icalproperty_action icalproperty_string_to_action(const char *str)
+{
+    int i;
+
+    icalerror_check_arg_rx(str != 0, "str", ICAL_ACTION_NONE);
+
+    while (*str == ' ') {
+        str++;
+    }
+
+    for (i = ICAL_ACTION_X - ICALPROPERTY_FIRST_ENUM;
+         i != ICAL_ACTION_NONE - ICALPROPERTY_FIRST_ENUM; i++) {
+        if (strcasecmp(enum_map[i].str, str) == 0) {
+            return (icalproperty_action) enum_map[i].prop_enum;
+        }
+    }
+
+    return ICAL_ACTION_NONE;
+}
+
+const char *icalproperty_transp_to_string(icalproperty_transp transp)
+{
+    icalerror_check_arg_rz(transp >= ICAL_TRANSP_X, "transp");
+    icalerror_check_arg_rz(transp <= ICAL_TRANSP_NONE, "transp");
+
+    return enum_map[transp - ICALPROPERTY_FIRST_ENUM].str;
+}
+
+icalproperty_transp icalproperty_string_to_transp(const char *str)
+{
+    int i;
+
+    icalerror_check_arg_rx(str != 0, "str", ICAL_TRANSP_NONE);
+
+    while (*str == ' ') {
+        str++;
+    }
+
+    for (i = ICAL_TRANSP_X - ICALPROPERTY_FIRST_ENUM;
+         i != ICAL_TRANSP_NONE - ICALPROPERTY_FIRST_ENUM; i++) {
+        if (strcasecmp(enum_map[i].str, str) == 0) {
+            return (icalproperty_transp) enum_map[i].prop_enum;
+        }
+    }
+
+    return ICAL_TRANSP_NONE;
+}
+
+const char *icalproperty_class_to_string(icalproperty_class class)
+{
+    icalerror_check_arg_rz(class >= ICAL_CLASS_X, "class");
+    icalerror_check_arg_rz(class <= ICAL_CLASS_NONE, "class");
+
+    return enum_map[class - ICALPROPERTY_FIRST_ENUM].str;
+}
+
+icalproperty_class icalproperty_string_to_class(const char *str)
+{
+    int i;
+
+    icalerror_check_arg_rx(str != 0, "str", ICAL_CLASS_NONE);
+
+    while (*str == ' ') {
+        str++;
+    }
+
+    for (i = ICAL_CLASS_X - ICALPROPERTY_FIRST_ENUM;
+         i != ICAL_CLASS_NONE - ICALPROPERTY_FIRST_ENUM; i++) {
+        if (strcasecmp(enum_map[i].str, str) == 0) {
+            return (icalproperty_class) enum_map[i].prop_enum;
+        }
+    }
+
+    return ICAL_CLASS_NONE;
+}
+
+const char *icalproperty_participanttype_to_string(icalproperty_participanttype participanttype)
+{
+    icalerror_check_arg_rz(participanttype >= ICAL_PARTICIPANTTYPE_X,
+            "participanttype");
+    icalerror_check_arg_rz(participanttype <= ICAL_PARTICIPANTTYPE_NONE,
+            "participanttype");
+
+    return enum_map[participanttype - ICALPROPERTY_FIRST_ENUM].str;
+}
+
+icalproperty_participanttype icalproperty_string_to_participanttype(const char *str)
+{
+    int i;
+
+    icalerror_check_arg_rx(str != 0, "str", ICAL_PARTICIPANTTYPE_NONE);
+
+    while (*str == ' ') {
+        str++;
+    }
+
+    for (i = ICAL_PARTICIPANTTYPE_X - ICALPROPERTY_FIRST_ENUM;
+         i != ICAL_PARTICIPANTTYPE_NONE - ICALPROPERTY_FIRST_ENUM; i++) {
+        if (strcasecmp(enum_map[i].str, str) == 0) {
+            return (icalproperty_participanttype) enum_map[i].prop_enum;
+        }
+    }
+
+    return ICAL_PARTICIPANTTYPE_NONE;
+}
+
+const char *icalproperty_resourcetype_to_string(icalproperty_resourcetype resourcetype)
+{
+    icalerror_check_arg_rz(resourcetype >= ICAL_RESOURCETYPE_X,
+            "resourcetype");
+    icalerror_check_arg_rz(resourcetype <= ICAL_RESOURCETYPE_NONE,
+            "resourcetype");
+
+    return enum_map[resourcetype - ICALPROPERTY_FIRST_ENUM].str;
+}
+
+icalproperty_resourcetype icalproperty_string_to_resourcetype(const char *str)
+{
+    int i;
+
+    icalerror_check_arg_rx(str != 0, "str", ICAL_RESOURCETYPE_NONE);
+
+    while (*str == ' ') {
+        str++;
+    }
+
+    for (i = ICAL_RESOURCETYPE_X - ICALPROPERTY_FIRST_ENUM;
+         i != ICAL_RESOURCETYPE_NONE - ICALPROPERTY_FIRST_ENUM; i++) {
+        if (strcasecmp(enum_map[i].str, str) == 0) {
+            return (icalproperty_resourcetype) enum_map[i].prop_enum;
+        }
+    }
+
+    return ICAL_RESOURCETYPE_NONE;
 }

@@ -3,9 +3,7 @@
  CREATOR: Ken Murchison 26 September 2014
 
  SPDX-FileCopyrightText: 2000 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 /*
@@ -19,17 +17,12 @@
 #include <libical/ical.h>
 #include <stdlib.h>
 
-#if defined(HAVE_LIBICU)
-#include <unicode/ucal.h>
-#endif
-
 struct recur {
     int line_no;
     char dtstart[100];
     char rrule[1024];
     char start_at[100];
     char instances[2000];
-    char rev_instances[2000];
 };
 
 int check_and_copy_field(const char *line, const char *pref, char *field, size_t field_size)
@@ -40,22 +33,89 @@ int check_and_copy_field(const char *line, const char *pref, char *field, size_t
     }
 
     size_t data_size = strlen(line) - l;
-    if (data_size >= field_size)
+    if (data_size >= field_size) {
         return 1;
+    }
 
     memcpy(field, &line[l], data_size + 1);
     return 0;
 }
 
-static void print_error_hdr(struct recur *r)
+static void print_error_hdr(const struct recur *r)
 {
     fprintf(stderr, "Test case at line %d failed.\n", r->line_no);
     fprintf(stderr, "RRULE:%s\n", r->rrule);
     fprintf(stderr, "DTSTART:%s\n", r->dtstart);
-    if (r->start_at[0])
+    if (r->start_at[0]) {
         fprintf(stderr, "START-AT:%s\n", r->start_at);
+    }
 }
 
+static void reverse_array(char *str, size_t len)
+{
+    char tmp;
+    for (size_t i = 0; i < len / 2; i++) {
+        tmp = str[i];
+        str[i] = str[len - i - 1];
+        str[len - i - 1] = tmp;
+    }
+}
+
+static void reverse_instances(char *str)
+{
+    size_t l = strlen(str);
+    reverse_array(str, l);
+
+    size_t current_instance_start = 0;
+
+    for (size_t i = 0; i < l; i++) {
+        if (str[i] == ',') {
+            reverse_array(&str[current_instance_start], i - current_instance_start);
+            current_instance_start = i + 1;
+        }
+    }
+
+    reverse_array(&str[current_instance_start], l - current_instance_start);
+}
+
+static char *skip_first(char *instances)
+{
+    while (*instances && (*instances != ',')) {
+        instances++;
+    }
+
+    if (*instances) {
+        instances++;
+    }
+
+    return instances;
+}
+
+static char *skip_until(char *instances, icaltimetype t, int order)
+{
+    char *start = instances;
+    while (1) {
+        char *next = skip_first(start);
+        if (!next) {
+            return 0;
+        }
+
+        char tmp = next[-1];
+        if (next[-1] == ',') {
+            next[-1] = 0;
+        }
+        icaltimetype current = icaltime_from_string(start);
+        next[-1] = tmp;
+
+        if ((icaltime_compare(current, t) * order) >= 0) {
+            return start;
+        }
+
+        start = next;
+    }
+}
+
+/* cppcheck-suppress constParameter */
 int main(int argc, char *argv[])
 {
     /* Default to RFC 5545 tests */
@@ -110,21 +170,21 @@ int main(int argc, char *argv[])
                 line[--l] = '\0';
             }
 
-            if (l == 0)
+            if (l == 0) {
                 yield = 1;
-            else if (line[0] == '#')
+            } else if (line[0] == '#') {
                 continue;
-            else {
+            } else {
                 int parse_err = 0;
 
-                if (r.rrule[0] == 0)
+                if (r.rrule[0] == 0) {
                     r.line_no = line_no;
+                }
 
                 parse_err = parse_err || check_and_copy_field(line, "RRULE:", r.rrule, sizeof(r.rrule));
                 parse_err = parse_err || check_and_copy_field(line, "DTSTART:", r.dtstart, sizeof(r.dtstart));
                 parse_err = parse_err || check_and_copy_field(line, "START-AT:", r.start_at, sizeof(r.start_at));
                 parse_err = parse_err || check_and_copy_field(line, "INSTANCES:", r.instances, sizeof(r.instances));
-                parse_err = parse_err || check_and_copy_field(line, "PREV-INSTANCES:", r.rev_instances, sizeof(r.rev_instances));
 
                 if (parse_err) {
                     nof_errors++;
@@ -163,6 +223,8 @@ int main(int argc, char *argv[])
             rrule = icalrecurrencetype_new_from_string(r.rrule);
             ritr = icalrecur_iterator_new(rrule, dtstart);
 
+            char *instances = r.instances;
+
             if (!ritr) {
                 snprintf(&actual_instances[actual_instances_len],
                          sizeof(actual_instances) - (size_t)actual_instances_len,
@@ -171,6 +233,8 @@ int main(int argc, char *argv[])
                 if (r.start_at[0]) {
                     start = icaltime_from_string(r.start_at);
                     icalrecur_iterator_set_start(ritr, start);
+
+                    instances = skip_until(instances, start, 1);
                 }
 
                 for (next = icalrecur_iterator_next(ritr);
@@ -183,19 +247,26 @@ int main(int argc, char *argv[])
                 }
             }
 
-            if (strcmp(r.instances, actual_instances)) {
+            if (strcmp(instances, actual_instances)) {
                 nof_errors++;
                 test_error = 1;
 
                 print_error_hdr(&r);
-                fprintf(stderr, "Expected INSTANCES:%s\n", r.instances);
+                fprintf(stderr, "Expected INSTANCES:%s\n", instances);
                 fprintf(stderr, "Actual   INSTANCES:%s\n", actual_instances);
                 fprintf(stderr, "\n");
             }
 
             if (ritr) {
+                instances = r.instances;
+
+                reverse_instances(instances);
+
+                instances = skip_first(instances);
+
                 if (r.start_at[0]) {
                     icalrecur_iterator_set_range(ritr, start, dtstart);
+                    instances = skip_until(instances, start, -1);
                 }
 
                 sep = "";
@@ -211,15 +282,16 @@ int main(int argc, char *argv[])
                     sep = ",";
                 }
 
-                if (strcmp(r.rev_instances, actual_instances)) {
+                if (strcmp(instances, actual_instances)) {
                     nof_errors++;
 
-                    if (!test_error)
+                    if (!test_error) {
                         print_error_hdr(&r);
+                    }
 
                     test_error = 1;
 
-                    fprintf(stderr, "Expected PREV-INSTANCES:%s\n", r.rev_instances);
+                    fprintf(stderr, "Expected PREV-INSTANCES:%s\n", instances);
                     fprintf(stderr, "Actual   PREV-INSTANCES:%s\n", actual_instances);
                     fprintf(stderr, "\n");
                 }
@@ -228,8 +300,9 @@ int main(int argc, char *argv[])
             icalrecur_iterator_free(ritr);
             icalrecurrencetype_unref(rrule);
 
-            if (test_error)
+            if (test_error) {
                 nof_failed_tests++;
+            }
 
             memset(&r, 0, sizeof(r));
         }

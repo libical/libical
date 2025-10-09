@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,110 +7,110 @@
 
 -->
 <structure namespace="ICal" name="Enums">
-    <enum name="ICalComponentKind" native_name="icalcomponent_kind" default_native="I_CAL_NO_COMPONENT">
-        <element name="ICAL_NO_COMPONENT"/>
-        <element name="ICAL_ANY_COMPONENT"/>
-        <element name="ICAL_XROOT_COMPONENT"/>
-        <element name="ICAL_XATTACH_COMPONENT"/>
-        <element name="ICAL_VEVENT_COMPONENT"/>
-        <element name="ICAL_VTODO_COMPONENT"/>
-        <element name="ICAL_VJOURNAL_COMPONENT"/>
-        <element name="ICAL_VCALENDAR_COMPONENT"/>
-        <element name="ICAL_VAGENDA_COMPONENT"/>
-        <element name="ICAL_VFREEBUSY_COMPONENT"/>
-        <element name="ICAL_VALARM_COMPONENT"/>
-        <element name="ICAL_XAUDIOALARM_COMPONENT"/>
-        <element name="ICAL_XDISPLAYALARM_COMPONENT"/>
-        <element name="ICAL_XEMAILALARM_COMPONENT"/>
-        <element name="ICAL_XPROCEDUREALARM_COMPONENT"/>
-        <element name="ICAL_VTIMEZONE_COMPONENT"/>
-        <element name="ICAL_XSTANDARD_COMPONENT"/>
-        <element name="ICAL_XDAYLIGHT_COMPONENT"/>
-        <element name="ICAL_X_COMPONENT"/>
-        <element name="ICAL_VSCHEDULE_COMPONENT"/>
-        <element name="ICAL_VQUERY_COMPONENT"/>
-        <element name="ICAL_VREPLY_COMPONENT"/>
-        <element name="ICAL_VCAR_COMPONENT"/>
-        <element name="ICAL_VCOMMAND_COMPONENT"/>
-        <element name="ICAL_XLICINVALID_COMPONENT"/>
-        <element name="ICAL_XLICMIMEPART_COMPONENT"/>
-        <element name="ICAL_VAVAILABILITY_COMPONENT"/>
-        <element name="ICAL_XAVAILABLE_COMPONENT"/>
-        <element name="ICAL_VPOLL_COMPONENT"/>
-        <element name="ICAL_VVOTER_COMPONENT"/>
-        <element name="ICAL_XVOTE_COMPONENT"/>
-        <element name="ICAL_VPATCH_COMPONENT"/>
-        <element name="ICAL_XPATCH_COMPONENT"/>
-        <element name="ICAL_PARTICIPANT_COMPONENT"/>
-        <element name="ICAL_VLOCATION_COMPONENT"/>
-        <element name="ICAL_VRESOURCE_COMPONENT"/>
-        <element name="ICAL_NUM_COMPONENT_TYPES"/>
-    </enum>
-    <enum name="ICalRequestStatus" native_name="icalrequeststatus" default_native="I_CAL_UNKNOWN_STATUS">
-        <element name="ICAL_UNKNOWN_STATUS"/>
-        <element name="ICAL_2_0_SUCCESS_STATUS"/>
-        <element name="ICAL_2_1_FALLBACK_STATUS"/>
-        <element name="ICAL_2_2_IGPROP_STATUS"/>
-        <element name="ICAL_2_3_IGPARAM_STATUS"/>
-        <element name="ICAL_2_4_IGXPROP_STATUS"/>
-        <element name="ICAL_2_5_IGXPARAM_STATUS"/>
-        <element name="ICAL_2_6_IGCOMP_STATUS"/>
-        <element name="ICAL_2_7_FORWARD_STATUS"/>
-        <element name="ICAL_2_8_ONEEVENT_STATUS"/>
-        <element name="ICAL_2_9_TRUNC_STATUS"/>
-        <element name="ICAL_2_10_ONETODO_STATUS"/>
-        <element name="ICAL_2_11_TRUNCRRULE_STATUS"/>
-        <element name="ICAL_3_0_INVPROPNAME_STATUS"/>
-        <element name="ICAL_3_1_INVPROPVAL_STATUS"/>
-        <element name="ICAL_3_2_INVPARAM_STATUS"/>
-        <element name="ICAL_3_3_INVPARAMVAL_STATUS"/>
-        <element name="ICAL_3_4_INVCOMP_STATUS"/>
-        <element name="ICAL_3_5_INVTIME_STATUS"/>
-        <element name="ICAL_3_6_INVRULE_STATUS"/>
-        <element name="ICAL_3_7_INVCU_STATUS"/>
-        <element name="ICAL_3_8_NOAUTH_STATUS"/>
-        <element name="ICAL_3_9_BADVERSION_STATUS"/>
-        <element name="ICAL_3_10_TOOBIG_STATUS"/>
-        <element name="ICAL_3_11_MISSREQCOMP_STATUS"/>
-        <element name="ICAL_3_12_UNKCOMP_STATUS"/>
-        <element name="ICAL_3_13_BADCOMP_STATUS"/>
-        <element name="ICAL_3_14_NOCAP_STATUS"/>
-        <element name="ICAL_3_15_INVCOMMAND"/>
-        <element name="ICAL_4_0_BUSY_STATUS"/>
-        <element name="ICAL_4_1_STORE_ACCESS_DENIED"/>
-        <element name="ICAL_4_2_STORE_FAILED"/>
-        <element name="ICAL_4_3_STORE_NOT_FOUND"/>
-        <element name="ICAL_5_0_MAYBE_STATUS"/>
-        <element name="ICAL_5_1_UNAVAIL_STATUS"/>
-        <element name="ICAL_5_2_NOSERVICE_STATUS"/>
-        <element name="ICAL_5_3_NOSCHED_STATUS"/>
-        <element name="ICAL_6_1_CONTAINER_NOT_FOUND"/>
-		<element name="ICAL_9_0_UNRECOGNIZED_COMMAND"/>
-    </enum>
-    <method name="i_cal_request_status_desc" corresponds="icalenum_reqstat_desc" since="1.0">
-        <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be translated"/>
-        <returns type="const gchar *" comment="The description of the @stat" />
-        <comment xml:space="preserve">Returns the descriptive text for a request status.</comment>
-    </method>
-    <method name="i_cal_request_status_major" corresponds="icalenum_reqstat_major" since="1.0">
-        <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be queried"/>
-        <returns type="gshort" comment="The major number for a request status" />
-        <comment xml:space="preserve">Returns the major number for a request status.</comment>
-    </method>
-    <method name="i_cal_request_status_minor" corresponds="icalenum_reqstat_minor" since="1.0">
-        <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be queried"/>
-        <returns type="gshort" comment="The minor number for a request status" />
-        <comment xml:space="preserve">Returns the minor number for a request status.</comment>
-    </method>
-    <method name="i_cal_request_status_from_num" corresponds="icalenum_num_to_reqstat" since="1.0">
-        <parameter type="gshort" name="major" comment="The major number"/>
-        <parameter type="gshort" name="minor" comment="The minor number"/>
-        <returns type="ICalRequestStatus" comment="The corresponding #ICalRequestStatus" />
-        <comment xml:space="preserve">Returns a request status for major/minor status numbers.</comment>
-    </method>
-    <method name="i_cal_request_status_code" corresponds="icalenum_reqstat_code_r" since="1.0">
-        <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be queried"/>
-        <returns type="gchar *" annotation="transfer full" comment="The code for a request status" translator="i_cal_memory_str_to_glib"/>
-        <comment xml:space="preserve">Returns the code for a request status.</comment>
-    </method>
+  <enum name="ICalComponentKind" native_name="icalcomponent_kind" default_native="I_CAL_NO_COMPONENT">
+    <element name="ICAL_NO_COMPONENT"/>
+    <element name="ICAL_ANY_COMPONENT"/>
+    <element name="ICAL_XROOT_COMPONENT"/>
+    <element name="ICAL_XATTACH_COMPONENT"/>
+    <element name="ICAL_VEVENT_COMPONENT"/>
+    <element name="ICAL_VTODO_COMPONENT"/>
+    <element name="ICAL_VJOURNAL_COMPONENT"/>
+    <element name="ICAL_VCALENDAR_COMPONENT"/>
+    <element name="ICAL_VAGENDA_COMPONENT"/>
+    <element name="ICAL_VFREEBUSY_COMPONENT"/>
+    <element name="ICAL_VALARM_COMPONENT"/>
+    <element name="ICAL_XAUDIOALARM_COMPONENT"/>
+    <element name="ICAL_XDISPLAYALARM_COMPONENT"/>
+    <element name="ICAL_XEMAILALARM_COMPONENT"/>
+    <element name="ICAL_XPROCEDUREALARM_COMPONENT"/>
+    <element name="ICAL_VTIMEZONE_COMPONENT"/>
+    <element name="ICAL_XSTANDARD_COMPONENT"/>
+    <element name="ICAL_XDAYLIGHT_COMPONENT"/>
+    <element name="ICAL_X_COMPONENT"/>
+    <element name="ICAL_VSCHEDULE_COMPONENT"/>
+    <element name="ICAL_VQUERY_COMPONENT"/>
+    <element name="ICAL_VREPLY_COMPONENT"/>
+    <element name="ICAL_VCAR_COMPONENT"/>
+    <element name="ICAL_VCOMMAND_COMPONENT"/>
+    <element name="ICAL_XLICINVALID_COMPONENT"/>
+    <element name="ICAL_XLICMIMEPART_COMPONENT"/>
+    <element name="ICAL_VAVAILABILITY_COMPONENT"/>
+    <element name="ICAL_XAVAILABLE_COMPONENT"/>
+    <element name="ICAL_VPOLL_COMPONENT"/>
+    <element name="ICAL_VVOTER_COMPONENT"/>
+    <element name="ICAL_XVOTE_COMPONENT"/>
+    <element name="ICAL_VPATCH_COMPONENT"/>
+    <element name="ICAL_XPATCH_COMPONENT"/>
+    <element name="ICAL_PARTICIPANT_COMPONENT"/>
+    <element name="ICAL_VLOCATION_COMPONENT"/>
+    <element name="ICAL_VRESOURCE_COMPONENT"/>
+    <element name="ICAL_NUM_COMPONENT_TYPES"/>
+  </enum>
+  <enum name="ICalRequestStatus" native_name="icalrequeststatus" default_native="I_CAL_UNKNOWN_STATUS">
+    <element name="ICAL_UNKNOWN_STATUS"/>
+    <element name="ICAL_2_0_SUCCESS_STATUS"/>
+    <element name="ICAL_2_1_FALLBACK_STATUS"/>
+    <element name="ICAL_2_2_IGPROP_STATUS"/>
+    <element name="ICAL_2_3_IGPARAM_STATUS"/>
+    <element name="ICAL_2_4_IGXPROP_STATUS"/>
+    <element name="ICAL_2_5_IGXPARAM_STATUS"/>
+    <element name="ICAL_2_6_IGCOMP_STATUS"/>
+    <element name="ICAL_2_7_FORWARD_STATUS"/>
+    <element name="ICAL_2_8_ONEEVENT_STATUS"/>
+    <element name="ICAL_2_9_TRUNC_STATUS"/>
+    <element name="ICAL_2_10_ONETODO_STATUS"/>
+    <element name="ICAL_2_11_TRUNCRRULE_STATUS"/>
+    <element name="ICAL_3_0_INVPROPNAME_STATUS"/>
+    <element name="ICAL_3_1_INVPROPVAL_STATUS"/>
+    <element name="ICAL_3_2_INVPARAM_STATUS"/>
+    <element name="ICAL_3_3_INVPARAMVAL_STATUS"/>
+    <element name="ICAL_3_4_INVCOMP_STATUS"/>
+    <element name="ICAL_3_5_INVTIME_STATUS"/>
+    <element name="ICAL_3_6_INVRULE_STATUS"/>
+    <element name="ICAL_3_7_INVCU_STATUS"/>
+    <element name="ICAL_3_8_NOAUTH_STATUS"/>
+    <element name="ICAL_3_9_BADVERSION_STATUS"/>
+    <element name="ICAL_3_10_TOOBIG_STATUS"/>
+    <element name="ICAL_3_11_MISSREQCOMP_STATUS"/>
+    <element name="ICAL_3_12_UNKCOMP_STATUS"/>
+    <element name="ICAL_3_13_BADCOMP_STATUS"/>
+    <element name="ICAL_3_14_NOCAP_STATUS"/>
+    <element name="ICAL_3_15_INVCOMMAND"/>
+    <element name="ICAL_4_0_BUSY_STATUS"/>
+    <element name="ICAL_4_1_STORE_ACCESS_DENIED"/>
+    <element name="ICAL_4_2_STORE_FAILED"/>
+    <element name="ICAL_4_3_STORE_NOT_FOUND"/>
+    <element name="ICAL_5_0_MAYBE_STATUS"/>
+    <element name="ICAL_5_1_UNAVAIL_STATUS"/>
+    <element name="ICAL_5_2_NOSERVICE_STATUS"/>
+    <element name="ICAL_5_3_NOSCHED_STATUS"/>
+    <element name="ICAL_6_1_CONTAINER_NOT_FOUND"/>
+    <element name="ICAL_9_0_UNRECOGNIZED_COMMAND"/>
+  </enum>
+  <method name="i_cal_request_status_desc" corresponds="icalenum_reqstat_desc" since="1.0">
+    <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be translated"/>
+    <returns type="const gchar *" comment="The description of the @stat"/>
+    <comment xml:space="preserve">Returns the descriptive text for a request status.</comment>
+  </method>
+  <method name="i_cal_request_status_major" corresponds="icalenum_reqstat_major" since="1.0">
+    <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be queried"/>
+    <returns type="gshort" comment="The major number for a request status"/>
+    <comment xml:space="preserve">Returns the major number for a request status.</comment>
+  </method>
+  <method name="i_cal_request_status_minor" corresponds="icalenum_reqstat_minor" since="1.0">
+    <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be queried"/>
+    <returns type="gshort" comment="The minor number for a request status"/>
+    <comment xml:space="preserve">Returns the minor number for a request status.</comment>
+  </method>
+  <method name="i_cal_request_status_from_num" corresponds="icalenum_num_to_reqstat" since="1.0">
+    <parameter type="gshort" name="major" comment="The major number"/>
+    <parameter type="gshort" name="minor" comment="The minor number"/>
+    <returns type="ICalRequestStatus" comment="The corresponding #ICalRequestStatus"/>
+    <comment xml:space="preserve">Returns a request status for major/minor status numbers.</comment>
+  </method>
+  <method name="i_cal_request_status_code" corresponds="icalenum_reqstat_code_r" since="1.0">
+    <parameter type="ICalRequestStatus" name="stat" comment="The #ICalRequestStatus to be queried"/>
+    <returns type="gchar *" annotation="transfer full" comment="The code for a request status" translator="i_cal_memory_str_to_glib"/>
+    <comment xml:space="preserve">Returns the code for a request status.</comment>
+  </method>
 </structure>

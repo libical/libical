@@ -4,9 +4,7 @@
  * @brief   Implementation of C++ Wrapper for icalcomponent.c
  *
  * SPDX-FileCopyrightText: 2001, Critical Path
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 */
 
 #ifdef HAVE_CONFIG_H
@@ -46,10 +44,12 @@ VComponent &VComponent::operator=(const VComponent &v)
 
     if (imp != NULL) {
         icalcomponent_free(imp);
-        imp = icalcomponent_clone(v.imp);
-        if (imp == NULL) {
-            throw icalerrno;
-        }
+        imp = NULL;
+    }
+
+    imp = icalcomponent_clone(v.imp);
+    if (imp == NULL) {
+        throw icalerrno;
     }
 
     return *this;
@@ -73,31 +73,6 @@ VComponent::VComponent(icalcomponent *v)
 }
 
 /* char* returned is in the ring buffer. caller doesn't have to free it */
-char *VComponent::quote_ical_string(char *str)
-{
-    const char *p;
-    size_t buf_sz;
-    buf_sz = strlen(str) * 2; // assume worse case scenarios.
-    // otherwise, we have to parse the string and count \ */
-    char *out = static_cast<char *>(icalmemory_new_buffer(buf_sz)); /* memory from the ring buf */
-    char *pout;
-
-    if (out == 0) {
-        return 0;
-    }
-
-    pout = out;
-
-    for (p = str; *p != 0; p++) {
-        if (*p == '\\') {
-            *pout++ = '\\';
-        }
-        *pout++ = *p;
-    }
-    *pout++ = '\0';
-
-    return out;
-}
 
 /**
  * @brief Constructor
@@ -534,17 +509,6 @@ int VComponent::recurrence_is_excluded(struct icaltimetype *dtstart,
     return icalproperty_recurrence_is_excluded(imp, dtstart, recurtime);
 }
 
-/* Internal operations. They are private, and you should not be using them. */
-VComponent *VComponent::get_parent()
-{
-    return new VComponent(icalcomponent_get_parent(imp));
-}
-
-void VComponent::set_parent(VComponent *parent)
-{
-    icalcomponent_set_parent(imp, *parent);
-}
-
 /* ignoreValue means remove properties even if the data doesn't match */
 bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
 {
@@ -559,10 +523,10 @@ bool VComponent::remove(VComponent &fromVC, bool ignoreValue)
          propToBeRemoved != NULL;
          propToBeRemoved = fromVC.get_next_property(ICAL_ANY_PROPERTY)) {
         /* loop through properties from this component */
-        ICalPropertyTmpPtr next;
+        ICalPropertyTmpPtr next_prop;
         ICalPropertyTmpPtr p;
-        for (p = this->get_first_property(propToBeRemoved->isa()); p != NULL; p = next) {
-            next = this->get_next_property(propToBeRemoved->isa());
+        for (p = this->get_first_property(propToBeRemoved->isa()); p != NULL; p = next_prop) {
+            next_prop = this->get_next_property(propToBeRemoved->isa());
             if (ignoreValue) {
                 this->remove_property(p);
             } else {
@@ -963,8 +927,8 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
                         // dtend from the dtstart.
                         struct icaltimetype recur_time = c.get_recurrenceid();
                         if (icaltime_is_null_time(recur_time) != 1) {
-                            struct icaldurationtype dur = icaltime_subtract(c.get_dtstart(), tt);
-                            tt = icaltime_add(recur_time, dur);
+                            struct icaldurationtype dur = icalduration_from_times(c.get_dtstart(), tt);
+                            tt = icalduration_extend(recur_time, dur);
                         }
                     } else if (c.isa() == ICAL_VTODO_COMPONENT) {
                         tt = c.get_due();
@@ -1010,7 +974,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
         };
 
         // now offset using tr.duration
-        tr->time = icaltime_add(tt, tr->duration);
+        tr->time = icalduration_extend(tt, tr->duration);
     }
     // else absolute time trigger
 

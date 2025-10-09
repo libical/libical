@@ -168,12 +168,12 @@ add_custom_target(
 )
 
 # GObject Introspection
-if(GOBJECT_INTROSPECTION)
+if(LIBICAL_GOBJECT_INTROSPECTION)
   include(GObjectIntrospectionMacros)
   set(GObjectIntrospection_GIRS)
 
-  set(LIBICAL_GIR_VERSION_STRING "${LIBICAL_LIB_MAJOR_VERSION}.0")
-  set(LIB_VERSION "${LIBICAL_LIB_MAJOR_VERSION}_0")
+  set(LIBICAL_GIR_VERSION_STRING "${LIBICAL_LIB_MAJOR_SOVERSION}.0")
+  set(LIB_VERSION "${LIBICAL_LIB_MAJOR_SOVERSION}_0")
   set(ICal_${LIB_VERSION}_gir "libical")
   set(ICal_${LIB_VERSION}_gir_VERSION ${LIBICAL_GIR_VERSION_STRING})
   set(
@@ -211,28 +211,31 @@ set(
   icalattach.c
   icalcomponent.c
   icalcomponent.h
+  icalenumarray.c
+  icalenumarray.h
   icalenums.c
   icalenums.h
   icalerror.c
   icalerror.h
   icalmemory.c
   icalmemory.h
-  icalmime.c
-  icalmime.h
   icalparameter.c
   icalparameter.h
   icalparameterimpl.h
   icalparser.c
   icalparser.h
+  icalproperty_p.h
   icalproperty.c
   icalproperty.h
   icalrecur.c
   icalrecur.h
   icalrestriction.h
+  icalstrarray.c
+  icalstrarray.h
   icaltime.c
   icaltime.h
-  icaltz-util.c
-  icaltz-util.h
+  icaltimezone_p.c
+  icaltimezone_p.h
   icaltimezone.c
   icaltimezone.h
   icaltimezoneimpl.h
@@ -245,16 +248,14 @@ set(
   icalvalue.c
   icalvalue.h
   icalvalueimpl.h
-  pvl.c
-  pvl.h
-  sspm.c
-  sspm.h
+  icalpvl.c
+  icalpvl.h
   qsort_gen.c
   qsort_gen.h
   icallangbind.h
   icallangbind.c
-  caldate.c
-  astime.h
+  icaldate_p.c
+  icaldate_p.h
   byref.c
 )
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
@@ -279,12 +280,6 @@ add_library(
   ${ical_LIB_SRCS}
 )
 add_dependencies(ical ical-header)
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  add_library(ical-static STATIC ${ical_LIB_SRCS})
-  add_dependencies(ical-static ical-header)
-elseif(STATIC_ONLY)
-  add_library(ical-static ALIAS ical)
-endif()
 
 target_include_directories(ical INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
 
@@ -311,30 +306,13 @@ if(MSVC)
       PREFIX
         "lib"
   )
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      ical-static
-      PROPERTIES
-        PREFIX
-          "lib"
-    )
-  endif()
-else()
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      ical-static
-      PROPERTIES
-        OUTPUT_NAME
-          "ical"
-    )
-  endif()
 endif()
 if(NOT ANDROID)
   set_target_properties(
     ical
     PROPERTIES
       VERSION
-        ${LIBICAL_LIB_VERSION_STRING}
+        ${CMAKE_PROJECT_VERSION}
       SOVERSION
         ${LIBICAL_LIB_SOVERSION_STRING}
   )
@@ -345,35 +323,16 @@ set_target_properties(
     CLEAN_DIRECT_OUTPUT
       1
 )
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  set_target_properties(
-    ical-static
-    PROPERTIES
-      CLEAN_DIRECT_OUTPUT
-        1
-  )
-endif()
 
-install(
-  TARGETS
-    ical
-  EXPORT icalTargets
-  DESTINATION
-  ${INSTALL_TARGETS_DEFAULT_ARGS}
-)
-if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-  install(
-    TARGETS
-      ical-static
-    EXPORT icalTargets
-    DESTINATION
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
-  )
-endif()
+install(TARGETS ical EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libical.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libical.pc @ONLY)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libical.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
 ########### next target ###############
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   set(
     icalcxx_LIB_SRCS
     icalparameter_cxx.cpp
@@ -395,12 +354,6 @@ if(WITH_CXX_BINDINGS)
     ${icalcxx_LIB_SRCS}
   )
   add_dependencies(ical_cxx ical-header)
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    add_library(ical_cxx-static STATIC ${icalcxx_LIB_SRCS})
-    add_dependencies(ical_cxx-static ical-header)
-  elseif(STATIC_ONLY)
-    add_library(ical_cxx-static ALIAS ical_cxx)
-  endif()
   target_link_libraries(ical_cxx ical)
   if(DEFINED CMAKE_THREAD_LIBS_INIT)
     target_link_libraries(ical_cxx ${CMAKE_THREAD_LIBS_INIT})
@@ -413,23 +366,6 @@ if(WITH_CXX_BINDINGS)
         PREFIX
           "lib"
     )
-    if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-      set_target_properties(
-        ical_cxx-static
-        PROPERTIES
-          PREFIX
-            "lib"
-      )
-    endif()
-  else()
-    if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-      set_target_properties(
-        ical_cxx-static
-        PROPERTIES
-          OUTPUT_NAME
-            "ical_cxx"
-      )
-    endif()
   endif()
 
   if(NOT ANDROID)
@@ -437,7 +373,7 @@ if(WITH_CXX_BINDINGS)
       ical_cxx
       PROPERTIES
         VERSION
-          ${LIBICAL_LIB_VERSION_STRING}
+          ${CMAKE_PROJECT_VERSION}
         SOVERSION
           ${LIBICAL_LIB_SOVERSION_STRING}
     )
@@ -448,31 +384,8 @@ if(WITH_CXX_BINDINGS)
       CLEAN_DIRECT_OUTPUT
         1
   )
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    set_target_properties(
-      ical_cxx-static
-      PROPERTIES
-        CLEAN_DIRECT_OUTPUT
-          1
-    )
-  endif()
 
-  install(
-    TARGETS
-      ical_cxx
-    EXPORT icalTargets
-    DESTINATION
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
-  )
-  if(NOT SHARED_ONLY AND NOT STATIC_ONLY)
-    install(
-      TARGETS
-        ical_cxx-static
-      EXPORT icalTargets
-      DESTINATION
-      ${INSTALL_TARGETS_DEFAULT_ARGS}
-    )
-  endif()
+  install(TARGETS ical_cxx EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 
   if(MSVC)
     remove_definitions(-DBUILD_LIBICALDLL)
@@ -489,31 +402,30 @@ install(
     icalcomponent.h
     ${BUILT_HEADERS}
     icalduration.h
+    icalenumarray.h
     icalenums.h
     icalerror.h
     icallangbind.h
     icalmemory.h
-    icalmime.h
     icalparameter.h
     icalparser.h
     icalperiod.h
     icalproperty.h
     icalrecur.h
     icalrestriction.h
+    icalstrarray.h
     ${PROJECT_BINARY_DIR}/src/libical/icaltime.h
-    icaltz-util.h
     icaltimezone.h
     icaltypes.h
     icalvalue.h
     libical_deprecated.h
     libical_sentinel.h
     libical_ical_export.h
-    pvl.h
-    sspm.h
+    icalpvl.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
 
-if(WITH_CXX_BINDINGS)
+if(LIBICAL_CXX_BINDINGS)
   install(
     FILES
       icalparameter_cxx.h

@@ -3,10 +3,7 @@
  CREATOR: eric 20 April 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
-  The original code is icalparser.h
 ======================================================================*/
 
 #ifndef ICALPARSER_H
@@ -190,7 +187,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_clean(icalparser *parser);
  *
  * icalparser_free(parser);
  */
-LIBICAL_ICAL_EXPORT icalparser_state icalparser_get_state(icalparser *parser);
+LIBICAL_ICAL_EXPORT icalparser_state icalparser_get_state(const icalparser *parser);
 
 /**
  * @brief Frees an icalparser object.
@@ -307,7 +304,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalparser_parse_string(const char *str);
  * @enum icalparser_ctrl
  * @brief Defines how to handle invalid CONTROL characters in content lines
  */
-enum icalparser_ctrl
+typedef enum icalparser_ctrl
 {
     /** Keep CONTROL characters in content-line */
     ICALPARSER_CTRL_KEEP,
@@ -315,7 +312,7 @@ enum icalparser_ctrl
     ICALPARSER_CTRL_OMIT,
     /** Insert a X-LIC-ERROR instead of content-line */
     ICALPARSER_CTRL_ERROR
-};
+} icalparser_ctrl;
 
 /**
  * @brief Get the current parser setting how to handle CONTROL characters

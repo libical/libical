@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
+  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<structure namespace="ICalVcard" name="DerivedValue">
+  <enum name="ICalVcardNField" native_name="vcard_n_field" default_native="I_CAL_VCARD_NUM_N_FIELDS">
+    <element name="VCARD_N_FAMILY"/>
+    <element name="VCARD_N_GIVEN"/>
+    <element name="VCARD_N_ADDITIONAL"/>
+    <element name="VCARD_N_PREFIX"/>
+    <element name="VCARD_N_SUFFIX"/>
+    <element name="VCARD_N_SECONDARY"/>
+    <element name="VCARD_N_GENERATION"/>
+    <element name="VCARD_NUM_N_FIELDS"/>
+  </enum>
+  <enum name="ICalVcardGenderField" native_name="vcard_gender_field" default_native="I_CAL_VCARD_NUM_GENDER_FIELDS">
+    <element name="VCARD_GENDER_SEX"/>
+    <element name="VCARD_GENDER_TEXT"/>
+    <element name="VCARD_NUM_GENDER_FIELDS"/>
+  </enum>
+  <enum name="ICalVcardAdrField" native_name="vcard_adr_field" default_native="I_CAL_VCARD_NUM_ADR_FIELDS">
+    <element name="VCARD_ADR_PO_BOX"/>
+    <element name="VCARD_ADR_EXTENDED"/>
+    <element name="VCARD_ADR_STREET"/>
+    <element name="VCARD_ADR_LOCALITY"/>
+    <element name="VCARD_ADR_REGION"/>
+    <element name="VCARD_ADR_POSTAL_CODE"/>
+    <element name="VCARD_ADR_COUNTRY"/>
+    <element name="VCARD_ADR_ROOM"/>
+    <element name="VCARD_ADR_APARTMENT"/>
+    <element name="VCARD_ADR_FLOOR"/>
+    <element name="VCARD_ADR_STREET_NUMBER"/>
+    <element name="VCARD_ADR_STREET_NAME"/>
+    <element name="VCARD_ADR_BUILDING"/>
+    <element name="VCARD_ADR_BLOCK"/>
+    <element name="VCARD_ADR_SUBDISTRICT"/>
+    <element name="VCARD_ADR_DISTRICT"/>
+    <element name="VCARD_ADR_LANDMARK"/>
+    <element name="VCARD_ADR_DIRECTION"/>
+    <element name="VCARD_NUM_ADR_FIELDS"/>
+  </enum>
+  <enum name="ICalVcardClientpidmapField" native_name="vcard_clientpidmap_field" default_native="I_CAL_VCARD_NUM_CLIENTPIDMAP_FIELDS">
+    <element name="VCARD_CLIENTPIDMAP_ID"/>
+    <element name="VCARD_CLIENTPIDMAP_URI"/>
+    <element name="VCARD_NUM_CLIENTPIDMAP_FIELDS"/>
+  </enum>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="X" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="x"/>
+  <method name="i_cal_vcard_value_reset_kind" corresponds="vcardvalue_reset_kind" kind="other" since="4.0">
+    <parameter type="ICalVcardValue *" name="value" comment="The #ICalVcardValue to be queried"/>
+    <comment>Reset's the value's kind.</comment>
+  </method>
+  <method name="priv_i_cal_vcardstructuredtype_clone" corresponds="none" kind="private" since="4.0" annotation="skip">
+    <parameter type="const vcardstructuredtype *" name="src" annotation="transfer none" comment="vcardstructuredtype to clone"/>
+    <returns type="vcardstructuredtype *" annotation="transfer full" comment="The newly created vcardstructuredtype"/>
+    <custom>    guint ii;
+    vcardstructuredtype *res;
+    if (src == NULL)
+        return NULL;
+    res = vcardstructured_new();
+    res-&gt;num_fields = src-&gt;num_fields;
+    for (ii = 0; ii &lt; src-&gt;num_fields; ii++) {
+        vcardstrarray *field = src-&gt;field[ii];
+        res-&gt;field[ii] = field ? vcardstrarray_clone(field) : NULL;
+    }
+    return res;</custom>
+  </method>
+  <method-from-template name="vcardstructured" obj-type="ICalVcardValue" native-type="vcardvalue" value-name="STRUCTURED" since="4.0" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="structured"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="GEO" since="4.0" value-get-type="ICalVcardGeo *" value-set-type="const ICalVcardGeo *" value-set-type-ref="#ICalVcardGeo" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="geo"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="TZ" since="4.0" value-get-type="ICalVcardTz *" value-set-type="const ICalVcardTz *" value-set-type-ref="#ICalVcardTz" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="tz"/>
+  <enum name="ICalVcardValueKind" native_name="vcardvalue_kind" default_native="I_CAL_VCARD_NO_VALUE">
+    <element name="VCARD_ANY_VALUE"/>
+    <element name="VCARD_BOOLEAN_VALUE"/>
+    <element name="VCARD_DATE_VALUE"/>
+    <element name="VCARD_DATEANDORTIME_VALUE"/>
+    <element name="VCARD_DATETIME_VALUE"/>
+    <element name="VCARD_FLOAT_VALUE"/>
+    <element name="VCARD_GEO_VALUE"/>
+    <element name="VCARD_GRAMGENDER_VALUE"/>
+    <element name="VCARD_INTEGER_VALUE"/>
+    <element name="VCARD_KIND_VALUE"/>
+    <element name="VCARD_LANGUAGETAG_VALUE"/>
+    <element name="VCARD_STRUCTURED_VALUE"/>
+    <element name="VCARD_TEXT_VALUE"/>
+    <element name="VCARD_TEXTLIST_VALUE"/>
+    <element name="VCARD_TIME_VALUE"/>
+    <element name="VCARD_TIMESTAMP_VALUE"/>
+    <element name="VCARD_TZ_VALUE"/>
+    <element name="VCARD_URI_VALUE"/>
+    <element name="VCARD_UTCOFFSET_VALUE"/>
+    <element name="VCARD_VERSION_VALUE"/>
+    <element name="VCARD_X_VALUE"/>
+    <element name="VCARD_NO_VALUE"/>
+  </enum>
+  <enum name="ICalVcardPropertyGramgender" native_name="vcardproperty_gramgender" default_native="I_CAL_VCARD_GRAMGENDER_NONE">
+    <element name="VCARD_GRAMGENDER_X"/>
+    <element name="VCARD_GRAMGENDER_ANIMATE"/>
+    <element name="VCARD_GRAMGENDER_COMMON"/>
+    <element name="VCARD_GRAMGENDER_FEMININE"/>
+    <element name="VCARD_GRAMGENDER_INANIMATE"/>
+    <element name="VCARD_GRAMGENDER_MASCULINE"/>
+    <element name="VCARD_GRAMGENDER_NEUTER"/>
+    <element name="VCARD_GRAMGENDER_NONE"/>
+  </enum>
+  <enum name="ICalVcardPropertyKindenum" native_name="vcardproperty_kindenum" default_native="I_CAL_VCARD_KIND_NONE">
+    <element name="VCARD_KIND_X"/>
+    <element name="VCARD_KIND_INDIVIDUAL"/>
+    <element name="VCARD_KIND_GROUP"/>
+    <element name="VCARD_KIND_ORG"/>
+    <element name="VCARD_KIND_LOCATION"/>
+    <element name="VCARD_KIND_APPLICATION"/>
+    <element name="VCARD_KIND_DEVICE"/>
+    <element name="VCARD_KIND_NONE"/>
+  </enum>
+  <enum name="ICalVcardPropertyVersion" native_name="vcardproperty_version" default_native="I_CAL_VCARD_VERSION_NONE">
+    <element name="VCARD_VERSION_X"/>
+    <element name="VCARD_VERSION_21" alias="VCARD_VERSION_V21"/>
+    <element name="VCARD_VERSION_30" alias="VCARD_VERSION_V30"/>
+    <element name="VCARD_VERSION_40" alias="VCARD_VERSION_V40"/>
+    <element name="VCARD_VERSION_NONE"/>
+  </enum>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="BOOLEAN" since="4.0" value-get-type="gboolean" value-set-type="gboolean" value-set-type-ref="boolean" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="boolean"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="DATE" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="date"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="DATEANDORTIME" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="dateandortime"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="DATETIME" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="datetime"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="FLOAT" since="4.0" value-get-type="gdouble" value-set-type="gdouble" value-set-type-ref="double" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="float"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="GRAMGENDER" since="4.0" value-get-type="ICalVcardPropertyGramgender" value-set-type="ICalVcardPropertyGramgender" value-set-type-ref="#ICalVcardPropertyGramgender" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="gramgender"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="INTEGER" since="4.0" value-get-type="gint" value-set-type="gint" value-set-type-ref="integer" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="integer"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="KIND" since="4.0" value-get-type="ICalVcardPropertyKindenum" value-set-type="ICalVcardPropertyKindenum" value-set-type-ref="#ICalVcardPropertyKindenum" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="kind"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="LANGUAGETAG" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="languagetag"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="TEXT" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="text"/>
+  <method-from-template name="strarray-new-get-set" obj-type="ICalVcardValue" value-name="TEXTLIST" since="4.0" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="textlist" native-type="vcardvalue" binding-array-type="ICalVcardStrArray" binding-array-new-prefix="i_cal_vcard_str_array" native-array-type="vcardstrarray"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="TIME" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="time"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="TIMESTAMP" since="4.0" value-get-type="ICalVcardTime *" value-set-type="const ICalVcardTime *" value-set-type-ref="#ICalVcardTime" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="timestamp"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="URI" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="uri"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="UTCOFFSET" since="4.0" value-get-type="gint" value-set-type="gint" value-set-type-ref="integer" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="utcoffset"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="VERSION" since="4.0" value-get-type="ICalVcardPropertyVersion" value-set-type="ICalVcardPropertyVersion" value-set-type-ref="#ICalVcardPropertyVersion" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="version"/>
+</structure>
