@@ -18,14 +18,14 @@ static jfieldID ICalPeriodType_Start_FID;
 static jfieldID ICalPeriodType_End_FID;
 static jfieldID ICalPeriodType_Duration_FID;
 
-void initICalPeriodTypeFieldIDs(JNIEnv* env, jclass clazz)
+void initICalPeriodTypeFieldIDs(JNIEnv *env, jclass clazz)
 {
     ICalPeriodType_Start_FID = env->GetFieldID(clazz, "start", "Lnet/cp/jlibical/ICalTimeType;");
     ICalPeriodType_End_FID = env->GetFieldID(clazz, "end", "Lnet/cp/jlibical/ICalTimeType;");
     ICalPeriodType_Duration_FID = env->GetFieldID(clazz, "duration", "Lnet/cp/jlibical/ICalDurationType;");
 }
 
-void  jni_SetStart_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
+void jni_SetStart_in_ICalPeriodType(struct ICalPeriodType *__ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
 {
     jobject lcl_jobj0;
     lcl_jobj0 = env->GetObjectField(thisICalPeriodType, ICalPeriodType_Start_FID);
@@ -39,7 +39,7 @@ void  jni_SetStart_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, J
     jni_SetZone_in_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
 }
 
-void jni_GetStart_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
+void jni_GetStart_from_ICalPeriodType(struct ICalPeriodType *__ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
 {
     jobject lcl_jobj0;
     lcl_jobj0 = env->GetObjectField(thisICalPeriodType, ICalPeriodType_Start_FID);
@@ -53,7 +53,7 @@ void jni_GetStart_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, 
     jni_GetZone_from_ICalTimeType(&(__ICalPeriodType_->start), env, lcl_jobj0);
 }
 
-void  jni_SetEnd_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
+void jni_SetEnd_in_ICalPeriodType(struct ICalPeriodType *__ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
 {
     jobject lcl_jobj0;
     lcl_jobj0 = env->GetObjectField(thisICalPeriodType, ICalPeriodType_End_FID);
@@ -67,7 +67,7 @@ void  jni_SetEnd_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNI
     jni_SetZone_in_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
 }
 
-void jni_GetEnd_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
+void jni_GetEnd_from_ICalPeriodType(struct ICalPeriodType *__ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
 {
     jobject lcl_jobj0;
     lcl_jobj0 = env->GetObjectField(thisICalPeriodType, ICalPeriodType_End_FID);
@@ -81,7 +81,7 @@ void jni_GetEnd_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JN
     jni_GetZone_from_ICalTimeType(&(__ICalPeriodType_->end), env, lcl_jobj0);
 }
 
-void  jni_SetDuration_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
+void jni_SetDuration_in_ICalPeriodType(struct ICalPeriodType *__ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
 {
     jobject lcl_jobj0;
     lcl_jobj0 = env->GetObjectField(thisICalPeriodType, ICalPeriodType_Duration_FID);
@@ -93,7 +93,7 @@ void  jni_SetDuration_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_
     jni_SetSeconds_in_ICalDurationType(&(__ICalPeriodType_->duration), env, lcl_jobj0);
 }
 
-void jni_GetDuration_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
+void jni_GetDuration_from_ICalPeriodType(struct ICalPeriodType *__ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
 {
     jobject lcl_jobj0;
     lcl_jobj0 = env->GetObjectField(thisICalPeriodType, ICalPeriodType_Duration_FID);
@@ -106,7 +106,7 @@ void jni_GetDuration_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType
 }
 
 // copy all fields from the c struct (__ICalPeriodType_) to the java object (thisICalPeriodType).
-void jni_SetAll_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIEnv* env, jobject thisICalPeriodType)
+void jni_SetAll_in_ICalPeriodType(struct ICalPeriodType *__ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
 {
     jni_SetStart_in_ICalPeriodType(__ICalPeriodType_, env, thisICalPeriodType);
     jni_SetEnd_in_ICalPeriodType(__ICalPeriodType_, env, thisICalPeriodType);
@@ -114,7 +114,7 @@ void jni_SetAll_in_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIE
 }
 
 // copy all fields from the java object (thisICalPeriodType) to the c struct (__ICalPeriodType_).
-void jni_GetAll_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JNIEnv* env, jobject thisICalPeriodType)
+void jni_GetAll_from_ICalPeriodType(struct ICalPeriodType *__ICalPeriodType_, JNIEnv *env, jobject thisICalPeriodType)
 {
     jni_GetStart_from_ICalPeriodType(__ICalPeriodType_, env, thisICalPeriodType);
     jni_GetEnd_from_ICalPeriodType(__ICalPeriodType_, env, thisICalPeriodType);
@@ -126,11 +126,10 @@ void jni_GetAll_from_ICalPeriodType(struct ICalPeriodType* __ICalPeriodType_, JN
  * Method:    init
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalPeriodType_init__J
-  (JNIEnv* env, jobject thisICalPeriodType, jlong data)
+JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalPeriodType_init__J(JNIEnv *env, jobject thisICalPeriodType, jlong data)
 {
     // copy all fields from the c struct (data) to the java object (thisICalTimeType).
-    jni_SetAll_in_ICalPeriodType((ICalPeriodType*)data,env,thisICalPeriodType);
+    jni_SetAll_in_ICalPeriodType((ICalPeriodType *)data, env, thisICalPeriodType);
 }
 
 /*
@@ -138,6 +137,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalPeriodType_init__J
  * Method:    initFIDs
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalPeriodType_initFIDs(JNIEnv *env, jclass clazz) {
+JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalPeriodType_initFIDs(JNIEnv *env, jclass clazz)
+{
     initICalPeriodTypeFieldIDs(env, clazz);
 }

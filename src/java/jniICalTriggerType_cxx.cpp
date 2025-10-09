@@ -16,13 +16,13 @@
 static jfieldID ICalTriggerType_Time_FID;
 static jfieldID ICalTriggerType_Duration_FID;
 
-void initICalTriggerTypeFieldIDs(JNIEnv* env, jclass clazz)
+void initICalTriggerTypeFieldIDs(JNIEnv *env, jclass clazz)
 {
     ICalTriggerType_Time_FID = env->GetFieldID(clazz, "time", "Lnet/cp/jlibical/ICalTimeType;");
     ICalTriggerType_Duration_FID = env->GetFieldID(clazz, "duration", "Lnet/cp/jlibical/ICalDurationType;");
 }
 
-void  jni_SetTime_in_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType)
+void jni_SetTime_in_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType)
 {
     jobject lcl_jobj0;
     lcl_jobj0 = env->GetObjectField(thisICalTriggerType, ICalTriggerType_Time_FID);
@@ -36,7 +36,7 @@ void  jni_SetTime_in_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_,
     jni_SetZone_in_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
 }
 
-void jni_GetTime_from_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType)
+void jni_GetTime_from_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType)
 {
     jobject lcl_jobj0;
     lcl_jobj0 = env->GetObjectField(thisICalTriggerType, ICalTriggerType_Time_FID);
@@ -50,7 +50,7 @@ void jni_GetTime_from_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_
     jni_GetZone_from_ICalTimeType(&(__ICalTriggerType_->time), env, lcl_jobj0);
 }
 
-void  jni_SetDuration_in_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType)
+void jni_SetDuration_in_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType)
 {
     jobject lcl_jobj0;
     lcl_jobj0 = env->GetObjectField(thisICalTriggerType, ICalTriggerType_Duration_FID);
@@ -62,7 +62,7 @@ void  jni_SetDuration_in_ICalTriggerType(struct ICalTriggerType* __ICalTriggerTy
     jni_SetSeconds_in_ICalDurationType(&(__ICalTriggerType_->duration), env, lcl_jobj0);
 }
 
-void jni_GetDuration_from_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType)
+void jni_GetDuration_from_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType)
 {
     jobject lcl_jobj0;
     lcl_jobj0 = env->GetObjectField(thisICalTriggerType, ICalTriggerType_Duration_FID);
@@ -75,14 +75,14 @@ void jni_GetDuration_from_ICalTriggerType(struct ICalTriggerType* __ICalTriggerT
 }
 
 // copy all fields from the c struct (__ICalTriggerType_) to the java object (thisICalTriggerType).
-void jni_SetAll_in_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_, JNIEnv* env, jobject thisICalTriggerType)
+void jni_SetAll_in_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType)
 {
     jni_SetTime_in_ICalTriggerType(__ICalTriggerType_, env, thisICalTriggerType);
     jni_SetDuration_in_ICalTriggerType(__ICalTriggerType_, env, thisICalTriggerType);
 }
 
 // copy all fields from the java object (thisICalTriggerType) to the c struct (__ICalTriggerType_).
-void jni_GetAll_from_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_, JNIEnv* env, jobject thisICalTriggerType)
+void jni_GetAll_from_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType)
 {
     jni_GetTime_from_ICalTriggerType(__ICalTriggerType_, env, thisICalTriggerType);
     jni_GetDuration_from_ICalTriggerType(__ICalTriggerType_, env, thisICalTriggerType);
@@ -93,11 +93,10 @@ void jni_GetAll_from_ICalTriggerType(struct ICalTriggerType* __ICalTriggerType_,
  * Method:    init
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalTriggerType_init__J
-  (JNIEnv* env, jobject thisICalTriggerType, jlong data)
+JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalTriggerType_init__J(JNIEnv *env, jobject thisICalTriggerType, jlong data)
 {
     // copy all fields from the c struct (data) to the java object (thisICalTimeType).
-    jni_SetAll_in_ICalTriggerType((ICalTriggerType*)data,env,thisICalTriggerType);
+    jni_SetAll_in_ICalTriggerType((ICalTriggerType *)data, env, thisICalTriggerType);
 }
 
 /*
@@ -105,6 +104,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalTriggerType_init__J
  * Method:    initFIDs
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalTriggerType_initFIDs(JNIEnv *env, jclass clazz) {
+JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalTriggerType_initFIDs(JNIEnv *env, jclass clazz)
+{
     initICalTriggerTypeFieldIDs(env, clazz);
 }
