@@ -268,27 +268,16 @@ void icaltimezone_free(icaltimezone *zone, int free_struct)
  */
 static void icaltimezone_reset(icaltimezone *zone)
 {
-    if (zone->tzid) {
-        icalmemory_free_buffer(zone->tzid);
-    }
-
-    if (zone->location) {
-        icalmemory_free_buffer(zone->location);
-    }
-
-    if (zone->tznames) {
-        icalmemory_free_buffer(zone->tznames);
-    }
-
+    icalmemory_free_buffer(zone->tzid);
+    icalmemory_free_buffer(zone->location);
+    icalmemory_free_buffer(zone->tznames);
     if (zone->component) {
         icalcomponent_free(zone->component);
     }
 
     //    icaltimezone_changes_lock();
-    if (zone->changes) {
-        icalarray_free(zone->changes);
-        zone->changes = NULL;
-    }
+    icalarray_free(zone->changes);
+    zone->changes = NULL;
     //    icaltimezone_changes_unlock();
 
     icaltimezone_init(zone);
@@ -332,9 +321,7 @@ static bool icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcompon
         return false;
     }
 
-    if (zone->tzid) {
-        icalmemory_free_buffer(zone->tzid);
-    }
+    icalmemory_free_buffer(zone->tzid);
     zone->tzid = icalmemory_strdup(tzid);
 
     if (zone->component) {
@@ -342,14 +329,10 @@ static bool icaltimezone_get_vtimezone_properties(icaltimezone *zone, icalcompon
     }
     zone->component = component;
 
-    if (zone->location) {
-        icalmemory_free_buffer(zone->location);
-    }
+    icalmemory_free_buffer(zone->location);
     zone->location = icaltimezone_get_location_from_vtimezone(component);
 
-    if (zone->tznames) {
-        icalmemory_free_buffer(zone->tznames);
-    }
+    icalmemory_free_buffer(zone->tznames);
     zone->tznames = icaltimezone_get_tznames_from_vtimezone(component);
 
     return true;
@@ -549,11 +532,8 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
        matter. */
     icalarray_sort(changes, icaltimezone_compare_change_fn);
 
-    if (zone->changes) {
-        icalarray_free(zone->changes);
-        zone->changes = 0;
-    }
-
+    icalarray_free(zone->changes);
+    zone->changes = 0;
     zone->changes = changes;
     zone->end_year = end_year;
 }

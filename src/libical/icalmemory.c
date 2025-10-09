@@ -55,9 +55,7 @@ static void icalmemory_free_ring_byval(buffer_ring *br)
     int i;
 
     for (i = 0; i < BUFFER_RING_SIZE; i++) {
-        if (br->ring[i] != 0) {
-            icalmemory_free_buffer(br->ring[i]);
-        }
+        icalmemory_free_buffer(br->ring[i]);
     }
     icalmemory_free_buffer(br);
 }
@@ -70,10 +68,7 @@ static pthread_once_t ring_key_once = PTHREAD_ONCE_INIT;
 
 static void ring_destroy(void *buf)
 {
-    if (buf) {
-        icalmemory_free_ring_byval((buffer_ring *)buf);
-    }
-
+    icalmemory_free_ring_byval((buffer_ring *)buf);
     pthread_setspecific(ring_key, NULL);
 }
 
@@ -165,9 +160,7 @@ void icalmemory_add_tmp_buffer(void *buf)
     }
 
     /* Free buffers as their slots are overwritten */
-    if (br->ring[br->pos] != 0) {
-        icalmemory_free_buffer(br->ring[br->pos]);
-    }
+    icalmemory_free_buffer(br->ring[br->pos]);
 
     /* Assign the buffer to a slot */
     br->ring[br->pos] = buf;
