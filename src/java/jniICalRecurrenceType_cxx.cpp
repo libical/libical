@@ -26,7 +26,7 @@ static jfieldID ICalRecurrenceType_By_week_no_FID;
 static jfieldID ICalRecurrenceType_By_month_FID;
 static jfieldID ICalRecurrenceType_By_set_pos_FID;
 
-void initICalRecurrenceTypeFieldIDs(JNIEnv *env, jclass clazz)
+static void initICalRecurrenceTypeFieldIDs(JNIEnv *env, jclass clazz)
 {
     ICalRecurrenceType_Until_FID = env->GetFieldID(clazz, "until", "Lnet/cp/jlibical/ICalTimeType;");
     ICalRecurrenceType_Freq_FID = env->GetFieldID(clazz, "freq", "I");
