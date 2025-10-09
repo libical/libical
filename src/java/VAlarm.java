@@ -9,18 +9,15 @@
 package net.cp.jlibical;
 
 public class VAlarm extends VComponent {
-	public VAlarm()
-	{
-		super(ICalComponentKind.ICAL_VALARM_COMPONENT);
-	}
+    public VAlarm() {
+        super(ICalComponentKind.ICAL_VALARM_COMPONENT);
+    }
 
-	public VAlarm(long obj)
-	{
-		super(obj);
-	}
+    public VAlarm(long obj) {
+        super(obj);
+    }
 
-	public VAlarm(String str)
-	{
-		super(str);
-	}
+    public VAlarm(String str) {
+        super(str);
+    }
 }
