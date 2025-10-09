@@ -36,14 +36,14 @@ int main(int argc, char *argv[])
 
     std::string content;
     {
-        std::ifstream myfile(fname);
+        const std::ifstream myfile(fname);
         std::stringstream ss;
         ss << myfile.rdbuf();
         content = ss.str();
     }
 
     using vcardptr = std::unique_ptr<VObject, decltype(&cleanVObject)>;
-    vcardptr ptr(Parse_MIME((char *)content.c_str(), static_cast<unsigned long>(content.size())), cleanVObject);
+    const vcardptr ptr(Parse_MIME((char *)content.c_str(), static_cast<unsigned long>(content.size())), cleanVObject);
 
     return 0;
 }
