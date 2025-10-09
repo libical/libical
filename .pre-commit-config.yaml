@@ -25,7 +25,6 @@ repos:
   hooks:
   - id: clang-format
     exclude: ^(src/Net-ICal-Libical|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
-    exclude_types: [java]
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
   rev: v0.13.3

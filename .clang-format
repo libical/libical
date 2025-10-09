@@ -299,5 +299,10 @@ FixNamespaceComments: false
 ---
 Language:       JavaScript
 DisableFormat:  false
-IndentWidth: 4
+IndentWidth:    4
+---
+Language:       Java
+DisableFormat:  false
+IndentWidth:    4
+ColumnLimit:    0
 ---

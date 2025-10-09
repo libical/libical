@@ -7,8 +7,9 @@
 
 package net.cp.jlibical;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 public class LibIcalTest {
 
@@ -169,7 +170,7 @@ public class LibIcalTest {
         exrule.setFreq(ICalRecurrenceType.ICalRecurrenceTypeFrequency.ICAL_MINUTELY_RECURRENCE);
         exrule.setWeek_start(ICalRecurrenceType.ICalRecurrenceTypeWeekday.ICAL_SUNDAY_WEEKDAY);
 
-        short[] testArray = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61};
+        short[] testArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
         exrule.setBy_second(testArray);
         exrule.setBy_minute(testArray);
 
@@ -225,7 +226,7 @@ public class LibIcalTest {
         rrule.setFreq(ICalRecurrenceType.ICalRecurrenceTypeFrequency.ICAL_MINUTELY_RECURRENCE);
         rrule.setWeek_start(ICalRecurrenceType.ICalRecurrenceTypeWeekday.ICAL_SUNDAY_WEEKDAY);
 
-        short[] testHourArray = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
+        short[] testHourArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
         rrule.setBy_hour(testHourArray);
 
         rruleProp.set_rrule(rrule);
@@ -347,7 +348,7 @@ public class LibIcalTest {
         VComponent vc = new VComponent(content);
         assertNotNull(vc);
 
-        VEvent vEvent = (VEvent) vc.get_first_component(VComponent.ICalComponentKind.ICAL_VEVENT_COMPONENT);
+        VEvent vEvent = (VEvent)vc.get_first_component(VComponent.ICalComponentKind.ICAL_VEVENT_COMPONENT);
         assertNotNull(vEvent);
 
         assertEquals("Important Meeting", vEvent.get_summary());

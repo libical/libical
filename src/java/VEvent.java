@@ -9,18 +9,15 @@
 package net.cp.jlibical;
 
 public class VEvent extends VComponent {
-	public VEvent()
-	{
-		super(ICalComponentKind.ICAL_VEVENT_COMPONENT);
-	}
+    public VEvent() {
+        super(ICalComponentKind.ICAL_VEVENT_COMPONENT);
+    }
 
-	public VEvent(long obj)
-	{
-		super(obj);
-	}
+    public VEvent(long obj) {
+        super(obj);
+    }
 
-	public VEvent(String str)
-	{
-		super(str);
-	}
+    public VEvent(String str) {
+        super(str);
+    }
 }

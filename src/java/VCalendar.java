@@ -9,18 +9,15 @@
 package net.cp.jlibical;
 
 public class VCalendar extends VComponent {
-	public VCalendar()
-	{
-		super(ICalComponentKind.ICAL_VCALENDAR_COMPONENT);
-	}
+    public VCalendar() {
+        super(ICalComponentKind.ICAL_VCALENDAR_COMPONENT);
+    }
 
-	public VCalendar(long obj)
-	{
-		super(obj);
-	}
+    public VCalendar(long obj) {
+        super(obj);
+    }
 
-	public VCalendar(String str)
-	{
-		super(str);
-	}
+    public VCalendar(String str) {
+        super(str);
+    }
 }
