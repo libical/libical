@@ -104,9 +104,7 @@ void icalenumarray_remove_element_at(icalenumarray *array,
 
     icalenumarray_element *del = icalarray_element_at(array, position);
 
-    if (del->xvalue) {
-        icalmemory_free_buffer((char *)del->xvalue);
-    }
+    icalmemory_free_buffer((char *)del->xvalue);
     icalarray_remove_element_at(array, position);
 }
 
@@ -123,9 +121,7 @@ void icalenumarray_remove(icalenumarray *array, const icalenumarray_element *del
         if (enumcmp(elem, del)) {
             icalarray_set_element_at(array, elem, j++);
         } else {
-            if (elem->xvalue) {
-                icalmemory_free_buffer((char *)elem->xvalue);
-            }
+            icalmemory_free_buffer((char *)elem->xvalue);
         }
     }
 
@@ -140,9 +136,7 @@ void icalenumarray_free(icalenumarray *array)
 
     for (size_t i = 0; i < icalenumarray_size(array); i++) {
         icalenumarray_element *del = icalarray_element_at(array, i);
-        if (del->xvalue) {
-            icalmemory_free_buffer((char *)del->xvalue);
-        }
+        icalmemory_free_buffer((char *)del->xvalue);
     }
 
     icalarray_free(array);

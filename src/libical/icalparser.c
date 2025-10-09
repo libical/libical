@@ -106,7 +106,7 @@ void icalparser_free(icalparser *parser)
 {
     icalcomponent *c;
 
-    if (parser->root_component != 0) {
+    if (parser->root_component) {
         icalcomponent_free(parser->root_component);
     }
 
@@ -921,15 +921,13 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 ical_unknown_token_handling tokHandlingSetting =
                     ical_get_unknown_token_handling_setting();
                 if (tokHandlingSetting == ICAL_DISCARD_TOKEN) {
-                    if (name_heap) {
-                        icalmemory_free_buffer(name_heap);
-                        name_heap = 0;
-                    }
-                    if (pvalue_heap) {
-                        icalmemory_free_buffer(pvalue_heap);
-                        /* coverity[uninit_use] */
-                        pvalue_heap = 0;
-                    }
+                    icalmemory_free_buffer(name_heap);
+                    name_heap = 0;
+
+                    icalmemory_free_buffer(pvalue_heap);
+                    /* coverity[uninit_use] */
+                    pvalue_heap = 0;
+
                     continue;
                 }
 
@@ -992,15 +990,12 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 /* Reparse the parameter name and value with the new segment */
                 if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack),
                                                  pvalue_stack, sizeof(pvalue_stack))) {
-                    if (pvalue_heap) {
-                        icalmemory_free_buffer(pvalue_heap);
-                        /* coverity[uninit_use] */
-                        pvalue_heap = 0;
-                    }
-                    if (name_heap) {
-                        icalmemory_free_buffer(name_heap);
-                        name = 0;
-                    }
+                    icalmemory_free_buffer(pvalue_heap);
+                    /* coverity[uninit_use] */
+                    pvalue_heap = 0;
+
+                    icalmemory_free_buffer(name_heap);
+                    name = 0;
                     name_heap = parser_get_param_name_heap(str, &pvalue_heap);
                     pvalue = pvalue_heap;
                 }
@@ -1018,41 +1013,32 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                                  ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
                     tail = 0;
                     parser->state = ICALPARSER_ERROR;
-                    if (pvalue_heap) {
-                        icalmemory_free_buffer(pvalue_heap);
-                        pvalue = 0;
-                    }
-                    if (name_heap) {
-                        icalmemory_free_buffer(name_heap);
-                        name = 0;
-                    }
+
+                    icalmemory_free_buffer(pvalue_heap);
+                    pvalue = 0;
+
+                    icalmemory_free_buffer(name_heap);
+                    name = 0;
+
                     icalmemory_free_buffer(str);
                     str = NULL;
                     return 0;
                 } else {
-                    if (name_heap) {
-                        icalmemory_free_buffer(name_heap);
-                        name_heap = 0;
-                    }
-                    if (pvalue_heap) {
-                        icalmemory_free_buffer(pvalue_heap);
-                        pvalue_heap = 0;
-                    }
+                    icalmemory_free_buffer(name_heap);
+                    name_heap = 0;
+                    icalmemory_free_buffer(pvalue_heap);
+                    pvalue_heap = 0;
                     icalmemory_free_buffer(str);
                     str = NULL;
                     continue;
                 }
             }
 
-            if (pvalue_heap) {
-                icalmemory_free_buffer(pvalue_heap);
-                pvalue_heap = 0;
-            }
+            icalmemory_free_buffer(pvalue_heap);
+            pvalue_heap = 0;
 
-            if (name_heap) {
-                icalmemory_free_buffer(name_heap);
-                name_heap = 0;
-            }
+            icalmemory_free_buffer(name_heap);
+            name_heap = 0;
 
             if (param == 0) {
                 /* 'tail' defined above */

@@ -67,9 +67,7 @@ void icalparameter_free(icalparameter *param)
         }
     }
 
-    if (param->x_name != 0) {
-        icalmemory_free_buffer((void *)param->x_name);
-    }
+    icalmemory_free_buffer((void *)param->x_name);
 
     memset(param, 0, sizeof(icalparameter));
 
@@ -381,10 +379,7 @@ void icalparameter_set_xname(icalparameter *param, const char *v)
     icalerror_check_arg_rv((param != 0), "param");
     icalerror_check_arg_rv((v != 0), "v");
 
-    if (param->x_name != 0) {
-        icalmemory_free_buffer((void *)param->x_name);
-    }
-
+    icalmemory_free_buffer((void *)param->x_name);
     param->x_name = icalmemory_strdup(v);
 
     if (param->x_name == 0) {
@@ -404,10 +399,7 @@ void icalparameter_set_xvalue(icalparameter *param, const char *v)
     icalerror_check_arg_rv((param != 0), "param");
     icalerror_check_arg_rv((v != 0), "v");
 
-    if (param->string != 0) {
-        icalmemory_free_buffer((void *)param->string);
-    }
-
+    icalmemory_free_buffer((void *)param->string);
     param->string = icalmemory_strdup(v);
 
     if (param->string == 0) {

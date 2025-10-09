@@ -70,17 +70,12 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
     }
 
     icalerrno = e;
-
     icalmemory_free_buffer(s);
-
     return p;
 
 error:
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-
-    if (s) {
-        icalmemory_free_buffer(s);
-    }
+    icalmemory_free_buffer(s);
     return null_p;
 }
 

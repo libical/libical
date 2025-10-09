@@ -42,10 +42,8 @@ VComponent &VComponent::operator=(const VComponent &v)
         return *this;
     }
 
-    if (imp != NULL) {
-        icalcomponent_free(imp);
-        imp = NULL;
-    }
+    icalcomponent_free(imp);
+    imp = NULL;
 
     imp = icalcomponent_clone(v.imp);
     if (imp == NULL) {
@@ -62,9 +60,7 @@ void VComponent::detach()
 
 VComponent::~VComponent()
 {
-    if (imp != NULL) {
-        icalcomponent_free(imp);
-    }
+    icalcomponent_free(imp);
 }
 
 VComponent::VComponent(icalcomponent *v)
@@ -133,9 +129,7 @@ int VComponent::isa_component(void *component)
 
 void VComponent::new_from_string(const std::string &str)
 {
-    if (imp != NULL) {
-        icalcomponent_free(imp);
-    }
+    icalcomponent_free(imp);
     imp = icalcomponent_new_from_string(str.c_str());
 }
 
