@@ -116,7 +116,7 @@ VComponent *ICalSpanList::get_vfreebusy(const char *organizer, const char *atten
 std::vector<int> ICalSpanList::as_vector(int delta_t)
 {
     int *matrix;
-    int i = 0;
+    const int i = 0;
     std::vector<int> event_vec;
 
     matrix = icalspanlist_as_freebusy_matrix(data, delta_t);

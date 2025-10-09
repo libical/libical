@@ -172,7 +172,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1parameter_1as_1
 
         if (szName != NULL)
         {
-            std::string szValue = cObj->get_parameter_as_string(szName);
+            const std::string szValue = cObj->get_parameter_as_string(szName);
             result = env->NewStringUTF(szValue.empty() ? "" : szValue.c_str());
         }
     }
@@ -469,7 +469,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1comment
 
     if (cObj != NULL)
     {
-        std::string commentStr = cObj->get_comment();
+        const std::string commentStr = cObj->get_comment();
         result = env->NewStringUTF(commentStr.empty() ? "" : commentStr.c_str());
     }
     return(result);
@@ -840,7 +840,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1organizer
 
     if (cObj != NULL)
     {
-        std::string organizerStr = cObj->get_organizer();
+        const std::string organizerStr = cObj->get_organizer();
         result = env->NewStringUTF(organizerStr.empty() ? "" : organizerStr.c_str());
     }
     return(result);
