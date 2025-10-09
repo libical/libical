@@ -30,8 +30,8 @@ struct icalrecurrencetype;
 struct icalperiodtype;
 
 // get & set
-void *getCObjectPtr(JNIEnv *env, jobject anObj);
-void setCObjectPtr(JNIEnv *env, jobject anObj, void *val);
+void *getCObjectPtr(JNIEnv *env, jobject surrogate);
+void setCObjectPtr(JNIEnv *env, jobject surrogate, void *subject);
 
 // type-safe getters
 LibICal::VComponent *getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType);
