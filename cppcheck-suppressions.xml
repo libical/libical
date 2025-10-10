@@ -16,9 +16,6 @@
     <id>variableScope</id>
   </suppress>
   <suppress>
-    <id>passedByValue</id>
-  </suppress>
-  <suppress>
     <id>unusedStructMember</id>
   </suppress>
 </suppressions>
