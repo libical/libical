@@ -240,9 +240,13 @@ int main(int argc, char *argv[])
                 for (next = icalrecur_iterator_next(ritr);
                      !icaltime_is_null_time(next);
                      next = icalrecur_iterator_next(ritr)) {
-                    actual_instances_len += snprintf(&actual_instances[actual_instances_len],
-                                                     sizeof(actual_instances) - (size_t)actual_instances_len,
-                                                     "%s%s", sep, icaltime_as_ical_string(next));
+                    int n = snprintf(&actual_instances[actual_instances_len],
+                                     sizeof(actual_instances) - (size_t)actual_instances_len,
+                                     "%s%s", sep, icaltime_as_ical_string(next));
+                    if (n < 0 || (size_t)n > sizeof(actual_instances) - (size_t)actual_instances_len) {
+                        break;
+                    }
+                    actual_instances_len += n;
                     sep = ",";
                 }
             }
@@ -276,9 +280,13 @@ int main(int argc, char *argv[])
                 for (next = icalrecur_iterator_prev(ritr);
                      !icaltime_is_null_time(next);
                      next = icalrecur_iterator_prev(ritr)) {
-                    actual_instances_len += snprintf(&actual_instances[actual_instances_len],
-                                                     sizeof(actual_instances) - (size_t)actual_instances_len,
-                                                     "%s%s", sep, icaltime_as_ical_string(next));
+                    int n = snprintf(&actual_instances[actual_instances_len],
+                                     sizeof(actual_instances) - (size_t)actual_instances_len,
+                                     "%s%s", sep, icaltime_as_ical_string(next));
+                    if (n < 0 || (size_t)n >= sizeof(actual_instances) - (size_t)actual_instances_len) {
+                        break;
+                    }
+                    actual_instances_len += n;
                     sep = ",";
                 }
 
