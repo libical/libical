@@ -1678,7 +1678,7 @@ static void icaltimezone_parse_zone_tab(void)
     const char *zonedir, *zonetab;
     char *filename;
     FILE *fp;
-    char buf[1024];      /* Used to store each line of zones.tab as it is read. */
+    char buf[1024];            /* Used to store each line of zones.tab as it is read. */
     char location[1024] = {0}; /* Stores the city name when parsing buf. */
     size_t filename_len;
     int latitude_degrees, latitude_minutes, latitude_seconds;
