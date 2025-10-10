@@ -34,7 +34,7 @@ int main(void)
     struct icaltimetype curr_tt;
     int failed = 0;
     int curr_failed;
-    int zonedef_printed = 0;
+    int zonedef_printed;
 #if !defined(HAVE_SETENV)
     static char new_tz[256];
 #endif

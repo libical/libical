@@ -278,7 +278,6 @@ static void icaldirset_add_uid(icalcomponent *comp)
         icalcomponent_add_property(comp, uid);
     } else {
         strncpy(uidstring, icalproperty_get_uid(uid), MAXPATHLEN - 1);
-        uidstring[MAXPATHLEN - 1] = '\0';
     }
 }
 

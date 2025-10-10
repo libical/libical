@@ -271,8 +271,8 @@ void test_fileset_extended(void)
 void test_bdbset(void)
 {
     icalset *cout;
-    int month = 0;
-    int count = 0;
+    int month;
+    int count;
 
     /*    int num_components=0;*/
     /*    int szdata_len=0;*/

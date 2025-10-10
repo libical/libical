@@ -65,7 +65,7 @@ void test_classify(void)
 {
     icalcomponent *c, *match;
     int i = 0;
-    int error_count = 0;
+    int error_count;
 
     /* Open up the two storage files, one for the incoming components,
        one for the calendar */

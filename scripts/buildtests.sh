@@ -449,6 +449,7 @@ CPPCHECK() {
     --suppress-xml=cppcheck-suppressions.xml \
     --template='{file}:{line},{severity},{id},{message}' \
     --checkers-report=cppcheck-report.txt \
+    -U __clang_analyzer__ \
     -D __cppcheck__ \
     -D ICAL_PACKAGE="\"x\"" \
     -D ICAL_VERSION="\"y\"" \
