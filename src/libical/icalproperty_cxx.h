@@ -35,7 +35,7 @@ public:
     ~ICalProperty();
 
     explicit ICalProperty(icalproperty *v);
-    explicit ICalProperty(std::string str);
+    explicit ICalProperty(const std::string &str);
     explicit ICalProperty(icalproperty_kind kind);
     ICalProperty(icalproperty_kind kind, std::string str);
 
