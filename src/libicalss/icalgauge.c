@@ -245,7 +245,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 {
     icalcomponent *inner;
     int local_pass = 0;
-    int last_clause = 1, this_clause = 1;
+    int last_clause = 1, this_clause;
     icalpvl_elem e;
     icalcomponent_kind kind;
     icalproperty *rrule;

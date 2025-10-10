@@ -610,7 +610,7 @@ err1:
 
 int icalbdbset_put(DB *dbp, DBT *key, DBT *data, u_int32_t access_method)
 {
-    int ret = 0;
+    int ret;
     DB_TXN *tid = NULL;
     int retry = 0;
     int done = 0;
@@ -699,7 +699,7 @@ icalerrorenum icalbdbset_commit(icalset *set)
     DBT key, data;
     icalcomponent *c;
     char *str = NULL;
-    int ret = 0;
+    int ret;
     icalerrorenum reterr = ICAL_NO_ERROR;
     char keystore[256];
     char uidbuf[256];
@@ -1238,7 +1238,7 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype *recur;
     icaltimezone *u_zone;
-    int g = 0;
+    int g;
     int orig_time_was_utc = 0;
 
     icalerror_check_arg_re((set != 0), "set", icalsetiter_null);
@@ -1456,7 +1456,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype *recur;
     icaltimezone *u_zone;
-    int g = 0;
+    int g;
     int orig_time_was_utc = 0;
 
     _unused(set);

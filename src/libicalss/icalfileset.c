@@ -340,7 +340,9 @@ icalerrorenum icalfileset_commit(icalset *set)
     char backupFile[MAXPATHLEN];
     char *str;
     icalcomponent *c;
+#if !defined(_WIN32)
     size_t write_size = 0;
+#endif
     icalfileset *fset = (icalfileset *)set;
 
     icalerror_check_arg_re((fset != 0), "set", ICAL_BADARG_ERROR);
@@ -380,7 +382,9 @@ icalerrorenum icalfileset_commit(icalset *set)
         }
 
         icalmemory_free_buffer(str);
+#if !defined(_WIN32)
         write_size += (size_t)sz;
+#endif
     }
 
     fset->changed = 0;
@@ -740,7 +744,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype *recur;
-    int g = 0;
+    int g;
 
     _unused(tzid);
 

@@ -621,13 +621,10 @@ bool VComponent::add(VComponent &fromC)
     }
 
     /* sub-components next */
-    bool err = false;
     VComponentTmpPtr comp;
     for (comp = fromC.get_first_component(ICAL_ANY_COMPONENT); comp != NULL;
          comp = fromC.get_next_component(ICAL_ANY_COMPONENT)) {
         VComponent *c = new VComponent(comp->isa());
-        err = c->add(*comp);
-        _unused(err);
         add_component(c);
         delete c;
     }

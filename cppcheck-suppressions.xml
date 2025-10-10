@@ -19,9 +19,6 @@
     <id>passedByValue</id>
   </suppress>
   <suppress>
-    <id>unreadVariable</id>
-  </suppress>
-  <suppress>
     <id>unusedStructMember</id>
   </suppress>
 </suppressions>
