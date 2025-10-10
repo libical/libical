@@ -230,15 +230,12 @@ void icalssutil_get_parts(icalcomponent *c, struct icalclassify_parts *parts)
     }
 
     if (parts->method == ICAL_METHOD_REPLY) {
-        icalparameter *param;
-
         p = icalcomponent_get_first_property(inner, ICAL_ATTENDEE_PROPERTY);
 
         if (p != 0) {
             const char *attendee = 0;
 
-            param = icalproperty_get_first_parameter(p, ICAL_PARTSTAT_PARAMETER);
-
+            icalparameter *param = icalproperty_get_first_parameter(p, ICAL_PARTSTAT_PARAMETER);
             if (param != 0) {
                 parts->reply_partstat = icalparameter_get_partstat(param);
             }
@@ -252,7 +249,6 @@ void icalssutil_get_parts(icalcomponent *c, struct icalclassify_parts *parts)
 
 static bool icalssutil_is_rescheduled(const icalcomponent *a, const icalcomponent *b)
 {
-    icalproperty *p1, *p2;
     icalcomponent *i1, *i2;
     char *temp1, *temp2;
     int i;
@@ -274,8 +270,8 @@ static bool icalssutil_is_rescheduled(const icalcomponent *a, const icalcomponen
     for (i = 0; kind_array[i] != ICAL_NO_PROPERTY; i++) {
         int cmp;
 
-        p1 = icalcomponent_get_first_property(i1, kind_array[i]);
-        p2 = icalcomponent_get_first_property(i2, kind_array[i]);
+        icalproperty *p1 = icalcomponent_get_first_property(i1, kind_array[i]);
+        icalproperty *p2 = icalcomponent_get_first_property(i2, kind_array[i]);
 
         if ((p1 != 0) ^ (p2 != 0)) {
             /* Return true if the property exists in one component and not

@@ -123,7 +123,7 @@ void test_fileset_extended(void)
     int month = 0;
     int count = 0;
     struct icaltimetype start, end;
-    icalcomponent *c, *clone, *itr;
+    icalcomponent *c, *itr;
     icalsetiter iter;
 
     start = icaltime_from_timet_with_zone(time(0), 0, NULL);
@@ -153,7 +153,7 @@ void test_fileset_extended(void)
         start.month = month;
         end.month = month;
 
-        clone = icalcomponent_clone(c);
+        icalcomponent *clone = icalcomponent_clone(c);
         ok("Making clone of output file", (clone != 0));
         assert(clone != 0);
 

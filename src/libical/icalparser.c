@@ -208,7 +208,7 @@ static char *parser_get_prop_name(char *line, char **end)
 static bool parser_get_param_name_stack(char *line, char *name, size_t name_length,
                                         char *value, size_t value_length)
 {
-    char *next, *end_quote;
+    char *next;
     size_t requested_name_length, requested_value_length;
 
     /* The name is everything up to the equals sign */
@@ -240,7 +240,7 @@ static bool parser_get_param_name_stack(char *line, char *name, size_t name_leng
         /* Dequote the value if it is a single quoted-string */
         next++;
 
-        end_quote = (*next == '"') ? next : parser_get_next_char('"', next, 0);
+        char *end_quote = (*next == '"') ? next : parser_get_next_char('"', next, 0);
 
         if (end_quote == 0) {
             return false;
@@ -408,7 +408,6 @@ static char *parser_get_next_parameter(char *line, char **end)
 {
     char *next;
     char *v;
-    char *str;
 
     v = parser_get_next_char(':', line, 1);
     next = parser_get_next_char(';', line, 1);
@@ -421,7 +420,7 @@ static char *parser_get_next_parameter(char *line, char **end)
     }
 
     if (next != 0) {
-        str = make_segment(line, next);
+        char *str = make_segment(line, next);
         *end = next + 1;
         return str;
     } else {

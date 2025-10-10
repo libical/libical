@@ -1029,7 +1029,6 @@ static int writeBase64(OFile *fp, unsigned char *s, long len)
 {
     long cur = 0;
     int i, numQuads = 0;
-    unsigned long trip;
     unsigned char b;
     char quad[5];
 #define MAXQUADS 16
@@ -1038,7 +1037,7 @@ static int writeBase64(OFile *fp, unsigned char *s, long len)
 
     while (cur < len) {
             /* collect the triplet of bytes into 'trip' */
-        trip = 0;
+        unsigned long trip = 0;
         for (i = 0; i < 3; i++) {
             b = (cur < len) ? *(s + cur) : 0;
             cur++;

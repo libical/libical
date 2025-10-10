@@ -37,12 +37,11 @@ static void sig_alrm(int i)
 
 static int get_expected_numevents(icalcomponent *c)
 {
-    icalproperty *p;
     const char *note = 0;
     int num_events = 0;
 
     if (c != 0) {
-        for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
+        for (icalproperty *p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
              p != 0; p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
             if (strcmp(icalproperty_get_x_name(p), "X-EXPECT-NUMEVENTS") == 0) {
                 note = icalproperty_get_x(p);

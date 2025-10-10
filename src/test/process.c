@@ -21,7 +21,6 @@ void send_message(icalcomponent *reply, const char *this_user)
 int main(int argc, char *argv[])
 {
     icalcomponent *c, *next_c = NULL;
-    int dont_remove;
     icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
 
     icalset *f = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/process-incoming.ics", &options);
@@ -51,7 +50,7 @@ int main(int argc, char *argv[])
         inner = icalcomponent_get_first_real_component(c);
 
         reply = 0;
-        dont_remove = 0;
+        int dont_remove = 0;
 
         if (inner == 0) {
             printf("Bad component, no inner\n %s\n", icalcomponent_as_ical_string(c));

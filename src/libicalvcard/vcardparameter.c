@@ -269,7 +269,6 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     size_t buf_size = 1024;
     char *buf;
     char *buf_ptr;
-    const char *kind_string;
 
     icalerror_check_arg_rz((param != 0), "parameter");
 
@@ -287,7 +286,7 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
         icalmemory_append_string(&buf, &buf_ptr,
                                  &buf_size, vcardparameter_get_iana_name(param));
     } else {
-        kind_string = vcardparameter_kind_to_string(param->kind);
+        const char *kind_string = vcardparameter_kind_to_string(param->kind);
 
         if (param->kind == VCARD_NO_PARAMETER ||
             param->kind == VCARD_ANY_PARAMETER || kind_string == 0) {

@@ -75,8 +75,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
 {
     struct icaltime_span range;
     icalpvl_elem itr;
-    icalcomponent *c, *inner;
-    icalcomponent_kind kind, inner_kind;
+    icalcomponent_kind inner_kind;
     icalspanlist *sl;
     struct icaltime_span *freetime;
 
@@ -95,11 +94,11 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
     /* Gets a list of spans of busy time from the events in the set
        and order the spans based on the start time */
 
-    for (c = icalset_get_first_component(set);
+    for (icalcomponent *c = icalset_get_first_component(set);
          c != 0;
          c = icalset_get_next_component(set)) {
-        kind = icalcomponent_isa(c);
-        inner = icalcomponent_get_inner(c);
+        icalcomponent_kind kind = icalcomponent_isa(c);
+        icalcomponent *inner = icalcomponent_get_inner(c);
 
         if (!inner) {
             continue;

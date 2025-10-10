@@ -32,7 +32,6 @@ Structure *structure_new(void)
 void structure_free(Structure *structure)
 {
     GList *list;
-    Enumeration *enumeration;
 
     if (structure == NULL) {
         return;
@@ -45,7 +44,7 @@ void structure_free(Structure *structure)
         g_free(list->data);
     }
     for (list = g_list_first(structure->enumerations); list != NULL; list = g_list_next(list)) {
-        enumeration = (Enumeration *)list->data;
+        Enumeration *enumeration = (Enumeration *)list->data;
         enumeration_free(enumeration);
         enumeration = NULL;
     }
@@ -375,14 +374,14 @@ GList *get_list_from_string(const gchar *str)
 gboolean parse_parameters(xmlNode *node, Method *method)
 {
     xmlAttr *attr;
-    Parameter *para;
 
     if (xmlStrcmp(node->name, (xmlChar *)"parameter") != 0) {
         return FALSE;
     }
 
     for (; xmlStrcmp(node->name, (xmlChar *)"parameter") == 0; node = node->next) {
-        para = parameter_new();
+
+        Parameter *para = parameter_new();
 
         for (attr = node->properties; attr != NULL; attr = attr->next) {
             if (xmlStrcmp(attr->name, (xmlChar *)"type") == 0) {

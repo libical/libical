@@ -447,12 +447,9 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
 
     default: {
         char temp[TMP_BUF_SIZE];
-        vcardparameter *errParam;
-
         if (error != 0) {
             snprintf(temp, TMP_BUF_SIZE, "Unknown type for \'%s\'", str);
-
-            errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
+            vcardparameter *errParam = vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
             *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
         }
 

@@ -169,8 +169,6 @@ void test_header(const char *header, int set)
 
 int test_end(void)
 {
-    int pct;
-
     if (testnumber < 1) {
         printf("\n        No Tests Run.\n");
         return 0;
@@ -179,7 +177,7 @@ int test_end(void)
     if (failed) {
         int i, oldset = 0;
 
-        pct = ((testnumber - failed) * 100) / testnumber;
+        int pct = ((testnumber - failed) * 100) / testnumber;
         printf("\n        Failed %d/%d tests, %2d%% okay\n", failed, testnumber, pct);
         printf("\n        Failed tests:\n          ");
         for (i = 0; i < failed; i++) {
