@@ -1,4 +1,6 @@
 name: Build tests
+permissions:
+  contents: read
 on:
   - push
   - pull_request
