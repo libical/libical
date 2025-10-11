@@ -459,11 +459,9 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 #pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
 #endif
     case ICAL_BINARY_VALUE: {
-        icalattach *attach;
-
         char *dupStr = strdup(str); // will be freed later on during unref
         if (dupStr) {
-            attach = icalattach_new_from_data(dupStr, free_icalvalue_attach_data, 0);
+            icalattach *attach = icalattach_new_from_data(dupStr, free_icalvalue_attach_data, 0);
             if (!attach) {
                 free(dupStr);
                 break;

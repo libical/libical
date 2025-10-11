@@ -263,7 +263,6 @@ static char *fold_property_line(char *text)
     ssize_t chars_left;
     char *buf, *buf_ptr, *line_start, *next_line_start;
     int first_line;
-    char ch;
 
     /* Start with a buffer twice the size of our property line, so we almost
        certainly won't overflow it. */
@@ -293,7 +292,7 @@ static char *fold_property_line(char *text)
 
         /* This adds the line to our tmp buffer. We temporarily place a '\0'
            in text, so we can copy the line in one go. */
-        ch = *next_line_start;
+        char ch = *next_line_start;
         *next_line_start = '\0';
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, line_start);
         *next_line_start = ch;
@@ -837,7 +836,7 @@ void vcardproperty_set_value(vcardproperty *p, vcardvalue *value)
 
 void vcardproperty_set_value_from_string(vcardproperty *prop, const char *str, const char *type)
 {
-    vcardvalue *oval, *nval;
+    vcardvalue *nval;
     vcardvalue_kind kind = VCARD_NO_VALUE;
 
     icalerror_check_arg_rv((prop != 0), "prop");
@@ -846,7 +845,7 @@ void vcardproperty_set_value_from_string(vcardproperty *prop, const char *str, c
 
     if (strcmp(type, "NO") == 0) {
         /* Get the type from the value the property already has, if it exists */
-        oval = vcardproperty_get_value(prop);
+        vcardvalue *oval = vcardproperty_get_value(prop);
         if (oval != 0) {
             /* Use the existing value kind */
             kind = vcardvalue_isa(oval);

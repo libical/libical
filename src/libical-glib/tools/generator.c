@@ -37,18 +37,14 @@ gchar *get_source_method_comment(Method *method)
 {
     GList *iter_list;
     GList *jter;
-    Parameter *para;
     gchar *anno;
     gchar *buffer;
     gchar *res;
-    gchar *comment_line;
     guint iter;
     guint len;
     gint count;
     gint cursor;
-    gchar *full_flag;
     guint full_flag_len;
-    gchar *full_comment;
     guint comment_len;
 
     g_return_val_if_fail(method != NULL, NULL);
@@ -68,12 +64,12 @@ gchar *get_source_method_comment(Method *method)
 
     /* Processing the parameters */
     if (method->parameters != NULL) {
-        full_flag = g_strdup("FULL:");
+        gchar *full_flag = g_strdup("FULL:");
         full_flag_len = (guint)strlen(full_flag);
 
         for (iter_list = g_list_first(method->parameters); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
-            para = (Parameter *)iter_list->data;
+            Parameter *para = (Parameter *)iter_list->data;
             if (para) {
                 comment_len = 0;
                 if (para->comment) {
@@ -88,7 +84,7 @@ gchar *get_source_method_comment(Method *method)
                 }
 
                 if (iter == full_flag_len) {
-                    full_comment = g_new(gchar, comment_len - full_flag_len + 1);
+                    gchar *full_comment = g_new(gchar, comment_len - full_flag_len + 1);
                     (void)g_stpcpy(full_comment, para->comment + full_flag_len);
                     buffer = g_strconcat(res, "\n * ", full_comment, NULL);
                     g_free(res);
@@ -128,7 +124,7 @@ gchar *get_source_method_comment(Method *method)
 
     /* Processing general comment */
     if (method->comment != NULL) {
-        comment_line = g_new(gchar, BUFFER_SIZE);
+        gchar *comment_line = g_new(gchar, BUFFER_SIZE);
         *comment_line = '\0';
         len = (guint)strlen(method->comment);
         count = 0;
@@ -644,7 +640,6 @@ static FILE *open_private_header(void)
     static gboolean first_private_header_write = TRUE;
     const gchar *mode = "ab";
     FILE *fp;
-    const gchar *guard = "#ifndef LIBICAL_GLIB_PRIVATE_H\n#define LIBICAL_GLIB_PRIVATE_H\n";
 
     if (first_private_header_write) {
         first_private_header_write = FALSE;
@@ -653,7 +648,7 @@ static FILE *open_private_header(void)
 
     fp = fopen(PRIVATE_HEADER, mode);
     if ((g_strcmp0(mode, "wb") == 0) && fp != NULL) {
-        write_str(fp, guard);
+        write_str(fp, "#ifndef LIBICAL_GLIB_PRIVATE_H\n#define LIBICAL_GLIB_PRIVATE_H\n");
         write_str(fp, "\n#include \"libical-glib.h\"\n");
     }
     return fp;
@@ -662,11 +657,10 @@ static FILE *open_private_header(void)
 static void close_private_header(void)
 {
     FILE *fp;
-    const gchar *endGuard = "#endif\n";
 
     fp = fopen(PRIVATE_HEADER, "ab");
     if (fp != NULL) {
-        write_str(fp, endGuard);
+        write_str(fp, "#endif\n");
         (void)fclose(fp);
     }
 }
@@ -674,10 +668,7 @@ static void close_private_header(void)
 void generate_header_method_protos(FILE *out, Structure *structure)
 {
     GList *iter;
-    Method *method;
-    gchar *typeName;
     FILE *privateHeader;
-    gchar *privateHeaderComment;
 
     privateHeader = NULL;
 
@@ -687,8 +678,8 @@ void generate_header_method_protos(FILE *out, Structure *structure)
          * Create the new_full method in it.
          */
         privateHeader = open_private_header();
-        typeName = g_strconcat(structure->nameSpace, structure->name, NULL);
-        privateHeaderComment = g_strconcat("\n/* Private methods for ", typeName, " */\n", NULL);
+        gchar *typeName = g_strconcat(structure->nameSpace, structure->name, NULL);
+        gchar *privateHeaderComment = g_strconcat("\n/* Private methods for ", typeName, " */\n", NULL);
         g_free(typeName);
         write_str(privateHeader, privateHeaderComment);
         g_free(privateHeaderComment);
@@ -696,7 +687,7 @@ void generate_header_method_protos(FILE *out, Structure *structure)
     }
 
     for (iter = g_list_first(structure->methods); iter != NULL; iter = g_list_next(iter)) {
-        method = (Method *)iter->data;
+        Method *method = (Method *)iter->data;
 
         if (g_strcmp0(method->kind, "private") == 0) {
             /* This checks whether there was method declared in private header already.
@@ -718,8 +709,6 @@ void generate_header_method_protos(FILE *out, Structure *structure)
 
 void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
 {
-    GList *iter_list;
-    Parameter *para;
     gint count;
     gchar *buffer;
     gint iter;
@@ -793,9 +782,9 @@ void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
     if (method->parameters == NULL) {
         write_str(out, "(void);");
     } else {
-        for (iter_list = g_list_first(method->parameters); iter_list != NULL;
+        for (GList *iter_list = g_list_first(method->parameters); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
-            para = (Parameter *)iter_list->data;
+            Parameter *para = (Parameter *)iter_list->data;
             if (iter_list == g_list_first(method->parameters)) {
                 write_str(out, "(");
             } else {
@@ -953,7 +942,6 @@ void generate_header_structure_boilerplate(FILE *out, Structure *structure, GHas
 
 void generate_header_includes(FILE *out, Structure *structure)
 {
-    gchar *typeName;
     Structure *parentStructure;
     gchar *lowerTrain;
     gchar *upperCamel;
@@ -986,7 +974,7 @@ void generate_header_includes(FILE *out, Structure *structure)
 
     for (g_hash_table_iter_init(&iter_table, structure->dependencies);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
-        typeName = (gchar *)key;
+        gchar *typeName = (gchar *)key;
         if (g_hash_table_contains(type2structure, typeName)) {
             parentStructure = g_hash_table_lookup(type2structure, typeName);
             upperCamel = g_strconcat(parentStructure->nameSpace, parentStructure->name, NULL);
@@ -1024,12 +1012,10 @@ void generate_header_includes(FILE *out, Structure *structure)
 
 void generate_source_includes(FILE *out, Structure *structure)
 {
-    gchar *typeName;
     Structure *parentStructure;
     gchar *lowerTrain;
     gchar *upperCamel;
     gchar *ownUpperCamel;
-    gchar *includeName;
     GHashTable *includeNames;
     GHashTableIter iter_table;
     gpointer key;
@@ -1053,7 +1039,7 @@ void generate_source_includes(FILE *out, Structure *structure)
 
     for (g_hash_table_iter_init(&iter_table, structure->dependencies);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
-        typeName = (gchar *)key;
+        gchar *typeName = (gchar *)key;
         if (g_hash_table_contains(type2structure, typeName)) {
             parentStructure = g_hash_table_lookup(type2structure, typeName);
             upperCamel = g_strconcat(parentStructure->nameSpace, parentStructure->name, NULL);
@@ -1073,7 +1059,7 @@ void generate_source_includes(FILE *out, Structure *structure)
 
     for (g_hash_table_iter_init(&iter_table, includeNames);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
-        includeName = (gchar *)key;
+        gchar *includeName = (gchar *)key;
         write_str(out, "#include \"");
         write_str(out, includeName);
         write_str(out, ".h\"\n");
@@ -1283,7 +1269,6 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     gint len;
     gchar c;
     gchar *var;
-    gchar *val;
     guint statement_len;
     guint expression_len;
 
@@ -1376,7 +1361,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                     }
 
                     if (g_hash_table_contains(table, var)) {
-                        val = g_hash_table_lookup(table, var);
+                        gchar *val = g_hash_table_lookup(table, var);
                         write_str(out, val);
                         val = NULL;
                     } else {
@@ -1403,7 +1388,6 @@ gchar *get_source_method_code(Method *method)
     gchar *buffer;
     gchar *ret;
     GList *iter;
-    gchar *para;
 
     buffer = g_new(gchar, BUFFER_SIZE);
     *buffer = '\0';
@@ -1420,7 +1404,7 @@ gchar *get_source_method_code(Method *method)
             } else {
                 (void)g_stpcpy(buffer + strlen(buffer), ", ");
             }
-            para = get_inline_parameter((Parameter *)iter->data);
+            gchar *para = get_inline_parameter((Parameter *)iter->data);
             (void)g_stpcpy(buffer + strlen(buffer), para);
             g_free(para);
         }
@@ -1437,14 +1421,13 @@ gchar *get_source_method_code(Method *method)
 static gboolean is_enum_type(const gchar *type)
 {
     gchar *trueType;
-    const gchar *structureKind;
     gboolean res = FALSE;
 
     g_return_val_if_fail(type != NULL, FALSE);
 
     trueType = get_true_type(type);
     if (trueType && g_hash_table_contains(type2kind, trueType)) {
-        structureKind = g_hash_table_lookup(type2kind, trueType);
+        const gchar *structureKind = g_hash_table_lookup(type2kind, trueType);
         res = g_strcmp0(structureKind, "enum") == 0;
     }
     g_free(trueType);
@@ -1454,9 +1437,7 @@ static gboolean is_enum_type(const gchar *type)
 
 gchar *get_translator_for_parameter(Parameter *para)
 {
-    gchar *trueType;
     gchar *res;
-    gchar *structureKind;
     gboolean is_bare;
     Structure *structure;
 
@@ -1470,9 +1451,9 @@ gchar *get_translator_for_parameter(Parameter *para)
             res = g_strdup(para->translator);
         }
     } else {
-        trueType = get_true_type(para->type);
+        gchar *trueType = get_true_type(para->type);
         if (g_hash_table_contains(type2kind, trueType)) {
-            structureKind = g_strdup(g_hash_table_lookup(type2kind, trueType));
+            gchar *structureKind = g_strdup(g_hash_table_lookup(type2kind, trueType));
             structure = g_hash_table_lookup(type2structure, trueType);
             if (structure == NULL) {
                 printf("ERROR: There is no corresponding structure for type %s\n", trueType);
@@ -1537,9 +1518,7 @@ gchar *get_translator_for_parameter(Parameter *para)
 gchar *get_translator_for_return(Ret *ret)
 {
     gchar *trueType;
-    gchar *lowerSnake;
     gchar *res;
-    gchar *kind;
 
     g_return_val_if_fail(ret != NULL, NULL);
 
@@ -1554,7 +1533,7 @@ gchar *get_translator_for_return(Ret *ret)
         if (g_hash_table_contains(type2kind, trueType)) {
             Structure *structure;
 
-            kind = g_strdup(g_hash_table_lookup(type2kind, trueType));
+            gchar *kind = g_strdup(g_hash_table_lookup(type2kind, trueType));
             structure = g_hash_table_lookup(type2structure, trueType);
             if (!structure) {
                 printf("ERROR: There is no corresponding structure for type %s\n", trueType);
@@ -1577,7 +1556,7 @@ gchar *get_translator_for_return(Ret *ret)
                     }
                 }
             } else {
-                lowerSnake = get_lower_snake_from_upper_camel(trueType);
+                gchar *lowerSnake = get_lower_snake_from_upper_camel(trueType);
                 res = g_strconcat(lowerSnake, "_new_full", NULL);
                 g_free(lowerSnake);
             }
@@ -1689,15 +1668,9 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
 {
     gchar *buffer;
     gchar *ret;
-    gchar *body;
     gchar *proto;
     gchar *comment;
-    GList *iter;
-    gchar *checkers;
     gchar *translator;
-    gchar *trueType;
-    Structure *structure;
-    Parameter *parameter;
 
     g_return_val_if_fail(method != NULL, NULL);
 
@@ -1720,7 +1693,8 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
     if (method->custom != NULL) {
         (void)g_stpcpy(buffer + strlen(buffer), method->custom);
     } else {
-        checkers = get_source_run_time_checkers(method, nameSpace);
+        GList *iter;
+        gchar *checkers = get_source_run_time_checkers(method, nameSpace);
         if (checkers != NULL) {
             (void)g_stpcpy(buffer + strlen(buffer), checkers);
             g_free(checkers);
@@ -1729,7 +1703,7 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
         /* op on the owner */
         /* TODO: Change the translatorArgus in Parameter to parent */
         for (iter = g_list_first(method->parameters); iter != NULL; iter = g_list_next(iter)) {
-            parameter = (Parameter *)iter->data;
+            Parameter *parameter = (Parameter *)iter->data;
             if (parameter->owner_op != NULL) {
                 if (g_strcmp0(parameter->owner_op, "REMOVE") == 0) {
                     (void)g_stpcpy(buffer + strlen(buffer),
@@ -1763,7 +1737,7 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
             }
         }
 
-        body = get_source_method_code(method);
+        gchar *body = get_source_method_code(method);
         (void)g_stpcpy(buffer + strlen(buffer), body);
         g_free(body);
 
@@ -1777,9 +1751,9 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
                     }
                 }
             } else {
-                trueType = get_true_type(method->ret->type);
+                gchar *trueType = get_true_type(method->ret->type);
                 if (g_hash_table_contains(type2structure, trueType)) {
-                    structure = g_hash_table_lookup(type2structure, trueType);
+                    Structure *structure = g_hash_table_lookup(type2structure, trueType);
                     if (!structure->isBare && !is_enum_type(method->ret->type)) {
                         (void)g_stpcpy(buffer + strlen(buffer), ", NULL");
                     }
@@ -1809,8 +1783,6 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
 gchar *get_source_method_proto(Method *method)
 {
     gchar *buffer;
-    GList *iter_list;
-    Parameter *para;
     gchar *ret;
     gint paddingLength;
     gchar *padding;
@@ -1843,9 +1815,9 @@ gchar *get_source_method_proto(Method *method)
     if (method->parameters == NULL) {
         (void)g_stpcpy(buffer + strlen(buffer), " (void)");
     } else {
-        for (iter_list = g_list_first(method->parameters); iter_list != NULL;
+        for (GList *iter_list = g_list_first(method->parameters); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
-            para = (Parameter *)iter_list->data;
+            Parameter *para = (Parameter *)iter_list->data;
             if (iter_list == g_list_first(method->parameters)) {
                 (void)g_stpcpy(buffer + strlen(buffer), " (");
             } else {
@@ -1970,13 +1942,11 @@ void generate_header_and_source(Structure *structure, gchar *dir)
 void generate_header_enums(FILE *out, Structure *structure)
 {
     GList *iter;
-    Enumeration *enumeration;
 
     g_return_if_fail(out != NULL && structure != NULL);
 
     for (iter = g_list_first(structure->enumerations); iter != NULL; iter = g_list_next(iter)) {
-        enumeration = (Enumeration *)iter->data;
-
+        Enumeration *enumeration = (Enumeration *)iter->data;
         generate_header_enum(out, enumeration);
         write_str(out, "\n");
     }
@@ -1986,7 +1956,6 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
 {
     guint ii;
     gchar *newName;
-    gchar *comment;
     gchar *tmp;
 
     g_return_if_fail(out != NULL && enumeration != NULL);
@@ -2001,7 +1970,7 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
 
     /* Generate the comment block */
     if (enumeration->comment != NULL) {
-        comment = g_strdup("/**");
+        gchar *comment = g_strdup("/**");
         tmp = g_strconcat(comment, "\n * ", enumeration->name, ":", NULL);
         g_free(comment);
         comment = tmp;
@@ -2069,7 +2038,6 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
     gchar *nameSpaceUpperSnake;
     gchar *nameUpperSnake;
     gchar *typeCheck;
-    gchar *trueType;
     gchar *res;
     gchar *defaultValue;
     gchar *retTrueType;
@@ -2088,7 +2056,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
         parameter = (Parameter *)iter->data;
 
         if (parameter && parameter->type && parameter->type[strlen(parameter->type) - 1] == '*') {
-            trueType = get_true_type(parameter->type);
+            gchar *trueType = get_true_type(parameter->type);
             if (!trueType) {
                 fprintf(stderr, "Unknown type '%s' in method %s\n", parameter->type, method->name);
                 continue;
@@ -2501,13 +2469,12 @@ out:
 static void generate_declarations(FILE *out, Structure *structure, const gchar *position)
 {
     GList *list_iter;
-    Declaration *declaration;
 
     g_return_if_fail(out != NULL && structure != NULL);
 
     for (list_iter = g_list_first(structure->declarations); list_iter != NULL;
          list_iter = g_list_next(list_iter)) {
-        declaration = (Declaration *)list_iter->data;
+        Declaration *declaration = (Declaration *)list_iter->data;
 
         if (g_strcmp0(declaration->position, position) == 0) {
             write_str(out, declaration->content);

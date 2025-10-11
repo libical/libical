@@ -53,9 +53,8 @@ static void print_error_hdr(const struct recur *r)
 
 static void reverse_array(char *str, size_t len)
 {
-    char tmp;
     for (size_t i = 0; i < len / 2; i++) {
-        tmp = str[i];
+        char tmp = str[i];
         str[i] = str[len - i - 1];
         str[len - i - 1] = tmp;
     }

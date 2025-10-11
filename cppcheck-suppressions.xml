@@ -13,9 +13,6 @@
     <id>cstyleCast</id>
   </suppress>
   <suppress>
-    <id>variableScope</id>
-  </suppress>
-  <suppress>
     <id>unusedStructMember</id>
   </suppress>
 </suppressions>

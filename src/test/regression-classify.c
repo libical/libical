@@ -19,11 +19,10 @@
 /* Gets a note about the purpose of the property*/
 static const char *get_note(icalcomponent *c)
 {
-    icalproperty *p;
     const char *note = 0;
 
     if (c != 0) {
-        for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
+        for (icalproperty *p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
              p != 0; p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
             if (strcmp(icalproperty_get_x_name(p), "X-LIC-NOTE") == 0) {
                 note = icalproperty_get_x(p);
@@ -42,11 +41,10 @@ static const char *get_note(icalcomponent *c)
 
 static const char *get_expect(icalcomponent *c)
 {
-    icalproperty *p;
     const char *note = 0;
 
     if (c != 0) {
-        for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
+        for (icalproperty *p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
              p != 0; p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
             if (strcmp(icalproperty_get_x_name(p), "X-LIC-EXPECT") == 0) {
                 note = icalproperty_get_x(p);
@@ -65,7 +63,6 @@ void test_classify(void)
 {
     icalcomponent *c, *match;
     int i = 0;
-    int error_count;
 
     /* Open up the two storage files, one for the incoming components,
        one for the calendar */
@@ -113,7 +110,7 @@ void test_classify(void)
 
         /* If there are any errors, print out the component */
 
-        error_count = icalcomponent_count_errors(c);
+        int error_count = icalcomponent_count_errors(c);
         snprintf(msg, sizeof(msg), "%s - parsing", this_note);
         int_is(msg, error_count, 0);
 

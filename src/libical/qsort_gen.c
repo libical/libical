@@ -25,10 +25,9 @@ void qsort_gen_memswap(void *m1, void *m2, size_t size)
 {
     char *p1 = (char *)m1;
     char *p2 = (char *)m2;
-    char tmp;
 
     while (size) {
-        tmp = *p1;
+        char tmp = *p1;
         *p1 = *p2;
         *p2 = tmp;
         size--;

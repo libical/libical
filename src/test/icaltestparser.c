@@ -71,7 +71,6 @@ int main(int argc, char *argv[])
 {
     char *line;
     FILE *stream;
-    icalcomponent *c;
     icalparser *parser = icalparser_new();
 
     if (argc != 2) {
@@ -89,7 +88,7 @@ int main(int argc, char *argv[])
     do {
         line = icalparser_get_line(parser, read_stream);
 
-        c = icalparser_add_line(parser, line);
+        icalcomponent *c = icalparser_add_line(parser, line);
         icalmemory_free_buffer(line);
 
         if (c != 0) {
