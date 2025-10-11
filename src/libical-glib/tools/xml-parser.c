@@ -380,7 +380,6 @@ gboolean parse_parameters(xmlNode *node, Method *method)
     }
 
     for (; xmlStrcmp(node->name, (xmlChar *)"parameter") == 0; node = node->next) {
-
         Parameter *para = parameter_new();
 
         for (attr = node->properties; attr != NULL; attr = attr->next) {
