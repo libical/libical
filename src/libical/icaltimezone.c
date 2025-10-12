@@ -1928,7 +1928,6 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 
 out:
     icaltimezone_builtin_unlock();
-    return;
 }
 
 /** @brief Callback used from icalparser_parse() */

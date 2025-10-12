@@ -514,7 +514,6 @@ void icaldirset_clear(icalset *set)
 
     /* NOT IMPLEMENTED */
     assert(0);
-    return;
 }
 
 icalcomponent *icaldirset_get_current_component(icalset *set)
