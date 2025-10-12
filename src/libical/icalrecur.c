@@ -175,7 +175,7 @@ static ICAL_GLOBAL_VAR ical_invalid_rrule_handling invalidRruleHandling = ICAL_R
 
 /****************** Forward declarations ******************/
 static void icalrecurrencetype_clear(struct icalrecurrencetype *recur);
-static short daymask_find_next_bit(const unsigned long *days, short start_idx);
+static short daymask_find_next_bit(const unsigned long *days, short start_index);
 
 /****************** Enumeration Routines ******************/
 
