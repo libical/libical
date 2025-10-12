@@ -53,7 +53,7 @@ LIBICAL_ICAL_EXPORT const char *icalproperty_get_parameter_as_string(icalpropert
                                                                      const char *name);
 
 LIBICAL_ICAL_EXPORT const char *icalproperty_get_parameter_as_string_r(icalproperty *prop,
-                                                                 const char *name);
+                                                                       const char *name);
 
 /** @brief Removes all parameters with the specified kind.
  *
