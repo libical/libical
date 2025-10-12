@@ -450,7 +450,7 @@ static void printValue(FILE *fp, VObject *o, int level)
     switch (VALUE_TYPE(o)) {
         case VCVT_USTRINGZ: {
             char c;
-            char *t,*s;
+            const char *t,*s;
             s = t = fakeCString(USTRINGZ_VALUE_OF(o));
             fputc('"',fp);
             while (c=*t,c) {
@@ -1106,7 +1106,7 @@ static void writeValue(OFile *fp, VObject *o, unsigned long size,int quote)
     if (o == 0) return;
     switch (VALUE_TYPE(o)) {
         case VCVT_USTRINGZ: {
-            char *s = fakeCString(USTRINGZ_VALUE_OF(o));
+            const char *s = fakeCString(USTRINGZ_VALUE_OF(o));
             if(quote) writeQPString(fp, s);
             else writeString(fp,s);
             deleteStr(s);
@@ -1227,7 +1227,7 @@ static void writeProp(OFile *fp, VObject *o)
             /* output prop as fields */
             appendcOFile(fp,':');
             while (*fields) {
-                VObject *tl = isAPropertyOf(o,*fields);
+                const VObject *tl = isAPropertyOf(o,*fields);
                 i++;
                 if (tl) n = i;
                 fields++;
