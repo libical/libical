@@ -443,6 +443,7 @@ CPPCHECK() {
   echo "===== RUN CPPCHECK FOR C FILES ======"
   rm -f cppcheck-c.out
   f=$(find "$TOP/src" -name "*.c")
+  # shellcheck disable=SC2086
   cppcheck --quiet \
     --language=c \
     --std=c99 \
@@ -451,7 +452,6 @@ CPPCHECK() {
     --check-level=exhaustive \
     --suppress-xml=cppcheck-suppressions.xml \
     --template='{file}:{line},{severity},{id},{message}' \
-    --checkers-report=cppcheck-report.txt \
     -D __cppcheck__ \
     -D ICAL_PACKAGE="\"x\"" \
     -D ICAL_VERSION="\"y\"" \
@@ -470,6 +470,7 @@ CPPCHECK() {
   echo "===== RUN CPPCHECK FOR C++ FILES ======"
   rm -f cppcheck-cpp.out
   f=$(find "$TOP/src" -name "*.cpp")
+  # shellcheck disable=SC2086
   cppcheck --quiet \
     --language=c++ \
     --std=c++11 \
@@ -478,7 +479,6 @@ CPPCHECK() {
     --check-level=exhaustive \
     --suppress-xml=cppcheck-suppressions.xml \
     --template='{file}:{line},{severity},{id},{message}' \
-    --checkers-report=cppcheck-report.txt \
     -D __cppcheck__ \
     -D ICAL_PACKAGE="\"x\"" \
     -D ICAL_VERSION="\"y\"" \
