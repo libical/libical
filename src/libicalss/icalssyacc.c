@@ -1,5 +1,7 @@
 /* A Bison parser, made by GNU Bison 2.3.  */
 
+// NOLINTBEGIN
+
 /* Skeleton implementation for Bison's Yacc-like parsers in C
 
    SPDX-FileCopyrightText: 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
@@ -1751,3 +1753,5 @@ void sserror(const char *s)
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
+
+// NOLINTEND

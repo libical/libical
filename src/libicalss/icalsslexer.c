@@ -3,6 +3,8 @@
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 */
 
+// NOLINTBEGIN
+
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
@@ -1985,3 +1987,5 @@ int sswrap(void)
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
+
+// NOLINTEND
