@@ -982,7 +982,6 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     limit_span.start = limit_start;
     limit_span.end = limit_end;
 
-    recurspan = basespan;
     rrule_span.start = rdate_span.start =
         last_start = end_timet + 1;
 

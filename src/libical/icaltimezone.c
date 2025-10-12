@@ -1724,7 +1724,7 @@ static void icaltimezone_parse_zone_tab(void)
         return;
     }
 
-#if !defined(__clang_analyzer__)
+#if !defined(__clang_analyzer__) || defined(__cppcheck__)
     while (fgets(buf, (int)sizeof(buf), fp)) {
         if (*buf == '#') {
             continue;

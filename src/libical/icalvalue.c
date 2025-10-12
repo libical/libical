@@ -598,7 +598,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
     case ICAL_GEO_VALUE: {
         char *cur = NULL;
-        struct icalgeotype geo;
+        struct icalgeotype geo = {0};
         memset(geo.lat, 0, ICAL_GEO_LEN);
         memset(geo.lon, 0, ICAL_GEO_LEN);
 
