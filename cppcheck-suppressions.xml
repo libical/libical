@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions>
   <suppress>
-    <id>cstyleCast</id>
-  </suppress>
-  <suppress>
     <id>unusedStructMember</id>
   </suppress>
 </suppressions>
