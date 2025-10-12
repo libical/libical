@@ -784,7 +784,7 @@ void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
     } else {
         for (GList *iter_list = g_list_first(method->parameters); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
-            Parameter *para = (Parameter *)iter_list->data;
+            const Parameter *para = (Parameter *)iter_list->data;
             if (iter_list == g_list_first(method->parameters)) {
                 write_str(out, "(");
             } else {
@@ -813,7 +813,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
     gint len;
     GList *iter;
     gchar *method;
-    gchar *val;
+    const gchar *val;
 
     g_return_if_fail(in != NULL && out != NULL && structure != NULL && table != NULL);
 
@@ -946,7 +946,7 @@ void generate_header_includes(FILE *out, Structure *structure)
     gchar *lowerTrain;
     gchar *upperCamel;
     gchar *ownUpperCamel;
-    gchar *includeName;
+    const gchar *includeName;
     GHashTable *includeNames;
     GHashTableIter iter_table;
     gpointer key;
@@ -1059,7 +1059,7 @@ void generate_source_includes(FILE *out, Structure *structure)
 
     for (g_hash_table_iter_init(&iter_table, includeNames);
          g_hash_table_iter_next(&iter_table, &key, &value);) {
-        gchar *includeName = (gchar *)key;
+        const gchar *includeName = (gchar *)key;
         write_str(out, "#include \"");
         write_str(out, includeName);
         write_str(out, ".h\"\n");
@@ -1361,7 +1361,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                     }
 
                     if (g_hash_table_contains(table, var)) {
-                        gchar *val = g_hash_table_lookup(table, var);
+                        const gchar *val = g_hash_table_lookup(table, var);
                         write_str(out, val);
                         val = NULL;
                     } else {
@@ -1753,7 +1753,7 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
             } else {
                 gchar *trueType = get_true_type(method->ret->type);
                 if (g_hash_table_contains(type2structure, trueType)) {
-                    Structure *structure = g_hash_table_lookup(type2structure, trueType);
+                    const Structure *structure = g_hash_table_lookup(type2structure, trueType);
                     if (!structure->isBare && !is_enum_type(method->ret->type)) {
                         (void)g_stpcpy(buffer + strlen(buffer), ", NULL");
                     }

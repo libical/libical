@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
     for (c = icalset_get_first_component(f); c != 0; c = next_c) {
         icalproperty_xlicclass class;
         icalcomponent *match;
-        icalcomponent *inner;
         icalcomponent *reply = 0;
+        const icalcomponent *inner;
 
         assert(c != 0);
 

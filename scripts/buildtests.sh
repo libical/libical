@@ -491,6 +491,7 @@ CPPCHECK() {
     -I "$TOP/src/libicalvcal" \
     -I "$TOP/src/libicalvcard" \
     -I "$TOP/src/libical-glib" \
+    -i "$TOP/src/java/" \
     -i "$TOP/src/Net-ICal-Libical/" \
     $f 2>&1 |
     tee cppcheck-cpp.out

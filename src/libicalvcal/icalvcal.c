@@ -144,7 +144,7 @@ static void icalvcal_traverse_objects(VObject *,
 
 icalcomponent *icalvcal_convert_with_defaults(VObject *object, icalvcal_defaults *defaults)
 {
-    char *name = (char *)vObjectName(object);
+    const char *name = vObjectName(object);
     icalcomponent *container;
     icalcomponent *root;
     icalproperty *prop;

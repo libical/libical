@@ -34,7 +34,7 @@ static icaldirset_options icaldirset_options_default = {O_RDWR | O_CREAT};
 
 const char *icaldirset_path(icalset *set)
 {
-    icaldirset *dset = (icaldirset *)set;
+    const icaldirset *dset = (icaldirset *)set;
 
     return dset->dir;
 }
@@ -78,7 +78,7 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
     char *str;
 
 #if defined(HAVE_DIRENT_H)
-    struct dirent *de;
+    const struct dirent *de;
     DIR *dp;
 
     dp = opendir(dset->dir);
@@ -138,7 +138,7 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
 icalset *icaldirset_init(icalset *set, const char *dir, void *options_in)
 {
     icaldirset *dset;
-    icaldirset_options *options = options_in;
+    const icaldirset_options *options = options_in;
     struct stat sbuf;
 
     icalerror_check_arg_rz((dir != 0), "dir");
@@ -383,8 +383,7 @@ icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
 
     for (i = icalcomponent_begin_component(filecomp, ICAL_ANY_COMPONENT);
          icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
-        icalcomponent *this = icalcompiter_deref(&i);
-
+        const icalcomponent *this = icalcompiter_deref(&i);
         if (this == comp) {
             found = 1;
             break;
@@ -472,7 +471,7 @@ icalcomponent *icaldirset_fetch(icalset *set, icalcomponent_kind kind, const cha
 
 int icaldirset_has_uid(icalset *set, const char *uid)
 {
-    icalcomponent *c;
+    const icalcomponent *c;
 
     icalerror_check_arg_rz((set != 0), "set");
     icalerror_check_arg_rz((uid != 0), "uid");

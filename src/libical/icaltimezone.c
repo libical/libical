@@ -819,7 +819,8 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
 
 int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *tt, int *is_daylight)
 {
-    icaltimezonechange *zone_change, *prev_zone_change;
+    const icaltimezonechange *zone_change;
+    icaltimezonechange *prev_zone_change;
     icaltimezonechange tt_change = {0}, tmp_change;
     size_t change_num, change_num_to_use;
     int found_change;
@@ -984,7 +985,8 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
 int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
                                             const struct icaltimetype *tt, int *is_daylight)
 {
-    icaltimezonechange *zone_change, tt_change, tmp_change;
+    const icaltimezonechange *zone_change;
+    icaltimezonechange tt_change, tmp_change;
     size_t change_num, change_num_to_use;
     int found_change = 1;
     int step, utc_offset;
@@ -1107,7 +1109,7 @@ static size_t icaltimezone_find_nearby_change(icaltimezone *zone, const icaltime
 
     while (lower < upper) {
         middle = (lower + upper) / 2;
-        icaltimezonechange *zone_change = icalarray_element_at(zone->changes, middle);
+        const icaltimezonechange *zone_change = icalarray_element_at(zone->changes, middle);
         int cmp = icaltimezone_compare_change_fn(change, zone_change);
         if (cmp == 0) {
             break;
@@ -1606,7 +1608,8 @@ static bool fetch_lat_long_from_string(const char *str,
                                        char *location)
 {
     size_t len;
-    char *sptr, *lat, *lon, *loc, *temp;
+    const char *loc, *temp;
+    char *sptr, *lat, *lon;
 
     /* We need to parse the latitude/longitude coordinates and location fields  */
     sptr = (char *)str;
@@ -1942,7 +1945,7 @@ bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
 {
     static const char months[][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-    icaltimezonechange *zone_change;
+    const icaltimezonechange *zone_change;
     size_t change_num;
     char buffer[8];
 
@@ -2033,7 +2036,8 @@ static const char *get_zone_directory_builtin(void)
     static ICAL_GLOBAL_VAR char *cache = NULL;
 
 #if !defined(_WIN32_WCE)
-    unsigned char *dirslash, *zislash, *zislashp1;
+    unsigned char *dirslash, *zislash;
+    const char *zislashp1;
 #else
     wchar_t *dirslash, *zislash;
 #endif

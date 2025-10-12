@@ -861,7 +861,7 @@ vcardvalue_kind vcardvalue_isa(const vcardvalue *value)
 
 bool vcardvalue_isa_value(void *value)
 {
-    struct vcardvalue_impl *impl = (struct vcardvalue_impl *)value;
+    const struct vcardvalue_impl *impl = (struct vcardvalue_impl *)value;
 
     icalerror_check_arg_rz((value != 0), "value");
 

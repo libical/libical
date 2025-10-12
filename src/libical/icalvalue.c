@@ -365,7 +365,8 @@ static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char
  */
 static bool simple_str_to_doublestr(const char *from, char *result, int result_len, char **to)
 {
-    char *start = NULL, *end = NULL, *cur = (char *)from;
+    const char *start = NULL;
+    char *end = NULL, *cur = (char *)from;
 
     struct lconv *loc_data = localeconv();
     int i = 0, len;
@@ -1306,7 +1307,7 @@ icalvalue_kind icalvalue_isa(const icalvalue *value)
 
 bool icalvalue_isa_value(void *value)
 {
-    struct icalvalue_impl *impl = (struct icalvalue_impl *)value;
+    const struct icalvalue_impl *impl = (struct icalvalue_impl *)value;
 
     icalerror_check_arg_rz((value != 0), "value");
 

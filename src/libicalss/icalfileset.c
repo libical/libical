@@ -65,7 +65,7 @@ icalset *icalfileset_new_writer(const char *path)
 
 icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
 {
-    icalfileset_options *options = (options_in) ? options_in : &icalfileset_options_default;
+    const icalfileset_options *options = (options_in) ? options_in : &icalfileset_options_default;
     icalfileset *fset = (icalfileset *)set;
     int flags;
     int mode;
@@ -413,7 +413,7 @@ void icalfileset_mark(icalset *set)
 
 icalcomponent *icalfileset_get_component(icalset *set)
 {
-    icalfileset *fset;
+    const icalfileset *fset;
 
     icalerror_check_arg_rz((set != 0), "set");
 

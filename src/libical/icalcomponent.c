@@ -128,8 +128,8 @@ icalcomponent *icalcomponent_new_from_string(const char *str)
 icalcomponent *icalcomponent_clone(const icalcomponent *old)
 {
     icalcomponent *clone;
-    icalproperty *p;
-    icalcomponent *c;
+    const icalcomponent *c;
+    const icalproperty *p;
     icalpvl_elem itr;
 
     icalerror_check_arg_rz((old != 0), "component");
@@ -225,7 +225,7 @@ char *icalcomponent_as_ical_string(const icalcomponent *impl)
 char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
 {
     char *buf;
-    char *tmp_buf;
+    const char *tmp_buf;
     size_t buf_size = 1024;
     char *buf_ptr = 0;
     icalpvl_elem itr;
@@ -233,7 +233,7 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
     /* RFC5545 explicitly says that the newline is *ALWAYS* a \r\n (CRLF)!!!! */
     const char newline[] = "\r\n";
 
-    icalcomponent *c;
+    const icalcomponent *c;
     icalproperty *p;
     icalcomponent_kind kind = icalcomponent_isa(impl);
 
@@ -268,7 +268,7 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
         tmp_buf = icalproperty_as_ical_string_r(p);
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
-        icalmemory_free_buffer(tmp_buf);
+        icalmemory_free_buffer((char *)tmp_buf);
     }
 
     for (itr = icalpvl_head(impl->components); itr != 0; itr = icalpvl_next(itr)) {
@@ -277,7 +277,7 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
         tmp_buf = icalcomponent_as_ical_string_r(c);
         if (tmp_buf != NULL) {
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
-            icalmemory_free_buffer(tmp_buf);
+            icalmemory_free_buffer((char *)tmp_buf);
         }
     }
 
@@ -306,7 +306,7 @@ icalcomponent_kind icalcomponent_isa(const icalcomponent *component)
 
 bool icalcomponent_isa_component(void *component)
 {
-    icalcomponent *impl = component;
+    const icalcomponent *impl = component;
 
     icalerror_check_arg_rz((component != 0), "component");
 
@@ -650,7 +650,7 @@ icalcomponent *icalcomponent_get_first_real_component(const icalcomponent *c)
 
 icaltime_span icalcomponent_get_span(icalcomponent *comp)
 {
-    icalcomponent *inner;
+    const icalcomponent *inner;
     icalcomponent_kind kind;
     icaltime_span span;
     struct icaltimetype start, end;
@@ -793,7 +793,7 @@ bool icalproperty_recurrence_is_excluded(icalcomponent *comp,
  */
 static bool icalcomponent_is_busy(icalcomponent *comp)
 {
-    icalproperty *transp;
+    const icalproperty *transp;
     enum icalproperty_status status;
     bool ret = true;
 
@@ -1326,7 +1326,7 @@ icalcompiter icalcomponent_begin_component(icalcomponent *component, icalcompone
     icalerror_check_arg_re(component != 0, "component", icalcompiter_null);
 
     for (i = icalpvl_head(component->components); i != 0; i = icalpvl_next(i)) {
-        icalcomponent *c = (icalcomponent *)icalpvl_data(i);
+        const icalcomponent *c = (icalcomponent *)icalpvl_data(i);
 
         if (icalcomponent_isa(c) == kind || kind == ICAL_ANY_COMPONENT) {
             itr.iter = i;
@@ -1348,7 +1348,7 @@ icalcompiter icalcomponent_end_component(icalcomponent *component, icalcomponent
     icalerror_check_arg_re(component != 0, "component", icalcompiter_null);
 
     for (i = icalpvl_tail(component->components); i != 0; i = icalpvl_prior(i)) {
-        icalcomponent *c = (icalcomponent *)icalpvl_data(i);
+        const icalcomponent *c = (icalcomponent *)icalpvl_data(i);
 
         if (icalcomponent_isa(c) == kind || kind == ICAL_ANY_COMPONENT) {
             itr.iter = icalpvl_next(i);
@@ -1369,7 +1369,7 @@ icalcomponent *icalcompiter_next(icalcompiter *i)
     }
 
     for (i->iter = icalpvl_next(i->iter); i->iter != 0; i->iter = icalpvl_next(i->iter)) {
-        icalcomponent *c = (icalcomponent *)icalpvl_data(i->iter);
+        const icalcomponent *c = (icalcomponent *)icalpvl_data(i->iter);
 
         if (icalcomponent_isa(c) == i->kind || i->kind == ICAL_ANY_COMPONENT) {
             return icalcompiter_deref(i);
@@ -1388,7 +1388,7 @@ icalcomponent *icalcompiter_prior(icalcompiter *i)
     }
 
     for (i->iter = icalpvl_prior(i->iter); i->iter != 0; i->iter = icalpvl_prior(i->iter)) {
-        icalcomponent *c = (icalcomponent *)icalpvl_data(i->iter);
+        const icalcomponent *c = (icalcomponent *)icalpvl_data(i->iter);
 
         if (icalcomponent_isa(c) == i->kind || i->kind == ICAL_ANY_COMPONENT) {
             return icalcompiter_deref(i);
@@ -2168,7 +2168,7 @@ static void icalcomponent_merge_vtimezone(icalcomponent *comp,
     icalproperty *tzid_prop;
     const char *tzid;
     char *tzid_copy;
-    icaltimezone *existing_vtimezone;
+    const icaltimezone *existing_vtimezone;
 
     /* Get the TZID of the VTIMEZONE. */
     tzid_prop = icalcomponent_get_first_property(vtimezone, ICAL_TZID_PROPERTY);
@@ -2684,7 +2684,7 @@ static int comp_compare(void *a, void *b)
                                          icalcomponent_get_recurrenceid(c2));
                 }
             } else {
-                icalproperty *p1, *p2;
+                const icalproperty *p1, *p2;
 
                 switch (k1) {
                 case ICAL_VALARM_COMPONENT:

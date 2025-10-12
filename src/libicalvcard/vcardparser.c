@@ -566,7 +566,7 @@ static int _parse_prop_params(struct vcardparser_state *state)
 static int _parse_prop_name(struct vcardparser_state *state)
 {
     const char *name;
-    char *group = NULL;
+    const char *group = NULL;
     vcardproperty_kind kind;
     vcardproperty_version version = VCARD_VERSION_NONE;
     int r = 0;

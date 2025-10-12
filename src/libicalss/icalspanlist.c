@@ -27,8 +27,8 @@
 
 static int compare_span(void *a, void *b)
 {
-    struct icaltime_span *span_a = (struct icaltime_span *)a;
-    struct icaltime_span *span_b = (struct icaltime_span *)b;
+    const struct icaltime_span *span_a = (struct icaltime_span *)a;
+    const struct icaltime_span *span_b = (struct icaltime_span *)b;
 
     if (span_a->start == span_b->start) {
         return 0;
@@ -121,7 +121,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
        span. */
 
     for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
-        struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
+        const struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
 
         if (!s) {
             continue;
@@ -152,7 +152,7 @@ icalspanlist *icalspanlist_new(icalset *set, struct icaltimetype start, struct i
        that indicates this */
 
     if (icaltime_is_null_time(end)) {
-        struct icaltime_span *last_span;
+        const struct icaltime_span *last_span;
 
         last_span = (struct icaltime_span *)icalpvl_data(icalpvl_tail(sl->spans));
 
@@ -316,7 +316,7 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     /* loop through each span and mark the slots in the array */
 
     for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
-        struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
+        const struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
 
         if (s && s->is_busy == 1) {
             icaltime_t offset_start = s->start / delta_t - sl_start / delta_t;

@@ -682,7 +682,7 @@ const char *icalbdbset_path(icalset *set)
 
 const char *icalbdbset_subdb(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *)set;
+    const icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -923,7 +923,7 @@ void icalbdbset_mark(icalset *set)
 
 icalcomponent *icalbdbset_get_component(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *)set;
+    const icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -1187,7 +1187,7 @@ icalerrorenum icalbdbset_free_cluster(icalset *set)
 
 icalcomponent *icalbdbset_get_cluster(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *)set;
+    const icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -1603,8 +1603,8 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
      * > 0 if a > b
      */
 
-    char *ac = (char *)a->data;
-    char *bc = (char *)b->data;
+    const char *ac = a->data;
+    const char *bc = b->data;
 
     _unused(dbp);
     return strncmp(ac, bc, a->size);
