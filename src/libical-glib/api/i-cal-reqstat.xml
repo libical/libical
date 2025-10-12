@@ -14,7 +14,7 @@
   </method>
   <method name="i_cal_reqstat_to_string" corresponds="icalreqstattype_as_string_r" since="1.0">
     <parameter type="ICalReqstat *" name="stat" comment="A #ICalReqstat"/>
-    <returns type="gchar *" annotation="transfer full" comment="A string." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="A string." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts #ICalReqstat to a string representation.</comment>
   </method>
   <method name="i_cal_reqstat_new_default" corresponds="none" kind="private" annotation="skip" since="1.0">

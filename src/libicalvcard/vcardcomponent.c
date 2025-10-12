@@ -108,7 +108,7 @@ vcardcomponent *vcardcomponent_new_from_string(const char *str)
 vcardcomponent *vcardcomponent_clone(const vcardcomponent *old)
 {
     vcardcomponent *clone;
-    vcardproperty *p;
+    const vcardproperty *p;
     icalpvl_elem itr;
 
     icalerror_check_arg_rz((old != 0), "component");
@@ -265,7 +265,7 @@ vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component)
 
 bool vcardcomponent_isa_component(void *component)
 {
-    vcardcomponent *impl = component;
+    const vcardcomponent *impl = component;
 
     icalerror_check_arg_rz((component != 0), "component");
 
@@ -664,8 +664,8 @@ static int prop_compare(void *a, void *b)
 static int prop_kind_compare(vcardproperty_kind kind,
                              vcardcomponent *c1, vcardcomponent *c2)
 {
-    vcardproperty *p1 = vcardcomponent_get_first_property(c1, kind);
-    vcardproperty *p2 = vcardcomponent_get_first_property(c2, kind);
+    const vcardproperty *p1 = vcardcomponent_get_first_property(c1, kind);
+    const vcardproperty *p2 = vcardcomponent_get_first_property(c2, kind);
 
     if (p1 && p2) {
         return strcmpsafe(vcardproperty_get_value_as_string(p1),

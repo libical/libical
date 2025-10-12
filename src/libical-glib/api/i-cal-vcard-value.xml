@@ -31,7 +31,7 @@
   </method>
   <method name="i_cal_vcard_value_as_vcard_string" corresponds="vcardvalue_as_vcard_string_r" since="4.0">
     <parameter type="const ICalVcardValue *" name="value" comment="A #ICalVcardValue"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="The string representation." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts the #ICalVcardValue to a string.</comment>
   </method>
   <method name="i_cal_vcard_value_isa" corresponds="vcardvalue_isa" since="4.0">

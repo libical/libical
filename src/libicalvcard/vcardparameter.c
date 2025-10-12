@@ -376,7 +376,7 @@ vcardparameter_kind vcardparameter_isa(const vcardparameter *parameter)
 
 bool vcardparameter_isa_parameter(void *parameter)
 {
-    struct vcardparameter_impl *impl = (struct vcardparameter_impl *)parameter;
+    const struct vcardparameter_impl *impl = (struct vcardparameter_impl *)parameter;
 
     if (parameter == 0) {
         return false;

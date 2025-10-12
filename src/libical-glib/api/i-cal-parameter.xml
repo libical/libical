@@ -34,7 +34,7 @@
   </method>
   <method name="i_cal_parameter_as_ical_string" corresponds="icalparameter_as_ical_string_r" kind="others" since="1.0">
     <parameter type="ICalParameter *" name="parameter" annotation="in" comment="The #ICalParameter to be converted"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation of the @parameter." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="The string representation of the @parameter." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts an #ICalParameter to the string representation.</comment>
   </method>
   <method name="i_cal_parameter_isa" corresponds="icalparameter_isa" kind="others" since="1.0">

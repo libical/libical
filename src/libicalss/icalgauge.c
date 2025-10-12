@@ -331,7 +331,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
         }
 
         /* check if it is a recurring */
-        icalproperty *rrule = icalcomponent_get_first_property(sub_comp, ICAL_RRULE_PROPERTY);
+        const icalproperty *rrule = icalcomponent_get_first_property(sub_comp, ICAL_RRULE_PROPERTY);
 
         if (gauge->expand && rrule) {
             if (w->prop == ICAL_DTSTART_PROPERTY ||

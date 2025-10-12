@@ -240,8 +240,7 @@ static bool parser_get_param_name_stack(char *line, char *name, size_t name_leng
         /* Dequote the value if it is a single quoted-string */
         next++;
 
-        char *end_quote = (*next == '"') ? next : parser_get_next_char('"', next, 0);
-
+        const char *end_quote = (*next == '"') ? next : parser_get_next_char('"', next, 0);
         if (end_quote == 0) {
             return false;
         }
@@ -407,7 +406,7 @@ static char *parser_get_next_value(char *line, char **end, icalvalue_kind kind)
 static char *parser_get_next_parameter(char *line, char **end)
 {
     char *next;
-    char *v;
+    const char *v;
 
     v = parser_get_next_char(':', line, 1);
     next = parser_get_next_char(';', line, 1);
@@ -972,7 +971,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                    "TZID=GMT+05" to "TZID=GMT+05:30"
                  */
                 if (lastColon && *(lastColon + 1) != 0) {
-                    char *strStart = line + strlen(name) + 2;
+                    const char *strStart = line + strlen(name) + 2;
 
                     end = lastColon + 1;
 
@@ -1243,7 +1242,7 @@ struct slg_data {
 char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
 {
     int replace_cr = 0;
-    char *n;
+    const char *n;
     size_t size;
     struct slg_data *data = (struct slg_data *)d;
 

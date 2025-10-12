@@ -891,7 +891,7 @@ void populate_dependencies(Structure *structure)
     GList *iter_method;
     GList *iter_para;
     Method *method;
-    Parameter *para;
+    const Parameter *para;
     gchar *trueType;
 
     iter_method = NULL;

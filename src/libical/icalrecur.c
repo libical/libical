@@ -1052,7 +1052,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
     }
 
     for (j = 0; j < ICAL_BY_NUM_PARTS; j++) {
-        icalrecurrence_by_data *by = &recur->by[j];
+        const icalrecurrence_by_data *by = &recur->by[j];
 
         /* Skip unused arrays */
         if (by->size > 0) {
