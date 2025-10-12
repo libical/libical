@@ -50,7 +50,6 @@ int main(int argc, char *argv[])
         inner = icalcomponent_get_first_real_component(c);
 
         reply = 0;
-        int dont_remove = 0;
 
         if (inner == 0) {
             printf("Bad component, no inner\n %s\n", icalcomponent_as_ical_string(c));
@@ -319,11 +318,6 @@ int main(int argc, char *argv[])
         }
 
         next_c = icalset_get_next_component(f);
-
-        if (dont_remove == 0) {
-            /*icalset_remove_component(f,c);
-               icalset_add_component(trash,c); */
-        }
     }
 
     icalset_free(f);
