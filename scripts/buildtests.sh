@@ -498,8 +498,9 @@ CPPCHECK() {
 
   set -e
   CPPCHECK_WARNINGS cppcheck-c.out
+  rm -f cppcheck-c.out
   CPPCHECK_WARNINGS cppcheck-cpp.out
-  rm -f cppcheck-c.out cppcheck-cpp.out
+  rm -f cppcheck-cpp.out
   CLEAN
   echo "===== END CPPCHECK: $1 ======"
 }
