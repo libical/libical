@@ -1499,7 +1499,7 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
 
     tzid_prefix = icaltimezone_tzid_prefix();
     /* Check that the TZID starts with our unique prefix. */
-    if (strncmp(tzid, tzid_prefix, strlen(tzid_prefix))) {
+    if (strncmp(tzid, tzid_prefix, strlen(tzid_prefix)) != 0) {
         int ii;
 
         for (ii = 0; glob_compat_tzids[ii].tzid; ii++) {
