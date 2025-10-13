@@ -1623,7 +1623,7 @@ enum byrule
     BY_YEAR_DAY = 5,
     BY_WEEK_NO = 6,
     BY_MONTH = 7,
-    BY_SET_POS
+    BY_SET_POS = 8,
 };
 
 void icalrecurrencetype_test(void)
