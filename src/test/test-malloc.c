@@ -100,7 +100,7 @@ void *test_realloc(void *p, size_t size)
     hdr->magic_no = 0;
 
     // cppcheck-suppress memleakOnRealloc; the mem block p passed to this function stays valid.
-    hdr = (struct testmalloc_hdr *)realloc(hdr, size + TESTMALLOC_HDR_SIZE);
+    hdr = (struct testmalloc_hdr *)realloc(hdr, size + TESTMALLOC_HDR_SIZE); //NOLINT(bugprone-suspicious-realloc-usage)
     if (hdr == NULL) {
         global_testmalloc_statistics.realloc_failed_cnt++;
         return NULL;
