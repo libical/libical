@@ -45,7 +45,7 @@ const char *ical_timet_string(const icaltime_t t);
 const char *ictt_as_string(struct icaltimetype t);
 char *icaltime_as_ctime(struct icaltimetype t);
 
-void _ok(const char *name, int result, const char *file, int linenum, const char *test);
+void _ok(const char *test_name, int success, const char *file, int linenum, const char *test);
 void _is(const char *test_name, const char *str1, const char *str2, const char *file,
          int linenum);
 void _int_is(const char *test_name, int i1, int i2, const char *file, int linenum);

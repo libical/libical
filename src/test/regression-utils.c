@@ -158,13 +158,13 @@ void test_start(int numtests)
     }
 }
 
-void test_header(const char *header, int set)
+void test_header(const char *title, int test_set)
 {
     if (!QUIET) {
-        printf("########## %-40s (%d) ##########\n", header, set);
+        printf("########## %-40s (%d) ##########\n", title, test_set);
     }
 
-    current_set = set;
+    current_set = test_set;
 }
 
 int test_end(void)
