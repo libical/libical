@@ -295,7 +295,7 @@ static char *fold_property_line(char *text)
 
         /* This adds the line to our tmp buffer. We temporarily place a '\0'
            in text, so we can copy the line in one go. */
-        int ch = *next_line_start;
+        char ch = *next_line_start;
         *next_line_start = '\0';
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, line_start);
         *next_line_start = ch;
