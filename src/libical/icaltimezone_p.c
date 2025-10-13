@@ -119,6 +119,7 @@ typedef struct
 
 static int decode(const void *ptr)
 {
+    // NOLINTBEGIN(misc-redundant-expression)
     if ((BYTE_ORDER == BIG_ENDIAN) && sizeof(int) == 4) {
         return *(const int *)ptr;
     } else if (BYTE_ORDER == LITTLE_ENDIAN && sizeof(int) == 4) {
@@ -128,6 +129,7 @@ static int decode(const void *ptr)
 #else
         return 1;
 #endif
+        // NOLINTEND(misc-redundant-expression)
     } else {
         const unsigned char *p = ptr;
         int result = (*p & (1 << (CHAR_BIT - 1))) ? ~0 : 0;
