@@ -1049,12 +1049,16 @@ const char *vcardparser_errstr(int err)
         return "End of data while parsing quoted value";
     case PE_QSTRING_EOL:
         return "End of line while parsing quoted value";
+    case PE_QSTRING_EOV:
+        return "End of line while parsing multi or structured value";
     case PE_VALUE_INVALID:
         return "Invalid value for property";
     case PE_ILLEGAL_CHAR:
         return "Illegal character in vCard";
+    case PE_NUMERR:
+    default:
+        return "Unknown error";
     }
-    return "Unknown error";
 }
 
 vcardcomponent *vcardparser_parse_string(const char *str)

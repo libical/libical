@@ -511,6 +511,8 @@ void icalparameter_decode_value(char *value)
                 *out = '"';
                 found_escaped_char = 1;
                 break;
+            default:
+                break;
             }
         }
 

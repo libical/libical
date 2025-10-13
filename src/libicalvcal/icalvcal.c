@@ -93,6 +93,9 @@ static const char *get_string_value(VObject *object, int *free_string)
     case VCVT_STRINGZ:
         *free_string = 0;
         return (char *)vObjectStringZValue(object);
+
+    default:
+        break;
     }
 
     *free_string = 0;
