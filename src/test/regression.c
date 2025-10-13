@@ -2673,8 +2673,9 @@ void test_fblist(void)
 
     foo = icalspanlist_as_freebusy_matrix(sl, 3600);
 
-    for (i = 0; foo[i] != -1; i++)
+    for (i = 0; foo[i] != -1; i++) {
         ; /* find number entries */
+    }
 
     int_is("Calculating freebusy hourly matrix", i, (7 * 24));
 

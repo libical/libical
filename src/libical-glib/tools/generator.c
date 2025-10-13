@@ -1868,8 +1868,9 @@ gchar *get_true_type(const gchar *type)
     type_len = (guint)strlen(type);
     end = type_len - 1;
 
-    for (i = 0; i < const_prefix_len && i < type_len && const_prefix[i] == type[i]; i++)
+    for (i = 0; i < const_prefix_len && i < type_len && const_prefix[i] == type[i]; i++) {
         ;
+    }
 
     if (i == const_prefix_len) {
         start = i + 1;
@@ -2063,8 +2064,9 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
             }
             for (i = 0;
                  i < nameSpace_len && trueType[i] && nameSpace[i] == trueType[i];
-                 i++)
+                 i++) {
                 ;
+            }
 
             if (i == nameSpace_len) {
                 (void)g_stpcpy(buffer + strlen(buffer), "\t");
