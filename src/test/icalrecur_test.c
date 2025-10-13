@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
                 }
             }
 
-            if (strcmp(instances, actual_instances)) {
+            if (strcmp(instances, actual_instances) != 0) {
                 nof_errors++;
                 test_error = 1;
 
@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
                     sep = ",";
                 }
 
-                if (strcmp(instances, actual_instances)) {
+                if (strcmp(instances, actual_instances) != 0) {
                     nof_errors++;
 
                     if (!test_error) {

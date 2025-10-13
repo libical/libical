@@ -456,7 +456,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
 
     /* read version 1 header */
     EFREAD(&header, 44, 1, f);
-    if (memcmp(header.magic, "TZif", 4)) {
+    if (memcmp(header.magic, "TZif", 4) != 0) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         goto error;
     }
@@ -493,7 +493,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
 
         /* read version 2+ header */
         EFREAD(&header, 44, 1, f);
-        if (memcmp(header.magic, "TZif", 4)) {
+        if (memcmp(header.magic, "TZif", 4) != 0) {
             icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
             goto error;
         }
@@ -756,7 +756,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
             if (types[prev_idx].gmtoff != zone->gmtoff_from ||
                 types[idx].gmtoff != zone->gmtoff_to ||
                 (types[idx].zname != NULL &&
-                 strcmp(types[idx].zname, zone->name))) {
+                 strcmp(types[idx].zname, zone->name) != 0)) {
                 zone->rdate_comp = NULL;
                 terminate = 1;
             }

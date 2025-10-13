@@ -97,7 +97,7 @@ void icalstrarray_remove(icalstrarray *array, const char *del)
 
     for (size_t i = 0; i < array->num_elements; i++) {
         char **elem = icalarray_element_at(array, i);
-        if (strcmp(*elem, del)) {
+        if (strcmp(*elem, del) != 0) {
             icalarray_set_element_at(array, elem, j++);
         } else {
             icalmemory_free_buffer(*elem);
