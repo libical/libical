@@ -54,7 +54,7 @@ static const int weekday_codes[] = {
     ICAL_FRIDAY_WEEKDAY,
     ICAL_SATURDAY_WEEKDAY};
 
-struct conversion_table_struct {
+struct conversion_table_struct { //NOLINT(clang-analyzer-optin.performance.Padding) too much work to change all the initialization
     const char *vcalname;
     enum datatype type;
     void *(*conversion_func)(int icaltype, VObject *o, const icalcomponent *comp,

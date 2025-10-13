@@ -618,7 +618,7 @@ int icalclassify_delinecounter(const struct icalclassify_parts *comp,
     icalclassify_post
 }
 
-static const struct icalclassify_map {
+static const struct icalclassify_map { //NOLINT(clang-analyzer-optin.performance.Padding) too much work to change all the initialization
     icalproperty_method method;
     int (*fn)(const struct icalclassify_parts *comp, const struct icalclassify_parts *match,
               const char *user);
