@@ -844,7 +844,7 @@ static void comp_to_v4(vcardcomponent *impl)
                     int n = snprintf(buf, size, "geo:%s,%s",
                                      geo.coords.lat, geo.coords.lon);
 
-                    size = (size_t)(n + 1);
+                    size = (size_t)n + 1;
                     buf = icalmemory_new_buffer(size);
                     snprintf(buf, size, "geo:%s,%s",
                              geo.coords.lat, geo.coords.lon);
