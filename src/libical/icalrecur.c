@@ -1697,7 +1697,7 @@ static short decode_month(short *month, bool is_hebrew)
 }
 
 /* cppcheck-suppress constParameterCallback */
-static short decode_day(short *day, bool flags)
+static short decode_day(short *day, bool flags) //NOLINT(readability-non-const-parameter)
 {
     _unused(flags);
 
