@@ -184,7 +184,8 @@ static icaltime_t icaltime_timegm(const struct tm *tm)
     }
 
     year = 1900 + tm->tm_year;
-    days = (icaltime_t)(365 * (year - 1970) + icaltime_leap_days(1970, year));
+    int idays = (365 * (year - 1970) + icaltime_leap_days(1970, year));
+    days = (icaltime_t)idays;
     days += days_in_year_passed_month[0][tm->tm_mon];
 
     if (tm->tm_mon > 1 && icaltime_is_leap_year(year)) {
