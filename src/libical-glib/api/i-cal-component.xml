@@ -507,7 +507,7 @@
   <method name="i_cal_component_get_status" corresponds="icalcomponent_get_status" kind="get" since="1.0">
     <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
     <returns type="ICalPropertyStatus" comment="A #ICalPropertyStatus."/>
-    <comment xml:space="preserve">Gets the status of the #ICalComponent.</comment>
+    <comment xml:space="preserve">Returns the property status of the #ICalComponent. ICAL_STATUS_NONE is returned if a problem parsing the component was detected.</comment>
   </method>
   <declaration position="header" content="typedef void (*ICalComponentForeachTZIDFunc)(ICalParameter *param, gpointer user_data);"/>
   <declaration position="body">
