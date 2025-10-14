@@ -1253,7 +1253,7 @@ void vcardcomponent_transform(vcardcomponent *impl,
 
 enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *card)
 {
-    icalerror_check_arg_rz(card != 0, "card");
+    icalerror_check_arg_rx(card != 0, "card", VCARD_VERSION_NONE);
 
     if (card->versionp == 0) {
         card->versionp =
