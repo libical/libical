@@ -6873,7 +6873,6 @@ int main(int argc, char *argv[])
     extern int optopt;
 #endif
 #if defined(HAVE_GETOPT)
-    int errflg = 0;
     int c;
 #endif
     int do_test = 0;
@@ -6911,15 +6910,11 @@ int main(int argc, char *argv[])
             do_header = 1;
             break;
         }
-        case '?': {
-            errflg++;
+        default: { /* '?' */
+            fprintf(stderr, "Usage: %s [-v|-q|-l]\n", strrchr(argv[0], '/'));
+            exit(1);
         }
         }
-    }
-
-    if (errflg > 0) {
-        fprintf(stderr, "Usage: %s [-v|-q|-l]\n", strrchr(argv[0], '/'));
-        exit(1);
     }
 
     if (optind < argc) {
