@@ -196,7 +196,9 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
             /* Now see if the comparison is equivalent to the comparison
                specified in the gauge */
 
-            if (rel == compare) {
+            if (rel == ICAL_XLICCOMPARETYPE_NONE || compare == ICAL_XLICCOMPARETYPE_NONE) {
+                localpass = 0;
+            } else if (rel == compare) {
                 localpass++;
             } else if (compare == ICAL_XLICCOMPARETYPE_LESSEQUAL &&
                        (rel == ICAL_XLICCOMPARETYPE_LESS || rel == ICAL_XLICCOMPARETYPE_EQUAL)) {
