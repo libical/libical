@@ -2,7 +2,7 @@
 #define ${namespaceLowerSnake}_TYPE_${nameLowerSnake} \
     (${lowerSnake}_get_type ())
 LIBICAL_ICAL_EXPORT
-G_DECLARE_DERIVABLE_TYPE(${upperCamel}, ${lowerSnake}, ${namespaceLowerSnake}, ${nameLowerSnake}, ICalObject)
+I_CAL_GLIB_DECLARE_DERIVABLE_TYPE(${upperCamel}, ${lowerSnake}, ${namespaceLowerSnake}, ${nameLowerSnake}, ICalObject)
 
 /**
  * ${upperCamel}:
