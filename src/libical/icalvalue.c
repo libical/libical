@@ -1329,15 +1329,10 @@ static bool icalvalue_is_time(const icalvalue *a)
     return false;
 }
 
-/*
- * In case of error, this function returns 0. This is partly bogus, as 0 is
- * not part of the returned enum.
- * FIXME We should probably add an error value to the enum.
- */
 icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalvalue *b)
 {
-    icalerror_check_arg_rz((a != 0), "a");
-    icalerror_check_arg_rz((b != 0), "b");
+    icalerror_check_arg_rx((a != 0), "a", ICAL_XLICCOMPARETYPE_NONE);
+    icalerror_check_arg_rx((b != 0), "b", ICAL_XLICCOMPARETYPE_NONE);
 
     /* Not the same type; they can only be unequal */
     if (!(icalvalue_is_time(a) && icalvalue_is_time(b)) && icalvalue_isa(a) != icalvalue_isa(b)) {
@@ -1504,7 +1499,7 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
     case ICAL_NO_VALUE:
     default: {
         icalerror_warn("Comparison not implemented for value type");
-        return 0;
+        return ICAL_XLICCOMPARETYPE_NONE;
     }
     }
 }

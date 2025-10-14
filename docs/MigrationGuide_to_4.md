@@ -120,6 +120,9 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
 * The `icaltzutil_set_zone_directory()` and `icaltzutil_get_zone_directory()` functions are now called
   `icaltimezone_set_system_zone_directory()` and `icaltimezone_get_system_zone_directory()` respectively.
 
+* In previous versions, the `icalvalue_compare()` function returned 0 if unknown or null value types
+  were encountered; in this version, ICAL_XLICCOMPARETYPE_NONE is returned instead.
+
 ### New functions
 
 The following functions have been added:

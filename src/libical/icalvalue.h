@@ -42,6 +42,16 @@ LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_isa(const icalvalue *value);
 
 LIBICAL_ICAL_EXPORT bool icalvalue_isa_value(void *);
 
+/**
+ * Compares two icalvalues.
+ *
+ * @param a an icalvalue to compare
+ * @param b an icalvalue to compare
+ *
+ * @return an icalparameter_xliccomparetype representing how @p a and @p b compare;
+ * if the values do not have the same type ICAL_XLICCOMPARETYPE_NOTEQUAL is returned;
+ * ICAL_XLICCOMPARETYPE_NONE is returned if the values type is unknown or one of the values is null.
+ */
 LIBICAL_ICAL_EXPORT icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a,
                                                                     const icalvalue *b);
 
