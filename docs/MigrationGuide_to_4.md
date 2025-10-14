@@ -129,6 +129,9 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
 * In previous versions, the `icalvalue_compare()` function returned 0 if unknown or null value types
   were encountered; in this version, ICAL_XLICCOMPARETYPE_NONE is returned instead.
 
+* In previous versions, the `icalcomponent_get_status()` returned 0 if a problem parsing the status property
+  was detected; in this version, ICAL_STATUS_NONE is returned instead.
+
 ### New functions
 
 The following functions have been added:

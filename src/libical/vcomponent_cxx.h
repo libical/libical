@@ -172,6 +172,11 @@ public:
     int get_sequence() const;
     void set_sequence(const int &v);
 
+    /**
+     * Returns the status VComponent status.
+     *
+     * @returns the status property or ICAL_STATUS_NONE if a problem parsing the status was detected.
+     */
     int get_status() const;
     void set_status(const enum icalproperty_status &v);
 

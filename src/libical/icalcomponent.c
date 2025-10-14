@@ -822,7 +822,7 @@ static bool icalcomponent_is_busy(icalcomponent *comp)
         }
     }
     status = icalcomponent_get_status(comp);
-    if (ret && status) {
+    if (ret && status != ICAL_STATUS_NONE) {
         switch (status) {
         case ICAL_STATUS_CANCELLED:
         case ICAL_STATUS_TENTATIVE:
@@ -1980,13 +1980,13 @@ enum icalproperty_status icalcomponent_get_status(icalcomponent *comp)
 
     if (inner == 0) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        return 0;
+        return ICAL_STATUS_NONE;
     }
 
     prop = icalcomponent_get_first_property(inner, ICAL_STATUS_PROPERTY);
 
     if (prop == 0) {
-        return 0;
+        return ICAL_STATUS_NONE;
     }
 
     return icalproperty_get_status(prop);
