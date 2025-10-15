@@ -1283,8 +1283,10 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
         isNegate = TRUE;
         iter = 1;
     }
+    // NOLINTBEGIN(bugprone-inc-dec-in-conditions) works as is
     g_return_if_fail(iter + 1 < statement_len && statement[iter++] == '$' &&
                      statement[iter++] == '{');
+    // NOLINTEND(bugprone-inc-dec-in-conditions)
 
     condition = g_new(gchar, BUFFER_SIZE);
     *condition = '\0';
