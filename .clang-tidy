@@ -42,19 +42,5 @@ Checks: -*,
         -readability-static-accessed-through-instance,
         -readability-use-std-min-max,
 CheckOptions:
-    - key:  bugprone-assert-side-effects.AssertMacros
-      value: 'Q_ASSERT;QVERIFY;QCOMPARE;AKVERIFY'
-    - key:  CheckFunctionCalls
-      value: true
-    - key:  StringCompareLikeFuctions
-      value: 'QString::compare;QString::localeAwareCompare'
-    - key: WarnOnSizeOfIntegerExpression
-      value: 1
-    - key: bugprone-dangling-handle.HandleClasses
-      value: 'std::string_view;QStringView'
-    - key: IgnoreClassesWithAllMemberVariablesBeingPublic
-      value: true
-    - key: VectorLikeClasses
-      value: 'std::vector;QList'
     - key: bugprone-reserved-identifier.AllowedIdentifiers
       value: '__ICalTriggerType_;__ICalTimeType_;__ICalRecurrenceType_;__ICalPeriodType_;__ICalDurationType_'
