@@ -224,7 +224,7 @@ void test_values(void)
     icalvalue_free(v);
     icalvalue_free(copy);
 
-    v = icalvalue_new((icalvalue_kind)-1);
+    v = icalvalue_new((icalvalue_kind)-1); //NOLINT (purposefully, for testing)
 
     ok("icalvalue_new(-1), Invalid type", (v == NULL));
 
@@ -327,7 +327,7 @@ void test_properties(void)
     icalproperty_free(clone);
     icalproperty_free(prop);
 
-    prop = icalproperty_new((icalproperty_kind)-1);
+    prop = icalproperty_new((icalproperty_kind)-1); //NOLINT (purposefully, for testing)
 
     ok("test icalproperty_new() with invalid type (-1)", (prop == NULL));
 
