@@ -91,12 +91,12 @@ typedef struct
     char charcnt[4];
 } tzinfo;
 
-#define EFREAD(buf, size, num, fs)                                     \
-    if (!ferror(fs) && !feof(fs) && fread(buf, size, num, fs) < num) { \
-        if (ferror(fs)) {                                              \
-            icalerror_set_errno(ICAL_FILE_ERROR);                      \
-            goto error;                                                \
-        }                                                              \
+#define EFREAD(buf, size, num, fs)                                       \
+    if (!ferror(fs) && !feof(fs) && fread(buf, size, num, fs) < (num)) { \
+        if (ferror(fs)) {                                                \
+            icalerror_set_errno(ICAL_FILE_ERROR);                        \
+            goto error;                                                  \
+        }                                                                \
     }
 
 typedef struct
@@ -229,7 +229,7 @@ static char *parse_posix_zone(char *p, ttinfo *type)
     return p;
 }
 
-#define nth_weekday(week, day) (icalrecurrencetype_encode_day((enum icalrecurrencetype_weekday)day, (short)week))
+#define nth_weekday(week, day) (icalrecurrencetype_encode_day((enum icalrecurrencetype_weekday)(day), (short)(week)))
 
 static bool icalrecur_set_single_by(icalrecurrence_by_data *by, short value)
 {

@@ -717,7 +717,7 @@ static void icalrecurrencetype_free(struct icalrecurrencetype *recur, int free_s
 #define SAFEFREE(p)                \
     if (p) {                       \
         icalmemory_free_buffer(p); \
-        p = 0;                     \
+        (p) = 0;                   \
     }
 
     SAFEFREE(recur->rscale);
@@ -1118,7 +1118,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
 #define BITS_PER_LONG ((unsigned short)(8 * sizeof(unsigned long)))
 
 /* Number of longs in mask of n bits */
-#define LONGS_PER_BITS(n) ((n + BITS_PER_LONG - 1) / BITS_PER_LONG)
+#define LONGS_PER_BITS(n) (((n) + BITS_PER_LONG - 1) / BITS_PER_LONG)
 
 #define ICAL_YEARDAYS_MASK_SIZE (ICAL_BY_YEARDAY_SIZE + 7)
 #define ICAL_YEARDAYS_MASK_OFFSET 4
@@ -2265,7 +2265,7 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype *rule,
         return 0;
     }
 
-#define IN_RANGE(val, min, max) (val >= min && val <= max)
+#define IN_RANGE(val, min, max) ((val) >= (min) && (val) <= (max))
     /* Make sure that DTSTART is a sane value */
     if (!icaltime_is_valid_time(dtstart) ||
         !IN_RANGE(dtstart.year, 0, MAX_TIME_T_YEAR) ||
