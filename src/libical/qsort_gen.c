@@ -50,10 +50,10 @@ void qsort_gen_memswap(void *m1, void *m2, size_t size)
     stackptr[0] = base;   \
     stackptr[1] = limit;  \
     stackptr += 2
-#define POP(base, limit) \
-    stackptr -= 2;       \
-    base = stackptr[0];  \
-    limit = stackptr[1]
+#define POP(base, limit)  \
+    stackptr -= 2;        \
+    (base) = stackptr[0]; \
+    (limit) = stackptr[1]
 /* TODO: Stack usage is log2(nmemb) (minus what T shaves off the worst case).
          Worst-case nmemb is platform dependent and should probably be
          configured.

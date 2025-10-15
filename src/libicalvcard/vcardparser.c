@@ -182,15 +182,15 @@ static void buf_vprintf(struct buf *buf, const char *fmt, va_list args)
 #define PUTC(C) buf_putc(&state->buf, C)
 #define INC(I) state->p += I
 #define IS_CTRL(ch) \
-    (ch > 0 && ch <= 0x1f && ch != '\r' && ch != '\n' && ch != '\t')
-#define HANDLECTRL(state)              \
-    {                                  \
-        if (IS_CTRL(*state->p)) {      \
-            while (IS_CTRL(*state->p)) \
-                state->p++;            \
-        }                              \
-        if ((*state->p) == 0)          \
-            break;                     \
+    ((ch) > 0 && (ch) <= 0x1f && (ch) != '\r' && (ch) != '\n' && (ch) != '\t')
+#define HANDLECTRL(state)                \
+    {                                    \
+        if (IS_CTRL(*(state)->p)) {      \
+            while (IS_CTRL(*(state)->p)) \
+                (state)->p++;            \
+        }                                \
+        if ((*(state)->p) == 0)          \
+            break;                       \
     }
 
 static int _parse_param_name(struct vcardparser_state *state)
