@@ -367,7 +367,7 @@ GList *get_list_from_string(const gchar *str)
         list = g_list_append(list, ret[iter]);
     }
 
-    g_free(ret);
+    g_free((void *)ret);
     return list;
 }
 

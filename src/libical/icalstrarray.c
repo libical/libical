@@ -59,7 +59,7 @@ void icalstrarray_append(icalstrarray *array, const char *elem)
 
     char *copy = icalmemory_strdup(elem);
 
-    icalarray_append(array, &copy);
+    icalarray_append(array, (const void *)&copy);
 }
 
 void icalstrarray_add(icalstrarray *array, const char *elem)
@@ -79,7 +79,7 @@ void icalstrarray_remove_element_at(icalstrarray *array, size_t position)
         return;
     }
 
-    char **del = icalarray_element_at(array, position);
+    char **del = (char **)icalarray_element_at(array, position);
 
     if (del && *del) {
         icalmemory_free_buffer(*del);
@@ -96,9 +96,9 @@ void icalstrarray_remove(icalstrarray *array, const char *del)
     size_t j = 0;
 
     for (size_t i = 0; i < array->num_elements; i++) {
-        char **elem = icalarray_element_at(array, i);
+        char **elem = (char **)icalarray_element_at(array, i);
         if (strcmp(*elem, del) != 0) {
-            icalarray_set_element_at(array, elem, j++);
+            (void)icalarray_set_element_at(array, (const void *)elem, j++);
         } else {
             icalmemory_free_buffer(*elem);
         }
@@ -114,7 +114,7 @@ void icalstrarray_free(icalstrarray *array)
     }
 
     for (size_t i = 0; i < array->num_elements; i++) {
-        char **del = icalarray_element_at(array, i);
+        char **del = (char **)icalarray_element_at(array, i);
         if (del && *del) {
             icalmemory_free_buffer(*del);
         }
