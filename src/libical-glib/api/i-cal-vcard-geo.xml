@@ -103,10 +103,13 @@
     <custom>    vcardgeotype *geo;
     g_return_if_fail(I_CAL_VCARD_IS_GEO((ICalVcardGeo *)self));
     geo = ((vcardgeotype *)i_cal_object_get_native((ICalObject *)self));
-    if (out_lat)
+    if (out_lat) {
         *out_lat = geo-&gt;coords.lat;
-    if (out_lon)
-        *out_lon = geo-&gt;coords.lon;</custom>
+    }
+    if (out_lon) {
+        *out_lon = geo-&gt;coords.lon;
+    }
+    </custom>
   </method>
   <method name="i_cal_vcard_geo_get_coord_lat" corresponds="none" kind="get" since="4.0">
     <parameter type="const ICalVcardGeo *" name="self" comment="an #ICalVcardGeo"/>

@@ -213,10 +213,11 @@ static icalarray *icalparameter_values_from_value_string(icalparameter_kind kind
         int i;
         int num_params = (int)(sizeof(icalparameter_map) / sizeof(icalparameter_map[0]));
         for (i = 0; i < num_params && !enum_end; i++) {
-            if (kind == icalparameter_map[i].kind && !enum_start)
+            if (kind == icalparameter_map[i].kind && !enum_start) {
                 enum_start = i;
-            else if (kind != icalparameter_map[i].kind && enum_start)
+            } else if (kind != icalparameter_map[i].kind && enum_start) {
                 enum_end = i;
+            }
         }
     }
 
@@ -229,21 +230,26 @@ static icalarray *icalparameter_values_from_value_string(icalparameter_kind kind
         icalenumarray_element elem;
         if (val[0] == '"') {
             end = strchr(val + 1, '"');
-            if (end) val++;
-        }
-        else {
+            if (end) {
+                val++;
+            }
+        } else {
             end = strchr(val, ',');
         }
         val_len = end ? (size_t)(end - val) : strlen(val);
 
-        if (!val_len) break;
+        if (!val_len) {
+            break;
+        }
 
         next_val = end;
-        if (next_val && next_val[0] == '"')
+        if (next_val && next_val[0] == '"') {
             next_val = strchr(next_val, ',');
+        }
 
-        if (next_val && next_val[0] == ',')
+        if (next_val && next_val[0] == ',') {
             next_val++;
+        }
 
         tmpbuf = icalmemory_new_buffer(val_len + 1);
         strncpy(tmpbuf, val, val_len);
@@ -260,7 +266,9 @@ static icalarray *icalparameter_values_from_value_string(icalparameter_kind kind
                 }
             }
 
-            if (!elem.val) elem.xvalue = tmpbuf;
+            if (!elem.val) {
+                elem.xvalue = tmpbuf;
+            }
             icalenumarray_append(values, &elem);
         }
 

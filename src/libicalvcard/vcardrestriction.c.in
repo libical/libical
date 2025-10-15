@@ -98,8 +98,9 @@ static const char *vcardrestriction_validate_datetime_value(
     vcardtimetype t = vcardproperty_get_bday(prop);
     static char buf[TMP_BUF_SIZE];
 
-    if (vcardtime_is_null_datetime(t))
+    if (vcardtime_is_null_datetime(t)) {
         return 0;
+    }
 
     if (comp && vcardcomponent_get_version(comp) != VCARD_VERSION_40) {
         unsigned missing_time_parts = (unsigned)((t.hour < 0) + (t.minute < 0) + (t.second < 0));
@@ -135,8 +136,9 @@ static const char *vcardrestriction_validate_timestamp_value(
     vcardtimetype t = vcardproperty_get_rev(prop);
     static char buf[TMP_BUF_SIZE];
 
-    if (vcardtime_is_null_datetime(t))
+    if (vcardtime_is_null_datetime(t)) {
         return 0;
+    }
 
     if (!vcardtime_is_timestamp(t) || !vcardtime_is_valid_time(t)) {
         snprintf(buf, TMP_BUF_SIZE,

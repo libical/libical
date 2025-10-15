@@ -83,8 +83,9 @@
     szEncText = g_new0(gchar, bufSize);
 
     result = icalvalue_encode_ical_string(szText, szEncText, bufSize);
-    if (result)
+    if (result) {
         buffer = g_strdup(szEncText);
+    }
     g_free(szEncText);
 
     return buffer;</custom>
@@ -104,8 +105,9 @@
     szDecText = g_new0(gchar, bufSize);
 
     result = icalvalue_decode_ical_string(szText, szDecText, bufSize);
-    if (result)
+    if (result) {
         buffer = g_strdup(szDecText);
+    }
     g_free (szDecText);
 
     return buffer;</custom>

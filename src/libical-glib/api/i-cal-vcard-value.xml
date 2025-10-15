@@ -69,8 +69,9 @@
     g_return_val_if_fail(text != NULL, NULL);
 
     dequoted = vcardvalue_strdup_and_dequote_text(text, separators);
-    if(!dequoted)
+    if(!dequoted) {
         return NULL;
+    }
     res = g_strdup(dequoted);
     icalmemory_free_buffer(dequoted);
 

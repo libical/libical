@@ -27,7 +27,7 @@
    - a bitmask of flags that further describe the property
 */
 
-struct icalproperty_map
+struct icalproperty_map // NOLINT(clang-analyzer-optin.performance.Padding)
 {
     icalproperty_kind kind;
     const char *name;
@@ -151,11 +151,13 @@ bool icalproperty_value_kind_is_valid(icalproperty_kind pkind, icalvalue_kind vk
     int i, j;
     int num_props;
 
-    if (vkind == ICAL_NO_VALUE)
+    if (vkind == ICAL_NO_VALUE) {
         return false;
+    }
 
-    if (pkind == ICAL_X_PROPERTY)
+    if (pkind == ICAL_X_PROPERTY) {
         return true;
+    }
 
     num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
     for (i = 0; i < num_props; i++) {
@@ -257,19 +259,22 @@ int icalproperty_kind_and_string_to_enum(const int kind, const char *str)
 
     icalerror_check_arg_rz(str != 0, "str");
 
-    if ((pkind = icalproperty_value_kind_to_kind((enum icalvalue_kind)kind)) == ICAL_NO_PROPERTY)
+    if ((pkind = icalproperty_value_kind_to_kind((enum icalvalue_kind)kind)) == ICAL_NO_PROPERTY) {
         return 0;
+     }
 
     while (*str == ' ') {
         str++;
     }
 
     for (i = ICALPROPERTY_FIRST_ENUM; i != ICALPROPERTY_LAST_ENUM; i++) {
-        if (enum_map[i - ICALPROPERTY_FIRST_ENUM].prop == pkind)
+        if (enum_map[i - ICALPROPERTY_FIRST_ENUM].prop == pkind) {
             break;
+        }
     }
-    if (i == ICALPROPERTY_LAST_ENUM)
+    if (i == ICALPROPERTY_LAST_ENUM) {
         return 0;
+    }
 
     for (; i != ICALPROPERTY_LAST_ENUM; i++) {
         if (enum_map[i - ICALPROPERTY_FIRST_ENUM].prop == pkind &&
