@@ -1359,7 +1359,7 @@ icalarray *icalrecurrencetype_rscale_supported_calendars(void)
     en = ucal_getKeywordValuesForLocale("calendar", "", false, &status);
     while ((cal = uenum_next(en, NULL, &status))) {
         cal = icalmemory_tmp_copy(cal);
-        icalarray_append(calendars, &cal);
+        icalarray_append(calendars, (const void *)&cal);
     }
     uenum_close(en);
 

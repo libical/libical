@@ -118,7 +118,7 @@ void icalbdbset_rmdbLog(void)
                 (void)unlink(listp[ii]);
                 ii++;
             }
-            free(listp);
+            free((void *)listp);
         }
     }
 }
