@@ -515,3 +515,44 @@ void icalmemory_append_encoded_string(char **buf, char **pos,
         icalmemory_append_char(buf, pos, buf_size, '"');
     }
 }
+
+void icalmemory_append_decoded_string(char **buf, char **pos,
+                                      size_t *buf_size, const char *string)
+{
+    const char *p;
+
+    /* Copy the string */
+    for (p = string; *p; p++) {
+        switch (*p) {
+        case '"':
+            /* Remove encapsulating quotes if necessary */
+            break;
+
+        case '^':
+            /* Decode unsafe characters per RFC6868 */
+            if (strchr("n^'", p[1])) {
+                switch (*++p) {
+                case 'n':
+                    icalmemory_append_char(buf, pos, buf_size, '\n');
+                    break;
+
+                case '^':
+                    icalmemory_append_char(buf, pos, buf_size, '^');
+                    break;
+
+                case '\'':
+                    icalmemory_append_char(buf, pos, buf_size, '"');
+                    break;
+                };
+
+                break;
+            }
+
+            _fallthrough();
+
+        default:
+            icalmemory_append_char(buf, pos, buf_size, *p);
+            break;
+        }
+    }
+}
