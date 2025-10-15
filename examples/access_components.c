@@ -116,7 +116,7 @@ icalcomponent *create_new_component(void)
 
     icalproperty_add_parameter(
         property,
-        icalparameter_new_rsvp(1));
+        icalparameter_new_rsvp(ICAL_RSVP_TRUE));
 
     icalproperty_add_parameter(
         property,
@@ -207,7 +207,7 @@ icalcomponent *create_new_component_with_va_args(void)
                 icalproperty_vanew_attendee(
                     "mailto:employee-A@host.com",
                     icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
-                    icalparameter_new_rsvp(1),
+                    icalparameter_new_rsvp(ICAL_RSVP_TRUE),
                     icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
                     (void *)0),
                 icalproperty_new_description("Project XYZ Review Meeting"),
