@@ -767,6 +767,9 @@ void vcardcomponent_normalize(vcardcomponent *comp)
     comp->components = sorted_comps;
 }
 
+#define UUID_PREFIX     "urn:uuid:"
+#define UUID_PREFIX_LEN 9
+
 static void comp_to_v4(vcardcomponent *impl)
 {
     icalpvl_elem itr, next;
@@ -962,13 +965,43 @@ static void comp_to_v4(vcardcomponent *impl)
 
         case VCARD_X_PROPERTY: {
             /* Rename X-ADDRESSBOOKSERVER-KIND, X-ADDRESSBOOKSERVER-MEMBER */
-            const char *xprop = vcardproperty_as_vcard_string(prop);
-            if (!strncasecmp(xprop, "X-ADDRESSBOOKSERVER-", 20) &&
-                (!strncasecmp(xprop + 20, "KIND:", 5) ||
-                 !strncasecmp(xprop + 20, "MEMBER:", 7))) {
-                vcardproperty *new = vcardproperty_new_from_string(xprop + 20);
-                vcardcomponent_add_property(impl, new);
-                vcardcomponent_remove_property(impl, prop);
+            const char *xname = vcardproperty_get_x_name(prop);
+
+            if (!strncasecmp(xname, "X-ADDRESSBOOKSERVER-", 20)) {
+                vcardproperty_kind kind = vcardproperty_string_to_kind(xname+20);
+                const char *valstr = vcardvalue_as_vcard_string(value);
+                vcardproperty *new;
+                char *buf = NULL, *buf_ptr;
+                size_t buf_size;
+
+                switch (kind) {
+                case VCARD_MEMBER_PROPERTY:
+                    /* strip urn:uuid: prefix and RFC6868-decode string */
+                    if (!strncmp(valstr, UUID_PREFIX, UUID_PREFIX_LEN)) {
+                        valstr += UUID_PREFIX_LEN;
+                    }
+
+                    buf_size = strlen(valstr) + 1;
+                    buf_ptr = buf = icalmemory_new_buffer(buf_size);
+                    icalmemory_append_decoded_string(&buf, &buf_ptr, &buf_size,
+                                                     valstr);
+                    valstr = buf;
+
+                    _fallthrough();
+                    
+                case VCARD_KIND_PROPERTY:
+                    new = vcardproperty_new(kind);
+                    vcardproperty_set_value_from_string(new, valstr, "NO");
+                    vcardcomponent_add_property(impl, new);
+                    vcardcomponent_remove_property(impl, prop);
+                    vcardproperty_free(prop);
+                    break;
+
+                default:
+                    break;
+                }
+
+                if (buf) icalmemory_free_buffer(buf);
             }
             break;
         }
@@ -1004,7 +1037,7 @@ static void comp_to_v3(vcardcomponent *impl)
         vcardvalue_kind vkind = vcardvalue_isa(value);
         vcardparameter *param;
         char *subtype = NULL, *buf = NULL;
-        const char *mediatype, *uri, *xname = NULL;
+        const char *mediatype, *uri, *xname = NULL, *xval = NULL;
 
         next = icalpvl_next(itr);
 
@@ -1158,15 +1191,29 @@ static void comp_to_v3(vcardcomponent *impl)
 
             _fallthrough();
 
-        case VCARD_MEMBER_PROPERTY:
+        case VCARD_MEMBER_PROPERTY: {
+            char *buf = NULL;
+
+            xval = vcardvalue_as_vcard_string(value);
             if (!xname) {
+                size_t buf_size = strlen(UUID_PREFIX) + strlen(xval) + 1;
+                char *buf_ptr = buf = icalmemory_new_buffer(buf_size);
+
+                /* RFC6868-encode the uid and prefix with urn:uuid: */
+                icalmemory_append_string(&buf, &buf_ptr, &buf_size, UUID_PREFIX);
+                icalmemory_append_encoded_string(&buf, &buf_ptr, &buf_size, xval);
                 xname = "X-ADDRESSBOOKSERVER-MEMBER";
+                xval = buf;
             }
-            xprop = vcardproperty_new_x(vcardvalue_as_vcard_string(value));
+
+            xprop = vcardproperty_new_x(xval);
             vcardproperty_set_x_name(xprop, xname);
             vcardcomponent_add_property(impl, xprop);
             vcardcomponent_remove_property(impl, prop);
+            vcardproperty_free(prop);
+            if (buf) icalmemory_free_buffer(buf);
             break;
+        }
 
         case VCARD_TEL_PROPERTY:
             uri = vcardvalue_get_uri(value);
