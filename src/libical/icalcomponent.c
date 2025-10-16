@@ -211,18 +211,18 @@ void icalcomponent_free(icalcomponent *c)
     icalmemory_free_buffer(c);
 }
 
-char *icalcomponent_as_ical_string(const icalcomponent *impl)
+char *icalcomponent_as_ical_string(const icalcomponent *component)
 {
     char *buf;
 
-    buf = icalcomponent_as_ical_string_r(impl);
+    buf = icalcomponent_as_ical_string_r(component);
     if (buf) {
         icalmemory_add_tmp_buffer(buf);
     }
     return buf;
 }
 
-char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
+char *icalcomponent_as_ical_string_r(const icalcomponent *component)
 {
     char *buf;
     const char *tmp_buf;
@@ -235,17 +235,17 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
 
     const icalcomponent *c;
     icalproperty *p;
-    icalcomponent_kind kind = icalcomponent_isa(impl);
+    icalcomponent_kind kind = icalcomponent_isa(component);
 
     const char *kind_string;
 
-    icalerror_check_arg_rz((impl != 0), "component");
+    icalerror_check_arg_rz((component != 0), "component");
     icalerror_check_arg_rz((kind != ICAL_NO_COMPONENT), "component kind is ICAL_NO_COMPONENT");
 
     if (kind != ICAL_X_COMPONENT) {
         kind_string = icalcomponent_kind_to_string(kind);
     } else {
-        kind_string = impl->x_name;
+        kind_string = component->x_name;
     }
 
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
@@ -261,7 +261,7 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
-    for (itr = icalpvl_head(impl->properties); itr != 0; itr = icalpvl_next(itr)) {
+    for (itr = icalpvl_head(component->properties); itr != 0; itr = icalpvl_next(itr)) {
         p = (icalproperty *)icalpvl_data(itr);
 
         icalerror_assert((p != 0), "Got a null property");
@@ -271,7 +271,7 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *impl)
         icalmemory_free_buffer((char *)tmp_buf);
     }
 
-    for (itr = icalpvl_head(impl->components); itr != 0; itr = icalpvl_next(itr)) {
+    for (itr = icalpvl_head(component->components); itr != 0; itr = icalpvl_next(itr)) {
         c = (icalcomponent *)icalpvl_data(itr);
 
         tmp_buf = icalcomponent_as_ical_string_r(c);

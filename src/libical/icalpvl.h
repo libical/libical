@@ -48,9 +48,9 @@ typedef int (*icalpvl_comparef)(void *a, void *b); /* a, b are of the data type 
 
 LIBICAL_ICAL_EXPORT void icalpvl_insert_ordered(icalpvl_list l, icalpvl_comparef f, void *d);
 
-LIBICAL_ICAL_EXPORT void icalpvl_insert_after(icalpvl_list l, icalpvl_elem e, void *d);
+LIBICAL_ICAL_EXPORT void icalpvl_insert_after(icalpvl_list l, icalpvl_elem p, void *d);
 
-LIBICAL_ICAL_EXPORT void icalpvl_insert_before(icalpvl_list l, icalpvl_elem e, void *d);
+LIBICAL_ICAL_EXPORT void icalpvl_insert_before(icalpvl_list l, icalpvl_elem p, void *d);
 
 /* Remove an element, or clear the entire list */
 LIBICAL_ICAL_EXPORT void *icalpvl_remove(icalpvl_list, icalpvl_elem); /* Remove element, return data */

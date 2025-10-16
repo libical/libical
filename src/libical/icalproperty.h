@@ -26,7 +26,7 @@ LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_impl(icalproperty_kind kind);
  * Returns a pointer to the memory for the newly cloned icalproperty.
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT icalproperty *icalproperty_clone(const icalproperty *prop);
+LIBICAL_ICAL_EXPORT icalproperty *icalproperty_clone(const icalproperty *old);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_from_string(const char *str);
 
@@ -103,8 +103,8 @@ LIBICAL_ICAL_EXPORT icalparameter *icalproperty_get_next_parameter(icalproperty 
                                                                    icalparameter_kind kind);
 /* Access the value of the property */
 LIBICAL_ICAL_EXPORT void icalproperty_set_value(icalproperty *prop, icalvalue *value);
-LIBICAL_ICAL_EXPORT void icalproperty_set_value_from_string(icalproperty *prop, const char *value,
-                                                            const char *kind);
+LIBICAL_ICAL_EXPORT void icalproperty_set_value_from_string(icalproperty *prop, const char *str,
+                                                            const char *type);
 
 LIBICAL_ICAL_EXPORT icalvalue *icalproperty_get_value(const icalproperty *prop);
 LIBICAL_ICAL_EXPORT const char *icalproperty_get_value_as_string(const icalproperty *prop);

@@ -989,11 +989,11 @@ char *vcardproperty_get_property_name_r(const vcardproperty *prop)
     return buf;
 }
 
-void vcardproperty_set_parent(vcardproperty *property, vcardcomponent *card)
+void vcardproperty_set_parent(vcardproperty *property, vcardcomponent *comp)
 {
     icalerror_check_arg_rv((property != 0), "property");
 
-    property->parent = card;
+    property->parent = comp;
 }
 
 vcardcomponent *vcardproperty_get_parent(const vcardproperty *property)

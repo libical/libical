@@ -272,7 +272,7 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
     return period;
 }
 
-int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
+int *icalspanlist_as_freebusy_matrix(icalspanlist *spanlist, int delta_t)
 {
     icalpvl_elem itr;
     icaltime_t spanduration_secs;
@@ -280,15 +280,15 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
     icaltime_t matrix_slots;
     icaltime_t sl_start, sl_end;
 
-    icalerror_check_arg_rz((sl != 0), "spanlist");
+    icalerror_check_arg_rz((spanlist != 0), "spanlist");
 
     if (!delta_t) {
         delta_t = 3600;
     }
 
     /* calculate the start and end time as icaltime_t **/
-    sl_start = icaltime_as_timet_with_zone(sl->start, icaltimezone_get_utc_timezone());
-    sl_end = icaltime_as_timet_with_zone(sl->end, icaltimezone_get_utc_timezone());
+    sl_start = icaltime_as_timet_with_zone(spanlist->start, icaltimezone_get_utc_timezone());
+    sl_end = icaltime_as_timet_with_zone(spanlist->end, icaltimezone_get_utc_timezone());
 
     /* insure that the time period falls on a time boundary divisible
       by delta_t */
@@ -315,7 +315,7 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *sl, int delta_t)
 
     /* loop through each span and mark the slots in the array */
 
-    for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
+    for (itr = icalpvl_head(spanlist->spans); itr != 0; itr = icalpvl_next(itr)) {
         const struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
 
         if (s && s->is_busy == 1) {

@@ -46,13 +46,13 @@
 
 typedef struct icaldirset_impl icaldirset;
 
-LIBICAL_ICALSS_EXPORT icalset *icaldirset_new(const char *path);
+LIBICAL_ICALSS_EXPORT icalset *icaldirset_new(const char *dir);
 
-LIBICAL_ICALSS_EXPORT icalset *icaldirset_new_reader(const char *path);
+LIBICAL_ICALSS_EXPORT icalset *icaldirset_new_reader(const char *dir);
 
-LIBICAL_ICALSS_EXPORT icalset *icaldirset_new_writer(const char *path);
+LIBICAL_ICALSS_EXPORT icalset *icaldirset_new_writer(const char *dir);
 
-LIBICAL_ICALSS_EXPORT icalset *icaldirset_init(icalset *set, const char *dsn, void *options);
+LIBICAL_ICALSS_EXPORT icalset *icaldirset_init(icalset *set, const char *dir, void *options_in);
 
 LIBICAL_ICALSS_EXPORT void icaldirset_free(icalset *set);
 
@@ -69,39 +69,39 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_commit(icalset *set);
    is an inner component of type VEVENT, VTODO or VJOURNAL. The inner
   component must have a DSTAMP property
 */
-LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_add_component(icalset *store, icalcomponent *comp);
-LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_remove_component(icalset *store,
+LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp);
+LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_remove_component(icalset *set,
                                                                 icalcomponent *comp);
 
 LIBICAL_ICALSS_EXPORT int icaldirset_count_components(icalset *store, icalcomponent_kind kind);
 
 /* Restricts the component returned by icaldirset_first, _next to those
    that pass the gauge. _clear removes the gauge. */
-LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_select(icalset *store, icalgauge *gauge);
+LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_select(icalset *set, icalgauge *gauge);
 
-LIBICAL_ICALSS_EXPORT void icaldirset_clear(icalset *store);
+LIBICAL_ICALSS_EXPORT void icaldirset_clear(icalset *set);
 
 /* Gets a component by uid */
-LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch(icalset *store,
+LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch(icalset *set,
                                                       icalcomponent_kind kind, const char *uid);
 
-LIBICAL_ICALSS_EXPORT int icaldirset_has_uid(icalset *store, const char *uid);
+LIBICAL_ICALSS_EXPORT int icaldirset_has_uid(icalset *set, const char *uid);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch_match(icalset *set, const icalcomponent *c);
 
 /* Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */
-LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_modify(icalset *store,
-                                                      icalcomponent *oldc, icalcomponent *newc);
+LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_modify(icalset *set,
+                                                      icalcomponent *old, icalcomponent *new);
 
 /* Iterates through the components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_current_component(icalset *store);
+LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_current_component(icalset *set);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_first_component(icalset *store);
+LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_first_component(icalset *set);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_next_component(icalset *store);
+LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_get_next_component(icalset *set);
 
 /* External iterator for thread safety */
 LIBICAL_ICALSS_EXPORT icalsetiter icaldirset_begin_component(icalset *set,

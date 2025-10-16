@@ -35,6 +35,6 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_error_reply(const icalcompo
                                                                  const char *user,
                                                                  const char *msg,
                                                                  const char *debug,
-                                                                 icalrequeststatus rs);
+                                                                 icalrequeststatus code);
 
 #endif /* ICALMESSAGE_H */

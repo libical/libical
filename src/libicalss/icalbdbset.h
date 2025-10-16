@@ -44,8 +44,8 @@ LIBICAL_ICALSS_EXPORT icalset *icalbdbset_new(const char *database_filename,
                                               int dbtype, u_int32_t flag);
 
 LIBICAL_ICALSS_EXPORT DB *icalbdbset_bdb_open_secondary(DB *dbp,
-                                                        const char *subdb,
-                                                        const char *sindex,
+                                                        const char *database,
+                                                        const char *sub_database,
                                                         int (*callback)(DB *db,
                                                                         const DBT *dbt1,
                                                                         const DBT *dbt2,
@@ -99,9 +99,9 @@ LIBICAL_ICALSS_EXPORT int icalbdbset_count_components(icalset *set, icalcomponen
 
 /* Restrict the component returned by icalbdbset_first, _next to those
    that pass the gauge. _clear removes the gauge */
-LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_select(icalset *store, icalgauge *gauge);
+LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_select(icalset *set, icalgauge *gauge);
 
-LIBICAL_ICALSS_EXPORT void icalbdbset_clear(icalset *store);
+LIBICAL_ICALSS_EXPORT void icalbdbset_clear(icalset *set);
 
 /* Gets and searches for a component by uid */
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch(icalset *set,

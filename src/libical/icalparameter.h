@@ -54,11 +54,11 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
 
 /**
  * @brief Creates new icalparameter as a clone of the given one.
- * @param p The existing, non-`NULL` parameter to clone.
+ * @param old The existing, non-`NULL` parameter to clone.
  * @return An icalparameter that is a clone of the given one.
  *
  * @par Error handling
- * If @a p is `NULL`, it returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR.
+ * If @a old is `NULL`, it returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR.
  * If there was an internal error cloning the data, it returns `NULL`
  * without reporting any error in ::icalerrno.
  *
@@ -84,17 +84,17 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new(icalparameter_kind kind);
  * ```
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT icalparameter *icalparameter_clone(const icalparameter *p);
+LIBICAL_ICAL_EXPORT icalparameter *icalparameter_clone(const icalparameter *old);
 
 /**
  * @brief Creates new icalparameter object from string
- * @param value The string from which to create the icalparameter, in the form `"PARAMNAME=VALUE"`
+ * @param str The string from which to create the icalparameter, in the form `"PARAMNAME=VALUE"`
  * @return An icalparameter that corresponds to the given string.
  *
  * @par Error handling
  * If there was an internal error copying data, it returns `NULL` and sets
- * ::icalerrno to ::ICAL_NEWFAILED_ERROR. If @a value was `NULL`, it returns
- * `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR. If @a value was malformed,
+ * ::icalerrno to ::ICAL_NEWFAILED_ERROR. If @a str was `NULL`, it returns
+ * `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR. If @a str was malformed,
  * it returns `NULL` and sets ::icalerrno to ::ICAL_MALFORMEDDATA_ERROR.
  *
  * @par Ownership
@@ -112,7 +112,7 @@ LIBICAL_ICAL_EXPORT icalparameter *icalparameter_clone(const icalparameter *p);
  * icalparameter_free(param);
  * ```
  */
-LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_string(const char *value);
+LIBICAL_ICAL_EXPORT icalparameter *icalparameter_new_from_string(const char *str);
 
 /**
  * @brief Creates new icalparameter of a given @a kind with a given @a value

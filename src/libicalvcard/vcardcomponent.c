@@ -168,18 +168,18 @@ void vcardcomponent_free(vcardcomponent *c)
     icalmemory_free_buffer(c);
 }
 
-char *vcardcomponent_as_vcard_string(vcardcomponent *impl)
+char *vcardcomponent_as_vcard_string(vcardcomponent *comp)
 {
     char *buf;
 
-    buf = vcardcomponent_as_vcard_string_r(impl);
+    buf = vcardcomponent_as_vcard_string_r(comp);
     if (buf) {
         icalmemory_add_tmp_buffer(buf);
     }
     return buf;
 }
 
-char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
+char *vcardcomponent_as_vcard_string_r(vcardcomponent *comp)
 {
     char *buf;
     char *tmp_buf;
@@ -192,18 +192,18 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
 
     vcardcomponent *c;
     vcardproperty *p;
-    vcardcomponent_kind kind = vcardcomponent_isa(impl);
+    vcardcomponent_kind kind = vcardcomponent_isa(comp);
 
     const char *kind_string = NULL;
 
-    icalerror_check_arg_rz((impl != 0), "component");
+    icalerror_check_arg_rz((comp != 0), "component");
     icalerror_check_arg_rz((kind != VCARD_NO_COMPONENT),
                            "component kind is VCARD_NO_COMPONENT");
 
     if (kind != VCARD_X_COMPONENT) {
         kind_string = vcardcomponent_kind_to_string(kind);
     } else {
-        kind_string = impl->x_name;
+        kind_string = comp->x_name;
     }
 
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
@@ -220,7 +220,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
-        for (itr = icalpvl_head(impl->properties); itr != 0; itr = icalpvl_next(itr)) {
+        for (itr = icalpvl_head(comp->properties); itr != 0; itr = icalpvl_next(itr)) {
             p = (vcardproperty *)icalpvl_data(itr);
 
             icalerror_assert((p != 0), "Got a null property");
@@ -231,7 +231,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
         }
     }
 
-    for (itr = icalpvl_head(impl->components); itr != 0; itr = icalpvl_next(itr)) {
+    for (itr = icalpvl_head(comp->components); itr != 0; itr = icalpvl_next(itr)) {
         c = (vcardcomponent *)icalpvl_data(itr);
 
         tmp_buf = vcardcomponent_as_vcard_string_r(c);
@@ -1251,29 +1251,29 @@ void vcardcomponent_transform(vcardcomponent *impl,
 
 /******************** Convenience routines **********************/
 
-enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *card)
+enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *comp)
 {
-    icalerror_check_arg_rx(card != 0, "card", VCARD_VERSION_NONE);
+    icalerror_check_arg_rx(comp != 0, "comp", VCARD_VERSION_NONE);
 
-    if (card->versionp == 0) {
-        card->versionp =
-            vcardcomponent_get_first_property(card, VCARD_VERSION_PROPERTY);
+    if (comp->versionp == 0) {
+        comp->versionp =
+            vcardcomponent_get_first_property(comp, VCARD_VERSION_PROPERTY);
 
-        if (card->versionp == 0) {
+        if (comp->versionp == 0) {
             return VCARD_VERSION_NONE;
         }
     }
 
-    return vcardproperty_get_version(card->versionp);
+    return vcardproperty_get_version(comp->versionp);
 }
 
-const char *vcardcomponent_get_uid(vcardcomponent *card)
+const char *vcardcomponent_get_uid(vcardcomponent *comp)
 {
     vcardproperty *prop;
 
-    icalerror_check_arg_rz(card != 0, "card");
+    icalerror_check_arg_rz(comp != 0, "comp");
 
-    prop = vcardcomponent_get_first_property(card, VCARD_UID_PROPERTY);
+    prop = vcardcomponent_get_first_property(comp, VCARD_UID_PROPERTY);
 
     if (prop == 0) {
         return 0;
@@ -1282,13 +1282,13 @@ const char *vcardcomponent_get_uid(vcardcomponent *card)
     return vcardproperty_get_uid(prop);
 }
 
-const char *vcardcomponent_get_fn(vcardcomponent *card)
+const char *vcardcomponent_get_fn(vcardcomponent *comp)
 {
     vcardproperty *prop;
 
-    icalerror_check_arg_rz(card != 0, "card");
+    icalerror_check_arg_rz(comp != 0, "comp");
 
-    prop = vcardcomponent_get_first_property(card, VCARD_FN_PROPERTY);
+    prop = vcardcomponent_get_first_property(comp, VCARD_FN_PROPERTY);
 
     if (prop == 0) {
         return 0;
