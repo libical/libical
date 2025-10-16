@@ -80,7 +80,7 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalValue_isa_1value(JNIEnv *env
         }
 
         // get the result from the c++ object
-        result = cObj->isa_value(argObjPtr) != 0;
+        result = (jboolean)cObj->isa_value(argObjPtr);
     }
 
     return (result);

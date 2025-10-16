@@ -80,7 +80,7 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalParameter_isa_1parameter(JNI
         }
 
         // get the result from the c++ object (candidateValue can be 0, it's cObj's responsibility to handle this if an error).
-        result = cObj->isa_parameter(argObjPtr) != 0;
+        result = (jboolean)cObj->isa_parameter(argObjPtr);
     }
 
     return (result);
