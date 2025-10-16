@@ -101,9 +101,9 @@ public:
     /// Using external iterators
     icalcompiter begin_component(const icalcomponent_kind &kind);
     icalcompiter end_component(const icalcomponent_kind &kind);
-    VComponent *next(icalcompiter *i);
-    VComponent *prev(icalcompiter *i);
-    VComponent *current(icalcompiter *i);
+    static VComponent *next(icalcompiter *i);
+    static VComponent *prev(icalcompiter *i);
+    static VComponent *current(icalcompiter *i);
 
     /// Working with embedded error properties
     int count_errors();

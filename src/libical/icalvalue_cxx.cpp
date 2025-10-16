@@ -90,7 +90,7 @@ icalvalue_kind ICalValue::isa()
     return icalvalue_isa(imp);
 }
 
-int ICalValue::isa_value(void *value)
+int ICalValue::isa_value(void *value) //NOLINT(readability-convert-member-functions-to-static)
 {
     return icalvalue_isa_value(value);
 }
@@ -106,7 +106,7 @@ struct icalrecurrencetype *ICalValue::get_recur()
     return icalvalue_get_recur(imp);
 }
 
-void ICalValue::set_trigger(const struct icaltriggertype &v)
+void ICalValue::set_trigger(const struct icaltriggertype &v) //NOLINT(readability-convert-member-functions-to-static)
 {
     _unused(v);
 }
@@ -138,7 +138,7 @@ icalvalue_kind ICalValue::string_to_kind(const std::string &str)
     return icalvalue_string_to_kind(str.c_str());
 }
 
-std::string ICalValue::kind_to_string(const icalvalue_kind &kind)
+std::string ICalValue::kind_to_string(const icalvalue_kind &kind) //NOLINT(readability-convert-member-functions-to-static)
 {
     return static_cast<std::string>(icalvalue_kind_to_string(kind));
 }

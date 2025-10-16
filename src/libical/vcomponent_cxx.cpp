@@ -122,7 +122,7 @@ icalcomponent_kind VComponent::isa()
     return icalcomponent_isa(imp);
 }
 
-int VComponent::isa_component(void *component)
+int VComponent::isa_component(void *component) //NOLINT(readability-convert-member-functions-to-static)
 {
     return icalcomponent_isa_component(component);
 }
