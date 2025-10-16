@@ -17,7 +17,7 @@
 
 LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new(vcardvalue_kind kind);
 
-LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_clone(const vcardvalue *value);
+LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_clone(const vcardvalue *old);
 
 LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new_from_string(vcardvalue_kind kind,
                                                             const char *str);

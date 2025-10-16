@@ -354,7 +354,7 @@ icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
     /* Add the component to the cluster */
     (void)icalcluster_add_component(dset->cluster, comp);
 
-    /* icalcluster_mark(impl->cluster); */
+    /* icalcluster_mark(cluster->cluster); */
 
     return ICAL_NO_ERROR;
 }
@@ -398,7 +398,7 @@ icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
 
     (void)icalcluster_remove_component(dset->cluster, comp);
 
-    /* icalcluster_mark(impl->cluster); */
+    /* icalcluster_mark(cluster->cluster); */
 
     /* If the removal emptied the fileset, get the next fileset */
     if (icalcluster_count_components(dset->cluster, ICAL_ANY_COMPONENT) == 0) {
@@ -407,7 +407,7 @@ icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
         if (dset->cluster != 0 && error == ICAL_NO_ERROR) {
             (void)icalcluster_get_first_component(dset->cluster);
         } else {
-            /* HACK. Not strictly correct for impl->cluster==0 */
+            /* HACK. Not strictly correct for cluster->cluster==0 */
             return error;
         }
     } else {

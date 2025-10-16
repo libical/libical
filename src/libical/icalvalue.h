@@ -26,7 +26,7 @@ LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);
  * Returns a pointer to the memory for the newly cloned icalvalue.
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT icalvalue *icalvalue_clone(const icalvalue *value);
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_clone(const icalvalue *old);
 
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_from_string(icalvalue_kind kind, const char *str);
 

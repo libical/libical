@@ -25,7 +25,7 @@ LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_new_impl(vcardproperty_kind ki
  * Returns a pointer to the memory for the newly cloned vcardproperty.
  * @since 4.0
  */
-LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_clone(const vcardproperty *prop);
+LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_clone(const vcardproperty *old);
 
 LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_new_from_string(const char *str);
 
@@ -102,8 +102,8 @@ LIBICAL_VCARD_EXPORT vcardparameter *vcardproperty_get_next_parameter(vcardprope
                                                                       vcardparameter_kind kind);
 /* Access the value of the property */
 LIBICAL_VCARD_EXPORT void vcardproperty_set_value(vcardproperty *prop, vcardvalue *value);
-LIBICAL_VCARD_EXPORT void vcardproperty_set_value_from_string(vcardproperty *prop, const char *value,
-                                                              const char *kind);
+LIBICAL_VCARD_EXPORT void vcardproperty_set_value_from_string(vcardproperty *prop, const char *str,
+                                                              const char *type);
 
 LIBICAL_VCARD_EXPORT vcardvalue *vcardproperty_get_value(const vcardproperty *prop);
 LIBICAL_VCARD_EXPORT const char *vcardproperty_get_value_as_string(const vcardproperty *prop);

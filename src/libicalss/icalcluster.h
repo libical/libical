@@ -27,7 +27,7 @@ LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_new(const char *key, icalcomponen
  * Returns a pointer to the memory for the newly cloned icalcluster.
  * @since 4.0
 */
-LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_clone(const icalcluster *cluster);
+LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_clone(const icalcluster *old);
 
 LIBICAL_ICALSS_EXPORT void icalcluster_free(icalcluster *cluster);
 

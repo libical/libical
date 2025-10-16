@@ -1038,9 +1038,9 @@ icalcomponent *icalbdbset_fetch(icalset *set, icalcomponent_kind kind, const cha
     return 0;
 }
 
-int icalbdbset_has_uid(icalset *store, const char *uid) // return an int for icalset_bdbset_init
+int icalbdbset_has_uid(icalset *set, const char *uid) // return an int for icalset_bdbset_init
 {
-    _unused(store);
+    _unused(set);
     _unused(uid);
     assert(0); /* HACK, not implemented */
     return 0;
@@ -1577,9 +1577,9 @@ icalcomponent *icalbdbset_get_next_component(icalset *set)
     return 0;
 }
 
-int icalbdbset_begin_transaction(DB_TXN *parent_tid, DB_TXN **tid)
+int icalbdbset_begin_transaction(DB_TXN *parent_id, DB_TXN **txnid)
 {
-    return ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, parent_tid, tid, 0);
+    return ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, parent_id, txnid, 0);
 }
 
 int icalbdbset_commit_transaction(DB_TXN *txnid)

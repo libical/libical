@@ -88,7 +88,7 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
 /**
  * @brief Adds a single line to be parsed by the icalparser.
  * @param parser The parser to use
- * @param str A string representing a single line of RFC5545-formatted iCalendar data
+ * @param line A string representing a single line of RFC5545-formatted iCalendar data
  * @return When this was the last line of the component to be parsed,
  *  it returns the icalcomponent, otherwise it returns `NULL`.
  * @sa icalparser_parse()
@@ -104,7 +104,7 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
  *     or components with properties of the type ICAL_XLICERROR_PROPERTY.
  *
  * @par Ownership
- * Ownership of the @a str is transferred to libical upon calling this
+ * Ownership of the @a line is transferred to libical upon calling this
  * method. The returned icalcomponent is owned by the caller and needs
  * to be `free()`d with the appropriate method after it's no longer needed.
  *
@@ -144,7 +144,7 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
  * }
  * ```
  */
-LIBICAL_ICAL_EXPORT icalcomponent *icalparser_add_line(icalparser *parser, char *str);
+LIBICAL_ICAL_EXPORT icalcomponent *icalparser_add_line(icalparser *parser, char *line);
 
 /**
  * @brief Cleans out an icalparser and returns whatever it has parsed so far.

@@ -97,7 +97,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
  *  end on a time boundary divisible by delta_t you may get results
  *  that are not quite what you expect.
  */
-LIBICAL_ICALSS_EXPORT int *icalspanlist_as_freebusy_matrix(icalspanlist *span, int delta_t);
+LIBICAL_ICALSS_EXPORT int *icalspanlist_as_freebusy_matrix(icalspanlist *spanlist, int delta_t);
 
 /** @brief Constructs an icalspanlist from a VFREEBUSY component */
 /** @brief Constructs an icalspanlist from the VFREEBUSY component of

@@ -36,7 +36,7 @@ LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_new(vcardcomponent_kind kind
  * Returns a pointer to the memory for the newly cloned vcard.
  * @since 4.0
  */
-LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_clone(const vcardcomponent *card);
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_clone(const vcardcomponent *old);
 
 /** @brief Constructor
  */
@@ -48,27 +48,27 @@ LIBICAL_VCARD_EXPORT LIBICAL_SENTINEL vcardcomponent *vcardcomponent_vanew(vcard
 
 /*** @brief Destructor
  */
-LIBICAL_VCARD_EXPORT void vcardcomponent_free(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT void vcardcomponent_free(vcardcomponent *comp);
 
-LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string(vcardcomponent *comp);
 
-LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string_r(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT char *vcardcomponent_as_vcard_string_r(vcardcomponent *comp);
 
-LIBICAL_VCARD_EXPORT bool vcardcomponent_is_valid(const vcardcomponent *card);
+LIBICAL_VCARD_EXPORT bool vcardcomponent_is_valid(const vcardcomponent *comp);
 
-LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component);
+LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *comp);
 
-LIBICAL_VCARD_EXPORT bool vcardcomponent_isa_component(void *component);
+LIBICAL_VCARD_EXPORT bool vcardcomponent_isa_component(void *comp);
 
 /***** Working with Properties *****/
 
-LIBICAL_VCARD_EXPORT void vcardcomponent_add_property(vcardcomponent *card,
+LIBICAL_VCARD_EXPORT void vcardcomponent_add_property(vcardcomponent *comp,
                                                       vcardproperty *property);
 
-LIBICAL_VCARD_EXPORT void vcardcomponent_remove_property(vcardcomponent *card,
+LIBICAL_VCARD_EXPORT void vcardcomponent_remove_property(vcardcomponent *comp,
                                                          vcardproperty *property);
 
-LIBICAL_VCARD_EXPORT int vcardcomponent_count_properties(vcardcomponent *card,
+LIBICAL_VCARD_EXPORT int vcardcomponent_count_properties(vcardcomponent *comp,
                                                          vcardproperty_kind kind,
                                                          int ignore_alts);
 
@@ -79,7 +79,7 @@ LIBICAL_VCARD_EXPORT void vcardcomponent_add_component(vcardcomponent *parent, v
 LIBICAL_VCARD_EXPORT void vcardcomponent_remove_component(vcardcomponent *parent,
                                                           vcardcomponent *child);
 
-LIBICAL_VCARD_EXPORT int vcardcomponent_count_components(vcardcomponent *component,
+LIBICAL_VCARD_EXPORT int vcardcomponent_count_components(vcardcomponent *comp,
                                                          vcardcomponent_kind kind);
 
 /* Kind conversion routines */
@@ -96,11 +96,11 @@ sufficient, but they fail badly when you want to construct a loop that
 removes components from the container.*/
 
 /* Iterate through components */
-LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_current_component(vcardcomponent *component);
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_current_component(vcardcomponent *comp);
 
-LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_first_component(vcardcomponent *component,
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_first_component(vcardcomponent *comp,
                                                                         vcardcomponent_kind kind);
-LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_next_component(vcardcomponent *component,
+LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_next_component(vcardcomponent *comp,
                                                                        vcardcomponent_kind kind);
 
 /**
@@ -108,7 +108,7 @@ LIBICAL_VCARD_EXPORT vcardcomponent *vcardcomponent_get_next_component(vcardcomp
  * @since 3.0
  */
 LIBICAL_VCARD_EXPORT void vcardproperty_set_parent(vcardproperty *property,
-                                                   vcardcomponent *card);
+                                                   vcardcomponent *comp);
 
 /**
  * @brief Returns the parent vcard for the specified @p property.
@@ -116,42 +116,42 @@ LIBICAL_VCARD_EXPORT void vcardproperty_set_parent(vcardproperty *property,
 LIBICAL_VCARD_EXPORT vcardcomponent *vcardproperty_get_parent(const vcardproperty *property);
 
 /* Iterate through the properties */
-LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_current_property(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_current_property(vcardcomponent *comp);
 
-LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_first_property(vcardcomponent *card,
+LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_first_property(vcardcomponent *comp,
                                                                       vcardproperty_kind kind);
-LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_next_property(vcardcomponent *component,
+LIBICAL_VCARD_EXPORT vcardproperty *vcardcomponent_get_next_property(vcardcomponent *comp,
                                                                      vcardproperty_kind kind);
 
 /***** Working with embedded error properties *****/
 
 /* Check the component against itip rules and insert error properties*/
 /* Working with embedded error properties */
-LIBICAL_VCARD_EXPORT int vcardcomponent_check_restrictions(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT int vcardcomponent_check_restrictions(vcardcomponent *comp);
 
 /** @brief Returns the number of errors encountered parsing the data.
  *
  * This function counts the number times the X-LIC-ERROR occurs
  * in the data structure.
  */
-LIBICAL_VCARD_EXPORT int vcardcomponent_count_errors(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT int vcardcomponent_count_errors(vcardcomponent *comp);
 
 /** @brief Removes all X-LIC-ERROR properties*/
-LIBICAL_VCARD_EXPORT void vcardcomponent_strip_errors(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT void vcardcomponent_strip_errors(vcardcomponent *comp);
 
 /**
  * @brief Normalizes (reorders and sorts the properties) the specified vcard @p comp.
  * @since 3.0
  */
-LIBICAL_VCARD_EXPORT void vcardcomponent_normalize(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT void vcardcomponent_normalize(vcardcomponent *comp);
 
 LIBICAL_VCARD_EXPORT void vcardcomponent_transform(vcardcomponent *impl,
                                                    vcardproperty_version version);
 
 /******************** Convenience routines **********************/
 
-LIBICAL_VCARD_EXPORT enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *card);
-LIBICAL_VCARD_EXPORT const char *vcardcomponent_get_uid(vcardcomponent *card);
-LIBICAL_VCARD_EXPORT const char *vcardcomponent_get_fn(vcardcomponent *card);
+LIBICAL_VCARD_EXPORT enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *comp);
+LIBICAL_VCARD_EXPORT const char *vcardcomponent_get_uid(vcardcomponent *comp);
+LIBICAL_VCARD_EXPORT const char *vcardcomponent_get_fn(vcardcomponent *comp);
 
 #endif /* !VCARDCOMPONENT_H */
