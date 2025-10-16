@@ -14,10 +14,11 @@
 
 #include "icalproperty.h"
 
+#define LIBICAL_ICALVALUE_ID_LENGTH 5
 struct icalvalue_impl {
     icalvalue_kind kind; /*this is the kind that is visible from the outside */
 
-    char id[5];
+    char id[LIBICAL_ICALVALUE_ID_LENGTH];
     int size;
     icalproperty *parent;
     char *x_value;

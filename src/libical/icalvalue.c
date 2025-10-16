@@ -63,8 +63,9 @@ icalvalue *icalvalue_clone(const icalvalue *old)
     if (clone == 0) {
         return 0;
     }
-
-    strcpy(clone->id, old->id);
+    // id is a LIBICAL_ICALVALUE_ID_LENGTH-char string (see icalvalue_impl def)
+    memset(clone->id, 0, LIBICAL_ICALVALUE_ID_LENGTH);
+    strncpy(clone->id, old->id, LIBICAL_ICALVALUE_ID_LENGTH);
     clone->kind = old->kind;
     clone->size = old->size;
 
@@ -72,9 +73,9 @@ icalvalue *icalvalue_clone(const icalvalue *old)
     case ICAL_ATTACH_VALUE:
     case ICAL_BINARY_VALUE: {
         /* Hmm.  We just ref the attach value, which may not be the right
-             * thing to do.  We cannot quite copy the data, anyways, since we
-             * don't know how long it is.
-             */
+         * thing to do.  We cannot quite copy the data, anyways, since we
+         * don't know how long it is.
+         */
         clone->data.v_attach = old->data.v_attach;
         if (clone->data.v_attach) {
             icalattach_ref(clone->data.v_attach);
@@ -888,7 +889,7 @@ static char *icalvalue_boolean_as_ical_string_r(const icalvalue *value)
 
     data = icalvalue_get_integer(value);
 
-    strcpy(str, data ? "TRUE" : "FALSE");
+    strncpy(str, data ? "TRUE" : "FALSE", 6);
 
     return str;
 }
@@ -952,9 +953,11 @@ static char *icalvalue_string_as_ical_string_r(const icalvalue *value)
     icalerror_check_arg_rz((value != 0), "value");
     data = value->data.v_string;
 
-    str = (char *)icalmemory_new_buffer(strlen(data) + 1);
+    const size_t str_len = strlen(data) + 1;
+    str = (char *)icalmemory_new_buffer(str_len);
 
-    strcpy(str, data);
+    strncpy(str, data, str_len);
+    str[str_len - 1] = '\0';
 
     return str;
 }
@@ -984,15 +987,19 @@ static char *icalvalue_attach_as_ical_string_r(const icalvalue *value)
         const char *url;
 
         url = icalattach_get_url(a);
-        str = icalmemory_new_buffer(strlen(url) + 1);
-        strcpy(str, url);
+        const size_t len_url = strlen(url) + 1;
+        str = icalmemory_new_buffer(len_url);
+        strncpy(str, url, len_url);
+        str[len_url - 1] = '\0';
         return str;
     } else {
         const char *data = 0;
 
         data = (const char *)icalattach_get_data(a);
-        str = icalmemory_new_buffer(strlen(data) + 1);
-        strcpy(str, data);
+        const size_t len_data = strlen(data) + 1;
+        str = icalmemory_new_buffer(len_data);
+        strncpy(str, data, len_data);
+        str[len_data - 1] = '\0';
         return str;
     }
 }
@@ -1559,7 +1566,7 @@ bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxB
         return false;
     }
 
-    strcpy(szEncText, ptr);
+    strcpy(szEncText, ptr); //NOLINT(clang-analyzer-security.insecureAPI.strcp
     icalmemory_free_buffer(ptr);
 
     icalvalue_free((icalvalue *)value);
@@ -1573,7 +1580,7 @@ bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxB
     const char *p;
     size_t buf_sz;
 
-    if ((szText == 0) || (szDecText == 0)) {
+    if ((szText == 0) || (szDecText == 0) || (nMaxBufferLen <= 0)) {
         return false;
     }
 
@@ -1604,7 +1611,7 @@ bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxB
         return false;
     }
 
-    strcpy(szDecText, str);
+    strcpy(szDecText, str); //NOLINT(clang-analyzer-security.insecureAPI.strcpy)
 
     icalmemory_free_buffer(str);
     return true;
