@@ -77,7 +77,7 @@ icalproperty_kind ICalProperty::isa()
     return icalproperty_isa(imp);
 }
 
-int ICalProperty::isa_property(void *property) //NOLINT(readability-convert-member-functions-to-static)
+bool ICalProperty::isa_property(void *property) //NOLINT(readability-convert-member-functions-to-static)
 {
     return icalproperty_isa_property(property);
 }

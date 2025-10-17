@@ -86,7 +86,7 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_VComponent_isa_1component(JNIEnv
         }
 
         // get the result from the c++ object (candidateValue can be 0, it's cObj's responsibility to handle this if an error).
-        result = cObj->isa_component(candidateValue) != 0;
+        result = (jboolean)cObj->isa_component(candidateValue);
     }
 
     return (result);

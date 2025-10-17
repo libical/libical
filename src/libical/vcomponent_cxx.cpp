@@ -114,7 +114,7 @@ bool VComponent::is_valid()
     if (imp == NULL) {
         return false;
     }
-    return (icalcomponent_is_valid(imp) != 0);
+    return icalcomponent_is_valid(imp);
 }
 
 icalcomponent_kind VComponent::isa()
@@ -122,7 +122,7 @@ icalcomponent_kind VComponent::isa()
     return icalcomponent_isa(imp);
 }
 
-int VComponent::isa_component(void *component) //NOLINT(readability-convert-member-functions-to-static)
+bool VComponent::isa_component(void *component) //NOLINT(readability-convert-member-functions-to-static)
 {
     return icalcomponent_isa_component(component);
 }
@@ -497,8 +497,8 @@ struct icaltime_span VComponent::get_span()
     return icalcomponent_get_span(imp);
 }
 
-int VComponent::recurrence_is_excluded(struct icaltimetype *dtstart,
-                                       struct icaltimetype *recurtime)
+bool VComponent::recurrence_is_excluded(struct icaltimetype *dtstart,
+                                        struct icaltimetype *recurtime)
 {
     return icalproperty_recurrence_is_excluded(imp, dtstart, recurtime);
 }
@@ -893,7 +893,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
 
     *tr = trigger_prop->get_trigger();
 
-    if (icaltime_is_null_time(tr->time) == 1) {
+    if (icaltime_is_null_time(tr->time)) {
         struct icaltimetype tt = icaltime_null_time();
 
         // relative time trigger
@@ -917,14 +917,14 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
                         // If a recurrenceid exists, use that to calculate the
                         // dtend from the dtstart.
                         const struct icaltimetype recur_time = c.get_recurrenceid();
-                        if (icaltime_is_null_time(recur_time) != 1) {
+                        if (!icaltime_is_null_time(recur_time)) {
                             const struct icaldurationtype dur = icalduration_from_times(c.get_dtstart(), tt);
                             tt = icalduration_extend(recur_time, dur);
                         }
                     } else if (c.isa() == ICAL_VTODO_COMPONENT) {
                         tt = c.get_due();
                         const struct icaltimetype recur_time = c.get_recurrenceid();
-                        if (icaltime_is_null_time(recur_time) != 1) {
+                        if (!icaltime_is_null_time(recur_time)) {
                             tt = recur_time;
                         }
                     }
@@ -936,7 +936,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
                 default:
                     tt = c.get_dtstart();
                     const struct icaltimetype recur_time = c.get_recurrenceid();
-                    if (icaltime_is_null_time(recur_time) != 1) {
+                    if (!icaltime_is_null_time(recur_time)) {
                         tt = recur_time;
                     }
                     break;
@@ -948,7 +948,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
             // due for VTODO to calculate trigger time.
             // If a recur time exists, use that. Recur time trumps dtstart or due.
             const struct icaltimetype recur_time = c.get_recurrenceid();
-            if (icaltime_is_null_time(recur_time) != 1) {
+            if (!icaltime_is_null_time(recur_time)) {
                 tt = recur_time;
             } else if (c.isa() == ICAL_VEVENT_COMPONENT) {
                 tt = c.get_dtstart();
@@ -960,7 +960,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
         delete related_param;
 
         // malformed? encapsulating VEVENT or VTODO MUST have DTSTART/DTEND
-        if (icaltime_is_null_time(tt) == 1) {
+        if (icaltime_is_null_time(tt)) {
             return ICAL_3_1_INVPROPVAL_STATUS;
         };
 

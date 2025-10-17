@@ -167,7 +167,7 @@ bool copyObjToicaltimetype(JNIEnv *env, jobject src, icaltimetype *dest)
 {
     bool result = false;
 
-    if (dest != NULL && env->IsInstanceOf(src, env->FindClass(JLIBICAL_CLASS_ICALTIMETYPE))) {
+    if (dest != NULL && (bool)env->IsInstanceOf(src, env->FindClass(JLIBICAL_CLASS_ICALTIMETYPE))) {
         jni_GetAll_from_ICalTimeType(dest, env, src);
         result = true;
     } else {
@@ -188,7 +188,7 @@ bool copyObjToicaltriggertype(JNIEnv *env, jobject src, icaltriggertype *dest)
 {
     bool result = false;
 
-    if (dest != NULL && env->IsInstanceOf(src, env->FindClass(JLIBICAL_CLASS_ICALTRIGGERTYPE))) {
+    if (dest != NULL && (bool)env->IsInstanceOf(src, env->FindClass(JLIBICAL_CLASS_ICALTRIGGERTYPE))) {
         jni_GetAll_from_ICalTriggerType(dest, env, src);
         result = true;
     } else {
@@ -209,7 +209,7 @@ bool copyObjToicaldurationtype(JNIEnv *env, jobject src, icaldurationtype *dest)
 {
     bool result = false;
 
-    if (dest != NULL && env->IsInstanceOf(src, env->FindClass(JLIBICAL_CLASS_ICALDURATIONTYPE))) {
+    if (dest != NULL && (bool)env->IsInstanceOf(src, env->FindClass(JLIBICAL_CLASS_ICALDURATIONTYPE))) {
         jni_GetAll_from_ICalDurationType(dest, env, src);
         result = true;
     } else {
@@ -230,7 +230,7 @@ bool copyObjToicalrecurrencetype(JNIEnv *env, jobject src, icalrecurrencetype *d
 {
     bool result = false;
 
-    if (dest != NULL && env->IsInstanceOf(src, env->FindClass(JLIBICAL_CLASS_ICALRECURRENCETYPE))) {
+    if (dest != NULL && (bool)env->IsInstanceOf(src, env->FindClass(JLIBICAL_CLASS_ICALRECURRENCETYPE))) {
         jni_GetAll_from_ICalRecurrenceType(dest, env, src);
         result = true;
     } else {
@@ -251,7 +251,7 @@ bool copyObjToicalperiodtype(JNIEnv *env, jobject src, icalperiodtype *dest)
 {
     bool result = false;
 
-    if (dest != NULL && env->IsInstanceOf(src, env->FindClass(JLIBICAL_CLASS_ICALPERIODTYPE))) {
+    if (dest != NULL && (bool)env->IsInstanceOf(src, env->FindClass(JLIBICAL_CLASS_ICALPERIODTYPE))) {
         jni_GetAll_from_ICalPeriodType(dest, env, src);
         result = true;
     } else {
@@ -269,17 +269,17 @@ bool copyObjToicalperiodtype(JNIEnv *env, jobject src, icalperiodtype *dest)
 jobject createNewVComponentSurrogate(JNIEnv *env, VComponent *subject)
 {
     auto classname = JLIBICAL_CLASS_VCOMPONENT;
-    if (dynamic_cast<VAlarm *>(subject)) {
+    if (dynamic_cast<VAlarm *>(subject) != nullptr) {
         classname = JLIBICAL_CLASS_VALARM;
-    } else if (dynamic_cast<VCalendar *>(subject)) {
+    } else if (dynamic_cast<VCalendar *>(subject) != nullptr) {
         classname = JLIBICAL_CLASS_VCALENDAR;
-    } else if (dynamic_cast<VEvent *>(subject)) {
+    } else if (dynamic_cast<VEvent *>(subject) != nullptr) {
         classname = JLIBICAL_CLASS_VEVENT;
-    } else if (dynamic_cast<VQuery *>(subject)) {
+    } else if (dynamic_cast<VQuery *>(subject) != nullptr) {
         classname = JLIBICAL_CLASS_VQUERY;
-    } else if (dynamic_cast<VToDo *>(subject)) {
+    } else if (dynamic_cast<VToDo *>(subject) != nullptr) {
         classname = JLIBICAL_CLASS_VTODO;
-    } else if (dynamic_cast<VAgenda *>(subject)) {
+    } else if (dynamic_cast<VAgenda *>(subject) != nullptr) {
         classname = JLIBICAL_CLASS_VAGENDA;
     }
 
@@ -396,7 +396,7 @@ void throwException(JNIEnv *env, int cpErr)
 {
     const char *exClassName;
 
-    if (env->ExceptionOccurred()) {
+    if ((bool)env->ExceptionOccurred()) {
         return;
     }
 

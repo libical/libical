@@ -27,7 +27,6 @@ Checks: -*,
         -readability-function-cognitive-complexity,
         -readability-function-size,
         -readability-identifier-length,
-        -readability-implicit-bool-conversion,
         -readability-isolate-declaration,
         -readability-magic-numbers,
         -readability-math-missing-parentheses,
@@ -37,6 +36,7 @@ Checks: -*,
         -readability-simplify-boolean-expr,
         -readability-static-accessed-through-instance,
         -readability-use-std-min-max,
+
 CheckOptions:
     - key: bugprone-reserved-identifier.AllowedIdentifiers
       value: '__ICalTriggerType_;__ICalTimeType_;__ICalRecurrenceType_;__ICalPeriodType_;__ICalDurationType_'

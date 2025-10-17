@@ -82,7 +82,7 @@ bool ICalValue::is_valid()
     if (imp == NULL) {
         return false;
     }
-    return (icalvalue_is_valid(imp) != 0);
+    return icalvalue_is_valid(imp);
 }
 
 icalvalue_kind ICalValue::isa()
@@ -90,7 +90,7 @@ icalvalue_kind ICalValue::isa()
     return icalvalue_isa(imp);
 }
 
-int ICalValue::isa_value(void *value) //NOLINT(readability-convert-member-functions-to-static)
+bool ICalValue::isa_value(void *value) //NOLINT(readability-convert-member-functions-to-static)
 {
     return icalvalue_isa_value(value);
 }

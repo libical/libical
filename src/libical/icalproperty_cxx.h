@@ -50,7 +50,7 @@ public:
 public:
     std::string as_ical_string();
     icalproperty_kind isa();
-    int isa_property(void *property);
+    bool isa_property(void *property);
 
     void add_parameter(ICalParameter &parameter);
     void set_parameter(ICalParameter &parameter);
