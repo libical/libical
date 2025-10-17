@@ -127,6 +127,7 @@ static ICAL_GLOBAL_VAR struct icalerror_state error_state_map[] = {
     {ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT},
     {ICAL_NEWFAILED_ERROR, ICAL_ERROR_DEFAULT},
     {ICAL_ALLOCATION_ERROR, ICAL_ERROR_DEFAULT},
+    {ICAL_THREADING_ERROR, ICAL_ERROR_DEFAULT},
     {ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT},
     {ICAL_PARSE_ERROR, ICAL_ERROR_DEFAULT},
     {ICAL_INTERNAL_ERROR, ICAL_ERROR_DEFAULT},
@@ -149,6 +150,7 @@ static const struct icalerror_string_map string_map[] = {
     {"NEWFAILED", ICAL_NEWFAILED_ERROR,
      "NEWFAILED: Failed to create a new object via a *_new() routine"},
     {"ALLOCATION", ICAL_ALLOCATION_ERROR, "ALLOCATION: Failed to allocate new memory"},
+    {"THREADING", ICAL_THREADING_ERROR, "Failing to lock or unlock threads"},
     {"MALFORMEDDATA", ICAL_MALFORMEDDATA_ERROR,
      "MALFORMEDDATA: An input string was not correctly formed or a component has "
      "missing or extra properties"},
