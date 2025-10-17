@@ -147,15 +147,15 @@ LIBICAL_ICAL_EXPORT icalrecurrencetype_weekday icalrecur_string_to_weekday(const
  *
  * The maximums below are based on lunisolar leap years (13 months)
  */
-#define ICAL_BY_SECOND_SIZE 62                             /* 0 to 60 */
-#define ICAL_BY_MINUTE_SIZE 61                             /* 0 to 59 */
-#define ICAL_BY_HOUR_SIZE 25                               /* 0 to 23 */
-#define ICAL_BY_MONTH_SIZE 14                              /* 1 to 13 */
-#define ICAL_BY_MONTHDAY_SIZE 32                           /* 1 to 31 */
-#define ICAL_BY_WEEKNO_SIZE 56                             /* 1 to 55 */
-#define ICAL_BY_YEARDAY_SIZE 386                           /* 1 to 385 */
-#define ICAL_BY_SETPOS_SIZE ICAL_BY_YEARDAY_SIZE           /* 1 to N */
-#define ICAL_BY_DAY_SIZE 7 * (ICAL_BY_WEEKNO_SIZE - 1) + 1 /* 1 to N */
+#define ICAL_BY_SECOND_SIZE 62                               /* 0 to 60 */
+#define ICAL_BY_MINUTE_SIZE 61                               /* 0 to 59 */
+#define ICAL_BY_HOUR_SIZE 25                                 /* 0 to 23 */
+#define ICAL_BY_MONTH_SIZE 14                                /* 1 to 13 */
+#define ICAL_BY_MONTHDAY_SIZE 32                             /* 1 to 31 */
+#define ICAL_BY_WEEKNO_SIZE 56                               /* 1 to 55 */
+#define ICAL_BY_YEARDAY_SIZE 386                             /* 1 to 385 */
+#define ICAL_BY_SETPOS_SIZE ICAL_BY_YEARDAY_SIZE             /* 1 to N */
+#define ICAL_BY_DAY_SIZE (7 * (ICAL_BY_WEEKNO_SIZE - 1) + 1) /* 1 to N */
 
 typedef struct
 {
