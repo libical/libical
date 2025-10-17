@@ -68,10 +68,10 @@ LIBICAL_VCARD_EXPORT int vcardrestriction_compare(vcardrestriction_kind restr,
  * @brief Checks if a given `VCARD` meets all the restrictions imposed by
  *  the standard.
  * @param comp The `VCARD/XROOT` component to check
- * @return 1 if the restrictions are met, 0 if not
+ * @return true if the restrictions are met, false if not
  *
  * @par Error handling
- * Returns 0 and sets ::vcarderrno if `NULL` is passed as @a comp, or if the
+ * Returns false and sets ::vcarderrno if `NULL` is passed as @a comp, or if the
  * component is not a `VCARD`.
  *
  * @par Example
@@ -82,6 +82,6 @@ LIBICAL_VCARD_EXPORT int vcardrestriction_compare(vcardrestriction_kind restr,
  * assert(vcardrestriction_check(component) == true);
  * ```
  */
-LIBICAL_VCARD_EXPORT int vcardrestriction_check(vcardcomponent *comp);
+LIBICAL_VCARD_EXPORT bool vcardrestriction_check(vcardcomponent *comp);
 
 #endif /* VCARDRESTRICTION_H */
