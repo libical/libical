@@ -56,7 +56,6 @@ public:
     // memory leak if you are not careful.
     void detach();
 
-public:
     std::string as_ical_string();
     bool is_valid();
     icalcomponent_kind isa();
@@ -118,7 +117,6 @@ public:
     static icalcomponent_kind string_to_kind(const std::string &str);
     static std::string kind_to_string(const icalcomponent_kind &kind);
 
-public:
     struct icaltimetype get_dtstart() const;
     void set_dtstart(const struct icaltimetype &v);
 
@@ -180,7 +178,6 @@ public:
     int get_status() const;
     void set_status(const enum icalproperty_status &v);
 
-public:
     /**
      * For VCOMPONENT: Return a reference to the first VEVENT,
      * VTODO, or VJOURNAL
@@ -195,7 +192,6 @@ public:
 
     int recurrence_is_excluded(struct icaltimetype *dtstart, struct icaltimetype *recurtime);
 
-public:
     /* helper functions for adding/removing/updating property and sub-components */
 
     /// Note: the VComponent kind have to be the same

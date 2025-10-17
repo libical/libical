@@ -47,7 +47,6 @@ public:
 
     void detach();
 
-public:
     std::string as_ical_string();
     icalproperty_kind isa();
     int isa_property(void *property);
@@ -76,7 +75,6 @@ public:
      */
     std::string get_name() const;
 
-public:
     /* Deal with X properties */
     static void set_x_name(ICalProperty &prop, const std::string &name);
     static std::string get_x_name(ICalProperty &prop);
@@ -100,7 +98,6 @@ public:
 
     static bool enum_belongs_to_property(const icalproperty_kind &kind, const int &e);
 
-public:
     /* ACTION */
     void set_action(const enum icalproperty_action &val);
     enum icalproperty_action get_action();

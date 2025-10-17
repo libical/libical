@@ -41,7 +41,6 @@ public:
 
     void detach();
 
-public:
     std::string as_ical_string();
     bool is_valid();
     icalvalue_kind isa();
@@ -57,14 +56,12 @@ public:
     void set_datetimeperiod(const struct icaldatetimeperiodtype &v);
     struct icaldatetimeperiodtype get_datetimeperiod();
 
-public:
     static icalparameter_xliccomparetype compare(ICalValue &a, ICalValue &b);
 
     /* Convert enumerations */
     static icalvalue_kind string_to_kind(const std::string &str);
     std::string kind_to_string(const icalvalue_kind &kind);
 
-public:
     /* BOOLEAN */
     int get_boolean() const;
     void set_boolean(const int &v);

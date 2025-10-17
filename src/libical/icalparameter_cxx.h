@@ -48,13 +48,11 @@ public:
 
     void detach();
 
-public:
     std::string as_ical_string();
     bool is_valid();
     icalparameter_kind isa();
     int isa_parameter(void *param);
 
-public:
     /* Access the name of an X parameter */
     static void set_xname(ICalParameter &param, const std::string &v);
     static std::string get_xname(ICalParameter &param);
@@ -65,7 +63,6 @@ public:
     static std::string kind_to_string(const icalparameter_kind &kind);
     static icalparameter_kind string_to_kind(const std::string &str);
 
-public:
     /* DELEGATED-FROM */
     std::vector<std::string> get_delegatedfrom() const;
     void set_delegatedfrom(const std::vector<std::string> &v);
