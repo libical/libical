@@ -788,8 +788,11 @@ static void comp_to_v4(vcardcomponent *impl)
         next = icalpvl_next(itr);
 
         /* Remove TYPE=PREF and replace with PREF=1 (if no existing (PREF=) */
-        param = vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER);
-        if (param) {
+        for (param = vcardproperty_get_first_parameter(prop,
+                                                       VCARD_TYPE_PARAMETER);
+             param;
+             param = vcardproperty_get_next_parameter(prop,
+                                                      VCARD_TYPE_PARAMETER)) {
             vcardenumarray_element pref = {VCARD_TYPE_PREF, NULL};
             size_t i;
 
@@ -799,7 +802,6 @@ static void comp_to_v4(vcardcomponent *impl)
                 vcardenumarray_remove_element_at(types, i);
                 if (!vcardenumarray_size(types)) {
                     vcardproperty_remove_parameter_by_ref(prop, param);
-                    types = NULL;
                 }
 
                 param = vcardproperty_get_first_parameter(prop,
@@ -808,6 +810,8 @@ static void comp_to_v4(vcardcomponent *impl)
                     param = vcardparameter_new_pref(1);
                     vcardproperty_add_parameter(prop, param);
                 }
+
+                break;
             }
         }
 
@@ -863,12 +867,12 @@ static void comp_to_v4(vcardcomponent *impl)
         case VCARD_LOGO_PROPERTY:
         case VCARD_PHOTO_PROPERTY:
         case VCARD_SOUND_PROPERTY: {
-            if (types) {
-                /* Replace TYPE=subtype with MEDIATYPE or data:<mediatype>
-                 *
-                 * XXX  We assume that the first VCARD_TYPE_X is the subtype
-                 */
-                for (size_t i = 0; i < vcardenumarray_size(types); i++) {
+            size_t i;
+            param = vcardproperty_get_first_parameter(prop,
+                                                      VCARD_TYPE_PARAMETER);
+            if (param) {
+                types = vcardparameter_get_type(param);
+                for (i = 0; i < vcardenumarray_size(types); i++) {
                     const vcardenumarray_element *type =
                         vcardenumarray_element_at(types, i);
 
