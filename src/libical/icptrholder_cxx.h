@@ -73,8 +73,11 @@ public:
         return *this;
     }
 
-    ICPointerHolder &operator=(ICPointerHolder &p)
+    ICPointerHolder &operator=(ICPointerHolder &p) //NOLINT(misc-unconventional-assign-operator)
     {
+        if (this == &p) {
+            return *this;
+        }
         this->release();
         ptr = p.ptr; // this transfer ownership of the pointer
         p.ptr = 0;   // set it to null so the pointer won't get delete twice.
