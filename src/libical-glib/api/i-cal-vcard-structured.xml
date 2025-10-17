@@ -56,7 +56,7 @@
   <method name="i_cal_vcard_structured_as_vcard_string" corresponds="vcardstructured_as_vcard_string_r" kind="other" since="4.0">
     <parameter type="ICalVcardStructured *" name="self" comment="an #ICalVcardStructured"/>
     <parameter type="gboolean" name="is_param" comment="whether the @self corresponds to a parameter"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation of the @self." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="The string representation of the @self." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts the @self into its string representation.</comment>
   </method>
   <method name="i_cal_vcard_structured_new_from_string" corresponds="vcardstructured_from_string" kind="constructor" since="4.0">

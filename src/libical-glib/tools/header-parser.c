@@ -157,8 +157,7 @@ parse_header_file(GHashTable *symbols, /* caller allocates, char * ~> itself */
                     }
                 }
             } else if (read_func_name) {
-                gchar *next = skip_white_spaces(ptr, &is_new_line);
-
+                const gchar *next = skip_white_spaces(ptr, &is_new_line);
                 if (*next == '(') {
                     g_hash_table_add(symbols, g_strndup(start, ptr - start));
                     read_func_name = FALSE;

@@ -182,15 +182,15 @@ static void buf_vprintf(struct buf *buf, const char *fmt, va_list args)
 #define PUTC(C) buf_putc(&state->buf, C)
 #define INC(I) state->p += I
 #define IS_CTRL(ch) \
-    (ch > 0 && ch <= 0x1f && ch != '\r' && ch != '\n' && ch != '\t')
-#define HANDLECTRL(state)              \
-    {                                  \
-        if (IS_CTRL(*state->p)) {      \
-            while (IS_CTRL(*state->p)) \
-                state->p++;            \
-        }                              \
-        if ((*state->p) == 0)          \
-            break;                     \
+    ((ch) > 0 && (ch) <= 0x1f && (ch) != '\r' && (ch) != '\n' && (ch) != '\t')
+#define HANDLECTRL(state)                \
+    {                                    \
+        if (IS_CTRL(*(state)->p)) {      \
+            while (IS_CTRL(*(state)->p)) \
+                (state)->p++;            \
+        }                                \
+        if ((*(state)->p) == 0)          \
+            break;                       \
     }
 
 static int _parse_param_name(struct vcardparser_state *state)
@@ -566,7 +566,7 @@ static int _parse_prop_params(struct vcardparser_state *state)
 static int _parse_prop_name(struct vcardparser_state *state)
 {
     const char *name;
-    char *group = NULL;
+    const char *group = NULL;
     vcardproperty_kind kind;
     vcardproperty_version version = VCARD_VERSION_NONE;
     int r = 0;
@@ -1049,12 +1049,16 @@ const char *vcardparser_errstr(int err)
         return "End of data while parsing quoted value";
     case PE_QSTRING_EOL:
         return "End of line while parsing quoted value";
+    case PE_QSTRING_EOV:
+        return "End of line while parsing multi or structured value";
     case PE_VALUE_INVALID:
         return "Invalid value for property";
     case PE_ILLEGAL_CHAR:
         return "Illegal character in vCard";
+    case PE_NUMERR:
+    default:
+        return "Unknown error";
     }
-    return "Unknown error";
 }
 
 vcardcomponent *vcardparser_parse_string(const char *str)

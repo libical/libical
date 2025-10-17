@@ -34,7 +34,7 @@ static icaldirset_options icaldirset_options_default = {O_RDWR | O_CREAT};
 
 const char *icaldirset_path(icalset *set)
 {
-    icaldirset *dset = (icaldirset *)set;
+    const icaldirset *dset = (icaldirset *)set;
 
     return dset->dir;
 }
@@ -78,7 +78,7 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
     char *str;
 
 #if defined(HAVE_DIRENT_H)
-    struct dirent *de;
+    const struct dirent *de;
     DIR *dp;
 
     dp = opendir(dset->dir);
@@ -138,7 +138,7 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
 icalset *icaldirset_init(icalset *set, const char *dir, void *options_in)
 {
     icaldirset *dset;
-    icaldirset_options *options = options_in;
+    const icaldirset_options *options = options_in;
     struct stat sbuf;
 
     icalerror_check_arg_rz((dir != 0), "dir");
@@ -278,7 +278,6 @@ static void icaldirset_add_uid(icalcomponent *comp)
         icalcomponent_add_property(comp, uid);
     } else {
         strncpy(uidstring, icalproperty_get_uid(uid), MAXPATHLEN - 1);
-        uidstring[MAXPATHLEN - 1] = '\0';
     }
 }
 
@@ -355,7 +354,7 @@ icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
     /* Add the component to the cluster */
     (void)icalcluster_add_component(dset->cluster, comp);
 
-    /* icalcluster_mark(impl->cluster); */
+    /* icalcluster_mark(cluster->cluster); */
 
     return ICAL_NO_ERROR;
 }
@@ -384,8 +383,7 @@ icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
 
     for (i = icalcomponent_begin_component(filecomp, ICAL_ANY_COMPONENT);
          icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
-        icalcomponent *this = icalcompiter_deref(&i);
-
+        const icalcomponent *this = icalcompiter_deref(&i);
         if (this == comp) {
             found = 1;
             break;
@@ -400,7 +398,7 @@ icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
 
     (void)icalcluster_remove_component(dset->cluster, comp);
 
-    /* icalcluster_mark(impl->cluster); */
+    /* icalcluster_mark(cluster->cluster); */
 
     /* If the removal emptied the fileset, get the next fileset */
     if (icalcluster_count_components(dset->cluster, ICAL_ANY_COMPONENT) == 0) {
@@ -409,7 +407,7 @@ icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
         if (dset->cluster != 0 && error == ICAL_NO_ERROR) {
             (void)icalcluster_get_first_component(dset->cluster);
         } else {
-            /* HACK. Not strictly correct for impl->cluster==0 */
+            /* HACK. Not strictly correct for cluster->cluster==0 */
             return error;
         }
     } else {
@@ -473,7 +471,7 @@ icalcomponent *icaldirset_fetch(icalset *set, icalcomponent_kind kind, const cha
 
 int icaldirset_has_uid(icalset *set, const char *uid)
 {
-    icalcomponent *c;
+    const icalcomponent *c;
 
     icalerror_check_arg_rz((set != 0), "set");
     icalerror_check_arg_rz((uid != 0), "uid");
@@ -516,7 +514,6 @@ void icaldirset_clear(icalset *set)
 
     /* NOT IMPLEMENTED */
     assert(0);
-    return;
 }
 
 icalcomponent *icaldirset_get_current_component(icalset *set)

@@ -263,7 +263,6 @@ static char *fold_property_line(char *text)
     ssize_t chars_left;
     char *buf, *buf_ptr, *line_start, *next_line_start;
     int first_line;
-    char ch;
 
     /* Start with a buffer twice the size of our property line, so we almost
        certainly won't overflow it. */
@@ -293,7 +292,7 @@ static char *fold_property_line(char *text)
 
         /* This adds the line to our tmp buffer. We temporarily place a '\0'
            in text, so we can copy the line in one go. */
-        ch = *next_line_start;
+        char ch = *next_line_start;
         *next_line_start = '\0';
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, line_start);
         *next_line_start = ch;
@@ -433,7 +432,7 @@ char *vcardproperty_as_vcard_string_r(vcardproperty *prop)
     size_t buf_size = 1024;
     char *buf;
     char *buf_ptr;
-    vcardvalue *value;
+    const vcardvalue *value;
     char *out_buf;
     const char *kind_string = 0;
     const char newline[] = "\r\n";
@@ -534,7 +533,7 @@ vcardproperty_kind vcardproperty_isa(vcardproperty *p)
 
 bool vcardproperty_isa_property(void *property)
 {
-    vcardproperty *impl = (vcardproperty *)property;
+    const vcardproperty *impl = (vcardproperty *)property;
 
     icalerror_check_arg_rz((property != 0), "property");
     if (strcmp(impl->id, "prop") == 0) {
@@ -837,7 +836,7 @@ void vcardproperty_set_value(vcardproperty *p, vcardvalue *value)
 
 void vcardproperty_set_value_from_string(vcardproperty *prop, const char *str, const char *type)
 {
-    vcardvalue *oval, *nval;
+    vcardvalue *nval;
     vcardvalue_kind kind = VCARD_NO_VALUE;
 
     icalerror_check_arg_rv((prop != 0), "prop");
@@ -846,7 +845,7 @@ void vcardproperty_set_value_from_string(vcardproperty *prop, const char *str, c
 
     if (strcmp(type, "NO") == 0) {
         /* Get the type from the value the property already has, if it exists */
-        oval = vcardproperty_get_value(prop);
+        const vcardvalue *oval = vcardproperty_get_value(prop);
         if (oval != 0) {
             /* Use the existing value kind */
             kind = vcardvalue_isa(oval);
@@ -894,7 +893,7 @@ const char *vcardproperty_get_value_as_string(const vcardproperty *prop)
 
 char *vcardproperty_get_value_as_string_r(const vcardproperty *prop)
 {
-    vcardvalue *value;
+    const vcardvalue *value;
 
     icalerror_check_arg_rz((prop != 0), "prop");
 
@@ -990,11 +989,11 @@ char *vcardproperty_get_property_name_r(const vcardproperty *prop)
     return buf;
 }
 
-void vcardproperty_set_parent(vcardproperty *property, vcardcomponent *card)
+void vcardproperty_set_parent(vcardproperty *property, vcardcomponent *comp)
 {
     icalerror_check_arg_rv((property != 0), "property");
 
-    property->parent = card;
+    property->parent = comp;
 }
 
 vcardcomponent *vcardproperty_get_parent(const vcardproperty *property)

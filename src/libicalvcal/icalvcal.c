@@ -54,7 +54,7 @@ static const int weekday_codes[] = {
     ICAL_FRIDAY_WEEKDAY,
     ICAL_SATURDAY_WEEKDAY};
 
-struct conversion_table_struct {
+struct conversion_table_struct { //NOLINT(clang-analyzer-optin.performance.Padding) too much work to change all the initialization
     const char *vcalname;
     enum datatype type;
     void *(*conversion_func)(int icaltype, VObject *o, const icalcomponent *comp,
@@ -93,6 +93,9 @@ static const char *get_string_value(VObject *object, int *free_string)
     case VCVT_STRINGZ:
         *free_string = 0;
         return (char *)vObjectStringZValue(object);
+
+    default:
+        break;
     }
 
     *free_string = 0;
@@ -144,7 +147,7 @@ static void icalvcal_traverse_objects(VObject *,
 
 icalcomponent *icalvcal_convert_with_defaults(VObject *object, icalvcal_defaults *defaults)
 {
-    char *name = (char *)vObjectName(object);
+    const char *name = vObjectName(object);
     icalcomponent *container;
     icalcomponent *root;
     icalproperty *prop;
@@ -508,7 +511,6 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
             if (url && url[0] == '/') {
                 size_t len;
                 char *new_url;
-                icalattach *new_attach;
 
                 /* Turn it into a proper file: URL. */
                 len = strlen(url) + 12;
@@ -518,9 +520,8 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
                     strcpy(new_url, "file://");
                     strcat(new_url, url);
 
-                    new_attach = icalattach_new_from_url(new_url);
+                    icalattach *new_attach = icalattach_new_from_url(new_url);
                     free(new_url);
-
                     icalproperty_set_attach(attach_prop, new_attach);
                     icalattach_unref(attach);
                 } else {
@@ -632,10 +633,9 @@ static void *multivalued_prop(int icaltype, VObject *object, const icalcomponent
 {
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop = NULL;
-    icalvalue *value;
     icalvalue_kind value_kind;
     const char *s;
-    char *tmp_copy, *p;
+    char *tmp_copy;
     int free_string;
 
     _unused(comp);
@@ -654,13 +654,13 @@ static void *multivalued_prop(int icaltype, VObject *object, const icalcomponent
 
         value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
 
-        for (p = tmp_copy; *p; p++) {
+        for (char *p = tmp_copy; *p; p++) {
             if (*p == ';') {
                 *p = ',';
             }
         }
 
-        value = icalvalue_new_from_string(value_kind, tmp_copy);
+        icalvalue *value = icalvalue_new_from_string(value_kind, tmp_copy);
         icalproperty_set_value(prop, value);
 
         free(tmp_copy);
@@ -1005,7 +1005,7 @@ static const char *rrule_parse_monthly_positions(const char *s,
 {
     int occurrences[ICAL_BY_DAY_SIZE];
     int found_weekdays[7] = {0, 0, 0, 0, 0, 0, 0};
-    int i, num_positions, elems, month_position, day;
+    int i, num_positions, day;
     int num_weekdays, only_weekday = 0;
     const char *e;
 
@@ -1097,9 +1097,9 @@ static const char *rrule_parse_monthly_positions(const char *s,
             return NULL;
         }
     } else {
-        elems = 0;
+        int elems = 0;
         for (i = 0; i < num_positions; i++) {
-            month_position = occurrences[i];
+            int month_position = occurrences[i];
 
             for (day = 0; day < 7; day++) {
                 if (found_weekdays[day]) {

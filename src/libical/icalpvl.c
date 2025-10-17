@@ -285,7 +285,6 @@ void icalpvl_insert_ordered(icalpvl_list L, icalpvl_comparef f, void *d)
     }
 
     /* badness, just return */
-    return;
 }
 
 /**

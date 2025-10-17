@@ -24,13 +24,13 @@ LIBICAL_ICALSS_EXPORT icalset *icalfileset_new_reader(const char *path);
 
 LIBICAL_ICALSS_EXPORT icalset *icalfileset_new_writer(const char *path);
 
-LIBICAL_ICALSS_EXPORT icalset *icalfileset_init(icalset *set, const char *dsn, void *options);
+LIBICAL_ICALSS_EXPORT icalset *icalfileset_init(icalset *set, const char *path, void *options_in);
 
 LIBICAL_ICALSS_EXPORT icalcluster *icalfileset_produce_icalcluster(const char *path);
 
-LIBICAL_ICALSS_EXPORT void icalfileset_free(icalset *cluster);
+LIBICAL_ICALSS_EXPORT void icalfileset_free(icalset *set);
 
-LIBICAL_ICALSS_EXPORT const char *icalfileset_path(icalset *cluster);
+LIBICAL_ICALSS_EXPORT const char *icalfileset_path(icalset *set);
 
 /* Mark the cluster as changed, so it will be written to disk when it
    is freed. Commit writes to disk immediately. */
@@ -74,11 +74,11 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_modify(icalset *set,
 /* Iterates through components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_current_component(icalset *cluster);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_current_component(icalset *set);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_first_component(icalset *cluster);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_first_component(icalset *set);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_next_component(icalset *cluster);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_next_component(icalset *set);
 
 /* External iterator for thread safety */
 LIBICAL_ICALSS_EXPORT icalsetiter icalfileset_begin_component(icalset *set,
@@ -93,7 +93,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_form_a_matched_recurrence_compo
 /** Returns a reference to the internal component. **You probably should
    not be using this.** */
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_component(icalset *cluster);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_component(icalset *set);
 
 /**
  * @brief Options for opening an icalfileset.

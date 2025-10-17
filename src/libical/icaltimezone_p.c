@@ -91,12 +91,12 @@ typedef struct
     char charcnt[4];
 } tzinfo;
 
-#define EFREAD(buf, size, num, fs)                                     \
-    if (!ferror(fs) && !feof(fs) && fread(buf, size, num, fs) < num) { \
-        if (ferror(fs)) {                                              \
-            icalerror_set_errno(ICAL_FILE_ERROR);                      \
-            goto error;                                                \
-        }                                                              \
+#define EFREAD(buf, size, num, fs)                                       \
+    if (!ferror(fs) && !feof(fs) && fread(buf, size, num, fs) < (num)) { \
+        if (ferror(fs)) {                                                \
+            icalerror_set_errno(ICAL_FILE_ERROR);                        \
+            goto error;                                                  \
+        }                                                                \
     }
 
 typedef struct
@@ -119,6 +119,7 @@ typedef struct
 
 static int decode(const void *ptr)
 {
+    // NOLINTBEGIN(misc-redundant-expression)
     if ((BYTE_ORDER == BIG_ENDIAN) && sizeof(int) == 4) {
         return *(const int *)ptr;
     } else if (BYTE_ORDER == LITTLE_ENDIAN && sizeof(int) == 4) {
@@ -128,6 +129,7 @@ static int decode(const void *ptr)
 #else
         return 1;
 #endif
+        // NOLINTEND(misc-redundant-expression)
     } else {
         const unsigned char *p = ptr;
         int result = (*p & (1 << (CHAR_BIT - 1))) ? ~0 : 0;
@@ -227,7 +229,7 @@ static char *parse_posix_zone(char *p, ttinfo *type)
     return p;
 }
 
-#define nth_weekday(week, day) (icalrecurrencetype_encode_day((enum icalrecurrencetype_weekday)day, (short)week))
+#define nth_weekday(week, day) (icalrecurrencetype_encode_day((enum icalrecurrencetype_weekday)(day), (short)(week)))
 
 static bool icalrecur_set_single_by(icalrecurrence_by_data *by, short value)
 {
@@ -456,7 +458,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
 
     /* read version 1 header */
     EFREAD(&header, 44, 1, f);
-    if (memcmp(header.magic, "TZif", 4)) {
+    if (memcmp(header.magic, "TZif", 4) != 0) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         goto error;
     }
@@ -493,7 +495,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
 
         /* read version 2+ header */
         EFREAD(&header, 44, 1, f);
-        if (memcmp(header.magic, "TZif", 4)) {
+        if (memcmp(header.magic, "TZif", 4) != 0) {
             icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
             goto error;
         }
@@ -756,7 +758,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
             if (types[prev_idx].gmtoff != zone->gmtoff_from ||
                 types[idx].gmtoff != zone->gmtoff_to ||
                 (types[idx].zname != NULL &&
-                 strcmp(types[idx].zname, zone->name))) {
+                 strcmp(types[idx].zname, zone->name) != 0)) {
                 zone->rdate_comp = NULL;
                 terminate = 1;
             }

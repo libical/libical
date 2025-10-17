@@ -63,12 +63,11 @@ void ical_caldat(struct ut_instant_int *date)
     long kc;
     long kd;
     long ke;
-    long ialp;
 
     jd = (long)(date->j_date0 + 1L); /* integer julian date */
     ka = (long)jd;
     if (jd >= 2299161L) {
-        ialp = (long)(((jd * 100LL) - 186721625LL) / 3652425LL);
+        long ialp = (long)(((jd * 100LL) - 186721625LL) / 3652425LL);
         ka = jd + 1L + ialp - (ialp >> 2);
     }
     kb = ka + 1524L;

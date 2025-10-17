@@ -263,6 +263,6 @@ void ical_bt(void)
             icalerrprintf("%p\n", stack_frames[i]);
         }
     }
-    free(strings); /* Not icalmemory_free_buffer(), allocated by backtrace_symbols() */
+    free((void *)strings); /* Not icalmemory_free_buffer(), allocated by backtrace_symbols() */
 #endif
 }

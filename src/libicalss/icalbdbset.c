@@ -118,7 +118,7 @@ void icalbdbset_rmdbLog(void)
                 (void)unlink(listp[ii]);
                 ii++;
             }
-            free(listp);
+            free((void *)listp);
         }
     }
 }
@@ -610,12 +610,12 @@ err1:
 
 int icalbdbset_put(DB *dbp, DBT *key, DBT *data, u_int32_t access_method)
 {
-    int ret = 0;
     DB_TXN *tid = NULL;
     int retry = 0;
     int done = 0;
 
     while ((retry < MAX_RETRY) && !done) {
+        int ret;
         if ((ret = ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, NULL, &tid, 0)) != 0) {
             if (ret == DB_LOCK_DEADLOCK) {
                 retry++;
@@ -682,7 +682,7 @@ const char *icalbdbset_path(icalset *set)
 
 const char *icalbdbset_subdb(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *)set;
+    const icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -699,7 +699,6 @@ icalerrorenum icalbdbset_commit(icalset *set)
     DBT key, data;
     icalcomponent *c;
     char *str = NULL;
-    int ret = 0;
     icalerrorenum reterr = ICAL_NO_ERROR;
     char keystore[256];
     char uidbuf[256];
@@ -737,6 +736,7 @@ icalerrorenum icalbdbset_commit(icalset *set)
     }
 
     while ((retry < MAX_RETRY) && !done) {
+        int ret;
         if ((ret = ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, NULL, &tid, 0)) != 0) {
             if (ret == DB_LOCK_DEADLOCK) {
                 retry++;
@@ -923,7 +923,7 @@ void icalbdbset_mark(icalset *set)
 
 icalcomponent *icalbdbset_get_component(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *)set;
+    const icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -1038,9 +1038,9 @@ icalcomponent *icalbdbset_fetch(icalset *set, icalcomponent_kind kind, const cha
     return 0;
 }
 
-int icalbdbset_has_uid(icalset *store, const char *uid) // return an int for icalset_bdbset_init
+int icalbdbset_has_uid(icalset *set, const char *uid) // return an int for icalset_bdbset_init
 {
-    _unused(store);
+    _unused(set);
     _unused(uid);
     assert(0); /* HACK, not implemented */
     return 0;
@@ -1187,7 +1187,7 @@ icalerrorenum icalbdbset_free_cluster(icalset *set)
 
 icalcomponent *icalbdbset_get_cluster(icalset *set)
 {
-    icalbdbset *bset = (icalbdbset *)set;
+    const icalbdbset *bset = (icalbdbset *)set;
 
     icalerror_check_arg_rz((bset != 0), "bset");
 
@@ -1238,7 +1238,7 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
     icalproperty *dtstart, *rrule, *prop, *due;
     struct icalrecurrencetype *recur;
     icaltimezone *u_zone;
-    int g = 0;
+    int g;
     int orig_time_was_utc = 0;
 
     icalerror_check_arg_re((set != 0), "set", icalsetiter_null);
@@ -1356,7 +1356,7 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
 {
     icalcomponent *comp = NULL;
     struct icaltimetype start, next;
-    icalproperty *dtstart, *rrule, *prop, *due;
+    icalproperty *rrule, *prop;
     struct icalrecurrencetype *recur;
     icaltimezone *u_zone;
     int orig_time_was_utc = 0;
@@ -1384,12 +1384,12 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
     start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
     if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
-        dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+        icalproperty *dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
         if (dtstart) {
             start = icalproperty_get_dtstart(dtstart);
         }
     } else if (icalcomponent_isa(comp) == ICAL_VTODO_COMPONENT) {
-        due = icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY);
+        icalproperty *due = icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY);
         if (due) {
             start = icalproperty_get_due(due);
         }
@@ -1454,9 +1454,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
     icalcomponent *comp = NULL;
     struct icaltimetype start, next;
     icalproperty *dtstart, *rrule, *prop, *due;
-    struct icalrecurrencetype *recur;
     icaltimezone *u_zone;
-    int g = 0;
     int orig_time_was_utc = 0;
 
     _unused(set);
@@ -1481,8 +1479,8 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
         /* finding the next matched component and return it to the caller */
 
         rrule = icalcomponent_get_first_property(comp, ICAL_RRULE_PROPERTY);
-        recur = rrule ? icalproperty_get_rrule(rrule) : NULL;
-        g = icalgauge_get_expand(i->gauge);
+        struct icalrecurrencetype *recur = rrule ? icalproperty_get_rrule(rrule) : NULL;
+        int g = icalgauge_get_expand(i->gauge);
 
         /* a recurring component with expand query */
         if (recur != 0 && g == 1) {
@@ -1579,9 +1577,9 @@ icalcomponent *icalbdbset_get_next_component(icalset *set)
     return 0;
 }
 
-int icalbdbset_begin_transaction(DB_TXN *parent_tid, DB_TXN **tid)
+int icalbdbset_begin_transaction(DB_TXN *parent_id, DB_TXN **txnid)
 {
-    return ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, parent_tid, tid, 0);
+    return ICAL_DB_ENV->txn_begin(ICAL_DB_ENV, parent_id, txnid, 0);
 }
 
 int icalbdbset_commit_transaction(DB_TXN *txnid)
@@ -1605,8 +1603,8 @@ static int _compare_keys(DB *dbp, const DBT *a, const DBT *b)
      * > 0 if a > b
      */
 
-    char *ac = (char *)a->data;
-    char *bc = (char *)b->data;
+    const char *ac = a->data;
+    const char *bc = b->data;
 
     _unused(dbp);
     return strncmp(ac, bc, a->size);

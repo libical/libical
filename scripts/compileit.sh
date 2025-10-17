@@ -55,6 +55,7 @@ cmake -S .. \
   ninja install &&
   ninja docs &&
   ninja build-book
+if (test $? -ne 0); then exit; fi
 ninja uninstall && rm -rf "$INSTALLDIR"
 
 #static build testing
@@ -86,4 +87,5 @@ cmake -S .. \
   ninja install &&
   ninja docs &&
   ninja build-book
+if (test $? -ne 0); then exit; fi
 ninja uninstall && rm -rf "$INSTALLDIR"

@@ -132,7 +132,7 @@ static bool load(const char *file)
 {
     void *modh;
     fptr inith;
-    char *dlerr;
+    const char *dlerr;
     icalset *icalset_init_ptr;
 
     if ((modh = dlopen(file, RTLD_NOW)) == 0) {
@@ -191,7 +191,7 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
 
 #if defined(_DLOPEN_TEST)
     icalpvl_elem e;
-    icalset *impl;
+    const icalset *impl;
 
     if (!icalset_init_done) {
         icalset_init();

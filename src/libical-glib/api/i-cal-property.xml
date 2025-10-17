@@ -26,7 +26,7 @@
   </method>
   <method name="i_cal_property_as_ical_string" corresponds="icalproperty_as_ical_string_r" since="1.0">
     <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be converted"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation of @prop." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="The string representation of @prop." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts a #ICalProperty to a string representation.</comment>
   </method>
   <method name="i_cal_property_free" corresponds="icalproperty_free" annotation="skip" kind="destructor" since="1.0">
@@ -72,7 +72,7 @@
   <method name="i_cal_property_get_parameter_as_string" corresponds="icalproperty_get_parameter_as_string_r" since="1.0">
     <parameter type="ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
     <parameter type="const gchar *" name="name" comment="The name of the target parameter"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation of the parameter." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="The string representation of the parameter." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Gets the string representation of the target parameter in the #ICalProperty.</comment>
   </method>
   <method name="i_cal_property_remove_parameter_by_kind" corresponds="icalproperty_remove_parameter_by_kind" since="1.0">
@@ -135,7 +135,7 @@
   </method>
   <method name="i_cal_property_get_value_as_string" corresponds="icalproperty_get_value_as_string_r" since="1.0">
     <parameter type="const ICalProperty *" name="prop" comment="The #ICalProperty to be queried"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation of the value of the #ICalProperty." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="The string representation of the value of the #ICalProperty." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Gets the string representation of the value in #ICalProperty.</comment>
   </method>
   <method name="i_cal_value_set_parent" corresponds="icalvalue_set_parent" since="2.0">
@@ -170,7 +170,7 @@
   </method>
   <method name="i_cal_property_get_property_name" corresponds="icalproperty_get_property_name_r" since="1.0">
     <parameter type="const ICalProperty *" name="prop" comment="A #ICalProperty"/>
-    <returns type="gchar *" annotation="transfer full" comment="Property name of #ICalProperty." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="Property name of #ICalProperty." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Gets the property name of #ICalProperty.</comment>
   </method>
   <method name="i_cal_parameter_value_to_value_kind" corresponds="icalparameter_value_to_value_kind" since="1.0">
@@ -215,7 +215,7 @@
   </method>
   <method name="i_cal_property_enum_to_string" corresponds="icalproperty_enum_to_string_r" since="1.0">
     <parameter type="gint" name="e" comment="The enum to be converted"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation of @e." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="The string representation of @e." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts the enum to string.</comment>
   </method>
   <method name="i_cal_property_kind_and_string_to_enum" corresponds="icalproperty_kind_and_string_to_enum" since="1.0">

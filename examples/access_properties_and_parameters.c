@@ -98,7 +98,7 @@ void test_properties(void)
     icalproperty *prop;
     icalparameter *param;
     icalvalue *value;
-    char *str;
+    const char *str;
 
     icalproperty *clone;
 
@@ -124,7 +124,7 @@ void test_properties(void)
     /* Spit out the property in its RFC 5545 representation */
     str = icalproperty_as_ical_string_r(prop);
     printf("As iCAL string:\n %s\n", str);
-    free(str);
+    free((void *)str);
 
     /* Make a copy of the property. Caller owns the memory */
     clone = icalproperty_clone(prop);
@@ -134,7 +134,7 @@ void test_properties(void)
 
     str = icalvalue_as_ical_string_r(value);
     printf("Value: %s", str);
-    free(str);
+    free((void *)str);
 
     /* Frees the original and the clone */
     icalproperty_free(clone);

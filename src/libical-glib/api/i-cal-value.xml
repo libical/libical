@@ -34,7 +34,7 @@
   </method>
   <method name="i_cal_value_as_ical_string" corresponds="icalvalue_as_ical_string_r" since="1.0">
     <parameter type="const ICalValue *" name="value" comment="A #ICalValue"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="The string representation." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts the #ICalValue to a string.</comment>
   </method>
   <method name="i_cal_value_isa" corresponds="icalvalue_isa" since="1.0">
@@ -51,7 +51,7 @@
     <parameter type="const ICalValue *" name="a" comment="A #ICalValue"/>
     <parameter type="const ICalValue *" name="b" comment="A #ICalValue"/>
     <returns type="ICalParameterXliccomparetype" comment="The compare result."/>
-    <comment xml:space="preserve">Compares two #ICalValue.</comment>
+    <comment xml:space="preserve">Compares two #ICalValue. If the values do not have the same type ICAL_XLICCOMPARETYPE_NOTEQUAL is returned. ICAL_XLICCOMPARETYPE_NONE is returned if the values type is unknown or one of the values is null.</comment>
   </method>
   <method name="i_cal_value_kind_from_string" corresponds="icalvalue_string_to_kind" since="1.0">
     <parameter type="const gchar *" name="str" comment="A string"/>

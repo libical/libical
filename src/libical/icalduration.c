@@ -102,7 +102,7 @@ struct icaldurationtype icaldurationtype_from_string(const char *str)
             /* Get all of the digits, not one at a time */
             scan_size = sscanf(&str[i], "%10d", &digits); /*limit to 10digits.
                                                                   increase as needed */
-            if (scan_size == 0) {
+            if (scan_size != 1) {
                 goto error;
             }
             break;

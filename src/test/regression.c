@@ -224,7 +224,7 @@ void test_values(void)
     icalvalue_free(v);
     icalvalue_free(copy);
 
-    v = icalvalue_new((icalvalue_kind)-1);
+    v = icalvalue_new((icalvalue_kind)-1); //NOLINT (purposefully, for testing)
 
     ok("icalvalue_new(-1), Invalid type", (v == NULL));
 
@@ -327,7 +327,7 @@ void test_properties(void)
     icalproperty_free(clone);
     icalproperty_free(prop);
 
-    prop = icalproperty_new((icalproperty_kind)-1);
+    prop = icalproperty_new((icalproperty_kind)-1); //NOLINT (purposefully, for testing)
 
     ok("test icalproperty_new() with invalid type (-1)", (prop == NULL));
 
@@ -1623,7 +1623,7 @@ enum byrule
     BY_YEAR_DAY = 5,
     BY_WEEK_NO = 6,
     BY_MONTH = 7,
-    BY_SET_POS
+    BY_SET_POS = 8,
 };
 
 void icalrecurrencetype_test(void)
@@ -2673,8 +2673,9 @@ void test_fblist(void)
 
     foo = icalspanlist_as_freebusy_matrix(sl, 3600);
 
-    for (i = 0; foo[i] != -1; i++)
+    for (i = 0; foo[i] != -1; i++) {
         ; /* find number entries */
+    }
 
     int_is("Calculating freebusy hourly matrix", i, (7 * 24));
 
@@ -6872,7 +6873,6 @@ int main(int argc, char *argv[])
     extern int optopt;
 #endif
 #if defined(HAVE_GETOPT)
-    int errflg = 0;
     int c;
 #endif
     int do_test = 0;
@@ -6910,15 +6910,11 @@ int main(int argc, char *argv[])
             do_header = 1;
             break;
         }
-        case '?': {
-            errflg++;
+        default: { /* '?' */
+            fprintf(stderr, "Usage: %s [-v|-q|-l]\n", strrchr(argv[0], '/'));
+            exit(1);
         }
         }
-    }
-
-    if (errflg > 0) {
-        fprintf(stderr, "Usage: %s [-v|-q|-l]\n", strrchr(argv[0], '/'));
-        exit(1);
     }
 
     if (optind < argc) {

@@ -69,9 +69,10 @@ VObject* vcsAddEvent(
     Z(VCDTendProp,end_date_time);
     if (description) {
         VObject *p = addPropValue(vevent,VCDescriptionProp,description);
-        if (strchr(description,'\n'))
+        if (strchr(description,'\n')) {
             (void)addProp(p,VCQuotedPrintableProp);
         }
+    }
     Z(VCSummaryProp,summary);
     Z(VCCategoriesProp,categories);
     Z(VCClassProp,classification);
@@ -104,9 +105,10 @@ VObject* vcsAddTodo(
     Z(VCCompletedProp,date_time_complete);
     if (description) {
         VObject *p = addPropValue(vtodo,VCDescriptionProp,description);
-        if (strchr(description,'\n'))
+        if (strchr(description,'\n')) {
             (void)addProp(p,VCQuotedPrintableProp);
         }
+    }
     Z(VCSummaryProp,summary);
     Z(VCPriorityProp,priority);
     Z(VCClassProp,classification);

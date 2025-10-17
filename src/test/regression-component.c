@@ -16,7 +16,7 @@
 void create_simple_component(void)
 {
     icalcomponent *calendar;
-    icalproperty *version, *bogus;
+    const icalproperty *version, *bogus;
 
     /* Create calendar and add properties */
     calendar = icalcomponent_new(ICAL_VCALENDAR_COMPONENT);
@@ -85,7 +85,7 @@ void create_new_component(void)
     struct icaltimetype atime = icaltime_from_timet_with_zone(1023398689, 0, NULL);
     struct icaldatetimeperiodtype rtime;
     icalproperty *property;
-    char *calendar_as_string;
+    const char *calendar_as_string;
 
     rtime.period.start = icaltime_from_timet_with_zone(1023398689, 0, NULL);
     rtime.period.end = icaltime_from_timet_with_zone(1023409689, 0, NULL);

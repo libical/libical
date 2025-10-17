@@ -136,7 +136,7 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
     char *buf_ptr;
     icalparameter *param;
 
-    icalvalue *value;
+    const icalvalue *value;
 
     if (prop == 0) {
         return 0;

@@ -99,7 +99,7 @@ icalproperty *icalclassify_find_attendee(const icalcomponent *c, const char *att
     icalproperty *p;
     icalcomponent *inner;
     char *lattendee;
-    char *upn;
+    const char *upn;
 
     if (attendee == 0) {
         return 0;
@@ -122,7 +122,7 @@ icalproperty *icalclassify_find_attendee(const icalcomponent *c, const char *att
     for (p = icalcomponent_get_first_property(inner, ICAL_ATTENDEE_PROPERTY);
          p != 0;
          p = icalcomponent_get_next_property(inner, ICAL_ATTENDEE_PROPERTY)) {
-        char *this_upn;
+        const char *this_upn;
         char *this_attendee = icalclassify_lowercase(icalproperty_get_attendee(p));
 
         if (!this_attendee) {
@@ -230,15 +230,12 @@ void icalssutil_get_parts(icalcomponent *c, struct icalclassify_parts *parts)
     }
 
     if (parts->method == ICAL_METHOD_REPLY) {
-        icalparameter *param;
-
         p = icalcomponent_get_first_property(inner, ICAL_ATTENDEE_PROPERTY);
 
         if (p != 0) {
             const char *attendee = 0;
 
-            param = icalproperty_get_first_parameter(p, ICAL_PARTSTAT_PARAMETER);
-
+            icalparameter *param = icalproperty_get_first_parameter(p, ICAL_PARTSTAT_PARAMETER);
             if (param != 0) {
                 parts->reply_partstat = icalparameter_get_partstat(param);
             }
@@ -252,9 +249,8 @@ void icalssutil_get_parts(icalcomponent *c, struct icalclassify_parts *parts)
 
 static bool icalssutil_is_rescheduled(const icalcomponent *a, const icalcomponent *b)
 {
-    icalproperty *p1, *p2;
     icalcomponent *i1, *i2;
-    char *temp1, *temp2;
+    const char *temp1, *temp2;
     int i;
 
     icalproperty_kind kind_array[] = {
@@ -274,8 +270,8 @@ static bool icalssutil_is_rescheduled(const icalcomponent *a, const icalcomponen
     for (i = 0; kind_array[i] != ICAL_NO_PROPERTY; i++) {
         int cmp;
 
-        p1 = icalcomponent_get_first_property(i1, kind_array[i]);
-        p2 = icalcomponent_get_first_property(i2, kind_array[i]);
+        icalproperty *p1 = icalcomponent_get_first_property(i1, kind_array[i]);
+        icalproperty *p2 = icalcomponent_get_first_property(i2, kind_array[i]);
 
         if ((p1 != 0) ^ (p2 != 0)) {
             /* Return true if the property exists in one component and not
@@ -288,8 +284,8 @@ static bool icalssutil_is_rescheduled(const icalcomponent *a, const icalcomponen
         temp1 = icalproperty_as_ical_string_r(p1);
         temp2 = icalproperty_as_ical_string_r(p2);
         cmp = strcmp(temp1, temp2);
-        icalmemory_free_buffer(temp1);
-        icalmemory_free_buffer(temp2);
+        icalmemory_free_buffer((char *)temp1);
+        icalmemory_free_buffer((char *)temp2);
 
         if (p1 && cmp != 0) {
             return true;
@@ -396,7 +392,7 @@ int icalclassify_request_delegate(const struct icalclassify_parts *comp,
                                   const struct icalclassify_parts *match, const char *user)
 {
     icalproperty *attendee;
-    icalparameter *param;
+    const icalparameter *param;
 
     icalclassify_pre;
     _unused(match);
@@ -464,7 +460,7 @@ int icalclassify_request_freebusy(const struct icalclassify_parts *comp,
 int icalclassify_reply_accept(const struct icalclassify_parts *comp,
                               const struct icalclassify_parts *match, const char *user)
 {
-    icalproperty *attendee;
+    const icalproperty *attendee;
 
     icalclassify_pre;
     _unused(user);
@@ -481,7 +477,7 @@ int icalclassify_reply_accept(const struct icalclassify_parts *comp,
 int icalclassify_reply_decline(const struct icalclassify_parts *comp,
                                const struct icalclassify_parts *match, const char *user)
 {
-    icalproperty *attendee;
+    const icalproperty *attendee;
 
     icalclassify_pre;
     _unused(user);
@@ -497,7 +493,7 @@ int icalclassify_reply_decline(const struct icalclassify_parts *comp,
 int icalclassify_reply_delegate(const struct icalclassify_parts *comp,
                                 const struct icalclassify_parts *match, const char *user)
 {
-    icalproperty *attendee;
+    const icalproperty *attendee;
 
     icalclassify_pre;
     _unused(user);
@@ -513,7 +509,7 @@ int icalclassify_reply_delegate(const struct icalclassify_parts *comp,
 int icalclassify_reply_crasher_accept(const struct icalclassify_parts *comp,
                                       const struct icalclassify_parts *match, const char *user)
 {
-    icalproperty *attendee;
+    const icalproperty *attendee;
 
     icalclassify_pre;
     _unused(user);
@@ -529,7 +525,7 @@ int icalclassify_reply_crasher_accept(const struct icalclassify_parts *comp,
 int icalclassify_reply_crasher_decline(const struct icalclassify_parts *comp,
                                        const struct icalclassify_parts *match, const char *user)
 {
-    icalproperty *attendee;
+    const icalproperty *attendee;
 
     icalclassify_pre;
     _unused(user);
@@ -622,7 +618,7 @@ int icalclassify_delinecounter(const struct icalclassify_parts *comp,
     icalclassify_post
 }
 
-static const struct icalclassify_map {
+static const struct icalclassify_map { //NOLINT(clang-analyzer-optin.performance.Padding) too much work to change all the initialization
     icalproperty_method method;
     int (*fn)(const struct icalclassify_parts *comp, const struct icalclassify_parts *match,
               const char *user);
@@ -655,7 +651,7 @@ static const struct icalclassify_map {
 
 icalproperty_xlicclass icalclassify(icalcomponent *c, icalcomponent *match, const char *user)
 {
-    icalcomponent *inner;
+    const icalcomponent *inner;
     icalproperty *p;
     icalproperty_method method;
     icalproperty_xlicclass class = ICAL_XLICCLASS_UNKNOWN;

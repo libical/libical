@@ -451,8 +451,10 @@ void ${lcprefix}parameter_add_${lc}(${lcprefix}parameter *param, ${singletype} v
     icalerror_check_arg_rv((param != 0), "param");
     icalerror_clear_errno();
 
-   values = &((struct ${lcprefix}parameter_impl *)param)->values;
-    if (*values == 0) *values = ${apitype}_new(5);
+    values = &((struct ${lcprefix}parameter_impl *)param)->values;
+    if (*values == 0) {
+        *values = ${apitype}_new(5);
+    }
     ${apitype}_add(*values, v);
 }
 
@@ -463,7 +465,9 @@ void ${lcprefix}parameter_remove_${lc}(${lcprefix}parameter *param, ${singletype
     icalerror_clear_errno();
 
     values = ((struct ${lcprefix}parameter_impl *)param)->values;
-    if (values != 0) ${apitype}_remove(values, v);
+    if (values != 0) {
+        ${apitype}_remove(values, v);
+    }
 }
 
 EOM

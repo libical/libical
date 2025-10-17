@@ -436,10 +436,41 @@ CPPCHECK() {
   COMMAND_EXISTS "cppcheck" "-c"
   echo "===== START SETUP FOR CPPCHECK: $1 ======"
 
-  echo "===== START CPPCHECK: $1 ======"
+  echo "===== START CPPCHECK ======"
   cd "$TOP" || exit 1
-  rm -f cppcheck.out cppcheck-report.txt
   set +e
+
+  echo "===== RUN CPPCHECK FOR C FILES ======"
+  rm -f cppcheck-c.out
+  f=$(find "$TOP/src" -name "*.c")
+  # shellcheck disable=SC2086
+  cppcheck --quiet \
+    --language=c \
+    --std=c99 \
+    --force --error-exitcode=1 --inline-suppr \
+    --enable=warning,performance,portability,style \
+    --check-level=exhaustive \
+    --suppress-xml=cppcheck-suppressions.xml \
+    --template='{file}:{line},{severity},{id},{message}' \
+    -D __cppcheck__ \
+    -D ICAL_PACKAGE="\"x\"" \
+    -D ICAL_VERSION="\"y\"" \
+    -D _unused="(void)" \
+    -D _fallthrough="" \
+    -D MIN="" \
+    -D sleep="" \
+    -i "$TOP/src/Net-ICal-Libical/" \
+    -i "$TOP/src/java/" \
+    -i "$TOP/src/libicalss/icalssyacc.c" \
+    -i "$TOP/src/libicalss/icalsslexer.c" \
+    -i "$TOP/src/libicalvcal/vcc.c" \
+    $f 2>&1 |
+    tee cppcheck-c.out
+
+  echo "===== RUN CPPCHECK FOR C++ FILES ======"
+  rm -f cppcheck-cpp.out
+  f=$(find "$TOP/src" -name "*.cpp")
+  # shellcheck disable=SC2086
   cppcheck --quiet \
     --language=c++ \
     --std=c++11 \
@@ -448,7 +479,6 @@ CPPCHECK() {
     --check-level=exhaustive \
     --suppress-xml=cppcheck-suppressions.xml \
     --template='{file}:{line},{severity},{id},{message}' \
-    --checkers-report=cppcheck-report.txt \
     -D __cppcheck__ \
     -D ICAL_PACKAGE="\"x\"" \
     -D ICAL_VERSION="\"y\"" \
@@ -461,17 +491,16 @@ CPPCHECK() {
     -I "$TOP/src/libicalvcal" \
     -I "$TOP/src/libicalvcard" \
     -I "$TOP/src/libical-glib" \
-    -i "$TOP/src/Net-ICal-Libical/" \
     -i "$TOP/src/java/" \
-    -i "$TOP/src/libicalss/icalssyacc.c" \
-    -i "$TOP/src/libicalss/icalsslexer.c" \
-    -i "$TOP/src/libicalvcal/vcc.y" \
-    -i "$TOP/src/libicalvcal/vcc.c" \
-    "$TOP/src" 2>&1 |
-    tee cppcheck.out
+    -i "$TOP/src/Net-ICal-Libical/" \
+    $f 2>&1 |
+    tee cppcheck-cpp.out
+
   set -e
-  CPPCHECK_WARNINGS cppcheck.out
-  rm -f cppcheck.out cppcheck-report.txt
+  CPPCHECK_WARNINGS cppcheck-c.out
+  rm -f cppcheck-c.out
+  CPPCHECK_WARNINGS cppcheck-cpp.out
+  rm -f cppcheck-cpp.out
   CLEAN
   echo "===== END CPPCHECK: $1 ======"
 }
@@ -592,7 +621,7 @@ CLANGTIDY() {
   echo "===== START CLANG-TIDY: $1 ====="
   cd "$TOP" || exit 1
   SET_CLANG
-  CONFIGURE "$1-tidy" "$2 -DCMAKE_CXX_CLANG_TIDY=clang-tidy"
+  CONFIGURE "$1-tidy" "$2 -DCMAKE_C_CLANG_TIDY=clang-tidy -DCMAKE_CXX_CLANG_TIDY=clang-tidy"
   cmake --build . 2>&1 | tee make-tidy.out || exit 1
   TIDY_WARNINGS make-tidy.out
   CLEAN

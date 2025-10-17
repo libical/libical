@@ -8,6 +8,8 @@ disclosure by the government are subject to restrictions set forth in
 DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 ***************************************************************************/
 
+// NOLINTBEGIN
+
 /*
  * src: vobject.c
  * doc: vobject and APIs to construct vobject, APIs pretty print
@@ -448,7 +450,7 @@ static void printValue(FILE *fp, VObject *o, int level)
     switch (VALUE_TYPE(o)) {
         case VCVT_USTRINGZ: {
             char c;
-            char *t,*s;
+            const char *t,*s;
             s = t = fakeCString(USTRINGZ_VALUE_OF(o));
             fputc('"',fp);
             while (c=*t,c) {
@@ -1029,7 +1031,6 @@ static int writeBase64(OFile *fp, unsigned char *s, long len)
 {
     long cur = 0;
     int i, numQuads = 0;
-    unsigned long trip;
     unsigned char b;
     char quad[5];
 #define MAXQUADS 16
@@ -1038,7 +1039,7 @@ static int writeBase64(OFile *fp, unsigned char *s, long len)
 
     while (cur < len) {
             /* collect the triplet of bytes into 'trip' */
-        trip = 0;
+        unsigned long trip = 0;
         for (i = 0; i < 3; i++) {
             b = (cur < len) ? *(s + cur) : 0;
             cur++;
@@ -1105,7 +1106,7 @@ static void writeValue(OFile *fp, VObject *o, unsigned long size,int quote)
     if (o == 0) return;
     switch (VALUE_TYPE(o)) {
         case VCVT_USTRINGZ: {
-            char *s = fakeCString(USTRINGZ_VALUE_OF(o));
+            const char *s = fakeCString(USTRINGZ_VALUE_OF(o));
             if(quote) writeQPString(fp, s);
             else writeString(fp,s);
             deleteStr(s);
@@ -1226,7 +1227,7 @@ static void writeProp(OFile *fp, VObject *o)
             /* output prop as fields */
             appendcOFile(fp,':');
             while (*fields) {
-                VObject *tl = isAPropertyOf(o,*fields);
+                const VObject *tl = isAPropertyOf(o,*fields);
                 i++;
                 if (tl) n = i;
                 fields++;
@@ -1390,5 +1391,7 @@ char* fakeCString(const wchar_t *u)
     *t = 0;
     return s;
 }
+
+// NOLINTEND
 
 /* end of source file vobject.c */

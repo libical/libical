@@ -196,7 +196,9 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
             /* Now see if the comparison is equivalent to the comparison
                specified in the gauge */
 
-            if (rel == compare) {
+            if (rel == ICAL_XLICCOMPARETYPE_NONE || compare == ICAL_XLICCOMPARETYPE_NONE) {
+                localpass = 0;
+            } else if (rel == compare) {
                 localpass++;
             } else if (compare == ICAL_XLICCOMPARETYPE_LESSEQUAL &&
                        (rel == ICAL_XLICCOMPARETYPE_LESS || rel == ICAL_XLICCOMPARETYPE_EQUAL)) {
@@ -245,10 +247,8 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 {
     icalcomponent *inner;
     int local_pass = 0;
-    int last_clause = 1, this_clause = 1;
+    int last_clause = 1;
     icalpvl_elem e;
-    icalcomponent_kind kind;
-    icalproperty *rrule;
     int compare_recur = 0;
 
     icalerror_check_arg_rz((comp != 0), "comp");
@@ -261,7 +261,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
          * a <VCALENDAR>. It's not an error.
          * icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
          * return 0; */
-        kind = icalcomponent_isa(comp);
+        icalcomponent_kind kind = icalcomponent_isa(comp);
         if (kind == ICAL_VEVENT_COMPONENT ||
             kind == ICAL_VTODO_COMPONENT ||
             kind == ICAL_VJOURNAL_COMPONENT ||
@@ -333,7 +333,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
         }
 
         /* check if it is a recurring */
-        rrule = icalcomponent_get_first_property(sub_comp, ICAL_RRULE_PROPERTY);
+        const icalproperty *rrule = icalcomponent_get_first_property(sub_comp, ICAL_RRULE_PROPERTY);
 
         if (gauge->expand && rrule) {
             if (w->prop == ICAL_DTSTART_PROPERTY ||
@@ -390,7 +390,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
             }
         }
 
-        this_clause = local_pass > 0 ? 1 : 0;
+        int this_clause = local_pass > 0 ? 1 : 0;
 
         /* Now look at the logic operator for this clause to see how
            the value should be merge with the previous clause */

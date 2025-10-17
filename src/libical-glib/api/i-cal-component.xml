@@ -39,7 +39,7 @@
   </method>
   <method name="i_cal_component_as_ical_string" corresponds="icalcomponent_as_ical_string_r" since="1.0">
     <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be converted"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation of #ICalComponent." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="The string representation of #ICalComponent." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts a #ICalComponent to a string.</comment>
   </method>
   <method name="i_cal_component_is_valid" corresponds="icalcomponent_is_valid" since="1.0">
@@ -507,7 +507,7 @@
   <method name="i_cal_component_get_status" corresponds="icalcomponent_get_status" kind="get" since="1.0">
     <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>
     <returns type="ICalPropertyStatus" comment="A #ICalPropertyStatus."/>
-    <comment xml:space="preserve">Gets the status of the #ICalComponent.</comment>
+    <comment xml:space="preserve">Returns the property status of the #ICalComponent. ICAL_STATUS_NONE is returned if a problem parsing the component was detected.</comment>
   </method>
   <declaration position="header" content="typedef void (*ICalComponentForeachTZIDFunc)(ICalParameter *param, gpointer user_data);"/>
   <declaration position="body">
@@ -696,7 +696,7 @@ static void foreach_recurrence_cb(const icalcomponent *in_comp, const struct ica
   </method>
   <method name="i_cal_component_get_component_name" corresponds="icalcomponent_get_component_name_r" since="4.0">
     <parameter type="const ICalComponent *" name="component" comment="an #ICalComponent"/>
-    <returns type="gchar *" annotation="transfer full" comment="name of the @component" translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="name of the @component" translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Returns the name of the @component as string.</comment>
   </method>
   <method name="i_cal_component_get_x_name" corresponds="icalcomponent_get_x_name" since="4.0">

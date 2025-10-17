@@ -158,19 +158,17 @@ void test_start(int numtests)
     }
 }
 
-void test_header(const char *header, int set)
+void test_header(const char *title, int test_set)
 {
     if (!QUIET) {
-        printf("########## %-40s (%d) ##########\n", header, set);
+        printf("########## %-40s (%d) ##########\n", title, test_set);
     }
 
-    current_set = set;
+    current_set = test_set;
 }
 
 int test_end(void)
 {
-    int pct;
-
     if (testnumber < 1) {
         printf("\n        No Tests Run.\n");
         return 0;
@@ -179,7 +177,7 @@ int test_end(void)
     if (failed) {
         int i, oldset = 0;
 
-        pct = ((testnumber - failed) * 100) / testnumber;
+        int pct = ((testnumber - failed) * 100) / testnumber;
         printf("\n        Failed %d/%d tests, %2d%% okay\n", failed, testnumber, pct);
         printf("\n        Failed tests:\n          ");
         for (i = 0; i < failed; i++) {

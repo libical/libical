@@ -331,7 +331,7 @@ calendar =
                 "employee-A@host.com",
                 icalparameter_new_role(
                     ICAL_ROLE_REQPARTICIPANT),
-                icalparameter_new_rsvp(1),
+                icalparameter_new_rsvp(ICAL_RSVP_TRUE),
                 icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
                 (void *)0),
             icalproperty_new_location(

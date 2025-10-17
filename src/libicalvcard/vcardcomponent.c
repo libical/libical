@@ -108,7 +108,7 @@ vcardcomponent *vcardcomponent_new_from_string(const char *str)
 vcardcomponent *vcardcomponent_clone(const vcardcomponent *old)
 {
     vcardcomponent *clone;
-    vcardproperty *p;
+    const vcardproperty *p;
     icalpvl_elem itr;
 
     icalerror_check_arg_rz((old != 0), "component");
@@ -129,7 +129,6 @@ vcardcomponent *vcardcomponent_clone(const vcardcomponent *old)
 
 void vcardcomponent_free(vcardcomponent *c)
 {
-    vcardproperty *prop;
     vcardcomponent *comp;
 
     icalerror_check_arg_rv((c != 0), "component");
@@ -139,6 +138,7 @@ void vcardcomponent_free(vcardcomponent *c)
     }
 
     if (c->properties != 0) {
+        vcardproperty *prop;
         while ((prop = icalpvl_pop(c->properties)) != 0) {
             vcardproperty_set_parent(prop, 0);
             vcardproperty_free(prop);
@@ -168,18 +168,18 @@ void vcardcomponent_free(vcardcomponent *c)
     icalmemory_free_buffer(c);
 }
 
-char *vcardcomponent_as_vcard_string(vcardcomponent *impl)
+char *vcardcomponent_as_vcard_string(vcardcomponent *comp)
 {
     char *buf;
 
-    buf = vcardcomponent_as_vcard_string_r(impl);
+    buf = vcardcomponent_as_vcard_string_r(comp);
     if (buf) {
         icalmemory_add_tmp_buffer(buf);
     }
     return buf;
 }
 
-char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
+char *vcardcomponent_as_vcard_string_r(vcardcomponent *comp)
 {
     char *buf;
     char *tmp_buf;
@@ -192,18 +192,18 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
 
     vcardcomponent *c;
     vcardproperty *p;
-    vcardcomponent_kind kind = vcardcomponent_isa(impl);
+    vcardcomponent_kind kind = vcardcomponent_isa(comp);
 
     const char *kind_string = NULL;
 
-    icalerror_check_arg_rz((impl != 0), "component");
+    icalerror_check_arg_rz((comp != 0), "component");
     icalerror_check_arg_rz((kind != VCARD_NO_COMPONENT),
                            "component kind is VCARD_NO_COMPONENT");
 
     if (kind != VCARD_X_COMPONENT) {
         kind_string = vcardcomponent_kind_to_string(kind);
     } else {
-        kind_string = impl->x_name;
+        kind_string = comp->x_name;
     }
 
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
@@ -220,7 +220,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, kind_string);
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
-        for (itr = icalpvl_head(impl->properties); itr != 0; itr = icalpvl_next(itr)) {
+        for (itr = icalpvl_head(comp->properties); itr != 0; itr = icalpvl_next(itr)) {
             p = (vcardproperty *)icalpvl_data(itr);
 
             icalerror_assert((p != 0), "Got a null property");
@@ -231,7 +231,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *impl)
         }
     }
 
-    for (itr = icalpvl_head(impl->components); itr != 0; itr = icalpvl_next(itr)) {
+    for (itr = icalpvl_head(comp->components); itr != 0; itr = icalpvl_next(itr)) {
         c = (vcardcomponent *)icalpvl_data(itr);
 
         tmp_buf = vcardcomponent_as_vcard_string_r(c);
@@ -265,7 +265,7 @@ vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component)
 
 bool vcardcomponent_isa_component(void *component)
 {
-    vcardcomponent *impl = component;
+    const vcardcomponent *impl = component;
 
     icalerror_check_arg_rz((component != 0), "component");
 
@@ -539,14 +539,12 @@ int vcardcomponent_check_restrictions(vcardcomponent *comp)
 int vcardcomponent_count_errors(vcardcomponent *comp)
 {
     int errors = 0;
-    vcardproperty *p;
     icalpvl_elem itr;
 
     icalerror_check_arg_rz((comp != 0), "card");
 
     for (itr = icalpvl_head(comp->properties); itr != 0; itr = icalpvl_next(itr)) {
-        p = (vcardproperty *)icalpvl_data(itr);
-
+        vcardproperty *p = (vcardproperty *)icalpvl_data(itr);
         if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
             errors++;
         }
@@ -557,13 +555,12 @@ int vcardcomponent_count_errors(vcardcomponent *comp)
 
 void vcardcomponent_strip_errors(vcardcomponent *comp)
 {
-    vcardproperty *p;
     icalpvl_elem itr, next_itr;
 
     icalerror_check_arg_rv((comp != 0), "comp");
 
     for (itr = icalpvl_head(comp->properties); itr != 0; itr = next_itr) {
-        p = (vcardproperty *)icalpvl_data(itr);
+        vcardproperty *p = (vcardproperty *)icalpvl_data(itr);
         next_itr = icalpvl_next(itr);
 
         if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
@@ -667,8 +664,8 @@ static int prop_compare(void *a, void *b)
 static int prop_kind_compare(vcardproperty_kind kind,
                              vcardcomponent *c1, vcardcomponent *c2)
 {
-    vcardproperty *p1 = vcardcomponent_get_first_property(c1, kind);
-    vcardproperty *p2 = vcardcomponent_get_first_property(c2, kind);
+    const vcardproperty *p1 = vcardcomponent_get_first_property(c1, kind);
+    const vcardproperty *p2 = vcardcomponent_get_first_property(c2, kind);
 
     if (p1 && p2) {
         return strcmpsafe(vcardproperty_get_value_as_string(p1),
@@ -691,8 +688,6 @@ static int comp_compare(void *a, void *b)
     int r = (int)(k1 - k2);
 
     if (r == 0) {
-        int i;
-
         if (k1 == VCARD_VCARD_COMPONENT) {
             vcardproperty_kind prop_kinds[] = {
                 VCARD_VERSION_PROPERTY,
@@ -703,7 +698,7 @@ static int comp_compare(void *a, void *b)
                 /* XXX  What else should we compare? */
                 VCARD_NO_PROPERTY};
 
-            for (i = 0; r == 0 && prop_kinds[i] != VCARD_NO_PROPERTY; i++) {
+            for (int i = 0; r == 0 && prop_kinds[i] != VCARD_NO_PROPERTY; i++) {
                 r = prop_kind_compare(prop_kinds[i], c1, c2);
             }
         } else {
@@ -849,7 +844,7 @@ static void comp_to_v4(vcardcomponent *impl)
                     int n = snprintf(buf, size, "geo:%s,%s",
                                      geo.coords.lat, geo.coords.lon);
 
-                    size = (size_t)(n + 1);
+                    size = (size_t)n + 1;
                     buf = icalmemory_new_buffer(size);
                     snprintf(buf, size, "geo:%s,%s",
                              geo.coords.lat, geo.coords.lon);
@@ -865,13 +860,12 @@ static void comp_to_v4(vcardcomponent *impl)
         case VCARD_LOGO_PROPERTY:
         case VCARD_PHOTO_PROPERTY:
         case VCARD_SOUND_PROPERTY: {
-            size_t i;
             if (types) {
                 /* Replace TYPE=subtype with MEDIATYPE or data:<mediatype>
                  *
                  * XXX  We assume that the first VCARD_TYPE_X is the subtype
                  */
-                for (i = 0; i < vcardenumarray_size(types); i++) {
+                for (size_t i = 0; i < vcardenumarray_size(types); i++) {
                     const vcardenumarray_element *type =
                         vcardenumarray_element_at(types, i);
 
@@ -1224,7 +1218,6 @@ void vcardcomponent_transform(vcardcomponent *impl,
                               vcardproperty_version version)
 {
     icalpvl_elem itr;
-    vcardcomponent *c;
     vcardcomponent_kind kind = vcardcomponent_isa(impl);
 
     icalerror_check_arg_rv((impl != 0), "component");
@@ -1240,37 +1233,36 @@ void vcardcomponent_transform(vcardcomponent *impl,
     }
 
     for (itr = icalpvl_head(impl->components); itr != 0; itr = icalpvl_next(itr)) {
-        c = (vcardcomponent *)icalpvl_data(itr);
-
+        vcardcomponent *c = (vcardcomponent *)icalpvl_data(itr);
         vcardcomponent_transform(c, version);
     }
 }
 
 /******************** Convenience routines **********************/
 
-enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *card)
+enum vcardproperty_version vcardcomponent_get_version(vcardcomponent *comp)
 {
-    icalerror_check_arg_rz(card != 0, "card");
+    icalerror_check_arg_rx(comp != 0, "comp", VCARD_VERSION_NONE);
 
-    if (card->versionp == 0) {
-        card->versionp =
-            vcardcomponent_get_first_property(card, VCARD_VERSION_PROPERTY);
+    if (comp->versionp == 0) {
+        comp->versionp =
+            vcardcomponent_get_first_property(comp, VCARD_VERSION_PROPERTY);
 
-        if (card->versionp == 0) {
+        if (comp->versionp == 0) {
             return VCARD_VERSION_NONE;
         }
     }
 
-    return vcardproperty_get_version(card->versionp);
+    return vcardproperty_get_version(comp->versionp);
 }
 
-const char *vcardcomponent_get_uid(vcardcomponent *card)
+const char *vcardcomponent_get_uid(vcardcomponent *comp)
 {
     vcardproperty *prop;
 
-    icalerror_check_arg_rz(card != 0, "card");
+    icalerror_check_arg_rz(comp != 0, "comp");
 
-    prop = vcardcomponent_get_first_property(card, VCARD_UID_PROPERTY);
+    prop = vcardcomponent_get_first_property(comp, VCARD_UID_PROPERTY);
 
     if (prop == 0) {
         return 0;
@@ -1279,13 +1271,13 @@ const char *vcardcomponent_get_uid(vcardcomponent *card)
     return vcardproperty_get_uid(prop);
 }
 
-const char *vcardcomponent_get_fn(vcardcomponent *card)
+const char *vcardcomponent_get_fn(vcardcomponent *comp)
 {
     vcardproperty *prop;
 
-    icalerror_check_arg_rz(card != 0, "card");
+    icalerror_check_arg_rz(comp != 0, "comp");
 
-    prop = vcardcomponent_get_first_property(card, VCARD_FN_PROPERTY);
+    prop = vcardcomponent_get_first_property(comp, VCARD_FN_PROPERTY);
 
     if (prop == 0) {
         return 0;

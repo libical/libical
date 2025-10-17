@@ -19,7 +19,7 @@ using namespace LibICal;
 #include <string>
 using namespace std;
 
-char content[] = "BEGIN:VCALENDAR\n\
+const char content[] = "BEGIN:VCALENDAR\n\
 VERSION:2.1\n\
 BEGIN:VEVENT\n\
 UID:abcd12345\n\
@@ -43,8 +43,8 @@ void test_cxx(void)
     ok("Valid LOCATION    Property", (locationProp != 0));
     ok("Valid DESCRIPTION Property", (descProp != 0));
 
-    struct icaltimetype starttime = icaltime_from_string("20011221T180000Z"); // UTC time ends in Z
-    struct icaltimetype endtime = icaltime_from_string("20020101T080000Z");   // UTC time ends in Z
+    const struct icaltimetype starttime = icaltime_from_string("20011221T180000Z"); // UTC time ends in Z
+    const struct icaltimetype endtime = icaltime_from_string("20020101T080000Z");   // UTC time ends in Z
 
     summProp->set_summary(
         string("jon said: change dir to c:\\rest\\test\\nest to get the file "
@@ -158,7 +158,7 @@ void test_cxx(void)
     int caughtException = 0;
     try {
         icalerrno = ICAL_NO_ERROR;
-        VComponent v = VComponent(string("HFHFHFHF"));
+        const VComponent v = VComponent(string("HFHFHFHF"));
     }
     catch (icalerrorenum err) {
         if (err == ICAL_BADARG_ERROR) {

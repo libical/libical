@@ -41,7 +41,7 @@
   </method>
   <method name="i_cal_vcard_parameter_as_vcard_string" corresponds="vcardparameter_as_vcard_string_r" kind="others" since="4.0">
     <parameter type="ICalVcardParameter *" name="parameter" annotation="in" comment="The #ICalVcardParameter to be converted"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation of the @parameter." translator="i_cal_memory_str_to_glib"/>
+    <returns type="const gchar *" annotation="transfer full" comment="The string representation of the @parameter." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts an #ICalVcardParameter to the string representation.</comment>
   </method>
   <method name="i_cal_vcard_parameter_isa" corresponds="vcardparameter_isa" kind="others" since="4.0">

@@ -365,7 +365,8 @@ static icalvalue *icalvalue_new_enum(icalvalue_kind kind, int x_type, const char
  */
 static bool simple_str_to_doublestr(const char *from, char *result, int result_len, char **to)
 {
-    char *start = NULL, *end = NULL, *cur = (char *)from;
+    const char *start = NULL;
+    char *end = NULL, *cur = (char *)from;
 
     struct lconv *loc_data = localeconv();
     int i = 0, len;
@@ -459,11 +460,9 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 #pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
 #endif
     case ICAL_BINARY_VALUE: {
-        icalattach *attach;
-
         char *dupStr = strdup(str); // will be freed later on during unref
         if (dupStr) {
-            attach = icalattach_new_from_data(dupStr, free_icalvalue_attach_data, 0);
+            icalattach *attach = icalattach_new_from_data(dupStr, free_icalvalue_attach_data, 0);
             if (!attach) {
                 free(dupStr);
                 break;
@@ -600,7 +599,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
     case ICAL_GEO_VALUE: {
         char *cur = NULL;
-        struct icalgeotype geo;
+        struct icalgeotype geo = {0};
         memset(geo.lat, 0, ICAL_GEO_LEN);
         memset(geo.lon, 0, ICAL_GEO_LEN);
 
@@ -1308,7 +1307,7 @@ icalvalue_kind icalvalue_isa(const icalvalue *value)
 
 bool icalvalue_isa_value(void *value)
 {
-    struct icalvalue_impl *impl = (struct icalvalue_impl *)value;
+    const struct icalvalue_impl *impl = (struct icalvalue_impl *)value;
 
     icalerror_check_arg_rz((value != 0), "value");
 
@@ -1330,15 +1329,10 @@ static bool icalvalue_is_time(const icalvalue *a)
     return false;
 }
 
-/*
- * In case of error, this function returns 0. This is partly bogus, as 0 is
- * not part of the returned enum.
- * FIXME We should probably add an error value to the enum.
- */
 icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalvalue *b)
 {
-    icalerror_check_arg_rz((a != 0), "a");
-    icalerror_check_arg_rz((b != 0), "b");
+    icalerror_check_arg_rx((a != 0), "a", ICAL_XLICCOMPARETYPE_NONE);
+    icalerror_check_arg_rx((b != 0), "b", ICAL_XLICCOMPARETYPE_NONE);
 
     /* Not the same type; they can only be unequal */
     if (!(icalvalue_is_time(a) && icalvalue_is_time(b)) && icalvalue_isa(a) != icalvalue_isa(b)) {
@@ -1505,7 +1499,7 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
     case ICAL_NO_VALUE:
     default: {
         icalerror_warn("Comparison not implemented for value type");
-        return 0;
+        return ICAL_XLICCOMPARETYPE_NONE;
     }
     }
 }

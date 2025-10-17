@@ -342,7 +342,6 @@ char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
 {
     icalproperty *prop;
     const char *location;
-    const char *name;
 
     prop = icalcomponent_get_first_property(component, ICAL_LOCATION_PROPERTY);
     if (prop) {
@@ -354,7 +353,7 @@ char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
 
     prop = icalcomponent_get_first_property(component, ICAL_X_PROPERTY);
     while (prop) {
-        name = icalproperty_get_x_name(prop);
+        const char *name = icalproperty_get_x_name(prop);
         if (name && !strcasecmp(name, "X-LIC-LOCATION")) {
             location = icalproperty_get_x(prop);
             if (location) {
@@ -370,7 +369,6 @@ char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
 char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 {
     icalcomponent *comp;
-    icalcomponent_kind type;
     icalproperty *prop;
     struct icaltimetype dtstart;
     struct icaldatetimeperiodtype rdate;
@@ -385,7 +383,7 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
     /* Step through the STANDARD & DAYLIGHT subcomponents. */
     comp = icalcomponent_get_first_component(component, ICAL_ANY_COMPONENT);
     while (comp) {
-        type = icalcomponent_isa(comp);
+        icalcomponent_kind type = icalcomponent_isa(comp);
         if (type == ICAL_XSTANDARD_COMPONENT || type == ICAL_XDAYLIGHT_COMPONENT) {
             current_max_date = icaltime_null_time();
             current_tzname = NULL;
@@ -821,8 +819,9 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
 
 int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *tt, int *is_daylight)
 {
-    icaltimezonechange *zone_change, *prev_zone_change;
-    icaltimezonechange tt_change = {0}, tmp_change = {0};
+    const icaltimezonechange *zone_change;
+    icaltimezonechange *prev_zone_change;
+    icaltimezonechange tt_change = {0}, tmp_change;
     size_t change_num, change_num_to_use;
     int found_change;
     int step, utc_offset_change, cmp;
@@ -986,7 +985,8 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
 int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
                                             const struct icaltimetype *tt, int *is_daylight)
 {
-    icaltimezonechange *zone_change, tt_change, tmp_change;
+    const icaltimezonechange *zone_change;
+    icaltimezonechange tt_change, tmp_change;
     size_t change_num, change_num_to_use;
     int found_change = 1;
     int step, utc_offset;
@@ -1101,9 +1101,7 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
 */
 static size_t icaltimezone_find_nearby_change(icaltimezone *zone, const icaltimezonechange *change)
 {
-    icaltimezonechange *zone_change;
     size_t lower, middle, upper;
-    int cmp;
 
     /* Do a simple binary search. */
     lower = middle = 0;
@@ -1111,8 +1109,8 @@ static size_t icaltimezone_find_nearby_change(icaltimezone *zone, const icaltime
 
     while (lower < upper) {
         middle = (lower + upper) / 2;
-        zone_change = icalarray_element_at(zone->changes, middle);
-        cmp = icaltimezone_compare_change_fn(change, zone_change);
+        const icaltimezonechange *zone_change = icalarray_element_at(zone->changes, middle);
+        int cmp = icaltimezone_compare_change_fn(change, zone_change);
         if (cmp == 0) {
             break;
         } else if (cmp < 0) {
@@ -1135,7 +1133,6 @@ static void icaltimezone_adjust_change(icaltimezonechange *tt,
 {
     int second, minute, hour, day;
     int minutes_overflow, hours_overflow, days_overflow;
-    int days_in_month;
 
     /* Add on the seconds. */
     second = tt->second + seconds;
@@ -1168,7 +1165,7 @@ static void icaltimezone_adjust_change(icaltimezonechange *tt,
     day = tt->day + days + days_overflow;
     if (day > 0) {
         for (;;) {
-            days_in_month = icaltime_days_in_month(tt->month, tt->year);
+            int days_in_month = icaltime_days_in_month(tt->month, tt->year);
             if (day <= days_in_month) {
                 break;
             }
@@ -1298,7 +1295,6 @@ static const char *skip_slashes(const char *text, int n_slashes)
 const char *icaltimezone_get_display_name(icaltimezone *zone)
 {
     const char *display_name;
-    const char *tzid_prefix;
 
     display_name = icaltimezone_get_location(zone);
     if (!display_name) {
@@ -1306,7 +1302,7 @@ const char *icaltimezone_get_display_name(icaltimezone *zone)
     }
     if (!display_name) {
         display_name = icaltimezone_get_tzid(zone);
-        tzid_prefix = icaltimezone_tzid_prefix();
+        const char *tzid_prefix = icaltimezone_tzid_prefix();
         /* Outlook will strip out X-LIC-LOCATION property and so all
            we get back in the iTIP replies is the TZID. So we see if
            this is one of our TZIDs and if so we jump to the city name
@@ -1338,12 +1334,9 @@ void icaltimezone_array_append_from_vtimezone(icalarray *timezones, icalcomponen
 
 void icaltimezone_array_free(icalarray *timezones)
 {
-    icaltimezone *zone;
-    size_t i;
-
     if (timezones) {
-        for (i = 0; i < timezones->num_elements; i++) {
-            zone = icalarray_element_at(timezones, i);
+        for (size_t i = 0; i < timezones->num_elements; i++) {
+            icaltimezone *zone = icalarray_element_at(timezones, i);
             icaltimezone_free(zone, 0);
         }
 
@@ -1377,7 +1370,6 @@ icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
     icalcomponent *comp;
     icaltimezone *zone;
     size_t lower;
-    const char *zone_location;
 
     if (!location || !location[0]) {
         return NULL;
@@ -1395,7 +1387,7 @@ icaltimezone *icaltimezone_get_builtin_timezone(const char *location)
        so we just do a sequential search */
     for (lower = 0; lower < builtin_timezones->num_elements; lower++) {
         zone = icalarray_element_at(builtin_timezones, lower);
-        zone_location = icaltimezone_get_location(zone);
+        const char *zone_location = icaltimezone_get_location(zone);
         if (zone_location && strcmp(location, zone_location) == 0) {
             return zone;
         }
@@ -1507,7 +1499,7 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_tzid(const char *tzid)
 
     tzid_prefix = icaltimezone_tzid_prefix();
     /* Check that the TZID starts with our unique prefix. */
-    if (strncmp(tzid, tzid_prefix, strlen(tzid_prefix))) {
+    if (strncmp(tzid, tzid_prefix, strlen(tzid_prefix)) != 0) {
         int ii;
 
         for (ii = 0; glob_compat_tzids[ii].tzid; ii++) {
@@ -1616,7 +1608,8 @@ static bool fetch_lat_long_from_string(const char *str,
                                        char *location)
 {
     size_t len;
-    char *sptr, *lat, *lon, *loc, *temp;
+    const char *loc, *temp;
+    char *sptr, *lat, *lon;
 
     /* We need to parse the latitude/longitude coordinates and location fields  */
     sptr = (char *)str;
@@ -1678,11 +1671,11 @@ static void icaltimezone_parse_zone_tab(void)
     const char *zonedir, *zonetab;
     char *filename;
     FILE *fp;
-    char buf[1024] = {0};      /* Used to store each line of zones.tab as it is read. */
+    char buf[1024];            /* Used to store each line of zones.tab as it is read. */
     char location[1024] = {0}; /* Stores the city name when parsing buf. */
     size_t filename_len;
-    int latitude_degrees = 0, latitude_minutes = 0, latitude_seconds = 0;
-    int longitude_degrees = 0, longitude_minutes = 0, longitude_seconds = 0;
+    int latitude_degrees, latitude_minutes, latitude_seconds;
+    int longitude_degrees, longitude_minutes, longitude_seconds;
 
     icalerror_assert(builtin_timezones == NULL, "Parsing zones.tab file multiple times");
 
@@ -1734,7 +1727,7 @@ static void icaltimezone_parse_zone_tab(void)
         return;
     }
 
-#if !defined(__clang_analyzer__)
+#if !defined(__clang_analyzer__) || defined(__cppcheck__)
     while (fgets(buf, (int)sizeof(buf), fp)) {
         if (*buf == '#') {
             continue;
@@ -1935,7 +1928,6 @@ static void icaltimezone_load_builtin_timezone(icaltimezone *zone)
 
 out:
     icaltimezone_builtin_unlock();
-    return;
 }
 
 /** @brief Callback used from icalparser_parse() */
@@ -1952,7 +1944,7 @@ bool icaltimezone_dump_changes(icaltimezone *zone, int max_year, FILE *fp)
 {
     static const char months[][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-    icaltimezonechange *zone_change;
+    const icaltimezonechange *zone_change;
     size_t change_num;
     char buffer[8];
 
@@ -2043,7 +2035,8 @@ static const char *get_zone_directory_builtin(void)
     static ICAL_GLOBAL_VAR char *cache = NULL;
 
 #if !defined(_WIN32_WCE)
-    unsigned char *dirslash, *zislash, *zislashp1;
+    unsigned char *dirslash, *zislash;
+    const char *zislashp1;
 #else
     wchar_t *dirslash, *zislash;
 #endif

@@ -110,6 +110,9 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
   * `icalproperty_get_exrule()`
   * `icalvalue_get_recur()`
 
+* `icaltimezone_convert_time()` now populates the icaltimetype zone member on conversion;
+  i.e. the timezone information is not lost during a conversion.
+
 * To more clearly illustrate their intended purpose, the `icaldurationtype_from_int()` and `icaldurationtype_as_int()`
   have been renamed to `icaldurationtype_from_seconds()` and `icaldurationtype_as_seconds()`, respectively.
   Their functionality has not changed.
@@ -117,8 +120,17 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
 * Similarly, the `icaltime_add()` and `icaltime_subtract()` functions are now called
   `icalduration_extend()` and `icalduration_from_times()`.  Their functionality has not changed.
 
+* The `get_zone_directory()` and `set_zone_directory()` functions are have been renamed to
+  `icaltimezone_get_zone_directory()` and `icaltimezone_set_zone_directory()`, respectively.
+
 * The `icaltzutil_set_zone_directory()` and `icaltzutil_get_zone_directory()` functions are now called
   `icaltimezone_set_system_zone_directory()` and `icaltimezone_get_system_zone_directory()` respectively.
+
+* In previous versions, the `icalvalue_compare()` function returned 0 if unknown or null value types
+  were encountered; in this version, ICAL_XLICCOMPARETYPE_NONE is returned instead.
+
+* In previous versions, the `icalcomponent_get_status()` returned 0 if a problem parsing the status property
+  was detected; in this version, ICAL_STATUS_NONE is returned instead.
 
 ### New functions
 
@@ -131,7 +143,6 @@ The following functions have been added:
 * `icalrecurrencetype_clone()`
 * `icalrecurrencetype_encode_day()`
 * `icalrecurrencetype_encode_month()`
-* `icaltzutil_set_zone_directory()`
 * `icalcomponent_clone()`
 * `icalproperty_clone()`
 * `icalproperty_set_allow_empty_properties()`
@@ -158,6 +169,7 @@ The following functions have been added:
 * `icalparser_get_ctrl()`
 * `icalparser_set_ctrl()`
 * `icaltimezone_tzid_prefix()`
+* `icaltimezone_set_system_zone_directory()`
 * and the new functions for the `icalstrarray` and `icalenumarray` data types
 
 ### Removed functions

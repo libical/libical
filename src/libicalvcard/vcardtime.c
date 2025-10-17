@@ -262,12 +262,11 @@ char *vcardtime_as_vcard_string_r(const vcardtimetype t, unsigned flags)
 {
     size_t size = TIME_BUF_SIZE;
     char *ptr, *buf;
-    int n;
 
     ptr = buf = icalmemory_new_buffer(size);
 
     if (!(flags & VCARDTIME_AS_V4) || !vcardtime_is_time(t)) {
-        n = sprintf_date(t, flags, ptr, size);
+        int n = sprintf_date(t, flags, ptr, size);
         ptr += n;
         size -= (size_t)n;
     }
@@ -371,7 +370,6 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
     */
     unsigned offset_h = 0, offset_m = 0;
     char sign[2] = "";
-    size_t ndig;
     char *newstr;
     int nchar = 0;
 
@@ -381,7 +379,7 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
     } else if (*str == 'Z') {
         nchar = 1;
     } else if (strchr("+-", *str)) {
-        ndig = num_digits(str + 1);
+        size_t ndig = num_digits(str + 1);
 
         if (ndig == 4) {
             sscanf(str, "%1[+-]%2u%2u%n", sign, &offset_h, &offset_m, &nchar);

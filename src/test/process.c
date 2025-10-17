@@ -21,7 +21,6 @@ void send_message(icalcomponent *reply, const char *this_user)
 int main(int argc, char *argv[])
 {
     icalcomponent *c, *next_c = NULL;
-    int dont_remove;
     icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
 
     icalset *f = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/process-incoming.ics", &options);
@@ -43,15 +42,14 @@ int main(int argc, char *argv[])
     for (c = icalset_get_first_component(f); c != 0; c = next_c) {
         icalproperty_xlicclass class;
         icalcomponent *match;
-        icalcomponent *inner;
         icalcomponent *reply = 0;
+        const icalcomponent *inner;
 
         assert(c != 0);
 
         inner = icalcomponent_get_first_real_component(c);
 
         reply = 0;
-        dont_remove = 0;
 
         if (inner == 0) {
             printf("Bad component, no inner\n %s\n", icalcomponent_as_ical_string(c));
@@ -320,11 +318,6 @@ int main(int argc, char *argv[])
         }
 
         next_c = icalset_get_next_component(f);
-
-        if (dont_remove == 0) {
-            /*icalset_remove_component(f,c);
-               icalset_add_component(trash,c); */
-        }
     }
 
     icalset_free(f);

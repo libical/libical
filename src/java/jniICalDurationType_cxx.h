@@ -20,22 +20,21 @@ extern "C" {
 
 #include "ical.h"
 
+void jni_SetIs_neg_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_GetIs_neg_from_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_SetDays_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_GetDays_from_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_SetWeeks_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_GetWeeks_from_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_SetHours_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_GetHours_from_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_SetMinutes_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_GetMinutes_from_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_SetSeconds_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_GetSeconds_from_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
+void jni_SetAll_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
 
-void  jni_SetIs_neg_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void jni_GetIs_neg_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void  jni_SetDays_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void jni_GetDays_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void  jni_SetWeeks_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void jni_GetWeeks_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void  jni_SetHours_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void jni_GetHours_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void  jni_SetMinutes_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void jni_GetMinutes_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void  jni_SetSeconds_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void jni_GetSeconds_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
-void jni_SetAll_in_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv* env, jobject thisICalDurationType);
-
-void jni_GetAll_from_ICalDurationType(struct ICalDurationType* __ICalDurationType_, JNIEnv* env, jobject thisICalDurationType);
+void jni_GetAll_from_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType);
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalDurationType_initFIDs(JNIEnv *env, jclass clazz);
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalDurationType_init__J(JNIEnv *env, jobject thisICalDurationType, jlong data);
 

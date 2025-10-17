@@ -26,8 +26,10 @@
 static void sig_alrm(int i)
 {
     _unused(i);
+    // NOLINTBEGIN(bugprone-signal-handler)
     fprintf(stderr, "Could not get lock on file\n");
     exit(1);
+    // NOLINTEND(bugprone-signal-handler)
 }
 #if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic pop

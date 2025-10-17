@@ -42,7 +42,7 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new(icalcomponent_kind kind);
  * Returns a pointer to the memory for the newly cloned icalcomponent.
  * @since 4.0
  */
-LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_clone(const icalcomponent *component);
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_clone(const icalcomponent *old);
 
 /** @brief Constructor
  */
@@ -405,6 +405,12 @@ LIBICAL_ICAL_EXPORT int icalcomponent_get_sequence(icalcomponent *comp);
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_status(icalcomponent *comp, enum icalproperty_status v);
 
+/**
+ * Returns the status property of the icalcomponent.
+ *
+ * @param comp pointer to a valid icalcomponent
+ * @returns the status property or ICAL_STATUS_NONE if a problem parsing the status was detected.
+ */
 LIBICAL_ICAL_EXPORT enum icalproperty_status icalcomponent_get_status(icalcomponent *comp);
 
 /** @brief Calls the given function for each TZID parameter found in the

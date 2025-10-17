@@ -57,7 +57,7 @@ ICalProperty::ICalProperty(icalproperty *v)
 {
 }
 
-ICalProperty::ICalProperty(std::string str) //NOLINT TODO:V3.1:pass const ref
+ICalProperty::ICalProperty(const std::string &str)
     : imp(icalproperty_new_from_string(str.c_str()))
 {
 }
@@ -77,7 +77,7 @@ icalproperty_kind ICalProperty::isa()
     return icalproperty_isa(imp);
 }
 
-int ICalProperty::isa_property(void *property)
+int ICalProperty::isa_property(void *property) //NOLINT(readability-convert-member-functions-to-static)
 {
     return icalproperty_isa_property(property);
 }
@@ -663,14 +663,14 @@ int ICalProperty::get_repeat() const
 /* REQUEST-STATUS */
 void ICalProperty::set_requeststatus(const std::string &val)
 {
-    icalreqstattype v = icalreqstattype_from_string(val.c_str());
+    const icalreqstattype v = icalreqstattype_from_string(val.c_str());
 
     icalproperty_set_requeststatus(imp, v);
 }
 
 std::string ICalProperty::get_requeststatus() const
 {
-    icalreqstattype v = icalproperty_get_requeststatus(imp);
+    const icalreqstattype v = icalproperty_get_requeststatus(imp);
     return static_cast<std::string>(icalreqstattype_as_string(v));
 }
 

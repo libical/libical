@@ -66,8 +66,8 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_seconds(int se
 
 /**
  * @brief Creates a new ::icaldurationtype from a duration given as a string.
- * @param dur The duration as a string
- * @return An ::icaldurationtype representing the duration @a dur
+ * @param str The duration as a string
+ * @return An ::icaldurationtype representing the duration @a str
  *
  * @par Error handling
  * When given bad input, it sets ::icalerrno to ::ICAL_MALFORMEDDATA_ERROR and
@@ -83,7 +83,7 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_seconds(int se
  * assert(duration.minutes == 5);
  * ```
  */
-LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const char *dur);
+LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const char *str);
 
 /**
  * @brief Extracts the duration in integer seconds from an ::icaldurationtype.

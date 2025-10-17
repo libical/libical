@@ -266,7 +266,6 @@ static char *fold_property_line(char *text)
     ssize_t chars_left;
     char *buf, *buf_ptr, *line_start, *next_line_start;
     int first_line;
-    char ch;
 
     /* Start with a buffer twice the size of our property line, so we almost
        certainly won't overflow it. */
@@ -296,7 +295,7 @@ static char *fold_property_line(char *text)
 
         /* This adds the line to our tmp buffer. We temporarily place a '\0'
            in text, so we can copy the line in one go. */
-        ch = *next_line_start;
+        char ch = *next_line_start;
         *next_line_start = '\0';
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, line_start);
         *next_line_start = ch;
@@ -352,14 +351,14 @@ static const char *icalproperty_get_value_kind(icalproperty *prop)
 
 const char *icalproperty_as_ical_string(icalproperty *prop)
 {
-    char *buf;
+    const char *buf;
 
     buf = icalproperty_as_ical_string_r(prop);
-    icalmemory_add_tmp_buffer(buf);
+    icalmemory_add_tmp_buffer((char *)buf);
     return buf;
 }
 
-char *icalproperty_as_ical_string_r(icalproperty *prop)
+const char *icalproperty_as_ical_string_r(icalproperty *prop)
 {
     icalparameter *param;
 
@@ -371,8 +370,8 @@ char *icalproperty_as_ical_string_r(icalproperty *prop)
     size_t buf_size = 1024;
     char *buf;
     char *buf_ptr;
-    icalvalue *value;
-    char *out_buf;
+    const icalvalue *value;
+    const char *out_buf;
     const char *kind_string = 0;
     const char newline[] = "\r\n";
 
@@ -468,7 +467,7 @@ icalproperty_kind icalproperty_isa(icalproperty *p)
 
 bool icalproperty_isa_property(void *property)
 {
-    icalproperty *impl = (icalproperty *)property;
+    const icalproperty *impl = (icalproperty *)property;
 
     icalerror_check_arg_rz((property != 0), "property");
     if (strcmp(impl->id, "prop") == 0) {
@@ -540,20 +539,21 @@ void icalproperty_set_parameter_from_string(icalproperty *prop,
 
 const char *icalproperty_get_parameter_as_string(icalproperty *prop, const char *name)
 {
-    char *buf;
+    const char *buf;
 
     buf = icalproperty_get_parameter_as_string_r(prop, name);
-    icalmemory_add_tmp_buffer(buf);
+    icalmemory_add_tmp_buffer((char *)buf);
     return buf;
 }
 
-char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *name)
+const char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *name)
 {
     icalparameter_kind kind;
     icalparameter *param;
     char *str;
-    char *pv, *t;
-    char *pvql;
+    const char *t;
+    const char *pv;
+    const char *pvql;
     char *pvqr;
 
     icalerror_check_arg_rz((prop != 0), "prop");
@@ -607,7 +607,7 @@ char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *nam
 
     /* Strip everything up to the first quote */
     str = icalmemory_strdup(pvql + 1);
-    icalmemory_free_buffer(pv);
+    icalmemory_free_buffer((char *)pv);
 
     /* Search for the end quote */
     pvqr = strrchr(str, '"');
@@ -770,7 +770,7 @@ void icalproperty_set_value(icalproperty *p, icalvalue *value)
 
 void icalproperty_set_value_from_string(icalproperty *prop, const char *str, const char *type)
 {
-    icalvalue *oval, *nval;
+    icalvalue *nval;
     icalvalue_kind kind = ICAL_NO_VALUE;
 
     icalerror_check_arg_rv((prop != 0), "prop");
@@ -779,7 +779,7 @@ void icalproperty_set_value_from_string(icalproperty *prop, const char *str, con
 
     if (strcmp(type, "NO") == 0) {
         /* Get the type from the value the property already has, if it exists */
-        oval = icalproperty_get_value(prop);
+        const icalvalue *oval = icalproperty_get_value(prop);
         if (oval != 0) {
             /* Use the existing value kind */
             kind = icalvalue_isa(oval);
@@ -827,7 +827,7 @@ const char *icalproperty_get_value_as_string(const icalproperty *prop)
 
 char *icalproperty_get_value_as_string_r(const icalproperty *prop)
 {
-    icalvalue *value;
+    const icalvalue *value;
 
     icalerror_check_arg_rz((prop != 0), "prop");
 

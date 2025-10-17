@@ -53,9 +53,8 @@ static void print_error_hdr(const struct recur *r)
 
 static void reverse_array(char *str, size_t len)
 {
-    char tmp;
     for (size_t i = 0; i < len / 2; i++) {
-        tmp = str[i];
+        char tmp = str[i];
         str[i] = str[len - i - 1];
         str[len - i - 1] = tmp;
     }
@@ -240,14 +239,18 @@ int main(int argc, char *argv[])
                 for (next = icalrecur_iterator_next(ritr);
                      !icaltime_is_null_time(next);
                      next = icalrecur_iterator_next(ritr)) {
-                    actual_instances_len += snprintf(&actual_instances[actual_instances_len],
-                                                     sizeof(actual_instances) - (size_t)actual_instances_len,
-                                                     "%s%s", sep, icaltime_as_ical_string(next));
+                    int n = snprintf(&actual_instances[actual_instances_len],
+                                     sizeof(actual_instances) - (size_t)actual_instances_len,
+                                     "%s%s", sep, icaltime_as_ical_string(next));
+                    if (n < 0 || (size_t)n > sizeof(actual_instances) - (size_t)actual_instances_len) {
+                        break;
+                    }
+                    actual_instances_len += n;
                     sep = ",";
                 }
             }
 
-            if (strcmp(instances, actual_instances)) {
+            if (strcmp(instances, actual_instances) != 0) {
                 nof_errors++;
                 test_error = 1;
 
@@ -276,13 +279,17 @@ int main(int argc, char *argv[])
                 for (next = icalrecur_iterator_prev(ritr);
                      !icaltime_is_null_time(next);
                      next = icalrecur_iterator_prev(ritr)) {
-                    actual_instances_len += snprintf(&actual_instances[actual_instances_len],
-                                                     sizeof(actual_instances) - (size_t)actual_instances_len,
-                                                     "%s%s", sep, icaltime_as_ical_string(next));
+                    int n = snprintf(&actual_instances[actual_instances_len],
+                                     sizeof(actual_instances) - (size_t)actual_instances_len,
+                                     "%s%s", sep, icaltime_as_ical_string(next));
+                    if (n < 0 || (size_t)n >= sizeof(actual_instances) - (size_t)actual_instances_len) {
+                        break;
+                    }
+                    actual_instances_len += n;
                     sep = ",";
                 }
 
-                if (strcmp(instances, actual_instances)) {
+                if (strcmp(instances, actual_instances) != 0) {
                     nof_errors++;
 
                     if (!test_error) {

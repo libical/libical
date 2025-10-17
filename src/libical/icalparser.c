@@ -208,7 +208,7 @@ static char *parser_get_prop_name(char *line, char **end)
 static bool parser_get_param_name_stack(char *line, char *name, size_t name_length,
                                         char *value, size_t value_length)
 {
-    char *next, *end_quote;
+    char *next;
     size_t requested_name_length, requested_value_length;
 
     /* The name is everything up to the equals sign */
@@ -240,8 +240,7 @@ static bool parser_get_param_name_stack(char *line, char *name, size_t name_leng
         /* Dequote the value if it is a single quoted-string */
         next++;
 
-        end_quote = (*next == '"') ? next : parser_get_next_char('"', next, 0);
-
+        const char *end_quote = (*next == '"') ? next : parser_get_next_char('"', next, 0);
         if (end_quote == 0) {
             return false;
         }
@@ -407,8 +406,7 @@ static char *parser_get_next_value(char *line, char **end, icalvalue_kind kind)
 static char *parser_get_next_parameter(char *line, char **end)
 {
     char *next;
-    char *v;
-    char *str;
+    const char *v;
 
     v = parser_get_next_char(':', line, 1);
     next = parser_get_next_char(';', line, 1);
@@ -421,7 +419,7 @@ static char *parser_get_next_parameter(char *line, char **end)
     }
 
     if (next != 0) {
-        str = make_segment(line, next);
+        char *str = make_segment(line, next);
         *end = next + 1;
         return str;
     } else {
@@ -585,7 +583,7 @@ icalcomponent *icalparser_parse(icalparser *parser,
                                 icalparser_line_gen_func line_gen_func)
 {
     char *line;
-    icalcomponent *c = 0;
+    icalcomponent *c;
     icalcomponent *root = 0;
     icalerrorstate es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
     int cont;
@@ -625,8 +623,6 @@ icalcomponent *icalparser_parse(icalparser *parser,
                 /* Badness */
                 icalassert(0);
             }
-
-            c = 0;
         }
         cont = 0;
         if (line != 0) {
@@ -720,7 +716,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 "Got a data line, but could not find a property name or component begin tag",
                 ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
         }
-        tail = 0;
         parser->state = ICALPARSER_ERROR;
         icalmemory_free_buffer(str);
         str = NULL;
@@ -779,7 +774,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             icalcomponent_add_component(tail, parser->root_component);
         }
 
-        tail = 0;
         icalmemory_free_buffer(str);
         str = NULL;
 
@@ -854,7 +848,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         insert_error(parser, tail, str, "Parse error in property name",
                      ICAL_XLICERRORTYPE_PROPERTYPARSEERROR);
 
-        tail = 0;
         parser->state = ICALPARSER_ERROR;
         icalmemory_free_buffer(str);
         str = NULL;
@@ -904,7 +897,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     /* 'tail' defined above */
                     insert_error(parser, tail, str, "Can't parse parameter name",
                                  ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
-                    tail = 0;
                     break;
                 }
             }
@@ -979,7 +971,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                    "TZID=GMT+05" to "TZID=GMT+05:30"
                  */
                 if (lastColon && *(lastColon + 1) != 0) {
-                    char *strStart = line + strlen(name) + 2;
+                    const char *strStart = line + strlen(name) + 2;
 
                     end = lastColon + 1;
 
@@ -1011,15 +1003,10 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 if (icalerror_get_errors_are_fatal()) {
                     insert_error(parser, tail, str, "Can't parse parameter name",
                                  ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
-                    tail = 0;
                     parser->state = ICALPARSER_ERROR;
 
                     icalmemory_free_buffer(pvalue_heap);
-                    pvalue = 0;
-
                     icalmemory_free_buffer(name_heap);
-                    name = 0;
-
                     icalmemory_free_buffer(str);
                     str = NULL;
                     return 0;
@@ -1087,7 +1074,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
             /* Everything is OK, so add the parameter */
             icalproperty_add_parameter(prop, param);
-            tail = 0;
             icalmemory_free_buffer(str);
             str = NULL;
             pcount++;
@@ -1132,7 +1118,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
                 icalcomponent_add_property(tail, clone);
                 prop = clone;
-                tail = 0;
             }
 
             value = icalvalue_new_from_string(value_kind, str);
@@ -1154,8 +1139,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 /* Remove the troublesome property */
                 icalcomponent_remove_property(tail, prop);
                 icalproperty_free(prop);
-                prop = 0;
-                tail = 0;
                 parser->state = ICALPARSER_ERROR;
 
                 icalmemory_free_buffer(str);
@@ -1192,8 +1175,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     /* Remove the troublesome property */
                     icalcomponent_remove_property(tail, prop);
                     icalproperty_free(prop);
-                    prop = 0;
-                    tail = 0;
                     parser->state = ICALPARSER_ERROR;
                     return 0;
                 } else {
@@ -1261,7 +1242,7 @@ struct slg_data {
 char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
 {
     int replace_cr = 0;
-    char *n;
+    const char *n;
     size_t size;
     struct slg_data *data = (struct slg_data *)d;
 

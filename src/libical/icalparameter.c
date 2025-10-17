@@ -361,7 +361,7 @@ icalparameter_kind icalparameter_isa(const icalparameter *parameter)
 
 bool icalparameter_isa_parameter(void *parameter)
 {
-    struct icalparameter_impl *impl = (struct icalparameter_impl *)parameter;
+    const struct icalparameter_impl *impl = (struct icalparameter_impl *)parameter;
 
     if (parameter == 0) {
         return false;
@@ -510,6 +510,8 @@ void icalparameter_decode_value(char *value)
             case '\'':
                 *out = '"';
                 found_escaped_char = 1;
+                break;
+            default:
                 break;
             }
         }

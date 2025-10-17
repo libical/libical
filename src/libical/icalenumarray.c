@@ -63,7 +63,7 @@ size_t icalenumarray_find(icalenumarray *array,
     size_t i;
 
     for (i = 0; i < array->num_elements; i++) {
-        icalenumarray_element *e = icalarray_element_at(array, i);
+        const icalenumarray_element *e = icalarray_element_at(array, i);
         if (!enumcmp(e, needle)) {
             return i;
         }
@@ -84,14 +84,14 @@ void icalenumarray_append(icalenumarray *array, const icalenumarray_element *ele
     icalarray_append(array, &copy);
 }
 
-void icalenumarray_add(icalenumarray *array, const icalenumarray_element *add)
+void icalenumarray_add(icalenumarray *array, const icalenumarray_element *elem)
 {
-    if (!array || !add) {
+    if (!array || !elem) {
         return;
     }
 
-    if (icalenumarray_find(array, add) >= icalenumarray_size(array)) {
-        icalenumarray_append(array, add);
+    if (icalenumarray_find(array, elem) >= icalenumarray_size(array)) {
+        icalenumarray_append(array, elem);
     }
 }
 
