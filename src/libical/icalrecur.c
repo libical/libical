@@ -3081,20 +3081,22 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
 
             for (i = 0; i < impl->bydata[ICAL_BY_MONTH].by.size; i++) {
                 short month = impl->bydata[ICAL_BY_MONTH].by.data[i];
-                int doy_offset, days_in_month;
+                if (month > 0 && month < ICAL_BY_MONTH_SIZE) {
+                    int doy_offset, days_in_month;
 
-                /* Get offset within year & day of week of first day of month */
-                doy_offset =
-                    get_day_of_year(impl, year, month, 1) - 1;
-                first_dow = get_day_of_week_adjusted(impl, year, month, 1);
+                    /* Get offset within year & day of week of first day of month */
+                    doy_offset =
+                        get_day_of_year(impl, year, month, 1) - 1;
+                    first_dow = get_day_of_week_adjusted(impl, year, month, 1);
 
-                /* Get day of week of last day of month */
-                days_in_month = get_days_in_month(impl, month, year);
-                last_dow = get_day_of_week_adjusted(impl, year,
-                                                    month, days_in_month);
+                    /* Get day of week of last day of month */
+                    days_in_month = get_days_in_month(impl, month, year);
+                    last_dow = get_day_of_week_adjusted(impl, year,
+                                                        month, days_in_month);
 
-                expand_by_day(impl, year, doy_offset, days_in_month,
-                              first_dow, last_dow, limiting);
+                    expand_by_day(impl, year, doy_offset, days_in_month,
+                                  first_dow, last_dow, limiting);
+                }
             }
         } else {
             /* Numeric BYDAY are within the year */
