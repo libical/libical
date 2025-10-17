@@ -92,7 +92,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icaldirset_fetch_match(icalset *set, const 
 /* Modifies components according to the MODIFY method of CAP. Works on
    the currently selected components. */
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_modify(icalset *set,
-                                                      icalcomponent *old, icalcomponent *new);
+                                                      icalcomponent *oldcomp, icalcomponent *newcomp);
 
 /* Iterates through the components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */

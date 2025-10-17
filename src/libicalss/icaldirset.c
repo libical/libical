@@ -497,11 +497,11 @@ icalerrorenum icaldirset_select(icalset *set, icalgauge *gauge)
     return ICAL_NO_ERROR;
 }
 
-icalerrorenum icaldirset_modify(icalset *set, icalcomponent *old, icalcomponent *new)
+icalerrorenum icaldirset_modify(icalset *set, icalcomponent *oldcomp, icalcomponent *newcomp)
 {
     _unused(set);
-    _unused(old);
-    _unused(new);
+    _unused(oldcomp);
+    _unused(newcomp);
 
     /* NOT IMPLEMENTED */
     assert(0);
