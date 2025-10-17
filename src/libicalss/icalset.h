@@ -31,7 +31,7 @@
 
 typedef struct icalset_impl icalset;
 
-typedef enum icalset_kind
+typedef enum icalset_kind // NOLINT(performance-enum-size)
 {
     ICAL_FILE_SET,
     ICAL_DIR_SET,
