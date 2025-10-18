@@ -48,7 +48,7 @@ static const vcardrestriction_record null_restriction_record =
    VCARD_RESTRICTION_ONE, if there is 1 of a property with that
    restriction, it passes, but if there are 0 or 2+, it fails. */
 
-static const char compare_map[VCARD_RESTRICTION_UNKNOWN + 1][3] = {
+static const bool compare_map[VCARD_RESTRICTION_UNKNOWN + 1][3] = {
     {1, 1, 1}, /*VCARD_RESTRICTION_NONE */
     {1, 0, 0}, /*VCARD_RESTRICTION_ZERO */
     {0, 1, 0}, /*VCARD_RESTRICTION_ONE */
@@ -215,7 +215,7 @@ static int _check_restriction(vcardcomponent *comp,
     return compare;
 }
 
-static int vcardrestriction_check_component(vcardcomponent *comp)
+static bool vcardrestriction_check_component(vcardcomponent *comp)
 {
     vcardcomponent_kind comp_kind, inner_kind;
     vcardproperty_version version;
@@ -225,7 +225,7 @@ static int vcardrestriction_check_component(vcardcomponent *comp)
     vcardcomponent *inner_comp;
     int count;
     int compare;
-    int valid = 1;
+    bool valid = true;
 
     comp_kind = vcardcomponent_isa(comp);
 
@@ -308,10 +308,10 @@ static int vcardrestriction_check_component(vcardcomponent *comp)
     return valid;
 }
 
-int vcardrestriction_check(vcardcomponent *outer_comp)
+bool vcardrestriction_check(vcardcomponent *outer_comp)
 {
     vcardcomponent_kind comp_kind;
-    int valid;
+    bool valid;
 
     icalerror_check_arg_rz((outer_comp != 0), "outer comp");
 

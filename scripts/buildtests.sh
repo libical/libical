@@ -541,14 +541,38 @@ SPLINT() {
   rm -f "splint-$name.out"
   # shellcheck disable=SC2086
   splint $files \
-    -badflag \
     -preproc \
-    -weak -warnposix \
-    -modobserver -initallelements -redef \
+    -standard -warnposix \
     -linelen 1000 \
+    -exportlocal \
+    -nullassign \
+    -nullret \
+    -nullpass \
+    -nullstate \
+    -mustfreefresh \
+    -usereleased \
+    -temptrans \
+    -mustfreeonly \
+    -compdef \
+    -compdestroy \
+    -boolops \
+    -predboolint \
+    -observertrans \
+    -globstate \
+    -branchstate \
+    -statictrans \
+    -usedef \
+    -initallelements \
+    -kepttrans \
+    -unqualifiedtrans \
+    -noeffect \
+    -immediatetrans \
     -DHAVE_CONFIG_H=1 \
     -DPACKAGE_DATA_DIR="\"foo\"" \
     -DTEST_DATADIR="\"bar\"" \
+    -D"icalmemory_new_buffer"="malloc" \
+    -D"icalmemory_free_buffer"="free" \
+    -D"icalstrarray_free"="free" \
     -D"gmtime_r"="" \
     -D"localtime_r"="" \
     -D"nanosleep"="" \
@@ -603,6 +627,14 @@ SPLINT() {
     echo "Splint parse error encountered.  Exiting..."
     exit 1
   fi
+  set +e
+  declare -i issues
+  issues=$(grep -ci "Finished checking.*code warning" "splint-$name.out")
+  if (test $issues -gt 0); then
+    echo "Splint issues error encountered.  Exiting..."
+    exit 1
+  fi
+  set +e
   CLEAN
   rm -f "splint-$name.out"
   echo "===== END SPLINT: $1 ======"
