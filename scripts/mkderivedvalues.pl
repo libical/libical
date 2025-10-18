@@ -158,7 +158,8 @@ sub insert_code
     # print out the value to string map
 
     my $count = scalar(keys %h) + 1;
-    print "static const struct ${lcprefix}value_kind_map value_map[$count]={\n";
+    my $map_count = $count - 2;
+    print "static const struct ${lcprefix}value_kind_map value_map[$map_count]={\n";
 
     foreach $value (sort keys %h) {
 

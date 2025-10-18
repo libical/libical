@@ -205,7 +205,6 @@ bool icalproperty_value_kind_is_multivalued(icalproperty_kind pkind, icalvalue_k
               //case ICAL_TIME_VALUE:
                 case ICAL_X_VALUE:
                     return true;
-                    break;
 
                 default:
                     break;

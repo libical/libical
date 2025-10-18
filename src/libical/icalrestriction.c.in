@@ -13,8 +13,6 @@
 #include "icalrestriction.h"
 #include "icalerror.h"
 
-#include <assert.h>
-
 /* Define the structs for the restrictions. these data are filled out
 in machine generated code below */
 
@@ -38,7 +36,7 @@ static const icalrestriction_record *icalrestriction_get_restriction(
     icalproperty_method method, icalcomponent_kind component,
     icalproperty_kind property, icalcomponent_kind subcomp);
 
-static const icalrestriction_record null_restriction_record =
+const icalrestriction_record null_restriction_record =
     { ICAL_METHOD_NONE, ICAL_NO_COMPONENT,
       ICAL_NO_PROPERTY, ICAL_NO_COMPONENT, ICAL_RESTRICTION_UNKNOWN, NULL };
 
@@ -48,16 +46,16 @@ static const icalrestriction_record null_restriction_record =
    ICAL_RESTRICTION_ONE, if there is 1 of a property with that
    restriction, it passes, but if there are 0 or 2+, it fails. */
 
-static const char compare_map[ICAL_RESTRICTION_UNKNOWN + 1][3] = {
-    {1, 1, 1}, /*ICAL_RESTRICTION_NONE */
-    {1, 0, 0}, /*ICAL_RESTRICTION_ZERO */
-    {0, 1, 0}, /*ICAL_RESTRICTION_ONE */
-    {1, 1, 1}, /*ICAL_RESTRICTION_ZEROPLUS */
-    {0, 1, 1}, /*ICAL_RESTRICTION_ONEPLUS */
-    {1, 1, 0}, /*ICAL_RESTRICTION_ZEROORONE */
-    {1, 1, 0}, /*ICAL_RESTRICTION_ONEEXCLUSIVE */
-    {1, 1, 0}, /*ICAL_RESTRICTION_ONEMUTUAL */
-    {1, 1, 1}   /*ICAL_RESTRICTION_UNKNOWN */
+static const bool compare_map[ICAL_RESTRICTION_UNKNOWN + 1][3] = {
+    {true, true, true},   /*ICAL_RESTRICTION_NONE */
+    {true, false, false}, /*ICAL_RESTRICTION_ZERO */
+    {false, true, false}, /*ICAL_RESTRICTION_ONE */
+    {true, true, true},   /*ICAL_RESTRICTION_ZEROPLUS */
+    {false, true, true},  /*ICAL_RESTRICTION_ONEPLUS */
+    {true, true, false},  /*ICAL_RESTRICTION_ZEROORONE */
+    {true, true, false},  /*ICAL_RESTRICTION_ONEEXCLUSIVE */
+    {true, true, false},  /*ICAL_RESTRICTION_ONEMUTUAL */
+    {true, true, true}    /*ICAL_RESTRICTION_UNKNOWN */
 };
 
 static const char restr_string_map[ICAL_RESTRICTION_UNKNOWN + 1][60] = {
@@ -72,12 +70,12 @@ static const char restr_string_map[ICAL_RESTRICTION_UNKNOWN + 1][60] = {
     "unknown number"    /*ICAL_RESTRICTION_UNKNOWN */
 };
 
-int icalrestriction_compare(icalrestriction_kind restr, int count)
+bool icalrestriction_compare(icalrestriction_kind restr, int count)
 {
     /* restr is an unsigned int and ICAL_RESTRICTION_NONE == 0,
        so no need to check if restr < ICAL_RESTRICTION_NONE */
     if (restr > ICAL_RESTRICTION_UNKNOWN || count < 0) {
-        return -1;
+        return false;
     }
 
     if (count > 2) {
@@ -227,13 +225,13 @@ static const char *icalrestriction_no_duration(const icalrestriction_record * re
     return 0;
 }
 
-static int _check_restriction(icalcomponent *comp,
-                              const icalrestriction_record *record,
-                              int count, icalproperty *prop)
+static bool _check_restriction(icalcomponent *comp,
+                               const icalrestriction_record *record,
+                               int count, icalproperty *prop)
 {
     icalrestriction_kind restr;
     const char *funcr = 0;
-    int compare;
+    bool compare;
 
     restr = record->restriction;
 
@@ -246,9 +244,7 @@ static int _check_restriction(icalcomponent *comp,
 
     compare = icalrestriction_compare(restr, count);
 
-    assert(compare != -1);
-
-    if (compare == 0) {
+    if (!compare) {
 #define TMP_BUF_SIZE 1024
         char temp[TMP_BUF_SIZE];
         icalproperty *errProp;
@@ -263,10 +259,11 @@ static int _check_restriction(icalcomponent *comp,
             kind = icalproperty_kind_to_string(record->property);
         }
 
-        snprintf(temp, TMP_BUF_SIZE,
-                 "Failed iTIP restrictions for %s %s. "
-                 "Expected %s instances of the %s and got %d",
-                 kind, type, restr_string_map[restr], type, count);
+        /* Don't worry if the error message is truncated at TMP_BUF_SIZE chars */
+        (void)snprintf(temp, TMP_BUF_SIZE,
+                       "Failed iTIP restrictions for %s %s. "
+                       "Expected %s instances of the %s and got %d",
+                       kind, type, restr_string_map[restr], type, count);
         errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
         errProp = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
         icalcomponent_add_property(comp, errProp);
@@ -286,14 +283,14 @@ static int _check_restriction(icalcomponent *comp,
         icalcomponent_add_property(comp, errProp);
         icalproperty_free(errProp);
 
-        compare = 0;
+        compare = false;
     }
 
     return compare;
 }
 
-static int icalrestriction_check_component(icalproperty_method method,
-                                           icalcomponent *comp)
+static bool icalrestriction_check_component(icalproperty_method method,
+                                            icalcomponent *comp)
 {
     icalcomponent_kind comp_kind, inner_kind;
     icalproperty_kind prop_kind;
@@ -302,8 +299,8 @@ static int icalrestriction_check_component(icalproperty_method method,
     icalcomponent *inner_comp;
     const char *errStr = NULL;
     int count;
-    int compare;
-    int valid = 1;
+    bool compare;
+    bool valid = true;
 
     comp_kind = icalcomponent_isa(comp);
 
@@ -343,7 +340,7 @@ static int icalrestriction_check_component(icalproperty_method method,
         icalcomponent_add_property(comp, errProp);
         icalproperty_free(errProp);
 
-        valid = 0;
+        valid = false;
     }
 
     /* Check all of the properties in this component */
@@ -413,10 +410,10 @@ static int icalrestriction_check_component(icalproperty_method method,
     return valid;
 }
 
-int icalrestriction_check(icalcomponent *outer_comp)
+bool icalrestriction_check(icalcomponent *outer_comp)
 {
     icalcomponent_kind comp_kind;
-    int valid;
+    bool valid;
 
     icalerror_check_arg_rz((outer_comp != 0), "outer comp");
 
@@ -428,7 +425,7 @@ int icalrestriction_check(icalcomponent *outer_comp)
     }
 
     /* Check the VCALENDAR wrapper */
-    valid = icalrestriction_check_component(ICAL_METHOD_NONE, outer_comp);
+    valid = (bool)icalrestriction_check_component(ICAL_METHOD_NONE, outer_comp);
 
     return valid;
 }
@@ -590,7 +587,7 @@ static const char *icalrestriction_validate_valarm_prop(
     }
 
     if (myrec) {
-        _check_restriction(comp, myrec, count, NULL);
+        (void)_check_restriction(comp, myrec, count, NULL);
     }
 
     return 0;

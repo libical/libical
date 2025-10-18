@@ -80,8 +80,9 @@ sub insert_code
 
     my @props = sort {$propmap{$a}->{"kindEnum"} <=> $propmap{$b}->{"kindEnum"}} keys %propmap;
     my $count = scalar(@props);
+    my $map_count = $count - 2;
 
-    print "static const struct ${lcprefix}property_map property_map[$count] = {\n";
+    print "static const struct ${lcprefix}property_map property_map[$map_count] = {\n";
 
     foreach $prop (@props) {
 
