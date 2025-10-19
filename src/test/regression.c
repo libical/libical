@@ -2237,21 +2237,15 @@ void do_test_time(const char *zone)
         printf("\n TimeZone Conversions \n");
     }
 
-    /*
-    icttla = ictt;
-    icaltimezone_convert_time(&icttla,
-                              icaltimezone_get_utc_timezone(),
-                              lazone);
-*/
     icttla = icaltime_convert_to_zone(ictt,
                                       icaltimezone_get_builtin_timezone("America/Los_Angeles"));
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     int_is("Converted hour in America/Los_Angeles is 10", icttla.hour, 10);
 #endif
     icttutc = icaltime_convert_to_zone(icttla, icaltimezone_get_utc_timezone());
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     ok("America/Los_Angeles local time is 2000-11-03 10:30:30",
        (strncmp(ictt_as_string(icttla), "2000-11-03 10:30:30", 19) == 0));
 #endif
@@ -2280,7 +2274,7 @@ void do_test_time(const char *zone)
         printf("Orig (ical) : %s\n", ictt_as_string(ictt));
         printf("NY          : %s\n", ictt_as_string(icttny));
     }
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     ok("Converted time in zone America/New_York is 2000-11-03 13:30:30",
        (strncmp(ictt_as_string(icttny), "2000-11-03 13:30:30", 19) == 0));
 #endif
@@ -2308,7 +2302,7 @@ void do_test_time(const char *zone)
         printf("Orig (ical) : %s\n", ictt_as_string(ictt));
         printf("LA          : %s\n", ictt_as_string(icttla));
     }
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     ok("Converted time in zone America/Los_Angeles is 2000-11-03 10:30:30",
        (strncmp(ictt_as_string(icttla), "2000-11-03 10:30:30", 19) == 0));
 #endif
@@ -2936,14 +2930,12 @@ void test_convenience(void)
     icalcomponent_set_duration(c, icaldurationtype_from_string("PT1H30M"));
     duration = icaldurationtype_as_seconds(icalcomponent_get_duration(c)) / 60;
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
     ok("Start is 1997-08-01 12:00:00 Europe/Rome",
        (0 == strcmp("1997-08-01 12:00:00 " TESTS_TZID_PREFIX "Europe/Rome",
                     ictt_as_string(icalcomponent_get_dtstart(c)))));
     ok("End is 1997-08-01 13:30:00 Europe/Rome",
        (0 == strcmp("1997-08-01 13:30:00 " TESTS_TZID_PREFIX "Europe/Rome",
                     ictt_as_string(icalcomponent_get_dtend(c)))));
-#endif
     ok("Duration is 90 m", (duration == 90));
 
     icalcomponent_free(c);
