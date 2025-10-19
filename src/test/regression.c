@@ -2037,14 +2037,7 @@ void do_test_time(const char *zone)
     ictt = icaltime_from_timet_with_zone(tt, 0, NULL);
     str_is("Floating time from icaltime_t", ictt_as_string(ictt), "2002-06-26 21:44:29 (floating)");
 
-    ictt = icaltime_from_timet_with_zone(tt, 0, azone);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
-    ok("icaltime_from_timet_with_zone(tt,0,zone) as zone",
-       strncmp(ictt_as_string(ictt), "2002-06-26 21:44:29", 19) == 0);
-#endif
-
     ictt = icaltime_from_timet_with_zone(tt, 0, utczone);
-
     str_is("icaltime_from_timet_with_zone(tt,0,utc)", ictt_as_string(ictt),
            "2002-06-26 21:44:29 Z UTC");
 
@@ -2544,8 +2537,8 @@ void test_overlaps(void)
 {
     icalcomponent *cset, *c;
     icalset *set;
-    icaltime_t tm1 = 973378800; /*Sat Nov  4 23:00:00 UTC 2000,
-                                   Sat Nov  4 15:00:00 PST 2000 */
+    icaltime_t tm1 = 973353600; /*Sat Nov  4 16:00:00 UTC 2000,
+                                   Sat Nov  4 08:00:00 PST 2000 */
     icaltime_t tm2 = 973382400; /*Sat Nov  5 00:00:00 UTC 2000
                                    Sat Nov  4 16:00:00 PST 2000 */
 
@@ -2560,9 +2553,7 @@ void test_overlaps(void)
                             (void *)0);
 
     cset = icalclassify_find_overlaps(set, c);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
-    ok("TODO find overlaps 1", (cset != NULL));
-#endif
+    ok("find overlaps 1", (cset != NULL));
 
     if (VERBOSE && cset) {
         printf("%s\n", icalcomponent_as_ical_string(cset));
@@ -2584,9 +2575,27 @@ void test_overlaps(void)
 
     cset = icalclassify_find_overlaps(set, c);
 
-#if ADD_TESTS_REQUIRING_INVESTIGATION
-    ok("TODO find overlaps 1", cset != NULL);
-#endif
+    ok("find overlaps 2", cset != NULL);
+    if (VERBOSE && cset) {
+        printf("%s\n", icalcomponent_as_ical_string(cset));
+    }
+
+    if (cset) {
+        icalcomponent_free(cset);
+    }
+
+    if (c) {
+        icalcomponent_free(c);
+    }
+
+    c = icalcomponent_vanew(
+        ICAL_VEVENT_COMPONENT,
+        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1 + 3 * hh, 0, NULL), (void *)0),
+        icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2 + 3 * hh, 0, NULL), (void *)0),
+        (void *)0);
+
+    cset = icalclassify_find_overlaps(set, c);
+    ok("find overlaps 3", cset != NULL);
     if (VERBOSE && cset) {
         printf("%s\n", icalcomponent_as_ical_string(cset));
     }
@@ -2606,15 +2615,9 @@ void test_overlaps(void)
         (void *)0);
 
     cset = icalclassify_find_overlaps(set, c);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
-    ok("TODO find overlaps 1", cset != NULL);
-#endif
+    ok("find overlaps 4", cset == NULL); // there are no overlaps in this range
     if (VERBOSE && cset) {
         printf("%s\n", icalcomponent_as_ical_string(cset));
-    }
-
-    if (set) {
-        icalset_free(set);
     }
 
     if (cset) {
@@ -2623,6 +2626,10 @@ void test_overlaps(void)
 
     if (c) {
         icalcomponent_free(c);
+    }
+
+    if (set) {
+        icalset_free(set);
     }
 }
 
@@ -4812,6 +4819,8 @@ void test_recurrenceexcluded(void)
     icalcomponent_free(calendar);
 }
 
+#if defined(USE_BUILTIN_TZDATA)
+// this test is setup for testing against our builtin tzdata
 void test_bad_dtstart_in_timezone(void)
 {
     icaltimezone *myTZ = NULL;
@@ -4825,10 +4834,9 @@ void test_bad_dtstart_in_timezone(void)
     if (VERBOSE) {
         printf("%s\n", str);
     }
-
-    ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:20371025T030000") != NULL));
-    ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:20371025T030000") != NULL));
+    ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:19700329T020000") != NULL));
 }
+#endif
 
 void test_icalcomponent_new_from_string(void)
 {
@@ -7002,7 +7010,8 @@ int main(int argc, char *argv[])
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
              do_header);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
+#if defined(USE_BUILTIN_TZDATA)
+    // this test is setup for testing against our builtin tzdata
     test_run("Test bad dtstart in timezone as per r960", test_bad_dtstart_in_timezone, do_test,
              do_header);
 #endif
