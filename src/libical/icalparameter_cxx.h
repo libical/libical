@@ -51,7 +51,7 @@ public:
     std::string as_ical_string();
     bool is_valid();
     icalparameter_kind isa();
-    int isa_parameter(void *param);
+    bool isa_parameter(void *param);
 
     /* Access the name of an X parameter */
     static void set_xname(ICalParameter &param, const std::string &v);

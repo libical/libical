@@ -97,7 +97,7 @@ bool ICalParameter::is_valid()
     if (imp == NULL) {
         return false;
     }
-    return (icalparameter_isa_parameter(static_cast<void *>(imp)) != 0);
+    return icalparameter_isa_parameter(static_cast<void *>(imp));
 }
 
 icalparameter_kind ICalParameter::isa()
@@ -105,7 +105,7 @@ icalparameter_kind ICalParameter::isa()
     return icalparameter_isa(imp);
 }
 
-int ICalParameter::isa_parameter(void *param) //NOLINT(readability-convert-member-functions-to-static)
+bool ICalParameter::isa_parameter(void *param) //NOLINT(readability-convert-member-functions-to-static)
 {
     return icalparameter_isa_parameter(param);
 }
@@ -151,7 +151,7 @@ std::vector<std::string> ICalParameter::get_delegatedfrom() const
 {
     std::vector<std::string> vals;
     icalstrarray *c_vals = icalparameter_get_delegatedfrom(imp);
-    if (c_vals) {
+    if (c_vals != NULL) {
         for (size_t i = 0; i < icalstrarray_size(c_vals); ++i) {
             vals.push_back(std::string(icalstrarray_element_at(c_vals, i)));
         }
@@ -283,7 +283,7 @@ std::vector<std::string> ICalParameter::get_delegatedto() const
 {
     std::vector<std::string> vals;
     icalstrarray *c_vals = icalparameter_get_delegatedto(imp);
-    if (c_vals) {
+    if (c_vals != NULL) {
         for (size_t i = 0; i < icalstrarray_size(c_vals); ++i) {
             vals.push_back(std::string(icalstrarray_element_at(c_vals, i)));
         }
@@ -360,7 +360,7 @@ std::vector<std::string> ICalParameter::get_member() const
 {
     std::vector<std::string> vals;
     icalstrarray *c_vals = icalparameter_get_member(imp);
-    if (c_vals) {
+    if (c_vals != NULL) {
         for (size_t i = 0; i < icalstrarray_size(c_vals); ++i) {
             vals.push_back(std::string(icalstrarray_element_at(c_vals, i)));
         }

@@ -78,7 +78,7 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalProperty_isa_1property(JNIEn
         }
 
         // get the result from the c++ object (argObjPtr can be 0, it's cObj's responsibility to handle this if an error).
-        result = cObj->isa_property(argObjPtr) != 0;
+        result = (jboolean)cObj->isa_property(argObjPtr);
     }
 
     return (result);

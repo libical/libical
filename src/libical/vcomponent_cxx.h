@@ -59,7 +59,7 @@ public:
     std::string as_ical_string();
     bool is_valid();
     icalcomponent_kind isa();
-    int isa_component(void *component);
+    bool isa_component(void *component);
 
     /// Working with properties
     void add_property(ICalProperty *property);
@@ -190,7 +190,7 @@ public:
      */
     virtual struct icaltime_span get_span();
 
-    int recurrence_is_excluded(struct icaltimetype *dtstart, struct icaltimetype *recurtime);
+    bool recurrence_is_excluded(struct icaltimetype *dtstart, struct icaltimetype *recurtime);
 
     /* helper functions for adding/removing/updating property and sub-components */
 
