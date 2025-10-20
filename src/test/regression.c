@@ -3095,10 +3095,6 @@ static int test_juldat_caldat_instance(long year, int month, int day)
         return -1;
     }
 
-    if (icaltime_week_number(t) != (originalInstant.day_of_year - originalInstant.weekday) / 7) {
-        return -1;
-    }
-
     return 0;
 }
 
@@ -3106,7 +3102,7 @@ static int test_juldat_caldat_instance(long year, int month, int day)
  * This test verifies the ical_caldat and ical_juldat functions. The functions are reworked versions
  * of the original ical_caldat and ical_juldat functions but avoid using floating point arithmetic. As the
  * new functions are not exported, the test cannot access them directly. It therefore checks the
- * output of the icaltime_day_of_week, icaltime_start_doy_week and icaltime_week_number functions
+ * output of the icaltime_day_of_week and icaltime_start_doy_week functions
  * which are based on the functions to be tested.
  */
 void test_juldat_caldat(void)

@@ -176,6 +176,9 @@ The following functions have been added:
 
 * `icalmime_parse()` has been removed. Please use another library if you need a MIME parser.
 
+* `icaltime_week_number()` has been removed. (it never properly accounted for the
+   start day of the week in different locales).
+
 * `icalrecurrencetype_clear()` has been removed.
 
 * `icaltimezone_release_zone_tab()` has been removed.

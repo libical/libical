@@ -109,11 +109,6 @@
     <returns type="gint" comment="The day of the year for the Sunday of the week that the given time is within."/>
     <comment xml:space="preserve">Returns the day of the year for the first day of the week that the given time is within.</comment>
   </method>
-  <method name="i_cal_time_week_number" corresponds="icaltime_week_number" since="1.0">
-    <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-    <returns type="gint" comment="The week number for the week the given time is within."/>
-    <comment xml:space="preserve">Returns the week number for the week the given time is within.</comment>
-  </method>
   <method name="i_cal_time_is_null_time" corresponds="icaltime_is_null_time" since="1.0">
     <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
     <returns type="gboolean" comment="Whether @tt is null_time. true if yes, false if not."/>

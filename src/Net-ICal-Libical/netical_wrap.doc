@@ -290,9 +290,6 @@ icaltime_start_doy_of_week(t);
 icaltime_as_ctime(struct icaltimetype *);
         [ returns char * ]
 
-icaltime_week_number(t);
-        [ returns short  ]
-
 icaltime_compare(a,b);
         [ returns int  ]
 

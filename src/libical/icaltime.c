@@ -524,22 +524,6 @@ int icaltime_start_doy_week(const struct icaltimetype t, int fdow)
     return jt.day_of_year - delta;
 }
 
-int icaltime_week_number(const struct icaltimetype ictt)
-{
-    UTinstantInt jt;
-
-    memset(&jt, 0, sizeof(UTinstantInt));
-
-    jt.year = ictt.year;
-    jt.month = ictt.month;
-    jt.day = ictt.day;
-
-    ical_juldat(&jt);
-    ical_caldat(&jt);
-
-    return (jt.day_of_year - jt.weekday) / 7;
-}
-
 int icaltime_day_of_year(const struct icaltimetype t)
 {
     unsigned int is_leap = (unsigned int)icaltime_is_leap_year(t.year);
