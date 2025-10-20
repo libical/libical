@@ -340,7 +340,7 @@ void test_icalcomponent_get_span(void)
         print_span(tnum++, span);
     }
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     int_is("America/Los_Angeles", span.start, 973350000);
 #endif
 
@@ -381,7 +381,7 @@ void test_icalcomponent_get_span(void)
         print_span(tnum++, span);
     }
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     int_is("America/New_York", span.start, 973360800);
 #endif
 
@@ -405,7 +405,7 @@ void test_icalcomponent_get_span(void)
         print_span(tnum++, span);
     }
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     int_is("America/New_York", span.start, 973360800);
 #endif
 
@@ -429,7 +429,7 @@ void test_icalcomponent_get_span(void)
         print_span(tnum++, span);
     }
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     int_is("America/Los_Angeles w/ duration", span.end, 973351800);
 #endif
 

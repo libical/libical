@@ -14,8 +14,6 @@
 extern "C" {
 #endif
 
-#define ADD_TESTS_BROKEN_BUILTIN_TZDATA 0
-
 extern int VERBOSE;
 extern int QUIET;
 
