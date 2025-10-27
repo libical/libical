@@ -1766,26 +1766,6 @@ XS(_wrap_icaltime_as_ctime) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icaltime_week_number) {
-
-    short  _result;
-    struct icaltimetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1))
-        croak("Usage: icaltime_week_number(t);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltime_week_number. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short )icaltime_week_number(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
 XS(_wrap_icaltime_compare) {
 
     int  _result;

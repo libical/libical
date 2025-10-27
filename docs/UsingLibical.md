@@ -944,11 +944,6 @@ short icaltime_start_doy_week(
     struct icaltimetype t,
     int fdow);
 
-short icaltime_week_number(
-    short day_of_month,
-    short month,
-    short year);
-
 short icaltime_days_in_month(
     short month,
     short year);

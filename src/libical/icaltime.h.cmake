@@ -46,7 +46,6 @@
  *      - icaltime_day_of_year(struct icaltimetype t)
  *      - icaltime_day_of_week(struct icaltimetype t)
  *      - icaltime_start_doy_week(struct icaltimetype t, int fdow)
- *      - icaltime_week_number(struct icaltimetype t)
  *
  *      Query methods include:
  *
@@ -269,13 +268,6 @@ LIBICAL_ICAL_EXPORT int icaltime_day_of_week(const struct icaltimetype t);
  *  day.
  */
 LIBICAL_ICAL_EXPORT int icaltime_start_doy_week(const struct icaltimetype t, int fdow);
-
-/** @brief Returns the week number for the week the given time is within.
- *
- * @todo Doesn't take into account the start day of the
- * week. strftime assumes that weeks start on Monday.
- */
-LIBICAL_ICAL_EXPORT int icaltime_week_number(const struct icaltimetype t);
 
 /** @brief Returns true if the time is null. */
 LIBICAL_ICAL_EXPORT bool icaltime_is_null_time(const struct icaltimetype t);

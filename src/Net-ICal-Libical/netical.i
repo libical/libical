@@ -242,9 +242,6 @@ short icaltime_start_doy_week(struct icaltimetype t, int fdow);
 /* Returns a string with the time represented in the same format as ctime(). THe string is owned by libical */
 char* icaltime_as_ctime(struct icaltimetype);
 
-/* Returns the week number for the week the given time is within */
-short icaltime_week_number(struct icaltimetype t);
-
 /* Returns -1, 0, or 1 to indicate that a<b, a==b or a>b */
 int icaltime_compare(struct icaltimetype a,struct icaltimetype b);
 
