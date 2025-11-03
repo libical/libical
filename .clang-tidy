@@ -37,6 +37,7 @@ Checks: -*,
         -readability-simplify-boolean-expr,
         -readability-static-accessed-through-instance,
         -readability-use-std-min-max,
+        -readability-use-concise-preprocessor-directives,
 
 CheckOptions:
     - key: bugprone-reserved-identifier.AllowedIdentifiers
