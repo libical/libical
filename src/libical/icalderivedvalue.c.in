@@ -152,8 +152,9 @@ void icalvalue_set_recur(icalvalue *value, struct icalrecurrencetype *recur)
 
     icalrecurrencetype_ref(recur);
 
-    if (impl->data.v_recur)
+    if (impl->data.v_recur) {
         icalrecurrencetype_unref(impl->data.v_recur);
+    }
 
     impl->data.v_recur = recur;
 }
@@ -460,8 +461,9 @@ void icalvalue_set_attach(icalvalue *value, icalattach *attach)
 
     icalattach_ref(attach);
 
-    if (impl->data.v_attach)
+    if (impl->data.v_attach) {
         icalattach_unref(impl->data.v_attach);
+    }
 
     impl->data.v_attach = attach;
 }

@@ -31,8 +31,9 @@
       <custom>    vcardstructuredtype *val;
     g_return_val_if_fail(value != NULL, NULL);
     val = (vcardstructuredtype *)i_cal_object_get_native((ICalObject *)value);
-    if (val == NULL)
+    if (val == NULL) {
         return NULL;
+    }
     return ${binding-prefix}_new_full(${native-prefix}_new_${suffix}(priv_i_cal_vcardstructuredtype_clone(val)), NULL);</custom>
     </method>
     <method name="${binding-prefix}_get_${suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
@@ -44,8 +45,9 @@
       <custom>    vcardstructuredtype *val;
     g_return_val_if_fail(self != NULL, NULL);
     val = ${native-prefix}_get_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self));
-    if (val == NULL)
+    if (val == NULL) {
         return NULL;
+    }
     return i_cal_vcard_structured_new_full(priv_i_cal_vcardstructuredtype_clone(val), NULL);</custom>
     </method>
     <method name="${binding-prefix}_set_${suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
@@ -72,8 +74,9 @@
       <custom>    ${native-array-type} *val;
     g_return_val_if_fail(value != NULL, NULL);
     val = (${native-array-type} *)i_cal_object_get_native((ICalObject *)value);
-    if (val == NULL)
+    if (val == NULL) {
         return NULL;
+    }
     return ${binding-prefix}_new_full(${native-prefix}_new_${suffix}_list(${native-array-type}_clone(val)), NULL);</custom>
     </method>
     <method name="${binding-prefix}_get_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
@@ -85,8 +88,9 @@
       <custom>    ${native-array-type} *val;
     g_return_val_if_fail(self != NULL, NULL);
     val = ${native-prefix}_get_${suffix}((${native-prefix} *)i_cal_object_get_native((ICalObject *)self));
-    if (val == NULL)
+    if (val == NULL) {
         return NULL;
+    }
     return ${binding-array-new-prefix}_new_full(${native-array-type}_clone(val), NULL);</custom>
     </method>
     <method name="${binding-prefix}_set_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
@@ -148,8 +152,9 @@
       <custom>    ${native-array-type} *val;
     g_return_val_if_fail(value != NULL, NULL);
     val = (${native-array-type} *)i_cal_object_get_native((ICalObject *)value);
-    if (val == NULL)
+    if (val == NULL) {
         return NULL;
+    }
     return ${binding-prefix}_new_full(${native-prefix}_new_${suffix}_list(${native-array-type}_clone(val)), NULL);</custom>
     </method>
     <method name="${binding-prefix}_get_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
@@ -161,8 +166,9 @@
       <custom>    ${native-array-type} *val;
     g_return_val_if_fail(self != NULL, NULL);
     val = ${native-prefix}_get_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self));
-    if (val == NULL)
+    if (val == NULL) {
         return NULL;
+    }
     return ${binding-array-new-prefix}_new_full(${native-array-type}_clone(val), NULL);</custom>
     </method>
     <method name="${binding-prefix}_set_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
@@ -207,8 +213,9 @@
       <custom>    ${native-array-type} *val;
     g_return_val_if_fail(value != NULL, NULL);
     val = (${native-array-type} *)i_cal_object_get_native((ICalObject *)value);
-    if (val == NULL)
+    if (val == NULL) {
         return NULL;
+    }
     return ${binding-prefix}_new_full(${native-prefix}_new_${suffix}(${native-array-type}_clone(val)), NULL);</custom>
     </method>
     <method name="${binding-prefix}_get_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
@@ -220,8 +227,9 @@
       <custom>    ${native-array-type} *val;
     g_return_val_if_fail(self != NULL, NULL);
     val = ${native-prefix}_get_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self));
-    if (val == NULL)
+    if (val == NULL) {
         return NULL;
+    }
     return ${binding-array-new-prefix}_new_full(${native-array-type}_clone(val), NULL);</custom>
     </method>
     <method name="${binding-prefix}_set_${suffix}${binding-get-set-suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">

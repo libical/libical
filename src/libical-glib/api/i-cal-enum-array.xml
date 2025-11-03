@@ -68,8 +68,9 @@
     <custom>    const icalenumarray_element *elem;
     g_return_val_if_fail(I_CAL_IS_ENUM_ARRAY(array), 0);
     elem = icalenumarray_element_at((icalenumarray *)i_cal_object_get_native((ICalObject *)array), position);
-    if (elem == NULL)
+    if (elem == NULL) {
         return 0;
+    }
     return elem-&gt;val;</custom>
   </method>
   <method name="i_cal_enum_array_element_get_xvalue_at" corresponds="icalenumarray_element_at" annotation="skip" kind="custom" since="4.0">
@@ -80,8 +81,9 @@
     <custom>    const icalenumarray_element *elem;
     g_return_val_if_fail(I_CAL_IS_ENUM_ARRAY(array), NULL);
     elem = icalenumarray_element_at((icalenumarray *)i_cal_object_get_native((ICalObject *)array), position);
-    if (elem == NULL)
+    if (elem == NULL) {
         return NULL;
+    }
     return elem-&gt;xvalue;</custom>
   </method>
   <method name="i_cal_enum_array_size" corresponds="icalenumarray_size" kind="other" since="4.0">

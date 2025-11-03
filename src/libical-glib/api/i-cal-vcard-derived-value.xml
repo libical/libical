@@ -55,8 +55,9 @@
     <returns type="vcardstructuredtype *" annotation="transfer full" comment="The newly created vcardstructuredtype"/>
     <custom>    guint ii;
     vcardstructuredtype *res;
-    if (src == NULL)
+    if (src == NULL) {
         return NULL;
+    }
     res = vcardstructured_new();
     res-&gt;num_fields = src-&gt;num_fields;
     for (ii = 0; ii &lt; src-&gt;num_fields; ii++) {

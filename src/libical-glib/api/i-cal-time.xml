@@ -186,8 +186,9 @@
     <custom xml:space="preserve">    icaltimetype *itt;
 
     g_return_if_fail(I_CAL_IS_TIME(tt));
-    if(zone)
+    if(zone) {
         g_return_if_fail(I_CAL_IS_TIMEZONE(zone));
+    }
 
     itt = i_cal_object_get_native(I_CAL_OBJECT(tt));
     g_return_if_fail(itt != NULL);
@@ -344,12 +345,16 @@
     g_return_if_fail(timetype != NULL);
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
     g_return_if_fail(itt != NULL);
-    if(year)
+    if(year) {
         *year = itt-&gt;year;
-    if(month)
+    }
+    if(month) {
         *month = itt-&gt;month;
-    if(day)
-        *day = itt-&gt;day; </custom>
+    }
+    if(day) {
+        *day = itt-&gt;day;
+    }
+    </custom>
   </method>
   <method name="i_cal_time_set_date" corresponds="none" kind="set" since="1.0">
     <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set to"/>
@@ -375,12 +380,16 @@
     g_return_if_fail(timetype != NULL);
     itt = (struct icaltimetype *)i_cal_object_get_native ((ICalObject *)timetype);
     g_return_if_fail(itt != NULL);
-    if(hour)
+    if(hour) {
         *hour = itt-&gt;hour;
-    if(minute)
+    }
+    if(minute) {
         *minute = itt-&gt;minute;
-    if(second)
-        *second = itt-&gt;second; </custom>
+    }
+    if(second) {
+        *second = itt-&gt;second;
+    }
+    </custom>
   </method>
   <method name="i_cal_time_set_time" corresponds="none" kind="set" since="1.0">
     <parameter type="ICalTime *" name="timetype" comment="The #ICalTime to be set to"/>

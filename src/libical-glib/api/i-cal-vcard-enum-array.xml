@@ -18,8 +18,9 @@
     <custom>    const vcardenumarray_element *elem;
     g_return_val_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array), 0);
     elem = vcardenumarray_element_at((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), position);
-    if (elem == NULL)
+    if (elem == NULL) {
         return 0;
+    }
     return elem-&gt;val;</custom>
   </method>
   <method name="i_cal_vcard_enum_array_get_xvalue_at" corresponds="vcardenumarray_element_at" annotation="skip" kind="other" since="4.0">
@@ -30,8 +31,9 @@
     <custom>    const vcardenumarray_element *elem;
     g_return_val_if_fail(I_CAL_VCARD_IS_ENUM_ARRAY(array), 0);
     elem = vcardenumarray_element_at((vcardenumarray *)i_cal_object_get_native((ICalObject *)array), position);
-    if (elem == NULL)
+    if (elem == NULL) {
         return 0;
+    }
     return elem-&gt;xvalue;</custom>
   </method>
   <method name="i_cal_vcard_enum_array_size" corresponds="vcardenumarray_size" kind="other" since="4.0">
