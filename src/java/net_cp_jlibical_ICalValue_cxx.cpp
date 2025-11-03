@@ -33,10 +33,10 @@ using namespace LibICal;
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_as_1ical_1string(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->as_ical_string();
+        const std::string icalStr = cObj->as_ical_string();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -51,7 +51,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_as_1ical_1string(JNIEnv
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalValue_isa(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->isa();
@@ -70,13 +70,13 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalValue_isa_1value(JNIEnv *env
     jboolean result = 0;
 
     // get the c++ object from the jobj
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         // get the c++ object from arg
         void *argObjPtr = 0;
 
         if (arg != NULL) {
-            argObjPtr = getCObjectPtr(env, jobj);
+            argObjPtr = (void *)getCObjectPtr(env, jobj);
         }
 
         // get the result from the c++ object
@@ -94,7 +94,7 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalValue_isa_1value(JNIEnv *env
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalValue_set_1trigger(JNIEnv *env, jobject jobj, jobject arg)
 {
     // get the c++ object from the jobj
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         icaltriggertype aTrigger;
 
@@ -114,7 +114,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1trigger(JNIEnv *en
     jobject result = 0;
 
     // get the c++ object from the jobj
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the trigger from CObj
@@ -135,7 +135,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1trigger(JNIEnv *en
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalValue_get_1method(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->get_method();
@@ -151,7 +151,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalValue_get_1method(JNIEnv *env, j
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalValue_set_1method(JNIEnv *env, jobject jobj, jint value)
 {
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->set_method((icalproperty_method)value);
@@ -166,7 +166,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalValue_set_1method(JNIEnv *env, j
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_get_1text(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_text();
@@ -183,7 +183,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_get_1text(JNIEnv *env, 
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalValue_set_1text(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -203,7 +203,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1duration(JNIEnv *e
     jobject result = 0;
 
     // get the c++ object from the jobj
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the duration from CObj
@@ -224,7 +224,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1duration(JNIEnv *e
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalValue_set_1duration(JNIEnv *env, jobject jobj, jobject arg)
 {
     // get the c++ object from the jobj
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaldurationtype aDuration;
@@ -243,7 +243,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalValue_set_1duration(JNIEnv *env,
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_get_1query(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_query();
@@ -260,7 +260,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_get_1query(JNIEnv *env,
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalValue_set_1query(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -280,7 +280,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1datetime(JNIEnv *e
     jobject result = NULL;
 
     // get the c++ object from the jobj
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aTime = cObj->get_datetime();
@@ -298,7 +298,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1datetime(JNIEnv *e
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalValue_set_1datetime(JNIEnv *env, jobject jobj, jobject arg)
 {
     // get the c++ object from the jobj
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aTime;
@@ -317,7 +317,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalValue_set_1datetime(JNIEnv *env,
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalValue_get_1action(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->get_action();
@@ -333,7 +333,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalValue_get_1action(JNIEnv *env, j
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalValue_set_1action(JNIEnv *env, jobject jobj, jint value)
 {
-    ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalValue *cObj = (ICalValue *)getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->set_action((icalproperty_action)value);

@@ -33,7 +33,7 @@ using namespace LibICal;
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_as_1ical_1string(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->as_ical_string();
@@ -51,7 +51,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_as_1ical_1string(JNI
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_isa(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->isa();
@@ -68,13 +68,13 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_isa(JNIEnv *env, jobjec
 JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalProperty_isa_1property(JNIEnv *env, jobject jobj, jobject arg)
 {
     jboolean result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         void *argObjPtr = 0;
 
         if (arg != NULL) {
-            argObjPtr = getCObjectPtr(env, arg);
+            argObjPtr = (void *)getCObjectPtr(env, arg);
         }
 
         // get the result from the c++ object (argObjPtr can be 0, it's cObj's responsibility to handle this if an error).
@@ -91,10 +91,10 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalProperty_isa_1property(JNIEn
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_add_1parameter(JNIEnv *env, jobject jobj, jobject arg)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        ICalParameter *icalparameter = getSubjectAsICalParameter(env, arg, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
+        ICalParameter *icalparameter = (ICalParameter *)getSubjectAsICalParameter(env, arg, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
 
         if (icalparameter != NULL) {
             cObj->add_parameter(*icalparameter);
@@ -109,10 +109,10 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_add_1parameter(JNIEnv *
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1parameter(JNIEnv *env, jobject jobj, jobject arg)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        ICalParameter *icalparameter = getSubjectAsICalParameter(env, arg, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
+        ICalParameter *icalparameter = (ICalParameter *)getSubjectAsICalParameter(env, arg, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
 
         if (icalparameter != NULL) {
             cObj->set_parameter(*icalparameter);
@@ -127,7 +127,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1parameter(JNIEnv *
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1parameter_1from_1string(JNIEnv *env, jobject jobj, jstring name, jstring value)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szName = env->GetStringUTFChars(name, NULL);
@@ -147,7 +147,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1parameter_1from_1s
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1parameter_1as_1string(JNIEnv *env, jobject jobj, jstring name)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szName = env->GetStringUTFChars(name, NULL);
@@ -168,7 +168,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1parameter_1as_1
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_remove_1parameter_by_kind(JNIEnv *env, jobject jobj, jint kind)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->remove_parameter_by_kind((icalparameter_kind)kind);
@@ -183,7 +183,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_remove_1parameter_by_ki
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_count_1parameters(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->count_parameters();
@@ -200,7 +200,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_count_1parameters(JNIEn
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1first_1parameter(JNIEnv *env, jobject jobj, jint kind)
 {
     jobject result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the first parameter from CObj
@@ -221,7 +221,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1first_1paramete
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1next_1parameter(JNIEnv *env, jobject jobj, jint kind)
 {
     jobject result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the first parameter from CObj
@@ -241,10 +241,10 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1next_1parameter
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1value(JNIEnv *env, jobject jobj, jobject arg)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        ICalValue *aValue = getSubjectAsICalValue(env, arg, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
+        const ICalValue *aValue = getSubjectAsICalValue(env, arg, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
         cObj->set_value(*aValue);
     }
 }
@@ -256,7 +256,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1value(JNIEnv *env,
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1value_1from_1string(JNIEnv *env, jobject jobj, jstring name, jstring value)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szName = env->GetStringUTFChars(name, NULL);
@@ -276,7 +276,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1value_1from_1strin
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1value(JNIEnv *env, jobject jobj)
 {
     jobject result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the first value from CObj
@@ -297,7 +297,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1value(JNIEnv *e
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1value_1as_1string(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_value_as_string();
@@ -315,7 +315,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1value_1as_1stri
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1name(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_name();
@@ -332,7 +332,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1name(JNIEnv *en
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1action(JNIEnv *env, jobject jobj, jint value)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->set_action((icalproperty_action)value);
@@ -347,7 +347,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1action(JNIEnv *env
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_get_1action(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->get_action();
@@ -363,7 +363,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_get_1action(JNIEnv *env
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1attendee(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -381,7 +381,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1attendee(JNIEnv *e
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1attendee(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_attendee();
@@ -398,7 +398,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1attendee(JNIEnv
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1comment(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -416,7 +416,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1comment(JNIEnv *en
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1comment(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const std::string commentStr = cObj->get_comment();
@@ -432,7 +432,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1comment(JNIEnv 
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1description(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -450,7 +450,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1description(JNIEnv
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1description(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_description();
@@ -467,7 +467,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1description(JNI
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1dtend(JNIEnv *env, jobject jobj, jobject arg)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aTime;
@@ -486,7 +486,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1dtend(JNIEnv *env,
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1dtend(JNIEnv *env, jobject jobj)
 {
     jobject result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the dtend time from CObj
@@ -506,7 +506,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1dtend(JNIEnv *e
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1dtstamp(JNIEnv *env, jobject jobj, jobject dtstamp)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aDTStamp;
@@ -525,7 +525,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1dtstamp(JNIEnv *en
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1dtstamp(JNIEnv *env, jobject jobj)
 {
     jobject result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the dtstamp time from CObj
@@ -545,7 +545,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1dtstamp(JNIEnv 
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1dtstart(JNIEnv *env, jobject jobj, jobject arg)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aTime;
@@ -564,7 +564,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1dtstart(JNIEnv *en
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1dtstart(JNIEnv *env, jobject jobj)
 {
     jobject result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the dtend time from CObj
@@ -584,7 +584,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1dtstart(JNIEnv 
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1due(JNIEnv *env, jobject jobj, jobject arg)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aTime;
@@ -603,7 +603,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1due(JNIEnv *env, j
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1due(JNIEnv *env, jobject jobj)
 {
     jobject result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the dtend time from CObj
@@ -623,7 +623,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1due(JNIEnv *env
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1duration(JNIEnv *env, jobject jobj, jobject arg)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaldurationtype aDuration;
@@ -642,7 +642,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1duration(JNIEnv *e
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1duration(JNIEnv *env, jobject jobj)
 {
     jobject result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the dtend time from CObj
@@ -662,7 +662,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1duration(JNIEnv
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1location(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -680,7 +680,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1location(JNIEnv *e
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1location(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_location();
@@ -697,7 +697,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1location(JNIEnv
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1method(JNIEnv *env, jobject jobj, jint value)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->set_method((icalproperty_method)value);
@@ -712,7 +712,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1method(JNIEnv *env
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_get_1method(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->get_method();
@@ -728,7 +728,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_get_1method(JNIEnv *env
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1organizer(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -746,7 +746,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1organizer(JNIEnv *
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1organizer(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const std::string organizerStr = cObj->get_organizer();
@@ -762,7 +762,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1organizer(JNIEn
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1owner(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -780,7 +780,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1owner(JNIEnv *env,
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1owner(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_owner();
@@ -797,7 +797,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1owner(JNIEnv *e
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1prodid(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -815,7 +815,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1prodid(JNIEnv *env
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1prodid(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_prodid();
@@ -832,7 +832,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1prodid(JNIEnv *
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1query(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -850,7 +850,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1query(JNIEnv *env,
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1query(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_query();
@@ -867,7 +867,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1query(JNIEnv *e
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1queryname(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -885,7 +885,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1queryname(JNIEnv *
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1queryname(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_queryname();
@@ -902,7 +902,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1queryname(JNIEn
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1repeat(JNIEnv *env, jobject jobj, jint value)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->set_repeat(value);
@@ -917,7 +917,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1repeat(JNIEnv *env
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_get_1repeat(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->get_repeat();
@@ -933,7 +933,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_get_1repeat(JNIEnv *env
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1summary(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -951,7 +951,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1summary(JNIEnv *en
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1summary(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_summary();
@@ -968,7 +968,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1summary(JNIEnv 
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1target(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -986,7 +986,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1target(JNIEnv *env
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1target(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_target();
@@ -1003,7 +1003,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1target(JNIEnv *
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1trigger(JNIEnv *env, jobject jobj, jobject arg)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltriggertype aTrigger;
@@ -1022,7 +1022,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1trigger(JNIEnv *en
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1trigger(JNIEnv *env, jobject jobj)
 {
     jobject result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the dtend time from CObj
@@ -1042,7 +1042,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1trigger(JNIEnv 
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1tzid(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -1060,7 +1060,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1tzid(JNIEnv *env, 
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1tzid(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_tzid();
@@ -1077,7 +1077,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1tzid(JNIEnv *en
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1uid(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -1095,7 +1095,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1uid(JNIEnv *env, j
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1uid(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_uid();
@@ -1150,7 +1150,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_init__I(JNIEnv *env, jo
 
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1status(JNIEnv *env, jobject jobj, jint value)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->set_status((icalproperty_status)value);
@@ -1165,7 +1165,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1status(JNIEnv *env
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_get_1status(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->get_status();
@@ -1181,7 +1181,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalProperty_get_1status(JNIEnv *env
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1relcalid(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -1200,7 +1200,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1relcalid(JNIEnv *e
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1relcalid(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_relcalid();
@@ -1218,7 +1218,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1relcalid(JNIEnv
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1exdate(JNIEnv *env, jobject jobj, jobject exdate)
 {
     // get the ICalProperty c++ object from jobj
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aExDate;
@@ -1238,7 +1238,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1exdate(JNIEnv *
 {
     jobject result = 0;
     // get the ICalProperty c++ object from jobj
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the exdate from CObj
@@ -1259,7 +1259,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1exdate(JNIEnv *
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1exrule(JNIEnv *env, jobject jobj, jobject exrule)
 {
     // get the ICalProperty c++ object from jobj
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         auto aExRule = icalrecurrencetype_new();
         if (copyObjToicalrecurrencetype(env, exrule, aExRule)) {
@@ -1277,7 +1277,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1exrule(JNIEnv *
 {
     jobject result = 0;
     // get the ICalProperty c++ object from jobj
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the exrule from CObj
@@ -1298,7 +1298,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1exrule(JNIEnv *
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1freebusy(JNIEnv *env, jobject jobj, jobject period)
 {
     // get the ICalProperty c++ object from jobj
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icalperiodtype aPeriod;
@@ -1318,7 +1318,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1freebusy(JNIEnv
 {
     jobject result = 0;
     // get the ICalProperty c++ object from jobj
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the period from CObj
@@ -1339,7 +1339,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1freebusy(JNIEnv
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1recurrenceid(JNIEnv *env, jobject jobj, jobject recurrenceid)
 {
     // get the ICalProperty c++ object from jobj
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aRecurrenceId;
@@ -1359,7 +1359,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1recurrenceid(JN
 {
     jobject result = 0;
     // get the ICalProperty c++ object from jobj
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the exdate from CObj
@@ -1380,7 +1380,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1recurrenceid(JN
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalProperty_set_1rrule(JNIEnv *env, jobject jobj, jobject rrule)
 {
     // get the ICalProperty c++ object from jobj
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto aRRule = icalrecurrencetype_new();
@@ -1400,7 +1400,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1rrule(JNIEnv *e
 {
     jobject result = 0;
     // get the ICalProperty c++ object from jobj
-    ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the rrule from CObj

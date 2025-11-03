@@ -100,7 +100,7 @@ VComponent::VComponent(const icalcomponent_kind &kind)
 
 std::string VComponent::as_ical_string()
 {
-    char *str = icalcomponent_as_ical_string(imp);
+    const char *str = icalcomponent_as_ical_string(imp);
 
     if (str == NULL) {
         throw icalerrno;
@@ -207,7 +207,7 @@ VComponent *VComponent::get_current_component()
 
 VComponent *VComponent::get_first_component(const icalcomponent_kind &kind)
 {
-    VComponent *result = NULL;
+    VComponent *result = NULL; // NOLINT(misc-const-correctness)
     icalcomponent *t = icalcomponent_get_first_component(imp, kind);
     if (t != NULL) {
         switch (kind) {
@@ -239,7 +239,7 @@ VComponent *VComponent::get_first_component(const icalcomponent_kind &kind)
 
 VComponent *VComponent::get_next_component(const icalcomponent_kind &kind)
 {
-    VComponent *result = NULL;
+    VComponent *result = NULL; // NOLINT(misc-const-correctness)
     icalcomponent *t = icalcomponent_get_next_component(imp, kind);
     if (t != NULL) {
         switch (kind) {
@@ -577,8 +577,8 @@ bool VComponent::update(VComponent &fromC, bool removeMissing)
             thisProp = new ICalProperty(prop->isa());
             this->add_property(thisProp);
         }
-        ICalValue *tempValue = prop->get_value();
-        ICalValue *value = new ICalValue(*tempValue); // clone the value
+        const ICalValue *tempValue = prop->get_value();
+        const ICalValue *value = new ICalValue(*tempValue); // clone the value
         thisProp->set_value(*value);
         delete tempValue;
         delete value;

@@ -57,9 +57,9 @@ using namespace LibICal;
 //-------------------------------------------------------
 // Returns a pointer to the subject (a c++ object) for the given surrogate (a java object)
 //-------------------------------------------------------
-void *getCObjectPtr(JNIEnv *env, jobject surrogate)
+const void *getCObjectPtr(JNIEnv *env, jobject surrogate)
 {
-    void *result = 0;
+    const void *result = 0;
     jclass jcls = env->GetObjectClass(surrogate);
     jfieldID fid = env->GetFieldID(jcls, "m_Obj", "J");
 
@@ -100,9 +100,9 @@ void setCObjectPtr(JNIEnv *env, jobject surrogate, void *subject)
 // Return the pointer to the subject (as a VComponent*) from the given surrogate.
 // If the subject is not a VComponent type, or if the subject is NULL, then return NULL.
 //-------------------------------------------------------
-VComponent *getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType)
+const VComponent *getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType)
 {
-    VComponent *result = (VComponent *)(getCObjectPtr(env, surrogateComponent));
+    const VComponent *result = (VComponent *)(getCObjectPtr(env, surrogateComponent));
 
     if (result == NULL) {
         throwException(env, exceptionType);
@@ -115,9 +115,9 @@ VComponent *getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int 
 // Return the pointer to the subject (as an ICalProperty*) from the given surrogate.
 // If the subject is not an ICalProperty type, or if the subject is NULL, then return NULL.
 //-------------------------------------------------------
-ICalProperty *getSubjectAsICalProperty(JNIEnv *env, jobject surrogateProperty, int exceptionType)
+const ICalProperty *getSubjectAsICalProperty(JNIEnv *env, jobject surrogateProperty, int exceptionType)
 {
-    ICalProperty *result = (ICalProperty *)(getCObjectPtr(env, surrogateProperty));
+    const ICalProperty *result = (ICalProperty *)(getCObjectPtr(env, surrogateProperty));
 
     if (result == NULL) {
         throwException(env, exceptionType);
@@ -130,9 +130,9 @@ ICalProperty *getSubjectAsICalProperty(JNIEnv *env, jobject surrogateProperty, i
 // Return the pointer to the subject (as an ICalValue*) from the given surrogate.
 // If the subject is not an ICalValue type, or if the subject is NULL, then return NULL.
 //-------------------------------------------------------
-ICalValue *getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int exceptionType)
+const ICalValue *getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int exceptionType)
 {
-    ICalValue *result = (ICalValue *)(getCObjectPtr(env, surrogateValue));
+    const ICalValue *result = (ICalValue *)(getCObjectPtr(env, surrogateValue));
 
     if (result == NULL) {
         throwException(env, exceptionType);
@@ -145,9 +145,9 @@ ICalValue *getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int except
 // Return the pointer to the subject (as an ICalParameter*) from the given surrogate.
 // If the subject is not an ICalParameter type, or if the subject is NULL, then return NULL.
 //-------------------------------------------------------
-ICalParameter *getSubjectAsICalParameter(JNIEnv *env, jobject surrogateParameter, int exceptionType)
+const ICalParameter *getSubjectAsICalParameter(JNIEnv *env, jobject surrogateParameter, int exceptionType)
 {
-    ICalParameter *result = (ICalParameter *)(getCObjectPtr(env, surrogateParameter));
+    const ICalParameter *result = (ICalParameter *)(getCObjectPtr(env, surrogateParameter));
 
     if (result == NULL) {
         throwException(env, exceptionType);
