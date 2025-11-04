@@ -54,7 +54,7 @@ jobs:
       matrix:
         configuration:
           - Debug
-    runs-on: macos-13
+    runs-on: macos-15
     env:
       XML_CATALOG_FILES: /usr/local/etc/xml/catalog
     steps:
