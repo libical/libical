@@ -23,7 +23,7 @@
     return i_cal_attach_new_full (icalattach_new_from_data (data, (icalattach_free_fn_t) (free_fn), free_fn_data), NULL);</custom>
   </method>
   <declaration position="body">
-static void unref_g_bytes(char *data, void *user_data)
+static void unref_g_bytes(char *data, void *user_data) // NOLINT(readability-non-const-parameter)
 {
     GBytes *bytes = user_data;
 
