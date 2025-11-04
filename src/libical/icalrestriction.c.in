@@ -241,6 +241,9 @@ static bool _check_restriction(icalcomponent *comp,
         /* First treat is as a 0/1 restriction */
         restr = ICAL_RESTRICTION_ZEROORONE;
     }
+    if (restr > ICAL_RESTRICTION_UNKNOWN) {
+        restr = ICAL_RESTRICTION_UNKNOWN;
+    }
 
     compare = icalrestriction_compare(restr, count);
 
@@ -606,7 +609,7 @@ static const icalrestriction_record *icalrestriction_get_restriction(
         start = &icalrestriction_records[0];
     }
 
-    for (rec = start; rec && rec->restriction != ICAL_RESTRICTION_NONE; rec++) {
+    for (rec = start; rec && rec->restriction < ICAL_RESTRICTION_UNKNOWN && rec->restriction != ICAL_RESTRICTION_NONE; rec++) {
 
         if (method == rec->method &&
             (component == ICAL_ANY_COMPONENT ||

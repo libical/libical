@@ -99,7 +99,7 @@ static char *skip_until(char *instances, icaltimetype t, int order)
             return 0;
         }
 
-        char tmp = next[-1];
+        char tmp = next[-1]; // NOLINT(clang-analyzer-security.ArrayBound)
         if (next[-1] == ',') {
             next[-1] = 0;
         }
