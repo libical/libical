@@ -24,8 +24,9 @@ ${new_full}
 {
     ${upperCamel} *object;$^${isBare}
     ${native} *clone;^$$^!${isBare}
-    if (native == NULL)
-        return NULL;^$
+    if (native == NULL) {
+        return NULL;
+    }^$
     ${new_full_extraCode}
     $^${isBare}
     clone = g_new (${native}, 1);

@@ -341,8 +341,9 @@ i_cal_object_construct(GType object_type,
 
     g_return_val_if_fail(object_type != G_TYPE_INVALID, NULL);
     g_return_val_if_fail(native != NULL, NULL);
-    if (owner)
+    if (owner) {
         g_return_val_if_fail(G_IS_OBJECT(owner), NULL);
+    }
 
     if (is_global_memory) {
         G_LOCK(global_objects);
@@ -550,8 +551,9 @@ void i_cal_object_set_owner(ICalObject *iobject, GObject *owner)
     ICalObjectPrivate *priv = i_cal_object_get_instance_private(iobject);
 
     g_return_if_fail(I_CAL_IS_OBJECT(iobject));
-    if (owner)
+    if (owner) {
         g_return_if_fail(G_IS_OBJECT(owner));
+    }
 
     LOCK_PROPS(priv);
 
@@ -590,8 +592,9 @@ GObject *i_cal_object_ref_owner(ICalObject *iobject)
     LOCK_PROPS(priv);
 
     owner = priv->owner;
-    if (owner)
+    if (owner) {
         g_object_ref(owner);
+    }
 
     UNLOCK_PROPS(priv);
 
@@ -703,13 +706,15 @@ void i_cal_object_set_always_destroy(ICalObject *iobject, gboolean value)
     LOCK_PROPS(priv);
 
     changed = (value ? 1 : 0) != (priv->always_destroy ? 1 : 0);
-    if (changed)
+    if (changed) {
         priv->always_destroy = value;
+    }
 
     UNLOCK_PROPS(priv);
 
-    if (changed)
+    if (changed) {
         g_object_notify(G_OBJECT(iobject), "always-destroy");
+    }
 }
 
 /**

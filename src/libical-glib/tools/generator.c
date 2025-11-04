@@ -2071,11 +2071,12 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
             }
 
             if (i == nameSpace_len) {
-                (void)g_stpcpy(buffer + strlen(buffer), "\t");
-                if (annotation_contains_nullable(parameter->annotations)) {
-                    (void)g_stpcpy(buffer + strlen(buffer), "if(");
+                gboolean with_nullable = annotation_contains_nullable(parameter->annotations);
+                (void)g_stpcpy(buffer + strlen(buffer), "    ");
+                if (with_nullable) {
+                    (void)g_stpcpy(buffer + strlen(buffer), "if (");
                     (void)g_stpcpy(buffer + strlen(buffer), parameter->name);
-                    (void)g_stpcpy(buffer + strlen(buffer), ")\n\t\t");
+                    (void)g_stpcpy(buffer + strlen(buffer), ") {\n        ");
                 }
                 nameSpaceUpperSnake = get_upper_snake_from_upper_camel(nameSpace);
                 nameUpperSnake = get_upper_snake_from_upper_camel(trueType + i);
@@ -2112,12 +2113,15 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
                 g_free(nameUpperSnake);
                 g_free(typeCheck);
                 (void)g_stpcpy(buffer + strlen(buffer), "\n");
+                if (with_nullable) {
+                    (void)g_stpcpy(buffer + strlen(buffer), "    }\n");
+                }
             }
 
             param_is_out = parameter_is_out(parameter);
             if (i != nameSpace_len && ((!param_is_out && !annotation_contains_nullable(parameter->annotations)) ||
                                        (param_is_out && !annotation_contains_optional(parameter->annotations)))) {
-                (void)g_stpcpy(buffer + strlen(buffer), "\t");
+                (void)g_stpcpy(buffer + strlen(buffer), "    ");
                 if (method->ret != NULL) {
                     (void)g_stpcpy(buffer + strlen(buffer), "g_return_val_if_fail (");
                     (void)g_stpcpy(buffer + strlen(buffer), parameter->name);

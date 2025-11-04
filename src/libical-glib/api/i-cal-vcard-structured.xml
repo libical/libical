@@ -49,8 +49,9 @@
     g_return_val_if_fail(self != NULL, NULL);
     g_return_val_if_fail(index &lt; i_cal_vcard_structured_get_num_fields(self), NULL);
     self_ical = (vcardstructuredtype *)i_cal_object_get_native((ICalObject *)self);
-    if (self_ical-&gt;field[index] == NULL)
+    if (self_ical-&gt;field[index] == NULL) {
         return NULL;
+    }
     return i_cal_vcard_str_array_new_full(self_ical-&gt;field[index], NULL);</custom>
   </method>
   <method name="i_cal_vcard_structured_as_vcard_string" corresponds="vcardstructured_as_vcard_string_r" kind="other" since="4.0">
