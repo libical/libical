@@ -7,7 +7,7 @@
 
 -->
 <structure namespace="ICal" name="Unknowntokenhandling">
-  <enum name="ICalUnknowntokenhandling" native_name="ical_unknown_token_handling" default_native="0">
+  <enum name="ICalUnknowntokenhandling" native_name="ical_unknown_token_handling" default_native="ICAL_TREAT_AS_ERROR">
     <element name="ICAL_ASSUME_IANA_TOKEN"/>
     <element name="ICAL_DISCARD_TOKEN"/>
     <element name="ICAL_TREAT_AS_ERROR"/>
