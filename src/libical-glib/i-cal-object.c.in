@@ -226,7 +226,7 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             "native",
             "Native",
             "Native libical structure",
-            G_PARAM_READWRITE |
+            G_PARAM_READWRITE | //NOLINT(clang-analyzer-optin.core.EnumCastOutOfRange)
             G_PARAM_CONSTRUCT_ONLY |
             G_PARAM_STATIC_STRINGS));
 
@@ -242,7 +242,7 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             "native-destroy-func",
             "Native-Destroy-Func",
             "GDestroyNotify function to use to destroy the native libical structure",
-            G_PARAM_READWRITE |
+            G_PARAM_READWRITE | //NOLINT(clang-analyzer-optin.core.EnumCastOutOfRange)
             G_PARAM_STATIC_STRINGS));
 
     /**
@@ -259,7 +259,7 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             "Is-Global-Memory",
             "Whether the native libical structure is from a global shared memory",
             FALSE,
-            G_PARAM_READWRITE |
+            G_PARAM_READWRITE | //NOLINT(clang-analyzer-optin.core.EnumCastOutOfRange)
             G_PARAM_CONSTRUCT_ONLY |
             G_PARAM_STATIC_STRINGS));
 
@@ -279,7 +279,7 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             "Always-Destroy",
             "Whether the native libical structure is freed even when the owner is set",
             FALSE,
-            G_PARAM_READWRITE |
+            G_PARAM_READWRITE | //NOLINT(clang-analyzer-optin.core.EnumCastOutOfRange)
             G_PARAM_STATIC_STRINGS));
 
     /**
@@ -296,7 +296,7 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             "Owner",
             "The native libical structure owner",
             G_TYPE_OBJECT,
-            G_PARAM_READWRITE |
+            G_PARAM_READWRITE | //NOLINT(clang-analyzer-optin.core.EnumCastOutOfRange)
             G_PARAM_STATIC_STRINGS));
 }
 
