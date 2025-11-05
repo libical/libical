@@ -446,7 +446,7 @@ gpointer i_cal_object_steal_native(ICalObject *iobject)
 
     LOCK_PROPS(priv);
 
-    native = g_steal_pointer(&priv->native);
+    native = g_steal_pointer(&priv->native); //NOLINT(bugprone-multi-level-implicit-pointer-conversion)
 
     UNLOCK_PROPS(priv);
 
