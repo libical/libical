@@ -106,7 +106,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(ICalObject, i_cal_object, G_TYPE_OBJECT)
 #define LOCK_PROPS(x) g_mutex_lock (&((x)->props_lock))
 #define UNLOCK_PROPS(x) g_mutex_unlock (&((x)->props_lock))
 
-enum
+enum PropID
 {
     PROP_0,
     PROP_NATIVE,
@@ -124,7 +124,7 @@ static void i_cal_object_set_property(GObject *object, guint property_id,
 
     g_return_if_fail(I_CAL_IS_OBJECT(object));
 
-    switch (property_id) {
+    switch ((enum PropID)property_id) {
     case PROP_NATIVE:
         /* no need for LOCK_PROPS() here, these can be set only during construction time */
         g_return_if_fail(priv->native == NULL);
@@ -147,6 +147,8 @@ static void i_cal_object_set_property(GObject *object, guint property_id,
     case PROP_OWNER:
         i_cal_object_set_owner(iobject, g_value_get_object(value));
         return;
+    case PROP_0:
+        break;
     }
 
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -159,7 +161,7 @@ static void i_cal_object_get_property(GObject *object, guint property_id,
 
     g_return_if_fail(I_CAL_IS_OBJECT(object));
 
-    switch (property_id) {
+    switch ((enum PropID)property_id) {
     case PROP_NATIVE:
         g_value_set_pointer(value, i_cal_object_get_native(iobject));
         return;
@@ -179,6 +181,8 @@ static void i_cal_object_get_property(GObject *object, guint property_id,
     case PROP_OWNER:
         g_value_take_object(value, i_cal_object_ref_owner(iobject));
         return;
+    case PROP_0:
+        break;
     }
 
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
