@@ -83,7 +83,7 @@ ICalParameter::ICalParameter(const icalparameter_kind &kind)
 
 std::string ICalParameter::as_ical_string()
 {
-    char *str = icalparameter_as_ical_string(imp);
+    const char *str = icalparameter_as_ical_string(imp);
 
     if (str == NULL) {
         throw icalerrno;
