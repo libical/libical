@@ -517,8 +517,9 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
 
                 new_url = malloc(len);
                 if (new_url) {
-                    strcpy(new_url, "file://");
-                    strcat(new_url, url);
+                    strncpy(new_url, "file://", len);
+                    strncat(new_url, url, len);
+                    new_url[len - 1] = '\0';
 
                     icalattach *new_attach = icalattach_new_from_url(new_url);
                     free(new_url);

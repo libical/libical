@@ -458,10 +458,12 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 
         standard_len = strlen(standard_tzname);
         daylight_len = strlen(daylight_tzname);
-        tznames = icalmemory_new_buffer(standard_len + daylight_len + 2);
-        strcpy(tznames, standard_tzname);
+        const size_t len_tznames = standard_len + daylight_len + 2;
+        tznames = icalmemory_new_buffer(len_tznames);
+        strncpy(tznames, standard_tzname, len_tznames);
         tznames[standard_len] = '/';
-        strcpy(tznames + standard_len + 1, daylight_tzname);
+        strncpy(tznames + standard_len + 1, daylight_tzname, len_tznames - standard_len - 1);
+        tznames[len_tznames - 1] = '\0';
         return tznames;
     } else {
         const char *tznames;
@@ -2220,10 +2222,12 @@ void icaltimezone_set_zone_directory(const char *path)
         icaltimezone_free_zone_directory();
     }
 
-    zone_files_directory = icalmemory_new_buffer(strlen(path) + 1);
+    const size_t len_path = strlen(path) + 1;
+    zone_files_directory = icalmemory_new_buffer(len_path);
 
     if (zone_files_directory != NULL) {
-        strcpy(zone_files_directory, path);
+        strncpy(zone_files_directory, path, len_path);
+        zone_files_directory[len_path - 1] = '\0';
     }
 }
 

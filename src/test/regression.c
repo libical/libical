@@ -8,6 +8,9 @@
  The original author is Eric Busboom
 ======================================================================*/
 
+//Don't care about insecureAPI.strcpy issues in this test program
+//NOLINTBEGIN(clang-analyzer-security.insecureAPI.strcpy)
+
 #define NO_DEPRECATION_WARNINGS // do not complain about our own deprecated usage
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -7064,6 +7067,8 @@ int main(int argc, char *argv[])
     /* return a non-zero exit code if a test failed */
     return failed_count > 0;
 }
+
+//NOLINTEND(clang-analyzer-security.insecureAPI.strcpy)
 
 /* make sure to keep tabs in our test strings */
 /* Local Variables:    */

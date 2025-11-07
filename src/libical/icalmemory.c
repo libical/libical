@@ -219,13 +219,15 @@ char *icalmemory_tmp_copy(const char *str)
         return NULL;
     }
 
-    b = icalmemory_tmp_buffer(strlen(str) + 1);
+    const size_t len_b = strlen(str) + 1;
+    b = icalmemory_tmp_buffer(len_b);
 
     if (!b) {
         return NULL;
     }
 
-    strcpy(b, str);
+    strncpy(b, str, len_b);
+    b[len_b] = '\0';
 
     return b;
 }
@@ -389,7 +391,7 @@ void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const ch
         *buf = new_buf;
     }
 
-    strcpy(*pos, string);
+    strcpy(*pos, string); //NOLINT(clang-analyzer-security.insecureAPI.strcpy)
 
     *pos += string_length;
 }

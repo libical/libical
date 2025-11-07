@@ -62,7 +62,9 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
         return 0;
     }
 
-    strcpy(clone->id, old->id);
+    // id is a LIBICAL_VCARDVALUE_ID_LENGTH-char string (see vcardvalue_impl def)
+    memset(clone->id, 0, LIBICAL_VCARDVALUE_ID_LENGTH);
+    strncpy(clone->id, old->id, LIBICAL_VCARDVALUE_ID_LENGTH);
     clone->kind = old->kind;
     clone->size = old->size;
 
@@ -546,7 +548,7 @@ static char *vcardvalue_boolean_as_vcard_string_r(const vcardvalue *value)
 
     data = vcardvalue_get_integer(value);
 
-    strcpy(str, data ? "TRUE" : "FALSE");
+    strncpy(str, data ? "TRUE" : "FALSE", 6);
 
     return str;
 }
@@ -637,9 +639,11 @@ static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
     icalerror_check_arg_rz((value != 0), "value");
     data = value->data.v_string;
 
-    str = (char *)icalmemory_new_buffer(strlen(data) + 1);
+    const size_t len_data = strlen(data) + 1;
+    str = (char *)icalmemory_new_buffer(len_data);
 
-    strcpy(str, data);
+    strncpy(str, data, len_data);
+    str[len_data - 1] = '\0';
 
     return str;
 }
