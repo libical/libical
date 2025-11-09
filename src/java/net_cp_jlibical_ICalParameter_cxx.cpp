@@ -33,7 +33,7 @@ using namespace LibICal;
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalParameter_as_1ical_1string(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalParameter *cObj = (ICalParameter *)getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->as_ical_string();
@@ -51,7 +51,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalParameter_as_1ical_1string(JN
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_isa(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalParameter *cObj = (ICalParameter *)getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->isa();
@@ -70,13 +70,13 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalParameter_isa_1parameter(JNI
     jboolean result = 0;
 
     // get the c++ object from the jobj
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalParameter *cObj = (ICalParameter *)getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         // get the c++ object from the arg
         void *argObjPtr = 0;
 
         if (arg != NULL) {
-            argObjPtr = getCObjectPtr(env, arg);
+            argObjPtr = (void *)getCObjectPtr(env, arg);
         }
 
         // get the result from the c++ object (candidateValue can be 0, it's cObj's responsibility to handle this if an error).
@@ -94,7 +94,7 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalParameter_isa_1parameter(JNI
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalParameter_get_1language(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_language();
@@ -111,7 +111,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalParameter_get_1language(JNIEn
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalParameter_set_1language(JNIEnv *env, jobject jobj, jstring str)
 {
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalParameter *cObj = (ICalParameter *)getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -129,7 +129,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalParameter_set_1language(JNIEnv *
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_get_1encoding(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->get_encoding();
@@ -145,7 +145,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_get_1encoding(JNIEnv *
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalParameter_set_1encoding(JNIEnv *env, jobject jobj, jint value)
 {
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalParameter *cObj = (ICalParameter *)getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->set_encoding((icalparameter_encoding)value);
@@ -160,7 +160,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalParameter_set_1encoding(JNIEnv *
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_get_1role(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->get_role();
@@ -176,7 +176,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_get_1role(JNIEnv *env,
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalParameter_set_1role(JNIEnv *env, jobject jobj, jint value)
 {
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalParameter *cObj = (ICalParameter *)getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->set_role((icalparameter_role)value);
@@ -191,7 +191,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalParameter_set_1role(JNIEnv *env,
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_get_1partstat(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->get_partstat();
@@ -207,7 +207,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_get_1partstat(JNIEnv *
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalParameter_set_1partstat(JNIEnv *env, jobject jobj, jint value)
 {
-    ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    ICalParameter *cObj = (ICalParameter *)getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->set_partstat((icalparameter_partstat)value);

@@ -2296,7 +2296,8 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
     }
 
     snprintf(suffix_buf, sizeof(suffix_buf), "%i", max_suffix + 1);
-    new_tzid = icalmemory_new_buffer(tzid_len + strlen(suffix_buf) + 1);
+    const size_t len_new_tzid = tzid_len + strlen(suffix_buf) + 1;
+    new_tzid = icalmemory_new_buffer(len_new_tzid);
     if (!new_tzid) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         icalmemory_free_buffer(tzid_copy);
@@ -2304,7 +2305,8 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
     }
 
     strncpy(new_tzid, tzid, tzid_len);
-    strcpy(new_tzid + tzid_len, suffix_buf);
+    strncpy(new_tzid + tzid_len, suffix_buf, len_new_tzid);
+    new_tzid[len_new_tzid - 1] = '\0';
     icalarray_append(tzids_to_rename, tzid_copy);
     icalarray_append(tzids_to_rename, new_tzid);
     icalmemory_free_buffer(tzid_copy);

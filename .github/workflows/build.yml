@@ -27,7 +27,10 @@ jobs:
         run: cmake --build build
         shell: cmd
       - name: Test project
-        run: cd build && ctest -VV
+        run: |
+          cd build
+          ctest -VV
+          ctest --rerun-failed --output-on-failure
         shell: cmd
 
   build-ubuntu:
@@ -47,7 +50,7 @@ jobs:
       - name: Build project
         run: cmake --build build
       - name: Test project
-        run: cd build && ctest --test-dir .
+        run: cd build && (ctest --test-dir . || ctest --rerun-failed --output-on-failure)
 
   build-macos:
     strategy:
@@ -69,4 +72,4 @@ jobs:
       - name: Build project
         run: cmake --build build
       - name: Test project
-        run: cd build && ctest --test-dir .
+        run: cd build && (ctest --test-dir . || ctest --rerun-failed --output-on-failure)

@@ -458,10 +458,12 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 
         standard_len = strlen(standard_tzname);
         daylight_len = strlen(daylight_tzname);
-        tznames = icalmemory_new_buffer(standard_len + daylight_len + 2);
-        strcpy(tznames, standard_tzname);
+        const size_t len_tznames = standard_len + daylight_len + 2;
+        tznames = icalmemory_new_buffer(len_tznames);
+        strncpy(tznames, standard_tzname, len_tznames);
         tznames[standard_len] = '/';
-        strcpy(tznames + standard_len + 1, daylight_tzname);
+        strncpy(tznames + standard_len + 1, daylight_tzname, len_tznames - standard_len - 1);
+        tznames[len_tznames - 1] = '\0';
         return tznames;
     } else {
         const char *tznames;
@@ -1605,25 +1607,41 @@ static bool fetch_lat_long_from_string(const char *str,
                                        int *latitude_seconds,
                                        int *longitude_degrees, int *longitude_minutes,
                                        int *longitude_seconds,
-                                       char *location)
+                                       char *location, size_t len_location)
 {
     size_t len;
     const char *loc, *temp;
     char *sptr, *lat, *lon;
 
+    if (!location || !len_location) {
+        return false;
+    }
+
     /* We need to parse the latitude/longitude coordinates and location fields  */
+    const size_t len_str = strlen(str);
+    size_t i = 0;
     sptr = (char *)str;
     while ((*sptr != '\t') && (*sptr != '\0')) {
         sptr++;
+        i++;
+    }
+    if (i >= len_str) {
+        return false;
     }
     temp = ++sptr;
     while (*sptr != '\t' && *sptr != '\0') {
         sptr++;
     }
     len = (size_t)(ptrdiff_t)(sptr - temp);
+    if (len == 0) {
+        return false;
+    }
     lat = (char *)icalmemory_new_buffer(len + 1);
+    if (!lat) {
+        return false;
+    }
     memset(lat, '\0', len + 1);
-    strncpy(lat, temp, len);
+    strncpy(lat, temp, len + 1);
     lat[len] = '\0';
     while ((*sptr != '\t') && (*sptr != '\0')) {
         sptr++;
@@ -1633,6 +1651,9 @@ static bool fetch_lat_long_from_string(const char *str,
         sptr++;
     }
     len = (size_t)(ptrdiff_t)(sptr - loc);
+    if (len >= len_location) {
+        len = len_location - 1;
+    }
     strncpy(location, loc, len);
     location[len] = '\0';
 
@@ -1728,7 +1749,10 @@ static void icaltimezone_parse_zone_tab(void)
     }
 
 #if !defined(__clang_analyzer__) || defined(__cppcheck__)
-    while (fgets(buf, (int)sizeof(buf), fp)) {
+    while (!feof(fp) && !ferror(fp) && fgets(buf, (int)sizeof(buf), fp)) {
+        if (buf[0] == '\0') {
+            break;
+        }
         if (*buf == '#') {
             continue;
         }
@@ -1742,7 +1766,7 @@ static void icaltimezone_parse_zone_tab(void)
                 if (sscanf(buf, "%1000s", location) != 1) { /*limit location to 1000chars */
                     /*increase as needed */
                     /*see location and buf declarations */
-                    icalerrprintf("Invalid timezone description line: %s\n", buf);
+                    icalerrprintf("%s: Invalid timezone description line: %s\n", filename, buf);
                     continue;
                 }
             } else if (sscanf(buf, "%4d%2d%2d %4d%2d%2d %1000s", /*limit location to 1000chars */
@@ -1752,7 +1776,7 @@ static void icaltimezone_parse_zone_tab(void)
                               &latitude_seconds,
                               &longitude_degrees, &longitude_minutes,
                               &longitude_seconds, location) != 7) {
-                icalerrprintf("Invalid timezone description line: %s\n", buf);
+                icalerrprintf("%s: Invalid timezone description line: %s\n", filename, buf);
                 continue;
             }
         } else {
@@ -1760,8 +1784,12 @@ static void icaltimezone_parse_zone_tab(void)
             if (fetch_lat_long_from_string(buf, &latitude_degrees, &latitude_minutes,
                                            &latitude_seconds,
                                            &longitude_degrees, &longitude_minutes,
-                                           &longitude_seconds, location)) {
-                icalerrprintf("Invalid timezone description line: %s\n", buf);
+                                           &longitude_seconds, location, sizeof(location))) {
+                icalerrprintf("%s: Invalid timezone description line: %s\n", filename, buf);
+                continue;
+            }
+            if (location[0] == '\0') {
+                icalerrprintf("%s: Invalid timezone location: %s\n", filename, buf);
                 continue;
             }
         }
@@ -2220,10 +2248,12 @@ void icaltimezone_set_zone_directory(const char *path)
         icaltimezone_free_zone_directory();
     }
 
-    zone_files_directory = icalmemory_new_buffer(strlen(path) + 1);
+    const size_t len_path = strlen(path) + 1;
+    zone_files_directory = icalmemory_new_buffer(len_path);
 
     if (zone_files_directory != NULL) {
-        strcpy(zone_files_directory, path);
+        strncpy(zone_files_directory, path, len_path);
+        zone_files_directory[len_path - 1] = '\0';
     }
 }
 

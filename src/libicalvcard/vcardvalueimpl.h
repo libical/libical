@@ -13,10 +13,11 @@
 #include "vcardproperty.h"
 #include "vcardtime.h"
 
+#define LIBICAL_VCARDVALUE_ID_LENGTH 5
 struct vcardvalue_impl {
     vcardvalue_kind kind; /* the kind that is visible from the outside */
 
-    char id[5];
+    char id[LIBICAL_VCARDVALUE_ID_LENGTH];
     int size;
     vcardproperty *parent;
     char *x_value;

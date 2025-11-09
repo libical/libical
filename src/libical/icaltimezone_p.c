@@ -157,14 +157,14 @@ static long long int decode64(const void *ptr)
     }
 }
 
-static char *zname_from_stridx(char *str, size_t idx)
+static char *zname_from_stridx(char *str, size_t len_str, size_t idx)
 {
     size_t i;
     size_t size;
     char *ret;
 
     i = idx;
-    while (str[i] != '\0') {
+    while (i < len_str && str[i] != '\0') {
         i++;
     }
 
@@ -519,7 +519,9 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
     }
-    trans_idx = icalmemory_new_buffer((num_trans + 1) * sizeof(int)); // +1 for TZ string
+    const size_t len_types = (num_types + 2) * sizeof(ttinfo);  // +2 for TZ string
+    const size_t len_trans_idx = (num_trans + 1) * sizeof(int); // +1 for TZ string
+    trans_idx = icalmemory_new_buffer(len_trans_idx);
     if (trans_idx == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -533,7 +535,11 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
         EFREAD(r_trans, (size_t)trans_size, num_trans, f);
         temp = r_trans;
         for (i = 0; i < num_trans && !feof(f) && !ferror(f); i++) {
-            trans_idx[i] = fgetc(f);
+            int c = fgetc(f);
+            if (c < 0 || c >= (int)len_types) {
+                break;
+            }
+            trans_idx[i] = c; // possibly tainted
             if (trans_size == 8) {
                 transitions[i] = (icaltime_t)decode64(r_trans);
             } else {
@@ -543,8 +549,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
         }
         r_trans = temp;
     }
-
-    types = icalmemory_new_buffer((num_types + 2) * sizeof(ttinfo)); // +2 for TZ string
+    types = icalmemory_new_buffer(len_types);
     if (types == NULL) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         goto error;
@@ -613,7 +618,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
 
     for (i = 0; i < num_types; i++) {
         /* coverity[tainted_data] */
-        types[i].zname = zname_from_stridx(znames, types[i].abbr);
+        types[i].zname = zname_from_stridx(znames, num_chars, types[i].abbr);
     }
 
     /* Read the footer */
@@ -731,11 +736,11 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
         enum icalrecurrencetype_weekday dow = ICAL_NO_WEEKDAY;
 
         prev_idx = idx;
-        idx = trans_idx[i];
+        idx = trans_idx[i]; // possibly tainted
         start = transitions[i] + types[prev_idx].gmtoff;
         icaltime = icaltime_from_timet_with_zone(start, 0, NULL);
 
-        if (types[idx].isdst) {
+        if (idx >= 0 && idx < (int)len_types && types[idx].isdst) { //NOLINT(clang-analyzer-security.ArrayBound)
             zone = &daylight;
         } else {
             zone = &standard;

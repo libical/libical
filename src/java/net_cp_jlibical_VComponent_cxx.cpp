@@ -38,7 +38,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_as_1ical_1string(JNIEn
 {
     jstring result = NULL;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->as_ical_string();
@@ -57,7 +57,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_VComponent_isa(JNIEnv *env, jobject 
 {
     jint result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->isa();
@@ -76,13 +76,13 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_VComponent_isa_1component(JNIEnv
     jboolean result = 0;
 
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         void *candidateValue = 0;
 
         if (candidateObj != NULL) {
             // get the c++ object from candidateObj (as long)
-            candidateValue = getCObjectPtr(env, candidateObj);
+            candidateValue = (void *)getCObjectPtr(env, candidateObj);
         }
 
         // get the result from the c++ object (candidateValue can be 0, it's cObj's responsibility to handle this if an error).
@@ -100,13 +100,13 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_VComponent_isa_1component(JNIEnv
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_add_1property(JNIEnv *env, jobject jobj, jobject jprop)
 {
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         // get the ICalProperty c++ object from jprop
-        ICalProperty *icalProperty = getSubjectAsICalProperty(env, jprop, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
+        const ICalProperty *icalProperty = getSubjectAsICalProperty(env, jprop, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
 
         if (icalProperty != NULL) {
-            cObj->add_property(icalProperty);
+            cObj->add_property((ICalProperty *)icalProperty);
         }
     }
 }
@@ -119,13 +119,13 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_add_1property(JNIEnv *env
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_remove_1property(JNIEnv *env, jobject jobj, jobject jprop)
 {
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         // get the ICalProperty c++ object from jprop
-        ICalProperty *icalProperty = getSubjectAsICalProperty(env, jprop, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
+        const ICalProperty *icalProperty = getSubjectAsICalProperty(env, jprop, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
 
         if (icalProperty != NULL) {
-            cObj->remove_property(icalProperty);
+            cObj->remove_property((ICalProperty *)icalProperty);
         }
     }
 }
@@ -140,7 +140,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_VComponent_count_1properties(JNIEnv 
     jint result = 0;
 
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         result = cObj->count_properties((icalproperty_kind)kind);
     }
@@ -157,7 +157,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1current_1property
 {
     jobject result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the current property from CObj
@@ -179,7 +179,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1first_1property(J
 {
     jobject result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the first property from CObj
@@ -200,7 +200,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1first_1property(J
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1next_1property(JNIEnv *env, jobject jobj, jint kind)
 {
     jobject result = 0;
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the next property from CObj
@@ -221,7 +221,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1next_1property(JN
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1inner(JNIEnv *env, jobject jobj)
 {
     jobject result = 0;
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the next property from CObj
@@ -242,10 +242,10 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1inner(JNIEnv *env
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_add_1component(JNIEnv *env, jobject jobj, jobject jcomp)
 {
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         // get the VComponent c++ object from jcomp
-        VComponent *aComponent = getSubjectAsVComponent(env, jcomp, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
+        VComponent *aComponent = (VComponent *)getSubjectAsVComponent(env, jcomp, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
 
         if (aComponent != NULL) {
             cObj->add_component(aComponent);
@@ -261,10 +261,10 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_add_1component(JNIEnv *en
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_remove_1component(JNIEnv *env, jobject jobj, jobject jcomp)
 {
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         // get the VComponent c++ object from jcomp
-        VComponent *aComponent = getSubjectAsVComponent(env, jcomp, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
+        VComponent *aComponent = (VComponent *)getSubjectAsVComponent(env, jcomp, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
 
         if (aComponent != NULL) {
             cObj->remove_component(aComponent);
@@ -282,7 +282,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_VComponent_count_1components(JNIEnv 
     jint result = 0;
 
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
         result = cObj->count_components((icalcomponent_kind)kind);
     }
@@ -298,7 +298,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_VComponent_count_1components(JNIEnv 
 JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1current_1component(JNIEnv *env, jobject jobj)
 {
     jobject result = 0;
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the next property from CObj
@@ -320,7 +320,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1first_1component(
 {
     jobject result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the first component from CObj
@@ -342,7 +342,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1next_1component(J
 {
     jobject result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the first component from CObj
@@ -364,7 +364,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtstart(JNIEnv *e
 {
     jobject result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the dtstart time from CObj
@@ -385,7 +385,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtstart(JNIEnv *e
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1dtstart(JNIEnv *env, jobject jobj, jobject dtstart)
 {
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aStartTime;
@@ -405,7 +405,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtend(JNIEnv *env
 {
     jobject result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the dtend time from CObj
@@ -426,7 +426,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtend(JNIEnv *env
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1dtend(JNIEnv *env, jobject jobj, jobject dtend)
 {
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype anEndTime;
@@ -446,7 +446,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1duration(JNIEnv *
 {
     jobject result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the duration time from CObj
@@ -467,7 +467,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1duration(JNIEnv *
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1duration(JNIEnv *env, jobject jobj, jobject duration)
 {
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaldurationtype aDuration;
@@ -486,7 +486,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1duration(JNIEnv *env
 JNIEXPORT jint JNICALL Java_net_cp_jlibical_VComponent_get_1method(JNIEnv *env, jobject jobj)
 {
     jint result = 0;
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         result = cObj->get_method();
@@ -502,7 +502,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_VComponent_get_1method(JNIEnv *env, 
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1method(JNIEnv *env, jobject jobj, jint value)
 {
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         cObj->set_method((icalproperty_method)value);
@@ -517,7 +517,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1method(JNIEnv *env, 
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1summary(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_summary();
@@ -534,7 +534,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1summary(JNIEnv *e
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1summary(JNIEnv *env, jobject jobj, jstring str)
 {
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -553,7 +553,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtstamp(JNIEnv *e
 {
     jobject result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the recurrenceid from CObj
@@ -574,7 +574,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtstamp(JNIEnv *e
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1dtstamp(JNIEnv *env, jobject jobj, jobject dtstamp)
 {
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aDTStamp;
@@ -593,7 +593,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1dtstamp(JNIEnv *env,
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1location(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_location();
@@ -610,7 +610,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1location(JNIEnv *
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1location(JNIEnv *env, jobject jobj, jstring str)
 {
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -628,7 +628,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1location(JNIEnv *env
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1description(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_description();
@@ -645,7 +645,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1description(JNIEn
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1description(JNIEnv *env, jobject jobj, jstring str)
 {
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto szTemp = env->GetStringUTFChars(str, NULL);
@@ -662,7 +662,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1description(JNIEnv *
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1uid(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_uid();
@@ -679,7 +679,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1uid(JNIEnv *env, 
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1uid(JNIEnv *env, jobject jobj, jstring str)
 {
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -698,7 +698,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1first_1real_1comp
 {
     jobject result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the first component from CObj
@@ -755,7 +755,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_init__I(JNIEnv *env, jobj
  */
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1relcalid(JNIEnv *env, jobject jobj, jstring str)
 {
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         const char *szTemp = env->GetStringUTFChars(str, NULL);
@@ -773,7 +773,7 @@ JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1relcalid(JNIEnv *env
 JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1relcalid(JNIEnv *env, jobject jobj)
 {
     jstring result = NULL;
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         auto icalStr = cObj->get_relcalid();
@@ -792,7 +792,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1recurrenceid(JNIE
 {
     jobject result = 0;
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    const VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         // get the recurrenceid from CObj
@@ -813,7 +813,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1recurrenceid(JNIE
 JNIEXPORT void JNICALL Java_net_cp_jlibical_VComponent_set_1recurrenceid(JNIEnv *env, jobject jobj, jobject recurrenceid)
 {
     // get the VComponent c++ object from jobj
-    VComponent *cObj = getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
+    VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
         icaltimetype aRecurrenceId;

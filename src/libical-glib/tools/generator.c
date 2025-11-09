@@ -1808,10 +1808,10 @@ gchar *get_source_method_proto(Method *method)
 
     paddingLength = (gint)strlen(method->name) + 2;
     padding = g_new(gchar, (gsize)(paddingLength + 1));
+    memset(padding, 0, paddingLength + 1);
     for (iter = 0; iter < paddingLength; iter++) {
         padding[iter] = ' ';
     }
-    padding[iter] = '\0';
 
     /* Generate all the parameters */
     if (method->parameters == NULL) {

@@ -30,14 +30,14 @@ struct icalrecurrencetype;
 struct icalperiodtype;
 
 // get & set
-void *getCObjectPtr(JNIEnv *env, jobject surrogate);
+const void *getCObjectPtr(JNIEnv *env, jobject surrogate);
 void setCObjectPtr(JNIEnv *env, jobject surrogate, void *subject);
 
 // type-safe getters
-LibICal::VComponent *getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType);
-LibICal::ICalProperty *getSubjectAsICalProperty(JNIEnv *env, jobject surrogateProperty, int exceptionType);
-LibICal::ICalValue *getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int exceptionType);
-LibICal::ICalParameter *getSubjectAsICalParameter(JNIEnv *env, jobject surrogateParameter, int exceptionType);
+const LibICal::VComponent *getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType);
+const LibICal::ICalProperty *getSubjectAsICalProperty(JNIEnv *env, jobject surrogateProperty, int exceptionType);
+const LibICal::ICalValue *getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int exceptionType);
+const LibICal::ICalParameter *getSubjectAsICalParameter(JNIEnv *env, jobject surrogateParameter, int exceptionType);
 
 bool copyObjToicaltimetype(JNIEnv *env, jobject src, icaltimetype *dest);
 bool copyObjToicaltriggertype(JNIEnv *env, jobject src, icaltriggertype *dest);
