@@ -309,6 +309,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     42536390
     448424495
     448717854
+    458943970 # Heap-buffer-overflow WRITE 1
     usban
     usban2
     usban3

@@ -227,7 +227,6 @@ char *icalmemory_tmp_copy(const char *str)
     }
 
     strncpy(b, str, len_b);
-    b[len_b] = '\0';
 
     return b;
 }
