@@ -665,6 +665,7 @@ replace_variables_in_list(/*const*/ GList *src,
                         }
                     }
                     g_strfreev(strv);
+                    g_free(text);
                 } else {
                     des = g_list_prepend(des, text);
                 }
