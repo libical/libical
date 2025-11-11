@@ -2244,7 +2244,7 @@ parse_api_templates(void)
         return NULL;
     }
 
-    api_templates = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, (GDestroyNotify)g_ptr_array_unref);
+    api_templates = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, (GDestroyNotify)template_data_free);
 
     for (child = xmlFirstElementChild(node); child != NULL; child = xmlNextElementSibling(child)) {
         if (xmlStrcmp(child->name, (const xmlChar *)"method-template") == 0) {
