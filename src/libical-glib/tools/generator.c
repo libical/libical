@@ -2692,6 +2692,8 @@ int main(int argc, char *argv[])
     const gchar *apis_dir;
     gint res;
 
+    g_set_prgname("ical-glib-src-generator");
+
     if (argc < 3) {
         fprintf(stderr,
                 "Requires two arguments, the first is path to templates, "
