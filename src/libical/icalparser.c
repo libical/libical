@@ -586,12 +586,13 @@ icalcomponent *icalparser_parse(icalparser *parser,
     icalcomponent *c;
     icalcomponent *root = 0;
     icalerrorstate es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
-    int cont;
+    bool cont = false;
 
     icalerror_check_arg_rz((parser != 0), "parser");
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
 
+    size_t bad_lines = 0;
     do {
         line = icalparser_get_line(parser, line_gen_func);
 
@@ -623,13 +624,15 @@ icalcomponent *icalparser_parse(icalparser *parser,
                 /* Badness */
                 icalassert(0);
             }
+        } else {
+            bad_lines++; // track the number of possibly bogus data lines
         }
-        cont = 0;
+        cont = false;
         if (line != 0) {
             icalmemory_free_buffer(line);
-            cont = 1;
+            cont = true;
         }
-    } while (cont);
+    } while (cont && bad_lines < 10000); // limit the number of possibly bogus data lines
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 
