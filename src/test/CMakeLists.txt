@@ -305,6 +305,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     69344
     69527
     69888 # cpu timeout fails beyond 60s
+    42521679 # out-of-memory
     42536507 # cpu timeout fails beyond 60s
     42536390
     448424495
