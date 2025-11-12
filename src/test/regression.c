@@ -11,7 +11,6 @@
 //Don't care about insecureAPI.strcpy issues in this test program
 //NOLINTBEGIN(clang-analyzer-security.insecureAPI.strcpy)
 
-#define NO_DEPRECATION_WARNINGS // do not complain about our own deprecated usage
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
