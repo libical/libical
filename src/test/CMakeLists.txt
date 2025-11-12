@@ -314,7 +314,8 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     usban
     usban2
     usban3
-    usban4 # integer overflow in pvl_newlist
+    usban4 # integer overflow in icalpvl_newlist
+    usban5 # integer overflow in icalpvl_new_element
   )
     add_test(
       NAME fuzz1test${fuzztest}
