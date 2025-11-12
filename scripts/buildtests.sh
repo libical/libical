@@ -312,9 +312,13 @@ ASAN_BUILD() {
   echo "===== START ASAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libasan.so" "-a"
   SET_GCC
+  ulimit -S -t 60      # oss-fuzz uses 60 seconds
+  ulimit -S -m 2621440 # oss-fuzz uses 2560Mb (many systems do not honor this limit)
   #asan also does leak detection. do that in the specific leak sanitizer
   export ASAN_OPTIONS="detect_leaks=0:verify_asan_link_order=0" #link_order is needed with different ld on Fedora (like gold)
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
+  ulimit -S -t unlimited
+  ulimit -S -m unlimited
   echo "===== END ASAN BUILD: $1 ======"
 }
 #function LSAN_BUILD:
@@ -380,8 +384,8 @@ UBSAN_BUILD() {
   echo "===== START UBSAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libubsan.so" "-a"
   SET_GCC
-  ulimit -S -t 180     # oss-fuzz uses 60 seconds which is too low for us
-  ulimit -S -m 2621440 # oss-fuzz uses 2560Mb
+  ulimit -S -t 60      # oss-fuzz uses 60 seconds
+  ulimit -S -m 2621440 # oss-fuzz uses 2560Mb (many systems do not honor this limit)
   export UBSAN_OPTIONS=allocator_release_to_os_interval_ms=500:halt_on_error=1:handle_abort=2:handle_segv=2:handle_sigbus=2:handle_sigfpe=2:handle_sigill=2:print_stacktrace=1:print_summary=1:print_suppressions=0:silence_unsigned_overflow=1:symbolize=1:use_sigaltstack=1
   export CFLAGS="-g -fno-omit-frame-pointer"
   BUILD "$name" "-DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True $2"
