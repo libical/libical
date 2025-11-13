@@ -928,7 +928,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
                             tt = recur_time;
                         }
                     }
-                    // @@@ TODO: if not DTEND or DUE, then DTSTART and DURATION must be present
+                    // the c.get_dtend()/c.get_due() uses DTSTART+DURATION when neither the DTEND nor DUE is present
                     break;
                 case ICAL_RELATED_START:
                 case ICAL_RELATED_X:
