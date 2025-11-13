@@ -1703,7 +1703,6 @@ gchar *get_source_method_body(Method *method, const gchar *nameSpace)
         }
 
         /* op on the owner */
-        /* TODO: Change the translatorArgus in Parameter to parent */
         for (iter = g_list_first(method->parameters); iter != NULL; iter = g_list_next(iter)) {
             Parameter *parameter = (Parameter *)iter->data;
             if (parameter->owner_op != NULL) {
