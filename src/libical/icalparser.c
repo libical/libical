@@ -632,7 +632,7 @@ icalcomponent *icalparser_parse(icalparser *parser,
             icalmemory_free_buffer(line);
             cont = true;
         }
-    } while (cont && bad_lines < 10000); // limit the number of possibly bogus data lines
+    } while (cont && bad_lines < 5000); // limit the number of possibly bogus data lines
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 
