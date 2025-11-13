@@ -1,5 +1,5 @@
 /**
- * @file    vcomponent_cxx.h
+ * @file    vcomponent_cxx.hpp
  * @author  fnguyen (12/10/01)
  * @brief   C++ classes for the icalcomponent wrapper (VToDo VEvent, etc..).
  *
@@ -11,7 +11,7 @@
 #define ICAL_VCOMPONENT_CXX_H
 
 #include "libical_ical_export.h"
-#include "icptrholder_cxx.h"
+#include "icptrholder_cxx.hpp"
 
 extern "C" {
 #include "icalerror.h"

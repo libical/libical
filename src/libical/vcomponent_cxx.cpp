@@ -11,10 +11,10 @@
 #include <config.h>
 #endif
 
-#include "vcomponent_cxx.h"
-#include "icalparameter_cxx.h"
-#include "icalproperty_cxx.h"
-#include "icalvalue_cxx.h"
+#include "vcomponent_cxx.hpp"
+#include "icalparameter_cxx.hpp"
+#include "icalproperty_cxx.hpp"
+#include "icalvalue_cxx.hpp"
 using namespace LibICal;
 
 extern "C" {

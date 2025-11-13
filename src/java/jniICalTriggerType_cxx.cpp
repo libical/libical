@@ -9,9 +9,9 @@
 ======================================================================*/
 #include <jni.h>
 
-#include "jniICalTriggerType_cxx.h"
-#include "jniICalTimeType_cxx.h"
-#include "jniICalDurationType_cxx.h"
+#include "jniICalTriggerType_cxx.hpp"
+#include "jniICalTimeType_cxx.hpp"
+#include "jniICalDurationType_cxx.hpp"
 
 static jfieldID ICalTriggerType_Time_FID;
 static jfieldID ICalTriggerType_Duration_FID;

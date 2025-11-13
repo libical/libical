@@ -7,27 +7,27 @@ include(UseJava)
 
 set(
   ical_jni_LIB_SRCS
-  jlibical_consts_cxx.h
+  jlibical_consts_cxx.hpp
   jlibical_utils_cxx.cpp
-  jlibical_utils_cxx.h
+  jlibical_utils_cxx.hpp
   jniICalDurationType_cxx.cpp
-  jniICalDurationType_cxx.h
+  jniICalDurationType_cxx.hpp
   jniICalPeriodType_cxx.cpp
-  jniICalPeriodType_cxx.h
+  jniICalPeriodType_cxx.hpp
   jniICalRecurrenceType_cxx.cpp
-  jniICalRecurrenceType_cxx.h
+  jniICalRecurrenceType_cxx.hpp
   jniICalTimeType_cxx.cpp
-  jniICalTimeType_cxx.h
+  jniICalTimeType_cxx.hpp
   jniICalTriggerType_cxx.cpp
-  jniICalTriggerType_cxx.h
+  jniICalTriggerType_cxx.hpp
   net_cp_jlibical_ICalParameter_cxx.cpp
-  net_cp_jlibical_ICalParameter_cxx.h
+  net_cp_jlibical_ICalParameter_cxx.hpp
   net_cp_jlibical_ICalProperty_cxx.cpp
-  net_cp_jlibical_ICalProperty_cxx.h
+  net_cp_jlibical_ICalProperty_cxx.hpp
   net_cp_jlibical_ICalValue_cxx.cpp
-  net_cp_jlibical_ICalValue_cxx.h
+  net_cp_jlibical_ICalValue_cxx.hpp
   net_cp_jlibical_VComponent_cxx.cpp
-  net_cp_jlibical_VComponent_cxx.h
+  net_cp_jlibical_VComponent_cxx.hpp
 )
 
 add_library(
