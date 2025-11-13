@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: jniICalPeriodType_cxx.h
+ FILE: jniICalPeriodType_cxx.hpp
  CREATOR: structConverter
 
  SPDX-FileCopyrightText: 2002, Critical Path

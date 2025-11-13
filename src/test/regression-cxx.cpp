@@ -12,8 +12,8 @@ extern "C" {
 #include "libical/icalparser.h"
 }
 
-#include "icalproperty_cxx.h"
-#include "vcomponent_cxx.h"
+#include "icalproperty_cxx.hpp"
+#include "vcomponent_cxx.hpp"
 using namespace LibICal;
 
 #include <string>

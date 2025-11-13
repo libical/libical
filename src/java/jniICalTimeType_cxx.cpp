@@ -10,7 +10,7 @@
 #include <jni.h>
 
 #ifndef _jni_ICalTimeType_H
-#include "jniICalTimeType_cxx.h"
+#include "jniICalTimeType_cxx.hpp"
 #endif
 
 static jfieldID ICalTimeType_Year_FID;

@@ -336,14 +336,14 @@ if(LIBICAL_CXX_BINDINGS)
   set(
     icalcxx_LIB_SRCS
     icalparameter_cxx.cpp
-    icalparameter_cxx.h
+    icalparameter_cxx.hpp
     icalproperty_cxx.cpp
-    icalproperty_cxx.h
+    icalproperty_cxx.hpp
     icalvalue_cxx.cpp
-    icalvalue_cxx.h
-    icptrholder_cxx.h
+    icalvalue_cxx.hpp
+    icptrholder_cxx.hpp
     vcomponent_cxx.cpp
-    vcomponent_cxx.h
+    vcomponent_cxx.hpp
   )
 
   add_definitions(-DBUILD_LIBICALDLL)
@@ -428,11 +428,11 @@ install(
 if(LIBICAL_CXX_BINDINGS)
   install(
     FILES
-      icalparameter_cxx.h
-      icalproperty_cxx.h
-      icalvalue_cxx.h
-      icptrholder_cxx.h
-      vcomponent_cxx.h
+      icalparameter_cxx.hpp
+      icalproperty_cxx.hpp
+      icalvalue_cxx.hpp
+      icptrholder_cxx.hpp
+      vcomponent_cxx.hpp
     DESTINATION ${INCLUDE_INSTALL_DIR}/libical
   )
 endif()

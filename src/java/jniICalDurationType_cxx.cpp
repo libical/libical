@@ -9,7 +9,7 @@
 
 #include <jni.h>
 
-#include "jniICalDurationType_cxx.h"
+#include "jniICalDurationType_cxx.hpp"
 
 static jfieldID ICalDurationType_Is_neg_FID;
 static jfieldID ICalDurationType_Days_FID;

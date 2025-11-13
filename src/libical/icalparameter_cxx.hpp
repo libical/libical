@@ -1,5 +1,5 @@
 /**
- * @file    icalparameter_cxx.h
+ * @file    icalparameter_cxx.hpp
  * @author  fnguyen (12/10/01)
  * @brief   Definition of C++ Wrapper for icalparameter.c
  *
@@ -11,7 +11,7 @@
 #define ICALPARAMETER_CXX_H
 
 #include "libical_ical_export.h"
-#include "icptrholder_cxx.h"
+#include "icptrholder_cxx.hpp"
 
 extern "C" {
 #include "icalerror.h"

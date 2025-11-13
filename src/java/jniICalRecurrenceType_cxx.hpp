@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: jniICalRecurrenceType_cxx.h
+ FILE: jniICalRecurrenceType_cxx.hpp
  CREATOR: structConverter
 
  SPDX-FileCopyrightText: 2002, Critical Path

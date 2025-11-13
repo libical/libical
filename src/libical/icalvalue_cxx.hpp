@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: icalvalue_cxx.h
+ FILE: icalvalue_cxx.hpp
  CREATOR: fnguyen 12/13/01
 
  SPDX-FileCopyrightText: 2001, Critical Path
@@ -10,7 +10,7 @@
 #define ICALVALUE_CXX_H
 
 #include "libical_ical_export.h"
-#include "icptrholder_cxx.h"
+#include "icptrholder_cxx.hpp"
 
 extern "C" {
 #include "icalerror.h"

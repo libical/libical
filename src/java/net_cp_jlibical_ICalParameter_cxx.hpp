@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: net_cp_jlibical_ICalParameter_cxx.h
+ FILE: net_cp_jlibical_ICalParameter_cxx.hpp
  CREATOR: javah 1/11/02
 
  SPDX-FileCopyrightText: 2002, Critical Path

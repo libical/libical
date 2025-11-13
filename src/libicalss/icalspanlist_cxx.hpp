@@ -1,5 +1,5 @@
 /**
- * @file     icalspanlist_cxx.h
+ * @file     icalspanlist_cxx.hpp
  * @author   Critical Path
  * @brief    C++ class wrapping the icalspanlist data structure
  *

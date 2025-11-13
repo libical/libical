@@ -9,47 +9,47 @@
 ======================================================================*/
 
 #ifndef JLIBICAL_UTILS_CXX_H
-#include "jlibical_utils_cxx.h"
+#include "jlibical_utils_cxx.hpp"
 #endif
 
 #ifndef JLIBICAL_CONSTS_CXX_H
-#include "jlibical_consts_cxx.h"
+#include "jlibical_consts_cxx.hpp"
 #endif
 
 #ifndef ICALPARAMETER_CXX_H
-#include "icalparameter_cxx.h"
+#include "icalparameter_cxx.hpp"
 #endif
 
 #ifndef VCOMPONENT_CXX_H
-#include "vcomponent_cxx.h"
+#include "vcomponent_cxx.hpp"
 #endif
 
 #ifndef ICALPROPERTY_CXX_H
-#include "icalproperty_cxx.h"
+#include "icalproperty_cxx.hpp"
 #endif
 
 #ifndef ICALVALUE_CXX_H
-#include "icalvalue_cxx.h"
+#include "icalvalue_cxx.hpp"
 #endif
 
 #ifndef _jni_ICalTimeType_H
-#include "jniICalTimeType_cxx.h"
+#include "jniICalTimeType_cxx.hpp"
 #endif
 
 #ifndef _jni_ICalTriggerType_H
-#include "jniICalTriggerType_cxx.h"
+#include "jniICalTriggerType_cxx.hpp"
 #endif
 
 #ifndef _jni_ICalDurationType_H
-#include "jniICalDurationType_cxx.h"
+#include "jniICalDurationType_cxx.hpp"
 #endif
 
 #ifndef _jni_ICalRecurrenceType_H
-#include "jniICalRecurrenceType_cxx.h"
+#include "jniICalRecurrenceType_cxx.hpp"
 #endif
 
 #ifndef _jni_ICalPeriodType_H
-#include "jniICalPeriodType_cxx.h"
+#include "jniICalPeriodType_cxx.hpp"
 #endif
 
 using namespace LibICal;

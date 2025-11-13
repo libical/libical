@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: jlibical_consts_cxx.h
+ FILE: jlibical_consts_cxx.hpp
  CREATOR: Srinivasa Boppana/George Norman
 
  SPDX-FileCopyrightText: 2002, Critical Path

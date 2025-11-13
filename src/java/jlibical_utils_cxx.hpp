@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: jlibical_utils_cxx.h
+ FILE: jlibical_utils_cxx.hpp
  CREATOR: Srinivasa Boppana/George Norman
 
  SPDX-FileCopyrightText: 2002, Critical Path

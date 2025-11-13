@@ -7,8 +7,8 @@
 
 #include <jni.h>
 
-#include "jniICalRecurrenceType_cxx.h"
-#include "jniICalTimeType_cxx.h"
+#include "jniICalRecurrenceType_cxx.hpp"
+#include "jniICalTimeType_cxx.hpp"
 
 static jfieldID ICalRecurrenceType_Until_FID;
 static jfieldID ICalRecurrenceType_Freq_FID;

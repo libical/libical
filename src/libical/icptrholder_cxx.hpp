@@ -1,5 +1,5 @@
 /**
- * @file    icptrholder_cxx.h
+ * @file    icptrholder_cxx.hpp
  * @author  wyau (08/29/02)
  * @brief   C++ template classes for managing C++ pointers returned by
  *          VComponent::get_..._component, VComponent::get_..._property,

@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: jniICalTimeType_cxx.h
+ FILE: jniICalTimeType_cxx.hpp
  CREATOR: structConverter
 
  SPDX-FileCopyrightText: 2002, Critical Path

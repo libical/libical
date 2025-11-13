@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: jniICalTriggerType_cxx.h
+ FILE: jniICalTriggerType_cxx.hpp
  CREATOR: structConverter
 
  SPDX-FileCopyrightText: 2002, Critical Path

@@ -10,7 +10,7 @@
 #include <config.h>
 #endif
 
-#include "icalvalue_cxx.h"
+#include "icalvalue_cxx.hpp"
 using namespace LibICal;
 
 ICalValue::ICalValue()
