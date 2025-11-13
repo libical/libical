@@ -97,9 +97,9 @@
 #endif /* yyrule */
 #define YYPREFIX "mime_"
 
-#define YYPURE 0
+#define YYPURE 1
 
-#line 2 "vcc.y"
+#line 3 "vcc.y"
 
 /***************************************************************************
 SPDX-FileCopyrightText: 1996 Apple Computer, Inc., AT&T Corp., International
@@ -195,12 +195,14 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
                                 /* (includes outermost) */
 
 /****  Global Variables  ****/
-int mime_lineNum, mime_numErrors; /* yyerror() can use these */
-static VObject* vObjList;
-static VObject *curProp;
-static VObject *curObj;
-static VObject* ObjStack[MAXLEVEL];
-static int ObjStackTop;
+ICAL_GLOBAL_VAR int mime_lineNum, mime_numErrors; /* yyerror() can use these */
+static ICAL_GLOBAL_VAR VObject* vObjList;
+static ICAL_GLOBAL_VAR VObject *curProp;
+static ICAL_GLOBAL_VAR VObject *curObj;
+static ICAL_GLOBAL_VAR VObject* ObjStack[MAXLEVEL];
+static ICAL_GLOBAL_VAR int ObjStackTop;
+
+extern ICAL_GLOBAL_VAR const char **fieldedProp;
 
 /* A helpful utility for the rest of the app. */
 #if defined(__CPLUSPLUS__)
@@ -213,8 +215,6 @@ extern "C" {
 #if defined(__CPLUSPLUS__)
     };
 #endif
-
-int yylex(void);
 
 enum LexMode {
         L_NORMAL,
@@ -254,7 +254,7 @@ static VObject* Parse_MIMEHelper(void);
 static VObject* popVObject(void);
 static int pushVObject(const char *prop);
 
-#line 202 "vcc.y"
+#line 173 "vcc.y"
 #ifdef YYSTYPE
 #undef  YYSTYPE_IS_DECLARED
 #define YYSTYPE_IS_DECLARED 1
@@ -266,7 +266,7 @@ typedef union {
     VObject *vobj;
     } YYSTYPE;
 #endif /* !YYSTYPE_IS_DECLARED */
-#line 308 "vcc.c"
+#line 278 "vcc.c"
 
 /* compatibility with bison */
 #ifdef YYPARSE_PARAM
@@ -282,11 +282,15 @@ typedef union {
 
 /* Parameters sent to lex. */
 #ifdef YYLEX_PARAM
-# define YYLEX_DECL() yylex(void *YYLEX_PARAM)
-# define YYLEX yylex(YYLEX_PARAM)
+# ifdef YYLEX_PARAM_TYPE
+#  define YYLEX_DECL() yylex(YYSTYPE *yylval, YYLEX_PARAM_TYPE YYLEX_PARAM)
+# else
+#  define YYLEX_DECL() yylex(YYSTYPE *yylval, void * YYLEX_PARAM)
+# endif
+# define YYLEX yylex(&yylval, YYLEX_PARAM)
 #else
-# define YYLEX_DECL() yylex(void)
-# define YYLEX yylex()
+# define YYLEX_DECL() yylex(YYSTYPE *yylval)
+# define YYLEX yylex(&yylval)
 #endif
 
 /* Parameters sent to yyerror. */
@@ -502,11 +506,6 @@ static const char *const mime_rule[] = {
 int      yydebug;
 int      yynerrs;
 
-int      yyerrflag;
-int      yychar;
-YYSTYPE  yyval;
-YYSTYPE  yylval;
-
 /* define the initial stack-sizes */
 #ifdef YYSTACKSIZE
 #undef YYMAXDEPTH
@@ -530,9 +529,7 @@ typedef struct {
     YYSTYPE  *l_base;
     YYSTYPE  *l_mark;
 } YYSTACKDATA;
-/* variables for the parser stack */
-static YYSTACKDATA yystack;
-#line 395 "vcc.y"
+#line 366 "vcc.y"
 static int pushVObject(const char *prop)
     {
     VObject *newObj;
@@ -655,7 +652,9 @@ struct LexBuf {
     unsigned long maxToken;
     char *strs;
     unsigned long strsLen;
-    } lexBuf;
+    };
+
+static ICAL_GLOBAL_VAR struct LexBuf lexBuf;
 
 static void lexPushMode(enum LexMode mode)
     {
@@ -929,6 +928,7 @@ static int match_begin_name(int end) {
     return 0;
     }
 
+
 #ifdef INCLUDEMFC
 void initLex(const char *inputstring, unsigned long inputlen, CFile *inputfile)
 #else
@@ -950,6 +950,7 @@ void initLex(const char *inputstring, unsigned long inputlen, FILE *inputfile)
     lexBuf.maxToken = MAXTOKEN;
     lexBuf.strs = (char*)malloc(MAXTOKEN);
     lexBuf.strsLen = 0;
+
     }
 
 static void finiLex(void) {
@@ -961,6 +962,7 @@ static void finiLex(void) {
         cleanVObject(topobj);
     free(lexBuf.strs);
     }
+
 
 /* This parses and converts the base64 format for binary encoding into
  * a decoded buffer (allocated with new).  See RFC 1521.
@@ -1066,7 +1068,7 @@ static char * lexGetDataFromBase64(void)
     return 0;
     }
 
-static int match_begin_end_name(int end) {
+static int match_begin_end_name(YYSTYPE *yylval, int end) {
     int token;
     lexSkipWhite();
     if (lexLookahead() != ':') return ID;
@@ -1075,12 +1077,12 @@ static int match_begin_end_name(int end) {
     token = match_begin_name(end);
     if (token == ID) {
         lexPushLookaheadc(':');
-        DBG_(("db: ID '%s'\n", yylval.str));
+        DBG_(("db: ID '%s'\n", yylval->str));
         return ID;
         }
     else if (token != 0) {
         lexSkipLookaheadWord();
-        deleteStr(yylval.str);
+        deleteStr(yylval->str);
         DBG_(("db: begin/end %d\n", token));
         return token;
         }
@@ -1144,8 +1146,7 @@ EndString:
     return lexStr();
     } /* LexQuotedPrintable */
 
-int yylex(void) {
-
+int YYLEX_DECL() {
     int lexmode = LEXMODE();
     if (lexmode == L_VALUES) {
         int c = lexGetc();
@@ -1176,7 +1177,7 @@ int yylex(void) {
             if (lexWithinMode(L_BASE64)) {
                 /* get each char and convert to bin on the fly... */
                 p = lexGetDataFromBase64();
-                yylval.str = p;
+                yylval->str = p;
                 return STRING;
                 }
             else if (lexWithinMode(L_QUOTED_PRINTABLE)) {
@@ -1191,7 +1192,7 @@ int yylex(void) {
                 }
             if (p) {
                 DBG_(("db: STRING: '%s'\n", p));
-                yylval.str = p;
+                yylval->str = p;
                 return STRING;
                 }
             else return 0;
@@ -1233,12 +1234,12 @@ int yylex(void) {
                     lexPushLookaheadc(c);
                     if (isalpha(c)) {
                         char *t = lexGetWord();
-                        yylval.str = t;
+                        yylval->str = t;
                         if (!strcasecmp(t, "begin")) {
-                            return match_begin_end_name(0);
+                            return match_begin_end_name(yylval, 0);
                             }
                         else if (!strcasecmp(t,"end")) {
-                            return match_begin_end_name(1);
+                            return match_begin_end_name(yylval, 1);
                             }
                         else {
                             DBG_(("db: ID '%s'\n", t));
@@ -1355,7 +1356,7 @@ static void mime_error_(const char *s)
         mimeErrorHandler(s);
         }
     }
-#line 1398 "vcc.c"
+#line 1373 "vcc.c"
 
 #if YYDEBUG
 #include <stdio.h>		/* needed for printf */
@@ -1418,6 +1419,13 @@ static void yyfreestack(YYSTACKDATA *data)
 int
 YYPARSE_DECL()
 {
+    int      yyerrflag;
+    int      yychar;
+    YYSTYPE  yyval;
+    YYSTYPE  yylval;
+
+    /* variables for the parser stack */
+    YYSTACKDATA yystack;
     int yym, yyn, yystate;
 #if YYDEBUG
     const char *yys;
@@ -1433,7 +1441,7 @@ YYPARSE_DECL()
     yynerrs = 0;
     yyerrflag = 0;
     yychar = YYEMPTY;
-/*    yystate = 0; never read, says scan-view */
+    yystate = 0;
 
 #if YYPURE
     memset(&yystack, 0, sizeof(yystack));
@@ -1558,49 +1566,49 @@ yyreduce:
     switch (yyn)
     {
 case 2:
-#line 233 "vcc.y"
+#line 204 "vcc.y"
 	{ addList(&vObjList, yystack.l_mark[0].vobj); curObj = 0; }
 break;
 case 4:
-#line 236 "vcc.y"
+#line 207 "vcc.y"
 	{ addList(&vObjList, yystack.l_mark[0].vobj); curObj = 0; }
 break;
 case 7:
-#line 245 "vcc.y"
+#line 216 "vcc.y"
 	{
         lexPushMode(L_VCARD);
         if (!pushVObject(VCCardProp)) YYERROR;
         }
 break;
 case 8:
-#line 250 "vcc.y"
+#line 221 "vcc.y"
 	{
         lexPopMode(0);
         yyval.vobj = popVObject();
         }
 break;
 case 9:
-#line 255 "vcc.y"
+#line 226 "vcc.y"
 	{
         lexPushMode(L_VCARD);
         if (!pushVObject(VCCardProp)) YYERROR;
         }
 break;
 case 10:
-#line 260 "vcc.y"
+#line 231 "vcc.y"
 	{
         lexPopMode(0);
         yyval.vobj = popVObject();
         }
 break;
 case 13:
-#line 271 "vcc.y"
+#line 242 "vcc.y"
 	{
         lexPushMode(L_VALUES);
         }
 break;
 case 14:
-#line 275 "vcc.y"
+#line 246 "vcc.y"
 	{
         if (lexWithinMode(L_BASE64) || lexWithinMode(L_QUOTED_PRINTABLE))
            lexPopMode(0);
@@ -1608,114 +1616,115 @@ case 14:
         }
 break;
 case 16:
-#line 284 "vcc.y"
+#line 255 "vcc.y"
 	{
         enterProps(yystack.l_mark[0].str);
         }
 break;
 case 18:
-#line 289 "vcc.y"
+#line 260 "vcc.y"
 	{
         enterProps(yystack.l_mark[0].str);
         }
 break;
 case 22:
-#line 302 "vcc.y"
+#line 273 "vcc.y"
 	{
         enterAttr(yystack.l_mark[0].str,0);
         }
 break;
 case 23:
-#line 306 "vcc.y"
+#line 277 "vcc.y"
 	{
         enterAttr(yystack.l_mark[-2].str,yystack.l_mark[0].str);
+
         }
 break;
 case 25:
-#line 315 "vcc.y"
+#line 286 "vcc.y"
 	{ enterValues(yystack.l_mark[-1].str); }
 break;
 case 27:
-#line 317 "vcc.y"
+#line 288 "vcc.y"
 	{ enterValues(yystack.l_mark[0].str); }
 break;
 case 29:
-#line 321 "vcc.y"
+#line 292 "vcc.y"
 	{ yyval.str = 0; }
 break;
 case 30:
-#line 326 "vcc.y"
+#line 297 "vcc.y"
 	{ if (!pushVObject(VCCalProp)) YYERROR; }
 break;
 case 31:
-#line 329 "vcc.y"
+#line 300 "vcc.y"
 	{ yyval.vobj = popVObject(); }
 break;
 case 32:
-#line 331 "vcc.y"
+#line 302 "vcc.y"
 	{ if (!pushVObject(VCCalProp)) YYERROR; }
 break;
 case 33:
-#line 333 "vcc.y"
+#line 304 "vcc.y"
 	{ yyval.vobj = popVObject(); }
 break;
 case 39:
-#line 348 "vcc.y"
+#line 319 "vcc.y"
 	{
         lexPushMode(L_VEVENT);
         if (!pushVObject(VCEventProp)) YYERROR;
         }
 break;
 case 40:
-#line 354 "vcc.y"
+#line 325 "vcc.y"
 	{
         lexPopMode(0);
         (void)popVObject();
         }
 break;
 case 41:
-#line 359 "vcc.y"
+#line 330 "vcc.y"
 	{
         lexPushMode(L_VEVENT);
         if (!pushVObject(VCEventProp)) YYERROR;
         }
 break;
 case 42:
-#line 364 "vcc.y"
+#line 335 "vcc.y"
 	{
         lexPopMode(0);
         (void)popVObject();
         }
 break;
 case 43:
-#line 372 "vcc.y"
+#line 343 "vcc.y"
 	{
         lexPushMode(L_VTODO);
         if (!pushVObject(VCTodoProp)) YYERROR;
         }
 break;
 case 44:
-#line 378 "vcc.y"
+#line 349 "vcc.y"
 	{
         lexPopMode(0);
         (void)popVObject();
         }
 break;
 case 45:
-#line 383 "vcc.y"
+#line 354 "vcc.y"
 	{
         lexPushMode(L_VTODO);
         if (!pushVObject(VCTodoProp)) YYERROR;
         }
 break;
 case 46:
-#line 388 "vcc.y"
+#line 359 "vcc.y"
 	{
         lexPopMode(0);
         (void)popVObject();
         }
 break;
-#line 1759 "vcc.c"
+#line 1741 "vcc.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;
