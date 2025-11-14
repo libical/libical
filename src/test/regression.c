@@ -5346,6 +5346,97 @@ void test_icalvalue_decode_ical_string(void)
     ok("Properly decoded", (strcmp(buff, "a\\") == 0));
 }
 
+void test_missing_uid_or_dtstamp(void)
+{
+    const char *calstr =
+        "BEGIN:VCALENDAR\r\n"
+
+        "BEGIN:VEVENT\r\n"
+        "SUMMARY:Event1\r\n"
+        "DTSTART;TZID=test_tz:20250603T023000\r\n"
+        "DTEND;TZID=test_tz:20250603T033000\r\n"
+        "UID:event1\r\n"
+        "END:VEVENT\r\n"
+
+        "BEGIN:VEVENT\r\n"
+        "SUMMARY:Event2\r\n"
+        "DTSTART;TZID=test_tz:20250617T030000\r\n"
+        "DTEND;TZID=test_tz:20250617T040000\r\n"
+        "DTSTAMP:20250603T063931Z\r\n"
+        "RECURRENCE-ID;TZID=test_tz:20250617T023000\r\n"
+        "END:VEVENT\r\n"
+
+        "BEGIN:VTODO\r\n"
+        "DTSTAMP:20250603T063931Z\r\n"
+        "SUMMARY:Todo1\r\n"
+        "DUE;VALUE=DATE:20250402\r\n"
+        "COMPLETED:20250404T202923Z\r\n"
+        "PERCENT-COMPLETE:100\r\n"
+        "STATUS:COMPLETED\r\n"
+        "END:VTODO\r\n"
+
+        "BEGIN:VTODO\r\n"
+        "UID:todo2\r\n"
+        "SUMMARY:Todo2\r\n"
+        "DUE;VALUE=DATE:20250402\r\n"
+        "COMPLETED:20250404T202923Z\r\n"
+        "PERCENT-COMPLETE:100\r\n"
+        "STATUS:COMPLETED\r\n"
+        "END:VTODO\r\n"
+
+        "BEGIN:VTODO\r\n"
+        "SUMMARY:Todo3\r\n"
+        "DUE;VALUE=DATE:20250402\r\n"
+        "COMPLETED:20250404T202923Z\r\n"
+        "PERCENT-COMPLETE:100\r\n"
+        "STATUS:COMPLETED\r\n"
+        "END:VTODO\r\n"
+        "END:VCALENDAR\r\n";
+
+    icalcomponent *comp;
+
+    comp = icalcomponent_new_from_string(calstr);
+    ok("icalcomponent_new_from_string()", (comp != NULL));
+    if (comp) {
+        icalcomponent *event1 = icalcomponent_get_next_component(comp, ICAL_VEVENT_COMPONENT);
+        ok("event1 should fail: missing dtstamp", (event1 == NULL));
+        if (event1) {
+            icalcomponent_free(event1);
+            printf("event1: %s\n", icalcomponent_as_ical_string(event1));
+        }
+
+        icalcomponent *event2 = icalcomponent_get_next_component(comp, ICAL_VEVENT_COMPONENT);
+        ok("event2 should fail: missing uid", (event2 == NULL));
+        if (event2) {
+            icalcomponent_free(event2);
+            printf("event1: %s\n", icalcomponent_as_ical_string(event2));
+        }
+
+        icalcomponent *todo1 = icalcomponent_get_next_component(comp, ICAL_VTODO_COMPONENT);
+        ok("todo1 should fail: missing uid", (todo1 == NULL));
+        if (todo1) {
+            icalcomponent_free(todo1);
+            printf("todo1: %s\n", icalcomponent_as_ical_string(todo1));
+        }
+
+        icalcomponent *todo2 = icalcomponent_get_next_component(comp, ICAL_VTODO_COMPONENT);
+        ok("todo2 should fail: missing dtstamp", (todo2 == NULL));
+        if (todo2) {
+            icalcomponent_free(todo2);
+            printf("todo2: %s\n", icalcomponent_as_ical_string(todo2));
+        }
+
+        icalcomponent *todo3 = icalcomponent_get_next_component(comp, ICAL_VTODO_COMPONENT);
+        ok("todo3 should fail: missing uid and dtstamp", (todo3 == NULL));
+        if (todo3) {
+            icalcomponent_free(todo3);
+            printf("todo3: %s\n", icalcomponent_as_ical_string(todo3));
+        }
+
+        icalcomponent_free(comp);
+    }
+}
+
 static int test_icalarray_sort_compare_char(const void *p1, const void *p2)
 {
     char c1 = *((char *)p1);
@@ -7047,6 +7138,7 @@ int main(int argc, char *argv[])
     test_run("Test icaltime proper zone set", test_icaltime_proper_zone, do_test, do_header);
     test_run("Test property values from string", test_value_from_string, do_test, do_header);
     test_run("Test normalizing time", test_icaltime_normalize, do_test, do_header);
+    test_run("Test missing uid or dtstamp", test_missing_uid_or_dtstamp, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
