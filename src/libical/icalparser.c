@@ -134,7 +134,8 @@ static char *parser_get_next_char(char c, char *str, int qm)
     char next_char = *p;
     char prev_char = 0;
 
-    while (next_char != '\0') {
+    size_t count = 0;
+    while (next_char != '\0' && count++ < 100000) {
         if ((prev_char != '\0') && (prev_char != '\\')) {
             if (qm == 1 && next_char == '"') {
                 /* Encountered a quote, toggle quote mode */
