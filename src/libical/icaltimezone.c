@@ -715,7 +715,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 icalarray_append(changes, &change);
 
                 rrule_iterator = icalrecur_iterator_new(rrule, dtstart);
-                for (; rrule_iterator;) {
+                for (size_t rrule_iterator_count = 0; rrule_iterator && rrule_iterator_count < 1000; rrule_iterator_count++) {
                     occ = icalrecur_iterator_next(rrule_iterator);
                     /* Skip dtstart since we just added it */
                     if (icaltime_compare(dtstart, occ) == 0) {
