@@ -124,9 +124,6 @@ void icalparser_set_gen_data(icalparser *parser, void *data)
     parser->line_gen_data = data;
 }
 
-icalvalue *icalvalue_new_From_string_with_error(icalvalue_kind kind,
-                                                char *str, icalproperty **error);
-
 static char *parser_get_next_char(char c, char *str, int qm)
 {
     int quote_mode = 0;
