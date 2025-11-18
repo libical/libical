@@ -30,6 +30,7 @@ for details about API changes since libical 3.x.
 
 ### Changed
 
+- To conform to RFC5545: VEVENTs, VTODOs, VJOURNALs now *require* the UID and DTSTAMP properties
 - Requires MSVC 2013 or higher (when building on Windows with MSVC)
 - Requires CMake v3.20.0 or higher
 - For the C++ bindings, requires a C++11 compliant C++ compiler
