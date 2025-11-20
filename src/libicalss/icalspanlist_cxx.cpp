@@ -11,6 +11,7 @@
 #include "vcomponent_cxx.hpp"
 
 #include <cstdlib> // for free()
+#include <vector>
 
 using namespace LibICal;
 

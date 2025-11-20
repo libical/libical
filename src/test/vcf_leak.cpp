@@ -17,8 +17,9 @@
 
 #include <fstream>
 #include <iostream>
-#include <sstream>
 #include <memory>
+#include <sstream>
+#include <string>
 
 #include "vcc.h"
 #include "vobject.h"

@@ -52,6 +52,8 @@
 #include "jniICalPeriodType_cxx.hpp"
 #endif
 
+#include <cstdio>
+
 using namespace LibICal;
 
 //-------------------------------------------------------

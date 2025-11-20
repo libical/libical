@@ -23,6 +23,8 @@
 #include "icalproperty_cxx.hpp"
 #endif
 
+#include <string>
+
 using namespace LibICal;
 
 /*

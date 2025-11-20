@@ -8,6 +8,10 @@
  */
 
 #include "icalparameter_cxx.hpp"
+
+#include <string>
+#include <vector>
+
 using namespace LibICal;
 
 ICalParameter::ICalParameter()

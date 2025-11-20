@@ -10,6 +10,9 @@
 #include "icalproperty_cxx.hpp"
 #include "icalparameter_cxx.hpp"
 #include "icalvalue_cxx.hpp"
+
+#include <string>
+
 using namespace LibICal;
 
 ICalProperty::ICalProperty()

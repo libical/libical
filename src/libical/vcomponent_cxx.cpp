@@ -22,6 +22,7 @@ extern "C" {
 }
 
 #include <cstdlib>
+#include <string>
 
 VComponent::VComponent()
     : imp(icalcomponent_new(ICAL_ANY_COMPONENT))
