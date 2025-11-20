@@ -39,6 +39,7 @@ HELP() {
   echo " -t, --no-tidy              Don't run any clang-tidy tests"
   echo " -w, --no-iwyu              Don't run any include-what-you-use tests"
   echo " -c, --no-cppcheck          Don't run any cppcheck tests"
+  echo " -i, --no-cpplint           Don't run any cpplint tests"
   echo " -g, --no-gcc-build         Don't run any gcc-build tests with Unix Makefiles"
   echo " -n, --no-ninja-gcc-build   Don't run any gcc build tests with ninja"
   echo " -z, --no-clang-build       Don't run any clang-build tests"
@@ -729,6 +730,29 @@ KRAZY() {
   echo "===== END KRAZY ======"
 }
 
+#function CPPLINT
+# runs cpplint
+CPPLINT() {
+  if (test -z "$(REVERSE $runcpplint)"); then
+    echo "===== CPPLINT TEST DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  COMMAND_EXISTS "cpplint" "-i"
+  echo "===== START CPPLINT ====="
+  cd "$TOP" || exit 1
+  rm -f cpplint.out
+  f=$(find "$TOP/src" -name "*.cpp" -o -name "*.hpp")
+  # shellcheck disable=SC2086
+  cpplint $f 2>&1 | tee cpplint.out | grep -v "Done processing"
+  status=$?
+  if (test $status -gt 0); then
+    echo "cpplint warnings encountered.  Exiting..."
+    exit 1
+  fi
+  rm -f cpplint.out
+  echo "===== END CPPLINT ======"
+}
+
 #function PRECOMMIT
 # run pre-commit
 PRECOMMIT() {
@@ -752,7 +776,7 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hCpksbtwcgnzxalmdufrR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse" -- "$@")
+options=$(getopt -o "hCpksbtwcignzxalmdufrR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-cpplint,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse" -- "$@")
 eval set -- "$options"
 
 reverse=0
@@ -760,6 +784,7 @@ cmakecompat=1
 runkrazy=1
 runprecommit=1
 runcppcheck=1
+runcpplint=1
 runtidy=1
 runiwyu=1
 runsplint=1
@@ -795,6 +820,10 @@ while true; do
     ;;
   -c | --no-cppcheck)
     runcppcheck=0
+    shift
+    ;;
+  -i | --no-cpplint)
+    runcpplint=0
     shift
     ;;
   -t | --no-tidy)
@@ -945,6 +974,7 @@ CLANGSCAN test "$STATICCCHECKOPTS"
 CLANGTIDY test "$STATICCCHECKOPTS"
 IWYU test "$STATICCCHECKOPTS"
 CPPCHECK test "$STATICCCHECKOPTS"
+CPPLINT test "$STATICCCHECKOPTS"
 
 #GCC based build tests, with non-Ninja
 GCC_BUILD testgcc1 "$DEFCMAKEOPTS"
