@@ -44,7 +44,7 @@ public:
     }
 
     /* cppcheck-suppress noExplicitConstructor */
-    ICPointerHolder(T *p)
+    ICPointerHolder(T *p) // NOLINT(runtime/explicit)
         : ptr(p)
     {
     }
