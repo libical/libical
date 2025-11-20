@@ -962,7 +962,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
         // malformed? encapsulating VEVENT or VTODO MUST have DTSTART/DTEND
         if (icaltime_is_null_time(tt)) {
             return ICAL_3_1_INVPROPVAL_STATUS;
-        };
+        }
 
         // now offset using tr.duration
         tr->time = icalduration_extend(tt, tr->duration);
