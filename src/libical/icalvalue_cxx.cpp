@@ -11,6 +11,9 @@
 #endif
 
 #include "icalvalue_cxx.hpp"
+
+#include <string>
+
 using namespace LibICal;
 
 ICalValue::ICalValue()

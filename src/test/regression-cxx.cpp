@@ -16,6 +16,7 @@ extern "C" {
 #include "vcomponent_cxx.hpp"
 using namespace LibICal;
 
+#include <cstdio>
 #include <string>
 using namespace std;
 

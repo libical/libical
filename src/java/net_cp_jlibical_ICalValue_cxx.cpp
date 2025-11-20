@@ -23,6 +23,8 @@
 #include "icalvalue_cxx.hpp"
 #endif
 
+#include <string>
+
 using namespace LibICal;
 
 /*
