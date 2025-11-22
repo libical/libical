@@ -742,13 +742,15 @@ CPPLINT() {
   cd "$TOP" || exit 1
   rm -f cpplint.out
   f=$(find "$TOP/src" -name "*.cpp" -o -name "*.hpp")
+  set +e
   # shellcheck disable=SC2086
   cpplint $f 2>&1 | tee cpplint.out | grep -v "Done processing"
-  status=$?
-  if (test $status -gt 0); then
-    echo "cpplint warnings encountered.  Exiting..."
+  declare -i cpplintIssues
+  cpplintIssues=$(grep -c "Total errors found:" cpplint.out)
+  if (test $cpplintIssues -gt 0); then
     exit 1
   fi
+  set -e
   rm -f cpplint.out
   echo "===== END CPPLINT ======"
 }
@@ -969,12 +971,12 @@ STATICCCHECKOPTS="\
 "
 PRECOMMIT
 KRAZY
+CPPLINT test "$STATICCCHECKOPTS"
 SPLINT test "$STATICCCHECKOPTS"
 CLANGSCAN test "$STATICCCHECKOPTS"
 CLANGTIDY test "$STATICCCHECKOPTS"
 IWYU test "$STATICCCHECKOPTS"
 CPPCHECK test "$STATICCCHECKOPTS"
-CPPLINT test "$STATICCCHECKOPTS"
 
 #GCC based build tests, with non-Ninja
 GCC_BUILD testgcc1 "$DEFCMAKEOPTS"
