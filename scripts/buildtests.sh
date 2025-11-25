@@ -39,6 +39,7 @@ HELP() {
   echo " -t, --no-tidy              Don't run any clang-tidy tests"
   echo " -w, --no-iwyu              Don't run any include-what-you-use tests"
   echo " -c, --no-cppcheck          Don't run any cppcheck tests"
+  echo " -i, --no-cpplint           Don't run any cpplint tests"
   echo " -g, --no-gcc-build         Don't run any gcc-build tests with Unix Makefiles"
   echo " -n, --no-ninja-gcc-build   Don't run any gcc build tests with ninja"
   echo " -z, --no-clang-build       Don't run any clang-build tests"
@@ -226,7 +227,11 @@ BUILD() {
   else
     export LD_LIBRARY_PATH=$BDIR/lib
   fi
+  ulimit -S -t 10      # oss-fuzz uses 60 seconds
+  ulimit -S -m 2621440 # oss-fuzz uses 2560Mb (many systems do not honor this limit)
   ctest . 2>&1 | tee make-test.out || exit 1
+  ulimit -S -t unlimited
+  ulimit -S -m unlimited
   CLEAN
 }
 
@@ -380,14 +385,10 @@ UBSAN_BUILD() {
   echo "===== START UBSAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libubsan.so" "-a"
   SET_GCC
-  ulimit -S -t 180     # oss-fuzz uses 60 seconds which is too low for us
-  ulimit -S -m 2621440 # oss-fuzz uses 2560Mb
   export UBSAN_OPTIONS=allocator_release_to_os_interval_ms=500:halt_on_error=1:handle_abort=2:handle_segv=2:handle_sigbus=2:handle_sigfpe=2:handle_sigill=2:print_stacktrace=1:print_summary=1:print_suppressions=0:silence_unsigned_overflow=1:symbolize=1:use_sigaltstack=1
   export CFLAGS="-g -fno-omit-frame-pointer"
   BUILD "$name" "-DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True $2"
   unset CFLAGS
-  ulimit -S -t unlimited
-  ulimit -S -m unlimited
   echo "===== END UBSAN BUILD: $1 ======"
 }
 
@@ -729,6 +730,31 @@ KRAZY() {
   echo "===== END KRAZY ======"
 }
 
+#function CPPLINT
+# runs cpplint
+CPPLINT() {
+  if (test -z "$(REVERSE $runcpplint)"); then
+    echo "===== CPPLINT TEST DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  COMMAND_EXISTS "cpplint" "-i"
+  echo "===== START CPPLINT ====="
+  cd "$TOP" || exit 1
+  rm -f cpplint.out
+  f=$(find "$TOP/src" -name "*.cpp" -o -name "*.hpp")
+  set +e
+  # shellcheck disable=SC2086
+  cpplint $f 2>&1 | tee cpplint.out | grep -v "Done processing"
+  declare -i cpplintIssues
+  cpplintIssues=$(grep -c "Total errors found:" cpplint.out)
+  if (test $cpplintIssues -gt 0); then
+    exit 1
+  fi
+  set -e
+  rm -f cpplint.out
+  echo "===== END CPPLINT ======"
+}
+
 #function PRECOMMIT
 # run pre-commit
 PRECOMMIT() {
@@ -752,7 +778,7 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hCpksbtwcgnzxalmdufrR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse" -- "$@")
+options=$(getopt -o "hCpksbtwcignzxalmdufrR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-cpplint,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse" -- "$@")
 eval set -- "$options"
 
 reverse=0
@@ -760,6 +786,7 @@ cmakecompat=1
 runkrazy=1
 runprecommit=1
 runcppcheck=1
+runcpplint=1
 runtidy=1
 runiwyu=1
 runsplint=1
@@ -795,6 +822,10 @@ while true; do
     ;;
   -c | --no-cppcheck)
     runcppcheck=0
+    shift
+    ;;
+  -i | --no-cpplint)
+    runcpplint=0
     shift
     ;;
   -t | --no-tidy)
@@ -940,6 +971,7 @@ STATICCCHECKOPTS="\
 "
 PRECOMMIT
 KRAZY
+CPPLINT test "$STATICCCHECKOPTS"
 SPLINT test "$STATICCCHECKOPTS"
 CLANGSCAN test "$STATICCCHECKOPTS"
 CLANGTIDY test "$STATICCCHECKOPTS"

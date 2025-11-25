@@ -124,9 +124,6 @@ void icalparser_set_gen_data(icalparser *parser, void *data)
     parser->line_gen_data = data;
 }
 
-icalvalue *icalvalue_new_From_string_with_error(icalvalue_kind kind,
-                                                char *str, icalproperty **error);
-
 static char *parser_get_next_char(char c, char *str, int qm)
 {
     int quote_mode = 0;
@@ -134,7 +131,8 @@ static char *parser_get_next_char(char c, char *str, int qm)
     char next_char = *p;
     char prev_char = 0;
 
-    while (next_char != '\0') {
+    size_t count = 0;
+    while (next_char != '\0' && count++ < 100000) {
         if ((prev_char != '\0') && (prev_char != '\\')) {
             if (qm == 1 && next_char == '"') {
                 /* Encountered a quote, toggle quote mode */
@@ -586,12 +584,13 @@ icalcomponent *icalparser_parse(icalparser *parser,
     icalcomponent *c;
     icalcomponent *root = 0;
     icalerrorstate es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
-    int cont;
+    bool cont = false;
 
     icalerror_check_arg_rz((parser != 0), "parser");
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
 
+    size_t bad_lines = 0;
     do {
         line = icalparser_get_line(parser, line_gen_func);
 
@@ -623,13 +622,15 @@ icalcomponent *icalparser_parse(icalparser *parser,
                 /* Badness */
                 icalassert(0);
             }
+        } else {
+            bad_lines++; // track the number of possibly bogus data lines
         }
-        cont = 0;
+        cont = false;
         if (line != 0) {
             icalmemory_free_buffer(line);
-            cont = 1;
+            cont = true;
         }
-    } while (cont);
+    } while (cont && bad_lines < 5000); // limit the number of possibly bogus data lines
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 

@@ -3047,6 +3047,8 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
 
                 if (weekno < 0) {
                     weekno += nweeks + 1;
+                } else if (weekno > nweeks) {
+                    continue;
                 }
 
                 doy = start_doy + 7 * (weekno - 1);

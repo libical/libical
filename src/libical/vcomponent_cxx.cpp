@@ -11,10 +11,10 @@
 #include <config.h>
 #endif
 
-#include "vcomponent_cxx.h"
-#include "icalparameter_cxx.h"
-#include "icalproperty_cxx.h"
-#include "icalvalue_cxx.h"
+#include "vcomponent_cxx.hpp"
+#include "icalparameter_cxx.hpp"
+#include "icalproperty_cxx.hpp"
+#include "icalvalue_cxx.hpp"
 using namespace LibICal;
 
 extern "C" {
@@ -22,6 +22,7 @@ extern "C" {
 }
 
 #include <cstdlib>
+#include <string>
 
 VComponent::VComponent()
     : imp(icalcomponent_new(ICAL_ANY_COMPONENT))
@@ -928,7 +929,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
                             tt = recur_time;
                         }
                     }
-                    // @@@ TODO: if not DTEND or DUE, then DTSTART and DURATION must be present
+                    // the c.get_dtend()/c.get_due() uses DTSTART+DURATION when neither the DTEND nor DUE is present
                     break;
                 case ICAL_RELATED_START:
                 case ICAL_RELATED_X:
@@ -962,7 +963,7 @@ icalrequeststatus VAlarm::getTriggerTime(VComponent &c, struct icaltriggertype *
         // malformed? encapsulating VEVENT or VTODO MUST have DTSTART/DTEND
         if (icaltime_is_null_time(tt)) {
             return ICAL_3_1_INVPROPVAL_STATUS;
-        };
+        }
 
         // now offset using tr.duration
         tr->time = icalduration_extend(tt, tr->duration);

@@ -8,19 +8,19 @@
 ======================================================================*/
 
 #ifndef NET_CP_JLIBICAL_ICALPARAMETER_CXX_H
-#include "net_cp_jlibical_ICalParameter_cxx.h"
+#include "net_cp_jlibical_ICalParameter_cxx.hpp"
 #endif
 
 #ifndef JLIBICAL_CONSTS_CXX_H
-#include "jlibical_consts_cxx.h"
+#include "jlibical_consts_cxx.hpp"
 #endif
 
 #ifndef JLIBICAL_UTILS_CXX_H
-#include "jlibical_utils_cxx.h"
+#include "jlibical_utils_cxx.hpp"
 #endif
 
 #ifndef ICALPARAMETER_CXX_H
-#include "icalparameter_cxx.h"
+#include "icalparameter_cxx.hpp"
 #endif
 
 using namespace LibICal;

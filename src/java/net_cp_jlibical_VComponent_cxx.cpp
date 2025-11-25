@@ -8,23 +8,23 @@
 ======================================================================*/
 
 #ifndef NET_CP_JLIBICAL_VCOMPONENT_CXX_H
-#include "net_cp_jlibical_VComponent_cxx.h"
+#include "net_cp_jlibical_VComponent_cxx.hpp"
 #endif
 
 #ifndef JLIBICAL_CONSTS_CXX_H
-#include "jlibical_consts_cxx.h"
+#include "jlibical_consts_cxx.hpp"
 #endif
 
 #ifndef JLIBICAL_UTILS_CXX_H
-#include "jlibical_utils_cxx.h"
+#include "jlibical_utils_cxx.hpp"
 #endif
 
 #ifndef VCOMPONENT_CXX_H
-#include "vcomponent_cxx.h"
+#include "vcomponent_cxx.hpp"
 #endif
 
 #ifndef ICALPROPERTY_CXX_H
-#include "icalproperty_cxx.h"
+#include "icalproperty_cxx.hpp"
 #endif
 
 using namespace LibICal;

@@ -630,6 +630,20 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
 {
     struct icaltimetype a, b;
 
+    /* Ensure valid icaltimetypes, else the comparisons below mean nothing at all */
+    const bool a_is_valid = icaltime_is_valid_time(a_in);
+    const bool b_is_valid = icaltime_is_valid_time(b_in);
+    if (a_is_valid && !b_is_valid) {
+        return 1;
+    }
+    if (!a_is_valid) {
+        if (b_is_valid) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
     /* We only need to perform time zone conversion if times aren't in the same time zone
        or neither of them is floating (zone equals NULL) */
     if (a_in.zone != b_in.zone && a_in.zone != NULL && b_in.zone != NULL) {

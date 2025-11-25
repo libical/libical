@@ -305,15 +305,20 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     69344
     69527
     69888 # cpu timeout fails beyond 60s
+    42517512 # UBSAN cpu timeout exceeds 60s
+    42521679 # out-of-memory
     42536507 # cpu timeout fails beyond 60s
     42536390
     448424495
     448717854
     458943970 # Heap-buffer-overflow WRITE 1
+    460946139 # cpu timeout fails beyond 60s
+    462342205 # ASAN cpu timeout exceeds 60s
     usban
     usban2
     usban3
-    usban4 # integer overflow in pvl_newlist
+    usban4 # integer overflow in icalpvl_newlist
+    usban5 # integer overflow in icalpvl_new_element
   )
     add_test(
       NAME fuzz1test${fuzztest}

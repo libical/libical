@@ -10,9 +10,9 @@
 ======================================================================*/
 #include <jni.h>
 
-#include "jniICalPeriodType_cxx.h"
-#include "jniICalTimeType_cxx.h"
-#include "jniICalDurationType_cxx.h"
+#include "jniICalPeriodType_cxx.hpp"
+#include "jniICalTimeType_cxx.hpp"
+#include "jniICalDurationType_cxx.hpp"
 
 static jfieldID ICalPeriodType_Start_FID;
 static jfieldID ICalPeriodType_End_FID;

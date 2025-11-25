@@ -12,22 +12,24 @@ extern "C" {
 #include "libical/icalparser.h"
 }
 
-#include "icalproperty_cxx.h"
-#include "vcomponent_cxx.h"
+#include "icalproperty_cxx.hpp"
+#include "vcomponent_cxx.hpp"
 using namespace LibICal;
 
+#include <cstdio>
 #include <string>
 using namespace std;
 
-const char content[] = "BEGIN:VCALENDAR\n\
-VERSION:2.1\n\
-BEGIN:VEVENT\n\
-UID:abcd12345\n\
-DTSTART:20020307T180000Z\n\
-DTEND:20020307T190000Z\n\
-SUMMARY:Important Meeting\n\
-END:VEVENT\n\
-END:VCALENDAR";
+const char content[] =
+    "BEGIN:VCALENDAR\n"
+    "VERSION:2.1\n"
+    "BEGIN:VEVENT\n"
+    "UID:abcd12345\n"
+    "DTSTART:20020307T180000Z\n"
+    "DTEND:20020307T190000Z\n"
+    "SUMMARY:Important Meeting\n"
+    "END:VEVENT\n"
+    "END:VCALENDAR";
 
 void test_cxx(void)
 {

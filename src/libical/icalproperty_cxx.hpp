@@ -1,5 +1,5 @@
 /**
- * @file    icalproperty_cxx.h
+ * @file    icalproperty_cxx.hpp
  * @author  fnguyen (12/10/01)
  * @brief   Definition of C++ Wrapper for icalproperty.c
  *
@@ -11,7 +11,7 @@
 #define ICALPROPERTY_CXX_H
 
 #include "libical_ical_export.h"
-#include "icptrholder_cxx.h"
+#include "icptrholder_cxx.hpp"
 
 extern "C" {
 #include "icalerror.h"
@@ -37,7 +37,6 @@ public:
     explicit ICalProperty(icalproperty *v);
     explicit ICalProperty(const std::string &str);
     explicit ICalProperty(icalproperty_kind kind);
-    ICalProperty(icalproperty_kind kind, std::string str);
 
     operator icalproperty *()
     {

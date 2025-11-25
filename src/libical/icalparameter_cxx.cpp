@@ -7,7 +7,11 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
-#include "icalparameter_cxx.h"
+#include "icalparameter_cxx.hpp"
+
+#include <string>
+#include <vector>
+
 using namespace LibICal;
 
 ICalParameter::ICalParameter()

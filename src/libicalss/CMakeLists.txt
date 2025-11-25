@@ -142,7 +142,7 @@ if(LIBICAL_CXX_BINDINGS)
   set(
     icalsscxx_LIB_SRCS
     icalspanlist_cxx.cpp
-    icalspanlist_cxx.h
+    icalspanlist_cxx.hpp
   )
   add_library(
     icalss_cxx
@@ -215,5 +215,5 @@ install(
 )
 
 if(LIBICAL_CXX_BINDINGS)
-  install(FILES icalspanlist_cxx.h DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
+  install(FILES icalspanlist_cxx.hpp DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
 endif()

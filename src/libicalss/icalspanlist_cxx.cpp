@@ -7,10 +7,11 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 */
 
-#include "icalspanlist_cxx.h"
-#include "vcomponent_cxx.h"
+#include "icalspanlist_cxx.hpp"
+#include "vcomponent_cxx.hpp"
 
 #include <cstdlib> // for free()
+#include <vector>
 
 using namespace LibICal;
 
