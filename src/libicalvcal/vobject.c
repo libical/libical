@@ -56,7 +56,7 @@ struct StrItem {
     unsigned int refCnt;
     };
 
-const char** fieldedProp;
+ICAL_GLOBAL_VAR const char** fieldedProp;
 
 /*----------------------------------------------------------------------
    The following functions involve with memory allocation:
