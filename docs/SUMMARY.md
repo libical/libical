@@ -10,7 +10,7 @@
 - [Installation Dependencies](Dependencies.md)
 - [Using](UsingLibical.md)
 - [Version 4 Migration Guide](MigrationGuide_to_4.md)
-- [Known Limitations](KnownLimitations.md)
+- [Known RFC Exceptions](KnownExceptions.md)
 
 # Reference Guide
 
