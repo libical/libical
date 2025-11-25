@@ -225,6 +225,10 @@ endif()
 
 include(CheckTypeSize)
 check_type_size(
+  int
+  SIZEOF_INT
+)
+check_type_size(
   intptr_t
   SIZEOF_INTPTR_T
 )
@@ -290,3 +294,12 @@ check_include_files(
   "pthread.h;pthread_np.h"
   HAVE_PTHREAD_NP_H
 )
+
+if(CMAKE_C_BYTE_ORDER STREQUAL "BIG_ENDIAN")
+  set(HAVE_WORDS_BIGENDIAN TRUE)
+elseif(CMAKE_C_BYTE_ORDER STREQUAL "LITTLE_ENDIAN")
+  set(HAVE_WORDS_BIGENDIAN FALSE)
+else()
+  set(HAVE_WORDS_BIGENDIAN FALSE)
+  message(WARNING "Endianness could not be determined.")
+endif()

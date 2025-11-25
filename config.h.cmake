@@ -194,6 +194,9 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 /* whether we should bring our own TZ-Data */
 #cmakedefine USE_BUILTIN_TZDATA
 
+/* whether this is a big-endian system. */
+#cmakedefine HAVE_WORDS_BIGENDIAN
+
 /* Define to empty if `const' does not conform to ANSI C. */
 #cmakedefine const
 
@@ -233,6 +236,7 @@ typedef unsigned int wint_t;
 #endif
 #endif
 
+#cmakedefine SIZEOF_INT ${SIZEOF_INT}
 #cmakedefine SIZEOF_TIME_T ${SIZEOF_TIME_T}
 #cmakedefine SIZEOF_ICALTIME_T ${SIZEOF_ICALTIME_T}
 

@@ -114,42 +114,35 @@ typedef struct
 
 static int decode(const void *ptr)
 {
-    // NOLINTBEGIN(misc-redundant-expression)
-    if ((BYTE_ORDER == BIG_ENDIAN) && sizeof(int) == 4) {
-        return *(const int *)ptr;
-    } else if (BYTE_ORDER == LITTLE_ENDIAN && sizeof(int) == 4) {
-#if !defined(__cppcheck__) && !defined(__clang_analyzer__) //core.CallAndMessage
-        /* stumped why cppcheck 2.16 has a syntax error on this line */
-        return (int)bswap_32(*(const unsigned int *)ptr);
+#if SIZEOF_INT == 4
+#if defined(HAVE_WORDS_BIGENDIAN)
+    return *(const int *)ptr;
 #else
-        return 1;
+    const unsigned int *p = (const unsigned int *)ptr;
+    return (int)bswap_32(*p);
 #endif
-        // NOLINTEND(misc-redundant-expression)
-    } else {
-        const unsigned char *p = ptr;
-        int result = (*p & (1 << (CHAR_BIT - 1))) ? ~0 : 0;
+#else
+    const unsigned char *p = ptr;
+    int result = (*p & (1 << (CHAR_BIT - 1))) ? ~0 : 0;
 
-        /* cppcheck-suppress shiftNegativeLHS */
-        result = (result << 8) | *p++;
-        result = (result << 8) | *p++;
-        result = (result << 8) | *p++;
-        result = (result << 8) | *p++;
+    /* cppcheck-suppress shiftNegativeLHS */
+    result = (result << 8) | *p++;
+    result = (result << 8) | *p++;
+    result = (result << 8) | *p++;
+    result = (result << 8) | *p++;
 
-        return result;
-    }
+    return result;
+#endif
 }
 
 static long long int decode64(const void *ptr)
 {
-    if ((BYTE_ORDER == BIG_ENDIAN)) {
-        return *(const long long int *)ptr;
-    } else {
-#if !defined(__clang_analyzer__) //core.CallAndMessage
-        return (const long long int)bswap_64(*(const unsigned long long int *)ptr);
+#if defined(HAVE_WORDS_BIGENDIAN)
+    return *(const long long int *)ptr;
 #else
-        return 0;
+    const unsigned long long int *p = (const unsigned long long int *)ptr;
+    return (long long int)bswap_64(*p);
 #endif
-    }
 }
 
 static char *zname_from_stridx(char *str, size_t len_str, size_t idx)
