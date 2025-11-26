@@ -3606,6 +3606,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     icalrecur_iterator impl_last = *impl;
 
     /* Iterate until we get the next valid time */
+    int time_standing_still_count = 0;
     do {
         switch (impl->rule->freq) {
         case ICAL_SECONDLY_RECURRENCE:
@@ -3671,6 +3672,14 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
             }
         }
 
+        // is time standing still? if so, break out of here
+        if (icaltime_compare(impl->last, impl_last.last) == 0) {
+            if (time_standing_still_count++ == 50) {
+                break;
+            }
+        } else {
+            time_standing_still_count = 0;
+        }
     } while (icaltime_compare(impl->last, impl->istart) < 0 ||
              icaltime_compare(impl->last, impl_last.last) == 0 ||
              !check_contracting_rules(impl) ||
