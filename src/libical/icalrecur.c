@@ -1247,7 +1247,7 @@ static unsigned long daysmask_getbit(const unsigned long mask[], short n)
     return (mask[n / BITS_PER_LONG] >> (n % BITS_PER_LONG)) & 1;
 }
 
-static int has_by_data(icalrecur_iterator *impl, icalrecurrencetype_byrule byrule)
+static bool has_by_data(icalrecur_iterator *impl, icalrecurrencetype_byrule byrule)
 {
     return (impl->bydata[byrule].orig_data == 1);
 }
@@ -1383,7 +1383,7 @@ static void set_hour(icalrecur_iterator *impl, int hour)
 
 static void __set_month(icalrecur_iterator *impl, int month)
 {
-    int is_leap_month = icalrecurrencetype_month_is_leap(month);
+    bool is_leap_month = icalrecurrencetype_month_is_leap(month);
 
     month = icalrecurrencetype_month_month(month) - 1; /* UCal is 0-based */
 
@@ -1660,10 +1660,10 @@ static void increment_second(icalrecur_iterator *impl, int inc)
     ucal_add(impl->rscale, UCAL_SECOND, (int32_t)inc, &status);
 }
 
-static int validate_byrule(icalrecur_iterator *impl,
-                           icalrecurrencetype_byrule byrule, UCalendarDateFields field,
-                           short (*decode_val)(short *, bool),
-                           bool decode_flags)
+static bool validate_byrule(icalrecur_iterator *impl,
+                            icalrecurrencetype_byrule byrule, UCalendarDateFields field,
+                            short (*decode_val)(short *, bool),
+                            bool decode_flags)
 {
     if (has_by_data(impl, byrule)) {
         UErrorCode status = U_ZERO_ERROR;
@@ -1676,12 +1676,12 @@ static int validate_byrule(icalrecur_iterator *impl,
             short val = decode_val ? decode_val(&by_ptr->data[idx], decode_flags) : by_ptr->data[idx];
 
             if (abs(val) > max) {
-                return 0;
+                return false;
             }
         }
     }
 
-    return 1;
+    return true;
 }
 
 static short decode_month(short *month, bool is_hebrew)
@@ -1704,7 +1704,7 @@ static short decode_day(short *day, bool flags) //NOLINT(readability-non-const-p
     return icalrecurrencetype_day_position(*day);
 }
 
-static int initialize_rscale(icalrecur_iterator *impl)
+static bool initialize_rscale(icalrecur_iterator *impl)
 {
     struct icalrecurrencetype *rule = impl->rule;
     struct icaltimetype dtstart = impl->dtstart;
@@ -1730,7 +1730,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
         tzid = u_strFromUTF8Lenient(tzid, (int32_t)len, NULL, src, -1, &status);
         if (U_FAILURE(status)) {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
-            return 0;
+            return false;
         }
     }
 
@@ -1751,7 +1751,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
     }
     if (!impl->greg || U_FAILURE(status)) {
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
-        return 0;
+        return false;
     }
 
     if (!rule->rscale) {
@@ -1778,7 +1778,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
         uenum_close(en);
         if (!cal) {
             icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
-            return 0;
+            return false;
         }
 
         /* Create locale for RSCALE calendar */
@@ -1794,7 +1794,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
         }
         if (!impl->rscale || U_FAILURE(status)) {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
-            return 0;
+            return false;
         }
     }
 
@@ -1807,7 +1807,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
         !validate_byrule(impl, ICAL_BY_WEEK_NO, UCAL_WEEK_OF_YEAR, NULL, 0) ||
         !validate_byrule(impl, ICAL_BY_SET_POS, UCAL_DAY_OF_YEAR, NULL, 0)) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-        return 0;
+        return false;
     }
 
     /* Set iCalendar defaults */
@@ -1817,7 +1817,7 @@ static int initialize_rscale(icalrecur_iterator *impl)
     /* Get rstart (DTSTART in RSCALE) */
     impl->rstart = occurrence_as_icaltime(impl, 0);
 
-    return 1;
+    return true;
 }
 
 /** Sets the Gregorian date and convert to RSCALE */
@@ -2154,16 +2154,16 @@ static void increment_second(icalrecur_iterator *impl, int inc)
     icaltime_adjust(&impl->last, 0, 0, 0, inc);
 }
 
-static int initialize_rscale(icalrecur_iterator *impl)
+static bool initialize_rscale(icalrecur_iterator *impl)
 {
     if (impl->rule->rscale && strcasecmp(impl->rule->rscale, "GREGORIAN")) {
         icalerror_set_errno(ICAL_UNIMPLEMENTED_ERROR);
-        return 0;
+        return false;
     }
 
     impl->rstart = impl->dtstart;
 
-    return 1;
+    return true;
 }
 
 /** Sets the Gregorian date */
@@ -2868,7 +2868,7 @@ static int next_weekday_by_week(icalrecur_iterator *impl)
     }
 }
 
-static int next_week(icalrecur_iterator *impl)
+static bool next_week(icalrecur_iterator *impl)
 {
     /* Increment to the next week day,
        if there is data at a level less than a week */
@@ -3360,18 +3360,18 @@ static int prev_yearday(icalrecur_iterator *impl,
     return ret;
 }
 
-int icalrecur_check_rulepart(const icalrecur_iterator *impl,
-                             int v, icalrecurrencetype_byrule byrule)
+bool icalrecur_check_rulepart(const icalrecur_iterator *impl,
+                              int v, icalrecurrencetype_byrule byrule)
 {
     if (impl->bydata[byrule].by.size > 0) {
         for (int itr = 0; itr < impl->bydata[byrule].by.size; itr++) {
             if (impl->bydata[byrule].by.data[itr] == v) {
-                return 1;
+                return true;
             }
         }
     }
 
-    return 0;
+    return false;
 }
 
 static int days_in_current_month(icalrecur_iterator *impl)
@@ -3391,13 +3391,13 @@ static inline int has_contract_restriction(icalrecur_iterator *impl,
            expand_map[impl->rule->freq].map[byrule] == CONTRACT;
 }
 
-static int check_contract_restriction(icalrecur_iterator *impl,
-                                      icalrecurrencetype_byrule byrule, int v,
-                                      int (*get_total)(icalrecur_iterator *))
+static bool check_contract_restriction(icalrecur_iterator *impl,
+                                       icalrecurrencetype_byrule byrule, int v,
+                                       int (*get_total)(icalrecur_iterator *))
 {
     if (has_contract_restriction(impl, byrule)) {
         int total = 0;
-        int pass = 0;
+        bool pass = false;
         for (int itr = 0; itr < impl->bydata[byrule].by.size; itr++) {
             short byval = impl->bydata[byrule].by.data[itr];
             if ((byval < 0) && (total == 0)) {
@@ -3413,20 +3413,19 @@ static int check_contract_restriction(icalrecur_iterator *impl,
             }
 
             if (v == ((byval >= 0) ? byval : (total + 1 + byval))) {
-                pass = 1;
+                pass = true;
                 break;
             }
         }
 
         return pass;
-    } else {
-        /* This is not a contracting byrule, or it has no data, so the
-           test passes */
-        return 1;
     }
+
+    /* This is not a contracting byrule, or it has no data, so the test passes */
+    return true;
 }
 
-static int check_contracting_rules(icalrecur_iterator *impl)
+static bool check_contracting_rules(icalrecur_iterator *impl)
 {
     struct icaltimetype last = occurrence_as_icaltime(impl, 0);
 
@@ -3446,12 +3445,12 @@ static int check_contracting_rules(icalrecur_iterator *impl)
             ICAL_BY_DAY, get_day_of_week_adjusted(impl, last.year, last.month, last.day), NULL) &&
         CHECK_CONTRACT_RESTRICTION(
             ICAL_BY_YEAR_DAY, get_day_of_year(impl, last.year, last.month, last.day), days_in_current_year)) {
-        return 1;
+        return true;
     }
 
 #undef CHECK_CONTRACT_RESTRICTION
 
-    return 0;
+    return false;
 }
 
 /* Initialize data relating to BYSETPOS, in particular:
@@ -3550,10 +3549,10 @@ static inline int setpos_cmp(int s1, int s2, int next)
  * sp_idxp and sp_idxn, respectively, while
  * next == 0 indicates that we should decrease and increase them
  */
-static int check_setpos(icalrecur_iterator *impl, int next)
+static bool check_setpos(icalrecur_iterator *impl, int next)
 {
     if (!has_by_data(impl, ICAL_BY_SET_POS)) {
-        return 1;
+        return true;
     }
     icalrecurrence_by_data *by = &(impl->bydata[ICAL_BY_SET_POS].by);
     int32_t set_pos;
@@ -3573,7 +3572,7 @@ static int check_setpos(icalrecur_iterator *impl, int next)
             set_pos = by->data[impl->sp_idxp];
         }
         if (impl->set_pos == set_pos) {
-            return 1;
+            return true;
         }
     }
 
@@ -3590,10 +3589,10 @@ static int check_setpos(icalrecur_iterator *impl, int next)
             set_pos = by->data[impl->sp_idxn] + impl->recurrence_set_size + 1;
         }
         if (impl->set_pos == set_pos) {
-            return 1;
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
