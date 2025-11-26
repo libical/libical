@@ -94,12 +94,12 @@
   larger time span than the interval. For instance, if
   INTERVAL=DAILY, BYMONTH is a contracting rule part.
 
-  Check_contracting_rules() uses icalrecur_check_rulepart() to do its
-  work. icalrecur_check_rulepart() uses expand_map[] to determine if a rule
+  check_contracting_rules() uses has_contract_restriction() to do its
+  work. has_contract_restriction() uses expand_map[] to determine if a rule
   is contracting, and if it is, and if the BY rule part has some data,
   then the routine checks if the value of a component of the time is
   part of the byrule part. For instance, for "INTERVAL=DAILY;
-  BYMONTH=6,10", icalrecur_check_rulepart() would check that the time value
+  BYMONTH=6,10", ihas_contract_restriction() would check that the time value
   given to it has a month of either 6 or 10.
 
   Finally, icalrecur_iterator_next() does a few other checks on the
@@ -3358,20 +3358,6 @@ static int prev_yearday(icalrecur_iterator *impl,
     set_day_of_year(impl, impl->days_index);
 
     return ret;
-}
-
-bool icalrecur_check_rulepart(const icalrecur_iterator *impl,
-                              int v, icalrecurrencetype_byrule byrule)
-{
-    if (impl->bydata[byrule].by.size > 0) {
-        for (int itr = 0; itr < impl->bydata[byrule].by.size; itr++) {
-            if (impl->bydata[byrule].by.data[itr] == v) {
-                return true;
-            }
-        }
-    }
-
-    return false;
 }
 
 static int days_in_current_month(icalrecur_iterator *impl)
