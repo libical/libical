@@ -36,7 +36,6 @@
 
 #if defined(_MSC_VER)
 #if !defined(HAVE_BYTESWAP_H) && !defined(HAVE_SYS_ENDIAN_H) && !defined(HAVE_ENDIAN_H)
-#define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8) & 0xff)
 
 #define bswap_32(x)               \
     (((x) << 24) & 0xff000000) |  \
@@ -58,9 +57,6 @@
 #endif
 
 #if defined(HAVE_ENDIAN_H) || defined(HAVE_SYS_ENDIAN_H)
-#ifndef bswap_16
-#define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8) & 0xff)
-#endif
 #ifdef bswap32
 #define bswap_32 bswap32
 #define bswap_64 bswap64
@@ -72,7 +68,6 @@
 #endif
 
 #if defined(__APPLE__) || defined(__MINGW32__)
-#define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8) & 0xff)
 #define bswap_32 __builtin_bswap32
 #define bswap_64 __builtin_bswap64
 #endif
