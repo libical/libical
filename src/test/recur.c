@@ -47,8 +47,7 @@ static void recur_callback(const icalcomponent *comp, const struct icaltime_span
     printf("    %s\n", icalctime(&span->end));
 }
 
-/* cppcheck-suppress constParameter */
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
     icalset *cin;
     struct icaltimetype next;

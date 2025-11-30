@@ -123,15 +123,14 @@ static int decode(const void *ptr)
 #endif
 #else
     const unsigned char *p = ptr;
-    int result = (*p & (1 << (CHAR_BIT - 1))) ? ~0 : 0;
+    unsigned int result = (*p & (1 << (CHAR_BIT - 1))) ? ~0U : 0;
 
-    /* cppcheck-suppress shiftNegativeLHS */
     result = (result << 8) | *p++;
     result = (result << 8) | *p++;
     result = (result << 8) | *p++;
     result = (result << 8) | *p++;
 
-    return result;
+    return (int)result;
 #endif
 }
 

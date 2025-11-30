@@ -2074,7 +2074,7 @@ static const char *get_zone_directory_builtin(void)
         return zone_files_directory;
     }
 
-    /* cppcheck-suppress knownConditionTrueFalse */
+    /* cppcheck-suppress knownConditionTrueFalse; cppcheck should not be seeing this on non-Windows, yet it does */
     if (cache) {
         return cache;
     }

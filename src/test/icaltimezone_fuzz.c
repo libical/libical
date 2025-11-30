@@ -19,8 +19,7 @@
 
 #include "libical/ical.h"
 
-/* cppcheck-suppress constParameter */
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
     FILE *fp;
     int fd, r;
@@ -42,41 +41,37 @@ int main(int argc, char *argv[])
     fp = fopen(fname, "rb");
     if (fp == (FILE *)NULL) {
         fprintf(stderr, "Error: unable to open %s\n", fname);
-        assert(0);
+        return 1;
     }
 
     fd = fileno(fp);
     if (fstat(fd, &sbuf) != 0) {
         fprintf(stderr, "Error: unable to fstat %s\n", fname);
         fclose(fp);
-        assert(0);
+        return 1;
     }
     filesize = (size_t)sbuf.st_size;
-    /* cppcheck-suppress nullPointerRedundantCheck */
     data = malloc(filesize + 1);
     if (!data) {
         fprintf(stderr, "Error: unable to allocate memory\n");
         free(data);
-        assert(0);
+        fclose(fp);
+        return 1;
     }
-    /* cppcheck-suppress nullPointerRedundantCheck */
     memset(data, 0, filesize + 1);
     r = read(fd, data, filesize);
-    /* cppcheck-suppress doubleFree */
     fclose(fp);
 
     if (r < 0) {
         fprintf(stderr, "Error: Failed to read data\n");
-        /* cppcheck-suppress doubleFree */
         free(data);
-        assert(0);
+        return 1;
     }
 #define LOOKBACK_CHARS 40
     if (r <= LOOKBACK_CHARS) {
         fprintf(stderr, "Error: Failed to read enough data -- more than %d chars is required for this test", LOOKBACK_CHARS);
-        /* cppcheck-suppress doubleFree */
         free(data);
-        assert(0);
+        return 1;
     }
     size_t ics_len = filesize - LOOKBACK_CHARS;
     char *ics_str = (char *)malloc(ics_len + 1);
@@ -84,7 +79,6 @@ int main(int argc, char *argv[])
         return 0;
     }
     memset(ics_str, '\0', ics_len + 1);
-    /* cppcheck-suppress deallocuse */
     memcpy(ics_str, data, ics_len);
     icalcomponent *vtz = icalcomponent_new_from_string(ics_str);
     free(ics_str);

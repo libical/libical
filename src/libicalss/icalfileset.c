@@ -99,7 +99,6 @@ icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
     (void)icalfileset_lock(fset);
 
     if (cluster_file_size > 0) {
-        /* cppcheck-suppress knownConditionTrueFalse; we might want to return an error some day */
         if (icalfileset_read_file(fset, mode) != ICAL_NO_ERROR) {
             icalfileset_free(set);
             return 0;
@@ -307,8 +306,7 @@ int icalfileset_unlock(icalfileset *set)
 }
 
 /* Lifted from https://stackoverflow.com/questions/29079011/copy-file-function-in-c */
-/* cppcheck-suppress constParameter */
-static int file_copy(char fileSource[], char fileDestination[])
+static int file_copy(const char *fileSource, const char *fileDestination)
 {
     char c[1024]; // or any other constant you like
     FILE *stream_R, *stream_W;

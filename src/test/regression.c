@@ -862,7 +862,7 @@ static void test_component_foreach_dtend_callback(const icalcomponent *comp, con
     _unused(span);
 
     assert(a->found < a->arr->num_elements);
-    icaltime_t *dtend = (icaltime_t *)icalarray_element_at(a->arr, a->found);
+    const icaltime_t *dtend = (icaltime_t *)icalarray_element_at(a->arr, a->found);
     ok("DTEND matches", *dtend == span->end);
 
     a->found++;
@@ -960,14 +960,14 @@ void test_memory(void)
     int i;
     char *p;
 
-    char S1[] = "1) When in the Course of human events, ";
-    char S2[] = "2) it becomes necessary for one people to dissolve the political bands which have connected them with another, ";
-    char S3[] = "3) and to assume among the powers of the earth, ";
-    char S4[] = "4) the separate and equal station to which the Laws of Nature and of Nature's God entitle them, ";
-    char S5[] = "5) a decent respect to the opinions of mankind requires that they ";
-    char S6[] = "6) should declare the causes which impel them to the separation. ";
-    char S7[] = "7) We hold these truths to be self-evident, ";
-    char S8[] = "8) that all men are created equal, ";
+    const char S1[] = "1) When in the Course of human events, ";
+    const char S2[] = "2) it becomes necessary for one people to dissolve the political bands which have connected them with another, ";
+    const char S3[] = "3) and to assume among the powers of the earth, ";
+    const char S4[] = "4) the separate and equal station to which the Laws of Nature and of Nature's God entitle them, ";
+    const char S5[] = "5) a decent respect to the opinions of mankind requires that they ";
+    const char S6[] = "6) should declare the causes which impel them to the separation. ";
+    const char S7[] = "7) We hold these truths to be self-evident, ";
+    const char S8[] = "8) that all men are created equal, ";
 
     /*    char S9[] = "9) that they are endowed by their Creator with certain unalienable Rights, ";
     char S10[] = "10) that among these are Life, Liberty, and the pursuit of Happiness. ";
@@ -1668,7 +1668,7 @@ void test_recur_parameter_bug(void)
     icalproperty *prop;
     struct icalrecurrencetype *recur;
     int n_errors;
-    char *str;
+    const char *str;
 
     icalcomp = icalparser_parse_string((char *)test_icalcomp_str);
     ok("icalparser_parse_string()", (icalcomp != NULL));
@@ -1688,9 +1688,7 @@ void test_recur_parameter_bug(void)
         for (p = icalcomponent_get_first_property(icalcomp, ICAL_XLICERROR_PROPERTY);
              p;
              p = icalcomponent_get_next_property(icalcomp, ICAL_XLICERROR_PROPERTY)) {
-            const char *str;
-            str = icalproperty_as_ical_string(p);
-            fprintf(stderr, "error: %s\n", str);
+            fprintf(stderr, "error: %s\n", icalproperty_as_ical_string(p));
         }
     }
 
@@ -2635,7 +2633,7 @@ void test_fblist(void)
     icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
     icalset *set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/spanlist.ics", &options);
     struct icalperiodtype period;
-    icalcomponent *comp, *fbcomp;
+    icalcomponent *comp;
     int *foo;
     int i;
 
@@ -2669,7 +2667,7 @@ void test_fblist(void)
            "19980102T010000");
 
     if (VERBOSE) {
-        fbcomp = icalspanlist_as_vfreebusy(sl, "a@foo.com", "b@foo.com");
+        icalcomponent *fbcomp = icalspanlist_as_vfreebusy(sl, "a@foo.com", "b@foo.com");
         printf("%s\n", icalcomponent_as_ical_string(fbcomp));
         icalcomponent_free(fbcomp);
     }
@@ -3160,16 +3158,15 @@ void test_start_of_week(void)
 {
     struct icaltimetype tt2;
     struct icaltimetype tt1 = icaltime_from_string("19900110");
-    int dow, doy, start_dow;
 
     do {
         tt1 = icaltime_normalize(tt1);
 
-        doy = icaltime_start_doy_week(tt1, 1);
-        dow = icaltime_day_of_week(tt1);
+        int doy = icaltime_start_doy_week(tt1, 1);
+        int dow = icaltime_day_of_week(tt1);
 
         tt2 = icaltime_from_day_of_year(doy, tt1.year);
-        start_dow = icaltime_day_of_week(tt2);
+        int start_dow = icaltime_day_of_week(tt2);
 
         if (doy == 1) {
             char msg[128];
@@ -3827,11 +3824,9 @@ void test_file_locks(void)
 
     if (pid == 0) {
         /*child */
-        int i;
-
         microsleep(rand() / (RAND_MAX / 100));
 
-        for (i = 0; i < 50; i++) {
+        for (int ii = 0; ii < 50; ii++) {
             fs = icalfileset_new(path);
 
             assert(fs != 0);
@@ -3862,9 +3857,7 @@ void test_file_locks(void)
 
     } else {
         /* parent */
-        int i;
-
-        for (i = 0; i < 50; i++) {
+        for (int ii = 0; ii < 50; ii++) {
             fs = icalfileset_new(path);
 
             assert(fs != 0);
@@ -3901,9 +3894,9 @@ void test_file_locks(void)
     c = icalfileset_get_first_component(fs);
     final = icaldurationtype_as_seconds(icalcomponent_get_duration(c));
     for (c = icalfileset_get_next_component(fs); c != 0; c = icalfileset_get_next_component(fs)) {
-        struct icaldurationtype d = icalcomponent_get_duration(c);
+        struct icaldurationtype next_d = icalcomponent_get_duration(c);
 
-        sec = icaldurationtype_as_seconds(d);
+        sec = icaldurationtype_as_seconds(next_d);
 
         /*printf("%d,%d ",i,sec); */
         assert(i == sec);
@@ -3921,7 +3914,6 @@ void test_action(void)
 {
     icalcomponent *c;
     icalproperty *p;
-    char *str;
 
     static const char test_icalcomp_str[] =
         "BEGIN:VEVENT\r\n"
@@ -3936,7 +3928,7 @@ void test_action(void)
     ok("icalparser_parse_string(), ACTIONS", (c != NULL));
     assert(c != 0);
 
-    str = icalcomponent_as_ical_string(c);
+    const char *str = icalcomponent_as_ical_string(c);
     str_is("icalcomponent_as_ical_string()", str, ((char *)test_icalcomp_str));
     if (VERBOSE) {
         printf("%s\n\n", str);
@@ -4173,7 +4165,7 @@ void test_langbind(void)
 {
     icalcomponent *c, *inner;
     icalproperty *p;
-    char *test_str_parsed;
+    const char *test_str_parsed;
     static const char test_str[] =
         "BEGIN:VEVENT\n"
         "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com\n"
@@ -4728,16 +4720,14 @@ void test_attach_data(void)
 void test_vcal(void)
 {
     VObject *vcal;
-    icalcomponent *comp;
     const char *file = TEST_DATADIR "/user-cal.vcf";
 
     vcal = Parse_MIME_FromFileName(file);
 
-    /* cppcheck-suppress unknownMacro */
     ok("Parsing " TEST_DATADIR "/user-cal.vcf", (vcal != 0));
 
     if (vcal) {
-        comp = icalvcal_convert(vcal);
+        icalcomponent *comp = icalvcal_convert(vcal);
 
         ok("Converting to ical component", (comp != 0));
 
@@ -5006,7 +4996,7 @@ void test_tzid_with_utc_time(void)
         "EXDATE;TZID=my_zone:20180404T040000Z\r\n"
         "END:VEVENT\r\n"
         "END:VCALENDAR\r\n";
-    struct _exdate_expected {
+    const struct _exdate_expected {
         const char *tzid;
     } exdate_expected[] = {
         {""},
@@ -5239,7 +5229,7 @@ void test_timezone_from_builtin(void)
         "DUE;TZID=Europe/Berlin:20180101T030000\r\n"
         "END:VEVENT\r\n"
         "END:VCALENDAR\r\n";
-    icalcomponent *comp, *subcomp;
+    icalcomponent *comp;
     icaltimezone *zone;
     struct icaltimetype dtstart, dtend, due;
     char *strcomp, *tzidprefix, *prevslash = NULL, *prevprevslash = NULL, *p;
@@ -5253,7 +5243,7 @@ void test_timezone_from_builtin(void)
     zone = icaltimezone_get_builtin_timezone("America/New_York");
     tzidprefix = strdup(icaltimezone_get_tzid(zone));
     p = tzidprefix;
-    while (p = strchr(p + 1, '/'), p) {
+    while (p && (p = strchr(p + 1, '/'))) {
         prevprevslash = prevslash;
         prevslash = p;
     }
@@ -5265,28 +5255,30 @@ void test_timezone_from_builtin(void)
 
     len = strlen(strcomp_fmt) + strlen(icaltimezone_get_tzid(zone)) + 2;
     strcomp = (char *)malloc(len + 1);
+    if (strcomp) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
-    snprintf(strcomp, len, strcomp_fmt, icaltimezone_get_tzid(zone));
+        snprintf(strcomp, len, strcomp_fmt, icaltimezone_get_tzid(zone));
 #pragma GCC diagnostic pop
 
-    comp = icalcomponent_new_from_string(strcomp);
-    ok("icalcomponent_new_from_string()", (comp != NULL));
-    subcomp = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
-    ok("get subcomp", (subcomp != NULL));
+        comp = icalcomponent_new_from_string(strcomp);
+        ok("icalcomponent_new_from_string()", (comp != NULL));
+        icalcomponent *subcomp = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+        ok("get subcomp", (subcomp != NULL));
 
-    dtstart = icalcomponent_get_dtstart(subcomp);
-    dtend = icalcomponent_get_dtend(subcomp);
-    due = icalcomponent_get_due(subcomp);
+        dtstart = icalcomponent_get_dtstart(subcomp);
+        dtend = icalcomponent_get_dtend(subcomp);
+        due = icalcomponent_get_due(subcomp);
 
-    ok("DTSTART is my_zone", (strcmp(icaltimezone_get_tzid((icaltimezone *)dtstart.zone), "my_zone") == 0));
-    ok("DTEND is America/New_York", (strcmp(icaltimezone_get_location((icaltimezone *)dtend.zone), "America/New_York") == 0));
-    ok("DUE is Europe/Berlin", (strcmp(icaltimezone_get_location((icaltimezone *)due.zone), "Europe/Berlin") == 0));
+        ok("DTSTART is my_zone", (strcmp(icaltimezone_get_tzid((icaltimezone *)dtstart.zone), "my_zone") == 0));
+        ok("DTEND is America/New_York", (strcmp(icaltimezone_get_location((icaltimezone *)dtend.zone), "America/New_York") == 0));
+        ok("DUE is Europe/Berlin", (strcmp(icaltimezone_get_location((icaltimezone *)due.zone), "Europe/Berlin") == 0));
 
-    icalcomponent_free(comp);
+        icalcomponent_free(comp);
+        free(strcomp);
+    }
+
     free(tzidprefix);
-    free(strcomp);
-
     zone = icaltimezone_get_builtin_timezone("Pacific/Midway");
     ok("builtin location is Pacific/Midway", (strcmp(icaltimezone_get_location((icaltimezone *)zone), "Pacific/Midway") == 0));
     comp = icaltimezone_get_component(zone);
@@ -5359,7 +5351,7 @@ void test_icalarray_sort(void)
     /* this test is based on the work from the PDCLib project */
 
     char presort[] = {"shreicnyjqpvozxmbt"};
-    char sorted1[] = {"bcehijmnopqrstvxyz"};
+    const char sorted1[] = {"bcehijmnopqrstvxyz"};
     unsigned int i;
 
     icalarray *array = icalarray_new(1, 2);
@@ -5604,7 +5596,6 @@ static void test_builtin_compat_tzid(void)
         {"Does not match custom TZID", "/custom/test/tzid/Europe/London", 0},
         {NULL, NULL, 0}};
     int ii, jj;
-    icaltimezone *tz;
 
     for (jj = 0; jj < 2; jj++) {
         if (jj == 1) {
@@ -5612,8 +5603,7 @@ static void test_builtin_compat_tzid(void)
             icaltimezone_free_builtin_timezones();
         }
 
-        tz = icaltimezone_get_builtin_timezone("Europe/London");
-
+        const icaltimezone *tz = icaltimezone_get_builtin_timezone("Europe/London");
         for (ii = 0; cases[ii].tzid; ii++) {
             icaltimezone *zone;
 
@@ -6328,19 +6318,19 @@ static void test_icalpropiter(void)
     icalcomponent *comp = icalcomponent_new_from_string(str);
     ok("Parsed VEVENT component", (comp != NULL));
 
-    icalproperty *dtstamp =
+    const icalproperty *dtstamp =
         icalcomponent_get_first_property(comp, ICAL_DTSTAMP_PROPERTY);
     assert(dtstamp != NULL);
-    icalproperty *dtstart =
+    const icalproperty *dtstart =
         icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
     assert(dtstart != NULL);
-    icalproperty *comment1 =
+    const icalproperty *comment1 =
         icalcomponent_get_first_property(comp, ICAL_COMMENT_PROPERTY);
     assert(comment1 != NULL);
-    icalproperty *comment2 =
+    const icalproperty *comment2 =
         icalcomponent_get_next_property(comp, ICAL_COMMENT_PROPERTY);
     assert(comment2 != NULL);
-    icalproperty *uid =
+    const icalproperty *uid =
         icalcomponent_get_first_property(comp, ICAL_UID_PROPERTY);
     assert(uid != NULL);
 
@@ -6402,10 +6392,10 @@ static void test_icalparamiter(void)
         icalcomponent_get_first_property(comp, ICAL_ATTENDEE_PROPERTY);
     ok("Parsed ATTENDEE property", (prop != NULL));
 
-    icalparameter *rsvp =
+    const icalparameter *rsvp =
         icalproperty_get_first_parameter(prop, ICAL_RSVP_PARAMETER);
     assert(rsvp != NULL);
-    icalparameter *partstat =
+    const icalparameter *partstat =
         icalproperty_get_first_parameter(prop, ICAL_PARTSTAT_PARAMETER);
     assert(partstat != NULL);
 
@@ -6864,7 +6854,7 @@ static void test_icaltime_proper_zone(void)
     ok("first is the same as the second after second's convert", (icaltime_compare(first, second) == 0));
 }
 
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
     extern char *optarg;
@@ -6894,7 +6884,7 @@ int main(int argc, char *argv[])
     test_start(0);
 
 #if defined(HAVE_GETOPT)
-    while ((c = getopt(argc, argv, "lvq")) != -1) {
+    while ((c = getopt(argc, (char **)argv, "lvq")) != -1) {
         switch (c) {
         case 'v': {
             VERBOSE = 1;

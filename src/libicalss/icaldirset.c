@@ -520,15 +520,13 @@ icalcomponent *icaldirset_get_current_component(icalset *set)
 {
     icaldirset *dset = (icaldirset *)set;
 
-    if (dset->cluster == 0) {
-        (void)icaldirset_get_first_component(set);
-    }
-    /* cppcheck-suppress duplicateCondition */
-    if (dset->cluster == 0) {
-        return 0;
-    }
+    icalerror_check_arg_rz((dset != 0), "dset");
 
-    return icalcluster_get_current_component(dset->cluster);
+    if (dset->cluster == 0) {
+        return icaldirset_get_first_component(set);
+    } else {
+        return icalcluster_get_current_component(dset->cluster);
+    }
 }
 
 icalcomponent *icaldirset_get_first_component(icalset *set)

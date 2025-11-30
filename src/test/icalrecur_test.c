@@ -114,8 +114,7 @@ static char *skip_until(char *instances, icaltimetype t, int order)
     }
 }
 
-/* cppcheck-suppress constParameter */
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
     /* Default to RFC 5545 tests */
     const char *file_name = "icalrecur_test.txt";

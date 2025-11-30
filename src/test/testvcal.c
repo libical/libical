@@ -27,8 +27,7 @@
 
 */
 
-/* cppcheck-suppress constParameter */
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
     VObject *vcal = 0;
     icalcomponent *comp;

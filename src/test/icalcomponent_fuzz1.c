@@ -19,8 +19,7 @@
 
 #include "libical/ical.h"
 
-/* cppcheck-suppress constParameter */
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
     FILE *fp;
     int fd, r;
@@ -43,37 +42,35 @@ int main(int argc, char *argv[])
     fp = fopen(fname, "rb");
     if (fp == (FILE *)NULL) {
         fprintf(stderr, "Error: unable to open %s\n", fname);
-        assert(0);
+        return 1;
     }
 
     fd = fileno(fp);
     if (fstat(fd, &sbuf) != 0) {
         fprintf(stderr, "Error: unable to fstat %s\n", fname);
         fclose(fp);
-        assert(0);
+        return 1;
     }
     filesize = (size_t)sbuf.st_size;
     data = malloc(filesize + 1);
     if (!data) {
         fprintf(stderr, "Error: unable to allocate memory\n");
         free(data);
-        assert(0);
+        fclose(fp);
+        return 1;
     }
-    /* cppcheck-suppress nullPointerRedundantCheck */
     memset(data, 0, filesize + 1);
 
     r = read(fd, data, filesize);
-    /* cppcheck-suppress doubleFree */
     fclose(fp);
 
     if (r < 0) {
         fprintf(stderr, "Error: Failed to read data\n");
         free(data);
-        assert(0);
+        return 1;
     }
 
     comp = icalcomponent_new_from_string(data);
-    /* cppcheck-suppress doubleFree */
     free(data);
 
     icalcomponent_normalize(comp);
