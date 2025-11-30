@@ -315,6 +315,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     460946139 # cpu timeout fails beyond 60s
     462342205 # ASAN cpu timeout exceeds 60s
     463617307 # ASAN cpu timeout exceeds 60s
+    464655084 # ASAN cpu timeout exceeds 60s
     usban
     usban2
     usban3
