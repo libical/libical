@@ -21,7 +21,7 @@ jobs:
       - name: Configure project
         run: |
           mkdir build
-          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False
+          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True
         shell: cmd
       - name: Build project
         run: cmake --build build
