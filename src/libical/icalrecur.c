@@ -144,12 +144,7 @@ static ICAL_GLOBAL_VAR ical_invalid_rrule_handling invalidRruleHandling = ICAL_R
 #if defined(HAVE_LIBICU)
 #include <unicode/ucal.h>
 #include <unicode/ustring.h>
-#if defined(HAVE_STDBOOL_H)
 #include <stdbool.h>
-#else
-#define false 0
-#define true 1
-#endif
 #else
 
 /* The maximums below are based on Gregorian leap years */
