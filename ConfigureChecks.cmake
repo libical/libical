@@ -46,10 +46,6 @@ check_include_files(
   wctype.h
   HAVE_WCTYPE_H
 )
-check_include_files(
-  stdbool.h
-  HAVE_STDBOOL_H
-)
 
 include(CheckFunctionExists)
 if(WIN32 AND MSVC)
