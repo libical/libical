@@ -42,8 +42,7 @@ install(EXPORT IcalGlibSrcGenerator NAMESPACE native- DESTINATION ${LIB_INSTALL_
 
 # iCalendar files
 list(
-  APPEND
-  API_FILES
+  APPEND API_FILES
   api/i-cal-array.xml
   api/i-cal-attach.xml
   api/i-cal-comp-iter.xml
@@ -80,8 +79,7 @@ list(
 
 # vCard files
 list(
-  APPEND
-  API_FILES
+  APPEND API_FILES
   api/i-cal-vcard-component.xml
   api/i-cal-vcard-derived-parameter.xml
   api/i-cal-vcard-derived-property.xml
@@ -100,8 +98,7 @@ list(
 )
 
 list(
-  APPEND
-  LIBICAL_GLIB_HEADERS
+  APPEND LIBICAL_GLIB_HEADERS
   ${CMAKE_CURRENT_BINARY_DIR}/libical-glib.h
   ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.h
   ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
@@ -115,8 +112,7 @@ foreach(file IN LISTS API_FILES)
   string(REGEX REPLACE ".xml$" ".c" c_file ${bin_file})
 
   list(
-    APPEND
-    LIBICAL_GLIB_SOURCES
+    APPEND LIBICAL_GLIB_SOURCES
     ${h_file}
     ${c_file}
   )
@@ -139,8 +135,7 @@ else()
 endif()
 
 list(
-  APPEND
-  LIBICAL_GLIB_SOURCES
+  APPEND LIBICAL_GLIB_SOURCES
   ${CMAKE_CURRENT_BINARY_DIR}/libical-glib-private.h
   ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.c
   ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.h

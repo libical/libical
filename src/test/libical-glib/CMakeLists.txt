@@ -17,8 +17,7 @@ add_feature_info(
 )
 
 list(
-  APPEND
-  TEST_FILES
+  APPEND TEST_FILES
   # iCalendar tests
   array.py
   attach.py
@@ -57,8 +56,7 @@ if(PYTHON3)
   endif()
 
   list(
-    APPEND
-    test_env
+    APPEND test_env
     "GI_TYPELIB_PATH=${GI_TYPELIB_PATH_STR}"
     "ZONEINFO_DIRECTORY=${PROJECT_SOURCE_DIR}/zoneinfo"
   )
