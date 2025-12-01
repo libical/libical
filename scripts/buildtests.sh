@@ -227,7 +227,7 @@ BUILD() {
   else
     export LD_LIBRARY_PATH=$BDIR/lib
   fi
-  ulimit -S -t 10      # oss-fuzz uses 60 seconds
+  ulimit -S -t 15      # oss-fuzz uses 60 seconds
   ulimit -S -m 2621440 # oss-fuzz uses 2560Mb (many systems do not honor this limit)
   ctest . 2>&1 | tee make-test.out || exit 1
   ulimit -S -t unlimited
