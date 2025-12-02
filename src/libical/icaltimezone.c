@@ -503,8 +503,8 @@ static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
         changes_end_year = ICALTIMEZONE_MAX_YEAR;
     }
 
+    /* coverity[forward_null] */
     if (!zone->changes || zone->end_year < end_year) {
-        /* coverity[forward_null] */
         icaltimezone_expand_changes(zone, changes_end_year);
     }
 }
@@ -1311,15 +1311,15 @@ const char *icaltimezone_get_display_name(icaltimezone *zone)
     }
     if (!display_name) {
         display_name = (char *)icaltimezone_get_tzid(zone);
-        const char *tzid_prefix = icaltimezone_tzid_prefix();
-        /* Outlook will strip out X-LIC-LOCATION property and so all
-           we get back in the iTIP replies is the TZID. So we see if
-           this is one of our TZIDs and if so we jump to the city name
-           at the end of it. */
-        if (display_name &&
-            !strncmp(display_name, tzid_prefix, strlen(tzid_prefix))) {
-            /* Skip past our prefix */
-            display_name += strlen(tzid_prefix);
+        if (display_name) {
+            /* Outlook strips out X-LIC-LOCATION property and all we get back
+            * in the iTIP replies is the TZID. So we see if this is one of our TZIDs
+            * and if so we jump to the city name at the end of it. */
+            const char *tzid_prefix = icaltimezone_tzid_prefix();
+            if (!strncmp(display_name, tzid_prefix, strlen(tzid_prefix))) {
+                /* Skip past our prefix */
+                display_name += strlen(tzid_prefix);
+            }
         }
     }
 
@@ -1786,7 +1786,6 @@ static void icaltimezone_parse_zone_tab(void)
                 continue;
             }
         } else {
-            /* coverity[tainted_data] */
             if (fetch_lat_long_from_string(buf, &latitude_degrees, &latitude_minutes,
                                            &latitude_seconds,
                                            &longitude_degrees, &longitude_minutes,

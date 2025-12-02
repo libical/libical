@@ -481,7 +481,7 @@ int icaltime_days_in_month(const int month, const int year)
     days = _days_in_month[month];
 
     if (month == 2) {
-        days += (int)icaltime_is_leap_year(year);
+        days += (icaltime_is_leap_year(year) ? 1 : 0);
     }
 
     return days;
@@ -539,7 +539,7 @@ struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
     int doy = _doy;
     int year = _year;
 
-    is_leap = (unsigned int)icaltime_is_leap_year(year);
+    is_leap = (icaltime_is_leap_year(year) ? 1 : 0);
 
     /* Zero and neg numbers represent days  of the previous year */
     if (doy < 1) {
