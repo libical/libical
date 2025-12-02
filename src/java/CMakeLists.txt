@@ -60,8 +60,7 @@ endif()
 file(GLOB JAVA_SOURCES ${PROJECT_SOURCE_DIR}/src/java/*.java)
 
 file(
-  WRITE
-  ${CMAKE_CURRENT_BINARY_DIR}/manifest.txt
+  WRITE ${CMAKE_CURRENT_BINARY_DIR}/manifest.txt
   "Manifest-Version: 1.0\n"
   "Created-By: CMake\n"
   "Implementation-Title: libical Java Bindings\n"
