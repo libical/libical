@@ -453,7 +453,6 @@ CPPCHECK() {
     --check-level=exhaustive \
     --suppress-xml=cppcheck-suppressions.xml \
     --template='{file}:{line},{severity},{id},{message}' \
-    -D __cppcheck__ \
     -D ICAL_PACKAGE="\"x\"" \
     -D ICAL_VERSION="\"y\"" \
     -D HAVE_CONFIG_H=1 \
@@ -479,7 +478,6 @@ CPPCHECK() {
     --check-level=exhaustive \
     --suppress-xml=cppcheck-suppressions.xml \
     --template='{file}:{line},{severity},{id},{message}' \
-    -D __cppcheck__ \
     -D ICAL_PACKAGE="\"x\"" \
     -D ICAL_VERSION="\"y\"" \
     -D HAVE_CONFIG_H=1 \
