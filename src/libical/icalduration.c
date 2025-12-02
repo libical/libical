@@ -321,7 +321,7 @@ struct icaltimetype icalduration_extend(struct icaltimetype t, struct icaldurati
      * addition of the change of duration of the discontinuity.
      */
     icaltime_adjust(&t, 0, 0, 0,
-                    /* coverity[COPY_PASTE_ERROR] */
+                    /* coverity[copy_paste_error] */
                     icaltimezone_get_utc_offset((icaltimezone *)t.zone, &t, &t.is_daylight) -
                         icaltimezone_get_utc_offset((icaltimezone *)t.zone, &t_days, &t_days.is_daylight));
 

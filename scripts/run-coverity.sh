@@ -32,7 +32,7 @@ builddir=build-coverity_scan-gcc
 rm -rf $builddir
 mkdir $builddir
 cd "$builddir" || exit 1
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_ENABLE_BUILTIN_TZDATA=true -DLIBICAL_JAVA_BINDINGS=False ..
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_ENABLE_BUILTIN_TZDATA=False -DLIBICAL_JAVA_BINDINGS=False ..
 PATH=$HOME/projects/cov-analysis-linux64-$COVVERS/bin:$PATH cov-build --dir cov-int ninja || exit 1
 
 set +e
