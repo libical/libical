@@ -1713,6 +1713,7 @@ static bool initialize_rscale(icalrecur_iterator *impl)
     if (!src) {
         const char *prefix = icaltimezone_tzid_prefix();
         src = (char *)icaltimezone_get_tzid((icaltimezone *)dtstart.zone);
+        /* coverity[use_after_free] */
         if (src && !strncmp(src, prefix, strlen(prefix))) {
             /* Skip past our prefix */
             src += strlen(prefix);
@@ -3198,7 +3199,7 @@ static short daymask_find_next_bit(const unsigned long *days, short start_index)
         int maskSize = (int)(BITS_PER_LONG / 2);
         mask = (((unsigned long)1) << maskSize) - 1;
 
-        while (days_index < ICAL_YEARDAYS_MASK_SIZE && maskSize) {
+        while (maskSize) {
             if ((v & mask) == 0) {
                 v >>= maskSize;
                 days_index += maskSize;

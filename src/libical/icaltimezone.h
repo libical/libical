@@ -59,7 +59,7 @@ LIBICAL_ICAL_EXPORT void icaltimezone_free(icaltimezone *zone, int free_struct);
  */
 LIBICAL_ICAL_EXPORT void icaltimezone_set_tzid_prefix(const char *new_prefix);
 
-/** Returns the current setting of the tzid prefix. Never returns NULL */
+/** Returns the current setting of the tzid prefix. */
 LIBICAL_ICAL_EXPORT const char *icaltimezone_tzid_prefix(void);
 
 /*

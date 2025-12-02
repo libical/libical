@@ -57,6 +57,7 @@ void icalstrarray_append(icalstrarray *array, const char *elem)
         return;
     }
 
+    /* coverity[resource_leak] */
     char *copy = icalmemory_strdup(elem);
 
     icalarray_append(array, (const void *)&copy);

@@ -94,7 +94,7 @@ icalarray *icalarray_copy(const icalarray *originalarray)
 
 void icalarray_free(icalarray *array)
 {
-    if (array && array->chunks) {
+    if (array->chunks) {
         size_t chunks = array->space_allocated / array->increment_size;
         size_t chunk;
 

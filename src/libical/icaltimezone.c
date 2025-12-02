@@ -276,8 +276,10 @@ static void icaltimezone_reset(icaltimezone *zone)
     }
 
     //    icaltimezone_changes_lock();
-    icalarray_free(zone->changes);
-    zone->changes = NULL;
+    if (zone->changes) {
+        icalarray_free(zone->changes);
+        zone->changes = NULL;
+    }
     //    icaltimezone_changes_unlock();
 
     icaltimezone_init(zone);
@@ -503,7 +505,6 @@ static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
         changes_end_year = ICALTIMEZONE_MAX_YEAR;
     }
 
-    /* coverity[forward_null] */
     if (!zone->changes || zone->end_year < end_year) {
         icaltimezone_expand_changes(zone, changes_end_year);
     }
@@ -515,6 +516,9 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
     icalarray *changes;
     icalcomponent *comp;
 
+    if (!zone) {
+        return;
+    }
 #ifdef ICALTIMEZONE_DEBUG_PRINT
     printf("\nExpanding changes for: %s to year: %i\n", zone->tzid, end_year);
 #endif
@@ -535,8 +539,10 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
        matter. */
     icalarray_sort(changes, icaltimezone_compare_change_fn);
 
-    icalarray_free(zone->changes);
-    zone->changes = 0;
+    if (zone->changes) {
+        icalarray_free(zone->changes);
+        zone->changes = 0;
+    }
     zone->changes = changes;
     zone->end_year = end_year;
 }
@@ -1306,6 +1312,7 @@ const char *icaltimezone_get_display_name(icaltimezone *zone)
     char *display_name;
 
     display_name = (char *)icaltimezone_get_location(zone);
+    /* coverity[use_after_free] */
     if (!display_name) {
         display_name = (char *)icaltimezone_get_tznames(zone);
     }
