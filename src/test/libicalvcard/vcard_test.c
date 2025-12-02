@@ -51,7 +51,7 @@ void strip_errors(vcardcomponent *comp)
     }
 }
 
-static void test_parse_file(const char *fname)
+static bool test_parse_file(const char *fname)
 {
     FILE *fp;
     int fd, r;
@@ -101,21 +101,22 @@ static void test_parse_file(const char *fname)
     fp = fopen(fname, "rb"); //on Windows, must open in binary mode
     if (fp == (FILE *)NULL) {
         fprintf(stderr, "Error: unable to open %s\n", fname);
-        assert(0);
+        return false;
     }
     fd = fileno(fp);
     if (fstat(fd, &sbuf) != 0) {
         fprintf(stderr, "Error: unable to stat %s\n", fname);
-        assert(0);
+        fclose(fp);
+        return false;
     }
     filesize = (size_t)sbuf.st_size;
     data = malloc(filesize + 1);
     if (!data) {
         fprintf(stderr, "Error: unable to allocate memory\n");
         free(data);
-        assert(0);
+        fclose(fp);
+        return false;
     }
-    /* cppcheck-suppress nullPointerRedundantCheck */
     memset(data, 0, filesize + 1);
 
     r = read(fd, data, filesize);
@@ -124,22 +125,23 @@ static void test_parse_file(const char *fname)
     if (r < 0) {
         fprintf(stderr, "Error: Failed to read vCard\n");
         free(data);
-        assert(0);
+        return false;
     }
 
     card = vcardparser_parse_string(data);
-    /* cppcheck-suppress doubleFree */
     free(data);
 
     if (card == NULL) {
         fprintf(stderr, "Error: Failed to parse vCard\n");
-        assert(0);
+        return false;
     }
 
     vcardrestriction_check(card);
     vcardcomponent_normalize(card);
     assert_str_equals(want, vcardcomponent_as_vcard_string(card));
     vcardcomponent_free(card);
+
+    return true;
 }
 
 static vcardcomponent *test_comp_vanew(void)
@@ -159,7 +161,7 @@ static vcardcomponent *test_comp_vanew(void)
 
     if (card == NULL) {
         fprintf(stderr, "Failed to create vCard\n");
-        assert(0);
+        return 0;
     }
 
     vcardrestriction_check(card);
@@ -432,8 +434,13 @@ int main(int argc, const char **argv)
         file = argv[1];
     }
 
-    test_parse_file(file);
+    if (!test_parse_file(file)) {
+        return 1;
+    }
     card = test_comp_vanew();
+    if (!card) {
+        return 1;
+    }
     test_add_props(card);
     test_n_restriction(card);
     test_v3_to_v4(card);

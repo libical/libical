@@ -48,8 +48,7 @@ static void assert_ctrl(enum icalparser_ctrl ctrl,
     icalcomponent_free(ical);
 }
 
-/* cppcheck-suppress constParameter */
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
     if (argc != 1) {
         fprintf(stderr, "Usage: %s\n", argv[0]);

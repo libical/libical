@@ -893,31 +893,25 @@ static const char *rrule_parse_weekly_days(const char *s,
 
     for (i = 0; i < ICAL_BY_DAY_SIZE; i++) {
         const char *e = s;
-        int found_day, day;
+        int day;
 
-        found_day = -1;
         for (day = 0; day < 7; day++) {
             if (!strncmp(weekdays[day], s, 2)) {
                 /* Check the next char is whitespace or the end of string. */
                 e = s + 2;
                 if (*e == ' ' || *e == '\t' || *e == '\0') {
-                    found_day = day;
                     break;
                 }
             }
         }
 
-        if (found_day == -1) {
-            break;
-        }
-
-        /* cppcheck-suppress arrayIndexOutOfBounds; since 'day' can't be >6 */
-        recur->by[ICAL_BY_DAY].data[i] = weekday_codes[day];
-
-        s = e;
-        /* Skip any whitespace. */
-        while (*s == ' ' || *s == '\t') {
-            s++;
+        if (day < 7) {
+            recur->by[ICAL_BY_DAY].data[i] = weekday_codes[day];
+            s = e;
+            /* Skip any whitespace. */
+            while (*s == ' ' || *s == '\t') {
+                s++;
+            }
         }
     }
 

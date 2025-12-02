@@ -599,7 +599,6 @@ static char *vcardvalue_utcoffset_as_vcard_string_r(const vcardvalue *value,
     s = MIN(abs(s), 59);
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
-    /* cppcheck-suppress knownConditionTrueFalse */
     if (s != 0) {
         if (version == VCARD_VERSION_40) {
             fmt = "%c%02d%02d%02d";

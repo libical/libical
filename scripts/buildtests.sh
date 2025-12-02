@@ -456,10 +456,9 @@ CPPCHECK() {
     -D __cppcheck__ \
     -D ICAL_PACKAGE="\"x\"" \
     -D ICAL_VERSION="\"y\"" \
-    -D _unused="(void)" \
-    -D _fallthrough="" \
-    -D MIN="" \
-    -D sleep="" \
+    -D HAVE_CONFIG_H=1 \
+    -D PACKAGE_DATA_DIR="\"foo\"" \
+    -D TEST_DATADIR="\"bar\"" \
     -i "$TOP/src/Net-ICal-Libical/" \
     -i "$TOP/src/java/" \
     -i "$TOP/src/libicalss/icalssyacc.c" \
@@ -483,10 +482,9 @@ CPPCHECK() {
     -D __cppcheck__ \
     -D ICAL_PACKAGE="\"x\"" \
     -D ICAL_VERSION="\"y\"" \
-    -D _unused="(void)" \
-    -D _fallthrough="" \
-    -D MIN="" \
-    -D sleep="" \
+    -D HAVE_CONFIG_H=1 \
+    -D PACKAGE_DATA_DIR="\"foo\"" \
+    -D TEST_DATADIR="\"bar\"" \
     -I "$TOP/src/libical" \
     -I "$TOP/src/libicalss" \
     -I "$TOP/src/libicalvcal" \
