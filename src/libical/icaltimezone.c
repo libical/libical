@@ -1692,11 +1692,7 @@ static void icaltimezone_parse_zone_tab(void)
     const char *zonedir, *zonetab;
     char *filename;
     FILE *fp;
-    char buf[1024];            /* Used to store each line of zones.tab as it is read. */
-    char location[1024] = {0}; /* Stores the city name when parsing buf. */
     size_t filename_len;
-    int latitude_degrees, latitude_minutes, latitude_seconds;
-    int longitude_degrees, longitude_minutes, longitude_seconds;
 
     icalerror_assert(builtin_timezones == NULL, "Parsing zones.tab file multiple times");
 
@@ -1748,8 +1744,13 @@ static void icaltimezone_parse_zone_tab(void)
         return;
     }
 
-#if !defined(__clang_analyzer__) || defined(__cppcheck__)
+#if !defined(__clang_analyzer__) // avoid unix.BlockInCriticalSection
+    char buf[1024];
     while (!feof(fp) && !ferror(fp) && fgets(buf, (int)sizeof(buf), fp)) {
+        char location[1024] = {0}; /* Stores the city name when parsing buf. */
+        int longitude_degrees, longitude_minutes, longitude_seconds;
+        int latitude_degrees, latitude_minutes, latitude_seconds;
+
         if (buf[0] == '\0') {
             break;
         }
