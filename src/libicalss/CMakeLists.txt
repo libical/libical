@@ -69,8 +69,7 @@ set(
 )
 if(BDB_FOUND)
   list(
-    APPEND
-    icalss_LIB_SRCS
+    APPEND icalss_LIB_SRCS
     icalbdbset.c
     icalbdbset.h
     icalbdbsetimpl.h

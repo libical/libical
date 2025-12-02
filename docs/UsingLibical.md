@@ -1354,12 +1354,13 @@ RFC5545.
 
 There are a few routines to manipulate error properties:
 
-| Routine                               | Purpose                                              |
-|:--------------------------------------|:-----------------------------------------------------|
+| Routine                               | Purpose                                                                                  |
+|:--------------------------------------|:-----------------------------------------------------------------------------------------|
 | `void icalrestriction_check()`        | Check a component against RFC5546 and insert error properties to indicate non compliance |
-| `int icalcomponent_count_errors()`    | Return the number of error properties in a component |
-| `void icalcomponent_strip_errors()`   | Remove all error properties in a component           |
-| `void icalcomponent_convert_errors()` | Convert some error properties into REQUESTS-STATUS properties to indicate the inability to process the component as an iTIP request |
+| `int icalcomponent_count_errors()`    | Return the number of error properties in a component                                     |
+| `void icalcomponent_strip_errors()`   | Remove all error properties in a component                                               |
+| `void icalcomponent_convert_errors()` | Convert some error properties into REQUESTS-STATUS properties to indicate the inability  |
+|                                       | to process the component as an iTIP request                                              |
 
 The types of errors are listed in icalerror.h. They are:
 

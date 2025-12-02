@@ -38,8 +38,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES ".*[wW]indows.*")
 
   foreach(_target_berkeleydb_path "Oracle/Berkeley DB" "Berkeley DB")
     list(
-      APPEND
-      _BERKELEYDB_PATHS
+      APPEND _BERKELEYDB_PATHS
       "${_programfiles}/${_target_berkeleydb_path}"
       "C:/Program Files (x86)/${_target_berkeleydb_path}"
       "C:/Program Files/${_target_berkeleydb_path}"
@@ -50,8 +49,7 @@ else()
   # Paths for anything other than Windows
   # /usr/local/opt/berkeley-db is for macOS from homebrew installation
   list(
-    APPEND
-    _BERKELEYDB_PATHS
+    APPEND _BERKELEYDB_PATHS
     "/usr"
     "/usr/local"
     "/usr/local/opt/berkeley-db"
