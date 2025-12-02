@@ -692,11 +692,15 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
         enum icalrecurrencetype_weekday dow = ICAL_NO_WEEKDAY;
 
         prev_idx = idx;
-        idx = trans_idx[i]; // possibly tainted
+        idx = trans_idx[i];
+        if (idx < 0 || idx >= (int)len_types) {
+            // tainted data
+            goto error;
+        }
         start = transitions[i] + types[prev_idx].gmtoff;
         icaltime = icaltime_from_timet_with_zone(start, 0, NULL);
 
-        if (idx >= 0 && idx < (int)len_types && types[idx].isdst) { //NOLINT(clang-analyzer-security.ArrayBound)
+        if (types[idx].isdst) {
             zone = &daylight;
         } else {
             zone = &standard;
@@ -781,7 +785,8 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
                            (icaltime.day == zone->recur->by[ICAL_BY_MONTH_DAY].data[0])) {
                     // Same day of the month - remove BYDAY
                     if (zone->recur->by[ICAL_BY_DAY].data) {
-                        icalrecur_resize_by(&zone->recur->by[ICAL_BY_DAY], 0);
+                        // Ignore return since we're simply removing
+                        (void)icalrecur_resize_by(&zone->recur->by[ICAL_BY_DAY], 0);
                     }
                 } else {
                     // Different BYDAY and BYMONTHDAY - possible RDATE

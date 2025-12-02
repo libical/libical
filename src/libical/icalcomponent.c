@@ -852,7 +852,8 @@ static struct icaltimetype icaltime_at_midnight(const struct icaltimetype t)
 
 static icaltime_span icaltime_span_from_time(const struct icaltimetype t, const struct icaldurationtype d)
 {
-    icaltime_span ret;
+    icaltime_span ret = {0};
+
     ret.start =
         icaltime_as_timet_with_zone(t,
                                     t.zone ? t.zone : icaltimezone_get_utc_timezone());
@@ -868,7 +869,7 @@ static icaltime_span icaltime_span_from_datetimeperiod(const struct icaldatetime
     struct icaltimetype start = p.time;
     struct icaldurationtype dur = icaldurationtype_null_duration();
 
-    icaltime_span ret;
+    icaltime_span ret = {0};
     if (icaltime_is_null_time(start)) {
         start = p.period.start;
 
@@ -2443,13 +2444,24 @@ icaltimezone *icalcomponent_get_timezone(icalcomponent *comp, const char *tzid)
 static int icalcomponent_compare_timezone_fn(const void *elem1, const void *elem2)
 {
     icaltimezone *zone1, *zone2;
-    const char *zone1_tzid, *zone2_tzid;
+    const char *zone1_tzid = 0, *zone2_tzid = 0;
 
     zone1 = (icaltimezone *)elem1;
     zone2 = (icaltimezone *)elem2;
 
-    zone1_tzid = icaltimezone_get_tzid(zone1);
-    zone2_tzid = icaltimezone_get_tzid(zone2);
+    const bool zone1_is_valid = (zone1 && (zone1_tzid = icaltimezone_get_tzid(zone1)));
+    const bool zone2_is_valid = (zone2 && (zone2_tzid = icaltimezone_get_tzid(zone2)));
+
+    if (zone1_is_valid && !zone2_is_valid) {
+        return 1;
+    }
+    if (!zone1_is_valid) {
+        if (zone2_is_valid) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
 
     return strcmp(zone1_tzid, zone2_tzid);
 }

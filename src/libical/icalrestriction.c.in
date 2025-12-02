@@ -281,6 +281,7 @@ static bool _check_restriction(icalcomponent *comp,
         icalproperty *errProp;
         icalparameter *errParam;
 
+        /* coverity[resource_leak] */
         errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
         errProp = icalproperty_vanew_xlicerror(funcr, errParam, (void *)0);
         icalcomponent_add_property(comp, errProp);
@@ -338,6 +339,7 @@ static bool icalrestriction_check_component(icalproperty_method method,
         icalproperty *errProp;
         icalparameter *errParam;
 
+        /* coverity[resource_leak] */
         errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_INVALIDITIP);
         errProp = icalproperty_vanew_xlicerror(errStr, errParam, (void *)0);
         icalcomponent_add_property(comp, errProp);
