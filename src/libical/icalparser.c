@@ -555,6 +555,7 @@ static void insert_error(icalparser *parser, icalcomponent *comp, const char *te
         snprintf(temp, 1024, "%s: %s", message, text);
     }
 
+    /* coverity[resource_leak] */
     icalcomponent_add_property(
         comp,
         icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), (void *)0));
