@@ -2791,10 +2791,16 @@ static int comp_compare(void *a, void *b)
 
 void icalcomponent_normalize(icalcomponent *comp)
 {
+    /* oss-fuzz sets the cpu timeout at 60 seconds.
+     * In order to meet that requirement we need to cap the number of properties.
+     */
+    static const size_t MAX_PROPERTIES = 10000;
+
     icalproperty *prop;
     icalcomponent *sub;
     icalpvl_list sorted_props;
     icalpvl_list sorted_comps;
+    size_t cnt = 0; //track properties
 
     icalerror_check_arg(comp != 0, "comp");
     if (!comp) {
@@ -2805,14 +2811,15 @@ void icalcomponent_normalize(icalcomponent *comp)
     sorted_comps = icalpvl_newlist();
 
     /* Normalize properties into sorted list */
-    while ((prop = icalpvl_pop(comp->properties)) != 0) {
+
+    while ((++cnt < MAX_PROPERTIES) && ((prop = icalpvl_pop(comp->properties)) != 0)) {
         int nparams, remove = 0;
 
         icalproperty_normalize(prop);
 
         nparams = icalproperty_count_parameters(prop);
 
-        /* Remove unparameterized properties having default values */
+        /* Remove un-parameterized properties having default values */
         if (nparams == 0) {
             switch (icalproperty_isa(prop)) {
             case ICAL_CALSCALE_PROPERTY:
@@ -2861,6 +2868,14 @@ void icalcomponent_normalize(icalcomponent *comp)
             icalproperty_free(prop);
         } else {
             icalpvl_insert_ordered(sorted_props, prop_compare, prop);
+        }
+    }
+
+    /* Drain the remaining properties */
+    if (cnt == MAX_PROPERTIES) {
+        while ((prop = icalpvl_pop(comp->properties)) != 0) {
+            icalproperty_set_parent(prop, 0); // MUST NOT have a parent to free
+            icalproperty_free(prop);
         }
     }
 
