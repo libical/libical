@@ -540,6 +540,10 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
 
 void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray *changes)
 {
+    /* Maximum number of rrule iterations before an occurrence is found beyond the specified end_year.
+     */
+    static const size_t RRULE_ITERATIONS = 100;
+
     icaltimezonechange change;
     icalproperty *prop;
     struct icaltimetype dtstart, occ;
@@ -715,7 +719,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 icalarray_append(changes, &change);
 
                 rrule_iterator = icalrecur_iterator_new(rrule, dtstart);
-                for (size_t rrule_iterator_count = 0; rrule_iterator && rrule_iterator_count < 1000; rrule_iterator_count++) {
+                for (size_t rrule_iterator_count = 0; rrule_iterator && rrule_iterator_count < RRULE_ITERATIONS; rrule_iterator_count++) {
                     occ = icalrecur_iterator_next(rrule_iterator);
                     /* Skip dtstart since we just added it */
                     if (icaltime_compare(dtstart, occ) == 0) {
