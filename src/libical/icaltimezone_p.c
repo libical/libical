@@ -5,7 +5,6 @@
  * SPDX-FileCopyrightText: 2007, Novell, Inc.
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
-//krazy:excludeall=cpp
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -19,30 +18,18 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#if defined(sun) && defined(__SVR4)
-#include <sys/types.h>
-#include <sys/byteorder.h>
-#else
 #if defined(HAVE_BYTESWAP_H)
 #include <byteswap.h>
-#endif
-#if defined(HAVE_ENDIAN_H)
-#include <endian.h>
-#endif
-#if defined(HAVE_SYS_ENDIAN_H)
-#include <sys/endian.h>
-#endif
-#endif
-
-#if defined(_MSC_VER)
-#if !defined(HAVE_BYTESWAP_H) && !defined(HAVE_SYS_ENDIAN_H) && !defined(HAVE_ENDIAN_H)
-
-#define bswap_32(x)               \
-    (((x) << 24) & 0xff000000) |  \
-        (((x) << 8) & 0xff0000) | \
-        (((x) >> 8) & 0xff00) |   \
-        (((x) >> 24) & 0xff)
-
+#elif defined(_MSC_VER) //krazy:exclude=cpp
+// these are provided in stdlib.h since MSVC 2015
+#define bswap_32 _byteswap_ulong
+#define bswap_64 _byteswap_uint64
+#else
+#define bswap_32(x)                \
+    ((((x) & 0xff000000u) >> 24) | \
+     (((x) & 0x00ff0000u) >> 8) |  \
+     (((x) & 0x0000ff00u) << 8) |  \
+     (((x) & 0x000000ffu) << 24))
 #define bswap_64(x)                          \
     ((((x) & 0xff00000000000000ull) >> 56) | \
      (((x) & 0x00ff000000000000ull) >> 40) | \
@@ -53,24 +40,14 @@
      (((x) & 0x000000000000ff00ull) << 40) | \
      (((x) & 0x00000000000000ffull) << 56))
 #endif
-#include <io.h>
-#endif
 
-#if defined(HAVE_ENDIAN_H) || defined(HAVE_SYS_ENDIAN_H)
-#ifdef bswap32
-#define bswap_32 bswap32
-#define bswap_64 bswap64
-#endif
-#ifdef swap32
-#define bswap_32 swap32
-#define bswap_64 swap64
-#endif
-#endif
-
-#if defined(__APPLE__) || defined(__MINGW32__)
-#define bswap_32 __builtin_bswap32
-#define bswap_64 __builtin_bswap64
-#endif
+#define EFREAD(buf, size, num, fs)                                       \
+    if (!ferror(fs) && !feof(fs) && fread(buf, size, num, fs) < (num)) { \
+        if (ferror(fs)) {                                                \
+            icalerror_set_errno(ICAL_FILE_ERROR);                        \
+            goto error;                                                  \
+        }                                                                \
+    }
 
 //@cond PRIVATE
 typedef struct
@@ -85,14 +62,6 @@ typedef struct
     char typecnt[4];
     char charcnt[4];
 } tzinfo;
-
-#define EFREAD(buf, size, num, fs)                                       \
-    if (!ferror(fs) && !feof(fs) && fread(buf, size, num, fs) < (num)) { \
-        if (ferror(fs)) {                                                \
-            icalerror_set_errno(ICAL_FILE_ERROR);                        \
-            goto error;                                                  \
-        }                                                                \
-    }
 
 typedef struct
 {
