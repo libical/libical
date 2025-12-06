@@ -481,7 +481,7 @@ int icaltime_days_in_month(const int month, const int year)
     days = _days_in_month[month];
 
     if (month == 2) {
-        days += icaltime_is_leap_year(year);
+        days += (icaltime_is_leap_year(year) ? 1 : 0);
     }
 
     return days;
@@ -526,7 +526,7 @@ int icaltime_start_doy_week(const struct icaltimetype t, int fdow)
 
 int icaltime_day_of_year(const struct icaltimetype t)
 {
-    unsigned int is_leap = (unsigned int)icaltime_is_leap_year(t.year);
+    unsigned int is_leap = (icaltime_is_leap_year(t.year) ? 1 : 0);
 
     return days_in_year_passed_month[is_leap][t.month - 1] + t.day;
 }
@@ -539,16 +539,16 @@ struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
     int doy = _doy;
     int year = _year;
 
-    is_leap = (unsigned int)icaltime_is_leap_year(year);
+    is_leap = (icaltime_is_leap_year(year) ? 1 : 0);
 
     /* Zero and neg numbers represent days  of the previous year */
     if (doy < 1) {
         year--;
-        is_leap = icaltime_is_leap_year(year);
+        is_leap = (icaltime_is_leap_year(year) ? 1 : 0);
         doy += days_in_year_passed_month[is_leap][12];
     } else if (doy > days_in_year_passed_month[is_leap][12]) {
         /* Move on to the next year */
-        is_leap = icaltime_is_leap_year(year);
+        is_leap = (icaltime_is_leap_year(year) ? 1 : 0);
         doy -= days_in_year_passed_month[is_leap][12];
         year++;
     }

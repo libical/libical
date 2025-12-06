@@ -770,6 +770,7 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
     if (error != 0 && *error == 0 && value == 0) {
         snprintf(temp, TMP_BUF_SIZE, "Failed to parse value: \'%s\'", str);
 
+        /* coverity[resource_leak] */
         errParam = icalparameter_new_xlicerrortype(ICAL_XLICERRORTYPE_VALUEPARSEERROR);
         *error = icalproperty_vanew_xlicerror(temp, errParam, (void *)0);
     }

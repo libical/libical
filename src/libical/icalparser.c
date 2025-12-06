@@ -555,9 +555,9 @@ static void insert_error(icalparser *parser, icalcomponent *comp, const char *te
         snprintf(temp, 1024, "%s: %s", message, text);
     }
 
-    icalcomponent_add_property(
-        comp,
-        icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), (void *)0));
+    /* coverity[resource_leak] */
+    icalproperty *errProp = icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), (void *)0);
+    icalcomponent_add_property(comp, errProp);
 
     parser->error_count++;
 }
@@ -918,7 +918,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     name_heap = 0;
 
                     icalmemory_free_buffer(pvalue_heap);
-                    /* coverity[uninit_use] */
                     pvalue_heap = 0;
 
                     continue;
@@ -984,7 +983,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack),
                                                  pvalue_stack, sizeof(pvalue_stack))) {
                     icalmemory_free_buffer(pvalue_heap);
-                    /* coverity[uninit_use] */
                     pvalue_heap = 0;
 
                     icalmemory_free_buffer(name_heap);

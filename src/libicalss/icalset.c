@@ -277,7 +277,7 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
 
     /** call the implementation specific initializer **/
     if ((ret = data->init(data, dsn, options)) == NULL) {
-        /* coverity[ALLOC_FREE_MISMATCH] */
+        /* coverity[alloc_free_mismatch] */
         icalset_free(data);
     }
 

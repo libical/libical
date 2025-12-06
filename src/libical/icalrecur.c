@@ -1709,11 +1709,10 @@ static bool initialize_rscale(icalrecur_iterator *impl)
     bool is_hebrew = false;
 
     /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
-    const char *src = icaltimezone_get_location((icaltimezone *)dtstart.zone);
+    char *src = (char *)icaltimezone_get_location((icaltimezone *)dtstart.zone);
     if (!src) {
         const char *prefix = icaltimezone_tzid_prefix();
-
-        src = icaltimezone_get_tzid((icaltimezone *)dtstart.zone);
+        src = (char *)icaltimezone_get_tzid((icaltimezone *)dtstart.zone);
         if (src && !strncmp(src, prefix, strlen(prefix))) {
             /* Skip past our prefix */
             src += strlen(prefix);
@@ -3199,7 +3198,7 @@ static short daymask_find_next_bit(const unsigned long *days, short start_index)
         int maskSize = (int)(BITS_PER_LONG / 2);
         mask = (((unsigned long)1) << maskSize) - 1;
 
-        while (maskSize) {
+        while (days_index < ICAL_YEARDAYS_MASK_SIZE && maskSize) {
             if ((v & mask) == 0) {
                 v >>= maskSize;
                 days_index += maskSize;
