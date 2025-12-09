@@ -674,6 +674,7 @@ void ICalProperty::set_requeststatus(const std::string &val)
 std::string ICalProperty::get_requeststatus() const
 {
     const icalreqstattype v = icalproperty_get_requeststatus(imp);
+    /* coverity[resource_leak] */
     return static_cast<std::string>(icalreqstattype_as_string(v));
 }
 

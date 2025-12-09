@@ -1452,7 +1452,6 @@ void test_calendar(void)
 
 void test_increment(void);
 
-/* coverity[pass_by_value] */
 void print_occur(struct icalrecurrencetype *recur, struct icaltimetype start)
 {
     struct icaltimetype next;

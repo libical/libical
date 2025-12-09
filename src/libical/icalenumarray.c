@@ -78,8 +78,9 @@ void icalenumarray_append(icalenumarray *array, const icalenumarray_element *ele
         return;
     }
 
-    icalenumarray_element copy = {
-        elem->val, elem->xvalue ? icalmemory_strdup(elem->xvalue) : NULL};
+    /* coverity[resource_leak] */
+    char *val = (elem->xvalue ? icalmemory_strdup(elem->xvalue) : NULL);
+    icalenumarray_element copy = {elem->val, val};
 
     icalarray_append(array, &copy);
 }

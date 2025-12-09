@@ -510,10 +510,11 @@ static void _parse_error(struct vcardparser_state *state,
         vcardproperty_free(state->prop);
     }
 
-    state->prop =
-        vcardproperty_vanew_xlicerror(buf_cstring(&state->errbuf),
-                                      vcardparameter_new_xlicerrortype(type),
-                                      (void *)0);
+    /* coverity[resource_leak] */
+    vcardparameter *errParam = vcardparameter_new_xlicerrortype(type);
+    state->prop = vcardproperty_vanew_xlicerror(buf_cstring(&state->errbuf),
+                                                errParam,
+                                                (void *)0);
     buf_reset(&state->buf);
 }
 

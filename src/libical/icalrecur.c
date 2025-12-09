@@ -1709,11 +1709,11 @@ static bool initialize_rscale(icalrecur_iterator *impl)
     bool is_hebrew = false;
 
     /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
-    const char *src = icaltimezone_get_location((icaltimezone *)dtstart.zone);
+    char *src = (char *)icaltimezone_get_location((icaltimezone *)dtstart.zone);
     if (!src) {
         const char *prefix = icaltimezone_tzid_prefix();
-
-        src = icaltimezone_get_tzid((icaltimezone *)dtstart.zone);
+        src = (char *)icaltimezone_get_tzid((icaltimezone *)dtstart.zone);
+        /* coverity[use_after_free] */
         if (src && !strncmp(src, prefix, strlen(prefix))) {
             /* Skip past our prefix */
             src += strlen(prefix);

@@ -276,8 +276,10 @@ static void icaltimezone_reset(icaltimezone *zone)
     }
 
     //    icaltimezone_changes_lock();
-    icalarray_free(zone->changes);
-    zone->changes = NULL;
+    if (zone->changes) {
+        icalarray_free(zone->changes);
+        zone->changes = NULL;
+    }
     //    icaltimezone_changes_unlock();
 
     icaltimezone_init(zone);
@@ -480,7 +482,9 @@ static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
        year, plus ICALTIMEZONE_EXTRA_COVERAGE. */
     static ICAL_GLOBAL_VAR int icaltimezone_minimum_expansion_year = -1;
 
-    int changes_end_year;
+    if (!zone) {
+        return;
+    }
 
     icaltimezone_load_builtin_timezone(zone);
 
@@ -490,7 +494,7 @@ static void icaltimezone_ensure_coverage(icaltimezone *zone, int end_year)
         icaltimezone_minimum_expansion_year = today.year;
     }
 
-    changes_end_year = end_year;
+    int changes_end_year = end_year;
     if (changes_end_year < icaltimezone_minimum_expansion_year) {
         changes_end_year = icaltimezone_minimum_expansion_year;
     }
@@ -512,6 +516,9 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
     icalarray *changes;
     icalcomponent *comp;
 
+    if (!zone) {
+        return;
+    }
 #ifdef ICALTIMEZONE_DEBUG_PRINT
     printf("\nExpanding changes for: %s to year: %i\n", zone->tzid, end_year);
 #endif
@@ -532,8 +539,10 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
        matter. */
     icalarray_sort(changes, icaltimezone_compare_change_fn);
 
-    icalarray_free(zone->changes);
-    zone->changes = 0;
+    if (zone->changes) {
+        icalarray_free(zone->changes);
+        zone->changes = 0;
+    }
     zone->changes = changes;
     zone->end_year = end_year;
 }
@@ -1300,23 +1309,24 @@ static const char *skip_slashes(const char *text, int n_slashes)
 
 const char *icaltimezone_get_display_name(icaltimezone *zone)
 {
-    const char *display_name;
+    char *display_name;
 
-    display_name = icaltimezone_get_location(zone);
+    display_name = (char *)icaltimezone_get_location(zone);
+    /* coverity[use_after_free] */
     if (!display_name) {
-        display_name = icaltimezone_get_tznames(zone);
+        display_name = (char *)icaltimezone_get_tznames(zone);
     }
     if (!display_name) {
-        display_name = icaltimezone_get_tzid(zone);
-        const char *tzid_prefix = icaltimezone_tzid_prefix();
-        /* Outlook will strip out X-LIC-LOCATION property and so all
-           we get back in the iTIP replies is the TZID. So we see if
-           this is one of our TZIDs and if so we jump to the city name
-           at the end of it. */
-        if (display_name &&
-            !strncmp(display_name, tzid_prefix, strlen(tzid_prefix))) {
-            /* Skip past our prefix */
-            display_name += strlen(tzid_prefix);
+        display_name = (char *)icaltimezone_get_tzid(zone);
+        if (display_name) {
+            /* Outlook strips out X-LIC-LOCATION property and all we get back
+            * in the iTIP replies is the TZID. So we see if this is one of our TZIDs
+            * and if so we jump to the city name at the end of it. */
+            const char *tzid_prefix = icaltimezone_tzid_prefix();
+            if (!strncmp(display_name, tzid_prefix, strlen(tzid_prefix))) {
+                /* Skip past our prefix */
+                display_name += strlen(tzid_prefix);
+            }
         }
     }
 
@@ -1474,15 +1484,13 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset, const ch
     count = builtin_timezones->num_elements;
 
     for (i = 0; i < count; i++) {
-        int z_offset;
-
         zone = icalarray_element_at(builtin_timezones, i);
-        icaltimezone_load_builtin_timezone(zone);
-
-        z_offset = get_offset(zone);
-
-        if (z_offset == offset && zone->tznames && !strcmp(tzname, zone->tznames)) {
-            return zone;
+        if (zone) {
+            icaltimezone_load_builtin_timezone(zone);
+            int z_offset = get_offset(zone);
+            if (z_offset == offset && zone->tznames && !strcmp(tzname, zone->tznames)) {
+                return zone;
+            }
         }
     }
 
@@ -1738,13 +1746,13 @@ static void icaltimezone_parse_zone_tab(void)
     snprintf(filename, filename_len, "%s/%s", zonedir, zonetab);
 
     fp = fopen(filename, "r");
-    icalmemory_free_buffer(filename);
     icalerror_assert(fp, "Cannot open the zonetab file for reading");
     if (!fp) {
         // Set an empty builtin_timezones array if there's an error
         builtin_timezones = timezones;
 
         icalerror_set_errno(ICAL_INTERNAL_ERROR);
+        icalmemory_free_buffer(filename);
         return;
     }
 
@@ -1785,7 +1793,6 @@ static void icaltimezone_parse_zone_tab(void)
                 continue;
             }
         } else {
-            /* coverity[tainted_data] */
             if (fetch_lat_long_from_string(buf, &latitude_degrees, &latitude_minutes,
                                            &latitude_seconds,
                                            &longitude_degrees, &longitude_minutes,
@@ -1800,6 +1807,7 @@ static void icaltimezone_parse_zone_tab(void)
         }
         icaltimezone zone;
         icaltimezone_init(&zone);
+        /* coverity[resource_leak] */
         zone.location = icalmemory_strdup(location);
 
         if (latitude_degrees >= 0) {
@@ -1836,6 +1844,7 @@ static void icaltimezone_parse_zone_tab(void)
 
     builtin_timezones = timezones;
 
+    icalmemory_free_buffer(filename);
     fclose(fp);
 }
 

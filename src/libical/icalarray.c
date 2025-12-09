@@ -65,7 +65,7 @@ icalarray *icalarray_copy(const icalarray *originalarray)
         return NULL;
     }
 
-    array->chunks = (void **)icalmemory_new_buffer(chunks * sizeof(void **));
+    array->chunks = (void **)icalmemory_new_buffer(chunks * sizeof(void *));
     if (array->chunks) {
         for (size_t chunk = 0; chunk < chunks; chunk++) {
             array->chunks[chunk] = icalarray_alloc_chunk(array);
@@ -94,7 +94,7 @@ icalarray *icalarray_copy(const icalarray *originalarray)
 
 void icalarray_free(icalarray *array)
 {
-    if (array && array->chunks) {
+    if (array->chunks) {
         size_t chunks = array->space_allocated / array->increment_size;
         size_t chunk;
 
@@ -194,7 +194,7 @@ static void icalarray_expand(icalarray *array, size_t space_needed)
         num_new_chunks = 1;
     }
 
-    new_chunks = (void **)icalmemory_new_buffer((num_chunks + num_new_chunks) * sizeof(void **));
+    new_chunks = (void **)icalmemory_new_buffer((num_chunks + num_new_chunks) * sizeof(void *));
 
     if (new_chunks) {
         if (array->chunks && num_chunks) {

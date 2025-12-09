@@ -1237,7 +1237,7 @@ yysetstate:
         YYDPRINTF((stderr, "Stack size increased to %lu\n",
                    (unsigned long int)yystacksize));
 
-        /* coverity[OVERRUN] */
+        /* coverity[overrun] */
         if (yyss + yystacksize - 1 <= yyssp) {
             YYABORT;
         }
