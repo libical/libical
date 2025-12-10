@@ -3589,8 +3589,8 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     /* If initial time is valid, return it */
     if ((impl->occurrence_no == 0) &&
         (icaltime_compare(impl->last, impl->istart) >= 0) &&
-        check_contracting_rules(impl) &&
-        check_setpos(impl, 1)) {
+        check_setpos(impl, 1) &&
+        check_contracting_rules(impl)) {
         impl->occurrence_no++;
         return impl->last;
     }
@@ -3659,7 +3659,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
             return icaltime_null_time();
         }
 
-        if (check_contracting_rules(impl) && has_by_data(impl, ICAL_BY_SET_POS)) {
+        if (has_by_data(impl, ICAL_BY_SET_POS) && check_contracting_rules(impl)) {
             if (period_change) {
                 setup_setpos(impl, 1);
             } else {
@@ -3677,8 +3677,8 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         }
     } while (icaltime_compare(impl->last, impl->istart) < 0 ||
              icaltime_compare(impl->last, impl_last.last) == 0 ||
-             !check_contracting_rules(impl) ||
-             (has_by_data(impl, ICAL_BY_SET_POS) && !check_setpos(impl, 1)));
+             (has_by_data(impl, ICAL_BY_SET_POS) && !check_setpos(impl, 1)) ||
+             !check_contracting_rules(impl));
 
     impl->occurrence_no++;
 
@@ -3744,7 +3744,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
             return icaltime_null_time();
         }
 
-        if (check_contracting_rules(impl) && has_by_data(impl, ICAL_BY_SET_POS)) {
+        if (has_by_data(impl, ICAL_BY_SET_POS) && check_contracting_rules(impl)) {
             if (period_change) {
                 setup_setpos(impl, 0);
             } else {
@@ -3758,8 +3758,8 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
              (!icaltime_is_null_time(impl->iend) &&
               icaltime_compare(impl->last, impl->iend) > 0) ||
              icaltime_compare(impl->last, impl_last.last) == 0 ||
-             !check_contracting_rules(impl) ||
-             (has_by_data(impl, ICAL_BY_SET_POS) && !check_setpos(impl, 0)));
+             (has_by_data(impl, ICAL_BY_SET_POS) && !check_setpos(impl, 0)) ||
+             !check_contracting_rules(impl));
 
     impl->occurrence_no--;
 
