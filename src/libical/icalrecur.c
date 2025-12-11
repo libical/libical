@@ -3602,6 +3602,9 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
 
     /* Iterate until we get the next valid time */
     int time_standing_still_count = 0;
+    int lastTimeCompare = 0;
+    bool hasByData = false;
+    int checkContractingRules = 0;
     do {
         switch (impl->rule->freq) {
         case ICAL_SECONDLY_RECURRENCE:
@@ -3659,26 +3662,33 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
             return icaltime_null_time();
         }
 
-        if (has_by_data(impl, ICAL_BY_SET_POS) && check_contracting_rules(impl)) {
-            if (period_change) {
-                setup_setpos(impl, 1);
-            } else {
-                impl->set_pos++;
+        hasByData = has_by_data(impl, ICAL_BY_SET_POS);
+        checkContractingRules = -1;
+        if (hasByData) {
+            checkContractingRules = check_contracting_rules(impl) ? 1 : 0;
+            if (checkContractingRules == 1) {
+                if (period_change) {
+                    setup_setpos(impl, 1);
+                } else {
+                    impl->set_pos++;
+                }
             }
         }
 
         // is time standing still? if so, break out of here
-        if (icaltime_compare(impl->last, impl_last.last) == 0) {
+        lastTimeCompare = icaltime_compare(impl->last, impl_last.last);
+        if (lastTimeCompare == 0) {
             if (time_standing_still_count++ == 50) {
                 break;
             }
         } else {
             time_standing_still_count = 0;
         }
-    } while (icaltime_compare(impl->last, impl->istart) < 0 ||
-             icaltime_compare(impl->last, impl_last.last) == 0 ||
-             (has_by_data(impl, ICAL_BY_SET_POS) && !check_setpos(impl, 1)) ||
-             !check_contracting_rules(impl));
+    } while ((lastTimeCompare == 0) ||
+             (hasByData && !check_setpos(impl, 1)) ||
+             icaltime_compare(impl->last, impl->istart) < 0 ||
+             (checkContractingRules == 0) ||
+             (checkContractingRules == -1 && !check_contracting_rules(impl)));
 
     impl->occurrence_no++;
 
