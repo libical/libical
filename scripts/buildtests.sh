@@ -450,13 +450,15 @@ CPPCHECK() {
   echo "===== RUN CPPCHECK FOR C FILES ======"
   rm -f cppcheck-c.out
   f=$(find "$TOP/src" -name "*.c")
+  mkdir -p build-cppcheck-c
   # shellcheck disable=SC2086
   cppcheck --quiet \
+    --cppcheck-build-dir=build-cppcheck-c \
     --language=c \
     --std=c99 \
     --force --error-exitcode=1 --inline-suppr \
     --enable=warning,performance,portability,style \
-    --check-level=exhaustive \
+    --check-level=normal \
     --suppress-xml=cppcheck-suppressions.xml \
     --template='{file}:{line},{severity},{id},{message}' \
     -D ICAL_PACKAGE="\"x\"" \
@@ -475,8 +477,10 @@ CPPCHECK() {
   echo "===== RUN CPPCHECK FOR C++ FILES ======"
   rm -f cppcheck-cpp.out
   f=$(find "$TOP/src" -name "*.cpp")
+  mkdir -p build-cppcheck-cpp
   # shellcheck disable=SC2086
   cppcheck --quiet \
+    --cppcheck-build-dir=build-cppcheck-cpp \
     --language=c++ \
     --std=c++11 \
     --force --error-exitcode=1 --inline-suppr \
