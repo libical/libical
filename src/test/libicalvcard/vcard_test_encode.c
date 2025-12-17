@@ -151,6 +151,136 @@ static void test_param_multivalued(void)
     vcardcomponent_free(card);
 }
 
+static void test_value_structured(void)
+{
+    vcardstructuredtype *stt;
+    vcardvalue *val;
+
+    // Set structured value having both fields set.
+    stt = vcardstructured_new();
+    stt->field[0] = vcardstrarray_new(1);
+    vcardstrarray_add(stt->field[0], "foo");
+    stt->field[1] = vcardstrarray_new(1);
+    vcardstrarray_add(stt->field[1], "bar");
+    stt->num_fields = 2;
+
+    val = vcardvalue_new_structured(stt);
+    assert_str_equals("foo;bar", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+
+    // Set structured value having only first field set.
+    stt = vcardstructured_new();
+    stt->field[0] = vcardstrarray_new(1);
+    vcardstrarray_add(stt->field[0], "foo");
+    stt->field[1] = vcardstrarray_new(1);
+    stt->num_fields = 2;
+
+    val = vcardvalue_new_structured(stt);
+    assert_str_equals("foo;", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+
+    // Set structured value having only second field set.
+    stt = vcardstructured_new();
+    stt->field[0] = vcardstrarray_new(1);
+    stt->field[1] = vcardstrarray_new(1);
+    vcardstrarray_add(stt->field[1], "bar");
+    stt->num_fields = 2;
+
+    val = vcardvalue_new_structured(stt);
+    assert_str_equals(";bar", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+
+    // Set structured value having no field set.
+    stt = vcardstructured_new();
+    stt->field[0] = vcardstrarray_new(1);
+    stt->field[1] = vcardstrarray_new(1);
+    stt->num_fields = 2;
+
+    val = vcardvalue_new_structured(stt);
+    assert_str_equals(";", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+}
+
+static void test_value_structured_from_string(void)
+{
+    vcardstructuredtype *stt;
+
+    // Parse structured value having both fields set.
+    stt = vcardstructured_from_string("foo;bar");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 1);
+    assert(vcardstrarray_size(stt->field[1]) == 1);
+    assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("bar", vcardstrarray_element_at(stt->field[1], 0));
+    vcardstructured_free(stt);
+
+    // Parse structured value having only first field set.
+    stt = vcardstructured_from_string("foo;");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 1);
+    assert(vcardstrarray_size(stt->field[1]) == 1);
+    assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("", vcardstrarray_element_at(stt->field[1], 0));
+    vcardstructured_free(stt);
+
+    // Parse structured value having only second field set.
+    stt = vcardstructured_from_string(";foo");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 1);
+    assert(vcardstrarray_size(stt->field[1]) == 1);
+    assert_str_equals("", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("foo", vcardstrarray_element_at(stt->field[1], 0));
+    vcardstructured_free(stt);
+
+    // Parse structured value having no field set.
+    stt = vcardstructured_from_string(";");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 1);
+    assert(vcardstrarray_size(stt->field[1]) == 1);
+    assert_str_equals("", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("", vcardstrarray_element_at(stt->field[1], 0));
+    vcardstructured_free(stt);
+}
+
+static void test_value_structured_escaped(void)
+{
+    vcardstructuredtype *stt = vcardstructured_new();
+
+    stt->field[0] = vcardstrarray_new(1);
+    vcardstrarray_add(stt->field[0], "foo,bar");
+    vcardstrarray_add(stt->field[0], "baz;bam");
+    stt->field[1] = vcardstrarray_new(1);
+    vcardstrarray_add(stt->field[1], "tux;");
+    vcardstrarray_add(stt->field[1], "qux,");
+    stt->num_fields = 2;
+
+    vcardvalue *val = vcardvalue_new_structured(stt);
+    assert_str_equals("foo\\,bar,baz\\;bam;tux\\;,qux\\,", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+}
+
+static void test_value_structured_from_string_escaped(void)
+{
+    vcardstructuredtype *stt;
+
+    stt = vcardstructured_from_string("foo\\,bar,baz\\;bam;tux\\;,qux\\,");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 2);
+    assert(vcardstrarray_size(stt->field[1]) == 2);
+    assert_str_equals("foo,bar", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("baz;bam", vcardstrarray_element_at(stt->field[0], 1));
+    assert_str_equals("tux;", vcardstrarray_element_at(stt->field[1], 0));
+    assert_str_equals("qux,", vcardstrarray_element_at(stt->field[1], 1));
+    vcardstructured_free(stt);
+
+    stt = vcardstructured_from_string("foo,bar\\");
+    assert(stt->num_fields == 1);
+    assert(vcardstrarray_size(stt->field[0]) == 2);
+    assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("bar", vcardstrarray_element_at(stt->field[0], 1));
+    vcardstructured_free(stt);
+}
+
 int main(int argc, char **argv)
 {
     _unused(argc);
@@ -162,6 +292,11 @@ int main(int argc, char **argv)
 
     test_param_singlevalued();
     test_param_multivalued();
+
+    test_value_structured();
+    test_value_structured_from_string();
+    test_value_structured_escaped();
+    test_value_structured_from_string_escaped();
 
     return 0;
 }
