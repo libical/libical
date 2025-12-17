@@ -690,7 +690,7 @@ char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_pa
         vcardstrarray *array = s->field[i];
 
         if (i) {
-            buf_ptr -= 1; // backup to \0
+            if (buf_ptr > buf) buf_ptr -= 1; // backup to \0
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
         }
 

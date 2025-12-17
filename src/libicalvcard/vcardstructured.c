@@ -47,6 +47,14 @@ vcardstructuredtype *vcardstructured_from_string(const char *s)
         pos = buf + len;
 
         switch (*s) {
+        case '\\':
+            if (s[1]) {
+                icalmemory_append_char(&buf, &pos, &alloc, s[1]);
+                len = (ptrdiff_t)(pos - buf);
+                s++;
+            }
+            break;
+
         case ',':
         case ';':
             /* end of value */
@@ -69,6 +77,7 @@ vcardstructuredtype *vcardstructured_from_string(const char *s)
     }
 
     /* end of value */
+    pos = buf + len;
     icalmemory_append_char(&buf, &pos, &alloc, '\0');
     vcardstrarray_append(field, buf);
 
