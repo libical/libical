@@ -19,7 +19,7 @@ getopts('chvi:');
 
 my $ucprefix = "ICAL";
 if ($opt_v) {
-    $ucprefix = "VCARD"
+  $ucprefix = "VCARD";
 }
 my $lcprefix = lc($ucprefix);
 
@@ -111,7 +111,7 @@ sub insert_code
 
       next if $value eq 'NO' or $value eq 'ANY';
 
-      my $ucv = join("", map {uc(lc($_));} split(/-/, $value));
+      my $ucv   = join("", map {uc(lc($_));} split(/-/, $value));
       my @enums = @{$h{$value}->{'enums'}};
 
       if (@enums) {
@@ -157,7 +157,7 @@ sub insert_code
 
     # print out the value to string map
 
-    my $count = scalar(keys %h) + 1;
+    my $count     = scalar(keys %h) + 1;
     my $map_count = $count - 2;
     print "static const struct ${lcprefix}value_kind_map value_map[$map_count]={\n";
 
@@ -235,16 +235,15 @@ $pointer_check_rv\
 
         print
 "    if (impl->data.v_${union_data} != 0) {\n        icalmemory_free_buffer((void *)impl->data.v_${union_data});\n    }\n";
-      }
 
-      elsif ($union_data eq 'structured.field[0]') {
+      } elsif ($union_data eq 'structured.field[0]') {
 
         print
 "    if (impl->data.v_${union_data} != 0) {\n        vcardstrarray_free(impl->data.v_${union_data});\n    }\n";
       }
 
       $castStr = "";
-      if ($union_data eq 'enum'){ $castStr = "(int)"; }
+      if ($union_data eq 'enum') {$castStr = "(int)";}
       print "\
     impl->data.v_$union_data = $castStr$assign\
     ${lcprefix}value_reset_kind(impl);\n}\n\n";
@@ -263,11 +262,11 @@ $pointer_check_rv\
         } elsif ($union_data eq 'float') {
           print "    if (!value) {\n        return 0.0;\n     }\n";
         } elsif ($union_data eq 'time') {
-            if ($opt_v) {
-                print "    if (!value) {\n        return vcardtime_null_datetime();\n    }\n";
-            } else {
-                print "    if (!value) {\n        return icaltime_null_time();\n    }\n";
-            }
+          if ($opt_v) {
+            print "    if (!value) {\n        return vcardtime_null_datetime();\n    }\n";
+          } else {
+            print "    if (!value) {\n        return icaltime_null_time();\n    }\n";
+          }
         } elsif ($union_data eq 'duration') {
           print "    if (!value) {\n        return icaldurationtype_null_duration();\n    }\n";
         } elsif ($union_data eq 'period') {
