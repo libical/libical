@@ -12,10 +12,10 @@ getopts('vi:');
 # i -> .c "in" file (template)
 
 my $ucprefix = "ICAL";
-my $uckey = "METHOD";
+my $uckey    = "METHOD";
 if ($opt_v) {
-    $ucprefix = "VCARD";
-    $uckey = "VERSION";
+  $ucprefix = "VCARD";
+  $uckey    = "VERSION";
 }
 my $lcprefix = lc($ucprefix);
 
@@ -85,10 +85,10 @@ sub insert_code
   # Build the restriction table
   print "static const ${lcprefix}restriction_record ${lcprefix}restriction_records[] = {\n";
 
-  for $key ( sort keys %prop_restr ) {
-    for $targetcomp ( sort keys %{ $prop_restr{$key} } ) {
-      for $prop ( sort keys %{ $prop_restr{$key}{$targetcomp} } ) {
-        for $subcomp ( sort keys %{ $prop_restr{$key}{$targetcomp}{$prop} } ) {
+  for $key (sort keys %prop_restr) {
+    for $targetcomp (sort keys %{$prop_restr{$key}}) {
+      for $prop (sort keys %{$prop_restr{$key}{$targetcomp}}) {
+        for $subcomp (sort keys %{$prop_restr{$key}{$targetcomp}{$prop}}) {
           my ($restr, $sub) = @{$prop_restr{$key}{$targetcomp}{$prop}{$subcomp}};
           print(
 "    \{${ucprefix}_${uckey}_${key}, ${ucprefix}_${targetcomp}_COMPONENT, ${ucprefix}_${prop}_PROPERTY, ${ucprefix}_${subcomp}_COMPONENT, ${ucprefix}_RESTRICTION_${restr}, $sub},\n"
@@ -96,11 +96,11 @@ sub insert_code
         }
       }
     }
-}
+  }
 
   # Print the terminating line
   print
-    "    {${ucprefix}_${uckey}_NONE, ${ucprefix}_NO_COMPONENT, ${ucprefix}_NO_PROPERTY, ${ucprefix}_NO_COMPONENT, ${ucprefix}_RESTRICTION_NONE, NULL}\n";
+"    {${ucprefix}_${uckey}_NONE, ${ucprefix}_NO_COMPONENT, ${ucprefix}_NO_PROPERTY, ${ucprefix}_NO_COMPONENT, ${ucprefix}_RESTRICTION_NONE, NULL}\n";
 
   print "};\n";
 

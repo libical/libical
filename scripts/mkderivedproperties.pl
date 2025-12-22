@@ -16,7 +16,7 @@ getopts('chvi:');
 
 my $ucprefix = "ICAL";
 if ($opt_v) {
-    $ucprefix = "VCARD"
+  $ucprefix = "VCARD";
 }
 my $lcprefix = lc($ucprefix);
 
@@ -78,8 +78,8 @@ sub insert_code
   # Create the property map data
   if ($opt_c) {
 
-    my @props = sort {$propmap{$a}->{"kindEnum"} <=> $propmap{$b}->{"kindEnum"}} keys %propmap;
-    my $count = scalar(@props);
+    my @props     = sort {$propmap{$a}->{"kindEnum"} <=> $propmap{$b}->{"kindEnum"}} keys %propmap;
+    my $count     = scalar(@props);
     my $map_count = $count - 2;
 
     print "static const struct ${lcprefix}property_map property_map[$map_count] = {\n";
@@ -101,28 +101,28 @@ sub insert_code
       print "      { ";
 
       if (@comp_types) {
-          foreach $comp (@comp_types) {
-              $comp =~ s/-//g;
-              print "${ucprefix}_${comp}_VALUE, ";
-          }
+        foreach $comp (@comp_types) {
+          $comp =~ s/-//g;
+          print "${ucprefix}_${comp}_VALUE, ";
+        }
       } elsif ($defvalue ne "NO") {
-          print "${ucprefix}_${defvalue}_VALUE, ";
+        print "${ucprefix}_${defvalue}_VALUE, ";
       } else {
-          print "${ucprefix}_${ucvalue}_VALUE, ";
+        print "${ucprefix}_${ucvalue}_VALUE, ";
       }
 
       print "${ucprefix}_NO_VALUE }, ";
 
       if (@flags) {
-          my $sep = "\n      ";
-          foreach $flag (@flags) {
-              $flag =~ s/-//g;
-              $flag  = uc($flag);
-              print "${sep}${ucprefix}_PROPERTY_${flag}";
-              $sep = " | ";
-          }
+        my $sep = "\n      ";
+        foreach $flag (@flags) {
+          $flag =~ s/-//g;
+          $flag = uc($flag);
+          print "${sep}${ucprefix}_PROPERTY_${flag}";
+          $sep = " | ";
+        }
       } else {
-          print "0";
+        print "0";
       }
 
       print " },\n";
@@ -146,7 +146,7 @@ sub insert_code
       next if !$value;
       next if $value eq 'NO' or $prop eq 'ANY';
 
-      my $ucv = join("", map {uc(lc($_));} split(/-/, $value));
+      my $ucv   = join("", map {uc(lc($_));} split(/-/, $value));
       my @enums = @{$valuemap{$value}->{'enums'}};
 
       if (@enums) {
@@ -178,7 +178,7 @@ sub insert_code
           if ($e eq "NONE") {
             my ($tbd) = 1;
             $saveidx++;
-            for (; $saveidx < $idx; $saveidx++, $tbd++) {
+            for (; $saveidx < $idx ; $saveidx++, $tbd++) {
               $lines{$saveidx} =
                 "    {${ucprefix}_${ucv}_PROPERTY,${ucprefix}_${ucv}_NONE, \"\" }, /*$saveidx*/\n";
             }
@@ -186,7 +186,8 @@ sub insert_code
 
           # Place each property into a hash based on the index specified in value-types.csv
           # The lines are printed so they're in the same order as the indices
-          $lines{$idx} = "    {${ucprefix}_${ucv}_PROPERTY,${ucprefix}_${ucv}_${uce}, \"$str\" }, /*$idx*/\n";
+          $lines{$idx} =
+            "    {${ucprefix}_${ucv}_PROPERTY,${ucprefix}_${ucv}_${uce}, \"$str\" }, /*$idx*/\n";
           $saveidx = $idx;
           $count++;
         }
@@ -207,7 +208,8 @@ sub insert_code
 
     # Create the property enumerations list
     my $enumConst = $propmap{'ANY'}->{"kindEnum"};
-    print "typedef enum ${lcprefix}property_kind {\n    ${ucprefix}_ANY_PROPERTY = " . $enumConst . ",\n";
+    print "typedef enum ${lcprefix}property_kind {\n    ${ucprefix}_ANY_PROPERTY = "
+      . $enumConst . ",\n";
     foreach $prop (sort keys %propmap) {
 
       next if !$prop;
@@ -230,8 +232,11 @@ sub insert_code
 
     next if !$prop;
 
-    next if $prop eq 'NO' or $prop eq 'ANY'
-        or $prop eq 'BEGIN' or $prop eq 'END';
+    next
+      if $prop eq 'NO'
+      or $prop eq 'ANY'
+      or $prop eq 'BEGIN'
+      or $prop eq 'END';
 
     my ($uc, $lc, $lcvalue, $ucvalue, $type) = fudge_data($prop);
 
@@ -312,7 +317,8 @@ LIBICAL_${ucprefix}_EXPORT void ${lcprefix}property_set_${lc}(${lcprefix}propert
 LIBICAL_${ucprefix}_EXPORT $type ${lcprefix}property_get_${lc}(const ${lcprefix}property *prop);";
 
       if ($include_vanew) {
-        print "\nLIBICAL_${ucprefix}_EXPORT LIBICAL_SENTINEL ${lcprefix}property *${lcprefix}property_vanew_${lc}($type v, ...);\n";
+        print
+"\nLIBICAL_${ucprefix}_EXPORT LIBICAL_SENTINEL ${lcprefix}property *${lcprefix}property_vanew_${lc}($type v, ...);\n";
       }
 
     }

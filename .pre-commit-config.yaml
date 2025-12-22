@@ -47,7 +47,7 @@ repos:
   rev: "20250912.01"
   hooks:
   - id: perltidy
-    exclude: ^(scripts/|src/Net-ICal-Libical)
+    exclude: ^(src/Net-ICal-Libical)
 - repo: https://github.com/DavidAnson/markdownlint-cli2
   rev: v0.19.1
   hooks:
