@@ -24,7 +24,7 @@ repos:
   rev: v21.1.6
   hooks:
   - id: clang-format
-    exclude: ^(src/Net-ICal-Libical|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
+    exclude: ^(vzic/|src/Net-ICal-Libical|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
   rev: v0.14.7
@@ -43,6 +43,11 @@ repos:
   hooks:
   - id: gersemi
     exclude: (cmake/Toolchain-|.h.cmake|/Doxyfile.cmake)
+- repo: https://github.com/perltidy/perltidy
+  rev: "20250912.01"
+  hooks:
+  - id: perltidy
+    exclude: ^(scripts/|src/Net-ICal-Libical)
 - repo: https://github.com/DavidAnson/markdownlint-cli2
   rev: v0.19.1
   hooks:

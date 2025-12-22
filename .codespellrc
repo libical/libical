@@ -2,3 +2,6 @@
 skip = ./build-*,.git,book,test-data,zoneinfo,regression.c
 interactive = 3
 ignore-words-list = inout,gir,parameterizes,yau,crasher,thur,damon
+uri-ignore-words-list = damon
+#ignore camelCase, regardless. also mixed case words with correct spelling
+ignore-regex = \b([a-z]+[A-Z0-9][a-z0-9]*|Damon|Devine|Nome|IST|TAST)\b
