@@ -849,23 +849,24 @@ local time and UTC. The libical structure is:
 
 ```c
 struct icaltimetype {
-  int year;
-  int month;
   int day;
   int hour;
-  int minute;
-  int second;
-  int is_utc; /* 1-> time is in UTC timezone */
   int is_date; /* 1 -> interpret this as date. */
+  int is_daylight; /* 1 -> time is in daylight savings time. */
+  int minute;
+  int month;
+  int second;
+  int year;
+  const icaltimezone * zone; /* timezone */
 };
 ```
 
-The `year`, `month`, `day`, `hour`, `minute` and `second` fields
-hold the broken-out
-time values. The `is_utc` field distinguishes between times in UTC and
-a local time zone. The `is_date` field indicates if the time should
-be interpreted only as a date. If it is a date, the hour, minute and
-second fields are assumed to be zero, regardless of their actual values.
+The `year`, `month`, `day`, `hour`, `minute` and `second` fields hold the
+broken-out time values. The `is_date` field indicates if the time should be
+interpreted only as a date. If it is a date, the hour, minute and second fields
+are assumed to be zero, regardless of their actual values. The `is_daylight`
+field indicates if the time is in daylight savings time. The `zone` field holds
+a struct representing a timezone.
 
 #### 5.3.2 Creating time structures
 
