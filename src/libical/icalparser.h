@@ -290,7 +290,7 @@ LIBICAL_ICAL_EXPORT void icalparser_set_gen_data(icalparser *parser, void *data)
  * // parse ical_string
  * icalcomponent *component = icalparser_parse_string(ical_string);
  *
- * if(!icalerrno || component == NULL) {
+ * if(!icalerrno || component != NULL) {
  *     // use component ...
  * }
  *
