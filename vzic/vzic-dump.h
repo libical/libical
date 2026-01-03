@@ -17,8 +17,8 @@
  * output.
  */
 
-#ifndef _VZIC_DUMP_H_
-#define _VZIC_DUMP_H_
+#ifndef VZIC_DUMP_H
+#define VZIC_DUMP_H
 
 #include <glib.h>
 
@@ -43,4 +43,4 @@ void		dump_time_zone_names		(GList		*names,
 						 char		*output_dir,
 						 GHashTable	*zones_hash);
 
-#endif /* _VZIC_DUMP_H_ */
+#endif /* VZIC_DUMP_H */
