@@ -2332,7 +2332,7 @@ output_rrule_2				(char		*buffer,
     /* Can't convert to a correct RRULE. If we want Outlook compatibility we
        have to use a slightly incorrect RRULE, so the time change will be 1
        week out every 7 or so years. Alternatively we could possibly move the
-       change by an hour or so so we would always be 1 or 2 hours out, but
+       change by an hour or so; then we would always be 1 or 2 hours out, but
        never 1 week out. Yes, that sounds a better idea. */
     if (!VzicPureOutput) {
       printf ("WARNING: %s: Modifying RRULE to be compatible with Outlook (day >= %i, month = %i)\n", CurrentZoneName, day_number, month + 1);
