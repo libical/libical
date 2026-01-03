@@ -10,8 +10,8 @@
  * Author: Damon Chaplin <damon@gnome.org>
  */
 
-#ifndef _VZIC_PARSE_H_
-#define _VZIC_PARSE_H_
+#ifndef VZIC_PARSE_H
+#define VZIC_PARSE_H
 
 #include <glib.h>
 
@@ -23,4 +23,4 @@ void		parse_olson_file		(char		*filename,
 
 GHashTable*	parse_zone_tab			(char		*filename);
 
-#endif /* _VZIC_PARSE_H_ */
+#endif /* VZIC_PARSE_H */

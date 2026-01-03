@@ -11,8 +11,8 @@
  *
  */
 
-#ifndef _VZIC_H_
-#define _VZIC_H_
+#ifndef VZIC_H
+#define VZIC_H
 
 #include <glib.h>
 
@@ -195,4 +195,4 @@ struct _ZoneDescription
   char	       *comment;
 };
 
-#endif /* _VZIC_H_ */
+#endif /* VZIC_H */

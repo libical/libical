@@ -10,8 +10,8 @@
  * Author: Damon Chaplin <damon@gnome.org>
  */
 
-#ifndef _VZIC_OUTPUT_H_
-#define _VZIC_OUTPUT_H_
+#ifndef VZIC_OUTPUT_H
+#define VZIC_OUTPUT_H
 
 #include <glib.h>
 
@@ -23,4 +23,4 @@ void		output_vtimezone_files		(char		*directory,
 
 void		ensure_directory_exists		(char		*directory);
 
-#endif /* _VZIC_OUTPUT_H_ */
+#endif /* VZIC_OUTPUT_H */
