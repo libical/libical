@@ -3578,6 +3578,8 @@ static bool check_setpos(icalrecur_iterator *impl, int next)
 
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
 {
+    static const size_t MAX_RECURRENCES = 10000000;
+
     /* Quit if we reached COUNT or if last time is after the UNTIL time */
     if (!impl ||
         (impl->rule->count != 0 && impl->occurrence_no >= impl->rule->count) ||
@@ -3605,6 +3607,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     int lastTimeCompare = 0;
     bool hasByData = false;
     int checkContractingRules = 0;
+    size_t cntRecurrences = 0;
     do {
         switch (impl->rule->freq) {
         case ICAL_SECONDLY_RECURRENCE:
@@ -3684,11 +3687,12 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         } else {
             time_standing_still_count = 0;
         }
-    } while ((lastTimeCompare == 0) ||
-             (hasByData && !check_setpos(impl, 1)) ||
-             icaltime_compare(impl->last, impl->istart) < 0 ||
-             (checkContractingRules == 0) ||
-             (checkContractingRules == -1 && !check_contracting_rules(impl)));
+    } while ((cntRecurrences++ < MAX_RECURRENCES) &&
+             ((lastTimeCompare == 0) ||
+              (hasByData && !check_setpos(impl, 1)) ||
+              icaltime_compare(impl->last, impl->istart) < 0 ||
+              (checkContractingRules == 0) ||
+              (checkContractingRules == -1 && !check_contracting_rules(impl))));
 
     impl->occurrence_no++;
 
