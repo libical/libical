@@ -34,12 +34,11 @@ static int dump_compare_strings(const void *arg1,
 void dump_zone_data(GArray *zone_data,
                     char *filename)
 {
-    static char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    static const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     FILE *fp;
     ZoneData *zone;
     ZoneLineData *zone_line;
-    int i, j;
     gboolean output_month, output_day, output_time;
 
     fp = fopen(filename, "w");
@@ -48,12 +47,12 @@ void dump_zone_data(GArray *zone_data,
         exit(1);
     }
 
-    for (i = 0; i < zone_data->len; i++) {
+    for (unsigned int i = 0; i < zone_data->len; i++) {
         zone = &g_array_index(zone_data, ZoneData, i);
 
         fprintf(fp, "Zone\t%s\t", zone->zone_name);
 
-        for (j = 0; j < zone->zone_line_data->len; j++) {
+        for (unsigned int j = 0; j < zone->zone_line_data->len; j++) {
             zone_line = &g_array_index(zone->zone_line_data, ZoneLineData, j);
 
             if (j != 0) {
@@ -118,7 +117,6 @@ void dump_rule_data(GHashTable *rule_data,
     FILE *fp;
     GPtrArray *name_array;
     GArray *rule_array;
-    int i;
     char *name;
 
     fp = fopen(filename, "w");
@@ -135,7 +133,7 @@ void dump_rule_data(GHashTable *rule_data,
     qsort(name_array->pdata, name_array->len, sizeof(char *),
           dump_compare_strings);
 
-    for (i = 0; i < name_array->len; i++) {
+    for (unsigned int i = 0; i < name_array->len; i++) {
         name = g_ptr_array_index(name_array, i);
         rule_array = g_hash_table_lookup(rule_data, name);
         if (!rule_array) {
@@ -155,6 +153,7 @@ dump_add_rule(char *name,
               GArray *rule_array,
               GPtrArray *name_array)
 {
+    (void)rule_array; /* unused */
     g_ptr_array_add(name_array, name);
 }
 
@@ -174,17 +173,16 @@ void dump_rule_array(char *name,
                      GArray *rule_array,
                      FILE *fp)
 {
-    static char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    static const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
     RuleData *rule;
-    int i;
 
 #if 0
   fprintf (fp, "\n# Rule	NAME	FROM	TO	TYPE	IN	ON	AT	SAVE	LETTER/S");
 #endif
 
-    for (i = 0; i < rule_array->len; i++) {
+    for (unsigned int i = 0; i < rule_array->len; i++) {
         rule = &g_array_index(rule_array, RuleData, i);
 
         fprintf(fp, "Rule\t%s\t%s\t", name, dump_year(rule->from_year));
@@ -213,14 +211,15 @@ void dump_rule_array(char *name,
     }
 }
 
-char *
+const char *
 dump_time(int seconds,
           TimeCode time_code,
           gboolean use_zero)
 {
-    static char buffer[256], *sign;
+    static char buffer[256];
+    const char *sign;
     int hours, minutes;
-    char *code;
+    const char *code;
 
     if (time_code == TIME_STANDARD) {
         code = "s";
@@ -258,8 +257,8 @@ dump_day_coded(DayCode day_code,
                int day_weekday)
 {
     static char buffer[256];
-    static char *weekdays[] = {"Sun", "Mon", "Tue", "Wed",
-                               "Thu", "Fri", "Sat"};
+    static const char *weekdays[] = {"Sun", "Mon", "Tue", "Wed",
+                                     "Thu", "Fri", "Sat"};
 
     switch (day_code) {
     case DAY_SIMPLE:
@@ -282,7 +281,7 @@ dump_day_coded(DayCode day_code,
     return buffer;
 }
 
-char *
+const char *
 dump_year(int year)
 {
     static char buffer[256];
@@ -299,10 +298,11 @@ dump_year(int year)
 }
 
 void dump_time_zone_names(GList *names,
-                          char *output_dir,
+                          const char *output_dir,
                           GHashTable *zones_hash)
 {
-    char filename[PATHNAME_BUFFER_SIZE], *zone_name, *zone_name_in_hash = NULL;
+    char filename[PATHNAME_BUFFER_SIZE], *zone_name;
+    const char *zone_name_in_hash = NULL;
     char strings_filename[PATHNAME_BUFFER_SIZE];
     FILE *fp, *strings_fp = NULL;
     GList *elem;

@@ -31,16 +31,16 @@ void dump_rule_array(char *name,
                      GArray *rule_array,
                      FILE *fp);
 
-char *dump_year(int year);
+const char *dump_year(int year);
 char *dump_day_coded(DayCode day_code,
                      int day_number,
                      int day_weekday);
-char *dump_time(int seconds,
-                TimeCode time_code,
-                gboolean use_zero);
+const char *dump_time(int seconds,
+                      TimeCode time_code,
+                      gboolean use_zero);
 
 void dump_time_zone_names(GList *names,
-                          char *output_dir,
+                          const char *output_dir,
                           GHashTable *zones_hash);
 
 #endif /* VZIC_DUMP_H */

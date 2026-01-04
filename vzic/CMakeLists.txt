@@ -6,9 +6,6 @@
 # Pass the following variables to cmake to control the build:
 # (See docs/HOWTO-update-zoneinfo.md for more information)
 #
-# -DOLSON_DIR=[path/to/Olson/files]
-#  The path where the Olson files (ie. from tzdataXXXX) can be found
-#
 # -DPRODUCT_ID=[propid]
 #  This is used as the PRODID property on the iCalendar files output.
 #  It identifies the product which created the iCalendar objects.
@@ -40,31 +37,6 @@
 #  an effect if CREATE_SYMLINK is 0, and mainly is useful for backward
 #  compatibility with previous vzic versions.
 #  Default=True
-
-cmake_minimum_required(VERSION 3.20.0)
-project(vzic LANGUAGES C)
-
-include(FeatureSummary)
-
-get_filename_component(
-    LIBICAL_CMAKE_MODULE_PATH
-    "${CMAKE_CURRENT_SOURCE_DIR}"
-    DIRECTORY
-)
-list(APPEND CMAKE_MODULE_PATH "${LIBICAL_CMAKE_MODULE_PATH}/cmake/modules")
-
-find_package(PkgConfig QUIET)
-set(MIN_GLIB "2.44")
-find_package(GLib ${MIN_GLIB} REQUIRED)
-
-if(NOT OLSON_DIR)
-    message(
-        FATAL_ERROR
-        "Must provide a variable for OLSON_DIR on the command line, i.e. \"-DOLSON_DIR=tzdata2025c\")"
-    )
-endif()
-message(STATUS "OLSON_DIR is ${OLSON_DIR}")
-add_definitions(-DOLSON_DIR=\"${OLSON_DIR}\")
 
 if(NOT PRODUCT_ID)
     set(PRODUCT_ID "-//citadel.org//NONSGML Citadel calendar//EN")
@@ -108,4 +80,4 @@ set(VZIC_SRCS
 
 add_executable(vzic ${VZIC_SRCS})
 target_compile_options(vzic PRIVATE ${GLIB_CFLAGS})
-target_link_options(vzic PRIVATE ${GLIB_LIBRARIES})
+target_link_libraries(vzic PRIVATE ${GLIB_LIBRARIES})

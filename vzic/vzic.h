@@ -16,6 +16,9 @@
 
 #include <glib.h>
 
+/* uncomment, to enable debug prints */
+/* #define VZIC_DEBUG_PRINT 1 */
+
 /*
  * Global command-line options.
  */
@@ -32,7 +35,7 @@ extern gboolean VzicDumpZoneTranslatableStrings;
 extern gboolean VzicNoRRules;
 extern gboolean VzicNoRDates;
 extern char *VzicUrlPrefix;
-extern char *VzicOutputDir;
+extern const char *VzicOutputDir;
 
 extern GList *VzicTimeZoneNames;
 
