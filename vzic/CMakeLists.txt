@@ -39,43 +39,36 @@
 #  Default=True
 
 if(NOT PRODUCT_ID)
-    set(PRODUCT_ID "-//citadel.org//NONSGML Citadel calendar//EN")
+  set(PRODUCT_ID "-//citadel.org//NONSGML Citadel calendar//EN")
 endif()
 message(STATUS "PRODUCT_ID is ${PRODUCT_ID}")
 add_definitions(-DPRODUCT_ID=\"${PRODUCT_ID}\")
 
 if(NOT TZID_PREFIX)
-    set(TZID_PREFIX "/citadel.org/%D_1/")
+  set(TZID_PREFIX "/citadel.org/%D_1/")
 endif()
 message(STATUS "TZID_PREFIX is ${TZID_PREFIX}")
 add_definitions(-DTZID_PREFIX=\"${TZID_PREFIX}\")
 
-option(
-    CREATE_SYMLINK
-    "Symbolically link the Link zone file to its authoritative zone"
-    True
-)
+option(CREATE_SYMLINK "Symbolically link the Link zone file to its authoritative zone" True)
 if(CREATE_SYMLINK)
-    add_definitions(-DCREATE_SYMLINK)
+  add_definitions(-DCREATE_SYMLINK)
 endif()
-option(
-    IGNORE_TOP_LEVEL_LINK
-    "Ignore top-level timezone aliases (a timezone name without any '/' such as EST5EDT)"
-    True
-)
+option(IGNORE_TOP_LEVEL_LINK "Ignore top-level timezone aliases (a timezone name without any '/' such as EST5EDT)" True)
 if(IGNORE_TOP_LEVEL_LINK)
-    add_definitions(-DIGNORE_TOP_LEVEL_LINK)
+  add_definitions(-DIGNORE_TOP_LEVEL_LINK)
 endif()
 
-set(VZIC_SRCS
-    vzic.c
-    vzic.h
-    vzic-dump.c
-    vzic-dump.h
-    vzic-output.c
-    vzic-output.h
-    vzic-parse.c
-    vzic-parse.h
+set(
+  VZIC_SRCS
+  vzic.c
+  vzic.h
+  vzic-dump.c
+  vzic-dump.h
+  vzic-output.c
+  vzic-output.h
+  vzic-parse.c
+  vzic-parse.h
 )
 
 add_executable(vzic ${VZIC_SRCS})
