@@ -35,7 +35,7 @@ gunzip and untar the tzdata file:
 
 ## BUILDING
 
-Edit the Makefile to set the PRODUCT_ID and TZID_PREFIX variables.
+Edit the Makefile to set PRODUCT_ID and TZID_PREFIX variables.
 
 Then run `make -B`.
 
