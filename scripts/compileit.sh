@@ -18,8 +18,10 @@ BRANCH=$(git branch --show-current | awk -F/ '{print $NF}')
 BDIR="$TOP/build-$BRANCH-gcc"
 INSTALLDIR="$HOME/tmp/libical-$BRANCH"
 
+CMAKE_STRICT=""
 CMAKE_VERSION4_OPTIONS=""
 if (test "$BRANCH" != "3.0"); then
+  CMAKE_STRICT="--warn-uninitialized -Werror=dev"
   CMAKE_VERSION4_OPTIONS="\
     -DLIBICAL_DEVMODE=ON \
     -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=ON \
@@ -36,6 +38,7 @@ mkdir -p "$BDIR" &&
   cd "$BDIR"
 # shellcheck disable=SC2086,SC2226
 cmake -S .. \
+  $CMAKE_STRICT \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Debug \
   -DLIBICAL_STATIC=OFF \
