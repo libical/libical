@@ -6,7 +6,7 @@ How to use the vzic program to update the libical builtin zoneinfo database.
 
 1. Retrieve the most recent tzdata from IANA from <http://www.iana.org/time-zones>
 
-   Look for a gzip-compressed tar file (a "tarball") named tzdata2022d.tar.gz, for example.
+   Look for a gzip-compressed tar file (a "tarball") named tzdata2025c.tar.gz, for example.
 
    Save the tarball into your Downloads folder.
 
@@ -14,8 +14,8 @@ How to use the vzic program to update the libical builtin zoneinfo database.
 
      ```shell
      cd ./vzic
-     mkdir tzdata2024b
-     cd tzdata2024b; tar xvfz ~/Downloads/tzdata2024b.tar.gz; cd ..
+     mkdir tzdata2025c
+     cd tzdata2025c; tar xvfz ~/Downloads/tzdata2025c.tar.gz; cd ..
      ```
 
 ## Building vzic
