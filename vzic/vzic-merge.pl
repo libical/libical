@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use Getopt::Long;
-use Cwd qw(abs_path);
+use Cwd            qw(abs_path);
 use File::Basename qw( fileparse );
 use File::Path     qw( make_path );
 use File::Spec;
@@ -34,9 +34,11 @@ $LIBICAL_VERSIONING = 1;
 # Set this to 0 for dry-runs, and 1 to actually update.
 $DO_UPDATES = 1;
 
-sub usage {
-    say STDERR "Usage: $0 --master-zoneinfo-dir=<path_to_master_zoneinfo> --new_zoneinfo_dir=<path_to_new_zone_info>";
-    exit 1;
+sub usage
+{
+  say STDERR
+"Usage: $0 --master-zoneinfo-dir=<path_to_master_zoneinfo> --new_zoneinfo_dir=<path_to_new_zone_info>";
+  exit 1;
 }
 
 GetOptions(
@@ -45,15 +47,15 @@ GetOptions(
 ) or die 'Invalid command-line arguments';
 
 if (!defined($MASTER_ZONEINFO_DIR)) {
-    say STDERR "You forgot to pass a master-zoneinfo-dir command line option\n";
-    usage();
+  say STDERR "You forgot to pass a master-zoneinfo-dir command line option\n";
+  usage();
 }
 if (!defined($NEW_ZONEINFO_DIR)) {
-    say STDERR "You forgot to pass a new-zoneinfo-dir command line option\n";
-    usage();
+  say STDERR "You forgot to pass a new-zoneinfo-dir command line option\n";
+  usage();
 }
 $MASTER_ZONEINFO_DIR = abs_path($MASTER_ZONEINFO_DIR);
-$NEW_ZONEINFO_DIR = abs_path($NEW_ZONEINFO_DIR);
+$NEW_ZONEINFO_DIR    = abs_path($NEW_ZONEINFO_DIR);
 
 # Save this so we can restore it later.
 $input_record_separator = $/;
