@@ -178,8 +178,8 @@ void dump_rule_array(char *name,
 
     RuleData *rule;
 
-#if 0
-  fprintf (fp, "\n# Rule	NAME	FROM	TO	TYPE	IN	ON	AT	SAVE	LETTER/S");
+#ifdef VZIC_DEBUG_PRINT
+    fprintf(fp, "\n# Rule	NAME	FROM	TO	TYPE	IN	ON	AT	SAVE	LETTER/S");
 #endif
 
     for (unsigned int i = 0; i < rule_array->len; i++) {
@@ -365,12 +365,13 @@ void dump_time_zone_names(GList *names,
         }
 
         if (VzicDumpZoneTranslatableStrings) {
-#if 0
-      char zone_name_buffer[1024], *src, *dest;
+#ifdef VZIC_DEBUG_PRINT
+            char zone_name_buffer[1024], *src, *dest;
 
-      for (src = zone_name, dest = zone_name_buffer; *src; src++, dest++)
-	*dest = (*src == '_') ? ' ' : *src;
-      *dest = '\0';
+            for (src = zone_name, dest = zone_name_buffer; *src; src++, dest++) {
+                *dest = (*src == '_') ? ' ' : *src;
+            }
+            *dest = '\0';
 #endif
 
             fprintf(strings_fp, "N_(\"%s\");\n", zone_name);

@@ -236,7 +236,7 @@ static gboolean output_rrule_2(char *buffer,
                                int day_number,
                                int day_weekday);
 
-#if 0
+#ifdef VZIC_DEBUG_PRINT
 static char *format_vzictime(VzicTime *vzictime);
 #endif
 
@@ -365,7 +365,7 @@ expand_and_sort_rule_array(gpointer key,
 
     /* Now sort the rules. */
     qsort(rule_array->data, rule_array->len, sizeof(RuleData), rule_sort_func);
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     dump_rule_array(name, rule_array, stdout);
 #endif
 }
@@ -475,12 +475,12 @@ output_zone(const char *directory,
     CurrentZoneName = zone_name;
 
     /* Use this to only output a particular zone. */
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     if (strcmp(zone_name, "Atlantic/Azores")) {
         return;
     }
 #endif
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     printf("Outputting Zone: %s\n", zone_name);
 #endif
 
@@ -608,7 +608,7 @@ parse_zone_name(char *name,
             }
         }
     }
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     if (!first_slash_pos) {
         fprintf(stderr, "No '/' character in Zone name: %s. Skipping.\n", name);
         return FALSE;
@@ -733,14 +733,14 @@ output_zone_to_files(ZoneData *zone,
                                                         start_index + 1);
             if (times_match(vzictime_start, prev_stdoff, prev_walloff,
                             vzictime_first_rule_change, stdoff, walloff)) {
-#if 0
+#ifdef VZIC_DEBUG_PRINT
                 printf("Removing zone-line change (using new offsets)\n");
 #endif
                 g_array_remove_index(changes, start_index);
                 vzictime_start = NULL;
             } else if (times_match(vzictime_start, prev_stdoff, prev_walloff,
                                    vzictime_first_rule_change, prev_stdoff, prev_walloff)) {
-#if 0
+#ifdef VZIC_DEBUG_PRINT
                 printf("Removing zone-line change (using previous offsets)\n");
 #endif
                 g_array_remove_index(changes, start_index);
@@ -876,7 +876,7 @@ add_rule_changes(ZoneLineData *zone_line,
                     *save_seconds = prev_rule->save_seconds;
                     found_start_letter_s = TRUE;
                     *start_letter_s = prev_rule->letter_s;
-#if 0
+#ifdef VZIC_DEBUG_PRINT
                     printf("Could use save_seconds from previous Rule: %s\n",
                            zone_name);
 #endif
@@ -940,7 +940,7 @@ expand_tzname(char *zone_name,
     const char *guess = NULL;
     size_t len;
 
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     printf("Expanding %s with %s\n", format, letter_s);
 #endif
 
@@ -992,7 +992,7 @@ expand_tzname(char *zone_name,
             }
 
             if (guess) {
-#if 0
+#ifdef VZIC_DEBUG_PRINT
                 fprintf(stderr,
                         "WARNING: Couldn't find a LETTER_S to use in FORMAT: %s in Zone: %s Guessing: %s\n",
                         format, zone_name, guess);
@@ -1004,7 +1004,7 @@ expand_tzname(char *zone_name,
                     "WARNING: Couldn't find a LETTER_S to use in FORMAT: %s in Zone: %s Leaving TZNAME empty\n",
                     format, zone_name);
 
-#if 0
+#ifdef VZIC_DEBUG_PRINT
 
             /* This is useful to spot exactly which component had a problem. */
             sprintf(buffer, "FIXME: %s", format);
@@ -1086,7 +1086,7 @@ compare_times(VzicTime *time1,
     else {
         result = 0;
     }
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     printf("%i/%i/%i %i <=> %i/%i/%i %i  -> %i\n",
            t1.day_number, t1.month + 1, t1.year, t1.time_seconds,
            t2.day_number, t2.month + 1, t2.year, t2.time_seconds,
@@ -1185,13 +1185,13 @@ output_zone_components(FILE *fp,
             }
         }
 
-#if 0
+#ifdef VZIC_DEBUG_PRINT
         printf("Zone: %s had %i infinite RRULEs\n", CurrentZoneName,
                num_rrules_output);
 #endif
 
         if (!VzicPureOutput && num_rrules_output == 2) {
-#if 0
+#ifdef VZIC_DEBUG_PRINT
             printf("Zone: %s using 2 RRULEs\n", CurrentZoneName);
 #endif
             fprintf(fp, "END:VTIMEZONE\r\n");
@@ -1281,7 +1281,7 @@ output_zone_components(FILE *fp,
             printf("Skipping DAYLIGHT change\n");
             continue;
         }
-#if 0
+#ifdef VZIC_DEBUG_PRINT
         printf("Zone: %s using DTSTART Year: %i\n", CurrentZoneName,
                vzictime->year);
 #endif
@@ -1380,7 +1380,7 @@ check_for_recurrence(FILE *fp,
                             ? TRUE
                             : FALSE;
 
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     printf("\nChecking: %s OFFSETFROM: %i %s\n",
            format_vzictime(vzictime_start), vzictime_start->prev_walloff,
            is_daylight_start ? "DAYLIGHT" : "");
@@ -1427,7 +1427,7 @@ check_for_recurrence(FILE *fp,
             continue;
         }
 
-#if 0
+#ifdef VZIC_DEBUG_PRINT
         printf("          %s OFFSETFROM: %i %s\n",
                format_vzictime(vzictime), vzictime->prev_walloff,
                is_daylight ? "DAYLIGHT" : "");
@@ -1476,7 +1476,7 @@ check_for_recurrence(FILE *fp,
         return FALSE;
     }
 
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     printf("Found recurrence %i - %i!!!\n", vzictime_start->year,
            next_year - 1);
 #endif
@@ -1487,7 +1487,7 @@ check_for_recurrence(FILE *fp,
    since otherwise RDATEs are more efficient. */
     if (!vzictime->is_infinite) {
         int years = vzictime->year - vzictime_start->year + 1;
-#if 0
+#ifdef VZIC_DEBUG_PRINT
         printf("RRULE Years: %i\n", years);
 #endif
         if (!VzicPureOutput || years < MIN_RRULE_OCCURRENCES) {
@@ -1552,7 +1552,7 @@ check_for_rdates(FILE *fp,
     is_daylight_start = (vzictime_start->stdoff != vzictime_start->walloff)
                             ? TRUE
                             : FALSE;
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     printf("\nChecking: %s OFFSETFROM: %i %s\n",
            format_vzictime(vzictime_start), vzictime_start->prev_walloff,
            is_daylight_start ? "DAYLIGHT" : "");
@@ -1568,7 +1568,7 @@ check_for_rdates(FILE *fp,
         if (vzictime->output) {
             continue;
         }
-#if 0
+#ifdef VZIC_DEBUG_PRINT
         printf("          %s OFFSETFROM: %i %s\n", format_vzictime(vzictime),
                vzictime->prev_walloff, is_daylight ? "DAYLIGHT" : "");
 #endif
@@ -1684,13 +1684,13 @@ output_component_start(char *buffer,
         }
     }
     sprintf(line5 + n, ":%s\r\n", formatted_time);
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     /* The RDATE matching DTSTART is unnecessary */
     if (output_rdate) {
         sprintf(line6, "RDATE:%s\r\n", formatted_time);
     } else
 #endif
-    line6[0] = '\0';
+        line6[0] = '\0';
 
     sprintf(buffer, "%s%s%s%s%s%s", line1, line2, line3, line4, line5, line6);
 
@@ -1798,7 +1798,7 @@ calculate_actual_time(VzicTime *vzictime,
             vzictime->day_number += days_in_month;
         }
     }
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     fprintf(stderr, "%s -> %i/%i/%i\n",
             dump_day_coded(vzictime->day_code, vzictime->day_number,
                            vzictime->day_weekday),
@@ -1912,7 +1912,7 @@ calculate_wall_time(int time,
         fprintf(stderr, "Time overflow: %i\n", result);
         exit(1);
     }
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     printf("%s -> ", dump_time(time, time_code, TRUE));
     printf("%s (%i)\n", dump_time(result, TIME_WALL, TRUE), *day_offset);
 #endif
@@ -2115,7 +2115,7 @@ output_rrule(char *rrule_buffer,
 
     case DAY_WEEKDAY_ON_OR_AFTER:
         if (day_number > DaysInMonth[month] - 6) {
-#if 0
+#ifdef VZIC_DEBUG_PRINT
             fprintf(stderr, "DAY_WEEKDAY_ON_OR_AFTER: %i %i\n", day_number,
                     month + 1);
 #endif
@@ -2166,7 +2166,7 @@ output_rrule(char *rrule_buffer,
 
     case DAY_WEEKDAY_ON_OR_BEFORE:
         if (day_number < 7) {
-#if 0
+#ifdef VZIC_DEBUG_PRINT
             fprintf(stderr, "DAY_WEEKDAY_ON_OR_BEFORE: %i %i\n", day_number,
                     month + 1);
 #endif
@@ -2197,7 +2197,7 @@ output_rrule(char *rrule_buffer,
 
     case DAY_LAST_WEEKDAY:
         if (day_offset == 1) {
-#if 0
+#ifdef VZIC_DEBUG_PRINT
             /* Need to allow this for Asia/Amman as of tzdata 2021c */
             if (month == 1) {
                 fprintf(stderr, "DAY_LAST_WEEKDAY - day moved, in February - can't fix\n");
@@ -2205,7 +2205,7 @@ output_rrule(char *rrule_buffer,
             }
 #endif
             /* This is only used once at present, for Africa/Cairo. */
-#if 0
+#ifdef VZIC_DEBUG_PRINT
             fprintf(stderr, "DAY_LAST_WEEKDAY - day moved\n");
 #endif
 
@@ -2367,7 +2367,7 @@ output_rrule_2(char *buffer,
     return TRUE;
 }
 
-#if 0
+#ifdef VZIC_DEBUG_PRINT
 static char *
 format_vzictime(VzicTime *vzictime)
 {
@@ -2542,7 +2542,7 @@ expand_tzid_prefix(void)
             *dest++ = ch1;
         }
     }
-#if 0
+#ifdef VZIC_DEBUG_PRINT
     printf("TZID    : %s\n", TZIDPrefix);
     printf("Expanded: %s\n", TZIDPrefixExpanded);
 #endif
