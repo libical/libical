@@ -458,8 +458,7 @@ parse_rule_line(ParsingData *data)
 static void
 parse_link_line(ParsingData *data)
 {
-    char *from, *to, *old_from;
-    GList *zone_list;
+    char *from, *to;
 
     /* We must have 3 fields for a Link. */
     if (data->num_fields != 3) {
@@ -497,12 +496,17 @@ parse_link_line(ParsingData *data)
             return;
         }
         sprintf(to_path, "%s/%s.ics", VzicOutputDir, to);
-        strncpy(to_dir, to_path, 254);
+        strncpy(to_dir, to_path, 255);
         ensure_directory_exists(dirname(to_dir));
         //printf("Creating symlink from %s to %s\n", rel_from, to_path);
-        symlink(rel_from, to_path);
+        if (symlink(rel_from, to_path) != 0) {
+            fprintf(stderr, "Unable to create symbolic link from %s to %s: %s\n", rel_from, to_path, strerror(errno));
+            exit(1);
+        }
     }
 #else
+    GList *zone_list;
+    char *old_from;
     if (g_hash_table_lookup_extended(data->link_data, from,
                                      (gpointer)&old_from,
                                      (gpointer)&zone_list)) {
@@ -524,7 +528,8 @@ parse_year(ParsingData *data,
            gboolean accept_only,
            int only_value)
 {
-    int len, year = 0;
+    size_t len;
+    int year = 0;
     char *p;
 
     if (!field) {
@@ -569,11 +574,12 @@ static int
 parse_month(ParsingData *data,
             char *field)
 {
-    static char *months[] = {"january", "february", "march", "april", "may",
-                             "june", "july", "august", "september", "october",
-                             "november", "december"};
+    static const char *months[] = {"january", "february", "march", "april", "may",
+                                   "june", "july", "august", "september", "october",
+                                   "november", "december"};
     char *p;
-    int len, i;
+    size_t len;
+    int i;
 
     /* If the field is missing, it must be the optional UNTIL month, so we return
      0 for January. */
@@ -665,10 +671,11 @@ static int
 parse_weekday(ParsingData *data,
               char *field)
 {
-    static char *weekdays[] = {"sunday", "monday", "tuesday", "wednesday",
-                               "thursday", "friday", "saturday"};
+    static const char *weekdays[] = {"sunday", "monday", "tuesday", "wednesday",
+                                     "thursday", "friday", "saturday"};
     char *p;
-    int len, i;
+    size_t len;
+    int i;
 
     for (p = field, len = 0; *p; p++, len++) {
         *p = tolower(*p);
@@ -837,7 +844,7 @@ parse_zone_tab(char *filename)
     ZoneDescription *zone_desc;
     FILE *fp;
     char buf[4096];
-    gchar **fields, *zone_name, *latitude, *longitude, *p;
+    gchar **fields, *zone_name, *latitude, *longitude;
 
     fp = fopen(filename, "r");
     if (!fp) {

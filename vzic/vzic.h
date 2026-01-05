@@ -32,7 +32,7 @@ extern gboolean VzicDumpZoneTranslatableStrings;
 extern gboolean VzicNoRRules;
 extern gboolean VzicNoRDates;
 extern char *VzicUrlPrefix;
-extern char *VzicOutputDir;
+extern const char *VzicOutputDir;
 
 extern GList *VzicTimeZoneNames;
 
