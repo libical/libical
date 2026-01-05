@@ -35,14 +35,13 @@ gunzip and untar the tzdata file:
 
 ## BUILDING
 
-Edit the Makefile to set the OLSON_DIR (in this case to tzdata2014g),
-PRODUCT_ID and TZID_PREFIX variables.
+Edit the Makefile to set PRODUCT_ID and TZID_PREFIX variables.
 
 Then run `make -B`.
 
 ## RUNNING
 
-Run `./vzic`
+Run `./vzic --olson-dir <tzdataXXXX>`
 
 The output is placed in the zoneinfo subdirectory by default,
 but you can use the --output-dir options to set another toplevel output

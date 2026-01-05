@@ -37,7 +37,7 @@ gboolean VzicNoRRules = FALSE;
 gboolean VzicNoRDates = FALSE;
 char *VzicOutputDir = "zoneinfo";
 char *VzicUrlPrefix = NULL;
-char *VzicOlsonDir = OLSON_DIR;
+char *VzicOlsonDir = NULL;
 
 GList *VzicTimeZoneNames = NULL;
 
@@ -139,8 +139,16 @@ int main(int argc,
     }
 
     /*
-   * Create any necessary directories.
-   */
+     * Verify the olson dir
+     */
+    if (!VzicOlsonDir) {
+        fprintf(stderr, "You forgot to specify the --olson-dir\n");
+        exit(1);
+    }
+
+    /*
+    * Create any necessary directories.
+    */
     ensure_directory_exists(VzicOutputDir);
 
     if (VzicDumpOutput) {
@@ -256,7 +264,7 @@ convert_olson_files(GPtrArray *olson_filenames)
 static void
 usage(void)
 {
-    fprintf(stderr, "Usage: vzic [--dump] [--dump-changes] [--no-rrules] [--no-rdates] [--pure] [--gen-links] [--output-dir <directory>] [--url-prefix <url>] [--olson-dir <directory>]\n");
+    fprintf(stderr, "Usage: vzic [--dump] [--dump-changes] [--no-rrules] [--no-rdates] [--pure] [--gen-links] [--output-dir <directory>] [--url-prefix <url>] --olson-dir <directory>\n");
 
     exit(1);
 }

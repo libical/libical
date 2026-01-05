@@ -23,7 +23,7 @@ How to use the vzic program to update the libical builtin zoneinfo database.
 ```shell
      cd ./vzic
      make clean
-     make -B OLSON_DIR=tzdata2024b CREATE_SYMLINK=0 IGNORE_TOP_LEVEL_LINK=0
+     make -B CREATE_SYMLINK=0 IGNORE_TOP_LEVEL_LINK=0
      # pass PRODUCT_ID and TZID_PREFIX as necessary (shouldn't be) or you could edit the top-level Makefile
 ```
 
@@ -31,7 +31,7 @@ How to use the vzic program to update the libical builtin zoneinfo database.
 
 ```shell
      cd ./vzic
-     ./vzic
+     ./vzic --olson-dir=tzdata2024b
 ```
 
 The output is placed in the zoneinfo subdirectory by default, but you can use the --output-dir options
