@@ -196,8 +196,8 @@ void parse_olson_file(char *filename,
 
     fclose(fp);
 
-#if 0
-  printf ("Max UNTIL year: %i\n", data.max_until_year);
+#ifdef VZIC_DEBUG_PRINT
+    printf("Max UNTIL year: %i\n", data.max_until_year);
 #endif
     *max_until_year = data.max_until_year;
 }
@@ -268,11 +268,12 @@ parse_fields(ParsingData *data)
         }
     }
 
-#if 0
-  printf ("%i fields: ", data->num_fields);
-  for (i = 0; i < data->num_fields; i++)
-    printf ("'%s' ", data->fields[i]);
-  printf ("\n");
+#ifdef VZIC_DEBUG_PRINT
+    printf("%i fields: ", data->num_fields);
+    for (i = 0; i < data->num_fields; i++) {
+        printf("'%s' ", data->fields[i]);
+    }
+    printf("\n");
 #endif
 }
 
@@ -471,8 +472,8 @@ parse_link_line(ParsingData *data)
     from = data->fields[LINK_FROM];
     to = data->fields[LINK_TO];
 
-#if 0
-  printf ("LINK FROM: %s\tTO: %s\n", from, to);
+#ifdef VZIC_DEBUG_PRINT
+    printf("LINK FROM: %s\tTO: %s\n", from, to);
 #endif
 
 #if CREATE_SYMLINK
@@ -735,17 +736,8 @@ parse_time(ParsingData *data,
         exit(1);
     }
 
-#if 0
-  /* Hack to work around older libical that doesn't support BYDAY + BYYEARDAY */
-  if (hours == 24) {
-    hours = 23;
-    minutes = 59;
-    seconds = 59;
-  }
-#endif
-
-#if 0
-  printf ("Time: %s -> %i:%02i:%02i\n", field, hours, minutes, seconds);
+#ifdef VZIC_DEBUG_PRINT
+    printf("Time: %s -> %i:%02i:%02i\n", field, hours, minutes, seconds);
 #endif
 
     result = hours * 3600 + minutes * 60 + seconds;
@@ -787,8 +779,8 @@ parse_number(ParsingData *data,
 
     p = *num;
 
-#if 0
-  printf ("In parse_number p:%s\n", p);
+#ifdef VZIC_DEBUG_PRINT
+    printf("In parse_number p:%s\n", p);
 #endif
 
     // potential null value where '-' is specified. assume zero.
@@ -887,12 +879,12 @@ parse_zone_tab(char *filename)
 
         g_hash_table_insert(zones_hash, zone_name, zone_desc);
 
-#if 0
-    g_print ("Found zone: %s %i %02i %02i,%i %02i %02i\n", zone_name,
-	     zone_desc->latitude[0], zone_desc->latitude[1],
-	     zone_desc->latitude[2],
-	     zone_desc->longitude[0], zone_desc->longitude[1],
-	     zone_desc->longitude[2]);
+#ifdef VZIC_DEBUG_PRINT
+        g_print("Found zone: %s %i %02i %02i,%i %02i %02i\n", zone_name,
+                zone_desc->latitude[0], zone_desc->latitude[1],
+                zone_desc->latitude[2],
+                zone_desc->longitude[0], zone_desc->longitude[1],
+                zone_desc->longitude[2]);
 #endif
     }
 
