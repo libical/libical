@@ -179,13 +179,14 @@ int main(int argc,
     /* These are backwards-compatibility and weird stuff. */
     g_ptr_array_add(olson_filenames, (char *)"backward");
     g_ptr_array_add(olson_filenames, (char *)"etcetera");
-#if 0
-  g_ptr_array_add(olson_filenames, (char *)"leapseconds");
-  g_ptr_array_add(olson_filenames, (char *)"pacificnew");
-  g_ptr_array_add(olson_filenames, (char *)"solar87");
-  g_ptr_array_add(olson_filenames, (char *)"solar88");
-  g_ptr_array_add(olson_filenames, (char *)"solar89");
-#endif
+
+    /* these top-level dirs are ignored. some have been removed over the years:
+    g_ptr_array_add(olson_filenames, (char *)"leapseconds");
+    g_ptr_array_add(olson_filenames, (char *)"pacificnew");
+    g_ptr_array_add(olson_filenames, (char *)"solar87");
+    g_ptr_array_add(olson_filenames, (char *)"solar88");
+    g_ptr_array_add(olson_filenames, (char *)"solar89");
+    */
 
     /* Convert the Olson timezone files. */
     convert_olson_files(olson_filenames);
