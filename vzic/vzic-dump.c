@@ -22,7 +22,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "vzic.h"
 #include "vzic-dump.h"
 
 static void dump_add_rule(char *name,
@@ -130,7 +129,7 @@ void dump_rule_data(GHashTable *rule_data,
      sort it, then output them. */
     name_array = g_ptr_array_new();
     g_hash_table_foreach(rule_data, (GHFunc)dump_add_rule, name_array);
-    qsort(name_array->pdata, name_array->len, sizeof(char *),
+    qsort((void *)name_array->pdata, name_array->len, sizeof(char *),
           dump_compare_strings);
 
     for (unsigned int i = 0; i < name_array->len; i++) {

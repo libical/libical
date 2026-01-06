@@ -1418,7 +1418,7 @@ check_for_recurrence(FILE *fp,
 
     last_match = idx;
     next_year = vzictime_start->year + 1;
-    for (size_t i = (size_t)(idx + 1); i < changes->len; i++) {
+    for (size_t i = (size_t)(idx) + 1; i < changes->len; i++) {
         vzictime = &g_array_index(changes, VzicTime, i);
 
         is_daylight = (vzictime->stdoff != vzictime->walloff) ? TRUE : FALSE;
@@ -1499,16 +1499,15 @@ check_for_recurrence(FILE *fp,
         if (vzictime->is_infinite) {
             until[0] = '\0';
         } else {
-            VzicTime t1 = *vzictime;
-
             printf("RRULE with UNTIL - aborting\n");
             abort();
+            // no need to do this stuff since we aborted
+            // VzicTime t1 = *vzictime;
+            // calculate_actual_time(&t1, TIME_UNIVERSAL, vzictime->prev_stdoff,
+            //                      vzictime->prev_walloff);
 
-            calculate_actual_time(&t1, TIME_UNIVERSAL, vzictime->prev_stdoff,
-                                  vzictime->prev_walloff);
-
-            /* Output UNTIL, in UTC. */
-            sprintf(until, ";UNTIL=%sZ", format_time(t1.year, t1.month, t1.day_number, t1.time_seconds));
+            // /* Output UNTIL, in UTC. */
+            // sprintf(until, ";UNTIL=%sZ", format_time(t1.year, t1.month, t1.day_number, t1.time_seconds));
         }
 
         /* Change the year to our minimum start year. */
@@ -1560,7 +1559,7 @@ check_for_rdates(FILE *fp,
 
     /* We want to go backwards through the array now, for Outlook compatibility.
      (It only looks at the first DTSTART/RDATE.) */
-    for (size_t i = (size_t)(idx + 1); i < changes->len; i++) {
+    for (size_t i = (size_t)(idx) + 1; i < changes->len; i++) {
         vzictime = &g_array_index(changes, VzicTime, i);
 
         is_daylight = (vzictime->stdoff != vzictime->walloff) ? TRUE : FALSE;
@@ -1935,12 +1934,12 @@ fix_time_overflow(int *year,
                 *month = 11;
                 *year = *year - 1;
             }
-            *day = g_date_get_days_in_month(*month + 1, *year);
+            *day = g_date_get_days_in_month((GDateMonth)(*month + 1), *year);
         }
     } else if (day_offset == 1) {
         *day = *day + 1;
 
-        if (*day > g_date_get_days_in_month(*month + 1, *year)) {
+        if (*day > g_date_get_days_in_month((GDateMonth)(*month + 1), *year)) {
             *month = *month + 1;
             if (*month == 12) {
                 *month = 0;

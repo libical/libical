@@ -20,6 +20,9 @@
 #ifndef VZIC_DUMP_H
 #define VZIC_DUMP_H
 
+#include "vzic.h"
+
+#include <stdio.h>
 #include <glib.h>
 
 void dump_zone_data(GArray *zone_data,
