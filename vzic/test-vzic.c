@@ -30,6 +30,9 @@
  * other timezones incorrect sometimes (e.g. if they change).
  */
 
+#include "vzic.h"
+
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -39,6 +42,9 @@
 
 #include <ical.h>
 /*#include <evolution/ical.h>*/
+
+/* uncomment, to enable debug prints */
+/* #define TESTVZIC_PRINT_DEBUG 1 */
 
 #define CHANGES_MAX_YEAR 2030
 
@@ -69,17 +75,15 @@
 #define TRUE (!FALSE)
 #endif
 
-int VzicDumpChanges = FALSE;
-
 /* We output beneath the current directory for now. */
-char *directory = "test-output";
+const char *directory = "test-output";
 
 static void usage(void);
 static int parse_zone_name(char *name,
                            char **directory,
                            char **subdirectory,
                            char **filename);
-static void ensure_directory_exists(char *directory);
+static void ensure_directory_exists(const char *directory);
 static void dump_local_times(icaltimezone *zone,
                              FILE *fp);
 
@@ -87,12 +91,15 @@ int main(int argc, char *argv[])
 {
     icalarray *zones;
     icaltimezone *zone;
-    char *zone_directory, *zone_subdirectory, *zone_filename, *location;
+    char *zone_directory = {0};
+    char *zone_subdirectory, *zone_filename, *location;
     char output_directory[PATHNAME_BUFFER_SIZE];
     char filename[PATHNAME_BUFFER_SIZE];
     FILE *fp;
     int i;
+#ifdef TESTVZIC_PRINT_DEBUG
     int skipping = TRUE;
+#endif
 
     /*
    * Command-Line Option Parsing.
@@ -113,53 +120,65 @@ int main(int argc, char *argv[])
 
     ensure_directory_exists(directory);
 
-    for (i = 0; i < zones->num_elements; i++) {
-        zone = icalarray_element_at(zones, i);
+    for (size_t j = 0; j < zones->num_elements; j++) {
+        zone = icalarray_element_at(zones, j);
 
         location = (char *)icaltimezone_get_location(zone);
 
-#if 0
-    /* Use this to start at a certain zone. */
-    if (skipping && strcmp (location, "America/Boise"))
-      continue;
-#endif
+#ifdef TESTVZIC_PRINT_DEBUG
+        /* Use this to start at a certain zone. */
+        if (skipping && strcmp(location, "America/Boise")) {
+            continue;
+        }
 
         skipping = FALSE;
+#endif
 
         /* Use this to only output data for certain timezones. */
-#if 0
-    if (strcmp (location, "America/Cancun")
-        && strcmp (location, "Asia/Baku")
-        && strcmp (location, "Asia/Nicosia")
-        && strcmp (location, "Asia/Novosibirsk")
-        && strcmp (location, "Asia/Samarkand")
-        && strcmp (location, "Asia/Tashkent")
-        && strcmp (location, "Asia/Tbilisi")
-        && strcmp (location, "Asia/Yerevan")
-        && strcmp (location, "Australia/Broken_Hill")
-        && strcmp (location, "Europe/Simferopol")
-        && strcmp (location, "Europe/Tallinn")
-        && strcmp (location, "Europe/Zaporozhye")
-        )
-      continue;
+#ifdef TESTVZIC_PRINT_DEBUG
+        if (strcmp(location, "America/Cancun") &&
+            strcmp(location, "Asia/Baku") &&
+            strcmp(location, "Asia/Nicosia") &&
+            strcmp(location, "Asia/Novosibirsk") &&
+            strcmp(location, "Asia/Samarkand") &&
+            strcmp(location, "Asia/Tashkent") &&
+            strcmp(location, "Asia/Tbilisi") &&
+            strcmp(location, "Asia/Yerevan") &&
+            strcmp(location, "Australia/Broken_Hill") &&
+            strcmp(location, "Europe/Simferopol") &&
+            strcmp(location, "Europe/Tallinn") &&
+            strcmp(location, "Europe/Zaporozhye")) {
+            continue;
+        }
 #endif
 
-#if 0
-    printf ("%s\n", location);
+#ifdef TESTVZIC_PRINT_DEBUG
+        printf("%s\n", location);
 #endif
 
-        parse_zone_name(location, &zone_directory, &zone_subdirectory,
-                        &zone_filename);
+        if (parse_zone_name(location, &zone_directory, &zone_subdirectory, &zone_filename) == FALSE) {
+            fprintf(stderr, "Couldn't create parse this location: %s\n", location);
+            exit(1);
+        }
 
-        sprintf(output_directory, "%s/%s", directory, zone_directory);
+        strncpy(output_directory, directory, PATHNAME_BUFFER_SIZE - 1);
+        strncat(output_directory, "/", PATHNAME_BUFFER_SIZE - 1);
+        strncat(output_directory, zone_directory, PATHNAME_BUFFER_SIZE - 1);
         ensure_directory_exists(output_directory);
-        sprintf(filename, "%s/%s", output_directory, zone_filename);
+        strncpy(filename, output_directory, PATHNAME_BUFFER_SIZE);
+        strncat(filename, "/", PATHNAME_BUFFER_SIZE - 1);
+        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
 
         if (zone_subdirectory) {
-            sprintf(output_directory, "%s/%s/%s", directory, zone_directory,
-                    zone_subdirectory);
+            strncpy(output_directory, directory, PATHNAME_BUFFER_SIZE - 1);
+            strncat(output_directory, "/", PATHNAME_BUFFER_SIZE - 1);
+            strncat(output_directory, zone_directory, PATHNAME_BUFFER_SIZE - 1);
+            strncat(output_directory, "/", PATHNAME_BUFFER_SIZE - 1);
+            strncat(output_directory, zone_subdirectory, PATHNAME_BUFFER_SIZE - 1);
             ensure_directory_exists(output_directory);
-            sprintf(filename, "%s/%s", output_directory, zone_filename);
+            strncpy(filename, output_directory, PATHNAME_BUFFER_SIZE);
+            strncat(filename, "/", PATHNAME_BUFFER_SIZE - 1);
+            strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
         }
 
         fp = fopen(filename, "w");
@@ -204,8 +223,6 @@ parse_zone_name(char *name,
                 char **subdirectory,
                 char **filename)
 {
-    static int invalid_zone_num = 1;
-
     char *p, ch, *first_slash_pos = NULL, *second_slash_pos = NULL;
     int invalid = FALSE;
 
@@ -253,10 +270,11 @@ parse_zone_name(char *name,
             *filename = icalmemory_strdup(first_slash_pos + 1);
         }
     }
+    return TRUE;
 }
 
 static void
-ensure_directory_exists(char *directory)
+ensure_directory_exists(const char *directory)
 {
     struct stat filestat;
 
@@ -281,8 +299,8 @@ ensure_directory_exists(char *directory)
 static void
 dump_local_times(icaltimezone *zone, FILE *fp)
 {
-    static char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    static const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     icaltimezone *utc_timezone;
     struct icaltimetype tt, tt_copy;
     struct tm tm, local_tm;
@@ -312,7 +330,7 @@ dump_local_times(icaltimezone *zone, FILE *fp)
     tm.tm_isdst = -1;
 
     /* Convert it to a time_t by saying it is in UTC. */
-    putenv("TZ=UTC");
+    putenv((char *)"TZ=UTC");
     t = mktime(&tm);
 
     location = (char *)icaltimezone_get_location(zone);
@@ -326,26 +344,25 @@ dump_local_times(icaltimezone *zone, FILE *fp)
     while (tt.year <= DUMP_END_YEAR) {
         if (tt.year > last_year_output) {
             last_year_output = tt.year;
-#if 0
-      printf ("  %i\n", last_year_output);
-      fprintf (fp, "  %i\n", last_year_output);
+#ifdef TESTVZIC_PRINT_DEBUG
+            printf("  %i\n", last_year_output);
+            fprintf(fp, "  %i\n", last_year_output);
 #endif
         }
 
-#if 1
         /* First use the Unix functions. */
         /* Now convert it to a local time in the given timezone. */
         local_tm = *localtime(&t);
-#endif
 
-#if 1
         /* Now use libical. */
         tt_copy = tt;
         icaltimezone_convert_time(&tt_copy, utc_timezone, zone);
-#endif
-
-#if 1
-        if (local_tm.tm_year + 1900 != tt_copy.year || local_tm.tm_mon + 1 != tt_copy.month || local_tm.tm_mday != tt_copy.day || local_tm.tm_hour != tt_copy.hour || local_tm.tm_min != tt_copy.minute || local_tm.tm_sec != tt_copy.second) {
+        if (local_tm.tm_year + 1900 != tt_copy.year ||
+            local_tm.tm_mon + 1 != tt_copy.month ||
+            local_tm.tm_mday != tt_copy.day ||
+            local_tm.tm_hour != tt_copy.hour ||
+            local_tm.tm_min != tt_copy.minute ||
+            local_tm.tm_sec != tt_copy.second) {
             /* The error format is:
 
      ERROR: Original-UTC-Time  Local-Time-From-mktime  Local-Time-From-Libical
@@ -365,11 +382,15 @@ dump_local_times(icaltimezone *zone, FILE *fp)
                     tt_copy.day, months[tt_copy.month - 1], tt_copy.year,
                     tt_copy.hour, tt_copy.minute, tt_copy.second);
         }
-#endif
 
         /* Now convert it back, and check we get the original time. */
         icaltimezone_convert_time(&tt_copy, zone, utc_timezone);
-        if (tt.year != tt_copy.year || tt.month != tt_copy.month || tt.day != tt_copy.day || tt.hour != tt_copy.hour || tt.minute != tt_copy.minute || tt.second != tt_copy.second) {
+        if (tt.year != tt_copy.year ||
+            tt.month != tt_copy.month ||
+            tt.day != tt_copy.day ||
+            tt.hour != tt_copy.hour ||
+            tt.minute != tt_copy.minute ||
+            tt.second != tt_copy.second) {
             total_error2++;
 
             fprintf(fp, "ERROR 2: %2i %s %04i %2i:%02i:%02i UTC",
@@ -383,8 +404,7 @@ dump_local_times(icaltimezone *zone, FILE *fp)
         /* Increment the time. */
         icaltime_adjust(&tt, 0, 0, 15, 0);
 
-        /* We assume leap seconds are not included in time_t values, which should
-       be true on POSIX systems. */
+        /* We assume leap seconds are not included in time_t values, which should be true on POSIX systems. */
         t += 15 * 60;
     }
 

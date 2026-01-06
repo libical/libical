@@ -41,9 +41,9 @@ char *VzicOlsonDir = NULL;
 
 GList *VzicTimeZoneNames = NULL;
 
-static void convert_olson_files(GPtrArray *olson_filenames);
-
-static void usage(void);
+#if !defined(VZIC_LIBRARY)
+static void
+convert_olson_files(GPtrArray *olson_filenames);
 
 static void free_zone_data(GArray *zone_data);
 static void free_rule_array(gpointer key,
@@ -52,6 +52,14 @@ static void free_rule_array(gpointer key,
 static void free_link_data(gpointer key,
                            gpointer value,
                            gpointer data);
+
+static void
+usage(void)
+{
+    fprintf(stderr, "Usage: vzic [--dump] [--dump-changes] [--no-rrules] [--no-rdates] [--pure] [--gen-links] [--output-dir <directory>] [--url-prefix <url>] --olson-dir <directory>\n");
+
+    exit(1);
+}
 
 int main(int argc,
          char *argv[])
@@ -247,14 +255,6 @@ convert_olson_files(GPtrArray *olson_filenames)
     g_hash_table_destroy(link_data);
 }
 
-static void
-usage(void)
-{
-    fprintf(stderr, "Usage: vzic [--dump] [--dump-changes] [--no-rrules] [--no-rdates] [--pure] [--gen-links] [--output-dir <directory>] [--url-prefix <url>] --olson-dir <directory>\n");
-
-    exit(1);
-}
-
 /*
  * Functions to free the data structures.
  */
@@ -323,3 +323,4 @@ free_link_data(gpointer key,
 
     g_list_free(data);
 }
+#endif
