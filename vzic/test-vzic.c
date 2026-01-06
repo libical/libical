@@ -87,7 +87,7 @@ static void ensure_directory_exists(const char *directory);
 static void dump_local_times(icaltimezone *zone,
                              FILE *fp);
 
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
     icalarray *zones;
     icaltimezone *zone;
@@ -305,7 +305,8 @@ dump_local_times(icaltimezone *zone, FILE *fp)
     struct icaltimetype tt, tt_copy;
     struct tm tm, local_tm;
     time_t t;
-    char tzstring[256], *location;
+    char tzstring[256];
+    const char *location;
     int last_year_output = 0;
     int total_error = 0, total_error2 = 0;
 

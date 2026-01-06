@@ -26,12 +26,12 @@
 #include <glib.h>
 
 void dump_zone_data(GArray *zone_data,
-                    char *filename);
+                    const char *filename);
 void dump_rule_data(GHashTable *rule_data,
-                    char *filename);
+                    const char *filename);
 
-void dump_rule_array(char *name,
-                     GArray *rule_array,
+void dump_rule_array(const char *name,
+                     const GArray *rule_array,
                      FILE *fp);
 
 const char *dump_year(int year);

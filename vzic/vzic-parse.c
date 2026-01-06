@@ -107,28 +107,28 @@ static gboolean parse_zone_common(ParsingData *data,
 static void parse_rule_line(ParsingData *data);
 static void parse_link_line(ParsingData *data);
 
-static int parse_year(ParsingData *data,
+static int parse_year(const ParsingData *data,
                       char *field,
                       gboolean accept_only,
                       int only_value);
-static int parse_month(ParsingData *data,
+static int parse_month(const ParsingData *data,
                        char *field);
-static DayCode parse_day(ParsingData *data,
+static DayCode parse_day(const ParsingData *data,
                          char *field,
                          int *day,
                          int *weekday);
-static int parse_weekday(ParsingData *data,
+static int parse_weekday(const ParsingData *data,
                          char *field);
-static int parse_time(ParsingData *data,
+static int parse_time(const ParsingData *data,
                       char *field,
                       TimeCode *time_code);
-static int parse_number(ParsingData *data,
+static int parse_number(const ParsingData *data,
                         char **num);
-static int parse_rules_save(ParsingData *data,
+static int parse_rules_save(const ParsingData *data,
                             char *field,
                             char **rules);
 
-static void parse_coord(char *coord,
+static void parse_coord(const char *coord,
                         int len,
                         int *result);
 
@@ -459,7 +459,8 @@ parse_rule_line(ParsingData *data)
 static void
 parse_link_line(ParsingData *data)
 {
-    char *from, *to;
+    const char *from;
+    char *to;
 
     /* We must have 3 fields for a Link. */
     if (data->num_fields != 3) {
@@ -524,7 +525,7 @@ parse_link_line(ParsingData *data)
 }
 
 static int
-parse_year(ParsingData *data,
+parse_year(const ParsingData *data,
            char *field,
            gboolean accept_only,
            int only_value)
@@ -572,7 +573,7 @@ parse_year(ParsingData *data,
 
 /* Parses a month name, returning 0 (Jan) to 11 (Dec). */
 static int
-parse_month(ParsingData *data,
+parse_month(const ParsingData *data,
             char *field)
 {
     static const char *months[] = {"january", "february", "march", "april", "may",
@@ -606,7 +607,7 @@ parse_month(ParsingData *data,
 /* Parses a day specifier, returning a code representing the type of match
    together with a day of the month and a weekday number (0=Sun). */
 static DayCode
-parse_day(ParsingData *data,
+parse_day(const ParsingData *data,
           char *field,
           int *day,
           int *weekday)
@@ -669,7 +670,7 @@ parse_day(ParsingData *data,
 
 /* Parses a weekday name, returning 0 (Sun) to 6 (Sat). */
 static int
-parse_weekday(ParsingData *data,
+parse_weekday(const ParsingData *data,
               char *field)
 {
     static const char *weekdays[] = {"sunday", "monday", "tuesday", "wednesday",
@@ -698,7 +699,7 @@ parse_weekday(ParsingData *data,
    local standard time, or universal time.
    The time can start with a '-' in which case it will be negative. */
 static int
-parse_time(ParsingData *data,
+parse_time(const ParsingData *data,
            char *field,
            TimeCode *time_code)
 {
@@ -771,7 +772,7 @@ parse_time(ParsingData *data,
 /* Parses a simple number and returns the result. The pointer argument
    is moved to the first character after the number. */
 static int
-parse_number(ParsingData *data,
+parse_number(const ParsingData *data,
              char **num)
 {
     char *p;
@@ -779,14 +780,14 @@ parse_number(ParsingData *data,
 
     p = *num;
 
-#ifdef VZIC_DEBUG_PRINT
-    printf("In parse_number p:%s\n", p);
-#endif
-
     // potential null value where '-' is specified. assume zero.
     if (!p || !*p) {
         return 0;
     }
+
+#ifdef VZIC_DEBUG_PRINT
+    printf("In parse_number p:%s\n", p);
+#endif
 
     if (*p < '0' || *p > '9') {
         fprintf(stderr, "%s:%i: Invalid number: %s\n%s\n", data->filename,
@@ -805,7 +806,7 @@ parse_number(ParsingData *data,
 }
 
 static int
-parse_rules_save(ParsingData *data,
+parse_rules_save(const ParsingData *data,
                  char *field,
                  char **rules)
 {
@@ -830,13 +831,14 @@ parse_rules_save(ParsingData *data,
 }
 
 GHashTable *
-parse_zone_tab(char *filename)
+parse_zone_tab(const char *filename)
 {
     GHashTable *zones_hash;
     ZoneDescription *zone_desc;
     FILE *fp;
     char buf[4096];
-    gchar **fields, *zone_name, *latitude, *longitude;
+    gchar **fields, *zone_name, *latitude;
+    const gchar *longitude;
 
     fp = fopen(filename, "r");
     if (!fp) {
@@ -894,7 +896,7 @@ parse_zone_tab(char *filename)
 }
 
 static void
-parse_coord(char *coord,
+parse_coord(const char *coord,
             int len,
             int *result)
 {

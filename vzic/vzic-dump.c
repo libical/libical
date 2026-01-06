@@ -31,12 +31,11 @@ static int dump_compare_strings(const void *arg1,
                                 const void *arg2);
 
 void dump_zone_data(GArray *zone_data,
-                    char *filename)
+                    const char *filename)
 {
     static const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     FILE *fp;
-    ZoneData *zone;
     ZoneLineData *zone_line;
     gboolean output_month, output_day, output_time;
 
@@ -47,7 +46,7 @@ void dump_zone_data(GArray *zone_data,
     }
 
     for (unsigned int i = 0; i < zone_data->len; i++) {
-        zone = &g_array_index(zone_data, ZoneData, i);
+        ZoneData *zone = &g_array_index(zone_data, ZoneData, i);
 
         fprintf(fp, "Zone\t%s\t", zone->zone_name);
 
@@ -111,12 +110,10 @@ void dump_zone_data(GArray *zone_data,
 }
 
 void dump_rule_data(GHashTable *rule_data,
-                    char *filename)
+                    const char *filename)
 {
     FILE *fp;
     GPtrArray *name_array;
-    GArray *rule_array;
-    char *name;
 
     fp = fopen(filename, "w");
     if (!fp) {
@@ -133,8 +130,8 @@ void dump_rule_data(GHashTable *rule_data,
           dump_compare_strings);
 
     for (unsigned int i = 0; i < name_array->len; i++) {
-        name = g_ptr_array_index(name_array, i);
-        rule_array = g_hash_table_lookup(rule_data, name);
+        const char *name = g_ptr_array_index(name_array, i);
+        const GArray *rule_array = g_hash_table_lookup(rule_data, name);
         if (!rule_array) {
             fprintf(stderr, "Couldn't access rules: %s\n", name);
             exit(1);
@@ -168,8 +165,8 @@ dump_compare_strings(const void *arg1,
     return strcmp(*a, *b);
 }
 
-void dump_rule_array(char *name,
-                     GArray *rule_array,
+void dump_rule_array(const char *name,
+                     const GArray *rule_array,
                      FILE *fp)
 {
     static const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -305,7 +302,7 @@ void dump_time_zone_names(GList *names,
     char strings_filename[PATHNAME_BUFFER_SIZE];
     FILE *fp, *strings_fp = NULL;
     GList *elem;
-    ZoneDescription *zone_desc;
+    const ZoneDescription *zone_desc;
 
     sprintf(filename, "%s/zones.tab", output_dir);
     sprintf(strings_filename, "%s/zones.h", output_dir);
