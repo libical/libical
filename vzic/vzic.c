@@ -226,7 +226,6 @@ convert_olson_files(GPtrArray *olson_filenames)
     for (unsigned int i = 0; i < olson_filenames->len; i++) {
         const char *olson_filename = g_ptr_array_index(olson_filenames, i);
         char input_filename[PATHNAME_BUFFER_SIZE];
-        char dump_filename[PATHNAME_BUFFER_SIZE];
         int file_max_until_year;
 
         sprintf(input_filename, "%s/%s", VzicOlsonDir, olson_filename);
@@ -237,6 +236,7 @@ convert_olson_files(GPtrArray *olson_filenames)
         }
 
         if (VzicDumpOutput) {
+            char dump_filename[PATHNAME_BUFFER_SIZE];
             sprintf(dump_filename, "%s/ZonesVzic/%s", VzicOutputDir, olson_filename);
             dump_zone_data(zone_data, dump_filename);
 
@@ -261,11 +261,10 @@ convert_olson_files(GPtrArray *olson_filenames)
 static void
 free_zone_data(GArray *zone_data)
 {
-    ZoneData *zone;
     ZoneLineData *zone_line;
 
     for (unsigned int i = 0; i < zone_data->len; i++) {
-        zone = &g_array_index(zone_data, ZoneData, i);
+        ZoneData *zone = &g_array_index(zone_data, ZoneData, i);
 
         g_free(zone->zone_name);
 
@@ -290,10 +289,9 @@ free_rule_array(gpointer key,
     (void)data; /* unused */
     char *name = key;
     GArray *rule_array = value;
-    RuleData *rule;
 
     for (unsigned int i = 0; i < rule_array->len; i++) {
-        rule = &g_array_index(rule_array, RuleData, i);
+        RuleData *rule = &g_array_index(rule_array, RuleData, i);
 
         if (!rule->is_shallow_copy) {
             g_free(rule->type);

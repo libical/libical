@@ -21,6 +21,6 @@ void parse_olson_file(char *filename,
                       GHashTable *link_data,
                       int *max_until_year);
 
-GHashTable *parse_zone_tab(char *filename);
+GHashTable *parse_zone_tab(const char *filename);
 
 #endif /* VZIC_PARSE_H */
