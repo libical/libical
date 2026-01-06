@@ -68,7 +68,7 @@ jobs:
         run: |
           export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
           mkdir build
-          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=False -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True
+          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=False -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_VZIC=True
       - name: Build project
         run: cmake --build build
       - name: Test project
