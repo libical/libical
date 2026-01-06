@@ -82,6 +82,11 @@
 #  Forces the test suite to be built.
 #  Default=false
 #
+# -DLIBICAL_BUILD_VZIC=[true|false]
+#  Set to build the vzic tool to generate zoneinfo files from the Olson timezone database (requires glib and pkgconfig)
+#  Default=false
+#  (Refer to the top of vzic/CMakeLists.txt for variables and options related to building vzic.)
+#
 # -DLIBICAL_BUILD_TESTING_BIGFUZZ=[true|false]
 #  Set to build the big fuzzer tests
 #  Default=false
@@ -1050,6 +1055,22 @@ if(LIBICAL_BUILD_DOCS)
   add_subdirectory(docs) # needs to go last, for the build source files
 else()
   set(LIBICAL_GLIB_BUILD_DOCS)
+endif()
+
+libical_option(
+  LIBICAL_BUILD_VZIC
+  "Build the vzic tool to generate zoneinfo files from the Olson timezone database"
+  False
+)
+if(LIBICAL_BUILD_VZIC)
+  if(NOT GLIB_FOUND)
+    message(
+      FATAL_ERROR
+      "You requested to build the vzic tool, but the necessary development package "
+      "is missing or too low a version (glib ${MIN_GLIB} or higher is required)."
+    )
+  endif()
+  add_subdirectory(vzic)
 endif()
 
 ########### Create and install the CMake Config files ##########
