@@ -71,6 +71,28 @@ set(
   vzic-parse.h
 )
 
+include_directories(
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_BINARY_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}/src/libical
+)
+
 add_executable(vzic ${VZIC_SRCS})
 target_compile_options(vzic PRIVATE ${GLIB_CFLAGS})
 target_link_libraries(vzic PRIVATE ${GLIB_LIBRARIES})
+
+add_executable(
+  test-vzic
+  test-vzic.c
+  ${VZIC_SRCS}
+)
+target_compile_definitions(test-vzic PRIVATE -DVZIC_LIBRARY)
+target_compile_options(test-vzic PRIVATE ${GLIB_CFLAGS})
+target_link_libraries(
+  test-vzic
+  PRIVATE
+    ${GLIB_LIBRARIES}
+    ical
+)
