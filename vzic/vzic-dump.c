@@ -360,16 +360,7 @@ void dump_time_zone_names(GList *names,
             fprintf(fp, "%s\n", zone_name);
         }
 
-        if (VzicDumpZoneTranslatableStrings) {
-#ifdef VZIC_DEBUG_PRINT
-            char zone_name_buffer[1024], *src, *dest;
-
-            for (src = zone_name, dest = zone_name_buffer; *src; src++, dest++) {
-                *dest = (*src == '_') ? ' ' : *src;
-            }
-            *dest = '\0';
-#endif
-
+        if (strings_fp) {
             fprintf(strings_fp, "N_(\"%s\");\n", zone_name);
         }
 
@@ -378,7 +369,7 @@ void dump_time_zone_names(GList *names,
 
     fclose(fp);
 
-    if (VzicDumpZoneTranslatableStrings) {
+    if (strings_fp) {
         fclose(strings_fp);
     }
 }
