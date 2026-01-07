@@ -308,6 +308,11 @@ expand_and_sort_rule_array(gpointer key,
     int max_year, from, to, year;
     gboolean is_infinite;
 
+    if (!key) {
+        fprintf(stderr, "expand_and_sort_rule_array: Empty key\n");
+        exit(1);
+    }
+
     /* We expand the rule data to a year greater than any year used in a Zone
      UNTIL value. This is so that we can easily get parts of the array to
      use for each Zone line. */
@@ -471,7 +476,8 @@ output_zone(const char *directory,
     char output_directory[PATHNAME_BUFFER_SIZE];
     char filename[PATHNAME_BUFFER_SIZE];
     char changes_filename[PATHNAME_BUFFER_SIZE];
-    char *zone_directory, *zone_subdirectory, *zone_filename;
+    char *zone_directory, *zone_filename;
+    char *zone_subdirectory = NULL;
 
     /* Set a global for the zone_name, to be used only for debug messages. */
     CurrentZoneName = zone_name;
@@ -619,7 +625,7 @@ parse_zone_name(char *name,
         return FALSE;
     }
 #endif
-    if (invalid) {
+    if (invalid || !first_slash_pos) {
         *directory = g_strdup("Invalid");
         *filename = g_strdup_printf("Zone%i", invalid_zone_num++);
     } else {
@@ -653,7 +659,7 @@ output_zone_to_files(ZoneData *zone,
     ZoneLineData *zone_line;
     GArray *changes;
     size_t start_index;
-    int stdoff, walloff, save_seconds;
+    int stdoff, save_seconds;
     VzicTime start, end, *vzictime_start, *vzictime;
     const VzicTime *vzictime_first_rule_change;
     gboolean is_daylight, found_letter_s;
@@ -676,7 +682,7 @@ output_zone_to_files(ZoneData *zone,
 
         /* This is the local standard time offset from GMT for this period. */
         start.stdoff = stdoff = zone_line->stdoff_seconds;
-        start.walloff = walloff = stdoff + zone_line->save_seconds;
+        start.walloff = stdoff + zone_line->save_seconds;
 
         if (zone_line->until_set) {
             end.year = zone_line->until_year;
@@ -716,7 +722,7 @@ output_zone_to_files(ZoneData *zone,
         }
         is_daylight = save_seconds ? TRUE : FALSE;
         vzictime_start = &g_array_index(changes, VzicTime, start_index);
-        walloff = vzictime_start->walloff = stdoff + save_seconds;
+        int walloff = vzictime_start->walloff = stdoff + save_seconds;
 
         /* TEST: See if the first Rule time is exactly the same as the change from
        the Zone line. In which case we can remove the Zone line change. */
@@ -2455,6 +2461,10 @@ dump_change(FILE *fp,
        to add to UTC to get local time.
     */
 
+    if (!fp) {
+        fprintf(stderr, "dump_change: File pointer is NULL\n");
+        exit(1);
+    }
     fprintf(fp, "%s\t", zone_name);
 
     if (year == YEAR_MINIMUM) {
