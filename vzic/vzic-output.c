@@ -57,7 +57,7 @@ const char *ProductID = PRODUCT_ID;
 const char *TZIDPrefix = TZID_PREFIX;
 
 /* We expand the TZIDPrefix, replacing %D with the date, in here. */
-char TZIDPrefixExpanded[1024];
+char TZIDPrefixExpanded[1024] = {0};
 
 /* We only use RRULEs if there are at least MIN_RRULE_OCCURRENCES occurrences,
    since otherwise RDATEs are more efficient. Actually, I've set this high
@@ -2539,8 +2539,7 @@ expand_tzid_prefix(void)
 
             if (ch2 == 'D') {
                 /* '%D' gets expanded into the date string. */
-                memset(dest, 0, 1024);
-                strncpy(dest, date_buf, 1023);
+                strncpy(dest, date_buf, 1024 - strlen(dest));
                 dest += strlen(dest);
             } else if (ch2 == '%') {
                 /* '%%' gets converted into one '%'. */
