@@ -26,6 +26,9 @@
 
 #define DEBUG 0
 
+static ICAL_GLOBAL_VAR vcard_xprop_value_kind_func xprop_value_kind_func = NULL;
+static ICAL_GLOBAL_VAR void *xprop_value_kind_data = NULL;
+
 enum parse_error
 {
     PE_OK = 0,
@@ -622,6 +625,12 @@ static int _parse_prop_name(struct vcardparser_state *state)
                 state->value_kind = version == VCARD_VERSION_40 ? VCARD_URI_VALUE : VCARD_TEXT_VALUE;
                 break;
 
+            case VCARD_X_PROPERTY:
+              state->value_kind =
+                  xprop_value_kind_func ? xprop_value_kind_func(name, xprop_value_kind_data)
+                                    : VCARD_X_VALUE;
+              break;
+
             default:
                 state->value_kind = vcardproperty_kind_to_value_kind(kind);
                 break;
@@ -1087,4 +1096,10 @@ vcardcomponent *vcardparser_parse_string(const char *str)
     vcardparser_free(&parser);
 
     return vcard;
+}
+
+void vcardparser_set_xprop_value_kind(vcard_xprop_value_kind_func func, void *data)
+{
+    xprop_value_kind_func = func;
+    xprop_value_kind_data = data;
 }
