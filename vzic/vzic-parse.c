@@ -159,7 +159,8 @@ void parse_olson_file(char *filename,
             break;
         }
 
-        strcpy(data.buffer, data.line);
+        memset(data.buffer, 0, MAX_LINE_LEN);
+        strncpy(data.buffer, data.line, MAX_LINE_LEN);
 
         parse_fields(&data);
         if (data.num_fields == 0) {

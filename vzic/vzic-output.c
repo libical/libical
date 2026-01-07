@@ -592,7 +592,6 @@ parse_zone_name(char *name,
                 char **subdirectory,
                 char **filename)
 {
-    static int invalid_zone_num = 1;
     char *p, ch, *first_slash_pos = NULL, *second_slash_pos = NULL;
 
     if (!name) {
@@ -603,7 +602,7 @@ parse_zone_name(char *name,
     for (p = name; (ch = *p) != 0; p++) {
         if ((ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z') && (ch < '0' || ch > '9') && ch != '/' && ch != '_' && ch != '-' && ch != '+') {
             fprintf(stderr, "WARNING: Unusual Zone name: %s\n", name);
-            invalid = TRUE;
+            first_slash_pos = NULL;
             break;
         }
 
@@ -619,15 +618,15 @@ parse_zone_name(char *name,
             }
         }
     }
-#ifdef VZIC_DEBUG_PRINT
-    if (!first_slash_pos) {
-        fprintf(stderr, "No '/' character in Zone name: %s. Skipping.\n", name);
-        return FALSE;
-    }
-#endif
-    if (invalid || !first_slash_pos) {
+
+    if (invalid) {
+        static int invalid_zone_num = 1;
         *directory = g_strdup("Invalid");
         *filename = g_strdup_printf("Zone%i", invalid_zone_num++);
+    } else if (!first_slash_pos) {
+        *directory = NULL;
+        *subdirectory = NULL;
+        *filename = g_strdup(name);
     } else {
         *first_slash_pos = '\0';
         *directory = g_strdup(name);
@@ -2531,7 +2530,7 @@ expand_tzid_prefix(void)
             tm->tm_mon + 1, tm->tm_mday);
 
     src = TZIDPrefix;
-    dest = TZIDPrefixExpanded;
+    dest = TZIDPrefixExpanded; // 1024 long
 
     while ((ch1 = *src++)) {
         /* Look for a '%'. */
@@ -2540,7 +2539,8 @@ expand_tzid_prefix(void)
 
             if (ch2 == 'D') {
                 /* '%D' gets expanded into the date string. */
-                strcpy(dest, date_buf);
+                memset(dest, 0, 1024);
+                strncpy(dest, date_buf, 1023);
                 dest += strlen(dest);
             } else if (ch2 == '%') {
                 /* '%%' gets converted into one '%'. */

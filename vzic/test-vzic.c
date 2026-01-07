@@ -56,13 +56,10 @@
    But when using VTIMEZONE's that are compatible with Outlook, it is only
    worth testing times in the future. There will be lots of differences in
    the past, since we can't include any historical changes in the files. */
-#if 1
 #define DUMP_START_YEAR 2003
 #define DUMP_END_YEAR 2038
-#else
-#define DUMP_START_YEAR 1970
-#define DUMP_END_YEAR 2038
-#endif
+//#define DUMP_START_YEAR 1970
+//#define DUMP_END_YEAR 2038
 
 /* The maximum size of any complete pathname. */
 #define PATHNAME_BUFFER_SIZE 1024
@@ -305,7 +302,6 @@ dump_local_times(icaltimezone *zone, FILE *fp)
     struct icaltimetype tt, tt_copy;
     struct tm tm, local_tm;
     time_t t;
-    char tzstring[256];
     const char *location;
     int last_year_output = 0;
     int total_error = 0, total_error2 = 0;
@@ -331,14 +327,11 @@ dump_local_times(icaltimezone *zone, FILE *fp)
     tm.tm_isdst = -1;
 
     /* Convert it to a time_t by saying it is in UTC. */
-    putenv((char *)"TZ=UTC");
+    setenv("TZ", "UTC", 1);
     t = mktime(&tm);
 
     location = (char *)icaltimezone_get_location(zone);
-    sprintf(tzstring, "TZ=%s", location);
-
-    /*printf ("Zone: %s\n", location);*/
-    putenv(tzstring);
+    setenv("TZ", location, 1);
 
     /* Loop around converting the UTC time to local time, outputting it, and
      then adding on 15 minutes to the UTC time. */
