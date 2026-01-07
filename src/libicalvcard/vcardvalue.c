@@ -441,10 +441,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         break;
 
     case VCARD_X_VALUE: {
-        char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, NULL);
-
-        value = vcardvalue_new_x(dequoted_str);
-        icalmemory_free_buffer(dequoted_str);
+        value = vcardvalue_new_x(str);
     } break;
 
     default: {
@@ -836,12 +833,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     case VCARD_X_VALUE:
         if (value->x_value != 0) {
-            char *str = NULL;
-            char *str_p;
-            size_t buf_sz;
-
-            return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
-                                                value->x_value, 0);
+            return icalmemory_strdup(value->x_value);
         }
         _fallthrough();
 

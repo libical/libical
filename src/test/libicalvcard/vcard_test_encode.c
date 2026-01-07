@@ -103,6 +103,111 @@ static void test_prop_multivalued(void)
     vcardcomponent_free(card);
 }
 
+static void test_prop_x(void)
+{
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "X-PROP:foo\r\n"
+        "X-PROP:foo;bar\r\n"
+        "X-PROP:foo;bar\\;baz\r\n"
+        "X-PROP:foo,bar\r\n"
+        "X-PROP:foo\\,bar\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+    assert(card != NULL);
+
+    vcardproperty *prop;
+    vcardvalue *val;
+
+    prop = vcardcomponent_get_first_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP:foo\r\n", vcardproperty_as_vcard_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo;bar", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP:foo;bar\r\n", vcardproperty_as_vcard_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo;bar\\;baz", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP:foo;bar\\;baz\r\n", vcardproperty_as_vcard_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo,bar", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP:foo,bar\r\n", vcardproperty_as_vcard_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo\\,bar", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP:foo\\,bar\r\n", vcardproperty_as_vcard_string(prop));
+
+    assert(0 == vcardcomponent_get_next_property(card, VCARD_X_PROPERTY));
+
+    vcardcomponent_free(card);
+}
+
+static vcardvalue_kind my_xprop_value_kind_func(const char *name, void *data)
+{
+    (void)(data); // make CI happy, reporting unused parameter otherwise
+    assert(data == (void*) 0x1234);
+    return !strcasecmp(name, "X-PROP-A") ? VCARD_TEXT_VALUE : VCARD_X_VALUE;
+}
+
+static void test_prop_x_value_kind(void)
+{
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "X-PROP-A:foo,bar\\,baz\r\n"
+        "X-PROP-B:foo,bar\\,baz\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card;
+    vcardproperty *prop;
+    vcardvalue *val;
+
+    /* Parse all both properties as X value */
+    card = vcardparser_parse_string(input);
+    prop = vcardcomponent_get_first_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo,bar\\,baz", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP-A:foo,bar\\,baz\r\n", vcardproperty_as_vcard_string(prop));
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo,bar\\,baz", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP-B:foo,bar\\,baz\r\n", vcardproperty_as_vcard_string(prop));
+    vcardcomponent_free(card);
+
+    /* Parse X-PROP-A property as TEXT value, others as X value */
+    vcardparser_set_xprop_value_kind(my_xprop_value_kind_func, (void*) 0x1234);
+
+    card = vcardparser_parse_string(input);
+    prop = vcardcomponent_get_first_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_TEXT_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo,bar,baz", vcardvalue_get_text(val));
+    assert_str_equals("X-PROP-A:foo\\,bar\\,baz\r\n", vcardproperty_as_vcard_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo,bar\\,baz", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP-B:foo,bar\\,baz\r\n", vcardproperty_as_vcard_string(prop));
+    vcardcomponent_free(card);
+}
+
 static void test_param_singlevalued(void)
 {
     static const char *input =
@@ -289,6 +394,8 @@ int main(int argc, char **argv)
     test_prop_text();
     test_prop_structured();
     test_prop_multivalued();
+    test_prop_x();
+    test_prop_x_value_kind();
 
     test_param_singlevalued();
     test_param_multivalued();
