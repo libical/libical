@@ -297,12 +297,11 @@ void dump_time_zone_names(GList *names,
                           const char *output_dir,
                           GHashTable *zones_hash)
 {
-    char filename[PATHNAME_BUFFER_SIZE], *zone_name;
+    char filename[PATHNAME_BUFFER_SIZE];
     const char *zone_name_in_hash = NULL;
     char strings_filename[PATHNAME_BUFFER_SIZE];
     FILE *fp, *strings_fp = NULL;
     GList *elem;
-    const ZoneDescription *zone_desc;
 
     sprintf(filename, "%s/zones.tab", output_dir);
     sprintf(strings_filename, "%s/zones.h", output_dir);
@@ -325,14 +324,13 @@ void dump_time_zone_names(GList *names,
 
     elem = names;
     while (elem) {
-        zone_name = (char *)elem->data;
-
-        zone_desc = g_hash_table_lookup(zones_hash, zone_name);
+        char *zone_name = (char *)elem->data;
+        const ZoneDescription *zone_desc = g_hash_table_lookup(zones_hash, zone_name);
 
         /* SPECIAL CASES: These timezones are links from other zones and are
-       almost exactly the same - they are basically there so users can find
-       them a bit easier. But they don't have entries in the zone.tab file,
-       so we use the entry from the timezone linked from. */
+           almost exactly the same - they are basically there so users can find
+           them a bit easier. But they don't have entries in the zone.tab file,
+           so we use the entry from the timezone linked from. */
         if (!zone_desc) {
             if (!strcmp(zone_name, "America/Indiana/Indianapolis")) {
                 zone_name_in_hash = "America/Indianapolis";
