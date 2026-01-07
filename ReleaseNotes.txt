@@ -3,7 +3,6 @@ Release Highlights
 
 Version 3.0.21 (UNRELEASED):
 ----------------------------
- * Built-in timezones updated to tzdata2025c including historical offsets
  * Fix some scenarios with RRULEs and EXRULE (#754)
 
 Version 3.0.20 (10 March 2025):
