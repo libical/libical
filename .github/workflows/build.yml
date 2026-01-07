@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ilammy/msvc-dev-cmd@v1
         with:
-          vsversion: 2019
+          vsversion: 2022
       - name: Configure project
         run: |
           mkdir build
@@ -55,7 +55,7 @@ jobs:
         configuration:
           - Debug
           - Release
-    runs-on: macos-13
+    runs-on: macos-14
     env:
       XML_CATALOG_FILES: /usr/local/etc/xml/catalog
     steps:
