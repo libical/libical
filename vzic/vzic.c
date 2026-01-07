@@ -207,6 +207,7 @@ int main(int argc,
         zones_hash = parse_zone_tab(filename);
 
         dump_time_zone_names(VzicTimeZoneNames, VzicOutputDir, zones_hash);
+        g_hash_table_destroy(zones_hash);
     }
 
     g_ptr_array_free(olson_filenames, TRUE);
