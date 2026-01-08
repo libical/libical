@@ -2530,7 +2530,7 @@ expand_tzid_prefix(void)
             tm->tm_mon + 1, tm->tm_mday);
 
     src = TZIDPrefix;
-    dest = TZIDPrefixExpanded; // 1024 long
+    dest = TZIDPrefixExpanded;
 
     while ((ch1 = *src++)) {
         /* Look for a '%'. */
@@ -2539,7 +2539,8 @@ expand_tzid_prefix(void)
 
             if (ch2 == 'D') {
                 /* '%D' gets expanded into the date string. */
-                strncpy(dest, date_buf, 1024 - strlen(dest));
+                size_t dest_len = (size_t)(ptrdiff_t)(dest - TZIDPrefixExpanded);
+                strncpy(dest, date_buf, sizeof(TZIDPrefixExpanded) - dest_len);
                 dest += strlen(dest);
             } else if (ch2 == '%') {
                 /* '%%' gets converted into one '%'. */
