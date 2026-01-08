@@ -48,13 +48,13 @@ extern GList *VzicTimeZoneNames;
 
 /* Defines if to generate symbolic links or VTIMEZONEs for zone aliases */
 #ifndef CREATE_SYMLINK
-#define CREATE_SYMLINK 1
+#define CREATE_SYMLINK 0
 #endif
 
 /* Defines if timezone aliases at top-level ("e.g. EST5EDT")
  * should be ignored. */
 #ifndef IGNORE_TOP_LEVEL_LINK
-#define IGNORE_TOP_LEVEL_LINK 1
+#define IGNORE_TOP_LEVEL_LINK 0
 #endif
 
 /* Days can be expressed either as a simple month day number, 1-31, or a rule

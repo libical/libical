@@ -26,7 +26,7 @@
 #  in Olson files) should be generated: The default is to symbolically link
 #  the Link zone file to its authoritative zone. Alternatively, if set to False,
 #  a VTIMEZONE file is generated for each Link.
-#  Default=True
+#  Default=False
 #
 # -DIGNORE_TOP_LEVEL_LINK=[true|false]
 #  This option indicates if top-level timezone aliases (a timezone name without
@@ -34,7 +34,7 @@
 #  generated also for top-level aliases. This option only has
 #  an effect if CREATE_SYMLINK is False, and mainly is useful for backward
 #  compatibility with previous vzic versions.
-#  Default=True
+#  Default=False
 #
 
 if(NOT PRODUCT_ID)
@@ -49,14 +49,22 @@ endif()
 message(STATUS "TZID_PREFIX is ${TZID_PREFIX}")
 add_definitions(-DTZID_PREFIX=\"${TZID_PREFIX}\")
 
-option(CREATE_SYMLINK "Symbolically link the Link zone file to its authoritative zone" True)
+option(CREATE_SYMLINK "Symbolically link the Link zone file to its authoritative zone" False)
 if(CREATE_SYMLINK)
-  add_definitions(-DCREATE_SYMLINK)
+  add_definitions(-DCREATE_SYMLINK=1)
+else()
+  add_definitions(-DCREATE_SYMLINK=0)
 endif()
 
-option(IGNORE_TOP_LEVEL_LINK "Ignore top-level timezone aliases (a timezone name without any '/' such as EST5EDT)" True)
+option(
+  IGNORE_TOP_LEVEL_LINK
+  "Ignore top-level timezone aliases (a timezone name without any '/' such as EST5EDT)"
+  False
+)
 if(IGNORE_TOP_LEVEL_LINK)
-  add_definitions(-DIGNORE_TOP_LEVEL_LINK)
+  add_definitions(-DIGNORE_TOP_LEVEL_LINK=1)
+else()
+  add_definitions(-DIGNORE_TOP_LEVEL_LINK=0)
 endif()
 
 set(
