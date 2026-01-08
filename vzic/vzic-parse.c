@@ -511,8 +511,8 @@ parse_link_line(ParsingData *data)
     GList *zone_list;
     char *old_from;
     if (g_hash_table_lookup_extended(data->link_data, from,
-                                     (gpointer)&old_from,
-                                     (gpointer)&zone_list)) {
+                                     (gpointer *)&old_from,
+                                     (gpointer *)&zone_list)) {
         from = old_from;
     } else {
         from = g_strdup(from);
@@ -521,7 +521,7 @@ parse_link_line(ParsingData *data)
 
     zone_list = g_list_prepend(zone_list, g_strdup(to));
 
-    g_hash_table_insert(data->link_data, from, zone_list);
+    g_hash_table_insert(data->link_data, (gpointer)from, zone_list);
 #endif
 }
 
