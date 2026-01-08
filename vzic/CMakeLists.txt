@@ -91,6 +91,7 @@ add_executable(vzic ${VZIC_SRCS})
 target_compile_options(vzic PRIVATE ${GLIB_CFLAGS})
 target_link_libraries(vzic PRIVATE ${GLIB_LIBRARIES})
 
+# test-vzic is very slow and should only be run by-hand
 add_executable(
   test-vzic
   test-vzic.c
@@ -104,3 +105,43 @@ target_link_libraries(
     ${GLIB_LIBRARIES}
     ical
 )
+
+if(LIBICAL_BUILD_TESTING AND NOT WIN32)
+  # not Windows, because we currently rely on the 'diff' command
+  # TODO write a perl command that compares the 2 files, line-by-line and skipping LAST-MODIFIED lines
+  set(tzYear "2025c")
+  add_custom_command(
+    TARGET vzic
+    POST_BUILD
+    COMMAND
+      vzic --olson-dir ${PROJECT_SOURCE_DIR}/test-data/tzdata${tzYear} --output-dir
+      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen
+    BYPRODUCTS
+      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen
+    VERBATIM
+  )
+  add_test(
+    NAME zoneinfo-cmp
+    COMMAND
+      diff --strip-trailing-cr -ILAST-MODIFIED: ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen
+      ${PROJECT_SOURCE_DIR}/test-data/zoneinfo${tzYear}
+  )
+
+  # test the "pure" (ie. with historical data) version
+  add_custom_command(
+    TARGET vzic
+    POST_BUILD
+    COMMAND
+      vzic --pure --olson-dir ${PROJECT_SOURCE_DIR}/test-data/tzdata${tzYear} --output-dir
+      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure
+    BYPRODUCTS
+      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure
+    VERBATIM
+  )
+  add_test(
+    NAME zoneinfo-cmp-pure
+    COMMAND
+      diff --strip-trailing-cr -ILAST-MODIFIED: ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure
+      ${PROJECT_SOURCE_DIR}/test-data/zoneinfo${tzYear}-pure
+  )
+endif()
