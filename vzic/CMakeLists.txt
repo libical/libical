@@ -110,6 +110,12 @@ if(LIBICAL_BUILD_TESTING AND NOT WIN32)
   # not Windows, because we currently rely on the 'diff' command
   # TODO write a perl command that compares the 2 files, line-by-line and skipping LAST-MODIFIED lines
   set(tzYear "2025c")
+  set(
+    diffArgs
+    -ILAST-MODIFIED:
+    -ITZID:
+    -ITZID-ALIAS-OF:
+  )
   add_custom_command(
     TARGET vzic
     POST_BUILD
@@ -123,7 +129,7 @@ if(LIBICAL_BUILD_TESTING AND NOT WIN32)
   add_test(
     NAME zoneinfo-cmp
     COMMAND
-      diff --strip-trailing-cr -ILAST-MODIFIED: ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen
+      diff --strip-trailing-cr ${diffArgs} ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen
       ${PROJECT_SOURCE_DIR}/test-data/zoneinfo${tzYear}
   )
 
@@ -141,7 +147,7 @@ if(LIBICAL_BUILD_TESTING AND NOT WIN32)
   add_test(
     NAME zoneinfo-cmp-pure
     COMMAND
-      diff --strip-trailing-cr -ILAST-MODIFIED: ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure
+      diff --strip-trailing-cr ${diffArgs} ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure
       ${PROJECT_SOURCE_DIR}/test-data/zoneinfo${tzYear}-pure
   )
 endif()
