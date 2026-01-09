@@ -107,8 +107,7 @@ target_link_libraries(
 )
 
 if(LIBICAL_BUILD_TESTING AND NOT WIN32)
-  # not Windows, because we currently rely on the 'diff' command
-  # TODO write a perl command that compares the 2 files, line-by-line and skipping LAST-MODIFIED lines
+  # not Windows, because we currently rely on the 'diff' command and redirecting output to /dev/null
   set(tzYear "2025c")
   set(
     diffArgs
@@ -121,10 +120,10 @@ if(LIBICAL_BUILD_TESTING AND NOT WIN32)
     POST_BUILD
     COMMAND
       vzic --olson-dir ${PROJECT_SOURCE_DIR}/test-data/tzdata${tzYear} --output-dir
-      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen
+      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen >/dev/null
     BYPRODUCTS
       ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen
-    VERBATIM
+    #VERBATIM #comment this so we can redirect any vzic output to /dev/null
   )
   add_test(
     NAME zoneinfo-cmp
@@ -139,10 +138,10 @@ if(LIBICAL_BUILD_TESTING AND NOT WIN32)
     POST_BUILD
     COMMAND
       vzic --pure --olson-dir ${PROJECT_SOURCE_DIR}/test-data/tzdata${tzYear} --output-dir
-      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure
+      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure >/dev/null
     BYPRODUCTS
       ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure
-    VERBATIM
+    #VERBATIM #comment this so we can redirect any vzic output to /dev/null
   )
   add_test(
     NAME zoneinfo-cmp-pure
