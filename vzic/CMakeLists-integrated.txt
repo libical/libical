@@ -116,4 +116,24 @@ if(LIBICAL_BUILD_TESTING AND NOT WIN32)
       diff --strip-trailing-cr ${diffArgs} ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure
       ${PROJECT_SOURCE_DIR}/test-data/zoneinfo${tzYear}-pure
   )
+
+  # test-changes
+  add_custom_command(
+    TARGET vzic
+    POST_BUILD
+    COMMAND
+      vzic --pure --dump-changes --olson-dir ${PROJECT_SOURCE_DIR}/test-data/tzdata${tzYear} --output-dir
+      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure-changes >/dev/null
+    COMMAND
+      test-vzic --dump-changes
+    BYPRODUCTS
+      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure-changes
+      ${CMAKE_CURRENT_BINARY_DIR}/test-output
+    #VERBATIM #comment this so we can redirect any vzic output to /dev/null
+  )
+  add_test(
+    NAME testchanges
+    COMMAND
+      diff -ru ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure-changes/ChangesVzic ${CMAKE_CURRENT_BINARY_DIR}/test-output
+  )
 endif()
