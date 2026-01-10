@@ -24,20 +24,9 @@ calculations). You need version 2.0 or higher. You can get this from:
 
   <http://www.gtk.org>
 
-## PREPARATIONS
-
-gunzip and untar the tzdata file:
-
-```bash
-  % mkdir tzdata2014g
-  % cd  tzdata2014g; tar xvfz ../tzdata2014g.tar.gz; cd ..
-```
-
 ## BUILDING
 
-Edit the Makefile to set PRODUCT_ID and TZID_PREFIX variables.
-
-Then run `make -B`.
+Please see docs/HOWTO-update-zoneinfo.md
 
 ## RUNNING
 
