@@ -62,6 +62,10 @@ echo "DONE!"
 echo "The libical/zoneinfo has been updated for $tzdataDir"
 echo "git add any new zoneinfo files and then git commit zoneinfo"
 
+cd "$TOP/vzic"
+rm -f "$tzdataTarball"*
+rm -rf "$tzdataDir"
+
 set +e
 diff -q "$TOP/zoneinfo/zones.tab" "$TOP/vzic/$buildDir/zoneinfo/zones.tab" >/dev/null
 if (test $? -eq 1); then
@@ -74,5 +78,7 @@ if (test $? -eq 1); then
   echo
   echo "Copy lines from the new zones.tab that are new (or differ) into the official zoneinfo/zones.tab"
   echo "... and of course then commit the updated zoneinfo/zones.tab"
+else
+  rm -rf $buildDir
 fi
 set -e
