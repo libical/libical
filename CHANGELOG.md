@@ -30,6 +30,7 @@ for details about API changes since libical 3.x.
 
 ### Changed
 
+- Built-in timezones updated to tzdata2025c to include historical data
 - Requires MSVC 2013 or higher (when building on Windows with MSVC)
 - Requires CMake v3.20.0 or higher
 - For the C++ bindings, requires a C++11 compliant C++ compiler

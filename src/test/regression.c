@@ -4806,14 +4806,14 @@ void test_bad_dtstart_in_timezone(void)
     icalcomponent *vtimezone = NULL;
     char *str = NULL;
 
-    myTZ = icaltimezone_get_builtin_timezone("Europe/Zurich");
+    myTZ = icaltimezone_get_builtin_timezone("Pacific/Guam");
     vtimezone = icaltimezone_get_component(myTZ);
     str = icalcomponent_as_ical_string(vtimezone);
 
     if (VERBOSE) {
         printf("%s\n", str);
     }
-    ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:19700329T020000") != NULL));
+    ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:19700906T020000") != NULL));
 }
 #endif
 
