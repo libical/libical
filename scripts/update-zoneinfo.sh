@@ -56,6 +56,13 @@ cmake --build .
 cd ..
 perl vzic-merge.pl --master-zoneinfo-dir="$TOP/zoneinfo" --new-zoneinfo-dir="$buildDir/zoneinfo"
 
+# Testing (currently failing)
+#cd $buildDir
+#perl ../vzic-dump.pl ../"$tzdataDir"
+#./vzic --dump --pure --olson-dir ../"$tzdataDir"
+#diff -ruw zoneinfo/ZonesPerl zoneinfo/ZonesVzic
+#diff -ruw zoneinfo/RulesPerl zoneinfo/RulesVzic
+
 # Add the new timezones in the zones.tab file by hand
 echo
 echo "DONE!"
