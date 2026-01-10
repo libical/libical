@@ -3,13 +3,3 @@ book
 .cache
 compile_commands.json
 precommit.out
-vzic/ChangesVzic
-vzic/RulesPerl
-vzic/RulesVzic
-vzic/ZonesPerl
-vzic/ZonesVzic
-vzic/test-vzic
-vzic/vzic
-vzic/zoneinfo
-vzic/tzdata*
-*.o
