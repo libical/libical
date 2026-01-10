@@ -1,6 +1,13 @@
+# This is the top-level CMakeLists.txt file for the vzic project.
+#
 # SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
 # SPDX-License-Identifier: BSD-3-Clause
 #
+
+# Uses the standalone version if STANDALONE is specified, else uses the integrated version.
+# Stand-alone is available for people who want to build vzic but don't need to build all of libical.
+#  For example: cmake -DSTANDALONE=True (you'll need the glib and pkgconfig development packages)
+
 # Pass the following variables to cmake to control the build:
 # (See docs/HOWTO-update-zoneinfo.md for more information)
 #
@@ -37,116 +44,19 @@
 #  Default=False
 #
 
-if(NOT PRODUCT_ID)
-  set(PRODUCT_ID "-//citadel.org//NONSGML Citadel calendar//EN")
-endif()
-message(STATUS "PRODUCT_ID is ${PRODUCT_ID}")
-add_definitions(-DPRODUCT_ID=\"${PRODUCT_ID}\")
+if(DEFINED STANDALONE)
+  cmake_minimum_required(VERSION 3.20.0)
+  project(vzic LANGUAGES C)
+  include(FeatureSummary)
+  get_filename_component(LIBICAL_CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" DIRECTORY)
+  list(APPEND CMAKE_MODULE_PATH "${LIBICAL_CMAKE_MODULE_PATH}/cmake/modules")
 
-if(NOT TZID_PREFIX)
-  set(TZID_PREFIX "/citadel.org/%D_1/")
-endif()
-message(STATUS "TZID_PREFIX is ${TZID_PREFIX}")
-add_definitions(-DTZID_PREFIX=\"${TZID_PREFIX}\")
-
-option(CREATE_SYMLINK "Symbolically link the Link zone file to its authoritative zone" False)
-if(CREATE_SYMLINK)
-  add_definitions(-DCREATE_SYMLINK=1)
+  find_package(PkgConfig QUIET)
+  set(MIN_GLIB "2.44")
+  find_package(GLib ${MIN_GLIB} REQUIRED)
 else()
-  add_definitions(-DCREATE_SYMLINK=0)
+  set(STANDALONE False)
 endif()
 
-option(
-  IGNORE_TOP_LEVEL_LINK
-  "Ignore top-level timezone aliases (a timezone name without any '/' such as EST5EDT)"
-  False
-)
-if(IGNORE_TOP_LEVEL_LINK)
-  add_definitions(-DIGNORE_TOP_LEVEL_LINK=1)
-else()
-  add_definitions(-DIGNORE_TOP_LEVEL_LINK=0)
-endif()
-
-set(
-  VZIC_SRCS
-  vzic.c
-  vzic.h
-  vzic-dump.c
-  vzic-dump.h
-  vzic-output.c
-  vzic-output.h
-  vzic-parse.c
-  vzic-parse.h
-)
-
-include_directories(
-  ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}/src
-  ${PROJECT_BINARY_DIR}/src
-  ${PROJECT_SOURCE_DIR}/src/libical
-  ${PROJECT_BINARY_DIR}/src/libical
-)
-
-add_executable(vzic ${VZIC_SRCS})
-target_compile_options(vzic PRIVATE ${GLIB_CFLAGS})
-target_link_libraries(vzic PRIVATE ${GLIB_LIBRARIES})
-
-# test-vzic is very slow and should only be run by-hand
-add_executable(
-  test-vzic
-  test-vzic.c
-  ${VZIC_SRCS}
-)
-target_compile_definitions(test-vzic PRIVATE -DVZIC_LIBRARY)
-target_compile_options(test-vzic PRIVATE ${GLIB_CFLAGS})
-target_link_libraries(
-  test-vzic
-  PRIVATE
-    ${GLIB_LIBRARIES}
-    ical
-)
-
-if(LIBICAL_BUILD_TESTING AND NOT WIN32)
-  # not Windows, because we currently rely on the 'diff' command and redirecting output to /dev/null
-  set(tzYear "2025c")
-  set(
-    diffArgs
-    -ILAST-MODIFIED:
-    -ITZID:
-    -ITZID-ALIAS-OF:
-  )
-  add_custom_command(
-    TARGET vzic
-    POST_BUILD
-    COMMAND
-      vzic --olson-dir ${PROJECT_SOURCE_DIR}/test-data/tzdata${tzYear} --output-dir
-      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen >/dev/null
-    BYPRODUCTS
-      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen
-    #VERBATIM #comment this so we can redirect any vzic output to /dev/null
-  )
-  add_test(
-    NAME zoneinfo-cmp
-    COMMAND
-      diff --strip-trailing-cr ${diffArgs} ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen
-      ${PROJECT_SOURCE_DIR}/test-data/zoneinfo${tzYear}
-  )
-
-  # test the "pure" (ie. with historical data) version
-  add_custom_command(
-    TARGET vzic
-    POST_BUILD
-    COMMAND
-      vzic --pure --olson-dir ${PROJECT_SOURCE_DIR}/test-data/tzdata${tzYear} --output-dir
-      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure >/dev/null
-    BYPRODUCTS
-      ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure
-    #VERBATIM #comment this so we can redirect any vzic output to /dev/null
-  )
-  add_test(
-    NAME zoneinfo-cmp-pure
-    COMMAND
-      diff --strip-trailing-cr ${diffArgs} ${CMAKE_CURRENT_BINARY_DIR}/zoneinfo-gen-pure
-      ${PROJECT_SOURCE_DIR}/test-data/zoneinfo${tzYear}-pure
-  )
-endif()
+message(STATUS "Building vzic stand-alone ${STANDALONE}")
+include(CMakeLists-integrated.txt)
