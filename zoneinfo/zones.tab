@@ -97,6 +97,7 @@
 +0085800 -0793200 America/Coral_Harbour
 -0312400 -0641100 America/Cordoba
 +0095600 -0840500 America/Costa_Rica
+-0453400 -0720400 America/Coyhaique
 +0490600 -1163100 America/Creston
 -0153500 -0560500 America/Cuiaba
 +0121100 -0690000 America/Curacao
@@ -290,7 +291,7 @@
 +0221150 +1133230 Asia/Macau
 +0593400 +1504800 Asia/Magadan
 -0050700 +1192400 Asia/Makassar
-+0143500 +1210000 Asia/Manila
++0143512 +1205804 Asia/Manila
 +0233600 +0583500 Asia/Muscat
 +0351000 +0332200 Asia/Nicosia
 +0534500 +0870700 Asia/Novokuznetsk
