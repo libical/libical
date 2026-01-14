@@ -280,4 +280,18 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalduration_extend(struct icaltimetype 
 LIBICAL_ICAL_EXPORT struct icaldurationtype icalduration_from_times(struct icaltimetype t1,
                                                                     struct icaltimetype t2);
 
+/**
+ * @brief Create a normalized duration from another duration.
+ *
+ * @param dur The duration of which to create a normalized copy from.
+ * @return An ::icaldurationtype representing the normalized duration.
+ *
+ * A duration is normalized such that:
+ * - Minutes and seconds are in the inclusive range [0;59], but hours may exceed 23 hours.
+ * - Only weeks or days are set, and weeks only are set if no hours, minutes
+ *   and seconds are set.
+ *
+ */
+LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_normalize(struct icaldurationtype dur);
+
 #endif /* !ICALDURATION_H */

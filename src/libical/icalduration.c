@@ -350,3 +350,27 @@ struct icaldurationtype icalduration_from_times(struct icaltimetype t1, struct i
     }
     return ret;
 }
+
+struct icaldurationtype icaldurationtype_normalize(struct icaldurationtype dur)
+{
+    struct icaldurationtype newdur = icaldurationtype_null_duration();
+    newdur.is_neg = dur.is_neg;
+
+    // Normalize nominal duration.
+    if (dur.days % 7 == 0 && !dur.hours && !dur.minutes && !dur.seconds) {
+        newdur.weeks = dur.weeks + dur.days / 7;
+    } else {
+        newdur.days = dur.days + dur.weeks * 7;
+    }
+
+    // Normalize fixed duration.
+    unsigned ut = dur.seconds + dur.minutes * 60 + dur.hours * 60 * 60;
+    unsigned used = 0;
+    newdur.hours = (ut - used) / (60 * 60);
+    used += newdur.hours * (60 * 60);
+    newdur.minutes = (ut - used) / (60);
+    used += newdur.minutes * (60);
+    newdur.seconds = (ut - used);
+
+    return newdur;
+}

@@ -6872,6 +6872,34 @@ static void test_internal_limits(void)
     ok("value chars is size_max", icallimit_get(ICAL_LIMIT_VALUE_CHARS) == SIZE_MAX);
 }
 
+void test_icaldurationtype_normalize(void)
+{
+#define assert_normalized_duration(input, want) \
+    str_is("normalize(" input ")=" want, want, \
+        icaldurationtype_as_ical_string( \
+            icaldurationtype_normalize( \
+                icaldurationtype_from_string(input) \
+            ) \
+        ) \
+    )
+
+    assert_normalized_duration("PT0S", "PT0S");
+    assert_normalized_duration("PT59S", "PT59S");
+    assert_normalized_duration("PT60S", "PT1M");
+    assert_normalized_duration("PT0M", "PT0S");
+    assert_normalized_duration("PT59M", "PT59M");
+    assert_normalized_duration("PT60M", "PT1H");
+    assert_normalized_duration("PT86400S", "PT24H");
+    assert_normalized_duration("PT86460S", "PT24H1M");
+    assert_normalized_duration("PT86461S", "PT24H1M1S");
+    assert_normalized_duration("P2W14D", "P4W");
+    assert_normalized_duration("P21D", "P3W");
+    assert_normalized_duration("P2W3DT86400S", "P17DT24H");
+    assert_normalized_duration("P1WT1S", "P7DT1S");
+
+#undef assert_normalized_duration
+}
+
 int main(int argc, const char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -7056,6 +7084,8 @@ int main(int argc, const char *argv[])
     test_run("Test property values from string", test_value_from_string, do_test, do_header);
     test_run("Test normalizing time", test_icaltime_normalize, do_test, do_header);
     test_run("Test setting/getting internal limits", test_internal_limits, do_test, do_header);
+    test_run("Test normalizing duration", test_icaldurationtype_normalize, do_test, do_header);
+    /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
     test_run("Test C++ API", test_cxx, do_test, do_header);
