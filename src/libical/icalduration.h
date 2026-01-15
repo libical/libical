@@ -94,7 +94,7 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
  * depending if the duration points forward or backward in time.
  *
  * Additionally, a ::icaldurationtype that has a non-zero days or weeks value is considered an error.
- * ie. only the ::icaldurationtype seconds, minutes and hours structure members are converted.
+ * ie. only the ::icaldurationtype seconds, minutes and hours structure members are converted. Also @see icaldurationtype_as_utc_seconds.
  *
  * @par Usage
  * ```c
@@ -109,6 +109,19 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
  * @since 4.0 previously known as icaldurationtype_as_int
  */
 LIBICAL_ICAL_EXPORT int icaldurationtype_as_seconds(struct icaldurationtype duration);
+
+/**
+ * @brief Extracts the duration in integer seconds from an ::icaldurationtype in UTC time.
+ * @param duration A valid duration type.
+ * @return An `int` representing the number of seconds in the duration.
+ *
+ * The number of seconds returned from the specified ::icaldurationtype can be a positive or negative integer
+ * depending if the duration points forward or backward in time.
+ *
+ * Days are fixed to have 24 hours.
+ *
+ */
+LIBICAL_ICAL_EXPORT int icaldurationtype_as_utc_seconds(struct icaldurationtype duration);
 
 /**
  * Converts an icaldurationtype into the iCal format as string.
