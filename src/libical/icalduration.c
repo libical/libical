@@ -243,6 +243,16 @@ int icaldurationtype_as_seconds(struct icaldurationtype dur)
                  (dur.is_neg == 1 ? -1 : 1));
 }
 
+int icaldurationtype_as_utc_seconds(struct icaldurationtype dur)
+{
+    return (int)(((int)dur.seconds +
+                  60 * ((int)dur.minutes +
+                        60 * ((int)dur.hours +
+                              24 * ((int)dur.days +
+                                    7 * (int)dur.weeks)))) *
+                 (dur.is_neg == 1 ? -1 : 1));
+}
+
 struct icaldurationtype icaldurationtype_null_duration(void)
 {
     struct icaldurationtype d;

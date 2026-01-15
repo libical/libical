@@ -1713,18 +1713,21 @@ void test_duration(void)
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("PT8H30M", icaldurationtype_as_seconds(d), 30600);
+    int_is("PT8H30M", icaldurationtype_as_utc_seconds(d), 30600);
 
     d = icaldurationtype_from_string("-PT8H30M");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("-PT8H30M", icaldurationtype_as_seconds(d), -30600);
+    int_is("-PT8H30M", icaldurationtype_as_utc_seconds(d), -30600);
 
     d = icaldurationtype_from_string("PT10H10M10S");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("PT10H10M10S", icaldurationtype_as_seconds(d), 36610);
+    int_is("PT10H10M10S", icaldurationtype_as_utc_seconds(d), 36610);
 
     icalerror_set_errors_are_fatal(false);
 
@@ -1735,36 +1738,42 @@ void test_duration(void)
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("P7W", icaldurationtype_as_seconds(d), 0);
+    int_is("P7W", icaldurationtype_as_utc_seconds(d), 4233600);
 
     d = icaldurationtype_from_string("P2DT8H30M");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("P2DT8H30M", icaldurationtype_as_seconds(d), 0);
+    int_is("P2DT8H30M", icaldurationtype_as_utc_seconds(d), 203400);
 
     d = icaldurationtype_from_string("P2W1DT5H");
     if (VERBOSE) {
         printf("%s %d\n", icaldurationtype_as_ical_string(d), icaldurationtype_as_seconds(d));
     }
     int_is("P2W1DT5H", icaldurationtype_as_seconds(d), 0);
+    int_is("P2W1DT5H", icaldurationtype_as_utc_seconds(d), 1314000);
 
-    d = icaldurationtype_from_string("P-2DT8H30M");
+    d = icaldurationtype_from_string("-P2DT8H30M");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("P-2DT8H30M", icaldurationtype_as_seconds(d), 0);
+    int_is("-P2DT8H30M", icaldurationtype_as_seconds(d), 0);
+    int_is("-P2DT8H30M", icaldurationtype_as_utc_seconds(d), -203400);
 
-    d = icaldurationtype_from_string("P7W8H");
+    d = icaldurationtype_from_string("P7WT8H");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("P7W8H", icaldurationtype_as_seconds(d), 0);
+    int_is("P7WT8H", icaldurationtype_as_seconds(d), 0);
+    int_is("P7WT8H", icaldurationtype_as_utc_seconds(d), 4262400);
 
     d = icaldurationtype_from_string("T10H");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("T10H", icaldurationtype_as_seconds(d), 0);
+    int_is("T10H", icaldurationtype_as_utc_seconds(d), 0);
 
     icalerror_set_errors_are_fatal(true);
 
