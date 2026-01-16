@@ -6909,6 +6909,68 @@ void test_icaldurationtype_normalize(void)
 #undef assert_normalized_duration
 }
 
+static void test_icalcomponent_remove_property_by_kind(void)
+
+{
+    const char *str =
+        "BEGIN:VEVENT\r\n"
+        "COMMENT:comment1\r\n"
+        "DTSTAMP:20060102T030405Z\r\n"
+        "COMMENT:comment2\r\n"
+        "UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n"
+        "DTSTART;VALUE=DATE:20250120\r\n"
+        "COMMENT:comment3\r\n"
+        "END:VEVENT\r\n";
+
+    icalcomponent *test_comp = icalcomponent_new_from_string(str);
+    ok("Parsed VEVENT component", (test_comp != NULL));
+
+    icalcomponent *comp;
+    icalproperty *prop;
+
+    // Assert removing existing property kind.
+    comp = icalcomponent_clone(test_comp);
+    icalcomponent_remove_property_by_kind(comp, ICAL_COMMENT_PROPERTY);
+    prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
+    ok("DTSTAMP", icalproperty_isa(prop) == ICAL_DTSTAMP_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("UID", icalproperty_isa(prop) == ICAL_UID_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("DTSTART", icalproperty_isa(prop) == ICAL_DTSTART_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("<end>", prop == NULL);
+    icalcomponent_free(comp);
+
+    // Assert removing non-existing property kind.
+    comp = icalcomponent_clone(test_comp);
+    icalcomponent_remove_property_by_kind(comp, ICAL_CLASS_PROPERTY);
+    prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
+    ok("COMMENT", icalproperty_isa(prop) == ICAL_COMMENT_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("DTSTAMP", icalproperty_isa(prop) == ICAL_DTSTAMP_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("COMMENT", icalproperty_isa(prop) == ICAL_COMMENT_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("UID", icalproperty_isa(prop) == ICAL_UID_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("DTSTART", icalproperty_isa(prop) == ICAL_DTSTART_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("COMMENT", icalproperty_isa(prop) == ICAL_COMMENT_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("<end>", prop == NULL);
+    icalcomponent_free(comp);
+
+    // Assert removing any property kind.
+    comp = icalcomponent_clone(test_comp);
+    icalcomponent_remove_property_by_kind(comp, ICAL_ANY_PROPERTY);
+    prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
+    ok("<end>", prop == NULL);
+    icalcomponent_free(comp);
+
+    icalcomponent_free(test_comp);
+}
+
+
 int main(int argc, const char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -7094,6 +7156,7 @@ int main(int argc, const char *argv[])
     test_run("Test normalizing time", test_icaltime_normalize, do_test, do_header);
     test_run("Test setting/getting internal limits", test_internal_limits, do_test, do_header);
     test_run("Test normalizing duration", test_icaldurationtype_normalize, do_test, do_header);
+    test_run("Test removing component properties by kind", test_icalcomponent_remove_property_by_kind, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
