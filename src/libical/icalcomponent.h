@@ -91,6 +91,9 @@ LIBICAL_ICAL_EXPORT void icalcomponent_add_property(icalcomponent *component,
 LIBICAL_ICAL_EXPORT void icalcomponent_remove_property(icalcomponent *component,
                                                        icalproperty *property);
 
+LIBICAL_ICAL_EXPORT void icalcomponent_remove_property_by_kind(icalcomponent *component,
+                                                               icalproperty_kind kind);
+
 LIBICAL_ICAL_EXPORT int icalcomponent_count_properties(icalcomponent *component,
                                                        icalproperty_kind kind);
 
