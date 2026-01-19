@@ -61,13 +61,13 @@
     <comment xml:space="preserve">A wrapper around strdup. Partly to trap calls to strdup, partly because in -ansi, gcc on Red Hat claims that strdup is undeclared.</comment>
   </method>
   <method name="i_cal_memory_str_to_glib" corresponds="none" annotation="skip" kind="private" since="1.0">
-    <parameter type="const char *" annotation="transfer full, nullable" name="buffer" comment="The ical memory string to transform"/>
-    <returns type="const gchar *" annotation="transfer full, nullable" comment="The same string that can be freed with g_free"/>
+    <parameter type="char *" annotation="transfer full, nullable" name="buffer" comment="The ical memory string to transform"/>
+    <returns type="gchar *" annotation="transfer full, nullable" comment="The same string that can be freed with g_free"/>
     <comment xml:space="preserve">Transform a string allocated with icalmemory into one that can be freed with g_free.</comment>
-    <custom>    const gchar *buffer_copy;
+    <custom>    gchar *buffer_copy;
 
     buffer_copy = g_strdup(buffer);
-    icalmemory_free_buffer((char *)buffer);
+    icalmemory_free_buffer(buffer);
 
     return buffer_copy;</custom>
   </method>

@@ -23,7 +23,7 @@
   </method>
   <method name="i_cal_vcard_property_as_vcard_string" corresponds="vcardproperty_as_vcard_string_r" since="4.0">
     <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be converted"/>
-    <returns type="const gchar *" annotation="transfer full" comment="The string representation of @prop." translator="i_cal_memory_str_to_glib"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of @prop." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts an #ICalVcardProperty to a string representation.</comment>
   </method>
   <method name="i_cal_vcard_property_free" corresponds="vcardproperty_free" annotation="skip" kind="destructor" since="4.0">
@@ -69,7 +69,7 @@
   <method name="i_cal_vcard_property_get_parameter_as_string" corresponds="vcardproperty_get_parameter_as_string_r" since="4.0">
     <parameter type="ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be queried"/>
     <parameter type="const gchar *" name="name" comment="The name of the target parameter"/>
-    <returns type="const gchar *" annotation="transfer full" comment="The string representation of the parameter." translator="i_cal_memory_str_to_glib"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of the parameter." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Gets the string representation of the target parameter in the #ICalVcardProperty.</comment>
   </method>
   <method name="i_cal_vcard_property_remove_parameter_by_kind" corresponds="vcardproperty_remove_parameter_by_kind" since="4.0">
@@ -132,7 +132,7 @@
   </method>
   <method name="i_cal_vcard_property_get_value_as_string" corresponds="vcardproperty_get_value_as_string_r" since="4.0">
     <parameter type="const ICalVcardProperty *" name="prop" comment="The #ICalVcardProperty to be queried"/>
-    <returns type="const gchar *" annotation="transfer full" comment="The string representation of the value of the #ICalVcardProperty." translator="i_cal_memory_str_to_glib"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of the value of the #ICalVcardProperty." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Gets the string representation of the value in #ICalVcardProperty.</comment>
   </method>
   <method name="i_cal_vcard_value_set_parent" corresponds="vcardvalue_set_parent" since="4.0">
@@ -167,7 +167,7 @@
   </method>
   <method name="i_cal_vcard_property_get_property_name" corresponds="vcardproperty_get_property_name_r" since="4.0">
     <parameter type="const ICalVcardProperty *" name="prop" comment="An #ICalVcardProperty"/>
-    <returns type="const gchar *" annotation="transfer full" comment="Property name of #ICalVcardProperty." translator="i_cal_memory_str_to_glib"/>
+    <returns type="gchar *" annotation="transfer full" comment="Property name of #ICalVcardProperty." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Gets the property name of #ICalVcardProperty.</comment>
   </method>
   <method name="i_cal_vcard_parameter_value_to_value_kind" corresponds="vcardparameter_value_to_value_kind" since="4.0">
@@ -212,7 +212,7 @@
   </method>
   <method name="i_cal_vcard_property_enum_to_string" corresponds="vcardproperty_enum_to_string_r" since="4.0">
     <parameter type="int" name="e" comment="An enum value"/>
-    <returns type="const gchar *" annotation="transfer full,nullable" comment="String representation of the @e, or %NULL, when the @e is an unknown enum." translator="i_cal_memory_str_to_glib"/>
+    <returns type="gchar *" annotation="transfer full,nullable" comment="String representation of the @e, or %NULL, when the @e is an unknown enum." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Gets string representation of the @e.</comment>
   </method>
   <method name="i_cal_vcard_property_kind_and_string_to_enum" corresponds="vcardproperty_kind_and_string_to_enum" since="4.0">

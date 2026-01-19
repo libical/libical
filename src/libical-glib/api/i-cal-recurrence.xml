@@ -123,7 +123,7 @@
   </method>
   <method name="i_cal_recurrence_to_string" corresponds="icalrecurrencetype_as_string_r" since="1.0">
     <parameter type="ICalRecurrence *" name="recur" native_op="POINTER" comment="The #ICalRecurrence to be converted"/>
-    <returns type="const gchar *" annotation="transfer full" comment="The string representation of @recur." translator="i_cal_memory_str_to_glib"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of @recur." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts a #ICalRecurrence to a string.</comment>
   </method>
   <method name="i_cal_recurrence_get_until" corresponds="none" kind="get" since="1.0">
