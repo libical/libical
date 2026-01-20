@@ -358,7 +358,7 @@ const char *icalproperty_as_ical_string(icalproperty *prop)
     return buf;
 }
 
-const char *icalproperty_as_ical_string_r(icalproperty *prop)
+char *icalproperty_as_ical_string_r(icalproperty *prop)
 {
     icalparameter *param;
 
@@ -371,7 +371,7 @@ const char *icalproperty_as_ical_string_r(icalproperty *prop)
     char *buf;
     char *buf_ptr;
     const icalvalue *value;
-    const char *out_buf;
+    char *out_buf;
     const char *kind_string = 0;
     const char newline[] = "\r\n";
 
@@ -539,14 +539,14 @@ void icalproperty_set_parameter_from_string(icalproperty *prop,
 
 const char *icalproperty_get_parameter_as_string(icalproperty *prop, const char *name)
 {
-    const char *buf;
+    char *buf;
 
     buf = icalproperty_get_parameter_as_string_r(prop, name);
-    icalmemory_add_tmp_buffer((char *)buf);
+    icalmemory_add_tmp_buffer(buf);
     return buf;
 }
 
-const char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *name)
+char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *name)
 {
     icalparameter_kind kind;
     icalparameter *param;
@@ -602,7 +602,7 @@ const char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const cha
     /* Is the string quoted? */
     pvql = strchr(pv, '"');
     if (pvql == 0) {
-        return (pv); /* No quotes?  Return it immediately. */
+        return ((char *)pv); /* No quotes?  Return it immediately. */
     }
 
     /* Strip everything up to the first quote */
