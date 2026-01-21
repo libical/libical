@@ -6970,6 +6970,92 @@ static void test_icalcomponent_remove_property_by_kind(void)
     icalcomponent_free(test_comp);
 }
 
+static void test_icalcomponent_get_duration(void)
+{
+#define assert_icalcomponent_get_duration(desc, want, ctlines) \
+    { \
+        const char *str = \
+            "BEGIN:VCALENDAR\r\n" \
+            "VERSION:2.0\r\n" \
+            "PRODID:-//foo/bar//v1.0//EN\r\n" \
+            "BEGIN:VEVENT\r\n" \
+            "UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n" \
+            "DTSTAMP:20060102T030405Z\r\n" \
+            ctlines \
+            "END:VEVENT\r\n" \
+            "END:VCALENDAR\r\n"; \
+        icalcomponent *ical = icalcomponent_new_from_string(str); \
+        ok("Parsed iCalendar object", (ical != NULL)); \
+        icalcomponent *comp = icalcomponent_get_first_real_component(ical); \
+        ok("Parsed VEVENT component", icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT); \
+        str_is(desc, \
+                icaldurationtype_as_ical_string(\
+                    icalcomponent_get_duration(comp)), want); \
+        icalcomponent_free(ical); \
+    }
+
+    assert_icalcomponent_get_duration(
+        "nominal duration (days)", "P2D",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DURATION:P2D\r\n");
+
+    assert_icalcomponent_get_duration(
+        "nominal duration (weeks)", "P2W",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DURATION:P2W\r\n");
+
+    assert_icalcomponent_get_duration(
+        "nominal duration (weeks & days - non-standard)", "P1W2D",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DURATION:P1W2D\r\n");
+
+    assert_icalcomponent_get_duration(
+        "mixed nominal and accurate", "P2DT3H2M",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DURATION:P2DT3H2M\r\n");
+
+    assert_icalcomponent_get_duration(
+        "accurate duration - not normalized", "PT26H120S",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DURATION:PT26H120S\r\n");
+
+    assert_icalcomponent_get_duration(
+        "DTEND - same timezones", "PT7200S",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DTEND;TZID=Europe/Vienna:20250101T030000\r\n");
+
+    assert_icalcomponent_get_duration(
+        "DTEND - different timezones", "PT7200S",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DTEND;TZID=Asia/Bangkok:20250101T090000\r\n");
+
+    assert_icalcomponent_get_duration(
+        "DTEND - more than one day", "PT93600S",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DTEND;TZID=Europe/Vienna:20250102T030000\r\n");
+
+    assert_icalcomponent_get_duration(
+        "DTEND - across STD-to-DST gap", "PT82800S",
+        "DTSTART;TZID=Europe/Vienna:20250329T230000\r\n"
+        "DTEND;TZID=Europe/Vienna:20250330T230000\r\n");
+
+    assert_icalcomponent_get_duration(
+        "DTEND - across DST-to-STD", "PT90000S",
+        "DTSTART;TZID=Europe/Vienna:20251025T230000\r\n"
+        "DTEND;TZID=Europe/Vienna:20251026T230000\r\n");
+
+    // XXX - this incorrectly uses the standard time occurrence of
+    // 2025-10-26T02:00:00, it should use the daylight offset.
+    // (see RFC 5545, Section 3.3.5).
+    // This requires the is_daylight field be set in icaltimetype.
+    assert_icalcomponent_get_duration(
+        "DTEND - same timezones, DST-to-STD shift (should be PT3H)", "PT14400S",
+        "DTSTART;TZID=Europe/Vienna:20251025T230000\r\n"
+        "DTEND;TZID=Europe/Vienna:20251026T020000\r\n");
+
+#undef assert_icalcomponent_get_duration
+}
+
 
 int main(int argc, const char *argv[])
 {
@@ -7157,6 +7243,7 @@ int main(int argc, const char *argv[])
     test_run("Test setting/getting internal limits", test_internal_limits, do_test, do_header);
     test_run("Test normalizing duration", test_icaldurationtype_normalize, do_test, do_header);
     test_run("Test removing component properties by kind", test_icalcomponent_remove_property_by_kind, do_test, do_header);
+    test_run("Test icalcomponent_get_duration", test_icalcomponent_get_duration, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
