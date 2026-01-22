@@ -713,4 +713,9 @@ static void foreach_recurrence_cb(const icalcomponent *in_comp, const struct ica
     <parameter type="ICalComponent *" name="component" comment="an #ICalComponent"/>
     <comment xml:space="preserve">Normalizes (reorders and sorts the properties) the @component.</comment>
   </method>
+  <method name="i_cal_component_remove_property_by_kind" corresponds="icalcomponent_remove_property_by_kind" since="4.0">
+    <parameter type="ICalComponent *" name="component" comment="an #ICalComponent"/>
+    <parameter type="ICalPropertyKind" name="kind" comment="The #ICalPropertyKind to be removed"/>
+    <comment xml:space="preserve">Removes all properties of that kind in the #ICalComponent.</comment>
+  </method>
 </structure>
