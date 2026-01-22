@@ -91,3 +91,36 @@ string = 'This is a link'
 value_from_string = ICalGLib.Value.new_from_string(kind, string)
 value_from_string.set_parent(stringProperty)
 value_from_string.set_parent(None)
+
+# the RRULE and EXRULE returned by get_rrule/get_exrule should not influence
+# the component, to preserve the libical 3.x series behaviour
+comp = ICalGLib.Component.new_from_string(
+    'BEGIN:VEVENT\r\n'
+    'UID:recurring\r\n'
+    'DTSTAMP:20180403T101443Z\r\n'
+    'DTSTART:20180320T150000Z\r\n'
+    'DTEND:20180320T153000Z\r\n'
+    'SUMMARY:Recurring event\r\n'
+    'CREATED:20180403T113809Z\r\n'
+    'LAST-MODIFIED:20180403T113905Z\r\n'
+    'RRULE:FREQ=DAILY;COUNT=10;INTERVAL=1\r\n'
+    'EXRULE:FREQ=DAILY;COUNT=5;INTERVAL=2\r\n'
+    'END:VEVENT\r\n'
+)
+property = comp.get_first_property(ICalGLib.PropertyKind.RRULE_PROPERTY)
+rrule = property.get_rrule()
+assert rrule.get_count() == 10
+rrule.set_count(3)
+assert rrule.get_count() == 3
+property = comp.get_first_property(ICalGLib.PropertyKind.RRULE_PROPERTY)
+rrule = property.get_rrule()
+assert rrule.get_count() == 10
+
+property = comp.get_first_property(ICalGLib.PropertyKind.EXRULE_PROPERTY)
+exrule = property.get_exrule()
+assert exrule.get_count() == 5
+exrule.set_count(7)
+assert exrule.get_count() == 7
+property = comp.get_first_property(ICalGLib.PropertyKind.EXRULE_PROPERTY)
+exrule = property.get_exrule()
+assert exrule.get_count() == 5

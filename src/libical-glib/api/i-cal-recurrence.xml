@@ -6,7 +6,7 @@
 
 
 -->
-<structure namespace="ICal" name="Recurrence" native="struct icalrecurrencetype" default_native="i_cal_recurrence_new_default ()" destroy_func="icalrecurrencetype_unref" new_full_extra_code="if (owner) { icalrecurrencetype_ref (native); owner = NULL; }">
+<structure namespace="ICal" name="Recurrence" native="struct icalrecurrencetype" default_native="i_cal_recurrence_new_default ()" destroy_func="icalrecurrencetype_unref" new_full_extra_code="if (owner) { native = icalrecurrencetype_clone (native); owner = NULL; }">
   <enum name="ICalRecurrenceFrequency" native_name="icalrecurrencetype_frequency" default_native="I_CAL_NO_RECURRENCE">
     <element name="ICAL_SECONDLY_RECURRENCE"/>
     <element name="ICAL_MINUTELY_RECURRENCE"/>
