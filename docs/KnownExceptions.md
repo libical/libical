@@ -31,4 +31,6 @@ The RFC states for "FORM #3: DATE WITH LOCAL TIME AND TIME ZONE REFERENCE":
 > to standard time), the DATE-TIME value refers to the first
 > occurrence of the referenced time.
 
-This only is the case in libical for `icaltimetype` values having the `is_daylight` field set, but this field is not set by the icalparser when parsing DATE-TIME values. As a consequence, durations calculated from such ambiguous datetimes are incorrect.
+This only is the case in libical for `icaltimetype` values having the`is_daylight` field set,
+but this field is not set by the icalparser when parsing DATE-TIME values. As a consequence,
+durations calculated from such ambiguous datetimes are incorrect.

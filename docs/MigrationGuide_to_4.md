@@ -121,7 +121,10 @@ The C library is C99 standards compliant and uses bool types.
 
 * To more clearly illustrate their intended purpose, the `icaldurationtype_from_int()` and `icaldurationtype_as_int()`
   have been renamed to `icaldurationtype_from_seconds()` and `icaldurationtype_as_seconds()`, respectively.
-  The functionality of `icaldurationtype_from_seconds` has not changed. The functionality for `icaldurationtype_as_seconds` has changed, such that a duration with days or weeks fails with a ICAL_MALFORMEDDATA_ERROR and returns 0. To preserve the former logic of `icaldurationtype_as_int`, use he newly introduced `icaldurationtype_as_utc_seconds`.
+  The functionality of `icaldurationtype_from_seconds` has not changed. The functionality for
+  `icaldurationtype_as_seconds` has changed, such that a duration with days or weeks fails
+  with a ICAL_MALFORMEDDATA_ERROR and returns 0. To preserve the former logic of
+  `icaldurationtype_as_int`, use he newly introduced `icaldurationtype_as_utc_seconds`.
 
 * Similarly, the `icaltime_add()` and `icaltime_subtract()` functions are now called
   `icalduration_extend()` and `icalduration_from_times()`.  Their functionality has not changed.
