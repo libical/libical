@@ -530,29 +530,23 @@ void icalmemory_append_decoded_string(char **buf, char **pos,
 
         case '^':
             /* Decode unsafe characters per RFC6868 */
-            if (strchr("n^'", p[1])) {
-                switch (*++p) {
-                case 'n':
-                    icalmemory_append_char(buf, pos, buf_size, '\n');
-                    break;
-
-                case '^':
-                    icalmemory_append_char(buf, pos, buf_size, '^');
-                    break;
-
-                case '\'':
-                    icalmemory_append_char(buf, pos, buf_size, '"');
-                    break;
-                };
-
-                break;
+            if (p[1] == 'n') {
+                icalmemory_append_char(buf, pos, buf_size, '\n');
+                p++;
+            } else if (p[1] == '^') {
+                icalmemory_append_char(buf, pos, buf_size, '^');
+                p++;
+            } else if (p[1] == '\'') {
+                icalmemory_append_char(buf, pos, buf_size, '"');
+                p++;
+            } else {
+                // Unknown escape sequence, copy verbatim.
+                icalmemory_append_char(buf, pos, buf_size, *p);
             }
-
-            _fallthrough();
+            break;
 
         default:
             icalmemory_append_char(buf, pos, buf_size, *p);
-            break;
         }
     }
 }
