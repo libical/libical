@@ -35,6 +35,7 @@ set(
   ${TOPS}/src/libical/icalparser.h
   ${TOPS}/src/libical/icalmemory.h
   ${TOPS}/src/libical/icalerror.h
+  ${TOPS}/src/libical/icallimits.h
   ${TOPS}/src/libical/icalrestriction.h
   ${TOPS}/src/libical/icallangbind.h
 )

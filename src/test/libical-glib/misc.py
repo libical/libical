@@ -60,3 +60,45 @@ span = ICalGLib.TimeSpan.new_timet(55, 66, 0)
 assert span.get_start() == 55
 assert span.get_end() == 66
 assert span.get_is_busy() == 0
+
+limits_kinds = [
+    ICalGLib.LimitsKind.PARSE_FAILURES,
+    ICalGLib.LimitsKind.PARSE_SEARCH,
+    ICalGLib.LimitsKind.PARSE_FAILURE_ERROR_MESSAGES,
+    ICalGLib.LimitsKind.PROPERTIES,
+    ICalGLib.LimitsKind.PARAMETERS,
+    ICalGLib.LimitsKind.VALUE_CHARS,
+    ICalGLib.LimitsKind.PROPERTY_VALUES,
+    ICalGLib.LimitsKind.RECURRENCE_SEARCH,
+    ICalGLib.LimitsKind.RECURRENCE_TIME_STANDING_STILL,
+    ICalGLib.LimitsKind.RRULE_SEARCH,
+]
+old_limits = []
+
+for limit_kind in limits_kinds:
+    old_limit = ICalGLib.limit_get(limit_kind)
+    old_limits.append(old_limit)
+    assert old_limit != 0
+
+# limit_diff is used to recognize changes
+limit_diff = 3
+
+# verify it does not clash with other default limits
+for i in range(len(old_limits)):
+    for j in range(len(old_limits)):
+        if i == j:
+            continue
+        assert old_limits[i] + limit_diff != old_limits[j]
+
+# verify each can be changed and it does not influence the others
+for i in range(len(old_limits)):
+    ICalGLib.limit_set(limits_kinds[i], old_limits[i] + limit_diff)
+    assert old_limits[i] + limit_diff == ICalGLib.limit_get(limits_kinds[i])
+
+    for j in range(len(old_limits)):
+        if i == j:
+            continue
+        assert old_limits[j] == ICalGLib.limit_get(limits_kinds[j])
+
+    ICalGLib.limit_set(limits_kinds[i], old_limits[i])
+    assert old_limits[i] == ICalGLib.limit_get(limits_kinds[i])

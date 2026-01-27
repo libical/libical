@@ -12,6 +12,7 @@
 
 #include "icalcomponent.h"
 #include "icalerror.h"
+#include "icallimits.h"
 #include "icalmemory.h"
 #include "icalparser.h"
 #include "icalrestriction.h"
@@ -2806,11 +2807,6 @@ static int comp_compare(void *a, void *b)
 
 void icalcomponent_normalize(icalcomponent *comp)
 {
-    /* oss-fuzz sets the cpu timeout at 60 seconds.
-     * In order to meet that requirement we need to cap the number of properties.
-     */
-    static const size_t MAX_PROPERTIES = 10000;
-
     icalproperty *prop;
     icalcomponent *sub;
     icalpvl_list sorted_props;
@@ -2825,9 +2821,12 @@ void icalcomponent_normalize(icalcomponent *comp)
     sorted_props = icalpvl_newlist();
     sorted_comps = icalpvl_newlist();
 
+    /* oss-fuzz sets the cpu timeout at 60 seconds.
+     * In order to meet that requirement we need to cap the number of properties.
+     */
+    const size_t max_properties = icallimit_get(ICAL_LIMIT_PROPERTIES);
     /* Normalize properties into sorted list */
-
-    while ((++cnt < MAX_PROPERTIES) && ((prop = icalpvl_pop(comp->properties)) != 0)) {
+    while ((++cnt < max_properties) && ((prop = icalpvl_pop(comp->properties)) != 0)) {
         int nparams, remove = 0;
 
         icalproperty_normalize(prop);
@@ -2887,7 +2886,7 @@ void icalcomponent_normalize(icalcomponent *comp)
     }
 
     /* Drain the remaining properties */
-    if (cnt == MAX_PROPERTIES) {
+    if (cnt == max_properties) {
         while ((prop = icalpvl_pop(comp->properties)) != 0) {
             icalproperty_set_parent(prop, 0); // MUST NOT have a parent to free
             icalproperty_free(prop);

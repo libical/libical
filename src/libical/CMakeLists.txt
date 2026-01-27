@@ -217,6 +217,8 @@ set(
   icalenums.h
   icalerror.c
   icalerror.h
+  icallimits.c
+  icallimits.h
   icalmemory.c
   icalmemory.h
   icalparameter.c
@@ -406,6 +408,7 @@ install(
     icalenums.h
     icalerror.h
     icallangbind.h
+    icallimits.h
     icalmemory.h
     icalparameter.h
     icalparser.h

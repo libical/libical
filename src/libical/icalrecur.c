@@ -126,6 +126,7 @@
 
 #include "icalrecur.h"
 #include "icalerror.h"
+#include "icallimits.h"
 #include "icalmemory.h"
 #include "icaltimezone.h"
 #include "icalvalue.h" /* for print_date[time]_to_string() */
@@ -3578,8 +3579,6 @@ static bool check_setpos(icalrecur_iterator *impl, int next)
 
 struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
 {
-    static const size_t MAX_RECURRENCES = 10000000;
-
     /* Quit if we reached COUNT or if last time is after the UNTIL time */
     if (!impl ||
         (impl->rule->count != 0 && impl->occurrence_no >= impl->rule->count) ||
@@ -3603,11 +3602,13 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     icalrecur_iterator impl_last = *impl;
 
     /* Iterate until we get the next valid time */
-    int time_standing_still_count = 0;
+    size_t stalledCnt = 0;
+    const size_t max_recurrence_time_count = icallimit_get(ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL);
     int lastTimeCompare = 0;
     bool hasByData = false;
     int checkContractingRules = 0;
     size_t cntRecurrences = 0;
+    const size_t max_recurrences = icallimit_get(ICAL_LIMIT_RECURRENCE_SEARCH);
     do {
         switch (impl->rule->freq) {
         case ICAL_SECONDLY_RECURRENCE:
@@ -3681,13 +3682,13 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         // is time standing still? if so, break out of here
         lastTimeCompare = icaltime_compare(impl->last, impl_last.last);
         if (lastTimeCompare == 0) {
-            if (time_standing_still_count++ == 50) {
+            if (stalledCnt++ == max_recurrence_time_count) {
                 break;
             }
         } else {
-            time_standing_still_count = 0;
+            stalledCnt = 0;
         }
-    } while ((cntRecurrences++ < MAX_RECURRENCES) &&
+    } while ((cntRecurrences++ < max_recurrences) &&
              ((lastTimeCompare == 0) ||
               (hasByData && !check_setpos(impl, 1)) ||
               icaltime_compare(impl->last, impl->istart) < 0 ||
