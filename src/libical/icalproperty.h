@@ -32,7 +32,7 @@ LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_from_string(const char *str);
 
 LIBICAL_ICAL_EXPORT const char *icalproperty_as_ical_string(icalproperty *prop);
 
-LIBICAL_ICAL_EXPORT const char *icalproperty_as_ical_string_r(icalproperty *prop);
+LIBICAL_ICAL_EXPORT char *icalproperty_as_ical_string_r(icalproperty *prop);
 
 LIBICAL_ICAL_EXPORT void icalproperty_free(icalproperty *prop);
 
@@ -52,8 +52,8 @@ LIBICAL_ICAL_EXPORT void icalproperty_set_parameter_from_string(icalproperty *pr
 LIBICAL_ICAL_EXPORT const char *icalproperty_get_parameter_as_string(icalproperty *prop,
                                                                      const char *name);
 
-LIBICAL_ICAL_EXPORT const char *icalproperty_get_parameter_as_string_r(icalproperty *prop,
-                                                                       const char *name);
+LIBICAL_ICAL_EXPORT char *icalproperty_get_parameter_as_string_r(icalproperty *prop,
+                                                                 const char *name);
 
 /** @brief Removes all parameters with the specified kind.
  *

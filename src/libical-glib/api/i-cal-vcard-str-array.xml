@@ -63,7 +63,7 @@
   <method name="i_cal_vcard_str_array_as_vcard_string" corresponds="vcardstrarray_as_vcard_string_r" kind="other" since="4.0">
     <parameter type="ICalVcardStrArray *" name="array" comment="an #ICalVcardStrArray"/>
     <parameter type="const char" name="sep" comment="separator character"/>
-    <returns type="const gchar *" annotation="transfer full" comment="The string representation of the @array." translator="i_cal_memory_str_to_glib"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of the @array." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts the @array into its string representation.</comment>
   </method>
 </structure>

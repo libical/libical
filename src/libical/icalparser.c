@@ -580,6 +580,9 @@ static bool line_is_blank(const char *line)
 icalcomponent *icalparser_parse(icalparser *parser,
                                 icalparser_line_gen_func line_gen_func)
 {
+    /* Maximum number of bad parsed lines allowed */
+    static const size_t MAX_PARSE_FAILURES = 1000;
+
     char *line;
     icalcomponent *c;
     icalcomponent *root = 0;
@@ -622,15 +625,15 @@ icalcomponent *icalparser_parse(icalparser *parser,
                 /* Badness */
                 icalassert(0);
             }
-        } else {
-            bad_lines++; // track the number of possibly bogus data lines
+        } else if (parser->state == ICALPARSER_ERROR) {
+            bad_lines++; // track the number of un-parsable data lines
         }
         cont = false;
         if (line != 0) {
             icalmemory_free_buffer(line);
             cont = true;
         }
-    } while (cont && bad_lines < 5000); // limit the number of possibly bogus data lines
+    } while (cont && bad_lines < MAX_PARSE_FAILURES); // limit the number of un-parsable data lines
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 

@@ -89,7 +89,7 @@
   <method name="i_cal_vcard_time_as_vcard_string" corresponds="vcardtime_as_vcard_string_r" since="4.0">
     <parameter type="const ICalVcardTime *" name="self" comment="The #ICalVcardTime to be converted"/>
     <parameter type="guint" name="flags" comment="bit-or of #ICalVcardTimeConvertFlags"/>
-    <returns type="const gchar *" annotation="transfer full" comment="The string representation" translator="i_cal_memory_str_to_glib"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation" translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Returns a string representation of the @self.</comment>
   </method>
   <method name="i_cal_vcard_time_new_from_string" corresponds="vcardtime_from_string" kind="others" since="4.0">

@@ -225,7 +225,6 @@ char *icalcomponent_as_ical_string(const icalcomponent *component)
 char *icalcomponent_as_ical_string_r(const icalcomponent *component)
 {
     char *buf;
-    const char *tmp_buf;
     size_t buf_size = 1024;
     char *buf_ptr = 0;
     icalpvl_elem itr;
@@ -262,22 +261,26 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *component)
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
 
     for (itr = icalpvl_head(component->properties); itr != 0; itr = icalpvl_next(itr)) {
+        char *tmp_buf;
+
         p = (icalproperty *)icalpvl_data(itr);
 
         icalerror_assert((p != 0), "Got a null property");
         tmp_buf = icalproperty_as_ical_string_r(p);
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
-        icalmemory_free_buffer((char *)tmp_buf);
+        icalmemory_free_buffer(tmp_buf);
     }
 
     for (itr = icalpvl_head(component->components); itr != 0; itr = icalpvl_next(itr)) {
+        char *tmp_buf;
+
         c = (icalcomponent *)icalpvl_data(itr);
 
         tmp_buf = icalcomponent_as_ical_string_r(c);
         if (tmp_buf != NULL) {
             icalmemory_append_string(&buf, &buf_ptr, &buf_size, tmp_buf);
-            icalmemory_free_buffer((char *)tmp_buf);
+            icalmemory_free_buffer(tmp_buf);
         }
     }
 
