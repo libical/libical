@@ -2405,6 +2405,10 @@ parse_api_files(const gchar *apis_dir,
                     break;
                 }
             }
+
+            if (!success) {
+                break;
+            }
         }
         structures = g_list_append(structures, structure);
         xmlFreeDoc(doc);
