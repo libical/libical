@@ -842,7 +842,7 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
     int step, utc_offset_change, cmp;
     int want_daylight;
 
-    if (tt == NULL) {
+    if (tt == NULL || tt->year > ICALTIMEZONE_MAX_YEAR) {
         return 0;
     }
 
