@@ -126,13 +126,18 @@ void icalparser_set_gen_data(icalparser *parser, void *data)
 
 static char *parser_get_next_char(char c, char *str, int qm)
 {
+    /* oss-fuzz sets the cpu timeout at 60 seconds.
+     * In order to meet that requirement we need to cap the number of characters searched per.
+     */
+    static const size_t MAX_PARSE_CHAR_SEARCH = 10000;
+
     int quote_mode = 0;
     char *p = str;
     char next_char = *p;
     char prev_char = 0;
 
     size_t count = 0;
-    while (next_char != '\0' && count++ < 100000) {
+    while (next_char != '\0' && count++ < MAX_PARSE_CHAR_SEARCH) {
         if ((prev_char != '\0') && (prev_char != '\\')) {
             if (qm == 1 && next_char == '"') {
                 /* Encountered a quote, toggle quote mode */
