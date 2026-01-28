@@ -25,7 +25,7 @@ static FILE *open_file(const gchar *dir, const gchar *filename)
     if (path) {
         tmpl = fopen(path, "rb");
         if (!tmpl) {
-            fprintf(stderr, "generator: Failed to open %s: %s\n", path, strerror(errno));
+            g_warning("Failed to open %s: %s", path, strerror(errno));
         }
 
         g_free(path);
@@ -823,7 +823,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
     while (!feof(in) && !ferror(in) && (c = fgetc(in)) != EOF) {
         if (c == '$') {
             if ((c = fgetc(in)) != '{' && c != '^') {
-                printf("The following char is not {");
+                g_warning("The following char is not {");
                 g_free(buffer);
                 return;
             }
@@ -903,8 +903,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                         generate_source_structure_boilerplate(out, structure, table);
                     }
                 } else {
-                    printf("The string %s is not recognized, please check the template\n", buffer);
-                    fflush(NULL);
+                    g_warning("The string %s is not recognized, please check the template", buffer);
                     g_free(buffer);
                     return;
                 }
@@ -1093,7 +1092,7 @@ void generate_forward_declarations_header_file(GList *structures)
     out = fopen(FORWARD_DECLARATIONS_HEADER, "wb");
     if (!out) {
         fclose(in);
-        fprintf(stderr, "Failed to open '%s' for writing\n", FORWARD_DECLARATIONS_HEADER);
+        g_warning("Failed to open '%s' for writing", FORWARD_DECLARATIONS_HEADER);
         return;
     }
 
@@ -1124,7 +1123,7 @@ void generate_forward_declarations_header_file(GList *structures)
     while (!feof(in) && !ferror(in) && (c = fgetc(in)) != EOF) {
         if (c == '$') {
             if (!feof(in) && !ferror(in) && (c = fgetc(in)) != '{' && c != '^') {
-                printf("The following char is not {");
+                g_warning("The following char is not {");
                 fclose(in);
                 fclose(out);
                 return;
@@ -1154,9 +1153,8 @@ void generate_forward_declarations_header_file(GList *structures)
             } else if (g_strcmp0(buffer, "upperSnake") == 0) {
                 write_str(out, "I_CAL_FORWARD_DECLARATIONS");
             } else {
-                fprintf(stderr, "The string '%s' is not recognized, please check the %s\n",
-                        buffer, FORWARD_DECLARATIONS_HEADER);
-                fflush(stderr);
+                g_warning("The string '%s' is not recognized, please check the %s",
+                          buffer, FORWARD_DECLARATIONS_HEADER);
                 break;
             }
             buffer[0] = '\0';
@@ -1306,7 +1304,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     } else if (g_strcmp0(condition, "isPossibleGlobal") == 0) {
         isTrue = structure->isPossibleGlobal;
     } else {
-        printf("The condition variable of %s is not recognized\n", condition);
+        g_warning("The condition variable of %s is not recognized", condition);
     }
     g_free(condition);
 
@@ -1350,7 +1348,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                 c = expression[iter];
                 if (c == '$') {
                     if (expression[++iter] != '{') {
-                        printf("The following char is not {");
+                        g_warning("The following char is not {");
                         g_free(expression);
                         g_free(var);
                         return;
@@ -1367,9 +1365,9 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                         write_str(out, val);
                         val = NULL;
                     } else {
-                        printf("The string %s is not recognized in conditional, "
-                               "please check the template\n",
-                               var);
+                        g_warning("The string %s is not recognized in conditional, "
+                                  "please check the template",
+                                  var);
                         g_free(expression);
                         g_free(var);
                         return;
@@ -1458,7 +1456,7 @@ gchar *get_translator_for_parameter(Parameter *para)
             gchar *structureKind = g_strdup(g_hash_table_lookup(type2kind, trueType));
             structure = g_hash_table_lookup(type2structure, trueType);
             if (structure == NULL) {
-                printf("ERROR: There is no corresponding structure for type %s\n", trueType);
+                g_warning("There is no corresponding structure for type %s", trueType);
             } else {
                 is_bare = structure->isBare;
             }
@@ -1472,7 +1470,7 @@ gchar *get_translator_for_parameter(Parameter *para)
 
                     if (g_strcmp0(trueType, enumeration->name) == 0) {
                         if (!enumeration->nativeName) {
-                            g_printerr("Missing 'native_name' for enum %s\n", enumeration->name);
+                            g_warning("Missing 'native_name' for enum %s", enumeration->name);
                             break;
                         }
 
@@ -1495,8 +1493,7 @@ gchar *get_translator_for_parameter(Parameter *para)
                             g_strconcat("(", structure->native, " *)i_cal_object_steal_native",
                                         NULL);
                     } else {
-                        printf("The parameter kind \"%s\" is illegal!", para->native_op);
-                        fflush(NULL);
+                        g_warning("The parameter kind \"%s\" is illegal!", para->native_op);
                     }
                 } else {
                     if (is_bare) {
@@ -1538,7 +1535,7 @@ gchar *get_translator_for_return(Ret *ret)
             gchar *kind = g_strdup(g_hash_table_lookup(type2kind, trueType));
             structure = g_hash_table_lookup(type2structure, trueType);
             if (!structure) {
-                printf("ERROR: There is no corresponding structure for type %s\n", trueType);
+                g_warning("There is no corresponding structure for type %s", trueType);
             }
 
             if (structure && g_strcmp0(kind, "enum") == 0) {
@@ -1549,7 +1546,7 @@ gchar *get_translator_for_return(Ret *ret)
 
                     if (g_strcmp0(trueType, enumeration->name) == 0) {
                         if (!enumeration->nativeName) {
-                            g_printerr("Missing 'native_name' for enum %s\n", enumeration->name);
+                            g_warning("Missing 'native_name' for enum %s", enumeration->name);
                             break;
                         }
 
@@ -2009,7 +2006,7 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
             prefix_len = strlen(ENUM_HEADER_VCARD);
             use_prefix = "I_CAL_VCARD_";
         } else {
-            fprintf(stderr, "The enum name '%s' in '%s' cannot be processed, it has no known prefix\n", use_name, enumeration->name);
+            g_warning("The enum name '%s' in '%s' cannot be processed, it has no known prefix", use_name, enumeration->name);
             continue;
         }
         if (use_name[prefix_len] == '_') {
@@ -2060,7 +2057,7 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
         if (parameter && parameter->type && parameter->type[strlen(parameter->type) - 1] == '*') {
             gchar *trueType = get_true_type(parameter->type);
             if (!trueType) {
-                fprintf(stderr, "Unknown type '%s' in method %s\n", parameter->type, method->name);
+                g_warning("Unknown type '%s' in method %s", parameter->type, method->name);
                 continue;
             }
             for (i = 0;
@@ -2095,8 +2092,8 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
                     } else if (g_hash_table_contains(defaultValues, retTrueType)) {
                         defaultValue = g_strdup(g_hash_table_lookup(defaultValues, retTrueType));
                     } else {
-                        printf("No default value provided for the return type %s in method %s\n",
-                               method->ret->type, method->name);
+                        g_warning("No default value provided for the return type %s in method %s",
+                                  method->ret->type, method->name);
                         defaultValue = g_strdup("NULL");
                     }
                     g_free(retTrueType);
@@ -2136,8 +2133,8 @@ gchar *get_source_run_time_checkers(Method *method, const gchar *nameSpace)
                             g_strdup(g_hash_table_lookup(defaultValues, retTrueType));
                         g_free(retTrueType);
                     } else {
-                        printf("No default value provided for the return type %s in method %s\n",
-                               method->ret->type, method->name);
+                        g_warning("No default value provided for the return type %s in method %s",
+                                  method->ret->type, method->name);
                         defaultValue = g_strdup("NULL");
                     }
                     (void)g_stpcpy(buffer + strlen(buffer), defaultValue);
@@ -2336,7 +2333,7 @@ parse_api_files(const gchar *apis_dir,
         path = g_build_filename(apis_dir, filename, NULL);
         doc = xmlParseFile(path);
         if (doc == NULL) {
-            printf("The doc %s cannot be parsed.\n", path);
+            g_warning("The doc %s cannot be parsed.", path);
             g_free(path);
             success = FALSE;
             break;
@@ -2346,7 +2343,7 @@ parse_api_files(const gchar *apis_dir,
 
         node = xmlDocGetRootElement(doc);
         if (node == NULL) {
-            printf("The root node cannot be retrieved from the doc\n");
+            g_warning("The root node cannot be retrieved from the doc");
             xmlFreeDoc(doc);
             success = FALSE;
             break;
@@ -2354,7 +2351,7 @@ parse_api_files(const gchar *apis_dir,
 
         structure = structure_new();
         if (!parse_structure(node, structure, api_templates)) {
-            printf("The node cannot be parsed into a structure.\n");
+            g_warning("The node cannot be parsed into a structure.");
             xmlFreeDoc(doc);
             success = FALSE;
             structure_free(structure);
@@ -2375,8 +2372,8 @@ parse_api_files(const gchar *apis_dir,
                                                           NULL),
                                               g_strdup(structure->defaultNative));
                 } else {
-                    printf("Please supply a default value for the bare structure %s\n",
-                           structure->name);
+                    g_warning("Please supply a default value for the bare structure %s",
+                              structure->name);
                     xmlFreeDoc(doc);
                     success = FALSE;
                     structure_free(structure);
@@ -2398,7 +2395,7 @@ parse_api_files(const gchar *apis_dir,
                     (void)g_hash_table_insert(defaultValues, g_strdup(enumeration->name),
                                               g_strdup(enumeration->defaultNative));
                 } else {
-                    printf("Please supply a default value for enum %s\n", enumeration->name);
+                    g_warning("Please supply a default value for enum %s", enumeration->name);
                     xmlFreeDoc(doc);
                     success = FALSE;
                     structure_free(structure);
@@ -2527,7 +2524,7 @@ void generate_header_header_file(GList *structures)
 
     out = fopen("libical-glib.h", "w");
     if (!out) {
-        fprintf(stderr, "Failed to open libical-glib.h for writing\n");
+        g_warning("Failed to open libical-glib.h for writing");
         fclose(in);
         return;
     }
@@ -2538,7 +2535,7 @@ void generate_header_header_file(GList *structures)
     while (!feof(in) && !ferror(in) && (c = fgetc(in)) != EOF) {
         if (c == '$') {
             if (!feof(in) && !ferror(in) && (c = fgetc(in)) != '{' && c != '^') {
-                printf("The following char is not {");
+                g_warning("The following char is not {");
                 g_free(buffer);
                 fclose(in);
                 fclose(out);
@@ -2564,9 +2561,8 @@ void generate_header_header_file(GList *structures)
                     structure = NULL;
                 }
             } else {
-                printf("The string %s is not recognized, please check the header-header-template\n",
-                       buffer);
-                fflush(NULL);
+                g_warning("The string %s is not recognized, please check the header-header-template",
+                          buffer);
                 g_free(buffer);
                 fclose(in);
                 fclose(out);
@@ -2658,14 +2654,14 @@ check_api_files(const gchar *apis_dir,
 
     success = g_hash_table_size(symbols) == 0;
     if (!success) {
+        GString *msg = g_string_new("");
         GHashTableIter iter;
         GPtrArray *sorted;
         gpointer key = NULL;
         guint ii;
 
-        fprintf(stderr,
-                "Error: The following %u symbols are not covered by the libical-glib API files: ",
-                g_hash_table_size(symbols));
+        g_string_append_printf(msg, "Error: The following %u symbols are not covered by the libical-glib API files: ",
+                               g_hash_table_size(symbols));
 
         sorted = g_ptr_array_sized_new(g_hash_table_size(symbols));
         g_hash_table_iter_init(&iter, symbols);
@@ -2677,13 +2673,14 @@ check_api_files(const gchar *apis_dir,
         for (ii = 0; ii < sorted->len; ii++) {
             const gchar *symbol = g_ptr_array_index(sorted, ii);
             if (ii > 0) {
-                fprintf(stderr, " ");
+                g_string_append_c(msg, ' ');
             }
-            fprintf(stderr, "%s", symbol);
+            g_string_append(msg, symbol);
         }
-        fprintf(stderr, "\n");
-        fprintf(stderr,
-                "Hint: Either add the definitions for them or declare them as <skip>symbol</skip> under <structure/>\n");
+        g_string_append_c(msg, '\n');
+        g_string_append(msg, "Hint: Either add the definitions for them or declare them as <skip>symbol</skip> under <structure/>");
+        g_warning("%s", msg->str);
+        g_string_free(msg, TRUE);
         g_ptr_array_unref(sorted);
     }
 
@@ -2698,9 +2695,8 @@ int main(int argc, char *argv[])
     g_set_prgname("ical-glib-src-generator");
 
     if (argc < 3) {
-        fprintf(stderr,
-                "Requires two arguments, the first is path to templates, "
-                "the second is a path to XML files with an API description\n");
+        g_warning("Requires two arguments, the first is path to templates, "
+                  "the second is a path to XML files with an API description");
         return 1;
     }
 
@@ -2714,11 +2710,11 @@ int main(int argc, char *argv[])
         int ii;
 
         if (strcmp(argv[3], "--check-api-files") != 0) {
-            fprintf(stderr, "Unknown argument '%s', expects '--check-api-files'\n", argv[3]);
+            g_warning("Unknown argument '%s', expects '--check-api-files'", argv[3]);
             return 2;
         }
         if (((argc - 4) & 1) != 0) {
-            fprintf(stderr, "Expects pair of arguments, path to a header file and export token\n");
+            g_warning("Expects pair of arguments, path to a header file and export token");
             return 3;
         }
 
@@ -2727,8 +2723,8 @@ int main(int argc, char *argv[])
         for (ii = 4; ii < argc; ii += 2) {
             GError *error = NULL;
             if (!parse_header_file(symbols, argv[ii], argv[ii + 1], &error)) {
-                fprintf(stderr, "Failed to parse header file '%s': %s\n",
-                        argv[ii], error ? error->message : "Unknown error");
+                g_warning("Failed to parse header file '%s': %s",
+                          argv[ii], error ? error->message : "Unknown error");
                 g_hash_table_unref(symbols);
                 g_clear_error(&error);
                 return 4;
