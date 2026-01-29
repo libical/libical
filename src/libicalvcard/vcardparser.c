@@ -421,7 +421,9 @@ static int _parse_param_value(struct vcardparser_state *state)
                                             structured != NULL,
                                             multivalued)) == PE_QSTRING_EOV) {
                 if (structured) {
-                    vcardstrarray_append(field, buf_cstring(&state->buf));
+                    if (buf_len(&state->buf) || *state->p == ',' || vcardstrarray_size(field)) {
+                        vcardstrarray_append(field, buf_cstring(&state->buf));
+                    }
 
                     if (*state->p == ';') {
                         field = vcardstrarray_new(2);
@@ -444,7 +446,9 @@ static int _parse_param_value(struct vcardparser_state *state)
         case ';':
             /* done - end of parameter */
             if (structured) {
-                vcardstrarray_append(field, buf_cstring(&state->buf));
+                if (buf_len(&state->buf) || vcardstrarray_size(field)) {
+                    vcardstrarray_append(field, buf_cstring(&state->buf));
+                }
             } else if (multivalued) {
                 vcardparameter_add_value_from_string(state->param,
                                                      buf_cstring(&state->buf));
@@ -757,9 +761,13 @@ static int _parse_prop_value(struct vcardparser_state *state)
                 char *dequot_str =
                     vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
-                /* repair critical property values */
                 if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0') {
+                    /* repair critical property values */
                     vcardstrarray_append(textlist, "0.0");
+                } else if (is_structured) {
+                    if (dequot_str[0] || *state->p == ',' || vcardstrarray_size(textlist)) {
+                        vcardstrarray_append(textlist, dequot_str);
+                    }
                 } else {
                     vcardstrarray_append(textlist, dequot_str);
                 }
@@ -793,9 +801,13 @@ out:
         char *dequot_str =
             vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
-        /* repair critical property values */
         if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0') {
+            /* repair critical property values */
             vcardstrarray_append(textlist, "0.0");
+        } else if (is_structured) {
+            if (dequot_str[0] || *state->p == ',' || vcardstrarray_size(textlist)) {
+                vcardstrarray_append(textlist, dequot_str);
+            }
         } else {
             vcardstrarray_append(textlist, dequot_str);
         }
