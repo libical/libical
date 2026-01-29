@@ -51,7 +51,7 @@ static void test_prop_structured(void)
     static const char *input =
         "BEGIN:VCARD\r\n"
         "VERSION:3.0\r\n"
-        "N:y,\\,\\\\;\\;,\\n\\N\r\n"
+        "N:y,\\,\\\\;\\;,\\n\\N;;,\r\n"
         "END:VCARD\r\n";
 
     vcardcomponent *card = vcardparser_parse_string(input);
@@ -59,14 +59,19 @@ static void test_prop_structured(void)
     vcardproperty *prop =
         vcardcomponent_get_first_property(card, VCARD_N_PROPERTY);
     vcardstructuredtype *n = vcardproperty_get_n(prop);
-    assert(2 == n->num_fields);
+    assert(4 == n->num_fields);
     assert(2 == n->field[0]->num_elements);
     assert_str_equals("y", vcardstrarray_element_at(n->field[0], 0));
     assert_str_equals(",\\", vcardstrarray_element_at(n->field[0], 1));
     assert(2 == n->field[1]->num_elements);
     assert_str_equals(";", vcardstrarray_element_at(n->field[1], 0));
     assert_str_equals("\n\n", vcardstrarray_element_at(n->field[1], 1));
-    assert_str_equals("N:y,\\,\\\\;\\;,\\n\\n\r\n",
+    assert(0 == n->field[2]->num_elements);
+    assert(2 == n->field[3]->num_elements);
+    assert_str_equals("", vcardstrarray_element_at(n->field[3], 0));
+    assert_str_equals("", vcardstrarray_element_at(n->field[3], 1));
+
+    assert_str_equals("N:y,\\,\\\\;\\;,\\n\\n;;,\r\n",
                       vcardproperty_as_vcard_string(prop));
 
     vcardcomponent_free(card);
@@ -314,8 +319,8 @@ static void test_value_structured_from_string(void)
     stt = vcardstructured_from_string("foo;bar");
     assert(stt->num_fields == 2);
     assert(vcardstrarray_size(stt->field[0]) == 1);
-    assert(vcardstrarray_size(stt->field[1]) == 1);
     assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
+    assert(vcardstrarray_size(stt->field[1]) == 1);
     assert_str_equals("bar", vcardstrarray_element_at(stt->field[1], 0));
     vcardstructured_free(stt);
 
@@ -323,27 +328,45 @@ static void test_value_structured_from_string(void)
     stt = vcardstructured_from_string("foo;");
     assert(stt->num_fields == 2);
     assert(vcardstrarray_size(stt->field[0]) == 1);
-    assert(vcardstrarray_size(stt->field[1]) == 1);
     assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
-    assert_str_equals("", vcardstrarray_element_at(stt->field[1], 0));
+    assert(vcardstrarray_size(stt->field[1]) == 0);
     vcardstructured_free(stt);
 
     // Parse structured value having only second field set.
     stt = vcardstructured_from_string(";foo");
     assert(stt->num_fields == 2);
-    assert(vcardstrarray_size(stt->field[0]) == 1);
+    assert(vcardstrarray_size(stt->field[0]) == 0);
     assert(vcardstrarray_size(stt->field[1]) == 1);
-    assert_str_equals("", vcardstrarray_element_at(stt->field[0], 0));
     assert_str_equals("foo", vcardstrarray_element_at(stt->field[1], 0));
     vcardstructured_free(stt);
 
     // Parse structured value having no field set.
     stt = vcardstructured_from_string(";");
     assert(stt->num_fields == 2);
-    assert(vcardstrarray_size(stt->field[0]) == 1);
-    assert(vcardstrarray_size(stt->field[1]) == 1);
+    assert(vcardstrarray_size(stt->field[0]) == 0);
+    assert(vcardstrarray_size(stt->field[1]) == 0);
+    vcardstructured_free(stt);
+
+    // Parse structured value having just empty values.
+    stt = vcardstructured_from_string(",;,");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 2);
     assert_str_equals("", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("", vcardstrarray_element_at(stt->field[0], 1));
+    assert(vcardstrarray_size(stt->field[1]) == 2);
     assert_str_equals("", vcardstrarray_element_at(stt->field[1], 0));
+    assert_str_equals("", vcardstrarray_element_at(stt->field[1], 1));
+    vcardstructured_free(stt);
+
+    // Parse structured value having non-empty and empty values.
+    stt = vcardstructured_from_string(",foo;bar,");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 2);
+    assert_str_equals("", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 1));
+    assert(vcardstrarray_size(stt->field[1]) == 2);
+    assert_str_equals("bar", vcardstrarray_element_at(stt->field[1], 0));
+    assert_str_equals("", vcardstrarray_element_at(stt->field[1], 1));
     vcardstructured_free(stt);
 }
 

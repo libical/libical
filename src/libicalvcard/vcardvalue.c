@@ -649,6 +649,11 @@ static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *b
                                              vcardstrarray *array, const char sep,
                                              bool is_param)
 {
+    if (!vcardstrarray_size(array)) {
+        (void)vcardmemory_strdup_and_quote(str, str_p, buf_sz, "", is_param);
+        return;
+    }
+
     size_t i;
 
     for (i = 0; i < vcardstrarray_size(array); i++) {

@@ -58,8 +58,10 @@ vcardstructuredtype *vcardstructured_from_string(const char *s)
         case ',':
         case ';':
             /* end of value */
-            icalmemory_append_char(&buf, &pos, &alloc, '\0');
-            vcardstrarray_append(field, buf);
+            if (len || *s == ',' || vcardstrarray_size(field)) {
+                icalmemory_append_char(&buf, &pos, &alloc, '\0');
+                vcardstrarray_append(field, buf);
+            }
             len = 0;
 
             if (*s == ';') {
@@ -78,8 +80,10 @@ vcardstructuredtype *vcardstructured_from_string(const char *s)
 
     /* end of value */
     pos = buf + len;
-    icalmemory_append_char(&buf, &pos, &alloc, '\0');
-    vcardstrarray_append(field, buf);
+    if (len || vcardstrarray_size(field)) {
+        icalmemory_append_char(&buf, &pos, &alloc, '\0');
+        vcardstrarray_append(field, buf);
+    }
 
     icalmemory_free_buffer(buf);
 
