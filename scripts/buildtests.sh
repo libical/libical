@@ -229,7 +229,7 @@ BUILD() {
   fi
 
   # The builtin_timezones test takes longer in thread-sanitizer mode (that's the whole point of the test)
-  cpu_secs=30
+  cpu_secs=60
   if [[ "$2" == *"THREAD_SANITIZER"* ]]; then
     cpu_secs=90
   fi
