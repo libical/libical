@@ -136,6 +136,8 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
 
 The following functions have been added:
 
+* `icallimit_set()`
+* `icallimit_get()`
 * `icalarray_set_element_at()`
 * `icalrecurrencetype_new()`
 * `icalrecurrencetype_ref()`

@@ -27,6 +27,7 @@ for details about API changes since libical 3.x.
 - Allow previous recurrence iteration
 - icalparser_ctrl setting defines how to handle invalid CONTROL characters during parsing
 - Full support for `BYSETPOS`, i.e. remove the limitation to MONTHLY and YEARLY frequencies
+- An API for setting/getting internal library limits (`icallimit_set` and `icallimit_get`)
 
 ### Changed
 
