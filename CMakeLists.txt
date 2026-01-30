@@ -973,6 +973,7 @@ libical_option(LIBICAL_BUILD_TESTING "Build tests." False)
 if(LIBICAL_DEVMODE)
   set(LIBICAL_BUILD_TESTING True)
 endif()
+libical_option(LIBICAL_BUILD_TESTING_BIGFUZZ "Build fuzzer tests" False)
 libical_option(LIBICAL_BUILD_EXAMPLES "Build examples." True)
 
 ########### Configure pkg-config variables #########
