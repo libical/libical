@@ -502,7 +502,14 @@ void vcardvalue_free(vcardvalue *v)
         break;
     }
 
-    case VCARD_TEXTLIST_VALUE:
+    case VCARD_TEXTLIST_VALUE: {
+        if (v->data.v_textlist != 0) {
+            vcardstrarray_free(v->data.v_textlist);
+        }
+        v->data.v_textlist = 0;
+        break;
+    }
+
     case VCARD_STRUCTURED_VALUE: {
         int i;
         for (i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
@@ -712,7 +719,7 @@ static char *vcardvalue_textlist_as_vcard_string_r(const vcardvalue *value,
 {
     icalerror_check_arg_rz((value != 0), "value");
 
-    return vcardstrarray_as_vcard_string_r(value->data.v_structured.field[0], sep);
+    return vcardstrarray_as_vcard_string_r(value->data.v_textlist, sep);
 }
 
 static char *vcardvalue_structured_as_vcard_string_r(const vcardvalue *value)
