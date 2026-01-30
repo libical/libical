@@ -33,7 +33,7 @@ vcardstructuredtype *vcardstructured_new(void)
     return s;
 }
 
-vcardstructuredtype *vcardstructured_from_string(const char *s)
+vcardstructuredtype *vcardstructured_new_from_string(const char *s)
 {
     vcardstructuredtype *st = vcardstructured_new();
     ptrdiff_t len = 0;

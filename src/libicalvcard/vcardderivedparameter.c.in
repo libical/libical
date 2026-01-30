@@ -220,7 +220,7 @@ void vcardparameter_set_value_from_string(vcardparameter *param,
 
     } else if (param->value_kind == VCARD_STRUCTURED_VALUE) {
         ((struct vcardparameter_impl *)param)->structured =
-            vcardstructured_from_string(val);
+            vcardstructured_new_from_string(val);
 
     } else {
         /* Search through the parameter map to find a matching kind */
