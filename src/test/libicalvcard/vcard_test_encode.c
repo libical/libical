@@ -316,7 +316,7 @@ static void test_value_structured_from_string(void)
     vcardstructuredtype *stt;
 
     // Parse structured value having both fields set.
-    stt = vcardstructured_from_string("foo;bar");
+    stt = vcardstructured_new_from_string("foo;bar");
     assert(stt->num_fields == 2);
     assert(vcardstrarray_size(stt->field[0]) == 1);
     assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
@@ -325,7 +325,7 @@ static void test_value_structured_from_string(void)
     vcardstructured_free(stt);
 
     // Parse structured value having only first field set.
-    stt = vcardstructured_from_string("foo;");
+    stt = vcardstructured_new_from_string("foo;");
     assert(stt->num_fields == 2);
     assert(vcardstrarray_size(stt->field[0]) == 1);
     assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
@@ -333,7 +333,7 @@ static void test_value_structured_from_string(void)
     vcardstructured_free(stt);
 
     // Parse structured value having only second field set.
-    stt = vcardstructured_from_string(";foo");
+    stt = vcardstructured_new_from_string(";foo");
     assert(stt->num_fields == 2);
     assert(vcardstrarray_size(stt->field[0]) == 0);
     assert(vcardstrarray_size(stt->field[1]) == 1);
@@ -341,14 +341,14 @@ static void test_value_structured_from_string(void)
     vcardstructured_free(stt);
 
     // Parse structured value having no field set.
-    stt = vcardstructured_from_string(";");
+    stt = vcardstructured_new_from_string(";");
     assert(stt->num_fields == 2);
     assert(vcardstrarray_size(stt->field[0]) == 0);
     assert(vcardstrarray_size(stt->field[1]) == 0);
     vcardstructured_free(stt);
 
     // Parse structured value having just empty values.
-    stt = vcardstructured_from_string(",;,");
+    stt = vcardstructured_new_from_string(",;,");
     assert(stt->num_fields == 2);
     assert(vcardstrarray_size(stt->field[0]) == 2);
     assert_str_equals("", vcardstrarray_element_at(stt->field[0], 0));
@@ -359,7 +359,7 @@ static void test_value_structured_from_string(void)
     vcardstructured_free(stt);
 
     // Parse structured value having non-empty and empty values.
-    stt = vcardstructured_from_string(",foo;bar,");
+    stt = vcardstructured_new_from_string(",foo;bar,");
     assert(stt->num_fields == 2);
     assert(vcardstrarray_size(stt->field[0]) == 2);
     assert_str_equals("", vcardstrarray_element_at(stt->field[0], 0));
@@ -391,7 +391,7 @@ static void test_value_structured_from_string_escaped(void)
 {
     vcardstructuredtype *stt;
 
-    stt = vcardstructured_from_string("foo\\,bar,baz\\;bam;tux\\;,qux\\,");
+    stt = vcardstructured_new_from_string("foo\\,bar,baz\\;bam;tux\\;,qux\\,");
     assert(stt->num_fields == 2);
     assert(vcardstrarray_size(stt->field[0]) == 2);
     assert(vcardstrarray_size(stt->field[1]) == 2);
@@ -401,7 +401,7 @@ static void test_value_structured_from_string_escaped(void)
     assert_str_equals("qux,", vcardstrarray_element_at(stt->field[1], 1));
     vcardstructured_free(stt);
 
-    stt = vcardstructured_from_string("foo,bar\\");
+    stt = vcardstructured_new_from_string("foo,bar\\");
     assert(stt->num_fields == 1);
     assert(vcardstrarray_size(stt->field[0]) == 2);
     assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
