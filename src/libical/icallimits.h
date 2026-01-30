@@ -42,7 +42,7 @@ typedef enum icallimits_kind
  *
  * @param kind is the icallimits_kind of limit to get.
  *
- * @returns The current value of the specified @kind"
+ * @returns The current value of the specified @p kind"
  */
 LIBICAL_ICAL_EXPORT size_t icallimit_get(icallimits_kind kind);
 
