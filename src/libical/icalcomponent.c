@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+ * @file icalcomponent.c
+ * @brief Implements the data structure for iCalendar components
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -1261,6 +1266,7 @@ void icalcomponent_convert_errors(icalcomponent *component)
     }
 }
 
+/// @cond PRIVATE
 icalcomponent *icalcomponent_get_parent(const icalcomponent *component)
 {
     return component->parent;
@@ -1270,6 +1276,7 @@ void icalcomponent_set_parent(icalcomponent *component, icalcomponent *parent)
 {
     component->parent = parent;
 }
+/// @endcond
 
 static const icalcompiter icalcompiter_null = {ICAL_NO_COMPONENT, 0};
 
@@ -1574,6 +1581,7 @@ icalproperty_method icalcomponent_get_method(icalcomponent *comp)
     return icalproperty_get_method(prop);
 }
 
+/// @cond PRIVATE
 #define ICALSETUPSET(p_kind)                           \
     icalcomponent *inner;                              \
     icalproperty *prop;                                \
@@ -1584,6 +1592,7 @@ icalproperty_method icalcomponent_get_method(icalcomponent *comp)
         return;                                        \
     }                                                  \
     prop = icalcomponent_get_first_property(inner, p_kind);
+/// @endcond
 
 void icalcomponent_set_dtstart(icalcomponent *comp, struct icaltimetype v)
 {
@@ -2616,13 +2625,6 @@ static int icalcomponent_compare_vtimezones(icalcomponent *vtimezone1, icalcompo
     return (cmp == 0) ? 1 : 0;
 }
 
-/**
- * @brief Sets the RELCALID property of a component.
- *
- * @param comp    Valid calendar component.
- * @param v       Relcalid URL value
- */
-
 void icalcomponent_set_relcalid(icalcomponent *comp, const char *v)
 {
     ICALSETUPSET(ICAL_RELCALID_PROPERTY);
@@ -2634,12 +2636,6 @@ void icalcomponent_set_relcalid(icalcomponent *comp, const char *v)
 
     icalproperty_set_relcalid(prop, v);
 }
-
-/**
- * @brief Gets the RELCALID property of a component.
- *
- * @param comp    Valid calendar component.
- */
 
 const char *icalcomponent_get_relcalid(icalcomponent *comp)
 {

@@ -11,9 +11,12 @@
 #include "libical_icalss_export.h"
 #include "icalset.h"
 
-/** @file icalspanlist.h
- *  @brief Code that supports collections of free/busy spans of time
+/**
+ * @file icalspanlist.h
+ * @brief Code that supports collections of free/busy spans of time
  */
+
+/// @cond PRIVATE
 struct icalpvl_list_t;
 struct icalspanlist_impl {
     struct icalpvl_list_t *spans; /**< list of icaltime_span data **/
@@ -21,69 +24,78 @@ struct icalspanlist_impl {
     struct icaltimetype end;      /**< end time of span **/
 };
 typedef struct icalspanlist_impl icalspanlist;
+/// @endcond
 
-/** @brief Makes a free list from a set of VEVENT components.
+/**
+ * Makes a free list from a set of VEVENT components.
  *
- *  @param set    A valid icalset containing VEVENTS
- *  @param start  The free list starts at this date/time
- *  @param end    The free list ends at this date/time
+ *  @param set a pointer to valid icalset containing VEVENTS
+ *  @param start  the free list starts at this date/time
+ *  @param end the free list ends at this date/time
  *
- *  @return        A spanlist corresponding to the VEVENTS
+ *  @return a spanlist corresponding to the VEVENTS
  *
  * Given a set of components, a start time and an end time
  * return a spanlist that contains the free/busy times.
- * @p Start and @p end should be in UTC.
+ * @p start and @p end should be in UTC.
  */
 LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_new(icalset *set,
                                                      struct icaltimetype start,
                                                      struct icaltimetype end);
 
-/** @brief Destructor.
- *  @param sl A valid icalspanlist
+/**
+ * Destructor.
+ *
+ * @param sl A valid icalspanlist
  *
  *  Frees the memory associated with the spanlist.
  */
 LIBICAL_ICALSS_EXPORT void icalspanlist_free(icalspanlist *sl);
 
-/** @brief Finds the next free time span in a spanlist.
+/**
+ * Finds the next free time span in a spanlist.
  *
- *  @param  sl     The spanlist to search.
- *  @param  t      The time to start looking.
+ * @param  sl a pointer to a valid icalspanlist to search
+ * @param  t the time to start looking.
  *
- *  Given a spanlist and a time, finds the next period of time
- *  that is free.
+ * Given a spanlist and a time, finds the next period of free time.
+ *
+ * @return an icalperiodtype representing the free type period; if no free time is
+ * available then an invalid icalperiodtype is returned.
  */
 LIBICAL_ICALSS_EXPORT struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl,
                                                                         struct icaltimetype t);
 
-/** @brief (Debug) print out spanlist to STDOUT.
- *  @param sl A valid icalspanlist.
+/**
+ * (Debug) print out spanlist to STDOUT.
+ *
+ *  @param sl a pointer to a valid icalspanlist.
  */
 LIBICAL_ICALSS_EXPORT void icalspanlist_dump(icalspanlist *sl);
 
-/** @brief Returns a VFREEBUSY component for a spanlist.
+/**
+ * Returns a VFREEBUSY component for a spanlist.
  *
- *   @param sl         A valid icalspanlist, from icalspanlist_new()
- *   @param organizer  The organizer specified as "MAILTO:user@domain"
- *   @param attendee   The attendee specified as "MAILTO:user@domain"
+ * @param sl a pointer to a valid icalspanlist, from icalspanlist_new()
+ * @param organizer  the organizer specified as "MAILTO:user@domain"
+ * @param attendee the attendee specified as "MAILTO:user@domain"
  *
- *   @return            A valid icalcomponent or NULL.
+ * @return a pointer to an icalcomponent, NULL if the conversion failed.
  *
  * This function returns a VFREEBUSY component for the given spanlist.
  * The start time is mapped to DTSTART, the end time to DTEND.
  * Each busy span is represented as a separate FREEBUSY entry.
- * An attendee parameter is required, and organizer parameter is
- * optional.
+ * An attendee parameter is required, and organizer parameter is optional.
  */
 LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
                                                                const char *organizer,
                                                                const char *attendee);
 
-/** @brief Returns an hour-by-hour array of free/busy times over a
- *         given period.
+/**
+ * Returns an hour-by-hour array of free/busy times over a given period.
  *
- *  @param spanlist A valid icalspanlist
- *  @param delta_t  The time slice to divide by, in seconds.  Default 3600.
+ *  @param spanlist a pointer to a valid icalspanlist
+ *  @param delta_t  the time slice to divide by, in seconds.  Default 3600.
  *
  *  @return A pointer to an array of integers containing the number of
  *       busy events in each delta_t time period.  The final entry
@@ -100,14 +112,12 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
  */
 LIBICAL_ICALSS_EXPORT int *icalspanlist_as_freebusy_matrix(icalspanlist *spanlist, int delta_t);
 
-/** @brief Constructs an icalspanlist from a VFREEBUSY component */
-/** @brief Constructs an icalspanlist from the VFREEBUSY component of
- *         an icalcomponent.
+/**
+ * Constructs an icalspanlist from the VFREEBUSY component of an icalcomponent.
  *
- *   @param   comp     A valid icalcomponent.
+ *   @param comp a pointer to a valid icalcomponent
  *
- *   @return           A valid icalspanlist or NULL if no VFREEBUSY section.
- *
+ *   @return a pointer to an icalspanlist or NULL if no VFREEBUSY section.
  */
 LIBICAL_ICALSS_EXPORT icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp);
 

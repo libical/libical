@@ -5,6 +5,12 @@
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
+
+/**
+ * @file icaltypes.c
+ * @brief Implements the functions to manipulate internal types
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -13,7 +19,9 @@
 #include "icalerror_p.h"
 #include "icalmemory.h"
 
+/// @cond PRIVATE
 #define TMP_BUF_SIZE 1024
+/// @endcond
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>

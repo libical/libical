@@ -5,6 +5,13 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+  @file icalbdbset.c
+
+  @brief Manages a Berkeley database of ical components and offers interfaces
+  for reading, writing and searching for components.
+*/
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

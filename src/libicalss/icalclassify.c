@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+ * @file icalclassify.c
+ * @brief Implements functions for classification.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

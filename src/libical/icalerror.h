@@ -168,15 +168,15 @@ LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
 LIBICAL_ICAL_EXPORT const char *icalerror_strerror(icalerrorenum e);
 
 /**
- * @brief Returns the description string for the current error in ::icalerrno
+ * Gets the description string for the current error in ::icalerrno
  *
  * @par Error handling
- * If the type of error @a e wasn't found, it returns the description
+ * If the type of error wasn't found, it returns the description
  * for ::ICAL_UNKNOWN_ERROR.
  *
  * @par Ownership
  * The string that is returned is owned by the library and must not
- * be free'd() by the user.
+ * be freed by the user.
  *
  * @par Usage
  * ```c
@@ -184,6 +184,8 @@ LIBICAL_ICAL_EXPORT const char *icalerror_strerror(icalerrorenum e);
  *     printf("%s\n", icalerror_perror());
  * }
  * ```
+ *
+ * @return a pointer to a char string containing the description of the current icalerror.
  */
 LIBICAL_ICAL_EXPORT const char *icalerror_perror(void);
 

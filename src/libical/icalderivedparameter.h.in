@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: icalparam.h
+ FILE: icalderivedparameter.h
  CREATOR: eric 20 March 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
@@ -7,6 +7,11 @@
 ======================================================================*/
 #ifndef ICALDERIVEDPARAMETER_H
 #define ICALDERIVEDPARAMETER_H
+
+/**
+ * @file icalderivedparameter.h
+ * @brief ICalendar parameters.
+ */
 
 #include "libical_ical_export.h"
 #include "icalduration.h"

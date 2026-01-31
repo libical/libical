@@ -9,6 +9,11 @@
  Code is Eric Busboom
 ======================================================================*/
 
+/**
+ * @file icalperiod.c
+ * @brief Implements data structures for working with iCal periods (of time).
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

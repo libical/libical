@@ -5,6 +5,13 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+  @file icalbdbset.h
+
+  @brief Manages a Berkeley database of ical components and offers interfaces
+  for reading, writing and searching for components.
+*/
+
 #ifndef ICALBDBSET_H
 #define ICALBDBSET_H
 
@@ -157,6 +164,7 @@ LIBICAL_ICALSS_EXPORT DB *icalbdbset_bdb_open(const char *path,
                                               const char *subdb,
                                               int type, int mode, u_int32_t flag);
 
+/// @cond PRIVATE
 typedef struct icalbdbset_options {
     icalbdbset_subdb_type subdb; /**< the subdatabase to open */
     int dbtype;                  /**< db_open type: DB_HASH | DB_BTREE */
@@ -168,5 +176,6 @@ typedef struct icalbdbset_options {
                     /**< callback for secondary db open */
                     const DBT *dbt1, const DBT *dbt2, DBT *dbt3);
 } icalbdbset_options;
+/// @endcond
 
 #endif /* !ICALBDBSET_H */

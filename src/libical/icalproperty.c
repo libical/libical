@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+ * @file icalproperty.c
+ * @brief Implements the data structure representing iCalendar properties.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -32,6 +37,7 @@ struct icalproperty_impl {
     icalcomponent *parent;
 };
 
+/// @cond PRIVATE
 LIBICAL_ICAL_EXPORT struct icalproperty_impl *icalproperty_new_impl(icalproperty_kind kind)
 {
     icalproperty *prop;
@@ -54,6 +60,7 @@ LIBICAL_ICAL_EXPORT struct icalproperty_impl *icalproperty_new_impl(icalproperty
 
     return prop;
 }
+/// @endcond
 
 static ICAL_GLOBAL_VAR bool icalprop_allow_empty_properties = false;
 
@@ -1062,16 +1069,6 @@ void icalproperty_normalize(icalproperty *prop)
     prop->parameters = sorted_params;
 }
 
-/**     @brief Gets a DATE or DATE-TIME property as an icaltime
- *
- *      If the property is a DATE-TIME with a TZID parameter and a
- *      corresponding VTIMEZONE is present in the component, the
- *      returned component will already be in the correct timezone;
- *      otherwise the caller is responsible for converting it.
- *
- *      The @a comp can be NULL, in which case the parent of the @a prop
- *      is used to find the corresponding time zone.
- */
 struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop,
                                                              icalcomponent *comp)
 {
@@ -1118,6 +1115,7 @@ struct icaltimetype icalproperty_get_datetime_with_component(icalproperty *prop,
 
 static const icalparamiter icalparamiter_null = {ICAL_NO_PARAMETER, 0};
 
+/// @cond PRIVATE
 icalparamiter icalproperty_begin_parameter(icalproperty *property, icalparameter_kind kind)
 {
     icalerror_check_arg_re(property != 0, "property", icalparamiter_null);
@@ -1163,3 +1161,4 @@ icalparameter *icalparamiter_deref(icalparamiter *i)
 
     return icalpvl_data(i->iter);
 }
+/// @endcond

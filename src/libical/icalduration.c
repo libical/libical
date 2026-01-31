@@ -9,6 +9,11 @@
  Code is Eric Busboom
 ======================================================================*/
 
+/**
+ * @file icalduration.c
+ * @brief Implements the data structure for time durations
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

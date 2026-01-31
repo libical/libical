@@ -26,7 +26,15 @@
 #include <time.h>
 
 #define icaltime_t ${ICAL_ICALTIME_T_TYPE}
+/// @cond PRIVATE
+// clang-format off
+#define icaltime_t ${ICAL_ICALTIME_T_TYPE}
+// clang-format on
+/// @endcond
 
+/**
+ * Structure to represent a time span, with option "busy" indicator.
+ */
 struct icaltime_span
 {
     icaltime_t start;       /**< in UTC */

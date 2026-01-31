@@ -21,7 +21,7 @@ Thanks to our [contributors](CONTRIBUTORS.md).
 
 ## RFCs
 
-See [RFC calendar standards](docs/rfcs.md) for list of RFCs supported by this library.
+See [RFC calendar standards](rfcs.md) for list of RFCs supported by this library.
 
 ## License
 
@@ -54,12 +54,12 @@ overview of changes since the previous version.
 See the [C API documentation](https://libical.github.io/libical/v4/apidocs/) and
 [glibc API documentation](https://libical.github.io/libical/v4/libical-glib/).
 
-For a conceptual overview of the library, see [Using Libical](docs/UsingLibical.md).
+For a conceptual overview of the library, see [Using Libical](UsingLibical.md).
 There is other rudimentary, unfinished documentation in the `docs/` directory of the
 source distribution, annotated examples in `examples/` and the test code in `src/test/`.
 
 For developers porting their code to libical version 4, please visit the
-[Version 4 Migration Guide](docs/MigrationGuide_to_4.md).
+[Version 4 Migration Guide](MigrationGuide_to_4.md).
 
 ## Acknowledgments
 

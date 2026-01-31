@@ -6,6 +6,15 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+ * @file icalcalendar.c
+ * @brief Routines for storing calendar data in a file system.
+ *
+ * The calendar has two icaldirsets, one for incoming components and one for
+ * booked components. It also has interfaces to access the free/busy list and a
+ * list of calendar properties
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

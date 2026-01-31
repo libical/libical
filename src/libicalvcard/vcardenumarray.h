@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardenumarray.h
+ * @brief Namespace the icalenumarray functions for vcard.
+ */
+
 #ifndef VCARDENUMARRAY_H
 #define VCARDENUMARRAY_H
 

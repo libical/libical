@@ -1,11 +1,13 @@
+/*
+ * SPDX-FileCopyrightText: 2001, Critical Path
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+*/
+
 /**
  * @file    vcomponent_cxx.cpp
  * @author  fnguyen (12/10/01)
  * @brief   Implementation of C++ Wrapper for icalcomponent.c
- *
- * SPDX-FileCopyrightText: 2001, Critical Path
- * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-*/
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

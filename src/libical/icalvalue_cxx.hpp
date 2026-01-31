@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+ * @file icalvalue_cxx.hpp
+ * @brief Definition of C++ Wrapper for icalvalue.c
+ */
+
 #ifndef ICALVALUE_CXX_H
 #define ICALVALUE_CXX_H
 

@@ -37,6 +37,11 @@
    POSSIBILITY OF SUCH DAMAGE.
 ======================================================================*/
 
+/**
+ * @file icaltime.c
+ * @brief Implements data structure for representing date-times.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

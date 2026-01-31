@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardtextlist.h
+ * @brief Defines functions for creating vCard text lists
+ */
+
 #ifndef VCARDTEXTLIST_H
 #define VCARDTEXTLIST_H
 

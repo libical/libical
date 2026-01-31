@@ -10,10 +10,10 @@
 ======================================================================*/
 
 /**
-   @file   icaldirset.h
+  @file icaldirset.h
 
-   @brief  icaldirset manages a database of ical components and offers
-  interfaces for reading, writing and searching for components.
+  @brief Manages a database of ical components and offers interfaces for
+  reading, writing and searching for components.
 
   icaldirset groups components in to clusters based on their DTSTAMP
   time -- all components that start in the same month are grouped
@@ -32,7 +32,6 @@
   not already have a UID. The UID is the name of the cluster (month &
   year as MMYYYY) plus a unique serial number. The serial number is
   stored as a property of the cluster.
-
 */
 
 #ifndef ICALDIRSET_H
@@ -65,11 +64,30 @@ LIBICAL_ICALSS_EXPORT void icaldirset_mark(icalset *set);
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_commit(icalset *set);
 
 /**
-  This assumes that the top level component is a VCALENDAR, and there
-   is an inner component of type VEVENT, VTODO or VJOURNAL. The inner
-  component must have a DSTAMP property
-*/
+ * Adds a component to the current cluster.
+ *
+ * This assumes that the top level component is a VCALENDAR, and there is an
+ * inner component of either VEVENT, VTODO or VJOURNAL. The inner component
+ * must have a DTSTAMP property.
+ *
+ * @param set is a pointer to a valid icalset
+ * @param comp is a pointer to the icalcomponent to add
+ *
+ * @return ::ICAL_NO_ERROR it @p comp was successfully added; if not, an error occurred.
+ */
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp);
+
+/**
+ * Remove a component in the current cluster. HACK. This routine is a
+ * "friend" of icalfileset, and breaks its encapsulation. It was
+ * either do it this way, or add several layers of interfaces that had
+ * no other use.
+ *
+ * @param set is a pointer to a valid icalset
+ * @param comp is a pointer to the icalcomponent to remove
+ *
+ * @return ::ICAL_NO_ERROR it @p comp was successfully removed; if not, an error occurred.
+ */
 LIBICAL_ICALSS_EXPORT icalerrorenum icaldirset_remove_component(icalset *set,
                                                                 icalcomponent *comp);
 
