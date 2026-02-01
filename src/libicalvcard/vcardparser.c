@@ -630,10 +630,10 @@ static int _parse_prop_name(struct vcardparser_state *state)
                 break;
 
             case VCARD_X_PROPERTY:
-              state->value_kind =
-                  xprop_value_kind_func ? xprop_value_kind_func(name, xprop_value_kind_data)
-                                    : VCARD_X_VALUE;
-              break;
+                state->value_kind =
+                    xprop_value_kind_func ? xprop_value_kind_func(name, xprop_value_kind_data)
+                                          : VCARD_X_VALUE;
+                break;
 
             default:
                 state->value_kind = vcardproperty_kind_to_value_kind(kind);

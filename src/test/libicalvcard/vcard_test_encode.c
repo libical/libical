@@ -164,7 +164,7 @@ static void test_prop_x(void)
 static vcardvalue_kind my_xprop_value_kind_func(const char *name, void *data)
 {
     (void)(data); // make CI happy, reporting unused parameter otherwise
-    assert(data == (void*) 0x1234);
+    assert(data == (void *)0x1234);
     return !strcasecmp(name, "X-PROP-A") ? VCARD_TEXT_VALUE : VCARD_X_VALUE;
 }
 
@@ -196,7 +196,7 @@ static void test_prop_x_value_kind(void)
     vcardcomponent_free(card);
 
     /* Parse X-PROP-A property as TEXT value, others as X value */
-    vcardparser_set_xprop_value_kind(my_xprop_value_kind_func, (void*) 0x1234);
+    vcardparser_set_xprop_value_kind(my_xprop_value_kind_func, (void *)0x1234);
 
     card = vcardparser_parse_string(input);
     prop = vcardcomponent_get_first_property(card, VCARD_X_PROPERTY);
@@ -372,7 +372,7 @@ static void test_value_structured_from_string(void)
 
 static void test_value_structured_escaped(void)
 {
-    vcardstructuredtype stt = { 0 };
+    vcardstructuredtype stt = {0};
 
     stt.field[0] = vcardstrarray_new(1);
     vcardstrarray_add(stt.field[0], "foo,bar");
