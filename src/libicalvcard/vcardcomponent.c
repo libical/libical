@@ -854,7 +854,8 @@ static void comp_to_v4(vcardcomponent *impl)
                              geo.coords.lat, geo.coords.lon);
 
                     geo.uri = buf;
-                    geo.coords.lat = geo.coords.lon = NULL;
+                    geo.coords.lat[0] = '\0';
+                    geo.coords.lon[0] = '\0';
                     vcardvalue_set_geo(value, geo);
                     icalmemory_free_buffer(buf);
                 }
@@ -1122,17 +1123,21 @@ static void comp_to_v3(vcardcomponent *impl)
 
                 if (geo.uri && !strncmp(geo.uri, "geo:", 4)) {
                     /* Convert geo: URI to STRUCTURED value kind */
-                    char *lon;
-
                     char *buf = icalmemory_strdup(geo.uri);
                     geo.uri = NULL;
-                    geo.coords.lat = buf + 4;
-                    lon = strchr(buf + 4, ',');
+                    char *lat = buf + 4;
+                    char *lon = strchr(buf + 4, ',');
                     if (lon) {
                         *lon++ = '\0';
-                        geo.coords.lon = lon;
+                    }
+                    if (lat && lon) {
+                        strncpy(geo.coords.lat, lat, VCARD_GEO_LEN);
+                        geo.coords.lat[VCARD_GEO_LEN-1] = '\0';
+                        strncpy(geo.coords.lon, lon, VCARD_GEO_LEN);
+                        geo.coords.lon[VCARD_GEO_LEN-1] = '\0';
                     } else {
-                        geo.coords.lon = "";
+                        geo.coords.lat[0] = '\0';
+                        geo.coords.lon[0] = '\0';
                     }
 
                     vcardvalue_set_geo(value, geo);

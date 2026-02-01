@@ -35,8 +35,8 @@
     <custom>    vcardgeotype geo = { 0, };
     gchar *lat_copy = g_strdup(lat), *lon_copy = g_strdup(lon);
     ICalVcardGeo *obj;
-    geo.coords.lat = lat_copy;
-    geo.coords.lon = lon_copy;
+    g_strlcpy(geo.coords.lat, lat_copy, VCARD_GEO_LEN);
+    g_strlcpy(geo.coords.lon, lon_copy, VCARD_GEO_LEN);
     obj = i_cal_vcard_geo_new_full(geo);
     g_object_set_data_full(G_OBJECT(obj), GEO_KEY_COORD_LAT, lat_copy, g_free);
     g_object_set_data_full(G_OBJECT(obj), GEO_KEY_COORD_LON, lon_copy, g_free);
@@ -62,8 +62,8 @@
     } else {
         lat_copy = g_strdup(geo.coords.lat);
         lon_copy = g_strdup(geo.coords.lon);
-        geo.coords.lat = lat_copy;
-        geo.coords.lon = lon_copy;
+        g_strlcpy(geo.coords.lat, lat_copy, VCARD_GEO_LEN);
+        g_strlcpy(geo.coords.lon, lon_copy, VCARD_GEO_LEN);
     }
     obj = i_cal_vcard_geo_new_full(geo);
     g_object_set_data_full(G_OBJECT(obj), GEO_KEY_URI, uri_copy, g_free);
@@ -89,8 +89,8 @@
     geo = ((vcardgeotype *)i_cal_object_get_native((ICalObject *)self));
     uri_copy = g_strdup(uri);
     geo-&gt;uri = uri_copy;
-    geo-&gt;coords.lat = NULL;
-    geo-&gt;coords.lon = NULL;
+    memset(geo-&gt;coords.lat, 0, VCARD_GEO_LEN);
+    memset(geo-&gt;coords.lon, 0, VCARD_GEO_LEN);
     g_object_set_data_full(G_OBJECT(self), GEO_KEY_URI, uri_copy, g_free);
     g_object_set_data_full(G_OBJECT(self), GEO_KEY_COORD_LAT, NULL, NULL);
     g_object_set_data_full(G_OBJECT(self), GEO_KEY_COORD_LON, NULL, NULL);</custom>
@@ -139,8 +139,8 @@
     lat_copy = g_strdup(lat);
     lon_copy = g_strdup(lon);
     geo-&gt;uri = NULL;
-    geo-&gt;coords.lat = lat_copy;
-    geo-&gt;coords.lon = lon_copy;
+    g_strlcpy(geo-&gt;coords.lat, lat_copy, VCARD_GEO_LEN);
+    g_strlcpy(geo-&gt;coords.lon, lon_copy, VCARD_GEO_LEN);
     g_object_set_data_full(G_OBJECT(self), GEO_KEY_URI, NULL, NULL);
     g_object_set_data_full(G_OBJECT(self), GEO_KEY_COORD_LAT, lat_copy, g_free);
     g_object_set_data_full(G_OBJECT(self), GEO_KEY_COORD_LON, lon_copy, g_free);</custom>

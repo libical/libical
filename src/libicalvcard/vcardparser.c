@@ -611,7 +611,7 @@ static int _parse_prop_name(struct vcardparser_state *state)
             /* set default value kind */
             switch (kind) {
             case VCARD_GEO_PROPERTY:
-                state->value_kind = version == VCARD_VERSION_40 ? VCARD_URI_VALUE : VCARD_STRUCTURED_VALUE;
+                state->value_kind = version == VCARD_VERSION_40 ? VCARD_URI_VALUE : VCARD_GEO_VALUE;
                 break;
 
             case VCARD_KEY_PROPERTY:
@@ -761,10 +761,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
                 char *dequot_str =
                     vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
-                if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0') {
-                    /* repair critical property values */
-                    vcardstrarray_append(textlist, "0.0");
-                } else if (is_structured) {
+                if (is_structured) {
                     if (dequot_str[0] || *state->p == ',' || vcardstrarray_size(textlist)) {
                         vcardstrarray_append(textlist, dequot_str);
                     }
@@ -801,10 +798,7 @@ out:
         char *dequot_str =
             vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
-        if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0') {
-            /* repair critical property values */
-            vcardstrarray_append(textlist, "0.0");
-        } else if (is_structured) {
+        if (is_structured) {
             if (dequot_str[0] || *state->p == ',' || vcardstrarray_size(textlist)) {
                 vcardstrarray_append(textlist, dequot_str);
             }
@@ -816,13 +810,6 @@ out:
         icalmemory_free_buffer(dequot_str);
 
         if (is_structured) {
-            /* repair critical property values */
-            if (prop_kind == VCARD_GEO_PROPERTY && structured.num_fields == 1) {
-                textlist = vcardstrarray_new(1);
-                vcardstrarray_append(textlist, "0.0");
-                structured.field[structured.num_fields++] = textlist;
-            }
-
             value = vcardvalue_new_structured(&structured);
         } else {
             value = vcardvalue_new_textlist(textlist);

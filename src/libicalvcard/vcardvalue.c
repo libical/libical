@@ -272,6 +272,71 @@ static vcardvalue *vcardvalue_new_enum(vcardvalue_kind kind, int x_type, const c
     return value;
 }
 
+/**
+ * Extracts a simple floating point number as a substring.
+ * The decimal separator (if any) of the double has to be '.'
+ * The code is locale *independent* and does *not* change the locale.
+ * It should be thread safe.
+ */
+static bool simple_str_to_doublestr(const char *from, char *result, int result_len, char **to)
+{
+    const char *start = NULL;
+    char *end = NULL, *cur = (char *)from;
+
+    struct lconv *loc_data = localeconv();
+    int i = 0, len;
+    double dtest;
+
+    /*sanity checks */
+    if (!from || !result) {
+        return true;
+    }
+
+    /*skip the white spaces at the beginning */
+    while (*cur && isspace((int)*cur)) {
+        cur++;
+    }
+
+    start = cur;
+    /* copy the part that looks like a double into result.
+     * during the copy, we give ourselves a chance to convert the '.'
+     * into the decimal separator of the current locale.
+     */
+    while (*cur && (isdigit((int)*cur) || *cur == '.' || *cur == '+' || *cur == '-')) {
+        ++cur;
+    }
+    end = cur;
+    len = (int)(ptrdiff_t)(end - start);
+    if (len + 1 >= result_len) {
+        /* huh hoh, number is too big. truncate it */
+        len = result_len - 1;
+    }
+
+    /* copy the float number string into result, and take
+     * care to have the (optional) decimal separator be the one
+     * of the current locale.
+     */
+    for (i = 0; i < len; ++i) {
+        if (start[i] == '.' &&
+            loc_data && loc_data->decimal_point && loc_data->decimal_point[0] && loc_data->decimal_point[0] != '.') {
+            /*replace '.' by the digit separator of the current locale */
+            result[i] = loc_data->decimal_point[0];
+        } else {
+            result[i] = start[i];
+        }
+    }
+    if (to) {
+        *to = end;
+    }
+
+    /* now try to convert to a floating point number, to check for validity only */
+    if (sscanf(result, "%lf", &dtest) != 1) {
+        return true;
+    }
+    return false;
+}
+
+
 static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                                                          const char *str,
                                                          vcardproperty **error)
@@ -415,6 +480,50 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         break;
     }
 
+    case VCARD_GEO_VALUE: {
+        char *cur = NULL;
+        struct vcardgeotype geo = {0};
+        memset(geo.coords.lat, 0, VCARD_GEO_LEN);
+        memset(geo.coords.lon, 0, VCARD_GEO_LEN);
+
+        if (simple_str_to_doublestr(str, geo.coords.lat, VCARD_GEO_LEN, &cur)) {
+            goto geo_parsing_error;
+        }
+        /* skip white spaces */
+        while (cur && isspace((int)*cur)) {
+            ++cur;
+        }
+
+        /*there is a ';' between the latitude and longitude parts */
+        if (!cur || *cur != ';') {
+            goto geo_parsing_error;
+        }
+
+        ++cur;
+
+        /* skip white spaces */
+        while (cur && isspace((int)*cur)) {
+            ++cur;
+        }
+
+        if (simple_str_to_doublestr(cur, geo.coords.lon, VCARD_GEO_LEN, &cur)) {
+            goto geo_parsing_error;
+        }
+        value = vcardvalue_new_geo(geo);
+        break;
+
+    geo_parsing_error:
+        if (error != 0) {
+            char temp[TMP_BUF_SIZE];
+            snprintf(temp, sizeof(temp),
+                     "Could not parse %s as a %s value",
+                     str, vcardvalue_kind_to_string(kind));
+            vcardparameter *errParam =
+                vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
+            *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
+        }
+    } break;
+
     case VCARD_URI_VALUE:
         value = vcardvalue_new_uri(str);
         break;
@@ -518,6 +627,12 @@ void vcardvalue_free(vcardvalue *v)
                 vcardstrarray_free(array);
             }
         }
+        break;
+    }
+
+    case VCARD_GEO_VALUE: {
+        v->data.v_geo.coords.lat[0] = '\0';
+        v->data.v_geo.coords.lon[0] = '\0';
         break;
     }
 
@@ -755,6 +870,17 @@ static char *vcardvalue_float_as_vcard_string_r(const vcardvalue *value)
     return str;
 }
 
+static char *vcardvalue_geo_as_vcard_string_r(const vcardvalue *value)
+{
+    icalerror_check_arg_rz((value != 0), "value");
+    size_t max_len = 2 * VCARD_GEO_LEN;
+    char *str = (char *)icalmemory_new_buffer(max_len);
+    snprintf(str, max_len, "%s;%s",
+            value->data.v_geo.coords.lat, value->data.v_geo.coords.lon);
+    str[max_len - 1] = '\0';
+    return str;
+}
+
 const char *vcardvalue_as_vcard_string(const vcardvalue *value)
 {
     char *buf;
@@ -806,6 +932,9 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     case VCARD_STRUCTURED_VALUE:
         return vcardvalue_structured_as_vcard_string_r(value);
+
+    case VCARD_GEO_VALUE:
+        return vcardvalue_geo_as_vcard_string_r(value);
 
     case VCARD_URI_VALUE:
     case VCARD_LANGUAGETAG_VALUE:
