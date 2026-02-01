@@ -705,7 +705,7 @@ static int _parse_prop_value(struct vcardparser_state *state)
         switch (*state->p) {
         case '\\':
             /* seen in the wild - \n split by line wrapping */
-            while (strchr("\r\n", state->p[1])) {
+            while (state->p[1] && strchr("\r\n", state->p[1])) {
                 if (state->p[1] == '\r') {
                     INC(1);
                 }
