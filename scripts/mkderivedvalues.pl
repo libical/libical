@@ -66,7 +66,7 @@ sub insert_code
     LANGUAGETAG    => 'string',
     TEXT           => 'string',
     STRUCTURED     => 'structured',
-    TEXTLIST       => 'structured.field[0]',
+    TEXTLIST       => 'textlist',
     TIME           => 'time',
     TIMESTAMP      => 'time',
     UID            => 'string',
@@ -236,10 +236,8 @@ $pointer_check_rv\
         print
 "    if (impl->data.v_${union_data} != 0) {\n        icalmemory_free_buffer((void *)impl->data.v_${union_data});\n    }\n";
 
-      } elsif ($union_data eq 'structured.field[0]') {
-
-        print
-"    if (impl->data.v_${union_data} != 0) {\n        vcardstrarray_free(impl->data.v_${union_data});\n    }\n";
+      } elsif ($union_data eq 'textlist') {
+        print "    ${lcprefix}strarray_free(impl->data.v_textlist);\n";
       }
 
       $castStr = "";
@@ -250,7 +248,7 @@ $pointer_check_rv\
 
       print "$type\ ${lcprefix}value_get_${lc}(const ${lcprefix}value *value)\n{\n";
       $retString = "";
-      if ($union_data eq 'string' or $union_data eq 'structured.field[0]') {
+      if ($union_data eq 'string' or $union_data eq 'textlist') {
         print "    icalerror_check_arg_rz((value != 0), \"value\");\n";
       } else {
         print "    icalerror_check_arg((value != 0), \"value\");\n";

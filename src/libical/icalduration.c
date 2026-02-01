@@ -243,6 +243,16 @@ int icaldurationtype_as_seconds(struct icaldurationtype dur)
                  (dur.is_neg == 1 ? -1 : 1));
 }
 
+int icaldurationtype_as_utc_seconds(struct icaldurationtype dur)
+{
+    return (int)(((int)dur.seconds +
+                  60 * ((int)dur.minutes +
+                        60 * ((int)dur.hours +
+                              24 * ((int)dur.days +
+                                    7 * (int)dur.weeks)))) *
+                 (dur.is_neg == 1 ? -1 : 1));
+}
+
 struct icaldurationtype icaldurationtype_null_duration(void)
 {
     struct icaldurationtype d;
@@ -349,4 +359,28 @@ struct icaldurationtype icalduration_from_times(struct icaltimetype t1, struct i
         ret = icaldurationtype_from_seconds((int)(t1t - t2t));
     }
     return ret;
+}
+
+struct icaldurationtype icaldurationtype_normalize(struct icaldurationtype dur)
+{
+    struct icaldurationtype newdur = icaldurationtype_null_duration();
+    newdur.is_neg = dur.is_neg;
+
+    // Normalize nominal duration.
+    if (dur.days % 7 == 0 && !dur.hours && !dur.minutes && !dur.seconds) {
+        newdur.weeks = dur.weeks + dur.days / 7;
+    } else {
+        newdur.days = dur.days + dur.weeks * 7;
+    }
+
+    // Normalize fixed duration.
+    unsigned ut = dur.seconds + dur.minutes * 60 + dur.hours * 60 * 60;
+    unsigned used = 0;
+    newdur.hours = (ut - used) / (60 * 60);
+    used += newdur.hours * (60 * 60);
+    newdur.minutes = (ut - used) / (60);
+    used += newdur.minutes * (60);
+    newdur.seconds = (ut - used);
+
+    return newdur;
 }

@@ -71,4 +71,18 @@
 
     return buffer_copy;</custom>
   </method>
+  <method name="i_cal_memory_append_encoded_string" corresponds="icalmemory_append_encoded_string" since="4.0">
+    <parameter type="gchar **" name="buf" annotation="array length=buf_size, element-type gchar, inout" comment="The buffer to be appended. It should not be the memory in ical."/>
+    <parameter type="gchar **" name="pos" annotation="array, element-type gchar, inout" comment="The position at which the new string to be appended"/>
+    <parameter type="size_t *" name="buf_size" comment="The size of the buffer before appended"/>
+    <parameter type="const gchar *" name="str" comment="The string to be allocated"/>
+    <comment xml:space="preserve">Encodes the string as TEXT value and then appends it to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_encoded_string has to resize a buffer on the ring, the ring will loose track of it and you will have memory problems.</comment>
+  </method>
+  <method name="i_cal_memory_append_decoded_string" corresponds="icalmemory_append_decoded_string" since="4.0">
+    <parameter type="gchar **" name="buf" annotation="array length=buf_size, element-type gchar, inout" comment="The buffer to be appended. It should not be the memory in ical."/>
+    <parameter type="gchar **" name="pos" annotation="array, element-type gchar, inout" comment="The position at which the new string to be appended"/>
+    <parameter type="size_t *" name="buf_size" comment="The size of the buffer before appended"/>
+    <parameter type="const gchar *" name="str" comment="The string to be allocated"/>
+    <comment xml:space="preserve">Decodes the string as TEXT value and then appends it to the buffer. Only use them on normally allocated memory, or on buffers created from icalmemory_new_buffer, never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_decoded_string has to resize a buffer on the ring, the ring will loose track of it and you will have memory problems.</comment>
+  </method>
 </structure>

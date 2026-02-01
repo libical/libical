@@ -17,6 +17,7 @@
 #endif
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 /**
  * @brief Determines the size of the ring buffer used for keeping track of
@@ -433,4 +434,119 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
     **pos = ch;
     *pos += 1;
     **pos = 0;
+}
+
+/*
+ * Checks whether this character is allowed in a (Q)SAFE-CHAR
+ *
+ * QSAFE-CHAR   = WSP / %x21 / %x23-7E / NON-US-ASCII
+ * ; any character except CTLs and DQUOTE
+ * SAFE-CHAR    = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E / NON-US-ASCII
+ * ; any character except CTLs, DQUOTE. ";", ":", and ","
+ * WSP      = SPACE / HTAB
+ * NON-US-ASCII       = %x80-F8
+ * ; Use restricted by charset parameter
+ * ; on outer MIME object (UTF-8 preferred)
+ *
+ * Note that comma IS actually safe in vCard but we will quote it anyway
+ */
+#define UNSAFE_CHARS ";:,"
+
+static bool icalmemory_is_safe_char(unsigned char character, bool quoted)
+{
+    if (character == ' ' || character == '\t' || character == '!') {
+        return true;
+    }
+
+    if (character < 0x23 || character == 0x7f || character > 0xf8 ||
+        (!quoted && strchr(UNSAFE_CHARS, character))) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Appends the string to the buffer, encoding per RFC 6868
+ * and filtering out those characters not permitted by the specifications
+ *
+ * paramtext    = *SAFE-CHAR
+ * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
+ */
+void icalmemory_append_encoded_string(char **buf, char **pos,
+                                      size_t *buf_size, const char *string)
+{
+    bool quoted = false;
+    const char *p;
+
+    /* Encapsulate the string in quotes if necessary */
+    if (!*string || strpbrk(string, UNSAFE_CHARS) != 0) {
+        icalmemory_append_char(buf, pos, buf_size, '"');
+        quoted = true;
+    }
+
+    /* Copy the string */
+    for (p = string; *p; p++) {
+        /* Encode unsafe characters per RFC6868, otherwise replace with SP */
+        switch (*p) {
+        case '\n':
+            icalmemory_append_string(buf, pos, buf_size, "^n");
+            break;
+
+        case '^':
+            icalmemory_append_string(buf, pos, buf_size, "^^");
+            break;
+
+        case '"':
+            icalmemory_append_string(buf, pos, buf_size, "^'");
+            break;
+
+        default:
+            if (icalmemory_is_safe_char((unsigned char)*p, quoted)) {
+                icalmemory_append_char(buf, pos, buf_size, *p);
+            } else {
+                icalmemory_append_char(buf, pos, buf_size, ' ');
+            }
+            break;
+        }
+    }
+
+    if (quoted == true) {
+        icalmemory_append_char(buf, pos, buf_size, '"');
+    }
+}
+
+void icalmemory_append_decoded_string(char **buf, char **pos,
+                                      size_t *buf_size, const char *string)
+{
+    const char *p;
+
+    /* Copy the string */
+    for (p = string; *p; p++) {
+        switch (*p) {
+        case '"':
+            /* Remove encapsulating quotes if necessary */
+            break;
+
+        case '^':
+            /* Decode unsafe characters per RFC6868 */
+            if (p[1] == 'n') {
+                icalmemory_append_char(buf, pos, buf_size, '\n');
+                p++;
+            } else if (p[1] == '^') {
+                icalmemory_append_char(buf, pos, buf_size, '^');
+                p++;
+            } else if (p[1] == '\'') {
+                icalmemory_append_char(buf, pos, buf_size, '"');
+                p++;
+            } else {
+                // Unknown escape sequence, copy verbatim.
+                icalmemory_append_char(buf, pos, buf_size, *p);
+            }
+            break;
+
+        default:
+            icalmemory_append_char(buf, pos, buf_size, *p);
+        }
+    }
 }

@@ -378,4 +378,12 @@ LIBICAL_ICAL_EXPORT void icalmemory_append_char(char **buf, char **pos, size_t *
  */
 LIBICAL_ICAL_EXPORT char *icalmemory_strdup(const char *s);
 
+LIBICAL_ICAL_EXPORT void icalmemory_append_encoded_string(char **buf, char **pos,
+                                                          size_t *buf_size,
+                                                          const char *string);
+
+LIBICAL_ICAL_EXPORT void icalmemory_append_decoded_string(char **buf, char **pos,
+                                                          size_t *buf_size,
+                                                          const char *string);
+
 #endif /* !ICALMEMORY_H */
