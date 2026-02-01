@@ -115,12 +115,60 @@ static char *skip_until(char *instances, icaltimetype t, int order)
     }
 }
 
-int run_testcase(struct recur* r, bool verbose, bool forward) {
+static char *skip_n(char *instances, int n)
+{
+    char *start = instances;
+    for (int i = 0; i < n; i++) {
+        start = skip_first(start);
+        if (!start) {
+            return 0;
+        }
+    }
 
-    struct icalrecurrencetype* rrule;
+    return start;
+}
+
+static int get_instance_count(const char *instances)
+{
+    int count = 1;
+    const char *p = instances;
+    while (*p) {
+        if (*p == ',') {
+            count++;
+        }
+        p++;
+    }
+    return count;
+}
+
+static icaltimetype get_instance_n_time(char *instances, int n)
+{
+    char *instance_n = skip_n(instances, n);
+    if (!instance_n) {
+        return icaltime_null_time();
+    }
+    char *next = skip_first(instance_n);
+    char tmp_char;
+    if (next) {
+        next--;
+        tmp_char = *next;
+        *next = 0;
+    }
+
+    struct icaltimetype res = icaltime_from_string(instance_n);
+    if (next) {
+        *next = tmp_char;
+    }
+
+    return res;
+}
+
+static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed_dtstart_offs, int *has_skip)
+{
+    struct icalrecurrencetype *rrule;
     struct icaltimetype dtstart, next;
-    icalrecur_iterator* ritr;
-    const char* sep = "";
+    icalrecur_iterator *ritr;
+    const char *sep = "";
     char actual_instances[2048];
     int actual_instances_len = 0;
     struct icaltimetype start = icaltime_null_time();
@@ -130,19 +178,38 @@ int run_testcase(struct recur* r, bool verbose, bool forward) {
         printf("Processing line %d: %s\n", r->line_no, r->rrule);
     }
 
-    memset(&actual_instances[0], 0, sizeof(actual_instances));
-    actual_instances_len = 0;
-
-    dtstart = icaltime_from_string(r->dtstart);
     rrule = icalrecurrencetype_new_from_string(r->rrule);
-    ritr = icalrecur_iterator_new(rrule, dtstart);
+    if (has_skip) {
+        *has_skip = (rrule->skip == ICAL_SKIP_FORWARD) || (rrule->skip == ICAL_SKIP_BACKWARD);
+    }
 
-    if (!ritr && !forward) {
+    if (r->instances[0] && !forward) {
         // handled by the forward test
         return test_error;
     }
 
-    char* instances = r->instances;
+    memset(&actual_instances[0], 0, sizeof(actual_instances));
+    actual_instances_len = 0;
+
+    dtstart = icaltime_from_string(r->dtstart);
+
+    char *instances = r->instances;
+
+    if (proceed_dtstart_offs >= 0) {
+        dtstart = get_instance_n_time(r->instances, proceed_dtstart_offs);
+
+        if (icaltime_is_null_time(dtstart)) {
+            return test_error;
+        }
+
+        if (rrule->count > 0) {
+            rrule->count -= proceed_dtstart_offs;
+        }
+
+        instances = skip_n(r->instances, proceed_dtstart_offs);
+    }
+
+    ritr = icalrecur_iterator_new(rrule, dtstart);
 
     if (!forward) {
         // restore order at the end of the test
@@ -191,7 +258,15 @@ int run_testcase(struct recur* r, bool verbose, bool forward) {
         test_error = 1;
 
         print_error_hdr(r);
-        const char* msg_prefix = forward ? "" : "PREV-";
+        if (proceed_dtstart_offs >= 0) {
+            fprintf(stderr, "with alternative DTSTART:%s", icaltime_as_ical_string(dtstart));
+            if (rrule->count) {
+                fprintf(stderr, " and adjusted COUNT:%d", rrule->count);
+            }
+            fprintf(stderr, "\n");
+        }
+
+        const char *msg_prefix = forward ? "" : "PREV-";
         fprintf(stderr, "Expected %sINSTANCES:%s\n", msg_prefix, instances);
         fprintf(stderr, "Actual   %sINSTANCES:%s\n", msg_prefix, actual_instances);
         fprintf(stderr, "\n");
@@ -294,16 +369,26 @@ int main(int argc, const char *argv[])
 
         if (yield) {
             int test_error = 0;
+            int has_skip = 0;
 
             nof_tests++;
 
-            if (run_testcase(&r, verbose, 1)) {
+            if (run_testcase(&r, verbose, 1, -1, &has_skip)) {
+                test_error = 1;
+                nof_errors++;
+            } else if (run_testcase(&r, verbose, 0, -1, 0)) {
                 test_error = 1;
                 nof_errors++;
             }
-            else if (run_testcase(&r, verbose, 0)) {
-                test_error = 1;
-                nof_errors++;
+
+            if ((test_error == 0) && *r.instances && !r.start_at[0] && !has_skip) {
+                int instance_count = get_instance_count(r.instances);
+                for (int instance_idx = 0; instance_idx < instance_count; instance_idx++) {
+                    if (run_testcase(&r, verbose, 1, instance_idx, 0)) {
+                        test_error = 1;
+                        nof_errors++;
+                    }
+                }
             }
 
             if (test_error != 0) {
