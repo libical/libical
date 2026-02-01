@@ -11,11 +11,13 @@
 
 #include "libical_vcard_export.h"
 
+#define VCARD_GEO_LEN 16
+
 typedef struct vcardgeotype {
     const char *uri;
     struct {
-        const char *lat;
-        const char *lon;
+        char lat[VCARD_GEO_LEN];
+        char lon[VCARD_GEO_LEN];
     } coords;
 } vcardgeotype;
 
