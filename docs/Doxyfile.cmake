@@ -1070,7 +1070,7 @@ EXCLUDE                = @PROJECT_SOURCE_DIR@/docs/SUMMARY.md \
 # from the input.
 # The default value is: NO.
 
-EXCLUDE_SYMLINKS       = YES
+EXCLUDE_SYMLINKS       = NO
 
 # If the value of the INPUT tag contains directories, you can use the
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude

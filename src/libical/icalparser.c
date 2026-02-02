@@ -14,6 +14,7 @@
 
 #include "icalparser.h"
 #include "icalerror.h"
+#include "icallimits.h"
 #include "icalmemory.h"
 #include "icalvalue.h"
 #include "icalparameter.h"
@@ -25,9 +26,6 @@
 #include <string.h>
 
 #define TMP_BUF_SIZE 80
-#define MAXIMUM_ALLOWED_PARAMETERS 100
-#define MAXIMUM_ALLOWED_MULTIPLE_VALUES 500
-#define MAXIMUM_ALLOWED_ERRORS 100 // Limit the number of errors created by insert_error
 
 static enum icalparser_ctrl icalparser_ctrl_g = ICALPARSER_CTRL_KEEP;
 
@@ -41,7 +39,7 @@ struct icalparser_impl {
     int version;
     int level;
     int lineno;
-    int error_count;
+    size_t error_count;
     icalparser_state state;
     icalpvl_list components;
 
@@ -131,8 +129,9 @@ static char *parser_get_next_char(char c, char *str, int qm)
     char next_char = *p;
     char prev_char = 0;
 
-    size_t count = 0;
-    while (next_char != '\0' && count++ < 100000) {
+    size_t charCount = 0;
+    const size_t max_search_chars = icallimit_get(ICAL_LIMIT_PARSE_SEARCH);
+    while (next_char != '\0' && charCount++ < max_search_chars) {
         if ((prev_char != '\0') && (prev_char != '\\')) {
             if (qm == 1 && next_char == '"') {
                 /* Encountered a quote, toggle quote mode */
@@ -545,7 +544,7 @@ static void insert_error(icalparser *parser, icalcomponent *comp, const char *te
 {
     char temp[1024];
 
-    if (parser->error_count > MAXIMUM_ALLOWED_ERRORS) {
+    if (parser->error_count > icallimit_get(ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES)) {
         return;
     }
 
@@ -590,7 +589,9 @@ icalcomponent *icalparser_parse(icalparser *parser,
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
 
-    size_t bad_lines = 0;
+    /* Maximum number of bad parsed lines allowed */
+    const size_t max_parse_failures = icallimit_get(ICAL_LIMIT_PARSE_FAILURES);
+    size_t parse_failures = 0;
     do {
         line = icalparser_get_line(parser, line_gen_func);
 
@@ -622,15 +623,15 @@ icalcomponent *icalparser_parse(icalparser *parser,
                 /* Badness */
                 icalassert(0);
             }
-        } else {
-            bad_lines++; // track the number of possibly bogus data lines
+        } else if (parser->state == ICALPARSER_ERROR) {
+            parse_failures++; // track the number of un-parsable data lines
         }
         cont = false;
         if (line != 0) {
             icalmemory_free_buffer(line);
             cont = true;
         }
-    } while (cont && bad_lines < 5000); // limit the number of possibly bogus data lines
+    } while (cont && parse_failures < max_parse_failures); // limit the number of un-parsable data lines
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 
@@ -641,8 +642,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 {
     char *str;
     char *end;
-    int pcount = 0;
-    int vcount = 0;
+    size_t pcount = 0;
+    size_t vcount = 0;
     icalproperty *prop;
     icalproperty_kind prop_kind;
     icalvalue *value;
@@ -863,8 +864,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
      **********************************************************************/
 
     /* Now, add any parameters to the last property */
-
-    while (pcount < MAXIMUM_ALLOWED_PARAMETERS) {
+    const size_t maximum_allowed_parameters = icallimit_get(ICAL_LIMIT_PARAMETERS);
+    while (pcount < maximum_allowed_parameters) {
         if (*(end - 1) == ':') {
             /* if the last separator was a ":" and the value is a
                URL, icalparser_get_next_parameter will find the
@@ -1093,7 +1094,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
        parameter and add one part of the value to each clone */
 
     vcount = 0;
-    while (vcount < MAXIMUM_ALLOWED_MULTIPLE_VALUES) {
+    const size_t maximum_property_values = icallimit_get(ICAL_LIMIT_PROPERTY_VALUES);
+    while (vcount < maximum_property_values) {
         /* Only some properties can have multiple values. This list was taken
            from rfc5545. Also added the x-properties, because the spec actually
            says that commas should be escaped. For x-properties, other apps may

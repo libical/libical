@@ -81,8 +81,8 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 /** @brief Returns an hour-by-hour array of free/busy times over a
  *         given period.
  *
- *  @param span      A valid icalspanlist
- *  @param delta_t   The time slice to divide by, in seconds.  Default 3600.
+ *  @param spanlist A valid icalspanlist
+ *  @param delta_t  The time slice to divide by, in seconds.  Default 3600.
  *
  *  @return A pointer to an array of integers containing the number of
  *       busy events in each delta_t time period.  The final entry

@@ -16,6 +16,7 @@
 #include "icaltimezoneimpl.h"
 #include "icalarray.h"
 #include "icalerror.h"
+#include "icallimits.h"
 #include "icalparser.h"
 #include "icalmemory.h"
 
@@ -573,10 +574,6 @@ static void icaltimezone_expand_changes(icaltimezone *zone, int end_year)
 
 void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray *changes)
 {
-    /* Maximum number of rrule iterations before an occurrence is found beyond the specified end_year.
-     */
-    static const size_t RRULE_ITERATIONS = 100;
-
     icaltimezonechange change;
     icalproperty *prop;
     struct icaltimetype dtstart, occ;
@@ -671,6 +668,8 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
         icalarray_append(changes, &change);
     }
 
+    const size_t max_rrule_search = icallimit_get(ICAL_LIMIT_RRULE_SEARCH);
+
     /* The component has recurrence data, so we expand that now. */
     prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
     while (prop && (has_rdate || has_rrule)) {
@@ -752,7 +751,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
                 icalarray_append(changes, &change);
 
                 rrule_iterator = icalrecur_iterator_new(rrule, dtstart);
-                for (size_t rrule_iterator_count = 0; rrule_iterator && rrule_iterator_count < RRULE_ITERATIONS; rrule_iterator_count++) {
+                for (size_t rrule_iterator_count = 0; rrule_iterator && rrule_iterator_count < max_rrule_search; rrule_iterator_count++) {
                     occ = icalrecur_iterator_next(rrule_iterator);
                     /* Skip dtstart since we just added it */
                     if (icaltime_compare(dtstart, occ) == 0) {
@@ -866,7 +865,7 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
     int step, utc_offset_change, cmp;
     int want_daylight;
 
-    if (tt == NULL) {
+    if (tt == NULL || tt->year > ICALTIMEZONE_MAX_YEAR) {
         return 0;
     }
 

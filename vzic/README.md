@@ -24,25 +24,13 @@ calculations). You need version 2.0 or higher. You can get this from:
 
   <http://www.gtk.org>
 
-## PREPARATIONS
-
-gunzip and untar the tzdata file:
-
-```bash
-  % mkdir tzdata2014g
-  % cd  tzdata2014g; tar xvfz ../tzdata2014g.tar.gz; cd ..
-```
-
 ## BUILDING
 
-Edit the Makefile to set the OLSON_DIR (in this case to tzdata2014g),
-PRODUCT_ID and TZID_PREFIX variables.
-
-Then run `make -B`.
+Please see docs/HOWTO-update-zoneinfo.md
 
 ## RUNNING
 
-Run `./vzic`
+Run `./vzic --olson-dir <tzdataXXXX>`
 
 The output is placed in the zoneinfo subdirectory by default,
 but you can use the --output-dir options to set another toplevel output

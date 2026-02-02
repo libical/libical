@@ -6,7 +6,7 @@
 
 
 -->
-<structure namespace="ICal" name="Recurrence" native="struct icalrecurrencetype" default_native="i_cal_recurrence_new_default ()" destroy_func="icalrecurrencetype_unref" new_full_extra_code="if (owner) { icalrecurrencetype_ref (native); owner = NULL; }">
+<structure namespace="ICal" name="Recurrence" native="struct icalrecurrencetype" default_native="i_cal_recurrence_new_default ()" destroy_func="icalrecurrencetype_unref" new_full_extra_code="if (owner) { native = icalrecurrencetype_clone (native); owner = NULL; }">
   <enum name="ICalRecurrenceFrequency" native_name="icalrecurrencetype_frequency" default_native="I_CAL_NO_RECURRENCE">
     <element name="ICAL_SECONDLY_RECURRENCE"/>
     <element name="ICAL_MINUTELY_RECURRENCE"/>
@@ -123,7 +123,7 @@
   </method>
   <method name="i_cal_recurrence_to_string" corresponds="icalrecurrencetype_as_string_r" since="1.0">
     <parameter type="ICalRecurrence *" name="recur" native_op="POINTER" comment="The #ICalRecurrence to be converted"/>
-    <returns type="const gchar *" annotation="transfer full" comment="The string representation of @recur." translator="i_cal_memory_str_to_glib"/>
+    <returns type="gchar *" annotation="transfer full" comment="The string representation of @recur." translator="i_cal_memory_str_to_glib"/>
     <comment xml:space="preserve">Converts a #ICalRecurrence to a string.</comment>
   </method>
   <method name="i_cal_recurrence_get_until" corresponds="none" kind="get" since="1.0">

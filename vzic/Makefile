@@ -3,13 +3,6 @@
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-#
-# You will need to set this to the directory that the Olson timezone data
-# files are in.
-#
-OLSON_DIR ?= tzdata2021a
-
-
 # This is used as the PRODID property on the iCalendar files output.
 # It identifies the product which created the iCalendar objects.
 # So you need to substitute your own organization name and product.
@@ -61,7 +54,7 @@ LIBICAL_LDADD = -lical -lpthread
 GLIB_CFLAGS = `pkg-config --cflags glib-2.0`
 GLIB_LDADD = `pkg-config --libs glib-2.0`
 
-CFLAGS = -g -DOLSON_DIR=\"$(OLSON_DIR)\" -DPRODUCT_ID='"$(PRODUCT_ID)"'
+CFLAGS = -g -DPRODUCT_ID='"$(PRODUCT_ID)"'
 CFLAGS += -DTZID_PREFIX='"$(TZID_PREFIX)"'
 CFLAGS += -DCREATE_SYMLINK=$(CREATE_SYMLINK)
 CFLAGS += -DIGNORE_TOP_LEVEL_LINK=$(IGNORE_TOP_LEVEL_LINK)
@@ -84,14 +77,19 @@ vzic.o vzic-dump.o: vzic-dump.h
 vzic.o vzic-output.o: vzic-output.h
 
 test-parse: vzic
+ifndef OLSON_DIR
+	@echo "You forgot to pass OLSON_DIR"
+	@echo "Example: make test OLSON_DIR=tzdata2025c"
+else
 	./vzic-dump.pl $(OLSON_DIR)
-	./vzic --dump --pure
+	./vzic --dump --pure --olson-dir $(OLSON_DIR)
 	@echo
 	@echo "#"
 	@echo "# If either of these diff commands outputs anything there may be a problem."
 	@echo "#"
 	diff -ru zoneinfo/ZonesPerl zoneinfo/ZonesVzic
 	diff -ru zoneinfo/RulesPerl zoneinfo/RulesVzic
+endif
 
 test-changes: vzic test-vzic
 	./test-vzic --dump-changes

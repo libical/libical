@@ -4806,14 +4806,14 @@ void test_bad_dtstart_in_timezone(void)
     icalcomponent *vtimezone = NULL;
     char *str = NULL;
 
-    myTZ = icaltimezone_get_builtin_timezone("Europe/Zurich");
+    myTZ = icaltimezone_get_builtin_timezone("Pacific/Guam");
     vtimezone = icaltimezone_get_component(myTZ);
     str = icalcomponent_as_ical_string(vtimezone);
 
     if (VERBOSE) {
         printf("%s\n", str);
     }
-    ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:19700329T020000") != NULL));
+    ok("bad-dtstart-in-timezone.patch r960", (strstr(str, "DTSTART:19700906T020000") != NULL));
 }
 #endif
 
@@ -6853,6 +6853,27 @@ static void test_icaltime_proper_zone(void)
     ok("first is the same as the second after second's convert", (icaltime_compare(first, second) == 0));
 }
 
+static void test_internal_limits(void)
+{
+    /* follow the _MAX* defaults at the top of icalllimits.c */
+    int_is("max parse failures default", (int)icallimit_get(ICAL_LIMIT_PARSE_FAILURES), 1000);
+    int_is("parse search default", (int)icallimit_get(ICAL_LIMIT_PARSE_SEARCH), 100000);
+    int_is("max parse failure messages", (int)icallimit_get(ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES), 100);
+    int_is("max props default", (int)icallimit_get(ICAL_LIMIT_PROPERTIES), 10000);
+    int_is("max params default", (int)icallimit_get(ICAL_LIMIT_PARAMETERS), 100);
+    int_is("max value chars", (int)icallimit_get(ICAL_LIMIT_VALUE_CHARS), 10485760);
+    int_is("max prop values", (int)icallimit_get(ICAL_LIMIT_PROPERTY_VALUES), 500);
+    int_is("max recurrence search", (int)icallimit_get(ICAL_LIMIT_RECURRENCE_SEARCH), 10000000);
+    int_is("time standing still", (int)icallimit_get(ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL), 50);
+    int_is("max rrule search", (int)icallimit_get(ICAL_LIMIT_RRULE_SEARCH), 100);
+
+    icallimit_set(ICAL_LIMIT_PROPERTIES, 10);
+    int_is("properties limit", (int)icallimit_get(ICAL_LIMIT_PROPERTIES), 10);
+
+    icallimit_set(ICAL_LIMIT_VALUE_CHARS, SIZE_MAX);
+    ok("value chars is size_max", icallimit_get(ICAL_LIMIT_VALUE_CHARS) == SIZE_MAX);
+}
+
 int main(int argc, const char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -7036,7 +7057,7 @@ int main(int argc, const char *argv[])
     test_run("Test icaltime proper zone set", test_icaltime_proper_zone, do_test, do_header);
     test_run("Test property values from string", test_value_from_string, do_test, do_header);
     test_run("Test normalizing time", test_icaltime_normalize, do_test, do_header);
-    /** OPTIONAL TESTS go here... **/
+    test_run("Test setting/getting internal limits", test_internal_limits, do_test, do_header);
 
 #if defined(LIBICAL_CXX_BINDINGS)
     test_run("Test C++ API", test_cxx, do_test, do_header);

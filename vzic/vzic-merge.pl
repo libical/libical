@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use Getopt::Long;
+use Cwd            qw(abs_path);
 use File::Basename qw( fileparse );
 use File::Path     qw( make_path );
 use File::Spec;
@@ -14,20 +15,6 @@ use File::Spec;
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
 # Author: Damon Chaplin <damon@gnome.org>
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 #
 
 #
@@ -47,10 +34,28 @@ $LIBICAL_VERSIONING = 1;
 # Set this to 0 for dry-runs, and 1 to actually update.
 $DO_UPDATES = 1;
 
+sub usage
+{
+  say STDERR
+"Usage: $0 --master-zoneinfo-dir=<path_to_master_zoneinfo> --new_zoneinfo_dir=<path_to_new_zone_info>";
+  exit 1;
+}
+
 GetOptions(
   'master-zoneinfo-dir=s' => \$MASTER_ZONEINFO_DIR,
   'new-zoneinfo-dir=s'    => \$NEW_ZONEINFO_DIR,
 ) or die 'Invalid command-line arguments';
+
+if (!defined($MASTER_ZONEINFO_DIR)) {
+  say STDERR "You forgot to pass a master-zoneinfo-dir command line option\n";
+  usage();
+}
+if (!defined($NEW_ZONEINFO_DIR)) {
+  say STDERR "You forgot to pass a new-zoneinfo-dir command line option\n";
+  usage();
+}
+$MASTER_ZONEINFO_DIR = abs_path($MASTER_ZONEINFO_DIR);
+$NEW_ZONEINFO_DIR    = abs_path($NEW_ZONEINFO_DIR);
 
 # Save this so we can restore it later.
 $input_record_separator = $/;

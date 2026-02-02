@@ -229,7 +229,7 @@ BUILD() {
   fi
 
   # The builtin_timezones test takes longer in thread-sanitizer mode (that's the whole point of the test)
-  cpu_secs=30
+  cpu_secs=60
   if [[ "$2" == *"THREAD_SANITIZER"* ]]; then
     cpu_secs=90
   fi
@@ -450,6 +450,7 @@ CPPCHECK() {
   echo "===== RUN CPPCHECK FOR C FILES ======"
   rm -f cppcheck-c.out
   f=$(find "$TOP/src" -name "*.c")
+  f="$f $(find "$TOP/vzic" -name "*.c")"
   mkdir -p build-cppcheck-c
   # shellcheck disable=SC2086
   cppcheck --quiet \
@@ -534,7 +535,7 @@ SPLINT() {
   echo "===== START SPLINT: $1 ======"
   cd "$TOP" || exit 1
   set +e
-  files=$(find src -name "*.c$" -o -name "*.h$" |
+  files=$(find "$TOP/src" -name "*.c$" -o -name "*.h$" |
     # skip C++
     grep -v _cxx | grep -v /Net-ICal-Libical |
     # skip lex/yacc
@@ -544,6 +545,7 @@ SPLINT() {
     # skip builddirs
     grep -v build-)
   files="$files $BDIR/src/libical/*.c $BDIR/src/libical/*.h"
+  files="$files $(find "$TOP/vzic" -name "*.c$" -o -name "*.h$")"
 
   rm -f "splint-$name.out"
   # shellcheck disable=SC2086
@@ -974,6 +976,7 @@ STATICCCHECKOPTS="\
 -DLIBICAL_GLIB_BUILD_DOCS=True \
 -DLIBICAL_BUILD_TESTING=True \
 -DLIBICAL_BUILD_EXAMPLES=True \
+-DLIBICAL_BUILD_VZIC=True \
 "
 PRECOMMIT
 KRAZY

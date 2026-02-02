@@ -16,6 +16,7 @@
 #include "icalvalue.h"
 #include "icalvalueimpl.h"
 #include "icalerror.h"
+#include "icallimits.h"
 #include "icalmemory.h"
 #include "icaltime.h"
 
@@ -250,11 +251,6 @@ static char *icalmemory_strdup_and_dequote(const char *str)
  */
 static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unquoted_str)
 {
-    /* oss-fuzz sets the cpu timeout at 60 seconds.
-     * In order to meet that requirement we'd need to set MAX_ITERATIONS to (1024 * 128) approximately.
-     * We don't feel safe setting MAX_ITERATIONS that low.
-     */
-    static const size_t MAX_ITERATIONS = (1024 * 1024 * 10);
     char *str;
     char *str_p;
     const char *p;
@@ -269,7 +265,8 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
         return 0;
     }
 
-    for (p = unquoted_str; *p != 0 && cnt < MAX_ITERATIONS; p++, cnt++) {
+    const size_t max_value_chars = icallimit_get(ICAL_LIMIT_VALUE_CHARS);
+    for (p = unquoted_str; *p != 0 && cnt < max_value_chars; p++, cnt++) {
         switch (*p) {
         case '\n': {
             icalmemory_append_string(&str, &str_p, &buf_sz, "\\n");

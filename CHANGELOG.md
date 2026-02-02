@@ -27,9 +27,11 @@ for details about API changes since libical 3.x.
 - Allow previous recurrence iteration
 - icalparser_ctrl setting defines how to handle invalid CONTROL characters during parsing
 - Full support for `BYSETPOS`, i.e. remove the limitation to MONTHLY and YEARLY frequencies
+- An API for setting/getting internal library limits (`icallimit_set` and `icallimit_get`)
 
 ### Changed
 
+- Built-in timezones updated to tzdata2025c to include historical data
 - Requires MSVC 2013 or higher (when building on Windows with MSVC)
 - Requires CMake v3.20.0 or higher
 - For the C++ bindings, requires a C++11 compliant C++ compiler

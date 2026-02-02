@@ -42,9 +42,10 @@ Or, just make them up:
 
 @code
         struct icaltimetype next;
-        while (next = icalrecur_iterator_next(ritr)
-               && !icaltime_is_null_time(next){
-                Do something with next
+        next = icalrecur_iterator_next(ritr);
+        while (!icaltime_is_null_time(next)){
+                // Do something with next
+                next = icalrecur_iterator_next(ritr);
         }
 @endcode
 
