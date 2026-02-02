@@ -182,13 +182,17 @@ ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
     ical_unknown_token_handling myHandling;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_lock(&unk_token_mutex);
+    if (pthread_mutex_lock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     myHandling = unknownTokenHandling;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_unlock(&unk_token_mutex);
+    if (pthread_mutex_unlock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     return myHandling;
@@ -197,12 +201,16 @@ ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
 void ical_set_unknown_token_handling_setting(ical_unknown_token_handling newSetting)
 {
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_lock(&unk_token_mutex);
+    if (pthread_mutex_lock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     unknownTokenHandling = newSetting;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_unlock(&unk_token_mutex);
+    if (pthread_mutex_unlock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 }

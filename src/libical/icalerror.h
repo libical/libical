@@ -74,6 +74,9 @@ typedef enum icalerrorenum
     /** An error occurred while allocating some memory. */
     ICAL_ALLOCATION_ERROR,
 
+    /** An error occurred with threading. */
+    ICAL_THREADING_ERROR,
+
     /** Malformed data was passed to a function. */
     ICAL_MALFORMEDDATA_ERROR,
 
