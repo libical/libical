@@ -44,7 +44,7 @@ The internal limits and their default values are shown here:
 * Maximum number of times to search for the next recurrence before giving up
 
       Kind = ICAL_LIMIT_RECURRENCE_SEARCH
-      Default = 10000000 (ten million)
+      Default = 100000 (one hundred thousand)
 
 * Maximum number of times to search for the next recurrence before time is considered standing still
 
