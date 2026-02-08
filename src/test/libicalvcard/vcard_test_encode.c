@@ -51,7 +51,7 @@ static void test_prop_structured(void)
     static const char *input =
         "BEGIN:VCARD\r\n"
         "VERSION:3.0\r\n"
-        "N:y,\\,\\\\;\\;,\\n\\N\r\n"
+        "N:y,\\,\\\\;\\;,\\n\\N;;,\r\n"
         "END:VCARD\r\n";
 
     vcardcomponent *card = vcardparser_parse_string(input);
@@ -59,14 +59,19 @@ static void test_prop_structured(void)
     vcardproperty *prop =
         vcardcomponent_get_first_property(card, VCARD_N_PROPERTY);
     vcardstructuredtype *n = vcardproperty_get_n(prop);
-    assert(2 == n->num_fields);
+    assert(4 == n->num_fields);
     assert(2 == n->field[0]->num_elements);
     assert_str_equals("y", vcardstrarray_element_at(n->field[0], 0));
     assert_str_equals(",\\", vcardstrarray_element_at(n->field[0], 1));
     assert(2 == n->field[1]->num_elements);
     assert_str_equals(";", vcardstrarray_element_at(n->field[1], 0));
     assert_str_equals("\n\n", vcardstrarray_element_at(n->field[1], 1));
-    assert_str_equals("N:y,\\,\\\\;\\;,\\n\\n\r\n",
+    assert(0 == n->field[2]->num_elements);
+    assert(2 == n->field[3]->num_elements);
+    assert_str_equals("", vcardstrarray_element_at(n->field[3], 0));
+    assert_str_equals("", vcardstrarray_element_at(n->field[3], 1));
+
+    assert_str_equals("N:y,\\,\\\\;\\;,\\n\\n;;,\r\n",
                       vcardproperty_as_vcard_string(prop));
 
     vcardcomponent_free(card);
@@ -100,6 +105,111 @@ static void test_prop_multivalued(void)
     assert_str_equals(";", vcardstrarray_element_at(org, 1));
     assert_str_equals("x", vcardstrarray_element_at(org, 2));
 
+    vcardcomponent_free(card);
+}
+
+static void test_prop_x(void)
+{
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "X-PROP:foo\r\n"
+        "X-PROP:foo;bar\r\n"
+        "X-PROP:foo;bar\\;baz\r\n"
+        "X-PROP:foo,bar\r\n"
+        "X-PROP:foo\\,bar\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+    assert(card != NULL);
+
+    vcardproperty *prop;
+    vcardvalue *val;
+
+    prop = vcardcomponent_get_first_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP:foo\r\n", vcardproperty_as_vcard_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo;bar", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP:foo;bar\r\n", vcardproperty_as_vcard_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo;bar\\;baz", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP:foo;bar\\;baz\r\n", vcardproperty_as_vcard_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo,bar", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP:foo,bar\r\n", vcardproperty_as_vcard_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo\\,bar", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP:foo\\,bar\r\n", vcardproperty_as_vcard_string(prop));
+
+    assert(0 == vcardcomponent_get_next_property(card, VCARD_X_PROPERTY));
+
+    vcardcomponent_free(card);
+}
+
+static vcardvalue_kind my_xprop_value_kind_func(const char *name, void *data)
+{
+    (void)(data); // make CI happy, reporting unused parameter otherwise
+    assert(data == (void *)0x1234);
+    return !strcasecmp(name, "X-PROP-A") ? VCARD_TEXT_VALUE : VCARD_X_VALUE;
+}
+
+static void test_prop_x_value_kind(void)
+{
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "X-PROP-A:foo,bar\\,baz\r\n"
+        "X-PROP-B:foo,bar\\,baz\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card;
+    vcardproperty *prop;
+    vcardvalue *val;
+
+    /* Parse all both properties as X value */
+    card = vcardparser_parse_string(input);
+    prop = vcardcomponent_get_first_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo,bar\\,baz", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP-A:foo,bar\\,baz\r\n", vcardproperty_as_vcard_string(prop));
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo,bar\\,baz", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP-B:foo,bar\\,baz\r\n", vcardproperty_as_vcard_string(prop));
+    vcardcomponent_free(card);
+
+    /* Parse X-PROP-A property as TEXT value, others as X value */
+    vcardparser_set_xprop_value_kind(my_xprop_value_kind_func, (void *)0x1234);
+
+    card = vcardparser_parse_string(input);
+    prop = vcardcomponent_get_first_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_TEXT_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo,bar,baz", vcardvalue_get_text(val));
+    assert_str_equals("X-PROP-A:foo\\,bar\\,baz\r\n", vcardproperty_as_vcard_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    val = vcardproperty_get_value(prop);
+    assert(VCARD_X_VALUE == vcardvalue_isa(val));
+    assert_str_equals("foo,bar\\,baz", vcardvalue_get_x(val));
+    assert_str_equals("X-PROP-B:foo,bar\\,baz\r\n", vcardproperty_as_vcard_string(prop));
     vcardcomponent_free(card);
 }
 
@@ -151,6 +261,154 @@ static void test_param_multivalued(void)
     vcardcomponent_free(card);
 }
 
+static void test_value_structured(void)
+{
+    vcardstructuredtype stt;
+    vcardvalue *val;
+
+    // Set structured value having both fields set.
+    memset(&stt, 0, sizeof(vcardstructuredtype));
+    stt.field[0] = vcardstrarray_new(1);
+    vcardstrarray_add(stt.field[0], "foo");
+    stt.field[1] = vcardstrarray_new(1);
+    vcardstrarray_add(stt.field[1], "bar");
+    stt.num_fields = 2;
+
+    val = vcardvalue_new_structured(&stt);
+    assert_str_equals("foo;bar", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+
+    // Set structured value having only first field set.
+    memset(&stt, 0, sizeof(vcardstructuredtype));
+    stt.field[0] = vcardstrarray_new(1);
+    vcardstrarray_add(stt.field[0], "foo");
+    stt.field[1] = vcardstrarray_new(1);
+    stt.num_fields = 2;
+
+    val = vcardvalue_new_structured(&stt);
+    assert_str_equals("foo;", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+
+    // Set structured value having only second field set.
+    memset(&stt, 0, sizeof(vcardstructuredtype));
+    stt.field[0] = vcardstrarray_new(1);
+    stt.field[1] = vcardstrarray_new(1);
+    vcardstrarray_add(stt.field[1], "bar");
+    stt.num_fields = 2;
+
+    val = vcardvalue_new_structured(&stt);
+    assert_str_equals(";bar", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+
+    // Set structured value having no field set.
+    memset(&stt, 0, sizeof(vcardstructuredtype));
+    stt.field[0] = vcardstrarray_new(1);
+    stt.field[1] = vcardstrarray_new(1);
+    stt.num_fields = 2;
+
+    val = vcardvalue_new_structured(&stt);
+    assert_str_equals(";", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+}
+
+static void test_value_structured_from_string(void)
+{
+    vcardstructuredtype *stt;
+
+    // Parse structured value having both fields set.
+    stt = vcardstructured_new_from_string("foo;bar");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 1);
+    assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
+    assert(vcardstrarray_size(stt->field[1]) == 1);
+    assert_str_equals("bar", vcardstrarray_element_at(stt->field[1], 0));
+    vcardstructured_free(stt);
+
+    // Parse structured value having only first field set.
+    stt = vcardstructured_new_from_string("foo;");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 1);
+    assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
+    assert(vcardstrarray_size(stt->field[1]) == 0);
+    vcardstructured_free(stt);
+
+    // Parse structured value having only second field set.
+    stt = vcardstructured_new_from_string(";foo");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 0);
+    assert(vcardstrarray_size(stt->field[1]) == 1);
+    assert_str_equals("foo", vcardstrarray_element_at(stt->field[1], 0));
+    vcardstructured_free(stt);
+
+    // Parse structured value having no field set.
+    stt = vcardstructured_new_from_string(";");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 0);
+    assert(vcardstrarray_size(stt->field[1]) == 0);
+    vcardstructured_free(stt);
+
+    // Parse structured value having just empty values.
+    stt = vcardstructured_new_from_string(",;,");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 2);
+    assert_str_equals("", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("", vcardstrarray_element_at(stt->field[0], 1));
+    assert(vcardstrarray_size(stt->field[1]) == 2);
+    assert_str_equals("", vcardstrarray_element_at(stt->field[1], 0));
+    assert_str_equals("", vcardstrarray_element_at(stt->field[1], 1));
+    vcardstructured_free(stt);
+
+    // Parse structured value having non-empty and empty values.
+    stt = vcardstructured_new_from_string(",foo;bar,");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 2);
+    assert_str_equals("", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 1));
+    assert(vcardstrarray_size(stt->field[1]) == 2);
+    assert_str_equals("bar", vcardstrarray_element_at(stt->field[1], 0));
+    assert_str_equals("", vcardstrarray_element_at(stt->field[1], 1));
+    vcardstructured_free(stt);
+}
+
+static void test_value_structured_escaped(void)
+{
+    vcardstructuredtype stt = {0};
+
+    stt.field[0] = vcardstrarray_new(1);
+    vcardstrarray_add(stt.field[0], "foo,bar");
+    vcardstrarray_add(stt.field[0], "baz;bam");
+    stt.field[1] = vcardstrarray_new(1);
+    vcardstrarray_add(stt.field[1], "tux;");
+    vcardstrarray_add(stt.field[1], "qux,");
+    stt.num_fields = 2;
+
+    vcardvalue *val = vcardvalue_new_structured(&stt);
+    assert_str_equals("foo\\,bar,baz\\;bam;tux\\;,qux\\,", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+}
+
+static void test_value_structured_from_string_escaped(void)
+{
+    vcardstructuredtype *stt;
+
+    stt = vcardstructured_new_from_string("foo\\,bar,baz\\;bam;tux\\;,qux\\,");
+    assert(stt->num_fields == 2);
+    assert(vcardstrarray_size(stt->field[0]) == 2);
+    assert(vcardstrarray_size(stt->field[1]) == 2);
+    assert_str_equals("foo,bar", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("baz;bam", vcardstrarray_element_at(stt->field[0], 1));
+    assert_str_equals("tux;", vcardstrarray_element_at(stt->field[1], 0));
+    assert_str_equals("qux,", vcardstrarray_element_at(stt->field[1], 1));
+    vcardstructured_free(stt);
+
+    stt = vcardstructured_new_from_string("foo,bar\\");
+    assert(stt->num_fields == 1);
+    assert(vcardstrarray_size(stt->field[0]) == 2);
+    assert_str_equals("foo", vcardstrarray_element_at(stt->field[0], 0));
+    assert_str_equals("bar", vcardstrarray_element_at(stt->field[0], 1));
+    vcardstructured_free(stt);
+}
+
 int main(int argc, char **argv)
 {
     _unused(argc);
@@ -159,9 +417,16 @@ int main(int argc, char **argv)
     test_prop_text();
     test_prop_structured();
     test_prop_multivalued();
+    test_prop_x();
+    test_prop_x_value_kind();
 
     test_param_singlevalued();
     test_param_multivalued();
+
+    test_value_structured();
+    test_value_structured_from_string();
+    test_value_structured_escaped();
+    test_value_structured_from_string_escaped();
 
     return 0;
 }

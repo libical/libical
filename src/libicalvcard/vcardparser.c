@@ -26,6 +26,9 @@
 
 #define DEBUG 0
 
+static ICAL_GLOBAL_VAR vcard_xprop_value_kind_func xprop_value_kind_func = NULL;
+static ICAL_GLOBAL_VAR void *xprop_value_kind_data = NULL;
+
 enum parse_error
 {
     PE_OK = 0,
@@ -418,7 +421,9 @@ static int _parse_param_value(struct vcardparser_state *state)
                                             structured != NULL,
                                             multivalued)) == PE_QSTRING_EOV) {
                 if (structured) {
-                    vcardstrarray_append(field, buf_cstring(&state->buf));
+                    if (buf_len(&state->buf) || *state->p == ',' || vcardstrarray_size(field)) {
+                        vcardstrarray_append(field, buf_cstring(&state->buf));
+                    }
 
                     if (*state->p == ';') {
                         field = vcardstrarray_new(2);
@@ -441,7 +446,9 @@ static int _parse_param_value(struct vcardparser_state *state)
         case ';':
             /* done - end of parameter */
             if (structured) {
-                vcardstrarray_append(field, buf_cstring(&state->buf));
+                if (buf_len(&state->buf) || vcardstrarray_size(field)) {
+                    vcardstrarray_append(field, buf_cstring(&state->buf));
+                }
             } else if (multivalued) {
                 vcardparameter_add_value_from_string(state->param,
                                                      buf_cstring(&state->buf));
@@ -604,7 +611,7 @@ static int _parse_prop_name(struct vcardparser_state *state)
             /* set default value kind */
             switch (kind) {
             case VCARD_GEO_PROPERTY:
-                state->value_kind = version == VCARD_VERSION_40 ? VCARD_URI_VALUE : VCARD_STRUCTURED_VALUE;
+                state->value_kind = version == VCARD_VERSION_40 ? VCARD_URI_VALUE : VCARD_GEO_VALUE;
                 break;
 
             case VCARD_KEY_PROPERTY:
@@ -620,6 +627,12 @@ static int _parse_prop_name(struct vcardparser_state *state)
 
             case VCARD_UID_PROPERTY:
                 state->value_kind = version == VCARD_VERSION_40 ? VCARD_URI_VALUE : VCARD_TEXT_VALUE;
+                break;
+
+            case VCARD_X_PROPERTY:
+                state->value_kind =
+                    xprop_value_kind_func ? xprop_value_kind_func(name, xprop_value_kind_data)
+                                          : VCARD_X_VALUE;
                 break;
 
             default:
@@ -748,9 +761,10 @@ static int _parse_prop_value(struct vcardparser_state *state)
                 char *dequot_str =
                     vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
-                /* repair critical property values */
-                if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0') {
-                    vcardstrarray_append(textlist, "0.0");
+                if (is_structured) {
+                    if (dequot_str[0] || *state->p == ',' || vcardstrarray_size(textlist)) {
+                        vcardstrarray_append(textlist, dequot_str);
+                    }
                 } else {
                     vcardstrarray_append(textlist, dequot_str);
                 }
@@ -784,9 +798,10 @@ out:
         char *dequot_str =
             vcardvalue_strdup_and_dequote_text(&str, text_sep);
 
-        /* repair critical property values */
-        if (prop_kind == VCARD_GEO_PROPERTY && dequot_str[0] == '\0') {
-            vcardstrarray_append(textlist, "0.0");
+        if (is_structured) {
+            if (dequot_str[0] || *state->p == ',' || vcardstrarray_size(textlist)) {
+                vcardstrarray_append(textlist, dequot_str);
+            }
         } else {
             vcardstrarray_append(textlist, dequot_str);
         }
@@ -795,13 +810,6 @@ out:
         icalmemory_free_buffer(dequot_str);
 
         if (is_structured) {
-            /* repair critical property values */
-            if (prop_kind == VCARD_GEO_PROPERTY && structured.num_fields == 1) {
-                textlist = vcardstrarray_new(1);
-                vcardstrarray_append(textlist, "0.0");
-                structured.field[structured.num_fields++] = textlist;
-            }
-
             value = vcardvalue_new_structured(&structured);
         } else {
             value = vcardvalue_new_textlist(textlist);
@@ -1087,4 +1095,10 @@ vcardcomponent *vcardparser_parse_string(const char *str)
     vcardparser_free(&parser);
 
     return vcard;
+}
+
+void vcardparser_set_xprop_value_kind(vcard_xprop_value_kind_func func, void *data)
+{
+    xprop_value_kind_func = func;
+    xprop_value_kind_data = data;
 }

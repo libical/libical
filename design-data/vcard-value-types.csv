@@ -20,7 +20,7 @@
 "TEXTLIST","5016","(a)vcardstrarray*","array","unitary",
 "STRUCTURED","5017","(m)vcardstructuredtype*","structured","unitary",
 "TZ","5020","(m)vcardtztype","structured","unitary",
-"GEO","5021","(m)vcardgeotype","structured","unitary",
+"GEO","5021","(m)vcardgeotype","tuple","unitary",
 
 "#Non-standard property enumeration types",,,,
 "#KIND:APPLICATION from RFC 6473",,,,
