@@ -21,3 +21,16 @@ the calling application's job to deal with these missing properties as they see 
 * FREQ=YEARLY, BYWEEKNO can't be combined with BYYEARDAY, BYMONTH or BYMONTHDAY
 
      ref: <https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2928>
+
+### DATE-TIME section 3.3.5
+
+The RFC states for "FORM #3: DATE WITH LOCAL TIME AND TIME ZONE REFERENCE":
+
+> If, based on the definition of the referenced time zone, the local
+> time described occurs more than once (when changing from daylight
+> to standard time), the DATE-TIME value refers to the first
+> occurrence of the referenced time.
+
+This only is the case in libical for `icaltimetype` values having the`is_daylight` field set,
+but this field is not set by the icalparser when parsing DATE-TIME values. As a consequence,
+durations calculated from such ambiguous datetimes are incorrect.

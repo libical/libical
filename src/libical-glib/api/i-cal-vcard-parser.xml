@@ -4,6 +4,7 @@
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 -->
 <structure namespace="ICalVcard" name="Parser">
+  <declaration position="header" content="typedef vcardvalue_kind (*ICalVcardXpropValueKindFunc)(const char *name, gpointer data);"/>
   <method name="i_cal_vcard_parser_parse_string" corresponds="vcardparser_parse_string" kind="get" since="4.0">
     <parameter type="const char *" name="str" comment="A vCard string to parse"/>
     <returns type="ICalVcardComponent *" annotation="transfer full,nullable" comment="A newly created #ICalVcardComponent, or %NULL on error."/>
@@ -13,5 +14,10 @@
     <parameter type="int" name="err" comment="error code"/>
     <returns type="const char *" comment="Text representation of the @err code."/>
     <comment xml:space="preserve">Converts an error code into its text representation.</comment>
+  </method>
+  <method name="i_cal_vcard_parser_set_xprop_value_kind" corresponds="vcardparser_set_xprop_value_kind" since="4.0">
+    <parameter type="ICalVcardXpropValueKindFunc" name="callback" annotation="scope call,closure data" comment="The callback function"/>
+    <parameter type="gpointer" name="data" annotation="nullable" comment="The user data for the callback function"/>
+    <comment xml:space="preserve">Registers a parser callback to override the default value type of an x-property.</comment>
   </method>
 </structure>

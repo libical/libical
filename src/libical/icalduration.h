@@ -94,7 +94,7 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
  * depending if the duration points forward or backward in time.
  *
  * Additionally, a ::icaldurationtype that has a non-zero days or weeks value is considered an error.
- * ie. only the ::icaldurationtype seconds, minutes and hours structure members are converted.
+ * ie. only the ::icaldurationtype seconds, minutes and hours structure members are converted. Also @see icaldurationtype_as_utc_seconds.
  *
  * @par Usage
  * ```c
@@ -109,6 +109,19 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
  * @since 4.0 previously known as icaldurationtype_as_int
  */
 LIBICAL_ICAL_EXPORT int icaldurationtype_as_seconds(struct icaldurationtype duration);
+
+/**
+ * @brief Extracts the duration in integer seconds from an ::icaldurationtype in UTC time.
+ * @param duration A valid duration type.
+ * @return An `int` representing the number of seconds in the duration.
+ *
+ * The number of seconds returned from the specified ::icaldurationtype can be a positive or negative integer
+ * depending if the duration points forward or backward in time.
+ *
+ * Days are fixed to have 24 hours.
+ *
+ */
+LIBICAL_ICAL_EXPORT int icaldurationtype_as_utc_seconds(struct icaldurationtype duration);
 
 /**
  * Converts an icaldurationtype into the iCal format as string.
@@ -279,5 +292,19 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icalduration_extend(struct icaltimetype 
  */
 LIBICAL_ICAL_EXPORT struct icaldurationtype icalduration_from_times(struct icaltimetype t1,
                                                                     struct icaltimetype t2);
+
+/**
+ * @brief Create a normalized duration from another duration.
+ *
+ * @param dur The duration of which to create a normalized copy from.
+ * @return An ::icaldurationtype representing the normalized duration.
+ *
+ * A duration is normalized such that:
+ * - Minutes and seconds are in the inclusive range [0;59], but hours may exceed 23 hours.
+ * - Only weeks or days are set, and weeks only are set if no hours, minutes
+ *   and seconds are set.
+ *
+ */
+LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_normalize(struct icaldurationtype dur);
 
 #endif /* !ICALDURATION_H */

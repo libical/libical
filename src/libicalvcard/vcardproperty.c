@@ -743,7 +743,7 @@ void vcardproperty_remove_parameter_by_ref(vcardproperty *prop, vcardparameter *
     for (p = icalpvl_head(prop->parameters); p != 0; p = icalpvl_next(p)) {
         vcardparameter *p_param = (vcardparameter *)icalpvl_data(p);
 
-        if (vcardparameter_has_same_name(parameter, p_param)) {
+        if (parameter == p_param) {
             (void)icalpvl_remove(prop->parameters, p);
             vcardparameter_free(p_param);
             break;

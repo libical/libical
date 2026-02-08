@@ -60,10 +60,4 @@
     <returns type="ICalVcardStrArray *" annotation="transfer full" translator_argus="NULL" comment="The newly cloned #ICalVcardStrArray with the same value as the @array"/>
     <comment xml:space="preserve">Creates a deep copy of #ICalVcardStrArray with the same properties as the @array.</comment>
   </method>
-  <method name="i_cal_vcard_str_array_as_vcard_string" corresponds="vcardstrarray_as_vcard_string_r" kind="other" since="4.0">
-    <parameter type="ICalVcardStrArray *" name="array" comment="an #ICalVcardStrArray"/>
-    <parameter type="const char" name="sep" comment="separator character"/>
-    <returns type="gchar *" annotation="transfer full" comment="The string representation of the @array." translator="i_cal_memory_str_to_glib"/>
-    <comment xml:space="preserve">Converts the @array into its string representation.</comment>
-  </method>
 </structure>
