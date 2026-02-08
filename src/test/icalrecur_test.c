@@ -171,7 +171,6 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
     const char *sep = "";
     char actual_instances[2048];
     int actual_instances_len = 0;
-    struct icaltimetype start = icaltime_null_time();
     int test_error = 0;
 
     if (verbose) {
@@ -223,7 +222,7 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
                  " *** %s", icalerror_strerror(icalerrno));
     } else {
         if (r->start_at[0]) {
-            start = icaltime_from_string(r->start_at);
+            struct icaltimetype start = icaltime_from_string(r->start_at);
 
             if (forward) {
                 icalrecur_iterator_set_start(ritr, start);
