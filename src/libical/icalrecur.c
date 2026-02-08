@@ -3827,14 +3827,14 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
         /* if we are in the last week of the previous year,
          * expand year days for the previous year
          */
-        if(has_by_data(impl, ICAL_BY_WEEK_NO) &&
-                get_week_number(impl, start) == 53 &&
-                start.month == 1) {
+        if (has_by_data(impl, ICAL_BY_WEEK_NO) &&
+            get_week_number(impl, start) == 53 &&
+            start.month == 1) {
             increment_year(impl, -1);
             expand_year_days(impl, start.year - 1);
             int days_in_year = get_days_in_year(impl, start.year - 1);
             impl->days_index = daymask_find_next_bit(impl->days, days_in_year + 1);
-            if(impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
+            if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
                 increment_year(impl, 1);
             }
         }
