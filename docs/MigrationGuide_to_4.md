@@ -88,6 +88,7 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
 
 * `icalrecurrencetype_from_string()` was replaced by `icalrecurrencetype_new_from_string()`,
    which returns a `struct icalrecurrencetype *` rather than a `struct icalrecurrencetype`.
+   Free the allocated memory using `icalrecurrencetype_unref()`.
 
 * The following functions now take arguments of type `struct icalrecurrencetype *` rather than
   `struct icalrecurrencetype`:
