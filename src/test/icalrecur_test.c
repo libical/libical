@@ -178,12 +178,16 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
     }
 
     rrule = icalrecurrencetype_new_from_string(r->rrule);
+    if (!rrule) {
+        return test_error;
+    }
     if (has_skip) {
         *has_skip = (rrule->skip == ICAL_SKIP_FORWARD) || (rrule->skip == ICAL_SKIP_BACKWARD);
     }
 
     if (r->instances[0] && !forward) {
         // handled by the forward test
+        icalrecurrencetype_unref(rrule);
         return test_error;
     }
 
@@ -198,6 +202,7 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
         dtstart = get_instance_n_time(r->instances, proceed_dtstart_offs);
 
         if (icaltime_is_null_time(dtstart)) {
+            icalrecurrencetype_unref(rrule);
             return test_error;
         }
 
