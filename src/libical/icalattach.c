@@ -107,11 +107,11 @@ void icalattach_unref(icalattach *attach)
     icalmemory_free_buffer(attach);
 }
 
-int icalattach_get_is_url(icalattach *attach)
+bool icalattach_get_is_url(const icalattach *attach)
 {
     icalerror_check_arg_rz((attach != NULL), "attach");
 
-    return attach->is_url ? 1 : 0;
+    return attach->is_url;
 }
 
 const char *icalattach_get_url(icalattach *attach)
