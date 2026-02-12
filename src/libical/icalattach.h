@@ -23,6 +23,8 @@
 
 #include "libical_ical_export.h"
 
+#include <stdbool.h>
+
 /**
  * @typedef icalattach
  * @brief An iCal attach object representing a link to a document object.
@@ -159,8 +161,10 @@ LIBICAL_ICAL_EXPORT void icalattach_unref(icalattach *attach);
  * // release it
  * icalattach_unref(attach);
  * ```
+ *
+ * @return true if the specified icalattach is a URL; false otherwise.
  */
-LIBICAL_ICAL_EXPORT int icalattach_get_is_url(icalattach *attach);
+LIBICAL_ICAL_EXPORT bool icalattach_get_is_url(const icalattach *attach);
 
 /**
  * @brief Returns the URL of the icalattach object.
