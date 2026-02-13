@@ -133,7 +133,7 @@ int main(int argc, const char *argv[])
     if (!icaltime_is_valid_time(end)) {
         return 0;
     }
-    int ms_compatible = p[12] % 2;
+    bool ms_compatible = (bool)(p[12] % 2);
 
     icaltimezone_truncate_vtimezone(vtz, start, end, ms_compatible);
     icalcomponent_free(vtz);

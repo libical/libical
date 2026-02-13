@@ -214,7 +214,7 @@
     <parameter type="ICalComponent *" name="comp" comment="an #ICalComponent"/>
     <parameter type="const ICalTime *" name="start" comment="a start #ICalTime"/>
     <parameter type="const ICalTime *" name="end" comment="an end #ICalTime"/>
-    <parameter type="gboolean" name="ms_compatible" comment="whether to truncate the timezoen in a Microsoft-compatible way"/>
+    <parameter type="gboolean" name="ms_compatible" comment="whether to truncate the timezone in a Microsoft-compatible way"/>
     <comment xml:space="preserve">Truncate a VTIMEZONE component to the given start and end times.
 If either time is null, then no truncation will occur at that point.
 If either time is non-null, then it MUST be specified as UTC.

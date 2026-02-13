@@ -2326,7 +2326,7 @@ static int rdate_compare(const void *rdate1, const void *rdate2)
 
 void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                                      icaltimetype start, icaltimetype end,
-                                     int ms_compatible)
+                                     bool ms_compatible)
 {
     icalcomponent *comp, *nextc, *tomb_std = NULL, *tomb_day = NULL;
     icalproperty *prop, *proleptic_prop = NULL;
