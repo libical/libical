@@ -459,6 +459,9 @@ changes to something like this in libical 4.0:
 `i_cal_recurrence_*_by_xxx*` methods have been replaced by more generic versions that take the 'by'
 type (day, month, ...) as a parameter.
 
+`i_cal_bt` and `i_cal_errno_return` are renamed to `i_calerror_backtrace` and
+`i_cal_errno_return`, respectively.
+
 ### Migrating `ICalGLib.Recurrence.*_by_*` methods from 3.0 to 4.0
 
 Code like this in libical 3.0:
