@@ -55,7 +55,7 @@
     <returns type="const gchar *" annotation="transfer none" comment="The string representation of the current error"/>
     <comment xml:space="preserve">Gets the #ICalErrorEnum in the string representation. This method called the icalerrorno_return to get the current error.</comment>
   </method>
-  <method name="i_cal_bt" corresponds="ical_bt" kind="other" since="1.0"/>
+  <method name="i_calerror_backtrace" corresponds="icalerror_backtrace" kind="other" since="1.0"/>
   <method name="i_cal_error_set_error_state" corresponds="icalerror_set_error_state" kind="set" since="1.0">
     <parameter type="ICalErrorEnum" name="error" comment="The error enum"/>
     <parameter type="ICalErrorState" name="state" comment="The error state"/>

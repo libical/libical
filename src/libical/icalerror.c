@@ -113,7 +113,7 @@ void icalerror_set_errno(icalerrorenum x)
     if (icalerror_get_error_state(x) == ICAL_ERROR_FATAL ||
         (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && icalerror_errors_are_fatal == 1)) {
         icalerror_warn(icalerror_strerror(x));
-        ical_bt();
+        icalerror_backtrace();
         icalassert(0);
     }
 }
@@ -245,7 +245,7 @@ const char *icalerror_strerror(icalerrorenum e)
     return string_map[i].name; /* Return string for ICAL_UNKNOWN_ERROR */
 }
 
-void ical_bt(void)
+void icalerror_backtrace(void)
 {
 #if defined(HAVE_BACKTRACE)
     void *stack_frames[50];

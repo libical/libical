@@ -267,11 +267,11 @@ LIBICAL_ICAL_EXPORT const char *icalerror_perror(void);
  * @par Usage
  * ```
  * if(icalerrno != ICAL_NO_ERROR) {
- *     ical_bt();
+ *     icalerror_backtrace();
  * }
  * ```
  */
-LIBICAL_ICAL_EXPORT void ical_bt(void);
+LIBICAL_ICAL_EXPORT void icalerror_backtrace(void);
 
 /**
  * @brief Sets the ::icalerrorstate for a given ::icalerrorenum @a error
