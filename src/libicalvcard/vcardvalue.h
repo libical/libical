@@ -12,9 +12,6 @@
 #include "libical_vcard_export.h"
 #include "vcardvalueimpl.h"
 
-#define VCARD_BOOLEAN_TRUE 1
-#define VCARD_BOOLEAN_FALSE 0
-
 LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_new(vcardvalue_kind kind);
 
 LIBICAL_VCARD_EXPORT vcardvalue *vcardvalue_clone(const vcardvalue *old);
