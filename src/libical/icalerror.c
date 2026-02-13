@@ -36,7 +36,7 @@ static void icalerrno_key_alloc(void)
     pthread_key_create(&icalerrno_key, icalerrno_destroy);
 }
 
-icalerrorenum *icalerrno_return(void)
+icalerrorenum *icalerror_icalerrno(void)
 {
     icalerrorenum *_errno;
 
@@ -56,7 +56,7 @@ icalerrorenum *icalerrno_return(void)
 
 static ICAL_GLOBAL_VAR icalerrorenum icalerrno_storage = ICAL_NO_ERROR;
 
-icalerrorenum *icalerrno_return(void)
+icalerrorenum *icalerror_icalerrno(void)
 {
     return &icalerrno_storage;
 }
