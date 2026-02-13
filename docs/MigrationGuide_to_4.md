@@ -133,8 +133,9 @@ The icalerror unit always compiles the `icalerror_set_errno` function.
 * In previous versions, the `icalcomponent_get_status()` returned 0 if a problem parsing the status
   property was detected; in this version, ICAL_STATUS_NONE is returned instead.
 
-* The `ical_bt()` function has been renamed `icalerror_backtrace()` for the sake
-  of consistent name-spacing.
+* The `ical_bt()` and `icalerrno_return()` functions have been renamed to
+  `icalerror_backtrace()` and icalerror_icalerrno()` respectively for the sake
+  of consistent function name-spacing.
 
 ### New functions
 

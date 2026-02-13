@@ -108,10 +108,10 @@ typedef enum icalerrorenum
  *
  * @par Examples
  * ```c
- * assert(*icalerrno_return() == icalerrno);
+ * assert(*icalerror_icalerrno() == icalerrno);
  * ```
  */
-LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
+LIBICAL_ICAL_EXPORT icalerrorenum *icalerror_icalerrno(void);
 
 /**
  * @brief Access the current ::icalerrno value
@@ -129,7 +129,7 @@ LIBICAL_ICAL_EXPORT icalerrorenum *icalerrno_return(void);
  * icalerrno = ICAL_NO_ERROR;
  * ```
  */
-#define icalerrno (*(icalerrno_return()))
+#define icalerrno (*(icalerror_icalerrno()))
 
 /**
  * @brief Change if errors are fatal

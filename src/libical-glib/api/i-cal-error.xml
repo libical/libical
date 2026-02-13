@@ -41,7 +41,7 @@
   <method name="i_cal_error_crash_here" corresponds="icalerror_crash_here" since="1.0">
     <comment xml:space="preserve">Shout out the errors to the compiler.</comment>
   </method>
-  <method name="i_cal_errno_return" corresponds="icalerrno_return" since="1.0">
+  <method name="i_cal_error_icalerrno" corresponds="icalerror_icalerrno" since="1.0">
     <returns type="ICalErrorEnum" annotation="transfer full" translator="(ICalErrorEnum) *" translator_argus="NONE" comment="Return the error happened"/>
     <comment xml:space="preserve">Returns the error stored in the library. If no error, return I_CAL_NO_ERROR.</comment>
   </method>

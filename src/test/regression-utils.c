@@ -204,9 +204,9 @@ int test_end(void)
   */
 static void cleanup_nondeterministic_memory(void)
 {
-    // icalerrno_return() allocates a buffer on it's first use per thread. Let's allocate it
+    // icalerror_icalerrno() allocates a buffer on it's first use per thread. Let's allocate it
     // now, so it doesn't disturb our test statistics.
-    icalerrno_return();
+    icalerror_icalerrno();
 
     // Built-in timezones are cached by libical. By freeing them, they don't influence our statistics.
     icaltimezone_free_builtin_timezones();
