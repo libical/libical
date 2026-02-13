@@ -82,6 +82,11 @@ The pvl unit always compiles the `pvl_data` function.
 The `ICAL_SETERROR_ISFUNC` conditional compile macro is removed.
 The icalerror unit always compiles the `icalerror_set_errno` function.
 
+## ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE
+
+The `ICAL_BOOLEAN_TRUE` and `ICAL_BOOLEAN_FALSE` macros are removed.
+The C library is C99 standards compliant and uses bool types.
+
 ## C library
 
 ### Modified functions

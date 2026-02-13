@@ -16,9 +16,6 @@
 
 /** @file icalvalue.h */
 
-#define ICAL_BOOLEAN_TRUE 1
-#define ICAL_BOOLEAN_FALSE 0
-
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);
 
 /** @brief Deeply clones an icalvalue.
