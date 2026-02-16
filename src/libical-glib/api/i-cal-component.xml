@@ -318,8 +318,8 @@
   </method>
   <method name="i_cal_component_check_restrictions" corresponds="icalcomponent_check_restrictions" kind="other" since="1.0">
     <parameter type="ICalComponent *" name="comp" comment="The #ICalComponent to be checked"/>
-    <returns type="gint" comment="The number of restrictions in @comp"/>
-    <comment xml:space="preserve">Checks the number of restrictions in #ICalComponent.</comment>
+    <returns type="gboolean" comment="If @comp has restrictions"/>
+    <comment xml:space="preserve">Checks if the #ICalComponent has restrictions.</comment>
   </method>
   <method name="i_cal_component_count_errors" corresponds="icalcomponent_count_errors" since="1.0">
     <parameter type="ICalComponent *" name="comp" comment="A #ICalComponent"/>

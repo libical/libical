@@ -173,7 +173,7 @@ LIBICAL_ICAL_EXPORT icalproperty *icalpropiter_deref(icalpropiter *i);
 
 /* Check the component against itip rules and insert error properties */
 /* Working with embedded error properties */
-LIBICAL_ICAL_EXPORT int icalcomponent_check_restrictions(icalcomponent *comp);
+LIBICAL_ICAL_EXPORT bool icalcomponent_check_restrictions(icalcomponent *comp);
 
 /** @brief Returns the number of errors encountered parsing the data.
  *
