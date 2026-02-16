@@ -404,14 +404,9 @@ void icalcomponent_remove_property(icalcomponent *component, icalproperty *prope
     icalerror_check_arg_rv((component != 0), "component");
     icalerror_check_arg_rv((property != 0), "property");
 
-#if defined(ICAL_REMOVE_NONMEMBER_COMPONENT_IS_ERROR)
-    icalerror_assert((icalproperty_get_parent(property)),
-                     "The property is not a member of a component");
-#else
     if (icalproperty_get_parent(property) == 0) {
         return;
     }
-#endif
 
     for (itr = icalpvl_head(component->properties); itr != 0; itr = next_itr) {
         next_itr = icalpvl_next(itr);
