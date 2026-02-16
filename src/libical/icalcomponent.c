@@ -1096,7 +1096,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
     }
 }
 
-int icalcomponent_check_restrictions(icalcomponent *comp)
+bool icalcomponent_check_restrictions(icalcomponent *comp)
 {
     icalerror_check_arg_rz(comp != 0, "comp");
     return icalrestriction_check(comp);
