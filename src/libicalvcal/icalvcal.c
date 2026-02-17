@@ -634,7 +634,6 @@ static void *multivalued_prop(int icaltype, VObject *object, const icalcomponent
 {
     icalproperty_kind kind = (icalproperty_kind)icaltype;
     icalproperty *prop = NULL;
-    icalvalue_kind value_kind;
     const char *s;
     char *tmp_copy;
     int free_string;
@@ -653,7 +652,7 @@ static void *multivalued_prop(int icaltype, VObject *object, const icalcomponent
     if (tmp_copy) {
         prop = icalproperty_new(kind);
 
-        value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
+        icalvalue_kind value_kind = icalproperty_kind_to_value_kind(icalproperty_isa(prop));
 
         for (char *p = tmp_copy; *p; p++) {
             if (*p == ';') {

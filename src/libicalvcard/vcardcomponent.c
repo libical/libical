@@ -263,7 +263,7 @@ vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component)
     return component->kind;
 }
 
-bool vcardcomponent_isa_component(void *component)
+bool vcardcomponent_isa_component(const void *component)
 {
     const vcardcomponent *impl = component;
 

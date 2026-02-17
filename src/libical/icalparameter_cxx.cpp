@@ -109,6 +109,7 @@ icalparameter_kind ICalParameter::isa()
     return icalparameter_isa(imp);
 }
 
+/* cppcheck-suppress functionStatic */
 bool ICalParameter::isa_parameter(void *param) //NOLINT(readability-convert-member-functions-to-static)
 {
     return icalparameter_isa_parameter(param);

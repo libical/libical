@@ -59,7 +59,7 @@ public:
     std::string as_ical_string();
     bool is_valid();
     icalcomponent_kind isa();
-    bool isa_component(void *component);
+    bool isa_component(const void *component);
 
     /// Working with properties
     void add_property(ICalProperty *property);

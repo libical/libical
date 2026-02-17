@@ -3155,7 +3155,6 @@ char *ical_strstr(const char *haystack, const char *needle)
 
 void test_start_of_week(void)
 {
-    struct icaltimetype tt2;
     struct icaltimetype tt1 = icaltime_from_string("19900110");
 
     do {
@@ -3164,7 +3163,7 @@ void test_start_of_week(void)
         int doy = icaltime_start_doy_week(tt1, 1);
         int dow = icaltime_day_of_week(tt1);
 
-        tt2 = icaltime_from_day_of_year(doy, tt1.year);
+        struct icaltimetype tt2 = icaltime_from_day_of_year(doy, tt1.year);
         int start_dow = icaltime_day_of_week(tt2);
 
         if (doy == 1) {
@@ -5230,7 +5229,6 @@ void test_timezone_from_builtin(void)
         "END:VCALENDAR\r\n";
     icalcomponent *comp;
     icaltimezone *zone;
-    struct icaltimetype dtstart, dtend, due;
     char *strcomp, *tzidprefix, *prevslash = NULL, *prevprevslash = NULL, *p;
     size_t len;
 
@@ -5265,9 +5263,9 @@ void test_timezone_from_builtin(void)
         icalcomponent *subcomp = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
         ok("get subcomp", (subcomp != NULL));
 
-        dtstart = icalcomponent_get_dtstart(subcomp);
-        dtend = icalcomponent_get_dtend(subcomp);
-        due = icalcomponent_get_due(subcomp);
+        struct icaltimetype dtstart = icalcomponent_get_dtstart(subcomp);
+        struct icaltimetype dtend = icalcomponent_get_dtend(subcomp);
+        struct icaltimetype due = icalcomponent_get_due(subcomp);
 
         ok("DTSTART is my_zone", (strcmp(icaltimezone_get_tzid((icaltimezone *)dtstart.zone), "my_zone") == 0));
         ok("DTEND is America/New_York", (strcmp(icaltimezone_get_location((icaltimezone *)dtend.zone), "America/New_York") == 0));
@@ -5454,7 +5452,7 @@ void test_icalcomponent_normalize_missing_mandatory_props(void)
     // component has the property set and the other does not, then
     // the component having the property sorts first.
 
-    struct testcase {
+    const struct testcase {
         const char *calStr;
         const char *expect;
     } tests[] = {{.calStr =

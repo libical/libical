@@ -166,8 +166,6 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
         icalproperty *targetprop;
         icalparameter *compareparam;
         icalparameter_xliccomparetype compare;
-        icalparameter_xliccomparetype rel; /* The relationship between the gauge
-                                                and target values. */
 
         /* Extract the comparison type from the gauge. If there is no
            comparison type, assume that it is "EQUAL" */
@@ -191,7 +189,8 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
             /* Compare the values of the gauge property and the target
                property */
 
-            rel = icalvalue_compare(icalproperty_get_value(p), icalproperty_get_value(targetprop));
+            /* The relationship between the gauge and target values */
+            icalparameter_xliccomparetype rel = icalvalue_compare(icalproperty_get_value(p), icalproperty_get_value(targetprop));
 
             /* Now see if the comparison is equivalent to the comparison
                specified in the gauge */

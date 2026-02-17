@@ -29,7 +29,7 @@ static const void *thread_comp = NULL;
 static void *thread_func(void *user_data)
 {
     icaltimezone *zone = user_data;
-    icalcomponent *icalcomp;
+    const icalcomponent *icalcomp;
 
     if (!zone) {
         return NULL;
