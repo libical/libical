@@ -78,7 +78,7 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_VComponent_isa_1component(JNIEnv
     // get the VComponent c++ object from jobj
     VComponent *cObj = (VComponent *)getSubjectAsVComponent(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
     if (cObj != NULL) {
-        void *candidateValue = 0;
+        const void *candidateValue = 0;
 
         if (candidateObj != NULL) {
             // get the c++ object from candidateObj (as long)

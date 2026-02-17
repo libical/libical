@@ -59,7 +59,7 @@ icalcomponent *icalclassify_find_overlaps(icalset *set, icalcomponent *comp)
 {
     icalcomponent *return_set;
     icalcomponent *c;
-    struct icaltime_span span, compspan;
+    struct icaltime_span compspan;
 
     icalerror_clear_errno();
     compspan = icalcomponent_get_span(comp);
@@ -73,7 +73,7 @@ icalcomponent *icalclassify_find_overlaps(icalset *set, icalcomponent *comp)
     for (c = icalset_get_first_component(set); c != 0; c = icalset_get_next_component(set)) {
         icalerror_clear_errno();
 
-        span = icalcomponent_get_span(c);
+        struct icaltime_span span = icalcomponent_get_span(c);
 
         if (icalerrno != ICAL_NO_ERROR) {
             continue;

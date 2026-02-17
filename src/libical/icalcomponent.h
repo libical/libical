@@ -70,7 +70,7 @@ LIBICAL_ICAL_EXPORT bool icalcomponent_is_valid(const icalcomponent *component);
 
 LIBICAL_ICAL_EXPORT icalcomponent_kind icalcomponent_isa(const icalcomponent *component);
 
-LIBICAL_ICAL_EXPORT bool icalcomponent_isa_component(void *component);
+LIBICAL_ICAL_EXPORT bool icalcomponent_isa_component(const void *component);
 
 /* Deal with X components */
 

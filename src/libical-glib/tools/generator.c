@@ -41,11 +41,6 @@ gchar *get_source_method_comment(Method *method)
     gchar *buffer;
     gchar *res;
     guint iter;
-    guint len;
-    gint count;
-    gint cursor;
-    guint full_flag_len;
-    guint comment_len;
 
     g_return_val_if_fail(method != NULL, NULL);
 
@@ -65,13 +60,13 @@ gchar *get_source_method_comment(Method *method)
     /* Processing the parameters */
     if (method->parameters != NULL) {
         gchar *full_flag = g_strdup("FULL:");
-        full_flag_len = (guint)strlen(full_flag);
+        guint full_flag_len = (guint)strlen(full_flag);
 
         for (iter_list = g_list_first(method->parameters); iter_list != NULL;
              iter_list = g_list_next(iter_list)) {
             Parameter *para = (Parameter *)iter_list->data;
             if (para) {
-                comment_len = 0;
+                guint comment_len = 0;
                 if (para->comment) {
                     comment_len = (guint)strlen(para->comment);
                 }
@@ -126,8 +121,8 @@ gchar *get_source_method_comment(Method *method)
     if (method->comment != NULL) {
         gchar *comment_line = g_new(gchar, BUFFER_SIZE);
         *comment_line = '\0';
-        len = (guint)strlen(method->comment);
-        count = 0;
+        guint len = (guint)strlen(method->comment);
+        int count = 0;
         (void)g_stpcpy(comment_line, "\n *\n * ");
         for (iter = 0; iter < len; iter++) {
             if (count >= COMMENT_LINE_LENGTH && method->comment[iter] == ' ') {
@@ -135,7 +130,7 @@ gchar *get_source_method_comment(Method *method)
                 count = -1;
             }
 
-            cursor = (gint)strlen(comment_line);
+            gint cursor = (gint)strlen(comment_line);
             comment_line[cursor] = method->comment[iter];
             comment_line[cursor + 1] = '\0';
 
@@ -1263,9 +1258,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
     gboolean isTrue;
     gchar *condition;
     gchar *expression;
-    gint count;
     gint len;
-    gchar c;
     gchar *var;
     guint statement_len;
     guint expression_len;
@@ -1319,7 +1312,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                 gchar *buffer;
 
                 iter += 2;
-                count = 1;
+                gint count = 1;
                 buffer = g_new(gchar, BUFFER_SIZE);
                 *buffer = '\0';
                 while (iter < expression_len) {
@@ -1345,7 +1338,7 @@ void generate_conditional(FILE *out, Structure *structure, gchar *statement, GHa
                 }
                 g_free(buffer);
             } else {
-                c = expression[iter];
+                gchar c = expression[iter];
                 if (c == '$') {
                     if (expression[++iter] != '{') {
                         g_warning("The following char is not {");

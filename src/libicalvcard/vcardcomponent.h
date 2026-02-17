@@ -58,7 +58,7 @@ LIBICAL_VCARD_EXPORT bool vcardcomponent_is_valid(const vcardcomponent *comp);
 
 LIBICAL_VCARD_EXPORT vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *comp);
 
-LIBICAL_VCARD_EXPORT bool vcardcomponent_isa_component(void *comp);
+LIBICAL_VCARD_EXPORT bool vcardcomponent_isa_component(const void *comp);
 
 /***** Working with Properties *****/
 

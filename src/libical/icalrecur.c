@@ -4142,8 +4142,7 @@ bool icalrecur_expand_recurrence(const char *rule,
 {
     struct icalrecurrencetype *recur;
     icalrecur_iterator *ritr;
-    icaltime_t tt;
-    struct icaltimetype icstart, next;
+    struct icaltimetype icstart;
 
     memset(array, 0, (size_t)count * sizeof(icaltime_t));
 
@@ -4157,10 +4156,10 @@ bool icalrecur_expand_recurrence(const char *rule,
     ritr = icalrecur_iterator_new(recur, icstart);
     if (ritr) {
         int i = 0;
-        for (next = icalrecur_iterator_next(ritr);
+        for (struct icaltimetype next = icalrecur_iterator_next(ritr);
              !icaltime_is_null_time(next) && i < count;
              next = icalrecur_iterator_next(ritr)) {
-            tt = icaltime_as_timet(next);
+            icaltime_t tt = icaltime_as_timet(next);
 
             if (tt >= start) {
                 array[i++] = tt;

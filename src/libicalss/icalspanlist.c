@@ -366,10 +366,10 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
     /* now add the freebusy sections.. */
 
     for (itr = icalpvl_head(sl->spans); itr != 0; itr = icalpvl_next(itr)) {
-        struct icalperiodtype period;
         struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
 
         if (s && s->is_busy == 1) {
+            struct icalperiodtype period;
             period.start = icaltime_from_timet_with_zone(s->start, 0, utc_zone);
             period.end = icaltime_from_timet_with_zone(s->end, 0, utc_zone);
             period.duration = icaldurationtype_null_duration();

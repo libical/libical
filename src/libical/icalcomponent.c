@@ -308,7 +308,7 @@ icalcomponent_kind icalcomponent_isa(const icalcomponent *component)
     return component->kind;
 }
 
-bool icalcomponent_isa_component(void *component)
+bool icalcomponent_isa_component(const void *component)
 {
     const icalcomponent *impl = component;
 
@@ -749,12 +749,10 @@ bool icalproperty_recurrence_is_excluded(icalcomponent *comp,
         struct icalrecurrencetype *recur = icalproperty_get_exrule(exrule);
         if (recur) {
             icalrecur_iterator *exrule_itr = icalrecur_iterator_new(recur, *dtstart);
-            struct icaltimetype exrule_time;
-
             while (exrule_itr) {
                 int result;
 
-                exrule_time = icalrecur_iterator_next(exrule_itr);
+                struct icaltimetype exrule_time = icalrecur_iterator_next(exrule_itr);
 
                 if (icaltime_is_null_time(exrule_time)) {
                     break;
@@ -2365,14 +2363,13 @@ void icalcomponent_foreach_tzid(icalcomponent *comp,
                                 void *callback_data)
 {
     icalproperty *prop;
-    icalproperty_kind kind;
     icalparameter *param;
     icalcomponent *subcomp;
 
     /* First look for any TZID parameters used in this component itself. */
     prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
     while (prop) {
-        kind = icalproperty_isa(prop);
+        icalproperty_kind kind = icalproperty_isa(prop);
 
         /* These are the only properties that can have a TZID. Note that
            COMPLETED, CREATED, DTSTAMP & LASTMODIFIED must be in UTC. */

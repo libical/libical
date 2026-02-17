@@ -374,7 +374,8 @@ VObject* addGroup(VObject *o, const char *g)
     char *dot = strrchr(g,'.');
     if (dot) {
         VObject *p, *t;
-        char *gs, *n = dot+1;
+        char *gs;
+        const char *n = dot+1;
         gs = dupStr(g,0);       /* so we can write to it. */
         /* used to be
         * t = p = addProp_(o,lookupProp_(n));

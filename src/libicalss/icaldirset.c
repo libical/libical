@@ -135,6 +135,7 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
     return ICAL_NO_ERROR;
 }
 
+/* cppcheck-suppress constParameterPointer */
 icalset *icaldirset_init(icalset *set, const char *dir, void *options_in)
 {
     icaldirset *dset;

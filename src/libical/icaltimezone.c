@@ -834,7 +834,7 @@ void icaltimezone_convert_time(struct icaltimetype *tt,
 int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *tt, int *is_daylight)
 {
     const icaltimezonechange *zone_change;
-    icaltimezonechange *prev_zone_change;
+    const icaltimezonechange *prev_zone_change;
     icaltimezonechange tt_change = {0}, tmp_change;
     size_t change_num, change_num_to_use;
     int found_change;
