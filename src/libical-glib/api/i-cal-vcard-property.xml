@@ -4,7 +4,6 @@
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 -->
 <structure namespace="ICalVcard" name="Property" native="vcardproperty" destroy_func="vcardproperty_free">
-  <skip>vcardproperty_new_impl</skip>
   <skip>vcardproperty_add_parameters</skip>
   <method name="i_cal_vcard_property_new" corresponds="vcardproperty_new" kind="constructor" since="4.0">
     <parameter type="ICalVcardPropertyKind" name="kind" comment="The kind of #ICalVcardProperty to be created"/>

@@ -18,6 +18,8 @@
 
 #include <string.h>
 
+LIBICAL_VCARD_EXPORT struct vcardproperty_impl *vcardproperty_new_impl(vcardproperty_kind kind);
+
 /* This map associates the property kinds with:
    - the string representation of the property name;
    - the VALUE kind that libical uses internally;
@@ -41,15 +43,14 @@ struct vcardproperty_map // NOLINT(clang-analyzer-optin.performance.Padding)
     unsigned int flags;
 };
 
-#define VCARD_PROPERTY_IS_STRUCTURED  (1U<<0)
-#define VCARD_PROPERTY_IS_MULTIVALUED (1U<<1)
+#define VCARD_PROPERTY_IS_STRUCTURED (1U << 0)
+#define VCARD_PROPERTY_IS_MULTIVALUED (1U << 1)
 
 /* This map associates the property enumerations with the king of
    property that they are used in and the string representation of the
    enumeration */
 
-struct vcardproperty_enum_map
-{
+struct vcardproperty_enum_map {
     vcardproperty_kind prop;
     int prop_enum;
     const char *str;
@@ -64,7 +65,7 @@ struct vcardproperty_enum_map
 #pragma clang diagnostic pop
 #endif
 
-bool vcardproperty_kind_is_valid(const vcardproperty_kind kind)
+    bool vcardproperty_kind_is_valid(const vcardproperty_kind kind)
 {
     int i = 0;
     int num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
@@ -88,7 +89,7 @@ const char *vcardproperty_kind_to_string(vcardproperty_kind kind)
     int i, num_props;
 
     num_props = (int)(sizeof(property_map) / sizeof(property_map[0]));
-    for (i = 0; i< num_props; i++) {
+    for (i = 0; i < num_props; i++) {
         if (property_map[i].kind == kind) {
             return property_map[i].name;
         }
@@ -144,8 +145,7 @@ vcardvalue_kind vcardproperty_kind_to_value_kind(vcardproperty_kind kind)
         if (map->kind == kind) {
             /* Return default value type if possible,
                otherwise return first legal value type */
-            return (map->default_value != VCARD_NO_VALUE) ?
-                map->default_value : map->valid_values[0];
+            return (map->default_value != VCARD_NO_VALUE) ? map->default_value : map->valid_values[0];
         }
     }
 
@@ -153,7 +153,7 @@ vcardvalue_kind vcardproperty_kind_to_value_kind(vcardproperty_kind kind)
 }
 
 bool vcardproperty_value_kind_is_valid(vcardproperty_kind pkind,
-                                     vcardvalue_kind vkind)
+                                       vcardvalue_kind vkind)
 {
     int i, j;
     int num_props;

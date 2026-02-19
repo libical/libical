@@ -19,8 +19,6 @@
 
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new(icalproperty_kind kind);
 
-LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_impl(icalproperty_kind kind);
-
 /** @brief Deeply clones an icalproperty.
  *
  * Returns a pointer to the memory for the newly cloned icalproperty.

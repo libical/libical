@@ -7,7 +7,6 @@
 
 -->
 <structure namespace="ICal" name="Property" native="icalproperty" destroy_func="icalproperty_free">
-  <skip>icalproperty_new_impl</skip>
   <skip>icalproperty_add_parameters</skip>
   <method name="i_cal_property_new" corresponds="icalproperty_new" kind="constructor" since="1.0">
     <parameter type="ICalPropertyKind" name="kind" comment="The kind of #ICalProperty to be created"/>
