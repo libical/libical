@@ -261,6 +261,55 @@ static void test_param_multivalued(void)
     vcardcomponent_free(card);
 }
 
+static void test_param_structured(void)
+{
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "X-PROP;JSCOMPS=\";a;b,c;d\\,e\":foo\r\n"
+        "X-PROP;JSCOMPS=a:foo\r\n" // non-standard
+        "X-PROP;JSCOMPS=a,b:foo\r\n" // non-standard
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+    vcardproperty *prop;
+    vcardparameter *param;
+    vcardstructuredtype *jscomps;
+
+    prop = vcardcomponent_get_first_property(card, VCARD_X_PROPERTY);
+    param = vcardproperty_get_first_parameter(prop, VCARD_JSCOMPS_PARAMETER);
+    jscomps = vcardparameter_get_jscomps(param);
+    assert(4 == jscomps->num_fields);
+    assert(0 == vcardstrarray_size(jscomps->field[0]));
+    assert(1 == vcardstrarray_size(jscomps->field[1]));
+    assert_str_equals("a", vcardstrarray_element_at(jscomps->field[1], 0));
+    assert(2 == vcardstrarray_size(jscomps->field[2]));
+    assert_str_equals("b", vcardstrarray_element_at(jscomps->field[2], 0));
+    assert_str_equals("c", vcardstrarray_element_at(jscomps->field[2], 1));
+    assert(1 == vcardstrarray_size(jscomps->field[3]));
+    assert_str_equals("d,e", vcardstrarray_element_at(jscomps->field[3], 0));
+    assert_str_equals("foo", vcardproperty_get_value_as_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    param = vcardproperty_get_first_parameter(prop, VCARD_JSCOMPS_PARAMETER);
+    jscomps = vcardparameter_get_jscomps(param);
+    assert(1 == jscomps->num_fields);
+    assert(1 == vcardstrarray_size(jscomps->field[0]));
+    assert_str_equals("a", vcardstrarray_element_at(jscomps->field[0], 0));
+    assert_str_equals("foo", vcardproperty_get_value_as_string(prop));
+
+    prop = vcardcomponent_get_next_property(card, VCARD_X_PROPERTY);
+    param = vcardproperty_get_first_parameter(prop, VCARD_JSCOMPS_PARAMETER);
+    jscomps = vcardparameter_get_jscomps(param);
+    assert(1 == jscomps->num_fields);
+    assert(2 == vcardstrarray_size(jscomps->field[0]));
+    assert_str_equals("a", vcardstrarray_element_at(jscomps->field[0], 0));
+    assert_str_equals("b", vcardstrarray_element_at(jscomps->field[0], 1));
+    assert_str_equals("foo", vcardproperty_get_value_as_string(prop));
+
+    vcardcomponent_free(card);
+}
+
 static void test_value_structured(void)
 {
     vcardstructuredtype stt;
@@ -422,6 +471,7 @@ int main(int argc, char **argv)
 
     test_param_singlevalued();
     test_param_multivalued();
+    test_param_structured();
 
     test_value_structured();
     test_value_structured_from_string();

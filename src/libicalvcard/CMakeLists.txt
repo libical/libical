@@ -183,6 +183,8 @@ set(
   vcardstrarray.h
   vcardstructured.c
   vcardstructured.h
+  vcardtextlist.c
+  vcardtextlist.h
   vcardtime.c
   vcardtime.h
   vcardtypes.h

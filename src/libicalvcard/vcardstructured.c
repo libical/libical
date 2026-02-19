@@ -11,6 +11,7 @@
 #endif
 
 #include "vcardstructured.h"
+#include "vcardvalue.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 
@@ -33,59 +34,28 @@ vcardstructuredtype *vcardstructured_new(void)
     return s;
 }
 
-vcardstructuredtype *vcardstructured_new_from_string(const char *s)
+vcardstructuredtype *vcardstructured_new_from_string(const char *str)
 {
     vcardstructuredtype *st = vcardstructured_new();
-    ptrdiff_t len = 0;
-    size_t alloc = 100;
-    char *pos, *buf = icalmemory_new_buffer(alloc);
     vcardstrarray *field = vcardstrarray_new(2);
 
     st->field[st->num_fields++] = field;
 
-    for (; *s; s++) {
-        pos = buf + len;
+    do {
+        char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",;");
 
-        switch (*s) {
-        case '\\':
-            if (s[1]) {
-                icalmemory_append_char(&buf, &pos, &alloc, s[1]);
-                len = (ptrdiff_t)(pos - buf);
-                s++;
-            }
-            break;
-
-        case ',':
-        case ';':
-            /* end of value */
-            if (len || *s == ',' || vcardstrarray_size(field)) {
-                icalmemory_append_char(&buf, &pos, &alloc, '\0');
-                vcardstrarray_append(field, buf);
-            }
-            len = 0;
-
-            if (*s == ';') {
-                /* end of field */
-                field = vcardstrarray_new(2);
-                st->field[st->num_fields++] = field;
-            }
-            break;
-
-        default:
-            icalmemory_append_char(&buf, &pos, &alloc, *s);
-            len = (ptrdiff_t)(pos - buf);
-            break;
+        if (*str == ',' || field->num_elements || strlen(dequoted_str)) {
+            vcardstrarray_append(field, dequoted_str);
         }
-    }
+        icalmemory_free_buffer(dequoted_str);
 
-    /* end of value */
-    pos = buf + len;
-    if (len || vcardstrarray_size(field)) {
-        icalmemory_append_char(&buf, &pos, &alloc, '\0');
-        vcardstrarray_append(field, buf);
-    }
+        if (*str == ';') {
+            /* end of field */
+            field = vcardstrarray_new(2);
+            st->field[st->num_fields++] = field;
+        }
 
-    icalmemory_free_buffer(buf);
+    } while (*str++ != '\0');
 
     return st;
 }

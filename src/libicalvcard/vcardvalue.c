@@ -14,6 +14,7 @@
 #include "vcardvalueimpl.h"
 #include "vcardcomponent.h"
 #include "vcardproperty.h"
+#include "vcardtextlist.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 
@@ -442,41 +443,17 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
     }
 
     case VCARD_TEXTLIST_VALUE: {
-        vcardstrarray *array = vcardstrarray_new(2);
-
-        do {
-            char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",");
-
-            vcardstrarray_append(array, dequoted_str);
-            icalmemory_free_buffer(dequoted_str);
-
-        } while (*str++ != '\0');
-
-        value = vcardvalue_new_textlist(array);
+        value = vcardvalue_new_textlist(vcardtextlist_new_from_string(str, ','));
         break;
     }
 
     case VCARD_STRUCTURED_VALUE: {
-        vcardstructuredtype st = {0, {0}};
-        vcardstrarray *field = vcardstrarray_new(2);
-
-        st.field[st.num_fields++] = field;
-
-        do {
-            char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",;");
-
-            vcardstrarray_append(field, dequoted_str);
-            icalmemory_free_buffer(dequoted_str);
-
-            if (*str == ';') {
-                /* end of field */
-                field = vcardstrarray_new(2);
-                st.field[st.num_fields++] = field;
-            }
-
-        } while (*str++ != '\0');
-
-        value = vcardvalue_new_structured(&st);
+        vcardstructuredtype *st = vcardstructured_new_from_string(str);
+        value = vcardvalue_new_structured(st);
+        {
+            // XXX new_structured only takes ownership of fields *within* st
+            free(st);
+        }
         break;
     }
 
