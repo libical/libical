@@ -212,6 +212,7 @@ The following functions have been added:
 * No longer publicly visible functions:
   * `icaltzutil_fetch_timezone()`
   * `icalrecurrencetype_clear()`
+  * `icalproperty_new_impl()`
 
 ### Removed macros
 

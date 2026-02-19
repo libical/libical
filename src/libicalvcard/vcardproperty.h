@@ -18,8 +18,6 @@
 
 LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_new(vcardproperty_kind kind);
 
-LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_new_impl(vcardproperty_kind kind);
-
 /** @brief Deeply clones an vcardproperty.
  *
  * Returns a pointer to the memory for the newly cloned vcardproperty.

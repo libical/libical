@@ -32,22 +32,7 @@ struct vcardproperty_impl {
     vcardcomponent *parent;
 };
 
-void vcardproperty_add_parameters(vcardproperty *prop, va_list args)
-{
-    void *vp;
-
-    while ((vp = va_arg(args, void *)) != 0) {
-        if (vcardvalue_isa_value(vp) != 0) {
-        } else if (vcardparameter_isa_parameter(vp) != 0) {
-            vcardproperty_add_parameter((vcardproperty *)prop,
-                                        (vcardparameter *)vp);
-        } else {
-            icalerror_set_errno(ICAL_BADARG_ERROR);
-        }
-    }
-}
-
-vcardproperty *vcardproperty_new_impl(vcardproperty_kind kind)
+LIBICAL_VCARD_EXPORT struct vcardproperty_impl *vcardproperty_new_impl(vcardproperty_kind kind)
 {
     vcardproperty *prop;
 
@@ -68,6 +53,21 @@ vcardproperty *vcardproperty_new_impl(vcardproperty_kind kind)
     prop->parameters = icalpvl_newlist();
 
     return prop;
+}
+
+void vcardproperty_add_parameters(vcardproperty *prop, va_list args)
+{
+    void *vp;
+
+    while ((vp = va_arg(args, void *)) != 0) {
+        if (vcardvalue_isa_value(vp) != 0) {
+        } else if (vcardparameter_isa_parameter(vp) != 0) {
+            vcardproperty_add_parameter((vcardproperty *)prop,
+                                        (vcardparameter *)vp);
+        } else {
+            icalerror_set_errno(ICAL_BADARG_ERROR);
+        }
+    }
 }
 
 vcardproperty *vcardproperty_new(vcardproperty_kind kind)

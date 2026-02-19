@@ -31,6 +31,29 @@ struct icalproperty_impl {
     icalcomponent *parent;
 };
 
+LIBICAL_ICAL_EXPORT struct icalproperty_impl *icalproperty_new_impl(icalproperty_kind kind)
+{
+    icalproperty *prop;
+
+    if (!icalproperty_kind_is_valid(kind)) {
+        return NULL;
+    }
+
+    if ((prop = (icalproperty *)icalmemory_new_buffer(sizeof(icalproperty))) == 0) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return 0;
+    }
+
+    memset(prop, 0, sizeof(icalproperty));
+
+    strcpy(prop->id, "prop");
+
+    prop->kind = kind;
+    prop->parameters = icalpvl_newlist();
+
+    return prop;
+}
+
 static ICAL_GLOBAL_VAR bool icalprop_allow_empty_properties = false;
 
 void icalproperty_set_allow_empty_properties(bool enable)
@@ -55,29 +78,6 @@ void icalproperty_add_parameters(icalproperty *prop, va_list args)
             icalerror_set_errno(ICAL_BADARG_ERROR);
         }
     }
-}
-
-icalproperty *icalproperty_new_impl(icalproperty_kind kind)
-{
-    icalproperty *prop;
-
-    if (!icalproperty_kind_is_valid(kind)) {
-        return NULL;
-    }
-
-    if ((prop = (icalproperty *)icalmemory_new_buffer(sizeof(icalproperty))) == 0) {
-        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
-        return 0;
-    }
-
-    memset(prop, 0, sizeof(icalproperty));
-
-    strcpy(prop->id, "prop");
-
-    prop->kind = kind;
-    prop->parameters = icalpvl_newlist();
-
-    return prop;
 }
 
 icalproperty *icalproperty_new(icalproperty_kind kind)
