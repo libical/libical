@@ -114,7 +114,6 @@ char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
     const char *p;
     char *out = (char *)icalmemory_new_buffer(sizeof(char) * strlen(*str) + 1);
     char *pout;
-    int wroteNull = 0;
 
     if (out == 0) {
         return 0;
@@ -126,12 +125,12 @@ char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
        or if a null has been written to the destination. This prevents
        reading past the end of the source string if the last character
        is a backslash. */
-    for (p = *str; !wroteNull && *p != 0; p++) {
+    for (p = *str; *p != 0; p++) {
         if (*p == '\\') {
             p++;
             switch (*p) {
             case 0: {
-                wroteNull = 1; //stops iteration so p isn't incremented past the end of str
+                p--; // step back to NUL to stop iteration
                 *pout = '\0';
                 break;
             }
