@@ -1131,9 +1131,9 @@ static void comp_to_v3(vcardcomponent *impl)
                         *lon++ = '\0';
                     }
                     if (lat && lon) {
-                        strncpy(geo.coords.lat, lat, VCARD_GEO_LEN);
+                        strncpy(geo.coords.lat, lat, VCARD_GEO_LEN - 1);
                         geo.coords.lat[VCARD_GEO_LEN-1] = '\0';
-                        strncpy(geo.coords.lon, lon, VCARD_GEO_LEN);
+                        strncpy(geo.coords.lon, lon, VCARD_GEO_LEN - 1);
                         geo.coords.lon[VCARD_GEO_LEN-1] = '\0';
                     } else {
                         geo.coords.lat[0] = '\0';
