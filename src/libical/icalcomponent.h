@@ -162,12 +162,34 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_prior(icalcompiter *i);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcompiter_deref(icalcompiter *i);
 
+/**
+ * Checks if the specified icalcompiter is valid.
+ *
+ * @param i a pointer to a possibly invalid icalcompiter
+ *
+ * @return true if @p i points to a valid icalcompiter; false otherwise.
+ *
+ * @since 4.0
+ */
+LIBICAL_ICAL_EXPORT bool icalcompiter_is_valid(const icalcompiter *i);
+
 LIBICAL_ICAL_EXPORT icalpropiter icalcomponent_begin_property(icalcomponent *component,
                                                               icalproperty_kind kind);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalpropiter_next(icalpropiter *i);
 
 LIBICAL_ICAL_EXPORT icalproperty *icalpropiter_deref(icalpropiter *i);
+
+/**
+ * Checks if the specified icalpropiter is valid.
+ *
+ * @param i a pointer to a possibly invalid icalpropiter
+ *
+ * @return true if @p i points to a valid icalpropiter; false otherwise.
+ *
+ * @since 4.0
+ */
+LIBICAL_ICAL_EXPORT bool icalpropiter_is_valid(const icalpropiter *i);
 
 /***** Working with embedded error properties *****/
 

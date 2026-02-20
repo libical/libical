@@ -182,6 +182,8 @@ The following functions have been added:
 * `icalparser_set_ctrl()`
 * `icaltimezone_tzid_prefix()`
 * `icaltimezone_set_system_zone_directory()`
+* `icalcompiter_is_valid()`
+* `icalpropiter_is_valid()`
 * and the new functions for the `icalstrarray` and `icalenumarray` data types
 
 ### Removed functions
