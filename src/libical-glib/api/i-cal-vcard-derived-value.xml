@@ -50,22 +50,6 @@
     <parameter type="ICalVcardValue *" name="value" comment="The #ICalVcardValue to be queried"/>
     <comment>Reset's the value's kind.</comment>
   </method>
-  <method name="priv_i_cal_vcardstructuredtype_clone" corresponds="none" kind="private" since="4.0" annotation="skip">
-    <parameter type="const vcardstructuredtype *" name="src" annotation="transfer none" comment="vcardstructuredtype to clone"/>
-    <returns type="vcardstructuredtype *" annotation="transfer full" comment="The newly created vcardstructuredtype"/>
-    <custom>    guint ii;
-    vcardstructuredtype *res;
-    if (src == NULL) {
-        return NULL;
-    }
-    res = vcardstructured_new();
-    res-&gt;num_fields = src-&gt;num_fields;
-    for (ii = 0; ii &lt; src-&gt;num_fields; ii++) {
-        vcardstrarray *field = src-&gt;field[ii];
-        res-&gt;field[ii] = field ? vcardstrarray_clone(field) : NULL;
-    }
-    return res;</custom>
-  </method>
   <method-from-template name="vcardstructured" obj-type="ICalVcardValue" native-type="vcardvalue" value-name="STRUCTURED" since="4.0" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="structured"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="GEO" since="4.0" value-get-type="ICalVcardGeo *" value-set-type="const ICalVcardGeo *" value-set-type-ref="#ICalVcardGeo" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="geo"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="TZ" since="4.0" value-get-type="ICalVcardTz *" value-set-type="const ICalVcardTz *" value-set-type-ref="#ICalVcardTz" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="tz"/>
