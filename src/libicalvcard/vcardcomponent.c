@@ -767,7 +767,7 @@ void vcardcomponent_normalize(vcardcomponent *comp)
     comp->components = sorted_comps;
 }
 
-#define UUID_PREFIX     "urn:uuid:"
+#define UUID_PREFIX "urn:uuid:"
 #define UUID_PREFIX_LEN 9
 
 static void comp_to_v4(vcardcomponent *impl)
@@ -961,8 +961,7 @@ static void comp_to_v4(vcardcomponent *impl)
                 value->kind = VCARD_URI_VALUE;
                 vcardproperty_remove_parameter_by_kind(prop,
                                                        VCARD_VALUE_PARAMETER);
-            }
-            else {
+            } else {
                 /* Otherwise, treat it as TEXT */
                 value->kind = VCARD_TEXT_VALUE;
             }
@@ -974,7 +973,7 @@ static void comp_to_v4(vcardcomponent *impl)
             const char *xname = vcardproperty_get_x_name(prop);
 
             if (!strncasecmp(xname, "X-ADDRESSBOOKSERVER-", 20)) {
-                vcardproperty_kind kind = vcardproperty_string_to_kind(xname+20);
+                vcardproperty_kind kind = vcardproperty_string_to_kind(xname + 20);
                 const char *valstr = vcardvalue_as_vcard_string(value);
                 vcardproperty *new;
                 char *buf = NULL, *buf_ptr;
@@ -994,7 +993,7 @@ static void comp_to_v4(vcardcomponent *impl)
                     valstr = buf;
 
                     _fallthrough();
-                    
+
                 case VCARD_KIND_PROPERTY:
                     new = vcardproperty_new(kind);
                     vcardproperty_set_value_from_string(new, valstr, "NO");
@@ -1015,7 +1014,6 @@ static void comp_to_v4(vcardcomponent *impl)
         default:
             break;
         }
-
     }
 }
 
@@ -1132,9 +1130,9 @@ static void comp_to_v3(vcardcomponent *impl)
                     }
                     if (lat && lon) {
                         strncpy(geo.coords.lat, lat, VCARD_GEO_LEN - 1);
-                        geo.coords.lat[VCARD_GEO_LEN-1] = '\0';
+                        geo.coords.lat[VCARD_GEO_LEN - 1] = '\0';
                         strncpy(geo.coords.lon, lon, VCARD_GEO_LEN - 1);
-                        geo.coords.lon[VCARD_GEO_LEN-1] = '\0';
+                        geo.coords.lon[VCARD_GEO_LEN - 1] = '\0';
                     } else {
                         geo.coords.lat[0] = '\0';
                         geo.coords.lon[0] = '\0';
@@ -1252,7 +1250,6 @@ static void comp_to_v3(vcardcomponent *impl)
         default:
             break;
         }
-
     }
 
     /* Add TYPE=PREF for each most preferred property */

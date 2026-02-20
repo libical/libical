@@ -6884,13 +6884,10 @@ static void test_internal_limits(void)
 void test_icaldurationtype_normalize(void)
 {
 #define assert_normalized_duration(input, want) \
-    str_is("normalize(" input ")=" want, want, \
-        icaldurationtype_as_ical_string( \
-            icaldurationtype_normalize( \
-                icaldurationtype_from_string(input) \
-            ) \
-        ) \
-    )
+    str_is("normalize(" input ")=" want, want,  \
+           icaldurationtype_as_ical_string(     \
+               icaldurationtype_normalize(      \
+                   icaldurationtype_from_string(input))))
 
     assert_normalized_duration("PT0S", "PT0S");
     assert_normalized_duration("PT59S", "PT59S");
@@ -6972,26 +6969,26 @@ static void test_icalcomponent_remove_property_by_kind(void)
 
 static void test_icalcomponent_get_duration(void)
 {
-#define assert_icalcomponent_get_duration(desc, want, ctlines) \
-    { \
-        const char *str = \
-            "BEGIN:VCALENDAR\r\n" \
-            "VERSION:2.0\r\n" \
-            "PRODID:-//foo/bar//v1.0//EN\r\n" \
-            "BEGIN:VEVENT\r\n" \
-            "UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n" \
-            "DTSTAMP:20060102T030405Z\r\n" \
-            ctlines \
-            "END:VEVENT\r\n" \
-            "END:VCALENDAR\r\n"; \
-        icalcomponent *ical = icalcomponent_new_from_string(str); \
-        ok("Parsed iCalendar object", (ical != NULL)); \
-        icalcomponent *comp = icalcomponent_get_first_real_component(ical); \
+#define assert_icalcomponent_get_duration(desc, want, ctlines)                           \
+    {                                                                                    \
+        const char *str =                                                                \
+            "BEGIN:VCALENDAR\r\n"                                                        \
+            "VERSION:2.0\r\n"                                                            \
+            "PRODID:-//foo/bar//v1.0//EN\r\n"                                            \
+            "BEGIN:VEVENT\r\n"                                                           \
+            "UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n"                               \
+            "DTSTAMP:20060102T030405Z\r\n" ctlines                                       \
+            "END:VEVENT\r\n"                                                             \
+            "END:VCALENDAR\r\n";                                                         \
+        icalcomponent *ical = icalcomponent_new_from_string(str);                        \
+        ok("Parsed iCalendar object", (ical != NULL));                                   \
+        icalcomponent *comp = icalcomponent_get_first_real_component(ical);              \
         ok("Parsed VEVENT component", icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT); \
-        str_is(desc, \
-                icaldurationtype_as_ical_string(\
-                    icalcomponent_get_duration(comp)), want); \
-        icalcomponent_free(ical); \
+        str_is(desc,                                                                     \
+               icaldurationtype_as_ical_string(                                          \
+                   icalcomponent_get_duration(comp)),                                    \
+               want);                                                                    \
+        icalcomponent_free(ical);                                                        \
     }
 
     assert_icalcomponent_get_duration(
@@ -7055,7 +7052,6 @@ static void test_icalcomponent_get_duration(void)
 
 #undef assert_icalcomponent_get_duration
 }
-
 
 int main(int argc, const char *argv[])
 {

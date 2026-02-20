@@ -31,7 +31,7 @@ LIBICAL_VCARD_EXPORT const char *vcardparser_errstr(int err);
  *
  * @see vcardparser_set_xprop_value_kind() how to set the callback.
  */
-typedef vcardvalue_kind(*vcard_xprop_value_kind_func)(const char *name, void *data);
+typedef vcardvalue_kind (*vcard_xprop_value_kind_func)(const char *name, void *data);
 
 /**
  * @brief Registers a parser callback to override the default value type of an

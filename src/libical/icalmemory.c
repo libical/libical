@@ -450,7 +450,7 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
  *
  * Note that comma IS actually safe in vCard but we will quote it anyway
  */
-#define UNSAFE_CHARS   ";:,"
+#define UNSAFE_CHARS ";:,"
 
 static bool icalmemory_is_safe_char(unsigned char character, bool quoted)
 {

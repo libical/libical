@@ -410,7 +410,7 @@ static int _parse_param_value(struct vcardparser_state *state)
                                             is_structured,
                                             is_multivalued)) == PE_QSTRING_EOV) {
                 vcardparameter_add_value_from_string(state->param,
-                        buf_cstring(&state->buf));
+                                                     buf_cstring(&state->buf));
 
                 buf_reset(&state->buf);
                 INC(1);
@@ -604,10 +604,10 @@ static int _parse_prop_name(struct vcardparser_state *state)
                 break;
 
             case VCARD_X_PROPERTY:
-              state->value_kind =
-                  xprop_value_kind_func ? xprop_value_kind_func(name, xprop_value_kind_data)
-                                    : VCARD_X_VALUE;
-              break;
+                state->value_kind =
+                    xprop_value_kind_func ? xprop_value_kind_func(name, xprop_value_kind_data)
+                                          : VCARD_X_VALUE;
+                break;
 
             default:
                 state->value_kind = vcardproperty_kind_to_value_kind(kind);

@@ -343,7 +343,6 @@ static bool simple_str_to_doublestr(const char *from, char *result, int result_l
     return false;
 }
 
-
 static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                                                          const char *str,
                                                          vcardproperty **error)
@@ -789,7 +788,9 @@ char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *st, bool is_p
         vcardstrarray *array = vcardstructured_field_at(st, i);
 
         if (i) {
-            if (buf_ptr > buf) buf_ptr -= 1; // backup to \0
+            if (buf_ptr > buf) {
+                buf_ptr -= 1; // backup to \0
+            }
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
         }
 
@@ -851,7 +852,7 @@ static char *vcardvalue_geo_as_vcard_string_r(const vcardvalue *value)
     size_t max_len = 2 * VCARD_GEO_LEN;
     char *str = (char *)icalmemory_new_buffer(max_len);
     snprintf(str, max_len, "%s;%s",
-            value->data.v_geo.coords.lat, value->data.v_geo.coords.lon);
+             value->data.v_geo.coords.lat, value->data.v_geo.coords.lon);
     str[max_len - 1] = '\0';
     return str;
 }
