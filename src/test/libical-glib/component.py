@@ -197,6 +197,7 @@ def main():
 
     # Traverse with external API.
     iterator = parent.begin_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
+    assert iterator.is_valid()
     childComponent = iterator.deref()
     for i in range(0, count):
         prefix = 'test'
@@ -314,6 +315,7 @@ def main():
     # Test propiter and paramiter
     comp = ICalGLib.Component.new_from_string(eventStr1)
     iter = comp.begin_property(ICalGLib.PropertyKind.ANY_PROPERTY)
+    assert iter.is_valid()
     assert iter.deref().as_ical_string().split('\n', 1)[0] == 'UID:event-uid-123\r'
     iter.next()
     prop = iter.deref()

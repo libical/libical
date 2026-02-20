@@ -214,6 +214,10 @@
 
     return iter;</custom>
   </method>
+  <method name="i_cal_comp_iter_is_valid" corresponds="icalcompiter_is_valid" since="4.0">
+    <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter"/>
+    <returns type="gboolean" comment="true if a valid iterator; false otherwise."/>
+  </method>
   <method name="i_cal_comp_iter_next" corresponds="icalcompiter_next" since="1.0">
     <parameter type="ICalCompIter *" name="i" native_op="POINTER" comment="A #ICalCompIter"/>
     <returns type="ICalComponent *" annotation="transfer full" comment="A #ICalComponent"/>
@@ -281,6 +285,10 @@
     }
 
     return iter;</custom>
+  </method>
+  <method name="i_cal_prop_iter_is_valid" corresponds="icalpropiter_is_valid" since="4.0">
+    <parameter type="ICalPropIter *" name="i" native_op="POINTER" comment="A #ICalPropIter"/>
+    <returns type="gboolean" comment="true if a valid iterator; false otherwise."/>
   </method>
   <method name="i_cal_prop_iter_next" corresponds="icalpropiter_next" since="4.0">
     <parameter type="ICalPropIter *" name="i" native_op="POINTER" comment="A #ICalPropIter"/>

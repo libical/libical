@@ -1313,6 +1313,12 @@ icalcomponent_kind icalcomponent_string_to_kind(const char *string)
     return ICAL_NO_COMPONENT;
 }
 
+bool icalcompiter_is_valid(const icalcompiter *i)
+{
+    /* compare to icalcompiter_null */
+    return !((i->kind == ICAL_NO_COMPONENT) && (i->iter == 0));
+}
+
 icalcompiter icalcomponent_begin_component(icalcomponent *component, icalcomponent_kind kind)
 {
     icalcompiter itr;
@@ -1423,6 +1429,12 @@ icalpropiter icalcomponent_begin_property(icalcomponent *component, icalproperty
     }
 
     return icalpropiter_null;
+}
+
+bool icalpropiter_is_valid(const icalpropiter *i)
+{
+    /* compare to icalpropiter_null */
+    return !((i->kind == ICAL_NO_PROPERTY) && (i->iter == 0));
 }
 
 icalproperty *icalpropiter_next(icalpropiter *i)

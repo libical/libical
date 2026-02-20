@@ -2415,6 +2415,9 @@ void test_iterators(void)
 
         strncat(vevent_list, s, sizeof(vevent_list) - strlen(vevent_list) - 1);
     }
+    /* at this point the icalcompiter should be invalid */
+    assert(icalcompiter_is_valid(&i));
+
     str_is("iterate through VEVENTS in a component", vevent_list, vevent_list_good);
 
     /* Delete all of the VEVENTS */
@@ -6333,6 +6336,7 @@ static void test_icalpropiter(void)
 
     // Iterate all properties.
     icalpropiter iter = icalcomponent_begin_property(comp, ICAL_ANY_PROPERTY);
+    assert(icalpropiter_is_valid(&iter));
     ok("iter at DTSTAMP",
        dtstamp == icalpropiter_deref(&iter));
     ok("iter at COMMENT (comment1)",
@@ -6353,6 +6357,7 @@ static void test_icalpropiter(void)
 
     // Iterate COMMENT property.
     iter = icalcomponent_begin_property(comp, ICAL_COMMENT_PROPERTY);
+    assert(icalpropiter_is_valid(&iter));
     ok("iter at COMMENT (comment1)",
        comment1 == icalpropiter_deref(&iter));
     ok("iter at COMMENT (comment2)",
@@ -6362,8 +6367,9 @@ static void test_icalpropiter(void)
        NULL == icalpropiter_next(&iter) &&
            NULL == icalpropiter_deref(&iter));
 
-    // Iterate in-existent property.
+    // Iterate non-existent property.
     iter = icalcomponent_begin_property(comp, ICAL_DESCRIPTION_PROPERTY);
+    assert(!icalpropiter_is_valid(&iter)); //will be invalid
     ok("iter at end", NULL == icalpropiter_deref(&iter));
 
     icalcomponent_free(comp);
