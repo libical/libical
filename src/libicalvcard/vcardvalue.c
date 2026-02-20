@@ -98,6 +98,13 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
         break;
     }
 
+    case VCARD_STRUCTURED_VALUE:
+        if (old->data.v_structured != 0) {
+            clone->data.v_structured =
+                vcardstructured_clone(old->data.v_structured);
+        }
+        break;
+
     default: {
         /* all of the other types are stored as values, not
                pointers, so we can just copy the whole structure. */
@@ -449,10 +456,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
     case VCARD_STRUCTURED_VALUE: {
         vcardstructuredtype *st = vcardstructured_new_from_string(str);
         value = vcardvalue_new_structured(st);
-        {
-            // XXX new_structured only takes ownership of fields *within* st
-            free(st);
-        }
+        vcardstructured_unref(st);
         break;
     }
 
@@ -596,13 +600,8 @@ void vcardvalue_free(vcardvalue *v)
     }
 
     case VCARD_STRUCTURED_VALUE: {
-        int i;
-        for (i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
-            vcardstrarray *array = v->data.v_structured.field[i];
-            if (array) {
-                vcardstrarray_free(array);
-            }
-        }
+        vcardstructured_unref(v->data.v_structured);
+        v->data.v_structured = 0;
         break;
     }
 
@@ -777,7 +776,7 @@ char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array, const char sep
     return buf;
 }
 
-char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_param)
+char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *st, bool is_param)
 {
     char *buf;
     char *buf_ptr;
@@ -786,8 +785,8 @@ char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_pa
 
     buf_ptr = buf = (char *)icalmemory_new_buffer(buf_size);
 
-    for (i = 0; i < s->num_fields; i++) {
-        vcardstrarray *array = s->field[i];
+    for (i = 0; i < vcardstructured_num_fields(st); i++) {
+        vcardstrarray *array = vcardstructured_field_at(st, i);
 
         if (i) {
             if (buf_ptr > buf) buf_ptr -= 1; // backup to \0
@@ -817,7 +816,7 @@ static char *vcardvalue_structured_as_vcard_string_r(const vcardvalue *value)
 {
     icalerror_check_arg_rz((value != 0), "value");
 
-    return vcardstructured_as_vcard_string_r(&value->data.v_structured, 0);
+    return vcardstructured_as_vcard_string_r(value->data.v_structured, 0);
 }
 
 static char *vcardvalue_float_as_vcard_string_r(const vcardvalue *value)

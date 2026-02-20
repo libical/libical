@@ -45,7 +45,6 @@ vcardvalue *vcardvalue_new_structured(vcardstructuredtype *v)
 void vcardvalue_set_structured(vcardvalue *value, vcardstructuredtype *v)
 {
     struct vcardvalue_impl *impl;
-    unsigned i;
 
     icalerror_check_arg_rv((value != 0), "value");
     icalerror_check_arg_rv((v != 0), "v");
@@ -53,10 +52,8 @@ void vcardvalue_set_structured(vcardvalue *value, vcardstructuredtype *v)
     icalerror_check_value_type(value, VCARD_STRUCTURED_VALUE);
     impl = (struct vcardvalue_impl *)value;
 
-    impl->data.v_structured.num_fields = v->num_fields;
-    for (i = 0; i < v->num_fields; i++) {
-        impl->data.v_structured.field[i] = v->field[i];
-    }
+    vcardstructured_ref(v);
+    impl->data.v_structured = v;
 
     vcardvalue_reset_kind(impl);
 }
@@ -65,7 +62,7 @@ vcardstructuredtype *vcardvalue_get_structured(const vcardvalue *value)
 {
     icalerror_check_arg((value != 0), "value");
     icalerror_check_value_type(value, VCARD_STRUCTURED_VALUE);
-    return &((struct vcardvalue_impl *)value)->data.v_structured;
+    return ((struct vcardvalue_impl *)value)->data.v_structured;
 }
 
 vcardvalue *vcardvalue_new_geo(struct vcardgeotype v)

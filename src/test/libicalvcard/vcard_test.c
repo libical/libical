@@ -224,36 +224,38 @@ static void test_add_props(vcardcomponent *card)
     vcardcomponent_add_property(card, prop);
 
     /* Create and add N property */
-    vcardstructuredtype name = {VCARD_NUM_N_FIELDS, {0}};
+    vcardstructuredtype *name = vcardstructured_new(VCARD_NUM_N_FIELDS);
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "Mouse");
-    name.field[VCARD_N_FAMILY] = sa;
+    vcardstructured_set_field_at(name, VCARD_N_FAMILY, sa);
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "Mickey");
-    name.field[VCARD_N_GIVEN] = sa;
-    prop = vcardproperty_new_n(&name);
+    vcardstructured_set_field_at(name, VCARD_N_GIVEN, sa);
+    prop = vcardproperty_new_n(name);
     vcardcomponent_add_property(card, prop);
+    vcardstructured_unref(name);
 
     /* Create and add ADR property */
-    vcardstructuredtype address = {VCARD_NUM_ADR_FIELDS, {0}};
+    vcardstructuredtype *address = vcardstructured_new(VCARD_NUM_ADR_FIELDS);
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "123 Main Street");
     vcardstrarray_append(sa, "Disney World");
-    address.field[VCARD_ADR_STREET] = sa;
+    vcardstructured_set_field_at(address, VCARD_ADR_STREET, sa);
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "Orlando");
-    address.field[VCARD_ADR_LOCALITY] = sa;
+    vcardstructured_set_field_at(address, VCARD_ADR_LOCALITY, sa);
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "FL");
-    address.field[VCARD_ADR_REGION] = sa;
+    vcardstructured_set_field_at(address, VCARD_ADR_REGION, sa);
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "32836");
-    address.field[VCARD_ADR_POSTAL_CODE] = sa;
+    vcardstructured_set_field_at(address, VCARD_ADR_POSTAL_CODE, sa);
     sa = vcardstrarray_new(1);
     vcardstrarray_append(sa, "USA");
-    address.field[VCARD_ADR_COUNTRY] = sa;
-    prop = vcardproperty_new_adr(&address);
+    vcardstructured_set_field_at(address, VCARD_ADR_COUNTRY, sa);
+    prop = vcardproperty_new_adr(address);
     vcardcomponent_add_property(card, prop);
+    vcardstructured_unref(address);
 
     /* Create and add CATEGORIES property */
     sa = vcardstrarray_new(2);

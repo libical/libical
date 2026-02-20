@@ -23,7 +23,7 @@ struct vcardvalue_impl {
     char *x_value;
 
     union data {
-        vcardstructuredtype v_structured;
+        vcardstructuredtype *v_structured;
         /*char *v_name; */       /* use v_structured field[0-4] only */
         /*char *v_adr; */        /* use v_structured field[0-6] */
 

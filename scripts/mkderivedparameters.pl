@@ -346,7 +346,7 @@ sub insert_code
         "    icalerror_check_arg_rz((param != 0), \"param\");\n    return param->structured;";
 
       $set_code =
-"if (param->structured != NULL) {\n        vcardstructured_free(param->structured);\n    }\n    ((struct ${lcprefix}parameter_impl *)param)->structured = v;";
+"if (param->structured != NULL) {\n        vcardstructured_unref(param->structured);\n    }\n    vcardstructured_ref(v);\n    ((struct ${lcprefix}parameter_impl *)param)->structured = v;";
 
     } else {
 

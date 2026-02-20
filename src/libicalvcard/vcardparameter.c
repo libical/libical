@@ -59,7 +59,7 @@ void vcardparameter_free(vcardparameter *param)
             vcardenumarray_free(param->values);
         }
     } else if (param->structured != 0) {
-        vcardstructured_free(param->structured);
+        vcardstructured_unref(param->structured);
     }
 
     if (param->x_name != 0) {

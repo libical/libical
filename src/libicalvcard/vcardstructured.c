@@ -10,6 +10,7 @@
 #include <config.h>
 #endif
 
+#include "vcardstructuredimpl.h"
 #include "vcardstructured.h"
 #include "vcardvalue.h"
 #include "icalerror.h"
@@ -19,26 +20,51 @@
 #include <stdlib.h>
 #include <string.h>
 
-vcardstructuredtype *vcardstructured_new(void)
+static vcardstructuredtype *vcardstructured_alloc(void)
 {
-    vcardstructuredtype *s;
+    struct vcardstructuredtype_impl *st;
 
-    s = (vcardstructuredtype *)icalmemory_new_buffer(sizeof(vcardstructuredtype));
-    if (!s) {
+    st = icalmemory_new_buffer(sizeof(struct vcardstructuredtype_impl));
+    if (!st) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return NULL;
     }
+    memset(st, 0, sizeof(struct vcardstructuredtype_impl));
 
-    memset(s, 0, sizeof(vcardstructuredtype));
+    return st;
+}
 
-    return s;
+static void vcardstructured_free(vcardstructuredtype *st)
+{
+    for (size_t i = 0; i < st->num_fields; i++) {
+        if (st->field[i]) {
+            vcardstrarray_free(st->field[i]);
+        }
+    }
+    icalmemory_free_buffer((void *)st);
+}
+
+vcardstructuredtype *vcardstructured_new(size_t num_fields)
+{
+    struct vcardstructuredtype_impl *st = vcardstructured_alloc();
+    if (!st) {
+        return st;
+    }
+    vcardstructured_ref(st);
+
+    st->num_fields = num_fields;
+    return st;
 }
 
 vcardstructuredtype *vcardstructured_new_from_string(const char *str)
 {
-    vcardstructuredtype *st = vcardstructured_new();
-    vcardstrarray *field = vcardstrarray_new(2);
+    struct vcardstructuredtype_impl *st = vcardstructured_alloc();
+    if (!st) {
+        return st;
+    }
+    vcardstructured_ref(st);
 
+    vcardstrarray *field = vcardstrarray_new(2);
     st->field[st->num_fields++] = field;
 
     do {
@@ -60,14 +86,83 @@ vcardstructuredtype *vcardstructured_new_from_string(const char *str)
     return st;
 }
 
-void vcardstructured_free(vcardstructuredtype *s)
+void vcardstructured_ref(vcardstructuredtype *st)
 {
-    unsigned i;
+    icalerror_check_arg_rv((st != NULL), "st");
 
-    for (i = 0; i < s->num_fields; i++) {
-        if (s->field[i]) {
-            vcardstrarray_free(s->field[i]);
-        }
+    st->refcount++;
+}
+
+void vcardstructured_unref(vcardstructuredtype *st)
+{
+    icalerror_check_arg_rv((st != NULL), "st");
+    icalerror_check_arg_rv((st->refcount > 0), "st->refcount > 0");
+
+    st->refcount--;
+
+    if (st->refcount != 0) {
+        return;
     }
-    icalmemory_free_buffer((void *)s);
+
+    vcardstructured_free(st);
+}
+
+vcardstructuredtype *vcardstructured_clone(const vcardstructuredtype *st)
+{
+    icalerror_check_arg_rz((st != NULL), "st");
+
+    struct vcardstructuredtype_impl *clone_st = vcardstructured_alloc();
+    if (!clone_st) {
+        return NULL;
+    }
+    vcardstructured_ref(clone_st);
+
+    clone_st->num_fields = st->num_fields;
+
+    for (size_t i = 0; i < st->num_fields; i++) {
+        clone_st->field[i] = vcardstrarray_clone(st->field[i]);
+    }
+
+    return clone_st;
+}
+
+size_t vcardstructured_num_fields(const vcardstructuredtype *st)
+{
+    icalerror_check_arg_rz((st != NULL), "st");
+    return st->num_fields;
+}
+
+void vcardstructured_set_num_fields(vcardstructuredtype *st,
+                                    size_t num_fields)
+{
+    icalerror_check_arg_rv((st != NULL), "st");
+
+    for (size_t i = num_fields; i < st->num_fields; i++) {
+        vcardstrarray_free(st->field[i]);
+    }
+
+    st->num_fields = num_fields;
+}
+
+vcardstrarray *vcardstructured_field_at(const vcardstructuredtype *st,
+                                        size_t position)
+{
+    icalerror_check_arg_rz((st != NULL), "st");
+    icalerror_check_arg_rz((st->num_fields > position), "position");
+
+    return st->field[position];
+}
+
+void vcardstructured_set_field_at(vcardstructuredtype *st,
+                                  size_t position,
+                                  vcardstrarray *field)
+{
+    icalerror_check_arg_rv((st != NULL), "st");
+
+    if (position >= st->num_fields) {
+        vcardstructured_set_num_fields(st, position + 1);
+    }
+
+    vcardstrarray_free(st->field[position]);
+    st->field[position] = field;
 }
