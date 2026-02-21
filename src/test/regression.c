@@ -1713,18 +1713,21 @@ void test_duration(void)
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("PT8H30M", icaldurationtype_as_seconds(d), 30600);
+    int_is("PT8H30M", icaldurationtype_as_utc_seconds(d), 30600);
 
     d = icaldurationtype_from_string("-PT8H30M");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("-PT8H30M", icaldurationtype_as_seconds(d), -30600);
+    int_is("-PT8H30M", icaldurationtype_as_utc_seconds(d), -30600);
 
     d = icaldurationtype_from_string("PT10H10M10S");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("PT10H10M10S", icaldurationtype_as_seconds(d), 36610);
+    int_is("PT10H10M10S", icaldurationtype_as_utc_seconds(d), 36610);
 
     icalerror_set_errors_are_fatal(false);
 
@@ -1735,36 +1738,42 @@ void test_duration(void)
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("P7W", icaldurationtype_as_seconds(d), 0);
+    int_is("P7W", icaldurationtype_as_utc_seconds(d), 4233600);
 
     d = icaldurationtype_from_string("P2DT8H30M");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("P2DT8H30M", icaldurationtype_as_seconds(d), 0);
+    int_is("P2DT8H30M", icaldurationtype_as_utc_seconds(d), 203400);
 
     d = icaldurationtype_from_string("P2W1DT5H");
     if (VERBOSE) {
         printf("%s %d\n", icaldurationtype_as_ical_string(d), icaldurationtype_as_seconds(d));
     }
     int_is("P2W1DT5H", icaldurationtype_as_seconds(d), 0);
+    int_is("P2W1DT5H", icaldurationtype_as_utc_seconds(d), 1314000);
 
-    d = icaldurationtype_from_string("P-2DT8H30M");
+    d = icaldurationtype_from_string("-P2DT8H30M");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("P-2DT8H30M", icaldurationtype_as_seconds(d), 0);
+    int_is("-P2DT8H30M", icaldurationtype_as_seconds(d), 0);
+    int_is("-P2DT8H30M", icaldurationtype_as_utc_seconds(d), -203400);
 
-    d = icaldurationtype_from_string("P7W8H");
+    d = icaldurationtype_from_string("P7WT8H");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
-    int_is("P7W8H", icaldurationtype_as_seconds(d), 0);
+    int_is("P7WT8H", icaldurationtype_as_seconds(d), 0);
+    int_is("P7WT8H", icaldurationtype_as_utc_seconds(d), 4262400);
 
     d = icaldurationtype_from_string("T10H");
     if (VERBOSE) {
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     int_is("T10H", icaldurationtype_as_seconds(d), 0);
+    int_is("T10H", icaldurationtype_as_utc_seconds(d), 0);
 
     icalerror_set_errors_are_fatal(true);
 
@@ -6878,6 +6887,178 @@ static void test_internal_limits(void)
     ok("value chars is size_max", icallimit_get(ICAL_LIMIT_VALUE_CHARS) == SIZE_MAX);
 }
 
+void test_icaldurationtype_normalize(void)
+{
+#define assert_normalized_duration(input, want) \
+    str_is("normalize(" input ")=" want, want,  \
+           icaldurationtype_as_ical_string(     \
+               icaldurationtype_normalize(      \
+                   icaldurationtype_from_string(input))))
+
+    assert_normalized_duration("PT0S", "PT0S");
+    assert_normalized_duration("PT59S", "PT59S");
+    assert_normalized_duration("PT60S", "PT1M");
+    assert_normalized_duration("PT0M", "PT0S");
+    assert_normalized_duration("PT59M", "PT59M");
+    assert_normalized_duration("PT60M", "PT1H");
+    assert_normalized_duration("PT86400S", "PT24H");
+    assert_normalized_duration("PT86460S", "PT24H1M");
+    assert_normalized_duration("PT86461S", "PT24H1M1S");
+    assert_normalized_duration("P2W14D", "P4W");
+    assert_normalized_duration("P21D", "P3W");
+    assert_normalized_duration("P2W3DT86400S", "P17DT24H");
+    assert_normalized_duration("P1WT1S", "P7DT1S");
+
+#undef assert_normalized_duration
+}
+
+static void test_icalcomponent_remove_property_by_kind(void)
+
+{
+    const char *str =
+        "BEGIN:VEVENT\r\n"
+        "COMMENT:comment1\r\n"
+        "DTSTAMP:20060102T030405Z\r\n"
+        "COMMENT:comment2\r\n"
+        "UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n"
+        "DTSTART;VALUE=DATE:20250120\r\n"
+        "COMMENT:comment3\r\n"
+        "END:VEVENT\r\n";
+
+    icalcomponent *test_comp = icalcomponent_new_from_string(str);
+    ok("Parsed VEVENT component", (test_comp != NULL));
+
+    icalcomponent *comp;
+    icalproperty *prop;
+
+    // Assert removing existing property kind.
+    comp = icalcomponent_clone(test_comp);
+    icalcomponent_remove_property_by_kind(comp, ICAL_COMMENT_PROPERTY);
+    prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
+    ok("DTSTAMP", icalproperty_isa(prop) == ICAL_DTSTAMP_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("UID", icalproperty_isa(prop) == ICAL_UID_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("DTSTART", icalproperty_isa(prop) == ICAL_DTSTART_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("<end>", prop == NULL);
+    icalcomponent_free(comp);
+
+    // Assert removing non-existing property kind.
+    comp = icalcomponent_clone(test_comp);
+    icalcomponent_remove_property_by_kind(comp, ICAL_CLASS_PROPERTY);
+    prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
+    ok("COMMENT", icalproperty_isa(prop) == ICAL_COMMENT_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("DTSTAMP", icalproperty_isa(prop) == ICAL_DTSTAMP_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("COMMENT", icalproperty_isa(prop) == ICAL_COMMENT_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("UID", icalproperty_isa(prop) == ICAL_UID_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("DTSTART", icalproperty_isa(prop) == ICAL_DTSTART_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("COMMENT", icalproperty_isa(prop) == ICAL_COMMENT_PROPERTY);
+    prop = icalcomponent_get_next_property(comp, ICAL_ANY_PROPERTY);
+    ok("<end>", prop == NULL);
+    icalcomponent_free(comp);
+
+    // Assert removing any property kind.
+    comp = icalcomponent_clone(test_comp);
+    icalcomponent_remove_property_by_kind(comp, ICAL_ANY_PROPERTY);
+    prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
+    ok("<end>", prop == NULL);
+    icalcomponent_free(comp);
+
+    icalcomponent_free(test_comp);
+}
+
+static void test_icalcomponent_get_duration(void)
+{
+#define assert_icalcomponent_get_duration(desc, want, ctlines)                           \
+    {                                                                                    \
+        const char *str =                                                                \
+            "BEGIN:VCALENDAR\r\n"                                                        \
+            "VERSION:2.0\r\n"                                                            \
+            "PRODID:-//foo/bar//v1.0//EN\r\n"                                            \
+            "BEGIN:VEVENT\r\n"                                                           \
+            "UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n"                               \
+            "DTSTAMP:20060102T030405Z\r\n" ctlines                                       \
+            "END:VEVENT\r\n"                                                             \
+            "END:VCALENDAR\r\n";                                                         \
+        icalcomponent *ical = icalcomponent_new_from_string(str);                        \
+        ok("Parsed iCalendar object", (ical != NULL));                                   \
+        icalcomponent *comp = icalcomponent_get_first_real_component(ical);              \
+        ok("Parsed VEVENT component", icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT); \
+        str_is(desc,                                                                     \
+               icaldurationtype_as_ical_string(                                          \
+                   icalcomponent_get_duration(comp)),                                    \
+               want);                                                                    \
+        icalcomponent_free(ical);                                                        \
+    }
+
+    assert_icalcomponent_get_duration(
+        "nominal duration (days)", "P2D",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DURATION:P2D\r\n");
+
+    assert_icalcomponent_get_duration(
+        "nominal duration (weeks)", "P2W",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DURATION:P2W\r\n");
+
+    assert_icalcomponent_get_duration(
+        "nominal duration (weeks & days - non-standard)", "P1W2D",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DURATION:P1W2D\r\n");
+
+    assert_icalcomponent_get_duration(
+        "mixed nominal and accurate", "P2DT3H2M",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DURATION:P2DT3H2M\r\n");
+
+    assert_icalcomponent_get_duration(
+        "accurate duration - not normalized", "PT26H120S",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DURATION:PT26H120S\r\n");
+
+    assert_icalcomponent_get_duration(
+        "DTEND - same timezones", "PT7200S",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DTEND;TZID=Europe/Vienna:20250101T030000\r\n");
+
+    assert_icalcomponent_get_duration(
+        "DTEND - different timezones", "PT7200S",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DTEND;TZID=Asia/Bangkok:20250101T090000\r\n");
+
+    assert_icalcomponent_get_duration(
+        "DTEND - more than one day", "PT93600S",
+        "DTSTART;TZID=Europe/Vienna:20250101T010000\r\n"
+        "DTEND;TZID=Europe/Vienna:20250102T030000\r\n");
+
+    assert_icalcomponent_get_duration(
+        "DTEND - across STD-to-DST gap", "PT82800S",
+        "DTSTART;TZID=Europe/Vienna:20250329T230000\r\n"
+        "DTEND;TZID=Europe/Vienna:20250330T230000\r\n");
+
+    assert_icalcomponent_get_duration(
+        "DTEND - across DST-to-STD", "PT90000S",
+        "DTSTART;TZID=Europe/Vienna:20251025T230000\r\n"
+        "DTEND;TZID=Europe/Vienna:20251026T230000\r\n");
+
+    // XXX - this incorrectly uses the standard time occurrence of
+    // 2025-10-26T02:00:00, it should use the daylight offset.
+    // (see RFC 5545, Section 3.3.5).
+    // This requires the is_daylight field be set in icaltimetype.
+    assert_icalcomponent_get_duration(
+        "DTEND - same timezones, DST-to-STD shift (should be PT3H)", "PT14400S",
+        "DTSTART;TZID=Europe/Vienna:20251025T230000\r\n"
+        "DTEND;TZID=Europe/Vienna:20251026T020000\r\n");
+
+#undef assert_icalcomponent_get_duration
+}
+
 int main(int argc, const char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -7062,6 +7243,10 @@ int main(int argc, const char *argv[])
     test_run("Test property values from string", test_value_from_string, do_test, do_header);
     test_run("Test normalizing time", test_icaltime_normalize, do_test, do_header);
     test_run("Test setting/getting internal limits", test_internal_limits, do_test, do_header);
+    test_run("Test normalizing duration", test_icaldurationtype_normalize, do_test, do_header);
+    test_run("Test removing component properties by kind", test_icalcomponent_remove_property_by_kind, do_test, do_header);
+    test_run("Test icalcomponent_get_duration", test_icalcomponent_get_duration, do_test, do_header);
+    /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
     test_run("Test C++ API", test_cxx, do_test, do_header);

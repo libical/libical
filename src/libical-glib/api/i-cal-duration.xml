@@ -104,7 +104,7 @@
   <method name="i_cal_duration_as_seconds" corresponds="icaldurationtype_as_seconds" kind="others" since="4.0">
     <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>
     <returns type="gint" comment="The duration in second"/>
-    <comment xml:space="preserve">Extracts the duration in seconds from an #ICalDuration. Does not consider negative durations.</comment>
+    <comment xml:space="preserve">Extracts the duration in seconds from an #ICalDuration. Does not consider negative durations. Does not support days and weeks.</comment>
   </method>
   <method name="i_cal_duration_as_ical_string" corresponds="icaldurationtype_as_ical_string_r" kind="others" since="1.0">
     <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>
@@ -140,5 +140,15 @@
     <parameter type="ICalTime *" name="t2" comment="The subtracting #ICalTime"/>
     <returns type="ICalDuration *" annotation="transfer full" comment="The #ICalDuration between two #ICalTime."/>
     <comment xml:space="preserve">Creates a duration between two time endpoints.</comment>
+  </method>
+  <method name="i_cal_duration_normalize" corresponds="icaldurationtype_normalize" kind="others" since="4.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration from which to create a normalized duration."/>
+    <returns type="ICalDuration *" annotation="transfer full" comment="A normalized #ICalDuration."/>
+    <comment xml:space="preserve">Create a normalized duration from another duration.</comment>
+  </method>
+  <method name="i_cal_duration_as_utc_seconds" corresponds="icaldurationtype_as_utc_seconds" kind="others" since="4.0">
+    <parameter type="ICalDuration *" name="duration" comment="The #ICalDuration to be converted"/>
+    <returns type="gint" comment="The duration in seconds"/>
+    <comment xml:space="preserve">Extracts the duration in seconds from an #ICalDuration on a continuous timeline with 24-hour days. Supports days, weeks, and negative durations.</comment>
   </method>
 </structure>

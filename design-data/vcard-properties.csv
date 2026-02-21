@@ -45,7 +45,7 @@
 "FBURL","34","URI","URI"
 "CALADRURI","35","URI","URI"
 "CALURI","36","URI","URI"
-"X","37","X","X",is_multivalued
+"X","37","X","X"
 
 "#Deprecated Properties","RFC 2425/2426",,,
 "NAME","38","TEXT","TEXT"

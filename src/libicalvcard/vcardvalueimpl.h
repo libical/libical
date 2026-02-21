@@ -23,16 +23,17 @@ struct vcardvalue_impl {
     char *x_value;
 
     union data {
-        vcardstructuredtype v_structured;
-        /*char *v_name; */       /* use v_structured field[0-4] only */
-        /*char *v_nickname; */   /* use v_structured field[0] only */
-        /*char *v_gender; */     /* use v_structured field[0] only */
-        /*char *v_adr; */        /* use v_structured field[0-6] */
-        /*char *v_org; */        /* use v_structured field[0] only */
-        /*char *v_categories; */ /* use v_structured field[0] only */
+        vcardstructuredtype *v_structured;
+        /*char *v_name; */ /* use v_structured field[0-4] only */
+        /*char *v_adr; */  /* use v_structured field[0-6] */
 
-        /*char *v_geo; */ /* use v_structured field[0-1] for v3
-                                    * use v_string for v4 (geo: uri) */
+        /*char *v_nickname; */   /* use v_textlist */
+        /*char *v_gender; */     /* use v_textlist */
+        /*char *v_org; */        /* use v_textlist */
+        /*char *v_categories; */ /* use v_textlist */
+        vcardstrarray *v_textlist;
+
+        vcardgeotype v_geo;
 
         const char *v_string;
         /*char *v_text; */         /* use v_string */

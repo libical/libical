@@ -14,6 +14,7 @@
 #include "vcardvalueimpl.h"
 #include "vcardcomponent.h"
 #include "vcardproperty.h"
+#include "vcardtextlist.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 
@@ -97,6 +98,13 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
         break;
     }
 
+    case VCARD_STRUCTURED_VALUE:
+        if (old->data.v_structured != 0) {
+            clone->data.v_structured =
+                vcardstructured_clone(old->data.v_structured);
+        }
+        break;
+
     default: {
         /* all of the other types are stored as values, not
                pointers, so we can just copy the whole structure. */
@@ -113,7 +121,6 @@ char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
     const char *p;
     char *out = (char *)icalmemory_new_buffer(sizeof(char) * strlen(*str) + 1);
     char *pout;
-    int wroteNull = 0;
 
     if (out == 0) {
         return 0;
@@ -125,12 +132,12 @@ char *vcardvalue_strdup_and_dequote_text(const char **str, const char *sep)
        or if a null has been written to the destination. This prevents
        reading past the end of the source string if the last character
        is a backslash. */
-    for (p = *str; !wroteNull && *p != 0; p++) {
+    for (p = *str; *p != 0; p++) {
         if (*p == '\\') {
             p++;
             switch (*p) {
             case 0: {
-                wroteNull = 1; //stops iteration so p isn't incremented past the end of str
+                p--; // step back to NUL to stop iteration
                 *pout = '\0';
                 break;
             }
@@ -272,6 +279,70 @@ static vcardvalue *vcardvalue_new_enum(vcardvalue_kind kind, int x_type, const c
     return value;
 }
 
+/**
+ * Extracts a simple floating point number as a substring.
+ * The decimal separator (if any) of the double has to be '.'
+ * The code is locale *independent* and does *not* change the locale.
+ * It should be thread safe.
+ */
+static bool simple_str_to_doublestr(const char *from, char *result, int result_len, char **to)
+{
+    const char *start = NULL;
+    char *end = NULL, *cur = (char *)from;
+
+    struct lconv *loc_data = localeconv();
+    int i = 0, len;
+    double dtest;
+
+    /*sanity checks */
+    if (!from || !result) {
+        return true;
+    }
+
+    /*skip the white spaces at the beginning */
+    while (*cur && isspace((int)*cur)) {
+        cur++;
+    }
+
+    start = cur;
+    /* copy the part that looks like a double into result.
+     * during the copy, we give ourselves a chance to convert the '.'
+     * into the decimal separator of the current locale.
+     */
+    while (*cur && (isdigit((int)*cur) || *cur == '.' || *cur == '+' || *cur == '-')) {
+        ++cur;
+    }
+    end = cur;
+    len = (int)(ptrdiff_t)(end - start);
+    if (len + 1 >= result_len) {
+        /* huh hoh, number is too big. truncate it */
+        len = result_len - 1;
+    }
+
+    /* copy the float number string into result, and take
+     * care to have the (optional) decimal separator be the one
+     * of the current locale.
+     */
+    for (i = 0; i < len; ++i) {
+        if (start[i] == '.' &&
+            loc_data && loc_data->decimal_point && loc_data->decimal_point[0] && loc_data->decimal_point[0] != '.') {
+            /*replace '.' by the digit separator of the current locale */
+            result[i] = loc_data->decimal_point[0];
+        } else {
+            result[i] = start[i];
+        }
+    }
+    if (to) {
+        *to = end;
+    }
+
+    /* now try to convert to a floating point number, to check for validity only */
+    if (sscanf(result, "%lf", &dtest) != 1) {
+        return true;
+    }
+    return false;
+}
+
 static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
                                                          const char *str,
                                                          vcardproperty **error)
@@ -377,43 +448,60 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
     }
 
     case VCARD_TEXTLIST_VALUE: {
-        vcardstrarray *array = vcardstrarray_new(2);
-
-        do {
-            char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",");
-
-            vcardstrarray_append(array, dequoted_str);
-            icalmemory_free_buffer(dequoted_str);
-
-        } while (*str++ != '\0');
-
-        value = vcardvalue_new_textlist(array);
+        value = vcardvalue_new_textlist(vcardtextlist_new_from_string(str, ','));
         break;
     }
 
     case VCARD_STRUCTURED_VALUE: {
-        vcardstructuredtype st = {0, {0}};
-        vcardstrarray *field = vcardstrarray_new(2);
-
-        st.field[st.num_fields++] = field;
-
-        do {
-            char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",;");
-
-            vcardstrarray_append(field, dequoted_str);
-            icalmemory_free_buffer(dequoted_str);
-
-            if (*str == ';') {
-                /* end of field */
-                field = vcardstrarray_new(2);
-                st.field[st.num_fields++] = field;
-            }
-
-        } while (*str++ != '\0');
-
-        value = vcardvalue_new_structured(&st);
+        vcardstructuredtype *st = vcardstructured_new_from_string(str);
+        value = vcardvalue_new_structured(st);
+        vcardstructured_unref(st);
         break;
     }
+
+    case VCARD_GEO_VALUE: {
+        char *cur = NULL;
+        struct vcardgeotype geo = {0};
+        memset(geo.coords.lat, 0, VCARD_GEO_LEN);
+        memset(geo.coords.lon, 0, VCARD_GEO_LEN);
+
+        if (simple_str_to_doublestr(str, geo.coords.lat, VCARD_GEO_LEN, &cur)) {
+            goto geo_parsing_error;
+        }
+        /* skip white spaces */
+        while (cur && isspace((int)*cur)) {
+            ++cur;
+        }
+
+        /*there is a ';' between the latitude and longitude parts */
+        if (!cur || *cur != ';') {
+            goto geo_parsing_error;
+        }
+
+        ++cur;
+
+        /* skip white spaces */
+        while (cur && isspace((int)*cur)) {
+            ++cur;
+        }
+
+        if (simple_str_to_doublestr(cur, geo.coords.lon, VCARD_GEO_LEN, &cur)) {
+            goto geo_parsing_error;
+        }
+        value = vcardvalue_new_geo(geo);
+        break;
+
+    geo_parsing_error:
+        if (error != 0) {
+            char temp[TMP_BUF_SIZE];
+            snprintf(temp, sizeof(temp),
+                     "Could not parse %s as a %s value",
+                     str, vcardvalue_kind_to_string(kind));
+            vcardparameter *errParam =
+                vcardparameter_new_xlicerrortype(VCARD_XLICERRORTYPE_VALUEPARSEERROR);
+            *error = vcardproperty_vanew_xlicerror(temp, errParam, (void *)0);
+        }
+    } break;
 
     case VCARD_URI_VALUE:
         value = vcardvalue_new_uri(str);
@@ -441,10 +529,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         break;
 
     case VCARD_X_VALUE: {
-        char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, NULL);
-
-        value = vcardvalue_new_x(dequoted_str);
-        icalmemory_free_buffer(dequoted_str);
+        value = vcardvalue_new_x(str);
     } break;
 
     default: {
@@ -505,15 +590,23 @@ void vcardvalue_free(vcardvalue *v)
         break;
     }
 
-    case VCARD_TEXTLIST_VALUE:
-    case VCARD_STRUCTURED_VALUE: {
-        int i;
-        for (i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
-            vcardstrarray *array = v->data.v_structured.field[i];
-            if (array) {
-                vcardstrarray_free(array);
-            }
+    case VCARD_TEXTLIST_VALUE: {
+        if (v->data.v_textlist != 0) {
+            vcardstrarray_free(v->data.v_textlist);
         }
+        v->data.v_textlist = 0;
+        break;
+    }
+
+    case VCARD_STRUCTURED_VALUE: {
+        vcardstructured_unref(v->data.v_structured);
+        v->data.v_structured = 0;
+        break;
+    }
+
+    case VCARD_GEO_VALUE: {
+        v->data.v_geo.coords.lat[0] = '\0';
+        v->data.v_geo.coords.lon[0] = '\0';
         break;
     }
 
@@ -652,6 +745,11 @@ static void _vcardstrarray_as_vcard_string_r(char **str, char **str_p, size_t *b
                                              vcardstrarray *array, const char sep,
                                              bool is_param)
 {
+    if (!vcardstrarray_size(array)) {
+        (void)vcardmemory_strdup_and_quote(str, str_p, buf_sz, "", is_param);
+        return;
+    }
+
     size_t i;
 
     for (i = 0; i < vcardstrarray_size(array); i++) {
@@ -677,7 +775,7 @@ char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array, const char sep
     return buf;
 }
 
-char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_param)
+char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *st, bool is_param)
 {
     char *buf;
     char *buf_ptr;
@@ -686,11 +784,13 @@ char *vcardstructured_as_vcard_string_r(const vcardstructuredtype *s, bool is_pa
 
     buf_ptr = buf = (char *)icalmemory_new_buffer(buf_size);
 
-    for (i = 0; i < s->num_fields; i++) {
-        vcardstrarray *array = s->field[i];
+    for (i = 0; i < vcardstructured_num_fields(st); i++) {
+        vcardstrarray *array = vcardstructured_field_at(st, i);
 
         if (i) {
-            buf_ptr -= 1; // backup to \0
+            if (buf_ptr > buf) {
+                buf_ptr -= 1; // backup to \0
+            }
             icalmemory_append_char(&buf, &buf_ptr, &buf_size, ';');
         }
 
@@ -710,14 +810,14 @@ static char *vcardvalue_textlist_as_vcard_string_r(const vcardvalue *value,
 {
     icalerror_check_arg_rz((value != 0), "value");
 
-    return vcardstrarray_as_vcard_string_r(value->data.v_structured.field[0], sep);
+    return vcardstrarray_as_vcard_string_r(value->data.v_textlist, sep);
 }
 
 static char *vcardvalue_structured_as_vcard_string_r(const vcardvalue *value)
 {
     icalerror_check_arg_rz((value != 0), "value");
 
-    return vcardstructured_as_vcard_string_r(&value->data.v_structured, 0);
+    return vcardstructured_as_vcard_string_r(value->data.v_structured, 0);
 }
 
 static char *vcardvalue_float_as_vcard_string_r(const vcardvalue *value)
@@ -743,6 +843,17 @@ static char *vcardvalue_float_as_vcard_string_r(const vcardvalue *value)
     (void)setlocale(LC_NUMERIC, old_locale);
     icalmemory_free_buffer(old_locale);
 
+    return str;
+}
+
+static char *vcardvalue_geo_as_vcard_string_r(const vcardvalue *value)
+{
+    icalerror_check_arg_rz((value != 0), "value");
+    size_t max_len = 2 * VCARD_GEO_LEN;
+    char *str = (char *)icalmemory_new_buffer(max_len);
+    snprintf(str, max_len, "%s;%s",
+             value->data.v_geo.coords.lat, value->data.v_geo.coords.lon);
+    str[max_len - 1] = '\0';
     return str;
 }
 
@@ -798,6 +909,9 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
     case VCARD_STRUCTURED_VALUE:
         return vcardvalue_structured_as_vcard_string_r(value);
 
+    case VCARD_GEO_VALUE:
+        return vcardvalue_geo_as_vcard_string_r(value);
+
     case VCARD_URI_VALUE:
     case VCARD_LANGUAGETAG_VALUE:
         return vcardvalue_string_as_vcard_string_r(value);
@@ -836,12 +950,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     case VCARD_X_VALUE:
         if (value->x_value != 0) {
-            char *str = NULL;
-            char *str_p;
-            size_t buf_sz;
-
-            return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
-                                                value->x_value, 0);
+            return icalmemory_strdup(value->x_value);
         }
         _fallthrough();
 

@@ -59,7 +59,7 @@ void vcardparameter_free(vcardparameter *param)
             vcardenumarray_free(param->values);
         }
     } else if (param->structured != 0) {
-        vcardstructured_free(param->structured);
+        vcardstructured_unref(param->structured);
     }
 
     if (param->x_name != 0) {
@@ -176,86 +176,6 @@ char *vcardparameter_as_vcard_string(vcardparameter *param)
 }
 
 /*
- * Checks whether this character is allowed in a (Q)SAFE-CHAR
- *
- * QSAFE-CHAR   = WSP / %x21 / %x23-7E / NON-US-ASCII
- * ; any character except CTLs and DQUOTE
- * SAFE-CHAR    = WSP / %x21 / %x23-39 / %x3C-7E / NON-US-ASCII
- * ; any character except CTLs, DQUOTE. ";", ":", ","
- * WSP      = SPACE / HTAB
- * NON-US-ASCII       = %x80-F8
- * ; Use restricted by charset parameter
- * ; on outer MIME object (UTF-8 preferred)
- */
-static bool vcardparameter_is_safe_char(unsigned char character, int quoted)
-{
-    if (character == ' ' || character == '\t' || character == '!' ||
-        (character >= 0x80 && character <= 0xF8)) {
-        return true;
-    }
-
-    if (quoted && character >= 0x23 && character <= 0x7e) {
-        return true;
-    } else if (!quoted &&
-               ((character >= 0x23 && character <= 0x39) ||
-                (character >= 0x3c && character <= 0x7e))) {
-        return true;
-    }
-
-    return false;
-}
-
-/**
- * Appends the parameter value to the buffer, encoding per RFC 6868
- * and filtering out those characters not permitted by the specifications
- *
- * paramtext    = *SAFE-CHAR
- * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
- */
-static void vcardparameter_append_encoded_value(char **buf, char **buf_ptr,
-                                                size_t *buf_size, const char *value)
-{
-    int qm = 0;
-    const char *p;
-
-    /* Encapsulate the property in quotes if necessary */
-    if (!*value || strpbrk(value, ";:,") != 0) {
-        icalmemory_append_char(buf, buf_ptr, buf_size, '"');
-        qm = 1;
-    }
-
-    /* Copy the parameter value */
-    for (p = value; *p; p++) {
-        /* Encode unsafe characters per RFC6868, otherwise replace with SP */
-        switch (*p) {
-        case '\n':
-            icalmemory_append_string(buf, buf_ptr, buf_size, "^n");
-            break;
-
-        case '^':
-            icalmemory_append_string(buf, buf_ptr, buf_size, "^^");
-            break;
-
-        case '"':
-            icalmemory_append_string(buf, buf_ptr, buf_size, "^'");
-            break;
-
-        default:
-            if (vcardparameter_is_safe_char((unsigned char)*p, qm)) {
-                icalmemory_append_char(buf, buf_ptr, buf_size, *p);
-            } else {
-                icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
-            }
-            break;
-        }
-    }
-
-    if (qm == 1) {
-        icalmemory_append_char(buf, buf_ptr, buf_size, '"');
-    }
-}
-
-/*
  * - param        = param-name "=" param-value
  * - param-name   = iana-token / x-token
  * - param-value  = paramtext /quoted-string
@@ -302,8 +222,8 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "=");
 
     if (param->string != 0) {
-        vcardparameter_append_encoded_value(&buf, &buf_ptr,
-                                            &buf_size, param->string);
+        icalmemory_append_encoded_string(&buf, &buf_ptr,
+                                         &buf_size, param->string);
     } else if (param->data != 0) {
         char *intbuf = NULL;
         const char *str;
@@ -330,14 +250,14 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
             if (param->value_kind == VCARD_TEXT_VALUE) {
                 const char *str = vcardstrarray_element_at(param->values, i);
 
-                vcardparameter_append_encoded_value(&buf, &buf_ptr,
-                                                    &buf_size, str);
+                icalmemory_append_encoded_string(&buf, &buf_ptr,
+                                                 &buf_size, str);
             } else {
                 const vcardenumarray_element *elem =
                     vcardenumarray_element_at(param->values, i);
                 if (elem->xvalue != 0) {
-                    vcardparameter_append_encoded_value(&buf, &buf_ptr,
-                                                        &buf_size, elem->xvalue);
+                    icalmemory_append_encoded_string(&buf, &buf_ptr,
+                                                     &buf_size, elem->xvalue);
                 } else {
                     const char *str = vcardparameter_enum_to_string(elem->val);
 
@@ -349,7 +269,7 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
     } else if (vcardparameter_is_structured(param)) {
         char *str = vcardstructured_as_vcard_string_r(param->structured, 1);
 
-        vcardparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, str);
+        icalmemory_append_encoded_string(&buf, &buf_ptr, &buf_size, str);
         icalmemory_free_buffer(str);
     } else if (vcardtime_is_valid_time(param->date)) {
         const char *str = vcardtime_as_vcard_string(param->date, 0);

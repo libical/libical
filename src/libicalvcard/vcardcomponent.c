@@ -767,6 +767,9 @@ void vcardcomponent_normalize(vcardcomponent *comp)
     comp->components = sorted_comps;
 }
 
+#define UUID_PREFIX "urn:uuid:"
+#define UUID_PREFIX_LEN 9
+
 static void comp_to_v4(vcardcomponent *impl)
 {
     icalpvl_elem itr, next;
@@ -778,15 +781,15 @@ static void comp_to_v4(vcardcomponent *impl)
         vcardvalue_kind vkind = vcardvalue_isa(value);
         vcardparameter *param;
         vcardenumarray *types = NULL;
-        char *mediatype = NULL, *buf = NULL, *buf_ptr;
-        const char *data;
-        size_t size = 0;
 
         next = icalpvl_next(itr);
 
         /* Remove TYPE=PREF and replace with PREF=1 (if no existing (PREF=) */
-        param = vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER);
-        if (param) {
+        for (param = vcardproperty_get_first_parameter(prop,
+                                                       VCARD_TYPE_PARAMETER);
+             param;
+             param = vcardproperty_get_next_parameter(prop,
+                                                      VCARD_TYPE_PARAMETER)) {
             vcardenumarray_element pref = {VCARD_TYPE_PREF, NULL};
             size_t i;
 
@@ -796,7 +799,6 @@ static void comp_to_v4(vcardcomponent *impl)
                 vcardenumarray_remove_element_at(types, i);
                 if (!vcardenumarray_size(types)) {
                     vcardproperty_remove_parameter_by_ref(prop, param);
-                    types = NULL;
                 }
 
                 param = vcardproperty_get_first_parameter(prop,
@@ -805,6 +807,8 @@ static void comp_to_v4(vcardcomponent *impl)
                     param = vcardparameter_new_pref(1);
                     vcardproperty_add_parameter(prop, param);
                 }
+
+                break;
             }
         }
 
@@ -841,17 +845,19 @@ static void comp_to_v4(vcardcomponent *impl)
 
                 if (!geo.uri) {
                     /* Convert STRUCTURED value kind to geo: URI */
-                    int n = snprintf(buf, size, "geo:%s,%s",
+                    int n = snprintf(NULL, 0, "geo:%s,%s",
                                      geo.coords.lat, geo.coords.lon);
 
-                    size = (size_t)n + 1;
-                    buf = icalmemory_new_buffer(size);
+                    size_t size = (size_t)n + 1;
+                    char *buf = icalmemory_new_buffer(size);
                     snprintf(buf, size, "geo:%s,%s",
                              geo.coords.lat, geo.coords.lon);
 
                     geo.uri = buf;
-                    geo.coords.lat = geo.coords.lon = NULL;
+                    geo.coords.lat[0] = '\0';
+                    geo.coords.lon[0] = '\0';
                     vcardvalue_set_geo(value, geo);
+                    icalmemory_free_buffer(buf);
                 }
             }
             break;
@@ -860,11 +866,11 @@ static void comp_to_v4(vcardcomponent *impl)
         case VCARD_LOGO_PROPERTY:
         case VCARD_PHOTO_PROPERTY:
         case VCARD_SOUND_PROPERTY: {
-            if (types) {
-                /* Replace TYPE=subtype with MEDIATYPE or data:<mediatype>
-                 *
-                 * XXX  We assume that the first VCARD_TYPE_X is the subtype
-                 */
+            char *mediatype = NULL;
+            param = vcardproperty_get_first_parameter(prop,
+                                                      VCARD_TYPE_PARAMETER);
+            if (param) {
+                types = vcardparameter_get_type(param);
                 for (size_t i = 0; i < vcardenumarray_size(types); i++) {
                     const vcardenumarray_element *type =
                         vcardenumarray_element_at(types, i);
@@ -886,8 +892,8 @@ static void comp_to_v4(vcardcomponent *impl)
                             break;
                         }
 
-                        size = strlen(mediatype);
-                        buf_ptr = mediatype + size;
+                        size_t size = strlen(mediatype);
+                        char *buf_ptr = mediatype + size;
                         icalmemory_append_string(&mediatype, &buf_ptr,
                                                  &size, type->xvalue);
                         for (c = mediatype; *c; c++) {
@@ -904,10 +910,10 @@ static void comp_to_v4(vcardcomponent *impl)
                 }
             }
 
-            data = vcardvalue_get_uri(value);
+            const char *data = vcardvalue_get_uri(value);
             if (data && !strchr(data, ':')) {
                 /* Convert base64-encoded TEXT value kind to data: URI */
-                size += strlen(data) + 7; // "data:," + NUL
+                size_t size = strlen(data) + 7; // "data:," + NUL
 
                 param = vcardproperty_get_first_parameter(prop,
                                                           VCARD_ENCODING_PARAMETER);
@@ -915,8 +921,8 @@ static void comp_to_v4(vcardcomponent *impl)
                     size += 7; // ";base64
                 }
 
-                buf = icalmemory_new_buffer(size);
-                buf_ptr = buf;
+                char *buf = icalmemory_new_buffer(size);
+                char *buf_ptr = buf;
 
                 icalmemory_append_string(&buf, &buf_ptr, &size, "data:");
                 if (mediatype) {
@@ -932,6 +938,8 @@ static void comp_to_v4(vcardcomponent *impl)
 
                 value->kind = VCARD_URI_VALUE;
                 vcardvalue_set_uri(value, buf);
+
+                icalmemory_free_buffer(buf);
             } else if (mediatype) {
                 param = vcardparameter_new_mediatype(mediatype);
                 vcardproperty_add_parameter(prop, param);
@@ -941,48 +949,70 @@ static void comp_to_v4(vcardcomponent *impl)
             break;
         }
 
-        case VCARD_UID_PROPERTY:
-            if (vkind == VCARD_TEXT_VALUE) {
-                unsigned t_low, t_mid, t_high, clock, node;
-
-                /* Does it look like a RFC 4122 UUID? */
-                data = vcardvalue_get_text(value);
-                if (data && strlen(data) == 36 &&
-                    sscanf(data, "%8X-%4X-%4X-%4X-%12X",
-                           &t_low, &t_mid, &t_high, &clock, &node) == 5) {
-                    /* Convert TEXT value kind to urn:uuid: URI */
-                    size = strlen(data) + 10; // "urn:uuid:" + NUL
-                    buf = icalmemory_new_buffer(size);
-                    buf_ptr = buf;
-
-                    icalmemory_append_string(&buf, &buf_ptr, &size, "urn:uuid:");
-                    icalmemory_append_string(&buf, &buf_ptr, &size, data);
-
-                    value->kind = VCARD_URI_VALUE;
-                    vcardvalue_set_uri(value, buf);
-                }
+        case VCARD_UID_PROPERTY: {
+            /* Does it look like a URI (the default)? */
+            const char *data = vcardvalue_get_text(value);
+            if (!strncasecmp(data, "urn:uuid:", 9) ||
+                !strncasecmp(data, "mailto:", 7) ||
+                !strncasecmp(data, "http://", 7) ||
+                !strncasecmp(data, "https://", 8) ||
+                !strncasecmp(data, "ldap://", 7) ||
+                !strncasecmp(data, "ldaps://", 8)) {
+                value->kind = VCARD_URI_VALUE;
+                vcardproperty_remove_parameter_by_kind(prop,
+                                                       VCARD_VALUE_PARAMETER);
+            } else {
+                /* Otherwise, treat it as TEXT */
+                value->kind = VCARD_TEXT_VALUE;
             }
             break;
+        }
 
         case VCARD_X_PROPERTY: {
             /* Rename X-ADDRESSBOOKSERVER-KIND, X-ADDRESSBOOKSERVER-MEMBER */
-            const char *xprop = vcardproperty_as_vcard_string(prop);
-            if (!strncasecmp(xprop, "X-ADDRESSBOOKSERVER-", 20) &&
-                (!strncasecmp(xprop + 20, "KIND:", 5) ||
-                 !strncasecmp(xprop + 20, "MEMBER:", 7))) {
-                vcardproperty *new = vcardproperty_new_from_string(xprop + 20);
-                vcardcomponent_add_property(impl, new);
-                vcardcomponent_remove_property(impl, prop);
+            const char *xname = vcardproperty_get_x_name(prop);
+
+            if (!strncasecmp(xname, "X-ADDRESSBOOKSERVER-", 20)) {
+                vcardproperty_kind kind = vcardproperty_string_to_kind(xname + 20);
+                const char *valstr = vcardvalue_as_vcard_string(value);
+                vcardproperty *new;
+                char *buf = NULL, *buf_ptr;
+                size_t buf_size;
+
+                switch (kind) {
+                case VCARD_MEMBER_PROPERTY:
+                    /* strip urn:uuid: prefix and RFC6868-decode string */
+                    if (!strncmp(valstr, UUID_PREFIX, UUID_PREFIX_LEN)) {
+                        valstr += UUID_PREFIX_LEN;
+                    }
+
+                    buf_size = strlen(valstr) + 1;
+                    buf_ptr = buf = icalmemory_new_buffer(buf_size);
+                    icalmemory_append_decoded_string(&buf, &buf_ptr, &buf_size,
+                                                     valstr);
+                    valstr = buf;
+
+                    _fallthrough();
+
+                case VCARD_KIND_PROPERTY:
+                    new = vcardproperty_new(kind);
+                    vcardproperty_set_value_from_string(new, valstr, "NO");
+                    vcardcomponent_add_property(impl, new);
+                    vcardcomponent_remove_property(impl, prop);
+                    vcardproperty_free(prop);
+                    break;
+
+                default:
+                    break;
+                }
+
+                icalmemory_free_buffer(buf);
             }
             break;
         }
 
         default:
             break;
-        }
-
-        if (buf) {
-            icalmemory_free_buffer(buf);
         }
     }
 }
@@ -1001,14 +1031,13 @@ static void comp_to_v3(vcardcomponent *impl)
 
     for (itr = icalpvl_head(impl->properties); itr != 0; itr = next) {
         vcardproperty *prop = (vcardproperty *)icalpvl_data(itr);
-        vcardproperty *xprop;
         vcardparameter *val_param =
             vcardproperty_get_first_parameter(prop, VCARD_VALUE_PARAMETER);
         vcardvalue *value = vcardproperty_get_value(prop);
         vcardvalue_kind vkind = vcardvalue_isa(value);
         vcardparameter *param;
-        char *subtype = NULL, *buf = NULL;
-        const char *mediatype, *uri, *xname = NULL;
+        char *subtype = NULL;
+        const char *mediatype, *uri, *xname = NULL, *xval = NULL;
 
         next = icalpvl_next(itr);
 
@@ -1092,20 +1121,25 @@ static void comp_to_v3(vcardcomponent *impl)
 
                 if (geo.uri && !strncmp(geo.uri, "geo:", 4)) {
                     /* Convert geo: URI to STRUCTURED value kind */
-                    char *lon;
-
-                    buf = icalmemory_strdup(geo.uri);
+                    char *buf = icalmemory_strdup(geo.uri);
                     geo.uri = NULL;
-                    geo.coords.lat = buf + 4;
-                    lon = strchr(buf + 4, ',');
+                    char *lat = buf + 4;
+                    char *lon = strchr(buf + 4, ',');
                     if (lon) {
                         *lon++ = '\0';
-                        geo.coords.lon = lon;
+                    }
+                    if (lat && lon) {
+                        strncpy(geo.coords.lat, lat, VCARD_GEO_LEN - 1);
+                        geo.coords.lat[VCARD_GEO_LEN - 1] = '\0';
+                        strncpy(geo.coords.lon, lon, VCARD_GEO_LEN - 1);
+                        geo.coords.lon[VCARD_GEO_LEN - 1] = '\0';
                     } else {
-                        geo.coords.lon = "";
+                        geo.coords.lat[0] = '\0';
+                        geo.coords.lon[0] = '\0';
                     }
 
                     vcardvalue_set_geo(value, geo);
+                    icalmemory_free_buffer(buf);
                 }
             }
             break;
@@ -1119,7 +1153,7 @@ static void comp_to_v3(vcardcomponent *impl)
                 /* Convert data: URI to base64-encoded TEXT value kind */
                 char *base64, *data = NULL;
 
-                buf = icalmemory_strdup(uri);
+                char *buf = icalmemory_strdup(uri);
                 mediatype = buf + 5;
                 base64 = strstr(mediatype, ";base64,");
 
@@ -1153,6 +1187,7 @@ static void comp_to_v3(vcardcomponent *impl)
 
                 value->kind = VCARD_TEXT_VALUE;
                 vcardvalue_set_text(value, data ? data : "");
+                icalmemory_free_buffer(buf);
             }
             break;
 
@@ -1162,21 +1197,35 @@ static void comp_to_v3(vcardcomponent *impl)
 
             _fallthrough();
 
-        case VCARD_MEMBER_PROPERTY:
+        case VCARD_MEMBER_PROPERTY: {
+            char *buf = NULL;
+
+            xval = vcardvalue_as_vcard_string(value);
             if (!xname) {
+                size_t buf_size = strlen(UUID_PREFIX) + strlen(xval) + 1;
+                char *buf_ptr = buf = icalmemory_new_buffer(buf_size);
+
+                /* RFC6868-encode the uid and prefix with urn:uuid: */
+                icalmemory_append_string(&buf, &buf_ptr, &buf_size, UUID_PREFIX);
+                icalmemory_append_encoded_string(&buf, &buf_ptr, &buf_size, xval);
                 xname = "X-ADDRESSBOOKSERVER-MEMBER";
+                xval = buf;
             }
-            xprop = vcardproperty_new_x(vcardvalue_as_vcard_string(value));
+
+            vcardproperty *xprop = vcardproperty_new_x(xval);
             vcardproperty_set_x_name(xprop, xname);
             vcardcomponent_add_property(impl, xprop);
             vcardcomponent_remove_property(impl, prop);
+            vcardproperty_free(prop);
+            icalmemory_free_buffer(buf);
             break;
+        }
 
         case VCARD_TEL_PROPERTY:
             uri = vcardvalue_get_uri(value);
             if (uri && !strncmp(uri, "tel:", 4)) {
                 /* Convert tel: URI to TEXT value kind */
-                buf = icalmemory_strdup(uri + 4);
+                char *buf = icalmemory_strdup(uri + 4);
 
                 value->kind = VCARD_TEXT_VALUE;
                 vcardvalue_set_text(value, buf);
@@ -1184,30 +1233,22 @@ static void comp_to_v3(vcardcomponent *impl)
                 if (val_param) {
                     vcardproperty_remove_parameter_by_ref(prop, val_param);
                 }
+
+                icalmemory_free_buffer(buf);
             }
             break;
 
         case VCARD_UID_PROPERTY:
-            uri = vcardvalue_get_uri(value);
-            if (uri && !strncmp(uri, "urn:uuid:", 9)) {
-                /* Convert urn:uuid: URI to TEXT value kind */
-                buf = icalmemory_strdup(uri + 9);
+            /* Treat all values as TEXT (the default) */
+            value->kind = VCARD_TEXT_VALUE;
 
-                value->kind = VCARD_TEXT_VALUE;
-                vcardvalue_set_text(value, buf);
-
-                if (val_param) {
-                    vcardproperty_remove_parameter_by_ref(prop, val_param);
-                }
+            if (val_param) {
+                vcardproperty_remove_parameter_by_ref(prop, val_param);
             }
             break;
 
         default:
             break;
-        }
-
-        if (buf) {
-            icalmemory_free_buffer(buf);
         }
     }
 

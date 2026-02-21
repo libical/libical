@@ -34,7 +34,7 @@
     if (val == NULL) {
         return NULL;
     }
-    return ${binding-prefix}_new_full(${native-prefix}_new_${suffix}(priv_i_cal_vcardstructuredtype_clone(val)), NULL);</custom>
+    return ${binding-prefix}_new_full(${native-prefix}_new_${suffix}(vcardstructured_clone(val)), NULL);</custom>
     </method>
     <method name="${binding-prefix}_get_${suffix}" corresponds="${native-prefix}_get_${suffix}" kind="get">
       <parameter type="const ${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
@@ -48,7 +48,7 @@
     if (val == NULL) {
         return NULL;
     }
-    return i_cal_vcard_structured_new_full(priv_i_cal_vcardstructuredtype_clone(val), NULL);</custom>
+    return i_cal_vcard_structured_new_full(vcardstructured_clone(val), NULL);</custom>
     </method>
     <method name="${binding-prefix}_set_${suffix}" corresponds="${native-prefix}_set_${suffix}" kind="set">
       <parameter type="${obj-type} *" name="self" comment="the #${obj-type} of ${value-name}"/>
@@ -58,7 +58,7 @@
  * Note: this uses a copy of the structured type, not the one stored in the @self</comment>
       <custom>    g_return_if_fail(self != NULL);
     ${native-prefix}_set_${suffix}((${native-type} *)i_cal_object_get_native((ICalObject *)self),
-        priv_i_cal_vcardstructuredtype_clone((vcardstructuredtype *)i_cal_object_get_native((ICalObject *)value)));</custom>
+        vcardstructured_clone((vcardstructuredtype *)i_cal_object_get_native((ICalObject *)value)));</custom>
     </method>
   </method-template>
   <method-template name="enumarray" requires="obj-type,value-name,value-get-type,value-set-type,value-set-type-ref,binding-prefix,binding-array-type,binding-array-new-prefix,native-prefix,native-type,native-array-type,native-elem-type,suffix" optional="binding-get-set-suffix">

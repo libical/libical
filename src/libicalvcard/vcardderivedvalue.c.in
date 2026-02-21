@@ -45,7 +45,6 @@ vcardvalue *vcardvalue_new_structured(vcardstructuredtype *v)
 void vcardvalue_set_structured(vcardvalue *value, vcardstructuredtype *v)
 {
     struct vcardvalue_impl *impl;
-    unsigned i;
 
     icalerror_check_arg_rv((value != 0), "value");
     icalerror_check_arg_rv((v != 0), "v");
@@ -53,10 +52,8 @@ void vcardvalue_set_structured(vcardvalue *value, vcardstructuredtype *v)
     icalerror_check_value_type(value, VCARD_STRUCTURED_VALUE);
     impl = (struct vcardvalue_impl *)value;
 
-    impl->data.v_structured.num_fields = v->num_fields;
-    for (i = 0; i < v->num_fields; i++) {
-        impl->data.v_structured.field[i] = v->field[i];
-    }
+    vcardstructured_ref(v);
+    impl->data.v_structured = v;
 
     vcardvalue_reset_kind(impl);
 }
@@ -65,7 +62,7 @@ vcardstructuredtype *vcardvalue_get_structured(const vcardvalue *value)
 {
     icalerror_check_arg((value != 0), "value");
     icalerror_check_value_type(value, VCARD_STRUCTURED_VALUE);
-    return &((struct vcardvalue_impl *)value)->data.v_structured;
+    return ((struct vcardvalue_impl *)value)->data.v_structured;
 }
 
 vcardvalue *vcardvalue_new_geo(struct vcardgeotype v)
@@ -86,32 +83,23 @@ void vcardvalue_set_geo(vcardvalue *value, struct vcardgeotype v)
     impl = (struct vcardvalue_impl *)value;
 
     if (v.uri) {
-        for (int i = 0; i < VCARD_MAX_STRUCTURED_FIELDS; i++) {
-            vcardstrarray *array = impl->data.v_structured.field[i];
-            if (array) {
-                vcardstrarray_free(array);
-                impl->data.v_structured.field[i] = 0;
-            }
+        if (impl->kind == VCARD_GEO_VALUE) {
+            impl->data.v_geo.coords.lat[0] = '\0';
+            impl->data.v_geo.coords.lon[0] = '\0';
         }
-        impl->data.v_structured.num_fields = 0;
-
         impl->kind = VCARD_URI_VALUE;
         vcardvalue_set_uri(value, v.uri);
     } else {
-        vcardstructuredtype geo = {
-            2,  { vcardstrarray_new(1), vcardstrarray_new(1) }
-        };
-
-        if (impl->data.v_string != 0) {
-            icalmemory_free_buffer((void *)impl->data.v_string);
-            impl->data.v_string = 0;
+        if (impl->kind == VCARD_URI_VALUE) {
+            if (impl->data.v_string != 0) {
+                icalmemory_free_buffer((void *)impl->data.v_string);
+                impl->data.v_string = 0;
+            }
         }
-
-        vcardstrarray_append(geo.field[0], v.coords.lat);
-        vcardstrarray_append(geo.field[1], v.coords.lon);
-
-        impl->kind = VCARD_STRUCTURED_VALUE;
-        vcardvalue_set_structured(value, &geo);
+        impl->data.v_geo = v;
+        impl->data.v_geo.uri = NULL;
+        impl->kind = VCARD_GEO_VALUE;
+        vcardvalue_reset_kind(impl);
     }
 }
 
@@ -123,20 +111,9 @@ struct vcardgeotype vcardvalue_get_geo(const vcardvalue *impl)
 
     if (impl->kind == VCARD_URI_VALUE) {
         geo.uri = impl->data.v_string;
-    } else if (impl->kind == VCARD_STRUCTURED_VALUE) {
-        geo.coords.lat = geo.coords.lon = "0.0";
-        switch (impl->data.v_structured.num_fields) {
-        default:
-            geo.coords.lon =
-                vcardstrarray_element_at(impl->data.v_structured.field[1], 0);
-            _fallthrough();
-        case 1:
-            geo.coords.lat =
-                vcardstrarray_element_at(impl->data.v_structured.field[0], 0);
-            _fallthrough();
-        case 0:
-            break;
-        }
+    } else if (impl->kind == VCARD_GEO_VALUE) {
+        geo = impl->data.v_geo;
+        geo.uri = NULL;
     } else {
         icalerror_set_errno(ICAL_BADARG_ERROR);
     }
