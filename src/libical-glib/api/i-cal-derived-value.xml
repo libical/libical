@@ -240,10 +240,6 @@
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DATETIMEPERIOD" since="1.0" value-get-type="ICalDatetimeperiod *" value-set-type="const ICalDatetimeperiod *" value-set-type-ref="#ICalDatetimeperiod" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="datetimeperiod"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="GEO" since="1.0" value-get-type="ICalGeo *" value-set-type="const ICalGeo *" value-set-type-ref="#ICalGeo" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="geo"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="ATTACH" since="1.0" value-get-type="ICalAttach *" value-set-type="const ICalAttach *" value-set-type-ref="#ICalAttach" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="attach"/>
-  <method name="i_cal_value_reset_kind" corresponds="icalvalue_reset_kind" kind="other" since="1.0">
-    <parameter type="ICalValue *" name="value" comment="The #ICalValue's kind to be reset"/>
-    <comment>Resets the kind of #ICalValue.</comment>
-  </method>
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="XLICCLASS" since="1.0" value-get-type="ICalPropertyXlicclass" value-set-type="ICalPropertyXlicclass" value-set-type-ref="#ICalPropertyXlicclass" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="xlicclass"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BOOLEAN" since="1.0" value-get-type="gboolean" value-set-type="gboolean" value-set-type-ref="boolean" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="boolean"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BUSYTYPE" since="2.0" value-get-type="ICalPropertyBusytype" value-set-type="ICalPropertyBusytype" value-set-type-ref="#ICalPropertyBusytype" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="busytype"/>

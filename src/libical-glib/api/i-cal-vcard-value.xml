@@ -59,6 +59,10 @@
     <returns type="gboolean" comment="true if yes, false if not."/>
     <comment xml:space="preserve">Checks whether the @kind is a valid #ICalVcardValueKind.</comment>
   </method>
+  <method name="i_cal_vcard_value_reset_kind" corresponds="vcardvalue_reset_kind" kind="other" since="4.0">
+    <parameter type="ICalVcardValue *" name="value" comment="The #ICalVcardValue to be queried"/>
+    <comment>Reset's the value's kind.</comment>
+  </method>
   <method name="i_cal_vcard_value_dequote_text" corresponds="vcardvalue_strdup_and_dequote_text" annotation="skip" since="4.0">
     <parameter type="const gchar **" name="text" annotation="inout" comment="pointer to a string to dequote"/>
     <parameter type="const gchar *" name="separators" annotation="nullable" comment="a string with separators, or %NULL"/>

@@ -40,6 +40,13 @@ LIBICAL_VCARD_EXPORT const char *vcardvalue_kind_to_string(const vcardvalue_kind
 /** Check validity of a specific vcardvalue_kind **/
 LIBICAL_VCARD_EXPORT bool vcardvalue_kind_is_valid(const vcardvalue_kind kind);
 
+/**
+ * Resets the vcardvalue_kind of the specified vcardvalue.
+ *
+ * @param value a pointer to a valid vcardvalue
+ */
+LIBICAL_VCARD_EXPORT void vcardvalue_reset_kind(vcardvalue *value);
+
 /* Duplicate and dequote a TEXT value */
 LIBICAL_VCARD_EXPORT char *vcardvalue_strdup_and_dequote_text(const char **str,
                                                               const char *sep);

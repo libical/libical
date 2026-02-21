@@ -77,6 +77,13 @@ LIBICAL_ICAL_EXPORT const char *icalvalue_kind_to_string(const icalvalue_kind ki
 /** Check validity of a specific icalvalue_kind **/
 LIBICAL_ICAL_EXPORT bool icalvalue_kind_is_valid(const icalvalue_kind kind);
 
+/**
+ * Resets the icalvalue_kind of the specified icalvalue.
+ *
+ * @param value a pointer to a valid icalvalue
+ */
+LIBICAL_ICAL_EXPORT void icalvalue_reset_kind(icalvalue *value);
+
 /** Encode a character string in ical format, escape certain characters, etc. */
 LIBICAL_ICAL_EXPORT bool icalvalue_encode_ical_string(const char *szText,
                                                       char *szEncText, int MaxBufferLen);
