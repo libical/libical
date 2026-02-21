@@ -68,6 +68,10 @@
     <returns type="gboolean" comment="true if yes, false if not."/>
     <comment xml:space="preserve">Checks whether the #ICalValueKind is valid.</comment>
   </method>
+  <method name="i_cal_value_reset_kind" corresponds="icalvalue_reset_kind" kind="other" since="1.0">
+    <parameter type="ICalValue *" name="value" comment="The #ICalValue's kind to be reset"/>
+    <comment>Resets the kind of #ICalValue.</comment>
+  </method>
   <method name="i_cal_value_encode_ical_string" corresponds="icalvalue_encode_ical_string" kind="custom" since="1.0">
     <parameter type="const gchar *" name="szText" comment="A string"/>
     <returns type="gchar *" annotation="nullable, transfer full" comment="The encoded string. NULL if fail."/>

@@ -46,10 +46,6 @@
     <element name="VCARD_NUM_CLIENTPIDMAP_FIELDS"/>
   </enum>
   <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="X" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="x"/>
-  <method name="i_cal_vcard_value_reset_kind" corresponds="vcardvalue_reset_kind" kind="other" since="4.0">
-    <parameter type="ICalVcardValue *" name="value" comment="The #ICalVcardValue to be queried"/>
-    <comment>Reset's the value's kind.</comment>
-  </method>
   <method-from-template name="vcardstructured" obj-type="ICalVcardValue" native-type="vcardvalue" value-name="STRUCTURED" since="4.0" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="structured"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="GEO" since="4.0" value-get-type="ICalVcardGeo *" value-set-type="const ICalVcardGeo *" value-set-type-ref="#ICalVcardGeo" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="geo"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalVcardValue" value-name="TZ" since="4.0" value-get-type="ICalVcardTz *" value-set-type="const ICalVcardTz *" value-set-type-ref="#ICalVcardTz" value-get-annotation="transfer full" binding-prefix="i_cal_vcard_value" native-prefix="vcardvalue" suffix="tz"/>
