@@ -21,7 +21,7 @@ vcardstrarray *vcardtextlist_new_from_string(const char *str, char sep)
     icalerror_check_arg_rz(sep != 0, "sep");
 
     vcardstrarray *array = vcardstrarray_new(2);
-    char sep_str[2] = {sep, 0};
+    const char sep_str[2] = {sep, 0};
 
     do {
         char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, sep_str);

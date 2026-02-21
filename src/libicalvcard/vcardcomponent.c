@@ -1123,7 +1123,7 @@ static void comp_to_v3(vcardcomponent *impl)
                     /* Convert geo: URI to STRUCTURED value kind */
                     char *buf = icalmemory_strdup(geo.uri);
                     geo.uri = NULL;
-                    char *lat = buf + 4;
+                    const char *lat = buf + 4;
                     char *lon = strchr(buf + 4, ',');
                     if (lon) {
                         *lon++ = '\0';
