@@ -43,6 +43,6 @@ LIBICAL_ICALSS_EXPORT void icalgauge_dump(icalgauge *gauge);
  * canonical form -- a VCALENDAR with one VEVENT, VTODO or VJOURNAL
  * sub component
  */
-LIBICAL_ICALSS_EXPORT int icalgauge_compare(icalgauge *g, icalcomponent *comp);
+LIBICAL_ICALSS_EXPORT bool icalgauge_compare(icalgauge *g, icalcomponent *comp);
 
 #endif /* ICALGAUGE_H */

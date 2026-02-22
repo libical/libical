@@ -242,11 +242,11 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
     return pass;
 }
 
-int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
+bool icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 {
     icalcomponent *inner;
     int local_pass = 0;
-    int last_clause = 1;
+    bool last_clause = true;
     icalpvl_elem e;
     int compare_recur = 0;
 
@@ -259,7 +259,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
         /* Wally Yau: our component is not always wrapped with
          * a <VCALENDAR>. It's not an error.
          * icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-         * return 0; */
+         * return false; */
         icalcomponent_kind kind = icalcomponent_isa(comp);
         if (kind == ICAL_VEVENT_COMPONENT ||
             kind == ICAL_VTODO_COMPONENT ||
@@ -268,7 +268,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
             inner = comp;
         } else {
             icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-            return 0;
+            return false;
         }
     }
 
@@ -283,7 +283,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
     }
 
     if (local_pass == 0) {
-        return 0;
+        return false;
     }
 
     /**** Check each where clause against the component ****/
@@ -296,7 +296,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 
         if (!w || w->prop == ICAL_NO_PROPERTY || w->value == 0) {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
-            return 0;
+            return false;
         }
 
         /* First, create a value from the gauge */
@@ -304,7 +304,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 
         if (vk == ICAL_NO_VALUE) {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
-            return 0;
+            return false;
         }
 
         if (w->compare == ICALGAUGECOMPARE_ISNULL || w->compare == ICALGAUGECOMPARE_ISNOTNULL) {
@@ -315,7 +315,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 
         if (v == 0) {
             /* Keep error set by icalvalue_from-string */
-            return 0;
+            return false;
         }
 
         /* Now find the corresponding property in the component,
@@ -327,7 +327,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
             sub_comp = icalcomponent_get_first_component(inner, w->comp);
             if (sub_comp == 0) {
                 icalvalue_free(v);
-                return 0;
+                return false;
             }
         }
 
@@ -388,7 +388,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
             }
         }
 
-        int this_clause = local_pass > 0 ? 1 : 0;
+        bool this_clause = (local_pass > 0);
 
         /* Now look at the logic operator for this clause to see how
            the value should be merge with the previous clause */
