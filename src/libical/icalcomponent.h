@@ -544,6 +544,8 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vagenda(void);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vquery(void);
 
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vreply(void);
+
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_vavailability(void);
 
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_xavailable(void);
