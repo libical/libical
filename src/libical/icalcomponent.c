@@ -506,8 +506,6 @@ icalproperty *icalcomponent_get_next_property(icalcomponent *c, icalproperty_kin
     return 0;
 }
 
-icalproperty **icalcomponent_get_properties(icalcomponent *component, icalproperty_kind kind);
-
 void icalcomponent_add_component(icalcomponent *parent, icalcomponent *child)
 {
     icalerror_check_arg_rv((parent != 0), "parent");
