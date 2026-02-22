@@ -99,44 +99,6 @@ void icalgauge_free(icalgauge *gauge)
     free(gauge);
 }
 
-/** Converts a VQUERY component into a gauge */
-icalcomponent *icalgauge_make_gauge(icalcomponent *query);
-
-/**
-   icaldirset_test compares a component against a gauge, and returns
-   true if the component passes the test
-
-   The gauge is a VCALENDAR component that specifies how to test the
-   target components. The gauge holds a collection of VEVENT, VTODO or
-   VJOURNAL sub-components. Each of the sub-components has a
-   collection of properties that are compared to corresponding
-   properties in the target component, according to the
-   X-LIC-COMPARETYPE parameters to the gauge's properties.
-
-   When a gauge has several sub-components, the results of testing the
-   target against each of them is ORed together - the target
-   component will pass if it matches any of the sub-components in the
-   gauge. However, the results of matching the properties in a
-   sub-component are ANDed -- the target must match every property in
-   a gauge sub-component to match the sub-component.
-
-   Here is an example:
-
-   BEGIN:XROOT
-   DTSTART;X-LIC-COMPARETYPE=LESS:19981025T020000
-   ORGANIZER;X-LIC-COMPARETYPE=EQUAL:mrbig@host.com
-   END:XROOT
-   BEGIN:XROOT
-   LOCATION;X-LIC-COMPARETYPE=EQUAL:McNary's Pub
-   END:XROOT
-
-   This gauge has two sub-components; one which will match a VEVENT
-   based on start time, and organizer, and another that matches based
-   on LOCATION. A target component will pass the test if it matched
-   either of the sub-components.
-
-  */
-
 /*non-static,recursive*/
 int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
 {
@@ -217,8 +179,7 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
     }
 
     /* Test subcomponents. Look for a child component that has a
-       counterpart in the gauge. If one is found, recursively call
-       icaldirset_test */
+       counterpart in the gauge. */
 
     for (subgauge = icalcomponent_get_first_component(gauge, ICAL_ANY_COMPONENT);
          subgauge != 0;
