@@ -206,8 +206,6 @@ void icalspanlist_dump(icalspanlist *sl)
     }
 }
 
-icalcomponent *icalspanlist_make_busy_list(icalspanlist *sl);
-
 struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icaltimetype t)
 {
     icalpvl_elem itr;
