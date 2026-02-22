@@ -26,8 +26,18 @@ macro(_GIR_GET_PKGCONFIG_VAR _outvar _varname)
 
   if(_null)
   else()
-    string(REGEX REPLACE "[\r\n]" " " _result "${_result}")
-    string(REGEX REPLACE " +$" "" _result "${_result}")
+    string(
+      REGEX REPLACE "[\r\n]"
+      " "
+      _result
+      "${_result}"
+    )
+    string(
+      REGEX REPLACE " +$"
+      ""
+      _result
+      "${_result}"
+    )
     separate_arguments(_result UNIX_COMMAND ${_result})
     set(${_outvar} ${_result} CACHE INTERNAL "")
   endif()

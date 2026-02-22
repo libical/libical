@@ -19,8 +19,18 @@ macro(gir_add_introspections introspections_girs)
 
     ## Transform the gir filename to something which can reference through a variable
     ## without automake/make complaining, eg Gtk-2.0.gir -> Gtk_2_0_gir
-    string(REPLACE "-" "_" _gir_name "${_gir_name}")
-    string(REPLACE "." "_" _gir_name "${_gir_name}")
+    string(
+      REPLACE "-"
+      "_"
+      _gir_name
+      "${_gir_name}"
+    )
+    string(
+      REPLACE "."
+      "_"
+      _gir_name
+      "${_gir_name}"
+    )
 
     # Namespace and Version is either fetched from the gir filename
     # or the _NAMESPACE/_VERSION variable combo
@@ -29,7 +39,12 @@ macro(gir_add_introspections introspections_girs)
       set(_gir_namespace "${${_gir_name}_NAMESPACE}")
     endif()
     if(_gir_namespace STREQUAL "")
-      string(REGEX REPLACE "([^-]+)-.*" "\\1" _gir_namespace "${gir}")
+      string(
+        REGEX REPLACE "([^-]+)-.*"
+        "\\1"
+        _gir_namespace
+        "${gir}"
+      )
     endif()
 
     set(_gir_version "")
@@ -37,7 +52,12 @@ macro(gir_add_introspections introspections_girs)
       set(_gir_version "${${_gir_name}_VERSION}")
     endif()
     if(_gir_version STREQUAL "")
-      string(REGEX REPLACE ".*-([^-]+).gir" "\\1" _gir_version "${gir}")
+      string(
+        REGEX REPLACE ".*-([^-]+).gir"
+        "\\1"
+        _gir_version
+        "${gir}"
+      )
     endif()
 
     # _PROGRAM is an optional variable which needs its own --program argument
@@ -92,7 +112,12 @@ macro(gir_add_introspections introspections_girs)
     list(APPEND _gir_girs ${CMAKE_CURRENT_BINARY_DIR}/${gir})
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${gir} DESTINATION ${SHARE_INSTALL_DIR}/gir-1.0)
 
-    string(REPLACE ".gir" ".typelib" _typelib "${gir}")
+    string(
+      REPLACE ".gir"
+      ".typelib"
+      _typelib
+      "${gir}"
+    )
     add_custom_command(
       OUTPUT
         ${_typelib}

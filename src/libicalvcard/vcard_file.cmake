@@ -32,8 +32,18 @@ foreach(_current_FILE ${COMBINEDHEADERSVCARD})
   file(STRINGS ${_current_FILE} _lines NEWLINE_CONSUME)
   foreach(_currentLINE ${_lines})
     # do not remove includes for private headers (of the form vcard*_p.h)
-    string(REGEX REPLACE "#include \"vcard.*[^_p]\\.h\"" "" _currentLINE "${_currentLINE}")
-    string(REGEX REPLACE "#include \"config.*\\.h\"" "" _currentLINE "${_currentLINE}")
+    string(
+      REGEX REPLACE "#include \"vcard.*[^_p]\\.h\""
+      ""
+      _currentLINE
+      "${_currentLINE}"
+    )
+    string(
+      REGEX REPLACE "#include \"config.*\\.h\""
+      ""
+      _currentLINE
+      "${_currentLINE}"
+    )
     if(NOT "${_currentLINE}" STREQUAL "")
       file(APPEND ${VCARD_FILE_H_FILE} "${_currentLINE}\n")
     endif()
