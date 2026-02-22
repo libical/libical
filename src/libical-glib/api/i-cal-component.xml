@@ -666,6 +666,10 @@ static void foreach_recurrence_cb(const icalcomponent *in_comp, const struct ica
     <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
     <comment xml:space="preserve">Creates a #ICalComponent with the type to be vavailability.</comment>
   </method>
+  <method name="i_cal_component_new_vreply" corresponds="icalcomponent_new_vreply" kind="constructor" since="1.0">
+    <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+    <comment xml:space="preserve">Creates a #ICalComponent with the type to be vreply.</comment>
+  </method>
   <method name="i_cal_component_new_xavailable" corresponds="icalcomponent_new_xavailable" kind="constructor" since="1.0">
     <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
     <comment xml:space="preserve">Creates a #ICalComponent with the type to be xavailable.</comment>
