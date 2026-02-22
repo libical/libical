@@ -1595,8 +1595,8 @@ static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator *impl,
     return tt;
 }
 
-struct icaltimetype __icaltime_from_day_of_year(icalrecur_iterator *impl,
-                                                int day, int year, int *weekno)
+static struct icaltimetype __icaltime_from_day_of_year(icalrecur_iterator *impl,
+                                                       int day, int year, int *weekno)
 {
     ucal_set(impl->rscale, UCAL_YEAR, (int32_t)year);
     if (day < 0) {
@@ -2083,8 +2083,8 @@ static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator *impl,
     return (normalize ? icaltime_normalize(impl->last) : impl->last);
 }
 
-struct icaltimetype __icaltime_from_day_of_year(icalrecur_iterator *impl,
-                                                int day, int year, int *weekno)
+static struct icaltimetype __icaltime_from_day_of_year(icalrecur_iterator *impl,
+                                                       int day, int year, int *weekno)
 {
     struct icaltimetype tt;
 
