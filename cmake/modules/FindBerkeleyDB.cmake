@@ -29,7 +29,11 @@ if(BerkeleyDB_ROOT_DIR)
 elseif(CMAKE_SYSTEM_NAME MATCHES ".*[wW]indows.*")
   # MATCHES is used to work on any devies with windows in the name
   # Shameless copy-paste from FindOpenSSL.cmake v3.8
-  file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _programfiles)
+  file(
+    TO_CMAKE_PATH
+    "$ENV{PROGRAMFILES}"
+    _programfiles
+  )
   list(APPEND _BERKELEYDB_PATHS "${_programfiles}")
 
   # There's actually production release and version numbers in the file path.
@@ -75,10 +79,25 @@ if(BerkeleyDB_INCLUDE_DIRS)
   # Read the version file db.h into a variable
   file(READ "${BerkeleyDB_INCLUDE_DIRS}/db.h" _BERKELEYDB_DB_HEADER)
   # Parse the DB version into variables to be used in the lib names
-  string(REGEX REPLACE ".*DB_VERSION_MAJOR	([0-9]+).*" "\\1" BerkeleyDB_VERSION_MAJOR "${_BERKELEYDB_DB_HEADER}")
-  string(REGEX REPLACE ".*DB_VERSION_MINOR	([0-9]+).*" "\\1" BerkeleyDB_VERSION_MINOR "${_BERKELEYDB_DB_HEADER}")
+  string(
+    REGEX REPLACE ".*DB_VERSION_MAJOR	([0-9]+).*"
+    "\\1"
+    BerkeleyDB_VERSION_MAJOR
+    "${_BERKELEYDB_DB_HEADER}"
+  )
+  string(
+    REGEX REPLACE ".*DB_VERSION_MINOR	([0-9]+).*"
+    "\\1"
+    BerkeleyDB_VERSION_MINOR
+    "${_BERKELEYDB_DB_HEADER}"
+  )
   # Patch version example on non-crypto installs: x.x.xNC
-  string(REGEX REPLACE ".*DB_VERSION_PATCH	([0-9]+(NC)?).*" "\\1" BerkeleyDB_VERSION_PATCH "${_BERKELEYDB_DB_HEADER}")
+  string(
+    REGEX REPLACE ".*DB_VERSION_PATCH	([0-9]+(NC)?).*"
+    "\\1"
+    BerkeleyDB_VERSION_PATCH
+    "${_BERKELEYDB_DB_HEADER}"
+  )
 else()
   if(BerkeleyDB_FIND_REQUIRED)
     # If the find_package(BerkeleyDB REQUIRED) was used, fail since we couldn't find the header

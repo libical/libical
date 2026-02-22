@@ -67,7 +67,12 @@ if(PYTHON3)
   endif()
 
   foreach(test_file IN LISTS TEST_FILES)
-    string(REPLACE ".py" "" test_name ${test_file})
+    string(
+      REPLACE ".py"
+      ""
+      test_name
+      ${test_file}
+    )
     set(test_name "libical-glib-${test_name}")
 
     add_test(

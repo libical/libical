@@ -36,8 +36,18 @@ macro(generate_gi_documentation _target _config _gir_path)
 
   get_filename_component(_gir_filename ${_gir_path} NAME)
   set(_gir_target "${_gir_filename}")
-  string(REPLACE "-" "_" _gir_target "${_gir_target}")
-  string(REPLACE "." "_" _gir_target "${_gir_target}")
+  string(
+    REPLACE "-"
+    "_"
+    _gir_target
+    "${_gir_target}"
+  )
+  string(
+    REPLACE "."
+    "_"
+    _gir_target
+    "${_gir_target}"
+  )
   set(_gir_target "gir-girs-${_gir_target}")
   add_custom_target(
     ${_target}-doc

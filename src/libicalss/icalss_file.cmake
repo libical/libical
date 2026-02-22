@@ -30,8 +30,18 @@ foreach(_current_FILE ${COMBINEDHEADERSICALSS})
   file(STRINGS ${_current_FILE} _lines)
   foreach(_currentLINE ${_lines})
     # do not remove includes for private headers (of the form ical*_p.h)
-    string(REGEX REPLACE "#include \"ical.*[^p]\\.h\"" "" _currentLINE "${_currentLINE}")
-    string(REGEX REPLACE "#include \"config.*\\.h\"" "" _currentLINE "${_currentLINE}")
+    string(
+      REGEX REPLACE "#include \"ical.*[^p]\\.h\""
+      ""
+      _currentLINE
+      "${_currentLINE}"
+    )
+    string(
+      REGEX REPLACE "#include \"config.*\\.h\""
+      ""
+      _currentLINE
+      "${_currentLINE}"
+    )
     if(NOT "${_currentLINE}" STREQUAL "")
       file(APPEND ${ICAL_FILE_H_FILE} "${_currentLINE}\n")
     endif()

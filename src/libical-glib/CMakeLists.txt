@@ -107,10 +107,30 @@ list(
 
 # add the command to generate the source code from the api files
 foreach(file IN LISTS API_FILES)
-  string(REPLACE "api/" "${CMAKE_CURRENT_SOURCE_DIR}/api/" xml_file_fullpath ${file})
-  string(REPLACE "api/" "${CMAKE_CURRENT_BINARY_DIR}/" bin_file ${file})
-  string(REGEX REPLACE ".xml$" ".h" h_file ${bin_file})
-  string(REGEX REPLACE ".xml$" ".c" c_file ${bin_file})
+  string(
+    REPLACE "api/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/api/"
+    xml_file_fullpath
+    ${file}
+  )
+  string(
+    REPLACE "api/"
+    "${CMAKE_CURRENT_BINARY_DIR}/"
+    bin_file
+    ${file}
+  )
+  string(
+    REGEX REPLACE ".xml$"
+    ".h"
+    h_file
+    ${bin_file}
+  )
+  string(
+    REGEX REPLACE ".xml$"
+    ".c"
+    c_file
+    ${bin_file}
+  )
 
   list(
     APPEND LIBICAL_GLIB_SOURCES
@@ -242,7 +262,12 @@ endif()
 if(LIBICAL_GOBJECT_INTROSPECTION)
   # extract only file names without path for introspection
   foreach(file IN LISTS LIBICAL_GLIB_SOURCES)
-    string(REPLACE "${CMAKE_CURRENT_BINARY_DIR}/" "" plain_file ${file})
+    string(
+      REPLACE "${CMAKE_CURRENT_BINARY_DIR}/"
+      ""
+      plain_file
+      ${file}
+    )
     list(APPEND LIBICAL_GLIB_GIR_SOURCES ${plain_file})
   endforeach()
 
