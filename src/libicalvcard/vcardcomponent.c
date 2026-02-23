@@ -298,14 +298,9 @@ void vcardcomponent_remove_property(vcardcomponent *comp, vcardproperty *propert
     icalerror_check_arg_rv((comp != 0), "component");
     icalerror_check_arg_rv((property != 0), "property");
 
-#if defined(ICAL_REMOVE_NONMEMBER_CARD_IS_ERROR)
-    icalerror_assert((vcardproperty_get_parent(property)),
-                     "The property is not a member of a card");
-#else
     if (vcardproperty_get_parent(property) == 0) {
         return;
     }
-#endif
 
     if (vcardproperty_isa(property) == VCARD_VERSION_PROPERTY) {
         comp->versionp = 0;
