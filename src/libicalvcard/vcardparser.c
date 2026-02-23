@@ -912,6 +912,7 @@ static int vcardparser_parse(struct vcardparser_state *state, int only_one)
     state->p = state->base;
 
     buf_init(&state->buf, BUF_GROW);
+    buf_init(&state->errbuf, BUF_GROW);
 
     /* don't parse trailing non-whitespace */
     return _parse_vcard(state, state->root, only_one);
