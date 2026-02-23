@@ -29,7 +29,7 @@ jobs:
       - name: Test project
         run: |
           cd build
-          ctest -VV
+          ctest --test-dir .
           ctest --rerun-failed --output-on-failure
         shell: cmd
 
