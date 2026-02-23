@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static vcardstructuredtype *vcardstructured_alloc(void)
+static vcardstructuredtype *vcardstructured_alloc(size_t num_fields)
 {
     struct vcardstructuredtype_impl *st;
 
@@ -30,6 +30,17 @@ static vcardstructuredtype *vcardstructured_alloc(void)
         return NULL;
     }
     memset(st, 0, sizeof(struct vcardstructuredtype_impl));
+
+    if (num_fields > 0) {
+        st->field = (vcardstrarray **)icalmemory_new_buffer(num_fields * sizeof(vcardstrarray *));
+        if (!st->field) {
+            icalmemory_free_buffer(st);
+            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+            return NULL;
+        }
+        memset((void *)st->field, 0, num_fields * sizeof(vcardstrarray *));
+        st->num_alloc = num_fields;
+    }
 
     return st;
 }
@@ -41,12 +52,13 @@ static void vcardstructured_free(vcardstructuredtype *st)
             vcardstrarray_free(st->field[i]);
         }
     }
+    icalmemory_free_buffer((void *)st->field);
     icalmemory_free_buffer((void *)st);
 }
 
 vcardstructuredtype *vcardstructured_new(size_t num_fields)
 {
-    struct vcardstructuredtype_impl *st = vcardstructured_alloc();
+    struct vcardstructuredtype_impl *st = vcardstructured_alloc(num_fields);
     if (!st) {
         return st;
     }
@@ -58,7 +70,7 @@ vcardstructuredtype *vcardstructured_new(size_t num_fields)
 
 vcardstructuredtype *vcardstructured_new_from_string(const char *str)
 {
-    struct vcardstructuredtype_impl *st = vcardstructured_alloc();
+    struct vcardstructuredtype_impl *st = vcardstructured_alloc(0);
     if (!st) {
         return st;
     }
@@ -69,7 +81,7 @@ vcardstructuredtype *vcardstructured_new_from_string(const char *str)
     }
 
     vcardstrarray *field = vcardstrarray_new(2);
-    st->field[st->num_fields++] = field;
+    vcardstructured_set_field_at(st, st->num_fields, field);
 
     do {
         char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",;");
@@ -82,7 +94,7 @@ vcardstructuredtype *vcardstructured_new_from_string(const char *str)
         if (*str == ';') {
             /* end of field */
             field = vcardstrarray_new(2);
-            st->field[st->num_fields++] = field;
+            vcardstructured_set_field_at(st, st->num_fields, field);
         }
 
     } while (*str++ != '\0');
@@ -115,14 +127,13 @@ vcardstructuredtype *vcardstructured_clone(const vcardstructuredtype *st)
 {
     icalerror_check_arg_rz((st != NULL), "st");
 
-    struct vcardstructuredtype_impl *clone_st = vcardstructured_alloc();
+    struct vcardstructuredtype_impl *clone_st = vcardstructured_alloc(st->num_fields);
     if (!clone_st) {
         return NULL;
     }
     vcardstructured_ref(clone_st);
 
     clone_st->num_fields = st->num_fields;
-
     for (size_t i = 0; i < st->num_fields; i++) {
         clone_st->field[i] = vcardstrarray_clone(st->field[i]);
     }
@@ -141,8 +152,26 @@ void vcardstructured_set_num_fields(vcardstructuredtype *st,
 {
     icalerror_check_arg_rv((st != NULL), "st");
 
+    if (num_fields > st->num_alloc) {
+        size_t new_alloc = ((num_fields + 7) / 8) * 8;
+        vcardstrarray **new_field = (vcardstrarray **)icalmemory_new_buffer(new_alloc * sizeof(vcardstrarray *));
+        if (!new_field) {
+            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+            return;
+        }
+
+        memcpy((void *)new_field, st->field, st->num_fields * sizeof(vcardstrarray *));
+        memset((void *)(new_field + st->num_alloc), 0,
+               (new_alloc - st->num_alloc) * sizeof(vcardstrarray *));
+
+        icalmemory_free_buffer(st->field);
+        st->field = new_field;
+        st->num_alloc = new_alloc;
+    }
+
     for (size_t i = num_fields; i < st->num_fields; i++) {
         vcardstrarray_free(st->field[i]);
+        st->field[i] = NULL;
     }
 
     st->num_fields = num_fields;
@@ -165,6 +194,9 @@ void vcardstructured_set_field_at(vcardstructuredtype *st,
 
     if (position >= st->num_fields) {
         vcardstructured_set_num_fields(st, position + 1);
+        if (icalerrno == ICAL_NEWFAILED_ERROR) {
+            return;
+        }
     }
 
     vcardstrarray_free(st->field[position]);

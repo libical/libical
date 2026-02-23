@@ -11,14 +11,13 @@
 
 #include "vcardstrarray.h"
 
-#define VCARD_MAX_STRUCTURED_FIELDS 20 // Extended ADR currently uses 18
-
 struct vcardstructuredtype_impl {
     /* Reference count */
     unsigned refcount;
 
     size_t num_fields;
-    vcardstrarray *field[VCARD_MAX_STRUCTURED_FIELDS];
+    size_t num_alloc;
+    vcardstrarray **field;
 };
 
 #endif /* VCARDSTRUCTUREDIMPL_H */
