@@ -46,7 +46,7 @@ jobs:
       - name: Configure project
         run: |
           mkdir build
-          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=False -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_GLIB_VAPI=True -DLIBICAL_GLIB_CHECK_API_FILES=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_VZIC=True
+          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_GLIB_VAPI=True -DLIBICAL_GLIB_CHECK_API_FILES=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_VZIC=True
       - name: Build project
         run: cmake --build build
       - name: Test project
