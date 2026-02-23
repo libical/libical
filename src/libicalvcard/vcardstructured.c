@@ -64,6 +64,10 @@ vcardstructuredtype *vcardstructured_new_from_string(const char *str)
     }
     vcardstructured_ref(st);
 
+    if (!*str) {
+        return st;
+    }
+
     vcardstrarray *field = vcardstrarray_new(2);
     st->field[st->num_fields++] = field;
 
