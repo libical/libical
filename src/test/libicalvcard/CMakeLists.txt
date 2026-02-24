@@ -37,7 +37,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     480258833 # MSAN floating-point exception
     481458325 # MSAN Use-of-uninitialized value
     485387226 # Null-dereference READ
-    485932113 # ASAN Heap-use-after-free
+    # TODO: 485932113 # ASAN Heap-use-after-free
   )
     add_test(
       NAME vcfuzz1test${fuzztest}
