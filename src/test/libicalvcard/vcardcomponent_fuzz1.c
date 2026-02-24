@@ -75,5 +75,6 @@ int main(int argc, const char *argv[])
 
     vcardcomponent_free(card);
 
+    free(data);
     return 0;
 }
