@@ -197,7 +197,6 @@ static void buf_vprintf(struct buf *buf, const char *fmt, va_list args)
             break;                       \
     }
 
-
 static int _parse_param_name(struct vcardparser_state *state)
 {
     vcardparameter_kind kind;
