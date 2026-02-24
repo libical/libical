@@ -197,6 +197,7 @@ static void buf_vprintf(struct buf *buf, const char *fmt, va_list args)
             break;                       \
     }
 
+
 static int _parse_param_name(struct vcardparser_state *state)
 {
     vcardparameter_kind kind;
@@ -490,6 +491,7 @@ static void _parse_error(struct vcardparser_state *state,
     if (state->prop) {
         vcardproperty_free(state->prop);
     }
+    state->version = NULL;
 
     /* coverity[resource_leak] */
     vcardparameter *errParam = vcardparameter_new_xlicerrortype(type);
