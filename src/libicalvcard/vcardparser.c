@@ -850,6 +850,12 @@ static int _parse_vcard(struct vcardparser_state *state,
         _parse_prop(state);
 
         if (vcardproperty_isa(state->prop) == VCARD_BEGIN_PROPERTY) {
+            if (vcardvalue_isa(vcardproperty_get_value(state->prop)) !=
+                VCARD_TEXT_VALUE) {
+                r = PE_VALUE_INVALID;
+                break;
+            }
+
             const char *val =
                 vcardvalue_get_text(vcardproperty_get_value(state->prop));
             vcardcomponent_kind kind = vcardcomponent_string_to_kind(val);
@@ -875,6 +881,12 @@ static int _parse_vcard(struct vcardparser_state *state,
             r = PE_MISMATCHED_CARD;
             break;
         } else if (vcardproperty_isa(state->prop) == VCARD_END_PROPERTY) {
+            if (vcardvalue_isa(vcardproperty_get_value(state->prop)) !=
+                VCARD_TEXT_VALUE) {
+                r = PE_VALUE_INVALID;
+                break;
+            }
+
             const char *val =
                 vcardvalue_get_text(vcardproperty_get_value(state->prop));
             vcardcomponent_kind kind = vcardcomponent_string_to_kind(val);
