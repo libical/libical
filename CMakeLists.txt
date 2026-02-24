@@ -265,7 +265,18 @@ add_feature_info(
 
 libical_option(LIBICAL_JAVA_BINDINGS "Build the Java bindings. Requires java compiler" True)
 if(LIBICAL_JAVA_BINDINGS)
-  enable_language(Java)
+  include(CheckLanguage)
+  check_language(Java)
+  if(CMAKE_Java_COMPILER)
+    enable_language(Java)
+  else()
+    message(
+      FATAL_ERROR
+      "Building the Java bindings is not possible since a Java compiler could not be found. "
+      "Please install a Java compiler and try again. "
+      "Otherwise, disable Java binding generation using the -DLIBICAL_JAVA_BINDINGS=False CMake option."
+    )
+  endif()
   if(NOT CMAKE_CXX_COMPILER)
     message(
       FATAL_ERROR
