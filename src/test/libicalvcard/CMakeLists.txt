@@ -38,7 +38,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     480258833 # MSAN floating-point exception
     481458325 # MSAN Use-of-uninitialized value
     485387226 # Null-dereference READ
-    # TODO: 485932113 # ASAN Heap-use-after-free
+    485932113 # ASAN Heap-use-after-free
     486715154 # ASAN Heap_buffer-overflow WRITE 8
   )
     add_test(
