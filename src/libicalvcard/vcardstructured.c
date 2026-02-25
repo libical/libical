@@ -160,7 +160,9 @@ void vcardstructured_set_num_fields(vcardstructuredtype *st,
             return;
         }
 
-        memcpy((void *)new_field, st->field, st->num_fields * sizeof(vcardstrarray *));
+        if (st->num_fields && st->field) {
+            memcpy((void *)new_field, st->field, st->num_fields * sizeof(vcardstrarray *));
+        }
         memset((void *)(new_field + st->num_alloc), 0,
                (new_alloc - st->num_alloc) * sizeof(vcardstrarray *));
 
