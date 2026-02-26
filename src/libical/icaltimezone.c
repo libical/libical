@@ -2186,8 +2186,8 @@ static const char *get_zone_directory_builtin(void)
             *zislash = '.';
             strcpy(dirname, buffer);
             strcat(dirname, "/");
-            zislashp1 = zislash + 1;
-            strcat(dirname, (char *)zislashp1);
+            zislashp1 = (const char *)(zislash + 1);
+            strcat(dirname, zislashp1);
             if (stat(dirname, &st) == 0 && S_ISDIR(st.st_mode)) {
                 cache = icalmemory_strdup(dirname);
                 return cache;
