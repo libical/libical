@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-# Please refer to docs/HOWTO-update-zoneinfo.md for more information
+# Please refer to docs/developer/HOWTO-update-zoneinfo.md for more information
 # Visit <http://www.iana.org/time-zones> to find the Time Zone Database version you want (eg. 2025c)
 
 #Exit if any undefined variable is used.

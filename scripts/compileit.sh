@@ -35,6 +35,8 @@ BRANCH=$(git branch --show-current | awk -F/ '{print $NF}')
 BDIR="$TOP/build-$BRANCH-gcc"
 INSTALLDIR="$HOME/tmp/libical-$BRANCH"
 
+export ASAN_OPTIONS="detect_leaks=0:verify_asan_link_order=0" #link_order is needed with different ld on Fedora (like gold)
+
 CMAKE_STRICT=""
 CMAKE_VERSION4_OPTIONS=""
 if (test "$BRANCH" != "3.0"); then
@@ -43,6 +45,9 @@ if (test "$BRANCH" != "3.0"); then
     -DLIBICAL_DEVMODE=ON \
     -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=ON \
     -DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=ON \
+    -DLIBICAL_DEVMODE_ADDRESS_SANITIZER=ON \
+    -DLIBICAL_DEVMODE_LEAK_SANITIZER=ON \
+    -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=ON \
     -DLIBICAL_BUILD_VZIC=ON \
   "
 fi
@@ -66,6 +71,7 @@ if (test $staticBuild -eq 0); then
     -DLIBICAL_BUILD_DOCS=ON \
     -DLIBICAL_BUILD_EXAMPLES=ON \
     -DLIBICAL_CXX_BINDINGS=ON \
+    -DLIBICAL_JAVA_BINDINGS=OFF \
     -DLIBICAL_GOBJECT_INTROSPECTION=ON \
     -DLIBICAL_GLIB_VAPI=ON \
     -DLIBICAL_GLIB_BUILD_DOCS=ON \

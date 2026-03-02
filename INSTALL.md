@@ -225,19 +225,38 @@ Disable the libical-glib developer documentation by running cmake with -DLIBICAL
 
 ## Using vcpkg to install dependencies
 
-If you want to use vcpkg (in $VCPKG_ROOT) to build the dependencies as part
-of the project you can also tell CMake the vcpkg toolchain file with:
-"-DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+If you want to use vcpkg (%VCPKG_ROOT% on Windows or $VCPKG_ROOT on non-Windows) to build
+the dependencies as part of the project you can also tell CMake the vcpkg toolchain file
+with the CMake "CMAKE_TOOLCHAIN_FILE" setting.
 
-for example: if you have vcpkg installed in $HOME/vcpkg, then run
-`cmake -DCMAKE_TOOLCHAIN_FILE=$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake ..`
+For example: if you have vcpkg installed in your project folder:
 
-Windows note:
+```shell
+     export VCPKG_ROOT=$HOME/projects/vcpkg
+     cmake -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake <OPTIONS> ..
+```
+
+or on Windows:
+
+```shell
+     set VCPKG_ROOT=%HOMEPATH%\projects\vcpkg
+     cmake -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake <OPTIONS> ..
+```
+
+### Windows Notes
+
 MSVC comes with vcpkg pre-installed and sets `%VCPKG_ROOT%` for you.
 However, the only way to update that vcpkg version is by upgrading
 MSVC itself; which may not be what you want and may be too old.
 Consider installing your own vcpkg instead of relying on the MSVC vcpkg.
 
-Non-Windows note:
+Either way (using Microsoft-provided or your own vcpkg):
+
+```shell
+     cmake "-DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake <OPTIONS> ..
+```
+
+### Non-Windows Notes
+
 You'll need to pre-install autoconf, automake and autoconf-archive for icu.
 See `%VCPKG_ROOT%/ports/icu/portfile.cmake` for more info.

@@ -26,7 +26,7 @@ calculations). You need version 2.0 or higher. You can get this from:
 
 ## BUILDING
 
-Please see docs/HOWTO-update-zoneinfo.md
+Please see docs/developer/HOWTO-update-zoneinfo.md
 
 ## RUNNING
 

@@ -40,6 +40,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     485387226 # Null-dereference READ
     485932113 # ASAN Heap-use-after-free
     486715154 # ASAN Heap_buffer-overflow WRITE 8
+    488194780 # UBSAN cpu timeout exceeds 60s
   )
     add_test(
       NAME vcfuzz1test${fuzztest}

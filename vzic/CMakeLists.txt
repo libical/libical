@@ -9,7 +9,7 @@
 #  For example: cmake -DSTANDALONE=True (you'll need the glib and pkgconfig development packages)
 
 # Pass the following variables to cmake to control the build:
-# (See docs/HOWTO-update-zoneinfo.md for more information)
+# (See docs/developer/HOWTO-update-zoneinfo.md for more information)
 #
 # -DPRODUCT_ID=[propid]
 #  This variable is used as the PRODID property on the iCalendar files output.
