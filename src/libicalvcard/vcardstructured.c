@@ -14,6 +14,7 @@
 #include "vcardstructured.h"
 #include "vcardvalue.h"
 #include "icalerror.h"
+#include "icallimits.h"
 #include "icalmemory.h"
 
 #include <ctype.h>
@@ -83,6 +84,8 @@ vcardstructuredtype *vcardstructured_new_from_string(const char *str)
     vcardstrarray *field = vcardstrarray_new(2);
     vcardstructured_set_field_at(st, st->num_fields, field);
 
+    size_t cnt = 0;
+    const size_t max_chars = icallimit_get(ICAL_LIMIT_PARSE_SEARCH);
     do {
         char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, ",;");
 
@@ -97,7 +100,7 @@ vcardstructuredtype *vcardstructured_new_from_string(const char *str)
             vcardstructured_set_field_at(st, st->num_fields, field);
         }
 
-    } while (*str++ != '\0');
+    } while (*str++ != '\0' && cnt++ < max_chars);
 
     return st;
 }
