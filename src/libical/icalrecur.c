@@ -2206,6 +2206,21 @@ static void reset_period_start(icalrecur_iterator *impl)
 
 #endif /* HAVE_LIBICU */
 
+static int get_second(icalrecur_iterator *impl)
+{
+    return occurrence_as_icaltime(impl, 1).second;
+}
+
+static int get_minute(icalrecur_iterator *impl)
+{
+    return occurrence_as_icaltime(impl, 1).minute;
+}
+
+static int get_hour(icalrecur_iterator *impl)
+{
+    return occurrence_as_icaltime(impl, 1).hour;
+}
+
 static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start);
 static void increment_month(icalrecur_iterator *impl, int inc);
 static void expand_month_days(icalrecur_iterator *impl, int year, int month);
@@ -2436,7 +2451,7 @@ static void increment_month(icalrecur_iterator *impl, int inc)
     if (has_by_data(impl, ICAL_BY_MONTH)) {
         struct icaltimetype this = occurrence_as_icaltime(impl, 0);
 
-        while (this.year < 20000) {
+        while (this.year < MAX_TIME_T_YEAR) {
             icalrecurrence_iterator_by_data *bydata = &impl->bydata[ICAL_BY_MONTH];
             for (bydata->index = 0;
                  bydata->index < bydata->by.size; bydata->index++) {
@@ -2455,8 +2470,9 @@ static int next_unit(icalrecur_iterator *impl,
                      int by_unit, icalrecurrencetype_frequency frequency,
                      int (*next_sub_unit)(icalrecur_iterator *),
                      void (*set_unit)(icalrecur_iterator *, int),
-                     void (*increment_unit)(icalrecur_iterator *, int),
-                     void (*increment_super_unit)(icalrecur_iterator *, int))
+                     int (*get_unit)(icalrecur_iterator *),
+                     int period_len,
+                     void (*increment_unit)(icalrecur_iterator *, int))
 {
     int has_by_unit = (by_unit > ICAL_BYRULE_NO_CONTRACTION) &&
                       (impl->bydata[by_unit].by.size > 0);
@@ -2471,35 +2487,52 @@ static int next_unit(icalrecur_iterator *impl,
     }
 
     if (has_by_unit) {
-        /* Ignore the frequency and use the byrule data */
-
+        /* Frequency must be hours, minutes or seconds */
         icalrecurrence_iterator_by_data *bydata = &impl->bydata[by_unit];
-        bydata->index++;
-
-        if (bydata->by.size <= bydata->index) {
-            bydata->index = 0;
-
-            end_of_data = 1;
-        }
-
-        if (bydata->index < bydata->by.size) {
-            set_unit(impl, bydata->by.data[bydata->index]);
+        if (this_frequency) {
+            bydata->index++;
+            /* Take the frequency into account and treat the byrule data as limiting */
+            while (impl->last.year < MAX_TIME_T_YEAR) {
+                int last_unit = get_unit(impl);
+                /* Find a BY* value that works with the interval length */
+                while (bydata->index < bydata->by.size) {
+                    int cur_by = bydata->by.data[bydata->index];
+                    if ((cur_by >= last_unit) &&
+                        ((cur_by - last_unit) % impl->rule->interval) == 0) {
+                        set_unit(impl, cur_by);
+                        return 1;
+                    }
+                    bydata->index++;
+                }
+                /* If none found, increment to next period (i.e., increment super unit,
+                 * but take into account interval length). */
+                bydata->index = 0;
+                int multiplier = 1;
+                if (last_unit + impl->rule->interval < period_len) {
+                    int diff = period_len - last_unit;
+                    multiplier = (diff / impl->rule->interval + (diff % impl->rule->interval > 0));
+                }
+                increment_unit(impl, multiplier * impl->rule->interval);
+            }
         } else {
-            icalerror_set_errno(ICAL_INTERNAL_ERROR);
-        }
+            bydata->index++;
 
-    } else if (this_frequency) {
+            if (bydata->by.size <= bydata->index) {
+                bydata->index = 0;
+
+                end_of_data = 1;
+            }
+
+            if (bydata->index < bydata->by.size) {
+                set_unit(impl, bydata->by.data[bydata->index]);
+            } else {
+                icalerror_set_errno(ICAL_INTERNAL_ERROR);
+            }
+        }
+    } else {
         /* Compute the next value from the last time and the freq interval */
         increment_unit(impl, impl->rule->interval);
         end_of_data = 1;
-    }
-
-    /* If we have gone through all of the units on the BY list, then we
-       need to move to the next larger unit
-       When increment_super_unit is NULL, we do nothing */
-
-    if (has_by_unit && end_of_data && this_frequency && increment_super_unit) {
-        increment_super_unit(impl, 1);
     }
 
     return end_of_data;
@@ -2508,33 +2541,33 @@ static int next_unit(icalrecur_iterator *impl,
 static int next_second(icalrecur_iterator *impl)
 {
     return next_unit(impl, ICAL_BY_SECOND, ICAL_SECONDLY_RECURRENCE, NULL,
-                     &set_second, &increment_second, &increment_minute);
+                     &set_second, &get_second, 60, &increment_second);
 }
 
 static int next_minute(icalrecur_iterator *impl)
 {
     return next_unit(impl, ICAL_BY_MINUTE, ICAL_MINUTELY_RECURRENCE, &next_second,
-                     &set_minute, &increment_minute, &increment_hour);
+                     &set_minute, &get_minute, 60, &increment_minute);
 }
 
 static int next_hour(icalrecur_iterator *impl)
 {
     return next_unit(impl, ICAL_BY_HOUR, ICAL_HOURLY_RECURRENCE, &next_minute,
-                     &set_hour, &increment_hour, &increment_monthday);
+                     &set_hour, &get_hour, 24, &increment_hour);
 }
 
 static int next_day(icalrecur_iterator *impl)
 {
     return next_unit(impl, ICAL_BYRULE_NO_CONTRACTION, ICAL_DAILY_RECURRENCE, &next_hour,
-                     NULL, &increment_monthday, NULL);
+                     NULL, NULL, 0, &increment_monthday);
 }
 
 static int prev_unit(icalrecur_iterator *impl,
                      int by_unit, icalrecurrencetype_frequency frequency,
                      int (*prev_sub_unit)(icalrecur_iterator *),
                      void (*set_unit)(icalrecur_iterator *, int),
-                     void (*increment_unit)(icalrecur_iterator *, int),
-                     void (*increment_super_unit)(icalrecur_iterator *, int))
+                     int (*get_unit)(icalrecur_iterator *),
+                     void (*increment_unit)(icalrecur_iterator *, int))
 {
     int has_by_unit = (by_unit > ICAL_BYRULE_NO_CONTRACTION) &&
                       (impl->bydata[by_unit].by.size > 0);
@@ -2550,32 +2583,44 @@ static int prev_unit(icalrecur_iterator *impl,
 
     if (has_by_unit) {
         icalrecurrence_iterator_by_data *bydata = &impl->bydata[by_unit];
+        if (this_frequency) {
+            bydata->index--;
 
-        /* Ignore the frequency and use the byrule data */
+            while (impl->last.year > 0) {
+                int last_unit = get_unit(impl);
+                while (bydata->index >= 0) {
+                    int cur_by = bydata->by.data[bydata->index];
+                    if ((cur_by <= last_unit) &&
+                        ((last_unit - cur_by) % impl->rule->interval) == 0) {
+                        set_unit(impl, cur_by);
+                        return 1;
+                    }
+                    bydata->index--;
+                }
+                bydata->index = bydata->by.size - 1;
+                int multiplier = 1;
+                if (last_unit - impl->rule->interval > 0) {
+                    multiplier = (last_unit / impl->rule->interval + (last_unit % impl->rule->interval > 0));
+                }
+                increment_unit(impl, -multiplier * impl->rule->interval);
+            }
+        } else {
+            bydata->index--;
 
-        bydata->index--;
+            if (bydata->index < 0) {
+                bydata->index =
+                    bydata->by.size - 1;
 
-        if (bydata->index < 0) {
-            bydata->index =
-                bydata->by.size - 1;
+                end_of_data = 1;
+            }
 
-            end_of_data = 1;
+            set_unit(impl, bydata->by.data[bydata->index]);
         }
 
-        set_unit(impl, bydata->by.data[bydata->index]);
-
-    } else if (this_frequency) {
+    } else {
         /* Compute the next value from the last time and the freq interval */
         increment_unit(impl, -impl->rule->interval);
         end_of_data = 1;
-    }
-
-    /* If we have gone through all of the units on the BY list, then we
-       need to move to the next larger unit
-       When increment_super_unit is NULL, we do nothing */
-
-    if (has_by_unit && end_of_data && this_frequency && increment_super_unit) {
-        increment_super_unit(impl, -1);
     }
 
     return end_of_data;
@@ -2584,25 +2629,25 @@ static int prev_unit(icalrecur_iterator *impl,
 static int prev_second(icalrecur_iterator *impl)
 {
     return prev_unit(impl, ICAL_BY_SECOND, ICAL_SECONDLY_RECURRENCE, NULL,
-                     &set_second, &increment_second, &increment_minute);
+                     &set_second, &get_second, &increment_second);
 }
 
 static int prev_minute(icalrecur_iterator *impl)
 {
     return prev_unit(impl, ICAL_BY_MINUTE, ICAL_MINUTELY_RECURRENCE, &prev_second,
-                     &set_minute, &increment_minute, &increment_hour);
+                     &set_minute, &get_minute, &increment_minute);
 }
 
 static int prev_hour(icalrecur_iterator *impl)
 {
     return prev_unit(impl, ICAL_BY_HOUR, ICAL_HOURLY_RECURRENCE, &prev_minute,
-                     &set_hour, &increment_hour, &increment_monthday);
+                     &set_hour, &get_hour, &increment_hour);
 }
 
 static int prev_day(icalrecur_iterator *impl)
 {
     return prev_unit(impl, ICAL_BYRULE_NO_CONTRACTION, ICAL_DAILY_RECURRENCE, &prev_hour,
-                     NULL, &increment_monthday, NULL);
+                     NULL, NULL, &increment_monthday);
 }
 
 /** Add each BYMONTHDAY to the year days bitmask */
@@ -3596,7 +3641,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         return impl->last;
     }
 
-    int period_change = 1, prev_index;
+    int period_change = 1;
     /* store previous instance, including iterator structures
      * (e.g., bydata) */
     icalrecur_iterator impl_last = *impl;
@@ -3617,17 +3662,11 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
             break;
 
         case ICAL_MINUTELY_RECURRENCE:
-            prev_index = impl->bydata[ICAL_BY_MINUTE].index;
-            /* next_minute and next_hour only indicate whether
-             * they have exhausted BYMINUTE and BYHOUR data, respectively.
-             * Thus, we also need to check whether the index has changed.
-             * The other functions always indicate whether the period has changed. */
-            period_change = next_minute(impl) || (prev_index != impl->bydata[ICAL_BY_MINUTE].index);
+            period_change = next_minute(impl);
             break;
 
         case ICAL_HOURLY_RECURRENCE:
-            prev_index = impl->bydata[ICAL_BY_HOUR].index;
-            period_change = next_hour(impl) || (prev_index != impl->bydata[ICAL_BY_HOUR].index);
+            period_change = next_hour(impl);
             break;
 
         case ICAL_DAILY_RECURRENCE:
@@ -3707,7 +3746,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
         return icaltime_null_time();
     }
 
-    int period_change = 1, prev_index;
+    int period_change = 1;
     icalrecur_iterator impl_last = *impl;
 
     /* Iterate until we get the next valid time */
@@ -3718,13 +3757,11 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
             break;
 
         case ICAL_MINUTELY_RECURRENCE:
-            prev_index = impl->bydata[ICAL_BY_MINUTE].index;
-            period_change = prev_minute(impl) || (prev_index != impl->bydata[ICAL_BY_MINUTE].index);
+            period_change = prev_minute(impl);
             break;
 
         case ICAL_HOURLY_RECURRENCE:
-            prev_index = impl->bydata[ICAL_BY_HOUR].index;
-            period_change = prev_hour(impl) || (prev_index != impl->bydata[ICAL_BY_HOUR].index);
+            period_change = prev_hour(impl);
             break;
 
         case ICAL_DAILY_RECURRENCE:
