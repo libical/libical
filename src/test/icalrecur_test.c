@@ -93,26 +93,31 @@ static char *skip_first(char *instances)
 
 static char *skip_until(char *instances, icaltimetype t, int order)
 {
-    char *start = instances;
-    while (1) {
-        char *next = skip_first(start);
-        if (!next) {
-            return 0;
+    char *head = instances;
+    while (head) {
+        char *next = skip_first(head);
+        char tmp = 0;
+        if (next) {
+            tmp = next[-1]; // NOLINT(clang-analyzer-security.ArrayBound)
+            if (next[-1] == ',') {
+                next[-1] = 0;
+            }
         }
 
-        char tmp = next[-1]; // NOLINT(clang-analyzer-security.ArrayBound)
-        if (next[-1] == ',') {
-            next[-1] = 0;
+        icaltimetype current = icaltime_from_string(head);
+
+        if (next) {
+            next[-1] = tmp;
         }
-        icaltimetype current = icaltime_from_string(start);
-        next[-1] = tmp;
 
         if ((icaltime_compare(current, t) * order) >= 0) {
-            return start;
+            break;
         }
 
-        start = next;
+        head = next;
     }
+
+    return head;
 }
 
 static char *skip_n(char *instances, int n)
