@@ -190,12 +190,6 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
         *has_skip = (rrule->skip == ICAL_SKIP_FORWARD) || (rrule->skip == ICAL_SKIP_BACKWARD);
     }
 
-    if (r->instances[0] && !forward) {
-        // handled by the forward test
-        icalrecurrencetype_unref(rrule);
-        return test_error;
-    }
-
     memset(&actual_instances[0], 0, sizeof(actual_instances));
     actual_instances_len = 0;
 
@@ -220,17 +214,20 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
 
     ritr = icalrecur_iterator_new(rrule, dtstart);
 
-    if (!forward) {
-        // restore order at the end of the test
-        reverse_instances(r->instances);
-        instances = skip_first(instances);
-    }
+    int instances_reversed = 0;
 
     if (!ritr) {
         snprintf(&actual_instances[actual_instances_len],
                  sizeof(actual_instances) - (size_t)actual_instances_len,
                  " *** %s", icalerror_strerror(icalerrno));
     } else {
+        if (!forward) {
+            // restore order at the end of the test
+            reverse_instances(r->instances);
+            instances_reversed = 1;
+            instances = skip_first(instances);
+        }
+
         if (r->start_at[0]) {
             struct icaltimetype start = icaltime_from_string(r->start_at);
 
@@ -263,7 +260,7 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
         }
     }
 
-    if (strcmp(instances, actual_instances) != 0) {
+    if (strcmp((instances == NULL) ? "" : instances, actual_instances) != 0) {
         test_error = 1;
 
         print_error_hdr(r);
@@ -276,12 +273,12 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
         }
 
         const char *msg_prefix = forward ? "" : "PREV-";
-        fprintf(stderr, "Expected %sINSTANCES:%s\n", msg_prefix, instances);
+        fprintf(stderr, "Expected %sINSTANCES:%s\n", msg_prefix, (instances == NULL) ? "" : instances);
         fprintf(stderr, "Actual   %sINSTANCES:%s\n", msg_prefix, actual_instances);
         fprintf(stderr, "\n");
     }
 
-    if (!forward) {
+    if (instances_reversed) {
         // restore order
         reverse_instances(r->instances);
     }
