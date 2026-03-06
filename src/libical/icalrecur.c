@@ -157,6 +157,9 @@ static ICAL_GLOBAL_VAR ical_invalid_rrule_handling invalidRruleHandling = ICAL_R
 #define ICAL_BY_YEARDAY_SIZE 367 /* 1 to 366 */
 #endif
 
+#if defined(HAVE_LIBICU)
+#define MAX_TIME_T_YEAR 20000
+#else
 #if (SIZEOF_ICALTIME_T > 4)
 /** Arbitrarily go up to 1000th anniversary of Gregorian calendar, since
     64-bit icaltime_t values get us up to the tm_year limit of 2+ billion years. */
@@ -165,6 +168,7 @@ static ICAL_GLOBAL_VAR ical_invalid_rrule_handling invalidRruleHandling = ICAL_R
 /** This is the last year we will go up to, since 32-bit icaltime_t values
    only go up to the start of 2038. */
 #define MAX_TIME_T_YEAR 2037
+#endif
 #endif
 
 #define LEAP_MONTH 0x1000
@@ -3861,24 +3865,37 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
         /* Get (adjusted) start date as RSCALE date */
         start = occurrence_as_icaltime(impl, 0);
 
-        /* if we are in the last week of the previous year,
-         * expand year days for the previous year
-         */
-        if (has_by_data(impl, ICAL_BY_WEEK_NO) &&
-            get_week_number(impl, start) == 53 &&
-            start.month == 1) {
-            increment_year(impl, -1);
-            expand_year_days(impl, start.year - 1);
-            int days_in_year = get_days_in_year(impl, start.year - 1);
-            impl->days_index = daymask_find_next_bit(impl->days, days_in_year + 1);
-            if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
+        if (has_by_data(impl, ICAL_BY_WEEK_NO)) {
+            int start_weekno = get_week_number(impl, start);
+            if(start_weekno > 5 &&
+                    start.month == 1) {
+                /* if we are in the last week of the previous year,
+                 * expand year days for the previous year
+                 */
+                increment_year(impl, -1);
+                expand_year_days(impl, start.year - 1);
+                int days_in_year = get_days_in_year(impl, start.year - 1);
+                impl->days_index = daymask_find_next_bit(impl->days, days_in_year + 1);
+                if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
+                    increment_year(impl, 1);
+                }
+            } else if(start_weekno < 45 &&
+                    start.month == 12) {
+                /* if we are in the first week of the next year,
+                 * expand year days for the next year
+                 */
                 increment_year(impl, 1);
+                expand_year_days(impl, start.year + 1);
+                impl->days_index = daymask_find_next_bit(impl->days, -ICAL_YEARDAYS_MASK_OFFSET);
+                if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
+                    increment_year(impl, -1);
+                }
             }
         }
 
         /* Expand days array for (adjusted) start year -
-           fail after hitting the year 20000 if no expanded days match */
-        while (start.year < 20000 && impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
+           fail after hitting the year MAX_TIME_T_YEAR if no expanded days match */
+        while (start.year < MAX_TIME_T_YEAR && impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
             expand_year_days(impl, start.year);
 
             icalerrorenum err = icalerrno;
