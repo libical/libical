@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['of_20icalendar_20protocols_20and_20data_20formats_0',['Libical — an implementation of iCalendar protocols and data formats',['../index.html',1,'']]]
+  ['_5fby_5f_20methods_0',['GLib/Python bindings - changed &lt;span class=&quot;tt&quot;&gt;ICalGLib.Recurrence.*_by_*&lt;/span&gt; methods',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md150',1,'']]],
+  ['_5fby_5f_20methods_20from_203_200_20to_204_200_1',['Migrating &lt;span class=&quot;tt&quot;&gt;ICalGLib.Recurrence.*_by_*&lt;/span&gt; methods from 3.0 to 4.0',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md151',1,'']]]
 ];

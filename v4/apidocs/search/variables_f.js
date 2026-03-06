@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['tail_0',['tail',['../structpvl__list__t.html#a4d1bde4f5c94d4e741edf103e1525fa9',1,'pvl_list_t']]],
-  ['timezones_1',['timezones',['../structicalcomponent__impl.html#a5040b5504df33dd4cde7d07460a1edd4',1,'icalcomponent_impl']]],
-  ['tzid_2',['tzid',['../struct__icaltimezone.html#ac863b840b171d996da68da6bfa664f89',1,'_icaltimezone']]],
-  ['tznames_3',['tznames',['../struct__icaltimezone.html#a7f30b657860b6bc98bdfd616c64eb20c',1,'_icaltimezone']]]
+  ['year_0',['year',['../structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8',1,'icaltimetype::year'],['../structut__instant__int.html#a6eae657611f3d6f63170ae2b8c898d64',1,'ut_instant_int::year']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['utc_5foffset_0',['utc_offset',['../struct__icaltimezonechange.html#ab5f8de7f535d3e7b15191fa37ddd62ab',1,'_icaltimezonechange']]]
+  ['zone_0',['zone',['../structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c',1,'icaltimetype']]]
 ];

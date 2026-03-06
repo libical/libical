@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['migrating_20to_20version_204_0',['Migrating to version 4',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html',1,'']]]
+  ['9_202021_2001_2016_0',['9 2021 01 16',['../md__2home_2winterz_2projects_2libical_2libical_2CHANGELOG.html#autotoc_md24',1,'[3.0.9] - 2021-01-16'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md83',1,'[3.0.9] - 2021-01-16']]]
 ];

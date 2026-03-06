@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['x_20lic_20error_20tt_20and_20tt_20x_20lic_20invalid_20component_20tt_0',['5.6.3 &lt;tt&gt;X-LIC-ERROR&lt;/tt&gt; and &lt;tt&gt;X-LIC-INVALID-COMPONENT&lt;/tt&gt;',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md186',1,'']]],
-  ['x_20lic_20invalid_20component_20tt_1',['5.6.3 &lt;tt&gt;X-LIC-ERROR&lt;/tt&gt; and &lt;tt&gt;X-LIC-INVALID-COMPONENT&lt;/tt&gt;',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md186',1,'']]],
-  ['xdaylight_2',['XDaylight',['../classLibICal_1_1XDaylight.html',1,'LibICal']]],
-  ['xstandard_3',['XStandard',['../classLibICal_1_1XStandard.html',1,'LibICal']]]
+  ['year_0',['year',['../structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8',1,'icaltimetype::year'],['../structut__instant__int.html#a6eae657611f3d6f63170ae2b8c898d64',1,'ut_instant_int::year']]]
 ];
