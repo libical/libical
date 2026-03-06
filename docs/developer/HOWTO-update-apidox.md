@@ -19,7 +19,7 @@ Checkout the branch corresponding to the version you want to update:
 ```shell
      mkdir build-apidox
      cd build-apidox
-     cmake -G Ninja .. && ninja docs
+     cmake -G Ninja .. && ninja && ninja docs
      cd ..
 ```
 
