@@ -731,7 +731,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
        starting or ending a new component */
 
     if (strcasecmp(str, "BEGIN") == 0) {
-        icalcomponent *c;
+        icalcomponent *c = NULL;
         icalcomponent_kind comp_kind;
 
         parser->level++;
@@ -742,6 +742,13 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
         if (comp_kind == ICAL_X_COMPONENT) {
             c = icalcomponent_new_x(str);
+        } else if (comp_kind == ICAL_IANA_COMPONENT) {
+            ical_unknown_token_handling tokHandlingSetting =
+                ical_get_unknown_token_handling_setting();
+            if (tokHandlingSetting == ICAL_ASSUME_IANA_TOKEN) {
+                c = icalcomponent_new_iana(str);
+            }
+            /* ICAL_DISCARD_TOKEN / ICAL_TREAT_AS_ERROR: treat as error */
         } else {
             c = icalcomponent_new(comp_kind);
         }

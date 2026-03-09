@@ -47,6 +47,7 @@ for details about API changes since libical 3.x.
 - `icaltimezone_set_tzid_prefix()` now allows setting an empty tzid prefix.
 - `icaldurationtype_from_int` and `icaldurationtype_as_int` have been renamed to
     `icaldurationtype_from_seconds` and `icaldurationtype_as_seconds`, respectively.
+- Components with arbitrary iana-token names now are parsed as kind ICAL_IANA_COMPONENT if the `ical_unknown_token_handling` setting is ICAL_ASSUME_IANA_TOKEN. Otherwise, they are handled as error.
 
 ### Deprecated
 

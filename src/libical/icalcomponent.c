@@ -25,7 +25,7 @@
 struct icalcomponent_impl {
     char id[5];
     icalcomponent_kind kind;
-    char *x_name;
+    char *x_name; /* also used for ICAL_IANA_COMPONENT */
     icalpvl_list properties;
     icalpvl_elem property_iterator;
     icalpvl_list components;
@@ -169,6 +169,17 @@ icalcomponent *icalcomponent_new_x(const char *x_name)
     return comp;
 }
 
+icalcomponent *icalcomponent_new_iana(const char *iana_name)
+{
+    icalcomponent *comp = icalcomponent_new_impl(ICAL_IANA_COMPONENT);
+
+    if (!comp) {
+        return 0;
+    }
+    comp->x_name = icalmemory_strdup(iana_name);
+    return comp;
+}
+
 void icalcomponent_free(icalcomponent *c)
 {
     icalcomponent *comp;
@@ -242,10 +253,10 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *component)
     icalerror_check_arg_rz((component != 0), "component");
     icalerror_check_arg_rz((kind != ICAL_NO_COMPONENT), "component kind is ICAL_NO_COMPONENT");
 
-    if (kind != ICAL_X_COMPONENT) {
-        kind_string = icalcomponent_kind_to_string(kind);
-    } else {
+    if (kind == ICAL_X_COMPONENT || kind == ICAL_IANA_COMPONENT) {
         kind_string = component->x_name;
+    } else {
+        kind_string = icalcomponent_kind_to_string(kind);
     }
 
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
@@ -341,6 +352,28 @@ const char *icalcomponent_get_x_name(const icalcomponent *comp)
     return comp->x_name;
 }
 
+void icalcomponent_set_iana_name(icalcomponent *comp, const char *name)
+{
+    icalerror_check_arg_rv((name != 0), "name");
+    icalerror_check_arg_rv((comp != 0), "comp");
+    icalerror_check_arg_rv((comp->kind == ICAL_IANA_COMPONENT), "comp->kind");
+
+    icalmemory_free_buffer(comp->x_name);
+    comp->x_name = icalmemory_strdup(name);
+
+    if (comp->x_name == 0) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+    }
+}
+
+const char *icalcomponent_get_iana_name(const icalcomponent *comp)
+{
+    icalerror_check_arg_rz((comp != 0), "comp");
+    icalerror_check_arg_rz((comp->kind == ICAL_IANA_COMPONENT), "comp->kind");
+
+    return comp->x_name;
+}
+
 const char *icalcomponent_get_component_name(const icalcomponent *comp)
 {
     char *buf;
@@ -362,7 +395,8 @@ char *icalcomponent_get_component_name_r(const icalcomponent *comp)
     buf = icalmemory_new_buffer(buf_size);
     buf_ptr = buf;
 
-    if (comp->kind == ICAL_X_COMPONENT && comp->x_name != 0) {
+    if ((comp->kind == ICAL_X_COMPONENT || comp->kind == ICAL_IANA_COMPONENT) &&
+        comp->x_name != 0) {
         component_name = comp->x_name;
     } else {
         component_name = icalcomponent_kind_to_string(comp->kind);
@@ -1286,6 +1320,9 @@ static const struct icalcomponent_kind_map component_map[] = {
     {ICAL_VLOCATION_COMPONENT, "VLOCATION"},
     {ICAL_VRESOURCE_COMPONENT, "VRESOURCE"},
 
+    /* IANA components (unknown but valid IANA token) */
+    {ICAL_IANA_COMPONENT, "IANA"},
+
     /* End of list */
     {ICAL_NO_COMPONENT, ""},
 };
@@ -1325,12 +1362,20 @@ icalcomponent_kind icalcomponent_string_to_kind(const char *string)
     }
 
     for (i = 0; component_map[i].kind != ICAL_NO_COMPONENT; i++) {
+        // ignore IANA component kind, we'll fall back to using it later.
+        if (component_map[i].kind == ICAL_IANA_COMPONENT) {
+            continue;
+        }
         if (strncasecmp(string, component_map[i].name, strlen(component_map[i].name)) == 0) {
             return component_map[i].kind;
         }
     }
 
-    return ICAL_NO_COMPONENT;
+    if (strncasecmp(string, "X-", 2) == 0) {
+        return ICAL_X_COMPONENT;
+    }
+
+    return ICAL_IANA_COMPONENT;
 }
 
 bool icalcompiter_is_valid(const icalcompiter *i)
@@ -2710,7 +2755,8 @@ static int comp_compare(void *a, void *b)
     int r = (int)(k1 - k2);
 
     if (r == 0) {
-        if (k1 == ICAL_X_COMPONENT && (c1->x_name && c2->x_name)) {
+        if ((k1 == ICAL_X_COMPONENT || k1 == ICAL_IANA_COMPONENT) &&
+            (c1->x_name && c2->x_name)) {
             r = strcmp(c1->x_name, c2->x_name);
         }
 

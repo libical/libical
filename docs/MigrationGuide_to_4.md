@@ -175,6 +175,9 @@ The following functions have been added:
 * `icalrecurrencetype_unref()`
 * `icalrecurrencetype_clone()`
 * `icalrecurrencetype_from_string()`
+* `icalcomponent_new_iana()`
+* `icalcomponent_set_iana_name()`
+* `icalcomponent_get_iana_name()`
 * `icalcomponent_set_x_name()`
 * `icalcomponent_get_x_name()`
 * `icalcomponent_get_component_name()`

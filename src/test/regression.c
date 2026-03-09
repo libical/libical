@@ -7118,6 +7118,63 @@ static void test_icalcomponent_foreach_recurrence_constness(void)
     icalcomponent_free(ical);
 }
 
+static void test_parse_iana_component(void)
+{
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:2.0\r\n"
+        "PRODID:-//foo/bar//v1.0//EN\r\n"
+        "BEGIN:FOO\r\n"
+        "UID:4dba9882-e4a2-43e6-9944-b93e726fa6d3\r\n"
+        "END:FOO\r\n"
+        "END:VCALENDAR\r\n";
+
+    ical_set_unknown_token_handling_setting(ICAL_ASSUME_IANA_TOKEN);
+
+    icalcomponent *ical = icalcomponent_new_from_string(str);
+    ok("parsed iCalendar object", (ical != NULL));
+
+    icalcomponent *comp = icalcomponent_get_first_component(ical, ICAL_IANA_COMPONENT);
+    ok("parsed IANA component", (comp != NULL));
+    int_is("component has ICAL_IANA_COMPONENT kind",
+           icalcomponent_isa(comp), ICAL_IANA_COMPONENT);
+    str_is("component has name FOO", icalcomponent_get_iana_name(comp), "FOO");
+
+    icalproperty *prop = icalcomponent_get_first_property(comp, ICAL_UID_PROPERTY);
+    str_is("component has UID property",
+        icalproperty_get_uid(prop), "4dba9882-e4a2-43e6-9944-b93e726fa6d3");
+
+    str_is("serializes to string", icalcomponent_as_ical_string(ical), str);
+
+    icalcomponent_free(ical);
+    ical_set_unknown_token_handling_setting(ICAL_TREAT_AS_ERROR);
+}
+
+static void test_create_iana_component(void)
+{
+    icalcomponent *comp = icalcomponent_new_iana("BAR");
+    ok("created IANA component", (comp != NULL));
+    int_is("component has ICAL_IANA_COMPONENT kind",
+           icalcomponent_isa(comp), ICAL_IANA_COMPONENT);
+    str_is("component has name BAR", icalcomponent_get_iana_name(comp), "BAR");
+
+    str_is("serializes to string", icalcomponent_as_ical_string(comp), "BEGIN:BAR\r\nEND:BAR\r\n");
+
+    icalcomponent_set_iana_name(comp, "BAZ");
+    str_is("component now has name BAZ", icalcomponent_get_iana_name(comp), "BAZ");
+
+    icalcomponent *clone = icalcomponent_clone(comp);
+    ok("cloned IANA component", (clone != NULL));
+    int_is("clone has ICAL_IANA_COMPONENT kind",
+           icalcomponent_isa(clone), ICAL_IANA_COMPONENT);
+    str_is("clone has name BAZ", icalcomponent_get_iana_name(clone), "BAZ");
+
+    str_is("serializes to string", icalcomponent_as_ical_string(clone), "BEGIN:BAZ\r\nEND:BAZ\r\n");
+
+    icalcomponent_free(clone);
+    icalcomponent_free(comp);
+}
+
 int main(int argc, const char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -7306,6 +7363,8 @@ int main(int argc, const char *argv[])
     test_run("Test removing component properties by kind", test_icalcomponent_remove_property_by_kind, do_test, do_header);
     test_run("Test icalcomponent_get_duration", test_icalcomponent_get_duration, do_test, do_header);
     test_run("Test component recurrence callback constness", test_icalcomponent_foreach_recurrence_constness, do_test, do_header);
+    test_run("Test parsing IANA components", test_parse_iana_component, do_test, do_header);
+    test_run("Test creating IANA components", test_create_iana_component, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
