@@ -23,6 +23,7 @@
     <element name="ICAL_BADARG_ERROR"/>
     <element name="ICAL_NEWFAILED_ERROR"/>
     <element name="ICAL_ALLOCATION_ERROR"/>
+    <element name="ICAL_THREADING_ERROR"/>
     <element name="ICAL_MALFORMEDDATA_ERROR"/>
     <element name="ICAL_PARSE_ERROR"/>
     <element name="ICAL_INTERNAL_ERROR"/>
