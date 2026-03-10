@@ -3867,8 +3867,8 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 
         if (has_by_data(impl, ICAL_BY_WEEK_NO)) {
             int start_weekno = get_week_number(impl, start);
-            if(start_weekno > 5 &&
-                    start.month == 1) {
+            if (start_weekno > 5 &&
+                start.month == 1) {
                 /* if we are in the last week of the previous year,
                  * expand year days for the previous year
                  */
@@ -3879,8 +3879,8 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
                 if (impl->days_index >= ICAL_YEARDAYS_MASK_SIZE) {
                     increment_year(impl, 1);
                 }
-            } else if(start_weekno < 45 &&
-                    start.month == 12) {
+            } else if (start_weekno < 45 &&
+                       start.month == 12) {
                 /* if we are in the first week of the next year,
                  * expand year days for the next year
                  */

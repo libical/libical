@@ -7063,7 +7063,7 @@ static void test_icalcomponent_foreach_recurrence_constness_cb(icalcomponent *co
 {
     _unused(span);
 
-    bool *got_called = (bool*)data;
+    bool *got_called = (bool *)data;
     *got_called = true;
 
     // Call a couple of icalcomponent functions to make sure that the constness
@@ -7110,9 +7110,9 @@ static void test_icalcomponent_foreach_recurrence_constness(void)
 
     bool called_cb = false;
     icalcomponent_foreach_recurrence(comp,
-            icaltime_from_string("20260311T000000Z"),
-            icaltime_from_string("20260411T235959Z"),
-            test_icalcomponent_foreach_recurrence_constness_cb, &called_cb);
+                                     icaltime_from_string("20260311T000000Z"),
+                                     icaltime_from_string("20260411T235959Z"),
+                                     test_icalcomponent_foreach_recurrence_constness_cb, &called_cb);
     ok("Called callback", called_cb);
 
     icalcomponent_free(ical);
