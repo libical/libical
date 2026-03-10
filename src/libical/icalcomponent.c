@@ -927,7 +927,7 @@ static int icaldatetimeperiod_start_compare(const void *a, const void *b)
 void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                       struct icaltimetype start,
                                       struct icaltimetype end,
-                                      void (*callback)(const icalcomponent *comp,
+                                      void (*callback)(icalcomponent *comp,
                                                        const struct icaltime_span *span,
                                                        void *data),
                                       void *callback_data)
