@@ -579,7 +579,7 @@ void test_components(void)
     icalerror_set_errors_are_fatal(estate);
 }
 
-static void test_component_foreach_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
+static void test_component_foreach_callback(icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     int *foundExpected;
     _unused(comp);
@@ -855,7 +855,7 @@ typedef struct {
     icalarray *arr;
 } foreach_arr_t;
 
-static void test_component_foreach_dtend_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
+static void test_component_foreach_dtend_callback(icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     foreach_arr_t *a = (foreach_arr_t *)data;
     _unused(comp);
@@ -7059,6 +7059,65 @@ static void test_icalcomponent_get_duration(void)
 #undef assert_icalcomponent_get_duration
 }
 
+static void test_icalcomponent_foreach_recurrence_constness_cb(icalcomponent *comp, const struct icaltime_span *span, void *data)
+{
+    _unused(span);
+
+    bool *got_called = (bool*)data;
+    *got_called = true;
+
+    // Call a couple of icalcomponent functions to make sure that the constness
+    // of the 'comp' argument and the function declarations agree. We don't
+    // really care about the actual return values.
+    ok("get_timezone", icalcomponent_get_timezone(comp, "Europe/Berlin") == NULL);
+    ok("get_uid", icalcomponent_get_uid(comp) != NULL);
+    ok("get_dstart", !icaltime_is_null_time(icalcomponent_get_dtstart(comp)));
+}
+
+static void test_icalcomponent_foreach_recurrence_constness(void)
+{
+    // This is a regression test to assert that the declaration
+    // of the icalcomponent_foreach_recurrence callback arguments
+    // agree with the rest of the icalcomponent API.
+    //
+    // The cppcheck/clang-tidy tool reports that the icalcomponent
+    // pointer argument in the callback could be made const, but
+    // this conflicts with the declaration of most of the other
+    // icalcomponent functions.
+
+    const char *str =
+        "BEGIN:VCALENDAR\n"
+        "PRODID:-//Foo//Bar//EN\n"
+        "VERSION:2.0\n"
+        "BEGIN:VEVENT\r\n"
+        "UID:e1d132bf-8d21-4c79-b351-e6b315d9702d\r\n"
+        "SEQUENCE:0\r\n"
+        "DTSTAMP:20260310T092158Z\r\n"
+        "CREATED:20260310T092158Z\r\n"
+        "DTSTART:20260310T090000Z\r\n"
+        "DURATION:PT1H\r\n"
+        "SUMMARY:test\r\n"
+        "RRULE:FREQ=DAILY;COUNT=2\r\n"
+        "STATUS:CONFIRMED\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+
+    icalcomponent *ical = icalcomponent_new_from_string(str);
+    ok("Parsed iCalendar object", (ical != NULL));
+
+    icalcomponent *comp = icalcomponent_get_first_real_component(ical);
+    ok("Parsed VEVENT", (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT));
+
+    bool called_cb = false;
+    icalcomponent_foreach_recurrence(comp,
+            icaltime_from_string("20260311T000000Z"),
+            icaltime_from_string("20260411T235959Z"),
+            test_icalcomponent_foreach_recurrence_constness_cb, &called_cb);
+    ok("Called callback", called_cb);
+
+    icalcomponent_free(ical);
+}
+
 int main(int argc, const char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -7246,6 +7305,7 @@ int main(int argc, const char *argv[])
     test_run("Test normalizing duration", test_icaldurationtype_normalize, do_test, do_header);
     test_run("Test removing component properties by kind", test_icalcomponent_remove_property_by_kind, do_test, do_header);
     test_run("Test icalcomponent_get_duration", test_icalcomponent_get_duration, do_test, do_header);
+    test_run("Test component recurrence callback constness", test_icalcomponent_foreach_recurrence_constness, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
