@@ -111,7 +111,7 @@ icalproperty_kind icalproperty_string_to_kind(const char *string)
         return ICAL_X_PROPERTY;
     }
 
-    return ICAL_NO_PROPERTY;
+    return ICAL_IANA_PROPERTY;
 }
 
 icalproperty_kind icalproperty_value_kind_to_kind(icalvalue_kind kind)
@@ -155,7 +155,7 @@ bool icalproperty_value_kind_is_valid(icalproperty_kind pkind, icalvalue_kind vk
         return false;
     }
 
-    if (pkind == ICAL_X_PROPERTY) {
+    if (pkind == ICAL_X_PROPERTY || pkind == ICAL_IANA_PROPERTY) {
         return true;
     }
 

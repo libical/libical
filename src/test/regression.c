@@ -7175,6 +7175,77 @@ static void test_create_iana_component(void)
     icalcomponent_free(comp);
 }
 
+static void test_parse_iana_property(void)
+{
+    ical_set_unknown_token_handling_setting(ICAL_ASSUME_IANA_TOKEN);
+
+    // Parse with default TEXT value type.
+    const char *str = "FOO:test\r\n";
+    icalproperty *prop = icalproperty_new_from_string(str);
+    ok("parsed property", (prop != NULL));
+    int_is("property has ICAL_IANA_PROPERTY kind",
+           icalproperty_isa(prop), ICAL_IANA_PROPERTY);
+    str_is("property has name FOO", icalproperty_get_iana_name(prop), "FOO");
+
+    icalvalue *value = icalproperty_get_value(prop);
+    int_is("value type is TEXT", icalvalue_isa(value), ICAL_TEXT_VALUE);
+    str_is("value matches", icalvalue_get_text(value), "test");
+    str_is("serializes to string", icalproperty_as_ical_string(prop), str);
+    icalproperty_free(prop);
+
+    // Parse with VALUE parameter.
+    str = "FOO;VALUE=BOOLEAN:TRUE\r\n";
+    prop = icalproperty_new_from_string(str);
+    ok("parsed property", (prop != NULL));
+    int_is("property has ICAL_IANA_PROPERTY kind",
+           icalproperty_isa(prop), ICAL_IANA_PROPERTY);
+    str_is("property has name FOO", icalproperty_get_iana_name(prop), "FOO");
+
+    value = icalproperty_get_value(prop);
+    int_is("value type is BOOLEAN", icalvalue_isa(value), ICAL_BOOLEAN_VALUE);
+    int_is("value matches", icalvalue_get_boolean(value), 1);
+    str_is("serializes to string", icalproperty_as_ical_string(prop), str);
+    icalproperty_free(prop);
+    ical_set_unknown_token_handling_setting(ICAL_TREAT_AS_ERROR);
+}
+
+static void test_create_iana_property(void)
+{
+    // Create IANA property FOO.
+    icalproperty *prop = icalproperty_new_iana("test");
+    ok("created IANA property", (prop != NULL));
+    int_is("property has ICAL_IANA_PROPERTY kind",
+           icalproperty_isa(prop), ICAL_IANA_PROPERTY);
+    icalproperty_set_iana_name(prop, "FOO");
+    str_is("property has name FOO", icalproperty_get_iana_name(prop), "FOO");
+
+    icalvalue *value = icalproperty_get_value(prop);
+    int_is("value type is TEXT", icalvalue_isa(value), ICAL_TEXT_VALUE);
+    str_is("value matches", icalvalue_get_text(value), "test");
+    str_is("serializes to string", icalproperty_as_ical_string(prop), "FOO:test\r\n");
+
+    icalproperty_set_iana_name(prop, "BAR");
+    str_is("property now has name BAR", icalproperty_get_iana_name(prop), "BAR");
+
+    icalproperty *clone = icalproperty_clone(prop);
+    ok("cloned IANA property", (clone != NULL));
+    int_is("clone has ICAL_IANA_PROPERTY kind",
+           icalproperty_isa(clone), ICAL_IANA_PROPERTY);
+    str_is("clone has name BAR", icalproperty_get_iana_name(clone), "BAR");
+    str_is("clone serializes to string", icalproperty_as_ical_string(clone), "BAR:test\r\n");
+    icalproperty_free(clone);
+
+    // Change value type from TEXT to BOOLEAN.
+    icalproperty_set_value(prop, icalvalue_new_boolean(1));
+    value = icalproperty_get_value(prop);
+    int_is("value type is now BOOLEAN", icalvalue_isa(value), ICAL_BOOLEAN_VALUE);
+    int_is("value matches", icalvalue_get_boolean(value), 1);
+    str_is("serializes with VALUE parameter",
+           icalproperty_as_ical_string(prop), "BAR;VALUE=BOOLEAN:TRUE\r\n");
+
+    icalproperty_free(prop);
+}
+
 int main(int argc, const char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -7365,6 +7436,8 @@ int main(int argc, const char *argv[])
     test_run("Test component recurrence callback constness", test_icalcomponent_foreach_recurrence_constness, do_test, do_header);
     test_run("Test parsing IANA components", test_parse_iana_component, do_test, do_header);
     test_run("Test creating IANA components", test_create_iana_component, do_test, do_header);
+    test_run("Test parsing IANA properties", test_parse_iana_property, do_test, do_header);
+    test_run("Test creating IANA properties", test_create_iana_property, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)

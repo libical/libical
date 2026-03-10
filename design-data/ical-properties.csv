@@ -169,4 +169,8 @@
 "LINK","134","LINK","NO"
 "REFID","135","TEXT","TEXT"
 
+"# Any unknown property that is not an x-name is treated as an iana property."
+"# RFC 5545, Section 3.8.8.1 defines the default value type to be TEXT."
+"IANA","136","TEXT","TEXT"
+
 "#NOTE for updaters.  Preserve the icalproperty_kind Enum values to aid forward compatibility"
