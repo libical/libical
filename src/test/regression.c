@@ -7137,12 +7137,12 @@ static void test_parse_iana_component(void)
     icalcomponent *comp = icalcomponent_get_first_component(ical, ICAL_IANA_COMPONENT);
     ok("parsed IANA component", (comp != NULL));
     ok("component has ICAL_IANA_COMPONENT kind",
-           icalcomponent_isa(comp) == ICAL_IANA_COMPONENT);
+       icalcomponent_isa(comp) == ICAL_IANA_COMPONENT);
     str_is("component has name FOO", icalcomponent_get_iana_name(comp), "FOO");
 
     icalproperty *prop = icalcomponent_get_first_property(comp, ICAL_UID_PROPERTY);
     str_is("component has UID property",
-        icalproperty_get_uid(prop), "4dba9882-e4a2-43e6-9944-b93e726fa6d3");
+           icalproperty_get_uid(prop), "4dba9882-e4a2-43e6-9944-b93e726fa6d3");
 
     str_is("serializes to string", icalcomponent_as_ical_string(ical), str);
 
@@ -7155,7 +7155,7 @@ static void test_create_iana_component(void)
     icalcomponent *comp = icalcomponent_new_iana("BAR");
     ok("created IANA component", (comp != NULL));
     ok("component has ICAL_IANA_COMPONENT kind",
-           icalcomponent_isa(comp) == ICAL_IANA_COMPONENT);
+       icalcomponent_isa(comp) == ICAL_IANA_COMPONENT);
     str_is("component has name BAR", icalcomponent_get_iana_name(comp), "BAR");
 
     str_is("serializes to string", icalcomponent_as_ical_string(comp), "BEGIN:BAR\r\nEND:BAR\r\n");
@@ -7166,7 +7166,7 @@ static void test_create_iana_component(void)
     icalcomponent *clone = icalcomponent_clone(comp);
     ok("cloned IANA component", (clone != NULL));
     ok("clone has ICAL_IANA_COMPONENT kind",
-           icalcomponent_isa(clone) == ICAL_IANA_COMPONENT);
+       icalcomponent_isa(clone) == ICAL_IANA_COMPONENT);
     str_is("clone has name BAZ", icalcomponent_get_iana_name(clone), "BAZ");
 
     str_is("serializes to string", icalcomponent_as_ical_string(clone), "BEGIN:BAZ\r\nEND:BAZ\r\n");
@@ -7184,7 +7184,7 @@ static void test_parse_iana_property(void)
     icalproperty *prop = icalproperty_new_from_string(str);
     ok("parsed property", (prop != NULL));
     ok("property has ICAL_IANA_PROPERTY kind",
-           icalproperty_isa(prop) == ICAL_IANA_PROPERTY);
+       icalproperty_isa(prop) == ICAL_IANA_PROPERTY);
     str_is("property has name FOO", icalproperty_get_iana_name(prop), "FOO");
 
     icalvalue *value = icalproperty_get_value(prop);
@@ -7198,7 +7198,7 @@ static void test_parse_iana_property(void)
     prop = icalproperty_new_from_string(str);
     ok("parsed property", (prop != NULL));
     ok("property has ICAL_IANA_PROPERTY kind",
-           icalproperty_isa(prop) == ICAL_IANA_PROPERTY);
+       icalproperty_isa(prop) == ICAL_IANA_PROPERTY);
     str_is("property has name FOO", icalproperty_get_iana_name(prop), "FOO");
 
     value = icalproperty_get_value(prop);
@@ -7215,7 +7215,7 @@ static void test_create_iana_property(void)
     icalproperty *prop = icalproperty_new_iana("test");
     ok("created IANA property", (prop != NULL));
     ok("property has ICAL_IANA_PROPERTY kind",
-           icalproperty_isa(prop) == ICAL_IANA_PROPERTY);
+       icalproperty_isa(prop) == ICAL_IANA_PROPERTY);
     icalproperty_set_iana_name(prop, "FOO");
     str_is("property has name FOO", icalproperty_get_iana_name(prop), "FOO");
 
@@ -7230,7 +7230,7 @@ static void test_create_iana_property(void)
     icalproperty *clone = icalproperty_clone(prop);
     ok("cloned IANA property", (clone != NULL));
     ok("clone has ICAL_IANA_PROPERTY kind",
-           icalproperty_isa(clone) == ICAL_IANA_PROPERTY);
+       icalproperty_isa(clone) == ICAL_IANA_PROPERTY);
     str_is("clone has name BAR", icalproperty_get_iana_name(clone), "BAR");
     str_is("clone serializes to string", icalproperty_as_ical_string(clone), "BAR:test\r\n");
     icalproperty_free(clone);
@@ -7270,7 +7270,7 @@ static void test_create_iana_parameter(void)
     icalparameter *param = icalparameter_new_iana("test");
     ok("created IANA parameter", (param != NULL));
     ok("parameter has ICAL_IANA_PARAMETER kind",
-           icalparameter_isa(param) == ICAL_IANA_PARAMETER);
+       icalparameter_isa(param) == ICAL_IANA_PARAMETER);
     icalparameter_set_iana_name(param, "FOO");
     str_is("parameter has name FOO", icalparameter_get_iana_name(param), "FOO");
     str_is("value matches", icalparameter_get_iana(param), "test");
@@ -7282,7 +7282,7 @@ static void test_create_iana_parameter(void)
     icalparameter *clone = icalparameter_clone(param);
     ok("cloned IANA parameter", (clone != NULL));
     ok("clone has ICAL_IANA_PARAMETER kind",
-           icalparameter_isa(clone) == ICAL_IANA_PARAMETER);
+       icalparameter_isa(clone) == ICAL_IANA_PARAMETER);
     str_is("clone has name BAR", icalparameter_get_iana_name(clone), "BAR");
     str_is("clone serializes to string", icalparameter_as_ical_string(clone), "BAR=test");
 
