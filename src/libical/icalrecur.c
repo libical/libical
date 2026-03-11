@@ -2594,7 +2594,7 @@ static int prev_unit(icalrecur_iterator *impl,
                 int last_unit = get_unit(impl);
                 while (bydata->index >= 0) {
                     int cur_by = bydata->by.data[bydata->index];
-                    if ((cur_by <= last_unit) &&
+                    if ((cur_by <= last_unit) && (impl->rule->interval > 0) &&
                         ((last_unit - cur_by) % impl->rule->interval) == 0) {
                         set_unit(impl, cur_by);
                         return 1;
