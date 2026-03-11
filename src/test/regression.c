@@ -7246,6 +7246,77 @@ static void test_create_iana_property(void)
     icalproperty_free(prop);
 }
 
+static void test_parse_iana_parameter(void)
+{
+    ical_set_unknown_token_handling_setting(ICAL_ASSUME_IANA_TOKEN);
+
+    // Parse known property with unknown IANA parameter.
+    const char *str = "SUMMARY;FOO=test:xxx\r\n";
+    icalproperty *prop = icalproperty_new_from_string(str);
+    ok("parsed property", (prop != NULL));
+    icalparameter *param = icalproperty_get_first_parameter(prop, ICAL_IANA_PARAMETER);
+    ok("parsed parameter", (param != NULL));
+    str_is("parameter has name FOO", icalparameter_get_iana_name(param), "FOO");
+    str_is("value matches", icalparameter_get_iana(param), "test");
+
+    ical_set_unknown_token_handling_setting(ICAL_TREAT_AS_ERROR);
+
+    icalproperty_free(prop);
+}
+
+static void test_create_iana_parameter(void)
+{
+    // Create IANA parameter.
+    icalparameter *param = icalparameter_new_iana("test");
+    ok("created IANA parameter", (param != NULL));
+    int_is("parameter has ICAL_IANA_PARAMETER kind",
+           icalparameter_isa(param), ICAL_IANA_PARAMETER);
+    icalparameter_set_iana_name(param, "FOO");
+    str_is("parameter has name FOO", icalparameter_get_iana_name(param), "FOO");
+    str_is("value matches", icalparameter_get_iana(param), "test");
+    str_is("serializes to string", icalparameter_as_ical_string(param), "FOO=test");
+
+    icalparameter_set_iana_name(param, "BAR");
+    str_is("parameter now has name BAR", icalparameter_get_iana_name(param), "BAR");
+
+    icalparameter *clone = icalparameter_clone(param);
+    ok("cloned IANA parameter", (clone != NULL));
+    int_is("clone has ICAL_IANA_PARAMETER kind",
+           icalparameter_isa(clone), ICAL_IANA_PARAMETER);
+    str_is("clone has name BAR", icalparameter_get_iana_name(clone), "BAR");
+    str_is("clone serializes to string", icalparameter_as_ical_string(clone), "BAR=test");
+
+    icalparameter_free(param);
+    icalparameter_free(clone);
+}
+
+static void test_parse_iana_parameter_value(void)
+{
+    ical_set_unknown_token_handling_setting(ICAL_ASSUME_IANA_TOKEN);
+
+    const char *str = "ATTENDEE;ROLE=FOO:mailto:xxx@local\r\n";
+    icalproperty *prop = icalproperty_new_from_string(str);
+    ok("parsed property", (prop != NULL));
+    icalparameter *param = icalproperty_get_first_parameter(prop, ICAL_ROLE_PARAMETER);
+    ok("parsed parameter", (param != NULL));
+    int_is("enum is ICAL_ROLE_X", icalparameter_get_role(param), ICAL_ROLE_X);
+    str_is("value matches", icalparameter_get_xvalue(param), "FOO");
+
+    ical_set_unknown_token_handling_setting(ICAL_TREAT_AS_ERROR);
+
+    icalproperty_free(prop);
+}
+
+static void test_create_iana_parameter_value(void)
+{
+    icalparameter *param = icalparameter_new_role(ICAL_ROLE_X);
+    icalparameter_set_xvalue(param, "FOO");
+    int_is("enum is ICAL_ROLE_X", icalparameter_get_role(param), ICAL_ROLE_X);
+    str_is("value matches", icalparameter_get_xvalue(param), "FOO");
+    str_is("serializes to string", icalparameter_as_ical_string(param), "ROLE=FOO");
+    icalparameter_free(param);
+}
+
 int main(int argc, const char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -7438,6 +7509,10 @@ int main(int argc, const char *argv[])
     test_run("Test creating IANA components", test_create_iana_component, do_test, do_header);
     test_run("Test parsing IANA properties", test_parse_iana_property, do_test, do_header);
     test_run("Test creating IANA properties", test_create_iana_property, do_test, do_header);
+    test_run("Test parsing IANA parameters", test_parse_iana_parameter, do_test, do_header);
+    test_run("Test creating IANA parameters", test_create_iana_parameter, do_test, do_header);
+    test_run("Test parsing IANA parameter enum values", test_parse_iana_parameter_value, do_test, do_header);
+    test_run("Test creating IANA parameter enum values", test_create_iana_parameter_value, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
