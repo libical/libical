@@ -124,6 +124,11 @@ LIBICAL_ICAL_EXPORT icalproperty *icalvalue_get_parent(const icalvalue *value);
 LIBICAL_ICAL_EXPORT void icalproperty_set_x_name(icalproperty *prop, const char *name);
 LIBICAL_ICAL_EXPORT const char *icalproperty_get_x_name(const icalproperty *prop);
 
+/* Deal with IANA properties */
+
+LIBICAL_ICAL_EXPORT void icalproperty_set_iana_name(icalproperty *prop, const char *name);
+LIBICAL_ICAL_EXPORT const char *icalproperty_get_iana_name(const icalproperty *prop);
+
 /** Returns the name of the property -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X
  *  property

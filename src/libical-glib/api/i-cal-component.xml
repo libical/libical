@@ -33,6 +33,11 @@
     <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
     <comment xml:space="preserve">Creates a new #ICalComponent based on name of x property.</comment>
   </method>
+  <method name="i_cal_component_new_iana" corresponds="icalcomponent_new_iana" kind="constructor" since="4.0">
+    <parameter type="const gchar *" name="iana_name" comment="The IANA name of the component"/>
+    <returns type="ICalComponent *" annotation="transfer full" comment="The newly created #ICalComponent."/>
+    <comment xml:space="preserve">Creates a new #ICalComponent with an IANA component name.</comment>
+  </method>
   <method name="i_cal_component_free" corresponds="icalcomponent_free" annotation="skip" kind="destructor" since="1.0">
     <parameter type="ICalComponent *" name="component" comment="The #ICalComponent to be freed"/>
     <comment xml:space="preserve">Frees a #ICalComponent.</comment>
@@ -720,6 +725,16 @@ static void foreach_recurrence_cb(icalcomponent *in_comp, const struct icaltime_
     <parameter type="ICalComponent *" name="component" comment="an #ICalComponent"/>
     <parameter type="const gchar *" name="xname" comment="an X (custom) name for the @component"/>
     <comment xml:space="preserve">Sets an X (custom) name of the @component.</comment>
+  </method>
+  <method name="i_cal_component_get_iana_name" corresponds="icalcomponent_get_iana_name" since="4.0">
+    <parameter type="const ICalComponent *" name="component" comment="an #ICalComponent"/>
+    <returns type="const gchar *" annotation="transfer full,nullable" comment="IANA name of the @component, or %NULL, when it's not an IANA component"/>
+    <comment xml:space="preserve">Returns the IANA name of the @component as string, or %NULL.</comment>
+  </method>
+  <method name="i_cal_component_set_iana_name" corresponds="icalcomponent_set_iana_name" since="4.0">
+    <parameter type="ICalComponent *" name="component" comment="an #ICalComponent"/>
+    <parameter type="const gchar *" name="iana_name" comment="an IANA name for the @component"/>
+    <comment xml:space="preserve">Sets the IANA name of the @component.</comment>
   </method>
   <method name="i_cal_component_normalize" corresponds="icalcomponent_normalize" since="4.0">
     <parameter type="ICalComponent *" name="component" comment="an #ICalComponent"/>

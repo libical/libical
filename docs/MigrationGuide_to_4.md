@@ -175,6 +175,9 @@ The following functions have been added:
 * `icalrecurrencetype_unref()`
 * `icalrecurrencetype_clone()`
 * `icalrecurrencetype_from_string()`
+* `icalcomponent_new_iana()`
+* `icalcomponent_set_iana_name()`
+* `icalcomponent_get_iana_name()`
 * `icalcomponent_set_x_name()`
 * `icalcomponent_get_x_name()`
 * `icalcomponent_get_component_name()`
@@ -187,6 +190,9 @@ The following functions have been added:
 * `icaltimezone_set_system_zone_directory()`
 * `icalcompiter_is_valid()`
 * `icalpropiter_is_valid()`
+* `icalproperty_new_iana()`
+* `icalproperty_set_iana_name()`
+* `icalproperty_get_iana_name()`
 * and the new functions for the `icalstrarray` and `icalenumarray` data types
 
 ### Removed functions

@@ -54,9 +54,13 @@ LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_from_string(const char *str
  */
 LIBICAL_ICAL_EXPORT LIBICAL_SENTINEL icalcomponent *icalcomponent_vanew(icalcomponent_kind kind, ...);
 
-/** @brief Constructor
+/** @brief Construct a component with an x-name name.
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_x(const char *x_name);
+
+/** @brief Construct a component with an arbitrary iana-token name.
+ */
+LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_iana(const char *iana_name);
 
 /*** @brief Destructor
  */
@@ -76,6 +80,11 @@ LIBICAL_ICAL_EXPORT bool icalcomponent_isa_component(const void *component);
 
 LIBICAL_ICAL_EXPORT void icalcomponent_set_x_name(icalcomponent *comp, const char *name);
 LIBICAL_ICAL_EXPORT const char *icalcomponent_get_x_name(const icalcomponent *comp);
+
+/* Deal with IANA components */
+
+LIBICAL_ICAL_EXPORT void icalcomponent_set_iana_name(icalcomponent *comp, const char *name);
+LIBICAL_ICAL_EXPORT const char *icalcomponent_get_iana_name(const icalcomponent *comp);
 
 /** Returns the name of the component -- the type name converted to a
  *  string, or the value of _get_x_name if the type is and X component

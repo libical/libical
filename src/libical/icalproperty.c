@@ -382,7 +382,7 @@ char *icalproperty_as_ical_string_r(icalproperty *prop)
 
     /* Append property name */
 
-    if (prop->kind == ICAL_X_PROPERTY && prop->x_name != 0) {
+    if ((prop->kind == ICAL_X_PROPERTY || prop->kind == ICAL_IANA_PROPERTY) && prop->x_name != 0) {
         property_name = prop->x_name;
     } else {
         property_name = icalproperty_kind_to_string(prop->kind);
@@ -856,6 +856,28 @@ const char *icalproperty_get_x_name(const icalproperty *prop)
     return prop->x_name;
 }
 
+void icalproperty_set_iana_name(icalproperty *prop, const char *name)
+{
+    icalerror_check_arg_rv((name != 0), "name");
+    icalerror_check_arg_rv((prop != 0), "prop");
+    icalerror_check_arg_rv((prop->kind == ICAL_IANA_PROPERTY), "prop->kind");
+
+    icalmemory_free_buffer(prop->x_name);
+    prop->x_name = icalmemory_strdup(name);
+
+    if (prop->x_name == 0) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+    }
+}
+
+const char *icalproperty_get_iana_name(const icalproperty *prop)
+{
+    icalerror_check_arg_rz((prop != 0), "prop");
+    icalerror_check_arg_rz((prop->kind == ICAL_IANA_PROPERTY), "prop->kind");
+
+    return prop->x_name;
+}
+
 const char *icalproperty_get_property_name(const icalproperty *prop)
 {
     char *buf;
@@ -877,7 +899,7 @@ char *icalproperty_get_property_name_r(const icalproperty *prop)
     buf = icalmemory_new_buffer(buf_size);
     buf_ptr = buf;
 
-    if (prop->kind == ICAL_X_PROPERTY && prop->x_name != 0) {
+    if ((prop->kind == ICAL_X_PROPERTY || prop->kind == ICAL_IANA_PROPERTY) && prop->x_name != 0) {
         property_name = prop->x_name;
     } else {
         property_name = icalproperty_kind_to_string(prop->kind);
