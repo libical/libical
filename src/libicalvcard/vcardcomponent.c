@@ -252,8 +252,12 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *comp)
 
 bool vcardcomponent_is_valid(const vcardcomponent *component)
 {
-    return ((strcmp(component->id, "comp") == 0) &&
-            (component->kind != VCARD_NO_COMPONENT));
+    if (component) {
+        if ((strcmp(component->id, "comp") == 0) && (component->kind != VCARD_NO_COMPONENT)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component)

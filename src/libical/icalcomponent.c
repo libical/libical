@@ -305,11 +305,12 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *component)
 
 bool icalcomponent_is_valid(const icalcomponent *component)
 {
-    if ((strcmp(component->id, "comp") == 0) && component->kind != ICAL_NO_COMPONENT) {
-        return true;
-    } else {
-        return false;
+    if (component) {
+        if ((strcmp(component->id, "comp") == 0) && component->kind != ICAL_NO_COMPONENT) {
+            return true;
+        }
     }
+    return false;
 }
 
 icalcomponent_kind icalcomponent_isa(const icalcomponent *component)
@@ -1380,6 +1381,9 @@ icalcomponent_kind icalcomponent_string_to_kind(const char *string)
 
 bool icalcompiter_is_valid(const icalcompiter *i)
 {
+    if (!i) {
+        return false;
+    }
     /* compare to icalcompiter_null */
     return !((i->kind == ICAL_NO_COMPONENT) && (i->iter == 0));
 }
@@ -1498,6 +1502,9 @@ icalpropiter icalcomponent_begin_property(icalcomponent *component, icalproperty
 
 bool icalpropiter_is_valid(const icalpropiter *i)
 {
+    if (!i) {
+        return false;
+    }
     /* compare to icalpropiter_null */
     return !((i->kind == ICAL_NO_PROPERTY) && (i->iter == 0));
 }
