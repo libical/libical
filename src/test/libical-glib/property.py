@@ -44,9 +44,9 @@ assert retrieved_parameter3.as_ical_string() == 'ACTIONPARAM=This is an action p
 stringProperty.remove_parameter_by_kind(ICalGLib.ParameterKind.CHARSET_PARAMETER)
 assert stringProperty.count_parameters() == 3
 stringProperty.remove_parameter_by_kind(ICalGLib.ParameterKind.ALTREP_PARAMETER)
-assert stringProperty.count_parameters() == 2
-stringProperty.remove_parameter_by_name('ACTIONPARAM')
 assert stringProperty.count_parameters() == 1
+stringProperty.remove_parameter_by_name('ACTIONPARAM')
+assert stringProperty.count_parameters() == 0
 
 kind = ICalGLib.ValueKind.ATTACH_VALUE
 string = 'This is a link'
