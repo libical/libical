@@ -6973,6 +6973,64 @@ static void test_icalcomponent_remove_property_by_kind(void)
     icalcomponent_free(test_comp);
 }
 
+static void test_icalproperty_remove_parameter_by_name(void)
+{
+    icalproperty *prop;
+
+    // Remove known IANA parameter by name.
+    prop = icalproperty_new_from_string("SUMMARY;LANGUAGE=en;language=de:test");
+    ok("parsed all LANGUAGE",
+            icalproperty_get_first_parameter(prop, ICAL_LANGUAGE_PARAMETER) != NULL &&
+            icalproperty_get_next_parameter(prop, ICAL_LANGUAGE_PARAMETER) != NULL &&
+            icalproperty_get_next_parameter(prop, ICAL_LANGUAGE_PARAMETER) == NULL);
+    icalproperty_remove_parameter_by_name(prop, "LANGUAGE");
+    ok("removed all LANGUAGE",
+            icalproperty_get_first_parameter(prop, ICAL_LANGUAGE_PARAMETER) == NULL);
+    icalproperty_free(prop);
+
+    // Remove x-parameter by name.
+    prop = icalproperty_new_from_string("SUMMARY;X-FOO=en;x-foo=de:test");
+    ok("parsed all X-FOO",
+            icalproperty_get_first_parameter(prop, ICAL_X_PARAMETER) != NULL &&
+            icalproperty_get_next_parameter(prop, ICAL_X_PARAMETER) != NULL &&
+            icalproperty_get_next_parameter(prop, ICAL_X_PARAMETER) == NULL);
+    icalproperty_remove_parameter_by_name(prop, "X-FOO");
+    ok("removed all X-FOO",
+            icalproperty_get_first_parameter(prop, ICAL_X_PARAMETER) == NULL);
+    icalproperty_free(prop);
+
+    ical_set_unknown_token_handling_setting(ICAL_ASSUME_IANA_TOKEN);
+
+    // Remove unknown iana-token parameter by name.
+    prop = icalproperty_new_from_string("SUMMARY;FOO=en;foo=de:test");
+    ok("parsed all FOO",
+            icalproperty_get_first_parameter(prop, ICAL_IANA_PARAMETER) != NULL &&
+            icalproperty_get_next_parameter(prop, ICAL_IANA_PARAMETER) != NULL &&
+            icalproperty_get_next_parameter(prop, ICAL_IANA_PARAMETER) == NULL);
+    icalproperty_remove_parameter_by_name(prop, "FOO");
+    ok("removed all FOO",
+            icalproperty_get_first_parameter(prop, ICAL_IANA_PARAMETER) == NULL);
+    icalproperty_free(prop);
+
+    ical_set_unknown_token_handling_setting(ICAL_TREAT_AS_ERROR);
+}
+
+static void test_icalproperty_remove_parameter_by_kind(void)
+{
+    icalproperty *prop;
+
+    // Remove known IANA parameter by name.
+    prop = icalproperty_new_from_string("SUMMARY;LANGUAGE=en;language=de:test");
+    ok("parsed all LANGUAGE",
+            icalproperty_get_first_parameter(prop, ICAL_LANGUAGE_PARAMETER) != NULL &&
+            icalproperty_get_next_parameter(prop, ICAL_LANGUAGE_PARAMETER) != NULL &&
+            icalproperty_get_next_parameter(prop, ICAL_LANGUAGE_PARAMETER) == NULL);
+    icalproperty_remove_parameter_by_kind(prop, ICAL_LANGUAGE_PARAMETER);
+    ok("removed all LANGUAGE",
+            icalproperty_get_first_parameter(prop, ICAL_LANGUAGE_PARAMETER) == NULL);
+    icalproperty_free(prop);
+}
+
 static void test_icalcomponent_get_duration(void)
 {
 #define assert_icalcomponent_get_duration(desc, want, ctlines)                           \
@@ -7513,6 +7571,8 @@ int main(int argc, const char *argv[])
     test_run("Test creating IANA parameters", test_create_iana_parameter, do_test, do_header);
     test_run("Test parsing IANA parameter enum values", test_parse_iana_parameter_value, do_test, do_header);
     test_run("Test creating IANA parameter enum values", test_create_iana_parameter_value, do_test, do_header);
+    test_run("Test removing parameter by name", test_icalproperty_remove_parameter_by_name, do_test, do_header);
+    test_run("Test removing parameter by kind", test_icalproperty_remove_parameter_by_kind, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
