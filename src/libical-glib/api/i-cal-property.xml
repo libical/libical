@@ -167,12 +167,12 @@
     <returns type="const gchar *" annotation="nullable" comment="The name of x property."/>
     <comment xml:space="preserve">Gets the name of x property.</comment>
   </method>
-  <method name="i_cal_property_set_iana_name" corresponds="icalproperty_set_iana_name" since="3.1">
+  <method name="i_cal_property_set_iana_name" corresponds="icalproperty_set_iana_name" since="4.0">
     <parameter type="ICalProperty *" name="prop" comment="A #ICalProperty"/>
     <parameter type="const gchar *" name="name" comment="The IANA property name"/>
     <comment xml:space="preserve">Sets the IANA name for the #ICalProperty.</comment>
   </method>
-  <method name="i_cal_property_get_iana_name" corresponds="icalproperty_get_iana_name" since="3.1">
+  <method name="i_cal_property_get_iana_name" corresponds="icalproperty_get_iana_name" since="4.0">
     <parameter type="ICalProperty *" name="prop" comment="A #ICalProperty"/>
     <returns type="const gchar *" annotation="nullable" comment="The IANA property name."/>
     <comment xml:space="preserve">Gets the IANA name of the #ICalProperty.</comment>

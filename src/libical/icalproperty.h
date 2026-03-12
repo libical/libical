@@ -126,7 +126,24 @@ LIBICAL_ICAL_EXPORT const char *icalproperty_get_x_name(const icalproperty *prop
 
 /* Deal with IANA properties */
 
+/**
+ * Sets the IANA name for an icalproperty.
+ *
+ * @param prop a pointer to a valid icalproperty
+ * @param name a pointer to char string containing the IANA name.
+ * @since 4.0
+ */
 LIBICAL_ICAL_EXPORT void icalproperty_set_iana_name(icalproperty *prop, const char *name);
+
+/**
+ * Gets the IANA name of the specified icalproperty.
+ *
+ * @param prop a pointer to a valid icalproperty
+ *
+ * @return a pointer to a char string containing the @p comp IANA name; will be NULL if the
+ * name has yet to be specified.
+ * @since 4.0
+ */
 LIBICAL_ICAL_EXPORT const char *icalproperty_get_iana_name(const icalproperty *prop);
 
 /** Returns the name of the property -- the type name converted to a

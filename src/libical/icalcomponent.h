@@ -58,7 +58,13 @@ LIBICAL_ICAL_EXPORT LIBICAL_SENTINEL icalcomponent *icalcomponent_vanew(icalcomp
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_x(const char *x_name);
 
-/** @brief Construct a component with an arbitrary iana-token name.
+/**
+ * Constructs a new icalcomponent with an IANA component name.
+ *
+ * @param iana_name a pointer to a char string containing the IANA name.
+ *
+ * @return A pointer to a new icalcomponent; or NULL on memory allocation failure.
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT icalcomponent *icalcomponent_new_iana(const char *iana_name);
 
@@ -83,7 +89,24 @@ LIBICAL_ICAL_EXPORT const char *icalcomponent_get_x_name(const icalcomponent *co
 
 /* Deal with IANA components */
 
+/**
+ * Sets the IANA name for an icalcomponent.
+ *
+ * @param comp a pointer to a valid icalcomponent
+ * @param name a pointer to char string containing the IANA name.
+ * @since 4.0
+ */
 LIBICAL_ICAL_EXPORT void icalcomponent_set_iana_name(icalcomponent *comp, const char *name);
+
+/**
+ * Gets the IANA name of the specified icalcomponent.
+ *
+ * @param comp a pointer to a valid icalcomponent
+ *
+ * @return a pointer to a char string containing the @p comp IANA name; will be NULL if the
+ * name has yet to be specified.
+ * @since 4.0
+ */
 LIBICAL_ICAL_EXPORT const char *icalcomponent_get_iana_name(const icalcomponent *comp);
 
 /** Returns the name of the component -- the type name converted to a
