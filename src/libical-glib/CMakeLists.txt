@@ -255,7 +255,7 @@ if(c_flag_Wswitch_enum_supported AND c_flag_Wswitch_supported)
       -Wswitch
   )
 else()
-  message(NOTICE "compiler does not support both -Wswitch-enum and -Wswitch, skipping libical-glib-build-check")
+  message(WARNING "compiler does not support both -Wswitch-enum and -Wswitch, skipping libical-glib-build-check")
 endif()
 
 # GObject Introspection
