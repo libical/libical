@@ -107,7 +107,7 @@ icalproperty_kind icalproperty_string_to_kind(const char *string)
         }
     }
 
-    if (strncmp(string, "X-", 2) == 0) {
+    if (strncasecmp(string, "X-", 2) == 0) {
         return ICAL_X_PROPERTY;
     }
 
