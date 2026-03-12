@@ -50,6 +50,10 @@ for details about API changes since libical 3.x.
 - Components and properties with arbitrary iana-token names now are parsed with kind
     ICAL_IANA_COMPONENT and ICAL_IANA_PROPERTY if the `ical_unknown_token_handling`
     setting is ICAL_ASSUME_IANA_TOKEN. Otherwise, they are handled as error.
+- Property and parameter names that start with "x-" (lowercase) now also
+  are parsed as X kind.
+- The `icalproperty_remove_parameter_by_(kind|name)` functions now remove all matching parameters.
+  Before, they only removed the first matching parameter contrary to their documentation.
 
 ### Deprecated
 
