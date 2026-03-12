@@ -623,28 +623,31 @@ char *icalproperty_get_parameter_as_string_r(icalproperty *prop, const char *nam
 
 void icalproperty_remove_parameter_by_kind(icalproperty *prop, icalparameter_kind kind)
 {
-    icalpvl_elem p;
+    icalpvl_elem p, next;
 
     icalerror_check_arg_rv((prop != 0), "prop");
 
-    for (p = icalpvl_head(prop->parameters); p != 0; p = icalpvl_next(p)) {
+    for (p = icalpvl_head(prop->parameters); p != 0; p = next) {
+        next = icalpvl_next(p);
+
         icalparameter *param = (icalparameter *)icalpvl_data(p);
 
         if (icalparameter_isa(param) == kind) {
             (void)icalpvl_remove(prop->parameters, p);
             icalparameter_free(param);
-            break;
         }
     }
 }
 
 void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
 {
-    icalpvl_elem p;
+    icalpvl_elem p, next;
 
     icalerror_check_arg_rv((prop != 0), "prop");
 
-    for (p = icalpvl_head(prop->parameters); p != 0; p = icalpvl_next(p)) {
+    for (p = icalpvl_head(prop->parameters); p != 0; p = next) {
+        next = icalpvl_next(p);
+
         icalparameter *param = (icalparameter *)icalpvl_data(p);
         const char *kind_string;
 
@@ -660,10 +663,9 @@ void icalproperty_remove_parameter_by_name(icalproperty *prop, const char *name)
             continue;
         }
 
-        if (0 == strcmp(kind_string, name)) {
+        if (0 == strcasecmp(kind_string, name)) {
             (void)icalpvl_remove(prop->parameters, p);
             icalparameter_free(param);
-            break;
         }
     }
 }
