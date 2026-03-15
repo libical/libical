@@ -165,7 +165,7 @@ LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zo
                                                                 int *is_daylight);
 
 /*
- * Handling arrays of timezones. Mainly for internal use.
+ * Handling arrays of timezones.
  */
 LIBICAL_ICAL_EXPORT icalarray *icaltimezone_array_new(void);
 
