@@ -165,14 +165,14 @@ LIBICAL_ICAL_EXPORT int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zo
                                                                 int *is_daylight);
 
 /*
- * Handling arrays of timezones. Mainly for internal use.
+ * Handling arrays of timezones. For internal use.
  */
-LIBICAL_ICAL_EXPORT icalarray *icaltimezone_array_new(void);
+LIBICAL_ICAL_NO_EXPORT icalarray *icaltimezone_array_new(void);
 
-LIBICAL_ICAL_EXPORT void icaltimezone_array_append_from_vtimezone(icalarray *timezones,
-                                                                  icalcomponent *child);
+LIBICAL_ICAL_NO_EXPORT void icaltimezone_array_append_from_vtimezone(icalarray *timezones,
+                                                                     icalcomponent *child);
 
-LIBICAL_ICAL_EXPORT void icaltimezone_array_free(icalarray *timezones);
+LIBICAL_ICAL_NO_EXPORT void icaltimezone_array_free(icalarray *timezones);
 
 /*
  * By request (issue #112) make vtimezone functions public
