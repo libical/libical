@@ -37,7 +37,6 @@ set(
   ${TOPS}/src/libical/icalerror.h
   ${TOPS}/src/libical/icallimits.h
   ${TOPS}/src/libical/icalrestriction.h
-  ${TOPS}/src/libical/icallangbind.h
 )
 
 file(WRITE ${ICAL_FILE_H_FILE} "#ifndef LIBICAL_ICAL_H\n")

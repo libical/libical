@@ -254,8 +254,8 @@ set(
   icalpvl.h
   qsort_gen.c
   qsort_gen.h
-  icallangbind.h
-  icallangbind.c
+  icallangbind_p.h
+  icallangbind_p.c
   icaldate_p.c
   icaldate_p.h
   byref.c
@@ -407,7 +407,6 @@ install(
     icalenumarray.h
     icalenums.h
     icalerror.h
-    icallangbind.h
     icallimits.h
     icalmemory.h
     icalparameter.h

@@ -6,6 +6,12 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/*************************************************************************
+ * WARNING: USE AT YOUR OWN RISK                                         *
+ * These are library internal-only functions.                            *
+ * Be warned that these functions can change at any time without notice. *
+ *************************************************************************/
+
 #ifndef ICALLANGBIND_H
 #define ICALLANGBIND_H
 
