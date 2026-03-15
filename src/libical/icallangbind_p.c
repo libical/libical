@@ -10,7 +10,7 @@
 #include <config.h>
 #endif
 
-#include "icallangbind.h"
+#include "icallangbind_p.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icalvalue.h"
