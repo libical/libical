@@ -2490,13 +2490,15 @@ static int next_unit(icalrecur_iterator *impl,
         return 0;
     }
 
+    const size_t max_recurrence_time_count = icallimit_get(ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL);
     if (has_by_unit) {
         /* Frequency must be hours, minutes or seconds */
         icalrecurrence_iterator_by_data *bydata = &impl->bydata[by_unit];
         if (this_frequency) {
             bydata->index++;
             /* Take the frequency into account and treat the byrule data as limiting */
-            while (impl->last.year < MAX_TIME_T_YEAR) {
+            size_t stalledCnt = 0;
+            while ((impl->last.year < MAX_TIME_T_YEAR) && (stalledCnt++ < max_recurrence_time_count)) {
                 int last_unit = get_unit(impl);
                 /* Find a BY* value that works with the interval length */
                 while (bydata->index < bydata->by.size) {
