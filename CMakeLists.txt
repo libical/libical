@@ -250,7 +250,7 @@ if(LIBICAL_CXX_BINDINGS)
     add_definitions(-DLIBICAL_CXX_BINDINGS)
   else()
     message(
-      WARNING
+      NOTICE
       "Building the C++ bindings is not possible since a C++ compiler could not be found. "
       "Turning-off C++ bindings."
     )
@@ -494,7 +494,7 @@ if(LIBICAL_ENABLE_64BIT_ICALTIME_T)
 else()
   if(SIZEOF_TIME_T EQUAL 4)
     message(
-      WARNING
+      NOTICE
       "The 32-bit time_t type has been detected. \
       Consider reconfiguring with -DLIBICAL_ENABLE_64BIT_ICALTIME_T=True to enable 64-bit time_t types."
     )
@@ -542,7 +542,7 @@ endif()
 if(WIN32 OR WINCE)
   #Always use builtin tzdata on Windows systems.
   if(NOT USE_BUILTIN_TZDATA)
-    message(WARNING "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata.")
+    message(NOTICE "Currently unable to use system tzdata on Windows. Falling back to builtin tzdata.")
     set(USE_BUILTIN_TZDATA 1)
   endif()
 endif()
@@ -869,7 +869,7 @@ if(LIBICAL_DEVMODE_LEAK_SANITIZER)
     endif()
     set(LIBRARY_TYPE SHARED)
     message(
-      WARNING
+      NOTICE
       "Currently unable to build leak sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
@@ -899,7 +899,7 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
     set(LIBRARY_TYPE SHARED)
     #currently unavailable for glib-based code
     message(
-      WARNING
+      NOTICE
       "Currently unable to build memory sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
@@ -927,7 +927,7 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     endif()
     set(LIBRARY_TYPE SHARED)
     message(
-      WARNING
+      NOTICE
       "Currently unable to build thread sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
