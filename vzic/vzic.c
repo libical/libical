@@ -262,15 +262,13 @@ convert_olson_files(GPtrArray *olson_filenames)
 static void
 free_zone_data(GArray *zone_data)
 {
-    ZoneLineData *zone_line;
-
     for (unsigned int i = 0; i < zone_data->len; i++) {
         ZoneData *zone = &g_array_index(zone_data, ZoneData, i);
 
         g_free(zone->zone_name);
 
         for (unsigned int j = 0; j < zone->zone_line_data->len; j++) {
-            zone_line = &g_array_index(zone->zone_line_data, ZoneLineData, j);
+            ZoneLineData *zone_line = &g_array_index(zone->zone_line_data, ZoneLineData, j);
 
             g_free(zone_line->rules);
             g_free(zone_line->format);

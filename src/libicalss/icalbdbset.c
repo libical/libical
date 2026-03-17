@@ -1008,17 +1008,16 @@ icalcomponent *icalbdbset_fetch(icalset *set, icalcomponent_kind kind, const cha
     for (i = icalcomponent_begin_component(bset->cluster, kind);
          icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
         icalcomponent *this = icalcompiter_deref(&i);
-        icalproperty *p = NULL;
-        const char *this_uid = NULL;
 
         if (this != 0) {
+            const char *this_uid = NULL;
             if (kind == ICAL_VAGENDA_COMPONENT) {
-                p = icalcomponent_get_first_property(this, ICAL_RELCALID_PROPERTY);
+                icalproperty *p = icalcomponent_get_first_property(this, ICAL_RELCALID_PROPERTY);
                 if (p != NULL) {
                     this_uid = icalproperty_get_relcalid(p);
                 }
             } else {
-                p = icalcomponent_get_first_property(this, ICAL_UID_PROPERTY);
+                icalproperty *p = icalcomponent_get_first_property(this, ICAL_UID_PROPERTY);
                 if (p != NULL) {
                     this_uid = icalproperty_get_uid(p);
                 }
@@ -1453,8 +1452,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
 {
     icalcomponent *comp = NULL;
     struct icaltimetype start, next;
-    icalproperty *dtstart, *rrule, *prop, *due;
-    icaltimezone *u_zone;
+    icalproperty *rrule, *prop;
     int orig_time_was_utc = 0;
 
     _unused(set);
@@ -1484,7 +1482,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
 
         /* a recurring component with expand query */
         if (recur != 0 && g == 1) {
-            u_zone = icaltimezone_get_builtin_timezone(i->tzid);
+            icaltimezone *u_zone = icaltimezone_get_builtin_timezone(i->tzid);
 
             /* use UTC, if that's all we have. */
             if (!u_zone) {
@@ -1494,12 +1492,12 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
             start = icaltime_from_timet_with_zone(time(0), 0, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
-                dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+                icalproperty *dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
                 if (dtstart) {
                     start = icalproperty_get_dtstart(dtstart);
                 }
             } else if (icalcomponent_isa(comp) == ICAL_VTODO_COMPONENT) {
-                due = icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY);
+                icalproperty *due = icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY);
                 if (due) {
                     start = icalproperty_get_due(due);
                 }

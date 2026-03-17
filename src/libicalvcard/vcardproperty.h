@@ -33,7 +33,7 @@ LIBICAL_VCARD_EXPORT char *vcardproperty_as_vcard_string_r(vcardproperty *prop);
 
 LIBICAL_VCARD_EXPORT void vcardproperty_free(vcardproperty *prop);
 
-LIBICAL_VCARD_EXPORT vcardproperty_kind vcardproperty_isa(vcardproperty *property);
+LIBICAL_VCARD_EXPORT vcardproperty_kind vcardproperty_isa(const vcardproperty *property);
 
 LIBICAL_VCARD_EXPORT bool vcardproperty_isa_property(void *property);
 

@@ -803,11 +803,8 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
 {
     gint c;
     gchar *buffer;
-    gint count;
-    gchar last;
     gint len;
     GList *iter;
-    gchar *method;
     const gchar *val;
 
     g_return_if_fail(in != NULL && out != NULL && structure != NULL && table != NULL);
@@ -824,8 +821,8 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
             }
 
             if (c == '^') {
-                count = 1;
-                last = '\0';
+                gint count = 1;
+                gchar last = '\0';
                 while (!feof(in) && !ferror(in) && !((c = fgetc(in)) == '$' && last == '^' && count == 1)) {
                     if (c == '^' && last == '$') {
                         ++count;
@@ -854,7 +851,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                 if (g_strcmp0(buffer, "source") == 0) {
                     for (iter = g_list_first(structure->methods); iter != NULL;
                          iter = g_list_next(iter)) {
-                        method =
+                        gchar *method =
                             get_source_method_body((Method *)iter->data, structure->nameSpace);
                         write_str(out, method);
                         if (iter != g_list_last(structure->methods)) {
@@ -936,10 +933,8 @@ void generate_header_structure_boilerplate(FILE *out, Structure *structure, GHas
 
 void generate_header_includes(FILE *out, Structure *structure)
 {
-    Structure *parentStructure;
     gchar *lowerTrain;
     gchar *upperCamel;
-    gchar *ownUpperCamel;
     const gchar *includeName;
     GHashTable *includeNames;
     GHashTableIter iter_table;
@@ -970,9 +965,9 @@ void generate_header_includes(FILE *out, Structure *structure)
          g_hash_table_iter_next(&iter_table, &key, &value);) {
         gchar *typeName = (gchar *)key;
         if (g_hash_table_contains(type2structure, typeName)) {
-            parentStructure = g_hash_table_lookup(type2structure, typeName);
+            Structure *parentStructure = g_hash_table_lookup(type2structure, typeName);
             upperCamel = g_strconcat(parentStructure->nameSpace, parentStructure->name, NULL);
-            ownUpperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
+            gchar *ownUpperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
             if (g_strcmp0(upperCamel, ownUpperCamel) == 0) {
                 g_free(upperCamel);
                 g_free(ownUpperCamel);
@@ -1006,10 +1001,8 @@ void generate_header_includes(FILE *out, Structure *structure)
 
 void generate_source_includes(FILE *out, Structure *structure)
 {
-    Structure *parentStructure;
     gchar *lowerTrain;
     gchar *upperCamel;
-    gchar *ownUpperCamel;
     GHashTable *includeNames;
     GHashTableIter iter_table;
     gpointer key;
@@ -1035,9 +1028,9 @@ void generate_source_includes(FILE *out, Structure *structure)
          g_hash_table_iter_next(&iter_table, &key, &value);) {
         gchar *typeName = (gchar *)key;
         if (g_hash_table_contains(type2structure, typeName)) {
-            parentStructure = g_hash_table_lookup(type2structure, typeName);
+            Structure *parentStructure = g_hash_table_lookup(type2structure, typeName);
             upperCamel = g_strconcat(parentStructure->nameSpace, parentStructure->name, NULL);
-            ownUpperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
+            gchar *ownUpperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
             if (g_strcmp0(upperCamel, ownUpperCamel) == 0) {
                 g_free(upperCamel);
                 g_free(ownUpperCamel);
@@ -1066,7 +1059,7 @@ void generate_source_includes(FILE *out, Structure *structure)
 void generate_forward_declarations_header_file(GList *structures)
 {
     FILE *in, *out;
-    gint c, len;
+    gint c;
     gchar buffer[BUFFER_SIZE];
     gchar *typeName;
     gchar *typeKind;
@@ -1125,7 +1118,7 @@ void generate_forward_declarations_header_file(GList *structures)
             }
 
             while (!feof(in) && !ferror(in) && (c = fgetc(in)) != '}') {
-                len = (gint)strlen(buffer);
+                gint len = (gint)strlen(buffer);
                 buffer[len] = c;
                 buffer[len + 1] = '\0';
             }
@@ -2502,11 +2495,7 @@ void generate_header_header_file(GList *structures)
     gint c;
     gchar *buffer;
     GList *iter;
-    gint len;
-    gchar *header;
     gchar *upperCamel;
-    gchar *lowerTrain;
-    Structure *structure;
 
     g_return_if_fail(structures != NULL);
 
@@ -2536,17 +2525,17 @@ void generate_header_header_file(GList *structures)
             }
 
             while (!feof(in) && !ferror(in) && (c = fgetc(in)) != '}') {
-                len = (gint)strlen(buffer);
+                gint len = (gint)strlen(buffer);
                 buffer[len] = c;
                 buffer[len + 1] = '\0';
             }
 
             if (g_strcmp0(buffer, "allHeaders") == 0) {
                 for (iter = g_list_first(structures); iter != NULL; iter = g_list_next(iter)) {
-                    structure = (Structure *)iter->data;
+                    Structure *structure = (Structure *)iter->data;
                     upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
-                    lowerTrain = get_lower_train_from_upper_camel(upperCamel);
-                    header = g_strconcat("#include <libical-glib/", lowerTrain, ".h>\n", NULL);
+                    gchar *lowerTrain = get_lower_train_from_upper_camel(upperCamel);
+                    gchar *header = g_strconcat("#include <libical-glib/", lowerTrain, ".h>\n", NULL);
                     write_str(out, header);
                     g_free(header);
                     g_free(upperCamel);

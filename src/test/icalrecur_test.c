@@ -171,9 +171,8 @@ static icaltimetype get_instance_n_time(char *instances, int n)
 static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed_dtstart_offs, int *has_skip)
 {
     struct icalrecurrencetype *rrule;
-    struct icaltimetype dtstart, next;
+    struct icaltimetype dtstart;
     icalrecur_iterator *ritr;
-    const char *sep = "";
     char actual_instances[2048];
     int actual_instances_len = 0;
     int test_error = 0;
@@ -246,7 +245,8 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
 
         struct icaltimetype (*iterator_proceed)(icalrecur_iterator *impl) = forward ? icalrecur_iterator_next : icalrecur_iterator_prev;
 
-        for (next = iterator_proceed(ritr);
+        const char *sep = "";
+        for (struct icaltimetype next = iterator_proceed(ritr);
              !icaltime_is_null_time(next);
              next = iterator_proceed(ritr)) {
             int n = snprintf(&actual_instances[actual_instances_len],

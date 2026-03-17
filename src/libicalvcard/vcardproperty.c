@@ -522,7 +522,7 @@ char *vcardproperty_as_vcard_string_r(vcardproperty *prop)
     return out_buf;
 }
 
-vcardproperty_kind vcardproperty_isa(vcardproperty *p)
+vcardproperty_kind vcardproperty_isa(const vcardproperty *p)
 {
     if (p != 0) {
         return p->kind;

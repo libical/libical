@@ -510,7 +510,7 @@ static void sort_bysetpos(icalrecurrence_by_data *by)
    -2 if an RSCALE rule is encountered yet we don't RSCALE support enabled
    -1 for all other parsing problems
 */
-static int icalrecur_add_byrules(struct icalrecur_parser *parser, icalrecurrence_by_data *by,
+static int icalrecur_add_byrules(const struct icalrecur_parser *parser, icalrecurrence_by_data *by,
                                  int min, int size, char *vals)
 {
     char *t, *n;
@@ -598,17 +598,17 @@ static void sort_bydayrules(struct icalrecur_parser *parser)
     icalrecurrence_by_data *by = &parser->rt->by[ICAL_BY_DAY];
     short *array = by->data;
 
-    int week_start, one, two, i, j;
+    int week_start, i, j;
 
     week_start = (int)parser->rt->week_start;
 
     for (i = 0; i < by->size; i++) {
         for (j = 0; j < i; j++) {
-            one = (int)icalrecurrencetype_day_day_of_week(array[j]) - week_start;
+            int one = (int)icalrecurrencetype_day_day_of_week(array[j]) - week_start;
             if (one < 0) {
                 one += 7;
             }
-            two = (int)icalrecurrencetype_day_day_of_week(array[i]) - week_start;
+            int two = (int)icalrecurrencetype_day_day_of_week(array[i]) - week_start;
             if (two < 0) {
                 two += 7;
             }

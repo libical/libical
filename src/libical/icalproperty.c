@@ -456,7 +456,7 @@ char *icalproperty_as_ical_string_r(icalproperty *prop)
     return out_buf;
 }
 
-icalproperty_kind icalproperty_isa(icalproperty *p)
+icalproperty_kind icalproperty_isa(const icalproperty *p)
 {
     if (p != 0) {
         return p->kind;

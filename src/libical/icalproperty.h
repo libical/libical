@@ -34,7 +34,7 @@ LIBICAL_ICAL_EXPORT char *icalproperty_as_ical_string_r(icalproperty *prop);
 
 LIBICAL_ICAL_EXPORT void icalproperty_free(icalproperty *prop);
 
-LIBICAL_ICAL_EXPORT icalproperty_kind icalproperty_isa(icalproperty *property);
+LIBICAL_ICAL_EXPORT icalproperty_kind icalproperty_isa(const icalproperty *property);
 
 LIBICAL_ICAL_EXPORT bool icalproperty_isa_property(void *property);
 

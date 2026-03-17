@@ -500,13 +500,12 @@ icalcomponent *icalfileset_fetch(icalset *set, icalcomponent_kind kind, const ch
          icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
         icalcomponent *this = icalcompiter_deref(&i);
         icalcomponent *inner;
-        const char *this_uid;
 
         for (inner = icalcomponent_get_first_component(this, ICAL_ANY_COMPONENT);
              inner != 0; inner = icalcomponent_get_next_component(this, ICAL_ANY_COMPONENT)) {
             icalproperty *p = icalcomponent_get_first_property(inner, ICAL_UID_PROPERTY);
             if (p) {
-                this_uid = icalproperty_get_uid(p);
+                const char *this_uid = icalproperty_get_uid(p);
 
                 if (this_uid == 0) {
                     icalerror_warn("icalfileset_fetch found a component with no UID");
@@ -739,7 +738,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
     icalcompiter citr;
     icalfileset *fset;
     struct icaltimetype start, next;
-    icalproperty *dtstart, *rrule, *prop, *due;
+    icalproperty *rrule;
 
     _unused(tzid);
 
@@ -765,12 +764,12 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
         int g = icalgauge_get_expand(gauge);
         if (recur != 0 && g == 1) {
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
-                dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+                icalproperty *dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
                 if (dtstart) {
                     start = icalproperty_get_dtstart(dtstart);
                 }
             } else if (icalcomponent_isa(comp) == ICAL_VTODO_COMPONENT) {
-                due = icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY);
+                icalproperty *due = icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY);
                 if (due) {
                     start = icalproperty_get_due(due);
                 }
@@ -794,7 +793,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
 
             /* add recurrence-id to the component
                if there is a recurrence-id already, remove it, then add the new one */
-            prop = icalcomponent_get_first_property(comp, ICAL_RECURRENCEID_PROPERTY);
+            icalproperty *prop = icalcomponent_get_first_property(comp, ICAL_RECURRENCEID_PROPERTY);
             if (prop) {
                 icalcomponent_remove_property(comp, prop);
             }
