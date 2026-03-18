@@ -101,6 +101,7 @@ int main(void)
                 curr_tm.tm_sec != curr_tt.second;
 
             /* only print first failed day and first day which is okay again */
+            /* cppcheck-suppress knownConditionTrueFalse */
             if (verbose || curr_failed != failed) {
                 struct tm utc_tm;
 

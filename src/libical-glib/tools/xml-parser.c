@@ -783,9 +783,6 @@ gboolean parse_structure(xmlNode *node, Structure *structure, GHashTable *api_te
 {
     xmlAttr *attr;
     xmlNode *child;
-    Method *method;
-    Enumeration *enumeration;
-    Declaration *declaration;
 
     if (xmlStrcmp(node->name, (xmlChar *)"structure") != 0) {
         return FALSE;
@@ -836,7 +833,7 @@ gboolean parse_structure(xmlNode *node, Structure *structure, GHashTable *api_te
 
     for (child = xmlFirstElementChild(node); child != NULL; child = xmlNextElementSibling(child)) {
         if (g_strcmp0((gchar *)child->name, "method") == 0) {
-            method = method_new();
+            Method *method = method_new();
             if (!parse_method(child, method)) {
                 method_free(method);
             } else {
@@ -847,7 +844,7 @@ gboolean parse_structure(xmlNode *node, Structure *structure, GHashTable *api_te
             parse_method_from_template(child, api_templates, structure);
         }
         if (g_strcmp0((gchar *)child->name, "declaration") == 0) {
-            declaration = declaration_new();
+            Declaration *declaration = declaration_new();
             if (!parse_declaration(child, declaration)) {
                 declaration_free(declaration);
             } else {
@@ -855,7 +852,7 @@ gboolean parse_structure(xmlNode *node, Structure *structure, GHashTable *api_te
             }
             declaration = NULL;
         } else if (g_strcmp0((gchar *)child->name, "enum") == 0) {
-            enumeration = enumeration_new();
+            Enumeration *enumeration = enumeration_new();
             if (!parse_enumeration(child, enumeration)) {
                 enumeration_free(enumeration);
             } else {

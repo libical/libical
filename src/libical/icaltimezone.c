@@ -372,13 +372,11 @@ char *icaltimezone_get_location_from_vtimezone(icalcomponent *component)
 char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
 {
     icalcomponent *comp;
-    icalproperty *prop;
     struct icaltimetype dtstart;
     struct icaldatetimeperiodtype rdate;
     const char *current_tzname;
     const char *standard_tzname = NULL, *daylight_tzname = NULL;
     struct icaltimetype standard_max_date, daylight_max_date;
-    struct icaltimetype current_max_date;
 
     standard_max_date = icaltime_null_time();
     daylight_max_date = icaltime_null_time();
@@ -388,12 +386,12 @@ char *icaltimezone_get_tznames_from_vtimezone(icalcomponent *component)
     while (comp) {
         icalcomponent_kind type = icalcomponent_isa(comp);
         if (type == ICAL_XSTANDARD_COMPONENT || type == ICAL_XDAYLIGHT_COMPONENT) {
-            current_max_date = icaltime_null_time();
+            struct icaltimetype current_max_date = icaltime_null_time();
             current_tzname = NULL;
 
             /* Step through the properties. We want to find the TZNAME, and
                the largest DTSTART or RDATE. */
-            prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
+            icalproperty *prop = icalcomponent_get_first_property(comp, ICAL_ANY_PROPERTY);
             while (prop) {
                 switch (icalproperty_isa(prop)) {
                 case ICAL_TZNAME_PROPERTY:
@@ -1465,9 +1463,6 @@ static int get_offset(icaltimezone *zone)
 
 icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset, const char *tzname)
 {
-    icaltimezone *zone = NULL;
-    size_t i, count;
-
     if (!builtin_timezones) {
         icaltimezone_init_builtin_timezones();
     }
@@ -1480,10 +1475,10 @@ icaltimezone *icaltimezone_get_builtin_timezone_from_offset(int offset, const ch
         return NULL;
     }
 
-    count = builtin_timezones->num_elements;
+    size_t count = builtin_timezones->num_elements;
 
-    for (i = 0; i < count; i++) {
-        zone = icalarray_element_at(builtin_timezones, i);
+    for (size_t i = 0; i < count; i++) {
+        icaltimezone *zone = icalarray_element_at(builtin_timezones, i);
         if (zone) {
             icaltimezone_load_builtin_timezone(zone);
             int z_offset = get_offset(zone);

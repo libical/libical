@@ -91,14 +91,13 @@ char *icalenum_reqstat_code(icalrequeststatus stat)
 
 char *icalenum_reqstat_code_r(icalrequeststatus stat)
 {
-    int i, major, minor;
     char tmpbuf[36];
 
     int len = (int)(sizeof(request_status_map) / sizeof(request_status_map[0]));
-    for (i = 0; i < len && request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
+    for (int i = 0; i < len && request_status_map[i].kind != ICAL_UNKNOWN_STATUS; i++) {
         if (request_status_map[i].kind == stat) {
-            major = request_status_map[i].major;
-            minor = request_status_map[i].minor;
+            int major = request_status_map[i].major;
+            int minor = request_status_map[i].minor;
             snprintf(tmpbuf, sizeof(tmpbuf), "%i.%i", major, minor);
             return icalmemory_strdup(tmpbuf);
         }

@@ -337,11 +337,9 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
                                          const char *organizer, const char *attendee)
 {
     icalcomponent *comp;
-    icalproperty *p;
     struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
     icalpvl_elem itr;
     icaltimezone *utc_zone;
-    icalparameter *param;
 
     if (!attendee) {
         icalerror_set_errno(ICAL_USAGE_ERROR);
@@ -372,10 +370,8 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
             period.end = icaltime_from_timet_with_zone(s->end, 0, utc_zone);
             period.duration = icaldurationtype_null_duration();
 
-            p = icalproperty_new_freebusy(period);
-            param = icalparameter_new_fbtype(ICAL_FBTYPE_BUSY);
-            icalproperty_add_parameter(p, param);
-
+            icalproperty *p = icalproperty_new_freebusy(period);
+            icalproperty_add_parameter(p, icalparameter_new_fbtype(ICAL_FBTYPE_BUSY));
             icalcomponent_add_property(comp, p);
         }
     }

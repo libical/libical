@@ -543,7 +543,7 @@ int vcardcomponent_count_errors(vcardcomponent *comp)
     icalerror_check_arg_rz((comp != 0), "card");
 
     for (itr = icalpvl_head(comp->properties); itr != 0; itr = icalpvl_next(itr)) {
-        vcardproperty *p = (vcardproperty *)icalpvl_data(itr);
+        const vcardproperty *p = (vcardproperty *)icalpvl_data(itr);
         if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
             errors++;
         }
@@ -633,8 +633,8 @@ static int strcmpsafe(const char *a, const char *b)
 
 static int prop_compare(void *a, void *b)
 {
-    vcardproperty *p1 = (vcardproperty *)a;
-    vcardproperty *p2 = (vcardproperty *)b;
+    const vcardproperty *p1 = (vcardproperty *)a;
+    const vcardproperty *p2 = (vcardproperty *)b;
     vcardproperty_kind k1 = vcardproperty_isa(p1);
     vcardproperty_kind k2 = vcardproperty_isa(p2);
     int r = (int)(k1 - k2);
@@ -1036,7 +1036,7 @@ static void comp_to_v3(vcardcomponent *impl)
         vcardvalue_kind vkind = vcardvalue_isa(value);
         vcardparameter *param;
         char *subtype = NULL;
-        const char *mediatype, *uri, *xname = NULL, *xval = NULL;
+        const char *mediatype, *uri, *xname = NULL;
 
         next = icalpvl_next(itr);
 
@@ -1199,7 +1199,7 @@ static void comp_to_v3(vcardcomponent *impl)
         case VCARD_MEMBER_PROPERTY: {
             char *buf = NULL;
 
-            xval = vcardvalue_as_vcard_string(value);
+            const char *xval = vcardvalue_as_vcard_string(value);
             if (!xname) {
                 size_t buf_size = strlen(UUID_PREFIX) + strlen(xval) + 1;
                 char *buf_ptr = buf = icalmemory_new_buffer(buf_size);

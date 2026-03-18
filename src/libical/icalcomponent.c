@@ -1163,7 +1163,7 @@ int icalcomponent_count_errors(icalcomponent *component)
     icalerror_check_arg_rz((component != 0), "component");
 
     for (itr = icalpvl_head(component->properties); itr != 0; itr = icalpvl_next(itr)) {
-        icalproperty *p = (icalproperty *)icalpvl_data(itr);
+        const icalproperty *p = (icalproperty *)icalpvl_data(itr);
         if (icalproperty_isa(p) == ICAL_XLICERROR_PROPERTY) {
             errors++;
         }
@@ -1489,7 +1489,7 @@ icalpropiter icalcomponent_begin_property(icalcomponent *component, icalproperty
     icalpvl_elem i;
 
     for (i = icalpvl_head(component->properties); i != 0; i = icalpvl_next(i)) {
-        icalproperty *p = (icalproperty *)icalpvl_data(i);
+        const icalproperty *p = (icalproperty *)icalpvl_data(i);
 
         if (icalproperty_isa(p) == kind || kind == ICAL_ANY_PROPERTY) {
             icalpropiter itr = {kind, i};
@@ -1518,7 +1518,7 @@ icalproperty *icalpropiter_next(icalpropiter *i)
     }
 
     for (i->iter = icalpvl_next(i->iter); i->iter != 0; i->iter = icalpvl_next(i->iter)) {
-        icalproperty *p = (icalproperty *)icalpvl_data(i->iter);
+        const icalproperty *p = (icalproperty *)icalpvl_data(i->iter);
 
         if (icalproperty_isa(p) == i->kind || i->kind == ICAL_ANY_PROPERTY) {
             return icalpropiter_deref(i);
@@ -2306,7 +2306,7 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
                                                         const char *tzid,
                                                         icalarray *tzids_to_rename)
 {
-    int suffix, max_suffix = 0;
+    int max_suffix = 0;
     size_t i, num_elements, tzid_len;
     char *new_tzid, suffix_buf[32];
 
@@ -2361,7 +2361,7 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
 
                 /* Convert the suffix to an integer and remember the maximum numeric
                    suffix found. */
-                suffix = atoi(existing_tzid + existing_tzid_len);
+                int suffix = atoi(existing_tzid + existing_tzid_len);
                 if (max_suffix < suffix) {
                     max_suffix = suffix;
                 }
@@ -2447,7 +2447,6 @@ void icalcomponent_foreach_tzid(icalcomponent *comp,
                                 void *callback_data)
 {
     icalproperty *prop;
-    icalparameter *param;
     icalcomponent *subcomp;
 
     /* First look for any TZID parameters used in this component itself. */
@@ -2462,7 +2461,7 @@ void icalcomponent_foreach_tzid(icalcomponent *comp,
             kind == ICAL_DUE_PROPERTY ||
             kind == ICAL_EXDATE_PROPERTY ||
             kind == ICAL_RDATE_PROPERTY) {
-            param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER);
+            icalparameter *param = icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER);
             if (param) {
                 (*callback)(param, callback_data);
             }
@@ -2483,7 +2482,6 @@ icaltimezone *icalcomponent_get_timezone(icalcomponent *comp, const char *tzid)
 {
     icaltimezone *zone;
     size_t lower, upper;
-    int cmp;
 
     if (!comp->timezones) {
         return NULL;
@@ -2504,7 +2502,7 @@ icaltimezone *icalcomponent_get_timezone(icalcomponent *comp, const char *tzid)
         zone = icalarray_element_at(comp->timezones, middle);
         const char *zone_tzid = icaltimezone_get_tzid(zone);
         if (zone_tzid != NULL) {
-            cmp = strcmp(tzid, zone_tzid);
+            int cmp = strcmp(tzid, zone_tzid);
             if (cmp == 0) {
                 return zone;
             } else if (cmp < 0) {
@@ -2722,8 +2720,8 @@ static int strcmpsafe(const char *a, const char *b)
 
 static int prop_compare(void *a, void *b)
 {
-    icalproperty *p1 = (icalproperty *)a;
-    icalproperty *p2 = (icalproperty *)b;
+    const icalproperty *p1 = (icalproperty *)a;
+    const icalproperty *p2 = (icalproperty *)b;
     icalproperty_kind k1 = icalproperty_isa(p1);
     icalproperty_kind k2 = icalproperty_isa(p2);
     int r = (int)(k1 - k2);
