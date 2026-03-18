@@ -224,6 +224,9 @@ The following functions have been added:
   * `icaltzutil_fetch_timezone()`
   * `icalrecurrencetype_clear()`
   * `icalproperty_new_impl()`
+  * `icaltimezone_array_new()`
+  * `icaltimezone_array_append_from_vtimezone()`
+  * `icaltimezone_array_free()`
 
 ### Removed macros
 
