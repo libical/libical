@@ -25,9 +25,7 @@ Value
   .kind_to_string parent="ICal.ValueKind" symbol_type="method" instance_idx=0 name="to_string"
   .kind_to_property_kind parent="ICal.ValueKind" symbol_type="method" instance_idx=0 name="to_property_kind"
 Timezone
-  .array_append_from_vtimezone parent="ICal.Array" symbol_type="method" instance_idx=0 name="append_timezone_from_vtimezone"
   .array_element_at parent="ICal.Array" symbol_type="method" instance_idx=0 name="timezone_element_at"
-  .array_new parent="ICal.Array" name="new_timezone"
   .dump_changes.fp type="GLib.FileStream"
 Recurrence
   .frequency_to_string parent="ICal.RecurrenceFrequency" symbol_type="method" instance_idx=0 name="to_string"
