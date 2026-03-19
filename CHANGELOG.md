@@ -317,7 +317,7 @@ for details about API changes since libical 3.x.
 - WARNING: Version 2 IS NOT Binary Compatible with Older Versions
 - Version 2 is Source Compatible with Older Versions
 - Lots of source code scrubbing
-- [New] RSCALE support (requires libicu from <http://www.icu-project.org>)
+- [New] RSCALE support (requires libicu from <https://icu.unicode.org>)
 - [New] CalDAV attachment support (draft-ietf-calext-caldav-attachments)
 - [New] Resurrect the Berkeley DB storage support
 - [Bug] issue83: Incorrect recurrence generation for weekly pattern

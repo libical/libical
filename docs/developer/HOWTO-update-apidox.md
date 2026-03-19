@@ -1,6 +1,6 @@
 # HOWTO: Update C/C++ API Documentation
 
-How to use doxygen to update and upload the C/C++ API documentation to <http://libical.github.io/libical>.
+How to use doxygen to update and upload the C/C++ API documentation to <https://libical.github.io/libical>.
 
 ## Preparations
 
@@ -39,6 +39,6 @@ Then add/update to the gh-pages branch:
 
 ## Finally
 
-Review the updated <http://libical.github.io/libical/index.html>  (might take a couple minutes to update)
+Review the updated <https://libical.github.io/libical/index.html>  (might take a couple minutes to update)
 
 At release time, don't forget to add the generated build-apidox/libical.tag file to the github release.

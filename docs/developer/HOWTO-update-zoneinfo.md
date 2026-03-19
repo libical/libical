@@ -7,7 +7,7 @@ Please use that script (update as needed).
 
 ## Preparations
 
-1. Retrieve the most recent tzdata from IANA from <http://www.iana.org/time-zones>
+1. Retrieve the most recent tzdata from IANA from <https://www.iana.org/time-zones>
 
    Look for a gzip-compressed tar file (a "tarball") named tzdata2025c.tar.gz, for example.
 

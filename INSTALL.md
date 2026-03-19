@@ -133,7 +133,7 @@ For more information about building CMake projects on Android see
 
 - libicu "International Components for Unicode" development libraries.
   Highly recommended for RSCALE support.
-  libicu can be found at <http://www.icu-project.org>
+  libicu can be found at <https://icu.unicode.org>
 
   If CMake doesn't locate your libicu installation try setting the
   ICU_ROOT or ICU_BASE environment variables to the top folder where

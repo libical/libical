@@ -22,7 +22,7 @@ set_package_properties(
     DESCRIPTION
       "API Documentation system"
     URL
-      "http://www.doxygen.org"
+      "https://www.doxygen.org"
     PURPOSE
       "Needed to build the API documentation."
 )
