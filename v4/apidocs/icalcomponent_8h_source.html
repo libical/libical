@@ -24,7 +24,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;4.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;4.0 UNRELEASED <a href="https://libical.github.io/libical/v3/apidocs/" target="_blank">Go to the stable 3.0 documentation</a></span>
    </div>
   </td>
  </tr>
@@ -348,7 +348,7 @@ $(function() {
 <div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span>                                                                     <span class="keywordtype">void</span> *data),</div>
 <div class="line"><a id="l00479" name="l00479"></a><span class="lineno">  479</span>                                                    <span class="keywordtype">void</span> *callback_data);</div>
 <div class="line"><a id="l00480" name="l00480"></a><span class="lineno">  480</span></div>
-<div class="line"><a id="l00484" name="l00484"></a><span class="lineno">  484</span>LIBICAL_ICAL_EXPORT icaltimezone *<a class="code hl_function" href="icalcomponent_8h.html#abc399fff22411a68f6f28ff93f625f3d">icalcomponent_get_timezone</a>(icalcomponent *comp,</div>
+<div class="line"><a id="l00484" name="l00484"></a><span class="lineno">  484</span>LIBICAL_ICAL_EXPORT <a class="code hl_typedef" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *<a class="code hl_function" href="icalcomponent_8h.html#abc399fff22411a68f6f28ff93f625f3d">icalcomponent_get_timezone</a>(icalcomponent *comp,</div>
 <div class="line"><a id="l00485" name="l00485"></a><span class="lineno">  485</span>                                                             <span class="keyword">const</span> <span class="keywordtype">char</span> *tzid);</div>
 <div class="line"><a id="l00486" name="l00486"></a><span class="lineno">  486</span></div>
 <div class="line"><a id="l00509" name="l00509"></a><span class="lineno">  509</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">bool</span> <a class="code hl_function" href="icalcomponent_8h.html#a9f262c20bc8ae92eb605ed949a60d4a5">icalproperty_recurrence_is_excluded</a>(icalcomponent *comp,</div>
@@ -451,6 +451,7 @@ $(function() {
 <div class="ttc" id="aicalcomponent_8h_html_af4a04ae38f7633b65f629452aff3376a"><div class="ttname"><a href="icalcomponent_8h.html#af4a04ae38f7633b65f629452aff3376a">icalcomponent_new_from_string</a></div><div class="ttdeci">icalcomponent * icalcomponent_new_from_string(const char *str)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition</b> icalcomponent.c:124</div></div>
 <div class="ttc" id="aicalenums_8h_html"><div class="ttname"><a href="icalenums_8h.html">icalenums.h</a></div></div>
 <div class="ttc" id="aicalproperty_8h_html"><div class="ttname"><a href="icalproperty_8h.html">icalproperty.h</a></div></div>
+<div class="ttc" id="aicaltime_8h_html_a8561e9d4374ca1e29cd5ade459a50208"><div class="ttname"><a href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a></div><div class="ttdeci">struct _icaltimezone icaltimezone</div><div class="ttdoc">An opaque struct representing a timezone. We declare this here to avoid a circular dependency.</div><div class="ttdef"><b>Definition</b> icaltime.h:84</div></div>
 <div class="ttc" id="astructicalcompiter_html"><div class="ttname"><a href="structicalcompiter.html">icalcompiter</a></div><div class="ttdef"><b>Definition</b> icalcomponent.h:26</div></div>
 <div class="ttc" id="astructicaldurationtype_html"><div class="ttname"><a href="structicaldurationtype.html">icaldurationtype</a></div><div class="ttdoc">A struct representing a duration.</div><div class="ttdef"><b>Definition</b> icalduration.h:30</div></div>
 <div class="ttc" id="astructicalpropiter_html"><div class="ttname"><a href="structicalpropiter.html">icalpropiter</a></div><div class="ttdef"><b>Definition</b> icalcomponent.h:31</div></div>

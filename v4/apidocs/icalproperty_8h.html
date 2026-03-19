@@ -24,7 +24,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;4.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;4.0 UNRELEASED <a href="https://libical.github.io/libical/v3/apidocs/" target="_blank">Go to the stable 3.0 documentation</a></span>
    </div>
   </td>
  </tr>
@@ -97,18 +97,18 @@ typedef struct icalparamiter&#160;</td><td class="memItemRight" valign="bottom">
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0fd41a53ef9551fe25343304a978b714" id="r_a0fd41a53ef9551fe25343304a978b714"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0fd41a53ef9551fe25343304a978b714">icalparameter_get_parent</a> (const <a class="el" href="structicalparameter__impl.html">icalparameter</a> *param)</td></tr>
-<tr class="memitem:add1ff57f4b9ffe33607a1629e68cdf1f" id="r_add1ff57f4b9ffe33607a1629e68cdf1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add1ff57f4b9ffe33607a1629e68cdf1f">icalparameter_set_parent</a> (<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param, icalproperty *property)</td></tr>
+<tr class="memitem:a0fd41a53ef9551fe25343304a978b714" id="r_a0fd41a53ef9551fe25343304a978b714"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0fd41a53ef9551fe25343304a978b714">icalparameter_get_parent</a> (const icalparameter *param)</td></tr>
+<tr class="memitem:add1ff57f4b9ffe33607a1629e68cdf1f" id="r_add1ff57f4b9ffe33607a1629e68cdf1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add1ff57f4b9ffe33607a1629e68cdf1f">icalparameter_set_parent</a> (icalparameter *param, icalproperty *property)</td></tr>
 <tr class="memitem:a5500f052153336e1d386e36be790abd3" id="r_a5500f052153336e1d386e36be790abd3"><td class="memItemLeft" align="right" valign="top"><a id="a5500f052153336e1d386e36be790abd3" name="a5500f052153336e1d386e36be790abd3"></a>
 icalvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalparameter_value_to_value_kind</b> (icalparameter_value value)</td></tr>
 <tr class="memitem:ab0b91eb9e169a38895570e02c40cfe89" id="r_ab0b91eb9e169a38895570e02c40cfe89"><td class="memItemLeft" align="right" valign="top"><a id="ab0b91eb9e169a38895570e02c40cfe89" name="ab0b91eb9e169a38895570e02c40cfe89"></a>
-<a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparamiter_deref</b> (<a class="el" href="structicalparamiter.html">icalparamiter</a> *i)</td></tr>
+icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparamiter_deref</b> (<a class="el" href="structicalparamiter.html">icalparamiter</a> *i)</td></tr>
 <tr class="memitem:abc21868b9acdfea79f8d8ec221f34795" id="r_abc21868b9acdfea79f8d8ec221f34795"><td class="memItemLeft" align="right" valign="top"><a id="abc21868b9acdfea79f8d8ec221f34795" name="abc21868b9acdfea79f8d8ec221f34795"></a>
-<a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparamiter_next</b> (<a class="el" href="structicalparamiter.html">icalparamiter</a> *i)</td></tr>
+icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparamiter_next</b> (<a class="el" href="structicalparamiter.html">icalparamiter</a> *i)</td></tr>
 <tr class="memitem:a9cc3e93186d8e81cfc46705dbcc1e054" id="r_a9cc3e93186d8e81cfc46705dbcc1e054"><td class="memItemLeft" align="right" valign="top"><a id="a9cc3e93186d8e81cfc46705dbcc1e054" name="a9cc3e93186d8e81cfc46705dbcc1e054"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_action_to_string</b> (icalproperty_action)</td></tr>
 <tr class="memitem:adbad161a2bc9e83fb921a6fcbd4e8ba6" id="r_adbad161a2bc9e83fb921a6fcbd4e8ba6"><td class="memItemLeft" align="right" valign="top"><a id="adbad161a2bc9e83fb921a6fcbd4e8ba6" name="adbad161a2bc9e83fb921a6fcbd4e8ba6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_add_parameter</b> (icalproperty *prop, <a class="el" href="structicalparameter__impl.html">icalparameter</a> *parameter)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_add_parameter</b> (icalproperty *prop, icalparameter *parameter)</td></tr>
 <tr class="memitem:ad4f04d3439224ea4b77499c9b69d37fe" id="r_ad4f04d3439224ea4b77499c9b69d37fe"><td class="memItemLeft" align="right" valign="top"><a id="ad4f04d3439224ea4b77499c9b69d37fe" name="ad4f04d3439224ea4b77499c9b69d37fe"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_add_parameters</b> (struct icalproperty_impl *prop, va_list args)</td></tr>
 <tr class="memitem:a6ebce0cd48cf395bc8e799b7030fe7bb" id="r_a6ebce0cd48cf395bc8e799b7030fe7bb"><td class="memItemLeft" align="right" valign="top"><a id="a6ebce0cd48cf395bc8e799b7030fe7bb" name="a6ebce0cd48cf395bc8e799b7030fe7bb"></a>
@@ -133,10 +133,10 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_enum_t
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_free</b> (icalproperty *prop)</td></tr>
 <tr class="memitem:a6a58eebb7a987d6f286097753126dfbd" id="r_a6a58eebb7a987d6f286097753126dfbd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a58eebb7a987d6f286097753126dfbd">icalproperty_get_allow_empty_properties</a> (void)</td></tr>
 <tr class="memitem:a5e7195290a9fd4437de863a1a2bf46dd" id="r_a5e7195290a9fd4437de863a1a2bf46dd"><td class="memItemLeft" align="right" valign="top"><a id="a5e7195290a9fd4437de863a1a2bf46dd" name="a5e7195290a9fd4437de863a1a2bf46dd"></a>
-<a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_first_parameter</b> (icalproperty *prop, icalparameter_kind kind)</td></tr>
+icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_first_parameter</b> (icalproperty *prop, icalparameter_kind kind)</td></tr>
 <tr class="memitem:aa9cfb30c2a2237eb52f319516ad0f0f0" id="r_aa9cfb30c2a2237eb52f319516ad0f0f0"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9cfb30c2a2237eb52f319516ad0f0f0">icalproperty_get_iana_name</a> (const icalproperty *prop)</td></tr>
 <tr class="memitem:ad7543361e1e99ff6cfc4609eefaf4cd9" id="r_ad7543361e1e99ff6cfc4609eefaf4cd9"><td class="memItemLeft" align="right" valign="top"><a id="ad7543361e1e99ff6cfc4609eefaf4cd9" name="ad7543361e1e99ff6cfc4609eefaf4cd9"></a>
-<a class="el" href="structicalparameter__impl.html">icalparameter</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_next_parameter</b> (icalproperty *prop, icalparameter_kind kind)</td></tr>
+icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_next_parameter</b> (icalproperty *prop, icalparameter_kind kind)</td></tr>
 <tr class="memitem:ae5ea07cdaaaed1428a338fdff2665ea5" id="r_ae5ea07cdaaaed1428a338fdff2665ea5"><td class="memItemLeft" align="right" valign="top"><a id="ae5ea07cdaaaed1428a338fdff2665ea5" name="ae5ea07cdaaaed1428a338fdff2665ea5"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_parameter_as_string</b> (icalproperty *prop, const char *name)</td></tr>
 <tr class="memitem:a7ab1b6d9dd8730d5fcdcdffe97cf6c2b" id="r_a7ab1b6d9dd8730d5fcdcdffe97cf6c2b"><td class="memItemLeft" align="right" valign="top"><a id="a7ab1b6d9dd8730d5fcdcdffe97cf6c2b" name="a7ab1b6d9dd8730d5fcdcdffe97cf6c2b"></a>
@@ -145,7 +145,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_pa
 <tr class="memitem:a4d87c891a4cef987cee55c29a35e35d1" id="r_a4d87c891a4cef987cee55c29a35e35d1"><td class="memItemLeft" align="right" valign="top"><a id="a4d87c891a4cef987cee55c29a35e35d1" name="a4d87c891a4cef987cee55c29a35e35d1"></a>
 char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_property_name_r</b> (const icalproperty *prop)</td></tr>
 <tr class="memitem:a00695d13cc8ae9f10974bea7db8f2621" id="r_a00695d13cc8ae9f10974bea7db8f2621"><td class="memItemLeft" align="right" valign="top"><a id="a00695d13cc8ae9f10974bea7db8f2621" name="a00695d13cc8ae9f10974bea7db8f2621"></a>
-<a class="el" href="structicalvalue__impl.html">icalvalue</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_value</b> (const icalproperty *prop)</td></tr>
+icalvalue *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_value</b> (const icalproperty *prop)</td></tr>
 <tr class="memitem:a631ae4a398eefc1a8a5cd634a3ea9b02" id="r_a631ae4a398eefc1a8a5cd634a3ea9b02"><td class="memItemLeft" align="right" valign="top"><a id="a631ae4a398eefc1a8a5cd634a3ea9b02" name="a631ae4a398eefc1a8a5cd634a3ea9b02"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_value_as_string</b> (const icalproperty *prop)</td></tr>
 <tr class="memitem:a8822c6176a45af460ade5186fc985251" id="r_a8822c6176a45af460ade5186fc985251"><td class="memItemLeft" align="right" valign="top"><a id="a8822c6176a45af460ade5186fc985251" name="a8822c6176a45af460ade5186fc985251"></a>
@@ -176,18 +176,18 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_
 <tr class="memdesc:a68baed35b3b1af4ababf2c62b2ced68d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all parameters with the specified kind.  <br /></td></tr>
 <tr class="memitem:a51587b7b70961ff814f964bf81a64afe" id="r_a51587b7b70961ff814f964bf81a64afe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51587b7b70961ff814f964bf81a64afe">icalproperty_remove_parameter_by_name</a> (icalproperty *prop, const char *name)</td></tr>
 <tr class="memdesc:a51587b7b70961ff814f964bf81a64afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all parameters with the specified name.  <br /></td></tr>
-<tr class="memitem:a3e16fd227adaaa8ec34aea6d2d565c3e" id="r_a3e16fd227adaaa8ec34aea6d2d565c3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e16fd227adaaa8ec34aea6d2d565c3e">icalproperty_remove_parameter_by_ref</a> (icalproperty *prop, <a class="el" href="structicalparameter__impl.html">icalparameter</a> *param)</td></tr>
+<tr class="memitem:a3e16fd227adaaa8ec34aea6d2d565c3e" id="r_a3e16fd227adaaa8ec34aea6d2d565c3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e16fd227adaaa8ec34aea6d2d565c3e">icalproperty_remove_parameter_by_ref</a> (icalproperty *prop, icalparameter *param)</td></tr>
 <tr class="memdesc:a3e16fd227adaaa8ec34aea6d2d565c3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the specified parameter reference from the property.  <br /></td></tr>
 <tr class="memitem:ac19e7431ad06f8896be71f7ea891ffa6" id="r_ac19e7431ad06f8896be71f7ea891ffa6"><td class="memItemLeft" align="right" valign="top"><a id="ac19e7431ad06f8896be71f7ea891ffa6" name="ac19e7431ad06f8896be71f7ea891ffa6"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_resourcetype_to_string</b> (icalproperty_resourcetype)</td></tr>
 <tr class="memitem:a4e85ae6c619d9eb990965327d7be9a67" id="r_a4e85ae6c619d9eb990965327d7be9a67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e85ae6c619d9eb990965327d7be9a67">icalproperty_set_allow_empty_properties</a> (bool enable)</td></tr>
 <tr class="memitem:aba3f3ce5a2f0a0c1b2e46022d63ce629" id="r_aba3f3ce5a2f0a0c1b2e46022d63ce629"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba3f3ce5a2f0a0c1b2e46022d63ce629">icalproperty_set_iana_name</a> (icalproperty *prop, const char *name)</td></tr>
 <tr class="memitem:aa4ab8877f11c9e23ceff9c538bbb6c18" id="r_aa4ab8877f11c9e23ceff9c538bbb6c18"><td class="memItemLeft" align="right" valign="top"><a id="aa4ab8877f11c9e23ceff9c538bbb6c18" name="aa4ab8877f11c9e23ceff9c538bbb6c18"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_parameter</b> (icalproperty *prop, <a class="el" href="structicalparameter__impl.html">icalparameter</a> *parameter)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_parameter</b> (icalproperty *prop, icalparameter *parameter)</td></tr>
 <tr class="memitem:a4a71e5508c72c370ab42f7bd4fe19e49" id="r_a4a71e5508c72c370ab42f7bd4fe19e49"><td class="memItemLeft" align="right" valign="top"><a id="a4a71e5508c72c370ab42f7bd4fe19e49" name="a4a71e5508c72c370ab42f7bd4fe19e49"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_parameter_from_string</b> (icalproperty *prop, const char *name, const char *value)</td></tr>
 <tr class="memitem:a774df19c0bd763874ce8c0f273380a1e" id="r_a774df19c0bd763874ce8c0f273380a1e"><td class="memItemLeft" align="right" valign="top"><a id="a774df19c0bd763874ce8c0f273380a1e" name="a774df19c0bd763874ce8c0f273380a1e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_value</b> (icalproperty *prop, <a class="el" href="structicalvalue__impl.html">icalvalue</a> *value)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_value</b> (icalproperty *prop, icalvalue *value)</td></tr>
 <tr class="memitem:aded432c51c2f3e0b08099ce6b0ca547b" id="r_aded432c51c2f3e0b08099ce6b0ca547b"><td class="memItemLeft" align="right" valign="top"><a id="aded432c51c2f3e0b08099ce6b0ca547b" name="aded432c51c2f3e0b08099ce6b0ca547b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_value_from_string</b> (icalproperty *prop, const char *str, const char *type)</td></tr>
 <tr class="memitem:ae729fcc22726fe05c9981735bb229be0" id="r_ae729fcc22726fe05c9981735bb229be0"><td class="memItemLeft" align="right" valign="top"><a id="ae729fcc22726fe05c9981735bb229be0" name="ae729fcc22726fe05c9981735bb229be0"></a>
@@ -214,8 +214,8 @@ icalproperty_transp&#160;</td><td class="memItemRight" valign="bottom"><b>icalpr
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_transp_to_string</b> (icalproperty_transp)</td></tr>
 <tr class="memitem:a9ad10def86b672932866c1f588c0be9f" id="r_a9ad10def86b672932866c1f588c0be9f"><td class="memItemLeft" align="right" valign="top"><a id="a9ad10def86b672932866c1f588c0be9f" name="a9ad10def86b672932866c1f588c0be9f"></a>
 icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_value_kind_to_kind</b> (icalvalue_kind kind)</td></tr>
-<tr class="memitem:a0985be5532b1bc4e5b4dc6858aa05883" id="r_a0985be5532b1bc4e5b4dc6858aa05883"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0985be5532b1bc4e5b4dc6858aa05883">icalvalue_get_parent</a> (const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *value)</td></tr>
-<tr class="memitem:a810f13ffbf32703b6f1e71ad3e0189c7" id="r_a810f13ffbf32703b6f1e71ad3e0189c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a810f13ffbf32703b6f1e71ad3e0189c7">icalvalue_set_parent</a> (<a class="el" href="structicalvalue__impl.html">icalvalue</a> *value, icalproperty *property)</td></tr>
+<tr class="memitem:a0985be5532b1bc4e5b4dc6858aa05883" id="r_a0985be5532b1bc4e5b4dc6858aa05883"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0985be5532b1bc4e5b4dc6858aa05883">icalvalue_get_parent</a> (const icalvalue *value)</td></tr>
+<tr class="memitem:a810f13ffbf32703b6f1e71ad3e0189c7" id="r_a810f13ffbf32703b6f1e71ad3e0189c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a810f13ffbf32703b6f1e71ad3e0189c7">icalvalue_set_parent</a> (icalvalue *value, icalproperty *property)</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a0fd41a53ef9551fe25343304a978b714" name="a0fd41a53ef9551fe25343304a978b714"></a>
@@ -227,7 +227,7 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         <tr>
           <td class="memname">icalproperty * icalparameter_get_parent </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structicalparameter__impl.html">icalparameter</a> *</td>          <td class="paramname"><span class="paramname"><em>param</em></span></td><td>)</td>
+          <td class="paramtype">const icalparameter *</td>          <td class="paramname"><span class="paramname"><em>param</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -245,7 +245,7 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         <tr>
           <td class="memname">void icalparameter_set_parent </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *</td>          <td class="paramname"><span class="paramname"><em>param</em></span>, </td>
+          <td class="paramtype">icalparameter *</td>          <td class="paramname"><span class="paramname"><em>param</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -455,7 +455,7 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structicalparameter__impl.html">icalparameter</a> *</td>          <td class="paramname"><span class="paramname"><em>param</em></span>&#160;)</td>
+          <td class="paramtype">icalparameter *</td>          <td class="paramname"><span class="paramname"><em>param</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -537,7 +537,7 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         <tr>
           <td class="memname">icalproperty * icalvalue_get_parent </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structicalvalue__impl.html">icalvalue</a> *</td>          <td class="paramname"><span class="paramname"><em>value</em></span></td><td>)</td>
+          <td class="paramtype">const icalvalue *</td>          <td class="paramname"><span class="paramname"><em>value</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -555,7 +555,7 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         <tr>
           <td class="memname">void icalvalue_set_parent </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structicalvalue__impl.html">icalvalue</a> *</td>          <td class="paramname"><span class="paramname"><em>value</em></span>, </td>
+          <td class="paramtype">icalvalue *</td>          <td class="paramname"><span class="paramname"><em>value</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

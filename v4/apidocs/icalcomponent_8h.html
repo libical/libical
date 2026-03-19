@@ -24,7 +24,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;4.0</span>
+   <div id="projectname">Libical API Documentation<span id="projectnumber">&#160;4.0 UNRELEASED <a href="https://libical.github.io/libical/v3/apidocs/" target="_blank">Go to the stable 3.0 documentation</a></span>
    </div>
   </td>
  </tr>
@@ -139,7 +139,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_count_pr
 <tr class="memitem:aef846b1f42b96a5d209323c347a891a6" id="r_aef846b1f42b96a5d209323c347a891a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef846b1f42b96a5d209323c347a891a6">icalcomponent_foreach_recurrence</a> (icalcomponent *comp, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> start, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> end, void(*callback)(icalcomponent *comp, const struct <a class="el" href="structicaltime__span.html">icaltime_span</a> *span, void *data), void *callback_data)</td></tr>
 <tr class="memdesc:aef846b1f42b96a5d209323c347a891a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles through all recurrences of an event.  <br /></td></tr>
 <tr class="memitem:addacbedbeccb2e2d31ae9a6963e19e49" id="r_addacbedbeccb2e2d31ae9a6963e19e49"><td class="memItemLeft" align="right" valign="top"><a id="addacbedbeccb2e2d31ae9a6963e19e49" name="addacbedbeccb2e2d31ae9a6963e19e49"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_foreach_tzid</b> (icalcomponent *comp, void(*callback)(<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param, void *data), void *callback_data)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_foreach_tzid</b> (icalcomponent *comp, void(*callback)(icalparameter *param, void *data), void *callback_data)</td></tr>
 <tr class="memdesc:addacbedbeccb2e2d31ae9a6963e19e49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the given function for each TZID parameter found in the component, and any subcomponents. <br /></td></tr>
 <tr class="memitem:ae9147a2140676139e7535de4836dcd29" id="r_ae9147a2140676139e7535de4836dcd29"><td class="memItemLeft" align="right" valign="top"><a id="ae9147a2140676139e7535de4836dcd29" name="ae9147a2140676139e7535de4836dcd29"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_free</b> (icalcomponent *component)</td></tr>
@@ -196,7 +196,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_sequ
 <tr class="memitem:a80c556f16bf3d5f16d0c6835db6e8f25" id="r_a80c556f16bf3d5f16d0c6835db6e8f25"><td class="memItemLeft" align="right" valign="top"><a id="a80c556f16bf3d5f16d0c6835db6e8f25" name="a80c556f16bf3d5f16d0c6835db6e8f25"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_summary</b> (icalcomponent *comp)</td></tr>
 <tr class="memitem:abc399fff22411a68f6f28ff93f625f3d" id="r_abc399fff22411a68f6f28ff93f625f3d"><td class="memItemLeft" align="right" valign="top"><a id="abc399fff22411a68f6f28ff93f625f3d" name="abc399fff22411a68f6f28ff93f625f3d"></a>
-<a class="el" href="struct__icaltimezone.html">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_timezone</b> (icalcomponent *comp, const char *tzid)</td></tr>
+<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_timezone</b> (icalcomponent *comp, const char *tzid)</td></tr>
 <tr class="memdesc:abc399fff22411a68f6f28ff93f625f3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the icaltimezone in the component corresponding to the TZID, or NULL if it can't be found. <br /></td></tr>
 <tr class="memitem:ac18738ce6b5f6bce894e0dff390735cf" id="r_ac18738ce6b5f6bce894e0dff390735cf"><td class="memItemLeft" align="right" valign="top"><a id="ac18738ce6b5f6bce894e0dff390735cf" name="ac18738ce6b5f6bce894e0dff390735cf"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_uid</b> (icalcomponent *comp)</td></tr>
