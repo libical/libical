@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Libical Manual</title>
-        <base href="/">
+        <title>Internal Limitations - Libical Manual</title>
 
 
         <!-- Custom HTML head -->
@@ -175,14 +174,85 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="internal-limits"><a class="header" href="#internal-limits">Internal Limits</a></h1>
+<p>In order to keep processing times from getting out of hand for huge (or bad) input data
+libical enforces these internal limits.  However, these limits can be changed at runtime
+using the <code>icallimit_set()</code> function. Similarly, the limits can be queried using <code>icallimit_get()</code>.</p>
+<p>The internal limits and their default values are shown here:</p>
+<ul>
+<li>
+<p>Maximum number of parse failures allowed in a calendar file before processing halts</p>
+<pre><code>Kind = ICAL_LIMIT_PARSE_FAILURES
+Default = 1000 (one thousand)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of parse characters to search in a calendar component for the next parameter or property</p>
+<pre><code>Kind = ICAL_LIMIT_PARSE_SEARCH
+Default = 100000 (one hundred thousand)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of parse failure messages inserted into the output (by <code>insert_error()</code>)</p>
+<pre><code>Kind = ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES
+Default = 100 (one hundred)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of properties allowed in a calendar component</p>
+<pre><code>Kind = ICAL_LIMIT_PROPERTIES
+Default = 10000 (ten thousand)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of parameters allowed for a property</p>
+<pre><code>Kind = ICAL_LIMIT_PARAMETERS
+Default = 100 (one hundred)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of characters for a value</p>
+<pre><code>Kind = ICAL_LIMIT_VALUE_CHARS
+Default = 10485760 (10 * 1024 * 1024 ie. 10 mega chars)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of values allowed for multi-valued properties</p>
+<pre><code>Kind = ICAL_LIMIT_PROPERTY_VALUES
+Default = 500
+</code></pre>
+</li>
+<li>
+<p>Maximum number of times to search for the next recurrence before giving up</p>
+<pre><code>Kind = ICAL_LIMIT_RECURRENCE_SEARCH
+Default = 100000 (one hundred thousand)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of times to search for the next recurrence before time is considered standing still</p>
+<pre><code>Kind = ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL
+Default = 50 (fifty)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of times to search vtimezone rrules for an occurrence before the specified end year</p>
+<pre><code>Kind = ICAL_LIMIT_RRULE_SEARCH
+Default = 100 (one hundred)
+</code></pre>
+</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="KnownExceptions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
 
+                            <a rel="next prefetch" href="rfcs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -190,7 +260,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="KnownExceptions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
 
+                    <a rel="next prefetch" href="rfcs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
             </nav>
 
         </div>

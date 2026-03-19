@@ -13,21 +13,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -37,12 +36,24 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-ea1c8da4.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="toc-efbb6a9c.js"></script>
     </head>
     <body>
-    <div id="body-container">
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -71,56 +82,59 @@
             html.classList.add("js");
         </script>
 
-        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
+                sidebar_toggle.checked = false;
             }
-            sidebar_toggle.checked = sidebar === 'visible';
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
                 <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
             </noscript>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="mdbook-page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
                         </label>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
                         </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
                         </button>
                     </div>
 
@@ -128,37 +142,42 @@
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
 
                     </div>
                 </div>
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
                     </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
                         </ul>
                     </div>
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
 
-                <div id="content" class="content">
+                <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="libical--an-implementation-of-icalendar-protocols-and-data-formats"><a class="header" href="#libical--an-implementation-of-icalendar-protocols-and-data-formats">Libical — an implementation of iCalendar protocols and data formats</a></h1>
-<p><a href="https://github.com/libical/libical/actions"><img src="https://github.com/libical/libical/actions/workflows/build.yml/badge.svg" alt="Github workflow" /></a>
-<a href="https://repology.org/metapackage/libical"><img src="https://repology.org/badge/tiny-repos/libical.svg" alt="Packaging status" /></a></p>
+<p><a href="https://github.com/libical/libical/actions"><img src="https://github.com/libical/libical/actions/workflows/build.yml/badge.svg" alt="Github workflow"></a>
+<a href="https://repology.org/metapackage/libical"><img src="https://repology.org/badge/tiny-repos/libical.svg" alt="Packaging status"></a></p>
 <h2 id="about"><a class="header" href="#about">About</a></h2>
 <p>Libical — an implementation of iCalendar protocols and data formats</p>
 <p>Most of the code in here was written by Eric Busboom at the end
@@ -169,7 +188,7 @@ at <a href="https://libical.github.io/libical">https://libical.github.io/libical
 and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.</p>
-<p>Thanks to our <a href="CONTRIBUTORS.html">contributors</a>.</p>
+<p>Thanks to our <a href="#contributors">contributors</a>.</p>
 <h2 id="rfcs"><a class="header" href="#rfcs">RFCs</a></h2>
 <p>See <a href="docs/rfcs.html">RFC calendar standards</a> for list of RFCs supported by this library.</p>
 <h2 id="license"><a class="header" href="#license">License</a></h2>
@@ -180,13 +199,16 @@ for a copy of this license.</p>
 General Public License (LGPL) v2.1. See <a href="https://www.gnu.org/licenses/lgpl-2.1.txt">https://www.gnu.org/licenses/lgpl-2.1.txt</a>
 for a copy of this license.</p>
 <p>This dual license ensures that the library can be incorporated into
-both proprietary code and GPL'd programs, and will benefit from improvements
+both proprietary code and GPL’d programs, and will benefit from improvements
 made by programmers in both realms. We (the libical developers) will only
 accept changes to this library if they are similarly dual-licensed.</p>
+<p>Some 3rdparty software with compatible licensing may be bundled with libcal.
+Please refer to our <a href="#3rdparty">3rdparty list</a> to see the projects
+included, along with their respective licenses.</p>
 <h2 id="building"><a class="header" href="#building">Building</a></h2>
-<p>See the <a href="INSTALL.html">Building Libical</a> instructions.</p>
+<p>See the <a href="#building-libical">Building Libical</a> instructions.</p>
 <h2 id="documentation"><a class="header" href="#documentation">Documentation</a></h2>
-<p>For new releases please refer to our <a href="CHANGELOG.html">Change Log</a> for a high-level
+<p>For new releases please refer to our <a href="#changelog">Change Log</a> for a high-level
 overview of changes since the previous version.</p>
 <p>See the <a href="https://libical.github.io/libical/v4/apidocs/">C API documentation</a> and
 <a href="https://libical.github.io/libical/v4/libical-glib/">glibc API documentation</a>.</p>
@@ -205,20 +227,20 @@ See <a href="src/libicalvcal/README.txt">src/libicalvcal/README.TXT</a> for deta
 <li><a href="https://www.cyrusimap.org">Cyrus Email/Calendars/Contacts Server</a></li>
 <li><a href="https://syncevolution.org">syncEvolution</a></li>
 <li><a href="https://flexibits.com/fantastical">Fantastical</a></li>
-<li>GNOME's EDS (evolution-data-server) which serves data to:
+<li>GNOME’s EDS (evolution-data-server) which serves data to:
 <ul>
 <li><a href="https://wiki.gnome.org/Apps/Evolution">Evolution</a></li>
 <li><a href="https://wiki.gnome.org/Apps/Calendar">GNOME Calendar</a></li>
 <li><a href="https://wiki.gnome.org/Apps/Notes">GNOME Notes</a></li>
 <li><a href="https://wiki.gnome.org/Apps/Todo">GNOME Todo</a></li>
-<li>and more GNOME apps...</li>
+<li>and more GNOME apps…</li>
 </ul>
 </li>
-<li>KDE's <a href="https://kontact.kde.org">Kontact Suite</a> including:
+<li>KDE’s <a href="https://kontact.kde.org">Kontact Suite</a> including:
 <ul>
 <li><a href="https://kontact.kde.org/components/akonadi.html">Akonadi framework</a></li>
 <li><a href="https://kontact.kde.org/components/korganizer.html">KOrganizer calendar and scheduling component</a></li>
-<li>and more KDE apps...</li>
+<li>and more KDE apps…</li>
 </ul>
 </li>
 </ul>
@@ -228,7 +250,8 @@ See <a href="src/libicalvcal/README.txt">src/libicalvcal/README.TXT</a> for deta
 <a href="https://github.com/libical/libical/discussions">https://github.com/libical/libical/discussions</a></p>
 <p>Report bugs to our issue tracker at
 <a href="https://github.com/libical/libical/issues">https://github.com/libical/libical/issues</a></p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="building-libical"><a class="header" href="#building-libical">Building Libical</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="building-libical"><a class="header" href="#building-libical">Building Libical</a></h1>
 <p>Libical uses the <a href="https://cmake.org">CMake buildsystem</a></p>
 <p>Please see the comments at the top of CMakeLists.txt for
 the available configuration options you can pass to cmake.</p>
@@ -261,7 +284,7 @@ From a command prompt for the version of MSVC you want to use</p>
 % nmake install
 </code></pre>
 <p>NOTE: Some MSVC 32bit compilers (like MSVC2005) use a 64bit version of time_t.
-In these cases you must pass -DUSE_32BIT_TIME_T=true to cmake to make sure
+In these cases you must pass -DLIBICAL_ENABLE_MSVC_32BIT_TIME_T=true to cmake to make sure
 the 32bit version of time_t is used instead.</p>
 <p>Building on Windows with mingw:
 Make sure you have the path to the MinGW programs in %PATH% first, for example:</p>
@@ -288,7 +311,7 @@ Make sure you have the path to the MinGW programs in %PATH% first, for example:<
 </code></pre>
 <p>To run the test suite, from inside the build directory
 run <code>make test</code> (or <code>nmake test</code> or <code>mingw32-make test</code>)</p>
-<p>To run the test suite in verbose mode, pass ARGS="-V" to the make command
+<p>To run the test suite in verbose mode, pass ARGS=“-V” to the make command
 For example: <code>nmake test ARGS="-V"</code></p>
 <p>By default, the buildsystem creates shared(dynamic) and static versions
 of the libraries, but that behavior can be modified at CMake time:</p>
@@ -325,10 +348,10 @@ same name.  This is known to be the case with libffi and libxml2</p>
 <h2 id="optional-dependencies"><a class="header" href="#optional-dependencies">Optional Dependencies</a></h2>
 <ul>
 <li>
-<p>libicu "International Components for Unicode" development libraries.
+<p>libicu “International Components for Unicode” development libraries.
 Highly recommended for RSCALE support.
 libicu can be found at <a href="http://www.icu-project.org">http://www.icu-project.org</a></p>
-<p>If CMake doesn't locate your libicu installation try setting the
+<p>If CMake doesn’t locate your libicu installation try setting the
 ICU_ROOT or ICU_BASE environment variables to the top folder where
 libicu is installed and run cmake again.</p>
 </li>
@@ -337,12 +360,12 @@ libicu is installed and run cmake again.</p>
 Optional for the Berkeley Database storage support.
 The development toolkit can be found at <a href="https://www.oracle.com/database/berkeley-db">https://www.oracle.com/database/berkeley-db</a></p>
 <p><strong>This code path has not been fully tested.</strong>
-<strong>Don't be surprised if there are bugs.</strong>
+<strong>Don’t be surprised if there are bugs.</strong>
 <strong>Do NOT use for production code.</strong></p>
 </li>
 <li>
-<p>GObject Introspection.  To generate GObject introspection "typelib"
-files pass the -DGOBJECT_INTROSPECTION=True option to cmake.  You'll
+<p>GObject Introspection.  To generate GObject introspection “typelib”
+files pass the -DLIBICAL_GOBJECT_INTROSPECTION=True option to cmake.  You’ll
 need to have the GObject Introspection development package v0.6.7 or higher
 installed beforehand.</p>
 <p>Requires the GObject Introspection development package:</p>
@@ -355,8 +378,8 @@ installed beforehand.</p>
 </li>
 </ul>
 <p>You can also force CMake to ignore any of the optional dependencies
-by passing the option -DCMAKE_DISABLE_FIND_PACKAGE_<PACKAGE>=True.
-For instance:</p>
+by passing the option -DCMAKE_DISABLE_FIND_PACKAGE_<package>=True.
+For instance:</package></p>
 <pre><code class="language-shell">  % cmake -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True # tell cmake to ignore ICU
 </code></pre>
 <h2 id="language-bindings"><a class="header" href="#language-bindings">Language Bindings</a></h2>
@@ -364,33 +387,34 @@ For instance:</p>
 <ul>
 <li>
 <p>C++. If a C++ compiler is found the buildsystem will create and install the C++ bindings API.
-Turn this off by passing -DWITH_CXX_BINDINGS=False option to cmake.
-Don't mix ABI from C and C++ compilers.</p>
+Turn off the C++ bindings by passing -DLIBICAL_CXX_BINDINGS=False to cmake.
+Don’t mix ABI from C and C++ compilers.</p>
 </li>
 <li>
 <p>Python bindings are built using gobject-introspection, which is enabled
-by passing -DGOBJECT_INTROSPECTION=True to cmake.</p>
+by passing -DLIBICAL_GOBJECT_INTROSPECTION=True to cmake.</p>
 <p>Requires the GObject Introspection development package (see above).</p>
-<p>Don't forget to set (or append to, as needed) the GI_TYPELIB_PATH environment
+<p>Don’t forget to set (or append to, as needed) the GI_TYPELIB_PATH environment
 variable to $PREFIX/lib/girepository-1.0 (or $PREFIX/lib64/girepository-1.0).</p>
+</li>
+<li>
+<p>Java. If Java (and associated JNI) along with a C++ compiler is found the
+buildsystem will create and install the Java bindings.</p>
+<p>Depending on your system, you may need to set the JAVA_HOME environment variable as well.</p>
+<p>Disable the Java bindings by passing -DLIBICAL_JAVA_BINDINGS=False to cmake.</p>
 </li>
 </ul>
 <h2 id="tweaking-the-library-behavior"><a class="header" href="#tweaking-the-library-behavior">Tweaking the Library Behavior</a></h2>
 <p>Use these CMake options to adjust the library behavior as follows:</p>
 <ul>
 <li>
-<p>ICAL_ERRORS_ARE_FATAL=[true|false]
+<p>LIBICAL_ENABLE_ERRORS_ARE_FATAL=[true|false]
 Set to make icalerror_* calls abort instead of internally signaling an error.
 Default=false</p>
 </li>
 <li>
-<p>ICAL_ALLOW_EMPTY_PROPERTIES=[true|false]
-Set to prevent empty properties from being replaced with X-LIC-ERROR properties.
-Default=false</p>
-</li>
-<li>
-<p>USE_BUILTIN_TZDATA=[true|false]
-Set to build using our own (instead of the system's) timezone data.
+<p>LIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
+Set to build using our own (instead of the system’s) timezone data.
 Default=false (use the system timezone data on non-Windows systems)
 ALWAYS true on Windows systems</p>
 </li>
@@ -407,23 +431,33 @@ ALWAYS true on Windows systems</p>
 <p>for example: <code>cmake -DCMAKE_INSTALL_PREFIX=/opt -DCMAKE_INSTALL_LIBDIR=/opt/lib32 ..</code></p>
 <h2 id="build-the-documentation"><a class="header" href="#build-the-documentation">Build the documentation</a></h2>
 <p>Run <code>make docs</code> to build the API documentation and reference.</p>
-<p>Disable the docs make target by running cmake with -DICAL_BUILD_DOCS=False option.
-Disable the libical-glib developer documentation by running cmake with -DICAL_GLIB_BUILD_DOCS=False.</p>
+<p>Disable the docs make target by running cmake with -DLIBICAL_BUILD_DOCS=False option.
+Disable the libical-glib developer documentation by running cmake with -DLIBICAL_GLIB_BUILD_DOCS=False.</p>
 <h2 id="using-vcpkg-to-install-dependencies"><a class="header" href="#using-vcpkg-to-install-dependencies">Using vcpkg to install dependencies</a></h2>
-<p>If you want to use vcpkg (in $VCPKG_ROOT) to build the dependencies as part
-of the project you can also tell CMake the vcpkg toolchain file with:
-"-DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"</p>
-<p>for example: if you have vcpkg installed in $HOME/vcpkg, then run
-<code>cmake -DCMAKE_TOOLCHAIN_FILE=$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake ..</code></p>
-<p>Windows note:
-MSVC comes with vcpkg pre-installed and sets %VCPKG_ROOT% for you.
+<p>If you want to use vcpkg (%VCPKG_ROOT% on Windows or $VCPKG_ROOT on non-Windows) to build
+the dependencies as part of the project you can also tell CMake the vcpkg toolchain file
+with the CMake “CMAKE_TOOLCHAIN_FILE” setting.</p>
+<p>For example: if you have vcpkg installed in your project folder:</p>
+<pre><code class="language-shell">     export VCPKG_ROOT=$HOME/projects/vcpkg
+     cmake -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake &lt;OPTIONS&gt; ..
+</code></pre>
+<p>or on Windows:</p>
+<pre><code class="language-shell">     set VCPKG_ROOT=%HOMEPATH%\projects\vcpkg
+     cmake -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake &lt;OPTIONS&gt; ..
+</code></pre>
+<h3 id="windows-notes"><a class="header" href="#windows-notes">Windows Notes</a></h3>
+<p>MSVC comes with vcpkg pre-installed and sets <code>%VCPKG_ROOT%</code> for you.
 However, the only way to update that vcpkg version is by upgrading
 MSVC itself; which may not be what you want and may be too old.
 Consider installing your own vcpkg instead of relying on the MSVC vcpkg.</p>
-<p>Non-Windows note:
-You'll need to pre-install autoconf, automake and autoconf-archive for icu.
-See %VCPKG_ROOT%/p rts/icu/portfile.cmake for more info.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h1>
+<p>Either way (using Microsoft-provided or your own vcpkg):</p>
+<pre><code class="language-shell">     cmake "-DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake &lt;OPTIONS&gt; ..
+</code></pre>
+<h3 id="non-windows-notes"><a class="header" href="#non-windows-notes">Non-Windows Notes</a></h3>
+<p>You’ll need to pre-install autoconf, automake and autoconf-archive for icu.
+See <code>%VCPKG_ROOT%/ports/icu/portfile.cmake</code> for more info.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h1>
 <h2 id="required"><a class="header" href="#required">Required</a></h2>
 <ul>
 <li>CMake version 3.20 or above</li>
@@ -440,19 +474,22 @@ See %VCPKG_ROOT%/p rts/icu/portfile.cmake for more info.</p>
 <li>libxml2 (-devel)</li>
 <li>python3</li>
 </ul>
-<p>and to build the associated GLib bindings documentation you'll need;</p>
+<p>and to build the associated GLib bindings documentation you’ll need;</p>
 <ul>
 <li>gi-docgen</li>
 </ul>
-<p>in addition, to build the Vala support you'll also need:</p>
+<p>in addition, to build the Vala support you’ll also need:</p>
 <ul>
 <li>vala (valac, the Vala compiler)</li>
 </ul>
 <h2 id="optional-dependencies-1"><a class="header" href="#optional-dependencies-1">Optional dependencies</a></h2>
 <ul>
 <li>berkeleydb (-devel) for Berkeley DB storage support in libicalss</li>
+<li>doxygen for building the API documentation</li>
+<li>mdbook for building the manual</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="using-libical"><a class="header" href="#using-libical">Using Libical</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="using-libical"><a class="header" href="#using-libical">Using Libical</a></h1>
 <blockquote>
 <p>Author: Eric Busboom <a href="mailto:eric@civicknowledge.com">eric@civicknowledge.com</a></p>
 <p>Date: January 2001</p>
@@ -462,7 +499,7 @@ See %VCPKG_ROOT%/p rts/icu/portfile.cmake for more info.</p>
 and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.</p>
-<p>Libical implements multiple <a href="rfcs.html">RFC calendar standards</a>.</p>
+<p>Libical implements multiple <a href="#libical-rfc-calendar-standards-support">RFC calendar standards</a>.</p>
 <p>This documentation assumes that you are familiar with the iCalendar
 standards <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> and <a href="https://tools.ietf.org/html/rfc5546">RFC5546</a>. These specifications are available
 at the <a href="https://tools.ietf.org/">IETF Tools</a> website:</p>
@@ -476,7 +513,7 @@ for a copy of the license. Alternately, you may use libical under
 the terms of the GNU Lesser General Public License, version 2.1.
 See <a href="https://www.gnu.org/licenses/lgpl-2.1.html">https://www.gnu.org/licenses/lgpl-2.1.html</a> for a copy of the LGPL.</p>
 <p>This dual license ensures that the library can be incorporated into
-both proprietary code and GPL'd programs, and will benefit from improvements
+both proprietary code and GPL’d programs, and will benefit from improvements
 made by programmers in both realms. We (the libical developers) will only
 accept changes to this library if they are similarly dual-licensed.</p>
 <h3 id="13-example-code"><a class="header" href="#13-example-code">1.3 Example Code</a></h3>
@@ -488,7 +525,7 @@ Also look in <code>src/test/</code> for additional annotated examples.</p>
 MacOS and Windows using <code>gcc</code>, <code>clang</code> and Microsoft Visual.  Please report build problems
 to the <a href="https://github.com/libical/libical/issues">Libical issue tracker</a>.</p>
 <p>For a more complete guide to building the library, see the
-<a href="INSTALL.html">Building Libical</a> instructions.</p>
+<a href="#building-libical">Building Libical</a> instructions.</p>
 <h2 id="3-structure"><a class="header" href="#3-structure">3 Structure</a></h2>
 <p>The iCalendar data model is based on four types of objects: <em>components</em>,
 <em>properties</em>, <em>values</em> and <em>parameters</em>.</p>
@@ -536,7 +573,7 @@ not actually have classes, we will use those terms since the behavior
 of these associations of data and routines is very similar to a class.</p>
 <h4 id="311-properties"><a class="header" href="#311-properties">3.1.1 Properties</a></h4>
 <p>Properties are represented with the <code>icalproperty</code> class and its many
-"derived" classes with one "derived" class per property type in <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a>.
+“derived” classes with one “derived” class per property type in <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a>.
 Again, there is no actual inheritance relations, but there are clusters
 of routines that make this term useful. A property is a container
 for a single value and a set of parameters.</p>
@@ -545,7 +582,7 @@ for a single value and a set of parameters.</p>
 <code>icalcomponent</code> is a container for a set of other components and properties.</p>
 <h4 id="313-values"><a class="header" href="#313-values">3.1.3 Values</a></h4>
 <p>Values are represented in a similar way to properties; a base class
-and many "derived " classes. A value is essentially an abstract handle
+and many “derived “ classes. A value is essentially an abstract handle
 on a single fundamental type, a structure or a union.</p>
 <h4 id="314-parameters"><a class="header" href="#314-parameters">3.1.4 Parameters</a></h4>
 <p>Parameters are represented in a similar way to properties, except that
@@ -565,9 +602,9 @@ blocks of text as a string, or it can parse line-by-line.</p>
 <p>Libical has a substantial error reporting system for both programming
 errors and component usage errors.</p>
 <h4 id="324-memory-management"><a class="header" href="#324-memory-management">3.2.4 Memory Management</a></h4>
-<p>Since many of libical's interfaces return strings, the library has its
+<p>Since many of libical’s interfaces return strings, the library has its
 own memory management system to eliminate the need to free every string
-returned from the library.  See <a href="UsingLibical.html#memory">Memory Management</a>.</p>
+returned from the library.  See <a href="#memory">Memory Management</a>.</p>
 <h4 id="325-storage-classes"><a class="header" href="#325-storage-classes">3.2.5 Storage classes</a></h4>
 <p>The library also offers several classes to store components to files,
 memory or databases.</p>
@@ -587,8 +624,8 @@ timezone properties associated with daylight savings time starts with
 <code>BEGIN:DAYLIGHT</code> and ends with <code>END:DAYLIGHT</code>, just like other components,
 but is not defined as a component in <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> (see <a href="https://tools.ietf.org/html/rfc5545#section-3.6.5">section 3.6.5</a>)
 In libical, this grouping is represented by the <code>XDAYLIGHT</code> component.
-Standard iCal components all start with the letter "V," while pseudo
-components start with "X."</p>
+Standard iCal components all start with the letter “V,” while pseudo
+components start with “X.”</p>
 <p>There are also pseudo components that are conceptually derived classes
 of <code>VALARM</code>. <a href="https://tools.ietf.org/html/rfc5546">RFC5546</a> defines what properties may be included in each
 component, and for <code>VALARM</code>, the set of properties it may have depends
@@ -614,14 +651,14 @@ in libical, the value of the <code>TRIGGER</code> property resolves to struct
 <h3 id="43-multi-valued-properties"><a class="header" href="#43-multi-valued-properties">4.3 Multi-Valued Properties</a></h3>
 <p>Some properties, such as <code>CATEGORIES</code> have only one value type, but each
 <code>CATEGORIES</code> property can have multiple value instances. This also results
-in a cumbersome interface -- <code>CATEGORIES</code> accessors would have to return
+in a cumbersome interface – <code>CATEGORIES</code> accessors would have to return
 a list while all other accessors returned a single value. In libical,
 all properties have a single value, and multi-valued properties are
 broken down into multiple single valued properties during parsing.
 That is, an input line like,</p>
 <pre><code class="language-ical">CATEGORIES: work, home
 </code></pre>
-<p>becomes in libical's internal representation</p>
+<p>becomes in libical’s internal representation</p>
 <pre><code class="language-ical">CATEGORIES: work
 CATEGORIES: home
 </code></pre>
@@ -667,15 +704,15 @@ icalcomponent_add_property(event, prop);
 </code></pre>
 <p>Notice that libical uses a semi-object-oriented style of interface.
 Most things you work with are objects, that are instantiated with
-a constructor that has "new" in the name. Also note that, other than
+a constructor that has “new” in the name. Also note that, other than
 the object reference, most structure data is passed in to libical
 routines by value. Libical has some complex but very regular memory
-handling rules. These are detailed in section <a href="UsingLibical.html#memory">Memory Management</a>.</p>
+handling rules. These are detailed in section <a href="#memory">Memory Management</a>.</p>
 <p>If any of the constructors fail, they will return 0. If you try to
 insert 0 into a property or component, or use a zero-valued object
 reference, libical will either silently ignore the error or will abort
 with an error message. This behavior is controlled by a compile time
-flag (<code>ICAL_ERRORS_ARE_FATAL</code>), and will abort by default.</p>
+flag (<code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code>), and will abort by default.</p>
 <h4 id="512-varargs-constructors"><a class="header" href="#512-varargs-constructors">5.1.2 varargs Constructors</a></h4>
 <p>There is another way to create complex components, which is arguably
 more elegant, if you are not horrified by varargs. The varargs constructor
@@ -702,7 +739,7 @@ calendar =
                 "employee-A@host.com",
                 icalparameter_new_role(
                     ICAL_ROLE_REQPARTICIPANT),
-                icalparameter_new_rsvp(1),
+                icalparameter_new_rsvp(ICAL_RSVP_TRUE),
                 icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
                 (void *)0),
             icalproperty_new_location(
@@ -715,7 +752,7 @@ have <code>vanew</code> instead of <code>new</code> in the name. The arguments a
 too, except that the component constructor can have a list of properties,
 and the property constructor can have a list of parameters.</p>
 <p><em>Be sure to terminate every list with a <code>NULL</code> (or a <em><code>(void 0)</code></em>, or your code
-will crash, if you are lucky</em>. The reason you can't use 0 itself is that
+will crash, if you are lucky</em>. The reason you can’t use 0 itself is that
 depending on what platform you are on, <code>sizeof(int) ≠ sizeof(void *)</code>.</p>
 <h4 id="513-parsing-text-files"><a class="header" href="#513-parsing-text-files">5.1.3 Parsing Text Files</a></h4>
 <p>The final way to create components will probably be the most common;
@@ -879,7 +916,7 @@ the first:</p>
     icalcomponent* component,
     icalcomponent_kind kind);
 </code></pre>
-<p>With the 'first' and 'next' routines, you can create a for loop to
+<p>With the ‘first’ and ‘next’ routines, you can create a for loop to
 iterate through all of a components subcomponents</p>
 <pre><code class="language-c">icalcomponent *c;
 
@@ -896,7 +933,7 @@ to another component type.</p>
 <h4 id="523-using-component-iterators"><a class="header" href="#523-using-component-iterators">5.2.3 Using Component Iterators</a></h4>
 <p>The iteration model in the previous section requires the component
 to keep the state of the iteration. So, you could not use this model
-to perform a sorting operations, since you'd need two iterators and
+to perform a sorting operations, since you’d need two iterators and
 there is only space for one. If you ever call <code>icalcomponent_get_first_component()</code>
 when an iteration is in progress, the pointer will be reset to the
 beginning.</p>
@@ -1055,7 +1092,7 @@ object instead of creating a copy.</p>
 <p><strong>Caution:</strong> Manipulating this referenced object will also modify the owning
 value object.</p>
 <p>Be mindful of the memory management for these objects, which is managed through
-reference counting. For more details, see <a href="UsingLibical.html#memory">Memory Management</a>.</p>
+reference counting. For more details, see <a href="#memory">Memory Management</a>.</p>
 <p>When working with an extension property or value (and <code>X-PROPERTY</code> or
 a property that has the parameter <code>VALUE=x-name</code>), the value type is
 always a string. To get and set the value, use:</p>
@@ -1114,26 +1151,27 @@ you want to preserve it.</p>
 <h3 id="53-time"><a class="header" href="#53-time">5.3 Time</a></h3>
 <h4 id="531-time-structure"><a class="header" href="#531-time-structure">5.3.1 Time structure</a></h4>
 <p>Libical defines its own time structure for storing all dates and times.
-It would have been nice to reuse the C library's struct <code>tm</code>, but that
+It would have been nice to reuse the C library’s struct <code>tm</code>, but that
 structure does not differentiate between dates and times, and between
 local time and UTC. The libical structure is:</p>
 <pre><code class="language-c">struct icaltimetype {
-  int year;
-  int month;
   int day;
   int hour;
-  int minute;
-  int second;
-  int is_utc; /* 1-&gt; time is in UTC timezone */
   int is_date; /* 1 -&gt; interpret this as date. */
+  int is_daylight; /* 1 -&gt; time is in daylight savings time. */
+  int minute;
+  int month;
+  int second;
+  int year;
+  const icaltimezone * zone; /* timezone */
 };
 </code></pre>
-<p>The <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code>, <code>minute</code> and <code>second</code> fields
-hold the broken-out
-time values. The <code>is_utc</code> field distinguishes between times in UTC and
-a local time zone. The <code>is_date</code> field indicates if the time should
-be interpreted only as a date. If it is a date, the hour, minute and
-second fields are assumed to be zero, regardless of their actual values.</p>
+<p>The <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code>, <code>minute</code> and <code>second</code> fields hold the
+broken-out time values. The <code>is_date</code> field indicates if the time should be
+interpreted only as a date. If it is a date, the hour, minute and second fields
+are assumed to be zero, regardless of their actual values. The <code>is_daylight</code>
+field indicates if the time is in daylight savings time. The <code>zone</code> field holds
+a struct representing a timezone.</p>
 <h4 id="532-creating-time-structures"><a class="header" href="#532-creating-time-structures">5.3.2 Creating time structures</a></h4>
 <p>There are several ways to create a new icaltimetype structure:</p>
 <pre><code class="language-c">struct icaltimetype icaltime_from_string(
@@ -1190,11 +1228,6 @@ short icaltime_day_of_week(
 short icaltime_start_doy_week(
     struct icaltimetype t,
     int fdow);
-
-short icaltime_week_number(
-    short day_of_month,
-    short month,
-    short year);
 
 short icaltime_days_in_month(
     short month,
@@ -1340,7 +1373,7 @@ icalfileset* icalfileset_new_open(
 open an existing file for reading and writing, or create a new file
 if it does not exist. <code>icalfileset_new_open()</code> takes the same arguments
 as the open() system routine and behaves in the same way.</p>
-<p>The icalset and icalfileset objects are somewhat interchangeable -- you
+<p>The icalset and icalfileset objects are somewhat interchangeable – you
 can use an <code>icalfileset*</code> as an argument to any of the icalset routines.</p>
 <p>The following examples will all use icalfileset routines; using the
 other icalset derived classes will be similar.</p>
@@ -1427,13 +1460,13 @@ caller owns and must free, and some of the memory is managed by the
 library. Here is a summary of the memory rules.</p>
 <ol>
 <li>
-<p>If the function name has "new" in it (such as <code>icalcomponent_new()</code>,
+<p>If the function name has “new” in it (such as <code>icalcomponent_new()</code>,
 or <code>icalproperty_new_from_string()</code>), the caller gets control
 of the memory. The caller also gets control over an object that is
-cloned via a function that ends with "_clone" (like <code>icalcomponent_clone()</code>)</p>
+cloned via a function that ends with “_clone” (like <code>icalcomponent_clone()</code>)</p>
 </li>
 <li>
-<p>If you got the memory from a routine with "clone" or "new" in it, you
+<p>If you got the memory from a routine with “clone” or “new” in it, you
 must call the corresponding <code>*_free()</code> routine to free the memory,
 for example use <code>icalcomponent_free()</code> to free objects created with
 <code>icalcomponent_new()</code> or <code>icalcomponent_clone()</code>. The only exception
@@ -1442,21 +1475,21 @@ to this rule are objects that implement reference counting (i.e.
 <code>*_unref()</code> functions. Learn more in the next section.</p>
 </li>
 <li>
-<p>If the function name has "add" in it, the caller is transferring
+<p>If the function name has “add” in it, the caller is transferring
 control of the memory to the routine, for example the function
 <code>icalproperty_add_parameter()</code></p>
 </li>
 <li>
-<p>If the function name has "remove" in it, the caller passes in
+<p>If the function name has “remove” in it, the caller passes in
 a pointer to an object and after the call returns, the caller owns
 the object. So, before you call <code>icalcomponent_remove_property(comp, foo)</code>,
-you do not own "foo" and after the call returns, you do.</p>
+you do not own “foo” and after the call returns, you do.</p>
 </li>
 <li>
 <p>If the routine returns a string and its name does NOT end in <code>_r</code>,
 libical owns the memory and will put it on a ring buffer to reclaim
 later. For example, <code>icalcomponent_as_ical_string()</code>. You better
-<code>strdup()</code> it if you want to keep it, and you don't have to delete it.</p>
+<code>strdup()</code> it if you want to keep it, and you don’t have to delete it.</p>
 </li>
 <li>
 <p>If the routine returns a string and its name <em>does</em> end in <code>_r</code>, the
@@ -1560,12 +1593,19 @@ Expected 1 instances of the property and got 0
 that the component does not have a <code>DTSTART</code> property, as required by
 RFC5545.</p>
 <p>There are a few routines to manipulate error properties:</p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Routine</th><th style="text-align: left">Purpose</th></tr></thead><tbody>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Routine</th><th style="text-align: left">Purpose</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: left"><code>void icalrestriction_check()</code></td><td style="text-align: left">Check a component against RFC5546 and insert error properties to indicate non compliance</td></tr>
 <tr><td style="text-align: left"><code>int icalcomponent_count_errors()</code></td><td style="text-align: left">Return the number of error properties in a component</td></tr>
 <tr><td style="text-align: left"><code>void icalcomponent_strip_errors()</code></td><td style="text-align: left">Remove all error properties in a component</td></tr>
-<tr><td style="text-align: left"><code>void icalcomponent_convert_errors()</code></td><td style="text-align: left">Convert some error properties into REQUESTS-STATUS properties to indicate the inability to process the component as an iTIP request</td></tr>
-</tbody></table>
+<tr><td style="text-align: left"><code>void icalcomponent_convert_errors()</code></td><td style="text-align: left">Convert some error properties into REQUESTS-STATUS properties to indicate the inability</td></tr>
+<tr><td style="text-align: left"></td><td style="text-align: left">to process the component as an iTIP request</td></tr>
+</tbody>
+</table>
 </div>
 <p>The types of errors are listed in icalerror.h. They are:</p>
 <ul>
@@ -1587,39 +1627,39 @@ in a component into <code>REQUEST-STATUS</code> properties that indicate a failu
 As of libical version 0.18, this routine only converts <code>PARSEERROR</code> errors
 and it always generates a 3.x (failure) code. This makes it more
 of a good idea than a really useful bit of code.</p>
-<h4 id="564-ical_errors_are_fatal-and-icalerror_errors_are_fatal"><a class="header" href="#564-ical_errors_are_fatal-and-icalerror_errors_are_fatal">5.6.4 <code>ICAL_ERRORS_ARE_FATAL</code> and <code>icalerror_errors_are_fatal</code></a></h4>
-<p>If <code>icalerror_get_errors_are_fatal()</code> returns 1, then any error
+<h4 id="564-libical_enable_errors_are_fatal-and-icalerror_errors_are_fatal"><a class="header" href="#564-libical_enable_errors_are_fatal-and-icalerror_errors_are_fatal">5.6.4 <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code> and <code>icalerror_errors_are_fatal</code></a></h4>
+<p>If <code>icalerror_get_errors_are_fatal()</code> returns true, then any error
 condition will cause the program to abort. The abort occurs
 in <code>icalerror_set_errno()</code>, and is done with an assert(0) if NDEBUG
 is undefined, and with <code>icalerror_crash_here()</code> if NDEBUG is defined.
-Initially, <code>icalerror_get_errors_are_fatal()</code> is 1 when <code>ICAL_ERRORS_ARE_FATAL</code>
-is defined, and 0 otherwise. Since <code>ICAL_ERRORS_ARE_FATAL</code> is defined
-by default, <code>icalerror_get_errors_are_fatal()</code> is also set to 1 by default.</p>
-<p>You can change the compiled-in <code>ICAL_ERRORS_ARE_FATAL</code> behavior at runtime
-by calling <code>icalerror_set_errors_are_fatal(0)</code> (i.e, errors are not fatal)
-or <code>icalerror_set_errors_are_fatal(1)</code> (i.e, errors are fatal).</p>
+Initially, <code>icalerror_get_errors_are_fatal()</code> is true when <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code>
+is defined, and false otherwise. Since <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code> is defined
+by default, <code>icalerror_get_errors_are_fatal()</code> is also set to true by default.</p>
+<p>You can change the compiled-in <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code> behavior at runtime
+by calling <code>icalerror_set_errors_are_fatal(false)</code> (i.e, errors are not fatal)
+or <code>icalerror_set_errors_are_fatal(true)</code> (i.e, errors are fatal).</p>
 <h3 id="57-naming-standard"><a class="header" href="#57-naming-standard">5.7 Naming Standard</a></h3>
-<p>Structures that you access with the "struct" keyword, such as <code>struct icaltimetype</code> are things that you are allowed to see inside and poke
+<p>Structures that you access with the “struct” keyword, such as <code>struct icaltimetype</code> are things that you are allowed to see inside and poke
 at.</p>
 <p>Structures that you access though a typedef, such as <code>icalcomponent</code>
 are things where all of the data is hidden.</p>
-<p>Component names that start with "V" are part of RFC5545 or another
-iCal standard. Component names that start with "X" are also part of
+<p>Component names that start with “V” are part of RFC5545 or another
+iCal standard. Component names that start with “X” are also part of
 the spec, but they are not actually components in the spec. However,
 they look and act like components, so they are components in libical.
 Names that start with <code>XLIC</code> or <code>X-LIC</code> are not part of any iCal spec.
 They are used internally by libical.</p>
 <p>Enums that identify a component, property, value or parameter end with
-<code>_COMPONENT</code>, <code>_PROPERTY</code>, <code>_VALUE</code>, or <code>_PARAMETER</code>"</p>
+<code>_COMPONENT</code>, <code>_PROPERTY</code>, <code>_VALUE</code>, or <code>_PARAMETER</code>“</p>
 <p>Enums that identify a parameter value have the name of the parameter
 as the second word. For instance: <code>ICAL_ROLE_REQPARTICIPANT</code> or
 <code>ICAL_PARTSTAT_ACCEPTED</code>.</p>
 <p>The enums for the parts of a recurrence rule and request statuses
 are irregular.</p>
 <h2 id="6-hacks-and-bugs"><a class="header" href="#6-hacks-and-bugs">6 Hacks and Bugs</a></h2>
-<p>There are a lot of hacks in the library -- bits of code that I am not
+<p>There are a lot of hacks in the library – bits of code that I am not
 proud of and should probably be changed. These are marked with the
-comment string "HACK."</p>
+comment string “HACK.”</p>
 <h2 id="7-library-reference"><a class="header" href="#7-library-reference">7 Library Reference</a></h2>
 <h3 id="71-manipulating-struct-icaltimetype"><a class="header" href="#71-manipulating-struct-icaltimetype">7.1 Manipulating struct icaltimetype</a></h3>
 <h4 id="711-struct-icaltimetype"><a class="header" href="#711-struct-icaltimetype">7.1.1 Struct icaltimetype</a></h4>
@@ -1637,8 +1677,50 @@ comment string "HACK."</p>
     const char* zone;
 };
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="migrating-to-version-4"><a class="header" href="#migrating-to-version-4">Migrating to version 4</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="migrating-to-version-4"><a class="header" href="#migrating-to-version-4">Migrating to version 4</a></h1>
 <p>A guide to help developers port their code from libical v3.x to libical 4.0.</p>
+<h2 id="cmake-options"><a class="header" href="#cmake-options">CMake options</a></h2>
+<p>Some CMake option names have been removed or renamed (deprecated) to the LIBICAL namespace.</p>
+<p>Please change your build scripts to use the new names before the next major release.</p>
+<p>User-specific:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Old Name</th><th>New Name</th></tr>
+</thead>
+<tbody>
+<tr><td>ICAL_ALLOW_EMPTY_PROPERTIES</td><td>removed</td></tr>
+<tr><td>ICAL_BUILD_DOCS</td><td>LIBICAL_BUILD_DOCS</td></tr>
+<tr><td>ICAL_ERRORS_ARE_FATAL</td><td>removed</td></tr>
+<tr><td>ICAL_GLIB</td><td>LIBICAL_GLIB</td></tr>
+<tr><td>ICAL_GLIB_VAPI</td><td>LIBICAL_GLIB_VAPI</td></tr>
+<tr><td>ICAL_GLIB_BUILD_DOCS</td><td>LIBICAL_GLIB_BUILD_DOCS</td></tr>
+<tr><td>USE_BUILTIN_TZDATA</td><td>LIBICAL_ENABLE_BUILTIN_TZDATA</td></tr>
+<tr><td>USE_32BIT_TIME_T</td><td>LIBICAL_ENABLE_MSVC_32BIT_TIME_T</td></tr>
+<tr><td>GOBJECT_INTROSPECTION</td><td>LIBICAL_GOBJECT_INTROSPECTION</td></tr>
+<tr><td>WITH_CXX_BINDINGS</td><td>LIBICAL_CXX_BINDINGS</td></tr>
+<tr><td>ENABLE_LTO_BUILD</td><td>CMAKE_INTERPROCEDURAL_OPTIMIZATION</td></tr>
+<tr><td>SHARED_ONLY</td><td>removed</td></tr>
+<tr><td>STATIC_ONLY</td><td>LIBICAL_STATIC</td></tr>
+</tbody>
+</table>
+</div>
+<p>Developer-specific:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Old Name</th><th>New Name</th></tr>
+</thead>
+<tbody>
+<tr><td>ABI_DUMPER</td><td>LIBICAL_DEVMODE_ABI_DUMPER</td></tr>
+<tr><td>ADDRESS_SANITIZER</td><td>LIBICAL_DEVMODE_ADDRESS_SANITIZER</td></tr>
+<tr><td>LIBICAL_SYNCMODE_THREADLOCAL</td><td>LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL</td></tr>
+<tr><td>THREAD_SANITIZER</td><td>LIBICAL_DEVMODE_THREAD_SANITIZER</td></tr>
+<tr><td>UNDEFINED_SANITIZER</td><td>LIBICAL_DEVMODE_UNDEFINED_SANITIZER</td></tr>
+</tbody>
+</table>
+</div>
 <h2 id="conditional-compilation"><a class="header" href="#conditional-compilation">Conditional compilation</a></h2>
 <p>To continue supporting the 3.0 version you can use conditional compilation, like so:</p>
 <pre><code class="language-C">     #if ICAL_CHECK_VERSION(4,0,0)
@@ -1652,12 +1734,32 @@ comment string "HACK."</p>
      &lt;...old code for the libical 3.0 version ...&gt;
      #endif
 </code></pre>
+<h2 id="ical_enable_errors_are_fatal"><a class="header" href="#ical_enable_errors_are_fatal">ICAL_ENABLE_ERRORS_ARE_FATAL</a></h2>
+<p>The <code>ICAL_ENABLE_ERRORS_ARE_FATAL</code> conditional compile macro and accompanying CMake option  <code>ICAL_ENABLE_ERRORS_ARE_FATAL</code>
+are removed.</p>
+<p>To abort whenever an error is encountered use the <code>icalerror_set_errors_are_fatal()</code> and <code>icalerror_get_errors_are_fatal()</code>
+functions.</p>
+<h2 id="ical_allow_empty_properties"><a class="header" href="#ical_allow_empty_properties">ICAL_ALLOW_EMPTY_PROPERTIES</a></h2>
+<p>The <code>ICAL_ALLOW_EMPTY_PROPERTIES</code> conditional compile macro and accompanying CMake option <code>ICAL_ALLOW_EMPTY_PROPERTIES</code>
+are removed.</p>
+<p>To allow empty properties you can use the new runtime functions <code>icalproperty_set_allow_empty_properties()</code>
+and <code>icalproperty_get_allow_empty_properties()</code>.</p>
+<h2 id="pvl_use_macros"><a class="header" href="#pvl_use_macros">PVL_USE_MACROS</a></h2>
+<p>The <code>PVL_USE_MACROS</code> conditional compile macro is removed.
+The pvl unit always compiles the <code>pvl_data</code> function.</p>
+<h2 id="ical_seterror_isfunc"><a class="header" href="#ical_seterror_isfunc">ICAL_SETERROR_ISFUNC</a></h2>
+<p>The <code>ICAL_SETERROR_ISFUNC</code> conditional compile macro is removed.
+The icalerror unit always compiles the <code>icalerror_set_errno</code> function.</p>
+<h2 id="ical_boolean_true-and-ical_boolean_false"><a class="header" href="#ical_boolean_true-and-ical_boolean_false">ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE</a></h2>
+<p>The <code>ICAL_BOOLEAN_TRUE</code> and <code>ICAL_BOOLEAN_FALSE</code> macros are removed.
+The C library is C99 standards compliant and uses bool types.</p>
 <h2 id="c-library"><a class="header" href="#c-library">C library</a></h2>
 <h3 id="modified-functions"><a class="header" href="#modified-functions">Modified functions</a></h3>
 <ul>
 <li>
 <p><code>icalrecurrencetype_from_string()</code> was replaced by <code>icalrecurrencetype_new_from_string()</code>,
-which returns a <code>struct icalrecurrencetype *</code> rather than a <code>struct icalrecurrencetype</code>.</p>
+which returns a <code>struct icalrecurrencetype *</code> rather than a <code>struct icalrecurrencetype</code>.
+Free the allocated memory using <code>icalrecurrencetype_unref()</code>.</p>
 </li>
 <li>
 <p>The following functions now take arguments of type <code>struct icalrecurrencetype *</code> rather than
@@ -1686,20 +1788,64 @@ which returns a <code>struct icalrecurrencetype *</code> rather than a <code>str
 <li><code>icalvalue_get_recur()</code></li>
 </ul>
 </li>
+<li>
+<p><code>icaltimezone_convert_time()</code> now populates the icaltimetype zone member on conversion;
+i.e. the timezone information is not lost during a conversion.</p>
+</li>
+<li>
+<p>To more clearly illustrate their intended purpose, the <code>icaldurationtype_from_int()</code> and <code>icaldurationtype_as_int()</code>
+have been renamed to <code>icaldurationtype_from_seconds()</code> and <code>icaldurationtype_as_seconds()</code>, respectively.
+The functionality of <code>icaldurationtype_from_seconds</code> has not changed. The functionality for
+<code>icaldurationtype_as_seconds</code> has changed, such that a duration with days or weeks fails
+with a ICAL_MALFORMEDDATA_ERROR and returns 0. To preserve the former logic of
+<code>icaldurationtype_as_int</code>, use he newly introduced <code>icaldurationtype_as_utc_seconds</code>.</p>
+</li>
+<li>
+<p>Similarly, the <code>icaltime_add()</code> and <code>icaltime_subtract()</code> functions are now called
+<code>icalduration_extend()</code> and <code>icalduration_from_times()</code>.  Their functionality has not changed.</p>
+</li>
+<li>
+<p>The <code>get_zone_directory()</code> and <code>set_zone_directory()</code> functions are have been renamed to
+<code>icaltimezone_get_zone_directory()</code> and <code>icaltimezone_set_zone_directory()</code>, respectively.</p>
+</li>
+<li>
+<p>The <code>icaltzutil_set_zone_directory()</code> and <code>icaltzutil_get_zone_directory()</code> functions are now called
+<code>icaltimezone_set_system_zone_directory()</code> and <code>icaltimezone_get_system_zone_directory()</code> respectively.</p>
+</li>
+<li>
+<p>In previous versions, the <code>icalvalue_compare()</code> function returned 0 if unknown or null value types
+were encountered; in this version, ICAL_XLICCOMPARETYPE_NONE is returned instead.</p>
+</li>
+<li>
+<p>In previous versions, the <code>icalcomponent_get_status()</code> returned 0 if a problem parsing the status
+property was detected; in this version, ICAL_STATUS_NONE is returned instead.</p>
+</li>
+<li>
+<p>The <code>ical_bt()</code> and <code>icalerrno_return()</code> functions have been renamed to
+<code>icalerror_backtrace()</code> and icalerror_icalerrno()` respectively for the sake
+of consistent function name-spacing.</p>
+</li>
 </ul>
 <h3 id="new-functions"><a class="header" href="#new-functions">New functions</a></h3>
 <p>The following functions have been added:</p>
 <ul>
+<li><code>icallimit_set()</code></li>
+<li><code>icallimit_get()</code></li>
+<li><code>icalarray_set_element_at()</code></li>
 <li><code>icalrecurrencetype_new()</code></li>
 <li><code>icalrecurrencetype_ref()</code></li>
 <li><code>icalrecurrencetype_unref()</code></li>
 <li><code>icalrecurrencetype_clone()</code></li>
 <li><code>icalrecurrencetype_encode_day()</code></li>
 <li><code>icalrecurrencetype_encode_month()</code></li>
-<li><code>icaltzutil_set_zone_directory()</code></li>
 <li><code>icalcomponent_clone()</code></li>
 <li><code>icalproperty_clone()</code></li>
+<li><code>icalproperty_set_allow_empty_properties()</code></li>
+<li><code>icalproperty_get_allow_empty_properties()</code></li>
 <li><code>icalparameter_clone()</code></li>
+<li><code>icalparameter_kind_value_kind()</code></li>
+<li><code>icalparameter_is_multivalued()</code></li>
+<li><code>icalparameter_decode_value()</code></li>
 <li><code>icalvalue_clone()</code></li>
 <li><code>icalcluster_clone()</code></li>
 <li><code>icalrecur_iterator_prev()</code></li>
@@ -1709,6 +1855,9 @@ which returns a <code>struct icalrecurrencetype *</code> rather than a <code>str
 <li><code>icalrecurrencetype_unref()</code></li>
 <li><code>icalrecurrencetype_clone()</code></li>
 <li><code>icalrecurrencetype_from_string()</code></li>
+<li><code>icalcomponent_new_iana()</code></li>
+<li><code>icalcomponent_set_iana_name()</code></li>
+<li><code>icalcomponent_get_iana_name()</code></li>
 <li><code>icalcomponent_set_x_name()</code></li>
 <li><code>icalcomponent_get_x_name()</code></li>
 <li><code>icalcomponent_get_component_name()</code></li>
@@ -1717,11 +1866,35 @@ which returns a <code>struct icalrecurrencetype *</code> rather than a <code>str
 <li><code>ical_get_invalid_rrule_handling_setting()</code></li>
 <li><code>icalparser_get_ctrl()</code></li>
 <li><code>icalparser_set_ctrl()</code></li>
+<li><code>icaltimezone_tzid_prefix()</code></li>
+<li><code>icaltimezone_set_system_zone_directory()</code></li>
+<li><code>icalcompiter_is_valid()</code></li>
+<li><code>icalpropiter_is_valid()</code></li>
+<li><code>icalproperty_new_iana()</code></li>
+<li><code>icalproperty_set_iana_name()</code></li>
+<li><code>icalproperty_get_iana_name()</code></li>
+<li>and the new functions for the <code>icalstrarray</code> and <code>icalenumarray</code> data types</li>
 </ul>
 <h3 id="removed-functions"><a class="header" href="#removed-functions">Removed functions</a></h3>
 <ul>
 <li>
+<p><code>icalmime_parse()</code> has been removed. Please use another library if you need a MIME parser.</p>
+</li>
+<li>
+<p><code>icaltime_week_number()</code> has been removed. (it never properly accounted for the
+start day of the week in different locales).</p>
+</li>
+<li>
 <p><code>icalrecurrencetype_clear()</code> has been removed.</p>
+</li>
+<li>
+<p><code>icaltimezone_release_zone_tab()</code> has been removed.
+Use `icaltimezone_free_builtin_timezones()  instead.</p>
+</li>
+<li>
+<p><code>icalrecurrencetype_rscale_is_supported()</code> has been removed as
+RSCALE=GREGORIAN is supported without libicu now.
+Replace <code>icalrecurrencetype_rscale_is_supported()</code> calls with a true condition.</p>
 </li>
 <li>
 <p>These deprecated functions have been removed:</p>
@@ -1740,6 +1913,54 @@ which returns a <code>struct icalrecurrencetype *</code> rather than a <code>str
 <ul>
 <li><code>icaltzutil_fetch_timezone()</code></li>
 <li><code>icalrecurrencetype_clear()</code></li>
+<li><code>icalproperty_new_impl()</code></li>
+<li><code>icaltimezone_array_new()</code></li>
+<li><code>icaltimezone_array_append_from_vtimezone()</code></li>
+<li><code>icaltimezone_array_free()</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="removed-macros"><a class="header" href="#removed-macros">Removed macros</a></h3>
+<p>These convenience macros were added in version 3 to ease porting from older versions.
+They have been removed in version 4 and should be replaced with their actual function
+names as follows:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Old Macro Name</th><th>Actual Function Name</th></tr>
+</thead>
+<tbody>
+<tr><td>icalenum_action_to_string</td><td>icalproperty_action_to_string</td></tr>
+<tr><td>icalenum_class_to_string</td><td>icalproperty_class_to_string</td></tr>
+<tr><td>icalenum_component_kind_to_string</td><td>icalcomponent_kind_to_string</td></tr>
+<tr><td>icalenum_method_to_string</td><td>icalproperty_method_to_string</td></tr>
+<tr><td>icalenum_participanttype_to_string</td><td>icalproperty_participanttype_to_string</td></tr>
+<tr><td>icalenum_property_kind_to_string</td><td>icalproperty_kind_to_string</td></tr>
+<tr><td>icalenum_property_kind_to_value_kind</td><td>icalproperty_kind_to_value_kind</td></tr>
+<tr><td>icalenum_resourcetype_to_string</td><td>icalproperty_resourcetype_to_string</td></tr>
+<tr><td>icalenum_status_to_string</td><td>icalproperty_status_to_string</td></tr>
+<tr><td>icalenum_string_to_action</td><td>icalproperty_string_to_action</td></tr>
+<tr><td>icalenum_string_to_class</td><td>icalproperty_string_to_class</td></tr>
+<tr><td>icalenum_string_to_component_kind</td><td>icalcomponent_string_to_kind</td></tr>
+<tr><td>icalenum_string_to_method</td><td>icalproperty_string_to_method</td></tr>
+<tr><td>icalenum_string_to_participanttype</td><td>icalproperty_string_to_participanttype</td></tr>
+<tr><td>icalenum_string_to_property_kind</td><td>icalproperty_string_to_kind</td></tr>
+<tr><td>icalenum_string_to_resourcetype</td><td>icalproperty_string_to_resourcetype</td></tr>
+<tr><td>icalenum_string_to_status</td><td>icalproperty_string_to_status</td></tr>
+<tr><td>icalenum_string_to_transp</td><td>icalproperty_string_to_transp</td></tr>
+<tr><td>icalenum_string_to_value_kind</td><td>icalvalue_string_to_kind</td></tr>
+<tr><td>icalenum_transp_to_string</td><td>icalproperty_transp_to_string</td></tr>
+<tr><td>icalenum_value_kind_to_string</td><td>icalvalue_kind_to_string</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="added-data-types"><a class="header" href="#added-data-types">Added data types</a></h3>
+<ul>
+<li>These data types have been added:
+<ul>
+<li>icalstrarray - for manipulating an array of strings</li>
+<li>icalenumarray_element - structure to hold a generic enum value</li>
+<li>icalenumarray - for manipulating an array of enum elements</li>
 </ul>
 </li>
 </ul>
@@ -1753,8 +1974,10 @@ which returns a <code>struct icalrecurrencetype *</code> rather than a <code>str
 </li>
 </ul>
 <h3 id="migrating-from-30-to-40"><a class="header" href="#migrating-from-30-to-40">Migrating from 3.0 to 4.0</a></h3>
+<h3 id="const-pointers"><a class="header" href="#const-pointers">const pointers</a></h3>
+<p>Many function signatures have been changed to use const pointers.</p>
 <h3 id="bool-return-values"><a class="header" href="#bool-return-values">bool return values</a></h3>
-<p>A number of function signatures have been changed to use 'bool' rather than 'int' types.</p>
+<p>A number of function signatures have been changed to use ‘bool’ rather than ‘int’ types.</p>
 <p>This is implemented using the C99 standards compliant &lt;stdbool.h&gt; header.</p>
 <h3 id="clone-functions"><a class="header" href="#clone-functions">Clone functions</a></h3>
 <p>Replace all <code>ical*_new_clone()</code> function calls with <code>ical*_clone()</code> .
@@ -1786,7 +2009,7 @@ applied that takes care of de-allocating an instance as soon as the reference co
     }
 </code></pre>
 <h3 id="icalgeotype-now-uses-character-strings-rather-than-doubles"><a class="header" href="#icalgeotype-now-uses-character-strings-rather-than-doubles"><code>icalgeotype</code> now uses character strings rather than doubles</a></h3>
-<p>The members of <code>struct icalgeotype</code> for latitude ('lat<code>) and longitude ('lon</code>) have been changed
+<p>The members of <code>struct icalgeotype</code> for latitude (’lat<code>) and longitude ('lon</code>) have been changed
 to use ICAL_GEO_LEN long character strings rather than the double type.</p>
 <p>This means that simple assignments in 3.0 must be replaced by string copies.</p>
 <pre><code class="language-C">     geo.lat = 0.0;
@@ -1805,6 +2028,8 @@ to use ICAL_GEO_LEN long character strings rather than the double type.</p>
     sscanf(geo.lat, "%lf", &amp;lat);
     sscanf(geo.lon, "%lf", &amp;lon);
 </code></pre>
+<h2 id="icaltime_adjust"><a class="header" href="#icaltime_adjust">icaltime_adjust</a></h2>
+<p>The <code>icaltime_adjust</code> function no longer adjusts null icaltimetypes.</p>
 <h3 id="working-with-icalvalue-and-icalproperty"><a class="header" href="#working-with-icalvalue-and-icalproperty">Working with <code>icalvalue</code> and <code>icalproperty</code></a></h3>
 <p>Code like this in libical 3.0:</p>
 <pre><code class="language-C">    icalvalue *recur_value = ...;
@@ -1819,6 +2044,28 @@ to use ICAL_GEO_LEN long character strings rather than the double type.</p>
     // Work with the object
     // No need to unref
 </code></pre>
+<h3 id="multi-valued-parameters"><a class="header" href="#multi-valued-parameters">Multi-valued parameters</a></h3>
+<p>Support for these multi-valued parameters is added in libical 4.0.</p>
+<ul>
+<li>DELEGATED-FROM (RFC 5545)</li>
+<li>DELEGATED-TO (RFC 5545)</li>
+<li>MEMBER (RFC 5545)</li>
+<li>DISPLAY (RFC 7986)</li>
+<li>FEATURE (RFC 7986)</li>
+</ul>
+<p>You can access the ‘nth’ value for such parameters using the new “_nth” functions.</p>
+<p>For example, to access the first delegated-to attendee use</p>
+<pre><code class="language-c">param = icalproperty_get_first_parameter(prop, ICAL_DELEGATEDTO_PARAMETER);
+icalparameter_get_delegatedto_nth(param, 0)
+</code></pre>
+<h3 id="setting-the-tzid"><a class="header" href="#setting-the-tzid">Setting the tzid</a></h3>
+<p>The <code>icaltimezone_set_tzid_prefix</code> function now allows setting an empty prefix.
+In older libical versions, calling <code>icaltimezone_set_tzid_prefix</code> with an empty tzid prefix
+would reset to the BUILTIN_TZID_PREFIX value (i.e. “”/freeassociation.sourceforge.net/“).</p>
+<p>The new publicly visible function <code>icaltimezone_tzid_prefix</code> returns the current tzid prefix string.</p>
+<p>Note that the tzid prefix must be globally unique (such as a domain name owned by the developer
+of the calling application), and begin and end with forward slashes. The tzid string must be
+fewer than 256 characters long.</p>
 <h2 id="c-library-1"><a class="header" href="#c-library-1">C++ library</a></h2>
 <h3 id="modified-methods"><a class="header" href="#modified-methods">Modified methods</a></h3>
 <ul>
@@ -1875,8 +2122,10 @@ required anymore.  The array is iterated by comparing the iterator to the <code>
     }
 </code></pre>
 <h2 id="glibpython-bindings---changed-icalglibrecurrence_by_-methods"><a class="header" href="#glibpython-bindings---changed-icalglibrecurrence_by_-methods">GLib/Python bindings - changed <code>ICalGLib.Recurrence.*_by_*</code> methods</a></h2>
-<p><code>i_cal_recurrence_*_by_xxx*</code> methods have been replaced by more generic versions that take the 'by'
-type (day, month, ...) as a parameter.</p>
+<p><code>i_cal_recurrence_*_by_xxx*</code> methods have been replaced by more generic versions that take the ‘by’
+type (day, month, …) as a parameter.</p>
+<p><code>i_cal_bt</code> and <code>i_cal_errno_return</code> are renamed to <code>i_calerror_backtrace</code> and
+<code>i_cal_errno_return</code>, respectively.</p>
 <h3 id="migrating-icalglibrecurrence_by_-methods-from-30-to-40"><a class="header" href="#migrating-icalglibrecurrence_by_-methods-from-30-to-40">Migrating <code>ICalGLib.Recurrence.*_by_*</code> methods from 3.0 to 4.0</a></h3>
 <p>Code like this in libical 3.0:</p>
 <pre><code class="language-python">    recurrence.set_by_second(0,
@@ -1886,50 +2135,121 @@ type (day, month, ...) as a parameter.</p>
 <pre><code class="language-python">    recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0,
     recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) + 1)
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="known-limitations"><a class="header" href="#known-limitations">Known Limitations</a></h1>
-<p>List where libical doesn't fully support all the features described in the RFCs.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="known-rfc-exceptions"><a class="header" href="#known-rfc-exceptions">Known RFC Exceptions</a></h1>
+<p>List where libical doesn’t fully follow or support all the features described in the RFCs.</p>
 <p>Contributions to help us fix these limitations are welcome.</p>
 <h2 id="rfc-5545"><a class="header" href="#rfc-5545">RFC 5545</a></h2>
+<h3 id="eventto-dojournalfree-busy-component-section-361-4"><a class="header" href="#eventto-dojournalfree-busy-component-section-361-4">Event/To-Do/Journal/Free-Busy Component section 3.6.[1-4]</a></h3>
+<p>libical does <em>not</em> require Event/To-Do/Journal/FreeBusy components to contain exactly one
+UID and DTSTAMP property - i.e., a missing UID or DTSTAMP property will be ignored and it is
+the calling application’s job to deal with these missing properties as they see fit.</p>
 <h3 id="recurrence-rule-section-3310"><a class="header" href="#recurrence-rule-section-3310">Recurrence Rule section 3.3.10</a></h3>
 <ul>
 <li>
-<p>BYSETPOS is only supported for MONTHLY and YEARLY frequencies (<a href="https://github.com/libical/libical/issues/795">https://github.com/libical/libical/issues/795</a>)</p>
-</li>
-<li>
-<p>FREQ=YEARLY, BYYEARDAY can't be combined with BYWEEKNO, BYMONTH or BYMONTHDAY</p>
+<p>FREQ=YEARLY, BYYEARDAY can’t be combined with BYWEEKNO, BYMONTH or BYMONTHDAY</p>
 <p>ref: <a href="https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2882">https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2882</a></p>
 </li>
 <li>
-<p>FREQ=YEARLY, BYWEEKNO can't be combined with BYYEARDAY, BYMONTH or BYMONTHDAY</p>
+<p>FREQ=YEARLY, BYWEEKNO can’t be combined with BYYEARDAY, BYMONTH or BYMONTHDAY</p>
 <p>ref: <a href="https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2928">https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2928</a></p>
 </li>
 </ul>
-<h3 id="recurrence-rule-sections-3853-duration-336"><a class="header" href="#recurrence-rule-sections-3853-duration-336">Recurrence Rule sections 3.8.5.3, DURATION 3.3.6</a></h3>
+<h3 id="date-time-section-335"><a class="header" href="#date-time-section-335">DATE-TIME section 3.3.5</a></h3>
+<p>The RFC states for “FORM #3: DATE WITH LOCAL TIME AND TIME ZONE REFERENCE”:</p>
+<blockquote>
+<p>If, based on the definition of the referenced time zone, the local
+time described occurs more than once (when changing from daylight
+to standard time), the DATE-TIME value refers to the first
+occurrence of the referenced time.</p>
+</blockquote>
+<p>This only is the case in libical for <code>icaltimetype</code> values having the<code>is_daylight</code> field set,
+but this field is not set by the icalparser when parsing DATE-TIME values. As a consequence,
+durations calculated from such ambiguous datetimes are incorrect.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="internal-limits"><a class="header" href="#internal-limits">Internal Limits</a></h1>
+<p>In order to keep processing times from getting out of hand for huge (or bad) input data
+libical enforces these internal limits.  However, these limits can be changed at runtime
+using the <code>icallimit_set()</code> function. Similarly, the limits can be queried using <code>icallimit_get()</code>.</p>
+<p>The internal limits and their default values are shown here:</p>
 <ul>
 <li>
-<p>The lib (e.g. <code>icalcomponent_foreach_recurrence()</code>, <code>icalcomponent_get_dtend()</code>) does not
-differentiate between nominal and exact durations. According to the RFC, when a component's
-duration is specified using the <code>DURATION</code> property rather than <code>DTEND</code>, the nominal duration
-must be used to calculate each recurrence's duration. However, the current implementation always
-uses the exact duration, which can cause discrepancies if a recurrence spans a daylight saving
-time transition.</p>
-<p>ref: <a href="https://github.com/libical/libical/issues/630">https://github.com/libical/libical/issues/630</a></p>
+<p>Maximum number of parse failures allowed in a calendar file before processing halts</p>
+<pre><code>Kind = ICAL_LIMIT_PARSE_FAILURES
+Default = 1000 (one thousand)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of parse characters to search in a calendar component for the next parameter or property</p>
+<pre><code>Kind = ICAL_LIMIT_PARSE_SEARCH
+Default = 100000 (one hundred thousand)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of parse failure messages inserted into the output (by <code>insert_error()</code>)</p>
+<pre><code>Kind = ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES
+Default = 100 (one hundred)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of properties allowed in a calendar component</p>
+<pre><code>Kind = ICAL_LIMIT_PROPERTIES
+Default = 10000 (ten thousand)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of parameters allowed for a property</p>
+<pre><code>Kind = ICAL_LIMIT_PARAMETERS
+Default = 100 (one hundred)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of characters for a value</p>
+<pre><code>Kind = ICAL_LIMIT_VALUE_CHARS
+Default = 10485760 (10 * 1024 * 1024 ie. 10 mega chars)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of values allowed for multi-valued properties</p>
+<pre><code>Kind = ICAL_LIMIT_PROPERTY_VALUES
+Default = 500
+</code></pre>
+</li>
+<li>
+<p>Maximum number of times to search for the next recurrence before giving up</p>
+<pre><code>Kind = ICAL_LIMIT_RECURRENCE_SEARCH
+Default = 100000 (one hundred thousand)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of times to search for the next recurrence before time is considered standing still</p>
+<pre><code>Kind = ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL
+Default = 50 (fifty)
+</code></pre>
+</li>
+<li>
+<p>Maximum number of times to search vtimezone rrules for an occurrence before the specified end year</p>
+<pre><code>Kind = ICAL_LIMIT_RRULE_SEARCH
+Default = 100 (one hundred)
+</code></pre>
 </li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="libical-rfc-calendar-standards-support"><a class="header" href="#libical-rfc-calendar-standards-support">Libical RFC calendar standards support</a></h1>
-<p><a id="rfcs"></a>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="libical-rfc-calendar-standards-support"><a class="header" href="#libical-rfc-calendar-standards-support">Libical RFC calendar standards support</a></h1>
+<p><a id="rfcs-1"></a>
 Libical implements the RFCS:</p>
 <ul>
 <li><a href="https://tools.ietf.org/html/rfc5545">RFC5545</a> Internet Calendaring and Scheduling Core Object Specification (iCalendar)</li>
 <li><a href="https://tools.ietf.org/html/rfc5546">RFC5546</a> iCalendar Transport-Independent Interoperability Protocol (iTIP)</li>
 <li><a href="https://tools.ietf.org/html/rfc7529">RFC7529</a> Non-Gregorian Recurrence Rules in the Internet Calendaring and
 Scheduling Core Object Specification (iCalendar)</li>
+<li><a href="https://tools.ietf.org/html/rfc6350">RFC6350</a> vCard Format Specification</li>
 </ul>
 <p>as well as iCalendar extensions described in:</p>
 <ul>
 <li><a href="https://tools.ietf.org/html/rfc7986">RFC7986</a> New Properties for iCalendar</li>
 <li><a href="https://tools.ietf.org/html/rfc9073">RFC9073</a> Event Publishing Extensions to iCalendar</li>
-<li><a href="https://tools.ietf.org/html/rfc9074">RFC9074</a> "VALARM" Extensions for iCalendar</li>
+<li><a href="https://tools.ietf.org/html/rfc9074">RFC9074</a> “VALARM” Extensions for iCalendar</li>
 <li><a href="https://tools.ietf.org/html/rfc9253">RFC9253</a> Support for iCalendar Relationships</li>
 </ul>
 <p>Plus:</p>
@@ -1937,9 +2257,24 @@ Scheduling Core Object Specification (iCalendar)</li>
 <li><a href="https://tools.ietf.org/html/rfc6047">RFC6047</a> iCalendar Message-Based Interoperability Protocol (iMIP)</li>
 <li><a href="https://tools.ietf.org/html/rfc6638">RFC6638</a> Scheduling Extensions to CalDAV</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="3rdparty"><a class="header" href="#3rdparty">3rdparty</a></h1>
+<p>3rdparty software bundled within Libical.</p>
+<h2 id="source-code"><a class="header" href="#source-code">Source code</a></h2>
+<p>The internal <code>ical_caldat</code> and <code>ical_juldat</code> functions in
+ical_date_p.[c,h] are copyright 1986-2000, Hiram Clawson with
+the <a href="LICENSES/BSD-3-Clause.txt">BSD-3-Clause</a> license.</p>
+<h2 id="build-time"><a class="header" href="#build-time">Build-time</a></h2>
+<p>These dependencies are only used during build or other purposes like
+generating documentation.</p>
+<h3 id="doxygen-awesome"><a class="header" href="#doxygen-awesome">Doxygen Awesome</a></h3>
+<p><a href="https://github.com/jothepro/doxygen-awesome-css">Doxygen Awesome</a>
+is a custom CSS theme for Doxygen HTML documentation.</p>
+<p><a href="docs/doxygen-awesome.css">code</a> - <a href="LICENSES/MIT.txt">MIT licensed</a></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
 <p>The Libical project was founded in 1999 (or perhaps earlier) by Eric Busboom <a href="mailto:eric@clarinova.com">eric@clarinova.com</a>.</p>
-<p>We use the term "Contributors to the Libical project" to indicate the current active developers,
+<p>We use the term “Contributors to the Libical project” to indicate the current active developers,
 to include and not limited to:</p>
 <ul>
 <li>Allen Winter <a href="mailto:winter@kde.org">winter@kde.org</a> (Maintainer)</li>
@@ -2037,7 +2372,8 @@ thread safe memory allocator, and a lot of documentation.</p>
 <p>Mark Tearle <a href="mailto:mtearle@tearle.com">mtearle@tearle.com</a> for keeping the Python bindings up to date.</p>
 </li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
@@ -2048,18 +2384,23 @@ for details about API changes since libical 3.x.</p>
 <h3 id="added"><a class="header" href="#added">Added</a></h3>
 <ul>
 <li>REUSE compliant licensing</li>
+<li>Supports multi-valued parameters (DELEGATED-FROM, DELEGATED-TO, MEMBER, DISPLAY, FEATURE, etc)</li>
+<li>Adds java bindings</li>
 <li>Brand new icalvcard library that follows the libical API.</li>
 <li>draft-ietf-calext-eventpub-extensions-19 (RFC 9073) support added</li>
 <li>draft-ietf-calext-valarm-extensions-07 (RFC 9074) support added</li>
 <li>Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions</li>
-<li>New CMake option "LIBICAL_ENABLE_64BIT_ICALTIME_T" to use 64-bit time_t implementations
+<li>New CMake option “LIBICAL_ENABLE_64BIT_ICALTIME_T” to use 64-bit time_t implementations
 on 32-bit systems (where available and supported.  Windows-only so far)</li>
 <li>GEO property has arbitrary precision (values are internally stored as strings, not doubles)</li>
 <li>Allow previous recurrence iteration</li>
 <li>icalparser_ctrl setting defines how to handle invalid CONTROL characters during parsing</li>
+<li>Full support for <code>BYSETPOS</code>, i.e. remove the limitation to MONTHLY and YEARLY frequencies</li>
+<li>An API for setting/getting internal library limits (<code>icallimit_set</code> and <code>icallimit_get</code>)</li>
 </ul>
 <h3 id="changed"><a class="header" href="#changed">Changed</a></h3>
 <ul>
+<li>Built-in timezones updated to tzdata2025c to include historical data</li>
 <li>Requires MSVC 2013 or higher (when building on Windows with MSVC)</li>
 <li>Requires CMake v3.20.0 or higher</li>
 <li>For the C++ bindings, requires a C++11 compliant C++ compiler</li>
@@ -2068,13 +2409,33 @@ on 32-bit systems (where available and supported.  Windows-only so far)</li>
 <li>Replace gtk-doc with gi-docgen to produce libical-glib developer documentation</li>
 <li>libical-glib API is considered stable; no longer need to define LIBICAL_GLIB_UNSTABLE_API=1
 before including &lt;libical-glib/libical-glib.h&gt;</li>
+<li>By default, only shared libraries are built; to get static libraries one must invoke
+separate build using the CMake <code>-DLIBICAL_STATIC=True</code> option.</li>
 <li>CMake option -DGOBJECT_INTROSPECTION=True by default.</li>
 <li><code>icaltzutil_get_zone_directory()</code> can use the TZDIR environment to find system zoneinfo</li>
+<li><code>icaltimezone_set_tzid_prefix()</code> now allows setting an empty tzid prefix.</li>
+<li><code>icaldurationtype_from_int</code> and <code>icaldurationtype_as_int</code> have been renamed to
+<code>icaldurationtype_from_seconds</code> and <code>icaldurationtype_as_seconds</code>, respectively.</li>
+<li>Components and properties with arbitrary iana-token names now are parsed with kind
+ICAL_IANA_COMPONENT and ICAL_IANA_PROPERTY if the <code>ical_unknown_token_handling</code>
+setting is ICAL_ASSUME_IANA_TOKEN. Otherwise, they are handled as error.</li>
+<li>Property and parameter names that start with “x-” (lowercase) now also
+are parsed as X kind.</li>
+<li>The <code>icalproperty_remove_parameter_by_(kind|name)</code> functions now remove all matching parameters.
+Before, they only removed the first matching parameter contrary to their documentation.</li>
 </ul>
 <h3 id="deprecated"><a class="header" href="#deprecated">Deprecated</a></h3>
 <ul>
-<li>The icalvcal library is deprecated and will be removed sometime in the 4.x series.
-Please port your icalvcal code to use icalvcard instead.</li>
+<li>
+<p>The icalvcal library is deprecated and will be removed sometime in the 4.x series.
+Please port your icalvcal code to use icalvcard instead.</p>
+</li>
+<li>
+<p>Several CMake options are renamed in favor of a “namespaced” equivalent.
+Please port your buildscripts to the new CMake option names.
+A complete list is provided in this “CMake options” section of the
+<a href="docs/MigrationGuide_to_4.html">Version 4 Migration Guide</a></p>
+</li>
 </ul>
 <h3 id="removed"><a class="header" href="#removed">Removed</a></h3>
 <ul>
@@ -2085,6 +2446,11 @@ Python bindings. Requires building with -DGOBJECT_INTROSPECTION=True</li>
 <ul>
 <li>Fixed <code>icalcomponent_get_duration()</code> to account for DTEND/DUE TZID</li>
 <li>Improved performance of recurrence iterators</li>
+<li>Improved handling of BYWEEKNO when BYDAY is not present</li>
+<li>Fixed <code>icalcomponent_get_dtend()</code> and <code>icalcomponent_foreach_recurrence()</code>
+to correctly handle nominal durations</li>
+<li>Fixed <code>icalcomponent_foreach_recurrence</code> to filter out duplicate
+instances</li>
 </ul>
 <h2 id="3021---unreleased"><a class="header" href="#3021---unreleased">[3.0.21] - Unreleased</a></h2>
 <ul>
@@ -2109,7 +2475,7 @@ Python bindings. Requires building with -DGOBJECT_INTROSPECTION=True</li>
 <li>Add support for RDATE;VALUE=PERIOD</li>
 <li>Fix time conversion to time_t for times before epoch</li>
 <li>Allow <code>icalcomponent_foreach_recurrence</code> to receive <code>DATE</code>-only <code>start</code> and <code>end</code> params.</li>
-<li>Fix the calculation of an event's duration if <code>DTSTART</code> is a <code>DATE</code>-only value.</li>
+<li>Fix the calculation of an event’s duration if <code>DTSTART</code> is a <code>DATE</code>-only value.</li>
 <li>Fix <code>icaltime_span_new()</code> - ignore the case where DTEND is unset and require it to be
 set by the caller instead.</li>
 <li>Various fixes for fuzzer issues</li>
@@ -2196,7 +2562,7 @@ or VFREEBUSY</li>
 </ul>
 <h2 id="309---2021-01-16"><a class="header" href="#309---2021-01-16">[3.0.9] - 2021-01-16</a></h2>
 <ul>
-<li>Add support for empty parameters, e.g. CN=""</li>
+<li>Add support for empty parameters, e.g. CN=“”</li>
 <li>Accept VTIMEZONE with more than one X- property</li>
 <li>Several fixes for recurrences containing BYWEEKNO</li>
 <li><code>icalrecurrencetype_from_string()</code> will reject any RRULE that contains a rule-part that
@@ -2213,13 +2579,13 @@ occurs more than once</li>
 </ul>
 <h2 id="308---2020-03-07"><a class="header" href="#308---2020-03-07">[3.0.8] - 2020-03-07</a></h2>
 <ul>
-<li>Fix for <code>icalattach_new_from_data()</code> and the 'free_fn' argument</li>
+<li>Fix for <code>icalattach_new_from_data()</code> and the ‘free_fn’ argument</li>
 <li>Fix if recurrencetype contains both COUNT and UNTIL (only output UNTIL in the RRULE)</li>
 </ul>
 <h2 id="307---2019-12-15"><a class="header" href="#307---2019-12-15">[3.0.7] - 2019-12-15</a></h2>
 <ul>
 <li>libical-glib: Fix ICalAttach handling of the icalattach native structure</li>
-<li>Let <code>icalattach_new_from_data()</code> use the 'free_fn' argument again</li>
+<li>Let <code>icalattach_new_from_data()</code> use the ‘free_fn’ argument again</li>
 <li>Fix memory leaks in attachment handling and elsewhere</li>
 <li>Fix a multithreading race condition</li>
 <li>More fuzzification fixes</li>
@@ -2259,7 +2625,7 @@ including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
 <li>Fixed <code>icalcomponent_set_comment()</code> and <code>icalcomponent_set_uid()</code></li>
 <li>fix FREQ=MONTHLY;BYMONTH</li>
 <li>Skip UTF-8 marker when parsing</li>
-<li>Fix parsing <CR>?<LF> in VCF files produced by Outlook</li>
+<li>Fix parsing “<cr>?<lf>” in VCF files produced by Outlook</lf></cr></li>
 <li>Fix TZID on DATE-TIME value can override time specified in UTC</li>
 <li>CMake discovery module for ICU uses pkg-config now</li>
 <li>New publicly available function:
@@ -2278,7 +2644,7 @@ including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
 <ul>
 <li>No longer attempt to detect the need for -DUSE_32BIT_TIME_T with MSVC</li>
 <li>New CMake option ICAL_BUILD_DOCS which can be used to disable the docs target</li>
-<li>Fix threading hang in BSD type systems (OpenBSD, MacOS,...)</li>
+<li>Fix threading hang in BSD type systems (OpenBSD, MacOS,…)</li>
 <li>Build with Ninja improvements</li>
 </ul>
 <h2 id="301---2017-11-18"><a class="header" href="#301---2017-11-18">[3.0.1] - 2017-11-18</a></h2>
@@ -2291,11 +2657,11 @@ including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
 <ul>
 <li>Relicense from MPL 1.0 to MPL 2.0 (keep dual license for LGPL v2.1)</li>
 <li>Requires CMake v3.1.0 or higher along with various CMake and buildsystem fixes</li>
-<li>Added a 'make uninstall'</li>
+<li>Added a ‘make uninstall’</li>
 <li>Fixed use-after-free issues and some memory leaks</li>
 <li>Built-in timezones updated to tzdata2017b</li>
 <li>More accurate VTIMEZONE generation when using the system time zone data (when USE_BUILTIN_TZDATA=False)</li>
-<li><code>icalvalue_as_ical_string()</code> returns "TRUE" (non-zero) or "FALSE" (zero) values only.</li>
+<li><code>icalvalue_as_ical_string()</code> returns “TRUE” (non-zero) or “FALSE” (zero) values only.</li>
 <li>New icalvalue.h convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE</li>
 <li>Better value type checking of property values when parsing</li>
 <li>icalvalue_new/set_date and icalvalue_new/set_datetime now enforce DATE and DATE-TIME values respectively</li>
@@ -2361,7 +2727,7 @@ including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
 <li>[Bug] Fix <code>icalcomponent_foreach_recurrence()</code> and large durations between recurrences (e.g. FREQ=YEARLY)</li>
 <li>[Bug] Properly handle UTCOFFSETs of the form +/-00mmss</li>
 <li>[Bug] Properly skip bogus dates (e.g. 2/30, 4/31) in RRULE:FREQ=MONTHLY</li>
-<li>[Bug] Properly handle RRULE:FREQ=MONTHLY;BYDAY;BYMONTHDAY when DTSTART isn't on BYDAY</li>
+<li>[Bug] Properly handle RRULE:FREQ=MONTHLY;BYDAY;BYMONTHDAY when DTSTART isn’t on BYDAY</li>
 <li>[Bug] Fix RRULE:FREQ=YEARLY;BYDAY;BYWEEKNO - MUST use ISO weeks</li>
 </ul>
 <!-- markdownlint-disable MD052 -->
@@ -2440,6 +2806,11 @@ including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
 
         </div>
 
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
 
 
@@ -2448,13 +2819,13 @@ including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
 
@@ -2463,6 +2834,7 @@ including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
             window.setTimeout(window.print, 100);
         });
         </script>
+
 
     </div>
     </body>

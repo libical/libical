@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Libical Manual</title>
-        <base href="/">
+        <title>Known RFC Exceptions - Libical Manual</title>
 
 
         <!-- Custom HTML head -->
@@ -175,14 +174,48 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="known-rfc-exceptions"><a class="header" href="#known-rfc-exceptions">Known RFC Exceptions</a></h1>
+<p>List where libical doesn’t fully follow or support all the features described in the RFCs.</p>
+<p>Contributions to help us fix these limitations are welcome.</p>
+<h2 id="rfc-5545"><a class="header" href="#rfc-5545">RFC 5545</a></h2>
+<h3 id="eventto-dojournalfree-busy-component-section-361-4"><a class="header" href="#eventto-dojournalfree-busy-component-section-361-4">Event/To-Do/Journal/Free-Busy Component section 3.6.[1-4]</a></h3>
+<p>libical does <em>not</em> require Event/To-Do/Journal/FreeBusy components to contain exactly one
+UID and DTSTAMP property - i.e., a missing UID or DTSTAMP property will be ignored and it is
+the calling application’s job to deal with these missing properties as they see fit.</p>
+<h3 id="recurrence-rule-section-3310"><a class="header" href="#recurrence-rule-section-3310">Recurrence Rule section 3.3.10</a></h3>
+<ul>
+<li>
+<p>FREQ=YEARLY, BYYEARDAY can’t be combined with BYWEEKNO, BYMONTH or BYMONTHDAY</p>
+<p>ref: <a href="https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2882">https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2882</a></p>
+</li>
+<li>
+<p>FREQ=YEARLY, BYWEEKNO can’t be combined with BYYEARDAY, BYMONTH or BYMONTHDAY</p>
+<p>ref: <a href="https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2928">https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2928</a></p>
+</li>
+</ul>
+<h3 id="date-time-section-335"><a class="header" href="#date-time-section-335">DATE-TIME section 3.3.5</a></h3>
+<p>The RFC states for “FORM #3: DATE WITH LOCAL TIME AND TIME ZONE REFERENCE”:</p>
+<blockquote>
+<p>If, based on the definition of the referenced time zone, the local
+time described occurs more than once (when changing from daylight
+to standard time), the DATE-TIME value refers to the first
+occurrence of the referenced time.</p>
+</blockquote>
+<p>This only is the case in libical for <code>icaltimetype</code> values having the<code>is_daylight</code> field set,
+but this field is not set by the icalparser when parsing DATE-TIME values. As a consequence,
+durations calculated from such ambiguous datetimes are incorrect.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="MigrationGuide_to_4.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
 
+                            <a rel="next prefetch" href="InternalLimits.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -190,7 +223,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="MigrationGuide_to_4.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
 
+                    <a rel="next prefetch" href="InternalLimits.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
             </nav>
 
         </div>

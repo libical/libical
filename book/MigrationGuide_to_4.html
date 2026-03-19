@@ -12,21 +12,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -36,12 +35,24 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-ea1c8da4.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="toc-efbb6a9c.js"></script>
     </head>
     <body>
-    <div id="body-container">
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -70,56 +81,59 @@
             html.classList.add("js");
         </script>
 
-        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
+                sidebar_toggle.checked = false;
             }
-            sidebar_toggle.checked = sidebar === 'visible';
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
                 <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
             </noscript>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="mdbook-page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
                         </label>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
                         </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
                         </button>
                     </div>
 
@@ -127,36 +141,82 @@
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
 
                     </div>
                 </div>
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
                     </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
                         </ul>
                     </div>
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
 
-                <div id="content" class="content">
+                <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="migrating-to-version-4"><a class="header" href="#migrating-to-version-4">Migrating to version 4</a></h1>
 <p>A guide to help developers port their code from libical v3.x to libical 4.0.</p>
+<h2 id="cmake-options"><a class="header" href="#cmake-options">CMake options</a></h2>
+<p>Some CMake option names have been removed or renamed (deprecated) to the LIBICAL namespace.</p>
+<p>Please change your build scripts to use the new names before the next major release.</p>
+<p>User-specific:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Old Name</th><th>New Name</th></tr>
+</thead>
+<tbody>
+<tr><td>ICAL_ALLOW_EMPTY_PROPERTIES</td><td>removed</td></tr>
+<tr><td>ICAL_BUILD_DOCS</td><td>LIBICAL_BUILD_DOCS</td></tr>
+<tr><td>ICAL_ERRORS_ARE_FATAL</td><td>removed</td></tr>
+<tr><td>ICAL_GLIB</td><td>LIBICAL_GLIB</td></tr>
+<tr><td>ICAL_GLIB_VAPI</td><td>LIBICAL_GLIB_VAPI</td></tr>
+<tr><td>ICAL_GLIB_BUILD_DOCS</td><td>LIBICAL_GLIB_BUILD_DOCS</td></tr>
+<tr><td>USE_BUILTIN_TZDATA</td><td>LIBICAL_ENABLE_BUILTIN_TZDATA</td></tr>
+<tr><td>USE_32BIT_TIME_T</td><td>LIBICAL_ENABLE_MSVC_32BIT_TIME_T</td></tr>
+<tr><td>GOBJECT_INTROSPECTION</td><td>LIBICAL_GOBJECT_INTROSPECTION</td></tr>
+<tr><td>WITH_CXX_BINDINGS</td><td>LIBICAL_CXX_BINDINGS</td></tr>
+<tr><td>ENABLE_LTO_BUILD</td><td>CMAKE_INTERPROCEDURAL_OPTIMIZATION</td></tr>
+<tr><td>SHARED_ONLY</td><td>removed</td></tr>
+<tr><td>STATIC_ONLY</td><td>LIBICAL_STATIC</td></tr>
+</tbody>
+</table>
+</div>
+<p>Developer-specific:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Old Name</th><th>New Name</th></tr>
+</thead>
+<tbody>
+<tr><td>ABI_DUMPER</td><td>LIBICAL_DEVMODE_ABI_DUMPER</td></tr>
+<tr><td>ADDRESS_SANITIZER</td><td>LIBICAL_DEVMODE_ADDRESS_SANITIZER</td></tr>
+<tr><td>LIBICAL_SYNCMODE_THREADLOCAL</td><td>LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL</td></tr>
+<tr><td>THREAD_SANITIZER</td><td>LIBICAL_DEVMODE_THREAD_SANITIZER</td></tr>
+<tr><td>UNDEFINED_SANITIZER</td><td>LIBICAL_DEVMODE_UNDEFINED_SANITIZER</td></tr>
+</tbody>
+</table>
+</div>
 <h2 id="conditional-compilation"><a class="header" href="#conditional-compilation">Conditional compilation</a></h2>
 <p>To continue supporting the 3.0 version you can use conditional compilation, like so:</p>
 <pre><code class="language-C">     #if ICAL_CHECK_VERSION(4,0,0)
@@ -170,12 +230,32 @@
      &lt;...old code for the libical 3.0 version ...&gt;
      #endif
 </code></pre>
+<h2 id="ical_enable_errors_are_fatal"><a class="header" href="#ical_enable_errors_are_fatal">ICAL_ENABLE_ERRORS_ARE_FATAL</a></h2>
+<p>The <code>ICAL_ENABLE_ERRORS_ARE_FATAL</code> conditional compile macro and accompanying CMake option  <code>ICAL_ENABLE_ERRORS_ARE_FATAL</code>
+are removed.</p>
+<p>To abort whenever an error is encountered use the <code>icalerror_set_errors_are_fatal()</code> and <code>icalerror_get_errors_are_fatal()</code>
+functions.</p>
+<h2 id="ical_allow_empty_properties"><a class="header" href="#ical_allow_empty_properties">ICAL_ALLOW_EMPTY_PROPERTIES</a></h2>
+<p>The <code>ICAL_ALLOW_EMPTY_PROPERTIES</code> conditional compile macro and accompanying CMake option <code>ICAL_ALLOW_EMPTY_PROPERTIES</code>
+are removed.</p>
+<p>To allow empty properties you can use the new runtime functions <code>icalproperty_set_allow_empty_properties()</code>
+and <code>icalproperty_get_allow_empty_properties()</code>.</p>
+<h2 id="pvl_use_macros"><a class="header" href="#pvl_use_macros">PVL_USE_MACROS</a></h2>
+<p>The <code>PVL_USE_MACROS</code> conditional compile macro is removed.
+The pvl unit always compiles the <code>pvl_data</code> function.</p>
+<h2 id="ical_seterror_isfunc"><a class="header" href="#ical_seterror_isfunc">ICAL_SETERROR_ISFUNC</a></h2>
+<p>The <code>ICAL_SETERROR_ISFUNC</code> conditional compile macro is removed.
+The icalerror unit always compiles the <code>icalerror_set_errno</code> function.</p>
+<h2 id="ical_boolean_true-and-ical_boolean_false"><a class="header" href="#ical_boolean_true-and-ical_boolean_false">ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE</a></h2>
+<p>The <code>ICAL_BOOLEAN_TRUE</code> and <code>ICAL_BOOLEAN_FALSE</code> macros are removed.
+The C library is C99 standards compliant and uses bool types.</p>
 <h2 id="c-library"><a class="header" href="#c-library">C library</a></h2>
 <h3 id="modified-functions"><a class="header" href="#modified-functions">Modified functions</a></h3>
 <ul>
 <li>
 <p><code>icalrecurrencetype_from_string()</code> was replaced by <code>icalrecurrencetype_new_from_string()</code>,
-which returns a <code>struct icalrecurrencetype *</code> rather than a <code>struct icalrecurrencetype</code>.</p>
+which returns a <code>struct icalrecurrencetype *</code> rather than a <code>struct icalrecurrencetype</code>.
+Free the allocated memory using <code>icalrecurrencetype_unref()</code>.</p>
 </li>
 <li>
 <p>The following functions now take arguments of type <code>struct icalrecurrencetype *</code> rather than
@@ -204,20 +284,64 @@ which returns a <code>struct icalrecurrencetype *</code> rather than a <code>str
 <li><code>icalvalue_get_recur()</code></li>
 </ul>
 </li>
+<li>
+<p><code>icaltimezone_convert_time()</code> now populates the icaltimetype zone member on conversion;
+i.e. the timezone information is not lost during a conversion.</p>
+</li>
+<li>
+<p>To more clearly illustrate their intended purpose, the <code>icaldurationtype_from_int()</code> and <code>icaldurationtype_as_int()</code>
+have been renamed to <code>icaldurationtype_from_seconds()</code> and <code>icaldurationtype_as_seconds()</code>, respectively.
+The functionality of <code>icaldurationtype_from_seconds</code> has not changed. The functionality for
+<code>icaldurationtype_as_seconds</code> has changed, such that a duration with days or weeks fails
+with a ICAL_MALFORMEDDATA_ERROR and returns 0. To preserve the former logic of
+<code>icaldurationtype_as_int</code>, use he newly introduced <code>icaldurationtype_as_utc_seconds</code>.</p>
+</li>
+<li>
+<p>Similarly, the <code>icaltime_add()</code> and <code>icaltime_subtract()</code> functions are now called
+<code>icalduration_extend()</code> and <code>icalduration_from_times()</code>.  Their functionality has not changed.</p>
+</li>
+<li>
+<p>The <code>get_zone_directory()</code> and <code>set_zone_directory()</code> functions are have been renamed to
+<code>icaltimezone_get_zone_directory()</code> and <code>icaltimezone_set_zone_directory()</code>, respectively.</p>
+</li>
+<li>
+<p>The <code>icaltzutil_set_zone_directory()</code> and <code>icaltzutil_get_zone_directory()</code> functions are now called
+<code>icaltimezone_set_system_zone_directory()</code> and <code>icaltimezone_get_system_zone_directory()</code> respectively.</p>
+</li>
+<li>
+<p>In previous versions, the <code>icalvalue_compare()</code> function returned 0 if unknown or null value types
+were encountered; in this version, ICAL_XLICCOMPARETYPE_NONE is returned instead.</p>
+</li>
+<li>
+<p>In previous versions, the <code>icalcomponent_get_status()</code> returned 0 if a problem parsing the status
+property was detected; in this version, ICAL_STATUS_NONE is returned instead.</p>
+</li>
+<li>
+<p>The <code>ical_bt()</code> and <code>icalerrno_return()</code> functions have been renamed to
+<code>icalerror_backtrace()</code> and icalerror_icalerrno()` respectively for the sake
+of consistent function name-spacing.</p>
+</li>
 </ul>
 <h3 id="new-functions"><a class="header" href="#new-functions">New functions</a></h3>
 <p>The following functions have been added:</p>
 <ul>
+<li><code>icallimit_set()</code></li>
+<li><code>icallimit_get()</code></li>
+<li><code>icalarray_set_element_at()</code></li>
 <li><code>icalrecurrencetype_new()</code></li>
 <li><code>icalrecurrencetype_ref()</code></li>
 <li><code>icalrecurrencetype_unref()</code></li>
 <li><code>icalrecurrencetype_clone()</code></li>
 <li><code>icalrecurrencetype_encode_day()</code></li>
 <li><code>icalrecurrencetype_encode_month()</code></li>
-<li><code>icaltzutil_set_zone_directory()</code></li>
 <li><code>icalcomponent_clone()</code></li>
 <li><code>icalproperty_clone()</code></li>
+<li><code>icalproperty_set_allow_empty_properties()</code></li>
+<li><code>icalproperty_get_allow_empty_properties()</code></li>
 <li><code>icalparameter_clone()</code></li>
+<li><code>icalparameter_kind_value_kind()</code></li>
+<li><code>icalparameter_is_multivalued()</code></li>
+<li><code>icalparameter_decode_value()</code></li>
 <li><code>icalvalue_clone()</code></li>
 <li><code>icalcluster_clone()</code></li>
 <li><code>icalrecur_iterator_prev()</code></li>
@@ -227,6 +351,9 @@ which returns a <code>struct icalrecurrencetype *</code> rather than a <code>str
 <li><code>icalrecurrencetype_unref()</code></li>
 <li><code>icalrecurrencetype_clone()</code></li>
 <li><code>icalrecurrencetype_from_string()</code></li>
+<li><code>icalcomponent_new_iana()</code></li>
+<li><code>icalcomponent_set_iana_name()</code></li>
+<li><code>icalcomponent_get_iana_name()</code></li>
 <li><code>icalcomponent_set_x_name()</code></li>
 <li><code>icalcomponent_get_x_name()</code></li>
 <li><code>icalcomponent_get_component_name()</code></li>
@@ -235,11 +362,35 @@ which returns a <code>struct icalrecurrencetype *</code> rather than a <code>str
 <li><code>ical_get_invalid_rrule_handling_setting()</code></li>
 <li><code>icalparser_get_ctrl()</code></li>
 <li><code>icalparser_set_ctrl()</code></li>
+<li><code>icaltimezone_tzid_prefix()</code></li>
+<li><code>icaltimezone_set_system_zone_directory()</code></li>
+<li><code>icalcompiter_is_valid()</code></li>
+<li><code>icalpropiter_is_valid()</code></li>
+<li><code>icalproperty_new_iana()</code></li>
+<li><code>icalproperty_set_iana_name()</code></li>
+<li><code>icalproperty_get_iana_name()</code></li>
+<li>and the new functions for the <code>icalstrarray</code> and <code>icalenumarray</code> data types</li>
 </ul>
 <h3 id="removed-functions"><a class="header" href="#removed-functions">Removed functions</a></h3>
 <ul>
 <li>
+<p><code>icalmime_parse()</code> has been removed. Please use another library if you need a MIME parser.</p>
+</li>
+<li>
+<p><code>icaltime_week_number()</code> has been removed. (it never properly accounted for the
+start day of the week in different locales).</p>
+</li>
+<li>
 <p><code>icalrecurrencetype_clear()</code> has been removed.</p>
+</li>
+<li>
+<p><code>icaltimezone_release_zone_tab()</code> has been removed.
+Use `icaltimezone_free_builtin_timezones()  instead.</p>
+</li>
+<li>
+<p><code>icalrecurrencetype_rscale_is_supported()</code> has been removed as
+RSCALE=GREGORIAN is supported without libicu now.
+Replace <code>icalrecurrencetype_rscale_is_supported()</code> calls with a true condition.</p>
 </li>
 <li>
 <p>These deprecated functions have been removed:</p>
@@ -258,6 +409,54 @@ which returns a <code>struct icalrecurrencetype *</code> rather than a <code>str
 <ul>
 <li><code>icaltzutil_fetch_timezone()</code></li>
 <li><code>icalrecurrencetype_clear()</code></li>
+<li><code>icalproperty_new_impl()</code></li>
+<li><code>icaltimezone_array_new()</code></li>
+<li><code>icaltimezone_array_append_from_vtimezone()</code></li>
+<li><code>icaltimezone_array_free()</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="removed-macros"><a class="header" href="#removed-macros">Removed macros</a></h3>
+<p>These convenience macros were added in version 3 to ease porting from older versions.
+They have been removed in version 4 and should be replaced with their actual function
+names as follows:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Old Macro Name</th><th>Actual Function Name</th></tr>
+</thead>
+<tbody>
+<tr><td>icalenum_action_to_string</td><td>icalproperty_action_to_string</td></tr>
+<tr><td>icalenum_class_to_string</td><td>icalproperty_class_to_string</td></tr>
+<tr><td>icalenum_component_kind_to_string</td><td>icalcomponent_kind_to_string</td></tr>
+<tr><td>icalenum_method_to_string</td><td>icalproperty_method_to_string</td></tr>
+<tr><td>icalenum_participanttype_to_string</td><td>icalproperty_participanttype_to_string</td></tr>
+<tr><td>icalenum_property_kind_to_string</td><td>icalproperty_kind_to_string</td></tr>
+<tr><td>icalenum_property_kind_to_value_kind</td><td>icalproperty_kind_to_value_kind</td></tr>
+<tr><td>icalenum_resourcetype_to_string</td><td>icalproperty_resourcetype_to_string</td></tr>
+<tr><td>icalenum_status_to_string</td><td>icalproperty_status_to_string</td></tr>
+<tr><td>icalenum_string_to_action</td><td>icalproperty_string_to_action</td></tr>
+<tr><td>icalenum_string_to_class</td><td>icalproperty_string_to_class</td></tr>
+<tr><td>icalenum_string_to_component_kind</td><td>icalcomponent_string_to_kind</td></tr>
+<tr><td>icalenum_string_to_method</td><td>icalproperty_string_to_method</td></tr>
+<tr><td>icalenum_string_to_participanttype</td><td>icalproperty_string_to_participanttype</td></tr>
+<tr><td>icalenum_string_to_property_kind</td><td>icalproperty_string_to_kind</td></tr>
+<tr><td>icalenum_string_to_resourcetype</td><td>icalproperty_string_to_resourcetype</td></tr>
+<tr><td>icalenum_string_to_status</td><td>icalproperty_string_to_status</td></tr>
+<tr><td>icalenum_string_to_transp</td><td>icalproperty_string_to_transp</td></tr>
+<tr><td>icalenum_string_to_value_kind</td><td>icalvalue_string_to_kind</td></tr>
+<tr><td>icalenum_transp_to_string</td><td>icalproperty_transp_to_string</td></tr>
+<tr><td>icalenum_value_kind_to_string</td><td>icalvalue_kind_to_string</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="added-data-types"><a class="header" href="#added-data-types">Added data types</a></h3>
+<ul>
+<li>These data types have been added:
+<ul>
+<li>icalstrarray - for manipulating an array of strings</li>
+<li>icalenumarray_element - structure to hold a generic enum value</li>
+<li>icalenumarray - for manipulating an array of enum elements</li>
 </ul>
 </li>
 </ul>
@@ -271,8 +470,10 @@ which returns a <code>struct icalrecurrencetype *</code> rather than a <code>str
 </li>
 </ul>
 <h3 id="migrating-from-30-to-40"><a class="header" href="#migrating-from-30-to-40">Migrating from 3.0 to 4.0</a></h3>
+<h3 id="const-pointers"><a class="header" href="#const-pointers">const pointers</a></h3>
+<p>Many function signatures have been changed to use const pointers.</p>
 <h3 id="bool-return-values"><a class="header" href="#bool-return-values">bool return values</a></h3>
-<p>A number of function signatures have been changed to use 'bool' rather than 'int' types.</p>
+<p>A number of function signatures have been changed to use ‘bool’ rather than ‘int’ types.</p>
 <p>This is implemented using the C99 standards compliant &lt;stdbool.h&gt; header.</p>
 <h3 id="clone-functions"><a class="header" href="#clone-functions">Clone functions</a></h3>
 <p>Replace all <code>ical*_new_clone()</code> function calls with <code>ical*_clone()</code> .
@@ -304,7 +505,7 @@ applied that takes care of de-allocating an instance as soon as the reference co
     }
 </code></pre>
 <h3 id="icalgeotype-now-uses-character-strings-rather-than-doubles"><a class="header" href="#icalgeotype-now-uses-character-strings-rather-than-doubles"><code>icalgeotype</code> now uses character strings rather than doubles</a></h3>
-<p>The members of <code>struct icalgeotype</code> for latitude ('lat<code>) and longitude ('lon</code>) have been changed
+<p>The members of <code>struct icalgeotype</code> for latitude (’lat<code>) and longitude ('lon</code>) have been changed
 to use ICAL_GEO_LEN long character strings rather than the double type.</p>
 <p>This means that simple assignments in 3.0 must be replaced by string copies.</p>
 <pre><code class="language-C">     geo.lat = 0.0;
@@ -323,6 +524,8 @@ to use ICAL_GEO_LEN long character strings rather than the double type.</p>
     sscanf(geo.lat, "%lf", &amp;lat);
     sscanf(geo.lon, "%lf", &amp;lon);
 </code></pre>
+<h2 id="icaltime_adjust"><a class="header" href="#icaltime_adjust">icaltime_adjust</a></h2>
+<p>The <code>icaltime_adjust</code> function no longer adjusts null icaltimetypes.</p>
 <h3 id="working-with-icalvalue-and-icalproperty"><a class="header" href="#working-with-icalvalue-and-icalproperty">Working with <code>icalvalue</code> and <code>icalproperty</code></a></h3>
 <p>Code like this in libical 3.0:</p>
 <pre><code class="language-C">    icalvalue *recur_value = ...;
@@ -337,6 +540,28 @@ to use ICAL_GEO_LEN long character strings rather than the double type.</p>
     // Work with the object
     // No need to unref
 </code></pre>
+<h3 id="multi-valued-parameters"><a class="header" href="#multi-valued-parameters">Multi-valued parameters</a></h3>
+<p>Support for these multi-valued parameters is added in libical 4.0.</p>
+<ul>
+<li>DELEGATED-FROM (RFC 5545)</li>
+<li>DELEGATED-TO (RFC 5545)</li>
+<li>MEMBER (RFC 5545)</li>
+<li>DISPLAY (RFC 7986)</li>
+<li>FEATURE (RFC 7986)</li>
+</ul>
+<p>You can access the ‘nth’ value for such parameters using the new “_nth” functions.</p>
+<p>For example, to access the first delegated-to attendee use</p>
+<pre><code class="language-c">param = icalproperty_get_first_parameter(prop, ICAL_DELEGATEDTO_PARAMETER);
+icalparameter_get_delegatedto_nth(param, 0)
+</code></pre>
+<h3 id="setting-the-tzid"><a class="header" href="#setting-the-tzid">Setting the tzid</a></h3>
+<p>The <code>icaltimezone_set_tzid_prefix</code> function now allows setting an empty prefix.
+In older libical versions, calling <code>icaltimezone_set_tzid_prefix</code> with an empty tzid prefix
+would reset to the BUILTIN_TZID_PREFIX value (i.e. “”/freeassociation.sourceforge.net/“).</p>
+<p>The new publicly visible function <code>icaltimezone_tzid_prefix</code> returns the current tzid prefix string.</p>
+<p>Note that the tzid prefix must be globally unique (such as a domain name owned by the developer
+of the calling application), and begin and end with forward slashes. The tzid string must be
+fewer than 256 characters long.</p>
 <h2 id="c-library-1"><a class="header" href="#c-library-1">C++ library</a></h2>
 <h3 id="modified-methods"><a class="header" href="#modified-methods">Modified methods</a></h3>
 <ul>
@@ -393,8 +618,10 @@ required anymore.  The array is iterated by comparing the iterator to the <code>
     }
 </code></pre>
 <h2 id="glibpython-bindings---changed-icalglibrecurrence_by_-methods"><a class="header" href="#glibpython-bindings---changed-icalglibrecurrence_by_-methods">GLib/Python bindings - changed <code>ICalGLib.Recurrence.*_by_*</code> methods</a></h2>
-<p><code>i_cal_recurrence_*_by_xxx*</code> methods have been replaced by more generic versions that take the 'by'
-type (day, month, ...) as a parameter.</p>
+<p><code>i_cal_recurrence_*_by_xxx*</code> methods have been replaced by more generic versions that take the ‘by’
+type (day, month, …) as a parameter.</p>
+<p><code>i_cal_bt</code> and <code>i_cal_errno_return</code> are renamed to <code>i_calerror_backtrace</code> and
+<code>i_cal_errno_return</code>, respectively.</p>
 <h3 id="migrating-icalglibrecurrence_by_-methods-from-30-to-40"><a class="header" href="#migrating-icalglibrecurrence_by_-methods-from-30-to-40">Migrating <code>ICalGLib.Recurrence.*_by_*</code> methods from 3.0 to 4.0</a></h3>
 <p>Code like this in libical 3.0:</p>
 <pre><code class="language-python">    recurrence.set_by_second(0,
@@ -410,11 +637,11 @@ type (day, month, ...) as a parameter.</p>
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                             <a rel="prev" href="UsingLibical.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="KnownLimitations.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                            <a rel="next prefetch" href="KnownExceptions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
                         <div style="clear: both"></div>
@@ -424,16 +651,21 @@ type (day, month, ...) as a parameter.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                     <a rel="prev" href="UsingLibical.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="KnownLimitations.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                    <a rel="next prefetch" href="KnownExceptions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
 
         </div>
 
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
 
 
@@ -442,15 +674,16 @@ type (day, month, ...) as a parameter.</p>
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
+
 
 
     </div>

@@ -51,6 +51,11 @@ if(DOXYGEN_FOUND)
     ${PROJECT_SOURCE_DIR}/src/libicalvcal/*.cxx
     ${PROJECT_BINARY_DIR}/src/libicalvcal/*.c
     ${PROJECT_BINARY_DIR}/src/libicalvcal/*.h
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*.h
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*.c
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*.cxx
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/*.c
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/*.h
   )
   list(APPEND _all_hdrs ${_dox_deps})
   _join_list(DOXYGEN_INPUT " " ${_all_hdrs})
@@ -88,7 +93,7 @@ if(DOXYGEN_FOUND)
     icalss
     icalvcal
   )
-  if(WITH_CXX_BINDINGS)
+  if(LIBICAL_CXX_BINDINGS)
     add_dependencies(
       docs
       ical_cxx
