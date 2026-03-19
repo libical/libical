@@ -1,3 +1,4 @@
+<!-- HTML header for doxygen 1.14.0-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
@@ -70,7 +71,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a href="dir_d24e1f32a4341799b79663a51704514c.html">src</a></li><li class="navelem"><a href="dir_09f2f6a10a8f8f6cc015af47b239d7a0.html">libical</a></li>  </ul>
+<li class="navelem"><a href="dir_5330c68354327086ecc8df050e51eedc.html">src</a></li><li class="navelem"><a href="dir_8e427daf5a9f830cf32cf5e679910194.html">libical</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div id="doc-content">
@@ -111,7 +112,6 @@ typedef struct icaltime_span&#160;</td><td class="memItemRight" valign="bottom">
 typedef struct icaltimetype&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimetype</b></td></tr>
 <tr class="memitem:a8561e9d4374ca1e29cd5ade459a50208" id="r_a8561e9d4374ca1e29cd5ade459a50208"><td class="memItemLeft" align="right" valign="top"><a id="a8561e9d4374ca1e29cd5ade459a50208" name="a8561e9d4374ca1e29cd5ade459a50208"></a>
 typedef struct <a class="el" href="struct__icaltimezone.html">_icaltimezone</a>&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone</b></td></tr>
-<tr class="memdesc:a8561e9d4374ca1e29cd5ade459a50208"><td class="mdescLeft">&#160;</td><td class="mdescRight">An opaque struct representing a timezone. We declare this here to avoid a circular dependency. <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -122,17 +122,17 @@ Functions</h2></td></tr>
 <tr class="memitem:aff3743be95ab23fecba3a1de69ffdc2e" id="r_aff3743be95ab23fecba3a1de69ffdc2e"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff3743be95ab23fecba3a1de69ffdc2e">icaltime_as_ical_string_r</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> tt)</td></tr>
 <tr class="memdesc:aff3743be95ab23fecba3a1de69ffdc2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string representation of the time, in RFC5545 format.  <br /></td></tr>
 <tr class="memitem:a7b39742d0f786f41df391c62ee56ec10" id="r_a7b39742d0f786f41df391c62ee56ec10"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b39742d0f786f41df391c62ee56ec10">icaltime_as_timet</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a>)</td></tr>
-<tr class="memitem:a4ec8d0734d00b761745ea55808db8237" id="r_a4ec8d0734d00b761745ea55808db8237"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ec8d0734d00b761745ea55808db8237">icaltime_as_timet_with_zone</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> tt, const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:a4ec8d0734d00b761745ea55808db8237" id="r_a4ec8d0734d00b761745ea55808db8237"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ec8d0734d00b761745ea55808db8237">icaltime_as_timet_with_zone</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> tt, const <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *zone)</td></tr>
 <tr class="memdesc:a4ec8d0734d00b761745ea55808db8237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time as seconds past the UNIX epoch, using the given timezone.  <br /></td></tr>
 <tr class="memitem:a123759194c6e8c44e1b05193cb61196a" id="r_a123759194c6e8c44e1b05193cb61196a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a123759194c6e8c44e1b05193cb61196a">icaltime_compare</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> a, const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> b)</td></tr>
 <tr class="memdesc:a123759194c6e8c44e1b05193cb61196a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns -1, 0, or 1 to indicate that a is less than b, a equals b, or a is greater than b.  <br /></td></tr>
 <tr class="memitem:a178f667071ea4e8f22140ee8e2f4cdae" id="r_a178f667071ea4e8f22140ee8e2f4cdae"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a178f667071ea4e8f22140ee8e2f4cdae">icaltime_compare_date_only</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> a, const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> b)</td></tr>
 <tr class="memdesc:a178f667071ea4e8f22140ee8e2f4cdae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like icaltime_compare, but only use the date parts.  <br /></td></tr>
-<tr class="memitem:abfa31574ddedeaf5e5b783b29ce0346d" id="r_abfa31574ddedeaf5e5b783b29ce0346d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfa31574ddedeaf5e5b783b29ce0346d">icaltime_compare_date_only_tz</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> a, const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> b, <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *tz)</td></tr>
+<tr class="memitem:abfa31574ddedeaf5e5b783b29ce0346d" id="r_abfa31574ddedeaf5e5b783b29ce0346d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfa31574ddedeaf5e5b783b29ce0346d">icaltime_compare_date_only_tz</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> a, const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> b, <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *tz)</td></tr>
 <tr class="memdesc:abfa31574ddedeaf5e5b783b29ce0346d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like icaltime_compare, but only use the date parts; accepts timezone.  <br /></td></tr>
-<tr class="memitem:a9fd9b6de943eec5733b74d958951a9c8" id="r_a9fd9b6de943eec5733b74d958951a9c8"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9fd9b6de943eec5733b74d958951a9c8">icaltime_convert_to_zone</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> tt, <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:a9fd9b6de943eec5733b74d958951a9c8" id="r_a9fd9b6de943eec5733b74d958951a9c8"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9fd9b6de943eec5733b74d958951a9c8">icaltime_convert_to_zone</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> tt, <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *zone)</td></tr>
 <tr class="memdesc:a9fd9b6de943eec5733b74d958951a9c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts time to a given timezone.  <br /></td></tr>
-<tr class="memitem:a35ab8c2fdc5766e30d3dd6c873af0151" id="r_a35ab8c2fdc5766e30d3dd6c873af0151"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35ab8c2fdc5766e30d3dd6c873af0151">icaltime_current_time_with_zone</a> (const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:a35ab8c2fdc5766e30d3dd6c873af0151" id="r_a35ab8c2fdc5766e30d3dd6c873af0151"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35ab8c2fdc5766e30d3dd6c873af0151">icaltime_current_time_with_zone</a> (const <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *zone)</td></tr>
 <tr class="memdesc:a35ab8c2fdc5766e30d3dd6c873af0151"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience constructor.  <br /></td></tr>
 <tr class="memitem:a6df493d8d79b6eef9fca25adefbb6d69" id="r_a6df493d8d79b6eef9fca25adefbb6d69"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6df493d8d79b6eef9fca25adefbb6d69">icaltime_day_of_week</a> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> t)</td></tr>
 <tr class="memdesc:a6df493d8d79b6eef9fca25adefbb6d69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the day of the week of the given time.  <br /></td></tr>
@@ -143,10 +143,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_day_of_year</
 <tr class="memitem:ac50c6fc84b7b70f1678d1771c287b73b" id="r_ac50c6fc84b7b70f1678d1771c287b73b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac50c6fc84b7b70f1678d1771c287b73b">icaltime_days_in_year</a> (const int year)</td></tr>
 <tr class="memitem:a2915233b392cc2a68aa5a9acf39e2307" id="r_a2915233b392cc2a68aa5a9acf39e2307"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2915233b392cc2a68aa5a9acf39e2307">icaltime_from_day_of_year</a> (const int doy, const int year)</td></tr>
 <tr class="memitem:a1b66b9f52a9823b95e4cd33f9dd9b8e5" id="r_a1b66b9f52a9823b95e4cd33f9dd9b8e5"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a> (const char *str)</td></tr>
-<tr class="memitem:afa1f4bd60882a641f0e0b8d5b549a36b" id="r_afa1f4bd60882a641f0e0b8d5b549a36b"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa1f4bd60882a641f0e0b8d5b549a36b">icaltime_from_timet_with_zone</a> (const time_t tm, const bool is_date, const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:afa1f4bd60882a641f0e0b8d5b549a36b" id="r_afa1f4bd60882a641f0e0b8d5b549a36b"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa1f4bd60882a641f0e0b8d5b549a36b">icaltime_from_timet_with_zone</a> (const time_t tm, const bool is_date, const <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *zone)</td></tr>
 <tr class="memdesc:afa1f4bd60882a641f0e0b8d5b549a36b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <br /></td></tr>
 <tr class="memitem:a5a59eb5d3951c49e5d62953fcffda3b0" id="r_a5a59eb5d3951c49e5d62953fcffda3b0"><td class="memItemLeft" align="right" valign="top"><a id="a5a59eb5d3951c49e5d62953fcffda3b0" name="a5a59eb5d3951c49e5d62953fcffda3b0"></a>
-const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_get_timezone</b> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> t)</td></tr>
+const <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_get_timezone</b> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> t)</td></tr>
 <tr class="memdesc:a5a59eb5d3951c49e5d62953fcffda3b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the timezone. <br /></td></tr>
 <tr class="memitem:a2189e2b4850921f206f87e7112e9e55b" id="r_a2189e2b4850921f206f87e7112e9e55b"><td class="memItemLeft" align="right" valign="top"><a id="a2189e2b4850921f206f87e7112e9e55b" name="a2189e2b4850921f206f87e7112e9e55b"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_get_tzid</b> (const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> t)</td></tr>
@@ -168,7 +168,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time
 <tr class="memdesc:a7c210823a8ad13687089f12ad285df25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <br /></td></tr>
 <tr class="memitem:af3f088ebb60b8716131742ef16eb7ce1" id="r_af3f088ebb60b8716131742ef16eb7ce1"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3f088ebb60b8716131742ef16eb7ce1">icaltime_null_time</a> (void)</td></tr>
 <tr class="memdesc:af3f088ebb60b8716131742ef16eb7ce1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <br /></td></tr>
-<tr class="memitem:aea5c3a433f2919943b42d7d6400f6304" id="r_aea5c3a433f2919943b42d7d6400f6304"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea5c3a433f2919943b42d7d6400f6304">icaltime_set_timezone</a> (struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *t, const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:aea5c3a433f2919943b42d7d6400f6304" id="r_aea5c3a433f2919943b42d7d6400f6304"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea5c3a433f2919943b42d7d6400f6304">icaltime_set_timezone</a> (struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *t, const <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *zone)</td></tr>
 <tr class="memdesc:aea5c3a433f2919943b42d7d6400f6304"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the timezone.  <br /></td></tr>
 <tr class="memitem:ab887553a0877a88ddb1315afff38bbb4" id="r_ab887553a0877a88ddb1315afff38bbb4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab887553a0877a88ddb1315afff38bbb4">icaltime_span_contains</a> (const <a class="el" href="structicaltime__span.html">icaltime_span</a> *s, const <a class="el" href="structicaltime__span.html">icaltime_span</a> *container)</td></tr>
 <tr class="memdesc:ab887553a0877a88ddb1315afff38bbb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the span is totally within the containing span.  <br /></td></tr>
@@ -344,7 +344,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -421,7 +421,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>tz</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="struct__icaltimezone.html">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>tz</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -445,7 +445,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="struct__icaltimezone.html">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -467,7 +467,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time
         <tr>
           <td class="memname">struct <a class="el" href="structicaltimetype.html">icaltimetype</a> icaltime_current_time_with_zone </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -611,7 +611,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -783,7 +783,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>icaltime_is_null_time
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="struct__icaltimezone.html">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">

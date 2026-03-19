@@ -1,3 +1,4 @@
+<!-- HTML header for doxygen 1.14.0-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
@@ -314,7 +315,7 @@ $(function() {
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
 <div class="ttc" id="aicalparser_8h_html_a02ed734ea9f8f1c2f22716d1838f56ab"><div class="ttname"><a href="icalparser_8h.html#a02ed734ea9f8f1c2f22716d1838f56ab">icalparser_add_line</a></div><div class="ttdeci">icalcomponent * icalparser_add_line(icalparser *parser, char *line)</div><div class="ttdoc">Adds a single line to be parsed by the icalparser.</div><div class="ttdef"><b>Definition</b> icalparser.c:641</div></div>
-<div class="ttc" id="aicalparser_8h_html_aa6e4c9c494345c51adf49a7e30255fb7"><div class="ttname"><a href="icalparser_8h.html#aa6e4c9c494345c51adf49a7e30255fb7">icalparser_clean</a></div><div class="ttdeci">icalcomponent * icalparser_clean(icalparser *parser)</div><div class="ttdoc">Cleans out an icalparser and returns whatever it has parsed so far.</div><div class="ttdef"><b>Definition</b> icalparser.c:1208</div></div>
+<div class="ttc" id="aicalparser_8h_html_aa6e4c9c494345c51adf49a7e30255fb7"><div class="ttname"><a href="icalparser_8h.html#aa6e4c9c494345c51adf49a7e30255fb7">icalparser_clean</a></div><div class="ttdeci">icalcomponent * icalparser_clean(icalparser *parser)</div><div class="ttdoc">Cleans out an icalparser and returns whatever it has parsed so far.</div><div class="ttdef"><b>Definition</b> icalparser.c:1222</div></div>
 </div><!-- fragment --><p>The parser object parametrizes the routine used to get input lines with <span class="tt">icalparser_set_gen_data()</span>and <span class="tt">icalparser_get_line()</span>. In this example, the routine <span class="tt">read_stream()</span> will fetch the next line from a stream, with the stream passed in as the <span class="tt">void*</span> parameter d. The parser calls <span class="tt">read_stream()</span> from <span class="tt">icalparser_get_line()</span>, but it also needs to know what stream to use. This is set by the call to <span class="tt">icalparser_set_gen_data()</span>. By using a different routine for <span class="tt">read_stream()</span> or passing in different data with <span class="tt">icalparser_set_gen_data()</span>, you can connect to any data source.</p>
 <p>Using the same mechanism, other implementations could read from memory buffers, sockets or other interfaces.</p>
 <p>Since the example code is a very common way to use the parser, there is a convenience routine;</p>
@@ -523,8 +524,7 @@ $(function() {
 5.2.7 Checking Component Validity</h3>
 <p><a href="https://tools.ietf.org/html/rfc5546">RFC5546</a> defines rules for what properties must exist in a component to be used for transferring scheduling data. Most of these rules relate to the existence of properties relative to the <span class="tt">METHOD</span> property, which declares what operation a remote receiver should use to process a component. For instance, if the <span class="tt">METHOD</span> is <span class="tt">REQUEST</span> and the component is a <span class="tt">VEVENT</span>, the sender is probably asking the receiver to join in a meeting. In this case, RFC5546 says that the component must specify a start time (<span class="tt">DTSTART</span>) and list the receiver as an attendee (<span class="tt">ATTENDEE</span>).</p>
 <p>Libical can check these restrictions with the routine:</p>
-<div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="icalrestriction_8h.html#aa88cfea2c38ed197d1047c7378dc2975">icalrestriction_check</a>(icalcomponent* comp);</div>
-<div class="ttc" id="aicalrestriction_8h_html_aa88cfea2c38ed197d1047c7378dc2975"><div class="ttname"><a href="icalrestriction_8h.html#aa88cfea2c38ed197d1047c7378dc2975">icalrestriction_check</a></div><div class="ttdeci">bool icalrestriction_check(icalcomponent *comp)</div><div class="ttdoc">Checks if a given VCALENDAR meets all the restrictions imposed by the standard.</div></div>
+<div class="fragment"><div class="line"><span class="keywordtype">int</span> icalrestriction_check(icalcomponent* comp);</div>
 </div><!-- fragment --><p>This routine returns 0 if the component does not pass RFC5546 restrictions, or if the component is malformed. The component you pass in must be a <span class="tt">VCALENDAR</span>, with one or more children, like the examples in RFC5546.</p>
 <p>When this routine runs, it will insert new properties into the component to indicate any errors it finds. See section 6.5.3, <span class="tt">X-LIC-ERROR</span> for more information about these error properties.</p>
 <p>5.2.8 Converting Components to Text</p>
@@ -552,9 +552,8 @@ $(function() {
 <div class="line">  <span class="keywordtype">int</span> <a class="code hl_variable" href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">month</a>;</div>
 <div class="line">  <span class="keywordtype">int</span> second;</div>
 <div class="line">  <span class="keywordtype">int</span> <a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a>;</div>
-<div class="line">  <span class="keyword">const</span> <a class="code hl_typedef" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> * <a class="code hl_variable" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">zone</a>; <span class="comment">/* timezone */</span></div>
+<div class="line">  <span class="keyword">const</span> icaltimezone * <a class="code hl_variable" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">zone</a>; <span class="comment">/* timezone */</span></div>
 <div class="line">};</div>
-<div class="ttc" id="aicaltime_8h_html_a8561e9d4374ca1e29cd5ade459a50208"><div class="ttname"><a href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a></div><div class="ttdeci">struct _icaltimezone icaltimezone</div><div class="ttdoc">An opaque struct representing a timezone. We declare this here to avoid a circular dependency.</div><div class="ttdef"><b>Definition</b> icaltime.h:84</div></div>
 <div class="ttc" id="astructicaltimetype_html_a48d5ac850b2675cd80bbcefe00d7ae96"><div class="ttname"><a href="structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96">icaltimetype::is_date</a></div><div class="ttdeci">int is_date</div><div class="ttdef"><b>Definition</b> icaltime.h:104</div></div>
 <div class="ttc" id="astructicaltimetype_html_a4f64cd87ff0d4aba7bf318485b7374b8"><div class="ttname"><a href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">icaltimetype::year</a></div><div class="ttdeci">int year</div><div class="ttdef"><b>Definition</b> icaltime.h:97</div></div>
 <div class="ttc" id="astructicaltimetype_html_a8b90b6a7979294823e98a2dd3d7edd50"><div class="ttname"><a href="structicaltimetype.html#a8b90b6a7979294823e98a2dd3d7edd50">icaltimetype::is_daylight</a></div><div class="ttdeci">int is_daylight</div><div class="ttdef"><b>Definition</b> icaltime.h:106</div></div>
@@ -570,9 +569,9 @@ $(function() {
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> <a class="code hl_function" href="icaltime_8h.html#afa1f4bd60882a641f0e0b8d5b549a36b">icaltime_from_timet_with_zone</a>(</div>
 <div class="line">    icaltime_t v,</div>
 <div class="line">    int <a class="code hl_variable" href="structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96">is_date</a>,</div>
-<div class="line">    <a class="code hl_typedef" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a>* <a class="code hl_variable" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">zone</a>);</div>
+<div class="line">    icaltimezone* <a class="code hl_variable" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">zone</a>);</div>
 <div class="ttc" id="aicaltime_8h_html_a1b66b9f52a9823b95e4cd33f9dd9b8e5"><div class="ttname"><a href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a></div><div class="ttdeci">struct icaltimetype icaltime_from_string(const char *str)</div><div class="ttdef"><b>Definition</b> icaltime.c:368</div></div>
-<div class="ttc" id="aicaltime_8h_html_afa1f4bd60882a641f0e0b8d5b549a36b"><div class="ttname"><a href="icaltime_8h.html#afa1f4bd60882a641f0e0b8d5b549a36b">icaltime_from_timet_with_zone</a></div><div class="ttdeci">struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const bool is_date, const icaltimezone *zone)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aicaltime_8h_html_afa1f4bd60882a641f0e0b8d5b549a36b"><div class="ttname"><a href="icaltime_8h.html#afa1f4bd60882a641f0e0b8d5b549a36b">icaltime_from_timet_with_zone</a></div><div class="ttdeci">struct icaltimetype icaltime_from_timet_with_zone(const time_t tm, const bool is_date, const icaltimezone *zone)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition</b> icaltime.c:203</div></div>
 </div><!-- fragment --><p><span class="tt"><a class="el" href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string()</a></span> takes any RFC5545 compliant time string:</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> tt = <a class="code hl_function" href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a>(<span class="stringliteral">&quot;19970101T103000&quot;</span>);</div>
 </div><!-- fragment --><p><span class="tt"><a class="el" href="icaltime_8h.html#afa1f4bd60882a641f0e0b8d5b549a36b" title="Constructor.">icaltime_from_timet_with_zone()</a></span> takes a <span class="tt">icaltime_t</span> value, representing seconds past the POSIX epoch, a flag to indicate if the time is a date, and a time zone. Dates have an identical structure to a time, but the time portion (hours, minutes and seconds) is always 00:00:00. Dates act differently in sorting and comparison, and they have a different string representation in <a href="https://tools.ietf.org/html/rfc5545">RFC5545</a>.</p>
@@ -621,7 +620,7 @@ $(function() {
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> <a class="code hl_function" href="icaltime_8h.html#afa1f4bd60882a641f0e0b8d5b549a36b">icaltime_from_timet_with_zone</a>(</div>
 <div class="line">    icaltime_t v,</div>
 <div class="line">    int <a class="code hl_variable" href="structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96">is_date</a>,</div>
-<div class="line">    <a class="code hl_typedef" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a>* <a class="code hl_variable" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">zone</a>);</div>
+<div class="line">    icaltimezone* <a class="code hl_variable" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">zone</a>);</div>
 <div class="line"> </div>
 <div class="line">icaltime_t <a class="code hl_function" href="icaltime_8h.html#a7b39742d0f786f41df391c62ee56ec10">icaltime_as_timet</a>(</div>
 <div class="line">    <span class="keyword">struct</span> <a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a>);</div>
@@ -850,18 +849,18 @@ $(function() {
 </ul>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md208"></a>
 5.6.3 <span class="tt">X-LIC-ERROR</span> and <span class="tt">X-LIC-INVALID-COMPONENT</span></h3>
-<p>The library handles semantic and syntactic errors in components by inserting errors properties into the components. If the parser cannot parse incoming text (a syntactic error) or if the <span class="tt"><a class="el" href="icalrestriction_8h.html#aa88cfea2c38ed197d1047c7378dc2975" title="Checks if a given VCALENDAR meets all the restrictions imposed by the standard.">icalrestriction_check()</a></span> routine indicates that the component does not meet the requirements of RFC5546 (a semantic error) the library will insert properties of the type <span class="tt">X-LIC-ERROR</span> to describe the error. Here is an example of the error property:</p>
+<p>The library handles semantic and syntactic errors in components by inserting errors properties into the components. If the parser cannot parse incoming text (a syntactic error) or if the <span class="tt">icalrestriction_check()</span> routine indicates that the component does not meet the requirements of RFC5546 (a semantic error) the library will insert properties of the type <span class="tt">X-LIC-ERROR</span> to describe the error. Here is an example of the error property:</p>
 <div class="fragment"><div class="line">X-LIC-ERROR;X-LIC-ERRORTYPE=INVALID_ITIP :Failed iTIP restrictions</div>
 <div class="line">for property DTSTART.</div>
 <div class="line"> </div>
 <div class="line">Expected 1 instances of the property and got 0</div>
-</div><!-- fragment --><p>This error resulted from a call to <span class="tt"><a class="el" href="icalrestriction_8h.html#aa88cfea2c38ed197d1047c7378dc2975" title="Checks if a given VCALENDAR meets all the restrictions imposed by the standard.">icalrestriction_check()</a></span>, which discovered that the component does not have a <span class="tt">DTSTART</span> property, as required by RFC5545.</p>
+</div><!-- fragment --><p>This error resulted from a call to <span class="tt">icalrestriction_check()</span>, which discovered that the component does not have a <span class="tt">DTSTART</span> property, as required by RFC5545.</p>
 <p>There are a few routines to manipulate error properties:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">Routine  </th><th class="markdownTableHeadLeft">Purpose  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft"><span class="tt">void <a class="el" href="icalrestriction_8h.html#aa88cfea2c38ed197d1047c7378dc2975" title="Checks if a given VCALENDAR meets all the restrictions imposed by the standard.">icalrestriction_check()</a></span>  </td><td class="markdownTableBodyLeft">Check a component against RFC5546 and insert error properties to indicate non compliance  </td></tr>
+<td class="markdownTableBodyLeft"><span class="tt">void icalrestriction_check()</span>  </td><td class="markdownTableBodyLeft">Check a component against RFC5546 and insert error properties to indicate non compliance  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft"><span class="tt">int icalcomponent_count_errors()</span>  </td><td class="markdownTableBodyLeft">Return the number of error properties in a component  </td></tr>
 <tr class="markdownTableRowOdd">
@@ -881,7 +880,7 @@ $(function() {
 <li><span class="tt">ICAL_XLICERRORTYPE_UNKVCALPROP</span></li>
 <li><span class="tt">ICAL_XLICERRORTYPE_INVALIDITIP</span></li>
 </ul>
-<p>The libical parser will generate the error that end in <span class="tt">PARSEERROR</span> when it encounters garbage in the input steam. <span class="tt">ICAL_XLICERRORTYPE_INVALIDITIP</span> is inserted by <span class="tt"><a class="el" href="icalrestriction_8h.html#aa88cfea2c38ed197d1047c7378dc2975" title="Checks if a given VCALENDAR meets all the restrictions imposed by the standard.">icalrestriction_check()</a></span>, and <span class="tt">ICAL_XLICERRORTYPE_UNKVCALPROP</span> is generated by <span class="tt">icalvcal_convert()</span> when it encounters a vCal property that it cannot convert or does not know about.</p>
+<p>The libical parser will generate the error that end in <span class="tt">PARSEERROR</span> when it encounters garbage in the input steam. <span class="tt">ICAL_XLICERRORTYPE_INVALIDITIP</span> is inserted by <span class="tt">icalrestriction_check()</span>, and <span class="tt">ICAL_XLICERRORTYPE_UNKVCALPROP</span> is generated by <span class="tt">icalvcal_convert()</span> when it encounters a vCal property that it cannot convert or does not know about.</p>
 <p><span class="tt">icalcomponent_convert_errors()</span> converts some of the error properties in a component into <span class="tt">REQUEST-STATUS</span> properties that indicate a failure. As of libical version 0.18, this routine only converts <span class="tt">PARSEERROR</span> errors and it always generates a 3.x (failure) code. This makes it more of a good idea than a really useful bit of code.</p>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md209"></a>
 5.6.4 <span class="tt">LIBICAL_ENABLE_ERRORS_ARE_FATAL</span> and <span class="tt">icalerror_errors_are_fatal</span></h3>

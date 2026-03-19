@@ -1,3 +1,4 @@
+<!-- HTML header for doxygen 1.14.0-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
@@ -135,10 +136,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_count_co
 int&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_count_properties</b> (icalcomponent *component, icalproperty_kind kind)</td></tr>
 <tr class="memitem:ac3e7057e5bf8bc74446e84334403bd8c" id="r_ac3e7057e5bf8bc74446e84334403bd8c"><td class="memItemLeft" align="right" valign="top"><a id="ac3e7057e5bf8bc74446e84334403bd8c" name="ac3e7057e5bf8bc74446e84334403bd8c"></a>
 <a class="el" href="structicalcompiter.html">icalcompiter</a>&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_end_component</b> (icalcomponent *component, icalcomponent_kind kind)</td></tr>
-<tr class="memitem:a41e5a3c4e35a473f24c55dfa4fdf1171" id="r_a41e5a3c4e35a473f24c55dfa4fdf1171"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41e5a3c4e35a473f24c55dfa4fdf1171">icalcomponent_foreach_recurrence</a> (icalcomponent *comp, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> start, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> end, void(*callback)(const icalcomponent *comp, const struct <a class="el" href="structicaltime__span.html">icaltime_span</a> *span, void *data), void *callback_data)</td></tr>
-<tr class="memdesc:a41e5a3c4e35a473f24c55dfa4fdf1171"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles through all recurrences of an event.  <br /></td></tr>
+<tr class="memitem:aef846b1f42b96a5d209323c347a891a6" id="r_aef846b1f42b96a5d209323c347a891a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef846b1f42b96a5d209323c347a891a6">icalcomponent_foreach_recurrence</a> (icalcomponent *comp, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> start, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> end, void(*callback)(icalcomponent *comp, const struct <a class="el" href="structicaltime__span.html">icaltime_span</a> *span, void *data), void *callback_data)</td></tr>
+<tr class="memdesc:aef846b1f42b96a5d209323c347a891a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycles through all recurrences of an event.  <br /></td></tr>
 <tr class="memitem:addacbedbeccb2e2d31ae9a6963e19e49" id="r_addacbedbeccb2e2d31ae9a6963e19e49"><td class="memItemLeft" align="right" valign="top"><a id="addacbedbeccb2e2d31ae9a6963e19e49" name="addacbedbeccb2e2d31ae9a6963e19e49"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_foreach_tzid</b> (icalcomponent *comp, void(*callback)(icalparameter *param, void *data), void *callback_data)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_foreach_tzid</b> (icalcomponent *comp, void(*callback)(<a class="el" href="structicalparameter__impl.html">icalparameter</a> *param, void *data), void *callback_data)</td></tr>
 <tr class="memdesc:addacbedbeccb2e2d31ae9a6963e19e49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the given function for each TZID parameter found in the component, and any subcomponents. <br /></td></tr>
 <tr class="memitem:ae9147a2140676139e7535de4836dcd29" id="r_ae9147a2140676139e7535de4836dcd29"><td class="memItemLeft" align="right" valign="top"><a id="ae9147a2140676139e7535de4836dcd29" name="ae9147a2140676139e7535de4836dcd29"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_free</b> (icalcomponent *component)</td></tr>
@@ -170,6 +171,7 @@ icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcompone
 <tr class="memitem:a860891cd0941545790632e5f5355d5ac" id="r_a860891cd0941545790632e5f5355d5ac"><td class="memItemLeft" align="right" valign="top"><a id="a860891cd0941545790632e5f5355d5ac" name="a860891cd0941545790632e5f5355d5ac"></a>
 icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_first_real_component</b> (const icalcomponent *c)</td></tr>
 <tr class="memdesc:a860891cd0941545790632e5f5355d5ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a reference to the first VEVENT, VTODO or VJOURNAL in the component. <br /></td></tr>
+<tr class="memitem:ab9e2c773c6480cd512bb71088efaf63a" id="r_ab9e2c773c6480cd512bb71088efaf63a"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab9e2c773c6480cd512bb71088efaf63a">icalcomponent_get_iana_name</a> (const icalcomponent *comp)</td></tr>
 <tr class="memitem:a744361f31ad6f28771035527ea00d11f" id="r_a744361f31ad6f28771035527ea00d11f"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a744361f31ad6f28771035527ea00d11f">icalcomponent_get_inner</a> (icalcomponent *comp)</td></tr>
 <tr class="memitem:adef015588bdcec62be5a44e62507fa15" id="r_adef015588bdcec62be5a44e62507fa15"><td class="memItemLeft" align="right" valign="top"><a id="adef015588bdcec62be5a44e62507fa15" name="adef015588bdcec62be5a44e62507fa15"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_location</b> (icalcomponent *comp)</td></tr>
@@ -194,7 +196,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_sequ
 <tr class="memitem:a80c556f16bf3d5f16d0c6835db6e8f25" id="r_a80c556f16bf3d5f16d0c6835db6e8f25"><td class="memItemLeft" align="right" valign="top"><a id="a80c556f16bf3d5f16d0c6835db6e8f25" name="a80c556f16bf3d5f16d0c6835db6e8f25"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_summary</b> (icalcomponent *comp)</td></tr>
 <tr class="memitem:abc399fff22411a68f6f28ff93f625f3d" id="r_abc399fff22411a68f6f28ff93f625f3d"><td class="memItemLeft" align="right" valign="top"><a id="abc399fff22411a68f6f28ff93f625f3d" name="abc399fff22411a68f6f28ff93f625f3d"></a>
-<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_timezone</b> (icalcomponent *comp, const char *tzid)</td></tr>
+<a class="el" href="struct__icaltimezone.html">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_timezone</b> (icalcomponent *comp, const char *tzid)</td></tr>
 <tr class="memdesc:abc399fff22411a68f6f28ff93f625f3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the icaltimezone in the component corresponding to the TZID, or NULL if it can't be found. <br /></td></tr>
 <tr class="memitem:ac18738ce6b5f6bce894e0dff390735cf" id="r_ac18738ce6b5f6bce894e0dff390735cf"><td class="memItemLeft" align="right" valign="top"><a id="ac18738ce6b5f6bce894e0dff390735cf" name="ac18738ce6b5f6bce894e0dff390735cf"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_get_uid</b> (icalcomponent *comp)</td></tr>
@@ -217,6 +219,7 @@ icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcompon
 <tr class="memitem:af4a04ae38f7633b65f629452aff3376a" id="r_af4a04ae38f7633b65f629452aff3376a"><td class="memItemLeft" align="right" valign="top"><a id="af4a04ae38f7633b65f629452aff3376a" name="af4a04ae38f7633b65f629452aff3376a"></a>
 icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_new_from_string</b> (const char *str)</td></tr>
 <tr class="memdesc:af4a04ae38f7633b65f629452aff3376a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
+<tr class="memitem:aaabb437d019b6a402e275fa430a6c52d" id="r_aaabb437d019b6a402e275fa430a6c52d"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaabb437d019b6a402e275fa430a6c52d">icalcomponent_new_iana</a> (const char *iana_name)</td></tr>
 <tr class="memitem:ab558a309b575796633cbde1f0b876879" id="r_ab558a309b575796633cbde1f0b876879"><td class="memItemLeft" align="right" valign="top"><a id="ab558a309b575796633cbde1f0b876879" name="ab558a309b575796633cbde1f0b876879"></a>
 icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_new_participant</b> (void)</td></tr>
 <tr class="memitem:a0b35fff52617945726d983084ddf68e2" id="r_a0b35fff52617945726d983084ddf68e2"><td class="memItemLeft" align="right" valign="top"><a id="a0b35fff52617945726d983084ddf68e2" name="a0b35fff52617945726d983084ddf68e2"></a>
@@ -253,7 +256,7 @@ icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcompon
 icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_new_vvoter</b> (void)</td></tr>
 <tr class="memitem:ad06faf0a54675bb708c3542b59f304dd" id="r_ad06faf0a54675bb708c3542b59f304dd"><td class="memItemLeft" align="right" valign="top"><a id="ad06faf0a54675bb708c3542b59f304dd" name="ad06faf0a54675bb708c3542b59f304dd"></a>
 icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_new_x</b> (const char *x_name)</td></tr>
-<tr class="memdesc:ad06faf0a54675bb708c3542b59f304dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
+<tr class="memdesc:ad06faf0a54675bb708c3542b59f304dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a component with an x-name name. <br /></td></tr>
 <tr class="memitem:ab3ec0940964b48bdb1541fbaa99eb664" id="r_ab3ec0940964b48bdb1541fbaa99eb664"><td class="memItemLeft" align="right" valign="top"><a id="ab3ec0940964b48bdb1541fbaa99eb664" name="ab3ec0940964b48bdb1541fbaa99eb664"></a>
 icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_new_xavailable</b> (void)</td></tr>
 <tr class="memitem:ac9c6a0ea1b32c171457a928fb93e8305" id="r_ac9c6a0ea1b32c171457a928fb93e8305"><td class="memItemLeft" align="right" valign="top"><a id="ac9c6a0ea1b32c171457a928fb93e8305" name="ac9c6a0ea1b32c171457a928fb93e8305"></a>
@@ -286,6 +289,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_set_dts
 <tr class="memdesc:ae9a61fb25f98f24b6b89276040c4f9f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the due date of a VTODO task.  <br /></td></tr>
 <tr class="memitem:ad122989d32c8e8eebbc8ca14a1cdfb18" id="r_ad122989d32c8e8eebbc8ca14a1cdfb18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad122989d32c8e8eebbc8ca14a1cdfb18">icalcomponent_set_duration</a> (icalcomponent *comp, struct <a class="el" href="structicaldurationtype.html">icaldurationtype</a> v)</td></tr>
 <tr class="memdesc:ad122989d32c8e8eebbc8ca14a1cdfb18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the DURATION property to given icalduration.  <br /></td></tr>
+<tr class="memitem:a45dad14c0a4584d99c6e28ca8d5006f9" id="r_a45dad14c0a4584d99c6e28ca8d5006f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a45dad14c0a4584d99c6e28ca8d5006f9">icalcomponent_set_iana_name</a> (icalcomponent *comp, const char *name)</td></tr>
 <tr class="memitem:a4292bb1e53eac6b4cbccd132650da393" id="r_a4292bb1e53eac6b4cbccd132650da393"><td class="memItemLeft" align="right" valign="top"><a id="a4292bb1e53eac6b4cbccd132650da393" name="a4292bb1e53eac6b4cbccd132650da393"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_set_location</b> (icalcomponent *comp, const char *v)</td></tr>
 <tr class="memitem:a6db8db9455d888c5f9cab83a6033bee5" id="r_a6db8db9455d888c5f9cab83a6033bee5"><td class="memItemLeft" align="right" valign="top"><a id="a6db8db9455d888c5f9cab83a6033bee5" name="a6db8db9455d888c5f9cab83a6033bee5"></a>
@@ -396,8 +400,8 @@ icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalpropite
 
 </div>
 </div>
-<a id="a41e5a3c4e35a473f24c55dfa4fdf1171" name="a41e5a3c4e35a473f24c55dfa4fdf1171"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41e5a3c4e35a473f24c55dfa4fdf1171">&#9670;&#160;</a></span>icalcomponent_foreach_recurrence()</h2>
+<a id="aef846b1f42b96a5d209323c347a891a6" name="aef846b1f42b96a5d209323c347a891a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef846b1f42b96a5d209323c347a891a6">&#9670;&#160;</a></span>icalcomponent_foreach_recurrence()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -420,7 +424,7 @@ icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalpropite
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">void(*</td>          <td class="paramname"><span class="paramname"><em>callback&#160;</em></span>)(const icalcomponent *comp, const struct <a class="el" href="structicaltime__span.html">icaltime_span</a> *span, void *data), </td>
+          <td class="paramtype">void(*</td>          <td class="paramname"><span class="paramname"><em>callback&#160;</em></span>)(icalcomponent *comp, const struct <a class="el" href="structicaltime__span.html">icaltime_span</a> *span, void *data), </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -556,6 +560,32 @@ icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalpropite
 
 </div>
 </div>
+<a id="ab9e2c773c6480cd512bb71088efaf63a" name="ab9e2c773c6480cd512bb71088efaf63a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9e2c773c6480cd512bb71088efaf63a">&#9670;&#160;</a></span>icalcomponent_get_iana_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalcomponent_get_iana_name </td>
+          <td>(</td>
+          <td class="paramtype">const icalcomponent *</td>          <td class="paramname"><span class="paramname"><em>comp</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the IANA name of the specified icalcomponent.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">comp</td><td>a pointer to a valid icalcomponent</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the <code class="param">comp</code> IANA name; will be NULL if the name has yet to be specified. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+
+</div>
+</div>
 <a id="a744361f31ad6f28771035527ea00d11f" name="a744361f31ad6f28771035527ea00d11f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a744361f31ad6f28771035527ea00d11f">&#9670;&#160;</a></span>icalcomponent_get_inner()</h2>
 
@@ -615,7 +645,7 @@ icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalpropite
 </div><div class="memdoc">
 
 <p>Gets the timespan covered by this component, in UTC. </p>
-<p>See <a class="el" href="#a41e5a3c4e35a473f24c55dfa4fdf1171" title="Cycles through all recurrences of an event.">icalcomponent_foreach_recurrence()</a> for a better way to extract spans from a component.</p>
+<p>See <a class="el" href="#aef846b1f42b96a5d209323c347a891a6" title="Cycles through all recurrences of an event.">icalcomponent_foreach_recurrence()</a> for a better way to extract spans from a component.</p>
 <p>This method can be called on either a VCALENDAR or any real component. If the VCALENDAR contains no real component, but contains a VTIMEZONE, we return that span instead. This might not be a desirable behavior; we keep it for now for backward compatibility, but it might be deprecated at a future time.</p>
 <p>FIXME this API needs to be clarified. DTEND is defined as the first available time after the end of this event, so the span should actually end 1 second before DTEND. </p>
 
@@ -665,6 +695,32 @@ icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalpropite
       </table>
 </div><div class="memdoc">
 <p>This takes 2 VCALENDAR components and merges the second one into the first, resolving any problems with conflicting TZIDs. comp_to_merge will no longer exist after calling this function. </p>
+
+</div>
+</div>
+<a id="aaabb437d019b6a402e275fa430a6c52d" name="aaabb437d019b6a402e275fa430a6c52d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaabb437d019b6a402e275fa430a6c52d">&#9670;&#160;</a></span>icalcomponent_new_iana()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent * icalcomponent_new_iana </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>iana_name</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Constructs a new icalcomponent with an IANA component name.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">iana_name</td><td>a pointer to a char string containing the IANA name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to a new icalcomponent; or NULL on memory allocation failure. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
 
 </div>
 </div>
@@ -796,6 +852,36 @@ icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalpropite
 <p>This method respects the icaltime type (DATE vs DATE-TIME) and timezone (or lack thereof).</p>
 <p>This also checks that a DTEND property isn't already there, and returns an error if it is. It's the caller's responsibility to remove it.</p>
 <p>For the icalcomponent routines only, DTEND and DURATION are tied together. If you call this routine and DTEND exists, no action will be taken and icalerrno will be set to ICAL_MALFORMEDDATA_ERROR. If neither exists, the routine will create the appropriate property. </p>
+
+</div>
+</div>
+<a id="a45dad14c0a4584d99c6e28ca8d5006f9" name="a45dad14c0a4584d99c6e28ca8d5006f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45dad14c0a4584d99c6e28ca8d5006f9">&#9670;&#160;</a></span>icalcomponent_set_iana_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalcomponent_set_iana_name </td>
+          <td>(</td>
+          <td class="paramtype">icalcomponent *</td>          <td class="paramname"><span class="paramname"><em>comp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the IANA name for an icalcomponent.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">comp</td><td>a pointer to a valid icalcomponent </td></tr>
+    <tr><td class="paramname">name</td><td>a pointer to char string containing the IANA name. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
 
 </div>
 </div>

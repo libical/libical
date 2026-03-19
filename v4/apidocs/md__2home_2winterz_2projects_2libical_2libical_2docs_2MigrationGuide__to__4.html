@@ -1,3 +1,4 @@
+<!-- HTML header for doxygen 1.14.0-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
@@ -209,7 +210,7 @@ New functions</h2>
 <li><span class="tt">icalproperty_set_allow_empty_properties()</span></li>
 <li><span class="tt"><a class="el" href="icalproperty_8h.html#a6a58eebb7a987d6f286097753126dfbd">icalproperty_get_allow_empty_properties()</a></span></li>
 <li><span class="tt">icalparameter_clone()</span></li>
-<li><span class="tt"><a class="el" href="icalparameter_8h.html#a68c485f63c64e1b03e616a45193ed17a">icalparameter_kind_value_kind()</a></span></li>
+<li><span class="tt">icalparameter_kind_value_kind()</span></li>
 <li><span class="tt">icalparameter_is_multivalued()</span></li>
 <li><span class="tt">icalparameter_decode_value()</span></li>
 <li><span class="tt">icalvalue_clone()</span></li>
@@ -221,6 +222,9 @@ New functions</h2>
 <li><span class="tt">icalrecurrencetype_unref()</span></li>
 <li><span class="tt">icalrecurrencetype_clone()</span></li>
 <li><span class="tt">icalrecurrencetype_from_string()</span></li>
+<li><span class="tt">icalcomponent_new_iana()</span></li>
+<li><span class="tt">icalcomponent_set_iana_name()</span></li>
+<li><span class="tt">icalcomponent_get_iana_name()</span></li>
 <li><span class="tt">icalcomponent_set_x_name()</span></li>
 <li><span class="tt">icalcomponent_get_x_name()</span></li>
 <li><span class="tt">icalcomponent_get_component_name()</span></li>
@@ -233,6 +237,9 @@ New functions</h2>
 <li><span class="tt">icaltimezone_set_system_zone_directory()</span></li>
 <li><span class="tt">icalcompiter_is_valid()</span></li>
 <li><span class="tt">icalpropiter_is_valid()</span></li>
+<li><span class="tt">icalproperty_new_iana()</span></li>
+<li><span class="tt">icalproperty_set_iana_name()</span></li>
+<li><span class="tt">icalproperty_get_iana_name()</span></li>
 <li>and the new functions for the <span class="tt">icalstrarray</span> and <span class="tt">icalenumarray</span> data types</li>
 </ul>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md132"></a>
@@ -257,6 +264,9 @@ Removed functions</h2>
 <li><span class="tt">icaltzutil_fetch_timezone()</span></li>
 <li><span class="tt">icalrecurrencetype_clear()</span></li>
 <li><span class="tt">icalproperty_new_impl()</span></li>
+<li><span class="tt">icaltimezone_array_new()</span></li>
+<li><span class="tt">icaltimezone_array_append_from_vtimezone()</span></li>
+<li><span class="tt">icaltimezone_array_free()</span></li>
 </ul>
 </li>
 </ul>
@@ -364,8 +374,8 @@ Clone functions</h2>
 <div class="line">} <span class="keywordflow">else</span> {</div>
 <div class="line">    <span class="comment">// out of memory error handling</span></div>
 <div class="line">}</div>
-<div class="ttc" id="aicalrecur_8h_html_a6ef32c4da69e9a5f2059f160bf3792ab"><div class="ttname"><a href="icalrecur_8h.html#a6ef32c4da69e9a5f2059f160bf3792ab">icalrecurrencetype_new</a></div><div class="ttdeci">struct icalrecurrencetype * icalrecurrencetype_new(void)</div><div class="ttdoc">Allocates and initializes a new instance of icalrecurrencetype. The new instance is returned with a r...</div><div class="ttdef"><b>Definition</b> icalrecur.c:694</div></div>
-<div class="ttc" id="aicalrecur_8h_html_ab514cbb2acf2d8781490199224752a91"><div class="ttname"><a href="icalrecur_8h.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a></div><div class="ttdeci">void icalrecurrencetype_unref(struct icalrecurrencetype *recur)</div><div class="ttdoc">Decreases the reference counter by 1. If it goes to 0, the instance and all referenced memory (i....</div><div class="ttdef"><b>Definition</b> icalrecur.c:739</div></div>
+<div class="ttc" id="aicalrecur_8h_html_a6ef32c4da69e9a5f2059f160bf3792ab"><div class="ttname"><a href="icalrecur_8h.html#a6ef32c4da69e9a5f2059f160bf3792ab">icalrecurrencetype_new</a></div><div class="ttdeci">struct icalrecurrencetype * icalrecurrencetype_new(void)</div><div class="ttdoc">Allocates and initializes a new instance of icalrecurrencetype. The new instance is returned with a r...</div><div class="ttdef"><b>Definition</b> icalrecur.c:698</div></div>
+<div class="ttc" id="aicalrecur_8h_html_ab514cbb2acf2d8781490199224752a91"><div class="ttname"><a href="icalrecur_8h.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a></div><div class="ttdeci">void icalrecurrencetype_unref(struct icalrecurrencetype *recur)</div><div class="ttdoc">Decreases the reference counter by 1. If it goes to 0, the instance and all referenced memory (i....</div><div class="ttdef"><b>Definition</b> icalrecur.c:743</div></div>
 </div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md141"></a>
 <span class="tt">icalgeotype</span> now uses character strings rather than doubles</h2>
 <p>The members of <span class="tt">struct icalgeotype</span> for latitude ('lat<span class="tt">) and longitude ('lon</span>) have been changed to use ICAL_GEO_LEN long character strings rather than the double type.</p>
@@ -467,7 +477,7 @@ Migrating <span class="tt">icalrecurrencetype.by_xxx</span> static arrays usage 
 <div class="line">} <span class="keywordflow">else</span> {</div>
 <div class="line">  recur.by[ICAL_BY_HOUR].data[0] = 12;</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalrecur_8h_html_a27e50d989ba059c6c91b4844428930e2"><div class="ttname"><a href="icalrecur_8h.html#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by</a></div><div class="ttdeci">bool icalrecur_resize_by(icalrecurrence_by_data *by, short size)</div><div class="ttdoc">Resizes the buffer backing the &#39;by&#39; array to the specified size, if different. Frees the buffer if th...</div><div class="ttdef"><b>Definition</b> icalrecur.c:296</div></div>
+<div class="ttc" id="aicalrecur_8h_html_a27e50d989ba059c6c91b4844428930e2"><div class="ttname"><a href="icalrecur_8h.html#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by</a></div><div class="ttdeci">bool icalrecur_resize_by(icalrecurrence_by_data *by, short size)</div><div class="ttdoc">Resizes the buffer backing the &#39;by&#39; array to the specified size, if different. Frees the buffer if th...</div><div class="ttdef"><b>Definition</b> icalrecur.c:300</div></div>
 </div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md150"></a>
 GLib/Python bindings - changed <span class="tt">ICalGLib.Recurrence.*_by_*</span> methods</h1>
 <p><span class="tt">i_cal_recurrence_*_by_xxx*</span> methods have been replaced by more generic versions that take the 'by' type (day, month, ...) as a parameter.</p>

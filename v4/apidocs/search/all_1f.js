@@ -13,7 +13,7 @@ var searchData=
   ['vcardproperty_2eh_10',['vcardproperty.h',['../vcardproperty_8h.html',1,'']]],
   ['vcardproperty_5fclone_11',['vcardproperty_clone',['../vcardproperty_8h.html#abc42d87518f3b777711d799759cc0b47',1,'vcardproperty.c']]],
   ['vcardproperty_5fget_5fproperty_5fname_12',['vcardproperty_get_property_name',['../vcardproperty_8h.html#a0978c4107c153dfad0c294f8f2ebc1bb',1,'vcardproperty.c']]],
-  ['vcardproperty_5fkind_5fis_5fvalid_13',['vcardproperty_kind_is_valid',['../vcardproperty_8h.html#a34690e58edcc8c06f54fc16ce317fc13',1,'vcardproperty.h']]],
+  ['vcardproperty_5fkind_5fis_5fvalid_13',['vcardproperty_kind_is_valid',['../vcardproperty_8h.html#a34690e58edcc8c06f54fc16ce317fc13',1,'vcardderivedproperty.c']]],
   ['vcardproperty_5fnormalize_14',['vcardproperty_normalize',['../vcardproperty_8h.html#a3c656d31e2b783dda959c0dccccf4c5e',1,'vcardproperty.c']]],
   ['vcardproperty_5fremove_5fparameter_5fby_5fkind_15',['vcardproperty_remove_parameter_by_kind',['../vcardproperty_8h.html#ac2adb2654ee641b6ba15042f2ffce565',1,'vcardproperty.c']]],
   ['vcardproperty_5fremove_5fparameter_5fby_5fname_16',['vcardproperty_remove_parameter_by_name',['../vcardproperty_8h.html#a4e87420ddea2f359fa0c4e7daffbc486',1,'vcardproperty.c']]],
