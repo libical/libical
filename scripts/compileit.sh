@@ -76,7 +76,7 @@ if (test $staticBuild -eq 0); then
     -DLIBICAL_BUILD_TESTING_BIGFUZZ=ON \
     -DCMAKE_INSTALL_PREFIX="$INSTALLDIR" &&
     (cd "$TOP" && ln -sf "$BDIR/compile_commands.json") &&
-    ninja &&
+    ninja --verbose &&
     ninja test &&
     ninja install &&
     ninja docs &&
@@ -108,7 +108,7 @@ else #static build
     -DLIBICAL_BUILD_TESTING_BIGFUZZ=ON \
     -DCMAKE_INSTALL_PREFIX="$INSTALLDIR" &&
     (cd "$TOP" && ln -sf "$BDIR/compile_commands.json") &&
-    ninja &&
+    ninja --verbose &&
     ninja test &&
     ninja install &&
     ninja docs &&
