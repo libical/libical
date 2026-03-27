@@ -164,7 +164,7 @@ void test_cxx(void)
         icalerrno = ICAL_NO_ERROR;
         const VComponent v = VComponent(string("HFHFHFHF"));
     }
-    catch (icalerrorenum err) {
+    catch (icalerrorenum &err) {
         if (err == ICAL_BADARG_ERROR) {
             caughtException = 1;
         }
