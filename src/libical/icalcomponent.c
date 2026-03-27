@@ -11,6 +11,7 @@
 #endif
 
 #include "icalcomponent.h"
+#include "icalerror_p.h"
 #include "icalerror.h"
 #include "icallimits.h"
 #include "icalmemory.h"

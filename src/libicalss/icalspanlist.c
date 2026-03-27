@@ -12,6 +12,7 @@
 
 #include "icalspanlist.h"
 #include "icalpvl_p.h"
+#include "icalerror_p.h"
 #include "icaltimezone.h"
 
 #include <stdlib.h>

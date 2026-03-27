@@ -9,6 +9,10 @@
 
 #include "icalparameter_cxx.hpp"
 
+extern "C" {
+#include "icalerror_p.h"
+}
+
 #include <string>
 #include <vector>
 

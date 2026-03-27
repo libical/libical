@@ -13,7 +13,7 @@
 #include "vcardderivedproperty.h"
 #include "vcardproperty.h"
 #include "vcardproperty_p.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <string.h>

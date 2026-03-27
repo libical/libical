@@ -16,6 +16,7 @@
 #include "icalderivedparameter.h"
 #include "icalparameter.h"
 #include "icalparameterimpl.h"
+#include "icalerror_p.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icaltime.h"

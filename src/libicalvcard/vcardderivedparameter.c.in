@@ -16,7 +16,7 @@
 #include "vcardparameterimpl.h"
 #include "vcardenumarray.h"
 #include "vcardstrarray.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <stdlib.h>

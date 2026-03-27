@@ -8,7 +8,7 @@
 #endif
 
 #include "icallimits.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 
 static ICAL_GLOBAL_VAR size_t _MAX_PARSE_FAILURES = 1000;
 static ICAL_GLOBAL_VAR size_t _MAX_PARSE_SEARCH = 100000;

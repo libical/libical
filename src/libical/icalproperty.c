@@ -12,6 +12,7 @@
 
 #include "icalproperty_p.h"
 #include "icalcomponent.h"
+#include "icalerror_p.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icalparser.h"

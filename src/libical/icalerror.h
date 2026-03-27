@@ -6,15 +6,6 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
-#ifndef ICALERROR_H
-#define ICALERROR_H
-
-#include "libical_ical_export.h"
-
-#include <assert.h>
-#include <stdbool.h>
-#include <stdio.h>
-
 /**
  * @file icalerror.h
  * @brief Error handling for libical
@@ -27,25 +18,12 @@
  * get a string describing the current error set in ::icalerrno.
  */
 
-/**
- * @brief Triggered before any error is called
- *
- * This routine is called before any error is triggered.
- * It is called by icalerror_set_errno(), so it does not
- * appear in all of the macros below.
- *
- * This routine can be used while debugging by setting
- * a breakpoint here.
- */
-LIBICAL_ICAL_EXPORT void icalerror_stop_here(void);
+#ifndef ICALERROR_H
+#define ICALERROR_H
 
-/**
- * @brief Triggered to abort the process
- *
- * This routine is called to abort the process in the
- * case of an error.
- */
-LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
+#include "libical_ical_export.h"
+
+#include <stdbool.h>
 
 #ifndef _MSC_VER
 #pragma GCC visibility push(default)
@@ -100,6 +78,26 @@ typedef enum icalerrorenum
 #endif
 
 /**
+ * @enum icalerrorstate
+ * @typedef icalerrorstate
+ * @brief Determine if an error is fatal or non-fatal.
+ */
+typedef enum icalerrorstate
+{
+    /** Fatal. */
+    ICAL_ERROR_FATAL,
+
+    /** Non-fatal. */
+    ICAL_ERROR_NONFATAL,
+
+    /** Fatal if icalerror_errors_are_fatal(), non-fatal otherwise. */
+    ICAL_ERROR_DEFAULT,
+
+    /** Asked state for an unknown error type. */
+    ICAL_ERROR_UNKNOWN
+} icalerrorstate;
+
+/**
  * @brief Returns the current ::icalerrno value
  * @return A pointer to the current ::icalerrno value
  *
@@ -132,91 +130,20 @@ LIBICAL_ICAL_EXPORT icalerrorenum *icalerror_icalerrno(void);
 #define icalerrno (*(icalerror_icalerrno()))
 
 /**
- * @brief Change if errors are fatal
- * @param fatal If true, libical aborts after a call to icalerror_set_error()
- * @warning NOT THREAD SAFE: it is recommended that you do not change
- *  this in a multithreaded program.
+ * @brief Sets the ::icalerrno to a given error
+ * @param x The error to set ::icalerrno to
+ *
+ * Sets ::icalerrno to the error given in @a x. Additionally, if
+ * the error is an ::ICAL_ERROR_FATAL or if it's an ::ICAL_ERROR_DEFAULT
+ * and icalerror_get_errors_are_fatal() is true, it prints a warning to
+ * @a stderr and aborts the process.
  *
  * @par Usage
  * ```c
- * icalerror_set_errors_are_fatal(true); // default
- * icalerror_set_errors_are_fatal(false);
+ * icalerror_set_errno(ICAL_PARSE_ERROR);
  * ```
  */
-LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(bool fatal);
-
-/**
- * @brief Determine if errors are fatal
- * @return True if libical errors are fatal
- *
- * @par Usage
- * ```c
- * if(icalerror_get_errors_are_fatal()) {
- *     // since errors are fatal, this will abort the
- *     // program.
- *     icalerror_set_errno(ICAL_PARSE_ERROR);
- * }
- * ```
- */
-LIBICAL_ICAL_EXPORT bool icalerror_get_errors_are_fatal(void);
-
-/* Warning messages */
-
-/**
- * @def icalerror_warn(message)
- * @brief Prints a formatted warning message to stderr
- * @param message Warning message to print
- *
- * @par Usage
- * ```c
- * icalerror_warn("Non-standard tag encountered");
- * ```
- */
-
-#ifdef __GNUC__
-#define icalerror_warn(message)                                                        \
-    {                                                                                  \
-        icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
-    }
-#else /* __GNU_C__ */
-#define icalerror_warn(message)                                    \
-    {                                                              \
-        icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message); \
-    }
-#endif /* __GNU_C__ */
-
-/**
- * @brief Resets icalerrno to ::ICAL_NO_ERROR
- *
- * @par Usage
- * ```c
- * if(icalerrno == ICAL_PARSE_ERROR) {
- *     // ignore parsing errors
- *     icalerror_clear_errno();
- * }
- * ```
- */
-LIBICAL_ICAL_EXPORT void icalerror_clear_errno(void);
-
-/**
- * @enum icalerrorstate
- * @typedef icalerrorstate
- * @brief Determine if an error is fatal or non-fatal.
- */
-typedef enum icalerrorstate
-{
-    /** Fatal. */
-    ICAL_ERROR_FATAL,
-
-    /** Non-fatal. */
-    ICAL_ERROR_NONFATAL,
-
-    /** Fatal if icalerror_errors_are_fatal(), non-fatal otherwise. */
-    ICAL_ERROR_DEFAULT,
-
-    /** Asked state for an unknown error type. */
-    ICAL_ERROR_UNKNOWN
-} icalerrorstate;
+LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
 
 /**
  * @brief Finds the description string for error
@@ -261,19 +188,6 @@ LIBICAL_ICAL_EXPORT const char *icalerror_strerror(icalerrorenum e);
 LIBICAL_ICAL_EXPORT const char *icalerror_perror(void);
 
 /**
- * @brief Prints backtrace
- * @note Only works on systems that support it (HAVE_BACKTRACE enabled).
- *
- * @par Usage
- * ```
- * if(icalerrno != ICAL_NO_ERROR) {
- *     icalerror_backtrace();
- * }
- * ```
- */
-LIBICAL_ICAL_EXPORT void icalerror_backtrace(void);
-
-/**
  * @brief Sets the ::icalerrorstate for a given ::icalerrorenum @a error
  * @param error The error to change
  * @param state The new error state of the error
@@ -313,184 +227,46 @@ LIBICAL_ICAL_EXPORT icalerrorstate icalerror_get_error_state(icalerrorenum error
 LIBICAL_ICAL_EXPORT icalerrorenum icalerror_error_from_string(const char *str);
 
 /**
- * @brief Sets the ::icalerrno to a given error
- * @param x The error to set ::icalerrno to
- *
- * Sets ::icalerrno to the error given in @a x. Additionally, if
- * the error is an ::ICAL_ERROR_FATAL or if it's an ::ICAL_ERROR_DEFAULT
- * and icalerror_get_errors_are_fatal() is true, it prints a warning to
- * @a stderr and aborts the process.
+ * @brief Change if errors are fatal
+ * @param fatal If true, libical aborts after a call to icalerror_set_error()
+ * @warning NOT THREAD SAFE: it is recommended that you do not change
+ *  this in a multithreaded program.
  *
  * @par Usage
  * ```c
- * icalerror_set_errno(ICAL_PARSE_ERROR);
+ * icalerror_set_errors_are_fatal(true); // default
+ * icalerror_set_errors_are_fatal(false);
  * ```
  */
-LIBICAL_ICAL_EXPORT void icalerror_set_errno(icalerrorenum x);
-
-#define icalerror_check_value_type(value, type) ;
-#define icalerror_check_property_type(value, type) ;
-#define icalerror_check_parameter_type(value, type) ;
-#define icalerror_check_component_type(value, type) ;
-
-/* Assert with a message */
-/**
- * @def icalerror_assert(test, message)
- * @brief Assert with a message
- * @param test The assertion to test
- * @param message The message to print on failure of assertion
- *
- * Tests the given assertion @a test, and if it fails, prints the
- * @a message given on @a stderr as a warning and aborts the process.
- * This only works if icalerror_get_errors_are_fatal() is true, otherwise
- * does nothing.
- */
-
-#ifdef __GNUC__
-#define icalerror_assert(test, message)                                                \
-    if (icalerror_get_errors_are_fatal() && !(test)) {                                 \
-        icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
-        icalerror_stop_here();                                                         \
-        abort();                                                                       \
-    }
-#else /*__GNUC__*/
-#define icalerror_assert(test, message)                            \
-    if (icalerror_get_errors_are_fatal() && !(test)) {             \
-        icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message); \
-        icalerror_stop_here();                                     \
-        abort();                                                   \
-    }
-#endif /*__GNUC__*/
+LIBICAL_ICAL_EXPORT void icalerror_set_errors_are_fatal(bool fatal);
 
 /**
- * @brief Checks the assertion @a test and raises error on failure
- * @param test The assertion to check
- * @param arg  The argument involved (as a string)
+ * @brief Determine if errors are fatal
+ * @return True if libical errors are fatal
  *
- * This function checks the assertion @a test, which is used to
- * test if the parameter @a arg is correct. If the assertion fails,
- * it sets ::icalerrno to ::ICAL_BADARG_ERROR.
- *
- * @par Example
+ * @par Usage
  * ```c
- * void test_function(icalcomponent *component) {
- *    icalerror_check_arg(component != 0, "component");
- *
- *    // use component
+ * if(icalerror_get_errors_are_fatal()) {
+ *     // since errors are fatal, this will abort the
+ *     // program.
+ *     icalerror_set_errno(ICAL_PARSE_ERROR);
  * }
  * ```
  */
-#define icalerror_check_arg(test, arg)          \
-    if (!(test)) {                              \
-        icalerror_set_errno(ICAL_BADARG_ERROR); \
-    }
+LIBICAL_ICAL_EXPORT bool icalerror_get_errors_are_fatal(void);
 
 /**
- * @brief Checks the assertion @a test and raises error on failure, returns void
- * @param test The assertion to check
- * @param arg  The argument involved (as a string)
+ * @brief Resets icalerrno to ::ICAL_NO_ERROR
  *
- * This function checks the assertion @a test, which is used to
- * test if the parameter @a arg is correct. If the assertion fails,
- * it sets ::icalerrno to ::ICAL_BADARG_ERROR and causes the enclosing
- * function to return `void`.
- *
- * @par Example
+ * @par Usage
  * ```c
- * void test_function(icalcomponent *component) {
- *    icalerror_check_arg_rv(component != 0, "component");
- *
- *    // use component
+ * if(icalerrno == ICAL_PARSE_ERROR) {
+ *     // ignore parsing errors
+ *     icalerror_clear_errno();
  * }
  * ```
  */
-#define icalerror_check_arg_rv(test, arg)       \
-    if (!(test)) {                              \
-        icalerror_set_errno(ICAL_BADARG_ERROR); \
-        return;                                 \
-    }
-
-/**
- * @brief Checks the assertion @a test and raises error on failure, returns 0
- * @param test The assertion to check
- * @param arg  The argument involved (as a string)
- *
- * This function checks the assertion @a test, which is used to
- * test if the parameter @a arg is correct. If the assertion fails,
- * it sets ::icalerrno to ::ICAL_BADARG_ERROR and causes the enclosing
- * function to return `0`.
- *
- * @par Example
- * ```c
- * int test_function(icalcomponent *component) {
- *    icalerror_check_arg_rz(component != 0, "component");
- *
- *    // use component
- *    return icalcomponent_count_kinds(component, ICAL_ANY_COMPONENT);
- * }
- * ```
- */
-#define icalerror_check_arg_rz(test, arg)       \
-    if (!(test)) {                              \
-        icalerror_set_errno(ICAL_BADARG_ERROR); \
-        return 0;                               \
-    }
-
-/**
- * @brief Checks the assertion @a test and raises error on failure, returns @a error
- * @param test The assertion to check
- * @param arg  The argument involved (as a string)
- * @param error What to return on error
- *
- * This function checks the assertion @a test, which is used to
- * test if the parameter @a arg is correct. If the assertion fails,
- * it aborts the process with `assert(0)` and causes the enclosing
- * function to return @a error.
- *
- * @par Example
- * ```c
- * icalcomponent *test_function(icalcomponent *component) {
- *    icalerror_check_arg_re(component != 0, "component", NULL);
- *
- *    // use component
- *    return icalcomponent_get_first_real_component(component);
- * }
- * ```
- */
-#define icalerror_check_arg_re(test, arg, error) \
-    if (!(test)) {                               \
-        icalerror_stop_here();                   \
-        icalassert(0);                           \
-        return error;                            \
-    }
-
-/**
- * @brief Checks the assertion @a test and raises error on failure, returns @a x
- * @param test The assertion to check
- * @param arg  The argument involved (as a string)
- * @param x    What to return on error
- *
- * This function checks the assertion @a test, which is used to
- * test if the parameter @a arg is correct. If the assertion fails,
- * it sets ::icalerrno to ::ICAL_BADARG_ERROR and causes the enclosing
- * function to return @a x.
- *
- * @par Example
- * ```c
- * icalcomponent *test_function(icalcomponent *component) {
- *    icalerror_check_arg_rx(component != 0, "component", NULL);
- *
- *    // use component
- *    return icalcomponent_get_first_real_component(component);
- * }
- * ```
- */
-#define icalerror_check_arg_rx(test, arg, x)    \
-    if (!(test)) {                              \
-        icalerror_set_errno(ICAL_BADARG_ERROR); \
-        return x;                               \
-    }
-
+LIBICAL_ICAL_EXPORT void icalerror_clear_errno(void);
 /* String interfaces to set an error to NONFATAL and restore it to its original value */
 
 /**
@@ -529,5 +305,18 @@ LIBICAL_ICAL_EXPORT icalerrorstate icalerror_supress(const char *error);
  * ```
  */
 LIBICAL_ICAL_EXPORT void icalerror_restore(const char *error, icalerrorstate es);
+
+/**
+ * @brief Prints backtrace
+ * @note Only works on systems that support it (HAVE_BACKTRACE enabled).
+ *
+ * @par Usage
+ * ```
+ * if(icalerrno != ICAL_NO_ERROR) {
+ *     icalerror_backtrace();
+ * }
+ * ```
+ */
+LIBICAL_ICAL_EXPORT void icalerror_backtrace(void);
 
 #endif /* !ICALERROR_H */

@@ -13,7 +13,7 @@
 #include "vcardstructuredimpl.h"
 #include "vcardstructured.h"
 #include "vcardvalue.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icallimits.h"
 #include "icalmemory.h"
 

@@ -9,6 +9,7 @@
 
 extern "C" {
 #include "regression.h"
+#include "libical/icalerror.h"
 #include "libical/icalparser.h"
 }
 

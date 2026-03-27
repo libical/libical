@@ -8,6 +8,7 @@
 */
 
 #include "icalspanlist_cxx.hpp"
+#include "icalerror.h"
 #include "vcomponent_cxx.hpp"
 
 #include <cstdlib> // for free()

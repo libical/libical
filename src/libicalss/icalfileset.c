@@ -15,6 +15,7 @@
 
 #include "icalfileset.h"
 #include "icalfilesetimpl.h"
+#include "icalerror_p.h"
 #include "icalparser.h"
 #include "icalvalue.h"
 #include "icalmemory.h"

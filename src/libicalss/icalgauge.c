@@ -15,7 +15,7 @@
 
 #include "icalgauge.h"
 #include "icalgaugeimpl.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalpvl_p.h"
 #include "icalvalue.h"
 

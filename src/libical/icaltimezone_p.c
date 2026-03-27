@@ -11,7 +11,7 @@
 #endif
 
 #include "icaltimezone_p.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icaltimezone.h"
 #include "icalmemory.h"
 

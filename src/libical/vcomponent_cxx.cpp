@@ -18,6 +18,7 @@
 using namespace LibICal;
 
 extern "C" {
+#include "icalerror_p.h"
 #include "icalmemory.h"
 }
 

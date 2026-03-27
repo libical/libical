@@ -17,6 +17,7 @@
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
 
+#include <assert.h>
 #include <stdlib.h>
 
 #define OUTPUT_FILE "filesetout.ics"

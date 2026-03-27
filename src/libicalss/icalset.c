@@ -24,6 +24,7 @@
 #include "icalset.h"
 #include "icaldirset.h"
 #include "icaldirsetimpl.h"
+#include "icalerror_p.h"
 #include "icalfileset.h"
 #include "icalfilesetimpl.h"
 

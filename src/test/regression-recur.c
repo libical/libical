@@ -14,6 +14,7 @@
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
 
+#include <assert.h>
 #include <stdlib.h>
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)

@@ -9,6 +9,7 @@
 #include <config.h>
 #endif
 
+#include <assert.h>
 #include <stdio.h>  /* for printf */
 #include <string.h> /* For strerror */
 

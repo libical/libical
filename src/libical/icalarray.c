@@ -11,7 +11,7 @@
 #endif
 
 #include "icalarray.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 #include "qsort_gen.h"
 

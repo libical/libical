@@ -11,7 +11,7 @@
 #endif
 
 #include "icallangbind_p.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 #include "icalvalue.h"
 

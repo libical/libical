@@ -215,6 +215,8 @@ set(
   icalenumarray.h
   icalenums.c
   icalenums.h
+  icalerror_p.c
+  icalerror_p.h
   icalerror.c
   icalerror.h
   icallimits.c

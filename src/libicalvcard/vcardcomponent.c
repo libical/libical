@@ -16,6 +16,7 @@
 #include "vcardproperty_p.h"
 #include "vcardrestriction.h"
 #include "vcardvalue.h"
+#include "icalerror_p.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 

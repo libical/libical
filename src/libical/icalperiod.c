@@ -14,7 +14,7 @@
 #endif
 
 #include "icalperiod.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 struct icalperiodtype icalperiodtype_from_string(const char *str)

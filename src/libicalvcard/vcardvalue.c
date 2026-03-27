@@ -15,7 +15,7 @@
 #include "vcardcomponent.h"
 #include "vcardproperty.h"
 #include "vcardtextlist.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <ctype.h>
