@@ -1586,7 +1586,7 @@ static void icaltimezone_init_builtin_timezones(void)
     icaltimezone_builtin_unlock();
 }
 
-static bool parse_coord(char *coord, int len, int *degrees, int *minutes, int *seconds)
+static bool parse_coord(const char *coord, int len, int *degrees, int *minutes, int *seconds)
 {
     if (len == 5) {
         sscanf(coord + 1, "%2d%2d", degrees, minutes);
@@ -1617,7 +1617,8 @@ static bool fetch_lat_long_from_string(const char *str,
 {
     size_t len;
     const char *loc, *temp;
-    char *sptr, *lat, *lon;
+    char *sptr, *lat;
+    const char *lon;
 
     if (!location || !len_location) {
         return false;
