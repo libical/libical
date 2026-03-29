@@ -15,6 +15,7 @@
 #include "icallimits.h"
 #include "icalmemory.h"
 #include "icalparser.h"
+#include "icalpvl_p.h"
 #include "icalrestriction.h"
 #include "icaltimezone.h"
 

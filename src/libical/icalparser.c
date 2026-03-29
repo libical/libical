@@ -19,6 +19,7 @@
 #include "icalvalue.h"
 #include "icalparameter.h"
 #include "icalproperty_p.h"
+#include "icalpvl_p.h"
 
 #include <ctype.h>
 #include <stddef.h> /* for ptrdiff_t */

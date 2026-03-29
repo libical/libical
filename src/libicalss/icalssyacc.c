@@ -155,6 +155,7 @@ enum yytokentype
 #include "icalgauge.h"
 #include "icalgaugeimpl.h"
 #include "icalerror.h"
+#include "icalpvl_p.h"
 
 extern struct icalgauge_impl *icalss_yy_gauge;
 

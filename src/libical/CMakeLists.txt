@@ -250,8 +250,8 @@ set(
   icalvalue.c
   icalvalue.h
   icalvalueimpl.h
-  icalpvl.c
-  icalpvl.h
+  icalpvl_p.c
+  icalpvl_p.h
   qsort_gen.c
   qsort_gen.h
   icallangbind_p.h
@@ -423,7 +423,6 @@ install(
     libical_deprecated.h
     libical_sentinel.h
     libical_ical_export.h
-    icalpvl.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
 

@@ -14,10 +14,11 @@
 /** @file icalspanlist.h
  *  @brief Code that supports collections of free/busy spans of time
  */
+struct icalpvl_list_t;
 struct icalspanlist_impl {
-    icalpvl_list spans;        /**< list of icaltime_span data **/
-    struct icaltimetype start; /**< start time of span **/
-    struct icaltimetype end;   /**< end time of span **/
+    struct icalpvl_list_t *spans; /**< list of icaltime_span data **/
+    struct icaltimetype start;    /**< start time of span **/
+    struct icaltimetype end;      /**< end time of span **/
 };
 typedef struct icalspanlist_impl icalspanlist;
 
