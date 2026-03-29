@@ -5,7 +5,7 @@ add_definitions(-Dlibical_ical_EXPORTS)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icalversion.h @ONLY)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icaltime.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icaltime.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icaltime_p.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icaltime_p.h)
 
 include_directories(
   ${PROJECT_BINARY_DIR}
@@ -236,6 +236,8 @@ set(
   icalrestriction.h
   icalstrarray.c
   icalstrarray.h
+  icaltime_p.c
+  icaltime_p.h
   icaltime.c
   icaltime.h
   icaltimezone_p.c
@@ -418,7 +420,8 @@ install(
     icalrecur.h
     icalrestriction.h
     icalstrarray.h
-    ${PROJECT_BINARY_DIR}/src/libical/icaltime.h
+    ${PROJECT_BINARY_DIR}/src/libical/icaltime_p.h
+    icaltime.h
     icaltimezone.h
     icaltypes.h
     icalvalue.h

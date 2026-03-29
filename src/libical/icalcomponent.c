@@ -18,6 +18,7 @@
 #include "icalparser.h"
 #include "icalpvl_p.h"
 #include "icalrestriction.h"
+#include "icaltime_p.h"
 #include "icaltimezone.h"
 
 #include <assert.h>

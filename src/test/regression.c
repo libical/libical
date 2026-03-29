@@ -24,6 +24,7 @@
 #include "libical/ical.h"
 #include "libical/icaldate_p.h"
 #include "libical/icallangbind_p.h"
+#include "libical/icaltime_p.h"
 #include "libicalss/icalss.h"
 #include "libicalvcal/icalvcal.h"
 #include "libicalvcal/vobject.h"
