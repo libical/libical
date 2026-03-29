@@ -39,7 +39,7 @@ public:
     ICalSpanList(const ICalSpanList &v);
 
     /** Constructs an ICalSpanList from an icalset */
-    ICalSpanList(icalset *set, icaltimetype start, icaltimetype end);
+    ICalSpanList(icalset *set, const icaltimetype &start, const icaltimetype &end);
 
     /** Constructs an ICalSpanList from the VFREEBUSY chunk of an icalcomponent */
     explicit ICalSpanList(icalcomponent *comp);

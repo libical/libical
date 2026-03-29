@@ -35,7 +35,7 @@ ICalSpanList::ICalSpanList(const ICalSpanList &v)
     @param start   Designated start of the spanlist
     @param end     Designated end of the spanlist
 */
-ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end)
+ICalSpanList::ICalSpanList(icalset *set, const icaltimetype &start, const icaltimetype &end)
     : data(icalspanlist_new(set, start, end))
 {
     if (data == NULL) {
