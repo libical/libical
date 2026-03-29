@@ -17,7 +17,7 @@
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icalproperty.h"
-#include "icalpvl.h"
+#include "icalpvl_p.h"
 
 #include <stdlib.h>
 

@@ -19,15 +19,16 @@
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icalset*/
 
+struct icalpvl_list_t;
 struct icaldirset_impl {
-    icalset super;                   /**< parent class */
-    char *dir;                       /**< directory containing ics files  */
-    icaldirset_options options;      /**< copy of options passed to icalset_new() */
-    icalcluster *cluster;            /**< cluster containing data */
-    icalgauge *gauge;                /**< gauge for filtering out data  */
-    int first_component;             /**< ??? */
-    icalpvl_list directory;          /**< ??? */
-    icalpvl_elem directory_iterator; /**< ??? */
+    icalset super;                             /**< parent class */
+    char *dir;                                 /**< directory containing ics files  */
+    icaldirset_options options;                /**< copy of options passed to icalset_new() */
+    icalcluster *cluster;                      /**< cluster containing data */
+    icalgauge *gauge;                          /**< gauge for filtering out data  */
+    int first_component;                       /**< ??? */
+    struct icalpvl_list_t *directory;          /**< ??? */
+    struct icalpvl_elem_t *directory_iterator; /**< ??? */
 };
 
 #endif

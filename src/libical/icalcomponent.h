@@ -17,20 +17,20 @@
 #include "libical_ical_export.h"
 #include "icalenums.h" /* Defines icalcomponent_kind */
 #include "icalproperty.h"
-#include "icalpvl.h"
 
 typedef struct icalcomponent_impl icalcomponent;
 
+struct icalpvl_elem_t;
 /* This is exposed so that callers will not have to allocate and
    deallocate iterators. Pretend that you can't see it. */
 typedef struct icalcompiter {
     icalcomponent_kind kind;
-    icalpvl_elem iter;
+    struct icalpvl_elem_t *iter;
 } icalcompiter;
 
 typedef struct icalpropiter {
     icalproperty_kind kind;
-    icalpvl_elem iter;
+    struct icalpvl_elem_t *iter;
 } icalpropiter;
 
 /** @brief Constructor

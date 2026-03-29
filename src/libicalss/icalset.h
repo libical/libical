@@ -38,6 +38,7 @@ typedef enum icalset_kind
     ICAL_BDB_SET
 } icalset_kind;
 
+struct icalcompiter;
 typedef struct icalsetiter {
     icalcompiter iter; /* icalcomponent_kind, icalpvl_elem iter */
     icalgauge *gauge;

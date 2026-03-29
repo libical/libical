@@ -17,6 +17,7 @@
 #include "icaldirset.h"
 #include "icaldirsetimpl.h"
 #include "icalfileset.h"
+#include "icalpvl_p.h"
 
 #include <stdio.h>
 #include <stdlib.h>

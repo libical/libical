@@ -18,8 +18,7 @@
 #include <config.h>
 #endif
 
-#include "icalpvl.h"
-
+#include "icalpvl_p.h"
 #include "icalmemory.h"
 
 #include <assert.h>

@@ -16,6 +16,7 @@
 #include "icalgauge.h"
 #include "icalgaugeimpl.h"
 #include "icalerror.h"
+#include "icalpvl_p.h"
 #include "icalvalue.h"
 
 #include <stddef.h> /* for ptrdiff_t */

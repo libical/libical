@@ -227,6 +227,7 @@ The following functions have been added:
   * `icaltimezone_array_new()`
   * `icaltimezone_array_append_from_vtimezone()`
   * `icaltimezone_array_free()`
+  * `icalpvl_*()`
 
 ### Removed macros
 

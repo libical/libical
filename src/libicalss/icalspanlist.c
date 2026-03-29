@@ -11,6 +11,7 @@
 #endif
 
 #include "icalspanlist.h"
+#include "icalpvl_p.h"
 #include "icaltimezone.h"
 
 #include <stdlib.h>

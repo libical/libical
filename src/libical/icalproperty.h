@@ -6,16 +6,23 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/** @file icalproperty.h */
+
 #ifndef ICALPROPERTY_H
 #define ICALPROPERTY_H
 
 #include "libical_ical_export.h"
 #include "icalderivedproperty.h" /* To get icalproperty_kind enumerations */
-#include "icalpvl.h"
 
 #include <stdarg.h> /* for va_... */
 
-/** @file icalproperty.h */
+/* This is exposed so that callers will not have to allocate and
+ *   deallocate iterators. Pretend that you can't see it. */
+struct icalpvl_elem_t;
+typedef struct icalparamiter {
+    icalparameter_kind kind;
+    struct icalpvl_elem_t *iter;
+} icalparamiter;
 
 LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new(icalproperty_kind kind);
 
@@ -233,13 +240,6 @@ LIBICAL_ICAL_EXPORT void icalproperty_set_allow_empty_properties(bool enable);
  *
  */
 LIBICAL_ICAL_EXPORT bool icalproperty_get_allow_empty_properties(void);
-
-/* This is exposed so that callers will not have to allocate and
-   deallocate iterators. Pretend that you can't see it. */
-typedef struct icalparamiter {
-    icalparameter_kind kind;
-    icalpvl_elem iter;
-} icalparamiter;
 
 LIBICAL_ICAL_EXPORT icalparamiter icalproperty_begin_parameter(icalproperty *property, icalparameter_kind kind);
 
