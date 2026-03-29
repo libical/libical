@@ -15,7 +15,7 @@
 
 #include "icalvalue.h"
 #include "icalvalueimpl.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icallimits.h"
 #include "icalmemory.h"
 #include "icaltime.h"

@@ -12,6 +12,7 @@
 
 #include "icalcalendar.h"
 #include "icaldirset.h"
+#include "icalerror_p.h"
 #include "icalfileset.h"
 
 #include <errno.h>

@@ -12,7 +12,7 @@
 
 #include "vcardtextlist.h"
 #include "vcardvalue.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 vcardstrarray *vcardtextlist_new_from_string(const char *str, char sep)

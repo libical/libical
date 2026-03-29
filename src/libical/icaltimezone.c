@@ -15,6 +15,7 @@
 #include "icaltimezone_p.h"
 #include "icaltimezoneimpl.h"
 #include "icalarray.h"
+#include "icalerror_p.h"
 #include "icalerror.h"
 #include "icallimits.h"
 #include "icalparser.h"

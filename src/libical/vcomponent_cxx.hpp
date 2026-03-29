@@ -14,7 +14,6 @@
 #include "icptrholder_cxx.hpp"
 
 extern "C" {
-#include "icalerror.h"
 #include "icalcomponent.h"
 }
 

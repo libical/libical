@@ -7,9 +7,7 @@
 
 -->
 <structure namespace="ICal" name="Error">
-  <skip>icalerror_assert</skip>
   <skip>icalerror_check_arg</skip>
-  <skip>icalerror_check_arg_re</skip>
   <skip>icalerror_check_arg_rv</skip>
   <skip>icalerror_check_arg_rx</skip>
   <skip>icalerror_check_arg_rz</skip>
@@ -37,10 +35,6 @@
     <element name="ICAL_ERROR_DEFAULT"/>
     <element name="ICAL_ERROR_UNKNOWN"/>
   </enum>
-  <method name="i_cal_error_stop_here" corresponds="icalerror_stop_here" since="1.0"/>
-  <method name="i_cal_error_crash_here" corresponds="icalerror_crash_here" since="1.0">
-    <comment xml:space="preserve">Shout out the errors to the compiler.</comment>
-  </method>
   <method name="i_cal_error_icalerrno" corresponds="icalerror_icalerrno" since="1.0">
     <returns type="ICalErrorEnum" annotation="transfer full" translator="(ICalErrorEnum) *" translator_argus="NONE" comment="Return the error happened"/>
     <comment xml:space="preserve">Returns the error stored in the library. If no error, return I_CAL_NO_ERROR.</comment>

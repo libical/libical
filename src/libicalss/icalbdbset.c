@@ -12,6 +12,7 @@
 #include "icalbdbset.h"
 #include "icalbdbsetimpl.h"
 
+#include "icalerror_p.h"
 #include "icalparser.h"
 #include "icaltimezone.h"
 #include "icalvalue.h"

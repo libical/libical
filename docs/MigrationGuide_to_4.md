@@ -228,6 +228,20 @@ The following functions have been added:
   * `icaltimezone_array_append_from_vtimezone()`
   * `icaltimezone_array_free()`
   * `icalpvl_*()`
+  * `icalerror_check_arg_rx()`
+  * `icalerror_check_arg_re()`
+  * `icalerror_check_arg_rz()`
+  * `icalerror_check_arg_rv()`
+  * `icalerror_check_arg()`
+  * `icalerror_assert()`
+  * `icalerrprintf()`
+  * `icalerror_warn()`
+  * `icalerror_crash_here()`
+  * `icalerror_stop_here()`
+  * `icalerror_check_value_type()`
+  * `icalerror_check_property_type()`
+  * `icalerror_check_parameter_type()`
+  * `icalerror_check_component_type()`
 
 ### Removed macros
 

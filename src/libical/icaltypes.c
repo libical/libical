@@ -10,7 +10,7 @@
 #endif
 
 #include "icaltypes.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #define TMP_BUF_SIZE 1024

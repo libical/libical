@@ -15,6 +15,7 @@
 #endif
 
 #include "test-malloc.h"
+#include "icalerror_p.h"
 #include "icalerror.h"
 #if !defined(MEMORY_CONSISTENCY)
 #include "regression.h"

@@ -26,7 +26,7 @@
 #endif
 
 #include "icalvcal.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalvalue.h"
 #include "icaltimezone.h"
 #include "icalversion.h" /* for ICAL_PACKAGE */

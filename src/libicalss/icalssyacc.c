@@ -149,6 +149,7 @@ enum yytokentype
 /*                                                                         */
 /*  ====================================================================== */
 #define YYDEBUG 1
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h> /* for strdup() */
 #include <limits.h> /* for SHRT_MAX*/

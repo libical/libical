@@ -11,6 +11,10 @@
 #include "icalparameter_cxx.hpp"
 #include "icalvalue_cxx.hpp"
 
+extern "C" {
+#include "icalerror_p.h"
+}
+
 #include <string>
 
 using namespace LibICal;

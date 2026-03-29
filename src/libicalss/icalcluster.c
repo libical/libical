@@ -23,6 +23,7 @@
 
 #include "icalcluster.h"
 #include "icalclusterimpl.h"
+#include "icalerror_p.h"
 
 #include <stdlib.h>
 

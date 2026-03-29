@@ -11,7 +11,7 @@
 #endif
 
 #include "icalrestriction.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 
 /* Define the structs for the restrictions. these data are filled out
 in machine generated code below */

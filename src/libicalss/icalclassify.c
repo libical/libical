@@ -11,8 +11,10 @@
 #endif
 
 #include "icalclassify.h"
+#include "icalerror.h"
 #include "icalmemory.h"
 
+#include <assert.h>
 #include <ctype.h>
 #include <stdlib.h>
 

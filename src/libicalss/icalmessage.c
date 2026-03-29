@@ -11,7 +11,7 @@
 #endif
 
 #include "icalmessage.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalversion.h" /* for ICAL_PACKAGE, ICAL_VERSION */
 
 #include <ctype.h>

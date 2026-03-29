@@ -11,7 +11,7 @@
 #endif
 
 #include "icalmemory.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #if defined(MEMORY_CONSISTENCY)
 #include "test-malloc.h"
 #endif

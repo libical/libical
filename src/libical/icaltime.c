@@ -43,6 +43,7 @@
 
 #include "icaltime.h"
 #include "icaldate_p.h"
+#include "icalerror_p.h"
 #include "icalerror.h"
 #include "icalmemory.h"
 #include "icaltimezone.h"

@@ -24,7 +24,6 @@ ICalGLib.error_set_error_state(ICalGLib.ErrorEnum.NEWFAILED_ERROR, ICalGLib.Erro
 state = ICalGLib.error_get_error_state(ICalGLib.ErrorEnum.NEWFAILED_ERROR)
 assert state == ICalGLib.ErrorState.FATAL
 
-ICalGLib.error_stop_here()
 enumeration = ICalGLib.error_icalerrno()
 string_rep = ICalGLib.error_strerror(enumeration)
 assert string_rep == 'NO: No error'
