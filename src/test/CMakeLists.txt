@@ -38,7 +38,7 @@ macro(setprops _name)
           "${PROJECT_BINARY_DIR}/bin"
     )
   endif()
-  if(WIN32)
+  if(WIN32 AND NOT MINGW)
     set(tpath "${PROJECT_BINARY_DIR}/bin;%PATH%")
     if(ICU_FOUND)
       set(tpath "${ICU_BINARY_DIR};${tpath}")
@@ -48,6 +48,14 @@ macro(setprops _name)
       PROPERTIES
         ENVIRONMENT
           "PATH=${tpath}"
+        WORKING_DIRECTORY
+          "${PROJECT_BINARY_DIR}/bin"
+    )
+  endif()
+  if(WIN32 AND MINGW)
+    set_tests_properties(
+      ${_name}
+      PROPERTIES
         WORKING_DIRECTORY
           "${PROJECT_BINARY_DIR}/bin"
     )

@@ -134,6 +134,7 @@
 
 #include <ctype.h>
 #include <stddef.h> /* For offsetof() macro */
+#include <stdint.h>
 #include <stdlib.h>
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
