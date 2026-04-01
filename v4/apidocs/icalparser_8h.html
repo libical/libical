@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -77,7 +77,6 @@ $(function() {
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">icalparser.h File Reference</div></div>
@@ -89,16 +88,6 @@ $(function() {
 
 <p><a href="icalparser_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a268240cde8363f3f669ff87d4a40a5d4" id="r_a268240cde8363f3f669ff87d4a40a5d4"><td class="memItemLeft" align="right" valign="top">typedef struct icalparser_impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a></td></tr>
-<tr class="memitem:aaf82988b92e406a6a8d383c34b3a2a77" id="r_aaf82988b92e406a6a8d383c34b3a2a77"><td class="memItemLeft" align="right" valign="top"><a id="aaf82988b92e406a6a8d383c34b3a2a77" name="aaf82988b92e406a6a8d383c34b3a2a77"></a>
-typedef enum <a class="el" href="#a6fcc054fab27a4491f52b0e1aba899c3">icalparser_ctrl</a>&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_ctrl</b></td></tr>
-<tr class="memitem:a69220c4ae4e2d8b576334ac8049f6a32" id="r_a69220c4ae4e2d8b576334ac8049f6a32"><td class="memItemLeft" align="right" valign="top"><a id="a69220c4ae4e2d8b576334ac8049f6a32" name="a69220c4ae4e2d8b576334ac8049f6a32"></a>
-typedef char *(*&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_line_gen_func</b>) (char *s, size_t size, void *d)</td></tr>
-<tr class="memitem:af8b34b2ce5d2982022e34e8a0ef32be0" id="r_af8b34b2ce5d2982022e34e8a0ef32be0"><td class="memItemLeft" align="right" valign="top"><a id="af8b34b2ce5d2982022e34e8a0ef32be0" name="af8b34b2ce5d2982022e34e8a0ef32be0"></a>
-typedef enum <a class="el" href="#aeec42cd09dd789c699d7b6741cbec3e7">icalparser_state</a>&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_state</b></td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:a6fcc054fab27a4491f52b0e1aba899c3" id="r_a6fcc054fab27a4491f52b0e1aba899c3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6fcc054fab27a4491f52b0e1aba899c3">icalparser_ctrl</a> { <a class="el" href="#a6fcc054fab27a4491f52b0e1aba899c3a5cb2c7f392cabe9b95975fd5f04abf4c">ICALPARSER_CTRL_KEEP</a>
@@ -119,52 +108,37 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a02ed734ea9f8f1c2f22716d1838f56ab" id="r_a02ed734ea9f8f1c2f22716d1838f56ab"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02ed734ea9f8f1c2f22716d1838f56ab">icalparser_add_line</a> (<a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser, char *line)</td></tr>
+<tr class="memitem:a02ed734ea9f8f1c2f22716d1838f56ab" id="r_a02ed734ea9f8f1c2f22716d1838f56ab"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02ed734ea9f8f1c2f22716d1838f56ab">icalparser_add_line</a> (icalparser *parser, char *line)</td></tr>
 <tr class="memdesc:a02ed734ea9f8f1c2f22716d1838f56ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a single line to be parsed by the icalparser.  <br /></td></tr>
-<tr class="memitem:aa6e4c9c494345c51adf49a7e30255fb7" id="r_aa6e4c9c494345c51adf49a7e30255fb7"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6e4c9c494345c51adf49a7e30255fb7">icalparser_clean</a> (<a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser)</td></tr>
+<tr class="memitem:aa6e4c9c494345c51adf49a7e30255fb7" id="r_aa6e4c9c494345c51adf49a7e30255fb7"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6e4c9c494345c51adf49a7e30255fb7">icalparser_clean</a> (icalparser *parser)</td></tr>
 <tr class="memdesc:aa6e4c9c494345c51adf49a7e30255fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans out an icalparser and returns whatever it has parsed so far.  <br /></td></tr>
-<tr class="memitem:a1cb8b8678b781d3d2ede0fbce613b90d" id="r_a1cb8b8678b781d3d2ede0fbce613b90d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a> (<a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser)</td></tr>
+<tr class="memitem:a1cb8b8678b781d3d2ede0fbce613b90d" id="r_a1cb8b8678b781d3d2ede0fbce613b90d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a> (icalparser *parser)</td></tr>
 <tr class="memdesc:a1cb8b8678b781d3d2ede0fbce613b90d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees an icalparser object.  <br /></td></tr>
 <tr class="memitem:a2d34db956d3cc609f2804bcadd0deee6" id="r_a2d34db956d3cc609f2804bcadd0deee6"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="#a6fcc054fab27a4491f52b0e1aba899c3">icalparser_ctrl</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d34db956d3cc609f2804bcadd0deee6">icalparser_get_ctrl</a> (void)</td></tr>
 <tr class="memdesc:a2d34db956d3cc609f2804bcadd0deee6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current parser setting how to handle CONTROL characters.  <br /></td></tr>
-<tr class="memitem:ada2de638b68de5146ae860631709f4a3" id="r_ada2de638b68de5146ae860631709f4a3"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada2de638b68de5146ae860631709f4a3">icalparser_get_line</a> (<a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser, icalparser_line_gen_func line_gen_func)</td></tr>
+<tr class="memitem:ada2de638b68de5146ae860631709f4a3" id="r_ada2de638b68de5146ae860631709f4a3"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada2de638b68de5146ae860631709f4a3">icalparser_get_line</a> (icalparser *parser, icalparser_line_gen_func line_gen_func)</td></tr>
 <tr class="memdesc:ada2de638b68de5146ae860631709f4a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a line generator function, returns a single iCal content line.  <br /></td></tr>
-<tr class="memitem:aff615b34398b3dd438e4b842c2bda70f" id="r_aff615b34398b3dd438e4b842c2bda70f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#aeec42cd09dd789c699d7b6741cbec3e7">icalparser_state</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff615b34398b3dd438e4b842c2bda70f">icalparser_get_state</a> (const <a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser)</td></tr>
+<tr class="memitem:aff615b34398b3dd438e4b842c2bda70f" id="r_aff615b34398b3dd438e4b842c2bda70f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#aeec42cd09dd789c699d7b6741cbec3e7">icalparser_state</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff615b34398b3dd438e4b842c2bda70f">icalparser_get_state</a> (const icalparser *parser)</td></tr>
 <tr class="memdesc:aff615b34398b3dd438e4b842c2bda70f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns current state of the icalparser.  <br /></td></tr>
-<tr class="memitem:a9848e4dc69f814f49a5ece028c43be57" id="r_a9848e4dc69f814f49a5ece028c43be57"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a> (void)</td></tr>
+<tr class="memitem:a9848e4dc69f814f49a5ece028c43be57" id="r_a9848e4dc69f814f49a5ece028c43be57"><td class="memItemLeft" align="right" valign="top">icalparser *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a> (void)</td></tr>
 <tr class="memdesc:a9848e4dc69f814f49a5ece028c43be57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new icalparser.  <br /></td></tr>
-<tr class="memitem:a00330df647417bb017a7daaaffafddec" id="r_a00330df647417bb017a7daaaffafddec"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00330df647417bb017a7daaaffafddec">icalparser_parse</a> (<a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser, icalparser_line_gen_func line_gen_func)</td></tr>
+<tr class="memitem:a00330df647417bb017a7daaaffafddec" id="r_a00330df647417bb017a7daaaffafddec"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00330df647417bb017a7daaaffafddec">icalparser_parse</a> (icalparser *parser, icalparser_line_gen_func line_gen_func)</td></tr>
 <tr class="memdesc:a00330df647417bb017a7daaaffafddec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Message oriented parsing.  <br /></td></tr>
 <tr class="memitem:a5e1268344c61e44a0ec18085688f07fd" id="r_a5e1268344c61e44a0ec18085688f07fd"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a> (const char *str)</td></tr>
 <tr class="memdesc:a5e1268344c61e44a0ec18085688f07fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a string and returns the parsed icalcomponent.  <br /></td></tr>
 <tr class="memitem:a24ad1a0d37a10aa31a8dbd9977660281" id="r_a24ad1a0d37a10aa31a8dbd9977660281"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24ad1a0d37a10aa31a8dbd9977660281">icalparser_set_ctrl</a> (enum <a class="el" href="#a6fcc054fab27a4491f52b0e1aba899c3">icalparser_ctrl</a> ctrl)</td></tr>
 <tr class="memdesc:a24ad1a0d37a10aa31a8dbd9977660281"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the parser setting how to handle CONTROL characters.  <br /></td></tr>
-<tr class="memitem:aae6d08b4084610e225621a25dddd7689" id="r_aae6d08b4084610e225621a25dddd7689"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae6d08b4084610e225621a25dddd7689">icalparser_set_gen_data</a> (<a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser, void *data)</td></tr>
+<tr class="memitem:aae6d08b4084610e225621a25dddd7689" id="r_aae6d08b4084610e225621a25dddd7689"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae6d08b4084610e225621a25dddd7689">icalparser_set_gen_data</a> (icalparser *parser, void *data)</td></tr>
 <tr class="memdesc:aae6d08b4084610e225621a25dddd7689"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the data that icalparser_parse will give to the line_gen_func as the parameter 'd'.  <br /></td></tr>
-<tr class="memitem:a6429fdd3d61babc95a3851d78c16ae66" id="r_a6429fdd3d61babc95a3851d78c16ae66"><td class="memItemLeft" align="right" valign="top"><a id="a6429fdd3d61babc95a3851d78c16ae66" name="a6429fdd3d61babc95a3851d78c16ae66"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_line_generator</b> (char *out, size_t buf_size, void *d)</td></tr>
+<tr class="memitem:a6429fdd3d61babc95a3851d78c16ae66" id="r_a6429fdd3d61babc95a3851d78c16ae66"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6429fdd3d61babc95a3851d78c16ae66">icalparser_string_line_generator</a> (char *out, size_t buf_size, void *d)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Line-oriented parsing. </p>
 <p>This file provides methods to parse iCalendar-formatted data into the structures provided by this library.</p>
 <dl class="section user"><dt>Usage</dt><dd>Create a new parser via icalparser_new_parser(), then add lines one at a time with <a class="el" href="#a02ed734ea9f8f1c2f22716d1838f56ab" title="Adds a single line to be parsed by the icalparser.">icalparser_add_line()</a>. <a class="el" href="#a02ed734ea9f8f1c2f22716d1838f56ab" title="Adds a single line to be parsed by the icalparser.">icalparser_add_line()</a> will return non-zero when it has finished with a component. </dd></dl>
-</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
-<a id="a268240cde8363f3f669ff87d4a40a5d4" name="a268240cde8363f3f669ff87d4a40a5d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a268240cde8363f3f669ff87d4a40a5d4">&#9670;&#160;</a></span>icalparser</h2>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct icalparser_impl <a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Implementation of the icalparser struct, which holds the state for the current parsing operation. </p>
-
-</div>
-</div>
-<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+<p class="definition">Definition in file <a class="el" href="icalparser_8h_source.html">icalparser.h</a>.</p>
+</div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
 <a id="a6fcc054fab27a4491f52b0e1aba899c3" name="a6fcc054fab27a4491f52b0e1aba899c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6fcc054fab27a4491f52b0e1aba899c3">&#9670;&#160;</a></span>icalparser_ctrl</h2>
 
@@ -186,6 +160,8 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
 <tr><td class="fieldname"><a id="a6fcc054fab27a4491f52b0e1aba899c3af461909a3196ea163ae9718975ae55e5" name="a6fcc054fab27a4491f52b0e1aba899c3af461909a3196ea163ae9718975ae55e5"></a>ICALPARSER_CTRL_ERROR&#160;</td><td class="fielddoc"><p>Insert a X-LIC-ERROR instead of content-line </p>
 </td></tr>
 </table>
+
+<p class="definition">Definition at line <a class="el" href="icalparser_8h_source.html#l00305">305</a> of file <a class="el" href="icalparser_8h_source.html">icalparser.h</a>.</p>
 
 </div>
 </div>
@@ -215,6 +191,8 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
 </td></tr>
 </table>
 
+<p class="definition">Definition at line <a class="el" href="icalparser_8h_source.html#l00039">39</a> of file <a class="el" href="icalparser_8h_source.html">icalparser.h</a>.</p>
+
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
@@ -227,7 +205,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
         <tr>
           <td class="memname">icalcomponent * icalparser_add_line </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span>, </td>
+          <td class="paramtype">icalparser *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -266,31 +244,37 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
 <div class="line">    FILE* stream;</div>
 <div class="line">    icalcomponent *component;</div>
 <div class="line"> </div>
-<div class="line">    <a class="code hl_typedef" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser = <a class="code hl_function" href="#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
+<div class="line">    icalparser *parser = <a class="code hl_function" href="icalparser_8c.html#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
 <div class="line">    stream = fopen(argv[1],<span class="stringliteral">&quot;r&quot;</span>);</div>
 <div class="line"> </div>
-<div class="line">    icalparser_set_gen_data(parser, stream);</div>
+<div class="line">    <a class="code hl_function" href="icalparser_8c.html#aae6d08b4084610e225621a25dddd7689">icalparser_set_gen_data</a>(parser, stream);</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">do</span>{</div>
 <div class="line">        <span class="comment">// get a single content line</span></div>
-<div class="line">        line = icalparser_get_line(parser, read_stream);</div>
+<div class="line">        line = <a class="code hl_function" href="icalparser_8c.html#ada2de638b68de5146ae860631709f4a3">icalparser_get_line</a>(parser, read_stream);</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">// add that line to the parser</span></div>
-<div class="line">        c = <a class="code hl_function" href="#a02ed734ea9f8f1c2f22716d1838f56ab">icalparser_add_line</a>(parser,line);</div>
+<div class="line">        c = <a class="code hl_function" href="icalparser_8c.html#a02ed734ea9f8f1c2f22716d1838f56ab">icalparser_add_line</a>(parser,line);</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">// once we parsed a component, print it</span></div>
 <div class="line">        <span class="keywordflow">if</span> (c != 0) {</div>
-<div class="line">            printf(<span class="stringliteral">&quot;%s&quot;</span>, icalcomponent_as_ical_string(c));</div>
-<div class="line">            icalcomponent_free(c);</div>
+<div class="line">            printf(<span class="stringliteral">&quot;%s&quot;</span>, <a class="code hl_function" href="icalcomponent_8c.html#a595fc3618235056bf10ad705275ae930">icalcomponent_as_ical_string</a>(c));</div>
+<div class="line">            <a class="code hl_function" href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free</a>(c);</div>
 <div class="line">        }</div>
 <div class="line">    } <span class="keywordflow">while</span> (line != 0);</div>
 <div class="line"> </div>
-<div class="line">    icalparser_free(parser);</div>
+<div class="line">    <a class="code hl_function" href="icalparser_8c.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a>(parser);</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalparser_8h_html_a02ed734ea9f8f1c2f22716d1838f56ab"><div class="ttname"><a href="#a02ed734ea9f8f1c2f22716d1838f56ab">icalparser_add_line</a></div><div class="ttdeci">icalcomponent * icalparser_add_line(icalparser *parser, char *line)</div><div class="ttdoc">Adds a single line to be parsed by the icalparser.</div><div class="ttdef"><b>Definition</b> icalparser.c:641</div></div>
-<div class="ttc" id="aicalparser_8h_html_a268240cde8363f3f669ff87d4a40a5d4"><div class="ttname"><a href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a></div><div class="ttdeci">struct icalparser_impl icalparser</div><div class="ttdef"><b>Definition</b> icalparser.h:36</div></div>
-<div class="ttc" id="aicalparser_8h_html_a9848e4dc69f814f49a5ece028c43be57"><div class="ttname"><a href="#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a></div><div class="ttdeci">icalparser * icalparser_new(void)</div><div class="ttdoc">Creates a new icalparser.</div><div class="ttdef"><b>Definition</b> icalparser.c:80</div></div>
+<div class="ttc" id="aicalcomponent_8c_html_a595fc3618235056bf10ad705275ae930"><div class="ttname"><a href="icalcomponent_8c.html#a595fc3618235056bf10ad705275ae930">icalcomponent_as_ical_string</a></div><div class="ttdeci">char * icalcomponent_as_ical_string(const icalcomponent *component)</div><div class="ttdef"><b>Definition</b> <a href="icalcomponent_8c_source.html#l00234">icalcomponent.c:234</a></div></div>
+<div class="ttc" id="aicalcomponent_8c_html_ae4d5dab5e04d8def5cff81e7c75cc065"><div class="ttname"><a href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free</a></div><div class="ttdeci">void icalcomponent_free(icalcomponent *c)</div><div class="ttdef"><b>Definition</b> <a href="icalcomponent_8c_source.html#l00191">icalcomponent.c:191</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_a02ed734ea9f8f1c2f22716d1838f56ab"><div class="ttname"><a href="icalparser_8c.html#a02ed734ea9f8f1c2f22716d1838f56ab">icalparser_add_line</a></div><div class="ttdeci">icalcomponent * icalparser_add_line(icalparser *parser, char *line)</div><div class="ttdoc">Adds a single line to be parsed by the icalparser.</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8c_source.html#l00650">icalparser.c:650</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_a1cb8b8678b781d3d2ede0fbce613b90d"><div class="ttname"><a href="icalparser_8c.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a></div><div class="ttdeci">void icalparser_free(icalparser *parser)</div><div class="ttdoc">Frees an icalparser object.</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8c_source.html#l00112">icalparser.c:112</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_a9848e4dc69f814f49a5ece028c43be57"><div class="ttname"><a href="icalparser_8c.html#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a></div><div class="ttdeci">icalparser * icalparser_new(void)</div><div class="ttdoc">Creates a new icalparser.</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8c_source.html#l00089">icalparser.c:89</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_aae6d08b4084610e225621a25dddd7689"><div class="ttname"><a href="icalparser_8c.html#aae6d08b4084610e225621a25dddd7689">icalparser_set_gen_data</a></div><div class="ttdeci">void icalparser_set_gen_data(icalparser *parser, void *data)</div><div class="ttdoc">Sets the data that icalparser_parse will give to the line_gen_func as the parameter &#39;d&#39;.</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8c_source.html#l00129">icalparser.c:129</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_ada2de638b68de5146ae860631709f4a3"><div class="ttname"><a href="icalparser_8c.html#ada2de638b68de5146ae860631709f4a3">icalparser_get_line</a></div><div class="ttdeci">char * icalparser_get_line(icalparser *parser, icalparser_line_gen_func line_gen_func)</div><div class="ttdoc">Given a line generator function, returns a single iCal content line.</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8c_source.html#l00437">icalparser.c:437</a></div></div>
 </div><!-- fragment --> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l00650">650</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
 
 </div>
 </div>
@@ -303,7 +287,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
         <tr>
           <td class="memname">icalcomponent * icalparser_clean </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span></td><td>)</td>
+          <td class="paramtype">icalparser *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -318,8 +302,10 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The parsed icalcomponent</dd></dl>
 <dl class="section user"><dt>Error handling</dt><dd>If <em class="arg">parser</em> is <span class="tt">NULL</span>, it returns <span class="tt">NULL</span> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. For parsing errors, it inserts an <span class="tt">X-LIC-ERROR</span> property into the affected components.</dd></dl>
-<dl class="section user"><dt>Ownership</dt><dd>The returned icalcomponent is property of the caller and needs to be free'd with icalcomponent_free() after use.</dd></dl>
+<dl class="section user"><dt>Ownership</dt><dd>The returned icalcomponent is property of the caller and needs to be free'd with <a class="el" href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free()</a> after use.</dd></dl>
 <p>This will parse components even if it hasn't encountered a proper <span class="tt">END</span> tag for it yet and return them, as well as clearing any intermediate state resulting from being in the middle of parsing something so the parser can be used to parse something new. </p>
+
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l01231">1231</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
 
 </div>
 </div>
@@ -332,7 +318,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
         <tr>
           <td class="memname">void icalparser_free </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span></td><td>)</td>
+          <td class="paramtype">icalparser *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -345,13 +331,14 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
   </table>
   </dd>
 </dl>
-<dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line"><a class="code hl_typedef" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser = <a class="code hl_function" href="#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
+<dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line">icalparser *parser = <a class="code hl_function" href="icalparser_8c.html#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// use parser ...</span></div>
 <div class="line"> </div>
-<div class="line"><a class="code hl_function" href="#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a>(parser);</div>
-<div class="ttc" id="aicalparser_8h_html_a1cb8b8678b781d3d2ede0fbce613b90d"><div class="ttname"><a href="#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a></div><div class="ttdeci">void icalparser_free(icalparser *parser)</div><div class="ttdoc">Frees an icalparser object.</div><div class="ttdef"><b>Definition</b> icalparser.c:103</div></div>
+<div class="line"><a class="code hl_function" href="icalparser_8c.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a>(parser);</div>
 </div><!-- fragment --> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l00112">112</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
 
 </div>
 </div>
@@ -373,6 +360,8 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
 <p>Get the current parser setting how to handle CONTROL characters. </p>
 <dl class="section return"><dt>Returns</dt><dd>The current parser setting </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l01360">1360</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
+
 </div>
 </div>
 <a id="ada2de638b68de5146ae860631709f4a3" name="ada2de638b68de5146ae860631709f4a3"></a>
@@ -384,7 +373,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
         <tr>
           <td class="memname">char * icalparser_get_line </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span>, </td>
+          <td class="paramtype">icalparser *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -405,6 +394,8 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
 </dl>
 <p>This function uses the supplied <em class="arg">line_gen_func</em> to read data in, until it has read a full line, and returns the full line. It includes any continuation lines, which start with a space after a newline. To supply arbitrary data (as the parameter <em class="arg">d</em>) to your <em class="arg">line_gen_func</em>, call <a class="el" href="#aae6d08b4084610e225621a25dddd7689" title="Sets the data that icalparser_parse will give to the line_gen_func as the parameter &#39;d&#39;.">icalparser_set_gen_data()</a>. </p>
 
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l00437">437</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
+
 </div>
 </div>
 <a id="aff615b34398b3dd438e4b842c2bda70f" name="aff615b34398b3dd438e4b842c2bda70f"></a>
@@ -416,7 +407,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
         <tr>
           <td class="memname"><a class="el" href="#aeec42cd09dd789c699d7b6741cbec3e7">icalparser_state</a> icalparser_get_state </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span></td><td>)</td>
+          <td class="paramtype">const icalparser *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -430,19 +421,21 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The current state of the icalparser, as an <a class="el" href="#aeec42cd09dd789c699d7b6741cbec3e7" title="Represents the current state of the parser.">icalparser_state</a></dd></dl>
-<dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line"><a class="code hl_typedef" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser = <a class="code hl_function" href="#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
+<dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line">icalparser *parser = <a class="code hl_function" href="icalparser_8c.html#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// use icalparser...</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keywordflow">if</span>(<a class="code hl_function" href="#aff615b34398b3dd438e4b842c2bda70f">icalparser_get_state</a>(parser) == <a class="code hl_enumvalue" href="#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>) {</div>
+<div class="line"><span class="keywordflow">if</span>(<a class="code hl_function" href="icalparser_8c.html#aff615b34398b3dd438e4b842c2bda70f">icalparser_get_state</a>(parser) == <a class="code hl_enumvalue" href="#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>) {</div>
 <div class="line">    <span class="comment">// handle error</span></div>
 <div class="line">} <span class="keywordflow">else</span> {</div>
 <div class="line">    <span class="comment">// ...</span></div>
 <div class="line">}</div>
-<div class="ttc" id="aicalparser_8h_html_aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8"><div class="ttname"><a href="#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a></div><div class="ttdeci">@ ICALPARSER_ERROR</div><div class="ttdef"><b>Definition</b> icalparser.h:46</div></div>
-<div class="ttc" id="aicalparser_8h_html_aff615b34398b3dd438e4b842c2bda70f"><div class="ttname"><a href="#aff615b34398b3dd438e4b842c2bda70f">icalparser_get_state</a></div><div class="ttdeci">icalparser_state icalparser_get_state(const icalparser *parser)</div><div class="ttdoc">Returns current state of the icalparser.</div><div class="ttdef"><b>Definition</b> icalparser.c:1217</div></div>
+<div class="ttc" id="aicalparser_8c_html_aff615b34398b3dd438e4b842c2bda70f"><div class="ttname"><a href="icalparser_8c.html#aff615b34398b3dd438e4b842c2bda70f">icalparser_get_state</a></div><div class="ttdeci">icalparser_state icalparser_get_state(const icalparser *parser)</div><div class="ttdoc">Returns current state of the icalparser.</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8c_source.html#l01226">icalparser.c:1226</a></div></div>
+<div class="ttc" id="aicalparser_8h_html_aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8"><div class="ttname"><a href="#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a></div><div class="ttdeci">@ ICALPARSER_ERROR</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8h_source.html#l00042">icalparser.h:42</a></div></div>
 </div><!-- fragment --></dd></dl>
 <p>icalparser_free(parser); </p>
+
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l01226">1226</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
 
 </div>
 </div>
@@ -453,7 +446,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> * icalparser_new </td>
+          <td class="memname">icalparser * icalparser_new </td>
           <td>(</td>
           <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -466,13 +459,15 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
 <dl class="section user"><dt>Error handling</dt><dd>On error, it returns <span class="tt">NULL</span> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a055394ffaf6701aa12491dc10767f07d">ICAL_NEWFAILED_ERROR</a>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>All icalparser objects created with this function need to be freed using the <a class="el" href="#a1cb8b8678b781d3d2ede0fbce613b90d" title="Frees an icalparser object.">icalparser_free()</a> function.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// create new parser</span></div>
-<div class="line"><a class="code hl_typedef" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser = <a class="code hl_function" href="#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
+<div class="line">icalparser *parser = <a class="code hl_function" href="icalparser_8c.html#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// do something with it...</span></div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// free parser</span></div>
-<div class="line"><a class="code hl_function" href="#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a>(parser);</div>
+<div class="line"><a class="code hl_function" href="icalparser_8c.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a>(parser);</div>
 </div><!-- fragment --> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l00089">89</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
 
 </div>
 </div>
@@ -485,7 +480,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
         <tr>
           <td class="memname">icalcomponent * icalparser_parse </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span>, </td>
+          <td class="paramtype">icalparser *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -525,22 +520,24 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
 <div class="line">    FILE* stream;</div>
 <div class="line">    icalcomponent *component;</div>
 <div class="line"> </div>
-<div class="line">    <a class="code hl_typedef" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *parser = <a class="code hl_function" href="#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
+<div class="line">    icalparser *parser = <a class="code hl_function" href="icalparser_8c.html#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
 <div class="line">    stream = fopen(argv[1],<span class="stringliteral">&quot;r&quot;</span>);</div>
 <div class="line"> </div>
-<div class="line">    icalparser_set_gen_data(parser, stream);</div>
+<div class="line">    <a class="code hl_function" href="icalparser_8c.html#aae6d08b4084610e225621a25dddd7689">icalparser_set_gen_data</a>(parser, stream);</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// use the parse method to parse the input data</span></div>
-<div class="line">    component = <a class="code hl_function" href="#a00330df647417bb017a7daaaffafddec">icalparser_parse</a>(parser, read_stream);</div>
+<div class="line">    component = <a class="code hl_function" href="icalparser_8c.html#a00330df647417bb017a7daaaffafddec">icalparser_parse</a>(parser, read_stream);</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// once we parsed a component, print it</span></div>
-<div class="line">    printf(<span class="stringliteral">&quot;%s&quot;</span>, icalcomponent_as_ical_string(c));</div>
-<div class="line">    icalcomponent_free(c);</div>
+<div class="line">    printf(<span class="stringliteral">&quot;%s&quot;</span>, <a class="code hl_function" href="icalcomponent_8c.html#a595fc3618235056bf10ad705275ae930">icalcomponent_as_ical_string</a>(c));</div>
+<div class="line">    <a class="code hl_function" href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free</a>(c);</div>
 <div class="line"> </div>
-<div class="line">    icalparser_free(parser);</div>
+<div class="line">    <a class="code hl_function" href="icalparser_8c.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a>(parser);</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalparser_8h_html_a00330df647417bb017a7daaaffafddec"><div class="ttname"><a href="#a00330df647417bb017a7daaaffafddec">icalparser_parse</a></div><div class="ttdeci">icalcomponent * icalparser_parse(icalparser *parser, icalparser_line_gen_func line_gen_func)</div><div class="ttdoc">Message oriented parsing.</div><div class="ttdef"><b>Definition</b> icalparser.c:579</div></div>
+<div class="ttc" id="aicalparser_8c_html_a00330df647417bb017a7daaaffafddec"><div class="ttname"><a href="icalparser_8c.html#a00330df647417bb017a7daaaffafddec">icalparser_parse</a></div><div class="ttdeci">icalcomponent * icalparser_parse(icalparser *parser, icalparser_line_gen_func line_gen_func)</div><div class="ttdoc">Message oriented parsing.</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8c_source.html#l00588">icalparser.c:588</a></div></div>
 </div><!-- fragment --> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l00588">588</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
 
 </div>
 </div>
@@ -572,17 +569,19 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
 <dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line"><span class="keywordtype">char</span> *ical_string;</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// parse ical_string</span></div>
-<div class="line">icalcomponent *component = <a class="code hl_function" href="#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a>(ical_string);</div>
+<div class="line">icalcomponent *component = <a class="code hl_function" href="icalparser_8c.html#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a>(ical_string);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">if</span>(!<a class="code hl_define" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37">icalerrno</a> || component != NULL) {</div>
 <div class="line">    <span class="comment">// use component ...</span></div>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release component</span></div>
-<div class="line">icalcomponent_free(component);</div>
-<div class="ttc" id="aicalerror_8h_html_ad2562706150f5c5a4d9b0ca149d78e37"><div class="ttname"><a href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37">icalerrno</a></div><div class="ttdeci">#define icalerrno</div><div class="ttdoc">Access the current icalerrno value.</div><div class="ttdef"><b>Definition</b> icalerror.h:132</div></div>
-<div class="ttc" id="aicalparser_8h_html_a5e1268344c61e44a0ec18085688f07fd"><div class="ttname"><a href="#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a></div><div class="ttdeci">icalcomponent * icalparser_parse_string(const char *str)</div><div class="ttdoc">Parses a string and returns the parsed icalcomponent.</div><div class="ttdef"><b>Definition</b> icalparser.c:1322</div></div>
+<div class="line"><a class="code hl_function" href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free</a>(component);</div>
+<div class="ttc" id="aicalerror_8h_html_ad2562706150f5c5a4d9b0ca149d78e37"><div class="ttname"><a href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37">icalerrno</a></div><div class="ttdeci">#define icalerrno</div><div class="ttdoc">Access the current icalerrno value.</div><div class="ttdef"><b>Definition</b> <a href="icalerror_8h_source.html#l00130">icalerror.h:130</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_a5e1268344c61e44a0ec18085688f07fd"><div class="ttname"><a href="icalparser_8c.html#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a></div><div class="ttdeci">icalcomponent * icalparser_parse_string(const char *str)</div><div class="ttdoc">Parses a string and returns the parsed icalcomponent.</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8c_source.html#l01331">icalparser.c:1331</a></div></div>
 </div><!-- fragment --> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l01331">1331</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
 
 </div>
 </div>
@@ -609,6 +608,8 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
   </dd>
 </dl>
 
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l01365">1365</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
+
 </div>
 </div>
 <a id="aae6d08b4084610e225621a25dddd7689" name="aae6d08b4084610e225621a25dddd7689"></a>
@@ -620,7 +621,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
         <tr>
           <td class="memname">void icalparser_set_gen_data </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a268240cde8363f3f669ff87d4a40a5d4">icalparser</a> *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span>, </td>
+          <td class="paramtype">icalparser *</td>          <td class="paramname"><span class="paramname"><em>parser</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -639,6 +640,46 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparser_string_l
   </dd>
 </dl>
 <p>If you use any of the icalparser_parser() or <a class="el" href="#ada2de638b68de5146ae860631709f4a3" title="Given a line generator function, returns a single iCal content line.">icalparser_get_line()</a> functions, the <em class="arg">line_gen_func</em> that they expect has a third <span class="tt">void *d</span> argument. This function sets what will be passed to your <em class="arg">line_gen_function</em> as such argument. </p>
+
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l00129">129</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
+
+</div>
+</div>
+<a id="a6429fdd3d61babc95a3851d78c16ae66" name="a6429fdd3d61babc95a3851d78c16ae66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6429fdd3d61babc95a3851d78c16ae66">&#9670;&#160;</a></span>icalparser_string_line_generator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icalparser_string_line_generator </td>
+          <td>(</td>
+          <td class="paramtype">char *</td>          <td class="paramname"><span class="paramname"><em>out</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>buf_size</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>d</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A callback function to use by icalparser_get_line.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">out</td><td>a pointer to a char string to hold the concatenated output data </td></tr>
+    <tr><td class="paramname">buf_size</td><td>is the length of <code class="param">out</code> </td></tr>
+    <tr><td class="paramname">d</td><td>is a pointer to the input data</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>NULL if processing is complete; else a pointer to <code class="param">out</code>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalparser_8c_source.html#l01266">1266</a> of file <a class="el" href="icalparser_8c_source.html">icalparser.c</a>.</p>
 
 </div>
 </div>

@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -75,14 +75,14 @@ $(function() {
   <div class="headertitle"><div class="title">Changelog </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md64"></a></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md4"></a></p>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>, and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md65"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
 [4.0.0] - Unreleased</h1>
 <p>This is a major release and is <b>not</b> source or binary compatible with version 3.x.</p>
-<p>Please see Version 4 Migration Guide for details about API changes since libical 3.x.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md66"></a>
+<p>Please see <a class="el" href="md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html">Version 4 Migration Guide</a> for details about API changes since libical 3.x.</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
 Added</h2>
 <ul>
 <li>REUSE compliant licensing</li>
@@ -99,7 +99,7 @@ Added</h2>
 <li>Full support for <span class="tt">BYSETPOS</span>, i.e. remove the limitation to MONTHLY and YEARLY frequencies</li>
 <li>An API for setting/getting internal library limits (<span class="tt">icallimit_set</span> and <span class="tt">icallimit_get</span>)</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md67"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
 Changed</h2>
 <ul>
 <li>Built-in timezones updated to tzdata2025c to include historical data</li>
@@ -113,38 +113,38 @@ Changed</h2>
 <li>By default, only shared libraries are built; to get static libraries one must invoke separate build using the CMake <span class="tt">-DLIBICAL_STATIC=True</span> option.</li>
 <li>CMake option -DGOBJECT_INTROSPECTION=True by default.</li>
 <li><span class="tt">icaltzutil_get_zone_directory()</span> can use the TZDIR environment to find system zoneinfo</li>
-<li><span class="tt">icaltimezone_set_tzid_prefix()</span> now allows setting an empty tzid prefix.</li>
+<li><span class="tt"><a class="el" href="icaltimezone_8c.html#a04849ce67c1a529f19d695b74cb238fe">icaltimezone_set_tzid_prefix()</a></span> now allows setting an empty tzid prefix.</li>
 <li><span class="tt">icaldurationtype_from_int</span> and <span class="tt">icaldurationtype_as_int</span> have been renamed to <span class="tt">icaldurationtype_from_seconds</span> and <span class="tt">icaldurationtype_as_seconds</span>, respectively.</li>
-<li>Components and properties with arbitrary iana-token names now are parsed with kind ICAL_IANA_COMPONENT and ICAL_IANA_PROPERTY if the <span class="tt">ical_unknown_token_handling</span> setting is ICAL_ASSUME_IANA_TOKEN. Otherwise, they are handled as error.</li>
+<li>Components and properties with arbitrary iana-token names now are parsed with kind ICAL_IANA_COMPONENT and ICAL_IANA_PROPERTY if the <span class="tt"><a class="el" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440c">ical_unknown_token_handling</a></span> setting is ICAL_ASSUME_IANA_TOKEN. Otherwise, they are handled as error.</li>
 <li>Property and parameter names that start with "x-" (lowercase) now also are parsed as X kind.</li>
 <li>The <span class="tt">icalproperty_remove_parameter_by_(kind|name)</span> functions now remove all matching parameters. Before, they only removed the first matching parameter contrary to their documentation.</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md68"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
 Deprecated</h2>
 <ul>
 <li>The icalvcal library is deprecated and will be removed sometime in the 4.x series. Please port your icalvcal code to use icalvcard instead.</li>
-<li>Several CMake options are renamed in favor of a "namespaced" equivalent. Please port your buildscripts to the new CMake option names. A complete list is provided in this "CMake options" section of the Version 4 Migration Guide</li>
+<li>Several CMake options are renamed in favor of a "namespaced" equivalent. Please port your buildscripts to the new CMake option names. A complete list is provided in this "CMake options" section of the <a class="el" href="md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html">Version 4 Migration Guide</a></li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md69"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
 Removed</h2>
 <ul>
 <li>The old src/python code is removed in favor of the glib-introspection generated Python bindings. Requires building with -DGOBJECT_INTROSPECTION=True</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md70"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 Fixed</h2>
 <ul>
-<li>Fixed <span class="tt">icalcomponent_get_duration()</span> to account for DTEND/DUE TZID</li>
+<li>Fixed <span class="tt"><a class="el" href="icalcomponent_8c.html#aa40346bf15111b7f9eb0e629c7e8a6e6">icalcomponent_get_duration()</a></span> to account for DTEND/DUE TZID</li>
 <li>Improved performance of recurrence iterators</li>
 <li>Improved handling of BYWEEKNO when BYDAY is not present</li>
-<li>Fixed <span class="tt">icalcomponent_get_dtend()</span> and <span class="tt">icalcomponent_foreach_recurrence()</span> to correctly handle nominal durations</li>
+<li>Fixed <span class="tt"><a class="el" href="icalcomponent_8c.html#a233d19ae5347cc66920e755c2c966f70">icalcomponent_get_dtend()</a></span> and <span class="tt"><a class="el" href="icalcomponent_8c.html#aef846b1f42b96a5d209323c347a891a6">icalcomponent_foreach_recurrence()</a></span> to correctly handle nominal durations</li>
 <li>Fixed <span class="tt">icalcomponent_foreach_recurrence</span> to filter out duplicate instances</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md71"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
 [3.0.21] - Unreleased</h1>
 <ul>
 <li>Fix some scenarios with RRULEs and EXRULE (#754)</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md72"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 [3.0.20] - 2025-05-10</h1>
 <ul>
 <li>Clean up the byte-swapping macros</li>
@@ -153,7 +153,7 @@ Fixed</h2>
 <li>Fix regression introduced in v3.0.19 error reporting for END before BEGIN</li>
 <li>Fix a CMake problem in libical-glib</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md73"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
 [3.0.19] - 2024-12-23</h1>
 <ul>
 <li>Fix for changes to the libicu 75 API</li>
@@ -166,10 +166,10 @@ Fixed</h2>
 <li>Fix time conversion to time_t for times before epoch</li>
 <li>Allow <span class="tt">icalcomponent_foreach_recurrence</span> to receive <span class="tt">DATE</span>-only <span class="tt">start</span> and <span class="tt">end</span> params.</li>
 <li>Fix the calculation of an event's duration if <span class="tt">DTSTART</span> is a <span class="tt">DATE</span>-only value.</li>
-<li>Fix <span class="tt"><a class="el" href="icaltime_8h.html#a164a4bcf15687ed8bf81330345b09924" title="Builds an icaltimespan given a start time, end time and busy value.">icaltime_span_new()</a></span> - ignore the case where DTEND is unset and require it to be set by the caller instead.</li>
+<li>Fix <span class="tt">icaltime_span_new()</span> - ignore the case where DTEND is unset and require it to be set by the caller instead.</li>
 <li>Various fixes for fuzzer issues</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md74"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
 [3.0.18] - 2024-03-24</h1>
 <ul>
 <li>Requires CMake v3.5.0 or higher</li>
@@ -178,7 +178,7 @@ Fixed</h2>
 <li>Should be able to use the project as a submodule</li>
 <li>Built-in timezones updated to tzdata2024a</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md75"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
 [3.0.17] - 2023-10-14</h1>
 <ul>
 <li>Improved Android support</li>
@@ -192,13 +192,13 @@ Fixed</h2>
 </ul>
 </li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md76"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
 [3.0.16] - 2022-10-17</h1>
 <ul>
 <li>Fix regressions in 3.0.15 due to improperly tested fuzz fixes</li>
 <li>Fix argument guards in icaltime_as_timet to match documentation and tests</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md77"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
 [3.0.15] - 2022-10-06</h1>
 <ul>
 <li>Add missing property parameters into libical-glib</li>
@@ -210,21 +210,21 @@ Fixed</h2>
 <li>Handle unreachable-code compile warnings with clang</li>
 <li>Ensure all vanew_foo() calls finish with (void*)0 (not 0)</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md78"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md18"></a>
 [3.0.14] - 2022-02-15</h1>
 <ul>
 <li>icalvalue: Reset non-UTC <a class="el" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">icaltimetype::zone</a> on set</li>
 <li>Fix icalcomponent_set_due not removing TZID when necessary</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md79"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md19"></a>
 [3.0.13] - 2022-01-17</h1>
 <ul>
-<li><span class="tt">icalcomponent_get_dtend()</span> returns <span class="tt"><a class="el" href="icaltime_8h.html#af3f088ebb60b8716131742ef16eb7ce1" title="Constructor.">icaltime_null_time()</a></span> unless called on VEVENT, VAVAILABILITY or VFREEBUSY</li>
-<li><span class="tt">icalcomponent_get_duration()</span> for VTODO calculate with DUE instead of DTEND</li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#a233d19ae5347cc66920e755c2c966f70">icalcomponent_get_dtend()</a></span> returns <span class="tt"><a class="el" href="icaltime_8c.html#af3f088ebb60b8716131742ef16eb7ce1">icaltime_null_time()</a></span> unless called on VEVENT, VAVAILABILITY or VFREEBUSY</li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#aa40346bf15111b7f9eb0e629c7e8a6e6">icalcomponent_get_duration()</a></span> for VTODO calculate with DUE instead of DTEND</li>
 <li>Replace CMake FindBDB with FindBerleyDB (<a href="https://github.com/sum01/FindBerkeleyDB">https://github.com/sum01/FindBerkeleyDB</a>)</li>
 <li>Fix finding ICU and BerkeleyDB on Mac (look for homebrew installs first)</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md80"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md20"></a>
 [3.0.12] - 2021-12-08</h1>
 <ul>
 <li>Fix a libicalval crash in cleanVObject</li>
@@ -234,10 +234,10 @@ Fixed</h2>
 <li>Buildsystem fixes (especially for the Ninja generator)</li>
 <li>Built-in timezones updated to tzdata2021e</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md81"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md21"></a>
 [3.0.11] - 2021-10-09</h1>
 <ul>
-<li>Fix <span class="tt">icalrecur_iterator_set_start()</span> for hourly, minutely, and secondly recurrences</li>
+<li>Fix <span class="tt"><a class="el" href="icalrecur_8c.html#a02427aacc00bb3a9c2b68d0fca951b9a">icalrecur_iterator_set_start()</a></span> for hourly, minutely, and secondly recurrences</li>
 <li>Fix build for Berkeley DB version greater than 5</li>
 <li>Fix vcal for some architectures (like aarch64, ppc64le and s390x)</li>
 <li>Fix memory leaks in vcal</li>
@@ -245,7 +245,7 @@ Fixed</h2>
 <li>Adjust libdir and includedir in generated pkgconfig files</li>
 <li>Built-in timezones updated to tzdata2021c</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md82"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md22"></a>
 [3.0.10] - 2021-04-17</h1>
 <ul>
 <li>Fix building -DSTATIC_ONLY=True with Ninja</li>
@@ -255,7 +255,7 @@ Fixed</h2>
 <li>Fix reading TZif files to use more RRULEs and/or RDATEs whevever possible</li>
 <li>Built-in timezones updated to tzdata2021a</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md83"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
 [3.0.9] - 2021-01-16</h1>
 <ul>
 <li>Add support for empty parameters, e.g. CN=""</li>
@@ -271,22 +271,22 @@ Fixed</h2>
 <li>Fix build with newer libicu</li>
 <li>Fix cross-compile support in libical-glib</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md84"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md24"></a>
 [3.0.8] - 2020-03-07</h1>
 <ul>
-<li>Fix for <span class="tt">icalattach_new_from_data()</span> and the 'free_fn' argument</li>
+<li>Fix for <span class="tt"><a class="el" href="icalattach_8c.html#a02add24fd5d06a4753df5e7b9e9ce94b" title="Creates new icalattach object from data.">icalattach_new_from_data()</a></span> and the 'free_fn' argument</li>
 <li>Fix if recurrencetype contains both COUNT and UNTIL (only output UNTIL in the RRULE)</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md85"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
 [3.0.7] - 2019-12-15</h1>
 <ul>
 <li>libical-glib: Fix ICalAttach handling of the icalattach native structure</li>
-<li>Let <span class="tt">icalattach_new_from_data()</span> use the 'free_fn' argument again</li>
+<li>Let <span class="tt"><a class="el" href="icalattach_8c.html#a02add24fd5d06a4753df5e7b9e9ce94b" title="Creates new icalattach object from data.">icalattach_new_from_data()</a></span> use the 'free_fn' argument again</li>
 <li>Fix memory leaks in attachment handling and elsewhere</li>
 <li>Fix a multithreading race condition</li>
 <li>More fuzzification fixes</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md86"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
 [3.0.6] - 2019-09-14</h1>
 <ul>
 <li>Handle both COUNT and UNTIL in RRULEs</li>
@@ -299,7 +299,7 @@ Fixed</h2>
 <li>Add option to disable building the test suite</li>
 <li>Built-in timezones updated to tzdata2019c</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md87"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
 [3.0.5] - 2019-05-14</h1>
 <ul>
 <li>New publicly available function:<ul>
@@ -307,18 +307,18 @@ Fixed</h2>
 </ul>
 </li>
 <li>Allow reset DATE/DATE-TIME VALUE parameter for all-day events</li>
-<li><span class="tt"><a class="el" href="icalcomponent_8h.html#a611f811f8f86a6499077e6e03291a721" title="Gets a DATE or DATE-TIME property as an icaltime.">icalproperty_get_datetime_with_component()</a></span> will use location as TZID fallback.</li>
+<li><span class="tt"><a class="el" href="icalcomponent_8h.html#a611f811f8f86a6499077e6e03291a721">icalproperty_get_datetime_with_component()</a></span> will use location as TZID fallback.</li>
 <li>New CMake option ENABLE_GTK_DOC for disabling the libical-glib developer documentation</li>
 <li>GObject Introspection - use $MAJOR-0 versioning</li>
 <li>libical-glib API is considered unstable, define LIBICAL_GLIB_UNSTABLE_API=1 before including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
 <li>Built-in timezones updated to tzdata2019a</li>
 <li>De-fuzzifications and Coverity fixes</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md88"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md28"></a>
 [3.0.4] - 2018-08-14</h1>
 <ul>
 <li>Silently fail RSCALE recurrence clauses when RSCALE is disabled</li>
-<li>Fixed <span class="tt">icalcomponent_set_comment()</span> and <span class="tt">icalcomponent_set_uid()</span></li>
+<li>Fixed <span class="tt"><a class="el" href="icalcomponent_8c.html#af749ddb4b0071fc967fe9110948a5474">icalcomponent_set_comment()</a></span> and <span class="tt"><a class="el" href="icalcomponent_8c.html#a0f38c66e67c15239a0c1e75fdb2e0d77">icalcomponent_set_uid()</a></span></li>
 <li>fix FREQ=MONTHLY;BYMONTH</li>
 <li>Skip UTF-8 marker when parsing</li>
 <li>Fix parsing "&lt;CR&gt;?&lt;LF&gt;" in VCF files produced by Outlook</li>
@@ -330,13 +330,13 @@ Fixed</h2>
 </li>
 <li>Built-in timezones updated to tzdata2018e</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md89"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
 [3.0.3] - 2018-02-27</h1>
 <ul>
 <li>VTODO COMPLETED property can be a DATE-TIME or DATE (for backward compatibility)</li>
 <li>Improved recurrence iteration</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md90"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md30"></a>
 [3.0.2] - 2018-02-17</h1>
 <ul>
 <li>No longer attempt to detect the need for -DUSE_32BIT_TIME_T with MSVC</li>
@@ -344,14 +344,14 @@ Fixed</h2>
 <li>Fix threading hang in BSD type systems (OpenBSD, MacOS,...)</li>
 <li>Build with Ninja improvements</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md91"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md31"></a>
 [3.0.1] - 2017-11-18</h1>
 <ul>
 <li>Built-in timezones updated to tzdata2017c</li>
 <li>Fix a multi-threaded deadlock in <span class="tt">icaltimezone_load_builtin_timezone()</span></li>
 <li>Fix a CMake problem with parallel builds</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md92"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md32"></a>
 [3.0.0] - 2017-10-28</h1>
 <ul>
 <li>Relicense from MPL 1.0 to MPL 2.0 (keep dual license for LGPL v2.1)</li>
@@ -360,15 +360,15 @@ Fixed</h2>
 <li>Fixed use-after-free issues and some memory leaks</li>
 <li>Built-in timezones updated to tzdata2017b</li>
 <li>More accurate VTIMEZONE generation when using the system time zone data (when USE_BUILTIN_TZDATA=False)</li>
-<li><span class="tt">icalvalue_as_ical_string()</span> returns "TRUE" (non-zero) or "FALSE" (zero) values only.</li>
-<li>New <a class="el" href="icalvalue_8h.html">icalvalue.h</a> convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE</li>
+<li><span class="tt"><a class="el" href="icalvalue_8c.html#afcde44ce941d8b6b5ffaad6095bfd778">icalvalue_as_ical_string()</a></span> returns "TRUE" (non-zero) or "FALSE" (zero) values only.</li>
+<li>New <a class="el" href="icalvalue_8h.html" title="Defines the data structure representing iCalendar parameter values.">icalvalue.h</a> convenience macros: ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE</li>
 <li>Better value type checking of property values when parsing</li>
 <li>icalvalue_new/set_date and icalvalue_new/set_datetime now enforce DATE and DATE-TIME values respectively</li>
 <li>draft-ietf-calext-extensions (RFC 7986) support added</li>
 <li>Parameter values are now en/decoded per RFC 6868</li>
 <li>Removed is_utc from icaltimetype struct<ul>
-<li>Set <a class="el" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">icaltimetype.zone</a> to <span class="tt"><a class="el" href="icaltimezone_8h.html#a8e9c520fc9a3ec85f5cc63fef1548583" title="Returns the UTC timezone.">icaltimezone_get_utc_timezone()</a></span> to change a time to UTC</li>
-<li>Use <span class="tt"><a class="el" href="icaltime_8h.html#a9e0b0c18a8a108cfe37b54a9ed5b184d" title="Returns true if the time is relative to UTC zone.">icaltime_is_utc()</a></span> to check if a time is in UTC</li>
+<li>Set <a class="el" href="structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c">icaltimetype.zone</a> to <span class="tt"><a class="el" href="icaltimezone_8c.html#a8e9c520fc9a3ec85f5cc63fef1548583">icaltimezone_get_utc_timezone()</a></span> to change a time to UTC</li>
+<li>Use <span class="tt"><a class="el" href="icaltime_8c.html#a9e0b0c18a8a108cfe37b54a9ed5b184d">icaltime_is_utc()</a></span> to check if a time is in UTC</li>
 </ul>
 </li>
 <li>Added support for VPATCH component</li>
@@ -403,25 +403,25 @@ Fixed</h2>
 </ul>
 </li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md93"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md33"></a>
 [2.0.0] - 2015-12-28</h1>
 <ul>
 <li>WARNING: Version 2 IS NOT Binary Compatible with Older Versions</li>
 <li>Version 2 is Source Compatible with Older Versions</li>
 <li>Lots of source code scrubbing</li>
-<li>[New] RSCALE support (requires libicu from <a href="http://www.icu-project.org">http://www.icu-project.org</a>)</li>
+<li>[New] RSCALE support (requires libicu from <a href="https://icu.unicode.org">https://icu.unicode.org</a>)</li>
 <li>[New] CalDAV attachment support (draft-ietf-calext-caldav-attachments)</li>
 <li>[New] Resurrect the Berkeley DB storage support</li>
 <li>[Bug] issue83: Incorrect recurrence generation for weekly pattern</li>
 <li>Handle RRULEs better</li>
 <li>Handle threading better</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md94"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md34"></a>
 [1.0.1] - 2014-10-11</h1>
 <ul>
 <li>[Bug] issue74: Do not escape double quote character</li>
 <li>[Bug] issue80,issue92: fix crashes using <span class="tt">icaltimezone_load_builtin_timezone()</span> recursively</li>
-<li>[Bug] Fix <span class="tt">icalcomponent_foreach_recurrence()</span> and large durations between recurrences (e.g. FREQ=YEARLY)</li>
+<li>[Bug] Fix <span class="tt"><a class="el" href="icalcomponent_8c.html#aef846b1f42b96a5d209323c347a891a6">icalcomponent_foreach_recurrence()</a></span> and large durations between recurrences (e.g. FREQ=YEARLY)</li>
 <li>[Bug] Properly handle UTCOFFSETs of the form +/-00mmss</li>
 <li>[Bug] Properly skip bogus dates (e.g. 2/30, 4/31) in RRULE:FREQ=MONTHLY</li>
 <li>[Bug] Properly handle RRULE:FREQ=MONTHLY;BYDAY;BYMONTHDAY when DTSTART isn't on BYDAY</li>
@@ -444,7 +444,7 @@ Fixed</h2>
 <li>[Quality] Almost all compile warnings silenced</li>
 <li>[Quality] A bunch of Coverity Scan warnings silenced</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md95"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md35"></a>
 [1.0.0] - 2014-06-28</h1>
 <ul>
 <li>Reborn </li>

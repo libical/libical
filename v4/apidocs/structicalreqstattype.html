@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -77,19 +77,76 @@ $(function() {
   <div class="headertitle"><div class="title">icalreqstattype Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="icaltypes_8h_source.html">icaltypes.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:ad398dde3d61994661cad6396f1f9bba0" id="r_ad398dde3d61994661cad6396f1f9bba0"><td class="memItemLeft" align="right" valign="top"><a id="ad398dde3d61994661cad6396f1f9bba0" name="ad398dde3d61994661cad6396f1f9bba0"></a>
-icalrequeststatus&#160;</td><td class="memItemRight" valign="bottom"><b>code</b></td></tr>
-<tr class="memitem:a9bc975bf5703f97662335f3773eacab4" id="r_a9bc975bf5703f97662335f3773eacab4"><td class="memItemLeft" align="right" valign="top"><a id="a9bc975bf5703f97662335f3773eacab4" name="a9bc975bf5703f97662335f3773eacab4"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>debug</b></td></tr>
-<tr class="memitem:a6f4827bc5dad88b04276f31312500ff6" id="r_a6f4827bc5dad88b04276f31312500ff6"><td class="memItemLeft" align="right" valign="top"><a id="a6f4827bc5dad88b04276f31312500ff6" name="a6f4827bc5dad88b04276f31312500ff6"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>desc</b></td></tr>
+<tr class="memitem:ad398dde3d61994661cad6396f1f9bba0" id="r_ad398dde3d61994661cad6396f1f9bba0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalenums_8h.html#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad398dde3d61994661cad6396f1f9bba0">code</a></td></tr>
+<tr class="memitem:a9bc975bf5703f97662335f3773eacab4" id="r_a9bc975bf5703f97662335f3773eacab4"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9bc975bf5703f97662335f3773eacab4">debug</a></td></tr>
+<tr class="memitem:a6f4827bc5dad88b04276f31312500ff6" id="r_a6f4827bc5dad88b04276f31312500ff6"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f4827bc5dad88b04276f31312500ff6">desc</a></td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/home/winterz/projects/libical/libical/src/libical/<a class="el" href="icaltypes_8h_source.html">icaltypes.h</a></li>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A datatype to represent a request status.</p>
+<p>This struct contains two string pointers:</p><ul>
+<li>"desc" string is a pointer to a static table inside the library. Don't try to free it.</li>
+<li>"debug" string is owned by the icalvalue and should not be freed manually.</li>
 </ul>
+<dl class="section note"><dt>Note</dt><dd>get the original string from icalproperty_get_requeststatus() or icalvalue_get_text() when operating on the value of a request_status property. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltypes_8h_source.html#l00110">110</a> of file <a class="el" href="icaltypes_8h_source.html">icaltypes.h</a>.</p>
+</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Field Documentation</h2>
+<a id="ad398dde3d61994661cad6396f1f9bba0" name="ad398dde3d61994661cad6396f1f9bba0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad398dde3d61994661cad6396f1f9bba0">&#9670;&#160;</a></span>code</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="icalenums_8h.html#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a> icalreqstattype::code</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>the status code "major.minor" </p>
+
+<p class="definition">Definition at line <a class="el" href="icaltypes_8h_source.html#l00111">111</a> of file <a class="el" href="icaltypes_8h_source.html">icaltypes.h</a>.</p>
+
+</div>
+</div>
+<a id="a9bc975bf5703f97662335f3773eacab4" name="a9bc975bf5703f97662335f3773eacab4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bc975bf5703f97662335f3773eacab4">&#9670;&#160;</a></span>debug</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* icalreqstattype::debug</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>the request status debug string </p>
+
+<p class="definition">Definition at line <a class="el" href="icaltypes_8h_source.html#l00113">113</a> of file <a class="el" href="icaltypes_8h_source.html">icaltypes.h</a>.</p>
+
+</div>
+</div>
+<a id="a6f4827bc5dad88b04276f31312500ff6" name="a6f4827bc5dad88b04276f31312500ff6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f4827bc5dad88b04276f31312500ff6">&#9670;&#160;</a></span>desc</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* icalreqstattype::desc</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>the request status description </p>
+
+<p class="definition">Definition at line <a class="el" href="icaltypes_8h_source.html#l00112">112</a> of file <a class="el" href="icaltypes_8h_source.html">icaltypes.h</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

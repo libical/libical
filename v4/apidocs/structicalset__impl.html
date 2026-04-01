@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Libical API Documentation: icalset_impl Struct Reference</title>
+<title>Libical API Documentation: icalset Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -74,62 +74,408 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-attribs">Data Fields</a>  </div>
-  <div class="headertitle"><div class="title">icalset_impl Struct Reference</div></div>
+  <div class="headertitle"><div class="title">icalset Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:a9b4e150ba519bc090868ec91db25430c" id="r_a9b4e150ba519bc090868ec91db25430c"><td class="memItemLeft" align="right" valign="top"><a id="a9b4e150ba519bc090868ec91db25430c" name="a9b4e150ba519bc090868ec91db25430c"></a>
-<a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(*&#160;</td><td class="memItemRight" valign="bottom"><b>add_component</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent *comp)</td></tr>
-<tr class="memitem:a6bb1b8fb47e041bdbad52b6dde4982f4" id="r_a6bb1b8fb47e041bdbad52b6dde4982f4"><td class="memItemLeft" align="right" valign="top"><a id="a6bb1b8fb47e041bdbad52b6dde4982f4" name="a6bb1b8fb47e041bdbad52b6dde4982f4"></a>
-void(*&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:afd586cc3d577f184bc9f32a2e18c0dda" id="r_afd586cc3d577f184bc9f32a2e18c0dda"><td class="memItemLeft" align="right" valign="top"><a id="afd586cc3d577f184bc9f32a2e18c0dda" name="afd586cc3d577f184bc9f32a2e18c0dda"></a>
-<a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(*&#160;</td><td class="memItemRight" valign="bottom"><b>commit</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a2d94f94599beae5ad776b682c9b5e7aa" id="r_a2d94f94599beae5ad776b682c9b5e7aa"><td class="memItemLeft" align="right" valign="top"><a id="a2d94f94599beae5ad776b682c9b5e7aa" name="a2d94f94599beae5ad776b682c9b5e7aa"></a>
-int(*&#160;</td><td class="memItemRight" valign="bottom"><b>count_components</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent_kind kind)</td></tr>
-<tr class="memitem:aebb40f36ebbb05bc7c2eb120d6130d82" id="r_aebb40f36ebbb05bc7c2eb120d6130d82"><td class="memItemLeft" align="right" valign="top"><a id="aebb40f36ebbb05bc7c2eb120d6130d82" name="aebb40f36ebbb05bc7c2eb120d6130d82"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>dsn</b></td></tr>
-<tr class="memitem:a0a8d6d8c23e7cab71bca6024b5631c4f" id="r_a0a8d6d8c23e7cab71bca6024b5631c4f"><td class="memItemLeft" align="right" valign="top"><a id="a0a8d6d8c23e7cab71bca6024b5631c4f" name="a0a8d6d8c23e7cab71bca6024b5631c4f"></a>
-icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><b>fetch</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent_kind kind, const char *uid)</td></tr>
-<tr class="memitem:ae2842ee04c5a62456c0bc04295223452" id="r_ae2842ee04c5a62456c0bc04295223452"><td class="memItemLeft" align="right" valign="top"><a id="ae2842ee04c5a62456c0bc04295223452" name="ae2842ee04c5a62456c0bc04295223452"></a>
-icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><b>fetch_match</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, const icalcomponent *comp)</td></tr>
-<tr class="memitem:a0c9a6b17636b2951e5ecf029cb1438c5" id="r_a0c9a6b17636b2951e5ecf029cb1438c5"><td class="memItemLeft" align="right" valign="top"><a id="a0c9a6b17636b2951e5ecf029cb1438c5" name="a0c9a6b17636b2951e5ecf029cb1438c5"></a>
-void(*&#160;</td><td class="memItemRight" valign="bottom"><b>free</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a412a1b7259c11293f4ebe5bc4b9c0ec4" id="r_a412a1b7259c11293f4ebe5bc4b9c0ec4"><td class="memItemLeft" align="right" valign="top"><a id="a412a1b7259c11293f4ebe5bc4b9c0ec4" name="a412a1b7259c11293f4ebe5bc4b9c0ec4"></a>
-icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><b>get_current_component</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a465c84ab9be8a72654ec60d76e9b4e97" id="r_a465c84ab9be8a72654ec60d76e9b4e97"><td class="memItemLeft" align="right" valign="top"><a id="a465c84ab9be8a72654ec60d76e9b4e97" name="a465c84ab9be8a72654ec60d76e9b4e97"></a>
-icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><b>get_first_component</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a4525f7775bf9f6c94ca02c190b833007" id="r_a4525f7775bf9f6c94ca02c190b833007"><td class="memItemLeft" align="right" valign="top"><a id="a4525f7775bf9f6c94ca02c190b833007" name="a4525f7775bf9f6c94ca02c190b833007"></a>
-icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><b>get_next_component</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:ad6973e4d8a2c1a9f7d31664247d099e4" id="r_ad6973e4d8a2c1a9f7d31664247d099e4"><td class="memItemLeft" align="right" valign="top"><a id="ad6973e4d8a2c1a9f7d31664247d099e4" name="ad6973e4d8a2c1a9f7d31664247d099e4"></a>
-int(*&#160;</td><td class="memItemRight" valign="bottom"><b>has_uid</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, const char *uid)</td></tr>
-<tr class="memitem:a5a2e81011411ff8fc132901eea72e38f" id="r_a5a2e81011411ff8fc132901eea72e38f"><td class="memItemLeft" align="right" valign="top"><a id="a5a2e81011411ff8fc132901eea72e38f" name="a5a2e81011411ff8fc132901eea72e38f"></a>
-<a class="el" href="structicalsetiter.html">icalsetiter</a>(*&#160;</td><td class="memItemRight" valign="bottom"><b>icalset_begin_component</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent_kind kind, <a class="el" href="structicalgauge__impl.html">icalgauge</a> *gauge, const char *tzid)</td></tr>
-<tr class="memitem:a46f335d2e5bac0b99ca116cf6514619d" id="r_a46f335d2e5bac0b99ca116cf6514619d"><td class="memItemLeft" align="right" valign="top"><a id="a46f335d2e5bac0b99ca116cf6514619d" name="a46f335d2e5bac0b99ca116cf6514619d"></a>
-icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><b>icalsetiter_to_next</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, <a class="el" href="structicalsetiter.html">icalsetiter</a> *i)</td></tr>
-<tr class="memitem:a50871dd38acd5a9a9fbacf8198d2c9a7" id="r_a50871dd38acd5a9a9fbacf8198d2c9a7"><td class="memItemLeft" align="right" valign="top"><a id="a50871dd38acd5a9a9fbacf8198d2c9a7" name="a50871dd38acd5a9a9fbacf8198d2c9a7"></a>
-icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><b>icalsetiter_to_prior</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, <a class="el" href="structicalsetiter.html">icalsetiter</a> *i)</td></tr>
-<tr class="memitem:a4701a52f4f719e52d5aea17b787c3766" id="r_a4701a52f4f719e52d5aea17b787c3766"><td class="memItemLeft" align="right" valign="top"><a id="a4701a52f4f719e52d5aea17b787c3766" name="a4701a52f4f719e52d5aea17b787c3766"></a>
-<a class="el" href="structicalset__impl.html">icalset</a> *(*&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, const char *dsn, void *options)</td></tr>
-<tr class="memitem:aaae2ac4a69d8ee075e5609127620f941" id="r_aaae2ac4a69d8ee075e5609127620f941"><td class="memItemLeft" align="right" valign="top"><a id="aaae2ac4a69d8ee075e5609127620f941" name="aaae2ac4a69d8ee075e5609127620f941"></a>
-icalset_kind&#160;</td><td class="memItemRight" valign="bottom"><b>kind</b></td></tr>
-<tr class="memitem:a4232fac99a0aecb2aa05f9710c97ac54" id="r_a4232fac99a0aecb2aa05f9710c97ac54"><td class="memItemLeft" align="right" valign="top"><a id="a4232fac99a0aecb2aa05f9710c97ac54" name="a4232fac99a0aecb2aa05f9710c97ac54"></a>
-void(*&#160;</td><td class="memItemRight" valign="bottom"><b>mark</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a53f77f18d29a4692852bf59656cc07fd" id="r_a53f77f18d29a4692852bf59656cc07fd"><td class="memItemLeft" align="right" valign="top"><a id="a53f77f18d29a4692852bf59656cc07fd" name="a53f77f18d29a4692852bf59656cc07fd"></a>
-<a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(*&#160;</td><td class="memItemRight" valign="bottom"><b>modify</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent *old, icalcomponent *newc)</td></tr>
-<tr class="memitem:a552f329a2a38a2caf184444b6ab4c792" id="r_a552f329a2a38a2caf184444b6ab4c792"><td class="memItemLeft" align="right" valign="top"><a id="a552f329a2a38a2caf184444b6ab4c792" name="a552f329a2a38a2caf184444b6ab4c792"></a>
-const char *(*&#160;</td><td class="memItemRight" valign="bottom"><b>path</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a3d10f0a94250821ac2ff968617e3b6df" id="r_a3d10f0a94250821ac2ff968617e3b6df"><td class="memItemLeft" align="right" valign="top"><a id="a3d10f0a94250821ac2ff968617e3b6df" name="a3d10f0a94250821ac2ff968617e3b6df"></a>
-<a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(*&#160;</td><td class="memItemRight" valign="bottom"><b>remove_component</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent *comp)</td></tr>
-<tr class="memitem:af64c22b3ca598a8672467a12a4b3302a" id="r_af64c22b3ca598a8672467a12a4b3302a"><td class="memItemLeft" align="right" valign="top"><a id="af64c22b3ca598a8672467a12a4b3302a" name="af64c22b3ca598a8672467a12a4b3302a"></a>
-<a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(*&#160;</td><td class="memItemRight" valign="bottom"><b>select</b> )(<a class="el" href="structicalset__impl.html">icalset</a> *set, <a class="el" href="structicalgauge__impl.html">icalgauge</a> *gauge)</td></tr>
-<tr class="memitem:aa715c1d10a1e09564070ab9a0e939a2b" id="r_aa715c1d10a1e09564070ab9a0e939a2b"><td class="memItemLeft" align="right" valign="top"><a id="aa715c1d10a1e09564070ab9a0e939a2b" name="aa715c1d10a1e09564070ab9a0e939a2b"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b></td></tr>
+<tr class="memitem:a7caa1a0da0dc5eac295dcf928f62fa72" id="r_a7caa1a0da0dc5eac295dcf928f62fa72"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7caa1a0da0dc5eac295dcf928f62fa72">add_component</a> )(icalset *set, icalcomponent *comp)</td></tr>
+<tr class="memitem:a3ddb93b675949243fa0926ebce4f8845" id="r_a3ddb93b675949243fa0926ebce4f8845"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ddb93b675949243fa0926ebce4f8845">clear</a> )(icalset *set)</td></tr>
+<tr class="memitem:a9dd2871966e6d1b33e23befecc19fa33" id="r_a9dd2871966e6d1b33e23befecc19fa33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9dd2871966e6d1b33e23befecc19fa33">commit</a> )(icalset *set)</td></tr>
+<tr class="memitem:a0cc393310ad0f54fbde98280a06ab270" id="r_a0cc393310ad0f54fbde98280a06ab270"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cc393310ad0f54fbde98280a06ab270">count_components</a> )(icalset *set, <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind)</td></tr>
+<tr class="memitem:a086b6a69d5682b3ea1751f4b3345990d" id="r_a086b6a69d5682b3ea1751f4b3345990d"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a086b6a69d5682b3ea1751f4b3345990d">dsn</a></td></tr>
+<tr class="memitem:a8a4822fa12d83fd3d387449677e3539d" id="r_a8a4822fa12d83fd3d387449677e3539d"><td class="memItemLeft" align="right" valign="top">icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a4822fa12d83fd3d387449677e3539d">fetch</a> )(icalset *set, <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind, const char *uid)</td></tr>
+<tr class="memitem:a626ed611e60df20ebe875ac9281ebe4a" id="r_a626ed611e60df20ebe875ac9281ebe4a"><td class="memItemLeft" align="right" valign="top">icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a626ed611e60df20ebe875ac9281ebe4a">fetch_match</a> )(icalset *set, const icalcomponent *comp)</td></tr>
+<tr class="memitem:acdc25c55ec834c658f4595e75038138b" id="r_acdc25c55ec834c658f4595e75038138b"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdc25c55ec834c658f4595e75038138b">free</a> )(icalset *set)</td></tr>
+<tr class="memitem:a8a081bf2c257ab70b2bb2a5844619f67" id="r_a8a081bf2c257ab70b2bb2a5844619f67"><td class="memItemLeft" align="right" valign="top">icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a081bf2c257ab70b2bb2a5844619f67">get_current_component</a> )(icalset *set)</td></tr>
+<tr class="memitem:a181f674c200f0a04c426750fc1e559b5" id="r_a181f674c200f0a04c426750fc1e559b5"><td class="memItemLeft" align="right" valign="top">icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a181f674c200f0a04c426750fc1e559b5">get_first_component</a> )(icalset *set)</td></tr>
+<tr class="memitem:a76e1acc7c789a3e2154032a15cb86f3b" id="r_a76e1acc7c789a3e2154032a15cb86f3b"><td class="memItemLeft" align="right" valign="top">icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76e1acc7c789a3e2154032a15cb86f3b">get_next_component</a> )(icalset *set)</td></tr>
+<tr class="memitem:ae70179c438189356485610ef53e7d4d7" id="r_ae70179c438189356485610ef53e7d4d7"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae70179c438189356485610ef53e7d4d7">has_uid</a> )(icalset *set, const char *uid)</td></tr>
+<tr class="memitem:a17559d496c2ccca9725951f3f521bc82" id="r_a17559d496c2ccca9725951f3f521bc82"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structicalsetiter.html">icalsetiter</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17559d496c2ccca9725951f3f521bc82">icalset_begin_component</a> )(icalset *set, <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind, icalgauge *gauge, const char *tzid)</td></tr>
+<tr class="memitem:a5c457ccbb5399f4c85a01d3f15917a27" id="r_a5c457ccbb5399f4c85a01d3f15917a27"><td class="memItemLeft" align="right" valign="top">icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c457ccbb5399f4c85a01d3f15917a27">icalsetiter_to_next</a> )(icalset *set, <a class="el" href="structicalsetiter.html">icalsetiter</a> *i)</td></tr>
+<tr class="memitem:a03bba4b7cc86b6b67c5f2d8ad8830297" id="r_a03bba4b7cc86b6b67c5f2d8ad8830297"><td class="memItemLeft" align="right" valign="top">icalcomponent *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a03bba4b7cc86b6b67c5f2d8ad8830297">icalsetiter_to_prior</a> )(icalset *set, <a class="el" href="structicalsetiter.html">icalsetiter</a> *i)</td></tr>
+<tr class="memitem:a4c82d376247f2d0662dba17d6af3b31a" id="r_a4c82d376247f2d0662dba17d6af3b31a"><td class="memItemLeft" align="right" valign="top">icalset *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c82d376247f2d0662dba17d6af3b31a">init</a> )(icalset *set, const char *dsn, void *options)</td></tr>
+<tr class="memitem:a1d26b8482be2f6002ee4e87db941fcb2" id="r_a1d26b8482be2f6002ee4e87db941fcb2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalset_8h.html#a39089640736d0c8dcaf5a1cb3bb9a40b">icalset_kind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d26b8482be2f6002ee4e87db941fcb2">kind</a></td></tr>
+<tr class="memitem:a755bb972bbc726ed831c86447f8db08e" id="r_a755bb972bbc726ed831c86447f8db08e"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a755bb972bbc726ed831c86447f8db08e">mark</a> )(icalset *set)</td></tr>
+<tr class="memitem:aa007ffe157e305e3fee663db0e34a9da" id="r_aa007ffe157e305e3fee663db0e34a9da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa007ffe157e305e3fee663db0e34a9da">modify</a> )(icalset *set, icalcomponent *old, icalcomponent *newc)</td></tr>
+<tr class="memitem:ab7bc0b32410833996933fc79fa2e08d1" id="r_ab7bc0b32410833996933fc79fa2e08d1"><td class="memItemLeft" align="right" valign="top">const char *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7bc0b32410833996933fc79fa2e08d1">path</a> )(icalset *set)</td></tr>
+<tr class="memitem:afb8efb9cf3e74eabaa4c59c312a96cdb" id="r_afb8efb9cf3e74eabaa4c59c312a96cdb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb8efb9cf3e74eabaa4c59c312a96cdb">remove_component</a> )(icalset *set, icalcomponent *comp)</td></tr>
+<tr class="memitem:a397d62b40ad1fd5ec7d3ed4d4330f044" id="r_a397d62b40ad1fd5ec7d3ed4d4330f044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a397d62b40ad1fd5ec7d3ed4d4330f044">select</a> )(icalset *set, icalgauge *gauge)</td></tr>
+<tr class="memitem:ae3678210c5c86a525d521700a18a09f5" id="r_ae3678210c5c86a525d521700a18a09f5"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3678210c5c86a525d521700a18a09f5">size</a></td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/home/winterz/projects/libical/libical/src/libicalss/<a class="el" href="icalset_8h_source.html">icalset.h</a></li>
-</ul>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock">
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00053">53</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Field Documentation</h2>
+<a id="a7caa1a0da0dc5eac295dcf928f62fa72" name="a7caa1a0da0dc5eac295dcf928f62fa72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7caa1a0da0dc5eac295dcf928f62fa72">&#9670;&#160;</a></span>add_component</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(* icalset::add_component) (icalset *set, icalcomponent *comp)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00062">62</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a3ddb93b675949243fa0926ebce4f8845" name="a3ddb93b675949243fa0926ebce4f8845"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ddb93b675949243fa0926ebce4f8845">&#9670;&#160;</a></span>clear</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void(* icalset::clear) (icalset *set)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00066">66</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a9dd2871966e6d1b33e23befecc19fa33" name="a9dd2871966e6d1b33e23befecc19fa33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dd2871966e6d1b33e23befecc19fa33">&#9670;&#160;</a></span>commit</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(* icalset::commit) (icalset *set)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00061">61</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a0cc393310ad0f54fbde98280a06ab270" name="a0cc393310ad0f54fbde98280a06ab270"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cc393310ad0f54fbde98280a06ab270">&#9670;&#160;</a></span>count_components</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int(* icalset::count_components) (icalset *set, <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00064">64</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a086b6a69d5682b3ea1751f4b3345990d" name="a086b6a69d5682b3ea1751f4b3345990d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a086b6a69d5682b3ea1751f4b3345990d">&#9670;&#160;</a></span>dsn</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* icalset::dsn</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00056">56</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a8a4822fa12d83fd3d387449677e3539d" name="a8a4822fa12d83fd3d387449677e3539d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a4822fa12d83fd3d387449677e3539d">&#9670;&#160;</a></span>fetch</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent *(* icalset::fetch) (icalset *set, <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind, const char *uid)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00067">67</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a626ed611e60df20ebe875ac9281ebe4a" name="a626ed611e60df20ebe875ac9281ebe4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a626ed611e60df20ebe875ac9281ebe4a">&#9670;&#160;</a></span>fetch_match</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent *(* icalset::fetch_match) (icalset *set, const icalcomponent *comp)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00068">68</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="acdc25c55ec834c658f4595e75038138b" name="acdc25c55ec834c658f4595e75038138b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdc25c55ec834c658f4595e75038138b">&#9670;&#160;</a></span>free</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void(* icalset::free) (icalset *set)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00058">58</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a8a081bf2c257ab70b2bb2a5844619f67" name="a8a081bf2c257ab70b2bb2a5844619f67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a081bf2c257ab70b2bb2a5844619f67">&#9670;&#160;</a></span>get_current_component</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent *(* icalset::get_current_component) (icalset *set)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00071">71</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a181f674c200f0a04c426750fc1e559b5" name="a181f674c200f0a04c426750fc1e559b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a181f674c200f0a04c426750fc1e559b5">&#9670;&#160;</a></span>get_first_component</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent *(* icalset::get_first_component) (icalset *set)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00072">72</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a76e1acc7c789a3e2154032a15cb86f3b" name="a76e1acc7c789a3e2154032a15cb86f3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76e1acc7c789a3e2154032a15cb86f3b">&#9670;&#160;</a></span>get_next_component</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent *(* icalset::get_next_component) (icalset *set)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00073">73</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="ae70179c438189356485610ef53e7d4d7" name="ae70179c438189356485610ef53e7d4d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae70179c438189356485610ef53e7d4d7">&#9670;&#160;</a></span>has_uid</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int(* icalset::has_uid) (icalset *set, const char *uid)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00069">69</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a17559d496c2ccca9725951f3f521bc82" name="a17559d496c2ccca9725951f3f521bc82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17559d496c2ccca9725951f3f521bc82">&#9670;&#160;</a></span>icalset_begin_component</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structicalsetiter.html">icalsetiter</a>(* icalset::icalset_begin_component) (icalset *set, <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind, icalgauge *gauge, const char *tzid)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00074">74</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a5c457ccbb5399f4c85a01d3f15917a27" name="a5c457ccbb5399f4c85a01d3f15917a27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c457ccbb5399f4c85a01d3f15917a27">&#9670;&#160;</a></span>icalsetiter_to_next</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent *(* icalset::icalsetiter_to_next) (icalset *set, <a class="el" href="structicalsetiter.html">icalsetiter</a> *i)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00077">77</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a03bba4b7cc86b6b67c5f2d8ad8830297" name="a03bba4b7cc86b6b67c5f2d8ad8830297"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03bba4b7cc86b6b67c5f2d8ad8830297">&#9670;&#160;</a></span>icalsetiter_to_prior</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent *(* icalset::icalsetiter_to_prior) (icalset *set, <a class="el" href="structicalsetiter.html">icalsetiter</a> *i)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00078">78</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a4c82d376247f2d0662dba17d6af3b31a" name="a4c82d376247f2d0662dba17d6af3b31a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c82d376247f2d0662dba17d6af3b31a">&#9670;&#160;</a></span>init</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalset *(* icalset::init) (icalset *set, const char *dsn, void *options)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00057">57</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a1d26b8482be2f6002ee4e87db941fcb2" name="a1d26b8482be2f6002ee4e87db941fcb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d26b8482be2f6002ee4e87db941fcb2">&#9670;&#160;</a></span>kind</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="icalset_8h.html#a39089640736d0c8dcaf5a1cb3bb9a40b">icalset_kind</a> icalset::kind</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00054">54</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a755bb972bbc726ed831c86447f8db08e" name="a755bb972bbc726ed831c86447f8db08e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a755bb972bbc726ed831c86447f8db08e">&#9670;&#160;</a></span>mark</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void(* icalset::mark) (icalset *set)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00060">60</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="aa007ffe157e305e3fee663db0e34a9da" name="aa007ffe157e305e3fee663db0e34a9da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa007ffe157e305e3fee663db0e34a9da">&#9670;&#160;</a></span>modify</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(* icalset::modify) (icalset *set, icalcomponent *old, icalcomponent *newc)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00070">70</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="ab7bc0b32410833996933fc79fa2e08d1" name="ab7bc0b32410833996933fc79fa2e08d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7bc0b32410833996933fc79fa2e08d1">&#9670;&#160;</a></span>path</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char *(* icalset::path) (icalset *set)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00059">59</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="afb8efb9cf3e74eabaa4c59c312a96cdb" name="afb8efb9cf3e74eabaa4c59c312a96cdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb8efb9cf3e74eabaa4c59c312a96cdb">&#9670;&#160;</a></span>remove_component</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(* icalset::remove_component) (icalset *set, icalcomponent *comp)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00063">63</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="a397d62b40ad1fd5ec7d3ed4d4330f044" name="a397d62b40ad1fd5ec7d3ed4d4330f044"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a397d62b40ad1fd5ec7d3ed4d4330f044">&#9670;&#160;</a></span>select</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>(* icalset::select) (icalset *set, icalgauge *gauge)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00065">65</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
+<a id="ae3678210c5c86a525d521700a18a09f5" name="ae3678210c5c86a525d521700a18a09f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3678210c5c86a525d521700a18a09f5">&#9670;&#160;</a></span>size</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t icalset::size</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icalset_8h_source.html#l00055">55</a> of file <a class="el" href="icalset_8h_source.html">icalset.h</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

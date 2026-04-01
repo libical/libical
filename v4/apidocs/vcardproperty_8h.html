@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -82,6 +82,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Defines the data structure representing vCard properties.  
+<a href="#details">More...</a></p>
+
 <p><a href="vcardproperty_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
@@ -90,57 +93,39 @@ Functions</h2></td></tr>
 <tr class="memitem:a6f36901a50b2d46bd3ca861ae917b1a8" id="r_a6f36901a50b2d46bd3ca861ae917b1a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f36901a50b2d46bd3ca861ae917b1a8">vcardparameter_set_parent</a> (vcardparameter *param, vcardproperty *property)</td></tr>
 <tr class="memitem:aa42cb4802dc1c6d794fdb969325cd35d" id="r_aa42cb4802dc1c6d794fdb969325cd35d"><td class="memItemLeft" align="right" valign="top"><a id="aa42cb4802dc1c6d794fdb969325cd35d" name="aa42cb4802dc1c6d794fdb969325cd35d"></a>
 vcardvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardparameter_value_to_value_kind</b> (vcardparameter_value value)</td></tr>
-<tr class="memitem:a35bc3c50f9a4f724f954c621a50cfb58" id="r_a35bc3c50f9a4f724f954c621a50cfb58"><td class="memItemLeft" align="right" valign="top"><a id="a35bc3c50f9a4f724f954c621a50cfb58" name="a35bc3c50f9a4f724f954c621a50cfb58"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_add_parameter</b> (vcardproperty *prop, vcardparameter *parameter)</td></tr>
+<tr class="memitem:a35bc3c50f9a4f724f954c621a50cfb58" id="r_a35bc3c50f9a4f724f954c621a50cfb58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35bc3c50f9a4f724f954c621a50cfb58">vcardproperty_add_parameter</a> (vcardproperty *prop, vcardparameter *parameter)</td></tr>
 <tr class="memitem:a24955453a7054c27d5f62832d08c67bd" id="r_a24955453a7054c27d5f62832d08c67bd"><td class="memItemLeft" align="right" valign="top"><a id="a24955453a7054c27d5f62832d08c67bd" name="a24955453a7054c27d5f62832d08c67bd"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_add_parameters</b> (struct vcardproperty_impl *prop, va_list args)</td></tr>
-<tr class="memitem:aa29328d8229f165d18905a4ea7d39886" id="r_aa29328d8229f165d18905a4ea7d39886"><td class="memItemLeft" align="right" valign="top"><a id="aa29328d8229f165d18905a4ea7d39886" name="aa29328d8229f165d18905a4ea7d39886"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_add_type_parameter</b> (vcardproperty *prop, <a class="el" href="structicalenumarray__element.html">vcardenumarray_element</a> *type)</td></tr>
-<tr class="memitem:a2a84ef78022757b26280abfe4fe3d7f3" id="r_a2a84ef78022757b26280abfe4fe3d7f3"><td class="memItemLeft" align="right" valign="top"><a id="a2a84ef78022757b26280abfe4fe3d7f3" name="a2a84ef78022757b26280abfe4fe3d7f3"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_as_vcard_string</b> (vcardproperty *prop)</td></tr>
-<tr class="memitem:acb4b41fe02dfd61b5ade0df230a88baf" id="r_acb4b41fe02dfd61b5ade0df230a88baf"><td class="memItemLeft" align="right" valign="top"><a id="acb4b41fe02dfd61b5ade0df230a88baf" name="acb4b41fe02dfd61b5ade0df230a88baf"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_as_vcard_string_r</b> (vcardproperty *prop)</td></tr>
+<tr class="memitem:aa29328d8229f165d18905a4ea7d39886" id="r_aa29328d8229f165d18905a4ea7d39886"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa29328d8229f165d18905a4ea7d39886">vcardproperty_add_type_parameter</a> (vcardproperty *prop, <a class="el" href="structicalenumarray__element.html">vcardenumarray_element</a> *type)</td></tr>
+<tr class="memitem:a2a84ef78022757b26280abfe4fe3d7f3" id="r_a2a84ef78022757b26280abfe4fe3d7f3"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a84ef78022757b26280abfe4fe3d7f3">vcardproperty_as_vcard_string</a> (vcardproperty *prop)</td></tr>
+<tr class="memitem:acb4b41fe02dfd61b5ade0df230a88baf" id="r_acb4b41fe02dfd61b5ade0df230a88baf"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb4b41fe02dfd61b5ade0df230a88baf">vcardproperty_as_vcard_string_r</a> (vcardproperty *prop)</td></tr>
 <tr class="memitem:abc42d87518f3b777711d799759cc0b47" id="r_abc42d87518f3b777711d799759cc0b47"><td class="memItemLeft" align="right" valign="top">vcardproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc42d87518f3b777711d799759cc0b47">vcardproperty_clone</a> (const vcardproperty *old)</td></tr>
 <tr class="memdesc:abc42d87518f3b777711d799759cc0b47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deeply clones an vcardproperty.  <br /></td></tr>
-<tr class="memitem:a6d9d81771781f73181c5192833204393" id="r_a6d9d81771781f73181c5192833204393"><td class="memItemLeft" align="right" valign="top"><a id="a6d9d81771781f73181c5192833204393" name="a6d9d81771781f73181c5192833204393"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_count_parameters</b> (const vcardproperty *prop)</td></tr>
+<tr class="memitem:a6d9d81771781f73181c5192833204393" id="r_a6d9d81771781f73181c5192833204393"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d9d81771781f73181c5192833204393">vcardproperty_count_parameters</a> (const vcardproperty *prop)</td></tr>
 <tr class="memitem:a9213dbaa335c29ed1e6cd05433737df7" id="r_a9213dbaa335c29ed1e6cd05433737df7"><td class="memItemLeft" align="right" valign="top"><a id="a9213dbaa335c29ed1e6cd05433737df7" name="a9213dbaa335c29ed1e6cd05433737df7"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_enum_belongs_to_property</b> (vcardproperty_kind kind, int e)</td></tr>
 <tr class="memitem:a8658cd40a9c5a5a4a1b747ca400c1028" id="r_a8658cd40a9c5a5a4a1b747ca400c1028"><td class="memItemLeft" align="right" valign="top"><a id="a8658cd40a9c5a5a4a1b747ca400c1028" name="a8658cd40a9c5a5a4a1b747ca400c1028"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_enum_to_string</b> (int e)</td></tr>
 <tr class="memitem:a4c8569841f9a34facb6de86b5c847e6d" id="r_a4c8569841f9a34facb6de86b5c847e6d"><td class="memItemLeft" align="right" valign="top"><a id="a4c8569841f9a34facb6de86b5c847e6d" name="a4c8569841f9a34facb6de86b5c847e6d"></a>
 char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_enum_to_string_r</b> (int e)</td></tr>
-<tr class="memitem:a18900fe8153ca30c02a1687edcc7f55b" id="r_a18900fe8153ca30c02a1687edcc7f55b"><td class="memItemLeft" align="right" valign="top"><a id="a18900fe8153ca30c02a1687edcc7f55b" name="a18900fe8153ca30c02a1687edcc7f55b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_free</b> (vcardproperty *prop)</td></tr>
-<tr class="memitem:a3bda9b438f3ab5068c8daa93475b0d52" id="r_a3bda9b438f3ab5068c8daa93475b0d52"><td class="memItemLeft" align="right" valign="top"><a id="a3bda9b438f3ab5068c8daa93475b0d52" name="a3bda9b438f3ab5068c8daa93475b0d52"></a>
-vcardparameter *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_get_first_parameter</b> (vcardproperty *prop, vcardparameter_kind kind)</td></tr>
-<tr class="memitem:aba4d5ec13b10df935343d739ba552784" id="r_aba4d5ec13b10df935343d739ba552784"><td class="memItemLeft" align="right" valign="top"><a id="aba4d5ec13b10df935343d739ba552784" name="aba4d5ec13b10df935343d739ba552784"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_get_group</b> (const vcardproperty *prop)</td></tr>
-<tr class="memitem:abc1f1a78c755cd6458d4686f39f8fd7d" id="r_abc1f1a78c755cd6458d4686f39f8fd7d"><td class="memItemLeft" align="right" valign="top"><a id="abc1f1a78c755cd6458d4686f39f8fd7d" name="abc1f1a78c755cd6458d4686f39f8fd7d"></a>
-vcardparameter *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_get_next_parameter</b> (vcardproperty *prop, vcardparameter_kind kind)</td></tr>
-<tr class="memitem:ae9bdfc88dfa04ccedfc6586a167d715f" id="r_ae9bdfc88dfa04ccedfc6586a167d715f"><td class="memItemLeft" align="right" valign="top"><a id="ae9bdfc88dfa04ccedfc6586a167d715f" name="ae9bdfc88dfa04ccedfc6586a167d715f"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_get_parameter_as_string</b> (vcardproperty *prop, const char *name)</td></tr>
-<tr class="memitem:abe75d812a9c2ea394ad1a4b7c290ef4e" id="r_abe75d812a9c2ea394ad1a4b7c290ef4e"><td class="memItemLeft" align="right" valign="top"><a id="abe75d812a9c2ea394ad1a4b7c290ef4e" name="abe75d812a9c2ea394ad1a4b7c290ef4e"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_get_parameter_as_string_r</b> (vcardproperty *prop, const char *name)</td></tr>
+<tr class="memitem:a18900fe8153ca30c02a1687edcc7f55b" id="r_a18900fe8153ca30c02a1687edcc7f55b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18900fe8153ca30c02a1687edcc7f55b">vcardproperty_free</a> (vcardproperty *prop)</td></tr>
+<tr class="memitem:a3bda9b438f3ab5068c8daa93475b0d52" id="r_a3bda9b438f3ab5068c8daa93475b0d52"><td class="memItemLeft" align="right" valign="top">vcardparameter *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3bda9b438f3ab5068c8daa93475b0d52">vcardproperty_get_first_parameter</a> (vcardproperty *prop, vcardparameter_kind kind)</td></tr>
+<tr class="memitem:aba4d5ec13b10df935343d739ba552784" id="r_aba4d5ec13b10df935343d739ba552784"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba4d5ec13b10df935343d739ba552784">vcardproperty_get_group</a> (const vcardproperty *prop)</td></tr>
+<tr class="memitem:abc1f1a78c755cd6458d4686f39f8fd7d" id="r_abc1f1a78c755cd6458d4686f39f8fd7d"><td class="memItemLeft" align="right" valign="top">vcardparameter *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc1f1a78c755cd6458d4686f39f8fd7d">vcardproperty_get_next_parameter</a> (vcardproperty *prop, vcardparameter_kind kind)</td></tr>
+<tr class="memitem:ae9bdfc88dfa04ccedfc6586a167d715f" id="r_ae9bdfc88dfa04ccedfc6586a167d715f"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9bdfc88dfa04ccedfc6586a167d715f">vcardproperty_get_parameter_as_string</a> (vcardproperty *prop, const char *name)</td></tr>
+<tr class="memitem:abe75d812a9c2ea394ad1a4b7c290ef4e" id="r_abe75d812a9c2ea394ad1a4b7c290ef4e"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe75d812a9c2ea394ad1a4b7c290ef4e">vcardproperty_get_parameter_as_string_r</a> (vcardproperty *prop, const char *name)</td></tr>
 <tr class="memitem:a0978c4107c153dfad0c294f8f2ebc1bb" id="r_a0978c4107c153dfad0c294f8f2ebc1bb"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0978c4107c153dfad0c294f8f2ebc1bb">vcardproperty_get_property_name</a> (const vcardproperty *prop)</td></tr>
-<tr class="memitem:ac7be83cf064c7c6ff870cf344bb5a03c" id="r_ac7be83cf064c7c6ff870cf344bb5a03c"><td class="memItemLeft" align="right" valign="top"><a id="ac7be83cf064c7c6ff870cf344bb5a03c" name="ac7be83cf064c7c6ff870cf344bb5a03c"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_get_property_name_r</b> (const vcardproperty *prop)</td></tr>
-<tr class="memitem:a9ec38f483b7833ffc388293a56e70a82" id="r_a9ec38f483b7833ffc388293a56e70a82"><td class="memItemLeft" align="right" valign="top"><a id="a9ec38f483b7833ffc388293a56e70a82" name="a9ec38f483b7833ffc388293a56e70a82"></a>
-vcardvalue *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_get_value</b> (const vcardproperty *prop)</td></tr>
-<tr class="memitem:a4c9c2027fc09acedc6a2223521c636e2" id="r_a4c9c2027fc09acedc6a2223521c636e2"><td class="memItemLeft" align="right" valign="top"><a id="a4c9c2027fc09acedc6a2223521c636e2" name="a4c9c2027fc09acedc6a2223521c636e2"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_get_value_as_string</b> (const vcardproperty *prop)</td></tr>
-<tr class="memitem:a561e87e715f141de7221ad709f90d010" id="r_a561e87e715f141de7221ad709f90d010"><td class="memItemLeft" align="right" valign="top"><a id="a561e87e715f141de7221ad709f90d010" name="a561e87e715f141de7221ad709f90d010"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_get_value_as_string_r</b> (const vcardproperty *prop)</td></tr>
-<tr class="memitem:a567fc275e0ed7a4141815406644b1d56" id="r_a567fc275e0ed7a4141815406644b1d56"><td class="memItemLeft" align="right" valign="top"><a id="a567fc275e0ed7a4141815406644b1d56" name="a567fc275e0ed7a4141815406644b1d56"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_get_x_name</b> (const vcardproperty *prop)</td></tr>
+<tr class="memitem:ac7be83cf064c7c6ff870cf344bb5a03c" id="r_ac7be83cf064c7c6ff870cf344bb5a03c"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7be83cf064c7c6ff870cf344bb5a03c">vcardproperty_get_property_name_r</a> (const vcardproperty *prop)</td></tr>
+<tr class="memitem:a9ec38f483b7833ffc388293a56e70a82" id="r_a9ec38f483b7833ffc388293a56e70a82"><td class="memItemLeft" align="right" valign="top">vcardvalue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ec38f483b7833ffc388293a56e70a82">vcardproperty_get_value</a> (const vcardproperty *prop)</td></tr>
+<tr class="memitem:a4c9c2027fc09acedc6a2223521c636e2" id="r_a4c9c2027fc09acedc6a2223521c636e2"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c9c2027fc09acedc6a2223521c636e2">vcardproperty_get_value_as_string</a> (const vcardproperty *prop)</td></tr>
+<tr class="memitem:a561e87e715f141de7221ad709f90d010" id="r_a561e87e715f141de7221ad709f90d010"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a561e87e715f141de7221ad709f90d010">vcardproperty_get_value_as_string_r</a> (const vcardproperty *prop)</td></tr>
+<tr class="memitem:a567fc275e0ed7a4141815406644b1d56" id="r_a567fc275e0ed7a4141815406644b1d56"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a567fc275e0ed7a4141815406644b1d56">vcardproperty_get_x_name</a> (const vcardproperty *prop)</td></tr>
 <tr class="memitem:a2519a288d364c5c0c0c0b08ce27b676f" id="r_a2519a288d364c5c0c0c0b08ce27b676f"><td class="memItemLeft" align="right" valign="top"><a id="a2519a288d364c5c0c0c0b08ce27b676f" name="a2519a288d364c5c0c0c0b08ce27b676f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_is_multivalued</b> (vcardproperty_kind pkind)</td></tr>
 <tr class="memitem:ad73629f184220db97e8daced6662f6ad" id="r_ad73629f184220db97e8daced6662f6ad"><td class="memItemLeft" align="right" valign="top"><a id="ad73629f184220db97e8daced6662f6ad" name="ad73629f184220db97e8daced6662f6ad"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_is_structured</b> (vcardproperty_kind pkind)</td></tr>
-<tr class="memitem:a24562453f775969a18551b52110d71f4" id="r_a24562453f775969a18551b52110d71f4"><td class="memItemLeft" align="right" valign="top"><a id="a24562453f775969a18551b52110d71f4" name="a24562453f775969a18551b52110d71f4"></a>
-vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_isa</b> (const vcardproperty *property)</td></tr>
-<tr class="memitem:a83d45a95b058d12528c2d895a28b96de" id="r_a83d45a95b058d12528c2d895a28b96de"><td class="memItemLeft" align="right" valign="top"><a id="a83d45a95b058d12528c2d895a28b96de" name="a83d45a95b058d12528c2d895a28b96de"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_isa_property</b> (void *property)</td></tr>
+<tr class="memitem:a24562453f775969a18551b52110d71f4" id="r_a24562453f775969a18551b52110d71f4"><td class="memItemLeft" align="right" valign="top">vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24562453f775969a18551b52110d71f4">vcardproperty_isa</a> (const vcardproperty *property)</td></tr>
+<tr class="memitem:a83d45a95b058d12528c2d895a28b96de" id="r_a83d45a95b058d12528c2d895a28b96de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83d45a95b058d12528c2d895a28b96de">vcardproperty_isa_property</a> (void *property)</td></tr>
 <tr class="memitem:a83ced5a2f59d7f874476ba982e1e0f14" id="r_a83ced5a2f59d7f874476ba982e1e0f14"><td class="memItemLeft" align="right" valign="top"><a id="a83ced5a2f59d7f874476ba982e1e0f14" name="a83ced5a2f59d7f874476ba982e1e0f14"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_kind_and_string_to_enum</b> (const int kind, const char *str)</td></tr>
 <tr class="memitem:a34690e58edcc8c06f54fc16ce317fc13" id="r_a34690e58edcc8c06f54fc16ce317fc13"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34690e58edcc8c06f54fc16ce317fc13">vcardproperty_kind_is_valid</a> (const vcardproperty_kind kind)</td></tr>
@@ -148,10 +133,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_kind_and
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_kind_to_string</b> (vcardproperty_kind kind)</td></tr>
 <tr class="memitem:a69950e6b1c6f57c5d33b2c1c335fa5a0" id="r_a69950e6b1c6f57c5d33b2c1c335fa5a0"><td class="memItemLeft" align="right" valign="top"><a id="a69950e6b1c6f57c5d33b2c1c335fa5a0" name="a69950e6b1c6f57c5d33b2c1c335fa5a0"></a>
 vcardvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_kind_to_value_kind</b> (vcardproperty_kind kind)</td></tr>
-<tr class="memitem:a072d6cf81b99a4ff8957734abfc02491" id="r_a072d6cf81b99a4ff8957734abfc02491"><td class="memItemLeft" align="right" valign="top"><a id="a072d6cf81b99a4ff8957734abfc02491" name="a072d6cf81b99a4ff8957734abfc02491"></a>
-vcardproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_new</b> (vcardproperty_kind kind)</td></tr>
-<tr class="memitem:a152ddabb77befd431a00cb03acdaae4d" id="r_a152ddabb77befd431a00cb03acdaae4d"><td class="memItemLeft" align="right" valign="top"><a id="a152ddabb77befd431a00cb03acdaae4d" name="a152ddabb77befd431a00cb03acdaae4d"></a>
-vcardproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_new_from_string</b> (const char *str)</td></tr>
+<tr class="memitem:a072d6cf81b99a4ff8957734abfc02491" id="r_a072d6cf81b99a4ff8957734abfc02491"><td class="memItemLeft" align="right" valign="top">vcardproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a072d6cf81b99a4ff8957734abfc02491">vcardproperty_new</a> (vcardproperty_kind kind)</td></tr>
+<tr class="memitem:a152ddabb77befd431a00cb03acdaae4d" id="r_a152ddabb77befd431a00cb03acdaae4d"><td class="memItemLeft" align="right" valign="top">vcardproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a152ddabb77befd431a00cb03acdaae4d">vcardproperty_new_from_string</a> (const char *str)</td></tr>
 <tr class="memitem:a3c656d31e2b783dda959c0dccccf4c5e" id="r_a3c656d31e2b783dda959c0dccccf4c5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c656d31e2b783dda959c0dccccf4c5e">vcardproperty_normalize</a> (vcardproperty *prop)</td></tr>
 <tr class="memitem:ac2adb2654ee641b6ba15042f2ffce565" id="r_ac2adb2654ee641b6ba15042f2ffce565"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2adb2654ee641b6ba15042f2ffce565">vcardproperty_remove_parameter_by_kind</a> (vcardproperty *prop, vcardparameter_kind kind)</td></tr>
 <tr class="memdesc:ac2adb2654ee641b6ba15042f2ffce565"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all parameters with the specified kind.  <br /></td></tr>
@@ -159,18 +142,12 @@ vcardproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>vcardprope
 <tr class="memdesc:a4e87420ddea2f359fa0c4e7daffbc486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all parameters with the specified name.  <br /></td></tr>
 <tr class="memitem:a0881df999f882ffa9f9fe5fa82cb8ed8" id="r_a0881df999f882ffa9f9fe5fa82cb8ed8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0881df999f882ffa9f9fe5fa82cb8ed8">vcardproperty_remove_parameter_by_ref</a> (vcardproperty *prop, vcardparameter *param)</td></tr>
 <tr class="memdesc:a0881df999f882ffa9f9fe5fa82cb8ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the specified parameter reference from the property.  <br /></td></tr>
-<tr class="memitem:a0c145082c373520851d2ba93df24ae51" id="r_a0c145082c373520851d2ba93df24ae51"><td class="memItemLeft" align="right" valign="top"><a id="a0c145082c373520851d2ba93df24ae51" name="a0c145082c373520851d2ba93df24ae51"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_set_group</b> (vcardproperty *prop, const char *group)</td></tr>
-<tr class="memitem:acb7b32a6d96871ff7e52ea9d14306ca6" id="r_acb7b32a6d96871ff7e52ea9d14306ca6"><td class="memItemLeft" align="right" valign="top"><a id="acb7b32a6d96871ff7e52ea9d14306ca6" name="acb7b32a6d96871ff7e52ea9d14306ca6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_set_parameter</b> (vcardproperty *prop, vcardparameter *parameter)</td></tr>
-<tr class="memitem:a08ec6932109ac2a9d28ad1411cef1406" id="r_a08ec6932109ac2a9d28ad1411cef1406"><td class="memItemLeft" align="right" valign="top"><a id="a08ec6932109ac2a9d28ad1411cef1406" name="a08ec6932109ac2a9d28ad1411cef1406"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_set_parameter_from_string</b> (vcardproperty *prop, const char *name, const char *value)</td></tr>
-<tr class="memitem:a1dde3f80aabd40b1914cef96365ba7de" id="r_a1dde3f80aabd40b1914cef96365ba7de"><td class="memItemLeft" align="right" valign="top"><a id="a1dde3f80aabd40b1914cef96365ba7de" name="a1dde3f80aabd40b1914cef96365ba7de"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_set_value</b> (vcardproperty *prop, vcardvalue *value)</td></tr>
-<tr class="memitem:a29e319f181e3c37778725935af4e827b" id="r_a29e319f181e3c37778725935af4e827b"><td class="memItemLeft" align="right" valign="top"><a id="a29e319f181e3c37778725935af4e827b" name="a29e319f181e3c37778725935af4e827b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_set_value_from_string</b> (vcardproperty *prop, const char *str, const char *type)</td></tr>
-<tr class="memitem:a17650fcdded3ba4a6641d549fc989b6b" id="r_a17650fcdded3ba4a6641d549fc989b6b"><td class="memItemLeft" align="right" valign="top"><a id="a17650fcdded3ba4a6641d549fc989b6b" name="a17650fcdded3ba4a6641d549fc989b6b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_set_x_name</b> (vcardproperty *prop, const char *name)</td></tr>
+<tr class="memitem:a0c145082c373520851d2ba93df24ae51" id="r_a0c145082c373520851d2ba93df24ae51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c145082c373520851d2ba93df24ae51">vcardproperty_set_group</a> (vcardproperty *prop, const char *group)</td></tr>
+<tr class="memitem:acb7b32a6d96871ff7e52ea9d14306ca6" id="r_acb7b32a6d96871ff7e52ea9d14306ca6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb7b32a6d96871ff7e52ea9d14306ca6">vcardproperty_set_parameter</a> (vcardproperty *prop, vcardparameter *parameter)</td></tr>
+<tr class="memitem:a08ec6932109ac2a9d28ad1411cef1406" id="r_a08ec6932109ac2a9d28ad1411cef1406"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08ec6932109ac2a9d28ad1411cef1406">vcardproperty_set_parameter_from_string</a> (vcardproperty *prop, const char *name, const char *value)</td></tr>
+<tr class="memitem:a1dde3f80aabd40b1914cef96365ba7de" id="r_a1dde3f80aabd40b1914cef96365ba7de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1dde3f80aabd40b1914cef96365ba7de">vcardproperty_set_value</a> (vcardproperty *prop, vcardvalue *value)</td></tr>
+<tr class="memitem:a29e319f181e3c37778725935af4e827b" id="r_a29e319f181e3c37778725935af4e827b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29e319f181e3c37778725935af4e827b">vcardproperty_set_value_from_string</a> (vcardproperty *prop, const char *str, const char *type)</td></tr>
+<tr class="memitem:a17650fcdded3ba4a6641d549fc989b6b" id="r_a17650fcdded3ba4a6641d549fc989b6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17650fcdded3ba4a6641d549fc989b6b">vcardproperty_set_x_name</a> (vcardproperty *prop, const char *name)</td></tr>
 <tr class="memitem:a60de60ae7ffbb758578f1c1cdc62b77e" id="r_a60de60ae7ffbb758578f1c1cdc62b77e"><td class="memItemLeft" align="right" valign="top"><a id="a60de60ae7ffbb758578f1c1cdc62b77e" name="a60de60ae7ffbb758578f1c1cdc62b77e"></a>
 vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardproperty_string_to_kind</b> (const char *string)</td></tr>
 <tr class="memitem:a4be4c4ed9a0b9cff07fdec0ec9f42e0d" id="r_a4be4c4ed9a0b9cff07fdec0ec9f42e0d"><td class="memItemLeft" align="right" valign="top"><a id="a4be4c4ed9a0b9cff07fdec0ec9f42e0d" name="a4be4c4ed9a0b9cff07fdec0ec9f42e0d"></a>
@@ -178,7 +155,11 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
 <tr class="memitem:a2b3a3f5bfad5cf309b5e5ad3ced64fc6" id="r_a2b3a3f5bfad5cf309b5e5ad3ced64fc6"><td class="memItemLeft" align="right" valign="top">vcardproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b3a3f5bfad5cf309b5e5ad3ced64fc6">vcardvalue_get_parent</a> (const vcardvalue *value)</td></tr>
 <tr class="memitem:a82766515c1fc63658a6f8f16ecbc6bf3" id="r_a82766515c1fc63658a6f8f16ecbc6bf3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82766515c1fc63658a6f8f16ecbc6bf3">vcardvalue_set_parent</a> (vcardvalue *value, vcardproperty *property)</td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines the data structure representing vCard properties. </p>
+
+<p class="definition">Definition in file <a class="el" href="vcardproperty_8h_source.html">vcardproperty.h</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a945192f51cf67ea30fa01dfd516ed259" name="a945192f51cf67ea30fa01dfd516ed259"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a945192f51cf67ea30fa01dfd516ed259">&#9670;&#160;</a></span>vcardparameter_get_parent()</h2>
 
@@ -194,6 +175,8 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
       </table>
 </div><div class="memdoc">
 <p>Returns the parent <code class="param">vcardproperty</code> for the specified <code class="param">vcardparameter</code>. </p><dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="vcardparameter_8c_source.html#l00390">390</a> of file <a class="el" href="vcardparameter_8c_source.html">vcardparameter.c</a>.</p>
 
 </div>
 </div>
@@ -217,6 +200,92 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
 </div><div class="memdoc">
 <p>Sets the parent <code class="param">vcardproperty</code> for the specified <code class="param">vcardparameter</code>. </p><dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="vcardparameter_8c_source.html#l00383">383</a> of file <a class="el" href="vcardparameter_8c_source.html">vcardparameter.c</a>.</p>
+
+</div>
+</div>
+<a id="a35bc3c50f9a4f724f954c621a50cfb58" name="a35bc3c50f9a4f724f954c621a50cfb58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35bc3c50f9a4f724f954c621a50cfb58">&#9670;&#160;</a></span>vcardproperty_add_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vcardproperty_add_parameter </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vcardparameter *</td>          <td class="paramname"><span class="paramname"><em>parameter</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00551">551</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="aa29328d8229f165d18905a4ea7d39886" name="aa29328d8229f165d18905a4ea7d39886"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa29328d8229f165d18905a4ea7d39886">&#9670;&#160;</a></span>vcardproperty_add_type_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vcardproperty_add_type_parameter </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structicalenumarray__element.html">vcardenumarray_element</a> *</td>          <td class="paramname"><span class="paramname"><em>type</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l01127">1127</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a2a84ef78022757b26280abfe4fe3d7f3" name="a2a84ef78022757b26280abfe4fe3d7f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a84ef78022757b26280abfe4fe3d7f3">&#9670;&#160;</a></span>vcardproperty_as_vcard_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * vcardproperty_as_vcard_string </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00419">419</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="acb4b41fe02dfd61b5ade0df230a88baf" name="acb4b41fe02dfd61b5ade0df230a88baf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb4b41fe02dfd61b5ade0df230a88baf">&#9670;&#160;</a></span>vcardproperty_as_vcard_string_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * vcardproperty_as_vcard_string_r </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00428">428</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
 </div>
 </div>
 <a id="abc42d87518f3b777711d799759cc0b47" name="abc42d87518f3b777711d799759cc0b47"></a>
@@ -237,6 +306,157 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
 <p>Deeply clones an vcardproperty. </p>
 <p>Returns a pointer to the memory for the newly cloned vcardproperty. </p><dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00087">87</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a6d9d81771781f73181c5192833204393" name="a6d9d81771781f73181c5192833204393"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d9d81771781f73181c5192833204393">&#9670;&#160;</a></span>vcardproperty_count_parameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int vcardproperty_count_parameters </td>
+          <td>(</td>
+          <td class="paramtype">const vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00759">759</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a18900fe8153ca30c02a1687edcc7f55b" name="a18900fe8153ca30c02a1687edcc7f55b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18900fe8153ca30c02a1687edcc7f55b">&#9670;&#160;</a></span>vcardproperty_free()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vcardproperty_free </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00171">171</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a3bda9b438f3ab5068c8daa93475b0d52" name="a3bda9b438f3ab5068c8daa93475b0d52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bda9b438f3ab5068c8daa93475b0d52">&#9670;&#160;</a></span>vcardproperty_get_first_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vcardparameter * vcardproperty_get_first_parameter </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vcardparameter_kind</td>          <td class="paramname"><span class="paramname"><em>kind</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00769">769</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="aba4d5ec13b10df935343d739ba552784" name="aba4d5ec13b10df935343d739ba552784"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba4d5ec13b10df935343d739ba552784">&#9670;&#160;</a></span>vcardproperty_get_group()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * vcardproperty_get_group </td>
+          <td>(</td>
+          <td class="paramtype">const vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00949">949</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="abc1f1a78c755cd6458d4686f39f8fd7d" name="abc1f1a78c755cd6458d4686f39f8fd7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc1f1a78c755cd6458d4686f39f8fd7d">&#9670;&#160;</a></span>vcardproperty_get_next_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vcardparameter * vcardproperty_get_next_parameter </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vcardparameter_kind</td>          <td class="paramname"><span class="paramname"><em>kind</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00791">791</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="ae9bdfc88dfa04ccedfc6586a167d715f" name="ae9bdfc88dfa04ccedfc6586a167d715f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9bdfc88dfa04ccedfc6586a167d715f">&#9670;&#160;</a></span>vcardproperty_get_parameter_as_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * vcardproperty_get_parameter_as_string </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00611">611</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="abe75d812a9c2ea394ad1a4b7c290ef4e" name="abe75d812a9c2ea394ad1a4b7c290ef4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe75d812a9c2ea394ad1a4b7c290ef4e">&#9670;&#160;</a></span>vcardproperty_get_parameter_as_string_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * vcardproperty_get_parameter_as_string_r </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00620">620</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
 </div>
 </div>
 <a id="a0978c4107c153dfad0c294f8f2ebc1bb" name="a0978c4107c153dfad0c294f8f2ebc1bb"></a>
@@ -254,6 +474,141 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
       </table>
 </div><div class="memdoc">
 <p>Returns the name of the property &ndash; the type name converted to a string, or the value of _get_x_name if the type is and X property </p>
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00956">956</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="ac7be83cf064c7c6ff870cf344bb5a03c" name="ac7be83cf064c7c6ff870cf344bb5a03c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7be83cf064c7c6ff870cf344bb5a03c">&#9670;&#160;</a></span>vcardproperty_get_property_name_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * vcardproperty_get_property_name_r </td>
+          <td>(</td>
+          <td class="paramtype">const vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00965">965</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a9ec38f483b7833ffc388293a56e70a82" name="a9ec38f483b7833ffc388293a56e70a82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ec38f483b7833ffc388293a56e70a82">&#9670;&#160;</a></span>vcardproperty_get_value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vcardvalue * vcardproperty_get_value </td>
+          <td>(</td>
+          <td class="paramtype">const vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00883">883</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a4c9c2027fc09acedc6a2223521c636e2" name="a4c9c2027fc09acedc6a2223521c636e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c9c2027fc09acedc6a2223521c636e2">&#9670;&#160;</a></span>vcardproperty_get_value_as_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * vcardproperty_get_value_as_string </td>
+          <td>(</td>
+          <td class="paramtype">const vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00890">890</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a561e87e715f141de7221ad709f90d010" name="a561e87e715f141de7221ad709f90d010"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a561e87e715f141de7221ad709f90d010">&#9670;&#160;</a></span>vcardproperty_get_value_as_string_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * vcardproperty_get_value_as_string_r </td>
+          <td>(</td>
+          <td class="paramtype">const vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00899">899</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a567fc275e0ed7a4141815406644b1d56" name="a567fc275e0ed7a4141815406644b1d56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a567fc275e0ed7a4141815406644b1d56">&#9670;&#160;</a></span>vcardproperty_get_x_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * vcardproperty_get_x_name </td>
+          <td>(</td>
+          <td class="paramtype">const vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00926">926</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a24562453f775969a18551b52110d71f4" name="a24562453f775969a18551b52110d71f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24562453f775969a18551b52110d71f4">&#9670;&#160;</a></span>vcardproperty_isa()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vcardproperty_kind vcardproperty_isa </td>
+          <td>(</td>
+          <td class="paramtype">const vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>property</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00530">530</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a83d45a95b058d12528c2d895a28b96de" name="a83d45a95b058d12528c2d895a28b96de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83d45a95b058d12528c2d895a28b96de">&#9670;&#160;</a></span>vcardproperty_isa_property()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vcardproperty_isa_property </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>property</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00539">539</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
 
 </div>
 </div>
@@ -275,6 +630,44 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
 
 </div>
 </div>
+<a id="a072d6cf81b99a4ff8957734abfc02491" name="a072d6cf81b99a4ff8957734abfc02491"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a072d6cf81b99a4ff8957734abfc02491">&#9670;&#160;</a></span>vcardproperty_new()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vcardproperty * vcardproperty_new </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty_kind</td>          <td class="paramname"><span class="paramname"><em>kind</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00078">78</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a152ddabb77befd431a00cb03acdaae4d" name="a152ddabb77befd431a00cb03acdaae4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a152ddabb77befd431a00cb03acdaae4d">&#9670;&#160;</a></span>vcardproperty_new_from_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vcardproperty * vcardproperty_new_from_string </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00125">125</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
 <a id="a3c656d31e2b783dda959c0dccccf4c5e" name="a3c656d31e2b783dda959c0dccccf4c5e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c656d31e2b783dda959c0dccccf4c5e">&#9670;&#160;</a></span>vcardproperty_normalize()</h2>
 
@@ -290,6 +683,8 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
       </table>
 </div><div class="memdoc">
 <p>Normalizes (reorders and sorts the parameters) the specified <code class="param">vcardproperty</code>. </p><dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l01017">1017</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
 
 </div>
 </div>
@@ -321,6 +716,8 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
   </dd>
 </dl>
 <p>See <a class="el" href="#a4e87420ddea2f359fa0c4e7daffbc486" title="Removes all parameters with the specified name.">vcardproperty_remove_parameter_by_name()</a> and <a class="el" href="#a0881df999f882ffa9f9fe5fa82cb8ed8" title="Removes the specified parameter reference from the property.">vcardproperty_remove_parameter_by_ref()</a> for alternate ways of removing parameters </p>
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00694">694</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
 
 </div>
 </div>
@@ -354,6 +751,8 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
 <p>This function removes parameters with the given name. The name corresponds to either a built-in name (TZID, etc.) or the name of an extended parameter (X-FOO)</p>
 <p>See <a class="el" href="#ac2adb2654ee641b6ba15042f2ffce565" title="Removes all parameters with the specified kind.">vcardproperty_remove_parameter_by_kind()</a> and <a class="el" href="#a0881df999f882ffa9f9fe5fa82cb8ed8" title="Removes the specified parameter reference from the property.">vcardproperty_remove_parameter_by_ref()</a> for alternate ways of removing parameters </p>
 
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00711">711</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
 </div>
 </div>
 <a id="a0881df999f882ffa9f9fe5fa82cb8ed8" name="a0881df999f882ffa9f9fe5fa82cb8ed8"></a>
@@ -385,6 +784,156 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
 </dl>
 <p>This function removes the specified parameter reference from the property. </p>
 
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00741">741</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a0c145082c373520851d2ba93df24ae51" name="a0c145082c373520851d2ba93df24ae51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c145082c373520851d2ba93df24ae51">&#9670;&#160;</a></span>vcardproperty_set_group()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vcardproperty_set_group </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>group</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00933">933</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="acb7b32a6d96871ff7e52ea9d14306ca6" name="acb7b32a6d96871ff7e52ea9d14306ca6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb7b32a6d96871ff7e52ea9d14306ca6">&#9670;&#160;</a></span>vcardproperty_set_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vcardproperty_set_parameter </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vcardparameter *</td>          <td class="paramname"><span class="paramname"><em>parameter</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00559">559</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a08ec6932109ac2a9d28ad1411cef1406" name="a08ec6932109ac2a9d28ad1411cef1406"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08ec6932109ac2a9d28ad1411cef1406">&#9670;&#160;</a></span>vcardproperty_set_parameter_from_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vcardproperty_set_parameter_from_string </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00578">578</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a1dde3f80aabd40b1914cef96365ba7de" name="a1dde3f80aabd40b1914cef96365ba7de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dde3f80aabd40b1914cef96365ba7de">&#9670;&#160;</a></span>vcardproperty_set_value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vcardproperty_set_value </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vcardvalue *</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00811">811</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a29e319f181e3c37778725935af4e827b" name="a29e319f181e3c37778725935af4e827b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29e319f181e3c37778725935af4e827b">&#9670;&#160;</a></span>vcardproperty_set_value_from_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vcardproperty_set_value_from_string </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>type</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00842">842</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a17650fcdded3ba4a6641d549fc989b6b" name="a17650fcdded3ba4a6641d549fc989b6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17650fcdded3ba4a6641d549fc989b6b">&#9670;&#160;</a></span>vcardproperty_set_x_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vcardproperty_set_x_name </td>
+          <td>(</td>
+          <td class="paramtype">vcardproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="vcardproperty_8c_source.html#l00910">910</a> of file <a class="el" href="vcardproperty_8c_source.html">vcardproperty.c</a>.</p>
+
 </div>
 </div>
 <a id="a2b3a3f5bfad5cf309b5e5ad3ced64fc6" name="a2b3a3f5bfad5cf309b5e5ad3ced64fc6"></a>
@@ -402,6 +951,8 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
       </table>
 </div><div class="memdoc">
 <p>Returns the parent <code class="param">vcardproperty</code> for the specified <code class="param">vcardvalue</code>. </p><dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="vcardvalue_8c_source.html#l01028">1028</a> of file <a class="el" href="vcardvalue_8c_source.html">vcardvalue.c</a>.</p>
 
 </div>
 </div>
@@ -424,6 +975,8 @@ vcardproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>vcardpr
       </table>
 </div><div class="memdoc">
 <p>Sets the parent <code class="param">vcardproperty</code> for the specified <code class="param">vcardvalue</code>. </p>
+
+<p class="definition">Definition at line <a class="el" href="vcardvalue_8c_source.html#l01021">1021</a> of file <a class="el" href="vcardvalue_8c_source.html">vcardvalue.c</a>.</p>
 
 </div>
 </div>

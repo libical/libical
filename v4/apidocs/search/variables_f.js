@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['year_0',['year',['../structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8',1,'icaltimetype::year'],['../structut__instant__int.html#a6eae657611f3d6f63170ae2b8c898d64',1,'ut_instant_int::year']]]
+  ['week_5fstart_0',['week_start',['../structicalrecurrencetype.html#ab7abcfded11855eeedcfdef6222783e5',1,'icalrecurrencetype']]],
+  ['weeks_1',['weeks',['../structicaldurationtype.html#a0d62704245de1e934f2d7f8d8bdd23d7',1,'icaldurationtype']]]
 ];

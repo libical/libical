@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -79,55 +79,68 @@ $(function() {
   <div class="headertitle"><div class="title">icalstrarray.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
+<a href="icalstrarray_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> FILE: icalstrarray.h</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> CREATOR: Ken Murchison 24 Aug 2022</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"></span> </div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> ======================================================================*/</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#ifndef ICALSTRARRAY_H</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define ICALSTRARRAY_H</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="icalarray_8h.html">icalarray.h</a>&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#ifndef ICALSTRARRAY_H</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#define ICALSTRARRAY_H</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">typedef</span> <a class="code hl_typedef" href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a> icalstrarray;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#define icalstrarray_new(increment_size) \</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">    (icalarray_new(sizeof(char *), increment_size))</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalstrarray_element_at(icalstrarray *array, <span class="keywordtype">size_t</span> position);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">size_t</span> icalstrarray_size(<span class="keyword">const</span> icalstrarray *array);</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">size_t</span> icalstrarray_find(icalstrarray *array,</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>                                             <span class="keyword">const</span> <span class="keywordtype">char</span> *needle);</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalstrarray_append(icalstrarray *array,</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>                                             <span class="keyword">const</span> <span class="keywordtype">char</span> *elem);</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalstrarray_add(icalstrarray *array,</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>                                          <span class="keyword">const</span> <span class="keywordtype">char</span> *elem);</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalstrarray_remove_element_at(icalstrarray *array,</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>                                                        <span class="keywordtype">size_t</span> position);</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span></div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalstrarray_remove(icalstrarray *array,</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>                                             <span class="keyword">const</span> <span class="keywordtype">char</span> *del);</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span></div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalstrarray_free(icalstrarray *array);</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span></div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalstrarray_sort(icalstrarray *array);</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span></div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>LIBICAL_ICAL_EXPORT icalstrarray *icalstrarray_clone(icalstrarray *array);</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span> </div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="preprocessor">#endif </span><span class="comment">/* ICALSTRARRAY_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;<a class="code" href="icalarray_8h.html">icalarray.h</a>&quot;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">/* An icalstrarray is just an icalarray in disguise. */</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">typedef</span> icalarray icalstrarray;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span></div>
+<div class="foldopen" id="foldopen00047" data-start="" data-end="">
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="icalstrarray_8h.html#ae3316de9c96769c068ce6697ea9ab552">   47</a></span><span class="preprocessor">#define icalstrarray_new(increment_size) \</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="preprocessor">    (icalarray_new(sizeof(char *), increment_size))</span></div>
+</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_function" href="icalstrarray_8h.html#a25b6870d35f6a2bfefc0cc1ffba6fca3">icalstrarray_element_at</a>(icalstrarray *array, <span class="keywordtype">size_t</span> position);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">size_t</span> <a class="code hl_function" href="icalstrarray_8h.html#afe04fc861be6375c6aa8a8e2b986d4cd">icalstrarray_size</a>(<span class="keyword">const</span> icalstrarray *array);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">size_t</span> <a class="code hl_function" href="icalstrarray_8h.html#a269df681cb08108fa01dc95db0b760d0">icalstrarray_find</a>(icalstrarray *array,</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>                                             <span class="keyword">const</span> <span class="keywordtype">char</span> *needle);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalstrarray_8h.html#a9da94fb777049c0a87589e244d305978">icalstrarray_append</a>(icalstrarray *array,</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>                                             <span class="keyword">const</span> <span class="keywordtype">char</span> *elem);</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalstrarray_8h.html#ad01512df4b3359b976450c47df4189c3">icalstrarray_add</a>(icalstrarray *array,</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>                                          <span class="keyword">const</span> <span class="keywordtype">char</span> *elem);</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalstrarray_8h.html#aa419d7dd17e30e7e54ef0aaa093e05aa">icalstrarray_remove_element_at</a>(icalstrarray *array,</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>                                                        <span class="keywordtype">size_t</span> position);</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalstrarray_8h.html#a87d4160e3f2a34ad6f69649e3913da38">icalstrarray_remove</a>(icalstrarray *array,</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>                                             <span class="keyword">const</span> <span class="keywordtype">char</span> *del);</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalstrarray_8h.html#afbd8b125e3484b57fc123464342869a4">icalstrarray_free</a>(icalstrarray *array);</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span></div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalstrarray_8h.html#af0d7a8885277c4e77ee7063910815f04">icalstrarray_sort</a>(icalstrarray *array);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span></div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>LIBICAL_ICAL_EXPORT icalstrarray *<a class="code hl_function" href="icalstrarray_8h.html#acc1c8a3ed00b42cc29896f5e353115fb">icalstrarray_clone</a>(icalstrarray *array);</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><span class="preprocessor">#endif </span><span class="comment">/* ICALSTRARRAY_H */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aicalarray_8h_html"><div class="ttname"><a href="icalarray_8h.html">icalarray.h</a></div><div class="ttdoc">An array of arbitrarily-sized elements which grows dynamically as elements are added.</div></div>
-<div class="ttc" id="aicalarray_8h_html_a1f1d8fb8cebf52447f5af6b2a8def29e"><div class="ttname"><a href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a></div><div class="ttdeci">struct _icalarray icalarray</div><div class="ttdoc">A struct representing an icalarray object.</div><div class="ttdef"><b>Definition</b> icalarray.h:26</div></div>
+<div class="ttc" id="aicalstrarray_8h_html_a25b6870d35f6a2bfefc0cc1ffba6fca3"><div class="ttname"><a href="icalstrarray_8h.html#a25b6870d35f6a2bfefc0cc1ffba6fca3">icalstrarray_element_at</a></div><div class="ttdeci">const char * icalstrarray_element_at(icalstrarray *array, size_t position)</div><div class="ttdoc">Accesses a string stored in the array.</div><div class="ttdef"><b>Definition</b> <a href="icalstrarray_8c_source.html#l00032">icalstrarray.c:32</a></div></div>
+<div class="ttc" id="aicalstrarray_8h_html_a269df681cb08108fa01dc95db0b760d0"><div class="ttname"><a href="icalstrarray_8h.html#a269df681cb08108fa01dc95db0b760d0">icalstrarray_find</a></div><div class="ttdeci">size_t icalstrarray_find(icalstrarray *array, const char *needle)</div><div class="ttdoc">Finds a string in the array.</div><div class="ttdef"><b>Definition</b> <a href="icalstrarray_8c_source.html#l00040">icalstrarray.c:40</a></div></div>
+<div class="ttc" id="aicalstrarray_8h_html_a87d4160e3f2a34ad6f69649e3913da38"><div class="ttname"><a href="icalstrarray_8h.html#a87d4160e3f2a34ad6f69649e3913da38">icalstrarray_remove</a></div><div class="ttdeci">void icalstrarray_remove(icalstrarray *array, const char *del)</div><div class="ttdoc">Removes all occurrences of a string.</div><div class="ttdef"><b>Definition</b> <a href="icalstrarray_8c_source.html#l00096">icalstrarray.c:96</a></div></div>
+<div class="ttc" id="aicalstrarray_8h_html_a9da94fb777049c0a87589e244d305978"><div class="ttname"><a href="icalstrarray_8h.html#a9da94fb777049c0a87589e244d305978">icalstrarray_append</a></div><div class="ttdeci">void icalstrarray_append(icalstrarray *array, const char *elem)</div><div class="ttdoc">Appends a string to the array.</div><div class="ttdef"><b>Definition</b> <a href="icalstrarray_8c_source.html#l00059">icalstrarray.c:59</a></div></div>
+<div class="ttc" id="aicalstrarray_8h_html_aa419d7dd17e30e7e54ef0aaa093e05aa"><div class="ttname"><a href="icalstrarray_8h.html#aa419d7dd17e30e7e54ef0aaa093e05aa">icalstrarray_remove_element_at</a></div><div class="ttdeci">void icalstrarray_remove_element_at(icalstrarray *array, size_t position)</div><div class="ttdoc">Removes the string at an array position.</div><div class="ttdef"><b>Definition</b> <a href="icalstrarray_8c_source.html#l00082">icalstrarray.c:82</a></div></div>
+<div class="ttc" id="aicalstrarray_8h_html_acc1c8a3ed00b42cc29896f5e353115fb"><div class="ttname"><a href="icalstrarray_8h.html#acc1c8a3ed00b42cc29896f5e353115fb">icalstrarray_clone</a></div><div class="ttdeci">icalstrarray * icalstrarray_clone(icalstrarray *array)</div><div class="ttdoc">Clones the array and all its elements.</div><div class="ttdef"><b>Definition</b> <a href="icalstrarray_8c_source.html#l00145">icalstrarray.c:145</a></div></div>
+<div class="ttc" id="aicalstrarray_8h_html_ad01512df4b3359b976450c47df4189c3"><div class="ttname"><a href="icalstrarray_8h.html#ad01512df4b3359b976450c47df4189c3">icalstrarray_add</a></div><div class="ttdeci">void icalstrarray_add(icalstrarray *array, const char *elem)</div><div class="ttdoc">Appends a string to the array, omitting duplicates.</div><div class="ttdef"><b>Definition</b> <a href="icalstrarray_8c_source.html#l00071">icalstrarray.c:71</a></div></div>
+<div class="ttc" id="aicalstrarray_8h_html_af0d7a8885277c4e77ee7063910815f04"><div class="ttname"><a href="icalstrarray_8h.html#af0d7a8885277c4e77ee7063910815f04">icalstrarray_sort</a></div><div class="ttdeci">void icalstrarray_sort(icalstrarray *array)</div><div class="ttdoc">Sorts the strings in the array in ascending order.</div><div class="ttdef"><b>Definition</b> <a href="icalstrarray_8c_source.html#l00137">icalstrarray.c:137</a></div></div>
+<div class="ttc" id="aicalstrarray_8h_html_afbd8b125e3484b57fc123464342869a4"><div class="ttname"><a href="icalstrarray_8h.html#afbd8b125e3484b57fc123464342869a4">icalstrarray_free</a></div><div class="ttdeci">void icalstrarray_free(icalstrarray *array)</div><div class="ttdoc">Frees this array&#39;s memory and all its elements.</div><div class="ttdef"><b>Definition</b> <a href="icalstrarray_8c_source.html#l00116">icalstrarray.c:116</a></div></div>
+<div class="ttc" id="aicalstrarray_8h_html_afe04fc861be6375c6aa8a8e2b986d4cd"><div class="ttname"><a href="icalstrarray_8h.html#afe04fc861be6375c6aa8a8e2b986d4cd">icalstrarray_size</a></div><div class="ttdeci">size_t icalstrarray_size(const icalstrarray *array)</div><div class="ttdoc">Indicates the count of strings stored in the array.</div><div class="ttdef"><b>Definition</b> <a href="icalstrarray_8c_source.html#l00024">icalstrarray.c:24</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

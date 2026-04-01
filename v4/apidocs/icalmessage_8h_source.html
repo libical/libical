@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -79,47 +79,52 @@ $(function() {
   <div class="headertitle"><div class="title">icalmessage.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
+<a href="icalmessage_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> FILE: icalmessage.h</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> CREATOR: eric 07 Nov 2000</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"></span> </div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> SPDX-FileCopyrightText: 2000, Eric Busboom &lt;eric@civicknowledge.com&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> =========================================================================*/</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#ifndef ICALMESSAGE_H</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define ICALMESSAGE_H</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;libical_icalss_export.h&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="icalcomponent_8h.html">icalcomponent.h</a>&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_accept_reply(<span class="keyword">const</span> icalcomponent *c,</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>                                                                  <span class="keyword">const</span> <span class="keywordtype">char</span> *user,</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>                                                                  <span class="keyword">const</span> <span class="keywordtype">char</span> *msg);</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_decline_reply(<span class="keyword">const</span> icalcomponent *c,</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>                                                                   <span class="keyword">const</span> <span class="keywordtype">char</span> *user,</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>                                                                   <span class="keyword">const</span> <span class="keywordtype">char</span> *msg);</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">/* New is modified version of old */</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_counterpropose_reply(<span class="keyword">const</span> icalcomponent *oldc,</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>                                                                          <span class="keyword">const</span> icalcomponent *newc,</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                                                                          <span class="keyword">const</span> <span class="keywordtype">char</span> *user,</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                                                                          <span class="keyword">const</span> <span class="keywordtype">char</span> *msg);</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_delegate_reply(<span class="keyword">const</span> icalcomponent *c,</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                                                                    <span class="keyword">const</span> <span class="keywordtype">char</span> *user,</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>                                                                    <span class="keyword">const</span> <span class="keywordtype">char</span> *delegatee,</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>                                                                    <span class="keyword">const</span> <span class="keywordtype">char</span> *msg);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalmessage_new_error_reply(<span class="keyword">const</span> icalcomponent *c,</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *user,</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *msg,</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *debug,</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>                                                                 icalrequeststatus code);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#endif </span><span class="comment">/* ICALMESSAGE_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="aicalcomponent_8h_html"><div class="ttname"><a href="icalcomponent_8h.html">icalcomponent.h</a></div></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#ifndef ICALMESSAGE_H</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#define ICALMESSAGE_H</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;libical_icalss_export.h&quot;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;<a class="code" href="icalcomponent_8h.html">icalcomponent.h</a>&quot;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>LIBICAL_ICALSS_EXPORT icalcomponent *<a class="code hl_function" href="icalmessage_8h.html#adae6f1c9a313826e6771c41a0eb8b505">icalmessage_new_accept_reply</a>(<span class="keyword">const</span> icalcomponent *c,</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>                                                                  <span class="keyword">const</span> <span class="keywordtype">char</span> *user,</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>                                                                  <span class="keyword">const</span> <span class="keywordtype">char</span> *msg);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>LIBICAL_ICALSS_EXPORT icalcomponent *<a class="code hl_function" href="icalmessage_8h.html#af52e80fd6eb5e6c392df7fe3c85be30a">icalmessage_new_decline_reply</a>(<span class="keyword">const</span> icalcomponent *c,</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                                                                   <span class="keyword">const</span> <span class="keywordtype">char</span> *user,</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                                                                   <span class="keyword">const</span> <span class="keywordtype">char</span> *msg);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>LIBICAL_ICALSS_EXPORT icalcomponent *<a class="code hl_function" href="icalmessage_8h.html#a1f4a70acfc533e60edadfc3ba72cb632">icalmessage_new_counterpropose_reply</a>(<span class="keyword">const</span> icalcomponent *oldc,</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                                                                          <span class="keyword">const</span> icalcomponent *newc,</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                                                                          <span class="keyword">const</span> <span class="keywordtype">char</span> *user,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                                                                          <span class="keyword">const</span> <span class="keywordtype">char</span> *msg);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>LIBICAL_ICALSS_EXPORT icalcomponent *<a class="code hl_function" href="icalmessage_8h.html#a812e6540c7663f3c125380c609f099fa">icalmessage_new_delegate_reply</a>(<span class="keyword">const</span> icalcomponent *c,</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                                                                    <span class="keyword">const</span> <span class="keywordtype">char</span> *user,</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>                                                                    <span class="keyword">const</span> <span class="keywordtype">char</span> *delegatee,</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                                                                    <span class="keyword">const</span> <span class="keywordtype">char</span> *msg);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>LIBICAL_ICALSS_EXPORT icalcomponent *<a class="code hl_function" href="icalmessage_8h.html#ac48aa139b9fa9781ae34fb033d15974f">icalmessage_new_error_reply</a>(<span class="keyword">const</span> icalcomponent *c,</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>                                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *user,</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>                                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *msg,</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>                                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *debug,</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>                                                                 <a class="code hl_enumeration" href="icalenums_8h.html#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a> code);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="preprocessor">#endif </span><span class="comment">/* ICALMESSAGE_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aicalcomponent_8h_html"><div class="ttname"><a href="icalcomponent_8h.html">icalcomponent.h</a></div><div class="ttdoc">Defines the data structure for iCalendar components.</div></div>
+<div class="ttc" id="aicalenums_8h_html_af155b8c4c213cc359e893cda6e7e443d"><div class="ttname"><a href="icalenums_8h.html#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a></div><div class="ttdeci">icalrequeststatus</div><div class="ttdef"><b>Definition</b> <a href="icalenums_8h_source.html#l00078">icalenums.h:79</a></div></div>
+<div class="ttc" id="aicalmessage_8h_html_a1f4a70acfc533e60edadfc3ba72cb632"><div class="ttname"><a href="icalmessage_8h.html#a1f4a70acfc533e60edadfc3ba72cb632">icalmessage_new_counterpropose_reply</a></div><div class="ttdeci">icalcomponent * icalmessage_new_counterpropose_reply(const icalcomponent *oldc, const icalcomponent *newc, const char *user, const char *msg)</div><div class="ttdef"><b>Definition</b> <a href="icalmessage_8c_source.html#l00200">icalmessage.c:200</a></div></div>
+<div class="ttc" id="aicalmessage_8h_html_a812e6540c7663f3c125380c609f099fa"><div class="ttname"><a href="icalmessage_8h.html#a812e6540c7663f3c125380c609f099fa">icalmessage_new_delegate_reply</a></div><div class="ttdeci">icalcomponent * icalmessage_new_delegate_reply(const icalcomponent *c, const char *user, const char *delegatee, const char *msg)</div><div class="ttdef"><b>Definition</b> <a href="icalmessage_8c_source.html#l00216">icalmessage.c:216</a></div></div>
+<div class="ttc" id="aicalmessage_8h_html_ac48aa139b9fa9781ae34fb033d15974f"><div class="ttname"><a href="icalmessage_8h.html#ac48aa139b9fa9781ae34fb033d15974f">icalmessage_new_error_reply</a></div><div class="ttdeci">icalcomponent * icalmessage_new_error_reply(const icalcomponent *c, const char *user, const char *msg, const char *debug, icalrequeststatus code)</div><div class="ttdef"><b>Definition</b> <a href="icalmessage_8c_source.html#l00275">icalmessage.c:275</a></div></div>
+<div class="ttc" id="aicalmessage_8h_html_adae6f1c9a313826e6771c41a0eb8b505"><div class="ttname"><a href="icalmessage_8h.html#adae6f1c9a313826e6771c41a0eb8b505">icalmessage_new_accept_reply</a></div><div class="ttdeci">icalcomponent * icalmessage_new_accept_reply(const icalcomponent *c, const char *user, const char *msg)</div><div class="ttdef"><b>Definition</b> <a href="icalmessage_8c_source.html#l00155">icalmessage.c:155</a></div></div>
+<div class="ttc" id="aicalmessage_8h_html_af52e80fd6eb5e6c392df7fe3c85be30a"><div class="ttname"><a href="icalmessage_8h.html#af52e80fd6eb5e6c392df7fe3c85be30a">icalmessage_new_decline_reply</a></div><div class="ttdeci">icalcomponent * icalmessage_new_decline_reply(const icalcomponent *c, const char *user, const char *msg)</div><div class="ttdef"><b>Definition</b> <a href="icalmessage_8c_source.html#l00178">icalmessage.c:178</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

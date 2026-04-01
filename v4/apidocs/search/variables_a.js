@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['options_0',['options',['../structicaldirset__impl.html#a38725a769403aec56b2b1a352c441ef1',1,'icaldirset_impl::options'],['../structicalfileset__impl.html#a769a3b2bca98184ea77e3a4589e486d8',1,'icalfileset_impl::options']]]
+  ['refcount_0',['refcount',['../structicalrecurrencetype.html#adfe932f79b7edfd0465ba6e855a7beaa',1,'icalrecurrencetype']]],
+  ['rscale_1',['rscale',['../structicalrecurrencetype.html#aebf890217d8c2726fe8e339cd1b2e248',1,'icalrecurrencetype']]]
 ];

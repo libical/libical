@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -86,129 +86,129 @@ $(function() {
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> ======================================================================*/</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#ifndef VCARDPROPERTY_H</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define VCARDPROPERTY_H</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;libical_vcard_export.h&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;vcardderivedproperty.h&quot;</span> <span class="comment">/* To get vcardproperty_kind enumerations */</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;stdarg.h&gt;</span> <span class="comment">/* for va_... */</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_new(vcardproperty_kind kind);</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>LIBICAL_VCARD_EXPORT vcardproperty *<a class="code hl_function" href="vcardproperty_8h.html#abc42d87518f3b777711d799759cc0b47">vcardproperty_clone</a>(<span class="keyword">const</span> vcardproperty *old);</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_new_from_string(<span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_as_vcard_string(vcardproperty *prop);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">char</span> *vcardproperty_as_vcard_string_r(vcardproperty *prop);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_free(vcardproperty *prop);</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>LIBICAL_VCARD_EXPORT vcardproperty_kind vcardproperty_isa(<span class="keyword">const</span> vcardproperty *property);</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">bool</span> vcardproperty_isa_property(<span class="keywordtype">void</span> *property);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_add_parameters(<span class="keyword">struct</span> vcardproperty_impl *prop, va_list args);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_add_parameter(vcardproperty *prop, vcardparameter *parameter);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_parameter(vcardproperty *prop, vcardparameter *parameter);</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_parameter_from_string(vcardproperty *prop,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                                                                  <span class="keyword">const</span> <span class="keywordtype">char</span> *name,</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                                                                  <span class="keyword">const</span> <span class="keywordtype">char</span> *value);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_get_parameter_as_string(vcardproperty *prop,</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                                                                       <span class="keyword">const</span> <span class="keywordtype">char</span> *name);</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">char</span> *vcardproperty_get_parameter_as_string_r(vcardproperty *prop,</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                                                                   <span class="keyword">const</span> <span class="keywordtype">char</span> *name);</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#ac2adb2654ee641b6ba15042f2ffce565">vcardproperty_remove_parameter_by_kind</a>(vcardproperty *prop,</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                                                                 vcardparameter_kind kind);</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#a4e87420ddea2f359fa0c4e7daffbc486">vcardproperty_remove_parameter_by_name</a>(vcardproperty *prop,</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *name);</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#a0881df999f882ffa9f9fe5fa82cb8ed8">vcardproperty_remove_parameter_by_ref</a>(vcardproperty *prop,</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>                                                                vcardparameter *param);</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">int</span> vcardproperty_count_parameters(<span class="keyword">const</span> vcardproperty *prop);</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment">/* Iterate through the parameters */</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>LIBICAL_VCARD_EXPORT vcardparameter *vcardproperty_get_first_parameter(vcardproperty *prop,</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>                                                                       vcardparameter_kind kind);</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>LIBICAL_VCARD_EXPORT vcardparameter *vcardproperty_get_next_parameter(vcardproperty *prop,</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>                                                                      vcardparameter_kind kind);</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment">/* Access the value of the property */</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_value(vcardproperty *prop, vcardvalue *value);</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_value_from_string(vcardproperty *prop, <span class="keyword">const</span> <span class="keywordtype">char</span> *str,</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>                                                              <span class="keyword">const</span> <span class="keywordtype">char</span> *type);</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>LIBICAL_VCARD_EXPORT vcardvalue *vcardproperty_get_value(<span class="keyword">const</span> vcardproperty *prop);</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_get_value_as_string(<span class="keyword">const</span> vcardproperty *prop);</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">char</span> *vcardproperty_get_value_as_string_r(<span class="keyword">const</span> vcardproperty *prop);</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#a82766515c1fc63658a6f8f16ecbc6bf3">vcardvalue_set_parent</a>(vcardvalue *value, vcardproperty *property);</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>LIBICAL_VCARD_EXPORT vcardproperty *<a class="code hl_function" href="vcardproperty_8h.html#a2b3a3f5bfad5cf309b5e5ad3ced64fc6">vcardvalue_get_parent</a>(<span class="keyword">const</span> vcardvalue *value);</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">/* Deal with X properties */</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_x_name(vcardproperty *prop, <span class="keyword">const</span> <span class="keywordtype">char</span> *name);</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_get_x_name(<span class="keyword">const</span> vcardproperty *prop);</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#ifndef VCARDPROPERTY_H</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#define VCARDPROPERTY_H</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;libical_vcard_export.h&quot;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;vcardderivedproperty.h&quot;</span> <span class="comment">/* To get vcardproperty_kind enumerations */</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;stdarg.h&gt;</span> <span class="comment">/* for va_... */</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_new(vcardproperty_kind kind);</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>LIBICAL_VCARD_EXPORT vcardproperty *<a class="code hl_function" href="vcardproperty_8h.html#abc42d87518f3b777711d799759cc0b47">vcardproperty_clone</a>(<span class="keyword">const</span> vcardproperty *old);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_new_from_string(<span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_as_vcard_string(vcardproperty *prop);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">char</span> *vcardproperty_as_vcard_string_r(vcardproperty *prop);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_free(vcardproperty *prop);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>LIBICAL_VCARD_EXPORT vcardproperty_kind vcardproperty_isa(<span class="keyword">const</span> vcardproperty *property);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">bool</span> vcardproperty_isa_property(<span class="keywordtype">void</span> *property);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_add_parameters(<span class="keyword">struct</span> vcardproperty_impl *prop, va_list args);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_add_parameter(vcardproperty *prop, vcardparameter *parameter);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_parameter(vcardproperty *prop, vcardparameter *parameter);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_parameter_from_string(vcardproperty *prop,</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                                                                  <span class="keyword">const</span> <span class="keywordtype">char</span> *name,</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                                                                  <span class="keyword">const</span> <span class="keywordtype">char</span> *value);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_get_parameter_as_string(vcardproperty *prop,</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                                                                       <span class="keyword">const</span> <span class="keywordtype">char</span> *name);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">char</span> *vcardproperty_get_parameter_as_string_r(vcardproperty *prop,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                                                                   <span class="keyword">const</span> <span class="keywordtype">char</span> *name);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#ac2adb2654ee641b6ba15042f2ffce565">vcardproperty_remove_parameter_by_kind</a>(vcardproperty *prop,</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                                                                 vcardparameter_kind kind);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#a4e87420ddea2f359fa0c4e7daffbc486">vcardproperty_remove_parameter_by_name</a>(vcardproperty *prop,</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>                                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *name);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#a0881df999f882ffa9f9fe5fa82cb8ed8">vcardproperty_remove_parameter_by_ref</a>(vcardproperty *prop,</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>                                                                vcardparameter *param);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">int</span> vcardproperty_count_parameters(<span class="keyword">const</span> vcardproperty *prop);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">/* Iterate through the parameters */</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>LIBICAL_VCARD_EXPORT vcardparameter *vcardproperty_get_first_parameter(vcardproperty *prop,</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>                                                                       vcardparameter_kind kind);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>LIBICAL_VCARD_EXPORT vcardparameter *vcardproperty_get_next_parameter(vcardproperty *prop,</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>                                                                      vcardparameter_kind kind);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">/* Access the value of the property */</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_value(vcardproperty *prop, vcardvalue *value);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_value_from_string(vcardproperty *prop, <span class="keyword">const</span> <span class="keywordtype">char</span> *str,</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>                                                              <span class="keyword">const</span> <span class="keywordtype">char</span> *type);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>LIBICAL_VCARD_EXPORT vcardvalue *vcardproperty_get_value(<span class="keyword">const</span> vcardproperty *prop);</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_get_value_as_string(<span class="keyword">const</span> vcardproperty *prop);</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">char</span> *vcardproperty_get_value_as_string_r(<span class="keyword">const</span> vcardproperty *prop);</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#a82766515c1fc63658a6f8f16ecbc6bf3">vcardvalue_set_parent</a>(vcardvalue *value, vcardproperty *property);</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>LIBICAL_VCARD_EXPORT vcardproperty *<a class="code hl_function" href="vcardproperty_8h.html#a2b3a3f5bfad5cf309b5e5ad3ced64fc6">vcardvalue_get_parent</a>(<span class="keyword">const</span> vcardvalue *value);</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">/* Deal with X properties */</span></div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment">/* Deal with grouped properties */</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_group(vcardproperty *prop, <span class="keyword">const</span> <span class="keywordtype">char</span> *group);</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_get_group(<span class="keyword">const</span> vcardproperty *prop);</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_function" href="vcardproperty_8h.html#a0978c4107c153dfad0c294f8f2ebc1bb">vcardproperty_get_property_name</a>(<span class="keyword">const</span> vcardproperty *prop);</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">char</span> *vcardproperty_get_property_name_r(<span class="keyword">const</span> vcardproperty *prop);</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>LIBICAL_VCARD_EXPORT vcardvalue_kind vcardparameter_value_to_value_kind(vcardparameter_value value);</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#a6f36901a50b2d46bd3ca861ae917b1a8">vcardparameter_set_parent</a>(vcardparameter *param, vcardproperty *property);</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span></div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>LIBICAL_VCARD_EXPORT vcardproperty *<a class="code hl_function" href="vcardproperty_8h.html#a945192f51cf67ea30fa01dfd516ed259">vcardparameter_get_parent</a>(<span class="keyword">const</span> vcardparameter *param);</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="comment">/* Convert kinds to string and get default value type */</span></div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>LIBICAL_VCARD_EXPORT vcardvalue_kind vcardproperty_kind_to_value_kind(vcardproperty_kind kind);</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>LIBICAL_VCARD_EXPORT vcardproperty_kind vcardproperty_value_kind_to_kind(vcardvalue_kind kind);</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_kind_to_string(vcardproperty_kind kind);</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>LIBICAL_VCARD_EXPORT vcardproperty_kind vcardproperty_string_to_kind(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>);</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span></div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="vcardproperty_8h.html#a34690e58edcc8c06f54fc16ce317fc13">  159</a></span>LIBICAL_VCARD_EXPORT <span class="keywordtype">bool</span> <a class="code hl_function" href="vcardproperty_8h.html#a34690e58edcc8c06f54fc16ce317fc13">vcardproperty_kind_is_valid</a>(<span class="keyword">const</span> vcardproperty_kind kind);</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_enum_to_string(<span class="keywordtype">int</span> e);</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">char</span> *vcardproperty_enum_to_string_r(<span class="keywordtype">int</span> e);</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">int</span> vcardproperty_kind_and_string_to_enum(<span class="keyword">const</span> <span class="keywordtype">int</span> kind, <span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">bool</span> vcardproperty_enum_belongs_to_property(vcardproperty_kind kind, <span class="keywordtype">int</span> e);</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span></div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#a3c656d31e2b783dda959c0dccccf4c5e">vcardproperty_normalize</a>(vcardproperty *prop);</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">bool</span> vcardproperty_is_structured(vcardproperty_kind pkind);</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">bool</span> vcardproperty_is_multivalued(vcardproperty_kind pkind);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_x_name(vcardproperty *prop, <span class="keyword">const</span> <span class="keywordtype">char</span> *name);</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_get_x_name(<span class="keyword">const</span> vcardproperty *prop);</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">/* Deal with grouped properties */</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_set_group(vcardproperty *prop, <span class="keyword">const</span> <span class="keywordtype">char</span> *group);</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_get_group(<span class="keyword">const</span> vcardproperty *prop);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_function" href="vcardproperty_8h.html#a0978c4107c153dfad0c294f8f2ebc1bb">vcardproperty_get_property_name</a>(<span class="keyword">const</span> vcardproperty *prop);</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">char</span> *vcardproperty_get_property_name_r(<span class="keyword">const</span> vcardproperty *prop);</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>LIBICAL_VCARD_EXPORT vcardvalue_kind vcardparameter_value_to_value_kind(vcardparameter_value value);</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#a6f36901a50b2d46bd3ca861ae917b1a8">vcardparameter_set_parent</a>(vcardparameter *param, vcardproperty *property);</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>LIBICAL_VCARD_EXPORT vcardproperty *<a class="code hl_function" href="vcardproperty_8h.html#a945192f51cf67ea30fa01dfd516ed259">vcardparameter_get_parent</a>(<span class="keyword">const</span> vcardparameter *param);</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="comment">/* Convert kinds to string and get default value type */</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>LIBICAL_VCARD_EXPORT vcardvalue_kind vcardproperty_kind_to_value_kind(vcardproperty_kind kind);</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>LIBICAL_VCARD_EXPORT vcardproperty_kind vcardproperty_value_kind_to_kind(vcardvalue_kind kind);</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_kind_to_string(vcardproperty_kind kind);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>LIBICAL_VCARD_EXPORT vcardproperty_kind vcardproperty_string_to_kind(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>);</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno"><a class="line" href="vcardproperty_8h.html#a34690e58edcc8c06f54fc16ce317fc13">  162</a></span>LIBICAL_VCARD_EXPORT <span class="keywordtype">bool</span> <a class="code hl_function" href="vcardproperty_8h.html#a34690e58edcc8c06f54fc16ce317fc13">vcardproperty_kind_is_valid</a>(<span class="keyword">const</span> vcardproperty_kind kind);</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardproperty_enum_to_string(<span class="keywordtype">int</span> e);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">char</span> *vcardproperty_enum_to_string_r(<span class="keywordtype">int</span> e);</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">int</span> vcardproperty_kind_and_string_to_enum(<span class="keyword">const</span> <span class="keywordtype">int</span> kind, <span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">bool</span> vcardproperty_enum_belongs_to_property(vcardproperty_kind kind, <span class="keywordtype">int</span> e);</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardproperty_8h.html#a3c656d31e2b783dda959c0dccccf4c5e">vcardproperty_normalize</a>(vcardproperty *prop);</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_add_type_parameter(vcardproperty *prop,</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                                                           vcardenumarray_element *type);</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">bool</span> vcardproperty_is_structured(vcardproperty_kind pkind);</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">bool</span> vcardproperty_is_multivalued(vcardproperty_kind pkind);</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="preprocessor">#endif </span><span class="comment">/*VCARDPROPERTY_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="avcardproperty_8h_html_a0881df999f882ffa9f9fe5fa82cb8ed8"><div class="ttname"><a href="vcardproperty_8h.html#a0881df999f882ffa9f9fe5fa82cb8ed8">vcardproperty_remove_parameter_by_ref</a></div><div class="ttdeci">void vcardproperty_remove_parameter_by_ref(vcardproperty *prop, vcardparameter *param)</div><div class="ttdoc">Removes the specified parameter reference from the property.</div><div class="ttdef"><b>Definition</b> vcardproperty.c:736</div></div>
-<div class="ttc" id="avcardproperty_8h_html_a0978c4107c153dfad0c294f8f2ebc1bb"><div class="ttname"><a href="vcardproperty_8h.html#a0978c4107c153dfad0c294f8f2ebc1bb">vcardproperty_get_property_name</a></div><div class="ttdeci">const char * vcardproperty_get_property_name(const vcardproperty *prop)</div><div class="ttdef"><b>Definition</b> vcardproperty.c:951</div></div>
-<div class="ttc" id="avcardproperty_8h_html_a2b3a3f5bfad5cf309b5e5ad3ced64fc6"><div class="ttname"><a href="vcardproperty_8h.html#a2b3a3f5bfad5cf309b5e5ad3ced64fc6">vcardvalue_get_parent</a></div><div class="ttdeci">vcardproperty * vcardvalue_get_parent(const vcardvalue *value)</div><div class="ttdef"><b>Definition</b> vcardvalue.c:1023</div></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardproperty_add_type_parameter(vcardproperty *prop,</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>                                                           vcardenumarray_element *type);</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="preprocessor">#endif </span><span class="comment">/*VCARDPROPERTY_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="avcardproperty_8h_html_a0881df999f882ffa9f9fe5fa82cb8ed8"><div class="ttname"><a href="vcardproperty_8h.html#a0881df999f882ffa9f9fe5fa82cb8ed8">vcardproperty_remove_parameter_by_ref</a></div><div class="ttdeci">void vcardproperty_remove_parameter_by_ref(vcardproperty *prop, vcardparameter *param)</div><div class="ttdoc">Removes the specified parameter reference from the property.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00741">vcardproperty.c:741</a></div></div>
+<div class="ttc" id="avcardproperty_8h_html_a0978c4107c153dfad0c294f8f2ebc1bb"><div class="ttname"><a href="vcardproperty_8h.html#a0978c4107c153dfad0c294f8f2ebc1bb">vcardproperty_get_property_name</a></div><div class="ttdeci">const char * vcardproperty_get_property_name(const vcardproperty *prop)</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00956">vcardproperty.c:956</a></div></div>
+<div class="ttc" id="avcardproperty_8h_html_a2b3a3f5bfad5cf309b5e5ad3ced64fc6"><div class="ttname"><a href="vcardproperty_8h.html#a2b3a3f5bfad5cf309b5e5ad3ced64fc6">vcardvalue_get_parent</a></div><div class="ttdeci">vcardproperty * vcardvalue_get_parent(const vcardvalue *value)</div><div class="ttdef"><b>Definition</b> <a href="vcardvalue_8c_source.html#l01028">vcardvalue.c:1028</a></div></div>
 <div class="ttc" id="avcardproperty_8h_html_a34690e58edcc8c06f54fc16ce317fc13"><div class="ttname"><a href="vcardproperty_8h.html#a34690e58edcc8c06f54fc16ce317fc13">vcardproperty_kind_is_valid</a></div><div class="ttdeci">bool vcardproperty_kind_is_valid(const vcardproperty_kind kind)</div></div>
-<div class="ttc" id="avcardproperty_8h_html_a3c656d31e2b783dda959c0dccccf4c5e"><div class="ttname"><a href="vcardproperty_8h.html#a3c656d31e2b783dda959c0dccccf4c5e">vcardproperty_normalize</a></div><div class="ttdeci">void vcardproperty_normalize(vcardproperty *prop)</div><div class="ttdef"><b>Definition</b> vcardproperty.c:1012</div></div>
-<div class="ttc" id="avcardproperty_8h_html_a4e87420ddea2f359fa0c4e7daffbc486"><div class="ttname"><a href="vcardproperty_8h.html#a4e87420ddea2f359fa0c4e7daffbc486">vcardproperty_remove_parameter_by_name</a></div><div class="ttdeci">void vcardproperty_remove_parameter_by_name(vcardproperty *prop, const char *name)</div><div class="ttdoc">Removes all parameters with the specified name.</div><div class="ttdef"><b>Definition</b> vcardproperty.c:706</div></div>
-<div class="ttc" id="avcardproperty_8h_html_a6f36901a50b2d46bd3ca861ae917b1a8"><div class="ttname"><a href="vcardproperty_8h.html#a6f36901a50b2d46bd3ca861ae917b1a8">vcardparameter_set_parent</a></div><div class="ttdeci">void vcardparameter_set_parent(vcardparameter *param, vcardproperty *property)</div><div class="ttdef"><b>Definition</b> vcardparameter.c:378</div></div>
-<div class="ttc" id="avcardproperty_8h_html_a82766515c1fc63658a6f8f16ecbc6bf3"><div class="ttname"><a href="vcardproperty_8h.html#a82766515c1fc63658a6f8f16ecbc6bf3">vcardvalue_set_parent</a></div><div class="ttdeci">void vcardvalue_set_parent(vcardvalue *value, vcardproperty *property)</div><div class="ttdef"><b>Definition</b> vcardvalue.c:1016</div></div>
-<div class="ttc" id="avcardproperty_8h_html_a945192f51cf67ea30fa01dfd516ed259"><div class="ttname"><a href="vcardproperty_8h.html#a945192f51cf67ea30fa01dfd516ed259">vcardparameter_get_parent</a></div><div class="ttdeci">vcardproperty * vcardparameter_get_parent(const vcardparameter *param)</div><div class="ttdef"><b>Definition</b> vcardparameter.c:385</div></div>
-<div class="ttc" id="avcardproperty_8h_html_abc42d87518f3b777711d799759cc0b47"><div class="ttname"><a href="vcardproperty_8h.html#abc42d87518f3b777711d799759cc0b47">vcardproperty_clone</a></div><div class="ttdeci">vcardproperty * vcardproperty_clone(const vcardproperty *old)</div><div class="ttdoc">Deeply clones an vcardproperty.</div><div class="ttdef"><b>Definition</b> vcardproperty.c:82</div></div>
-<div class="ttc" id="avcardproperty_8h_html_ac2adb2654ee641b6ba15042f2ffce565"><div class="ttname"><a href="vcardproperty_8h.html#ac2adb2654ee641b6ba15042f2ffce565">vcardproperty_remove_parameter_by_kind</a></div><div class="ttdeci">void vcardproperty_remove_parameter_by_kind(vcardproperty *prop, vcardparameter_kind kind)</div><div class="ttdoc">Removes all parameters with the specified kind.</div><div class="ttdef"><b>Definition</b> vcardproperty.c:689</div></div>
+<div class="ttc" id="avcardproperty_8h_html_a3c656d31e2b783dda959c0dccccf4c5e"><div class="ttname"><a href="vcardproperty_8h.html#a3c656d31e2b783dda959c0dccccf4c5e">vcardproperty_normalize</a></div><div class="ttdeci">void vcardproperty_normalize(vcardproperty *prop)</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l01017">vcardproperty.c:1017</a></div></div>
+<div class="ttc" id="avcardproperty_8h_html_a4e87420ddea2f359fa0c4e7daffbc486"><div class="ttname"><a href="vcardproperty_8h.html#a4e87420ddea2f359fa0c4e7daffbc486">vcardproperty_remove_parameter_by_name</a></div><div class="ttdeci">void vcardproperty_remove_parameter_by_name(vcardproperty *prop, const char *name)</div><div class="ttdoc">Removes all parameters with the specified name.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00711">vcardproperty.c:711</a></div></div>
+<div class="ttc" id="avcardproperty_8h_html_a6f36901a50b2d46bd3ca861ae917b1a8"><div class="ttname"><a href="vcardproperty_8h.html#a6f36901a50b2d46bd3ca861ae917b1a8">vcardparameter_set_parent</a></div><div class="ttdeci">void vcardparameter_set_parent(vcardparameter *param, vcardproperty *property)</div><div class="ttdef"><b>Definition</b> <a href="vcardparameter_8c_source.html#l00383">vcardparameter.c:383</a></div></div>
+<div class="ttc" id="avcardproperty_8h_html_a82766515c1fc63658a6f8f16ecbc6bf3"><div class="ttname"><a href="vcardproperty_8h.html#a82766515c1fc63658a6f8f16ecbc6bf3">vcardvalue_set_parent</a></div><div class="ttdeci">void vcardvalue_set_parent(vcardvalue *value, vcardproperty *property)</div><div class="ttdef"><b>Definition</b> <a href="vcardvalue_8c_source.html#l01021">vcardvalue.c:1021</a></div></div>
+<div class="ttc" id="avcardproperty_8h_html_a945192f51cf67ea30fa01dfd516ed259"><div class="ttname"><a href="vcardproperty_8h.html#a945192f51cf67ea30fa01dfd516ed259">vcardparameter_get_parent</a></div><div class="ttdeci">vcardproperty * vcardparameter_get_parent(const vcardparameter *param)</div><div class="ttdef"><b>Definition</b> <a href="vcardparameter_8c_source.html#l00390">vcardparameter.c:390</a></div></div>
+<div class="ttc" id="avcardproperty_8h_html_abc42d87518f3b777711d799759cc0b47"><div class="ttname"><a href="vcardproperty_8h.html#abc42d87518f3b777711d799759cc0b47">vcardproperty_clone</a></div><div class="ttdeci">vcardproperty * vcardproperty_clone(const vcardproperty *old)</div><div class="ttdoc">Deeply clones an vcardproperty.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00087">vcardproperty.c:87</a></div></div>
+<div class="ttc" id="avcardproperty_8h_html_ac2adb2654ee641b6ba15042f2ffce565"><div class="ttname"><a href="vcardproperty_8h.html#ac2adb2654ee641b6ba15042f2ffce565">vcardproperty_remove_parameter_by_kind</a></div><div class="ttdeci">void vcardproperty_remove_parameter_by_kind(vcardproperty *prop, vcardparameter_kind kind)</div><div class="ttdoc">Removes all parameters with the specified kind.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00694">vcardproperty.c:694</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

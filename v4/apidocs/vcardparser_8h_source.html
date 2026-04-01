@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -79,7 +79,7 @@ $(function() {
   <div class="headertitle"><div class="title">vcardparser.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
+<a href="vcardparser_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> FILE: vcardparser.h</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> CREATOR: Ken Murchison 24 Aug 2022</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> CONTRIBUTOR: Bron Gondwana</span></div>
@@ -87,22 +87,26 @@ $(function() {
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> ======================================================================*/</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#ifndef VCARDPARSER_H</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#define VCARDPARSER_H</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;libical_vcard_export.h&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;vcardcomponent.h&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;vcardderivedvalue.h&quot;</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>LIBICAL_VCARD_EXPORT vcardcomponent *vcardparser_parse_string(<span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardparser_errstr(<span class="keywordtype">int</span> err);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">typedef</span> vcardvalue_kind (*vcard_xprop_value_kind_func)(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">void</span> *data);</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> vcardparser_set_xprop_value_kind(vcard_xprop_value_kind_func func, <span class="keywordtype">void</span> *data);</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="preprocessor">#endif </span><span class="comment">/* VCARDPARSER_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#ifndef VCARDPARSER_H</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#define VCARDPARSER_H</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;libical_vcard_export.h&quot;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &quot;<a class="code" href="vcardcomponent_8h.html">vcardcomponent.h</a>&quot;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &quot;vcardderivedvalue.h&quot;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>LIBICAL_VCARD_EXPORT vcardcomponent *vcardparser_parse_string(<span class="keyword">const</span> <span class="keywordtype">char</span> *str);</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>LIBICAL_VCARD_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *vcardparser_errstr(<span class="keywordtype">int</span> err);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="vcardparser_8h.html#a9c01fe09032a6ef390aa5e98a431e5ed">   39</a></span><span class="keyword">typedef</span> vcardvalue_kind (*<a class="code hl_typedef" href="vcardparser_8h.html#a9c01fe09032a6ef390aa5e98a431e5ed">vcard_xprop_value_kind_func</a>)(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">void</span> *data);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>LIBICAL_VCARD_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="vcardparser_8h.html#adc1a2839fea5a4c2bdf41d799a966644">vcardparser_set_xprop_value_kind</a>(<a class="code hl_typedef" href="vcardparser_8h.html#a9c01fe09032a6ef390aa5e98a431e5ed">vcard_xprop_value_kind_func</a> func, <span class="keywordtype">void</span> *data);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="preprocessor">#endif </span><span class="comment">/* VCARDPARSER_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="avcardcomponent_8h_html"><div class="ttname"><a href="vcardcomponent_8h.html">vcardcomponent.h</a></div><div class="ttdoc">Defines the data structure representing vCard components.</div></div>
+<div class="ttc" id="avcardparser_8h_html_a9c01fe09032a6ef390aa5e98a431e5ed"><div class="ttname"><a href="vcardparser_8h.html#a9c01fe09032a6ef390aa5e98a431e5ed">vcard_xprop_value_kind_func</a></div><div class="ttdeci">vcardvalue_kind(* vcard_xprop_value_kind_func)(const char *name, void *data)</div><div class="ttdoc">Callback function pointer to define x-property default value types.</div><div class="ttdef"><b>Definition</b> <a href="#l00039">vcardparser.h:39</a></div></div>
+<div class="ttc" id="avcardparser_8h_html_adc1a2839fea5a4c2bdf41d799a966644"><div class="ttname"><a href="vcardparser_8h.html#adc1a2839fea5a4c2bdf41d799a966644">vcardparser_set_xprop_value_kind</a></div><div class="ttdeci">void vcardparser_set_xprop_value_kind(vcard_xprop_value_kind_func func, void *data)</div><div class="ttdoc">Registers a parser callback to override the default value type of an x-property.</div><div class="ttdef"><b>Definition</b> <a href="vcardparser_8c_source.html#l01030">vcardparser.c:1030</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

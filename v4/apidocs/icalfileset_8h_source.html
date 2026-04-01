@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -79,7 +79,7 @@ $(function() {
   <div class="headertitle"><div class="title">icalfileset.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
+<a href="icalfileset_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> FILE: icalfileset.h</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> CREATOR: eric 23 December 1999</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"></span> </div>
@@ -89,104 +89,110 @@ $(function() {
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> The Original Code is eric. The Initial Developer of the Original</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> Code is Eric Busboom</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">======================================================================*/</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#ifndef ICALFILESET_H</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#define ICALFILESET_H</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;libical_icalss_export.h&quot;</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;icalcluster.h&quot;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;<a class="code" href="icalset_8h.html">icalset.h</a>&quot;</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalfileset__impl.html">icalfileset_impl</a> icalfileset;</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#ifndef ICALFILESET_H</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#define ICALFILESET_H</span></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>LIBICAL_ICALSS_EXPORT icalset *icalfileset_new(<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="structicalfileset__impl.html#a4924243737e060acf24fd5daf9e732a0">path</a>);</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>LIBICAL_ICALSS_EXPORT icalset *icalfileset_new_reader(<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="structicalfileset__impl.html#a4924243737e060acf24fd5daf9e732a0">path</a>);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &quot;libical_icalss_export.h&quot;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &quot;<a class="code" href="icalcluster_8h.html">icalcluster.h</a>&quot;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &quot;<a class="code" href="icalset_8h.html">icalset.h</a>&quot;</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>LIBICAL_ICALSS_EXPORT icalset *icalfileset_new_writer(<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="structicalfileset__impl.html#a4924243737e060acf24fd5daf9e732a0">path</a>);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">typedef</span> <span class="keyword">struct </span>icalfileset_impl icalfileset;</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>LIBICAL_ICALSS_EXPORT icalset *icalfileset_init(icalset *set, <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="structicalfileset__impl.html#a4924243737e060acf24fd5daf9e732a0">path</a>, <span class="keywordtype">void</span> *options_in);</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>LIBICAL_ICALSS_EXPORT icalset *icalfileset_new(<span class="keyword">const</span> <span class="keywordtype">char</span> *path);</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>LIBICAL_ICALSS_EXPORT icalcluster *icalfileset_produce_icalcluster(<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="structicalfileset__impl.html#a4924243737e060acf24fd5daf9e732a0">path</a>);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>LIBICAL_ICALSS_EXPORT icalset *icalfileset_new_reader(<span class="keyword">const</span> <span class="keywordtype">char</span> *path);</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalfileset_free(icalset *set);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>LIBICAL_ICALSS_EXPORT icalset *icalfileset_new_writer(<span class="keyword">const</span> <span class="keywordtype">char</span> *path);</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>LIBICAL_ICALSS_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalfileset_path(icalset *set);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>LIBICAL_ICALSS_EXPORT icalset *icalfileset_init(icalset *set, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">void</span> *options_in);</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">/* Mark the cluster as changed, so it will be written to disk when it</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">   is freed. Commit writes to disk immediately. */</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalfileset_mark(icalset *set);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>LIBICAL_ICALSS_EXPORT icalcluster *icalfileset_produce_icalcluster(<span class="keyword">const</span> <span class="keywordtype">char</span> *path);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalfileset_free(icalset *set);</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_commit(icalset *set);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>LIBICAL_ICALSS_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalfileset_path(icalset *set);</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_add_component(icalset *set, icalcomponent *child);</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_remove_component(icalset *set,</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                                                                 icalcomponent *child);</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">int</span> icalfileset_count_components(icalset *set, icalcomponent_kind kind);</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_select(icalset *set, icalgauge *<a class="code hl_variable" href="structicalfileset__impl.html#a534b413abe1501e1ae3997267da86101">gauge</a>);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">/* Mark the cluster as changed, so it will be written to disk when it</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment">   is freed. Commit writes to disk immediately. */</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalfileset_mark(icalset *set);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_commit(icalset *set);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_add_component(icalset *set, icalcomponent *child);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_remove_component(icalset *set,</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                                                                 icalcomponent *child);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">int</span> icalfileset_count_components(icalset *set, <a class="code hl_enumeration" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind);</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalfileset_clear(icalset *set);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch(icalset *set,</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                                                       icalcomponent_kind kind, <span class="keyword">const</span> <span class="keywordtype">char</span> *uid);</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">int</span> icalfileset_has_uid(icalset *set, <span class="keyword">const</span> <span class="keywordtype">char</span> *uid);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch_match(icalset *set, <span class="keyword">const</span> icalcomponent *c);</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalfileset_modify(icalset *set,</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                                                       icalcomponent *oldcomp,</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                                                       icalcomponent *newcomp);</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">/* Iterates through components. If a gauge has been defined, these</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">   will skip over components that do not pass the gauge */</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_current_component(icalset *set);</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_first_component(icalset *set);</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_next_component(icalset *set);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> <a class="code hl_function" href="icalfileset_8h.html#a6e06a9cb70e9e56e9756ae3271af4381">icalfileset_select</a>(icalset *set, icalgauge *gauge);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalfileset_8h.html#a89e6295a731422b371a7ff7842a43083">icalfileset_clear</a>(icalset *set);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>LIBICAL_ICALSS_EXPORT icalcomponent *<a class="code hl_function" href="icalfileset_8h.html#aa90a3b05ff5c23f565df20274c3d2bab">icalfileset_fetch</a>(icalset *set,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                                                       <a class="code hl_enumeration" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind, <span class="keyword">const</span> <span class="keywordtype">char</span> *uid);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">int</span> icalfileset_has_uid(icalset *set, <span class="keyword">const</span> <span class="keywordtype">char</span> *uid);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch_match(icalset *set, <span class="keyword">const</span> icalcomponent *c);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> <a class="code hl_function" href="icalfileset_8h.html#a16adf17eed53405a9e810b40c7de276e">icalfileset_modify</a>(icalset *set,</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>                                                       icalcomponent *oldcomp,</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                                                       icalcomponent *newcomp);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment">/* Iterates through components. If a gauge has been defined, these</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment">   will skip over components that do not pass the gauge */</span></div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">/* External iterator for thread safety */</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>LIBICAL_ICALSS_EXPORT <a class="code hl_struct" href="structicalsetiter.html">icalsetiter</a> icalfileset_begin_component(icalset *set,</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>                                                              icalcomponent_kind kind,</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>                                                              icalgauge *<a class="code hl_variable" href="structicalfileset__impl.html#a534b413abe1501e1ae3997267da86101">gauge</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *tzid);</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfilesetiter_to_next(icalset *set, <a class="code hl_struct" href="structicalsetiter.html">icalsetiter</a> *iter);</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_form_a_matched_recurrence_component(<a class="code hl_struct" href="structicalsetiter.html">icalsetiter</a> *</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>                                                                                         itr);</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_current_component(icalset *set);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_first_component(icalset *set);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_next_component(icalset *set);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">/* External iterator for thread safety */</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>LIBICAL_ICALSS_EXPORT <a class="code hl_struct" href="structicalsetiter.html">icalsetiter</a> icalfileset_begin_component(icalset *set,</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>                                                              <a class="code hl_enumeration" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind,</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>                                                              icalgauge *gauge, <span class="keyword">const</span> <span class="keywordtype">char</span> *tzid);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfilesetiter_to_next(icalset *set, <a class="code hl_struct" href="structicalsetiter.html">icalsetiter</a> *iter);</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_component(icalset *set);</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
-<div class="foldopen" id="foldopen00104" data-start="{" data-end="};">
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="structicalfileset__options.html">  104</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalfileset__options.html">icalfileset_options</a> {</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno"><a class="line" href="structicalfileset__options.html#ad19cc9176412d8a16b2a6ac45c8f3bd1">  105</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structicalfileset__options.html#ad19cc9176412d8a16b2a6ac45c8f3bd1">flags</a>;            </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno"><a class="line" href="structicalfileset__options.html#a5e01006dc266beb9fd762ad4364218e9">  106</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structicalfileset__options.html#a5e01006dc266beb9fd762ad4364218e9">mode</a>;             </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="structicalfileset__options.html#ae1089f1b0a31021cba1a22945a9cf5b5">  107</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structicalfileset__options.html#ae1089f1b0a31021cba1a22945a9cf5b5">safe_saves</a>;       </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="structicalfileset__options.html#aa47516d0acdab84e6a851dd57cf2bed3">  108</a></span>    icalcluster *<a class="code hl_variable" href="structicalfileset__options.html#aa47516d0acdab84e6a851dd57cf2bed3">cluster</a>; </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>} <a class="code hl_struct" href="structicalfileset__options.html">icalfileset_options</a>;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_form_a_matched_recurrence_component(<a class="code hl_struct" href="structicalsetiter.html">icalsetiter</a> *</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>                                                                                         itr);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>LIBICAL_ICALSS_EXPORT icalcomponent *<a class="code hl_function" href="icalfileset_8h.html#a8aaa3c2a4a21775c134de0128143eb85">icalfileset_get_component</a>(icalset *set);</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
+<div class="foldopen" id="foldopen00110" data-start="{" data-end="};">
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno"><a class="line" href="structicalfileset__options.html">  110</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalfileset__options.html">icalfileset_options</a> {</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="structicalfileset__options.html#ad19cc9176412d8a16b2a6ac45c8f3bd1">  111</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structicalfileset__options.html#ad19cc9176412d8a16b2a6ac45c8f3bd1">flags</a>;            </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="structicalfileset__options.html#a5e01006dc266beb9fd762ad4364218e9">  112</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structicalfileset__options.html#a5e01006dc266beb9fd762ad4364218e9">mode</a>;             </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="structicalfileset__options.html#ae1089f1b0a31021cba1a22945a9cf5b5">  113</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structicalfileset__options.html#ae1089f1b0a31021cba1a22945a9cf5b5">safe_saves</a>;       </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno"><a class="line" href="structicalfileset__options.html#aa47516d0acdab84e6a851dd57cf2bed3">  114</a></span>    icalcluster *<a class="code hl_variable" href="structicalfileset__options.html#aa47516d0acdab84e6a851dd57cf2bed3">cluster</a>; </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>} <a class="code hl_struct" href="structicalfileset__options.html">icalfileset_options</a>;</div>
 </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="keyword">extern</span> <a class="code hl_struct" href="structicalfileset__options.html">icalfileset_options</a> icalfileset_options_default;</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALFILESET_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="aicalerror_8h_html_a601c122fcea522513b1b7732fa23e833"><div class="ttname"><a href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a></div><div class="ttdeci">icalerrorenum</div><div class="ttdoc">Represents the different types of errors that can be triggered in libical.</div><div class="ttdef"><b>Definition</b> icalerror.h:64</div></div>
-<div class="ttc" id="aicalset_8h_html"><div class="ttname"><a href="icalset_8h.html">icalset.h</a></div></div>
-<div class="ttc" id="astructicalfileset__impl_html"><div class="ttname"><a href="structicalfileset__impl.html">icalfileset_impl</a></div><div class="ttdef"><b>Definition</b> icalfilesetimpl.h:17</div></div>
-<div class="ttc" id="astructicalfileset__impl_html_a4924243737e060acf24fd5daf9e732a0"><div class="ttname"><a href="structicalfileset__impl.html#a4924243737e060acf24fd5daf9e732a0">icalfileset_impl::path</a></div><div class="ttdeci">char * path</div><div class="ttdef"><b>Definition</b> icalfilesetimpl.h:19</div></div>
-<div class="ttc" id="astructicalfileset__impl_html_a534b413abe1501e1ae3997267da86101"><div class="ttname"><a href="structicalfileset__impl.html#a534b413abe1501e1ae3997267da86101">icalfileset_impl::gauge</a></div><div class="ttdeci">icalgauge * gauge</div><div class="ttdef"><b>Definition</b> icalfilesetimpl.h:23</div></div>
-<div class="ttc" id="astructicalfileset__options_html"><div class="ttname"><a href="structicalfileset__options.html">icalfileset_options</a></div><div class="ttdoc">Options for opening an icalfileset.</div><div class="ttdef"><b>Definition</b> icalfileset.h:104</div></div>
-<div class="ttc" id="astructicalfileset__options_html_a5e01006dc266beb9fd762ad4364218e9"><div class="ttname"><a href="structicalfileset__options.html#a5e01006dc266beb9fd762ad4364218e9">icalfileset_options::mode</a></div><div class="ttdeci">int mode</div><div class="ttdef"><b>Definition</b> icalfileset.h:106</div></div>
-<div class="ttc" id="astructicalfileset__options_html_aa47516d0acdab84e6a851dd57cf2bed3"><div class="ttname"><a href="structicalfileset__options.html#aa47516d0acdab84e6a851dd57cf2bed3">icalfileset_options::cluster</a></div><div class="ttdeci">icalcluster * cluster</div><div class="ttdef"><b>Definition</b> icalfileset.h:108</div></div>
-<div class="ttc" id="astructicalfileset__options_html_ad19cc9176412d8a16b2a6ac45c8f3bd1"><div class="ttname"><a href="structicalfileset__options.html#ad19cc9176412d8a16b2a6ac45c8f3bd1">icalfileset_options::flags</a></div><div class="ttdeci">int flags</div><div class="ttdef"><b>Definition</b> icalfileset.h:105</div></div>
-<div class="ttc" id="astructicalfileset__options_html_ae1089f1b0a31021cba1a22945a9cf5b5"><div class="ttname"><a href="structicalfileset__options.html#ae1089f1b0a31021cba1a22945a9cf5b5">icalfileset_options::safe_saves</a></div><div class="ttdeci">int safe_saves</div><div class="ttdef"><b>Definition</b> icalfileset.h:107</div></div>
-<div class="ttc" id="astructicalsetiter_html"><div class="ttname"><a href="structicalsetiter.html">icalsetiter</a></div><div class="ttdef"><b>Definition</b> icalset.h:41</div></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="keyword">extern</span> <a class="code hl_struct" href="structicalfileset__options.html">icalfileset_options</a> <a class="code hl_variable" href="icalfileset_8c.html#a8e4f6c5d342d86d2d56b58ed37bcaa7d">icalfileset_options_default</a>;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALFILESET_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aicalcluster_8h_html"><div class="ttname"><a href="icalcluster_8h.html">icalcluster.h</a></div><div class="ttdoc">Defines the data structure for calendar clusters.</div></div>
+<div class="ttc" id="aicalenums_8h_html_a7cc82bf2af2050ddf53017fd3d4f7ca4"><div class="ttname"><a href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a></div><div class="ttdeci">icalcomponent_kind</div><div class="ttdef"><b>Definition</b> <a href="icalenums_8h_source.html#l00028">icalenums.h:29</a></div></div>
+<div class="ttc" id="aicalerror_8h_html_a601c122fcea522513b1b7732fa23e833"><div class="ttname"><a href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a></div><div class="ttdeci">icalerrorenum</div><div class="ttdoc">Represents the different types of errors that can be triggered in libical.</div><div class="ttdef"><b>Definition</b> <a href="icalerror_8h_source.html#l00041">icalerror.h:42</a></div></div>
+<div class="ttc" id="aicalfileset_8c_html_a8e4f6c5d342d86d2d56b58ed37bcaa7d"><div class="ttname"><a href="icalfileset_8c.html#a8e4f6c5d342d86d2d56b58ed37bcaa7d">icalfileset_options_default</a></div><div class="ttdeci">icalfileset_options icalfileset_options_default</div><div class="ttdef"><b>Definition</b> <a href="icalfileset_8c_source.html#l00042">icalfileset.c:42</a></div></div>
+<div class="ttc" id="aicalfileset_8h_html_a16adf17eed53405a9e810b40c7de276e"><div class="ttname"><a href="icalfileset_8h.html#a16adf17eed53405a9e810b40c7de276e">icalfileset_modify</a></div><div class="ttdeci">icalerrorenum icalfileset_modify(icalset *set, icalcomponent *oldcomp, icalcomponent *newcomp)</div><div class="ttdoc">Modifies components according to the MODIFY method of CAP.</div><div class="ttdef"><b>Definition</b> <a href="icalfileset_8c_source.html#l00648">icalfileset.c:648</a></div></div>
+<div class="ttc" id="aicalfileset_8h_html_a6e06a9cb70e9e56e9756ae3271af4381"><div class="ttname"><a href="icalfileset_8h.html#a6e06a9cb70e9e56e9756ae3271af4381">icalfileset_select</a></div><div class="ttdeci">icalerrorenum icalfileset_select(icalset *set, icalgauge *gauge)</div><div class="ttdef"><b>Definition</b> <a href="icalfileset_8c_source.html#l00475">icalfileset.c:475</a></div></div>
+<div class="ttc" id="aicalfileset_8h_html_a89e6295a731422b371a7ff7842a43083"><div class="ttname"><a href="icalfileset_8h.html#a89e6295a731422b371a7ff7842a43083">icalfileset_clear</a></div><div class="ttdeci">void icalfileset_clear(icalset *set)</div><div class="ttdoc">Clears the gauge.</div><div class="ttdef"><b>Definition</b> <a href="icalfileset_8c_source.html#l00487">icalfileset.c:487</a></div></div>
+<div class="ttc" id="aicalfileset_8h_html_a8aaa3c2a4a21775c134de0128143eb85"><div class="ttname"><a href="icalfileset_8h.html#a8aaa3c2a4a21775c134de0128143eb85">icalfileset_get_component</a></div><div class="ttdeci">icalcomponent * icalfileset_get_component(icalset *set)</div><div class="ttdef"><b>Definition</b> <a href="icalfileset_8c_source.html#l00420">icalfileset.c:420</a></div></div>
+<div class="ttc" id="aicalfileset_8h_html_aa90a3b05ff5c23f565df20274c3d2bab"><div class="ttname"><a href="icalfileset_8h.html#aa90a3b05ff5c23f565df20274c3d2bab">icalfileset_fetch</a></div><div class="ttdeci">icalcomponent * icalfileset_fetch(icalset *set, icalcomponent_kind kind, const char *uid)</div><div class="ttdoc">Gets and searches for a component by uid.</div><div class="ttdef"><b>Definition</b> <a href="icalfileset_8c_source.html#l00497">icalfileset.c:497</a></div></div>
+<div class="ttc" id="aicalset_8h_html"><div class="ttname"><a href="icalset_8h.html">icalset.h</a></div><div class="ttdoc">Icalset is the &quot;base class&quot; for representations of a collection of iCal components.</div></div>
+<div class="ttc" id="astructicalfileset__options_html"><div class="ttname"><a href="structicalfileset__options.html">icalfileset_options</a></div><div class="ttdoc">Options for opening an icalfileset.</div><div class="ttdef"><b>Definition</b> <a href="#l00110">icalfileset.h:110</a></div></div>
+<div class="ttc" id="astructicalfileset__options_html_a5e01006dc266beb9fd762ad4364218e9"><div class="ttname"><a href="structicalfileset__options.html#a5e01006dc266beb9fd762ad4364218e9">icalfileset_options::mode</a></div><div class="ttdeci">int mode</div><div class="ttdef"><b>Definition</b> <a href="#l00112">icalfileset.h:112</a></div></div>
+<div class="ttc" id="astructicalfileset__options_html_aa47516d0acdab84e6a851dd57cf2bed3"><div class="ttname"><a href="structicalfileset__options.html#aa47516d0acdab84e6a851dd57cf2bed3">icalfileset_options::cluster</a></div><div class="ttdeci">icalcluster * cluster</div><div class="ttdef"><b>Definition</b> <a href="#l00114">icalfileset.h:114</a></div></div>
+<div class="ttc" id="astructicalfileset__options_html_ad19cc9176412d8a16b2a6ac45c8f3bd1"><div class="ttname"><a href="structicalfileset__options.html#ad19cc9176412d8a16b2a6ac45c8f3bd1">icalfileset_options::flags</a></div><div class="ttdeci">int flags</div><div class="ttdef"><b>Definition</b> <a href="#l00111">icalfileset.h:111</a></div></div>
+<div class="ttc" id="astructicalfileset__options_html_ae1089f1b0a31021cba1a22945a9cf5b5"><div class="ttname"><a href="structicalfileset__options.html#ae1089f1b0a31021cba1a22945a9cf5b5">icalfileset_options::safe_saves</a></div><div class="ttdeci">int safe_saves</div><div class="ttdef"><b>Definition</b> <a href="#l00113">icalfileset.h:113</a></div></div>
+<div class="ttc" id="astructicalsetiter_html"><div class="ttname"><a href="structicalsetiter.html">icalsetiter</a></div><div class="ttdef"><b>Definition</b> <a href="icalset_8h_source.html#l00045">icalset.h:45</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

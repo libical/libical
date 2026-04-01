@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -84,7 +84,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>icaldirset manages a database of ical components and offers interfaces for reading, writing and searching for components.  
+<p>Manages a database of ical components and offers interfaces for reading, writing and searching for components.  
 <a href="#details">More...</a></p>
 
 <p><a href="icaldirset_8h_source.html">Go to the source code of this file.</a></p>
@@ -95,64 +95,59 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ae7712b1a5506b62af79f3e6e4ba2a409" id="r_ae7712b1a5506b62af79f3e6e4ba2a409"><td class="memItemLeft" align="right" valign="top"><a id="ae7712b1a5506b62af79f3e6e4ba2a409" name="ae7712b1a5506b62af79f3e6e4ba2a409"></a>
-typedef struct <a class="el" href="structicaldirset__impl.html">icaldirset_impl</a>&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset</b></td></tr>
-<tr class="memitem:a41b5afef5f485092ae5a81b4ac9681c2" id="r_a41b5afef5f485092ae5a81b4ac9681c2"><td class="memItemLeft" align="right" valign="top"><a id="a41b5afef5f485092ae5a81b4ac9681c2" name="a41b5afef5f485092ae5a81b4ac9681c2"></a>
-typedef struct icaldirset_options&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_options</b></td></tr>
+<tr class="memitem:ae7712b1a5506b62af79f3e6e4ba2a409" id="r_ae7712b1a5506b62af79f3e6e4ba2a409"><td class="memItemLeft" align="right" valign="top">typedef struct icaldirset_impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae7712b1a5506b62af79f3e6e4ba2a409">icaldirset</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a159f8a7441fd75a334971c0ddafa72c4" id="r_a159f8a7441fd75a334971c0ddafa72c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a159f8a7441fd75a334971c0ddafa72c4">icaldirset_add_component</a> (<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent *comp)</td></tr>
-<tr class="memitem:a1d870b03a4552f8fe335dd8599571cb4" id="r_a1d870b03a4552f8fe335dd8599571cb4"><td class="memItemLeft" align="right" valign="top"><a id="a1d870b03a4552f8fe335dd8599571cb4" name="a1d870b03a4552f8fe335dd8599571cb4"></a>
-<a class="el" href="structicalsetiter.html">icalsetiter</a>&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_begin_component</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent_kind kind, <a class="el" href="structicalgauge__impl.html">icalgauge</a> *gauge, const char *tzid)</td></tr>
-<tr class="memitem:a5c636c2529534a9ae85eb5f396c878d2" id="r_a5c636c2529534a9ae85eb5f396c878d2"><td class="memItemLeft" align="right" valign="top"><a id="a5c636c2529534a9ae85eb5f396c878d2" name="a5c636c2529534a9ae85eb5f396c878d2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_clear</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a5366244e9deac9d1737bf72b1aa2bdc3" id="r_a5366244e9deac9d1737bf72b1aa2bdc3"><td class="memItemLeft" align="right" valign="top"><a id="a5366244e9deac9d1737bf72b1aa2bdc3" name="a5366244e9deac9d1737bf72b1aa2bdc3"></a>
-<a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_commit</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:afe8a404b585e994f17854089c716e7fa" id="r_afe8a404b585e994f17854089c716e7fa"><td class="memItemLeft" align="right" valign="top"><a id="afe8a404b585e994f17854089c716e7fa" name="afe8a404b585e994f17854089c716e7fa"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_count_components</b> (<a class="el" href="structicalset__impl.html">icalset</a> *store, icalcomponent_kind kind)</td></tr>
-<tr class="memitem:a222297f13a1a4c687c2ec84ae8c52b6f" id="r_a222297f13a1a4c687c2ec84ae8c52b6f"><td class="memItemLeft" align="right" valign="top"><a id="a222297f13a1a4c687c2ec84ae8c52b6f" name="a222297f13a1a4c687c2ec84ae8c52b6f"></a>
-icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_fetch</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent_kind kind, const char *uid)</td></tr>
-<tr class="memitem:a64f5758d7a9bcc53e3d8fdab82dc6711" id="r_a64f5758d7a9bcc53e3d8fdab82dc6711"><td class="memItemLeft" align="right" valign="top"><a id="a64f5758d7a9bcc53e3d8fdab82dc6711" name="a64f5758d7a9bcc53e3d8fdab82dc6711"></a>
-icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_fetch_match</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set, const icalcomponent *c)</td></tr>
-<tr class="memitem:a39929ddba9ca8b4c2285119e1d5b9564" id="r_a39929ddba9ca8b4c2285119e1d5b9564"><td class="memItemLeft" align="right" valign="top"><a id="a39929ddba9ca8b4c2285119e1d5b9564" name="a39929ddba9ca8b4c2285119e1d5b9564"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_free</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a5070173e436e7346f31e7220a73fea69" id="r_a5070173e436e7346f31e7220a73fea69"><td class="memItemLeft" align="right" valign="top"><a id="a5070173e436e7346f31e7220a73fea69" name="a5070173e436e7346f31e7220a73fea69"></a>
-icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_get_current_component</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:ace72c51c7a944905b774e8265ceb4937" id="r_ace72c51c7a944905b774e8265ceb4937"><td class="memItemLeft" align="right" valign="top"><a id="ace72c51c7a944905b774e8265ceb4937" name="ace72c51c7a944905b774e8265ceb4937"></a>
-icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_get_first_component</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a7a5d4d56857b080b27eaddaa80f533bc" id="r_a7a5d4d56857b080b27eaddaa80f533bc"><td class="memItemLeft" align="right" valign="top"><a id="a7a5d4d56857b080b27eaddaa80f533bc" name="a7a5d4d56857b080b27eaddaa80f533bc"></a>
-icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_get_next_component</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a50d2707e9c5714976d211181d254843f" id="r_a50d2707e9c5714976d211181d254843f"><td class="memItemLeft" align="right" valign="top"><a id="a50d2707e9c5714976d211181d254843f" name="a50d2707e9c5714976d211181d254843f"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_has_uid</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set, const char *uid)</td></tr>
-<tr class="memitem:a269551eeb545f3781215bbd136e09124" id="r_a269551eeb545f3781215bbd136e09124"><td class="memItemLeft" align="right" valign="top"><a id="a269551eeb545f3781215bbd136e09124" name="a269551eeb545f3781215bbd136e09124"></a>
-<a class="el" href="structicalset__impl.html">icalset</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_init</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set, const char *dir, void *options_in)</td></tr>
-<tr class="memitem:a85969c454f8939d980d34042c6dcc567" id="r_a85969c454f8939d980d34042c6dcc567"><td class="memItemLeft" align="right" valign="top"><a id="a85969c454f8939d980d34042c6dcc567" name="a85969c454f8939d980d34042c6dcc567"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_mark</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a61c35b196b12529b674c63adb0bf6659" id="r_a61c35b196b12529b674c63adb0bf6659"><td class="memItemLeft" align="right" valign="top"><a id="a61c35b196b12529b674c63adb0bf6659" name="a61c35b196b12529b674c63adb0bf6659"></a>
-<a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_modify</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent *oldcomp, icalcomponent *newcomp)</td></tr>
-<tr class="memitem:aa2d879a1ac027cbb524ed394cea1c0b0" id="r_aa2d879a1ac027cbb524ed394cea1c0b0"><td class="memItemLeft" align="right" valign="top"><a id="aa2d879a1ac027cbb524ed394cea1c0b0" name="aa2d879a1ac027cbb524ed394cea1c0b0"></a>
-<a class="el" href="structicalset__impl.html">icalset</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_new</b> (const char *dir)</td></tr>
-<tr class="memitem:a511fbb3e2bd8a080cc1d2c78b5d9d2ed" id="r_a511fbb3e2bd8a080cc1d2c78b5d9d2ed"><td class="memItemLeft" align="right" valign="top"><a id="a511fbb3e2bd8a080cc1d2c78b5d9d2ed" name="a511fbb3e2bd8a080cc1d2c78b5d9d2ed"></a>
-<a class="el" href="structicalset__impl.html">icalset</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_new_reader</b> (const char *dir)</td></tr>
-<tr class="memitem:abb60df8aeda46c70ebe49b7b9bea63ba" id="r_abb60df8aeda46c70ebe49b7b9bea63ba"><td class="memItemLeft" align="right" valign="top"><a id="abb60df8aeda46c70ebe49b7b9bea63ba" name="abb60df8aeda46c70ebe49b7b9bea63ba"></a>
-<a class="el" href="structicalset__impl.html">icalset</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_new_writer</b> (const char *dir)</td></tr>
-<tr class="memitem:a84faafa7d9f8b47cd736d9902f273457" id="r_a84faafa7d9f8b47cd736d9902f273457"><td class="memItemLeft" align="right" valign="top"><a id="a84faafa7d9f8b47cd736d9902f273457" name="a84faafa7d9f8b47cd736d9902f273457"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_path</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set)</td></tr>
-<tr class="memitem:a885a644c7166e3f8260aad5b4184f757" id="r_a885a644c7166e3f8260aad5b4184f757"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a885a644c7166e3f8260aad5b4184f757">icaldirset_remove_component</a> (<a class="el" href="structicalset__impl.html">icalset</a> *set, icalcomponent *comp)</td></tr>
-<tr class="memitem:ace1233bf7ae91baa1af98bd0611efcf1" id="r_ace1233bf7ae91baa1af98bd0611efcf1"><td class="memItemLeft" align="right" valign="top"><a id="ace1233bf7ae91baa1af98bd0611efcf1" name="ace1233bf7ae91baa1af98bd0611efcf1"></a>
-<a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset_select</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set, <a class="el" href="structicalgauge__impl.html">icalgauge</a> *gauge)</td></tr>
-<tr class="memitem:ad676f42f4f0fc0b4f7e9d976cf7e6604" id="r_ad676f42f4f0fc0b4f7e9d976cf7e6604"><td class="memItemLeft" align="right" valign="top"><a id="ad676f42f4f0fc0b4f7e9d976cf7e6604" name="ad676f42f4f0fc0b4f7e9d976cf7e6604"></a>
-icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirsetiter_to_next</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set, <a class="el" href="structicalsetiter.html">icalsetiter</a> *i)</td></tr>
-<tr class="memitem:ae9fb42e49e5cae1839e4c1896b0c4b16" id="r_ae9fb42e49e5cae1839e4c1896b0c4b16"><td class="memItemLeft" align="right" valign="top"><a id="ae9fb42e49e5cae1839e4c1896b0c4b16" name="ae9fb42e49e5cae1839e4c1896b0c4b16"></a>
-icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirsetiter_to_prior</b> (<a class="el" href="structicalset__impl.html">icalset</a> *set, <a class="el" href="structicalsetiter.html">icalsetiter</a> *i)</td></tr>
+<tr class="memitem:a159f8a7441fd75a334971c0ddafa72c4" id="r_a159f8a7441fd75a334971c0ddafa72c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a159f8a7441fd75a334971c0ddafa72c4">icaldirset_add_component</a> (icalset *set, icalcomponent *comp)</td></tr>
+<tr class="memitem:a1d870b03a4552f8fe335dd8599571cb4" id="r_a1d870b03a4552f8fe335dd8599571cb4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structicalsetiter.html">icalsetiter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d870b03a4552f8fe335dd8599571cb4">icaldirset_begin_component</a> (icalset *set, <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind, icalgauge *gauge, const char *tzid)</td></tr>
+<tr class="memitem:a5c636c2529534a9ae85eb5f396c878d2" id="r_a5c636c2529534a9ae85eb5f396c878d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c636c2529534a9ae85eb5f396c878d2">icaldirset_clear</a> (icalset *set)</td></tr>
+<tr class="memitem:a5366244e9deac9d1737bf72b1aa2bdc3" id="r_a5366244e9deac9d1737bf72b1aa2bdc3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5366244e9deac9d1737bf72b1aa2bdc3">icaldirset_commit</a> (icalset *set)</td></tr>
+<tr class="memitem:afe8a404b585e994f17854089c716e7fa" id="r_afe8a404b585e994f17854089c716e7fa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe8a404b585e994f17854089c716e7fa">icaldirset_count_components</a> (icalset *store, <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind)</td></tr>
+<tr class="memitem:a222297f13a1a4c687c2ec84ae8c52b6f" id="r_a222297f13a1a4c687c2ec84ae8c52b6f"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a222297f13a1a4c687c2ec84ae8c52b6f">icaldirset_fetch</a> (icalset *set, <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind, const char *uid)</td></tr>
+<tr class="memitem:a64f5758d7a9bcc53e3d8fdab82dc6711" id="r_a64f5758d7a9bcc53e3d8fdab82dc6711"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64f5758d7a9bcc53e3d8fdab82dc6711">icaldirset_fetch_match</a> (icalset *set, const icalcomponent *c)</td></tr>
+<tr class="memitem:a39929ddba9ca8b4c2285119e1d5b9564" id="r_a39929ddba9ca8b4c2285119e1d5b9564"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39929ddba9ca8b4c2285119e1d5b9564">icaldirset_free</a> (icalset *set)</td></tr>
+<tr class="memitem:a5070173e436e7346f31e7220a73fea69" id="r_a5070173e436e7346f31e7220a73fea69"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5070173e436e7346f31e7220a73fea69">icaldirset_get_current_component</a> (icalset *set)</td></tr>
+<tr class="memitem:ace72c51c7a944905b774e8265ceb4937" id="r_ace72c51c7a944905b774e8265ceb4937"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace72c51c7a944905b774e8265ceb4937">icaldirset_get_first_component</a> (icalset *set)</td></tr>
+<tr class="memitem:a7a5d4d56857b080b27eaddaa80f533bc" id="r_a7a5d4d56857b080b27eaddaa80f533bc"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a5d4d56857b080b27eaddaa80f533bc">icaldirset_get_next_component</a> (icalset *set)</td></tr>
+<tr class="memitem:a50d2707e9c5714976d211181d254843f" id="r_a50d2707e9c5714976d211181d254843f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50d2707e9c5714976d211181d254843f">icaldirset_has_uid</a> (icalset *set, const char *uid)</td></tr>
+<tr class="memitem:a269551eeb545f3781215bbd136e09124" id="r_a269551eeb545f3781215bbd136e09124"><td class="memItemLeft" align="right" valign="top">icalset *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a269551eeb545f3781215bbd136e09124">icaldirset_init</a> (icalset *set, const char *dir, void *options_in)</td></tr>
+<tr class="memitem:a85969c454f8939d980d34042c6dcc567" id="r_a85969c454f8939d980d34042c6dcc567"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85969c454f8939d980d34042c6dcc567">icaldirset_mark</a> (icalset *set)</td></tr>
+<tr class="memitem:a61c35b196b12529b674c63adb0bf6659" id="r_a61c35b196b12529b674c63adb0bf6659"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61c35b196b12529b674c63adb0bf6659">icaldirset_modify</a> (icalset *set, icalcomponent *oldcomp, icalcomponent *newcomp)</td></tr>
+<tr class="memitem:aa2d879a1ac027cbb524ed394cea1c0b0" id="r_aa2d879a1ac027cbb524ed394cea1c0b0"><td class="memItemLeft" align="right" valign="top">icalset *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2d879a1ac027cbb524ed394cea1c0b0">icaldirset_new</a> (const char *dir)</td></tr>
+<tr class="memitem:a511fbb3e2bd8a080cc1d2c78b5d9d2ed" id="r_a511fbb3e2bd8a080cc1d2c78b5d9d2ed"><td class="memItemLeft" align="right" valign="top">icalset *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a511fbb3e2bd8a080cc1d2c78b5d9d2ed">icaldirset_new_reader</a> (const char *dir)</td></tr>
+<tr class="memitem:abb60df8aeda46c70ebe49b7b9bea63ba" id="r_abb60df8aeda46c70ebe49b7b9bea63ba"><td class="memItemLeft" align="right" valign="top">icalset *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb60df8aeda46c70ebe49b7b9bea63ba">icaldirset_new_writer</a> (const char *dir)</td></tr>
+<tr class="memitem:a84faafa7d9f8b47cd736d9902f273457" id="r_a84faafa7d9f8b47cd736d9902f273457"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84faafa7d9f8b47cd736d9902f273457">icaldirset_path</a> (icalset *set)</td></tr>
+<tr class="memitem:a885a644c7166e3f8260aad5b4184f757" id="r_a885a644c7166e3f8260aad5b4184f757"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a885a644c7166e3f8260aad5b4184f757">icaldirset_remove_component</a> (icalset *set, icalcomponent *comp)</td></tr>
+<tr class="memitem:ace1233bf7ae91baa1af98bd0611efcf1" id="r_ace1233bf7ae91baa1af98bd0611efcf1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace1233bf7ae91baa1af98bd0611efcf1">icaldirset_select</a> (icalset *set, icalgauge *gauge)</td></tr>
+<tr class="memitem:ad676f42f4f0fc0b4f7e9d976cf7e6604" id="r_ad676f42f4f0fc0b4f7e9d976cf7e6604"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad676f42f4f0fc0b4f7e9d976cf7e6604">icaldirsetiter_to_next</a> (icalset *set, <a class="el" href="structicalsetiter.html">icalsetiter</a> *i)</td></tr>
+<tr class="memitem:ae9fb42e49e5cae1839e4c1896b0c4b16" id="r_ae9fb42e49e5cae1839e4c1896b0c4b16"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9fb42e49e5cae1839e4c1896b0c4b16">icaldirsetiter_to_prior</a> (icalset *set, <a class="el" href="structicalsetiter.html">icalsetiter</a> *i)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>icaldirset manages a database of ical components and offers interfaces for reading, writing and searching for components. </p>
+<div class="textblock"><p>Manages a database of ical components and offers interfaces for reading, writing and searching for components. </p>
 <p>icaldirset groups components in to clusters based on their DTSTAMP time &ndash; all components that start in the same month are grouped together in a single file. All files in a store are kept in a single directory.</p>
 <p>The primary interfaces are icaldirset__get_first_component and icaldirset_get_next_component. These routine iterate through all of the components in the store, subject to the current gauge. A gauge is an icalcomponent that is tested against other components for a match. If a gauge has been set with icaldirset_select, icaldirset_first and icaldirset_next will only return components that match the gauge.</p>
 <p>The Store generated UIDs for all objects that are stored if they do not already have a UID. The UID is the name of the cluster (month &amp; year as MMYYYY) plus a unique serial number. The serial number is stored as a property of the cluster. </p>
-</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+
+<p class="definition">Definition in file <a class="el" href="icaldirset_8h_source.html">icaldirset.h</a>.</p>
+</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a id="ae7712b1a5506b62af79f3e6e4ba2a409" name="ae7712b1a5506b62af79f3e6e4ba2a409"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7712b1a5506b62af79f3e6e4ba2a409">&#9670;&#160;</a></span>icaldirset</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct icaldirset_impl icaldirset</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8h_source.html#l00046">46</a> of file <a class="el" href="icaldirset_8h_source.html">icaldirset.h</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a159f8a7441fd75a334971c0ddafa72c4" name="a159f8a7441fd75a334971c0ddafa72c4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a159f8a7441fd75a334971c0ddafa72c4">&#9670;&#160;</a></span>icaldirset_add_component()</h2>
 
@@ -162,7 +157,7 @@ icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset
         <tr>
           <td class="memname"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icaldirset_add_component </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structicalset__impl.html">icalset</a> *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -171,7 +166,413 @@ icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset
         </tr>
       </table>
 </div><div class="memdoc">
-<p>This assumes that the top level component is a VCALENDAR, and there is an inner component of type VEVENT, VTODO or VJOURNAL. The inner component must have a DSTAMP property </p>
+<p>Adds a component to the current cluster.</p>
+<p>This assumes that the top level component is a VCALENDAR, and there is an inner component of either VEVENT, VTODO or VJOURNAL. The inner component must have a DTSTAMP property.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">set</td><td>is a pointer to a valid icalset </td></tr>
+    <tr><td class="paramname">comp</td><td>is a pointer to the icalcomponent to add</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6748acb6af24f11fe6efbe1a19602d0b">ICAL_NO_ERROR</a> it <code class="param">comp</code> was successfully added; if not, an error occurred. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00293">293</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a1d870b03a4552f8fe335dd8599571cb4" name="a1d870b03a4552f8fe335dd8599571cb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d870b03a4552f8fe335dd8599571cb4">&#9670;&#160;</a></span>icaldirset_begin_component()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structicalsetiter.html">icalsetiter</a> icaldirset_begin_component </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalgauge *</td>          <td class="paramname"><span class="paramname"><em>gauge</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>tzid</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00642">642</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a5c636c2529534a9ae85eb5f396c878d2" name="a5c636c2529534a9ae85eb5f396c878d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c636c2529534a9ae85eb5f396c878d2">&#9670;&#160;</a></span>icaldirset_clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icaldirset_clear </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00513">513</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a5366244e9deac9d1737bf72b1aa2bdc3" name="a5366244e9deac9d1737bf72b1aa2bdc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5366244e9deac9d1737bf72b1aa2bdc3">&#9670;&#160;</a></span>icaldirset_commit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icaldirset_commit </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00057">57</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="afe8a404b585e994f17854089c716e7fa" name="afe8a404b585e994f17854089c716e7fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe8a404b585e994f17854089c716e7fa">&#9670;&#160;</a></span>icaldirset_count_components()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int icaldirset_count_components </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>store</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00422">422</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a222297f13a1a4c687c2ec84ae8c52b6f" name="a222297f13a1a4c687c2ec84ae8c52b6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a222297f13a1a4c687c2ec84ae8c52b6f">&#9670;&#160;</a></span>icaldirset_fetch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent * icaldirset_fetch </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>uid</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00443">443</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a64f5758d7a9bcc53e3d8fdab82dc6711" name="a64f5758d7a9bcc53e3d8fdab82dc6711"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64f5758d7a9bcc53e3d8fdab82dc6711">&#9670;&#160;</a></span>icaldirset_fetch_match()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent * icaldirset_fetch_match </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const icalcomponent *</td>          <td class="paramname"><span class="paramname"><em>c</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00433">433</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a39929ddba9ca8b4c2285119e1d5b9564" name="a39929ddba9ca8b4c2285119e1d5b9564"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39929ddba9ca8b4c2285119e1d5b9564">&#9670;&#160;</a></span>icaldirset_free()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icaldirset_free </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00204">204</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a5070173e436e7346f31e7220a73fea69" name="a5070173e436e7346f31e7220a73fea69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5070173e436e7346f31e7220a73fea69">&#9670;&#160;</a></span>icaldirset_get_current_component()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent * icaldirset_get_current_component </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00521">521</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="ace72c51c7a944905b774e8265ceb4937" name="ace72c51c7a944905b774e8265ceb4937"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace72c51c7a944905b774e8265ceb4937">&#9670;&#160;</a></span>icaldirset_get_first_component()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent * icaldirset_get_first_component </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00534">534</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a7a5d4d56857b080b27eaddaa80f533bc" name="a7a5d4d56857b080b27eaddaa80f533bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a5d4d56857b080b27eaddaa80f533bc">&#9670;&#160;</a></span>icaldirset_get_next_component()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent * icaldirset_get_next_component </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00583">583</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a50d2707e9c5714976d211181d254843f" name="a50d2707e9c5714976d211181d254843f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50d2707e9c5714976d211181d254843f">&#9670;&#160;</a></span>icaldirset_has_uid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int icaldirset_has_uid </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>uid</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00474">474</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a269551eeb545f3781215bbd136e09124" name="a269551eeb545f3781215bbd136e09124"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a269551eeb545f3781215bbd136e09124">&#9670;&#160;</a></span>icaldirset_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalset * icaldirset_init </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>dir</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>options_in</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00147">147</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a85969c454f8939d980d34042c6dcc567" name="a85969c454f8939d980d34042c6dcc567"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85969c454f8939d980d34042c6dcc567">&#9670;&#160;</a></span>icaldirset_mark()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icaldirset_mark </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00050">50</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a61c35b196b12529b674c63adb0bf6659" name="a61c35b196b12529b674c63adb0bf6659"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61c35b196b12529b674c63adb0bf6659">&#9670;&#160;</a></span>icaldirset_modify()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icaldirset_modify </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalcomponent *</td>          <td class="paramname"><span class="paramname"><em>oldcomp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalcomponent *</td>          <td class="paramname"><span class="paramname"><em>newcomp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00502">502</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="aa2d879a1ac027cbb524ed394cea1c0b0" name="aa2d879a1ac027cbb524ed394cea1c0b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2d879a1ac027cbb524ed394cea1c0b0">&#9670;&#160;</a></span>icaldirset_new()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalset * icaldirset_new </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>dir</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00181">181</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a511fbb3e2bd8a080cc1d2c78b5d9d2ed" name="a511fbb3e2bd8a080cc1d2c78b5d9d2ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a511fbb3e2bd8a080cc1d2c78b5d9d2ed">&#9670;&#160;</a></span>icaldirset_new_reader()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalset * icaldirset_new_reader </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>dir</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00186">186</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="abb60df8aeda46c70ebe49b7b9bea63ba" name="abb60df8aeda46c70ebe49b7b9bea63ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb60df8aeda46c70ebe49b7b9bea63ba">&#9670;&#160;</a></span>icaldirset_new_writer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalset * icaldirset_new_writer </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>dir</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00195">195</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="a84faafa7d9f8b47cd736d9902f273457" name="a84faafa7d9f8b47cd736d9902f273457"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84faafa7d9f8b47cd736d9902f273457">&#9670;&#160;</a></span>icaldirset_path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icaldirset_path </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00043">43</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
 
 </div>
 </div>
@@ -184,7 +585,7 @@ icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset
         <tr>
           <td class="memname"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icaldirset_remove_component </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structicalset__impl.html">icalset</a> *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -193,7 +594,86 @@ icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaldirset
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Remove a component in the current cluster. HACK. This routine is a "friend" of icalfileset, and breaks its encapsulation. It was either do it this way, or add several layers of interfaces that had no other use. </p>
+<p>Remove a component in the current cluster. HACK. This routine is a "friend" of icalfileset, and breaks its encapsulation. It was either do it this way, or add several layers of interfaces that had no other use.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">set</td><td>is a pointer to a valid icalset </td></tr>
+    <tr><td class="paramname">comp</td><td>is a pointer to the icalcomponent to remove</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6748acb6af24f11fe6efbe1a19602d0b">ICAL_NO_ERROR</a> it <code class="param">comp</code> was successfully removed; if not, an error occurred. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00371">371</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="ace1233bf7ae91baa1af98bd0611efcf1" name="ace1233bf7ae91baa1af98bd0611efcf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace1233bf7ae91baa1af98bd0611efcf1">&#9670;&#160;</a></span>icaldirset_select()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icaldirset_select </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalgauge *</td>          <td class="paramname"><span class="paramname"><em>gauge</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00489">489</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="ad676f42f4f0fc0b4f7e9d976cf7e6604" name="ad676f42f4f0fc0b4f7e9d976cf7e6604"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad676f42f4f0fc0b4f7e9d976cf7e6604">&#9670;&#160;</a></span>icaldirsetiter_to_next()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent * icaldirsetiter_to_next </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structicalsetiter.html">icalsetiter</a> *</td>          <td class="paramname"><span class="paramname"><em>i</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00662">662</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
+
+</div>
+</div>
+<a id="ae9fb42e49e5cae1839e4c1896b0c4b16" name="ae9fb42e49e5cae1839e4c1896b0c4b16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9fb42e49e5cae1839e4c1896b0c4b16">&#9670;&#160;</a></span>icaldirsetiter_to_prior()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent * icaldirsetiter_to_prior </td>
+          <td>(</td>
+          <td class="paramtype">icalset *</td>          <td class="paramname"><span class="paramname"><em>set</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structicalsetiter.html">icalsetiter</a> *</td>          <td class="paramname"><span class="paramname"><em>i</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaldirset_8c_source.html#l00670">670</a> of file <a class="el" href="icaldirset_8c_source.html">icaldirset.c</a>.</p>
 
 </div>
 </div>

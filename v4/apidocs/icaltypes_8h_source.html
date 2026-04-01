@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -79,105 +79,118 @@ $(function() {
   <div class="headertitle"><div class="title">icaltypes.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
+<a href="icaltypes_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> FILE: icaltypes.h</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> CREATOR: eric 20 March 1999</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"></span> </div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> SPDX-FileCopyrightText: 2000, Eric Busboom &lt;eric@civicknowledge.com&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">======================================================================*/</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#ifndef ICALTYPES_H</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define ICALTYPES_H</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="icalduration_8h.html">icalduration.h</a>&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="icalenums_8h.html">icalenums.h</a>&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="icalperiod_8h.html">icalperiod.h</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#ifndef ICALTYPES_H</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#define ICALTYPES_H</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="foldopen" id="foldopen00019" data-start="{" data-end="};">
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="structicaldatetimeperiodtype.html">   19</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structicaldatetimeperiodtype.html">icaldatetimeperiodtype</a> {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> time;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structicalperiodtype.html">icalperiodtype</a> period;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>};</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;<a class="code" href="icalduration_8h.html">icalduration.h</a>&quot;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &quot;<a class="code" href="icalenums_8h.html">icalenums.h</a>&quot;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &quot;<a class="code" href="icalperiod_8h.html">icalperiod.h</a>&quot;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span></div>
+<div class="foldopen" id="foldopen00029" data-start="{" data-end="};">
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="structicaldatetimeperiodtype.html">   29</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structicaldatetimeperiodtype.html">icaldatetimeperiodtype</a> {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structicaldatetimeperiodtype.html#a77118543c37dc0c02d4fb170a515c322">   30</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> <a class="code hl_variable" href="structicaldatetimeperiodtype.html#a77118543c37dc0c02d4fb170a515c322">time</a>;     </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="structicaldatetimeperiodtype.html#abfb17cde45af5d0429be516dec80ddfa">   31</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structicalperiodtype.html">icalperiodtype</a> <a class="code hl_variable" href="structicaldatetimeperiodtype.html#abfb17cde45af5d0429be516dec80ddfa">period</a>; </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>};</div>
 </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#define ICAL_GEO_LEN 16</span></div>
-<div class="foldopen" id="foldopen00025" data-start="{" data-end="};">
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="structicalgeotype.html">   25</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structicalgeotype.html">icalgeotype</a> {</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordtype">char</span> lat[ICAL_GEO_LEN];</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordtype">char</span> lon[ICAL_GEO_LEN];</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>};</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="icaltypes_8h.html#aab6b94d4d538dbba6427dec07a599951">   35</a></span><span class="preprocessor">#define ICAL_GEO_LEN 16</span><span class="preprocessor"></span></div>
+<div class="foldopen" id="foldopen00039" data-start="{" data-end="};">
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="structicalgeotype.html">   39</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structicalgeotype.html">icalgeotype</a> {</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="structicalgeotype.html#a2100f0d05beba89b1ce68d9928dd45c8">   40</a></span>    <span class="keywordtype">char</span> <a class="code hl_variable" href="structicalgeotype.html#a2100f0d05beba89b1ce68d9928dd45c8">lat</a>[<a class="code hl_define" href="icaltypes_8h.html#aab6b94d4d538dbba6427dec07a599951">ICAL_GEO_LEN</a>]; </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="structicalgeotype.html#a23a9dad57f7e07bf5401d56453852bfc">   41</a></span>    <span class="keywordtype">char</span> <a class="code hl_variable" href="structicalgeotype.html#a23a9dad57f7e07bf5401d56453852bfc">lon</a>[<a class="code hl_define" href="icaltypes_8h.html#aab6b94d4d538dbba6427dec07a599951">ICAL_GEO_LEN</a>]; </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>};</div>
 </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="foldopen" id="foldopen00030" data-start="{" data-end="};">
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structicaltriggertype.html">   30</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structicaltriggertype.html">icaltriggertype</a> {</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> time;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structicaldurationtype.html">icaldurationtype</a> duration;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>};</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span></div>
+<div class="foldopen" id="foldopen00049" data-start="{" data-end="};">
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="structicaltriggertype.html">   49</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structicaltriggertype.html">icaltriggertype</a> {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="structicaltriggertype.html#a8dc49cd88a61ae0a60c122a8d1a3b199">   50</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> <a class="code hl_variable" href="structicaltriggertype.html#a8dc49cd88a61ae0a60c122a8d1a3b199">time</a>;         </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="structicaltriggertype.html#a141193d9e4926a9b93854c7ddc5f9e89">   51</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structicaldurationtype.html">icaldurationtype</a> <a class="code hl_variable" href="structicaltriggertype.html#a141193d9e4926a9b93854c7ddc5f9e89">duration</a>; </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>};</div>
 </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code hl_struct" href="structicaltriggertype.html">icaltriggertype</a> icaltriggertype_from_seconds(const int reltime);</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code hl_struct" href="structicaltriggertype.html">icaltriggertype</a> icaltriggertype_from_string(const char *str);</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">bool</span> icaltriggertype_is_null_trigger(<span class="keyword">struct</span> <a class="code hl_struct" href="structicaltriggertype.html">icaltriggertype</a> tr);</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">bool</span> icaltriggertype_is_bad_trigger(<span class="keyword">struct</span> <a class="code hl_struct" href="structicaltriggertype.html">icaltriggertype</a> tr);</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment">/* struct icalreqstattype. This struct contains two string pointers.</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment">The &quot;desc&quot; string is a pointer to a static table inside the library.</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">Don&#39;t try to free it. The &quot;debug&quot; string is owned by the icalvalue</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">and should not be freed manually.</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"></span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment">BTW, you would get that original string from</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment">*icalproperty_get_requeststatus() or icalvalue_get_text(), when</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment">operating on the value of a request_status property. */</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="foldopen" id="foldopen00052" data-start="{" data-end="};">
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="structicalreqstattype.html">   52</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structicalreqstattype.html">icalreqstattype</a> {</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    icalrequeststatus code;</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *desc;</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *debug;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>};</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code hl_struct" href="structicaltriggertype.html">icaltriggertype</a> <a class="code hl_function" href="icaltypes_8c.html#a3c13ab76e7781352b52a8833560e7650">icaltriggertype_from_seconds</a>(const int reltime);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code hl_struct" href="structicaltriggertype.html">icaltriggertype</a> <a class="code hl_function" href="icaltypes_8c.html#a1f20f5988cf9a0a9295fca29f6e3eaa6">icaltriggertype_from_string</a>(const char *str);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">bool</span> <a class="code hl_function" href="icaltypes_8h.html#a58b2e3a144448393b038539f26e860a5">icaltriggertype_is_null_trigger</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structicaltriggertype.html">icaltriggertype</a> tr);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">bool</span> <a class="code hl_function" href="icaltypes_8h.html#a85d858eb7729b31dd1eaca5c86aad5d3">icaltriggertype_is_bad_trigger</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structicaltriggertype.html">icaltriggertype</a> tr);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span></div>
+<div class="foldopen" id="foldopen00110" data-start="{" data-end="};">
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno"><a class="line" href="structicalreqstattype.html">  110</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structicalreqstattype.html">icalreqstattype</a> {</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="structicalreqstattype.html#ad398dde3d61994661cad6396f1f9bba0">  111</a></span>    <a class="code hl_enumeration" href="icalenums_8h.html#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a> <a class="code hl_variable" href="structicalreqstattype.html#ad398dde3d61994661cad6396f1f9bba0">code</a>; </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="structicalreqstattype.html#a6f4827bc5dad88b04276f31312500ff6">  112</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="structicalreqstattype.html#a6f4827bc5dad88b04276f31312500ff6">desc</a>;       </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="structicalreqstattype.html#a9bc975bf5703f97662335f3773eacab4">  113</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="structicalreqstattype.html#a9bc975bf5703f97662335f3773eacab4">debug</a>;      </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>};</div>
 </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code hl_struct" href="structicalreqstattype.html">icalreqstattype</a> icalreqstattype_from_string(const char *str);</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalreqstattype_as_string(<span class="keyword">struct</span> <a class="code hl_struct" href="structicalreqstattype.html">icalreqstattype</a>);</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">char</span> *icalreqstattype_as_string_r(<span class="keyword">struct</span> <a class="code hl_struct" href="structicalreqstattype.html">icalreqstattype</a>);</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment">/* ical_unknown_token_handling :</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment"> *    How should the ICAL library handle components, properties and parameters with</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment"> *    unknown names?</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"> *    FIXME:  Currently only affects parameters.  Extend to components and properties.</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="keyword">typedef</span> <span class="keyword">enum</span> ical_unknown_token_handling</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>{</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    ICAL_ASSUME_IANA_TOKEN = 1,</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    ICAL_DISCARD_TOKEN = 2,</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    ICAL_TREAT_AS_ERROR = 3</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>} ical_unknown_token_handling;</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>LIBICAL_ICAL_EXPORT ical_unknown_token_handling ical_get_unknown_token_handling_setting(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> ical_set_unknown_token_handling_setting(</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    ical_unknown_token_handling newSetting);</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALTYPES_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="aicalduration_8h_html"><div class="ttname"><a href="icalduration_8h.html">icalduration.h</a></div><div class="ttdoc">Methods for working with durations in iCal.</div></div>
-<div class="ttc" id="aicalenums_8h_html"><div class="ttname"><a href="icalenums_8h.html">icalenums.h</a></div></div>
-<div class="ttc" id="aicalperiod_8h_html"><div class="ttname"><a href="icalperiod_8h.html">icalperiod.h</a></div><div class="ttdoc">Functions for working with iCal periods (of time).</div></div>
-<div class="ttc" id="astructicaldatetimeperiodtype_html"><div class="ttname"><a href="structicaldatetimeperiodtype.html">icaldatetimeperiodtype</a></div><div class="ttdef"><b>Definition</b> icaltypes.h:19</div></div>
-<div class="ttc" id="astructicaldurationtype_html"><div class="ttname"><a href="structicaldurationtype.html">icaldurationtype</a></div><div class="ttdoc">A struct representing a duration.</div><div class="ttdef"><b>Definition</b> icalduration.h:30</div></div>
-<div class="ttc" id="astructicalgeotype_html"><div class="ttname"><a href="structicalgeotype.html">icalgeotype</a></div><div class="ttdef"><b>Definition</b> icaltypes.h:25</div></div>
-<div class="ttc" id="astructicalperiodtype_html"><div class="ttname"><a href="structicalperiodtype.html">icalperiodtype</a></div><div class="ttdoc">Struct to represent a period in time.</div><div class="ttdef"><b>Definition</b> icalperiod.h:29</div></div>
-<div class="ttc" id="astructicalreqstattype_html"><div class="ttname"><a href="structicalreqstattype.html">icalreqstattype</a></div><div class="ttdef"><b>Definition</b> icaltypes.h:52</div></div>
-<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition</b> icaltime.h:96</div></div>
-<div class="ttc" id="astructicaltriggertype_html"><div class="ttname"><a href="structicaltriggertype.html">icaltriggertype</a></div><div class="ttdef"><b>Definition</b> icaltypes.h:30</div></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>LIBICAL_ICAL_EXPORT <span class="keyword">struct </span><a class="code hl_struct" href="structicalreqstattype.html">icalreqstattype</a> <a class="code hl_function" href="icaltypes_8c.html#aedc64205a116384fd44c18c731a487ca">icalreqstattype_from_string</a>(const char *str);</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_function" href="icaltypes_8h.html#a926b8c2a5f96a440d499d26ef7325b9c">icalreqstattype_as_string</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structicalreqstattype.html">icalreqstattype</a>);</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">char</span> *<a class="code hl_function" href="icaltypes_8h.html#afab71e4314a244245c9611e80f7a041a">icalreqstattype_as_string_r</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structicalreqstattype.html">icalreqstattype</a> stat);</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span></div>
+<div class="foldopen" id="foldopen00154" data-start="{" data-end="};">
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno"><a class="line" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440c">  154</a></span><span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code hl_enumeration" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440c">ical_unknown_token_handling</a></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>{</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno"><a class="line" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca9ff47a00e3b503d1bd67bb82a5cee30d">  157</a></span>    <a class="code hl_enumvalue" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca9ff47a00e3b503d1bd67bb82a5cee30d">ICAL_ASSUME_IANA_TOKEN</a> = 1,</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca3e63d3bae24a681655b2e98ead52dc56">  159</a></span>    <a class="code hl_enumvalue" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca3e63d3bae24a681655b2e98ead52dc56">ICAL_DISCARD_TOKEN</a> = 2,</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca6eb4a0c65c25763917fdcda2a1a06cbf">  161</a></span>    <a class="code hl_enumvalue" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca6eb4a0c65c25763917fdcda2a1a06cbf">ICAL_TREAT_AS_ERROR</a> = 3</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>} <a class="code hl_enumeration" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440c">ical_unknown_token_handling</a>;</div>
+</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>LIBICAL_ICAL_EXPORT <a class="code hl_enumeration" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440c">ical_unknown_token_handling</a> <a class="code hl_function" href="icaltypes_8h.html#a51280a1085fd75e7b6d31d8258141123">ical_get_unknown_token_handling_setting</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icaltypes_8h.html#a1332f5126cfaa379f6239828ecfdb3d8">ical_set_unknown_token_handling_setting</a>(</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    <a class="code hl_enumeration" href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440c">ical_unknown_token_handling</a> newSetting);</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span> </div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALTYPES_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aicalduration_8h_html"><div class="ttname"><a href="icalduration_8h.html">icalduration.h</a></div><div class="ttdoc">Defines the data structure for time durations.</div></div>
+<div class="ttc" id="aicalenums_8h_html"><div class="ttname"><a href="icalenums_8h.html">icalenums.h</a></div><div class="ttdoc">Defines enums not belonging to other data structures.</div></div>
+<div class="ttc" id="aicalenums_8h_html_af155b8c4c213cc359e893cda6e7e443d"><div class="ttname"><a href="icalenums_8h.html#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a></div><div class="ttdeci">icalrequeststatus</div><div class="ttdef"><b>Definition</b> <a href="icalenums_8h_source.html#l00078">icalenums.h:79</a></div></div>
+<div class="ttc" id="aicalperiod_8h_html"><div class="ttname"><a href="icalperiod_8h.html">icalperiod.h</a></div><div class="ttdoc">Defines data structures for working with iCal periods (of time).</div></div>
+<div class="ttc" id="aicaltypes_8c_html_a1f20f5988cf9a0a9295fca29f6e3eaa6"><div class="ttname"><a href="icaltypes_8c.html#a1f20f5988cf9a0a9295fca29f6e3eaa6">icaltriggertype_from_string</a></div><div class="ttdeci">struct icaltriggertype icaltriggertype_from_string(const char *str)</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8c_source.html#l00061">icaltypes.c:61</a></div></div>
+<div class="ttc" id="aicaltypes_8c_html_a3c13ab76e7781352b52a8833560e7650"><div class="ttname"><a href="icaltypes_8c.html#a3c13ab76e7781352b52a8833560e7650">icaltriggertype_from_seconds</a></div><div class="ttdeci">struct icaltriggertype icaltriggertype_from_seconds(const int reltime)</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8c_source.html#l00051">icaltypes.c:51</a></div></div>
+<div class="ttc" id="aicaltypes_8c_html_aedc64205a116384fd44c18c731a487ca"><div class="ttname"><a href="icaltypes_8c.html#aedc64205a116384fd44c18c731a487ca">icalreqstattype_from_string</a></div><div class="ttdeci">struct icalreqstattype icalreqstattype_from_string(const char *str)</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8c_source.html#l00099">icaltypes.c:99</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_a1332f5126cfaa379f6239828ecfdb3d8"><div class="ttname"><a href="icaltypes_8h.html#a1332f5126cfaa379f6239828ecfdb3d8">ical_set_unknown_token_handling_setting</a></div><div class="ttdeci">void ical_set_unknown_token_handling_setting(ical_unknown_token_handling newSetting)</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8c_source.html#l00205">icaltypes.c:205</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_a51280a1085fd75e7b6d31d8258141123"><div class="ttname"><a href="icaltypes_8h.html#a51280a1085fd75e7b6d31d8258141123">ical_get_unknown_token_handling_setting</a></div><div class="ttdeci">ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8c_source.html#l00188">icaltypes.c:188</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_a58b2e3a144448393b038539f26e860a5"><div class="ttname"><a href="icaltypes_8h.html#a58b2e3a144448393b038539f26e860a5">icaltriggertype_is_null_trigger</a></div><div class="ttdeci">bool icaltriggertype_is_null_trigger(struct icaltriggertype tr)</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8c_source.html#l00033">icaltypes.c:33</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_a5f7c027ba58d0676bce826b6d9e6440c"><div class="ttname"><a href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440c">ical_unknown_token_handling</a></div><div class="ttdeci">ical_unknown_token_handling</div><div class="ttdef"><b>Definition</b> <a href="#l00154">icaltypes.h:155</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_a5f7c027ba58d0676bce826b6d9e6440ca3e63d3bae24a681655b2e98ead52dc56"><div class="ttname"><a href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca3e63d3bae24a681655b2e98ead52dc56">ICAL_DISCARD_TOKEN</a></div><div class="ttdeci">@ ICAL_DISCARD_TOKEN</div><div class="ttdef"><b>Definition</b> <a href="#l00159">icaltypes.h:159</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_a5f7c027ba58d0676bce826b6d9e6440ca6eb4a0c65c25763917fdcda2a1a06cbf"><div class="ttname"><a href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca6eb4a0c65c25763917fdcda2a1a06cbf">ICAL_TREAT_AS_ERROR</a></div><div class="ttdeci">@ ICAL_TREAT_AS_ERROR</div><div class="ttdef"><b>Definition</b> <a href="#l00161">icaltypes.h:161</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_a5f7c027ba58d0676bce826b6d9e6440ca9ff47a00e3b503d1bd67bb82a5cee30d"><div class="ttname"><a href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca9ff47a00e3b503d1bd67bb82a5cee30d">ICAL_ASSUME_IANA_TOKEN</a></div><div class="ttdeci">@ ICAL_ASSUME_IANA_TOKEN</div><div class="ttdef"><b>Definition</b> <a href="#l00157">icaltypes.h:157</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_a85d858eb7729b31dd1eaca5c86aad5d3"><div class="ttname"><a href="icaltypes_8h.html#a85d858eb7729b31dd1eaca5c86aad5d3">icaltriggertype_is_bad_trigger</a></div><div class="ttdeci">bool icaltriggertype_is_bad_trigger(struct icaltriggertype tr)</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8c_source.html#l00042">icaltypes.c:42</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_a926b8c2a5f96a440d499d26ef7325b9c"><div class="ttname"><a href="icaltypes_8h.html#a926b8c2a5f96a440d499d26ef7325b9c">icalreqstattype_as_string</a></div><div class="ttdeci">const char * icalreqstattype_as_string(struct icalreqstattype)</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8c_source.html#l00156">icaltypes.c:156</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_aab6b94d4d538dbba6427dec07a599951"><div class="ttname"><a href="icaltypes_8h.html#aab6b94d4d538dbba6427dec07a599951">ICAL_GEO_LEN</a></div><div class="ttdeci">#define ICAL_GEO_LEN</div><div class="ttdef"><b>Definition</b> <a href="#l00035">icaltypes.h:35</a></div></div>
+<div class="ttc" id="aicaltypes_8h_html_afab71e4314a244245c9611e80f7a041a"><div class="ttname"><a href="icaltypes_8h.html#afab71e4314a244245c9611e80f7a041a">icalreqstattype_as_string_r</a></div><div class="ttdeci">char * icalreqstattype_as_string_r(struct icalreqstattype stat)</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8c_source.html#l00165">icaltypes.c:165</a></div></div>
+<div class="ttc" id="astructicaldatetimeperiodtype_html"><div class="ttname"><a href="structicaldatetimeperiodtype.html">icaldatetimeperiodtype</a></div><div class="ttdef"><b>Definition</b> <a href="#l00029">icaltypes.h:29</a></div></div>
+<div class="ttc" id="astructicaldatetimeperiodtype_html_a77118543c37dc0c02d4fb170a515c322"><div class="ttname"><a href="structicaldatetimeperiodtype.html#a77118543c37dc0c02d4fb170a515c322">icaldatetimeperiodtype::time</a></div><div class="ttdeci">struct icaltimetype time</div><div class="ttdef"><b>Definition</b> <a href="#l00030">icaltypes.h:30</a></div></div>
+<div class="ttc" id="astructicaldatetimeperiodtype_html_abfb17cde45af5d0429be516dec80ddfa"><div class="ttname"><a href="structicaldatetimeperiodtype.html#abfb17cde45af5d0429be516dec80ddfa">icaldatetimeperiodtype::period</a></div><div class="ttdeci">struct icalperiodtype period</div><div class="ttdef"><b>Definition</b> <a href="#l00031">icaltypes.h:31</a></div></div>
+<div class="ttc" id="astructicaldurationtype_html"><div class="ttname"><a href="structicaldurationtype.html">icaldurationtype</a></div><div class="ttdef"><b>Definition</b> <a href="icalduration_8h_source.html#l00030">icalduration.h:30</a></div></div>
+<div class="ttc" id="astructicalgeotype_html"><div class="ttname"><a href="structicalgeotype.html">icalgeotype</a></div><div class="ttdef"><b>Definition</b> <a href="#l00039">icaltypes.h:39</a></div></div>
+<div class="ttc" id="astructicalgeotype_html_a2100f0d05beba89b1ce68d9928dd45c8"><div class="ttname"><a href="structicalgeotype.html#a2100f0d05beba89b1ce68d9928dd45c8">icalgeotype::lat</a></div><div class="ttdeci">char lat[16]</div><div class="ttdef"><b>Definition</b> <a href="#l00040">icaltypes.h:40</a></div></div>
+<div class="ttc" id="astructicalgeotype_html_a23a9dad57f7e07bf5401d56453852bfc"><div class="ttname"><a href="structicalgeotype.html#a23a9dad57f7e07bf5401d56453852bfc">icalgeotype::lon</a></div><div class="ttdeci">char lon[16]</div><div class="ttdef"><b>Definition</b> <a href="#l00041">icaltypes.h:41</a></div></div>
+<div class="ttc" id="astructicalperiodtype_html"><div class="ttname"><a href="structicalperiodtype.html">icalperiodtype</a></div><div class="ttdef"><b>Definition</b> <a href="icalperiod_8h_source.html#l00029">icalperiod.h:29</a></div></div>
+<div class="ttc" id="astructicalreqstattype_html"><div class="ttname"><a href="structicalreqstattype.html">icalreqstattype</a></div><div class="ttdef"><b>Definition</b> <a href="#l00110">icaltypes.h:110</a></div></div>
+<div class="ttc" id="astructicalreqstattype_html_a6f4827bc5dad88b04276f31312500ff6"><div class="ttname"><a href="structicalreqstattype.html#a6f4827bc5dad88b04276f31312500ff6">icalreqstattype::desc</a></div><div class="ttdeci">const char * desc</div><div class="ttdef"><b>Definition</b> <a href="#l00112">icaltypes.h:112</a></div></div>
+<div class="ttc" id="astructicalreqstattype_html_a9bc975bf5703f97662335f3773eacab4"><div class="ttname"><a href="structicalreqstattype.html#a9bc975bf5703f97662335f3773eacab4">icalreqstattype::debug</a></div><div class="ttdeci">const char * debug</div><div class="ttdef"><b>Definition</b> <a href="#l00113">icaltypes.h:113</a></div></div>
+<div class="ttc" id="astructicalreqstattype_html_ad398dde3d61994661cad6396f1f9bba0"><div class="ttname"><a href="structicalreqstattype.html#ad398dde3d61994661cad6396f1f9bba0">icalreqstattype::code</a></div><div class="ttdeci">icalrequeststatus code</div><div class="ttdef"><b>Definition</b> <a href="#l00111">icaltypes.h:111</a></div></div>
+<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition</b> <a href="icaltime_8h_source.html#l00090">icaltime.h:90</a></div></div>
+<div class="ttc" id="astructicaltriggertype_html"><div class="ttname"><a href="structicaltriggertype.html">icaltriggertype</a></div><div class="ttdef"><b>Definition</b> <a href="#l00049">icaltypes.h:49</a></div></div>
+<div class="ttc" id="astructicaltriggertype_html_a141193d9e4926a9b93854c7ddc5f9e89"><div class="ttname"><a href="structicaltriggertype.html#a141193d9e4926a9b93854c7ddc5f9e89">icaltriggertype::duration</a></div><div class="ttdeci">struct icaldurationtype duration</div><div class="ttdef"><b>Definition</b> <a href="#l00051">icaltypes.h:51</a></div></div>
+<div class="ttc" id="astructicaltriggertype_html_a8dc49cd88a61ae0a60c122a8d1a3b199"><div class="ttname"><a href="structicaltriggertype.html#a8dc49cd88a61ae0a60c122a8d1a3b199">icaltriggertype::time</a></div><div class="ttdeci">struct icaltimetype time</div><div class="ttdef"><b>Definition</b> <a href="#l00050">icaltypes.h:50</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

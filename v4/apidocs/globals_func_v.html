@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -75,17 +75,62 @@ $(function() {
 <div class="textblock">Here is a list of all documented functions with links to the documentation:</div>
 
 <h3 class="doxsection"><a id="index_v" name="index_v"></a>- v -</h3><ul>
-<li>vcardparameter_get_parent()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a945192f51cf67ea30fa01dfd516ed259">vcardproperty.h</a></li>
-<li>vcardparameter_set_parent()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a6f36901a50b2d46bd3ca861ae917b1a8">vcardproperty.h</a></li>
-<li>vcardproperty_clone()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#abc42d87518f3b777711d799759cc0b47">vcardproperty.h</a></li>
-<li>vcardproperty_get_property_name()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a0978c4107c153dfad0c294f8f2ebc1bb">vcardproperty.h</a></li>
+<li>vcardcomponent_clone()&#160;:&#160;<a class="el" href="vcardcomponent_8c.html#a69c8f5b2f0c0852f0c4c0244da3fa391">vcardcomponent.c</a>, <a class="el" href="vcardcomponent_8h.html#a69c8f5b2f0c0852f0c4c0244da3fa391">vcardcomponent.h</a></li>
+<li>vcardcomponent_count_errors()&#160;:&#160;<a class="el" href="vcardcomponent_8c.html#a7ba5cb080a86d0eb5d26cd1f19204300">vcardcomponent.c</a>, <a class="el" href="vcardcomponent_8h.html#a7ba5cb080a86d0eb5d26cd1f19204300">vcardcomponent.h</a></li>
+<li>vcardcomponent_new()&#160;:&#160;<a class="el" href="vcardcomponent_8c.html#adb1577ba6613a133d666f26cae94cb3d">vcardcomponent.c</a>, <a class="el" href="vcardcomponent_8h.html#adb1577ba6613a133d666f26cae94cb3d">vcardcomponent.h</a></li>
+<li>vcardcomponent_new_from_string()&#160;:&#160;<a class="el" href="vcardcomponent_8c.html#ae6a5b18f406c063d4d01c3431967d998">vcardcomponent.c</a>, <a class="el" href="vcardcomponent_8h.html#ae6a5b18f406c063d4d01c3431967d998">vcardcomponent.h</a></li>
+<li>vcardcomponent_normalize()&#160;:&#160;<a class="el" href="vcardcomponent_8c.html#ae97e75e241ed1fa01e515b9bcc8faa66">vcardcomponent.c</a>, <a class="el" href="vcardcomponent_8h.html#ae97e75e241ed1fa01e515b9bcc8faa66">vcardcomponent.h</a></li>
+<li>vcardcomponent_strip_errors()&#160;:&#160;<a class="el" href="vcardcomponent_8c.html#a01bc860a6df31a010980d4947cfe2cfd">vcardcomponent.c</a>, <a class="el" href="vcardcomponent_8h.html#a01bc860a6df31a010980d4947cfe2cfd">vcardcomponent.h</a></li>
+<li>vcardcomponent_vanew()&#160;:&#160;<a class="el" href="vcardcomponent_8c.html#ac34bf368ae16a18c65bbaef0770f41fe">vcardcomponent.c</a>, <a class="el" href="vcardcomponent_8h.html#a898759587a6c93b29dd25fa3a7d2ca86">vcardcomponent.h</a></li>
+<li>vcardparameter_as_vcard_string()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a09bbcb14c9ed4e07b6023bc1accb6ea7">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#ab63dcbf526b11f692065e1485d3a6295">vcardparameter.h</a></li>
+<li>vcardparameter_as_vcard_string_r()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#afba4df3b0baf7afcf59e4e45c16571ed">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#a707ba029de905e857549edc767b452cf">vcardparameter.h</a></li>
+<li>vcardparameter_clone()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#aa8be73922d82703e9fe63a444420f3d5">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#aa8be73922d82703e9fe63a444420f3d5">vcardparameter.h</a></li>
+<li>vcardparameter_free()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a3362399bb59cdcd9c296cefe3ba67c18">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#a4252efde12ef9da14fae3bfe292f9001">vcardparameter.h</a></li>
+<li>vcardparameter_get_iana_name()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a6c41c9938a6ef8863608fd4d345a678f">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#a6c41c9938a6ef8863608fd4d345a678f">vcardparameter.h</a></li>
+<li>vcardparameter_get_iana_value()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a1f4c5532a95e0965e9687984456643ce">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#a1f4c5532a95e0965e9687984456643ce">vcardparameter.h</a></li>
+<li>vcardparameter_get_parent()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a945192f51cf67ea30fa01dfd516ed259">vcardparameter.c</a>, <a class="el" href="vcardproperty_8h.html#a945192f51cf67ea30fa01dfd516ed259">vcardproperty.h</a></li>
+<li>vcardparameter_get_xname()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#ad83086f8fb01f999f518f29fb52e2887">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#ad83086f8fb01f999f518f29fb52e2887">vcardparameter.h</a></li>
+<li>vcardparameter_get_xvalue()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#acc0a48763e82169d63662eab1e704cd7">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#acc0a48763e82169d63662eab1e704cd7">vcardparameter.h</a></li>
+<li>vcardparameter_has_same_name()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a05d131c1c8f3c037a1983ec6bc81afe8">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#a05d131c1c8f3c037a1983ec6bc81afe8">vcardparameter.h</a></li>
+<li>vcardparameter_isa()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a90c4802dc4a4531f86e8cd529a4f4091">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#a90c4802dc4a4531f86e8cd529a4f4091">vcardparameter.h</a></li>
+<li>vcardparameter_isa_parameter()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a8e66bca7b1ac292823deade705120078">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#a7379ab2ad8dc3889b3019f200c45ea32">vcardparameter.h</a></li>
+<li>vcardparameter_kind_is_valid()&#160;:&#160;<a class="el" href="vcardparameter_8h.html#acbc015b1d2108cb8fb96eb44cdfccad5">vcardparameter.h</a></li>
+<li>vcardparameter_kind_to_string()&#160;:&#160;<a class="el" href="vcardparameter_8h.html#a3acf987833491326d89b91a424e366db">vcardparameter.h</a></li>
+<li>vcardparameter_new()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#af92bc4f9b7751da7d4d3c66ffcea1ca1">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#af92bc4f9b7751da7d4d3c66ffcea1ca1">vcardparameter.h</a></li>
+<li>vcardparameter_new_from_string()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a009ad5a6b2325cd4f526739c2c60dc15">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#a009ad5a6b2325cd4f526739c2c60dc15">vcardparameter.h</a></li>
+<li>vcardparameter_new_from_value_string()&#160;:&#160;<a class="el" href="vcardparameter_8h.html#aabe7af74249bc2d9cc39b719f531875e">vcardparameter.h</a></li>
+<li>vcardparameter_set_iana_name()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#aa3f70b53d57b66c7bfd733f099d28f3b">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#aa3f70b53d57b66c7bfd733f099d28f3b">vcardparameter.h</a></li>
+<li>vcardparameter_set_iana_value()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a633a0631ba8d9aceb3f67b9499a8f199">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#a633a0631ba8d9aceb3f67b9499a8f199">vcardparameter.h</a></li>
+<li>vcardparameter_set_parent()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a6f36901a50b2d46bd3ca861ae917b1a8">vcardparameter.c</a>, <a class="el" href="vcardproperty_8h.html#a6f36901a50b2d46bd3ca861ae917b1a8">vcardproperty.h</a></li>
+<li>vcardparameter_set_xname()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#a19e50680bd27efde7da7824ec78155a8">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#a19e50680bd27efde7da7824ec78155a8">vcardparameter.h</a></li>
+<li>vcardparameter_set_xvalue()&#160;:&#160;<a class="el" href="vcardparameter_8c.html#aaad23bc0c0e203eef1cc146129d06439">vcardparameter.c</a>, <a class="el" href="vcardparameter_8h.html#aaad23bc0c0e203eef1cc146129d06439">vcardparameter.h</a></li>
+<li>vcardparameter_string_to_kind()&#160;:&#160;<a class="el" href="vcardparameter_8h.html#ad2e8d8e1c9828ec880ed82fb105ddd86">vcardparameter.h</a></li>
+<li>vcardparser_set_xprop_value_kind()&#160;:&#160;<a class="el" href="vcardparser_8c.html#adc1a2839fea5a4c2bdf41d799a966644">vcardparser.c</a>, <a class="el" href="vcardparser_8h.html#adc1a2839fea5a4c2bdf41d799a966644">vcardparser.h</a></li>
+<li>vcardproperty_clone()&#160;:&#160;<a class="el" href="vcardproperty_8c.html#abc42d87518f3b777711d799759cc0b47">vcardproperty.c</a>, <a class="el" href="vcardproperty_8h.html#abc42d87518f3b777711d799759cc0b47">vcardproperty.h</a></li>
+<li>vcardproperty_get_parent()&#160;:&#160;<a class="el" href="vcardcomponent_8h.html#a9cdf113e0c479d84add2f2a4da58edc4">vcardcomponent.h</a>, <a class="el" href="vcardproperty_8c.html#a9cdf113e0c479d84add2f2a4da58edc4">vcardproperty.c</a></li>
+<li>vcardproperty_get_property_name()&#160;:&#160;<a class="el" href="vcardproperty_8c.html#a0978c4107c153dfad0c294f8f2ebc1bb">vcardproperty.c</a>, <a class="el" href="vcardproperty_8h.html#a0978c4107c153dfad0c294f8f2ebc1bb">vcardproperty.h</a></li>
 <li>vcardproperty_kind_is_valid()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a34690e58edcc8c06f54fc16ce317fc13">vcardproperty.h</a></li>
-<li>vcardproperty_normalize()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a3c656d31e2b783dda959c0dccccf4c5e">vcardproperty.h</a></li>
-<li>vcardproperty_remove_parameter_by_kind()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#ac2adb2654ee641b6ba15042f2ffce565">vcardproperty.h</a></li>
-<li>vcardproperty_remove_parameter_by_name()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a4e87420ddea2f359fa0c4e7daffbc486">vcardproperty.h</a></li>
-<li>vcardproperty_remove_parameter_by_ref()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a0881df999f882ffa9f9fe5fa82cb8ed8">vcardproperty.h</a></li>
-<li>vcardvalue_get_parent()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a2b3a3f5bfad5cf309b5e5ad3ced64fc6">vcardproperty.h</a></li>
-<li>vcardvalue_set_parent()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a82766515c1fc63658a6f8f16ecbc6bf3">vcardproperty.h</a></li>
+<li>vcardproperty_normalize()&#160;:&#160;<a class="el" href="vcardproperty_8c.html#a3c656d31e2b783dda959c0dccccf4c5e">vcardproperty.c</a>, <a class="el" href="vcardproperty_8h.html#a3c656d31e2b783dda959c0dccccf4c5e">vcardproperty.h</a></li>
+<li>vcardproperty_remove_parameter_by_kind()&#160;:&#160;<a class="el" href="vcardproperty_8c.html#ac2adb2654ee641b6ba15042f2ffce565">vcardproperty.c</a>, <a class="el" href="vcardproperty_8h.html#ac2adb2654ee641b6ba15042f2ffce565">vcardproperty.h</a></li>
+<li>vcardproperty_remove_parameter_by_name()&#160;:&#160;<a class="el" href="vcardproperty_8c.html#a4e87420ddea2f359fa0c4e7daffbc486">vcardproperty.c</a>, <a class="el" href="vcardproperty_8h.html#a4e87420ddea2f359fa0c4e7daffbc486">vcardproperty.h</a></li>
+<li>vcardproperty_remove_parameter_by_ref()&#160;:&#160;<a class="el" href="vcardproperty_8c.html#a515f3b0a390500f4c606d22e5704dbf9">vcardproperty.c</a>, <a class="el" href="vcardproperty_8h.html#a0881df999f882ffa9f9fe5fa82cb8ed8">vcardproperty.h</a></li>
+<li>vcardproperty_set_parent()&#160;:&#160;<a class="el" href="vcardcomponent_8h.html#ab6d25934f4197abca43c7a7caeee1a06">vcardcomponent.h</a>, <a class="el" href="vcardproperty_8c.html#ab6d25934f4197abca43c7a7caeee1a06">vcardproperty.c</a></li>
+<li>vcardrestriction_check()&#160;:&#160;<a class="el" href="vcardrestriction_8h.html#a442545a4458b4615a9688ef94b4cbff3">vcardrestriction.h</a></li>
+<li>vcardrestriction_compare()&#160;:&#160;<a class="el" href="vcardrestriction_8h.html#ad55f23b655a9a94b25523a7d04f7765b">vcardrestriction.h</a></li>
+<li>vcardstructured_as_vcard_string_r()&#160;:&#160;<a class="el" href="vcardstructured_8h.html#afa23f3cc67503c3364fab6ec57cb2021">vcardstructured.h</a>, <a class="el" href="vcardvalue_8c.html#afa23f3cc67503c3364fab6ec57cb2021">vcardvalue.c</a></li>
+<li>vcardstructured_clone()&#160;:&#160;<a class="el" href="vcardstructured_8c.html#a73e3476c39e315d00efb4dbf9030c2ed">vcardstructured.c</a>, <a class="el" href="vcardstructured_8h.html#a73e3476c39e315d00efb4dbf9030c2ed">vcardstructured.h</a></li>
+<li>vcardstructured_field_at()&#160;:&#160;<a class="el" href="vcardstructured_8c.html#a19545e096a1ba83fce5859ac267a9f2a">vcardstructured.c</a>, <a class="el" href="vcardstructured_8h.html#a19545e096a1ba83fce5859ac267a9f2a">vcardstructured.h</a></li>
+<li>vcardstructured_new()&#160;:&#160;<a class="el" href="vcardstructured_8c.html#accb6626871d19518a22f227afa178a62">vcardstructured.c</a>, <a class="el" href="vcardstructured_8h.html#accb6626871d19518a22f227afa178a62">vcardstructured.h</a></li>
+<li>vcardstructured_new_from_string()&#160;:&#160;<a class="el" href="vcardstructured_8c.html#a29c281880c09a823afed7e055da67e97">vcardstructured.c</a>, <a class="el" href="vcardstructured_8h.html#a12a18b4f9733942492a1efcdc01902fd">vcardstructured.h</a></li>
+<li>vcardstructured_num_fields()&#160;:&#160;<a class="el" href="vcardstructured_8c.html#a8a7d7386f00d8ebac8d5d9d83eb45358">vcardstructured.c</a>, <a class="el" href="vcardstructured_8h.html#a8a7d7386f00d8ebac8d5d9d83eb45358">vcardstructured.h</a></li>
+<li>vcardstructured_ref()&#160;:&#160;<a class="el" href="vcardstructured_8c.html#a25774288f8020440aea46e7f35a2479e">vcardstructured.c</a>, <a class="el" href="vcardstructured_8h.html#a25774288f8020440aea46e7f35a2479e">vcardstructured.h</a></li>
+<li>vcardstructured_set_field_at()&#160;:&#160;<a class="el" href="vcardstructured_8c.html#a11966974be4faa0a7d7722b0424f9f94">vcardstructured.c</a>, <a class="el" href="vcardstructured_8h.html#a11966974be4faa0a7d7722b0424f9f94">vcardstructured.h</a></li>
+<li>vcardstructured_set_num_fields()&#160;:&#160;<a class="el" href="vcardstructured_8c.html#a31a62f5c168fb670a435a7fd97c11587">vcardstructured.c</a>, <a class="el" href="vcardstructured_8h.html#a31a62f5c168fb670a435a7fd97c11587">vcardstructured.h</a></li>
+<li>vcardstructured_unref()&#160;:&#160;<a class="el" href="vcardstructured_8c.html#a7f551331e7fa3c94a4639efc6479bb0b">vcardstructured.c</a>, <a class="el" href="vcardstructured_8h.html#a7f551331e7fa3c94a4639efc6479bb0b">vcardstructured.h</a></li>
+<li>vcardvalue_get_parent()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a2b3a3f5bfad5cf309b5e5ad3ced64fc6">vcardproperty.h</a>, <a class="el" href="vcardvalue_8c.html#a2b3a3f5bfad5cf309b5e5ad3ced64fc6">vcardvalue.c</a></li>
+<li>vcardvalue_kind_is_valid()&#160;:&#160;<a class="el" href="vcardvalue_8h.html#a5c7f45288118de845504ded0470bc0e2">vcardvalue.h</a></li>
+<li>vcardvalue_reset_kind()&#160;:&#160;<a class="el" href="vcardvalue_8c.html#ab660756bc1f385ad7d8519b6950926ac">vcardvalue.c</a>, <a class="el" href="vcardvalue_8h.html#ab660756bc1f385ad7d8519b6950926ac">vcardvalue.h</a></li>
+<li>vcardvalue_set_parent()&#160;:&#160;<a class="el" href="vcardproperty_8h.html#a82766515c1fc63658a6f8f16ecbc6bf3">vcardproperty.h</a>, <a class="el" href="vcardvalue_8c.html#a82766515c1fc63658a6f8f16ecbc6bf3">vcardvalue.c</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

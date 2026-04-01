@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -77,147 +77,89 @@ $(function() {
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Structures</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">icalproperty.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
+<p>Defines the data structure representing iCalendar properties.  
+<a href="#details">More...</a></p>
+
 <p><a href="icalproperty_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Data Structures</h2></td></tr>
-<tr class="memitem:icalparamiter" id="r_icalparamiter"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structicalparamiter.html">icalparamiter</a></td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a70a87594b345b6ddedb15b9d11d0f046" id="r_a70a87594b345b6ddedb15b9d11d0f046"><td class="memItemLeft" align="right" valign="top"><a id="a70a87594b345b6ddedb15b9d11d0f046" name="a70a87594b345b6ddedb15b9d11d0f046"></a>
-typedef struct icalparamiter&#160;</td><td class="memItemRight" valign="bottom"><b>icalparamiter</b></td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a0fd41a53ef9551fe25343304a978b714" id="r_a0fd41a53ef9551fe25343304a978b714"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0fd41a53ef9551fe25343304a978b714">icalparameter_get_parent</a> (const icalparameter *param)</td></tr>
 <tr class="memitem:add1ff57f4b9ffe33607a1629e68cdf1f" id="r_add1ff57f4b9ffe33607a1629e68cdf1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add1ff57f4b9ffe33607a1629e68cdf1f">icalparameter_set_parent</a> (icalparameter *param, icalproperty *property)</td></tr>
-<tr class="memitem:a5500f052153336e1d386e36be790abd3" id="r_a5500f052153336e1d386e36be790abd3"><td class="memItemLeft" align="right" valign="top"><a id="a5500f052153336e1d386e36be790abd3" name="a5500f052153336e1d386e36be790abd3"></a>
-icalvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalparameter_value_to_value_kind</b> (icalparameter_value value)</td></tr>
-<tr class="memitem:ab0b91eb9e169a38895570e02c40cfe89" id="r_ab0b91eb9e169a38895570e02c40cfe89"><td class="memItemLeft" align="right" valign="top"><a id="ab0b91eb9e169a38895570e02c40cfe89" name="ab0b91eb9e169a38895570e02c40cfe89"></a>
-icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparamiter_deref</b> (<a class="el" href="structicalparamiter.html">icalparamiter</a> *i)</td></tr>
-<tr class="memitem:abc21868b9acdfea79f8d8ec221f34795" id="r_abc21868b9acdfea79f8d8ec221f34795"><td class="memItemLeft" align="right" valign="top"><a id="abc21868b9acdfea79f8d8ec221f34795" name="abc21868b9acdfea79f8d8ec221f34795"></a>
-icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><b>icalparamiter_next</b> (<a class="el" href="structicalparamiter.html">icalparamiter</a> *i)</td></tr>
-<tr class="memitem:a9cc3e93186d8e81cfc46705dbcc1e054" id="r_a9cc3e93186d8e81cfc46705dbcc1e054"><td class="memItemLeft" align="right" valign="top"><a id="a9cc3e93186d8e81cfc46705dbcc1e054" name="a9cc3e93186d8e81cfc46705dbcc1e054"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_action_to_string</b> (icalproperty_action)</td></tr>
-<tr class="memitem:adbad161a2bc9e83fb921a6fcbd4e8ba6" id="r_adbad161a2bc9e83fb921a6fcbd4e8ba6"><td class="memItemLeft" align="right" valign="top"><a id="adbad161a2bc9e83fb921a6fcbd4e8ba6" name="adbad161a2bc9e83fb921a6fcbd4e8ba6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_add_parameter</b> (icalproperty *prop, icalparameter *parameter)</td></tr>
-<tr class="memitem:ad4f04d3439224ea4b77499c9b69d37fe" id="r_ad4f04d3439224ea4b77499c9b69d37fe"><td class="memItemLeft" align="right" valign="top"><a id="ad4f04d3439224ea4b77499c9b69d37fe" name="ad4f04d3439224ea4b77499c9b69d37fe"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_add_parameters</b> (struct icalproperty_impl *prop, va_list args)</td></tr>
-<tr class="memitem:a6ebce0cd48cf395bc8e799b7030fe7bb" id="r_a6ebce0cd48cf395bc8e799b7030fe7bb"><td class="memItemLeft" align="right" valign="top"><a id="a6ebce0cd48cf395bc8e799b7030fe7bb" name="a6ebce0cd48cf395bc8e799b7030fe7bb"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_as_ical_string</b> (icalproperty *prop)</td></tr>
-<tr class="memitem:a4922a40358a1dbe2a675d294f7ba323a" id="r_a4922a40358a1dbe2a675d294f7ba323a"><td class="memItemLeft" align="right" valign="top"><a id="a4922a40358a1dbe2a675d294f7ba323a" name="a4922a40358a1dbe2a675d294f7ba323a"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_as_ical_string_r</b> (icalproperty *prop)</td></tr>
-<tr class="memitem:ae0d2cf9809a873eb02e770726a433c4f" id="r_ae0d2cf9809a873eb02e770726a433c4f"><td class="memItemLeft" align="right" valign="top"><a id="ae0d2cf9809a873eb02e770726a433c4f" name="ae0d2cf9809a873eb02e770726a433c4f"></a>
-<a class="el" href="structicalparamiter.html">icalparamiter</a>&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_begin_parameter</b> (icalproperty *property, icalparameter_kind kind)</td></tr>
-<tr class="memitem:af2b18d277a23c8515900ec705a359a1a" id="r_af2b18d277a23c8515900ec705a359a1a"><td class="memItemLeft" align="right" valign="top"><a id="af2b18d277a23c8515900ec705a359a1a" name="af2b18d277a23c8515900ec705a359a1a"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_class_to_string</b> (icalproperty_class)</td></tr>
+<tr class="memitem:a5500f052153336e1d386e36be790abd3" id="r_a5500f052153336e1d386e36be790abd3"><td class="memItemLeft" align="right" valign="top">icalvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5500f052153336e1d386e36be790abd3">icalparameter_value_to_value_kind</a> (icalparameter_value value)</td></tr>
+<tr class="memitem:a8b2e5f9c0978ad2ec2f78a9c6196d613" id="r_a8b2e5f9c0978ad2ec2f78a9c6196d613"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b2e5f9c0978ad2ec2f78a9c6196d613">icalproperty_action_to_string</a> (icalproperty_action action)</td></tr>
+<tr class="memitem:adbad161a2bc9e83fb921a6fcbd4e8ba6" id="r_adbad161a2bc9e83fb921a6fcbd4e8ba6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbad161a2bc9e83fb921a6fcbd4e8ba6">icalproperty_add_parameter</a> (icalproperty *prop, icalparameter *parameter)</td></tr>
+<tr class="memitem:a0d67350f6ba481ea1363a053a92d04b9" id="r_a0d67350f6ba481ea1363a053a92d04b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d67350f6ba481ea1363a053a92d04b9">icalproperty_add_parameters</a> (icalproperty *prop, va_list args)</td></tr>
+<tr class="memitem:a6ebce0cd48cf395bc8e799b7030fe7bb" id="r_a6ebce0cd48cf395bc8e799b7030fe7bb"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ebce0cd48cf395bc8e799b7030fe7bb">icalproperty_as_ical_string</a> (icalproperty *prop)</td></tr>
+<tr class="memitem:a4922a40358a1dbe2a675d294f7ba323a" id="r_a4922a40358a1dbe2a675d294f7ba323a"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4922a40358a1dbe2a675d294f7ba323a">icalproperty_as_ical_string_r</a> (icalproperty *prop)</td></tr>
+<tr class="memitem:aa0139f9bb1ed3c1f087123c7a5ce2005" id="r_aa0139f9bb1ed3c1f087123c7a5ce2005"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa0139f9bb1ed3c1f087123c7a5ce2005">icalproperty_class_to_string</a> (icalproperty_class propclass)</td></tr>
 <tr class="memitem:a8b8c40e7c85a984df3c67e8ae8bd7549" id="r_a8b8c40e7c85a984df3c67e8ae8bd7549"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b8c40e7c85a984df3c67e8ae8bd7549">icalproperty_clone</a> (const icalproperty *old)</td></tr>
-<tr class="memdesc:a8b8c40e7c85a984df3c67e8ae8bd7549"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deeply clones an icalproperty.  <br /></td></tr>
-<tr class="memitem:a5bb5d91a569763150fb74553e21f200c" id="r_a5bb5d91a569763150fb74553e21f200c"><td class="memItemLeft" align="right" valign="top"><a id="a5bb5d91a569763150fb74553e21f200c" name="a5bb5d91a569763150fb74553e21f200c"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_count_parameters</b> (const icalproperty *prop)</td></tr>
-<tr class="memitem:a54c694fc2ffc41725f39c8f4720b6536" id="r_a54c694fc2ffc41725f39c8f4720b6536"><td class="memItemLeft" align="right" valign="top"><a id="a54c694fc2ffc41725f39c8f4720b6536" name="a54c694fc2ffc41725f39c8f4720b6536"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_enum_belongs_to_property</b> (icalproperty_kind kind, int e)</td></tr>
-<tr class="memitem:a70c3ef76267e68faccb955c79a5ae537" id="r_a70c3ef76267e68faccb955c79a5ae537"><td class="memItemLeft" align="right" valign="top"><a id="a70c3ef76267e68faccb955c79a5ae537" name="a70c3ef76267e68faccb955c79a5ae537"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_enum_to_string</b> (int e)</td></tr>
-<tr class="memitem:a2ccff04e3f59c2543382e7085b0c5c73" id="r_a2ccff04e3f59c2543382e7085b0c5c73"><td class="memItemLeft" align="right" valign="top"><a id="a2ccff04e3f59c2543382e7085b0c5c73" name="a2ccff04e3f59c2543382e7085b0c5c73"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_enum_to_string_r</b> (int e)</td></tr>
-<tr class="memitem:a2f96fe11e0729b7dc8593c8e6b431b00" id="r_a2f96fe11e0729b7dc8593c8e6b431b00"><td class="memItemLeft" align="right" valign="top"><a id="a2f96fe11e0729b7dc8593c8e6b431b00" name="a2f96fe11e0729b7dc8593c8e6b431b00"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_free</b> (icalproperty *prop)</td></tr>
+<tr class="memitem:a5bb5d91a569763150fb74553e21f200c" id="r_a5bb5d91a569763150fb74553e21f200c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bb5d91a569763150fb74553e21f200c">icalproperty_count_parameters</a> (const icalproperty *prop)</td></tr>
+<tr class="memitem:a54c694fc2ffc41725f39c8f4720b6536" id="r_a54c694fc2ffc41725f39c8f4720b6536"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54c694fc2ffc41725f39c8f4720b6536">icalproperty_enum_belongs_to_property</a> (icalproperty_kind kind, int e)</td></tr>
+<tr class="memitem:a70c3ef76267e68faccb955c79a5ae537" id="r_a70c3ef76267e68faccb955c79a5ae537"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70c3ef76267e68faccb955c79a5ae537">icalproperty_enum_to_string</a> (int e)</td></tr>
+<tr class="memitem:a2ccff04e3f59c2543382e7085b0c5c73" id="r_a2ccff04e3f59c2543382e7085b0c5c73"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ccff04e3f59c2543382e7085b0c5c73">icalproperty_enum_to_string_r</a> (int e)</td></tr>
+<tr class="memitem:a2f96fe11e0729b7dc8593c8e6b431b00" id="r_a2f96fe11e0729b7dc8593c8e6b431b00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f96fe11e0729b7dc8593c8e6b431b00">icalproperty_free</a> (icalproperty *prop)</td></tr>
 <tr class="memitem:a6a58eebb7a987d6f286097753126dfbd" id="r_a6a58eebb7a987d6f286097753126dfbd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a58eebb7a987d6f286097753126dfbd">icalproperty_get_allow_empty_properties</a> (void)</td></tr>
-<tr class="memitem:a5e7195290a9fd4437de863a1a2bf46dd" id="r_a5e7195290a9fd4437de863a1a2bf46dd"><td class="memItemLeft" align="right" valign="top"><a id="a5e7195290a9fd4437de863a1a2bf46dd" name="a5e7195290a9fd4437de863a1a2bf46dd"></a>
-icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_first_parameter</b> (icalproperty *prop, icalparameter_kind kind)</td></tr>
+<tr class="memitem:a5e7195290a9fd4437de863a1a2bf46dd" id="r_a5e7195290a9fd4437de863a1a2bf46dd"><td class="memItemLeft" align="right" valign="top">icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e7195290a9fd4437de863a1a2bf46dd">icalproperty_get_first_parameter</a> (icalproperty *prop, icalparameter_kind kind)</td></tr>
 <tr class="memitem:aa9cfb30c2a2237eb52f319516ad0f0f0" id="r_aa9cfb30c2a2237eb52f319516ad0f0f0"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9cfb30c2a2237eb52f319516ad0f0f0">icalproperty_get_iana_name</a> (const icalproperty *prop)</td></tr>
-<tr class="memitem:ad7543361e1e99ff6cfc4609eefaf4cd9" id="r_ad7543361e1e99ff6cfc4609eefaf4cd9"><td class="memItemLeft" align="right" valign="top"><a id="ad7543361e1e99ff6cfc4609eefaf4cd9" name="ad7543361e1e99ff6cfc4609eefaf4cd9"></a>
-icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_next_parameter</b> (icalproperty *prop, icalparameter_kind kind)</td></tr>
-<tr class="memitem:ae5ea07cdaaaed1428a338fdff2665ea5" id="r_ae5ea07cdaaaed1428a338fdff2665ea5"><td class="memItemLeft" align="right" valign="top"><a id="ae5ea07cdaaaed1428a338fdff2665ea5" name="ae5ea07cdaaaed1428a338fdff2665ea5"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_parameter_as_string</b> (icalproperty *prop, const char *name)</td></tr>
-<tr class="memitem:a7ab1b6d9dd8730d5fcdcdffe97cf6c2b" id="r_a7ab1b6d9dd8730d5fcdcdffe97cf6c2b"><td class="memItemLeft" align="right" valign="top"><a id="a7ab1b6d9dd8730d5fcdcdffe97cf6c2b" name="a7ab1b6d9dd8730d5fcdcdffe97cf6c2b"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_parameter_as_string_r</b> (icalproperty *prop, const char *name)</td></tr>
+<tr class="memitem:ad7543361e1e99ff6cfc4609eefaf4cd9" id="r_ad7543361e1e99ff6cfc4609eefaf4cd9"><td class="memItemLeft" align="right" valign="top">icalparameter *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7543361e1e99ff6cfc4609eefaf4cd9">icalproperty_get_next_parameter</a> (icalproperty *prop, icalparameter_kind kind)</td></tr>
+<tr class="memitem:ae5ea07cdaaaed1428a338fdff2665ea5" id="r_ae5ea07cdaaaed1428a338fdff2665ea5"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5ea07cdaaaed1428a338fdff2665ea5">icalproperty_get_parameter_as_string</a> (icalproperty *prop, const char *name)</td></tr>
+<tr class="memitem:a7ab1b6d9dd8730d5fcdcdffe97cf6c2b" id="r_a7ab1b6d9dd8730d5fcdcdffe97cf6c2b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ab1b6d9dd8730d5fcdcdffe97cf6c2b">icalproperty_get_parameter_as_string_r</a> (icalproperty *prop, const char *name)</td></tr>
 <tr class="memitem:a6a4e4af2200ccba5f48748f953968956" id="r_a6a4e4af2200ccba5f48748f953968956"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a4e4af2200ccba5f48748f953968956">icalproperty_get_property_name</a> (const icalproperty *prop)</td></tr>
-<tr class="memitem:a4d87c891a4cef987cee55c29a35e35d1" id="r_a4d87c891a4cef987cee55c29a35e35d1"><td class="memItemLeft" align="right" valign="top"><a id="a4d87c891a4cef987cee55c29a35e35d1" name="a4d87c891a4cef987cee55c29a35e35d1"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_property_name_r</b> (const icalproperty *prop)</td></tr>
-<tr class="memitem:a00695d13cc8ae9f10974bea7db8f2621" id="r_a00695d13cc8ae9f10974bea7db8f2621"><td class="memItemLeft" align="right" valign="top"><a id="a00695d13cc8ae9f10974bea7db8f2621" name="a00695d13cc8ae9f10974bea7db8f2621"></a>
-icalvalue *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_value</b> (const icalproperty *prop)</td></tr>
-<tr class="memitem:a631ae4a398eefc1a8a5cd634a3ea9b02" id="r_a631ae4a398eefc1a8a5cd634a3ea9b02"><td class="memItemLeft" align="right" valign="top"><a id="a631ae4a398eefc1a8a5cd634a3ea9b02" name="a631ae4a398eefc1a8a5cd634a3ea9b02"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_value_as_string</b> (const icalproperty *prop)</td></tr>
-<tr class="memitem:a8822c6176a45af460ade5186fc985251" id="r_a8822c6176a45af460ade5186fc985251"><td class="memItemLeft" align="right" valign="top"><a id="a8822c6176a45af460ade5186fc985251" name="a8822c6176a45af460ade5186fc985251"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_value_as_string_r</b> (const icalproperty *prop)</td></tr>
-<tr class="memitem:a8ba2ceb041926ce2f066296920392192" id="r_a8ba2ceb041926ce2f066296920392192"><td class="memItemLeft" align="right" valign="top"><a id="a8ba2ceb041926ce2f066296920392192" name="a8ba2ceb041926ce2f066296920392192"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_get_x_name</b> (const icalproperty *prop)</td></tr>
-<tr class="memitem:a2b2d63eb96ca82e341f88ac5290518a5" id="r_a2b2d63eb96ca82e341f88ac5290518a5"><td class="memItemLeft" align="right" valign="top"><a id="a2b2d63eb96ca82e341f88ac5290518a5" name="a2b2d63eb96ca82e341f88ac5290518a5"></a>
-icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_isa</b> (const icalproperty *property)</td></tr>
-<tr class="memitem:a219943c31dc340c9fe72c8e07cf79ea7" id="r_a219943c31dc340c9fe72c8e07cf79ea7"><td class="memItemLeft" align="right" valign="top"><a id="a219943c31dc340c9fe72c8e07cf79ea7" name="a219943c31dc340c9fe72c8e07cf79ea7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_isa_property</b> (void *property)</td></tr>
-<tr class="memitem:abce12586d3efe9670aac68c9bb22d4f5" id="r_abce12586d3efe9670aac68c9bb22d4f5"><td class="memItemLeft" align="right" valign="top"><a id="abce12586d3efe9670aac68c9bb22d4f5" name="abce12586d3efe9670aac68c9bb22d4f5"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_kind_and_string_to_enum</b> (const int kind, const char *str)</td></tr>
+<tr class="memitem:a4d87c891a4cef987cee55c29a35e35d1" id="r_a4d87c891a4cef987cee55c29a35e35d1"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d87c891a4cef987cee55c29a35e35d1">icalproperty_get_property_name_r</a> (const icalproperty *prop)</td></tr>
+<tr class="memitem:a00695d13cc8ae9f10974bea7db8f2621" id="r_a00695d13cc8ae9f10974bea7db8f2621"><td class="memItemLeft" align="right" valign="top">icalvalue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00695d13cc8ae9f10974bea7db8f2621">icalproperty_get_value</a> (const icalproperty *prop)</td></tr>
+<tr class="memitem:a631ae4a398eefc1a8a5cd634a3ea9b02" id="r_a631ae4a398eefc1a8a5cd634a3ea9b02"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a631ae4a398eefc1a8a5cd634a3ea9b02">icalproperty_get_value_as_string</a> (const icalproperty *prop)</td></tr>
+<tr class="memitem:a8822c6176a45af460ade5186fc985251" id="r_a8822c6176a45af460ade5186fc985251"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8822c6176a45af460ade5186fc985251">icalproperty_get_value_as_string_r</a> (const icalproperty *prop)</td></tr>
+<tr class="memitem:a8ba2ceb041926ce2f066296920392192" id="r_a8ba2ceb041926ce2f066296920392192"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ba2ceb041926ce2f066296920392192">icalproperty_get_x_name</a> (const icalproperty *prop)</td></tr>
+<tr class="memitem:a2b2d63eb96ca82e341f88ac5290518a5" id="r_a2b2d63eb96ca82e341f88ac5290518a5"><td class="memItemLeft" align="right" valign="top">icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b2d63eb96ca82e341f88ac5290518a5">icalproperty_isa</a> (const icalproperty *property)</td></tr>
+<tr class="memitem:a219943c31dc340c9fe72c8e07cf79ea7" id="r_a219943c31dc340c9fe72c8e07cf79ea7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a219943c31dc340c9fe72c8e07cf79ea7">icalproperty_isa_property</a> (void *property)</td></tr>
+<tr class="memitem:abce12586d3efe9670aac68c9bb22d4f5" id="r_abce12586d3efe9670aac68c9bb22d4f5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abce12586d3efe9670aac68c9bb22d4f5">icalproperty_kind_and_string_to_enum</a> (const int kind, const char *str)</td></tr>
 <tr class="memitem:af8f6ef1316258f3b165dea47064096de" id="r_af8f6ef1316258f3b165dea47064096de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8f6ef1316258f3b165dea47064096de">icalproperty_kind_is_valid</a> (const icalproperty_kind kind)</td></tr>
-<tr class="memitem:afcd683d080a344213a2c69283a63fe3a" id="r_afcd683d080a344213a2c69283a63fe3a"><td class="memItemLeft" align="right" valign="top"><a id="afcd683d080a344213a2c69283a63fe3a" name="afcd683d080a344213a2c69283a63fe3a"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_kind_to_string</b> (icalproperty_kind kind)</td></tr>
-<tr class="memitem:adc024f08eee28934f5a1bc22efcc4ee3" id="r_adc024f08eee28934f5a1bc22efcc4ee3"><td class="memItemLeft" align="right" valign="top"><a id="adc024f08eee28934f5a1bc22efcc4ee3" name="adc024f08eee28934f5a1bc22efcc4ee3"></a>
-icalvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_kind_to_value_kind</b> (icalproperty_kind kind)</td></tr>
-<tr class="memitem:aaf4581d3535f4b72a2783926cc4c8d21" id="r_aaf4581d3535f4b72a2783926cc4c8d21"><td class="memItemLeft" align="right" valign="top"><a id="aaf4581d3535f4b72a2783926cc4c8d21" name="aaf4581d3535f4b72a2783926cc4c8d21"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_method_to_string</b> (icalproperty_method method)</td></tr>
-<tr class="memitem:ab4694a22e0305daa0570c928b629f207" id="r_ab4694a22e0305daa0570c928b629f207"><td class="memItemLeft" align="right" valign="top"><a id="ab4694a22e0305daa0570c928b629f207" name="ab4694a22e0305daa0570c928b629f207"></a>
-icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_new</b> (icalproperty_kind kind)</td></tr>
-<tr class="memitem:ac3c46962ba50c73782546c42a19c3eb0" id="r_ac3c46962ba50c73782546c42a19c3eb0"><td class="memItemLeft" align="right" valign="top"><a id="ac3c46962ba50c73782546c42a19c3eb0" name="ac3c46962ba50c73782546c42a19c3eb0"></a>
-icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_new_from_string</b> (const char *str)</td></tr>
+<tr class="memitem:afcd683d080a344213a2c69283a63fe3a" id="r_afcd683d080a344213a2c69283a63fe3a"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcd683d080a344213a2c69283a63fe3a">icalproperty_kind_to_string</a> (icalproperty_kind kind)</td></tr>
+<tr class="memitem:adc024f08eee28934f5a1bc22efcc4ee3" id="r_adc024f08eee28934f5a1bc22efcc4ee3"><td class="memItemLeft" align="right" valign="top">icalvalue_kind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc024f08eee28934f5a1bc22efcc4ee3">icalproperty_kind_to_value_kind</a> (icalproperty_kind kind)</td></tr>
+<tr class="memitem:aaf4581d3535f4b72a2783926cc4c8d21" id="r_aaf4581d3535f4b72a2783926cc4c8d21"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf4581d3535f4b72a2783926cc4c8d21">icalproperty_method_to_string</a> (icalproperty_method method)</td></tr>
+<tr class="memitem:ab4694a22e0305daa0570c928b629f207" id="r_ab4694a22e0305daa0570c928b629f207"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4694a22e0305daa0570c928b629f207">icalproperty_new</a> (icalproperty_kind kind)</td></tr>
+<tr class="memitem:ac3c46962ba50c73782546c42a19c3eb0" id="r_ac3c46962ba50c73782546c42a19c3eb0"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3c46962ba50c73782546c42a19c3eb0">icalproperty_new_from_string</a> (const char *str)</td></tr>
 <tr class="memitem:a7b1e4b49622fbd0f1160b65c102fbcfa" id="r_a7b1e4b49622fbd0f1160b65c102fbcfa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b1e4b49622fbd0f1160b65c102fbcfa">icalproperty_normalize</a> (icalproperty *prop)</td></tr>
-<tr class="memitem:afc5bad7e39d0e13a223fa67b435941c6" id="r_afc5bad7e39d0e13a223fa67b435941c6"><td class="memItemLeft" align="right" valign="top"><a id="afc5bad7e39d0e13a223fa67b435941c6" name="afc5bad7e39d0e13a223fa67b435941c6"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_participanttype_to_string</b> (icalproperty_participanttype)</td></tr>
+<tr class="memitem:ac5da5f046eefa95ac4799baa16b62b0f" id="r_ac5da5f046eefa95ac4799baa16b62b0f"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5da5f046eefa95ac4799baa16b62b0f">icalproperty_participanttype_to_string</a> (icalproperty_participanttype participanttype)</td></tr>
 <tr class="memitem:a68baed35b3b1af4ababf2c62b2ced68d" id="r_a68baed35b3b1af4ababf2c62b2ced68d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68baed35b3b1af4ababf2c62b2ced68d">icalproperty_remove_parameter_by_kind</a> (icalproperty *prop, icalparameter_kind kind)</td></tr>
 <tr class="memdesc:a68baed35b3b1af4ababf2c62b2ced68d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all parameters with the specified kind.  <br /></td></tr>
 <tr class="memitem:a51587b7b70961ff814f964bf81a64afe" id="r_a51587b7b70961ff814f964bf81a64afe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51587b7b70961ff814f964bf81a64afe">icalproperty_remove_parameter_by_name</a> (icalproperty *prop, const char *name)</td></tr>
 <tr class="memdesc:a51587b7b70961ff814f964bf81a64afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all parameters with the specified name.  <br /></td></tr>
 <tr class="memitem:a3e16fd227adaaa8ec34aea6d2d565c3e" id="r_a3e16fd227adaaa8ec34aea6d2d565c3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e16fd227adaaa8ec34aea6d2d565c3e">icalproperty_remove_parameter_by_ref</a> (icalproperty *prop, icalparameter *param)</td></tr>
 <tr class="memdesc:a3e16fd227adaaa8ec34aea6d2d565c3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the specified parameter reference from the property.  <br /></td></tr>
-<tr class="memitem:ac19e7431ad06f8896be71f7ea891ffa6" id="r_ac19e7431ad06f8896be71f7ea891ffa6"><td class="memItemLeft" align="right" valign="top"><a id="ac19e7431ad06f8896be71f7ea891ffa6" name="ac19e7431ad06f8896be71f7ea891ffa6"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_resourcetype_to_string</b> (icalproperty_resourcetype)</td></tr>
+<tr class="memitem:a821152c6841a91fa755ad935bcfb36eb" id="r_a821152c6841a91fa755ad935bcfb36eb"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a821152c6841a91fa755ad935bcfb36eb">icalproperty_resourcetype_to_string</a> (icalproperty_resourcetype resourcetype)</td></tr>
 <tr class="memitem:a4e85ae6c619d9eb990965327d7be9a67" id="r_a4e85ae6c619d9eb990965327d7be9a67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e85ae6c619d9eb990965327d7be9a67">icalproperty_set_allow_empty_properties</a> (bool enable)</td></tr>
 <tr class="memitem:aba3f3ce5a2f0a0c1b2e46022d63ce629" id="r_aba3f3ce5a2f0a0c1b2e46022d63ce629"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba3f3ce5a2f0a0c1b2e46022d63ce629">icalproperty_set_iana_name</a> (icalproperty *prop, const char *name)</td></tr>
-<tr class="memitem:aa4ab8877f11c9e23ceff9c538bbb6c18" id="r_aa4ab8877f11c9e23ceff9c538bbb6c18"><td class="memItemLeft" align="right" valign="top"><a id="aa4ab8877f11c9e23ceff9c538bbb6c18" name="aa4ab8877f11c9e23ceff9c538bbb6c18"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_parameter</b> (icalproperty *prop, icalparameter *parameter)</td></tr>
-<tr class="memitem:a4a71e5508c72c370ab42f7bd4fe19e49" id="r_a4a71e5508c72c370ab42f7bd4fe19e49"><td class="memItemLeft" align="right" valign="top"><a id="a4a71e5508c72c370ab42f7bd4fe19e49" name="a4a71e5508c72c370ab42f7bd4fe19e49"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_parameter_from_string</b> (icalproperty *prop, const char *name, const char *value)</td></tr>
-<tr class="memitem:a774df19c0bd763874ce8c0f273380a1e" id="r_a774df19c0bd763874ce8c0f273380a1e"><td class="memItemLeft" align="right" valign="top"><a id="a774df19c0bd763874ce8c0f273380a1e" name="a774df19c0bd763874ce8c0f273380a1e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_value</b> (icalproperty *prop, icalvalue *value)</td></tr>
-<tr class="memitem:aded432c51c2f3e0b08099ce6b0ca547b" id="r_aded432c51c2f3e0b08099ce6b0ca547b"><td class="memItemLeft" align="right" valign="top"><a id="aded432c51c2f3e0b08099ce6b0ca547b" name="aded432c51c2f3e0b08099ce6b0ca547b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_value_from_string</b> (icalproperty *prop, const char *str, const char *type)</td></tr>
-<tr class="memitem:ae729fcc22726fe05c9981735bb229be0" id="r_ae729fcc22726fe05c9981735bb229be0"><td class="memItemLeft" align="right" valign="top"><a id="ae729fcc22726fe05c9981735bb229be0" name="ae729fcc22726fe05c9981735bb229be0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_set_x_name</b> (icalproperty *prop, const char *name)</td></tr>
-<tr class="memitem:a7fc8c3b86b48aa593dcf4da0dda13858" id="r_a7fc8c3b86b48aa593dcf4da0dda13858"><td class="memItemLeft" align="right" valign="top"><a id="a7fc8c3b86b48aa593dcf4da0dda13858" name="a7fc8c3b86b48aa593dcf4da0dda13858"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_status_to_string</b> (icalproperty_status)</td></tr>
-<tr class="memitem:acc56277677a859b6a0a35488e2fd50fd" id="r_acc56277677a859b6a0a35488e2fd50fd"><td class="memItemLeft" align="right" valign="top"><a id="acc56277677a859b6a0a35488e2fd50fd" name="acc56277677a859b6a0a35488e2fd50fd"></a>
-icalproperty_action&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_string_to_action</b> (const char *string)</td></tr>
-<tr class="memitem:a139ed0cdb593f339403382aa5c432357" id="r_a139ed0cdb593f339403382aa5c432357"><td class="memItemLeft" align="right" valign="top"><a id="a139ed0cdb593f339403382aa5c432357" name="a139ed0cdb593f339403382aa5c432357"></a>
-icalproperty_class&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_string_to_class</b> (const char *string)</td></tr>
-<tr class="memitem:a07c1bf2338074d6cbd282581bd0341e1" id="r_a07c1bf2338074d6cbd282581bd0341e1"><td class="memItemLeft" align="right" valign="top"><a id="a07c1bf2338074d6cbd282581bd0341e1" name="a07c1bf2338074d6cbd282581bd0341e1"></a>
-icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_string_to_kind</b> (const char *string)</td></tr>
-<tr class="memitem:a6b2801f77640f5505f3b533e45dd06db" id="r_a6b2801f77640f5505f3b533e45dd06db"><td class="memItemLeft" align="right" valign="top"><a id="a6b2801f77640f5505f3b533e45dd06db" name="a6b2801f77640f5505f3b533e45dd06db"></a>
-icalproperty_method&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_string_to_method</b> (const char *str)</td></tr>
-<tr class="memitem:a2a3bc88356ed6dcfcab867fe0a160c49" id="r_a2a3bc88356ed6dcfcab867fe0a160c49"><td class="memItemLeft" align="right" valign="top"><a id="a2a3bc88356ed6dcfcab867fe0a160c49" name="a2a3bc88356ed6dcfcab867fe0a160c49"></a>
-icalproperty_participanttype&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_string_to_participanttype</b> (const char *string)</td></tr>
-<tr class="memitem:a7bc5f32e9196a1a5f9921861ab0b9a8d" id="r_a7bc5f32e9196a1a5f9921861ab0b9a8d"><td class="memItemLeft" align="right" valign="top"><a id="a7bc5f32e9196a1a5f9921861ab0b9a8d" name="a7bc5f32e9196a1a5f9921861ab0b9a8d"></a>
-icalproperty_resourcetype&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_string_to_resourcetype</b> (const char *string)</td></tr>
-<tr class="memitem:a7d161a0a372bf4cf7d49c62e3ce1740c" id="r_a7d161a0a372bf4cf7d49c62e3ce1740c"><td class="memItemLeft" align="right" valign="top"><a id="a7d161a0a372bf4cf7d49c62e3ce1740c" name="a7d161a0a372bf4cf7d49c62e3ce1740c"></a>
-icalproperty_status&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_string_to_status</b> (const char *string)</td></tr>
-<tr class="memitem:aa161bbd02f8e4af00f23b36cd6934b79" id="r_aa161bbd02f8e4af00f23b36cd6934b79"><td class="memItemLeft" align="right" valign="top"><a id="aa161bbd02f8e4af00f23b36cd6934b79" name="aa161bbd02f8e4af00f23b36cd6934b79"></a>
-icalproperty_transp&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_string_to_transp</b> (const char *string)</td></tr>
-<tr class="memitem:a07644276854db5d088d1199f830c0ece" id="r_a07644276854db5d088d1199f830c0ece"><td class="memItemLeft" align="right" valign="top"><a id="a07644276854db5d088d1199f830c0ece" name="a07644276854db5d088d1199f830c0ece"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_transp_to_string</b> (icalproperty_transp)</td></tr>
-<tr class="memitem:a9ad10def86b672932866c1f588c0be9f" id="r_a9ad10def86b672932866c1f588c0be9f"><td class="memItemLeft" align="right" valign="top"><a id="a9ad10def86b672932866c1f588c0be9f" name="a9ad10def86b672932866c1f588c0be9f"></a>
-icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalproperty_value_kind_to_kind</b> (icalvalue_kind kind)</td></tr>
+<tr class="memitem:aa4ab8877f11c9e23ceff9c538bbb6c18" id="r_aa4ab8877f11c9e23ceff9c538bbb6c18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4ab8877f11c9e23ceff9c538bbb6c18">icalproperty_set_parameter</a> (icalproperty *prop, icalparameter *parameter)</td></tr>
+<tr class="memitem:a4a71e5508c72c370ab42f7bd4fe19e49" id="r_a4a71e5508c72c370ab42f7bd4fe19e49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a71e5508c72c370ab42f7bd4fe19e49">icalproperty_set_parameter_from_string</a> (icalproperty *prop, const char *name, const char *value)</td></tr>
+<tr class="memitem:a774df19c0bd763874ce8c0f273380a1e" id="r_a774df19c0bd763874ce8c0f273380a1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a774df19c0bd763874ce8c0f273380a1e">icalproperty_set_value</a> (icalproperty *prop, icalvalue *value)</td></tr>
+<tr class="memitem:aded432c51c2f3e0b08099ce6b0ca547b" id="r_aded432c51c2f3e0b08099ce6b0ca547b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aded432c51c2f3e0b08099ce6b0ca547b">icalproperty_set_value_from_string</a> (icalproperty *prop, const char *str, const char *type)</td></tr>
+<tr class="memitem:ae729fcc22726fe05c9981735bb229be0" id="r_ae729fcc22726fe05c9981735bb229be0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae729fcc22726fe05c9981735bb229be0">icalproperty_set_x_name</a> (icalproperty *prop, const char *name)</td></tr>
+<tr class="memitem:abacc096735dbd14407153cc812bd70cf" id="r_abacc096735dbd14407153cc812bd70cf"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abacc096735dbd14407153cc812bd70cf">icalproperty_status_to_string</a> (icalproperty_status status)</td></tr>
+<tr class="memitem:acc56277677a859b6a0a35488e2fd50fd" id="r_acc56277677a859b6a0a35488e2fd50fd"><td class="memItemLeft" align="right" valign="top">icalproperty_action&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc56277677a859b6a0a35488e2fd50fd">icalproperty_string_to_action</a> (const char *string)</td></tr>
+<tr class="memitem:a139ed0cdb593f339403382aa5c432357" id="r_a139ed0cdb593f339403382aa5c432357"><td class="memItemLeft" align="right" valign="top">icalproperty_class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a139ed0cdb593f339403382aa5c432357">icalproperty_string_to_class</a> (const char *string)</td></tr>
+<tr class="memitem:a07c1bf2338074d6cbd282581bd0341e1" id="r_a07c1bf2338074d6cbd282581bd0341e1"><td class="memItemLeft" align="right" valign="top">icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07c1bf2338074d6cbd282581bd0341e1">icalproperty_string_to_kind</a> (const char *string)</td></tr>
+<tr class="memitem:a6b2801f77640f5505f3b533e45dd06db" id="r_a6b2801f77640f5505f3b533e45dd06db"><td class="memItemLeft" align="right" valign="top">icalproperty_method&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b2801f77640f5505f3b533e45dd06db">icalproperty_string_to_method</a> (const char *str)</td></tr>
+<tr class="memitem:a2a3bc88356ed6dcfcab867fe0a160c49" id="r_a2a3bc88356ed6dcfcab867fe0a160c49"><td class="memItemLeft" align="right" valign="top">icalproperty_participanttype&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a3bc88356ed6dcfcab867fe0a160c49">icalproperty_string_to_participanttype</a> (const char *string)</td></tr>
+<tr class="memitem:a7bc5f32e9196a1a5f9921861ab0b9a8d" id="r_a7bc5f32e9196a1a5f9921861ab0b9a8d"><td class="memItemLeft" align="right" valign="top">icalproperty_resourcetype&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7bc5f32e9196a1a5f9921861ab0b9a8d">icalproperty_string_to_resourcetype</a> (const char *string)</td></tr>
+<tr class="memitem:a7d161a0a372bf4cf7d49c62e3ce1740c" id="r_a7d161a0a372bf4cf7d49c62e3ce1740c"><td class="memItemLeft" align="right" valign="top">icalproperty_status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d161a0a372bf4cf7d49c62e3ce1740c">icalproperty_string_to_status</a> (const char *string)</td></tr>
+<tr class="memitem:aa161bbd02f8e4af00f23b36cd6934b79" id="r_aa161bbd02f8e4af00f23b36cd6934b79"><td class="memItemLeft" align="right" valign="top">icalproperty_transp&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa161bbd02f8e4af00f23b36cd6934b79">icalproperty_string_to_transp</a> (const char *string)</td></tr>
+<tr class="memitem:a822164055d68006640f9d6accb15c57a" id="r_a822164055d68006640f9d6accb15c57a"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a822164055d68006640f9d6accb15c57a">icalproperty_transp_to_string</a> (icalproperty_transp transp)</td></tr>
+<tr class="memitem:a9ad10def86b672932866c1f588c0be9f" id="r_a9ad10def86b672932866c1f588c0be9f"><td class="memItemLeft" align="right" valign="top">icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ad10def86b672932866c1f588c0be9f">icalproperty_value_kind_to_kind</a> (icalvalue_kind kind)</td></tr>
 <tr class="memitem:a0985be5532b1bc4e5b4dc6858aa05883" id="r_a0985be5532b1bc4e5b4dc6858aa05883"><td class="memItemLeft" align="right" valign="top">icalproperty *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0985be5532b1bc4e5b4dc6858aa05883">icalvalue_get_parent</a> (const icalvalue *value)</td></tr>
 <tr class="memitem:a810f13ffbf32703b6f1e71ad3e0189c7" id="r_a810f13ffbf32703b6f1e71ad3e0189c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a810f13ffbf32703b6f1e71ad3e0189c7">icalvalue_set_parent</a> (icalvalue *value, icalproperty *property)</td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines the data structure representing iCalendar properties. </p>
+
+<p class="definition">Definition in file <a class="el" href="icalproperty_8h_source.html">icalproperty.h</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a0fd41a53ef9551fe25343304a978b714" name="a0fd41a53ef9551fe25343304a978b714"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0fd41a53ef9551fe25343304a978b714">&#9670;&#160;</a></span>icalparameter_get_parent()</h2>
 
@@ -232,7 +174,17 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the parent <code class="param">icalproperty</code> for the specified <code class="param">icalparameter</code>. </p><dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+<p>Gets the parent icalproperty of an icalparameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">param</td><td>a pointer to the icalparameter</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the parent <code class="param">icalproperty</code> for the specified <code class="param">icalparameter</code>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalparameter_8c_source.html#l00371">371</a> of file <a class="el" href="icalparameter_8c_source.html">icalparameter.c</a>.</p>
 
 </div>
 </div>
@@ -254,7 +206,213 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the parent <code class="param">icalproperty</code> for the specified <code class="param">icalparameter</code>. </p><dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+<p>Sets the parent icalproperty for the specified icalparameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">param</td><td>a pointer to a valid icalparameter </td></tr>
+    <tr><td class="paramname">property</td><td>a pointer to a presumably valid icalproperty to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalparameter_8c_source.html#l00364">364</a> of file <a class="el" href="icalparameter_8c_source.html">icalparameter.c</a>.</p>
+
+</div>
+</div>
+<a id="a5500f052153336e1d386e36be790abd3" name="a5500f052153336e1d386e36be790abd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5500f052153336e1d386e36be790abd3">&#9670;&#160;</a></span>icalparameter_value_to_value_kind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalvalue_kind icalparameter_value_to_value_kind </td>
+          <td>(</td>
+          <td class="paramtype">icalparameter_value</td>          <td class="paramname"><span class="paramname"><em>value</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalparameter_value to an icalvalue_kind.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>the icalparameter_value to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalvalue_kind conversion from <code class="param">value</code>; returns ICAL_NO_VALUE if <code class="param">value</code> is invalid. </dd></dl>
+
+</div>
+</div>
+<a id="a8b2e5f9c0978ad2ec2f78a9c6196d613" name="a8b2e5f9c0978ad2ec2f78a9c6196d613"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b2e5f9c0978ad2ec2f78a9c6196d613">&#9670;&#160;</a></span>icalproperty_action_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_action_to_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_action</td>          <td class="paramname"><span class="paramname"><em>action</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalproperty_action to its string representation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">action</td><td>is the icalproperty_action to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified icalproperty_action. </dd></dl>
+
+</div>
+</div>
+<a id="adbad161a2bc9e83fb921a6fcbd4e8ba6" name="adbad161a2bc9e83fb921a6fcbd4e8ba6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbad161a2bc9e83fb921a6fcbd4e8ba6">&#9670;&#160;</a></span>icalproperty_add_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalproperty_add_parameter </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalparameter *</td>          <td class="paramname"><span class="paramname"><em>parameter</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Adds a parameter to the specified icalproperty.</p>
+<p>No error checking is performed by this function.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+    <tr><td class="paramname">parameter</td><td>a pointer to a presumably valid icalparameter </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00488">488</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a0d67350f6ba481ea1363a053a92d04b9" name="a0d67350f6ba481ea1363a053a92d04b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d67350f6ba481ea1363a053a92d04b9">&#9670;&#160;</a></span>icalproperty_add_parameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalproperty_add_parameters </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list</td>          <td class="paramname"><span class="paramname"><em>args</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Adds a list of parameter to the specified icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty. </td></tr>
+    <tr><td class="paramname">args</td><td>a va_list of pointers that presumably point to list of valid icalparameters.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>If any item in <code class="param">va_list</code> points to an illegal icalparameter the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>.</p>
+<p>Any item in <code class="param">va_list</code> points to an icalvalue is ignored. </p>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00077">77</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a6ebce0cd48cf395bc8e799b7030fe7bb" name="a6ebce0cd48cf395bc8e799b7030fe7bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ebce0cd48cf395bc8e799b7030fe7bb">&#9670;&#160;</a></span>icalproperty_as_ical_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_as_ical_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Stringify an icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to an icalproperty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of <code class="param">prop</code>. NULL is returned is <code class="param">prop</code> is invalid.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a4922a40358a1dbe2a675d294f7ba323a">icalproperty_as_ical_string_r</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00360">360</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a4922a40358a1dbe2a675d294f7ba323a" name="a4922a40358a1dbe2a675d294f7ba323a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4922a40358a1dbe2a675d294f7ba323a">&#9670;&#160;</a></span>icalproperty_as_ical_string_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icalproperty_as_ical_string_r </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Stringify an icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to an icalproperty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of <code class="param">prop</code>. NULL is returned is <code class="param">prop</code> is invalid.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a6ebce0cd48cf395bc8e799b7030fe7bb">icalproperty_as_ical_string</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00369">369</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="aa0139f9bb1ed3c1f087123c7a5ce2005" name="aa0139f9bb1ed3c1f087123c7a5ce2005"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0139f9bb1ed3c1f087123c7a5ce2005">&#9670;&#160;</a></span>icalproperty_class_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_class_to_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_class</td>          <td class="paramname"><span class="paramname"><em>propclass</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalproperty_class to its string representation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">propclass</td><td>is the icalproperty_class to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified icalproperty_class. </dd></dl>
 
 </div>
 </div>
@@ -272,9 +430,152 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Deeply clones an icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">old</td><td>a pointer to the icalproperty to clone </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the memory for the newly cloned icalproperty.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
 
-<p>Deeply clones an icalproperty. </p>
-<p>Returns a pointer to the memory for the newly cloned icalproperty. </p><dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00100">100</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a5bb5d91a569763150fb74553e21f200c" name="a5bb5d91a569763150fb74553e21f200c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bb5d91a569763150fb74553e21f200c">&#9670;&#160;</a></span>icalproperty_count_parameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int icalproperty_count_parameters </td>
+          <td>(</td>
+          <td class="paramtype">const icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the number of parameter for a specified icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of parameters attached to <code class="param">prop</code>. Returns -1 if <code class="param">prop</code> is NULL. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00699">699</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a54c694fc2ffc41725f39c8f4720b6536" name="a54c694fc2ffc41725f39c8f4720b6536"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54c694fc2ffc41725f39c8f4720b6536">&#9670;&#160;</a></span>icalproperty_enum_belongs_to_property()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool icalproperty_enum_belongs_to_property </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_kind</td>          <td class="paramname"><span class="paramname"><em>kind</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>e</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Determines if a integer ia a valid enum for a specified icalproperty_kind.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>is the icalproperty_kind </td></tr>
+    <tr><td class="paramname">e</td><td>is a an integer to validate as an enum of type icalproperty_kind</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the specified integer is a valid enum for icalproperty_kind; false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="a70c3ef76267e68faccb955c79a5ae537" name="a70c3ef76267e68faccb955c79a5ae537"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70c3ef76267e68faccb955c79a5ae537">&#9670;&#160;</a></span>icalproperty_enum_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_enum_to_string </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>e</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an integer representing some icalproperty type to its string representation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">e</td><td>is an integer between ICALPROPERTY_FIRST_ENUM and ICALPROPERTY_LAST_ENUM, inclusive.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified icalproperty type.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a2ccff04e3f59c2543382e7085b0c5c73">icalproperty_enum_to_string_r</a> </dd></dl>
+
+</div>
+</div>
+<a id="a2ccff04e3f59c2543382e7085b0c5c73" name="a2ccff04e3f59c2543382e7085b0c5c73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ccff04e3f59c2543382e7085b0c5c73">&#9670;&#160;</a></span>icalproperty_enum_to_string_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icalproperty_enum_to_string_r </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>e</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an integer representing some icalproperty type to its string representation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">e</td><td>is an integer between ICALPROPERTY_FIRST_ENUM and ICALPROPERTY_LAST_ENUM, inclusive.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified icalproperty type.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a70c3ef76267e68faccb955c79a5ae537">icalproperty_enum_to_string</a> </dd></dl>
+
+</div>
+</div>
+<a id="a2f96fe11e0729b7dc8593c8e6b431b00" name="a2f96fe11e0729b7dc8593c8e6b431b00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f96fe11e0729b7dc8593c8e6b431b00">&#9670;&#160;</a></span>icalproperty_free()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalproperty_free </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Free the memory for an icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00184">184</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
 
 </div>
 </div>
@@ -295,6 +596,40 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
 <p>Returns if empty properties are allowed; else are replaced with X-LIC-ERROR properties.</p>
 <dl class="section return"><dt>Returns</dt><dd>true if empty properties are allowed; else returns false </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00072">72</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a5e7195290a9fd4437de863a1a2bf46dd" name="a5e7195290a9fd4437de863a1a2bf46dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e7195290a9fd4437de863a1a2bf46dd">&#9670;&#160;</a></span>icalproperty_get_first_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalparameter * icalproperty_get_first_parameter </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalparameter_kind</td>          <td class="paramname"><span class="paramname"><em>kind</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>From the head position, iterates the icalparameter list attached to the specified icalproperty until the first icalparameter_kind is found.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+    <tr><td class="paramname">kind</td><td>an icalparameter_kind to use for the search</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the first icalparameter found of icalparameter_kind <code class="param">kind</code> ; NULL if no matches are found. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00709">709</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
 
 </div>
 </div>
@@ -322,6 +657,106 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
 <dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the <code class="param">comp</code> IANA name; will be NULL if the name has yet to be specified. </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00883">883</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="ad7543361e1e99ff6cfc4609eefaf4cd9" name="ad7543361e1e99ff6cfc4609eefaf4cd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7543361e1e99ff6cfc4609eefaf4cd9">&#9670;&#160;</a></span>icalproperty_get_next_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalparameter * icalproperty_get_next_parameter </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalparameter_kind</td>          <td class="paramname"><span class="paramname"><em>kind</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>From the current position, iterates the icalparameter list attached to the specified icalproperty until the next icalparameter_kind is found.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+    <tr><td class="paramname">kind</td><td>an icalparameter_kind to use for the search</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the next icalparameter found of icalparamter_kind <code class="param">kind</code>; NULL if no matches are found. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00731">731</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="ae5ea07cdaaaed1428a338fdff2665ea5" name="ae5ea07cdaaaed1428a338fdff2665ea5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5ea07cdaaaed1428a338fdff2665ea5">&#9670;&#160;</a></span>icalproperty_get_parameter_as_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_get_parameter_as_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the parameter value for a specified icalproperty parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+    <tr><td class="paramname">name</td><td>a a pointer to a char string containing the name of icalparameter to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the value for the specified icalparameter name; NULL is returned is <code class="param">name</code> refers to an invalid icalproperty_kind.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a7ab1b6d9dd8730d5fcdcdffe97cf6c2b">icalproperty_get_parameter_as_string_r</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00548">548</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a7ab1b6d9dd8730d5fcdcdffe97cf6c2b" name="a7ab1b6d9dd8730d5fcdcdffe97cf6c2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ab1b6d9dd8730d5fcdcdffe97cf6c2b">&#9670;&#160;</a></span>icalproperty_get_parameter_as_string_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icalproperty_get_parameter_as_string_r </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the parameter value for a specified icalproperty parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+    <tr><td class="paramname">name</td><td>a pointer to a char string containing the name of icalparameter to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the value for the specified icalparameter name; NULL is returned is <code class="param">name</code> refers to an invalid icalproperty_kind.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#ae5ea07cdaaaed1428a338fdff2665ea5">icalproperty_get_parameter_as_string</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00557">557</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
 </div>
 </div>
 <a id="a6a4e4af2200ccba5f48748f953968956" name="a6a4e4af2200ccba5f48748f953968956"></a>
@@ -338,7 +773,243 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the name of the property &ndash; the type name converted to a string, or the value of _get_x_name if the type is and X property </p>
+<p>Gets the name of the specified icalproperty.</p>
+<p>Returns the name of the property &ndash; the type name converted to a string, or the value of _get_x_name if the type is and X property.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to the icalproperty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a string containing the icalproperty's name.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a4d87c891a4cef987cee55c29a35e35d1">icalproperty_get_property_name_r</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00891">891</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a4d87c891a4cef987cee55c29a35e35d1" name="a4d87c891a4cef987cee55c29a35e35d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d87c891a4cef987cee55c29a35e35d1">&#9670;&#160;</a></span>icalproperty_get_property_name_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icalproperty_get_property_name_r </td>
+          <td>(</td>
+          <td class="paramtype">const icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the name of the specified icalproperty.</p>
+<p>Returns the name of the property &ndash; the type name converted to a string, or the value of _get_x_name if the type is and X property.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to the icalproperty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a string containing the icalproperty's name.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a6a4e4af2200ccba5f48748f953968956">icalproperty_get_property_name</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00900">900</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a00695d13cc8ae9f10974bea7db8f2621" name="a00695d13cc8ae9f10974bea7db8f2621"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00695d13cc8ae9f10974bea7db8f2621">&#9670;&#160;</a></span>icalproperty_get_value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalvalue * icalproperty_get_value </td>
+          <td>(</td>
+          <td class="paramtype">const icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the icalvalue for the specified icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer the <code class="param">prop</code> icalvalue; or NULL if <code class="param">prop</code> does not have an attached icalvalue yet. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00822">822</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a631ae4a398eefc1a8a5cd634a3ea9b02" name="a631ae4a398eefc1a8a5cd634a3ea9b02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a631ae4a398eefc1a8a5cd634a3ea9b02">&#9670;&#160;</a></span>icalproperty_get_value_as_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_get_value_as_string </td>
+          <td>(</td>
+          <td class="paramtype">const icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the icalvalue for the specified icalproperty as a char string.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer the string-converted <code class="param">prop</code> icalvalue; or NULL if <code class="param">prop</code> does not have an attached icalvalue yet.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a8822c6176a45af460ade5186fc985251">icalproperty_get_value_as_string_r</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00829">829</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a8822c6176a45af460ade5186fc985251" name="a8822c6176a45af460ade5186fc985251"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8822c6176a45af460ade5186fc985251">&#9670;&#160;</a></span>icalproperty_get_value_as_string_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icalproperty_get_value_as_string_r </td>
+          <td>(</td>
+          <td class="paramtype">const icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the icalvalue for the specified icalproperty as a char string.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer the string-converted <code class="param">prop</code> icalvalue; or NULL if <code class="param">prop</code> does not have an attached icalvalue yet.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a631ae4a398eefc1a8a5cd634a3ea9b02">icalproperty_get_value_as_string</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00838">838</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a8ba2ceb041926ce2f066296920392192" name="a8ba2ceb041926ce2f066296920392192"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ba2ceb041926ce2f066296920392192">&#9670;&#160;</a></span>icalproperty_get_x_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_get_x_name </td>
+          <td>(</td>
+          <td class="paramtype">const icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the X-NAME icalproperty of the specified icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the X-NAME property. Will be NULL if an X-NAME property has not been set yet.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00862">862</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a2b2d63eb96ca82e341f88ac5290518a5" name="a2b2d63eb96ca82e341f88ac5290518a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b2d63eb96ca82e341f88ac5290518a5">&#9670;&#160;</a></span>icalproperty_isa()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty_kind icalproperty_isa </td>
+          <td>(</td>
+          <td class="paramtype">const icalproperty *</td>          <td class="paramname"><span class="paramname"><em>property</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Determines the icalproperty_kind of the specified icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">property</td><td>a pointer to valid icalproperty.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalproperty_kind of <code class="param">property</code>; ICAL_NO_PROPERTY is returned if <code class="param">property</code> is NULL. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00467">467</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a219943c31dc340c9fe72c8e07cf79ea7" name="a219943c31dc340c9fe72c8e07cf79ea7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a219943c31dc340c9fe72c8e07cf79ea7">&#9670;&#160;</a></span>icalproperty_isa_property()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool icalproperty_isa_property </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>property</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Determines if the specified pointer is an icalproperty pointer.</p>
+<p>Just looks if the ::id member strncmps to "prop".</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">property</td><td>a pointer, presumably to an icalproperty.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the pointer looks like an icalproperty; false otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00476">476</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="abce12586d3efe9670aac68c9bb22d4f5" name="abce12586d3efe9670aac68c9bb22d4f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abce12586d3efe9670aac68c9bb22d4f5">&#9670;&#160;</a></span>icalproperty_kind_and_string_to_enum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int icalproperty_kind_and_string_to_enum </td>
+          <td>(</td>
+          <td class="paramtype">const int</td>          <td class="paramname"><span class="paramname"><em>kind</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>str</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an integer representation of an icalvalue_kind enum along with a string representation of an icalproperty_kind to an integer representation of an icalproperty enum.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>is a integer representation of an icalvalue_kind </td></tr>
+    <tr><td class="paramname">str</td><td>is a non-NULL pointer to a char string containing the string representation of the icalproperty enum.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an integer representation of an icalproperty_kind enum; returns zero if <code class="param">kind</code> is invalid. </dd></dl>
 
 </div>
 </div>
@@ -356,7 +1027,143 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Check validity of a specific icalproperty_kind </p>
+<p>Check validity of a specified icalproperty_kind.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>is the icalproperty_kind</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the specified icalproperty_kind is valid; false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="afcd683d080a344213a2c69283a63fe3a" name="afcd683d080a344213a2c69283a63fe3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcd683d080a344213a2c69283a63fe3a">&#9670;&#160;</a></span>icalproperty_kind_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_kind_to_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_kind</td>          <td class="paramname"><span class="paramname"><em>kind</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalproperty_kind to its string representation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>is the icalproperty_kind to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified icalproperty_kind. </dd></dl>
+
+</div>
+</div>
+<a id="adc024f08eee28934f5a1bc22efcc4ee3" name="adc024f08eee28934f5a1bc22efcc4ee3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc024f08eee28934f5a1bc22efcc4ee3">&#9670;&#160;</a></span>icalproperty_kind_to_value_kind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalvalue_kind icalproperty_kind_to_value_kind </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_kind</td>          <td class="paramname"><span class="paramname"><em>kind</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalproperty_kind to an icalvalue_kind.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>is the icalproperty_kind to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalvalue_kind from <code class="param">kind</code>; returns ICAL_NO_VALUE if <code class="param">kind</code> is invalid. </dd></dl>
+
+</div>
+</div>
+<a id="aaf4581d3535f4b72a2783926cc4c8d21" name="aaf4581d3535f4b72a2783926cc4c8d21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf4581d3535f4b72a2783926cc4c8d21">&#9670;&#160;</a></span>icalproperty_method_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_method_to_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_method</td>          <td class="paramname"><span class="paramname"><em>method</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalproperty_method to its string representation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>is the icalproperty_method to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified icalproperty_method. </dd></dl>
+
+</div>
+</div>
+<a id="ab4694a22e0305daa0570c928b629f207" name="ab4694a22e0305daa0570c928b629f207"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4694a22e0305daa0570c928b629f207">&#9670;&#160;</a></span>icalproperty_new()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty * icalproperty_new </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_kind</td>          <td class="paramname"><span class="paramname"><em>kind</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Construct a new icalproperty of the specified icalproperty_kind.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>is the icalproperty_kind to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the newly allocated icalproperty. The data structure contains all null values and is essentially invalid. Free the resulting memory with icalproperty_free. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00091">91</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="ac3c46962ba50c73782546c42a19c3eb0" name="ac3c46962ba50c73782546c42a19c3eb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3c46962ba50c73782546c42a19c3eb0">&#9670;&#160;</a></span>icalproperty_new_from_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty * icalproperty_new_from_string </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Construct and populate a new icalproperty from a char string.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>a non-NULL pointer to the data used to populate the new icalproperty.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the newly allocated icalproperty. Free the resulting memory with icalproperty_free. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00138">138</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
 
 </div>
 </div>
@@ -374,7 +1181,41 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Normalizes (reorders and sorts the parameters) the specified <code class="param">icalproperty</code>. </p><dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+<p>Normalizes (reorders and sorts the parameters) the specified icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer a valid icalproperty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00953">953</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="ac5da5f046eefa95ac4799baa16b62b0f" name="ac5da5f046eefa95ac4799baa16b62b0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5da5f046eefa95ac4799baa16b62b0f">&#9670;&#160;</a></span>icalproperty_participanttype_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_participanttype_to_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_participanttype</td>          <td class="paramname"><span class="paramname"><em>participanttype</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalproperty_participanttype to its string representation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">participanttype</td><td>is the icalproperty_participanttype to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified icalproperty_participanttype. </dd></dl>
 
 </div>
 </div>
@@ -406,6 +1247,8 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
   </dd>
 </dl>
 <p>See <a class="el" href="#a51587b7b70961ff814f964bf81a64afe" title="Removes all parameters with the specified name.">icalproperty_remove_parameter_by_name()</a> and <a class="el" href="#a3e16fd227adaaa8ec34aea6d2d565c3e" title="Removes the specified parameter reference from the property.">icalproperty_remove_parameter_by_ref()</a> for alternate ways of removing parameters </p>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00632">632</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
 
 </div>
 </div>
@@ -439,6 +1282,8 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
 <p>This function removes parameters with the given name. The name corresponds to either a built-in name (TZID, etc.) or the name of an extended parameter (X-FOO)</p>
 <p>See <a class="el" href="#a68baed35b3b1af4ababf2c62b2ced68d" title="Removes all parameters with the specified kind.">icalproperty_remove_parameter_by_kind()</a> and <a class="el" href="#a3e16fd227adaaa8ec34aea6d2d565c3e" title="Removes the specified parameter reference from the property.">icalproperty_remove_parameter_by_ref()</a> for alternate ways of removing parameters </p>
 
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00650">650</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
 </div>
 </div>
 <a id="a3e16fd227adaaa8ec34aea6d2d565c3e" name="a3e16fd227adaaa8ec34aea6d2d565c3e"></a>
@@ -470,6 +1315,33 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
 </dl>
 <p>This function removes the specified parameter reference from the property. </p>
 
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00681">681</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a821152c6841a91fa755ad935bcfb36eb" name="a821152c6841a91fa755ad935bcfb36eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a821152c6841a91fa755ad935bcfb36eb">&#9670;&#160;</a></span>icalproperty_resourcetype_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_resourcetype_to_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_resourcetype</td>          <td class="paramname"><span class="paramname"><em>resourcetype</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalproperty_resourcetype to its string representation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">resourcetype</td><td>is the icalproperty_resourcetype to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified icalproperty_resourcetype. </dd></dl>
+
 </div>
 </div>
 <a id="a4e85ae6c619d9eb990965327d7be9a67" name="a4e85ae6c619d9eb990965327d7be9a67"></a>
@@ -495,6 +1367,8 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
   </dd>
 </dl>
 <p>Note that if icalerror_get_errors_are_fatal is also true a SIGABRT will be raised whenever an empty property is encountered. </p><dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00067">67</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
 
 </div>
 </div>
@@ -526,6 +1400,457 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
 </dl>
 <dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00869">869</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="aa4ab8877f11c9e23ceff9c538bbb6c18" name="aa4ab8877f11c9e23ceff9c538bbb6c18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4ab8877f11c9e23ceff9c538bbb6c18">&#9670;&#160;</a></span>icalproperty_set_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalproperty_set_parameter </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalparameter *</td>          <td class="paramname"><span class="paramname"><em>parameter</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Adds an icalparameter to an icalproperty.</p>
+<p>No error checking is performed by this function.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+    <tr><td class="paramname">parameter</td><td>a pointer to a presumably valid icalparameter</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>If <code class="param">parameter</code> kind is already attached to <code class="param">prop</code> then the old parameter is removed in favor of <code class="param">parameter</code>. </p>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00496">496</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a4a71e5508c72c370ab42f7bd4fe19e49" name="a4a71e5508c72c370ab42f7bd4fe19e49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a71e5508c72c370ab42f7bd4fe19e49">&#9670;&#160;</a></span>icalproperty_set_parameter_from_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalproperty_set_parameter_from_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets a icalparameter from a string for the specified icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+    <tr><td class="paramname">name</td><td>a pointer to a char string containing the parameter name </td></tr>
+    <tr><td class="paramname">value</td><td>a pointer to a char string containing the parameter value</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>If <code class="param">name</code> refers to an invalid icalparameter_kind or <code class="param">value</code> is illegal, then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#ae5ea07cdaaaed1428a338fdff2665ea5">icalproperty_get_parameter_as_string</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00515">515</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="a774df19c0bd763874ce8c0f273380a1e" name="a774df19c0bd763874ce8c0f273380a1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a774df19c0bd763874ce8c0f273380a1e">&#9670;&#160;</a></span>icalproperty_set_value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalproperty_set_value </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalvalue *</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets an icalvalue for the specified icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+    <tr><td class="paramname">value</td><td>a pointer to a valid icalvalue to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>If <code class="param">prop</code> already has an icalvalue it will be replaced. </p>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00751">751</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="aded432c51c2f3e0b08099ce6b0ca547b" name="aded432c51c2f3e0b08099ce6b0ca547b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aded432c51c2f3e0b08099ce6b0ca547b">&#9670;&#160;</a></span>icalproperty_set_value_from_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalproperty_set_value_from_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>type</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets an icalvalue for the specified icalproperty from a char string..</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+    <tr><td class="paramname">str</td><td>a non-NULL pointer to char string to be converted to the icalvalue </td></tr>
+    <tr><td class="paramname">type</td><td>a non-NULL pointer to a char string to be converted to an icalvalue_kind</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>If <code class="param">type</code> string matches "NO" then the icalvalue_kind will be taken from an existing icalvalue (if one exists) or will use the default icalvalue_kind for the icalproperty.</p>
+<p>If <code class="param">prop</code> already has an icalvalue it will be replaced. </p>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00781">781</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="ae729fcc22726fe05c9981735bb229be0" name="ae729fcc22726fe05c9981735bb229be0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae729fcc22726fe05c9981735bb229be0">&#9670;&#160;</a></span>icalproperty_set_x_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalproperty_set_x_name </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty *</td>          <td class="paramname"><span class="paramname"><em>prop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the X-NAME property of the specified icalproperty.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>a pointer to a valid icalproperty </td></tr>
+    <tr><td class="paramname">name</td><td>a pointer to a char string to use as the X-NAME </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="icalproperty_8c_source.html#l00849">849</a> of file <a class="el" href="icalproperty_8c_source.html">icalproperty.c</a>.</p>
+
+</div>
+</div>
+<a id="abacc096735dbd14407153cc812bd70cf" name="abacc096735dbd14407153cc812bd70cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abacc096735dbd14407153cc812bd70cf">&#9670;&#160;</a></span>icalproperty_status_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_status_to_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_status</td>          <td class="paramname"><span class="paramname"><em>status</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalproperty_status to its string representation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">status</td><td>is the icalproperty_status to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified icalproperty_status. </dd></dl>
+
+</div>
+</div>
+<a id="acc56277677a859b6a0a35488e2fd50fd" name="acc56277677a859b6a0a35488e2fd50fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc56277677a859b6a0a35488e2fd50fd">&#9670;&#160;</a></span>icalproperty_string_to_action()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty_action icalproperty_string_to_action </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>string</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into an icalproperty_action.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>a pointer to a char string containing the character representation of an icalproperty_action</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalproperty_action associated with <code class="param">string</code>. ICAL_ACTION_NONE is returned if <code class="param">string</code> is invalid. </dd></dl>
+
+</div>
+</div>
+<a id="a139ed0cdb593f339403382aa5c432357" name="a139ed0cdb593f339403382aa5c432357"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a139ed0cdb593f339403382aa5c432357">&#9670;&#160;</a></span>icalproperty_string_to_class()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty_class icalproperty_string_to_class </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>string</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into an icalproperty_class.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>a pointer to a char string containing the character representati on of an icalproperty_class_</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalproperty_class associated with <code class="param">string</code>. ICAL_CLASS_NONE is returned if <code class="param">string</code> is invalid. </dd></dl>
+
+</div>
+</div>
+<a id="a07c1bf2338074d6cbd282581bd0341e1" name="a07c1bf2338074d6cbd282581bd0341e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07c1bf2338074d6cbd282581bd0341e1">&#9670;&#160;</a></span>icalproperty_string_to_kind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty_kind icalproperty_string_to_kind </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>string</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into an icalproperty_kind.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>a pointer to a char string containing the character representati on of an icalproperty_kind</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalproperty_kind associated with <code class="param">string</code>. ICAL_NO_PROPERTY is returned if <code class="param">string</code> is invalid. </dd></dl>
+
+</div>
+</div>
+<a id="a6b2801f77640f5505f3b533e45dd06db" name="a6b2801f77640f5505f3b533e45dd06db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b2801f77640f5505f3b533e45dd06db">&#9670;&#160;</a></span>icalproperty_string_to_method()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty_method icalproperty_string_to_method </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into an icalproperty_method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>a pointer to a char string containing the character representati on of an icalproperty_method</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalproperty_method associated with <code class="param">string</code>. ICAL_METHOD_NONE is returned if <code class="param">str</code> is invalid. </dd></dl>
+
+</div>
+</div>
+<a id="a2a3bc88356ed6dcfcab867fe0a160c49" name="a2a3bc88356ed6dcfcab867fe0a160c49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a3bc88356ed6dcfcab867fe0a160c49">&#9670;&#160;</a></span>icalproperty_string_to_participanttype()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty_participanttype icalproperty_string_to_participanttype </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>string</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into an icalproperty_participanttype.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>a pointer to a char string containing the character representation of an icalproperty_participanttype</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalproperty_participanttype associated with <code class="param">string</code>. ICAL_PARTICIPANTTYPE_NONE is returned if <code class="param">string</code> is invalid. </dd></dl>
+
+</div>
+</div>
+<a id="a7bc5f32e9196a1a5f9921861ab0b9a8d" name="a7bc5f32e9196a1a5f9921861ab0b9a8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bc5f32e9196a1a5f9921861ab0b9a8d">&#9670;&#160;</a></span>icalproperty_string_to_resourcetype()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty_resourcetype icalproperty_string_to_resourcetype </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>string</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into an icalproperty_resourcetype.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>a pointer to a char string containing the character representation of an icalproperty_resourcetype</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalproperty_resourcetype associated with <code class="param">string</code>. ICAL_RESOURCETYPE_NONE is returned if <code class="param">string</code> is invalid. </dd></dl>
+
+</div>
+</div>
+<a id="a7d161a0a372bf4cf7d49c62e3ce1740c" name="a7d161a0a372bf4cf7d49c62e3ce1740c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d161a0a372bf4cf7d49c62e3ce1740c">&#9670;&#160;</a></span>icalproperty_string_to_status()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty_status icalproperty_string_to_status </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>string</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into an icalproperty_status.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>a pointer to a char string containing the character representation of an icalproperty_status</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalproperty_status associated with <code class="param">string</code>. ICAL_STATUS_NONE is returned if <code class="param">string</code> is invalid. </dd></dl>
+
+</div>
+</div>
+<a id="aa161bbd02f8e4af00f23b36cd6934b79" name="aa161bbd02f8e4af00f23b36cd6934b79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa161bbd02f8e4af00f23b36cd6934b79">&#9670;&#160;</a></span>icalproperty_string_to_transp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty_transp icalproperty_string_to_transp </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>string</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into an icalproperty_transp.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>a pointer to a char string containing the character representation of an icalproperty_transp</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalproperty_transp associated with <code class="param">string</code>. ICAL_TRANSP_NONE is returned if <code class="param">string</code> is invalid. </dd></dl>
+
+</div>
+</div>
+<a id="a822164055d68006640f9d6accb15c57a" name="a822164055d68006640f9d6accb15c57a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a822164055d68006640f9d6accb15c57a">&#9670;&#160;</a></span>icalproperty_transp_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalproperty_transp_to_string </td>
+          <td>(</td>
+          <td class="paramtype">icalproperty_transp</td>          <td class="paramname"><span class="paramname"><em>transp</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalproperty_transp to its string representation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transp</td><td>is the icalproperty_transp to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified icalproperty_transp. </dd></dl>
+
+</div>
+</div>
+<a id="a9ad10def86b672932866c1f588c0be9f" name="a9ad10def86b672932866c1f588c0be9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ad10def86b672932866c1f588c0be9f">&#9670;&#160;</a></span>icalproperty_value_kind_to_kind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalproperty_kind icalproperty_value_kind_to_kind </td>
+          <td>(</td>
+          <td class="paramtype">icalvalue_kind</td>          <td class="paramname"><span class="paramname"><em>kind</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts an icalvalue_kind to an icalproperty_kind.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>is the icalvalue_kind to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the icalproperty_kind from <code class="param">kind</code>; returns ICAL_NO_PROPERTY if <code class="param">kind</code> is invalid. </dd></dl>
+
 </div>
 </div>
 <a id="a0985be5532b1bc4e5b4dc6858aa05883" name="a0985be5532b1bc4e5b4dc6858aa05883"></a>
@@ -542,7 +1867,17 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the parent <code class="param">icalproperty</code> for the specified <code class="param">icalvalue</code>. </p><dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+<p>Gets the parent icalproperty of the specified icalvalue.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>a pointer to the icalvalue</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the parent <code class="param">icalproperty</code> for the specified <code class="param">icalvalue</code>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalvalue_8c_source.html#l01548">1548</a> of file <a class="el" href="icalvalue_8c_source.html">icalvalue.c</a>.</p>
 
 </div>
 </div>
@@ -564,7 +1899,16 @@ icalproperty_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalprop
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the parent <code class="param">icalproperty</code> for the specified <code class="param">icalvalue</code>. </p>
+<p>Sets the parent <code class="param">icalproperty</code> for the specified <code class="param">icalvalue</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>a pointer to a valid icalvalue </td></tr>
+    <tr><td class="paramname">property</td><td>a pointer to a presumably valid icalproperty to use </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="icalvalue_8c_source.html#l01541">1541</a> of file <a class="el" href="icalvalue_8c_source.html">icalvalue.c</a>.</p>
 
 </div>
 </div>

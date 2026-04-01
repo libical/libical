@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -78,6 +78,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">icaltimezone.h File Reference</div></div>
 </div><!--header-->
@@ -88,85 +89,89 @@ $(function() {
 
 <p><a href="icaltimezone_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a8561e9d4374ca1e29cd5ade459a50208" id="r_a8561e9d4374ca1e29cd5ade459a50208"><td class="memItemLeft" align="right" valign="top">typedef struct _icaltimezone&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:abe6dd6b2d7421e20b26b448e05947bc8" id="r_abe6dd6b2d7421e20b26b448e05947bc8"><td class="memItemLeft" align="right" valign="top"><a id="abe6dd6b2d7421e20b26b448e05947bc8" name="abe6dd6b2d7421e20b26b448e05947bc8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_array_append_from_vtimezone</b> (<a class="el" href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a> *timezones, icalcomponent *child)</td></tr>
-<tr class="memitem:a05bf1ca4e3c3a13af28331a7f0ddbe7e" id="r_a05bf1ca4e3c3a13af28331a7f0ddbe7e"><td class="memItemLeft" align="right" valign="top"><a id="a05bf1ca4e3c3a13af28331a7f0ddbe7e" name="a05bf1ca4e3c3a13af28331a7f0ddbe7e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_array_free</b> (<a class="el" href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a> *timezones)</td></tr>
-<tr class="memitem:ae896f8e01ef31170224fea9cc7592b66" id="r_ae896f8e01ef31170224fea9cc7592b66"><td class="memItemLeft" align="right" valign="top"><a id="ae896f8e01ef31170224fea9cc7592b66" name="ae896f8e01ef31170224fea9cc7592b66"></a>
-<a class="el" href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_array_new</b> (void)</td></tr>
-<tr class="memitem:ad2d1ee1c58825d3308713fc71387fda8" id="r_ad2d1ee1c58825d3308713fc71387fda8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2d1ee1c58825d3308713fc71387fda8">icaltimezone_convert_time</a> (struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *tt, <a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *from_zone, <a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *to_zone)</td></tr>
-<tr class="memitem:a4124b8c50e9d24f1b5cb27a8993dafdc" id="r_a4124b8c50e9d24f1b5cb27a8993dafdc"><td class="memItemLeft" align="right" valign="top"><a id="a4124b8c50e9d24f1b5cb27a8993dafdc" name="a4124b8c50e9d24f1b5cb27a8993dafdc"></a>
-<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_copy</b> (const <a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *originalzone)</td></tr>
-<tr class="memitem:ae4faceeaae4d0e80c517b2157d35344d" id="r_ae4faceeaae4d0e80c517b2157d35344d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4faceeaae4d0e80c517b2157d35344d">icaltimezone_dump_changes</a> (<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, int max_year, FILE *fp)</td></tr>
-<tr class="memdesc:ae4faceeaae4d0e80c517b2157d35344d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs a list of timezone changes for the given timezone to the given file, up to the maximum year given.  <br /></td></tr>
-<tr class="memitem:a56289e228ebd731806c73eb6dfcf57b0" id="r_a56289e228ebd731806c73eb6dfcf57b0"><td class="memItemLeft" align="right" valign="top"><a id="a56289e228ebd731806c73eb6dfcf57b0" name="a56289e228ebd731806c73eb6dfcf57b0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_expand_vtimezone</b> (icalcomponent *comp, int end_year, <a class="el" href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a> *changes)</td></tr>
-<tr class="memitem:aa96c3397fd8bcce74e1f220ca3fc333d" id="r_aa96c3397fd8bcce74e1f220ca3fc333d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa96c3397fd8bcce74e1f220ca3fc333d">icaltimezone_free</a> (<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, int free_struct)</td></tr>
+<tr class="memitem:ad2d1ee1c58825d3308713fc71387fda8" id="r_ad2d1ee1c58825d3308713fc71387fda8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2d1ee1c58825d3308713fc71387fda8">icaltimezone_convert_time</a> (struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *tt, <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *from_zone, <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *to_zone)</td></tr>
+<tr class="memitem:a4124b8c50e9d24f1b5cb27a8993dafdc" id="r_a4124b8c50e9d24f1b5cb27a8993dafdc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4124b8c50e9d24f1b5cb27a8993dafdc">icaltimezone_copy</a> (const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *originalzone)</td></tr>
+<tr class="memitem:ae4faceeaae4d0e80c517b2157d35344d" id="r_ae4faceeaae4d0e80c517b2157d35344d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4faceeaae4d0e80c517b2157d35344d">icaltimezone_dump_changes</a> (<a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, int max_year, FILE *fp)</td></tr>
+<tr class="memitem:a56289e228ebd731806c73eb6dfcf57b0" id="r_a56289e228ebd731806c73eb6dfcf57b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56289e228ebd731806c73eb6dfcf57b0">icaltimezone_expand_vtimezone</a> (icalcomponent *comp, int end_year, icalarray *changes)</td></tr>
+<tr class="memitem:aa96c3397fd8bcce74e1f220ca3fc333d" id="r_aa96c3397fd8bcce74e1f220ca3fc333d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa96c3397fd8bcce74e1f220ca3fc333d">icaltimezone_free</a> (<a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, int free_struct)</td></tr>
 <tr class="memdesc:aa96c3397fd8bcce74e1f220ca3fc333d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees all memory used for the icaltimezone.  <br /></td></tr>
-<tr class="memitem:a7596677c1f0c38bac7e687f37e19e397" id="r_a7596677c1f0c38bac7e687f37e19e397"><td class="memItemLeft" align="right" valign="top"><a id="a7596677c1f0c38bac7e687f37e19e397" name="a7596677c1f0c38bac7e687f37e19e397"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_free_builtin_timezones</b> (void)</td></tr>
-<tr class="memdesc:a7596677c1f0c38bac7e687f37e19e397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases builtin timezone memory. <br /></td></tr>
+<tr class="memitem:a7596677c1f0c38bac7e687f37e19e397" id="r_a7596677c1f0c38bac7e687f37e19e397"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7596677c1f0c38bac7e687f37e19e397">icaltimezone_free_builtin_timezones</a> (void)</td></tr>
+<tr class="memdesc:a7596677c1f0c38bac7e687f37e19e397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases builtin timezone memory.  <br /></td></tr>
 <tr class="memitem:a1e23270a7606f22eacfc0c88f503a5cb" id="r_a1e23270a7606f22eacfc0c88f503a5cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e23270a7606f22eacfc0c88f503a5cb">icaltimezone_free_zone_directory</a> (void)</td></tr>
-<tr class="memitem:a8670c0a0730ddb27a2a59efb9b476b24" id="r_a8670c0a0730ddb27a2a59efb9b476b24"><td class="memItemLeft" align="right" valign="top"><a id="a8670c0a0730ddb27a2a59efb9b476b24" name="a8670c0a0730ddb27a2a59efb9b476b24"></a>
-<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_get_builtin_timezone</b> (const char *location)</td></tr>
-<tr class="memdesc:a8670c0a0730ddb27a2a59efb9b476b24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a single builtin timezone, given its Olson city name. <br /></td></tr>
-<tr class="memitem:a1224ff59d8d1618ee41f17b5c6357312" id="r_a1224ff59d8d1618ee41f17b5c6357312"><td class="memItemLeft" align="right" valign="top"><a id="a1224ff59d8d1618ee41f17b5c6357312" name="a1224ff59d8d1618ee41f17b5c6357312"></a>
-<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_get_builtin_timezone_from_offset</b> (int offset, const char *tzname)</td></tr>
-<tr class="memdesc:a1224ff59d8d1618ee41f17b5c6357312"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a single builtin timezone, given its offset from UTC. <br /></td></tr>
-<tr class="memitem:ad05c4a96c4e7095f574641dfb9ceafc5" id="r_ad05c4a96c4e7095f574641dfb9ceafc5"><td class="memItemLeft" align="right" valign="top"><a id="ad05c4a96c4e7095f574641dfb9ceafc5" name="ad05c4a96c4e7095f574641dfb9ceafc5"></a>
-<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_get_builtin_timezone_from_tzid</b> (const char *tzid)</td></tr>
-<tr class="memdesc:ad05c4a96c4e7095f574641dfb9ceafc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a single builtin timezone, given its TZID. <br /></td></tr>
-<tr class="memitem:a8b765c5eb599505d208c89a799e13d21" id="r_a8b765c5eb599505d208c89a799e13d21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b765c5eb599505d208c89a799e13d21">icaltimezone_get_builtin_timezones</a> (void)</td></tr>
-<tr class="memdesc:a8b765c5eb599505d208c89a799e13d21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an icalarray of icaltimezone structs, one for each builtin timezone.  <br /></td></tr>
-<tr class="memitem:ae819f53231371637fbfc0bad1b8f96b8" id="r_ae819f53231371637fbfc0bad1b8f96b8"><td class="memItemLeft" align="right" valign="top"><a id="ae819f53231371637fbfc0bad1b8f96b8" name="ae819f53231371637fbfc0bad1b8f96b8"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_get_builtin_tzdata</b> (void)</td></tr>
-<tr class="memitem:a684813584e0e55460be636e8ebc81f53" id="r_a684813584e0e55460be636e8ebc81f53"><td class="memItemLeft" align="right" valign="top"><a id="a684813584e0e55460be636e8ebc81f53" name="a684813584e0e55460be636e8ebc81f53"></a>
-icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_get_component</b> (<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
-<tr class="memdesc:a684813584e0e55460be636e8ebc81f53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the VTIMEZONE component of a timezone. <br /></td></tr>
-<tr class="memitem:aaf3d9c36dca3dd4e2233aac2a88997bc" id="r_aaf3d9c36dca3dd4e2233aac2a88997bc"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf3d9c36dca3dd4e2233aac2a88997bc">icaltimezone_get_display_name</a> (<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
-<tr class="memdesc:aaf3d9c36dca3dd4e2233aac2a88997bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the timezone name to display to the user.  <br /></td></tr>
-<tr class="memitem:a4ad7579dce4a32496e68213db3509ef7" id="r_a4ad7579dce4a32496e68213db3509ef7"><td class="memItemLeft" align="right" valign="top"><a id="a4ad7579dce4a32496e68213db3509ef7" name="a4ad7579dce4a32496e68213db3509ef7"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_get_latitude</b> (const <a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
-<tr class="memdesc:a4ad7579dce4a32496e68213db3509ef7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the latitude of a builtin timezone. <br /></td></tr>
-<tr class="memitem:a2b61da8854e6fe355e6eed9e5a11b856" id="r_a2b61da8854e6fe355e6eed9e5a11b856"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b61da8854e6fe355e6eed9e5a11b856">icaltimezone_get_location</a> (const <a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
-<tr class="memitem:a4666bfd001ff5654fc3ee851e2e2338e" id="r_a4666bfd001ff5654fc3ee851e2e2338e"><td class="memItemLeft" align="right" valign="top"><a id="a4666bfd001ff5654fc3ee851e2e2338e" name="a4666bfd001ff5654fc3ee851e2e2338e"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_get_location_from_vtimezone</b> (icalcomponent *component)</td></tr>
-<tr class="memdesc:a4666bfd001ff5654fc3ee851e2e2338e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the LOCATION or X-LIC-LOCATION property from a VTIMEZONE. <br /></td></tr>
-<tr class="memitem:a186933bc23f39076bda2cf21477d0fda" id="r_a186933bc23f39076bda2cf21477d0fda"><td class="memItemLeft" align="right" valign="top"><a id="a186933bc23f39076bda2cf21477d0fda" name="a186933bc23f39076bda2cf21477d0fda"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_get_longitude</b> (const <a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
-<tr class="memdesc:a186933bc23f39076bda2cf21477d0fda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the longitude of a builtin timezone. <br /></td></tr>
+<tr class="memitem:a8670c0a0730ddb27a2a59efb9b476b24" id="r_a8670c0a0730ddb27a2a59efb9b476b24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8670c0a0730ddb27a2a59efb9b476b24">icaltimezone_get_builtin_timezone</a> (const char *location)</td></tr>
+<tr class="memitem:a1224ff59d8d1618ee41f17b5c6357312" id="r_a1224ff59d8d1618ee41f17b5c6357312"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1224ff59d8d1618ee41f17b5c6357312">icaltimezone_get_builtin_timezone_from_offset</a> (int offset, const char *tzname)</td></tr>
+<tr class="memitem:ad05c4a96c4e7095f574641dfb9ceafc5" id="r_ad05c4a96c4e7095f574641dfb9ceafc5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad05c4a96c4e7095f574641dfb9ceafc5">icaltimezone_get_builtin_timezone_from_tzid</a> (const char *tzid)</td></tr>
+<tr class="memitem:a8b765c5eb599505d208c89a799e13d21" id="r_a8b765c5eb599505d208c89a799e13d21"><td class="memItemLeft" align="right" valign="top">icalarray *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b765c5eb599505d208c89a799e13d21">icaltimezone_get_builtin_timezones</a> (void)</td></tr>
+<tr class="memitem:ae819f53231371637fbfc0bad1b8f96b8" id="r_ae819f53231371637fbfc0bad1b8f96b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae819f53231371637fbfc0bad1b8f96b8">icaltimezone_get_builtin_tzdata</a> (void)</td></tr>
+<tr class="memitem:a684813584e0e55460be636e8ebc81f53" id="r_a684813584e0e55460be636e8ebc81f53"><td class="memItemLeft" align="right" valign="top">icalcomponent *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a684813584e0e55460be636e8ebc81f53">icaltimezone_get_component</a> (<a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:aaf3d9c36dca3dd4e2233aac2a88997bc" id="r_aaf3d9c36dca3dd4e2233aac2a88997bc"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf3d9c36dca3dd4e2233aac2a88997bc">icaltimezone_get_display_name</a> (<a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:a4ad7579dce4a32496e68213db3509ef7" id="r_a4ad7579dce4a32496e68213db3509ef7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ad7579dce4a32496e68213db3509ef7">icaltimezone_get_latitude</a> (const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:a2b61da8854e6fe355e6eed9e5a11b856" id="r_a2b61da8854e6fe355e6eed9e5a11b856"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b61da8854e6fe355e6eed9e5a11b856">icaltimezone_get_location</a> (const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:a4666bfd001ff5654fc3ee851e2e2338e" id="r_a4666bfd001ff5654fc3ee851e2e2338e"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4666bfd001ff5654fc3ee851e2e2338e">icaltimezone_get_location_from_vtimezone</a> (icalcomponent *component)</td></tr>
+<tr class="memitem:a186933bc23f39076bda2cf21477d0fda" id="r_a186933bc23f39076bda2cf21477d0fda"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a186933bc23f39076bda2cf21477d0fda">icaltimezone_get_longitude</a> (const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
 <tr class="memitem:a746123158493db2a27bffa59c219b6e8" id="r_a746123158493db2a27bffa59c219b6e8"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a746123158493db2a27bffa59c219b6e8">icaltimezone_get_system_zone_directory</a> (void)</td></tr>
-<tr class="memitem:a8d74150570a8a31e1fb8fe976fea9250" id="r_a8d74150570a8a31e1fb8fe976fea9250"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d74150570a8a31e1fb8fe976fea9250">icaltimezone_get_tzid</a> (<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
-<tr class="memitem:a7de03feecf3cbb0c7899b36d1285fd63" id="r_a7de03feecf3cbb0c7899b36d1285fd63"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7de03feecf3cbb0c7899b36d1285fd63">icaltimezone_get_tznames</a> (<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:a8d74150570a8a31e1fb8fe976fea9250" id="r_a8d74150570a8a31e1fb8fe976fea9250"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d74150570a8a31e1fb8fe976fea9250">icaltimezone_get_tzid</a> (<a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
+<tr class="memitem:a7de03feecf3cbb0c7899b36d1285fd63" id="r_a7de03feecf3cbb0c7899b36d1285fd63"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7de03feecf3cbb0c7899b36d1285fd63">icaltimezone_get_tznames</a> (<a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone)</td></tr>
 <tr class="memitem:a48a804fe8f8d61aed3efbf86504baf79" id="r_a48a804fe8f8d61aed3efbf86504baf79"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48a804fe8f8d61aed3efbf86504baf79">icaltimezone_get_tznames_from_vtimezone</a> (icalcomponent *component)</td></tr>
-<tr class="memdesc:a48a804fe8f8d61aed3efbf86504baf79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the TZNAMEs used for the last STANDARD &amp; DAYLIGHT components in a VTIMEZONE.  <br /></td></tr>
-<tr class="memitem:a7b1870b5d603c5e92355cb75d065f04b" id="r_a7b1870b5d603c5e92355cb75d065f04b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b1870b5d603c5e92355cb75d065f04b">icaltimezone_get_utc_offset</a> (<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *tt, int *is_daylight)</td></tr>
-<tr class="memdesc:a7b1870b5d603c5e92355cb75d065f04b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the UTC offset of a given local time in the given timezone.  <br /></td></tr>
-<tr class="memitem:a608e9e5fe0996cfbd14e69f0b36ab17d" id="r_a608e9e5fe0996cfbd14e69f0b36ab17d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a608e9e5fe0996cfbd14e69f0b36ab17d">icaltimezone_get_utc_offset_of_utc_time</a> (<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *tt, int *is_daylight)</td></tr>
-<tr class="memdesc:a608e9e5fe0996cfbd14e69f0b36ab17d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the UTC offset of a given UTC time in the given timezone.  <br /></td></tr>
-<tr class="memitem:a8e9c520fc9a3ec85f5cc63fef1548583" id="r_a8e9c520fc9a3ec85f5cc63fef1548583"><td class="memItemLeft" align="right" valign="top"><a id="a8e9c520fc9a3ec85f5cc63fef1548583" name="a8e9c520fc9a3ec85f5cc63fef1548583"></a>
-<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_get_utc_timezone</b> (void)</td></tr>
-<tr class="memdesc:a8e9c520fc9a3ec85f5cc63fef1548583"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the UTC timezone. <br /></td></tr>
+<tr class="memitem:a7b1870b5d603c5e92355cb75d065f04b" id="r_a7b1870b5d603c5e92355cb75d065f04b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b1870b5d603c5e92355cb75d065f04b">icaltimezone_get_utc_offset</a> (<a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *tt, int *is_daylight)</td></tr>
+<tr class="memitem:a608e9e5fe0996cfbd14e69f0b36ab17d" id="r_a608e9e5fe0996cfbd14e69f0b36ab17d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a608e9e5fe0996cfbd14e69f0b36ab17d">icaltimezone_get_utc_offset_of_utc_time</a> (<a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, const struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *tt, int *is_daylight)</td></tr>
+<tr class="memitem:a8e9c520fc9a3ec85f5cc63fef1548583" id="r_a8e9c520fc9a3ec85f5cc63fef1548583"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e9c520fc9a3ec85f5cc63fef1548583">icaltimezone_get_utc_timezone</a> (void)</td></tr>
 <tr class="memitem:acf7d258f408276666ea93f3afb8030c0" id="r_acf7d258f408276666ea93f3afb8030c0"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf7d258f408276666ea93f3afb8030c0">icaltimezone_get_zone_directory</a> (void)</td></tr>
-<tr class="memitem:a01b653e3e1f9feefc63e7d71c036f330" id="r_a01b653e3e1f9feefc63e7d71c036f330"><td class="memItemLeft" align="right" valign="top"><a id="a01b653e3e1f9feefc63e7d71c036f330" name="a01b653e3e1f9feefc63e7d71c036f330"></a>
-<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_new</b> (void)</td></tr>
-<tr class="memdesc:a01b653e3e1f9feefc63e7d71c036f330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new icaltimezone. <br /></td></tr>
-<tr class="memitem:a36a88609f7eb8443ee6197fa0e498b38" id="r_a36a88609f7eb8443ee6197fa0e498b38"><td class="memItemLeft" align="right" valign="top"><a id="a36a88609f7eb8443ee6197fa0e498b38" name="a36a88609f7eb8443ee6197fa0e498b38"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_set_builtin_tzdata</b> (bool set)</td></tr>
-<tr class="memitem:aeaf603605a60721b91582f729dda0d7e" id="r_aeaf603605a60721b91582f729dda0d7e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeaf603605a60721b91582f729dda0d7e">icaltimezone_set_component</a> (<a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, icalcomponent *comp)</td></tr>
-<tr class="memdesc:aeaf603605a60721b91582f729dda0d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the VTIMEZONE component of an icaltimezone, initializing the tzid, location &amp; tzname fields.  <br /></td></tr>
+<tr class="memitem:a01b653e3e1f9feefc63e7d71c036f330" id="r_a01b653e3e1f9feefc63e7d71c036f330"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01b653e3e1f9feefc63e7d71c036f330">icaltimezone_new</a> (void)</td></tr>
+<tr class="memitem:a36a88609f7eb8443ee6197fa0e498b38" id="r_a36a88609f7eb8443ee6197fa0e498b38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36a88609f7eb8443ee6197fa0e498b38">icaltimezone_set_builtin_tzdata</a> (bool set)</td></tr>
+<tr class="memitem:aeaf603605a60721b91582f729dda0d7e" id="r_aeaf603605a60721b91582f729dda0d7e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeaf603605a60721b91582f729dda0d7e">icaltimezone_set_component</a> (<a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, icalcomponent *comp)</td></tr>
 <tr class="memitem:a5760032c198b705bd7803e976572e895" id="r_a5760032c198b705bd7803e976572e895"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5760032c198b705bd7803e976572e895">icaltimezone_set_system_zone_directory</a> (const char *zonepath)</td></tr>
 <tr class="memitem:a04849ce67c1a529f19d695b74cb238fe" id="r_a04849ce67c1a529f19d695b74cb238fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04849ce67c1a529f19d695b74cb238fe">icaltimezone_set_tzid_prefix</a> (const char *new_prefix)</td></tr>
 <tr class="memitem:a9e9a5efa6e89e1c9cce0919abe50ddef" id="r_a9e9a5efa6e89e1c9cce0919abe50ddef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e9a5efa6e89e1c9cce0919abe50ddef">icaltimezone_set_zone_directory</a> (const char *path)</td></tr>
-<tr class="memitem:a331c0fea42b418204cfac9961421a2b7" id="r_a331c0fea42b418204cfac9961421a2b7"><td class="memItemLeft" align="right" valign="top"><a id="a331c0fea42b418204cfac9961421a2b7" name="a331c0fea42b418204cfac9961421a2b7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate_vtimezone</b> (icalcomponent *vtz, <a class="el" href="structicaltimetype.html">icaltimetype</a> start, <a class="el" href="structicaltimetype.html">icaltimetype</a> end, bool ms_compatible)</td></tr>
+<tr class="memitem:a331c0fea42b418204cfac9961421a2b7" id="r_a331c0fea42b418204cfac9961421a2b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a331c0fea42b418204cfac9961421a2b7">icaltimezone_truncate_vtimezone</a> (icalcomponent *vtz, <a class="el" href="structicaltimetype.html">icaltimetype</a> start, <a class="el" href="structicaltimetype.html">icaltimetype</a> end, bool ms_compatible)</td></tr>
 <tr class="memitem:af8d207d1083c025f61a4ade54113f43e" id="r_af8d207d1083c025f61a4ade54113f43e"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8d207d1083c025f61a4ade54113f43e">icaltimezone_tzid_prefix</a> (void)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Timezone handling routines. </p>
-</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+
+<p class="definition">Definition in file <a class="el" href="icaltimezone_8h_source.html">icaltimezone.h</a>.</p>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
+<a id="a598767e5ef2c9303cf6f2441f05e2d40" name="a598767e5ef2c9303cf6f2441f05e2d40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a598767e5ef2c9303cf6f2441f05e2d40">&#9670;&#160;</a></span>ICALTIMEZONE_DEFINED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ICALTIMEZONE_DEFINED</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8h_source.html#l00024">24</a> of file <a class="el" href="icaltimezone_8h_source.html">icaltimezone.h</a>.</p>
+
+</div>
+</div>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a id="a8561e9d4374ca1e29cd5ade459a50208" name="a8561e9d4374ca1e29cd5ade459a50208"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8561e9d4374ca1e29cd5ade459a50208">&#9670;&#160;</a></span>icaltimezone</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct _icaltimezone <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>An opaque struct representing a timezone. We declare this here to avoid a circular dependency. </p>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8h_source.html#l00029">29</a> of file <a class="el" href="icaltimezone_8h_source.html">icaltimezone.h</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="ad2d1ee1c58825d3308713fc71387fda8" name="ad2d1ee1c58825d3308713fc71387fda8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad2d1ee1c58825d3308713fc71387fda8">&#9670;&#160;</a></span>icaltimezone_convert_time()</h2>
 
@@ -181,12 +186,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>from_zone</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>from_zone</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>to_zone</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>to_zone</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -200,6 +205,36 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
   </dd>
 </dl>
 
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l00830">830</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a4124b8c50e9d24f1b5cb27a8993dafdc" name="a4124b8c50e9d24f1b5cb27a8993dafdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4124b8c50e9d24f1b5cb27a8993dafdc">&#9670;&#160;</a></span>icaltimezone_copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> * icaltimezone_copy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>originalzone</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deep clones an icaltimezone.</p>
+<p>Invalid icaltimezone data structures can also be cloned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">originalzone</td><td>is a pointer to an icaltimezone.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the cloned icaltimezone. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l00243">243</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
 </div>
 </div>
 <a id="ae4faceeaae4d0e80c517b2157d35344d" name="ae4faceeaae4d0e80c517b2157d35344d"></a>
@@ -211,7 +246,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         <tr>
           <td class="memname">bool icaltimezone_dump_changes </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -225,12 +260,59 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Outputs a list of timezone changes for the given timezone to the given file, up to the maximum year given. </p>
+<p>Outputs a list of timezone changes for the given timezone to the given file, up to the maximum year given.</p>
 <p>We compare this output with the output from 'vzic &ndash;dump-changes' to make sure that we are consistent. (vzic is the Olson timezone database to VTIMEZONE converter.)</p>
 <p>The output format is: </p><pre class="fragment"> Zone-Name [tab] Date [tab] Time [tab] UTC-Offset
 </pre><p>The Date and Time fields specify the time change in UTC.</p>
-<p>The UTC Offset is for local (wall-clock) time. It is the amount of time to add to UTC to get local time. </p>
+<p>The UTC Offset is for local (wall-clock) time. It is the amount of time to add to UTC to get local time.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>is a pointer to a valid icaltimezone to use </td></tr>
+    <tr><td class="paramname">max_year</td><td>is the maximum year to process </td></tr>
+    <tr><td class="paramname">fp</td><td>is a pointer to FILE for a file that is opened for writing</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true. always. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l02010">2010</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a56289e228ebd731806c73eb6dfcf57b0" name="a56289e228ebd731806c73eb6dfcf57b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56289e228ebd731806c73eb6dfcf57b0">&#9670;&#160;</a></span>icaltimezone_expand_vtimezone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icaltimezone_expand_vtimezone </td>
+          <td>(</td>
+          <td class="paramtype">icalcomponent *</td>          <td class="paramname"><span class="paramname"><em>comp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>end_year</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">icalarray *</td>          <td class="paramname"><span class="paramname"><em>changes</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Applies a list of timezone changes from an array of changes until an end year.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">comp</td><td>a pointer to a valid icalcomponent </td></tr>
+    <tr><td class="paramname">end_year</td><td>the end year </td></tr>
+    <tr><td class="paramname">changes</td><td>a pointer to an icalarray containing the changes to be applied </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l00570">570</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -243,7 +325,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         <tr>
           <td class="memname">void icaltimezone_free </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -262,6 +344,29 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
   </dd>
 </dl>
 
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l00277">277</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a7596677c1f0c38bac7e687f37e19e397" name="a7596677c1f0c38bac7e687f37e19e397"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7596677c1f0c38bac7e687f37e19e397">&#9670;&#160;</a></span>icaltimezone_free_builtin_timezones()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icaltimezone_free_builtin_timezones </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Releases builtin timezone memory. </p>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01398">1398</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
 </div>
 </div>
 <a id="a1e23270a7606f22eacfc0c88f503a5cb" name="a1e23270a7606f22eacfc0c88f503a5cb"></a>
@@ -278,7 +383,96 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Frees the memory dedicated to the zonefile directory </p>
+<p>Frees the zonefile directory.</p>
+<p>Frees the memory allocated by the <a class="el" href="#a9e9a5efa6e89e1c9cce0919abe50ddef">icaltimezone_set_zone_directory()</a> </p>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l02301">2301</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a8670c0a0730ddb27a2a59efb9b476b24" name="a8670c0a0730ddb27a2a59efb9b476b24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8670c0a0730ddb27a2a59efb9b476b24">&#9670;&#160;</a></span>icaltimezone_get_builtin_timezone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> * icaltimezone_get_builtin_timezone </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>location</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets a single builtin timezone, given its Olson location.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">location</td><td>a pointer to a char string containing the Olson location to search</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a builtin icaltimezone that matches the specified Olson location. NULL is returned if the location is empty or if the search fails. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01406">1406</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a1224ff59d8d1618ee41f17b5c6357312" name="a1224ff59d8d1618ee41f17b5c6357312"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1224ff59d8d1618ee41f17b5c6357312">&#9670;&#160;</a></span>icaltimezone_get_builtin_timezone_from_offset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> * icaltimezone_get_builtin_timezone_from_offset </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>offset</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>tzname</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets a single builtin timezone, given its offset from UTC.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offset</td><td>the offset from UTC to search </td></tr>
+    <tr><td class="paramname">tzname</td><td>a pointer to a char string containing a TZNAME to search.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a builtin icaltimezone that matches the specified <code class="param">offset</code> and <code class="param">tzname</code>. NULL is returned if tzname is NULL or if the search fails. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01489">1489</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="ad05c4a96c4e7095f574641dfb9ceafc5" name="ad05c4a96c4e7095f574641dfb9ceafc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad05c4a96c4e7095f574641dfb9ceafc5">&#9670;&#160;</a></span>icaltimezone_get_builtin_timezone_from_tzid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> * icaltimezone_get_builtin_timezone_from_tzid </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>tzid</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets Returns a single builtin timezone, given its TZID.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tzid</td><td>a pointer to a char string containing the TZID to find</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a builting icaltimezone for the specified TZID. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01519">1519</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -289,16 +483,66 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a> * icaltimezone_get_builtin_timezones </td>
+          <td class="memname">icalarray * icaltimezone_get_builtin_timezones </td>
           <td>(</td>
           <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Gets an icalarray of icaltimezone structs, one for each builtin timezone.</p>
+<p>This will load and parse the zones.tab file to get the timezone names and their coordinates. It will not load the VTIMEZONE data for any timezones.</p>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to an icalarray containing the list of icaltimezone structs associated with the buildtin timezones. </dd></dl>
 
-<p>Returns an icalarray of icaltimezone structs, one for each builtin timezone. </p>
-<p>This will load and parse the zones.tab file to get the timezone names and their coordinates. It will not load the VTIMEZONE data for any timezones. </p>
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01389">1389</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="ae819f53231371637fbfc0bad1b8f96b8" name="ae819f53231371637fbfc0bad1b8f96b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae819f53231371637fbfc0bad1b8f96b8">&#9670;&#160;</a></span>icaltimezone_get_builtin_tzdata()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool icaltimezone_get_builtin_tzdata </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get if the library is using builtin timezone data.</p>
+<dl class="section return"><dt>Returns</dt><dd>true if the builtin timezone data is being used; false otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l02321">2321</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a684813584e0e55460be636e8ebc81f53" name="a684813584e0e55460be636e8ebc81f53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a684813584e0e55460be636e8ebc81f53">&#9670;&#160;</a></span>icaltimezone_get_component()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalcomponent * icaltimezone_get_component </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the VTIMEZONE component of a timezone.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>is a pointer to a valid icaltimezone.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the VTIMEZONE component of the specified icaltimezone. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01291">1291</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -311,14 +555,49 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         <tr>
           <td class="memname">const char * icaltimezone_get_display_name </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Get the timezone display name.</p>
+<p>We prefer to use the Olson city name, but fall back on the TZNAME, or finally the TZID. We don't want to use "" as it may be wrongly interpreted as a floating time. Do not free the returned string.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>a pointer to a valid icaltimezone</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the timezone display name. </dd></dl>
 
-<p>Returns the timezone name to display to the user. </p>
-<p>We prefer to use the Olson city name, but fall back on the TZNAME, or finally the TZID. We don't want to use "" as it may be wrongly interpreted as a floating time. Do not free the returned string. </p>
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01330">1330</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a4ad7579dce4a32496e68213db3509ef7" name="a4ad7579dce4a32496e68213db3509ef7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ad7579dce4a32496e68213db3509ef7">&#9670;&#160;</a></span>icaltimezone_get_latitude()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double icaltimezone_get_latitude </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the latitude of a builtin timezone.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>a pointer to a valid icaltimezone</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the latitude of the specified icaltimezone as a double. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01267">1267</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -331,12 +610,75 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         <tr>
           <td class="memname">const char * icaltimezone_get_location </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the city name of a timezone. </p>
+<p>Gets the LOCATION of a timezone.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>a pointer to a valid icaltimezone</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the LOCATION for the specified timezone. NULL will be returned for floating timezones. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01243">1243</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a4666bfd001ff5654fc3ee851e2e2338e" name="a4666bfd001ff5654fc3ee851e2e2338e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4666bfd001ff5654fc3ee851e2e2338e">&#9670;&#160;</a></span>icaltimezone_get_location_from_vtimezone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icaltimezone_get_location_from_vtimezone </td>
+          <td>(</td>
+          <td class="paramtype">icalcomponent *</td>          <td class="paramname"><span class="paramname"><em>component</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the LOCATION or X-LIC-LOCATION property from a VTIMEZONE.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">component</td><td>is a pointer to a valid icalcomponent.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the LOCATION or X-LIC-LOCATION property for the specified icalcomponent. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l00365">365</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a186933bc23f39076bda2cf21477d0fda" name="a186933bc23f39076bda2cf21477d0fda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a186933bc23f39076bda2cf21477d0fda">&#9670;&#160;</a></span>icaltimezone_get_longitude()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double icaltimezone_get_longitude </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the longitude of a builtin timezone.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>a pointer to a valid icaltimezone</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the longitude of the specified icaltimezone as a double. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01279">1279</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -354,9 +696,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the fullpath to the system zoneinfo directory (where zone.tab lives). The returned value points to static memory inside the library and should not try to be freed.</p>
+<p>Gets the fullpath to the system zoneinfo directory (where zone.tab lives). The returned value points to static memory inside the library and should not try to be freed.</p>
 <p>If the TZDIR variable appears in the environment, it will be searched first for zone.tab. If zone.tab is not located in TZDIR (or if TZDIR is not in the environment), then a list of well-known paths where the system zone.tab typically is installed is searched.</p>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the system zoneinfo directory name.</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>4.0 previously known as icaltzutil_get_zone_directory </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l02268">2268</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -369,12 +714,21 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         <tr>
           <td class="memname">const char * icaltimezone_get_tzid </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the TZID of a timezone. </p>
+<p>Gets the TZID of a timezone.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>a pointer to a valid icaltimezone</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the TZID for the specified icaltimezone. NULL will be returned for floating timezones. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01231">1231</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -387,12 +741,22 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         <tr>
           <td class="memname">const char * icaltimezone_get_tznames </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the TZNAME properties used in the latest STANDARD and DAYLIGHT components. If they are the same it will return just one, e.g. "LMT". If they are different it will format them like "EST/EDT". Note that this may also return NULL. </p>
+<p>Gets the TZNAME properties used in the latest STANDARD and DAYLIGHT components a a builtin timezone.</p>
+<p>If they are the same it will return just one, e.g. "LMT". If they are different it will format them like "EST/EDT".</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>is a pointer to a valid icaltimezone</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the TZNAME for the specified icaltimezone. NULL will be returned for floating timezones. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01255">1255</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -410,9 +774,17 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Gets the TZNAMEs used for the last STANDARD &amp; DAYLIGHT components in a VTIMEZONE.</p>
+<p>If both STANDARD and DAYLIGHT components use the same TZNAME, it returns that. If they use different TZNAMEs, it formats them like "EST/EDT". The returned string should be freed by the caller.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">component</td><td>a pointer to a valid icalcomponent</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the TZNAMEs. </dd></dl>
 
-<p>Gets the TZNAMEs used for the last STANDARD &amp; DAYLIGHT components in a VTIMEZONE. </p>
-<p>If both STANDARD and DAYLIGHT components use the same TZNAME, it returns that. If they use different TZNAMEs, it formats them like "EST/EDT". The returned string should be freed by the caller. </p>
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l00393">393</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -425,7 +797,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         <tr>
           <td class="memname">int icaltimezone_get_utc_offset </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -439,9 +811,19 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Calculates the UTC offset of a given local time in the given timezone.</p>
+<p>It is the number of seconds to add to UTC to get local time.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>is a pointer to a valid icaltimezone </td></tr>
+    <tr><td class="paramname">tt</td><td>is an icaltimetype with the local time </td></tr>
+    <tr><td class="paramname">is_daylight</td><td>is a pointer to an int which will be set to 1 (true) on return if the time is in daylight-savings; in non-daylight-saving it will be set to 0 (false).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the UTC offset corresponding to the timezone change. For local times and UTC a 0 offset is returned. Additionally, if <code class="param">tt</code> is NULL or if the <code class="param">tt</code> year is too large a 0 offset is returned. </dd></dl>
 
-<p>Calculates the UTC offset of a given local time in the given timezone. </p>
-<p>It is the number of seconds to add to UTC to get local time. The is_daylight flag is set to 1 (true) if the time is in daylight-savings time. </p>
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l00853">853</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -454,7 +836,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         <tr>
           <td class="memname">int icaltimezone_get_utc_offset_of_utc_time </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -468,9 +850,40 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Calculates the UTC offset of a given UTC time in the given timezone.</p>
+<p>It is the number of seconds to add to UTC to get local time.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>is a pointer to a valid icaltimezone </td></tr>
+    <tr><td class="paramname">tt</td><td>is an icaltimetype with the UTC time </td></tr>
+    <tr><td class="paramname">is_daylight</td><td>is a pointer to an int which will be set to 1 (true) on return if the time is in daylight-savings; in non-daylight-saving it will be set to 0 (false).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the UTC offset corresponding to the timezone change. For local times and UTC a 0 offset is returned. </dd></dl>
 
-<p>Calculates the UTC offset of a given UTC time in the given timezone. </p>
-<p>It is the number of seconds to add to UTC to get local time. The <code class="param">is_daylight</code> flag is set to 1 (true) if the time is in daylight-savings time. </p>
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01018">1018</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a8e9c520fc9a3ec85f5cc63fef1548583" name="a8e9c520fc9a3ec85f5cc63fef1548583"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e9c520fc9a3ec85f5cc63fef1548583">&#9670;&#160;</a></span>icaltimezone_get_utc_timezone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> * icaltimezone_get_utc_timezone </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the UTC timezone.</p>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to an icaltimezone representing the UTC timezone. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01588">1588</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -488,7 +901,57 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the directory to look for the zonefiles, either system or builtin </p>
+<p>Gets the directory to look for the zonefiles, either system or builtin.</p>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the zonefile directory name. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l02277">2277</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a01b653e3e1f9feefc63e7d71c036f330" name="a01b653e3e1f9feefc63e7d71c036f330"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01b653e3e1f9feefc63e7d71c036f330">&#9670;&#160;</a></span>icaltimezone_new()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> * icaltimezone_new </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates a new icaltimezone. The data structure contains all null values and is essentially invalid.</p>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the new invalid icaltimezone. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l00228">228</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a36a88609f7eb8443ee6197fa0e498b38" name="a36a88609f7eb8443ee6197fa0e498b38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36a88609f7eb8443ee6197fa0e498b38">&#9670;&#160;</a></span>icaltimezone_set_builtin_tzdata()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icaltimezone_set_builtin_tzdata </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>set</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the library to use builtin timezone data.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">set</td><td>if true, configures the library to use builtin timezone data; otherwise, the system timezone data is used. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l02316">2316</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -501,7 +964,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         <tr>
           <td class="memname">bool icaltimezone_set_component </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -510,9 +973,17 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Sets the VTIMEZONE component of an icaltimezone, initializing the tzid, location &amp; tzname fields. </p>
+<p>Sets the VTIMEZONE component of an icaltimezone, initializing the tzid, location &amp; tzname fields.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>a pointer to a valid icaltimezone </td></tr>
+    <tr><td class="paramname">comp</td><td>is a pointer to a valid icalcomponent to use</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success or false on failure, i.e. no TZID was found. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l01303">1303</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -537,6 +1008,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
   </dd>
 </dl>
 <p>The internal zoneinfo path can be cleared if <code class="param">zonepath</code> is empty or NULL. </p><dl class="section since"><dt>Since</dt><dd>4.0 previously known as icaltzutil_set_zone_directory </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l02233">2233</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -564,6 +1037,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
   </dd>
 </dl>
 
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l02309">2309</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
 </div>
 </div>
 <a id="a9e9a5efa6e89e1c9cce0919abe50ddef" name="a9e9a5efa6e89e1c9cce0919abe50ddef"></a>
@@ -580,7 +1055,61 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the directory to look for the zonefiles, either system or builting </p>
+<p>Sets the directory to look for the zonefiles, either system or builtin.</p>
+<p>The memory allocated by this function should be freed using <a class="el" href="#a9e9a5efa6e89e1c9cce0919abe50ddef">icaltimezone_set_zone_directory()</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>is a char string containing the directory path for zoneinfo data. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l02286">2286</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
+
+</div>
+</div>
+<a id="a331c0fea42b418204cfac9961421a2b7" name="a331c0fea42b418204cfac9961421a2b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a331c0fea42b418204cfac9961421a2b7">&#9670;&#160;</a></span>icaltimezone_truncate_vtimezone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icaltimezone_truncate_vtimezone </td>
+          <td>(</td>
+          <td class="paramtype">icalcomponent *</td>          <td class="paramname"><span class="paramname"><em>vtz</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structicaltimetype.html">icaltimetype</a></td>          <td class="paramname"><span class="paramname"><em>start</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structicaltimetype.html">icaltimetype</a></td>          <td class="paramname"><span class="paramname"><em>end</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>ms_compatible</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Truncate a VTIMEZONE component to the given start and end times.</p>
+<p>If either time is null, then no truncation will occur at that point. If either time is non-null, then it MUST be specified as UTC. If the start time is non-null and ms_compatible is false, then the DTSTART of RRULEs will be adjusted to occur after the start time.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vtz</td><td>is a pointer to a valid VTIMEZONE icalcomponent </td></tr>
+    <tr><td class="paramname">start</td><td>is the starting icaltimetype </td></tr>
+    <tr><td class="paramname">end</td><td>is the ending icaltimetype </td></tr>
+    <tr><td class="paramname">ms_compatible</td><td>is a flag indicating if the truncation should be compatible with Microsoft Outlook/Exchange (which doesn't appear to like truncating the frontend of RRULEs).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.0.6 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l02355">2355</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>
@@ -598,7 +1127,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icaltimezone_truncate
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the current setting of the tzid prefix. </p>
+<p>Get the current setting of the tzid prefix.</p>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the current tzid prefix. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icaltimezone_8c_source.html#l00223">223</a> of file <a class="el" href="icaltimezone_8c_source.html">icaltimezone.c</a>.</p>
 
 </div>
 </div>

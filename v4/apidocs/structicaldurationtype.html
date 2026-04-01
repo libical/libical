@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -78,32 +78,125 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>A struct representing a duration.  
- <a href="#details">More...</a></p>
-
 <p><code>#include &lt;<a class="el" href="icalduration_8h_source.html">icalduration.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:ae677f35fcbdc92e802ace29a2a332fec" id="r_ae677f35fcbdc92e802ace29a2a332fec"><td class="memItemLeft" align="right" valign="top"><a id="ae677f35fcbdc92e802ace29a2a332fec" name="ae677f35fcbdc92e802ace29a2a332fec"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>days</b></td></tr>
-<tr class="memitem:a53b0c468056bf4ee3d3bb0772becab1d" id="r_a53b0c468056bf4ee3d3bb0772becab1d"><td class="memItemLeft" align="right" valign="top"><a id="a53b0c468056bf4ee3d3bb0772becab1d" name="a53b0c468056bf4ee3d3bb0772becab1d"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>hours</b></td></tr>
-<tr class="memitem:a9b527c7a531950e121a8266396d0ccc1" id="r_a9b527c7a531950e121a8266396d0ccc1"><td class="memItemLeft" align="right" valign="top"><a id="a9b527c7a531950e121a8266396d0ccc1" name="a9b527c7a531950e121a8266396d0ccc1"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>is_neg</b></td></tr>
-<tr class="memitem:af7b55d3de560f31f4e3f9a711735ff4d" id="r_af7b55d3de560f31f4e3f9a711735ff4d"><td class="memItemLeft" align="right" valign="top"><a id="af7b55d3de560f31f4e3f9a711735ff4d" name="af7b55d3de560f31f4e3f9a711735ff4d"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>minutes</b></td></tr>
-<tr class="memitem:a5bdc0e08cbfdc85eaa65a5bec9c6d7c0" id="r_a5bdc0e08cbfdc85eaa65a5bec9c6d7c0"><td class="memItemLeft" align="right" valign="top"><a id="a5bdc0e08cbfdc85eaa65a5bec9c6d7c0" name="a5bdc0e08cbfdc85eaa65a5bec9c6d7c0"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>seconds</b></td></tr>
-<tr class="memitem:a0d62704245de1e934f2d7f8d8bdd23d7" id="r_a0d62704245de1e934f2d7f8d8bdd23d7"><td class="memItemLeft" align="right" valign="top"><a id="a0d62704245de1e934f2d7f8d8bdd23d7" name="a0d62704245de1e934f2d7f8d8bdd23d7"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>weeks</b></td></tr>
+<tr class="memitem:ae677f35fcbdc92e802ace29a2a332fec" id="r_ae677f35fcbdc92e802ace29a2a332fec"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae677f35fcbdc92e802ace29a2a332fec">days</a></td></tr>
+<tr class="memitem:a53b0c468056bf4ee3d3bb0772becab1d" id="r_a53b0c468056bf4ee3d3bb0772becab1d"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53b0c468056bf4ee3d3bb0772becab1d">hours</a></td></tr>
+<tr class="memitem:a9b527c7a531950e121a8266396d0ccc1" id="r_a9b527c7a531950e121a8266396d0ccc1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b527c7a531950e121a8266396d0ccc1">is_neg</a></td></tr>
+<tr class="memitem:af7b55d3de560f31f4e3f9a711735ff4d" id="r_af7b55d3de560f31f4e3f9a711735ff4d"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7b55d3de560f31f4e3f9a711735ff4d">minutes</a></td></tr>
+<tr class="memitem:a5bdc0e08cbfdc85eaa65a5bec9c6d7c0" id="r_a5bdc0e08cbfdc85eaa65a5bec9c6d7c0"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bdc0e08cbfdc85eaa65a5bec9c6d7c0">seconds</a></td></tr>
+<tr class="memitem:a0d62704245de1e934f2d7f8d8bdd23d7" id="r_a0d62704245de1e934f2d7f8d8bdd23d7"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d62704245de1e934f2d7f8d8bdd23d7">weeks</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A struct representing a duration. </p>
+<div class="textblock"><p>A struct representing a duration.</p>
 <p>Days and weeks are nominal; hours, minutes and seconds are exact </p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/home/winterz/projects/libical/libical/src/libical/<a class="el" href="icalduration_8h_source.html">icalduration.h</a></li>
-</ul>
+
+<p class="definition">Definition at line <a class="el" href="icalduration_8h_source.html#l00030">30</a> of file <a class="el" href="icalduration_8h_source.html">icalduration.h</a>.</p>
+</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Field Documentation</h2>
+<a id="ae677f35fcbdc92e802ace29a2a332fec" name="ae677f35fcbdc92e802ace29a2a332fec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae677f35fcbdc92e802ace29a2a332fec">&#9670;&#160;</a></span>days</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int icaldurationtype::days</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>number of duration days (nominal) </p>
+
+<p class="definition">Definition at line <a class="el" href="icalduration_8h_source.html#l00032">32</a> of file <a class="el" href="icalduration_8h_source.html">icalduration.h</a>.</p>
+
+</div>
+</div>
+<a id="a53b0c468056bf4ee3d3bb0772becab1d" name="a53b0c468056bf4ee3d3bb0772becab1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53b0c468056bf4ee3d3bb0772becab1d">&#9670;&#160;</a></span>hours</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int icaldurationtype::hours</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>number of duration hours (exact) </p>
+
+<p class="definition">Definition at line <a class="el" href="icalduration_8h_source.html#l00034">34</a> of file <a class="el" href="icalduration_8h_source.html">icalduration.h</a>.</p>
+
+</div>
+</div>
+<a id="a9b527c7a531950e121a8266396d0ccc1" name="a9b527c7a531950e121a8266396d0ccc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b527c7a531950e121a8266396d0ccc1">&#9670;&#160;</a></span>is_neg</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int icaldurationtype::is_neg</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>flag to denote a negative duration </p>
+
+<p class="definition">Definition at line <a class="el" href="icalduration_8h_source.html#l00031">31</a> of file <a class="el" href="icalduration_8h_source.html">icalduration.h</a>.</p>
+
+</div>
+</div>
+<a id="af7b55d3de560f31f4e3f9a711735ff4d" name="af7b55d3de560f31f4e3f9a711735ff4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7b55d3de560f31f4e3f9a711735ff4d">&#9670;&#160;</a></span>minutes</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int icaldurationtype::minutes</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>number duration minutes (exact) </p>
+
+<p class="definition">Definition at line <a class="el" href="icalduration_8h_source.html#l00035">35</a> of file <a class="el" href="icalduration_8h_source.html">icalduration.h</a>.</p>
+
+</div>
+</div>
+<a id="a5bdc0e08cbfdc85eaa65a5bec9c6d7c0" name="a5bdc0e08cbfdc85eaa65a5bec9c6d7c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bdc0e08cbfdc85eaa65a5bec9c6d7c0">&#9670;&#160;</a></span>seconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int icaldurationtype::seconds</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>number of duration seconds (exact) </p>
+
+<p class="definition">Definition at line <a class="el" href="icalduration_8h_source.html#l00036">36</a> of file <a class="el" href="icalduration_8h_source.html">icalduration.h</a>.</p>
+
+</div>
+</div>
+<a id="a0d62704245de1e934f2d7f8d8bdd23d7" name="a0d62704245de1e934f2d7f8d8bdd23d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d62704245de1e934f2d7f8d8bdd23d7">&#9670;&#160;</a></span>weeks</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int icaldurationtype::weeks</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>number of duration weeks (nominal) </p>
+
+<p class="definition">Definition at line <a class="el" href="icalduration_8h_source.html#l00033">33</a> of file <a class="el" href="icalduration_8h_source.html">icalduration.h</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

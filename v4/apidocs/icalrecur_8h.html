@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -78,8 +78,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
-<a href="#define-members">Macros</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">icalrecur.h File Reference</div></div>
@@ -93,151 +91,92 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
-<tr class="memitem:icalrecurrence_5Fby_5Fdata" id="r_icalrecurrence_5Fby_5Fdata"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structicalrecurrence__by__data.html">icalrecurrence_by_data</a></td></tr>
 <tr class="memitem:icalrecurrencetype" id="r_icalrecurrencetype"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a></td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:a88c777bba1c5287ec7a262a8cf140209" id="r_a88c777bba1c5287ec7a262a8cf140209"><td class="memItemLeft" align="right" valign="top"><a id="a88c777bba1c5287ec7a262a8cf140209" name="a88c777bba1c5287ec7a262a8cf140209"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ICAL_BY_DAY_SIZE</b>&#160;&#160;&#160;(7 * (ICAL_BY_WEEKNO_SIZE - 1) + 1) /* 1 to N */</td></tr>
-<tr class="memitem:af7660eef516049982e6ea1aa56d7a14f" id="r_af7660eef516049982e6ea1aa56d7a14f"><td class="memItemLeft" align="right" valign="top"><a id="af7660eef516049982e6ea1aa56d7a14f" name="af7660eef516049982e6ea1aa56d7a14f"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ICAL_BY_HOUR_SIZE</b>&#160;&#160;&#160;25                                 /* 0 to 23 */</td></tr>
-<tr class="memitem:a1328acf3383993b85d9819702a94dd8a" id="r_a1328acf3383993b85d9819702a94dd8a"><td class="memItemLeft" align="right" valign="top"><a id="a1328acf3383993b85d9819702a94dd8a" name="a1328acf3383993b85d9819702a94dd8a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ICAL_BY_MINUTE_SIZE</b>&#160;&#160;&#160;61                               /* 0 to 59 */</td></tr>
-<tr class="memitem:a3ba206a293eca6a045c9e24b75516528" id="r_a3ba206a293eca6a045c9e24b75516528"><td class="memItemLeft" align="right" valign="top"><a id="a3ba206a293eca6a045c9e24b75516528" name="a3ba206a293eca6a045c9e24b75516528"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ICAL_BY_MONTH_SIZE</b>&#160;&#160;&#160;14                                /* 1 to 13 */</td></tr>
-<tr class="memitem:a7d6e5cf6656a21e1fede23a4af633f31" id="r_a7d6e5cf6656a21e1fede23a4af633f31"><td class="memItemLeft" align="right" valign="top"><a id="a7d6e5cf6656a21e1fede23a4af633f31" name="a7d6e5cf6656a21e1fede23a4af633f31"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ICAL_BY_MONTHDAY_SIZE</b>&#160;&#160;&#160;32                             /* 1 to 31 */</td></tr>
-<tr class="memitem:acec51b2d651f24e31b00627b60b12728" id="r_acec51b2d651f24e31b00627b60b12728"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acec51b2d651f24e31b00627b60b12728">ICAL_BY_SECOND_SIZE</a>&#160;&#160;&#160;62                               /* 0 to 60 */</td></tr>
-<tr class="memitem:a8a02214312ee862af943de714ad30c1f" id="r_a8a02214312ee862af943de714ad30c1f"><td class="memItemLeft" align="right" valign="top"><a id="a8a02214312ee862af943de714ad30c1f" name="a8a02214312ee862af943de714ad30c1f"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ICAL_BY_SETPOS_SIZE</b>&#160;&#160;&#160;ICAL_BY_YEARDAY_SIZE             /* 1 to N */</td></tr>
-<tr class="memitem:a213222b2455537fceb2814e9e084e95a" id="r_a213222b2455537fceb2814e9e084e95a"><td class="memItemLeft" align="right" valign="top"><a id="a213222b2455537fceb2814e9e084e95a" name="a213222b2455537fceb2814e9e084e95a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ICAL_BY_WEEKNO_SIZE</b>&#160;&#160;&#160;56                               /* 1 to 55 */</td></tr>
-<tr class="memitem:aad632e88ecae484b09c8ca4be1bfd58b" id="r_aad632e88ecae484b09c8ca4be1bfd58b"><td class="memItemLeft" align="right" valign="top"><a id="aad632e88ecae484b09c8ca4be1bfd58b" name="aad632e88ecae484b09c8ca4be1bfd58b"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>ICAL_BY_YEARDAY_SIZE</b>&#160;&#160;&#160;386                             /* 1 to 385 */</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a6ee883e25caacc3f6e5ce05d4d45a645" id="r_a6ee883e25caacc3f6e5ce05d4d45a645"><td class="memItemLeft" align="right" valign="top"><a id="a6ee883e25caacc3f6e5ce05d4d45a645" name="a6ee883e25caacc3f6e5ce05d4d45a645"></a>
-typedef enum ical_invalid_rrule_handling&#160;</td><td class="memItemRight" valign="bottom"><b>ical_invalid_rrule_handling</b></td></tr>
-<tr class="memitem:a15b0ec0400bb64fcfd625d5a5511db7f" id="r_a15b0ec0400bb64fcfd625d5a5511db7f"><td class="memItemLeft" align="right" valign="top"><a id="a15b0ec0400bb64fcfd625d5a5511db7f" name="a15b0ec0400bb64fcfd625d5a5511db7f"></a>
-typedef struct icalrecur_iterator_impl&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecur_iterator</b></td></tr>
-<tr class="memitem:ac595e122cb15a3371bc7c8aa83929bb1" id="r_ac595e122cb15a3371bc7c8aa83929bb1"><td class="memItemLeft" align="right" valign="top"><a id="ac595e122cb15a3371bc7c8aa83929bb1" name="ac595e122cb15a3371bc7c8aa83929bb1"></a>
-typedef enum icalrecurrencetype_byrule&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_byrule</b></td></tr>
-<tr class="memitem:afd62e4356b0f28df5892167477be989d" id="r_afd62e4356b0f28df5892167477be989d"><td class="memItemLeft" align="right" valign="top"><a id="afd62e4356b0f28df5892167477be989d" name="afd62e4356b0f28df5892167477be989d"></a>
-typedef enum icalrecurrencetype_frequency&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_frequency</b></td></tr>
-<tr class="memitem:a25bc5be48c7458f25765a8f59ef1eb8c" id="r_a25bc5be48c7458f25765a8f59ef1eb8c"><td class="memItemLeft" align="right" valign="top"><a id="a25bc5be48c7458f25765a8f59ef1eb8c" name="a25bc5be48c7458f25765a8f59ef1eb8c"></a>
-typedef enum icalrecurrencetype_skip&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_skip</b></td></tr>
-<tr class="memitem:a75f2d7439c6001523b78dcef9b26ddad" id="r_a75f2d7439c6001523b78dcef9b26ddad"><td class="memItemLeft" align="right" valign="top"><a id="a75f2d7439c6001523b78dcef9b26ddad" name="a75f2d7439c6001523b78dcef9b26ddad"></a>
-typedef enum icalrecurrencetype_weekday&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_weekday</b></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a85aad1aeea58a53b5a0399a2fca38890" id="r_a85aad1aeea58a53b5a0399a2fca38890"><td class="memItemLeft" align="right" valign="top"><a id="a85aad1aeea58a53b5a0399a2fca38890" name="a85aad1aeea58a53b5a0399a2fca38890"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>ical_invalid_rrule_handling</b> { <b>ICAL_RRULE_TREAT_AS_ERROR</b> = 0
-, <b>ICAL_RRULE_IGNORE_INVALID</b> = 1
+<tr class="memitem:a85aad1aeea58a53b5a0399a2fca38890" id="r_a85aad1aeea58a53b5a0399a2fca38890"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85aad1aeea58a53b5a0399a2fca38890">ical_invalid_rrule_handling</a> { <a class="el" href="#a85aad1aeea58a53b5a0399a2fca38890a4ee97e29acf40d1ef634bbb4dcec1b9e">ICAL_RRULE_TREAT_AS_ERROR</a> = 0
+, <a class="el" href="#a85aad1aeea58a53b5a0399a2fca38890a9d4a497b5bd2cbb6ebac47d8b99b105e">ICAL_RRULE_IGNORE_INVALID</a> = 1
  }</td></tr>
-<tr class="memitem:a599167f0f15f02d98c9efea9ff5d91dc" id="r_a599167f0f15f02d98c9efea9ff5d91dc"><td class="memItemLeft" align="right" valign="top"><a id="a599167f0f15f02d98c9efea9ff5d91dc" name="a599167f0f15f02d98c9efea9ff5d91dc"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_byrule</b> { <br />
-&#160;&#160;<b>ICAL_BYRULE_NO_CONTRACTION</b> = -1
-, <b>ICAL_BY_MONTH</b> = 0
-, <b>ICAL_BY_WEEK_NO</b> = 1
-, <b>ICAL_BY_YEAR_DAY</b> = 2
+<tr class="memitem:a599167f0f15f02d98c9efea9ff5d91dc" id="r_a599167f0f15f02d98c9efea9ff5d91dc"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dc">icalrecurrencetype_byrule</a> { <br />
+&#160;&#160;<a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dcae42881972ba87aeb3f8db7e2c21e41ef">ICAL_BYRULE_NO_CONTRACTION</a> = -1
+, <a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dca5e401c70c4693ed4bf450ff31fe80fe6">ICAL_BY_MONTH</a> = 0
+, <a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dcac28a8d076c068087c3ed71bc82cddca7">ICAL_BY_WEEK_NO</a> = 1
+, <a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dca609ad0126bd8e79ae98b0915bdda5d7b">ICAL_BY_YEAR_DAY</a> = 2
 , <br />
-&#160;&#160;<b>ICAL_BY_MONTH_DAY</b> = 3
-, <b>ICAL_BY_DAY</b> = 4
-, <b>ICAL_BY_HOUR</b> = 5
-, <b>ICAL_BY_MINUTE</b> = 6
+&#160;&#160;<a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dca8ae62396dd439c8ae4598eaa5d6a6210">ICAL_BY_MONTH_DAY</a> = 3
+, <a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dcabf00eb69fbb0090d12d23a9b1e18981e">ICAL_BY_DAY</a> = 4
+, <a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dca448eb21484b6d446c2d6f86f42fb0d63">ICAL_BY_HOUR</a> = 5
+, <a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dca4c95bea940c220a8ba0b650efa1257b0">ICAL_BY_MINUTE</a> = 6
 , <br />
-&#160;&#160;<b>ICAL_BY_SECOND</b> = 7
-, <b>ICAL_BY_SET_POS</b> = 8
-, <b>ICAL_BY_NUM_PARTS</b> = 9
+&#160;&#160;<a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dca6048e48c8a4b19ae8dbc6f5c66b88d54">ICAL_BY_SECOND</a> = 7
+, <a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dca3ccf37e225dee43804d6b4e690213f7c">ICAL_BY_SET_POS</a> = 8
+, <a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dcaec8a06e66dd964d73969db0bb2fb1eb3">ICAL_BY_NUM_PARTS</a> = 9
 <br />
  }</td></tr>
-<tr class="memitem:a203e6ca308804a67ff343837e7c11a61" id="r_a203e6ca308804a67ff343837e7c11a61"><td class="memItemLeft" align="right" valign="top"><a id="a203e6ca308804a67ff343837e7c11a61" name="a203e6ca308804a67ff343837e7c11a61"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_frequency</b> { <br />
-&#160;&#160;<b>ICAL_SECONDLY_RECURRENCE</b> = 0
-, <b>ICAL_MINUTELY_RECURRENCE</b> = 1
-, <b>ICAL_HOURLY_RECURRENCE</b> = 2
-, <b>ICAL_DAILY_RECURRENCE</b> = 3
+<tr class="memitem:a203e6ca308804a67ff343837e7c11a61" id="r_a203e6ca308804a67ff343837e7c11a61"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a> { <br />
+&#160;&#160;<a class="el" href="#a203e6ca308804a67ff343837e7c11a61a57b7c7b2d8fe713da4c9d5e004a4f2ab">ICAL_SECONDLY_RECURRENCE</a> = 0
+, <a class="el" href="#a203e6ca308804a67ff343837e7c11a61ab05d7b1942fcf1889660dfc5b6b626b5">ICAL_MINUTELY_RECURRENCE</a> = 1
+, <a class="el" href="#a203e6ca308804a67ff343837e7c11a61a32f2abf79c9022ae97e2b0fe2d2d734a">ICAL_HOURLY_RECURRENCE</a> = 2
+, <a class="el" href="#a203e6ca308804a67ff343837e7c11a61a8d5b54da8af6673001a4fbd1f9bf63c4">ICAL_DAILY_RECURRENCE</a> = 3
 , <br />
-&#160;&#160;<b>ICAL_WEEKLY_RECURRENCE</b> = 4
-, <b>ICAL_MONTHLY_RECURRENCE</b> = 5
-, <b>ICAL_YEARLY_RECURRENCE</b> = 6
-, <b>ICAL_NO_RECURRENCE</b> = 7
+&#160;&#160;<a class="el" href="#a203e6ca308804a67ff343837e7c11a61ab18ed383ca386532112a8d0654c13de9">ICAL_WEEKLY_RECURRENCE</a> = 4
+, <a class="el" href="#a203e6ca308804a67ff343837e7c11a61ab7ed6703b65041311522bb023b62fbbd">ICAL_MONTHLY_RECURRENCE</a> = 5
+, <a class="el" href="#a203e6ca308804a67ff343837e7c11a61a8b4752c1ea2c7bf337e818a3b5a5131d">ICAL_YEARLY_RECURRENCE</a> = 6
+, <a class="el" href="#a203e6ca308804a67ff343837e7c11a61a2771b73d4b4ef192a44b5a48fe5bc76d">ICAL_NO_RECURRENCE</a> = 7
 <br />
  }</td></tr>
-<tr class="memitem:a46e0128948e7c4c5c1e120061211ddea" id="r_a46e0128948e7c4c5c1e120061211ddea"><td class="memItemLeft" align="right" valign="top"><a id="a46e0128948e7c4c5c1e120061211ddea" name="a46e0128948e7c4c5c1e120061211ddea"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_skip</b> { <b>ICAL_SKIP_BACKWARD</b> = 0
-, <b>ICAL_SKIP_FORWARD</b>
-, <b>ICAL_SKIP_OMIT</b>
-, <b>ICAL_SKIP_UNDEFINED</b>
+<tr class="memitem:a46e0128948e7c4c5c1e120061211ddea" id="r_a46e0128948e7c4c5c1e120061211ddea"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a> { <a class="el" href="#a46e0128948e7c4c5c1e120061211ddeaafbb99760bcbd50b869a242b3bcc5a60a">ICAL_SKIP_BACKWARD</a> = 0
+, <a class="el" href="#a46e0128948e7c4c5c1e120061211ddeaae35a7154e960896ce1075b05f82eb430">ICAL_SKIP_FORWARD</a>
+, <a class="el" href="#a46e0128948e7c4c5c1e120061211ddeaa725f0e58c4fa53dfc3913c15ab3ba299">ICAL_SKIP_OMIT</a>
+, <a class="el" href="#a46e0128948e7c4c5c1e120061211ddeaa8be35a84f3d224872ccd98adfa1130e6">ICAL_SKIP_UNDEFINED</a>
  }</td></tr>
-<tr class="memitem:a0d3df238238f2689b2cc48b162a9507b" id="r_a0d3df238238f2689b2cc48b162a9507b"><td class="memItemLeft" align="right" valign="top"><a id="a0d3df238238f2689b2cc48b162a9507b" name="a0d3df238238f2689b2cc48b162a9507b"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_weekday</b> { <br />
-&#160;&#160;<b>ICAL_NO_WEEKDAY</b>
-, <b>ICAL_SUNDAY_WEEKDAY</b>
-, <b>ICAL_MONDAY_WEEKDAY</b>
-, <b>ICAL_TUESDAY_WEEKDAY</b>
+<tr class="memitem:a0d3df238238f2689b2cc48b162a9507b" id="r_a0d3df238238f2689b2cc48b162a9507b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a> { <br />
+&#160;&#160;<a class="el" href="#a0d3df238238f2689b2cc48b162a9507ba2f63e8ddd4bb29962dd15fa454561730">ICAL_NO_WEEKDAY</a>
+, <a class="el" href="#a0d3df238238f2689b2cc48b162a9507bad0d0a870955673a339d8b218dfea5b53">ICAL_SUNDAY_WEEKDAY</a>
+, <a class="el" href="#a0d3df238238f2689b2cc48b162a9507ba8ff3e44bba972fdf75b3dcf181f86768">ICAL_MONDAY_WEEKDAY</a>
+, <a class="el" href="#a0d3df238238f2689b2cc48b162a9507ba24f9e92df2e7b2d7bfb7363a987bc460">ICAL_TUESDAY_WEEKDAY</a>
 , <br />
-&#160;&#160;<b>ICAL_WEDNESDAY_WEEKDAY</b>
-, <b>ICAL_THURSDAY_WEEKDAY</b>
-, <b>ICAL_FRIDAY_WEEKDAY</b>
-, <b>ICAL_SATURDAY_WEEKDAY</b>
+&#160;&#160;<a class="el" href="#a0d3df238238f2689b2cc48b162a9507ba374664bccaa9aa70b80fef1f6497ac9b">ICAL_WEDNESDAY_WEEKDAY</a>
+, <a class="el" href="#a0d3df238238f2689b2cc48b162a9507ba72bf64c30b625b98b8a934bff5006883">ICAL_THURSDAY_WEEKDAY</a>
+, <a class="el" href="#a0d3df238238f2689b2cc48b162a9507ba3a0c1e32772fe1214be1904a64929835">ICAL_FRIDAY_WEEKDAY</a>
+, <a class="el" href="#a0d3df238238f2689b2cc48b162a9507baab0d2cc1533a55f3a590973d12f908b1">ICAL_SATURDAY_WEEKDAY</a>
 <br />
  }</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a9eb6bec2840d2b84efb14d50731b6aaa" id="r_a9eb6bec2840d2b84efb14d50731b6aaa"><td class="memItemLeft" align="right" valign="top"><a id="a9eb6bec2840d2b84efb14d50731b6aaa" name="a9eb6bec2840d2b84efb14d50731b6aaa"></a>
-ical_invalid_rrule_handling&#160;</td><td class="memItemRight" valign="bottom"><b>ical_get_invalid_rrule_handling_setting</b> (void)</td></tr>
-<tr class="memitem:a3cc3b729a411ed8f1e046f1bbf84bf65" id="r_a3cc3b729a411ed8f1e046f1bbf84bf65"><td class="memItemLeft" align="right" valign="top"><a id="a3cc3b729a411ed8f1e046f1bbf84bf65" name="a3cc3b729a411ed8f1e046f1bbf84bf65"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ical_set_invalid_rrule_handling_setting</b> (ical_invalid_rrule_handling newSetting)</td></tr>
+<tr class="memitem:a9eb6bec2840d2b84efb14d50731b6aaa" id="r_a9eb6bec2840d2b84efb14d50731b6aaa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a85aad1aeea58a53b5a0399a2fca38890">ical_invalid_rrule_handling</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9eb6bec2840d2b84efb14d50731b6aaa">ical_get_invalid_rrule_handling_setting</a> (void)</td></tr>
+<tr class="memitem:a3cc3b729a411ed8f1e046f1bbf84bf65" id="r_a3cc3b729a411ed8f1e046f1bbf84bf65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3cc3b729a411ed8f1e046f1bbf84bf65">ical_set_invalid_rrule_handling_setting</a> (<a class="el" href="#a85aad1aeea58a53b5a0399a2fca38890">ical_invalid_rrule_handling</a> newSetting)</td></tr>
 <tr class="memitem:aa77fb18047c90e2b86530b5edcfff090" id="r_aa77fb18047c90e2b86530b5edcfff090"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa77fb18047c90e2b86530b5edcfff090">icalrecur_expand_recurrence</a> (const char *rule, icaltime_t start, int count, icaltime_t *array)</td></tr>
-<tr class="memdesc:aa77fb18047c90e2b86530b5edcfff090"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills an array with the 'count' number of occurrences generated by the rrule.  <br /></td></tr>
-<tr class="memitem:a3b9e06ff25b276716636610c58e0abf2" id="r_a3b9e06ff25b276716636610c58e0abf2"><td class="memItemLeft" align="right" valign="top"><a id="a3b9e06ff25b276716636610c58e0abf2" name="a3b9e06ff25b276716636610c58e0abf2"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecur_freq_to_string</b> (icalrecurrencetype_frequency kind)</td></tr>
-<tr class="memitem:a14daf9df313fdad9f536a7d9242b4cdc" id="r_a14daf9df313fdad9f536a7d9242b4cdc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14daf9df313fdad9f536a7d9242b4cdc">icalrecur_iterator_free</a> (icalrecur_iterator *)</td></tr>
+<tr class="memitem:a3b9e06ff25b276716636610c58e0abf2" id="r_a3b9e06ff25b276716636610c58e0abf2"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b9e06ff25b276716636610c58e0abf2">icalrecur_freq_to_string</a> (<a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a> kind)</td></tr>
+<tr class="memitem:a485fb0e1dd382fbfd05b6b7a618c49e0" id="r_a485fb0e1dd382fbfd05b6b7a618c49e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a485fb0e1dd382fbfd05b6b7a618c49e0">icalrecur_iterator_free</a> (icalrecur_iterator *impl)</td></tr>
 <tr class="memitem:acdcfa0fbb4e40377cae80ef977d28afe" id="r_acdcfa0fbb4e40377cae80ef977d28afe"><td class="memItemLeft" align="right" valign="top">icalrecur_iterator *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdcfa0fbb4e40377cae80ef977d28afe">icalrecur_iterator_new</a> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *rule, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> dtstart)</td></tr>
 <tr class="memitem:a2e10af320612cd7ab8c6fb6177ade3e3" id="r_a2e10af320612cd7ab8c6fb6177ade3e3"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e10af320612cd7ab8c6fb6177ade3e3">icalrecur_iterator_next</a> (icalrecur_iterator *)</td></tr>
-<tr class="memitem:aa15f2414c34796d414acce20ab7a2bf0" id="r_aa15f2414c34796d414acce20ab7a2bf0"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa15f2414c34796d414acce20ab7a2bf0">icalrecur_iterator_prev</a> (icalrecur_iterator *)</td></tr>
+<tr class="memitem:a0e5f34b0926384cc6c5de4571893f711" id="r_a0e5f34b0926384cc6c5de4571893f711"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicaltimetype.html">icaltimetype</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e5f34b0926384cc6c5de4571893f711">icalrecur_iterator_prev</a> (icalrecur_iterator *impl)</td></tr>
 <tr class="memitem:a18cbeaa4948510627ee12bd9b2f062be" id="r_a18cbeaa4948510627ee12bd9b2f062be"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18cbeaa4948510627ee12bd9b2f062be">icalrecur_iterator_set_end</a> (icalrecur_iterator *impl, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> end)</td></tr>
 <tr class="memitem:a84a74a935204885974338667eafb2f14" id="r_a84a74a935204885974338667eafb2f14"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84a74a935204885974338667eafb2f14">icalrecur_iterator_set_range</a> (icalrecur_iterator *impl, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> from, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> to)</td></tr>
 <tr class="memitem:a02427aacc00bb3a9c2b68d0fca951b9a" id="r_a02427aacc00bb3a9c2b68d0fca951b9a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02427aacc00bb3a9c2b68d0fca951b9a">icalrecur_iterator_set_start</a> (icalrecur_iterator *impl, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> start)</td></tr>
-<tr class="memitem:a27e50d989ba059c6c91b4844428930e2" id="r_a27e50d989ba059c6c91b4844428930e2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by</a> (<a class="el" href="structicalrecurrence__by__data.html">icalrecurrence_by_data</a> *by, short size)</td></tr>
-<tr class="memdesc:a27e50d989ba059c6c91b4844428930e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes the buffer backing the 'by' array to the specified size, if different. Frees the buffer if the new size is 0.  <br /></td></tr>
-<tr class="memitem:a2319613578f2a47d4be33618ea1fde1d" id="r_a2319613578f2a47d4be33618ea1fde1d"><td class="memItemLeft" align="right" valign="top"><a id="a2319613578f2a47d4be33618ea1fde1d" name="a2319613578f2a47d4be33618ea1fde1d"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecur_skip_to_string</b> (icalrecurrencetype_skip kind)</td></tr>
-<tr class="memitem:a6011fe4f7973affecf45fd377de2b83a" id="r_a6011fe4f7973affecf45fd377de2b83a"><td class="memItemLeft" align="right" valign="top"><a id="a6011fe4f7973affecf45fd377de2b83a" name="a6011fe4f7973affecf45fd377de2b83a"></a>
-icalrecurrencetype_frequency&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecur_string_to_freq</b> (const char *str)</td></tr>
-<tr class="memitem:a1285d50b79d9558543716fdce98d5c4f" id="r_a1285d50b79d9558543716fdce98d5c4f"><td class="memItemLeft" align="right" valign="top"><a id="a1285d50b79d9558543716fdce98d5c4f" name="a1285d50b79d9558543716fdce98d5c4f"></a>
-icalrecurrencetype_skip&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecur_string_to_skip</b> (const char *str)</td></tr>
-<tr class="memitem:ad60e4e0c33acf7f90dbbf891e2326a8e" id="r_ad60e4e0c33acf7f90dbbf891e2326a8e"><td class="memItemLeft" align="right" valign="top"><a id="ad60e4e0c33acf7f90dbbf891e2326a8e" name="ad60e4e0c33acf7f90dbbf891e2326a8e"></a>
-icalrecurrencetype_weekday&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecur_string_to_weekday</b> (const char *str)</td></tr>
-<tr class="memitem:a20b3fd7dfbcf3a75186714f59ddcb07a" id="r_a20b3fd7dfbcf3a75186714f59ddcb07a"><td class="memItemLeft" align="right" valign="top"><a id="a20b3fd7dfbcf3a75186714f59ddcb07a" name="a20b3fd7dfbcf3a75186714f59ddcb07a"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecur_weekday_to_string</b> (icalrecurrencetype_weekday kind)</td></tr>
-<tr class="memitem:aa908a1c2cc241ca48cb1df357c1f623b" id="r_aa908a1c2cc241ca48cb1df357c1f623b"><td class="memItemLeft" align="right" valign="top"><a id="aa908a1c2cc241ca48cb1df357c1f623b" name="aa908a1c2cc241ca48cb1df357c1f623b"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_as_string</b> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur)</td></tr>
-<tr class="memitem:af6013aeae190a26955eddd7cf1a00baf" id="r_af6013aeae190a26955eddd7cf1a00baf"><td class="memItemLeft" align="right" valign="top"><a id="af6013aeae190a26955eddd7cf1a00baf" name="af6013aeae190a26955eddd7cf1a00baf"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_as_string_r</b> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur)</td></tr>
-<tr class="memitem:ae588b89b709fa1c09dfdca3d7a2df7da" id="r_ae588b89b709fa1c09dfdca3d7a2df7da"><td class="memItemLeft" align="right" valign="top"><a id="ae588b89b709fa1c09dfdca3d7a2df7da" name="ae588b89b709fa1c09dfdca3d7a2df7da"></a>
-struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_clone</b> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *r)</td></tr>
-<tr class="memdesc:ae588b89b709fa1c09dfdca3d7a2df7da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a deep copy of the given recurrence rule. The new instance is returned with a refcount of 1. <br /></td></tr>
-<tr class="memitem:a96c160e7e6b16e0e369c540f2ee164c7" id="r_a96c160e7e6b16e0e369c540f2ee164c7"><td class="memItemLeft" align="right" valign="top">enum icalrecurrencetype_weekday&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96c160e7e6b16e0e369c540f2ee164c7">icalrecurrencetype_day_day_of_week</a> (short day)</td></tr>
-<tr class="memdesc:a96c160e7e6b16e0e369c540f2ee164c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decodes a day to a weekday.  <br /></td></tr>
+<tr class="memitem:a27e50d989ba059c6c91b4844428930e2" id="r_a27e50d989ba059c6c91b4844428930e2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by</a> (icalrecurrence_by_data *by, short size)</td></tr>
+<tr class="memitem:a2319613578f2a47d4be33618ea1fde1d" id="r_a2319613578f2a47d4be33618ea1fde1d"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2319613578f2a47d4be33618ea1fde1d">icalrecur_skip_to_string</a> (<a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a> kind)</td></tr>
+<tr class="memitem:a6011fe4f7973affecf45fd377de2b83a" id="r_a6011fe4f7973affecf45fd377de2b83a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6011fe4f7973affecf45fd377de2b83a">icalrecur_string_to_freq</a> (const char *str)</td></tr>
+<tr class="memitem:a1285d50b79d9558543716fdce98d5c4f" id="r_a1285d50b79d9558543716fdce98d5c4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1285d50b79d9558543716fdce98d5c4f">icalrecur_string_to_skip</a> (const char *str)</td></tr>
+<tr class="memitem:ad60e4e0c33acf7f90dbbf891e2326a8e" id="r_ad60e4e0c33acf7f90dbbf891e2326a8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad60e4e0c33acf7f90dbbf891e2326a8e">icalrecur_string_to_weekday</a> (const char *str)</td></tr>
+<tr class="memitem:a20b3fd7dfbcf3a75186714f59ddcb07a" id="r_a20b3fd7dfbcf3a75186714f59ddcb07a"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20b3fd7dfbcf3a75186714f59ddcb07a">icalrecur_weekday_to_string</a> (<a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a> kind)</td></tr>
+<tr class="memitem:aa908a1c2cc241ca48cb1df357c1f623b" id="r_aa908a1c2cc241ca48cb1df357c1f623b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa908a1c2cc241ca48cb1df357c1f623b">icalrecurrencetype_as_string</a> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur)</td></tr>
+<tr class="memitem:af6013aeae190a26955eddd7cf1a00baf" id="r_af6013aeae190a26955eddd7cf1a00baf"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6013aeae190a26955eddd7cf1a00baf">icalrecurrencetype_as_string_r</a> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur)</td></tr>
+<tr class="memitem:ae588b89b709fa1c09dfdca3d7a2df7da" id="r_ae588b89b709fa1c09dfdca3d7a2df7da"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae588b89b709fa1c09dfdca3d7a2df7da">icalrecurrencetype_clone</a> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *r)</td></tr>
+<tr class="memitem:a96c160e7e6b16e0e369c540f2ee164c7" id="r_a96c160e7e6b16e0e369c540f2ee164c7"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96c160e7e6b16e0e369c540f2ee164c7">icalrecurrencetype_day_day_of_week</a> (short day)</td></tr>
 <tr class="memitem:aa730e9ac327064456902076b718400f4" id="r_aa730e9ac327064456902076b718400f4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa730e9ac327064456902076b718400f4">icalrecurrencetype_day_position</a> (short day)</td></tr>
-<tr class="memdesc:aa730e9ac327064456902076b718400f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decodes a day to a position of the weekday.  <br /></td></tr>
-<tr class="memitem:a1de1894ce541ebf3d5a3cbaf6c5978e1" id="r_a1de1894ce541ebf3d5a3cbaf6c5978e1"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1de1894ce541ebf3d5a3cbaf6c5978e1">icalrecurrencetype_encode_day</a> (enum icalrecurrencetype_weekday weekday, int position)</td></tr>
+<tr class="memitem:a1de1894ce541ebf3d5a3cbaf6c5978e1" id="r_a1de1894ce541ebf3d5a3cbaf6c5978e1"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1de1894ce541ebf3d5a3cbaf6c5978e1">icalrecurrencetype_encode_day</a> (enum <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a> weekday, int position)</td></tr>
 <tr class="memitem:a19eea3c8b66206f6b0d2f31e6e112d1a" id="r_a19eea3c8b66206f6b0d2f31e6e112d1a"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19eea3c8b66206f6b0d2f31e6e112d1a">icalrecurrencetype_encode_month</a> (int month, bool is_leap)</td></tr>
 <tr class="memitem:a1e8f5a4043dc80c339737e9095257779" id="r_a1e8f5a4043dc80c339737e9095257779"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e8f5a4043dc80c339737e9095257779">icalrecurrencetype_month_is_leap</a> (short month)</td></tr>
-<tr class="memitem:adcf246d5de93b17c7c72444163671297" id="r_adcf246d5de93b17c7c72444163671297"><td class="memItemLeft" align="right" valign="top"><a id="adcf246d5de93b17c7c72444163671297" name="adcf246d5de93b17c7c72444163671297"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_month_month</b> (short month)</td></tr>
+<tr class="memitem:adcf246d5de93b17c7c72444163671297" id="r_adcf246d5de93b17c7c72444163671297"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adcf246d5de93b17c7c72444163671297">icalrecurrencetype_month_month</a> (short month)</td></tr>
 <tr class="memitem:a6ef32c4da69e9a5f2059f160bf3792ab" id="r_a6ef32c4da69e9a5f2059f160bf3792ab"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ef32c4da69e9a5f2059f160bf3792ab">icalrecurrencetype_new</a> (void)</td></tr>
-<tr class="memdesc:a6ef32c4da69e9a5f2059f160bf3792ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates and initializes a new instance of icalrecurrencetype. The new instance is returned with a refcount of 1.  <br /></td></tr>
 <tr class="memitem:a049335f2fa89dd1c5e420439e66e543f" id="r_a049335f2fa89dd1c5e420439e66e543f"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a049335f2fa89dd1c5e420439e66e543f">icalrecurrencetype_new_from_string</a> (const char *str)</td></tr>
-<tr class="memitem:a125182230627f4634f6057a620211b8a" id="r_a125182230627f4634f6057a620211b8a"><td class="memItemLeft" align="right" valign="top"><a id="a125182230627f4634f6057a620211b8a" name="a125182230627f4634f6057a620211b8a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_ref</b> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur)</td></tr>
-<tr class="memdesc:a125182230627f4634f6057a620211b8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increases the reference counter by 1. <br /></td></tr>
-<tr class="memitem:a8941770a8f65ece2561aa8786f8575c0" id="r_a8941770a8f65ece2561aa8786f8575c0"><td class="memItemLeft" align="right" valign="top"><a id="a8941770a8f65ece2561aa8786f8575c0" name="a8941770a8f65ece2561aa8786f8575c0"></a>
-<a class="el" href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_rscale_supported_calendars</b> (void)</td></tr>
-<tr class="memitem:ab514cbb2acf2d8781490199224752a91" id="r_ab514cbb2acf2d8781490199224752a91"><td class="memItemLeft" align="right" valign="top"><a id="ab514cbb2acf2d8781490199224752a91" name="ab514cbb2acf2d8781490199224752a91"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_unref</b> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur)</td></tr>
-<tr class="memdesc:ab514cbb2acf2d8781490199224752a91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decreases the reference counter by 1. If it goes to 0, the instance and all referenced memory (i.e. rscale and 'by' arrays) are deallocated. <br /></td></tr>
+<tr class="memitem:a125182230627f4634f6057a620211b8a" id="r_a125182230627f4634f6057a620211b8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a125182230627f4634f6057a620211b8a">icalrecurrencetype_ref</a> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur)</td></tr>
+<tr class="memitem:a8941770a8f65ece2561aa8786f8575c0" id="r_a8941770a8f65ece2561aa8786f8575c0"><td class="memItemLeft" align="right" valign="top">icalarray *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8941770a8f65ece2561aa8786f8575c0">icalrecurrencetype_rscale_supported_calendars</a> (void)</td></tr>
+<tr class="memitem:ab514cbb2acf2d8781490199224752a91" id="r_ab514cbb2acf2d8781490199224752a91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a> (struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Routines for dealing with recurring time. </p>
@@ -247,51 +186,251 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur;</div>
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> dtstart;</div>
 <div class="line"> </div>
-<div class="line">rrule = icalcomponent_get_first_property(comp,ICAL_RRULE_PROPERTY);</div>
+<div class="line">rrule = <a class="code hl_function" href="icalcomponent_8c.html#a2537651ca1a768a86b6a7ad90964320c">icalcomponent_get_first_property</a>(comp,ICAL_RRULE_PROPERTY);</div>
 <div class="line">recur = icalproperty_get_rrule(rrule);</div>
 <div class="line">start = icalproperty_get_dtstart(dtstart);</div>
-<div class="ttc" id="astructicalrecurrencetype_html"><div class="ttname"><a href="structicalrecurrencetype.html">icalrecurrencetype</a></div><div class="ttdef"><b>Definition</b> icalrecur.h:168</div></div>
-<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition</b> icaltime.h:96</div></div>
+<div class="ttc" id="aicalcomponent_8c_html_a2537651ca1a768a86b6a7ad90964320c"><div class="ttname"><a href="icalcomponent_8c.html#a2537651ca1a768a86b6a7ad90964320c">icalcomponent_get_first_property</a></div><div class="ttdeci">icalproperty * icalcomponent_get_first_property(icalcomponent *c, icalproperty_kind kind)</div><div class="ttdef"><b>Definition</b> <a href="icalcomponent_8c_source.html#l00517">icalcomponent.c:517</a></div></div>
+<div class="ttc" id="astructicalrecurrencetype_html"><div class="ttname"><a href="structicalrecurrencetype.html">icalrecurrencetype</a></div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8h_source.html#l00250">icalrecur.h:250</a></div></div>
+<div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition</b> <a href="icaltime_8h_source.html#l00090">icaltime.h:90</a></div></div>
 </div><!-- fragment --><p>Or, just make them up:</p>
-<div class="fragment"><div class="line">recur = <a class="code hl_function" href="#a049335f2fa89dd1c5e420439e66e543f">icalrecurrencetype_new_from_string</a>(<span class="stringliteral">&quot;FREQ=YEARLY;BYDAY=SU,WE&quot;</span>);</div>
-<div class="line">dtstart = <a class="code hl_function" href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a>(<span class="stringliteral">&quot;19970101T123000&quot;</span>)</div>
-<div class="ttc" id="aicalrecur_8h_html_a049335f2fa89dd1c5e420439e66e543f"><div class="ttname"><a href="#a049335f2fa89dd1c5e420439e66e543f">icalrecurrencetype_new_from_string</a></div><div class="ttdeci">struct icalrecurrencetype * icalrecurrencetype_new_from_string(const char *str)</div><div class="ttdef"><b>Definition</b> icalrecur.c:822</div></div>
-<div class="ttc" id="aicaltime_8h_html_a1b66b9f52a9823b95e4cd33f9dd9b8e5"><div class="ttname"><a href="icaltime_8h.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a></div><div class="ttdeci">struct icaltimetype icaltime_from_string(const char *str)</div><div class="ttdef"><b>Definition</b> icaltime.c:368</div></div>
+<div class="fragment"><div class="line">recur = <a class="code hl_function" href="icalrecur_8c.html#a049335f2fa89dd1c5e420439e66e543f">icalrecurrencetype_new_from_string</a>(<span class="stringliteral">&quot;FREQ=YEARLY;BYDAY=SU,WE&quot;</span>);</div>
+<div class="line">dtstart = <a class="code hl_function" href="icaltime_8c.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a>(<span class="stringliteral">&quot;19970101T123000&quot;</span>)</div>
+<div class="ttc" id="aicalrecur_8c_html_a049335f2fa89dd1c5e420439e66e543f"><div class="ttname"><a href="icalrecur_8c.html#a049335f2fa89dd1c5e420439e66e543f">icalrecurrencetype_new_from_string</a></div><div class="ttdeci">struct icalrecurrencetype * icalrecurrencetype_new_from_string(const char *str)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l00834">icalrecur.c:834</a></div></div>
+<div class="ttc" id="aicaltime_8c_html_a1b66b9f52a9823b95e4cd33f9dd9b8e5"><div class="ttname"><a href="icaltime_8c.html#a1b66b9f52a9823b95e4cd33f9dd9b8e5">icaltime_from_string</a></div><div class="ttdeci">struct icaltimetype icaltime_from_string(const char *str)</div><div class="ttdef"><b>Definition</b> <a href="icaltime_8c_source.html#l00374">icaltime.c:374</a></div></div>
 </div><!-- fragment --><p>2) Create an iterator</p>
 <div class="fragment"><div class="line">icalrecur_iterator *ritr;</div>
-<div class="line">ritr = <a class="code hl_function" href="#acdcfa0fbb4e40377cae80ef977d28afe">icalrecur_iterator_new</a>(recur, start);</div>
-<div class="ttc" id="aicalrecur_8h_html_acdcfa0fbb4e40377cae80ef977d28afe"><div class="ttname"><a href="#acdcfa0fbb4e40377cae80ef977d28afe">icalrecur_iterator_new</a></div><div class="ttdeci">icalrecur_iterator * icalrecur_iterator_new(struct icalrecurrencetype *rule, struct icaltimetype dtstart)</div><div class="ttdef"><b>Definition</b> icalrecur.c:2264</div></div>
+<div class="line">ritr = <a class="code hl_function" href="icalrecur_8c.html#acdcfa0fbb4e40377cae80ef977d28afe">icalrecur_iterator_new</a>(recur, start);</div>
+<div class="ttc" id="aicalrecur_8c_html_acdcfa0fbb4e40377cae80ef977d28afe"><div class="ttname"><a href="icalrecur_8c.html#acdcfa0fbb4e40377cae80ef977d28afe">icalrecur_iterator_new</a></div><div class="ttdeci">icalrecur_iterator * icalrecur_iterator_new(struct icalrecurrencetype *rule, struct icaltimetype dtstart)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l02280">icalrecur.c:2280</a></div></div>
 </div><!-- fragment --><p>3) Iterator over the occurrences</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> next;</div>
-<div class="line">next = <a class="code hl_function" href="#a2e10af320612cd7ab8c6fb6177ade3e3">icalrecur_iterator_next</a>(ritr);</div>
-<div class="line"><span class="keywordflow">while</span> (!<a class="code hl_function" href="icaltime_8h.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a>(next)){</div>
+<div class="line">next = <a class="code hl_function" href="icalrecur_8c.html#ad2d6bef31a3a7bbfb803df53ed895544">icalrecur_iterator_next</a>(ritr);</div>
+<div class="line"><span class="keywordflow">while</span> (!<a class="code hl_function" href="icaltime_8c.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a>(next)){</div>
 <div class="line">        <span class="comment">// Do something with next</span></div>
-<div class="line">        next = <a class="code hl_function" href="#a2e10af320612cd7ab8c6fb6177ade3e3">icalrecur_iterator_next</a>(ritr);</div>
+<div class="line">        next = <a class="code hl_function" href="icalrecur_8c.html#ad2d6bef31a3a7bbfb803df53ed895544">icalrecur_iterator_next</a>(ritr);</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalrecur_8h_html_a2e10af320612cd7ab8c6fb6177ade3e3"><div class="ttname"><a href="#a2e10af320612cd7ab8c6fb6177ade3e3">icalrecur_iterator_next</a></div><div class="ttdeci">struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *)</div><div class="ttdef"><b>Definition</b> icalrecur.c:3631</div></div>
-<div class="ttc" id="aicaltime_8h_html_ada6621230dc10c2cb16228935ee311b5"><div class="ttname"><a href="icaltime_8h.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a></div><div class="ttdeci">bool icaltime_is_null_time(const struct icaltimetype t)</div><div class="ttdoc">Returns true if the time is null.</div><div class="ttdef"><b>Definition</b> icaltime.c:620</div></div>
+<div class="ttc" id="aicalrecur_8c_html_ad2d6bef31a3a7bbfb803df53ed895544"><div class="ttname"><a href="icalrecur_8c.html#ad2d6bef31a3a7bbfb803df53ed895544">icalrecur_iterator_next</a></div><div class="ttdeci">struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l03651">icalrecur.c:3651</a></div></div>
+<div class="ttc" id="aicaltime_8c_html_ada6621230dc10c2cb16228935ee311b5"><div class="ttname"><a href="icaltime_8c.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a></div><div class="ttdeci">bool icaltime_is_null_time(const struct icaltimetype t)</div><div class="ttdef"><b>Definition</b> <a href="icaltime_8c_source.html#l00626">icaltime.c:626</a></div></div>
 </div><!-- fragment --><p>Note that the time returned by icalrecur_iterator_next is in whatever timezone that dtstart is in.</p>
 <p>4) Deallocate a rule</p>
-<div class="fragment"><div class="line"><a class="code hl_function" href="#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a>(recur);</div>
-<div class="ttc" id="aicalrecur_8h_html_ab514cbb2acf2d8781490199224752a91"><div class="ttname"><a href="#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a></div><div class="ttdeci">void icalrecurrencetype_unref(struct icalrecurrencetype *recur)</div><div class="ttdoc">Decreases the reference counter by 1. If it goes to 0, the instance and all referenced memory (i....</div><div class="ttdef"><b>Definition</b> icalrecur.c:743</div></div>
+<div class="fragment"><div class="line"><a class="code hl_function" href="icalrecur_8c.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a>(recur);</div>
+<div class="ttc" id="aicalrecur_8c_html_ab514cbb2acf2d8781490199224752a91"><div class="ttname"><a href="icalrecur_8c.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a></div><div class="ttdeci">void icalrecurrencetype_unref(struct icalrecurrencetype *recur)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l00755">icalrecur.c:755</a></div></div>
 </div><!-- fragment --><p>The icalrecurrencetype object is reference counted. It will automatically be deallocated when the reference count goes to zero. </p>
-</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
-<a id="acec51b2d651f24e31b00627b60b12728" name="acec51b2d651f24e31b00627b60b12728"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acec51b2d651f24e31b00627b60b12728">&#9670;&#160;</a></span>ICAL_BY_SECOND_SIZE</h2>
+
+<p class="definition">Definition in file <a class="el" href="icalrecur_8h_source.html">icalrecur.h</a>.</p>
+</div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+<a id="a85aad1aeea58a53b5a0399a2fca38890" name="a85aad1aeea58a53b5a0399a2fca38890"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85aad1aeea58a53b5a0399a2fca38890">&#9670;&#160;</a></span>ical_invalid_rrule_handling</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define ICAL_BY_SECOND_SIZE&#160;&#160;&#160;62                               /* 0 to 60 */</td>
+          <td class="memname">enum <a class="el" href="#a85aad1aeea58a53b5a0399a2fca38890">ical_invalid_rrule_handling</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Recurrence type routines </p>
+<p>How the library handles RRULEs with invalid BYxxx part combos. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a85aad1aeea58a53b5a0399a2fca38890a4ee97e29acf40d1ef634bbb4dcec1b9e" name="a85aad1aeea58a53b5a0399a2fca38890a4ee97e29acf40d1ef634bbb4dcec1b9e"></a>ICAL_RRULE_TREAT_AS_ERROR&#160;</td><td class="fielddoc"><p>treat as a error; the internal icalerror to :ICAL_MALFORMEDDATA_ERROR </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a85aad1aeea58a53b5a0399a2fca38890a9d4a497b5bd2cbb6ebac47d8b99b105e" name="a85aad1aeea58a53b5a0399a2fca38890a9d4a497b5bd2cbb6ebac47d8b99b105e"></a>ICAL_RRULE_IGNORE_INVALID&#160;</td><td class="fielddoc"><p>discard and continue normally </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8h_source.html#l00616">616</a> of file <a class="el" href="icalrecur_8h_source.html">icalrecur.h</a>.</p>
+
+</div>
+</div>
+<a id="a599167f0f15f02d98c9efea9ff5d91dc" name="a599167f0f15f02d98c9efea9ff5d91dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a599167f0f15f02d98c9efea9ff5d91dc">&#9670;&#160;</a></span>icalrecurrencetype_byrule</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a599167f0f15f02d98c9efea9ff5d91dc">icalrecurrencetype_byrule</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Recurrence byrule types. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dcae42881972ba87aeb3f8db7e2c21e41ef" name="a599167f0f15f02d98c9efea9ff5d91dcae42881972ba87aeb3f8db7e2c21e41ef"></a>ICAL_BYRULE_NO_CONTRACTION&#160;</td><td class="fielddoc"><p>indicates the end of byrule </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dca5e401c70c4693ed4bf450ff31fe80fe6" name="a599167f0f15f02d98c9efea9ff5d91dca5e401c70c4693ed4bf450ff31fe80fe6"></a>ICAL_BY_MONTH&#160;</td><td class="fielddoc"><p>recur by months </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dcac28a8d076c068087c3ed71bc82cddca7" name="a599167f0f15f02d98c9efea9ff5d91dcac28a8d076c068087c3ed71bc82cddca7"></a>ICAL_BY_WEEK_NO&#160;</td><td class="fielddoc"><p>recur by weeks </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dca609ad0126bd8e79ae98b0915bdda5d7b" name="a599167f0f15f02d98c9efea9ff5d91dca609ad0126bd8e79ae98b0915bdda5d7b"></a>ICAL_BY_YEAR_DAY&#160;</td><td class="fielddoc"><p>recur by year days </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dca8ae62396dd439c8ae4598eaa5d6a6210" name="a599167f0f15f02d98c9efea9ff5d91dca8ae62396dd439c8ae4598eaa5d6a6210"></a>ICAL_BY_MONTH_DAY&#160;</td><td class="fielddoc"><p>recur by month days </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dcabf00eb69fbb0090d12d23a9b1e18981e" name="a599167f0f15f02d98c9efea9ff5d91dcabf00eb69fbb0090d12d23a9b1e18981e"></a>ICAL_BY_DAY&#160;</td><td class="fielddoc"><p>recur by days </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dca448eb21484b6d446c2d6f86f42fb0d63" name="a599167f0f15f02d98c9efea9ff5d91dca448eb21484b6d446c2d6f86f42fb0d63"></a>ICAL_BY_HOUR&#160;</td><td class="fielddoc"><p>recur by hours </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dca4c95bea940c220a8ba0b650efa1257b0" name="a599167f0f15f02d98c9efea9ff5d91dca4c95bea940c220a8ba0b650efa1257b0"></a>ICAL_BY_MINUTE&#160;</td><td class="fielddoc"><p>recur by minutes </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dca6048e48c8a4b19ae8dbc6f5c66b88d54" name="a599167f0f15f02d98c9efea9ff5d91dca6048e48c8a4b19ae8dbc6f5c66b88d54"></a>ICAL_BY_SECOND&#160;</td><td class="fielddoc"><p>recur by seconds </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dca3ccf37e225dee43804d6b4e690213f7c" name="a599167f0f15f02d98c9efea9ff5d91dca3ccf37e225dee43804d6b4e690213f7c"></a>ICAL_BY_SET_POS&#160;</td><td class="fielddoc"><p>recur by a set position </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a599167f0f15f02d98c9efea9ff5d91dcaec8a06e66dd964d73969db0bb2fb1eb3" name="a599167f0f15f02d98c9efea9ff5d91dcaec8a06e66dd964d73969db0bb2fb1eb3"></a>ICAL_BY_NUM_PARTS&#160;</td><td class="fielddoc"><p>length of the bydata array </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8h_source.html#l00125">125</a> of file <a class="el" href="icalrecur_8h_source.html">icalrecur.h</a>.</p>
+
+</div>
+</div>
+<a id="a203e6ca308804a67ff343837e7c11a61" name="a203e6ca308804a67ff343837e7c11a61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a203e6ca308804a67ff343837e7c11a61">&#9670;&#160;</a></span>icalrecurrencetype_frequency</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Recurrence frequencies.</p>
+<dl class="section note"><dt>Note</dt><dd>These enums are used to index an array, so don't change the order or the integers </dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a203e6ca308804a67ff343837e7c11a61a57b7c7b2d8fe713da4c9d5e004a4f2ab" name="a203e6ca308804a67ff343837e7c11a61a57b7c7b2d8fe713da4c9d5e004a4f2ab"></a>ICAL_SECONDLY_RECURRENCE&#160;</td><td class="fielddoc"><p>recurs on the second </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a203e6ca308804a67ff343837e7c11a61ab05d7b1942fcf1889660dfc5b6b626b5" name="a203e6ca308804a67ff343837e7c11a61ab05d7b1942fcf1889660dfc5b6b626b5"></a>ICAL_MINUTELY_RECURRENCE&#160;</td><td class="fielddoc"><p>recurs on the minute </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a203e6ca308804a67ff343837e7c11a61a32f2abf79c9022ae97e2b0fe2d2d734a" name="a203e6ca308804a67ff343837e7c11a61a32f2abf79c9022ae97e2b0fe2d2d734a"></a>ICAL_HOURLY_RECURRENCE&#160;</td><td class="fielddoc"><p>recurs on the hour </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a203e6ca308804a67ff343837e7c11a61a8d5b54da8af6673001a4fbd1f9bf63c4" name="a203e6ca308804a67ff343837e7c11a61a8d5b54da8af6673001a4fbd1f9bf63c4"></a>ICAL_DAILY_RECURRENCE&#160;</td><td class="fielddoc"><p>recurs daily </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a203e6ca308804a67ff343837e7c11a61ab18ed383ca386532112a8d0654c13de9" name="a203e6ca308804a67ff343837e7c11a61ab18ed383ca386532112a8d0654c13de9"></a>ICAL_WEEKLY_RECURRENCE&#160;</td><td class="fielddoc"><p>recurs weekly </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a203e6ca308804a67ff343837e7c11a61ab7ed6703b65041311522bb023b62fbbd" name="a203e6ca308804a67ff343837e7c11a61ab7ed6703b65041311522bb023b62fbbd"></a>ICAL_MONTHLY_RECURRENCE&#160;</td><td class="fielddoc"><p>recurs monthly </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a203e6ca308804a67ff343837e7c11a61a8b4752c1ea2c7bf337e818a3b5a5131d" name="a203e6ca308804a67ff343837e7c11a61a8b4752c1ea2c7bf337e818a3b5a5131d"></a>ICAL_YEARLY_RECURRENCE&#160;</td><td class="fielddoc"><p>recurs yearly </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a203e6ca308804a67ff343837e7c11a61a2771b73d4b4ef192a44b5a48fe5bc76d" name="a203e6ca308804a67ff343837e7c11a61a2771b73d4b4ef192a44b5a48fe5bc76d"></a>ICAL_NO_RECURRENCE&#160;</td><td class="fielddoc"><p>does not recur </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8h_source.html#l00084">84</a> of file <a class="el" href="icalrecur_8h_source.html">icalrecur.h</a>.</p>
+
+</div>
+</div>
+<a id="a46e0128948e7c4c5c1e120061211ddea" name="a46e0128948e7c4c5c1e120061211ddea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46e0128948e7c4c5c1e120061211ddea">&#9670;&#160;</a></span>icalrecurrencetype_skip</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Recurrence skip types. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a46e0128948e7c4c5c1e120061211ddeaafbb99760bcbd50b869a242b3bcc5a60a" name="a46e0128948e7c4c5c1e120061211ddeaafbb99760bcbd50b869a242b3bcc5a60a"></a>ICAL_SKIP_BACKWARD&#160;</td><td class="fielddoc"><p>skip backward to the previous recurrence </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a46e0128948e7c4c5c1e120061211ddeaae35a7154e960896ce1075b05f82eb430" name="a46e0128948e7c4c5c1e120061211ddeaae35a7154e960896ce1075b05f82eb430"></a>ICAL_SKIP_FORWARD&#160;</td><td class="fielddoc"><p>skip forward to the next recurrence </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a46e0128948e7c4c5c1e120061211ddeaa725f0e58c4fa53dfc3913c15ab3ba299" name="a46e0128948e7c4c5c1e120061211ddeaa725f0e58c4fa53dfc3913c15ab3ba299"></a>ICAL_SKIP_OMIT&#160;</td><td class="fielddoc"><p>omit this recurrence </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a46e0128948e7c4c5c1e120061211ddeaa8be35a84f3d224872ccd98adfa1130e6" name="a46e0128948e7c4c5c1e120061211ddeaa8be35a84f3d224872ccd98adfa1130e6"></a>ICAL_SKIP_UNDEFINED&#160;</td><td class="fielddoc"><p>recurrence skip type is not defined </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8h_source.html#l00114">114</a> of file <a class="el" href="icalrecur_8h_source.html">icalrecur.h</a>.</p>
+
+</div>
+</div>
+<a id="a0d3df238238f2689b2cc48b162a9507b" name="a0d3df238238f2689b2cc48b162a9507b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d3df238238f2689b2cc48b162a9507b">&#9670;&#160;</a></span>icalrecurrencetype_weekday</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Weekly recurrences days. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0d3df238238f2689b2cc48b162a9507ba2f63e8ddd4bb29962dd15fa454561730" name="a0d3df238238f2689b2cc48b162a9507ba2f63e8ddd4bb29962dd15fa454561730"></a>ICAL_NO_WEEKDAY&#160;</td><td class="fielddoc"><p>does not recur on a weekday </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0d3df238238f2689b2cc48b162a9507bad0d0a870955673a339d8b218dfea5b53" name="a0d3df238238f2689b2cc48b162a9507bad0d0a870955673a339d8b218dfea5b53"></a>ICAL_SUNDAY_WEEKDAY&#160;</td><td class="fielddoc"><p>recurs on Sunday </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0d3df238238f2689b2cc48b162a9507ba8ff3e44bba972fdf75b3dcf181f86768" name="a0d3df238238f2689b2cc48b162a9507ba8ff3e44bba972fdf75b3dcf181f86768"></a>ICAL_MONDAY_WEEKDAY&#160;</td><td class="fielddoc"><p>recurs on Monday </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0d3df238238f2689b2cc48b162a9507ba24f9e92df2e7b2d7bfb7363a987bc460" name="a0d3df238238f2689b2cc48b162a9507ba24f9e92df2e7b2d7bfb7363a987bc460"></a>ICAL_TUESDAY_WEEKDAY&#160;</td><td class="fielddoc"><p>recurs on Tuesday </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0d3df238238f2689b2cc48b162a9507ba374664bccaa9aa70b80fef1f6497ac9b" name="a0d3df238238f2689b2cc48b162a9507ba374664bccaa9aa70b80fef1f6497ac9b"></a>ICAL_WEDNESDAY_WEEKDAY&#160;</td><td class="fielddoc"><p>recurs on Wednesday </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0d3df238238f2689b2cc48b162a9507ba72bf64c30b625b98b8a934bff5006883" name="a0d3df238238f2689b2cc48b162a9507ba72bf64c30b625b98b8a934bff5006883"></a>ICAL_THURSDAY_WEEKDAY&#160;</td><td class="fielddoc"><p>recurs on Thursday </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0d3df238238f2689b2cc48b162a9507ba3a0c1e32772fe1214be1904a64929835" name="a0d3df238238f2689b2cc48b162a9507ba3a0c1e32772fe1214be1904a64929835"></a>ICAL_FRIDAY_WEEKDAY&#160;</td><td class="fielddoc"><p>recurs on Friday </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0d3df238238f2689b2cc48b162a9507baab0d2cc1533a55f3a590973d12f908b1" name="a0d3df238238f2689b2cc48b162a9507baab0d2cc1533a55f3a590973d12f908b1"></a>ICAL_SATURDAY_WEEKDAY&#160;</td><td class="fielddoc"><p>recurs on Saturday </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8h_source.html#l00099">99</a> of file <a class="el" href="icalrecur_8h_source.html">icalrecur.h</a>.</p>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a9eb6bec2840d2b84efb14d50731b6aaa" name="a9eb6bec2840d2b84efb14d50731b6aaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9eb6bec2840d2b84efb14d50731b6aaa">&#9670;&#160;</a></span>ical_get_invalid_rrule_handling_setting()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a85aad1aeea58a53b5a0399a2fca38890">ical_invalid_rrule_handling</a> ical_get_invalid_rrule_handling_setting </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets how the library should handle invalid RRULEs.</p>
+<p>The default library setting is <a class="el" href="#a85aad1aeea58a53b5a0399a2fca38890a4ee97e29acf40d1ef634bbb4dcec1b9e">ICAL_RRULE_TREAT_AS_ERROR</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>the library's current cal_invalid_rrule_handling setting. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a3cc3b729a411ed8f1e046f1bbf84bf65">ical_set_invalid_rrule_handling_setting</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04252">4252</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="a3cc3b729a411ed8f1e046f1bbf84bf65" name="a3cc3b729a411ed8f1e046f1bbf84bf65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cc3b729a411ed8f1e046f1bbf84bf65">&#9670;&#160;</a></span>ical_set_invalid_rrule_handling_setting()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ical_set_invalid_rrule_handling_setting </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a85aad1aeea58a53b5a0399a2fca38890">ical_invalid_rrule_handling</a></td>          <td class="paramname"><span class="paramname"><em>newSetting</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets how the library should handle invalid RRULEs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newSetting</td><td>the <a class="el" href="#a85aad1aeea58a53b5a0399a2fca38890">ical_invalid_rrule_handling</a> to use. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a9eb6bec2840d2b84efb14d50731b6aaa">ical_get_invalid_rrule_handling_setting</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04269">4269</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
 <a id="aa77fb18047c90e2b86530b5edcfff090" name="aa77fb18047c90e2b86530b5edcfff090"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa77fb18047c90e2b86530b5edcfff090">&#9670;&#160;</a></span>icalrecur_expand_recurrence()</h2>
 
@@ -320,15 +459,54 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Fills an array with the 'count' number of occurrences generated by the rrule.</p>
+<p>Specifically, this fills an array up with at most 'count' icaltime_t values, each representing an occurrence time in seconds past the POSIX epoch.</p>
+<dl class="section note"><dt>Note</dt><dd>The times are returned in UTC, but the times are calculated in local time. You will have to convert the results back into local time before using them.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rule</td><td>a pointer to a char string containing the RRULE to use </td></tr>
+    <tr><td class="paramname">start</td><td>a valid starting date-time </td></tr>
+    <tr><td class="paramname">count</td><td>the length of the provided icalarray </td></tr>
+    <tr><td class="paramname">array</td><td>a pointer to an array of <code class="param">count</code> icaltime_t values resulting from expanding the specified RRULE <code class="param">rule</code>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the <code class="param">rule</code> could be converted to a string; false otherwise. </dd></dl>
 
-<p>Fills an array with the 'count' number of occurrences generated by the rrule. </p>
-<p>Specifically, this fills <code class="param">array</code> up with at most 'count' icaltime_t values, each representing an occurrence time in seconds past the POSIX epoch.</p>
-<p>Note that the times are returned in UTC, but the times are calculated in local time. You will have to convert the results back into local time before using them. </p>
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04216">4216</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
-<a id="a14daf9df313fdad9f536a7d9242b4cdc" name="a14daf9df313fdad9f536a7d9242b4cdc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a14daf9df313fdad9f536a7d9242b4cdc">&#9670;&#160;</a></span>icalrecur_iterator_free()</h2>
+<a id="a3b9e06ff25b276716636610c58e0abf2" name="a3b9e06ff25b276716636610c58e0abf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b9e06ff25b276716636610c58e0abf2">&#9670;&#160;</a></span>icalrecur_freq_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalrecur_freq_to_string </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Stringifies a <a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>a <a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a> to convert</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to char string version of <code class="param">kind</code>. If <code class="param">kind</code> is invalid then NULL is returned.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a6011fe4f7973affecf45fd377de2b83a">icalrecur_string_to_freq</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00213">213</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="a485fb0e1dd382fbfd05b6b7a618c49e0" name="a485fb0e1dd382fbfd05b6b7a618c49e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a485fb0e1dd382fbfd05b6b7a618c49e0">&#9670;&#160;</a></span>icalrecur_iterator_free()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -336,12 +514,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         <tr>
           <td class="memname">void icalrecur_iterator_free </td>
           <td>(</td>
-          <td class="paramtype">icalrecur_iterator *</td>          <td class="paramname"><span class="paramname"><em>i</em></span></td><td>)</td>
+          <td class="paramtype">icalrecur_iterator *</td>          <td class="paramname"><span class="paramname"><em>impl</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Frees the iterator. </p>
+<p>Frees the specified icalrecur_iterator.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">impl</td><td>a pointer to a valid icalrecur_iterator </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l02408">2408</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -363,8 +549,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a new recurrence rule iterator, starting at DTSTART.</p>
-<p>NOTE: The new iterator may keep a reference to the passed rule. It must not be modified as long as the iterator is in use. </p>
+<p>Creates a new recurrence rule iterator starting at DTSTART.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rule</td><td>a pointer to a valid icalrecurrencetype </td></tr>
+    <tr><td class="paramname">dtstart</td><td>a valid icaltimetype to use for the DTSART</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>The new iterator may keep a reference to the passed rule. It must not be modified as long as the iterator is in use.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalrecur_iterator. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l02280">2280</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -382,12 +578,21 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the next occurrence from an iterator. </p>
+<p>Gets the next occurrence from an icalrecur_iterator.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">impl</td><td>a pointer to a valid icalrecur_iterator</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an icaltimetype for the next occurrence. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l03651">3651</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
-<a id="aa15f2414c34796d414acce20ab7a2bf0" name="aa15f2414c34796d414acce20ab7a2bf0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa15f2414c34796d414acce20ab7a2bf0">&#9670;&#160;</a></span>icalrecur_iterator_prev()</h2>
+<a id="a0e5f34b0926384cc6c5de4571893f711" name="a0e5f34b0926384cc6c5de4571893f711"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e5f34b0926384cc6c5de4571893f711">&#9670;&#160;</a></span>icalrecur_iterator_prev()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -400,7 +605,17 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the previous occurrence from an iterator. </p><dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+<p>Gets the previous occurrence from an icalrecur_iterator.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">impl</td><td>a pointer to a valid icalrecur_iterator</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an icaltimetype for the previous occurrence.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l03768">3768</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -422,7 +637,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the date-time at which the iterator will stop at the latest. Values equal to or greater than end will not be returned by the iterator. </p>
+<p>Sets the date-time at which the iterator will stop at the latest.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">impl</td><td>is a pointer to a valid icalrecur_iterator </td></tr>
+    <tr><td class="paramname">end</td><td>is the ending icaltimetype</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Values equal to or greater than end will not be returned by the iterator.</p>
+<dl class="section return"><dt>Returns</dt><dd>if the end was successfully set; false otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04087">4087</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -449,11 +675,23 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the date-times over which the iterator will run, where <code class="param">from</code> is a value between DTSTART and UNTIL.</p>
+<p>Sets the date-times over which the iterator will run,</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">impl</td><td>is a pointer to a valid icalrecur_iterator </td></tr>
+    <tr><td class="paramname">to</td><td>is the starting icaltimetype </td></tr>
+    <tr><td class="paramname">from</td><td>is the ending icaltimetype that must be between DSTART and UNTIL</td></tr>
+  </table>
+  </dd>
+</dl>
 <p>If <code class="param">to</code> is null time, the forward iterator will return values up to and including UNTIL (if present), otherwise up to the year 2582.</p>
 <p>if <code class="param">to</code> is non-null time and later than <code class="param">from</code>, the forward iterator will return values up to and including 'to'.</p>
 <p>If <code class="param">to</code> is non-null time and earlier than <code class="param">from</code>, the reverse iterator will be set to start at <code class="param">from</code> and will return values down to and including <code class="param">to</code>.</p>
-<p>NOTE: CAN NOT be used with RRULEs that contain COUNT. </p><dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+<p>NOTE: CAN NOT be used with RRULEs that contain COUNT.</p>
+<dl class="section return"><dt>Returns</dt><dd>true if the range was successfully set; false otherwise.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04098">4098</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -475,8 +713,19 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the date-time at which the iterator will start, where <code class="param">start</code> is a value between DTSTART and UNTIL.</p>
-<p>NOTE: CAN NOT be used with RRULEs that contain COUNT. </p><dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+<p>Sets the date-time at which the iterator will start,</p>
+<dl class="section note"><dt>Note</dt><dd>CAN NOT be used with RRULEs that contain COUNT.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">impl</td><td>is a pointer to a valid icalrecur_iterator </td></tr>
+    <tr><td class="paramname">start</td><td>is the starting icaltimetype that must be between DTSTART and UNTIL.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>if the start was successfully set; false otherwise.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04062">4062</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -489,7 +738,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         <tr>
           <td class="memname">bool icalrecur_resize_by </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structicalrecurrence__by__data.html">icalrecurrence_by_data</a> *</td>          <td class="paramname"><span class="paramname"><em>by</em></span>, </td>
+          <td class="paramtype">icalrecurrence_by_data *</td>          <td class="paramname"><span class="paramname"><em>by</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -498,9 +747,242 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Resizes the buffer backing the 'by' array to the specified size, if different. Frees the buffer if the new size is 0. </p>
+<p>Resizes the buffer backing the 'by' array to the specified size, if different.</p>
+<p>Frees the buffer if the new size is 0.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">by</td><td>is a pointer to valid icalrecurrence_by_data to use </td></tr>
+    <tr><td class="paramname">size</td><td>is the new size for the array</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false on failure. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00306">306</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="a2319613578f2a47d4be33618ea1fde1d" name="a2319613578f2a47d4be33618ea1fde1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2319613578f2a47d4be33618ea1fde1d">&#9670;&#160;</a></span>icalrecur_skip_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalrecur_skip_to_string </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Stringifies a <a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>a <a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a> to convert</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to char string version of <code class="param">kind</code>. If <code class="param">kind</code> is invalid then NULL is returned.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a1285d50b79d9558543716fdce98d5c4f">icalrecur_string_to_skip</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00246">246</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="a6011fe4f7973affecf45fd377de2b83a" name="a6011fe4f7973affecf45fd377de2b83a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6011fe4f7973affecf45fd377de2b83a">&#9670;&#160;</a></span>icalrecur_string_to_freq()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a> icalrecur_string_to_freq </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into a <a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>a pointer to a char string containing the string representation of an <a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="#a203e6ca308804a67ff343837e7c11a61">icalrecurrencetype_frequency</a> version of <code class="param">str</code>. If <code class="param">str</code> is invalid then <a class="el" href="#a203e6ca308804a67ff343837e7c11a61a2771b73d4b4ef192a44b5a48fe5bc76d">ICAL_NO_RECURRENCE</a> is returned.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a3b9e06ff25b276716636610c58e0abf2">icalrecur_freq_to_string</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00201">201</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="a1285d50b79d9558543716fdce98d5c4f" name="a1285d50b79d9558543716fdce98d5c4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1285d50b79d9558543716fdce98d5c4f">&#9670;&#160;</a></span>icalrecur_string_to_skip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a> icalrecur_string_to_skip </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into a <a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>a pointer t a char string containing the string representation of an <a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="#a46e0128948e7c4c5c1e120061211ddea">icalrecurrencetype_skip</a> version of <code class="param">str</code>. If <code class="param">str</code> is invalid then <a class="el" href="#a46e0128948e7c4c5c1e120061211ddeaa8be35a84f3d224872ccd98adfa1130e6">ICAL_SKIP_UNDEFINED</a> is returned.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a2319613578f2a47d4be33618ea1fde1d">icalrecur_skip_to_string</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00234">234</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="ad60e4e0c33acf7f90dbbf891e2326a8e" name="ad60e4e0c33acf7f90dbbf891e2326a8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad60e4e0c33acf7f90dbbf891e2326a8e">&#9670;&#160;</a></span>icalrecur_string_to_weekday()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a> icalrecur_string_to_weekday </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a char string into a <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>a pointer to a char string containing the string representation of a <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a> version of <code class="param">str</code>. If <code class="param">str</code> is invalid then :: ICAL_NO_WEEKDAY is returned.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a20b3fd7dfbcf3a75186714f59ddcb07a">icalrecur_weekday_to_string</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00284">284</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="a20b3fd7dfbcf3a75186714f59ddcb07a" name="a20b3fd7dfbcf3a75186714f59ddcb07a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20b3fd7dfbcf3a75186714f59ddcb07a">&#9670;&#160;</a></span>icalrecur_weekday_to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalrecur_weekday_to_string </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Stringifies a <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>a <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a> to convert</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to char string version of <code class="param">kind</code>. If <code class="param">kind</code> is invalid then NULL is returned.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#ad60e4e0c33acf7f90dbbf891e2326a8e">icalrecur_string_to_weekday</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00271">271</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="aa908a1c2cc241ca48cb1df357c1f623b" name="aa908a1c2cc241ca48cb1df357c1f623b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa908a1c2cc241ca48cb1df357c1f623b">&#9670;&#160;</a></span>icalrecurrencetype_as_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icalrecurrencetype_as_string </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *</td>          <td class="paramname"><span class="paramname"><em>recur</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Represent an icalrecurrencetype as a string.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">recur</td><td>a pointer to a valid icalrecurrencetype</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of <code class="param">recur</code>. Returns NULL if the conversion was unsuccessful.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#af6013aeae190a26955eddd7cf1a00baf">icalrecurrencetype_as_string_r</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l01009">1009</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="af6013aeae190a26955eddd7cf1a00baf" name="af6013aeae190a26955eddd7cf1a00baf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6013aeae190a26955eddd7cf1a00baf">&#9670;&#160;</a></span>icalrecurrencetype_as_string_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icalrecurrencetype_as_string_r </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *</td>          <td class="paramname"><span class="paramname"><em>recur</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Represent an icalrecurrencetype as a string.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">recur</td><td>a pointer to a valid icalrecurrencetype</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of <code class="param">recur</code>. Returns NULL if the conversion was unsuccessful.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#aa908a1c2cc241ca48cb1df357c1f623b">icalrecurrencetype_as_string</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l01018">1018</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="ae588b89b709fa1c09dfdca3d7a2df7da" name="ae588b89b709fa1c09dfdca3d7a2df7da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae588b89b709fa1c09dfdca3d7a2df7da">&#9670;&#160;</a></span>icalrecurrencetype_clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> * icalrecurrencetype_clone </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *</td>          <td class="paramname"><span class="paramname"><em>r</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates a deep copy of the given icalrecurrencetype.</p>
+<p>The new instance is returned with a refcount of 1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r</td><td>is a pointer to a valid icalrecurrencetype</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the cloned memory. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00797">797</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -511,19 +993,24 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum icalrecurrencetype_weekday icalrecurrencetype_day_day_of_week </td>
+          <td class="memname">enum <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a> icalrecurrencetype_day_day_of_week </td>
           <td>(</td>
           <td class="paramtype">short</td>          <td class="paramname"><span class="paramname"><em>day</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Decode the weekday from a "weekday:pos" form.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">day</td><td>is the "weekday:pos" to decode (as created by <a class="el" href="#a1de1894ce541ebf3d5a3cbaf6c5978e1">icalrecurrencetype_encode_day()</a>)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The decoded day of the week from the "weekday:pos". 1 is Monday, 2 is Tuesday, etc.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a1de1894ce541ebf3d5a3cbaf6c5978e1">icalrecurrencetype_encode_day</a> and <a class="el" href="#aa730e9ac327064456902076b718400f4">icalrecurrencetype_day_position()</a>. </dd></dl>
 
-<p>Decodes a day to a weekday. </p>
-<dl class="section return"><dt>Returns</dt><dd>The decoded day of the week. 1 is Monday, 2 is Tuesday, etc. A position of 0 means 'any' or 'every'.</dd></dl>
-<p>The 'day' element of icalrecurrencetype_weekday is encoded to allow representation of both the day of the week ( Monday, Tuesday), but also the Nth day of the week ( First tuesday of the month, last thursday of the year) These routines decode the day values.</p>
-<p>The day's position in the period ( Nth-ness) and the numerical value of the day are encoded together as: pos*7 + dow.</p>
-<p>A position of 0 means 'any' or 'every'. </p>
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04178">4178</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -541,9 +1028,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Decodes a the position from a "weekday:pos" form.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">day</td><td>is the "weekday:pos" to decode (as created by <a class="el" href="#a1de1894ce541ebf3d5a3cbaf6c5978e1">icalrecurrencetype_encode_day()</a>).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The position of the day in the week, where: 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc. 0 means 'any' or 'every'. </dd></dl>
 
-<p>Decodes a day to a position of the weekday. </p>
-<dl class="section return"><dt>Returns</dt><dd>The position of the day in the week. 0 == any of day of week. 1 == first, 2 = second, -2 == second to last, etc. 0 means 'any' or 'every'. </dd></dl>
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04183">4183</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -556,7 +1050,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         <tr>
           <td class="memname">short icalrecurrencetype_encode_day </td>
           <td>(</td>
-          <td class="paramtype">enum icalrecurrencetype_weekday</td>          <td class="paramname"><span class="paramname"><em>weekday</em></span>, </td>
+          <td class="paramtype">enum <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a></td>          <td class="paramname"><span class="paramname"><em>weekday</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -565,7 +1059,22 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Encodes the <code class="param">weekday</code> and <code class="param">position</code> into a form, which can be stored to icalrecurrencetype::by[ICAL_BY_DAY] array. Use <a class="el" href="#a96c160e7e6b16e0e369c540f2ee164c7" title="Decodes a day to a weekday.">icalrecurrencetype_day_day_of_week()</a> and <a class="el" href="#aa730e9ac327064456902076b718400f4" title="Decodes a day to a position of the weekday.">icalrecurrencetype_day_position()</a> to split the encoded value back into the parts. </p><dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+<p>Encode a weekday and position into a form which can be stored into a <span class="tt"><a class="el" href="structicalrecurrencetype.html#af0a483e47bacf69a4c8b04525678ae24">icalrecurrencetype::by</a>[ICAL_BY_DAY]</span> array.</p>
+<p>The 'day' element of <a class="el" href="#a0d3df238238f2689b2cc48b162a9507b">icalrecurrencetype_weekday</a> is encoded to allow representation of both the day of the week ( Monday, Tuesday), but also the Nth day of the week (First tuesday of the month, last thursday of the year) These routines decode the day values.</p>
+<p>The day's position in the period (Nth-ness) and the numerical value of the day are encoded together as: pos*7 + dow.</p>
+<p>A position of 0 means 'any' or 'every'.</p>
+<p>Use <a class="el" href="#a96c160e7e6b16e0e369c540f2ee164c7">icalrecurrencetype_day_day_of_week()</a> and <a class="el" href="#aa730e9ac327064456902076b718400f4">icalrecurrencetype_day_position()</a> to split the encoded value back into the parts.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">weekday</td><td>is the weekday to use </td></tr>
+    <tr><td class="paramname">position</td><td>is the positiog to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the encoded "weekday:pos", which can later be decoded back using <a class="el" href="#a96c160e7e6b16e0e369c540f2ee164c7">icalrecurrencetype_day_day_of_week()</a> and <a class="el" href="#aa730e9ac327064456902076b718400f4">icalrecurrencetype_day_position()</a>.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04194">4194</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -587,7 +1096,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Encodes the <code class="param">month</code> and the <code class="param">is_leap</code> into a form, which can be stored to icalrecurrencetype::by[ICAL_BY_MONTH] array. Use <a class="el" href="#a1e8f5a4043dc80c339737e9095257779">icalrecurrencetype_month_is_leap()</a> and icalrecurrencetype_month_month() to split the encoded value back into the parts </p><dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+<p>Encodes a month and leap year indicator into a form which can be stored into a <span class="tt"><a class="el" href="structicalrecurrencetype.html#af0a483e47bacf69a4c8b04525678ae24">icalrecurrencetype::by</a>[ICAL_BY_MONTH]</span> array.</p>
+<p>The month element of the <span class="tt">by[ICAL_BY_MONTH]</span> array is encoded to allow representation of the "L" leap suffix (RFC 7529). The "L" suffix is encoded by setting a high-order bit.</p>
+<p>Use <a class="el" href="#a1e8f5a4043dc80c339737e9095257779">icalrecurrencetype_month_is_leap()</a> and <a class="el" href="#adcf246d5de93b17c7c72444163671297">icalrecurrencetype_month_month()</a> to split the encoded value back into the parts.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">month</td><td>is the month to use (1-12) </td></tr>
+    <tr><td class="paramname">is_leap</td><td>is a bool indicating if leap year is to be considered</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the encoded "month:leap_year", which can later be decoded back using <a class="el" href="#a1e8f5a4043dc80c339737e9095257779">icalrecurrencetype_month_is_leap()</a> and <a class="el" href="#adcf246d5de93b17c7c72444163671297">icalrecurrencetype_month_month()</a>.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04211">4211</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -605,8 +1127,45 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The <code class="param">month</code> element of the by[ICAL_BY_MONTH] array is encoded to allow representation of the "L" leap suffix (RFC 7529). These routines decode the month values.</p>
-<p>The "L" suffix is encoded by setting a high-order bit. </p>
+<p>Decode the is_leap from a month:leap_year form.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">month</td><td>is the month:leap_year to decode (as created by <a class="el" href="#a19eea3c8b66206f6b0d2f31e6e112d1a">icalrecurrencetype_encode_month()</a>)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the is_leap portion of the month:leap_year</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a19eea3c8b66206f6b0d2f31e6e112d1a">icalrecurrencetype_encode_month</a>, <a class="el" href="#adcf246d5de93b17c7c72444163671297">icalrecurrencetype_month_month</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04201">4201</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="adcf246d5de93b17c7c72444163671297" name="adcf246d5de93b17c7c72444163671297"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcf246d5de93b17c7c72444163671297">&#9670;&#160;</a></span>icalrecurrencetype_month_month()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int icalrecurrencetype_month_month </td>
+          <td>(</td>
+          <td class="paramtype">short</td>          <td class="paramname"><span class="paramname"><em>month</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Decode the month from a month:leap_year form.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">month</td><td>is the month:leap_year to decode (as created by <a class="el" href="#a19eea3c8b66206f6b0d2f31e6e112d1a">icalrecurrencetype_encode_month()</a>)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the month portion of the month:leap_year</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a19eea3c8b66206f6b0d2f31e6e112d1a">icalrecurrencetype_encode_month</a>, <a class="el" href="#a1e8f5a4043dc80c339737e9095257779">icalrecurrencetype_month_is_leap</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l04206">4206</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -624,9 +1183,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Constructs a new instance of icalrecurrencetype.</p>
+<p>The new instance is initialized with a refcount of 1.</p>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the new instance, or NULL if memory allocation failed. </dd></dl>
 
-<p>Allocates and initializes a new instance of icalrecurrencetype. The new instance is returned with a refcount of 1. </p>
-<dl class="section return"><dt>Returns</dt><dd>A pointer to the new instance, of NULL if allocation failed. </dd></dl>
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00708">708</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>
@@ -644,7 +1205,90 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>icalrecurrencetype_un
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Convert between strings and recurrencetype structures. </p>
+<p>Create a new icalrecurrencetype from a string.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>a pointer to a char string containing string version of the recurrence.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalrecurrencetype or NULL if the string contained an invalid representation. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00834">834</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="a125182230627f4634f6057a620211b8a" name="a125182230627f4634f6057a620211b8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a125182230627f4634f6057a620211b8a">&#9670;&#160;</a></span>icalrecurrencetype_ref()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalrecurrencetype_ref </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *</td>          <td class="paramname"><span class="paramname"><em>recur</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Increases the icalrecurrencetype reference counter by 1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">recur</td><td>is a pointer to a valid icalrecurrencetype </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00747">747</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="a8941770a8f65ece2561aa8786f8575c0" name="a8941770a8f65ece2561aa8786f8575c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8941770a8f65ece2561aa8786f8575c0">&#9670;&#160;</a></span>icalrecurrencetype_rscale_supported_calendars()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">icalarray * icalrecurrencetype_rscale_supported_calendars </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Return an array of RSCALE supported calendars.</p>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to an icalarray of a list of RSCALE supported calendars. Currently returns list containing "GREGORIAN" only. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l01966">1966</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
+
+</div>
+</div>
+<a id="ab514cbb2acf2d8781490199224752a91" name="ab514cbb2acf2d8781490199224752a91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab514cbb2acf2d8781490199224752a91">&#9670;&#160;</a></span>icalrecurrencetype_unref()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void icalrecurrencetype_unref </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structicalrecurrencetype.html">icalrecurrencetype</a> *</td>          <td class="paramname"><span class="paramname"><em>recur</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Decreases the icalrecurrencetype reference counter by 1.</p>
+<p>If the counter reaches 0, the instance and all referenced memory (i.e. rscale and 'by' arrays) are deallocated.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">recur</td><td>a pointer to a valid icalrecurrencetype </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="icalrecur_8c_source.html#l00755">755</a> of file <a class="el" href="icalrecur_8c_source.html">icalrecur.c</a>.</p>
 
 </div>
 </div>

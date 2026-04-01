@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -82,20 +82,23 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>A set of function wrappers to handle non-structured return type interop.  
+<p>Function wrappers to handle non-structured return type interoperability.  
 <a href="#details">More...</a></p>
+
+<p><a href="byref_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac00ad54bc51ac790fbe14643e946bf9f" id="r_ac00ad54bc51ac790fbe14643e946bf9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac00ad54bc51ac790fbe14643e946bf9f">icaltime_current_time_with_zone_ex</a> (const <a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *ret)</td></tr>
-<tr class="memdesc:ac00ad54bc51ac790fbe14643e946bf9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience constructor (ret-wrapped)  <br /></td></tr>
+<tr class="memitem:acf1e231e48ebe847e9e3c8ede9d3f698" id="r_acf1e231e48ebe847e9e3c8ede9d3f698"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf1e231e48ebe847e9e3c8ede9d3f698">icaltime_current_time_with_zone_ex</a> (const <a class="el" href="icaltimezone_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *zone, struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *ret_tt)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A set of function wrappers to handle non-structured return type interop. </p>
+<div class="textblock"><p>Function wrappers to handle non-structured return type interoperability. </p>
 <p>Not all programming languages managed or not have support for c-structured return types. To allow interop with these programming languages this file, over time, will contain wrapper functions, That wrap the return type to a "byref" or pointer variable which is used as output. </p>
+
+<p class="definition">Definition in file <a class="el" href="byref_8c_source.html">byref.c</a>.</p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="ac00ad54bc51ac790fbe14643e946bf9f" name="ac00ad54bc51ac790fbe14643e946bf9f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac00ad54bc51ac790fbe14643e946bf9f">&#9670;&#160;</a></span>icaltime_current_time_with_zone_ex()</h2>
+<a id="acf1e231e48ebe847e9e3c8ede9d3f698" name="acf1e231e48ebe847e9e3c8ede9d3f698"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf1e231e48ebe847e9e3c8ede9d3f698">&#9670;&#160;</a></span>icaltime_current_time_with_zone_ex()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -103,18 +106,26 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void icaltime_current_time_with_zone_ex </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="icaltime_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="icaltimezone_8h.html#a8561e9d4374ca1e29cd5ade459a50208">icaltimezone</a> *</td>          <td class="paramname"><span class="paramname"><em>zone</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *</td>          <td class="paramname"><span class="paramname"><em>ret</em></span>&#160;)</td>
+          <td class="paramtype">struct <a class="el" href="structicaltimetype.html">icaltimetype</a> *</td>          <td class="paramname"><span class="paramname"><em>ret_tt</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Convenience constructor (ret-wrapped)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zone</td><td>the timezone to use </td></tr>
+    <tr><td class="paramname">ret_tt</td><td>a pointer to a icaltimetype to contain the conversion result</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Return the current time in the given timezone, as an icaltimetype, in <code class="param">ret_tt</code>. </p>
 
-<p>Convenience constructor (ret-wrapped) </p>
-<p>The current time in the given timezone, as an icaltimetype, in the last parameter. </p>
+<p class="definition">Definition at line <a class="el" href="byref_8c_source.html#l00035">35</a> of file <a class="el" href="byref_8c_source.html">byref.c</a>.</p>
 
 </div>
 </div>

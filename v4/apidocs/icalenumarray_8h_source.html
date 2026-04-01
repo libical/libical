@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -79,63 +79,78 @@ $(function() {
   <div class="headertitle"><div class="title">icalenumarray.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
+<a href="icalenumarray_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> FILE: icalenumarray.h</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> CREATOR: Ken Murchison 24 Aug 2022 &lt;murch@fastmailteam.com&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"></span> </div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> ======================================================================*/</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#ifndef ICALENUMARRAY_H</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define ICALENUMARRAY_H</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="icalarray_8h.html">icalarray.h</a>&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#ifndef ICALENUMARRAY_H</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#define ICALENUMARRAY_H</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">typedef</span> <a class="code hl_typedef" href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a> icalenumarray;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="foldopen" id="foldopen00019" data-start="{" data-end="};">
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="structicalenumarray__element.html">   19</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordtype">int</span> val;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *xvalue;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>} <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;<a class="code" href="icalarray_8h.html">icalarray.h</a>&quot;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">/* An icalenumarray is just an icalarray in disguise. */</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">typedef</span> icalarray icalenumarray;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span></div>
+<div class="foldopen" id="foldopen00030" data-start="{" data-end="};">
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structicalenumarray__element.html">   30</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="structicalenumarray__element.html#a4e165897acd8cb513b0a9a05139db6d2">   31</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structicalenumarray__element.html#a4e165897acd8cb513b0a9a05139db6d2">val</a>;            </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="structicalenumarray__element.html#a6b98f121ef1a694d3c746408e3c4ddca">   32</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="structicalenumarray__element.html#a6b98f121ef1a694d3c746408e3c4ddca">xvalue</a>; </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>} <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a>;</div>
 </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#define icalenumarray_new(increment_size) \</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">    icalarray_new(sizeof(icalenumarray_element), increment_size)</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a> *icalenumarray_element_at(icalenumarray *array, <span class="keywordtype">size_t</span> position);</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">size_t</span> icalenumarray_size(<span class="keyword">const</span> icalenumarray *array);</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">size_t</span> icalenumarray_find(icalenumarray *array,</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>                                              <span class="keyword">const</span> <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a> *needle);</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalenumarray_append(icalenumarray *array,</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>                                              <span class="keyword">const</span> <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a> *elem);</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalenumarray_add(icalenumarray *array,</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>                                           <span class="keyword">const</span> <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a> *elem);</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span></div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalenumarray_remove_element_at(icalenumarray *array,</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>                                                         <span class="keywordtype">size_t</span> position);</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span></div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalenumarray_remove(icalenumarray *array,</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>                                              <span class="keyword">const</span> <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a> *del);</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span></div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalenumarray_free(icalenumarray *array);</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span></div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icalenumarray_sort(icalenumarray *array);</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span></div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>LIBICAL_ICAL_EXPORT icalenumarray *icalenumarray_clone(icalenumarray *array);</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><span class="preprocessor">#endif </span><span class="comment">/* ICALENUMARRAY_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span></div>
+<div class="foldopen" id="foldopen00056" data-start="" data-end="">
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="icalenumarray_8h.html#a283fafb3a2d079469d2ce83bada9d3bc">   56</a></span><span class="preprocessor">#define icalenumarray_new(increment_size) \</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="preprocessor">    icalarray_new(sizeof(icalenumarray_element), increment_size)</span></div>
+</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>LIBICAL_ICAL_EXPORT <span class="keyword">const</span> <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a> *<a class="code hl_function" href="icalenumarray_8h.html#af6b044e108ffdba35288ad9eb1016bf9">icalenumarray_element_at</a>(icalenumarray *array, <span class="keywordtype">size_t</span> position);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">size_t</span> <a class="code hl_function" href="icalenumarray_8h.html#a50d6133f9f24bae69f9a61bb4461a76b">icalenumarray_size</a>(<span class="keyword">const</span> icalenumarray *array);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">size_t</span> <a class="code hl_function" href="icalenumarray_8h.html#a2dcd3ac22985fefc299a384af40ecc24">icalenumarray_find</a>(icalenumarray *array,</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>                                              <span class="keyword">const</span> <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a> *needle);</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalenumarray_8h.html#a4f721df99efcbacff77ec82057049832">icalenumarray_append</a>(icalenumarray *array,</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>                                              <span class="keyword">const</span> <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a> *elem);</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalenumarray_8h.html#af9580e22b7415bca31068ed0ddf2d82d">icalenumarray_add</a>(icalenumarray *array,</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                                           <span class="keyword">const</span> <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a> *elem);</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalenumarray_8h.html#a7d72929a8f0c471fd1d203587cf63d54">icalenumarray_remove_element_at</a>(icalenumarray *array,</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>                                                         <span class="keywordtype">size_t</span> position);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalenumarray_8h.html#a29b9af6a4e9c94131369b270565f99e8">icalenumarray_remove</a>(icalenumarray *array,</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>                                              <span class="keyword">const</span> <a class="code hl_struct" href="structicalenumarray__element.html">icalenumarray_element</a> *del);</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalenumarray_8h.html#a1f342effda70392211f041b6916945d8">icalenumarray_free</a>(icalenumarray *array);</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icalenumarray_8h.html#a4083e8eab4eb3036b34628cdbfd6677a">icalenumarray_sort</a>(icalenumarray *array);</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span></div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>LIBICAL_ICAL_EXPORT icalenumarray *<a class="code hl_function" href="icalenumarray_8h.html#a6cc51aae7af6b06b80376a51a7e5a822">icalenumarray_clone</a>(icalenumarray *array);</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span><span class="preprocessor">#endif </span><span class="comment">/* ICALENUMARRAY_H */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aicalarray_8h_html"><div class="ttname"><a href="icalarray_8h.html">icalarray.h</a></div><div class="ttdoc">An array of arbitrarily-sized elements which grows dynamically as elements are added.</div></div>
-<div class="ttc" id="aicalarray_8h_html_a1f1d8fb8cebf52447f5af6b2a8def29e"><div class="ttname"><a href="icalarray_8h.html#a1f1d8fb8cebf52447f5af6b2a8def29e">icalarray</a></div><div class="ttdeci">struct _icalarray icalarray</div><div class="ttdoc">A struct representing an icalarray object.</div><div class="ttdef"><b>Definition</b> icalarray.h:26</div></div>
-<div class="ttc" id="astructicalenumarray__element_html"><div class="ttname"><a href="structicalenumarray__element.html">icalenumarray_element</a></div><div class="ttdef"><b>Definition</b> icalenumarray.h:19</div></div>
+<div class="ttc" id="aicalenumarray_8h_html_a1f342effda70392211f041b6916945d8"><div class="ttname"><a href="icalenumarray_8h.html#a1f342effda70392211f041b6916945d8">icalenumarray_free</a></div><div class="ttdeci">void icalenumarray_free(icalenumarray *array)</div><div class="ttdoc">Frees this array&#39;s memory and all its elements.</div><div class="ttdef"><b>Definition</b> <a href="icalenumarray_8c_source.html#l00137">icalenumarray.c:137</a></div></div>
+<div class="ttc" id="aicalenumarray_8h_html_a29b9af6a4e9c94131369b270565f99e8"><div class="ttname"><a href="icalenumarray_8h.html#a29b9af6a4e9c94131369b270565f99e8">icalenumarray_remove</a></div><div class="ttdeci">void icalenumarray_remove(icalenumarray *array, const icalenumarray_element *del)</div><div class="ttdoc">Removes all occurrences of an element.</div><div class="ttdef"><b>Definition</b> <a href="icalenumarray_8c_source.html#l00117">icalenumarray.c:117</a></div></div>
+<div class="ttc" id="aicalenumarray_8h_html_a2dcd3ac22985fefc299a384af40ecc24"><div class="ttname"><a href="icalenumarray_8h.html#a2dcd3ac22985fefc299a384af40ecc24">icalenumarray_find</a></div><div class="ttdeci">size_t icalenumarray_find(icalenumarray *array, const icalenumarray_element *needle)</div><div class="ttdoc">Finds an element in the array.</div><div class="ttdef"><b>Definition</b> <a href="icalenumarray_8c_source.html#l00061">icalenumarray.c:61</a></div></div>
+<div class="ttc" id="aicalenumarray_8h_html_a4083e8eab4eb3036b34628cdbfd6677a"><div class="ttname"><a href="icalenumarray_8h.html#a4083e8eab4eb3036b34628cdbfd6677a">icalenumarray_sort</a></div><div class="ttdeci">void icalenumarray_sort(icalenumarray *array)</div><div class="ttdoc">Sorts the elements in the array in ascending order.</div><div class="ttdef"><b>Definition</b> <a href="icalenumarray_8c_source.html#l00151">icalenumarray.c:151</a></div></div>
+<div class="ttc" id="aicalenumarray_8h_html_a4f721df99efcbacff77ec82057049832"><div class="ttname"><a href="icalenumarray_8h.html#a4f721df99efcbacff77ec82057049832">icalenumarray_append</a></div><div class="ttdeci">void icalenumarray_append(icalenumarray *array, const icalenumarray_element *elem)</div><div class="ttdoc">Appends an element to the array.</div><div class="ttdef"><b>Definition</b> <a href="icalenumarray_8c_source.html#l00080">icalenumarray.c:80</a></div></div>
+<div class="ttc" id="aicalenumarray_8h_html_a50d6133f9f24bae69f9a61bb4461a76b"><div class="ttname"><a href="icalenumarray_8h.html#a50d6133f9f24bae69f9a61bb4461a76b">icalenumarray_size</a></div><div class="ttdeci">size_t icalenumarray_size(const icalenumarray *array)</div><div class="ttdoc">Indicates the count of elements stored in the array.</div><div class="ttdef"><b>Definition</b> <a href="icalenumarray_8c_source.html#l00023">icalenumarray.c:23</a></div></div>
+<div class="ttc" id="aicalenumarray_8h_html_a6cc51aae7af6b06b80376a51a7e5a822"><div class="ttname"><a href="icalenumarray_8h.html#a6cc51aae7af6b06b80376a51a7e5a822">icalenumarray_clone</a></div><div class="ttdeci">icalenumarray * icalenumarray_clone(icalenumarray *array)</div><div class="ttdoc">Clones the array and all its elements.</div><div class="ttdef"><b>Definition</b> <a href="icalenumarray_8c_source.html#l00160">icalenumarray.c:160</a></div></div>
+<div class="ttc" id="aicalenumarray_8h_html_a7d72929a8f0c471fd1d203587cf63d54"><div class="ttname"><a href="icalenumarray_8h.html#a7d72929a8f0c471fd1d203587cf63d54">icalenumarray_remove_element_at</a></div><div class="ttdeci">void icalenumarray_remove_element_at(icalenumarray *array, size_t position)</div><div class="ttdoc">Removes the element at an array position.</div><div class="ttdef"><b>Definition</b> <a href="icalenumarray_8c_source.html#l00104">icalenumarray.c:104</a></div></div>
+<div class="ttc" id="aicalenumarray_8h_html_af6b044e108ffdba35288ad9eb1016bf9"><div class="ttname"><a href="icalenumarray_8h.html#af6b044e108ffdba35288ad9eb1016bf9">icalenumarray_element_at</a></div><div class="ttdeci">const icalenumarray_element * icalenumarray_element_at(icalenumarray *array, size_t position)</div><div class="ttdoc">Accesses an element stored in the array.</div><div class="ttdef"><b>Definition</b> <a href="icalenumarray_8c_source.html#l00031">icalenumarray.c:31</a></div></div>
+<div class="ttc" id="aicalenumarray_8h_html_af9580e22b7415bca31068ed0ddf2d82d"><div class="ttname"><a href="icalenumarray_8h.html#af9580e22b7415bca31068ed0ddf2d82d">icalenumarray_add</a></div><div class="ttdeci">void icalenumarray_add(icalenumarray *array, const icalenumarray_element *elem)</div><div class="ttdoc">Appends an element to the array, omitting duplicates.</div><div class="ttdef"><b>Definition</b> <a href="icalenumarray_8c_source.html#l00093">icalenumarray.c:93</a></div></div>
+<div class="ttc" id="astructicalenumarray__element_html"><div class="ttname"><a href="structicalenumarray__element.html">icalenumarray_element</a></div><div class="ttdef"><b>Definition</b> <a href="#l00030">icalenumarray.h:30</a></div></div>
+<div class="ttc" id="astructicalenumarray__element_html_a4e165897acd8cb513b0a9a05139db6d2"><div class="ttname"><a href="structicalenumarray__element.html#a4e165897acd8cb513b0a9a05139db6d2">icalenumarray_element::val</a></div><div class="ttdeci">int val</div><div class="ttdef"><b>Definition</b> <a href="#l00031">icalenumarray.h:31</a></div></div>
+<div class="ttc" id="astructicalenumarray__element_html_a6b98f121ef1a694d3c746408e3c4ddca"><div class="ttname"><a href="structicalenumarray__element.html#a6b98f121ef1a694d3c746408e3c4ddca">icalenumarray_element::xvalue</a></div><div class="ttdeci">const char * xvalue</div><div class="ttdef"><b>Definition</b> <a href="#l00032">icalenumarray.h:32</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

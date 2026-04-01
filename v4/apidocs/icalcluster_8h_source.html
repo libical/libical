@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -79,59 +79,63 @@ $(function() {
   <div class="headertitle"><div class="title">icalcluster.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
+<a href="icalcluster_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*======================================================================</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> FILE: icalcluster.h</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> CREATOR: acampi 13 March 2002</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"></span> </div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> SPDX-FileCopyrightText: 2002 Andrea Campi &lt;a.campi@inet.it&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">======================================================================*/</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#ifndef ICALCLUSTER_H</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define ICALCLUSTER_H</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;libical_icalss_export.h&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="icalcomponent_8h.html">icalcomponent.h</a>&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="icalerror_8h.html">icalerror.h</a>&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structicalcluster__impl.html">icalcluster_impl</a> icalcluster;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_new(<span class="keyword">const</span> <span class="keywordtype">char</span> *key, icalcomponent *data);</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>LIBICAL_ICALSS_EXPORT icalcluster *icalcluster_clone(<span class="keyword">const</span> icalcluster *old);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalcluster_free(icalcluster *cluster);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>LIBICAL_ICALSS_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalcluster_key(<span class="keyword">const</span> icalcluster *cluster);</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">int</span> icalcluster_is_changed(<span class="keyword">const</span> icalcluster *cluster);</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalcluster_mark(icalcluster *cluster);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalcluster_commit(icalcluster *cluster);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_component(<span class="keyword">const</span> icalcluster *cluster);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">int</span> icalcluster_count_components(icalcluster *cluster,</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                                                       icalcomponent_kind kind);</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#ifndef ICALCLUSTER_H</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#define ICALCLUSTER_H</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &quot;libical_icalss_export.h&quot;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;<a class="code" href="icalcomponent_8h.html">icalcomponent.h</a>&quot;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &quot;<a class="code" href="icalerror_8h.html">icalerror.h</a>&quot;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">typedef</span> <span class="keyword">struct </span>icalcluster_impl icalcluster;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>LIBICAL_ICALSS_EXPORT icalcluster *<a class="code hl_function" href="icalcluster_8h.html#ab670671ccb675c8d14abf67648d26269">icalcluster_new</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *key, icalcomponent *data);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>LIBICAL_ICALSS_EXPORT icalcluster *<a class="code hl_function" href="icalcluster_8h.html#adbdeee3a9ea22cd070526598d892160b">icalcluster_clone</a>(<span class="keyword">const</span> icalcluster *old);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalcluster_free(icalcluster *cluster);</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalcluster_add_component(icalcluster *cluster,</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                                                              icalcomponent *child);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalcluster_remove_component(icalcluster *cluster,</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                                                                 icalcomponent *child);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>LIBICAL_ICALSS_EXPORT <span class="keyword">const</span> <span class="keywordtype">char</span> *icalcluster_key(<span class="keyword">const</span> icalcluster *cluster);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">int</span> icalcluster_is_changed(<span class="keyword">const</span> icalcluster *cluster);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalcluster_mark(icalcluster *cluster);</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_current_component(icalcluster *cluster);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">void</span> icalcluster_commit(icalcluster *cluster);</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_first_component(icalcluster *cluster);</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_component(<span class="keyword">const</span> icalcluster *cluster);</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_next_component(icalcluster *cluster);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALCLUSTER_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="aicalcomponent_8h_html"><div class="ttname"><a href="icalcomponent_8h.html">icalcomponent.h</a></div></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>LIBICAL_ICALSS_EXPORT <span class="keywordtype">int</span> icalcluster_count_components(icalcluster *cluster,</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>                                                       <a class="code hl_enumeration" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> kind);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalcluster_add_component(icalcluster *cluster,</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                                                              icalcomponent *child);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>LIBICAL_ICALSS_EXPORT <a class="code hl_enumeration" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a> icalcluster_remove_component(icalcluster *cluster,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                                                                 icalcomponent *child);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>LIBICAL_ICALSS_EXPORT icalcomponent *<a class="code hl_function" href="icalcluster_8h.html#a368efd400d335b0cad2af0a3938cff19">icalcluster_get_current_component</a>(icalcluster *cluster);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_first_component(icalcluster *cluster);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>LIBICAL_ICALSS_EXPORT icalcomponent *icalcluster_get_next_component(icalcluster *cluster);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALCLUSTER_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aicalcluster_8h_html_a368efd400d335b0cad2af0a3938cff19"><div class="ttname"><a href="icalcluster_8h.html#a368efd400d335b0cad2af0a3938cff19">icalcluster_get_current_component</a></div><div class="ttdeci">icalcomponent * icalcluster_get_current_component(icalcluster *cluster)</div><div class="ttdoc">Iterate through components.</div><div class="ttdef"><b>Definition</b> <a href="icalcluster_8c_source.html#l00179">icalcluster.c:179</a></div></div>
+<div class="ttc" id="aicalcluster_8h_html_ab670671ccb675c8d14abf67648d26269"><div class="ttname"><a href="icalcluster_8h.html#ab670671ccb675c8d14abf67648d26269">icalcluster_new</a></div><div class="ttdeci">icalcluster * icalcluster_new(const char *key, icalcomponent *data)</div><div class="ttdoc">Create a cluster with a key/value pair.</div><div class="ttdef"><b>Definition</b> <a href="icalcluster_8c_source.html#l00039">icalcluster.c:39</a></div></div>
+<div class="ttc" id="aicalcluster_8h_html_adbdeee3a9ea22cd070526598d892160b"><div class="ttname"><a href="icalcluster_8h.html#adbdeee3a9ea22cd070526598d892160b">icalcluster_clone</a></div><div class="ttdeci">icalcluster * icalcluster_clone(const icalcluster *old)</div><div class="ttdoc">Deep clone an icalcluster to a new one.</div><div class="ttdef"><b>Definition</b> <a href="icalcluster_8c_source.html#l00070">icalcluster.c:70</a></div></div>
+<div class="ttc" id="aicalcomponent_8h_html"><div class="ttname"><a href="icalcomponent_8h.html">icalcomponent.h</a></div><div class="ttdoc">Defines the data structure for iCalendar components.</div></div>
+<div class="ttc" id="aicalenums_8h_html_a7cc82bf2af2050ddf53017fd3d4f7ca4"><div class="ttname"><a href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a></div><div class="ttdeci">icalcomponent_kind</div><div class="ttdef"><b>Definition</b> <a href="icalenums_8h_source.html#l00028">icalenums.h:29</a></div></div>
 <div class="ttc" id="aicalerror_8h_html"><div class="ttname"><a href="icalerror_8h.html">icalerror.h</a></div><div class="ttdoc">Error handling for libical.</div></div>
-<div class="ttc" id="aicalerror_8h_html_a601c122fcea522513b1b7732fa23e833"><div class="ttname"><a href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a></div><div class="ttdeci">icalerrorenum</div><div class="ttdoc">Represents the different types of errors that can be triggered in libical.</div><div class="ttdef"><b>Definition</b> icalerror.h:64</div></div>
-<div class="ttc" id="astructicalcluster__impl_html"><div class="ttname"><a href="structicalcluster__impl.html">icalcluster_impl</a></div><div class="ttdef"><b>Definition</b> icalclusterimpl.h:19</div></div>
+<div class="ttc" id="aicalerror_8h_html_a601c122fcea522513b1b7732fa23e833"><div class="ttname"><a href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833">icalerrorenum</a></div><div class="ttdeci">icalerrorenum</div><div class="ttdoc">Represents the different types of errors that can be triggered in libical.</div><div class="ttdef"><b>Definition</b> <a href="icalerror_8h_source.html#l00041">icalerror.h:42</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -77,146 +77,495 @@ $(function() {
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">icalenums.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
+<p>Defines enums not belonging to other data structures.  
+<a href="#details">More...</a></p>
+
 <p><a href="icalenums_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a1b1b11c606b1f1d7bbd24fef6bcd496c" id="r_a1b1b11c606b1f1d7bbd24fef6bcd496c"><td class="memItemLeft" align="right" valign="top"><a id="a1b1b11c606b1f1d7bbd24fef6bcd496c" name="a1b1b11c606b1f1d7bbd24fef6bcd496c"></a>
-typedef enum icalcomponent_kind&#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_kind</b></td></tr>
-<tr class="memitem:a13f0b4f712074b00ac5ba6d3a66395a8" id="r_a13f0b4f712074b00ac5ba6d3a66395a8"><td class="memItemLeft" align="right" valign="top"><a id="a13f0b4f712074b00ac5ba6d3a66395a8" name="a13f0b4f712074b00ac5ba6d3a66395a8"></a>
-typedef enum icalrequeststatus&#160;</td><td class="memItemRight" valign="bottom"><b>icalrequeststatus</b></td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a7cc82bf2af2050ddf53017fd3d4f7ca4" id="r_a7cc82bf2af2050ddf53017fd3d4f7ca4"><td class="memItemLeft" align="right" valign="top"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4" name="a7cc82bf2af2050ddf53017fd3d4f7ca4"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>icalcomponent_kind</b> { <br />
-&#160;&#160;<b>ICAL_NO_COMPONENT</b>
-, <b>ICAL_ANY_COMPONENT</b>
-, <b>ICAL_XROOT_COMPONENT</b>
-, <b>ICAL_XATTACH_COMPONENT</b>
+<tr class="memitem:a7cc82bf2af2050ddf53017fd3d4f7ca4" id="r_a7cc82bf2af2050ddf53017fd3d4f7ca4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> { <br />
+&#160;&#160;<a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a37317e19cb0684724bcd03fdf1546d22">ICAL_NO_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a9992d13236ac38152b8cac6fc4d3fd6c">ICAL_ANY_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a0f0a0ed38140c4d1523f70993d3f1689">ICAL_XROOT_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ae72286ee9e65eb3076fbf8d8b2217099">ICAL_XATTACH_COMPONENT</a>
 , <br />
-&#160;&#160;<b>ICAL_VEVENT_COMPONENT</b>
-, <b>ICAL_VTODO_COMPONENT</b>
-, <b>ICAL_VJOURNAL_COMPONENT</b>
-, <b>ICAL_VCALENDAR_COMPONENT</b>
+&#160;&#160;<a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a4ea85a7e7e64123a58e1d5dd726ea2ca">ICAL_VEVENT_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a3d90a3d7f47f2f2243b803c45561ef2e">ICAL_VTODO_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ac21106367b06978be6a3f0008301d047">ICAL_VJOURNAL_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a5c1e9663f16b41e1c44be1163c629876">ICAL_VCALENDAR_COMPONENT</a>
 , <br />
-&#160;&#160;<b>ICAL_VAGENDA_COMPONENT</b>
-, <b>ICAL_VFREEBUSY_COMPONENT</b>
-, <b>ICAL_VALARM_COMPONENT</b>
-, <b>ICAL_XAUDIOALARM_COMPONENT</b>
+&#160;&#160;<a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a8de2b039c613ba4d2dc3d5a27a2fce4b">ICAL_VAGENDA_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a3ab5be81287e84c4d8c0b3d5fc62c54f">ICAL_VFREEBUSY_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4afeba4a0dd90014439cff3447d20f5996">ICAL_VALARM_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a627149496fb25a52c2e3f8b930370578">ICAL_XAUDIOALARM_COMPONENT</a>
 , <br />
-&#160;&#160;<b>ICAL_XDISPLAYALARM_COMPONENT</b>
-, <b>ICAL_XEMAILALARM_COMPONENT</b>
-, <b>ICAL_XPROCEDUREALARM_COMPONENT</b>
-, <b>ICAL_VTIMEZONE_COMPONENT</b>
+&#160;&#160;<a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ac1ef901930da7196ee05cf4445b0a0f1">ICAL_XDISPLAYALARM_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4acf7ade672f09e5710a240ec3e4798632">ICAL_XEMAILALARM_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ae0de2be75b245bd5f06a5ab45a3e4d1a">ICAL_XPROCEDUREALARM_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ab1da738c818e177c48cba46261a6f148">ICAL_VTIMEZONE_COMPONENT</a>
 , <br />
-&#160;&#160;<b>ICAL_XSTANDARD_COMPONENT</b>
-, <b>ICAL_XDAYLIGHT_COMPONENT</b>
-, <b>ICAL_X_COMPONENT</b>
-, <b>ICAL_VSCHEDULE_COMPONENT</b>
+&#160;&#160;<a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a3181a7bf102dce706f48d033899c9850">ICAL_XSTANDARD_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a280e9bafebc6bff38f296d80bb59773f">ICAL_XDAYLIGHT_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a09045eacdcd35cc4167c5019b3a46798">ICAL_X_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a7ab570aef732df2421ec186de3749506">ICAL_VSCHEDULE_COMPONENT</a>
 , <br />
-&#160;&#160;<b>ICAL_VQUERY_COMPONENT</b>
-, <b>ICAL_VREPLY_COMPONENT</b>
-, <b>ICAL_VCAR_COMPONENT</b>
-, <b>ICAL_VCOMMAND_COMPONENT</b>
+&#160;&#160;<a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ad4f116a39e169c3bbf1f6045f0778a50">ICAL_VQUERY_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a29ce71cc76a99757b39401bfe33f0008">ICAL_VREPLY_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ac88900511c87f9ce4afe71d71c30b56f">ICAL_VCAR_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ad0f79720158e7b8b2765939e5a9fbecc">ICAL_VCOMMAND_COMPONENT</a>
 , <br />
-&#160;&#160;<b>ICAL_XLICINVALID_COMPONENT</b>
-, <b>ICAL_XLICMIMEPART_COMPONENT</b>
-, <b>ICAL_VAVAILABILITY_COMPONENT</b>
-, <b>ICAL_XAVAILABLE_COMPONENT</b>
+&#160;&#160;<a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4aeb81dddec2cf14786c919093db52178e">ICAL_XLICINVALID_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ad5d275d21f138afb894be8c68f7d4255">ICAL_XLICMIMEPART_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a6581c15ba9e92cadb54cdadf99d05753">ICAL_VAVAILABILITY_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ae5835f0031679f2831895766dd37a98f">ICAL_XAVAILABLE_COMPONENT</a>
 , <br />
-&#160;&#160;<b>ICAL_VPOLL_COMPONENT</b>
-, <b>ICAL_VVOTER_COMPONENT</b>
-, <b>ICAL_XVOTE_COMPONENT</b>
-, <b>ICAL_VPATCH_COMPONENT</b>
+&#160;&#160;<a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ae2d8d67099091eade4d73283746a4e22">ICAL_VPOLL_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ac83076f3821df7f62a436d027c6f8371">ICAL_VVOTER_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a8895a03142e2b5ba2bf098e015c9a162">ICAL_XVOTE_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a5207e204b316e9f4ec8d2f2bdc200601">ICAL_VPATCH_COMPONENT</a>
 , <br />
-&#160;&#160;<b>ICAL_XPATCH_COMPONENT</b>
-, <b>ICAL_PARTICIPANT_COMPONENT</b>
-, <b>ICAL_VLOCATION_COMPONENT</b>
-, <b>ICAL_VRESOURCE_COMPONENT</b>
+&#160;&#160;<a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4ad9e1c29bb79d87a7a2c1bcec2dd03167">ICAL_XPATCH_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a4bc0ae2963fee3a196b77457b0de5e4e">ICAL_PARTICIPANT_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a2bcafcb320b9a7ace1e0358fb83adb00">ICAL_VLOCATION_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4af6524b8186b1518ae5472d9e49b7987b">ICAL_VRESOURCE_COMPONENT</a>
 , <br />
-&#160;&#160;<b>ICAL_IANA_COMPONENT</b>
-, <b>ICAL_NUM_COMPONENT_TYPES</b>
+&#160;&#160;<a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a6adf22e628920355d3d6eaa9c78d6768">ICAL_IANA_COMPONENT</a>
+, <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4a6e55297d90c79e3a2f9b7afc99c4cbce">ICAL_NUM_COMPONENT_TYPES</a>
 <br />
  }</td></tr>
-<tr class="memitem:af155b8c4c213cc359e893cda6e7e443d" id="r_af155b8c4c213cc359e893cda6e7e443d"><td class="memItemLeft" align="right" valign="top"><a id="af155b8c4c213cc359e893cda6e7e443d" name="af155b8c4c213cc359e893cda6e7e443d"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>icalrequeststatus</b> { <br />
-&#160;&#160;<b>ICAL_UNKNOWN_STATUS</b>
-, <b>ICAL_2_0_SUCCESS_STATUS</b>
-, <b>ICAL_2_1_FALLBACK_STATUS</b>
-, <b>ICAL_2_2_IGPROP_STATUS</b>
+<tr class="memitem:af155b8c4c213cc359e893cda6e7e443d" id="r_af155b8c4c213cc359e893cda6e7e443d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a> { <br />
+&#160;&#160;<a class="el" href="#af155b8c4c213cc359e893cda6e7e443daf260ba88414e7a2d41a2c5a5225e7ea8">ICAL_UNKNOWN_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443dadd47bd3842d93800001ca8d94cce3f36">ICAL_2_0_SUCCESS_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da26bf55c33eb103645871bdd2b3ddad69">ICAL_2_1_FALLBACK_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443dad7ce94668870154845d8bfcdfbea60c2">ICAL_2_2_IGPROP_STATUS</a>
 , <br />
-&#160;&#160;<b>ICAL_2_3_IGPARAM_STATUS</b>
-, <b>ICAL_2_4_IGXPROP_STATUS</b>
-, <b>ICAL_2_5_IGXPARAM_STATUS</b>
-, <b>ICAL_2_6_IGCOMP_STATUS</b>
+&#160;&#160;<a class="el" href="#af155b8c4c213cc359e893cda6e7e443da403fb01c2f6de5af9381ec7e61717a1a">ICAL_2_3_IGPARAM_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443dae0d5c1c10151ffe19bb12621c9e4e0d9">ICAL_2_4_IGXPROP_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443dab8bb9e57756ae10b875983af42dcab7f">ICAL_2_5_IGXPARAM_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da5194e3b3062ee767fba1dec63ce63283">ICAL_2_6_IGCOMP_STATUS</a>
 , <br />
-&#160;&#160;<b>ICAL_2_7_FORWARD_STATUS</b>
-, <b>ICAL_2_8_ONEEVENT_STATUS</b>
-, <b>ICAL_2_9_TRUNC_STATUS</b>
-, <b>ICAL_2_10_ONETODO_STATUS</b>
+&#160;&#160;<a class="el" href="#af155b8c4c213cc359e893cda6e7e443da3ad2851da8454af6789a93c426fd0469">ICAL_2_7_FORWARD_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da78184e120621a6eea0bd30065251f168">ICAL_2_8_ONEEVENT_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da668fa9a11d663f47d0e62076f1541f6a">ICAL_2_9_TRUNC_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443dac59118d61067745790b61fad3c9a3d1a">ICAL_2_10_ONETODO_STATUS</a>
 , <br />
-&#160;&#160;<b>ICAL_2_11_TRUNCRRULE_STATUS</b>
-, <b>ICAL_3_0_INVPROPNAME_STATUS</b>
-, <b>ICAL_3_1_INVPROPVAL_STATUS</b>
-, <b>ICAL_3_2_INVPARAM_STATUS</b>
+&#160;&#160;<a class="el" href="#af155b8c4c213cc359e893cda6e7e443dac5baf3f631081c09d6e09479a9541b63">ICAL_2_11_TRUNCRRULE_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da85b50c4b8be5fb3d712d5944f38cfa90">ICAL_3_0_INVPROPNAME_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443dab47631bd0b930c4853b718b524431ec0">ICAL_3_1_INVPROPVAL_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da1646c2ce9c2a749609c114aba43b5d0a">ICAL_3_2_INVPARAM_STATUS</a>
 , <br />
-&#160;&#160;<b>ICAL_3_3_INVPARAMVAL_STATUS</b>
-, <b>ICAL_3_4_INVCOMP_STATUS</b>
-, <b>ICAL_3_5_INVTIME_STATUS</b>
-, <b>ICAL_3_6_INVRULE_STATUS</b>
+&#160;&#160;<a class="el" href="#af155b8c4c213cc359e893cda6e7e443daea17deec7f6fd0c3720bf59047b50d37">ICAL_3_3_INVPARAMVAL_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443daba21439144806ebbc979e8183747e91e">ICAL_3_4_INVCOMP_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da17e32300e6ff0ee319e92b23a3b7e030">ICAL_3_5_INVTIME_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443dae4914dc305aed5e9e726ac43ac82a185">ICAL_3_6_INVRULE_STATUS</a>
 , <br />
-&#160;&#160;<b>ICAL_3_7_INVCU_STATUS</b>
-, <b>ICAL_3_8_NOAUTH_STATUS</b>
-, <b>ICAL_3_9_BADVERSION_STATUS</b>
-, <b>ICAL_3_10_TOOBIG_STATUS</b>
+&#160;&#160;<a class="el" href="#af155b8c4c213cc359e893cda6e7e443da8573cb690d64c46b3c4ae7e3af7ac859">ICAL_3_7_INVCU_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da3d94ee1b738f90b3db0a8daf7643154f">ICAL_3_8_NOAUTH_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da94309e0d4325364dada7456481318e18">ICAL_3_9_BADVERSION_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da18fd22d151eb6925e6ab3e7f89acc933">ICAL_3_10_TOOBIG_STATUS</a>
 , <br />
-&#160;&#160;<b>ICAL_3_11_MISSREQCOMP_STATUS</b>
-, <b>ICAL_3_12_UNKCOMP_STATUS</b>
-, <b>ICAL_3_13_BADCOMP_STATUS</b>
-, <b>ICAL_3_14_NOCAP_STATUS</b>
+&#160;&#160;<a class="el" href="#af155b8c4c213cc359e893cda6e7e443da35ad90fb904e8f3993195ae303e4db3f">ICAL_3_11_MISSREQCOMP_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da6617d71d0c4c04706de2912978610dc3">ICAL_3_12_UNKCOMP_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443daec98c525edb6ea0f3c19199a0bdd548b">ICAL_3_13_BADCOMP_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da142d61fcae208c9005ec4226cf6e3c28">ICAL_3_14_NOCAP_STATUS</a>
 , <br />
-&#160;&#160;<b>ICAL_3_15_INVCOMMAND</b>
-, <b>ICAL_4_0_BUSY_STATUS</b>
-, <b>ICAL_4_1_STORE_ACCESS_DENIED</b>
-, <b>ICAL_4_2_STORE_FAILED</b>
+&#160;&#160;<a class="el" href="#af155b8c4c213cc359e893cda6e7e443dad2998aaa79326a5bacd67293a8504d77">ICAL_3_15_INVCOMMAND</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da2b1eaad78d336f1dac88f862178df9ff">ICAL_4_0_BUSY_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da7da6d7a4d4b81fb80e25070485b4f208">ICAL_4_1_STORE_ACCESS_DENIED</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443da413105c106ae1ed124222bca4a4f6fdf">ICAL_4_2_STORE_FAILED</a>
 , <br />
-&#160;&#160;<b>ICAL_4_3_STORE_NOT_FOUND</b>
-, <b>ICAL_5_0_MAYBE_STATUS</b>
-, <b>ICAL_5_1_UNAVAIL_STATUS</b>
-, <b>ICAL_5_2_NOSERVICE_STATUS</b>
+&#160;&#160;<a class="el" href="#af155b8c4c213cc359e893cda6e7e443dab9cf7b6391de44cfc7f722f89ff48a83">ICAL_4_3_STORE_NOT_FOUND</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443daa5d6938aa580ff03320c2c9cc3d0a6dc">ICAL_5_0_MAYBE_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443daad1feeb61633f6b04616aa9df00c9b64">ICAL_5_1_UNAVAIL_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443dad163c901d89b754fcc529e1e580de22b">ICAL_5_2_NOSERVICE_STATUS</a>
 , <br />
-&#160;&#160;<b>ICAL_5_3_NOSCHED_STATUS</b>
-, <b>ICAL_6_1_CONTAINER_NOT_FOUND</b>
-, <b>ICAL_9_0_UNRECOGNIZED_COMMAND</b>
+&#160;&#160;<a class="el" href="#af155b8c4c213cc359e893cda6e7e443daca7c818d98ba8092b3d167fe6bb3818c">ICAL_5_3_NOSCHED_STATUS</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443daec83ca99d4af10a1ecaae4fd83ae41e2">ICAL_6_1_CONTAINER_NOT_FOUND</a>
+, <a class="el" href="#af155b8c4c213cc359e893cda6e7e443daefc051a9d4c6afd8fc92cfac30dbf8d4">ICAL_9_0_UNRECOGNIZED_COMMAND</a>
 <br />
  }</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a53964f8e27e7e4db21c6e173e97d9169" id="r_a53964f8e27e7e4db21c6e173e97d9169"><td class="memItemLeft" align="right" valign="top"><a id="a53964f8e27e7e4db21c6e173e97d9169" name="a53964f8e27e7e4db21c6e173e97d9169"></a>
-icalrequeststatus&#160;</td><td class="memItemRight" valign="bottom"><b>icalenum_num_to_reqstat</b> (short major, short minor)</td></tr>
-<tr class="memdesc:a53964f8e27e7e4db21c6e173e97d9169"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a request status for major/minor status numbers. <br /></td></tr>
-<tr class="memitem:a65463f16d14bc894649a71b3580f3f17" id="r_a65463f16d14bc894649a71b3580f3f17"><td class="memItemLeft" align="right" valign="top"><a id="a65463f16d14bc894649a71b3580f3f17" name="a65463f16d14bc894649a71b3580f3f17"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalenum_reqstat_code</b> (icalrequeststatus stat)</td></tr>
-<tr class="memitem:ada0aa82f4ec0fb1c15550165fd49043c" id="r_ada0aa82f4ec0fb1c15550165fd49043c"><td class="memItemLeft" align="right" valign="top"><a id="ada0aa82f4ec0fb1c15550165fd49043c" name="ada0aa82f4ec0fb1c15550165fd49043c"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalenum_reqstat_code_r</b> (icalrequeststatus stat)</td></tr>
-<tr class="memdesc:ada0aa82f4ec0fb1c15550165fd49043c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the code for a request status. <br /></td></tr>
-<tr class="memitem:a2b1eaf6c550ec93869dc760cf8d2e0f7" id="r_a2b1eaf6c550ec93869dc760cf8d2e0f7"><td class="memItemLeft" align="right" valign="top"><a id="a2b1eaf6c550ec93869dc760cf8d2e0f7" name="a2b1eaf6c550ec93869dc760cf8d2e0f7"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>icalenum_reqstat_desc</b> (icalrequeststatus stat)</td></tr>
-<tr class="memdesc:a2b1eaf6c550ec93869dc760cf8d2e0f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the descriptive text for a request status. <br /></td></tr>
-<tr class="memitem:a49c50e3cc8a770b11306605c58c84c7d" id="r_a49c50e3cc8a770b11306605c58c84c7d"><td class="memItemLeft" align="right" valign="top"><a id="a49c50e3cc8a770b11306605c58c84c7d" name="a49c50e3cc8a770b11306605c58c84c7d"></a>
-short&#160;</td><td class="memItemRight" valign="bottom"><b>icalenum_reqstat_major</b> (icalrequeststatus stat)</td></tr>
-<tr class="memdesc:a49c50e3cc8a770b11306605c58c84c7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the major number for a request status. <br /></td></tr>
-<tr class="memitem:a93c405d78c5d9589c823a7521ba7e3f9" id="r_a93c405d78c5d9589c823a7521ba7e3f9"><td class="memItemLeft" align="right" valign="top"><a id="a93c405d78c5d9589c823a7521ba7e3f9" name="a93c405d78c5d9589c823a7521ba7e3f9"></a>
-short&#160;</td><td class="memItemRight" valign="bottom"><b>icalenum_reqstat_minor</b> (icalrequeststatus stat)</td></tr>
-<tr class="memdesc:a93c405d78c5d9589c823a7521ba7e3f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minor number for a request status. <br /></td></tr>
+<tr class="memitem:a53964f8e27e7e4db21c6e173e97d9169" id="r_a53964f8e27e7e4db21c6e173e97d9169"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53964f8e27e7e4db21c6e173e97d9169">icalenum_num_to_reqstat</a> (short major, short minor)</td></tr>
+<tr class="memitem:a65463f16d14bc894649a71b3580f3f17" id="r_a65463f16d14bc894649a71b3580f3f17"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65463f16d14bc894649a71b3580f3f17">icalenum_reqstat_code</a> (<a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a> stat)</td></tr>
+<tr class="memitem:ada0aa82f4ec0fb1c15550165fd49043c" id="r_ada0aa82f4ec0fb1c15550165fd49043c"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada0aa82f4ec0fb1c15550165fd49043c">icalenum_reqstat_code_r</a> (<a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a> stat)</td></tr>
+<tr class="memitem:a2b1eaf6c550ec93869dc760cf8d2e0f7" id="r_a2b1eaf6c550ec93869dc760cf8d2e0f7"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b1eaf6c550ec93869dc760cf8d2e0f7">icalenum_reqstat_desc</a> (<a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a> stat)</td></tr>
+<tr class="memitem:a49c50e3cc8a770b11306605c58c84c7d" id="r_a49c50e3cc8a770b11306605c58c84c7d"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49c50e3cc8a770b11306605c58c84c7d">icalenum_reqstat_major</a> (<a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a> stat)</td></tr>
+<tr class="memitem:a93c405d78c5d9589c823a7521ba7e3f9" id="r_a93c405d78c5d9589c823a7521ba7e3f9"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93c405d78c5d9589c823a7521ba7e3f9">icalenum_reqstat_minor</a> (<a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a> stat)</td></tr>
 </table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines enums not belonging to other data structures. </p>
+
+<p class="definition">Definition in file <a class="el" href="icalenums_8h_source.html">icalenums.h</a>.</p>
+</div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+<a id="a7cc82bf2af2050ddf53017fd3d4f7ca4" name="a7cc82bf2af2050ddf53017fd3d4f7ca4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cc82bf2af2050ddf53017fd3d4f7ca4">&#9670;&#160;</a></span>icalcomponent_kind</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Kinds of components. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a37317e19cb0684724bcd03fdf1546d22" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a37317e19cb0684724bcd03fdf1546d22"></a>ICAL_NO_COMPONENT&#160;</td><td class="fielddoc"><p>invalid component </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a9992d13236ac38152b8cac6fc4d3fd6c" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a9992d13236ac38152b8cac6fc4d3fd6c"></a>ICAL_ANY_COMPONENT&#160;</td><td class="fielddoc"><p>Used to select all components </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a0f0a0ed38140c4d1523f70993d3f1689" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a0f0a0ed38140c4d1523f70993d3f1689"></a>ICAL_XROOT_COMPONENT&#160;</td><td class="fielddoc"><p>The root component </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ae72286ee9e65eb3076fbf8d8b2217099" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ae72286ee9e65eb3076fbf8d8b2217099"></a>ICAL_XATTACH_COMPONENT&#160;</td><td class="fielddoc"><p>MIME attached data, returned by parser </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a4ea85a7e7e64123a58e1d5dd726ea2ca" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a4ea85a7e7e64123a58e1d5dd726ea2ca"></a>ICAL_VEVENT_COMPONENT&#160;</td><td class="fielddoc"><p>VEVENT </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a3d90a3d7f47f2f2243b803c45561ef2e" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a3d90a3d7f47f2f2243b803c45561ef2e"></a>ICAL_VTODO_COMPONENT&#160;</td><td class="fielddoc"><p>VTODO </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ac21106367b06978be6a3f0008301d047" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ac21106367b06978be6a3f0008301d047"></a>ICAL_VJOURNAL_COMPONENT&#160;</td><td class="fielddoc"><p>VJOURNAL </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a5c1e9663f16b41e1c44be1163c629876" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a5c1e9663f16b41e1c44be1163c629876"></a>ICAL_VCALENDAR_COMPONENT&#160;</td><td class="fielddoc"><p>VCALENDAR </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a8de2b039c613ba4d2dc3d5a27a2fce4b" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a8de2b039c613ba4d2dc3d5a27a2fce4b"></a>ICAL_VAGENDA_COMPONENT&#160;</td><td class="fielddoc"><p>VAGENDA </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a3ab5be81287e84c4d8c0b3d5fc62c54f" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a3ab5be81287e84c4d8c0b3d5fc62c54f"></a>ICAL_VFREEBUSY_COMPONENT&#160;</td><td class="fielddoc"><p>VFREEBUSY </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4afeba4a0dd90014439cff3447d20f5996" name="a7cc82bf2af2050ddf53017fd3d4f7ca4afeba4a0dd90014439cff3447d20f5996"></a>ICAL_VALARM_COMPONENT&#160;</td><td class="fielddoc"><p>VALARM </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a627149496fb25a52c2e3f8b930370578" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a627149496fb25a52c2e3f8b930370578"></a>ICAL_XAUDIOALARM_COMPONENT&#160;</td><td class="fielddoc"><p>XAUDIOALARM </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ac1ef901930da7196ee05cf4445b0a0f1" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ac1ef901930da7196ee05cf4445b0a0f1"></a>ICAL_XDISPLAYALARM_COMPONENT&#160;</td><td class="fielddoc"><p>XDISPLAYALARM </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4acf7ade672f09e5710a240ec3e4798632" name="a7cc82bf2af2050ddf53017fd3d4f7ca4acf7ade672f09e5710a240ec3e4798632"></a>ICAL_XEMAILALARM_COMPONENT&#160;</td><td class="fielddoc"><p>XEMAILALARM </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ae0de2be75b245bd5f06a5ab45a3e4d1a" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ae0de2be75b245bd5f06a5ab45a3e4d1a"></a>ICAL_XPROCEDUREALARM_COMPONENT&#160;</td><td class="fielddoc"><p>XPROCEDUREALARM </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ab1da738c818e177c48cba46261a6f148" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ab1da738c818e177c48cba46261a6f148"></a>ICAL_VTIMEZONE_COMPONENT&#160;</td><td class="fielddoc"><p>VTIMEZONE </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a3181a7bf102dce706f48d033899c9850" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a3181a7bf102dce706f48d033899c9850"></a>ICAL_XSTANDARD_COMPONENT&#160;</td><td class="fielddoc"><p>XSTANDARD </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a280e9bafebc6bff38f296d80bb59773f" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a280e9bafebc6bff38f296d80bb59773f"></a>ICAL_XDAYLIGHT_COMPONENT&#160;</td><td class="fielddoc"><p>XDAYLIGHT </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a09045eacdcd35cc4167c5019b3a46798" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a09045eacdcd35cc4167c5019b3a46798"></a>ICAL_X_COMPONENT&#160;</td><td class="fielddoc"><p>X-NAME component </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a7ab570aef732df2421ec186de3749506" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a7ab570aef732df2421ec186de3749506"></a>ICAL_VSCHEDULE_COMPONENT&#160;</td><td class="fielddoc"><p>VSCHEDULE </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ad4f116a39e169c3bbf1f6045f0778a50" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ad4f116a39e169c3bbf1f6045f0778a50"></a>ICAL_VQUERY_COMPONENT&#160;</td><td class="fielddoc"><p>VQUERY </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a29ce71cc76a99757b39401bfe33f0008" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a29ce71cc76a99757b39401bfe33f0008"></a>ICAL_VREPLY_COMPONENT&#160;</td><td class="fielddoc"><p>VREPLY </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ac88900511c87f9ce4afe71d71c30b56f" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ac88900511c87f9ce4afe71d71c30b56f"></a>ICAL_VCAR_COMPONENT&#160;</td><td class="fielddoc"><p>VCAR </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ad0f79720158e7b8b2765939e5a9fbecc" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ad0f79720158e7b8b2765939e5a9fbecc"></a>ICAL_VCOMMAND_COMPONENT&#160;</td><td class="fielddoc"><p>VCOMMAND </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4aeb81dddec2cf14786c919093db52178e" name="a7cc82bf2af2050ddf53017fd3d4f7ca4aeb81dddec2cf14786c919093db52178e"></a>ICAL_XLICINVALID_COMPONENT&#160;</td><td class="fielddoc"><p>XLICINVALID </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ad5d275d21f138afb894be8c68f7d4255" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ad5d275d21f138afb894be8c68f7d4255"></a>ICAL_XLICMIMEPART_COMPONENT&#160;</td><td class="fielddoc"><p>A non-stardard component that mirrors structure of MIME data </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a6581c15ba9e92cadb54cdadf99d05753" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a6581c15ba9e92cadb54cdadf99d05753"></a>ICAL_VAVAILABILITY_COMPONENT&#160;</td><td class="fielddoc"><p>VAVAILABILITY </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ae5835f0031679f2831895766dd37a98f" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ae5835f0031679f2831895766dd37a98f"></a>ICAL_XAVAILABLE_COMPONENT&#160;</td><td class="fielddoc"><p>XAVAILABLE </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ae2d8d67099091eade4d73283746a4e22" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ae2d8d67099091eade4d73283746a4e22"></a>ICAL_VPOLL_COMPONENT&#160;</td><td class="fielddoc"><p>VPOLL </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ac83076f3821df7f62a436d027c6f8371" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ac83076f3821df7f62a436d027c6f8371"></a>ICAL_VVOTER_COMPONENT&#160;</td><td class="fielddoc"><p>VVOTER </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a8895a03142e2b5ba2bf098e015c9a162" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a8895a03142e2b5ba2bf098e015c9a162"></a>ICAL_XVOTE_COMPONENT&#160;</td><td class="fielddoc"><p>XVOTE </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a5207e204b316e9f4ec8d2f2bdc200601" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a5207e204b316e9f4ec8d2f2bdc200601"></a>ICAL_VPATCH_COMPONENT&#160;</td><td class="fielddoc"><p>VPATCH </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4ad9e1c29bb79d87a7a2c1bcec2dd03167" name="a7cc82bf2af2050ddf53017fd3d4f7ca4ad9e1c29bb79d87a7a2c1bcec2dd03167"></a>ICAL_XPATCH_COMPONENT&#160;</td><td class="fielddoc"><p>XPATCH </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a4bc0ae2963fee3a196b77457b0de5e4e" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a4bc0ae2963fee3a196b77457b0de5e4e"></a>ICAL_PARTICIPANT_COMPONENT&#160;</td><td class="fielddoc"><p>PARTICIPANT </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a2bcafcb320b9a7ace1e0358fb83adb00" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a2bcafcb320b9a7ace1e0358fb83adb00"></a>ICAL_VLOCATION_COMPONENT&#160;</td><td class="fielddoc"><p>VLOCATION </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4af6524b8186b1518ae5472d9e49b7987b" name="a7cc82bf2af2050ddf53017fd3d4f7ca4af6524b8186b1518ae5472d9e49b7987b"></a>ICAL_VRESOURCE_COMPONENT&#160;</td><td class="fielddoc"><p>VRESOURCE </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a6adf22e628920355d3d6eaa9c78d6768" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a6adf22e628920355d3d6eaa9c78d6768"></a>ICAL_IANA_COMPONENT&#160;</td><td class="fielddoc"><p>IANA </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7cc82bf2af2050ddf53017fd3d4f7ca4a6e55297d90c79e3a2f9b7afc99c4cbce" name="a7cc82bf2af2050ddf53017fd3d4f7ca4a6e55297d90c79e3a2f9b7afc99c4cbce"></a>ICAL_NUM_COMPONENT_TYPES&#160;</td><td class="fielddoc"><p>MUST be last (unless we can put NO_COMP last) </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="icalenums_8h_source.html#l00028">28</a> of file <a class="el" href="icalenums_8h_source.html">icalenums.h</a>.</p>
+
+</div>
+</div>
+<a id="af155b8c4c213cc359e893cda6e7e443d" name="af155b8c4c213cc359e893cda6e7e443d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af155b8c4c213cc359e893cda6e7e443d">&#9670;&#160;</a></span>icalrequeststatus</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Request Status codes. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443daf260ba88414e7a2d41a2c5a5225e7ea8" name="af155b8c4c213cc359e893cda6e7e443daf260ba88414e7a2d41a2c5a5225e7ea8"></a>ICAL_UNKNOWN_STATUS&#160;</td><td class="fielddoc"><p>Error: Unknown request status </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dadd47bd3842d93800001ca8d94cce3f36" name="af155b8c4c213cc359e893cda6e7e443dadd47bd3842d93800001ca8d94cce3f36"></a>ICAL_2_0_SUCCESS_STATUS&#160;</td><td class="fielddoc"><p>Success </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da26bf55c33eb103645871bdd2b3ddad69" name="af155b8c4c213cc359e893cda6e7e443da26bf55c33eb103645871bdd2b3ddad69"></a>ICAL_2_1_FALLBACK_STATUS&#160;</td><td class="fielddoc"><p>Success but fallback taken on one or more property values </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dad7ce94668870154845d8bfcdfbea60c2" name="af155b8c4c213cc359e893cda6e7e443dad7ce94668870154845d8bfcdfbea60c2"></a>ICAL_2_2_IGPROP_STATUS&#160;</td><td class="fielddoc"><p>Success, invalid property ignored </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da403fb01c2f6de5af9381ec7e61717a1a" name="af155b8c4c213cc359e893cda6e7e443da403fb01c2f6de5af9381ec7e61717a1a"></a>ICAL_2_3_IGPARAM_STATUS&#160;</td><td class="fielddoc"><p>Success, invalid property parameter ignored </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dae0d5c1c10151ffe19bb12621c9e4e0d9" name="af155b8c4c213cc359e893cda6e7e443dae0d5c1c10151ffe19bb12621c9e4e0d9"></a>ICAL_2_4_IGXPROP_STATUS&#160;</td><td class="fielddoc"><p>Success, unknown non-standard property ignored </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dab8bb9e57756ae10b875983af42dcab7f" name="af155b8c4c213cc359e893cda6e7e443dab8bb9e57756ae10b875983af42dcab7f"></a>ICAL_2_5_IGXPARAM_STATUS&#160;</td><td class="fielddoc"><p>Success, unknown non standard property value ignored </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da5194e3b3062ee767fba1dec63ce63283" name="af155b8c4c213cc359e893cda6e7e443da5194e3b3062ee767fba1dec63ce63283"></a>ICAL_2_6_IGCOMP_STATUS&#160;</td><td class="fielddoc"><p>Success, invalid calendar component ignored </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da3ad2851da8454af6789a93c426fd0469" name="af155b8c4c213cc359e893cda6e7e443da3ad2851da8454af6789a93c426fd0469"></a>ICAL_2_7_FORWARD_STATUS&#160;</td><td class="fielddoc"><p>Success, request forwarded to Calendar User </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da78184e120621a6eea0bd30065251f168" name="af155b8c4c213cc359e893cda6e7e443da78184e120621a6eea0bd30065251f168"></a>ICAL_2_8_ONEEVENT_STATUS&#160;</td><td class="fielddoc"><p>Success, repeating event ignored. Scheduled as a single component </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da668fa9a11d663f47d0e62076f1541f6a" name="af155b8c4c213cc359e893cda6e7e443da668fa9a11d663f47d0e62076f1541f6a"></a>ICAL_2_9_TRUNC_STATUS&#160;</td><td class="fielddoc"><p>Success, truncated end date time to date boundary </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dac59118d61067745790b61fad3c9a3d1a" name="af155b8c4c213cc359e893cda6e7e443dac59118d61067745790b61fad3c9a3d1a"></a>ICAL_2_10_ONETODO_STATUS&#160;</td><td class="fielddoc"><p>Success, repeating VTODO ignored. Scheduled as a single VTODO </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dac5baf3f631081c09d6e09479a9541b63" name="af155b8c4c213cc359e893cda6e7e443dac5baf3f631081c09d6e09479a9541b63"></a>ICAL_2_11_TRUNCRRULE_STATUS&#160;</td><td class="fielddoc"><p>Success, unbounded RRULE clipped at some finite number of instances </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da85b50c4b8be5fb3d712d5944f38cfa90" name="af155b8c4c213cc359e893cda6e7e443da85b50c4b8be5fb3d712d5944f38cfa90"></a>ICAL_3_0_INVPROPNAME_STATUS&#160;</td><td class="fielddoc"><p>Invalid property name </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dab47631bd0b930c4853b718b524431ec0" name="af155b8c4c213cc359e893cda6e7e443dab47631bd0b930c4853b718b524431ec0"></a>ICAL_3_1_INVPROPVAL_STATUS&#160;</td><td class="fielddoc"><p>Invalid property value </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da1646c2ce9c2a749609c114aba43b5d0a" name="af155b8c4c213cc359e893cda6e7e443da1646c2ce9c2a749609c114aba43b5d0a"></a>ICAL_3_2_INVPARAM_STATUS&#160;</td><td class="fielddoc"><p>Invalid property parameter </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443daea17deec7f6fd0c3720bf59047b50d37" name="af155b8c4c213cc359e893cda6e7e443daea17deec7f6fd0c3720bf59047b50d37"></a>ICAL_3_3_INVPARAMVAL_STATUS&#160;</td><td class="fielddoc"><p>Invalid property parameter value </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443daba21439144806ebbc979e8183747e91e" name="af155b8c4c213cc359e893cda6e7e443daba21439144806ebbc979e8183747e91e"></a>ICAL_3_4_INVCOMP_STATUS&#160;</td><td class="fielddoc"><p>Invalid calendar component </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da17e32300e6ff0ee319e92b23a3b7e030" name="af155b8c4c213cc359e893cda6e7e443da17e32300e6ff0ee319e92b23a3b7e030"></a>ICAL_3_5_INVTIME_STATUS&#160;</td><td class="fielddoc"><p>Invalid date or time </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dae4914dc305aed5e9e726ac43ac82a185" name="af155b8c4c213cc359e893cda6e7e443dae4914dc305aed5e9e726ac43ac82a185"></a>ICAL_3_6_INVRULE_STATUS&#160;</td><td class="fielddoc"><p>Invalid rule </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da8573cb690d64c46b3c4ae7e3af7ac859" name="af155b8c4c213cc359e893cda6e7e443da8573cb690d64c46b3c4ae7e3af7ac859"></a>ICAL_3_7_INVCU_STATUS&#160;</td><td class="fielddoc"><p>Invalid Calendar User </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da3d94ee1b738f90b3db0a8daf7643154f" name="af155b8c4c213cc359e893cda6e7e443da3d94ee1b738f90b3db0a8daf7643154f"></a>ICAL_3_8_NOAUTH_STATUS&#160;</td><td class="fielddoc"><p>No authority </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da94309e0d4325364dada7456481318e18" name="af155b8c4c213cc359e893cda6e7e443da94309e0d4325364dada7456481318e18"></a>ICAL_3_9_BADVERSION_STATUS&#160;</td><td class="fielddoc"><p>Unsupported version </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da18fd22d151eb6925e6ab3e7f89acc933" name="af155b8c4c213cc359e893cda6e7e443da18fd22d151eb6925e6ab3e7f89acc933"></a>ICAL_3_10_TOOBIG_STATUS&#160;</td><td class="fielddoc"><p>Request entity too large </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da35ad90fb904e8f3993195ae303e4db3f" name="af155b8c4c213cc359e893cda6e7e443da35ad90fb904e8f3993195ae303e4db3f"></a>ICAL_3_11_MISSREQCOMP_STATUS&#160;</td><td class="fielddoc"><p>Required component or property missing </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da6617d71d0c4c04706de2912978610dc3" name="af155b8c4c213cc359e893cda6e7e443da6617d71d0c4c04706de2912978610dc3"></a>ICAL_3_12_UNKCOMP_STATUS&#160;</td><td class="fielddoc"><p>Unknown component or property found </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443daec98c525edb6ea0f3c19199a0bdd548b" name="af155b8c4c213cc359e893cda6e7e443daec98c525edb6ea0f3c19199a0bdd548b"></a>ICAL_3_13_BADCOMP_STATUS&#160;</td><td class="fielddoc"><p>Unsupported component or property found </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da142d61fcae208c9005ec4226cf6e3c28" name="af155b8c4c213cc359e893cda6e7e443da142d61fcae208c9005ec4226cf6e3c28"></a>ICAL_3_14_NOCAP_STATUS&#160;</td><td class="fielddoc"><p>Unsupported capability </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dad2998aaa79326a5bacd67293a8504d77" name="af155b8c4c213cc359e893cda6e7e443dad2998aaa79326a5bacd67293a8504d77"></a>ICAL_3_15_INVCOMMAND&#160;</td><td class="fielddoc"><p>Invalid command </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da2b1eaad78d336f1dac88f862178df9ff" name="af155b8c4c213cc359e893cda6e7e443da2b1eaad78d336f1dac88f862178df9ff"></a>ICAL_4_0_BUSY_STATUS&#160;</td><td class="fielddoc"><p>Event conflict. Date/time is busy </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da7da6d7a4d4b81fb80e25070485b4f208" name="af155b8c4c213cc359e893cda6e7e443da7da6d7a4d4b81fb80e25070485b4f208"></a>ICAL_4_1_STORE_ACCESS_DENIED&#160;</td><td class="fielddoc"><p>Store Access Denied </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443da413105c106ae1ed124222bca4a4f6fdf" name="af155b8c4c213cc359e893cda6e7e443da413105c106ae1ed124222bca4a4f6fdf"></a>ICAL_4_2_STORE_FAILED&#160;</td><td class="fielddoc"><p>Store Failed </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dab9cf7b6391de44cfc7f722f89ff48a83" name="af155b8c4c213cc359e893cda6e7e443dab9cf7b6391de44cfc7f722f89ff48a83"></a>ICAL_4_3_STORE_NOT_FOUND&#160;</td><td class="fielddoc"><p>Store not found </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443daa5d6938aa580ff03320c2c9cc3d0a6dc" name="af155b8c4c213cc359e893cda6e7e443daa5d6938aa580ff03320c2c9cc3d0a6dc"></a>ICAL_5_0_MAYBE_STATUS&#160;</td><td class="fielddoc"><p>Request MAY supported </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443daad1feeb61633f6b04616aa9df00c9b64" name="af155b8c4c213cc359e893cda6e7e443daad1feeb61633f6b04616aa9df00c9b64"></a>ICAL_5_1_UNAVAIL_STATUS&#160;</td><td class="fielddoc"><p>Service unavailable </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443dad163c901d89b754fcc529e1e580de22b" name="af155b8c4c213cc359e893cda6e7e443dad163c901d89b754fcc529e1e580de22b"></a>ICAL_5_2_NOSERVICE_STATUS&#160;</td><td class="fielddoc"><p>Invalid calendar service </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443daca7c818d98ba8092b3d167fe6bb3818c" name="af155b8c4c213cc359e893cda6e7e443daca7c818d98ba8092b3d167fe6bb3818c"></a>ICAL_5_3_NOSCHED_STATUS&#160;</td><td class="fielddoc"><p>No scheduling support for user </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443daec83ca99d4af10a1ecaae4fd83ae41e2" name="af155b8c4c213cc359e893cda6e7e443daec83ca99d4af10a1ecaae4fd83ae41e2"></a>ICAL_6_1_CONTAINER_NOT_FOUND&#160;</td><td class="fielddoc"><p>Container not found </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af155b8c4c213cc359e893cda6e7e443daefc051a9d4c6afd8fc92cfac30dbf8d4" name="af155b8c4c213cc359e893cda6e7e443daefc051a9d4c6afd8fc92cfac30dbf8d4"></a>ICAL_9_0_UNRECOGNIZED_COMMAND&#160;</td><td class="fielddoc"><p>An unrecognized command was received </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="icalenums_8h_source.html#l00078">78</a> of file <a class="el" href="icalenums_8h_source.html">icalenums.h</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a53964f8e27e7e4db21c6e173e97d9169" name="a53964f8e27e7e4db21c6e173e97d9169"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53964f8e27e7e4db21c6e173e97d9169">&#9670;&#160;</a></span>icalenum_num_to_reqstat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a> icalenum_num_to_reqstat </td>
+          <td>(</td>
+          <td class="paramtype">short</td>          <td class="paramname"><span class="paramname"><em>major</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">short</td>          <td class="paramname"><span class="paramname"><em>minor</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get an icalrequeststatus for major.minor status numbers.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">major</td><td>is the major request number </td></tr>
+    <tr><td class="paramname">minor</td><td>is the minor request number</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an icalrequeststatus representation of the major.minor request number. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalenums_8c_source.html#l00140">140</a> of file <a class="el" href="icalenums_8c_source.html">icalenums.c</a>.</p>
+
+</div>
+</div>
+<a id="a65463f16d14bc894649a71b3580f3f17" name="a65463f16d14bc894649a71b3580f3f17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65463f16d14bc894649a71b3580f3f17">&#9670;&#160;</a></span>icalenum_reqstat_code()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icalenum_reqstat_code </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a></td>          <td class="paramname"><span class="paramname"><em>stat</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets a string representation of an icalrequeststatus.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stat</td><td>the icalrequeststatus</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string representation of the specified icalrequest status. see icalenum_reqstat_code_r </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalenums_8c_source.html#l00089">89</a> of file <a class="el" href="icalenums_8c_source.html">icalenums.c</a>.</p>
+
+</div>
+</div>
+<a id="ada0aa82f4ec0fb1c15550165fd49043c" name="ada0aa82f4ec0fb1c15550165fd49043c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada0aa82f4ec0fb1c15550165fd49043c">&#9670;&#160;</a></span>icalenum_reqstat_code_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * icalenum_reqstat_code_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a></td>          <td class="paramname"><span class="paramname"><em>stat</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets a string representation of an icalrequeststatus.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stat</td><td>the icalrequeststatus</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string representation of the specified icalrequeststatus. see icalenum_reqstat_code </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalenums_8c_source.html#l00098">98</a> of file <a class="el" href="icalenums_8c_source.html">icalenums.c</a>.</p>
+
+</div>
+</div>
+<a id="a2b1eaf6c550ec93869dc760cf8d2e0f7" name="a2b1eaf6c550ec93869dc760cf8d2e0f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b1eaf6c550ec93869dc760cf8d2e0f7">&#9670;&#160;</a></span>icalenum_reqstat_desc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * icalenum_reqstat_desc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a></td>          <td class="paramname"><span class="paramname"><em>stat</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the descriptive text for an icalrequeststatus.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stat</td><td>is the icalrequeststatus to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the icalrequeststatus description. NULL is returned if <code class="param">stat</code> is invalid. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalenums_8c_source.html#l00075">75</a> of file <a class="el" href="icalenums_8c_source.html">icalenums.c</a>.</p>
+
+</div>
+</div>
+<a id="a49c50e3cc8a770b11306605c58c84c7d" name="a49c50e3cc8a770b11306605c58c84c7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49c50e3cc8a770b11306605c58c84c7d">&#9670;&#160;</a></span>icalenum_reqstat_major()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short icalenum_reqstat_major </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a></td>          <td class="paramname"><span class="paramname"><em>stat</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the major number for an icalrequeststatus.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stat</td><td>is the icalrequeststatus to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the major number of the specified icalrequeststatus. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalenums_8c_source.html#l00114">114</a> of file <a class="el" href="icalenums_8c_source.html">icalenums.c</a>.</p>
+
+</div>
+</div>
+<a id="a93c405d78c5d9589c823a7521ba7e3f9" name="a93c405d78c5d9589c823a7521ba7e3f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93c405d78c5d9589c823a7521ba7e3f9">&#9670;&#160;</a></span>icalenum_reqstat_minor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short icalenum_reqstat_minor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#af155b8c4c213cc359e893cda6e7e443d">icalrequeststatus</a></td>          <td class="paramname"><span class="paramname"><em>stat</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the minor number for an icalrequeststatus.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stat</td><td>is the icalrequeststatus to use</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the minor number of the specified icalrequeststatus. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalenums_8c_source.html#l00127">127</a> of file <a class="el" href="icalenums_8c_source.html">icalenums.c</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

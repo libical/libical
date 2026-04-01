@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -79,34 +79,53 @@ $(function() {
   <div class="headertitle"><div class="title">icallimits.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#ifndef LIBICAL_LIMITS_H</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#define LIBICAL_LIMITS_H</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
+<a href="icallimits_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> *  SPDX-FileCopyrightText: Allen Winter &lt;winter@kde.org&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;stddef.h&gt;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">typedef</span> <span class="keyword">enum</span> icallimits_kind</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>{</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    ICAL_LIMIT_PARSE_FAILURES,</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    ICAL_LIMIT_PARSE_SEARCH,</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES,</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    ICAL_LIMIT_PROPERTIES,</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    ICAL_LIMIT_PARAMETERS,</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    ICAL_LIMIT_VALUE_CHARS,</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    ICAL_LIMIT_PROPERTY_VALUES,</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    ICAL_LIMIT_RECURRENCE_SEARCH,</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL,</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    ICAL_LIMIT_RRULE_SEARCH,</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>} icallimits_kind;</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">size_t</span> icallimit_get(icallimits_kind kind);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> icallimit_set(icallimits_kind kind, <span class="keywordtype">size_t</span> limit);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#ifndef LIBICAL_LIMITS_H</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#define LIBICAL_LIMITS_H</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;libical_ical_export.h&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;stddef.h&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span></div>
+<div class="foldopen" id="foldopen00021" data-start="{" data-end="};">
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658">   21</a></span><span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code hl_enumeration" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658">icallimits_kind</a></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>{</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658ad364ca7c985a78f888ef5501269fb68e">   24</a></span>    <a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658ad364ca7c985a78f888ef5501269fb68e">ICAL_LIMIT_PARSE_FAILURES</a>,</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658af8171f32743ca792ace113e32db89da7">   26</a></span>    <a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658af8171f32743ca792ace113e32db89da7">ICAL_LIMIT_PARSE_SEARCH</a>,</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a26e42e5a98ad223b7421311b9db023fa">   28</a></span>    <a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a26e42e5a98ad223b7421311b9db023fa">ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES</a>,</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a49b59a23806d9e58518c15a15f0eb8cb">   30</a></span>    <a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a49b59a23806d9e58518c15a15f0eb8cb">ICAL_LIMIT_PROPERTIES</a>,</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658accc2cffbc1e310bc15dd61aa54dd3d5c">   32</a></span>    <a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658accc2cffbc1e310bc15dd61aa54dd3d5c">ICAL_LIMIT_PARAMETERS</a>,</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658ac755fa6a021cdfa5c278e6ba885bf615">   34</a></span>    <a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658ac755fa6a021cdfa5c278e6ba885bf615">ICAL_LIMIT_VALUE_CHARS</a>,</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a92f9c49f487f287ac1c0f22e40a84aa3">   36</a></span>    <a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a92f9c49f487f287ac1c0f22e40a84aa3">ICAL_LIMIT_PROPERTY_VALUES</a>,</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a4c068750007c7fcf4df4bba63e5e2751">   38</a></span>    <a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a4c068750007c7fcf4df4bba63e5e2751">ICAL_LIMIT_RECURRENCE_SEARCH</a>,</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658acc93735efb2d51444bc501916ebf80a1">   40</a></span>    <a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658acc93735efb2d51444bc501916ebf80a1">ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL</a>,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658ab932e0d2d831407e22f186661ca8d6ad">   42</a></span>    <a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658ab932e0d2d831407e22f186661ca8d6ad">ICAL_LIMIT_RRULE_SEARCH</a>,</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>} <a class="code hl_enumeration" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658">icallimits_kind</a>;</div>
+</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">size_t</span> <a class="code hl_function" href="icallimits_8h.html#a6fe30f14976e32a0b10cdb8f13d9a616">icallimit_get</a>(<a class="code hl_enumeration" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658">icallimits_kind</a> kind);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>LIBICAL_ICAL_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="icallimits_8h.html#af549f5d498923d1e99b70891b65eb45b">icallimit_set</a>(<a class="code hl_enumeration" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658">icallimits_kind</a> kind, <span class="keywordtype">size_t</span> limit);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aicallimits_8h_html_a6fe30f14976e32a0b10cdb8f13d9a616"><div class="ttname"><a href="icallimits_8h.html#a6fe30f14976e32a0b10cdb8f13d9a616">icallimit_get</a></div><div class="ttdeci">size_t icallimit_get(icallimits_kind kind)</div><div class="ttdef"><b>Definition</b> <a href="icallimits_8c_source.html#l00029">icallimits.c:29</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658">icallimits_kind</a></div><div class="ttdeci">icallimits_kind</div><div class="ttdef"><b>Definition</b> <a href="#l00021">icallimits.h:22</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658a26e42e5a98ad223b7421311b9db023fa"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a26e42e5a98ad223b7421311b9db023fa">ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES</a></div><div class="ttdeci">@ ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES</div><div class="ttdef"><b>Definition</b> <a href="#l00028">icallimits.h:28</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658a49b59a23806d9e58518c15a15f0eb8cb"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a49b59a23806d9e58518c15a15f0eb8cb">ICAL_LIMIT_PROPERTIES</a></div><div class="ttdeci">@ ICAL_LIMIT_PROPERTIES</div><div class="ttdef"><b>Definition</b> <a href="#l00030">icallimits.h:30</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658a4c068750007c7fcf4df4bba63e5e2751"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a4c068750007c7fcf4df4bba63e5e2751">ICAL_LIMIT_RECURRENCE_SEARCH</a></div><div class="ttdeci">@ ICAL_LIMIT_RECURRENCE_SEARCH</div><div class="ttdef"><b>Definition</b> <a href="#l00038">icallimits.h:38</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658a92f9c49f487f287ac1c0f22e40a84aa3"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a92f9c49f487f287ac1c0f22e40a84aa3">ICAL_LIMIT_PROPERTY_VALUES</a></div><div class="ttdeci">@ ICAL_LIMIT_PROPERTY_VALUES</div><div class="ttdef"><b>Definition</b> <a href="#l00036">icallimits.h:36</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658ab932e0d2d831407e22f186661ca8d6ad"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658ab932e0d2d831407e22f186661ca8d6ad">ICAL_LIMIT_RRULE_SEARCH</a></div><div class="ttdeci">@ ICAL_LIMIT_RRULE_SEARCH</div><div class="ttdef"><b>Definition</b> <a href="#l00042">icallimits.h:42</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658ac755fa6a021cdfa5c278e6ba885bf615"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658ac755fa6a021cdfa5c278e6ba885bf615">ICAL_LIMIT_VALUE_CHARS</a></div><div class="ttdeci">@ ICAL_LIMIT_VALUE_CHARS</div><div class="ttdef"><b>Definition</b> <a href="#l00034">icallimits.h:34</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658acc93735efb2d51444bc501916ebf80a1"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658acc93735efb2d51444bc501916ebf80a1">ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL</a></div><div class="ttdeci">@ ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL</div><div class="ttdef"><b>Definition</b> <a href="#l00040">icallimits.h:40</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658accc2cffbc1e310bc15dd61aa54dd3d5c"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658accc2cffbc1e310bc15dd61aa54dd3d5c">ICAL_LIMIT_PARAMETERS</a></div><div class="ttdeci">@ ICAL_LIMIT_PARAMETERS</div><div class="ttdef"><b>Definition</b> <a href="#l00032">icallimits.h:32</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658ad364ca7c985a78f888ef5501269fb68e"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658ad364ca7c985a78f888ef5501269fb68e">ICAL_LIMIT_PARSE_FAILURES</a></div><div class="ttdeci">@ ICAL_LIMIT_PARSE_FAILURES</div><div class="ttdef"><b>Definition</b> <a href="#l00024">icallimits.h:24</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_a7f04744f9dbe82728bebb95122538658af8171f32743ca792ace113e32db89da7"><div class="ttname"><a href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658af8171f32743ca792ace113e32db89da7">ICAL_LIMIT_PARSE_SEARCH</a></div><div class="ttdeci">@ ICAL_LIMIT_PARSE_SEARCH</div><div class="ttdef"><b>Definition</b> <a href="#l00026">icallimits.h:26</a></div></div>
+<div class="ttc" id="aicallimits_8h_html_af549f5d498923d1e99b70891b65eb45b"><div class="ttname"><a href="icallimits_8h.html#af549f5d498923d1e99b70891b65eb45b">icallimit_set</a></div><div class="ttdeci">void icallimit_set(icallimits_kind kind, size_t limit)</div><div class="ttdef"><b>Definition</b> <a href="icallimits_8c_source.html#l00058">icallimits.c:58</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

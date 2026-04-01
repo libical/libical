@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -89,13 +89,13 @@ $(function() {
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> The Original Code is eric. The Initial Developer of the Original</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> Code is Eric Busboom</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">======================================================================*/</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#ifndef ICALCALENDAR_H</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#define ICALCALENDAR_H</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;libical_icalss_export.h&quot;</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;<a class="code" href="icalset_8h.html">icalset.h</a>&quot;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#ifndef ICALCALENDAR_H</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#define ICALCALENDAR_H</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;libical_icalss_export.h&quot;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &quot;<a class="code" href="icalset_8h.html">icalset.h</a>&quot;</span></div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">typedef</span> <span class="keyword">struct </span>icalcalendar_impl icalcalendar;</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
@@ -114,13 +114,15 @@ $(function() {
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>LIBICAL_ICALSS_EXPORT icalset *icalcalendar_get_booked(icalcalendar *calendar);</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>LIBICAL_ICALSS_EXPORT icalset *icalcalendar_get_incoming(icalcalendar *calendar);</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>LIBICAL_ICALSS_EXPORT icalset *icalcalendar_get_properties(icalcalendar *calendar);</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>LIBICAL_ICALSS_EXPORT icalset *icalcalendar_get_freebusy(icalcalendar *calendar);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALCALENDAR_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="aicalset_8h_html"><div class="ttname"><a href="icalset_8h.html">icalset.h</a></div></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>LIBICAL_ICALSS_EXPORT icalset *<a class="code hl_function" href="icalcalendar_8h.html#a8a38c2fc5f246ede8c7cb58c957e4972">icalcalendar_get_properties</a>(icalcalendar *calendar);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>LIBICAL_ICALSS_EXPORT icalset *<a class="code hl_function" href="icalcalendar_8h.html#a88d39c91d789a3413c4676b40d289feb">icalcalendar_get_freebusy</a>(icalcalendar *calendar);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="preprocessor">#endif </span><span class="comment">/* !ICALCALENDAR_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aicalcalendar_8h_html_a88d39c91d789a3413c4676b40d289feb"><div class="ttname"><a href="icalcalendar_8h.html#a88d39c91d789a3413c4676b40d289feb">icalcalendar_get_freebusy</a></div><div class="ttdeci">icalset * icalcalendar_get_freebusy(icalcalendar *calendar)</div><div class="ttdef"><b>Definition</b> <a href="icalcalendar_8c_source.html#l00225">icalcalendar.c:225</a></div></div>
+<div class="ttc" id="aicalcalendar_8h_html_a8a38c2fc5f246ede8c7cb58c957e4972"><div class="ttname"><a href="icalcalendar_8h.html#a8a38c2fc5f246ede8c7cb58c957e4972">icalcalendar_get_properties</a></div><div class="ttdeci">icalset * icalcalendar_get_properties(icalcalendar *calendar)</div><div class="ttdef"><b>Definition</b> <a href="icalcalendar_8c_source.html#l00206">icalcalendar.c:206</a></div></div>
+<div class="ttc" id="aicalset_8h_html"><div class="ttname"><a href="icalset_8h.html">icalset.h</a></div><div class="ttdoc">Icalset is the &quot;base class&quot; for representations of a collection of iCal components.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

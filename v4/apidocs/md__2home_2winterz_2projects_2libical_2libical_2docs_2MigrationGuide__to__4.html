@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -75,9 +75,9 @@ $(function() {
   <div class="headertitle"><div class="title">Migrating to version 4 </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md121"></a></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md66"></a></p>
 <p>A guide to help developers port their code from libical v3.x to libical 4.0.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md122"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md67"></a>
 CMake options</h1>
 <p>Some CMake option names have been removed or renamed (deprecated) to the LIBICAL namespace.</p>
 <p>Please change your build scripts to use the new names before the next major release.</p>
@@ -127,7 +127,7 @@ CMake options</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">UNDEFINED_SANITIZER  </td><td class="markdownTableBodyNone">LIBICAL_DEVMODE_UNDEFINED_SANITIZER  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md123"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md68"></a>
 Conditional compilation</h1>
 <p>To continue supporting the 3.0 version you can use conditional compilation, like so:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#if ICAL_CHECK_VERSION(4,0,0)</span></div>
@@ -139,29 +139,29 @@ Conditional compilation</h1>
 <div class="fragment"><div class="line"><span class="preprocessor">#if !ICAL_CHECK_VERSION(4,0,0)</span></div>
 <div class="line">&lt;...old code <span class="keywordflow">for</span> the libical 3.0 version ...&gt;</div>
 <div class="line"><span class="preprocessor">#endif</span></div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md124"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md69"></a>
 ICAL_ENABLE_ERRORS_ARE_FATAL</h1>
 <p>The <span class="tt">ICAL_ENABLE_ERRORS_ARE_FATAL</span> conditional compile macro and accompanying CMake option <span class="tt">ICAL_ENABLE_ERRORS_ARE_FATAL</span> are removed.</p>
-<p>To abort whenever an error is encountered use the <span class="tt">icalerror_set_errors_are_fatal()</span> and <span class="tt"><a class="el" href="icalerror_8h.html#a3acf93364a96aed62d078f429f45c08a" title="Determine if errors are fatal.">icalerror_get_errors_are_fatal()</a></span> functions.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md125"></a>
+<p>To abort whenever an error is encountered use the <span class="tt"><a class="el" href="icalerror_8c.html#a2f503bfe69d0773c5dc48a7ee7e4d940" title="Change if errors are fatal.">icalerror_set_errors_are_fatal()</a></span> and <span class="tt"><a class="el" href="icalerror_8c.html#a3acf93364a96aed62d078f429f45c08a" title="Determine if errors are fatal.">icalerror_get_errors_are_fatal()</a></span> functions.</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md70"></a>
 ICAL_ALLOW_EMPTY_PROPERTIES</h1>
 <p>The <span class="tt">ICAL_ALLOW_EMPTY_PROPERTIES</span> conditional compile macro and accompanying CMake option <span class="tt">ICAL_ALLOW_EMPTY_PROPERTIES</span> are removed.</p>
-<p>To allow empty properties you can use the new runtime functions <span class="tt">icalproperty_set_allow_empty_properties()</span> and <span class="tt"><a class="el" href="icalproperty_8h.html#a6a58eebb7a987d6f286097753126dfbd">icalproperty_get_allow_empty_properties()</a></span>.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md126"></a>
+<p>To allow empty properties you can use the new runtime functions <span class="tt"><a class="el" href="icalproperty_8c.html#a4e85ae6c619d9eb990965327d7be9a67">icalproperty_set_allow_empty_properties()</a></span> and <span class="tt"><a class="el" href="icalproperty_8c.html#a6a58eebb7a987d6f286097753126dfbd">icalproperty_get_allow_empty_properties()</a></span>.</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md71"></a>
 PVL_USE_MACROS</h1>
 <p>The <span class="tt">PVL_USE_MACROS</span> conditional compile macro is removed. The pvl unit always compiles the <span class="tt">pvl_data</span> function.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md127"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md72"></a>
 ICAL_SETERROR_ISFUNC</h1>
 <p>The <span class="tt">ICAL_SETERROR_ISFUNC</span> conditional compile macro is removed. The icalerror unit always compiles the <span class="tt">icalerror_set_errno</span> function.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md128"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md73"></a>
 ICAL_BOOLEAN_TRUE and ICAL_BOOLEAN_FALSE</h1>
 <p>The <span class="tt">ICAL_BOOLEAN_TRUE</span> and <span class="tt">ICAL_BOOLEAN_FALSE</span> macros are removed. The C library is C99 standards compliant and uses bool types.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md129"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md74"></a>
 C library</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md130"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md75"></a>
 Modified functions</h2>
 <ul>
-<li><span class="tt">icalrecurrencetype_from_string()</span> was replaced by <span class="tt">icalrecurrencetype_new_from_string()</span>, which returns a <span class="tt">struct icalrecurrencetype *</span> rather than a <span class="tt">struct icalrecurrencetype</span>. Free the allocated memory using <span class="tt">icalrecurrencetype_unref()</span>.</li>
+<li><span class="tt">icalrecurrencetype_from_string()</span> was replaced by <span class="tt"><a class="el" href="icalrecur_8c.html#a049335f2fa89dd1c5e420439e66e543f">icalrecurrencetype_new_from_string()</a></span>, which returns a <span class="tt">struct icalrecurrencetype *</span> rather than a <span class="tt">struct icalrecurrencetype</span>. Free the allocated memory using <span class="tt"><a class="el" href="icalrecur_8c.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref()</a></span>.</li>
 <li>The following functions now take arguments of type <span class="tt">struct icalrecurrencetype *</span> rather than <span class="tt">struct icalrecurrencetype</span>:<ul>
 <li><span class="tt">icalproperty_new_rrule()</span></li>
 <li><span class="tt">icalproperty_get_rrule()</span></li>
@@ -171,7 +171,7 @@ Modified functions</h2>
 <li><span class="tt">icalproperty_set_exrule()</span></li>
 <li><span class="tt">icalproperty_get_exrule()</span></li>
 <li><span class="tt">icalproperty_vanew_exrule()</span></li>
-<li><span class="tt">icalrecur_iterator_new()</span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#acdcfa0fbb4e40377cae80ef977d28afe">icalrecur_iterator_new()</a></span></li>
 <li><span class="tt">icalvalue_new_recur()</span></li>
 <li><span class="tt">icalvalue_set_recur()</span></li>
 <li><span class="tt">icalvalue_get_recur()</span></li>
@@ -183,66 +183,66 @@ Modified functions</h2>
 <li><span class="tt">icalvalue_get_recur()</span></li>
 </ul>
 </li>
-<li><span class="tt">icaltimezone_convert_time()</span> now populates the icaltimetype zone member on conversion; i.e. the timezone information is not lost during a conversion.</li>
-<li>To more clearly illustrate their intended purpose, the <span class="tt">icaldurationtype_from_int()</span> and <span class="tt">icaldurationtype_as_int()</span> have been renamed to <span class="tt">icaldurationtype_from_seconds()</span> and <span class="tt">icaldurationtype_as_seconds()</span>, respectively. The functionality of <span class="tt">icaldurationtype_from_seconds</span> has not changed. The functionality for <span class="tt">icaldurationtype_as_seconds</span> has changed, such that a duration with days or weeks fails with a ICAL_MALFORMEDDATA_ERROR and returns 0. To preserve the former logic of <span class="tt">icaldurationtype_as_int</span>, use he newly introduced <span class="tt">icaldurationtype_as_utc_seconds</span>.</li>
-<li>Similarly, the <span class="tt">icaltime_add()</span> and <span class="tt">icaltime_subtract()</span> functions are now called <span class="tt">icalduration_extend()</span> and <span class="tt">icalduration_from_times()</span>. Their functionality has not changed.</li>
-<li>The <span class="tt">get_zone_directory()</span> and <span class="tt">set_zone_directory()</span> functions are have been renamed to <span class="tt"><a class="el" href="icaltimezone_8h.html#acf7d258f408276666ea93f3afb8030c0">icaltimezone_get_zone_directory()</a></span> and <span class="tt">icaltimezone_set_zone_directory()</span>, respectively.</li>
-<li>The <span class="tt">icaltzutil_set_zone_directory()</span> and <span class="tt">icaltzutil_get_zone_directory()</span> functions are now called <span class="tt">icaltimezone_set_system_zone_directory()</span> and <span class="tt"><a class="el" href="icaltimezone_8h.html#a746123158493db2a27bffa59c219b6e8">icaltimezone_get_system_zone_directory()</a></span> respectively.</li>
-<li>In previous versions, the <span class="tt">icalvalue_compare()</span> function returned 0 if unknown or null value types were encountered; in this version, ICAL_XLICCOMPARETYPE_NONE is returned instead.</li>
-<li>In previous versions, the <span class="tt">icalcomponent_get_status()</span> returned 0 if a problem parsing the status property was detected; in this version, ICAL_STATUS_NONE is returned instead.</li>
-<li>The <span class="tt">ical_bt()</span> and <span class="tt">icalerrno_return()</span> functions have been renamed to <span class="tt"><a class="el" href="icalerror_8h.html#a62ff19cffaf5d85562fa297f1d560fa6" title="Prints backtrace.">icalerror_backtrace()</a></span> and <a class="el" href="icalerror_8h.html#a32faf98ed4299799dd2217bb5e88c224" title="Returns the current icalerrno value.">icalerror_icalerrno()</a>` respectively for the sake of consistent function name-spacing.</li>
+<li><span class="tt"><a class="el" href="icaltimezone_8c.html#ad2d1ee1c58825d3308713fc71387fda8">icaltimezone_convert_time()</a></span> now populates the icaltimetype zone member on conversion; i.e. the timezone information is not lost during a conversion.</li>
+<li>To more clearly illustrate their intended purpose, the <span class="tt">icaldurationtype_from_int()</span> and <span class="tt">icaldurationtype_as_int()</span> have been renamed to <span class="tt"><a class="el" href="icalduration_8c.html#a7cc0c0064cacd7910ea54af63228e784" title="Creates a new icaldurationtype from a duration in seconds.">icaldurationtype_from_seconds()</a></span> and <span class="tt"><a class="el" href="icalduration_8c.html#a9f7bdfdbed45b67fa94e7332a3ae59d7" title="Extracts the duration in integer seconds from an icaldurationtype.">icaldurationtype_as_seconds()</a></span>, respectively. The functionality of <span class="tt">icaldurationtype_from_seconds</span> has not changed. The functionality for <span class="tt">icaldurationtype_as_seconds</span> has changed, such that a duration with days or weeks fails with a ICAL_MALFORMEDDATA_ERROR and returns 0. To preserve the former logic of <span class="tt">icaldurationtype_as_int</span>, use he newly introduced <span class="tt">icaldurationtype_as_utc_seconds</span>.</li>
+<li>Similarly, the <span class="tt">icaltime_add()</span> and <span class="tt">icaltime_subtract()</span> functions are now called <span class="tt"><a class="el" href="icalduration_8c.html#a3709459fd05fbb566af86d4bcef101c3" title="Extends a time duration.">icalduration_extend()</a></span> and <span class="tt"><a class="el" href="icalduration_8c.html#a2f86472ec38aaf88a042c05428ce2da3" title="Creates a duration from two icaltimetype endpoints.">icalduration_from_times()</a></span>. Their functionality has not changed.</li>
+<li>The <span class="tt">get_zone_directory()</span> and <span class="tt">set_zone_directory()</span> functions are have been renamed to <span class="tt"><a class="el" href="icaltimezone_8c.html#acf7d258f408276666ea93f3afb8030c0">icaltimezone_get_zone_directory()</a></span> and <span class="tt"><a class="el" href="icaltimezone_8c.html#a9e9a5efa6e89e1c9cce0919abe50ddef">icaltimezone_set_zone_directory()</a></span>, respectively.</li>
+<li>The <span class="tt">icaltzutil_set_zone_directory()</span> and <span class="tt">icaltzutil_get_zone_directory()</span> functions are now called <span class="tt"><a class="el" href="icaltimezone_8c.html#a5760032c198b705bd7803e976572e895">icaltimezone_set_system_zone_directory()</a></span> and <span class="tt"><a class="el" href="icaltimezone_8c.html#a746123158493db2a27bffa59c219b6e8">icaltimezone_get_system_zone_directory()</a></span> respectively.</li>
+<li>In previous versions, the <span class="tt"><a class="el" href="icalvalue_8c.html#aa45db6fe2256b8ec5b2d8b0414ffe279">icalvalue_compare()</a></span> function returned 0 if unknown or null value types were encountered; in this version, ICAL_XLICCOMPARETYPE_NONE is returned instead.</li>
+<li>In previous versions, the <span class="tt"><a class="el" href="icalcomponent_8c.html#a5ec08f24c492df7e726a6994252ba9bf">icalcomponent_get_status()</a></span> returned 0 if a problem parsing the status property was detected; in this version, ICAL_STATUS_NONE is returned instead.</li>
+<li>The <span class="tt">ical_bt()</span> and <span class="tt">icalerrno_return()</span> functions have been renamed to <span class="tt"><a class="el" href="icalerror_8c.html#a62ff19cffaf5d85562fa297f1d560fa6" title="Prints backtrace.">icalerror_backtrace()</a></span> and <a class="el" href="icalerror_8c.html#a32faf98ed4299799dd2217bb5e88c224" title="Returns the current icalerrno value.">icalerror_icalerrno()</a>` respectively for the sake of consistent function name-spacing.</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md131"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md76"></a>
 New functions</h2>
 <p>The following functions have been added:</p>
 <ul>
-<li><span class="tt">icallimit_set()</span></li>
-<li><span class="tt">icallimit_get()</span></li>
-<li><span class="tt">icalarray_set_element_at()</span></li>
-<li><span class="tt"><a class="el" href="icalrecur_8h.html#a6ef32c4da69e9a5f2059f160bf3792ab" title="Allocates and initializes a new instance of icalrecurrencetype. The new instance is returned with a r...">icalrecurrencetype_new()</a></span></li>
-<li><span class="tt">icalrecurrencetype_ref()</span></li>
-<li><span class="tt">icalrecurrencetype_unref()</span></li>
-<li><span class="tt">icalrecurrencetype_clone()</span></li>
-<li><span class="tt">icalrecurrencetype_encode_day()</span></li>
-<li><span class="tt">icalrecurrencetype_encode_month()</span></li>
-<li><span class="tt">icalcomponent_clone()</span></li>
-<li><span class="tt">icalproperty_clone()</span></li>
-<li><span class="tt">icalproperty_set_allow_empty_properties()</span></li>
-<li><span class="tt"><a class="el" href="icalproperty_8h.html#a6a58eebb7a987d6f286097753126dfbd">icalproperty_get_allow_empty_properties()</a></span></li>
-<li><span class="tt">icalparameter_clone()</span></li>
+<li><span class="tt"><a class="el" href="icallimits_8c.html#af549f5d498923d1e99b70891b65eb45b">icallimit_set()</a></span></li>
+<li><span class="tt"><a class="el" href="icallimits_8c.html#a6fe30f14976e32a0b10cdb8f13d9a616">icallimit_get()</a></span></li>
+<li><span class="tt"><a class="el" href="icalarray_8c.html#a9cd534843b704e80fc8b7053aa2f8378" title="Overwrites an existing element in an array with a new value.">icalarray_set_element_at()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a6ef32c4da69e9a5f2059f160bf3792ab">icalrecurrencetype_new()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a125182230627f4634f6057a620211b8a">icalrecurrencetype_ref()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a285cf87032135c18dcaf0786afc67486">icalrecurrencetype_clone()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a1de1894ce541ebf3d5a3cbaf6c5978e1">icalrecurrencetype_encode_day()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a19eea3c8b66206f6b0d2f31e6e112d1a">icalrecurrencetype_encode_month()</a></span></li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#aa91c3a52aaa6fb640adfb2ec782e06c0">icalcomponent_clone()</a></span></li>
+<li><span class="tt"><a class="el" href="icalproperty_8c.html#a8b8c40e7c85a984df3c67e8ae8bd7549">icalproperty_clone()</a></span></li>
+<li><span class="tt"><a class="el" href="icalproperty_8c.html#a4e85ae6c619d9eb990965327d7be9a67">icalproperty_set_allow_empty_properties()</a></span></li>
+<li><span class="tt"><a class="el" href="icalproperty_8c.html#a6a58eebb7a987d6f286097753126dfbd">icalproperty_get_allow_empty_properties()</a></span></li>
+<li><span class="tt"><a class="el" href="icalparameter_8c.html#a688a7554d9981c5b5dbbb2c41ef75c5c" title="Creates new icalparameter as a clone of the given one.">icalparameter_clone()</a></span></li>
 <li><span class="tt"><a class="el" href="icalparameter_8h.html#a68c485f63c64e1b03e616a45193ed17a">icalparameter_kind_value_kind()</a></span></li>
-<li><span class="tt">icalparameter_is_multivalued()</span></li>
-<li><span class="tt">icalparameter_decode_value()</span></li>
-<li><span class="tt">icalvalue_clone()</span></li>
-<li><span class="tt">icalcluster_clone()</span></li>
-<li><span class="tt">icalrecur_iterator_prev()</span></li>
-<li><span class="tt">icalrecur_resize_by()</span></li>
-<li><span class="tt"><a class="el" href="icalrecur_8h.html#a6ef32c4da69e9a5f2059f160bf3792ab" title="Allocates and initializes a new instance of icalrecurrencetype. The new instance is returned with a r...">icalrecurrencetype_new()</a></span></li>
-<li><span class="tt">icalrecurrencetype_ref()</span></li>
-<li><span class="tt">icalrecurrencetype_unref()</span></li>
-<li><span class="tt">icalrecurrencetype_clone()</span></li>
+<li><span class="tt"><a class="el" href="icalparameter_8c.html#a2c357a456a9c9b0f219d3dbc7fdbee5c">icalparameter_is_multivalued()</a></span></li>
+<li><span class="tt"><a class="el" href="icalparameter_8c.html#a9e036d8f0346a6f53a22fa9cf988a74f">icalparameter_decode_value()</a></span></li>
+<li><span class="tt"><a class="el" href="icalvalue_8c.html#a6cce233f4f52ca4bd2995af6688e33db">icalvalue_clone()</a></span></li>
+<li><span class="tt"><a class="el" href="icalcluster_8c.html#adbdeee3a9ea22cd070526598d892160b" title="Deep clone an icalcluster to a new one.">icalcluster_clone()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a0e5f34b0926384cc6c5de4571893f711">icalrecur_iterator_prev()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a6ef32c4da69e9a5f2059f160bf3792ab">icalrecurrencetype_new()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a125182230627f4634f6057a620211b8a">icalrecurrencetype_ref()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a285cf87032135c18dcaf0786afc67486">icalrecurrencetype_clone()</a></span></li>
 <li><span class="tt">icalrecurrencetype_from_string()</span></li>
-<li><span class="tt">icalcomponent_new_iana()</span></li>
-<li><span class="tt">icalcomponent_set_iana_name()</span></li>
-<li><span class="tt">icalcomponent_get_iana_name()</span></li>
-<li><span class="tt">icalcomponent_set_x_name()</span></li>
-<li><span class="tt">icalcomponent_get_x_name()</span></li>
-<li><span class="tt">icalcomponent_get_component_name()</span></li>
-<li><span class="tt">icalcomponent_get_component_name_r()</span></li>
-<li><span class="tt">ical_set_invalid_rrule_handling_setting()</span></li>
-<li><span class="tt">ical_get_invalid_rrule_handling_setting()</span></li>
-<li><span class="tt"><a class="el" href="icalparser_8h.html#a2d34db956d3cc609f2804bcadd0deee6" title="Get the current parser setting how to handle CONTROL characters.">icalparser_get_ctrl()</a></span></li>
-<li><span class="tt">icalparser_set_ctrl()</span></li>
-<li><span class="tt"><a class="el" href="icaltimezone_8h.html#af8d207d1083c025f61a4ade54113f43e">icaltimezone_tzid_prefix()</a></span></li>
-<li><span class="tt">icaltimezone_set_system_zone_directory()</span></li>
-<li><span class="tt">icalcompiter_is_valid()</span></li>
-<li><span class="tt">icalpropiter_is_valid()</span></li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#aaabb437d019b6a402e275fa430a6c52d">icalcomponent_new_iana()</a></span></li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#a45dad14c0a4584d99c6e28ca8d5006f9">icalcomponent_set_iana_name()</a></span></li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#ab9e2c773c6480cd512bb71088efaf63a">icalcomponent_get_iana_name()</a></span></li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#a20fe09c5d9ca019557fd4103109c7cf7">icalcomponent_set_x_name()</a></span></li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#a9f4f8f1f9de4a371f9b20e445032622b">icalcomponent_get_x_name()</a></span></li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#ac8151739c220f2a0bf3b6c39fe74a60c">icalcomponent_get_component_name()</a></span></li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#adae53fd89dd5c2ab5a69358aa544bda1">icalcomponent_get_component_name_r()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a3cc3b729a411ed8f1e046f1bbf84bf65">ical_set_invalid_rrule_handling_setting()</a></span></li>
+<li><span class="tt"><a class="el" href="icalrecur_8c.html#a9eb6bec2840d2b84efb14d50731b6aaa">ical_get_invalid_rrule_handling_setting()</a></span></li>
+<li><span class="tt"><a class="el" href="icalparser_8c.html#a2d34db956d3cc609f2804bcadd0deee6" title="Get the current parser setting how to handle CONTROL characters.">icalparser_get_ctrl()</a></span></li>
+<li><span class="tt"><a class="el" href="icalparser_8c.html#a24ad1a0d37a10aa31a8dbd9977660281" title="Set the parser setting how to handle CONTROL characters.">icalparser_set_ctrl()</a></span></li>
+<li><span class="tt"><a class="el" href="icaltimezone_8c.html#af8d207d1083c025f61a4ade54113f43e">icaltimezone_tzid_prefix()</a></span></li>
+<li><span class="tt"><a class="el" href="icaltimezone_8c.html#a5760032c198b705bd7803e976572e895">icaltimezone_set_system_zone_directory()</a></span></li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#a383d192090ae83d49499aef88b1a5d87">icalcompiter_is_valid()</a></span></li>
+<li><span class="tt"><a class="el" href="icalcomponent_8c.html#a9c2880a276e79ab74714ed92c7075ed8">icalpropiter_is_valid()</a></span></li>
 <li><span class="tt">icalproperty_new_iana()</span></li>
-<li><span class="tt">icalproperty_set_iana_name()</span></li>
-<li><span class="tt">icalproperty_get_iana_name()</span></li>
+<li><span class="tt"><a class="el" href="icalproperty_8c.html#aba3f3ce5a2f0a0c1b2e46022d63ce629">icalproperty_set_iana_name()</a></span></li>
+<li><span class="tt"><a class="el" href="icalproperty_8c.html#aa9cfb30c2a2237eb52f319516ad0f0f0">icalproperty_get_iana_name()</a></span></li>
 <li>and the new functions for the <span class="tt">icalstrarray</span> and <span class="tt">icalenumarray</span> data types</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md132"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md77"></a>
 Removed functions</h2>
 <ul>
 <li><span class="tt">icalmime_parse()</span> has been removed. Please use another library if you need a MIME parser.</li>
@@ -267,10 +267,28 @@ Removed functions</h2>
 <li><span class="tt">icaltimezone_array_new()</span></li>
 <li><span class="tt">icaltimezone_array_append_from_vtimezone()</span></li>
 <li><span class="tt">icaltimezone_array_free()</span></li>
+<li><span class="tt">icalpvl_*()</span></li>
+<li><span class="tt">icalerror_check_arg_rx()</span></li>
+<li><span class="tt">icalerror_check_arg_re()</span></li>
+<li><span class="tt">icalerror_check_arg_rz()</span></li>
+<li><span class="tt">icalerror_check_arg_rv()</span></li>
+<li><span class="tt">icalerror_check_arg()</span></li>
+<li><span class="tt">icalerror_assert()</span></li>
+<li><span class="tt">icalerrprintf()</span></li>
+<li><span class="tt">icalerror_warn()</span></li>
+<li><span class="tt">icalerror_crash_here()</span></li>
+<li><span class="tt">icalerror_stop_here()</span></li>
+<li><span class="tt">icalerror_check_value_type()</span></li>
+<li><span class="tt">icalerror_check_property_type()</span></li>
+<li><span class="tt">icalerror_check_parameter_type()</span></li>
+<li><span class="tt">icalerror_check_component_type()</span></li>
+<li><span class="tt">icaltime_span_new()</span></li>
+<li><span class="tt">icaltime_span_overlaps()</span></li>
+<li><span class="tt">icaltime_span_contains()</span></li>
 </ul>
 </li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md133"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md78"></a>
 Removed macros</h2>
 <p>These convenience macros were added in version 3 to ease porting from older versions. They have been removed in version 4 and should be replaced with their actual function names as follows:</p>
 <table class="markdownTable">
@@ -319,7 +337,7 @@ Removed macros</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">icalenum_value_kind_to_string  </td><td class="markdownTableBodyNone">icalvalue_kind_to_string  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md134"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md79"></a>
 Added data types</h2>
 <ul>
 <li>These data types have been added:<ul>
@@ -329,7 +347,7 @@ Added data types</h2>
 </ul>
 </li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md135"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md80"></a>
 Removed data types</h2>
 <ul>
 <li>These data structures have been removed (as they were never used):<ul>
@@ -338,19 +356,19 @@ Removed data types</h2>
 </ul>
 </li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md136"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md81"></a>
 Migrating from 3.0 to 4.0</h2>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md137"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md82"></a>
 const pointers</h2>
 <p>Many function signatures have been changed to use const pointers.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md138"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md83"></a>
 bool return values</h2>
 <p>A number of function signatures have been changed to use 'bool' rather than 'int' types.</p>
 <p>This is implemented using the C99 standards compliant &lt;stdbool.h&gt; header.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md139"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md84"></a>
 Clone functions</h2>
-<p>Replace all <span class="tt">ical*_new_clone()</span> function calls with <span class="tt">ical*_clone()</span> . ie, use <span class="tt">icalcomponent_clone()</span> rather then <span class="tt">icalcomponent_new_clone()</span>.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md140"></a>
+<p>Replace all <span class="tt">ical*_new_clone()</span> function calls with <span class="tt">ical*_clone()</span> . ie, use <span class="tt"><a class="el" href="icalcomponent_8c.html#aa91c3a52aaa6fb640adfb2ec782e06c0">icalcomponent_clone()</a></span> rather then <span class="tt">icalcomponent_new_clone()</span>.</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md85"></a>
 <span class="tt">icalrecurrencetype</span> now passed by reference</h2>
 <p>The way <span class="tt">struct icalrecurrencetype</span> is passed between functions has been changed. While it was usually passed by value in 3.0, it is now passed by reference. A reference counting mechanism is applied that takes care of de-allocating an instance as soon as the reference counter goes to 0.</p>
 <p>Code like this in libical 3.0:</p>
@@ -359,32 +377,33 @@ Clone functions</h2>
 <div class="line">icalrecurrencetype_clear(&amp;recur);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Work with the object</span></div>
-<div class="ttc" id="astructicalrecurrencetype_html"><div class="ttname"><a href="structicalrecurrencetype.html">icalrecurrencetype</a></div><div class="ttdef"><b>Definition</b> icalrecur.h:168</div></div>
+<div class="ttc" id="astructicalrecurrencetype_html"><div class="ttname"><a href="structicalrecurrencetype.html">icalrecurrencetype</a></div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8h_source.html#l00250">icalrecur.h:250</a></div></div>
 </div><!-- fragment --><p>changes to this in libical 4.0:</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur;</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// allocate</span></div>
-<div class="line">recur = <a class="code hl_function" href="icalrecur_8h.html#a6ef32c4da69e9a5f2059f160bf3792ab">icalrecurrencetype_new</a>();</div>
+<div class="line">recur = <a class="code hl_function" href="icalrecur_8c.html#a6ef32c4da69e9a5f2059f160bf3792ab">icalrecurrencetype_new</a>();</div>
 <div class="line"><span class="keywordflow">if</span> (recur) {</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Work with the object</span></div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// deallocate</span></div>
-<div class="line">    <a class="code hl_function" href="icalrecur_8h.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a>(recur);</div>
+<div class="line">    <a class="code hl_function" href="icalrecur_8c.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a>(recur);</div>
 <div class="line">} <span class="keywordflow">else</span> {</div>
 <div class="line">    <span class="comment">// out of memory error handling</span></div>
 <div class="line">}</div>
-<div class="ttc" id="aicalrecur_8h_html_a6ef32c4da69e9a5f2059f160bf3792ab"><div class="ttname"><a href="icalrecur_8h.html#a6ef32c4da69e9a5f2059f160bf3792ab">icalrecurrencetype_new</a></div><div class="ttdeci">struct icalrecurrencetype * icalrecurrencetype_new(void)</div><div class="ttdoc">Allocates and initializes a new instance of icalrecurrencetype. The new instance is returned with a r...</div><div class="ttdef"><b>Definition</b> icalrecur.c:698</div></div>
-<div class="ttc" id="aicalrecur_8h_html_ab514cbb2acf2d8781490199224752a91"><div class="ttname"><a href="icalrecur_8h.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a></div><div class="ttdeci">void icalrecurrencetype_unref(struct icalrecurrencetype *recur)</div><div class="ttdoc">Decreases the reference counter by 1. If it goes to 0, the instance and all referenced memory (i....</div><div class="ttdef"><b>Definition</b> icalrecur.c:743</div></div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md141"></a>
+<div class="ttc" id="aicalrecur_8c_html_a6ef32c4da69e9a5f2059f160bf3792ab"><div class="ttname"><a href="icalrecur_8c.html#a6ef32c4da69e9a5f2059f160bf3792ab">icalrecurrencetype_new</a></div><div class="ttdeci">struct icalrecurrencetype * icalrecurrencetype_new(void)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l00708">icalrecur.c:708</a></div></div>
+<div class="ttc" id="aicalrecur_8c_html_ab514cbb2acf2d8781490199224752a91"><div class="ttname"><a href="icalrecur_8c.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a></div><div class="ttdeci">void icalrecurrencetype_unref(struct icalrecurrencetype *recur)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l00755">icalrecur.c:755</a></div></div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md86"></a>
 <span class="tt">icalgeotype</span> now uses character strings rather than doubles</h2>
 <p>The members of <span class="tt">struct icalgeotype</span> for latitude ('lat<span class="tt">) and longitude ('lon</span>) have been changed to use ICAL_GEO_LEN long character strings rather than the double type.</p>
 <p>This means that simple assignments in 3.0 must be replaced by string copies.</p>
 <div class="fragment"><div class="line">geo.lat = 0.0;</div>
 <div class="line">geo.lon = 10.0;</div>
 </div><!-- fragment --><p>becomes</p>
-<div class="fragment"><div class="line">strncpy(geo.lat, <span class="stringliteral">&quot;0.0&quot;</span>, ICAL_GEO_LEN-1);</div>
-<div class="line">strncpy(geo.lon, <span class="stringliteral">&quot;10.0&quot;</span>, ICAL_GEO_LEN-1);</div>
+<div class="fragment"><div class="line">strncpy(geo.lat, <span class="stringliteral">&quot;0.0&quot;</span>, <a class="code hl_define" href="icaltypes_8h.html#aab6b94d4d538dbba6427dec07a599951">ICAL_GEO_LEN</a>-1);</div>
+<div class="line">strncpy(geo.lon, <span class="stringliteral">&quot;10.0&quot;</span>, <a class="code hl_define" href="icaltypes_8h.html#aab6b94d4d538dbba6427dec07a599951">ICAL_GEO_LEN</a>-1);</div>
+<div class="ttc" id="aicaltypes_8h_html_aab6b94d4d538dbba6427dec07a599951"><div class="ttname"><a href="icaltypes_8h.html#aab6b94d4d538dbba6427dec07a599951">ICAL_GEO_LEN</a></div><div class="ttdeci">#define ICAL_GEO_LEN</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8h_source.html#l00035">icaltypes.h:35</a></div></div>
 </div><!-- fragment --><p>and</p>
 <div class="fragment"><div class="line"><span class="keywordtype">double</span> lat = geo.lat;</div>
 <div class="line"><span class="keywordtype">double</span> lon = geo.lon;</div>
@@ -392,10 +411,10 @@ Clone functions</h2>
 <div class="fragment"><div class="line"><span class="keywordtype">double</span> lat, lon;</div>
 <div class="line">sscanf(geo.lat, <span class="stringliteral">&quot;%lf&quot;</span>, &amp;lat);</div>
 <div class="line">sscanf(geo.lon, <span class="stringliteral">&quot;%lf&quot;</span>, &amp;lon);</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md142"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md87"></a>
 icaltime_adjust</h1>
 <p>The <span class="tt">icaltime_adjust</span> function no longer adjusts null icaltimetypes.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md143"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md88"></a>
 Working with <span class="tt">icalvalue</span> and <span class="tt">icalproperty</span></h2>
 <p>Code like this in libical 3.0:</p>
 <div class="fragment"><div class="line">icalvalue *recur_value = ...;</div>
@@ -408,7 +427,7 @@ Working with <span class="tt">icalvalue</span> and <span class="tt">icalproperty
 <div class="line"> </div>
 <div class="line"><span class="comment">// Work with the object</span></div>
 <div class="line"><span class="comment">// No need to unref</span></div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md144"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md89"></a>
 Multi-valued parameters</h2>
 <p>Support for these multi-valued parameters is added in libical 4.0.</p>
 <ul>
@@ -420,16 +439,17 @@ Multi-valued parameters</h2>
 </ul>
 <p>You can access the 'nth' value for such parameters using the new "_nth" functions.</p>
 <p>For example, to access the first delegated-to attendee use</p>
-<div class="fragment"><div class="line">param = icalproperty_get_first_parameter(prop, ICAL_DELEGATEDTO_PARAMETER);</div>
+<div class="fragment"><div class="line">param = <a class="code hl_function" href="icalproperty_8c.html#a771dfb944d1966f4357992ba704c15d8">icalproperty_get_first_parameter</a>(prop, ICAL_DELEGATEDTO_PARAMETER);</div>
 <div class="line">icalparameter_get_delegatedto_nth(param, 0)</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md145"></a>
+<div class="ttc" id="aicalproperty_8c_html_a771dfb944d1966f4357992ba704c15d8"><div class="ttname"><a href="icalproperty_8c.html#a771dfb944d1966f4357992ba704c15d8">icalproperty_get_first_parameter</a></div><div class="ttdeci">icalparameter * icalproperty_get_first_parameter(icalproperty *p, icalparameter_kind kind)</div><div class="ttdef"><b>Definition</b> <a href="icalproperty_8c_source.html#l00709">icalproperty.c:709</a></div></div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md90"></a>
 Setting the tzid</h2>
 <p>The <span class="tt">icaltimezone_set_tzid_prefix</span> function now allows setting an empty prefix. In older libical versions, calling <span class="tt">icaltimezone_set_tzid_prefix</span> with an empty tzid prefix would reset to the BUILTIN_TZID_PREFIX value (i.e. ""/freeassociation.sourceforge.net/").</p>
 <p>The new publicly visible function <span class="tt">icaltimezone_tzid_prefix</span> returns the current tzid prefix string.</p>
 <p>Note that the tzid prefix must be globally unique (such as a domain name owned by the developer of the calling application), and begin and end with forward slashes. The tzid string must be fewer than 256 characters long.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md146"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md91"></a>
 C++ library</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md147"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md92"></a>
 Modified methods</h2>
 <ul>
 <li>The following methods now take arguments of type <span class="tt">struct icalrecurrencetype *</span> rather than <span class="tt">const
@@ -446,22 +466,23 @@ Modified methods</h2>
 </ul>
 </li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md148"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md93"></a>
 <span class="tt">icalrecurrencetype.by_xxx</span> static arrays replaced by dynamically allocated ones</h2>
 <p>I.e. memory <span class="tt">short by_hour[ICAL_BY_DAY_SIZE]</span> etc. are replaced by</p>
 <div class="fragment"><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span></div>
 <div class="line">{</div>
 <div class="line">  <span class="keywordtype">short</span> *data;</div>
 <div class="line">  <span class="keywordtype">short</span> size;</div>
-<div class="line">} <a class="code hl_struct" href="structicalrecurrence__by__data.html">icalrecurrence_by_data</a>;</div>
+<div class="line">} icalrecurrence_by_data;</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="structicalrecurrencetype.html">icalrecurrencetype</a> {</div>
 <div class="line">  ...</div>
-<div class="line">  <a class="code hl_struct" href="structicalrecurrence__by__data.html">icalrecurrence_by_data</a> by[ICAL_BY_NUM_PARTS];</div>
+<div class="line">  icalrecurrence_by_data <a class="code hl_variable" href="structicalrecurrencetype.html#af0a483e47bacf69a4c8b04525678ae24">by</a>[<a class="code hl_enumvalue" href="icalrecur_8h.html#a599167f0f15f02d98c9efea9ff5d91dcaec8a06e66dd964d73969db0bb2fb1eb3">ICAL_BY_NUM_PARTS</a>];</div>
 <div class="line">}</div>
-<div class="ttc" id="astructicalrecurrence__by__data_html"><div class="ttname"><a href="structicalrecurrence__by__data.html">icalrecurrence_by_data</a></div><div class="ttdef"><b>Definition</b> icalrecur.h:162</div></div>
-</div><!-- fragment --><p>Memory is allocated in the required size using the new <span class="tt">icalrecur_resize_by()</span> function. It is automatically freed together with the containing <span class="tt">icalrecurrencetype</span>. As the size of the array is stored explicitly, no termination of the array with special value <span class="tt">ICAL_RECURRENCE_ARRAY_MAX</span> is required anymore. The array is iterated by comparing the iterator to the <span class="tt">size</span> member value.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md149"></a>
+<div class="ttc" id="aicalrecur_8h_html_a599167f0f15f02d98c9efea9ff5d91dcaec8a06e66dd964d73969db0bb2fb1eb3"><div class="ttname"><a href="icalrecur_8h.html#a599167f0f15f02d98c9efea9ff5d91dcaec8a06e66dd964d73969db0bb2fb1eb3">ICAL_BY_NUM_PARTS</a></div><div class="ttdeci">@ ICAL_BY_NUM_PARTS</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8h_source.html#l00138">icalrecur.h:138</a></div></div>
+<div class="ttc" id="astructicalrecurrencetype_html_af0a483e47bacf69a4c8b04525678ae24"><div class="ttname"><a href="structicalrecurrencetype.html#af0a483e47bacf69a4c8b04525678ae24">icalrecurrencetype::by</a></div><div class="ttdeci">icalrecurrence_by_data by[ICAL_BY_NUM_PARTS]</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8h_source.html#l00286">icalrecur.h:286</a></div></div>
+</div><!-- fragment --><p>Memory is allocated in the required size using the new <span class="tt"><a class="el" href="icalrecur_8c.html#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by()</a></span> function. It is automatically freed together with the containing <span class="tt">icalrecurrencetype</span>. As the size of the array is stored explicitly, no termination of the array with special value <span class="tt">ICAL_RECURRENCE_ARRAY_MAX</span> is required anymore. The array is iterated by comparing the iterator to the <span class="tt">size</span> member value.</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md94"></a>
 Migrating <span class="tt">icalrecurrencetype.by_xxx</span> static arrays usage from 3.0 to 4.0</h2>
 <p>Code like this in libical 3.0:</p>
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structicalrecurrencetype.html">icalrecurrencetype</a> recur;</div>
@@ -471,18 +492,19 @@ Migrating <span class="tt">icalrecurrencetype.by_xxx</span> static arrays usage 
 </div><!-- fragment --><p>changes to something like this in libical 4.0:</p>
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structicalrecurrencetype.html">icalrecurrencetype</a> *recur;</div>
 <div class="line">...</div>
-<div class="line">if (!<a class="code hl_function" href="icalrecur_8h.html#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by</a>(&amp;recur-&gt;by[ICAL_BY_HOUR], 1)) {</div>
+<div class="line">if (!<a class="code hl_function" href="icalrecur_8c.html#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by</a>(&amp;recur-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#af0a483e47bacf69a4c8b04525678ae24">by</a>[<a class="code hl_enumvalue" href="icalrecur_8h.html#a599167f0f15f02d98c9efea9ff5d91dca448eb21484b6d446c2d6f86f42fb0d63">ICAL_BY_HOUR</a>], 1)) {</div>
 <div class="line">  <span class="comment">// allocation failed</span></div>
 <div class="line">  <span class="comment">// error handling</span></div>
 <div class="line">} <span class="keywordflow">else</span> {</div>
-<div class="line">  recur.by[ICAL_BY_HOUR].data[0] = 12;</div>
+<div class="line">  recur.<a class="code hl_variable" href="structicalrecurrencetype.html#af0a483e47bacf69a4c8b04525678ae24">by</a>[<a class="code hl_enumvalue" href="icalrecur_8h.html#a599167f0f15f02d98c9efea9ff5d91dca448eb21484b6d446c2d6f86f42fb0d63">ICAL_BY_HOUR</a>].data[0] = 12;</div>
 <div class="line">}</div>
-<div class="ttc" id="aicalrecur_8h_html_a27e50d989ba059c6c91b4844428930e2"><div class="ttname"><a href="icalrecur_8h.html#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by</a></div><div class="ttdeci">bool icalrecur_resize_by(icalrecurrence_by_data *by, short size)</div><div class="ttdoc">Resizes the buffer backing the &#39;by&#39; array to the specified size, if different. Frees the buffer if th...</div><div class="ttdef"><b>Definition</b> icalrecur.c:300</div></div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md150"></a>
+<div class="ttc" id="aicalrecur_8c_html_a27e50d989ba059c6c91b4844428930e2"><div class="ttname"><a href="icalrecur_8c.html#a27e50d989ba059c6c91b4844428930e2">icalrecur_resize_by</a></div><div class="ttdeci">bool icalrecur_resize_by(icalrecurrence_by_data *by, short size)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l00306">icalrecur.c:306</a></div></div>
+<div class="ttc" id="aicalrecur_8h_html_a599167f0f15f02d98c9efea9ff5d91dca448eb21484b6d446c2d6f86f42fb0d63"><div class="ttname"><a href="icalrecur_8h.html#a599167f0f15f02d98c9efea9ff5d91dca448eb21484b6d446c2d6f86f42fb0d63">ICAL_BY_HOUR</a></div><div class="ttdeci">@ ICAL_BY_HOUR</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8h_source.html#l00133">icalrecur.h:133</a></div></div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md95"></a>
 GLib/Python bindings - changed <span class="tt">ICalGLib.Recurrence.*_by_*</span> methods</h1>
 <p><span class="tt">i_cal_recurrence_*_by_xxx*</span> methods have been replaced by more generic versions that take the 'by' type (day, month, ...) as a parameter.</p>
 <p><span class="tt">i_cal_bt</span> and <span class="tt">i_cal_errno_return</span> are renamed to <span class="tt">i_calerror_backtrace</span> and <span class="tt">i_cal_errno_return</span>, respectively.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md151"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md96"></a>
 Migrating <span class="tt">ICalGLib.Recurrence.*_by_*</span> methods from 3.0 to 4.0</h2>
 <p>Code like this in libical 3.0:</p>
 <div class="fragment"><div class="line">recurrence.set_by_second(0,</div>

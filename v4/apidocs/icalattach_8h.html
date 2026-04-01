@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -83,17 +83,16 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>A set of functions to handle iCal attachments.  
+<p>Defines the data structure for iCalendar attachments.  
 <a href="#details">More...</a></p>
 
 <p><a href="icalattach_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a825e4167b52ccf37277078c8dedfcfb3" id="r_a825e4167b52ccf37277078c8dedfcfb3"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structicalattach__impl.html">icalattach_impl</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a></td></tr>
+<tr class="memitem:a825e4167b52ccf37277078c8dedfcfb3" id="r_a825e4167b52ccf37277078c8dedfcfb3"><td class="memItemLeft" align="right" valign="top">typedef struct icalattach_impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a></td></tr>
 <tr class="memdesc:a825e4167b52ccf37277078c8dedfcfb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">An iCal attach object representing a link to a document object.  <br /></td></tr>
 <tr class="memitem:afd710837527e7877dd0de8836433c74a" id="r_afd710837527e7877dd0de8836433c74a"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd710837527e7877dd0de8836433c74a">icalattach_free_fn_t</a>) (char *data, void *user_data)</td></tr>
-<tr class="memdesc:afd710837527e7877dd0de8836433c74a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to be called to free the data of an <a class="el" href="#a825e4167b52ccf37277078c8dedfcfb3" title="An iCal attach object representing a link to a document object.">icalattach</a> object.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -113,9 +112,11 @@ Functions</h2></td></tr>
 <tr class="memdesc:a4f9e8fe048e58d1035f82ca47e51024f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decrements reference count of the icalattach.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A set of functions to handle iCal attachments. </p>
+<div class="textblock"><p>Defines the data structure for iCalendar attachments. </p>
 <p>With the <span class="tt">ATTACH</span> property, the iCal standard defines a way to associate a document object with a calendar component.</p>
 <p>These are represented with icalattach objects in libical. This file contains functions to create and work with these objects. </p>
+
+<p class="definition">Definition in file <a class="el" href="icalattach_8h_source.html">icalattach.h</a>.</p>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
 <a id="a825e4167b52ccf37277078c8dedfcfb3" name="a825e4167b52ccf37277078c8dedfcfb3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a825e4167b52ccf37277078c8dedfcfb3">&#9670;&#160;</a></span>icalattach</h2>
@@ -124,13 +125,15 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef struct <a class="el" href="structicalattach__impl.html">icalattach_impl</a> <a class="el" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a></td>
+          <td class="memname">typedef struct icalattach_impl <a class="el" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>An iCal attach object representing a link to a document object. </p>
 <p>Represents an association with a document object. icalattach objects are reference counted, meaning that if the last reference to them is removed (with <a class="el" href="#a4f9e8fe048e58d1035f82ca47e51024f" title="Decrements reference count of the icalattach.">icalattach_unref()</a>), they are destroyed. </p>
+
+<p class="definition">Definition at line <a class="el" href="icalattach_8h_source.html#l00036">36</a> of file <a class="el" href="icalattach_8h_source.html">icalattach.h</a>.</p>
 
 </div>
 </div>
@@ -145,10 +148,10 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Function to be called to free the data of an <a class="el" href="#a825e4167b52ccf37277078c8dedfcfb3" title="An iCal attach object representing a link to a document object.">icalattach</a> object. </p><dl class="section warning"><dt>Warning</dt><dd>Currently not used</dd></dl>
+<p>This function type is used to free the data from an <a class="el" href="#a825e4167b52ccf37277078c8dedfcfb3" title="An iCal attach object representing a link to a document object.">icalattach</a> object created with <a class="el" href="#a02add24fd5d06a4753df5e7b9e9ce94b" title="Creates new icalattach object from data.">icalattach_new_from_data()</a>. </p>
 
-<p>Function to be called to free the data of an <a class="el" href="#a825e4167b52ccf37277078c8dedfcfb3" title="An iCal attach object representing a link to a document object.">icalattach</a> object. </p>
-<dl class="section warning"><dt>Warning</dt><dd>Currently not used</dd></dl>
-<p>This function type is used to free the data from an <a class="el" href="#a825e4167b52ccf37277078c8dedfcfb3" title="An iCal attach object representing a link to a document object.">icalattach</a> object created with <a class="el" href="#a02add24fd5d06a4753df5e7b9e9ce94b" title="Creates new icalattach object from data.">icalattach_new_from_data()</a>. It is currently not used </p>
+<p class="definition">Definition at line <a class="el" href="icalattach_8h_source.html#l00046">46</a> of file <a class="el" href="icalattach_8h_source.html">icalattach.h</a>.</p>
 
 </div>
 </div>
@@ -181,6 +184,8 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>Returns <span class="tt">NULL</span> and set <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a> if <em class="arg">attach</em> is <span class="tt">NULL</span>. Undefined behaviour if the object is a URL (check with <a class="el" href="#aefbcdc9f00f120ef79dd8f2686ad8a2a" title="Determines if attach is an URL.">icalattach_get_is_url()</a>).</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The string returned is owned by libical and must not be freed by the caller. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="icalattach_8c_source.html#l00130">130</a> of file <a class="el" href="icalattach_8c_source.html">icalattach.c</a>.</p>
+
 </div>
 </div>
 <a id="aefbcdc9f00f120ef79dd8f2686ad8a2a" name="aefbcdc9f00f120ef79dd8f2686ad8a2a"></a>
@@ -208,19 +213,21 @@ Functions</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="#abff756d83d05c46417c8cbdaa7e0fa04" title="Returns the URL of the icalattach object.">icalattach_get_url()</a></dd></dl>
 <p>Errors if <code class="param">attach</code> is <span class="tt">NULL</span>.</p>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// creates new</span></div>
-<div class="line"><a class="code hl_typedef" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a> *attach = <a class="code hl_function" href="#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="stringliteral">&quot;http://example.com&quot;</span>);</div>
+<div class="line"><a class="code hl_typedef" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a> *attach = <a class="code hl_function" href="icalattach_8c.html#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="stringliteral">&quot;http://example.com&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// checks if it is a URL</span></div>
-<div class="line">assert(<a class="code hl_function" href="#aefbcdc9f00f120ef79dd8f2686ad8a2a">icalattach_get_is_url</a>(attach));</div>
+<div class="line">assert(<a class="code hl_function" href="icalattach_8c.html#aefbcdc9f00f120ef79dd8f2686ad8a2a">icalattach_get_is_url</a>(attach));</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release it</span></div>
-<div class="line"><a class="code hl_function" href="#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a>(attach);</div>
-<div class="ttc" id="aicalattach_8h_html_a4f9e8fe048e58d1035f82ca47e51024f"><div class="ttname"><a href="#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a></div><div class="ttdeci">void icalattach_unref(icalattach *attach)</div><div class="ttdoc">Decrements reference count of the icalattach.</div><div class="ttdef"><b>Definition</b> icalattach.c:90</div></div>
-<div class="ttc" id="aicalattach_8h_html_a825e4167b52ccf37277078c8dedfcfb3"><div class="ttname"><a href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a></div><div class="ttdeci">struct icalattach_impl icalattach</div><div class="ttdoc">An iCal attach object representing a link to a document object.</div><div class="ttdef"><b>Definition</b> icalattach.h:36</div></div>
-<div class="ttc" id="aicalattach_8h_html_ae01e1b8479c7f4f6205d05271a4a8021"><div class="ttname"><a href="#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a></div><div class="ttdeci">icalattach * icalattach_new_from_url(const char *url)</div><div class="ttdoc">Creates new icalattach object from a URL.</div><div class="ttdef"><b>Definition</b> icalattach.c:20</div></div>
-<div class="ttc" id="aicalattach_8h_html_aefbcdc9f00f120ef79dd8f2686ad8a2a"><div class="ttname"><a href="#aefbcdc9f00f120ef79dd8f2686ad8a2a">icalattach_get_is_url</a></div><div class="ttdeci">bool icalattach_get_is_url(const icalattach *attach)</div><div class="ttdoc">Determines if attach is an URL.</div><div class="ttdef"><b>Definition</b> icalattach.c:110</div></div>
+<div class="line"><a class="code hl_function" href="icalattach_8c.html#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a>(attach);</div>
+<div class="ttc" id="aicalattach_8c_html_a4f9e8fe048e58d1035f82ca47e51024f"><div class="ttname"><a href="icalattach_8c.html#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a></div><div class="ttdeci">void icalattach_unref(icalattach *attach)</div><div class="ttdoc">Decrements reference count of the icalattach.</div><div class="ttdef"><b>Definition</b> <a href="icalattach_8c_source.html#l00095">icalattach.c:95</a></div></div>
+<div class="ttc" id="aicalattach_8c_html_ae01e1b8479c7f4f6205d05271a4a8021"><div class="ttname"><a href="icalattach_8c.html#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a></div><div class="ttdeci">icalattach * icalattach_new_from_url(const char *url)</div><div class="ttdoc">Creates new icalattach object from a URL.</div><div class="ttdef"><b>Definition</b> <a href="icalattach_8c_source.html#l00025">icalattach.c:25</a></div></div>
+<div class="ttc" id="aicalattach_8c_html_aefbcdc9f00f120ef79dd8f2686ad8a2a"><div class="ttname"><a href="icalattach_8c.html#aefbcdc9f00f120ef79dd8f2686ad8a2a">icalattach_get_is_url</a></div><div class="ttdeci">bool icalattach_get_is_url(const icalattach *attach)</div><div class="ttdoc">Determines if attach is an URL.</div><div class="ttdef"><b>Definition</b> <a href="icalattach_8c_source.html#l00115">icalattach.c:115</a></div></div>
+<div class="ttc" id="aicalattach_8h_html_a825e4167b52ccf37277078c8dedfcfb3"><div class="ttname"><a href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a></div><div class="ttdeci">struct icalattach_impl icalattach</div><div class="ttdoc">An iCal attach object representing a link to a document object.</div><div class="ttdef"><b>Definition</b> <a href="icalattach_8h_source.html#l00036">icalattach.h:36</a></div></div>
 </div><!-- fragment --></dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the specified icalattach is a URL; false otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalattach_8c_source.html#l00115">115</a> of file <a class="el" href="icalattach_8c_source.html">icalattach.c</a>.</p>
 
 </div>
 </div>
@@ -252,16 +259,18 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>Returns <span class="tt">NULL</span> and set <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a> if <em class="arg">attach</em> is <span class="tt">NULL</span>. Undefined behaviour if the object is not a URL (check with <a class="el" href="#aefbcdc9f00f120ef79dd8f2686ad8a2a" title="Determines if attach is an URL.">icalattach_get_is_url()</a>).</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The string returned is owned by libical and must not be freed by the caller.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// creates new</span></div>
-<div class="line"><a class="code hl_typedef" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a> *attach = <a class="code hl_function" href="#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="stringliteral">&quot;http://example.com&quot;</span>);</div>
+<div class="line"><a class="code hl_typedef" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a> *attach = <a class="code hl_function" href="icalattach_8c.html#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="stringliteral">&quot;http://example.com&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// checks it</span></div>
-<div class="line">assert(<a class="code hl_function" href="#aefbcdc9f00f120ef79dd8f2686ad8a2a">icalattach_get_is_url</a>(attach));</div>
-<div class="line">assert(0 == strcmp(<a class="code hl_function" href="#abff756d83d05c46417c8cbdaa7e0fa04">icalattach_get_url</a>(attach), <span class="stringliteral">&quot;http://example.com&quot;</span>));</div>
+<div class="line">assert(<a class="code hl_function" href="icalattach_8c.html#aefbcdc9f00f120ef79dd8f2686ad8a2a">icalattach_get_is_url</a>(attach));</div>
+<div class="line">assert(0 == strcmp(<a class="code hl_function" href="icalattach_8c.html#abff756d83d05c46417c8cbdaa7e0fa04">icalattach_get_url</a>(attach), <span class="stringliteral">&quot;http://example.com&quot;</span>));</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release it</span></div>
-<div class="line"><a class="code hl_function" href="#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a>(attach);</div>
-<div class="ttc" id="aicalattach_8h_html_abff756d83d05c46417c8cbdaa7e0fa04"><div class="ttname"><a href="#abff756d83d05c46417c8cbdaa7e0fa04">icalattach_get_url</a></div><div class="ttdeci">const char * icalattach_get_url(icalattach *attach)</div><div class="ttdoc">Returns the URL of the icalattach object.</div><div class="ttdef"><b>Definition</b> icalattach.c:117</div></div>
+<div class="line"><a class="code hl_function" href="icalattach_8c.html#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a>(attach);</div>
+<div class="ttc" id="aicalattach_8c_html_abff756d83d05c46417c8cbdaa7e0fa04"><div class="ttname"><a href="icalattach_8c.html#abff756d83d05c46417c8cbdaa7e0fa04">icalattach_get_url</a></div><div class="ttdeci">const char * icalattach_get_url(icalattach *attach)</div><div class="ttdoc">Returns the URL of the icalattach object.</div><div class="ttdef"><b>Definition</b> <a href="icalattach_8c_source.html#l00122">icalattach.c:122</a></div></div>
 </div><!-- fragment --> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalattach_8c_source.html#l00122">122</a> of file <a class="el" href="icalattach_8c_source.html">icalattach.c</a>.</p>
 
 </div>
 </div>
@@ -303,6 +312,8 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>If <em class="arg">url</em> is <span class="tt">NULL</span>, it returns <span class="tt">NULL</span> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. If there was an error allocating memory, it returns <span class="tt">NULL</span> and sets <span class="tt">errno</span> to <span class="tt">ENOMEM</span>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The returned icalattach object is owned by the caller of the function. icalattach objects are reference counted, which means that after use, <a class="el" href="#a4f9e8fe048e58d1035f82ca47e51024f" title="Decrements reference count of the icalattach.">icalattach_unref()</a> needs to be called to signal that they are not used anymore. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="icalattach_8c_source.html#l00056">56</a> of file <a class="el" href="icalattach_8c_source.html">icalattach.c</a>.</p>
+
 </div>
 </div>
 <a id="ae01e1b8479c7f4f6205d05271a4a8021" name="ae01e1b8479c7f4f6205d05271a4a8021"></a>
@@ -332,15 +343,17 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>If <em class="arg">url</em> is <span class="tt">NULL</span>, it returns <span class="tt">NULL</span> and sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. If there was an error allocating memory, it returns <span class="tt">NULL</span> and sets <span class="tt">errno</span> to <span class="tt">ENOMEM</span>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>The returned icalattach object is owned by the caller of the function. icalattach objects are reference counted, which means that after use, <a class="el" href="#a4f9e8fe048e58d1035f82ca47e51024f" title="Decrements reference count of the icalattach.">icalattach_unref()</a> needs to be called to signal that they are not used anymore.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// creates new</span></div>
-<div class="line"><a class="code hl_typedef" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a> *attach = <a class="code hl_function" href="#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="stringliteral">&quot;http://example.com&quot;</span>);</div>
+<div class="line"><a class="code hl_typedef" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a> *attach = <a class="code hl_function" href="icalattach_8c.html#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="stringliteral">&quot;http://example.com&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// checks it</span></div>
-<div class="line">assert(<a class="code hl_function" href="#aefbcdc9f00f120ef79dd8f2686ad8a2a">icalattach_get_is_url</a>(attach));</div>
-<div class="line">assert(0 == strcmp(<a class="code hl_function" href="#abff756d83d05c46417c8cbdaa7e0fa04">icalattach_get_url</a>(attach), <span class="stringliteral">&quot;http://example.com&quot;</span>));</div>
+<div class="line">assert(<a class="code hl_function" href="icalattach_8c.html#aefbcdc9f00f120ef79dd8f2686ad8a2a">icalattach_get_is_url</a>(attach));</div>
+<div class="line">assert(0 == strcmp(<a class="code hl_function" href="icalattach_8c.html#abff756d83d05c46417c8cbdaa7e0fa04">icalattach_get_url</a>(attach), <span class="stringliteral">&quot;http://example.com&quot;</span>));</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release it</span></div>
-<div class="line"><a class="code hl_function" href="#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a>(attach);</div>
+<div class="line"><a class="code hl_function" href="icalattach_8c.html#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a>(attach);</div>
 </div><!-- fragment --> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalattach_8c_source.html#l00025">25</a> of file <a class="el" href="icalattach_8c_source.html">icalattach.c</a>.</p>
 
 </div>
 </div>
@@ -369,6 +382,8 @@ Functions</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="#a4f9e8fe048e58d1035f82ca47e51024f" title="Decrements reference count of the icalattach.">icalattach_unref()</a></dd></dl>
 <dl class="section user"><dt>Error handling</dt><dd>If <em class="arg">attach</em> is <span class="tt">NULL</span>, or the reference count is smaller than 0, it sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>By increasing the refcount of <em class="arg">attach</em>, you are signaling that you are using it, and it is the owner's responsibility to call <a class="el" href="#a4f9e8fe048e58d1035f82ca47e51024f" title="Decrements reference count of the icalattach.">icalattach_unref()</a> after it's no longer used. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalattach_8c_source.html#l00087">87</a> of file <a class="el" href="icalattach_8c_source.html">icalattach.c</a>.</p>
 
 </div>
 </div>
@@ -399,11 +414,13 @@ Functions</h2></td></tr>
 <dl class="section user"><dt>Error handling</dt><dd>If <em class="arg">attach</em> is <span class="tt">NULL</span>, or the reference count is smaller than 0, it sets <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>.</dd></dl>
 <dl class="section user"><dt>Ownership</dt><dd>Calling this function releases the icalattach back to the library, and it must not be used afterwards.</dd></dl>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// creates new</span></div>
-<div class="line"><a class="code hl_typedef" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a> *attach = <a class="code hl_function" href="#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="stringliteral">&quot;http://example.com&quot;</span>);</div>
+<div class="line"><a class="code hl_typedef" href="#a825e4167b52ccf37277078c8dedfcfb3">icalattach</a> *attach = <a class="code hl_function" href="icalattach_8c.html#ae01e1b8479c7f4f6205d05271a4a8021">icalattach_new_from_url</a>(<span class="stringliteral">&quot;http://example.com&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// release it</span></div>
-<div class="line"><a class="code hl_function" href="#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a>(attach);</div>
+<div class="line"><a class="code hl_function" href="icalattach_8c.html#a4f9e8fe048e58d1035f82ca47e51024f">icalattach_unref</a>(attach);</div>
 </div><!-- fragment --> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="icalattach_8c_source.html#l00095">95</a> of file <a class="el" href="icalattach_8c_source.html">icalattach.c</a>.</p>
 
 </div>
 </div>

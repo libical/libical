@@ -15,7 +15,7 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css" />
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -75,15 +75,15 @@ $(function() {
   <div class="headertitle"><div class="title">Known RFC Exceptions </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md116"></a></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md61"></a></p>
 <p>List where libical doesn't fully follow or support all the features described in the RFCs.</p>
 <p>Contributions to help us fix these limitations are welcome.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md117"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md62"></a>
 RFC 5545</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md118"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md63"></a>
 Event/To-Do/Journal/Free-Busy Component section 3.6.[1-4]</h2>
 <p>libical does <em>not</em> require Event/To-Do/Journal/FreeBusy components to contain exactly one UID and DTSTAMP property - i.e., a missing UID or DTSTAMP property will be ignored and it is the calling application's job to deal with these missing properties as they see fit.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md119"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md64"></a>
 Recurrence Rule section 3.3.10</h2>
 <ul>
 <li><p class="startli">FREQ=YEARLY, BYYEARDAY can't be combined with BYWEEKNO, BYMONTH or BYMONTHDAY</p>
@@ -93,7 +93,7 @@ Recurrence Rule section 3.3.10</h2>
 <p class="startli">ref: <a href="https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2928">https://github.com/libical/libical/blob/cfd401b9d043214395888de1d9daf52263e3245b/src/libical/icalrecur.c#L2928</a></p>
 </li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md120"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md65"></a>
 DATE-TIME section 3.3.5</h2>
 <p>The RFC states for "FORM #3: DATE WITH LOCAL TIME AND TIME ZONE REFERENCE":</p>
 <blockquote class="doxtable">
