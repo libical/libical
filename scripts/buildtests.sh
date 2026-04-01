@@ -467,6 +467,7 @@ CPPCHECK() {
     -D HAVE_CONFIG_H=1 \
     -D PACKAGE_DATA_DIR="\"foo\"" \
     -D TEST_DATADIR="\"bar\"" \
+    -D G_GINT64_FORMAT=\"%ld\" \
     -i "$TOP/src/Net-ICal-Libical/" \
     -i "$TOP/src/java/" \
     -i "$TOP/src/libicalss/icalssyacc.c" \
