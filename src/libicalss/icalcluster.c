@@ -7,14 +7,8 @@
 ======================================================================*/
 
 /**
- *
- * icalcluster is an utility class design to manage clusters of
- * icalcomponents on behalf of an implementation of icalset. This is
- * done in order to split out common behavior different classes might
- * need.
- * The definition of what exactly a cluster will contain depends on the
- * icalset subclass. At the basic level, an icluster is just a tuple,
- * with anything as key and an icalcomponent as value.
+ * @file icalcluster.c
+ * @brief Implements the data structure for calendar clusters.
  */
 
 #ifdef HAVE_CONFIG_H

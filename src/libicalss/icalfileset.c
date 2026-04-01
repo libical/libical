@@ -9,6 +9,13 @@
  Code is Eric Busboom
 ======================================================================*/
 //krazy:excludeall=cpp
+
+/**
+ * @file icalfileset.c
+ * @brief Manages a database of ical components and offers interfaces for
+ * reading, writing and searching for components.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

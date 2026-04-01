@@ -9,6 +9,11 @@
  Code is Eric Busboom
 ======================================================================*/
 
+/**
+ * @file icalgauge.c
+ * @brief Routines implementing a filter for ical components
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -22,11 +27,13 @@
 #include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
 
+/// @cond PRIVATE
 extern int ssparse(void);
 extern char *input_buffer;
 extern char *input_buffer_p;
 
 struct icalgauge_impl *icalss_yy_gauge;
+/// @endcond
 
 icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
 {
@@ -100,6 +107,7 @@ void icalgauge_free(icalgauge *gauge)
     free(gauge);
 }
 
+/// @cond PRIVATE
 /*non-static,recursive*/
 int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
 {
@@ -203,6 +211,7 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
 
     return pass;
 }
+/// @endcond
 
 bool icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 {

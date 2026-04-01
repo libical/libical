@@ -6,6 +6,13 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+ * @file icalarray.c
+ *
+ * @brief An array of arbitrarily-sized elements which grows
+ * dynamically as elements are added.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -18,9 +25,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+/// @cond PRIVATE
 #ifndef ICALARRAY_DEFAULT_INCREMENT_SIZE
 #define ICALARRAY_DEFAULT_INCREMENT_SIZE 4
 #endif
+/// @endcond
 
 static void icalarray_expand(icalarray *array, size_t space_needed);
 

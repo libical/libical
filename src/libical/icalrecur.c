@@ -7,7 +7,7 @@
 ========================================================================*/
 
 /**
-  icalrecur.c
+  @file icalrecur.c
   @brief Implementation of routines for dealing with recurring time
 
   How this code works:
@@ -154,11 +154,14 @@ static ICAL_GLOBAL_VAR ical_invalid_rrule_handling invalidRruleHandling = ICAL_R
 #undef ICAL_BY_MONTH_SIZE
 #undef ICAL_BY_WEEKNO_SIZE
 #undef ICAL_BY_YEARDAY_SIZE
+/// @cond PRIVATE
 #define ICAL_BY_MONTH_SIZE 13    /* 1 to 12 */
 #define ICAL_BY_WEEKNO_SIZE 54   /* 1 to 53 */
 #define ICAL_BY_YEARDAY_SIZE 367 /* 1 to 366 */
+/// @endcond
 #endif
 
+/// @cond PRIVATE
 #if defined(HAVE_LIBICU)
 #define MAX_TIME_T_YEAR 20000
 #else
@@ -168,12 +171,13 @@ static ICAL_GLOBAL_VAR ical_invalid_rrule_handling invalidRruleHandling = ICAL_R
 #define MAX_TIME_T_YEAR 2582
 #else
 /** This is the last year we will go up to, since 32-bit icaltime_t values
-   only go up to the start of 2038. */
+    only go up to the start of 2038. */
 #define MAX_TIME_T_YEAR 2037
 #endif
 #endif
 
 #define LEAP_MONTH 0x1000
+/// @endcond
 
 /****************** Forward declarations ******************/
 static void icalrecurrencetype_clear(struct icalrecurrencetype *recur);
@@ -349,6 +353,7 @@ struct icalrecur_parser {
     struct icalrecurrencetype *rt;
 };
 
+/// @cond PRIVATE
 enum expand_table
 {
     UNKNOWN = 0,
@@ -356,6 +361,7 @@ enum expand_table
     EXPAND = 2,
     ILLEGAL = 3
 };
+/// @endcond
 
 struct expand_split_map_struct {
     icalrecurrencetype_frequency frequency;
@@ -489,7 +495,9 @@ static void sort_byrules(icalrecurrence_by_data *by)
  */
 static void sort_bysetpos(icalrecurrence_by_data *by)
 {
+/// @cond PRIVATE
 #define SIGN(A) ((A) < 0 ? -1 : 1)
+    /// @endcond
     short *array = by->data;
 
     int i, j;
@@ -716,11 +724,13 @@ struct icalrecurrencetype *icalrecurrencetype_new(void)
 
 static void icalrecurrencetype_free(struct icalrecurrencetype *recur, int free_self)
 {
+/// @cond PRIVATE
 #define SAFEFREE(p)                \
     if (p) {                       \
         icalmemory_free_buffer(p); \
         (p) = 0;                   \
     }
+    /// @endcond
 
     SAFEFREE(recur->rscale);
     for (int i = 0; i < ICAL_BY_NUM_PARTS; i++) {
@@ -1116,6 +1126,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
 
 /************************* occurrence iteration routines ******************/
 
+/// @cond PRIVATE
 /* Number of bits in an unsigned long */
 #define BITS_PER_LONG ((unsigned short)(8 * sizeof(unsigned long)))
 
@@ -1124,6 +1135,7 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
 
 #define ICAL_YEARDAYS_MASK_SIZE (ICAL_BY_YEARDAY_SIZE + 7)
 #define ICAL_YEARDAYS_MASK_OFFSET 4
+/// @endcond
 
 typedef struct icalrecurrence_iterator_by_data {
     icalrecurrence_by_data by;
@@ -1981,7 +1993,9 @@ static int set_month(icalrecur_iterator *impl, int month)
     return (impl->last.month = month);
 }
 
+/// @cond PRIVATE
 #define get_months_in_year(impl, year) (12)
+/// @endcond
 
 static int get_days_in_year(icalrecur_iterator *impl, int year)
 {
@@ -2282,7 +2296,9 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype *rule,
         return 0;
     }
 
+/// @cond PRIVATE
 #define IN_RANGE(val, min, max) ((val) >= (min) && (val) <= (max))
+    /// @endcond
     /* Make sure that DTSTART is a sane value */
     if (!icaltime_is_valid_time(dtstart) ||
         !IN_RANGE(dtstart.year, 0, MAX_TIME_T_YEAR) ||
@@ -2389,22 +2405,22 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype *rule,
     return impl;
 }
 
-void icalrecur_iterator_free(icalrecur_iterator *i)
+void icalrecur_iterator_free(icalrecur_iterator *impl)
 {
-    icalerror_check_arg_rv((i != 0), "impl");
+    icalerror_check_arg_rv((impl != 0), "impl");
 
 #if defined(HAVE_LIBICU)
-    if (i->greg) {
-        if (i->rscale && (i->rscale != i->greg)) {
-            ucal_close(i->rscale);
+    if (impl->greg) {
+        if (impl->rscale && (impl->rscale != impl->greg)) {
+            ucal_close(impl->rscale);
         }
 
-        ucal_close(i->greg);
+        ucal_close(impl->greg);
     }
 #endif
 
-    icalrecurrencetype_unref(i->rule);
-    icalmemory_free_buffer(i);
+    icalrecurrencetype_unref(impl->rule);
+    icalmemory_free_buffer(impl);
 }
 
 /** Calculate the number of days between 2 dates */
@@ -3464,6 +3480,7 @@ static bool check_contracting_rules(icalrecur_iterator *impl)
 {
     struct icaltimetype last = occurrence_as_icaltime(impl, 0);
 
+/// @cond PRIVATE
 // Check `has_contract_restriction` before calling `check_contract_restriction` to avoid
 // evaluating potentially expensive `v` if not needed.
 #define CHECK_CONTRACT_RESTRICTION(by, v, get_total) \
@@ -3484,6 +3501,7 @@ static bool check_contracting_rules(icalrecur_iterator *impl)
     }
 
 #undef CHECK_CONTRACT_RESTRICTION
+    /// @endcond
 
     return false;
 }

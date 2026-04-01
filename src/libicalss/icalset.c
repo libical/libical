@@ -17,6 +17,11 @@
  Code is Eric Busboom
 ======================================================================*/
 
+/**
+ * @file icalset.c
+ * @brief Icalset is the "base class" for representations of a collection of iCal components.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

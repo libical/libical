@@ -10,6 +10,12 @@
  Contributions from:
     Graham Davison <g.m.davison@computer.org>
 ======================================================================*/
+
+/**
+ * @file icalparameter.c
+ * @brief Implements the data structure representing iCalendar parameters.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -22,6 +28,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
+/// @cond PRIVATE
 LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparameter_kind kind)
 {
     struct icalparameter_impl *v;
@@ -40,6 +47,7 @@ LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparame
 
     return v;
 }
+/// @endcond
 
 icalparameter *icalparameter_new(icalparameter_kind kind)
 {
@@ -407,7 +415,6 @@ bool icalparameter_is_multivalued(const icalparameter *param)
     return param->is_multivalued;
 }
 
-/** Decode parameter value per RFC6868 */
 void icalparameter_decode_value(char *value)
 {
     char *in, *out;

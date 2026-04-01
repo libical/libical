@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: icalvalue.c
+ FILE: icalderivedvalue.c
  CREATOR: eric 02 May 1999
 
  SPDX-FileCopyrightText: 1999, Eric Busboom <eric@civicknowledge.com>
@@ -8,6 +8,11 @@
  Contributions from:
    Graham Davison (g.m.davison@computer.org)
 ======================================================================*/
+
+/**
+ * @file icalderivedvalue.c
+ * @brief ICalendar values.
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardproperty.h
+ * @brief Defines the data structure representing vCard properties.
+ */
+
 #ifndef VCARDPROPERTY_H
 #define VCARDPROPERTY_H
 
@@ -13,8 +18,6 @@
 #include "vcardderivedproperty.h" /* To get vcardproperty_kind enumerations */
 
 #include <stdarg.h> /* for va_... */
-
-/** @file vcardproperty.h */
 
 LIBICAL_VCARD_EXPORT vcardproperty *vcardproperty_new(vcardproperty_kind kind);
 

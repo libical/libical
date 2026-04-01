@@ -6,6 +6,19 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+ * @file icalcluster.h
+ * @brief Defines the data structure for calendar clusters.
+ *
+ * This is a utility class designed to manage clusters of icalcomponents
+ * on behalf of an implementation of icalset. This is done in order to
+ * split out common behavior different classes might need.
+ *
+ * The definition of what exactly a cluster will contain depends on the
+ * icalset subclass. At the basic level, an icluster is just a tuple,
+ * with anything as key and an icalcomponent as value.
+ */
+
 #ifndef ICALCLUSTER_H
 #define ICALCLUSTER_H
 

@@ -9,13 +9,13 @@
  Code is Eric Busboom
 ======================================================================*/
 
-#ifndef ICALDURATION_H
-#define ICALDURATION_H
-
 /**
  * @file icalduration.h
- * @brief Methods for working with durations in iCal
+ * @brief Defines the data structure for time durations
  */
+
+#ifndef ICALDURATION_H
+#define ICALDURATION_H
 
 #include "libical_ical_export.h"
 #include "icaltime.h"
@@ -23,22 +23,22 @@
 #include <stdbool.h>
 
 /**
- * @brief A struct representing a duration
+ * A struct representing a duration.
  *
  * Days and weeks are nominal; hours, minutes and seconds are exact
  */
 struct icaldurationtype {
-    int is_neg;
-    unsigned int days;
-    unsigned int weeks;
-    unsigned int hours;
-    unsigned int minutes;
-    unsigned int seconds;
+    int is_neg;           /**< flag to denote a negative duration */
+    unsigned int days;    /**< number of duration days (nominal) */
+    unsigned int weeks;   /**< number of duration weeks (nominal) */
+    unsigned int hours;   /**< number of duration hours (exact) */
+    unsigned int minutes; /**< number duration minutes (exact) */
+    unsigned int seconds; /**< number of duration seconds (exact) */
 };
 
-#define ICALDURATIONTYPE_INITIALIZER \
-    {                                \
-        0, 0, 0, 0, 0, 0}
+/// @cond PRIVATE
+#define ICALDURATIONTYPE_INITIALIZER {0, 0, 0, 0, 0, 0}
+/// @endcond
 
 /**
  * @brief Creates a new ::icaldurationtype from a duration in seconds.
@@ -87,6 +87,10 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
 
 /**
  * @brief Extracts the duration in integer seconds from an ::icaldurationtype.
+ *
+ * Does not consider negative durations.
+ * Does not support days and weeks.
+ *
  * @param duration A valid duration type.
  * @return An `int` representing the number of seconds in the duration.
  *
@@ -296,14 +300,16 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icalduration_from_times(struct icalt
 /**
  * @brief Create a normalized duration from another duration.
  *
- * @param dur The duration of which to create a normalized copy from.
+ * Extracts the duration in seconds from an icalduration a continuous timeline with 24-hour days.
+ * Supports days, weeks, and negative durations.
+ *
+ * @param dur The duration  from which to create a normalized duration.
  * @return An ::icaldurationtype representing the normalized duration.
  *
  * A duration is normalized such that:
  * - Minutes and seconds are in the inclusive range [0;59], but hours may exceed 23 hours.
  * - Only weeks or days are set, and weeks only are set if no hours, minutes
  *   and seconds are set.
- *
  */
 LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_normalize(struct icaldurationtype dur);
 

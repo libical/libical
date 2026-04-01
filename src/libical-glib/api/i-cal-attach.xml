@@ -50,7 +50,7 @@ static void unref_g_bytes(char *data, void *user_data) // NOLINT(readability-non
   </method>
   <method name="i_cal_attach_get_is_url" corresponds="icalattach_get_is_url" kind="others" since="1.0">
     <parameter type="ICalAttach *" name="attach" comment="The #ICalAttach to be queried"/>
-    <returns type="gboolean" comment="Whether the @attach is built from url"/>
+    <returns type="gboolean" comment="true if the attachment is a url; false otherwise"/>
     <comment xml:space="preserve">Checks whether the #ICalAttach is built from url.</comment>
   </method>
   <method name="i_cal_attach_get_url" corresponds="icalattach_get_url" kind="others" since="1.0">

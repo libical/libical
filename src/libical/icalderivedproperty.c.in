@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file icalderivedproperty.c
+ * @brief ICalendar properties.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -412,12 +417,12 @@ icalproperty_transp icalproperty_string_to_transp(const char *str)
     return ICAL_TRANSP_NONE;
 }
 
-const char *icalproperty_class_to_string(icalproperty_class class)
+const char *icalproperty_class_to_string(icalproperty_class propclass)
 {
-    icalerror_check_arg_rz(class >= ICAL_CLASS_X, "class");
-    icalerror_check_arg_rz(class <= ICAL_CLASS_NONE, "class");
+    icalerror_check_arg_rz(propclass >= ICAL_CLASS_X, "class");
+    icalerror_check_arg_rz(propclass <= ICAL_CLASS_NONE, "class");
 
-    return enum_map[class - ICALPROPERTY_FIRST_ENUM].str;
+    return enum_map[propclass - ICALPROPERTY_FIRST_ENUM].str;
 }
 
 icalproperty_class icalproperty_string_to_class(const char *str)

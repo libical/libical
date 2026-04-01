@@ -9,6 +9,11 @@
      Graham Davison <g.m.davison@computer.org>
 ======================================================================*/
 
+/**
+ * @file icalvalue.c
+ * @brief Implements the data structure representing iCalendar parameter values.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -24,6 +29,7 @@
 #include <locale.h>
 #include <stdlib.h>
 
+/// @cond PRIVATE
 #define TMP_BUF_SIZE 1024
 
 LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kind)
@@ -49,6 +55,7 @@ LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kin
 
     return v;
 }
+/// @endcond
 
 icalvalue *icalvalue_new(icalvalue_kind kind)
 {
@@ -893,7 +900,9 @@ static char *icalvalue_boolean_as_ical_string_r(const icalvalue *value)
     return str;
 }
 
+/// @cond PRIVATE
 #define MAX_INT_DIGITS 12 /* Enough for 2^32 + sign */
+/// @endcond
 
 static char *icalvalue_int_as_ical_string_r(const icalvalue *value)
 {
@@ -1037,6 +1046,7 @@ static void print_time_to_string(char *str, const struct icaltimetype *data)
 #endif
 }
 
+/// @cond PRIVATE
 void print_date_to_string(char *str, const struct icaltimetype *data)
 {
 #if defined(__GNUC__) && !defined(__clang__)
@@ -1055,6 +1065,7 @@ void print_date_to_string(char *str, const struct icaltimetype *data)
 #pragma GCC diagnostic pop
 #endif
 }
+/// @endcond
 
 static char *icalvalue_date_as_ical_string_r(const icalvalue *value)
 {
@@ -1072,6 +1083,7 @@ static char *icalvalue_date_as_ical_string_r(const icalvalue *value)
     return str;
 }
 
+/// @cond PRIVATE
 void print_datetime_to_string(char *str, const struct icaltimetype *data)
 {
 #if defined(__GNUC__) && !defined(__clang__)
@@ -1094,6 +1106,7 @@ void print_datetime_to_string(char *str, const struct icaltimetype *data)
 #pragma GCC diagnostic pop
 #endif
 }
+/// @endcond
 
 static char *icalvalue_datetime_as_ical_string_r(const icalvalue *value)
 {
@@ -1512,10 +1525,6 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
     }
 }
 
-/** Examine the value and possibly change the kind to agree with the
- *  value
- */
-
 void icalvalue_reset_kind(icalvalue *value)
 {
     if (value &&
@@ -1541,7 +1550,7 @@ icalproperty *icalvalue_get_parent(const icalvalue *value)
     return value->parent;
 }
 
-bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBufferLen)
+bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int maxBufferLen)
 {
     char *ptr;
     icalvalue *value = 0;
@@ -1561,7 +1570,7 @@ bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxB
         return false;
     }
 
-    if ((int)strlen(ptr) >= nMaxBufferLen) {
+    if ((int)strlen(ptr) >= maxBufferLen) {
         icalvalue_free(value);
         icalmemory_free_buffer(ptr);
         return false;
@@ -1575,13 +1584,13 @@ bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxB
     return true;
 }
 
-bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen)
+bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int maxBufferLen)
 {
     char *str, *str_p;
     const char *p;
     size_t buf_sz;
 
-    if ((szText == 0) || (szDecText == 0) || (nMaxBufferLen <= 0)) {
+    if ((szText == 0) || (szDecText == 0) || (maxBufferLen <= 0)) {
         return false;
     }
 
@@ -1600,14 +1609,14 @@ bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxB
             icalmemory_append_char(&str, &str_p, &buf_sz, *p);
         }
 
-        if (str_p - str > nMaxBufferLen) {
+        if (str_p - str > maxBufferLen) {
             break;
         }
     }
 
     icalmemory_append_char(&str, &str_p, &buf_sz, '\0');
 
-    if ((int)strlen(str) >= nMaxBufferLen) {
+    if ((int)strlen(str) >= maxBufferLen) {
         icalmemory_free_buffer(str);
         return false;
     }

@@ -1,5 +1,5 @@
 /*======================================================================
- FILE: icalderivedparameters.{c,h}
+ FILE: icalderivedparameter.c
  CREATOR: eric 09 May 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
@@ -8,6 +8,12 @@
  Contributions from:
     Graham Davison (g.m.davison@computer.org)
 ======================================================================*/
+
+/**
+ * @file icalderivedparameter.c
+ * @brief ICalendar parameters.
+ */
+
 /*#line 29 "icalparameter.c.in"*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>

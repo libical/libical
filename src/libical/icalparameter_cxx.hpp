@@ -1,10 +1,12 @@
+/*
+ * SPDX-FileCopyrightText: 2001, Critical Path
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+ */
+
 /**
  * @file    icalparameter_cxx.hpp
  * @author  fnguyen (12/10/01)
  * @brief   Definition of C++ Wrapper for icalparameter.c
- *
- * SPDX-FileCopyrightText: 2001, Critical Path
- * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifndef ICALPARAMETER_CXX_H
@@ -23,12 +25,31 @@ extern "C" {
 namespace LibICal
 {
 
+/**
+ * Class representing an icalparameter
+ */
 class LIBICAL_ICAL_EXPORT ICalParameter
 {
 public:
+    /**
+     * Construct an invalid ICalParameter.
+     */
     ICalParameter();
+
+    /**
+     * Construct from another ICalParameter.
+     */
     ICalParameter(const ICalParameter &);
+
+    /**
+     * Assignment operator.
+     * @return a new ICalParameter cloned from the specified ICalParameter
+     */
     ICalParameter &operator=(const ICalParameter &);
+
+    /**
+     * Destructor.
+     */
     ~ICalParameter();
 
     explicit ICalParameter(icalparameter *v);

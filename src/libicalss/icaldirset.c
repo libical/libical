@@ -10,6 +10,12 @@
  Code is Eric Busboom
  ======================================================================*/
 
+/**
+ * @file icaldirset.c
+ * @brief Manages a database of ical components and offers interfaces for
+ * reading, writing and searching for components.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -361,13 +367,6 @@ icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
 
     return ICAL_NO_ERROR;
 }
-
-/**
-   Remove a component in the current cluster. HACK. This routine is a
-   "friend" of icalfileset, and breaks its encapsulation. It was
-   either do it this way, or add several layers of interfaces that had
-   no other use.
- */
 
 icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
 {

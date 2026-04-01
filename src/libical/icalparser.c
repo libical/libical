@@ -8,6 +8,11 @@
  The Initial Developer of the Original Code is Eric Busboom
  ======================================================================*/
 
+/**
+ * @file  icalparser.c
+ * @brief Line-oriented parsing.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -27,7 +32,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+/// @cond PRIVATE
 #define TMP_BUF_SIZE 80
+/// @endcond
 
 static enum icalparser_ctrl icalparser_ctrl_g = ICALPARSER_CTRL_KEEP;
 

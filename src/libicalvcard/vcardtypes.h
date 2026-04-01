@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardtypes.h
+ * @brief Defines vcard internal types.
+ */
+
 #ifndef VCARDTYPES_H
 #define VCARDTYPES_H
 

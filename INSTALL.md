@@ -157,7 +157,7 @@ For more information about building CMake projects on Android see
   - Ubuntu: apt-get install gobject-introspection
   - Fedora: dnf install gobject-introspection
   - Mac: brew install gobject-introspection pygobject3
-  - Windows: vcpkg install gobject-introspection (see [using vcpkg](#Using vcpkg to install dependencies).
+  - Windows: vcpkg install gobject-introspection (see [using vcpkg](#vcpkg)).
 
 You can also force CMake to ignore any of the optional dependencies
 by passing the option -DCMAKE_DISABLE_FIND_PACKAGE_<PACKAGE>=True.
@@ -223,7 +223,9 @@ Run `make docs` to build the API documentation and reference.
 Disable the docs make target by running cmake with -DLIBICAL_BUILD_DOCS=False option.
 Disable the libical-glib developer documentation by running cmake with -DLIBICAL_GLIB_BUILD_DOCS=False.
 
+<a name="vcpkg">
 ## Using vcpkg to install dependencies
+</a>
 
 If you want to use vcpkg (%VCPKG_ROOT% on Windows or $VCPKG_ROOT on non-Windows) to build
 the dependencies as part of the project you can also tell CMake the vcpkg toolchain file

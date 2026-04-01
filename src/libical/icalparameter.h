@@ -8,9 +8,7 @@
 
 /**
  * @file icalparameter.h
- *
- * Functions to work with ical parameter objects, which represent
- * parameters to property objects.
+ * @brief Defines the data structure representing iCalendar parameters.
  */
 
 #ifndef ICALPARAMETER_H
@@ -619,18 +617,37 @@ LIBICAL_ICAL_EXPORT icalparameter_kind icalparameter_string_to_kind(const char *
 LIBICAL_ICAL_EXPORT bool icalparameter_kind_is_valid(const icalparameter_kind kind);
 
 /**
+ * Gets the icalvalue_kind of a icalparameter_kind.
+ *
+ * @param kind the parameter_kind
+ * @param is_multivalued an address pointing to integer that will contain a value
+ *        of one if the @p kind is a multi-value; a value of zero otherwise.
+ *
+ * @return the icalvalue_kind of the specified icalparameter_kind. Additionally,
+ * @p is_mulitivalued will indicate if the value_kind is multi-valued.
+ *
  * @since 4.0
  */
 LIBICAL_ICAL_EXPORT icalvalue_kind icalparameter_kind_value_kind(const icalparameter_kind kind, int *is_multivalued);
 
 /**
- * Return true if the specified parameter is multivalued.
+ * Return if the specified parameter is multivalued.
+ *
+ * @param param is a pointer to the icalparameter.
+ *
+ * @return true if the specified parameter is multivalued; false otherwise.
  *
  * @since 4.0
  */
 LIBICAL_ICAL_EXPORT bool icalparameter_is_multivalued(const icalparameter *param);
 
-/** Decode parameter value per RFC6868
+/**
+ * Decode the specified char string as a parameter value per RFC6868.
+ *
+ * @param value is a pointer to the char string to decode.
+ *
+ * @p value will contain the decoded value on return.
+ * No error checking is performed.
  *
  * @since 4.0
  */

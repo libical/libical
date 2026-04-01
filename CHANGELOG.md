@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 This is a major release and is **not** source or binary compatible with version 3.x.
 
-Please see [Version 4 Migration Guide](docs/MigrationGuide_to_4.md)
+Please see [Version 4 Migration Guide](MigrationGuide_to_4.md)
 for details about API changes since libical 3.x.
 
 ### Added
@@ -63,7 +63,7 @@ for details about API changes since libical 3.x.
 - Several CMake options are renamed in favor of a "namespaced" equivalent.
   Please port your buildscripts to the new CMake option names.
   A complete list is provided in this "CMake options" section of the
-  [Version 4 Migration Guide](docs/MigrationGuide_to_4.md)
+  [Version 4 Migration Guide](MigrationGuide_to_4.md)
 
 ### Removed
 

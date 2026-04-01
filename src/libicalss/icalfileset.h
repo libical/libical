@@ -9,6 +9,12 @@
  Code is Eric Busboom
 ======================================================================*/
 
+/**
+ * @file icalfileset.h
+ * @brief Manages a database of ical components and offers interfaces for
+ * reading, writing and searching for components.
+ */
+
 #ifndef ICALFILESET_H
 #define ICALFILESET_H
 

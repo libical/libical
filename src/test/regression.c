@@ -1869,7 +1869,7 @@ void test_requeststat(void)
 
     static const char test_icalcomp_str[] =
         "BEGIN:VEVENT\n"
-        "REQUEST-STATUS:2.1;Success but fallback taken  on one or more property  values.;booga\n"
+        "REQUEST-STATUS:2.1;Success but fallback taken on one or more property values.;booga\n"
         "END:VEVENT\n";
 
     s = icalenum_num_to_reqstat(2, 1);
@@ -1880,7 +1880,7 @@ void test_requeststat(void)
     ok("icalenum_reqstat_minor()", (icalenum_reqstat_minor(s) == 1));
 
     str_is("icalenum_reqstat_desc() -> 2.1", icalenum_reqstat_desc(s),
-           "Success but fallback taken  on one or more property  values.");
+           "Success but fallback taken on one or more property values.");
 
     st.code = s;
     st.debug = "booga";
@@ -1888,7 +1888,7 @@ void test_requeststat(void)
 
     str_is("icalreqstattype_as_string()",
            icalreqstattype_as_string(st),
-           "2.1;Success but fallback taken  on one or more property  values.;booga");
+           "2.1;Success but fallback taken on one or more property values.;booga");
 
     st.desc = " A non-standard description";
 
@@ -1900,29 +1900,29 @@ void test_requeststat(void)
     snprintf(temp, sizeof(temp), "%s\n", icalreqstattype_as_string(st));
 
     st2 = icalreqstattype_from_string(
-        "2.1;Success but fallback taken  on one or more property  values.;booga");
+        "2.1;Success but fallback taken on one or more property values.;booga");
 
     /*    printf("%d --  %d --  %s -- %s\n", */
     ok("icalenum_reqstat_major()", (icalenum_reqstat_major(st2.code) == 2));
     ok("icalenum_reqstat_minor()", (icalenum_reqstat_minor(st2.code) == 1));
     str_is("icalenum_reqstat_desc",
            icalenum_reqstat_desc(st2.code),
-           "Success but fallback taken  on one or more property  values.");
+           "Success but fallback taken on one or more property values.");
 
     st2 = icalreqstattype_from_string(
-        "2.1;Success but fallback taken  on one or more property  values.;booga");
+        "2.1;Success but fallback taken on one or more property values.;booga");
     if (VERBOSE) {
         printf("%s\n", icalreqstattype_as_string(st2));
     }
 
     st2 = icalreqstattype_from_string(
-        "2.1;Success but fallback taken  on one or more property  values.;");
+        "2.1;Success but fallback taken on one or more property values.;");
     if (VERBOSE) {
         printf("%s\n", icalreqstattype_as_string(st2));
     }
 
     st2 = icalreqstattype_from_string(
-        "2.1;Success but fallback taken  on one or more property  values.");
+        "2.1;Success but fallback taken on one or more property values.");
     if (VERBOSE) {
         printf("%s\n", icalreqstattype_as_string(st2));
     }
@@ -1934,12 +1934,12 @@ void test_requeststat(void)
 
     str_is("st2 test again",
            icalreqstattype_as_string(st2),
-           "2.1;Success but fallback taken  on one or more property  values.");
+           "2.1;Success but fallback taken on one or more property values.");
 
     st2 = icalreqstattype_from_string("2.1");
     str_is("st2 test #3",
            icalreqstattype_as_string(st2),
-           "2.1;Success but fallback taken  on one or more property  values.");
+           "2.1;Success but fallback taken on one or more property values.");
 
     c = icalparser_parse_string((char *)test_icalcomp_str);
     ok("icalparser_parse_string()", (c != NULL));
@@ -1954,7 +1954,7 @@ void test_requeststat(void)
 
     str_is("icalproperty_new_from_string()",
            icalproperty_as_ical_string(p),
-           "REQUEST-STATUS:2.1;Success but fallback taken  on one or more property  \r\n values.;booga\r\n");
+           "REQUEST-STATUS:2.1;Success but fallback taken on one or more property \r\n values.;booga\r\n");
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
     st2 = icalreqstattype_from_string("16.4");
 

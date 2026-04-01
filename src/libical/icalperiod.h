@@ -9,13 +9,13 @@
  Code is Eric Busboom
 ======================================================================*/
 
-#ifndef ICALPERIOD_H
-#define ICALPERIOD_H
-
 /**
  * @file icalperiod.h
- * @brief Functions for working with iCal periods (of time).
+ * @brief Defines data structures for working with iCal periods (of time).
  */
+
+#ifndef ICALPERIOD_H
+#define ICALPERIOD_H
 
 #include "libical_ical_export.h"
 #include "icalduration.h"
@@ -24,19 +24,25 @@
 #include <stdbool.h>
 
 /**
- * @brief Struct to represent a period in time.
+ * Structure to represent a period in time.
  */
 struct icalperiodtype {
+    /** the start of the time period */
     struct icaltimetype start;
+    /** the end of the time period.
+        may be computed from duration if unspecified or invalid */
     struct icaltimetype end;
+    /** the time period duration */
     struct icaldurationtype duration;
 };
 
+/// @cond PRIVATE
 #define ICALPERIODTYPE_INITIALIZER \
     {                              \
         ICALTIMETYPE_INITIALIZER,  \
         ICALTIMETYPE_INITIALIZER,  \
         ICALDURATIONTYPE_INITIALIZER}
+/// @endcond
 
 /**
  * @brief Constructs a new ::icalperiodtype from @a str

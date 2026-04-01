@@ -1,6 +1,11 @@
-/**
+/*
  *  SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
  *  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+ */
+
+/**
+ * @file icallimits.h
+ * @brief Defines the interface for getting/setting internal library limits.
  */
 
 #ifndef LIBICAL_LIMITS_H

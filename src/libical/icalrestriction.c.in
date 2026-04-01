@@ -4,6 +4,13 @@
  SPDX-FileCopyrightText: 2000, Eric Busboom  <eric@civicknowledge.com>
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
+
+/**
+ * @file icalrestriction.c
+ * @brief Functions to check if an icalcomponent meets the restrictions
+ * imposed by the standard.
+ */
+
 /*#line 7 "icalrestriction.c.in"*/
 
 #ifdef HAVE_CONFIG_H

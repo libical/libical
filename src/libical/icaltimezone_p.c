@@ -49,7 +49,6 @@
         }                                                                \
     }
 
-//@cond PRIVATE
 typedef struct
 {
     char magic[4];
@@ -79,7 +78,6 @@ typedef struct
     icaltime_t transition;
     long int change;
 } leap;
-//@endcond
 
 static int decode(const void *ptr)
 {

@@ -1,10 +1,12 @@
+/*
+ * SPDX-FileCopyrightText: 2001, Critical Path
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+ */
+
 /**
  * @file    icalproperty_cxx.hpp
  * @author  fnguyen (12/10/01)
  * @brief   Definition of C++ Wrapper for icalproperty.c
- *
- * SPDX-FileCopyrightText: 2001, Critical Path
- * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifndef ICALPROPERTY_CXX_H
@@ -67,9 +69,11 @@ public:
     ICalValue *get_value();
     std::string get_value_as_string();
 
-    /** Returns the name of the property -- the type name converted
-     *  to a string, or the value of get_x_name if the type is X
-     *  property
+    /**
+     * Gets the name of the property -- the type name converted to a string,
+     * or the value of get_x_name if the type is X property.
+     *
+     * @return the property name string.
      */
     std::string get_name() const;
 

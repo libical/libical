@@ -1,7 +1,12 @@
-/**
+/*
   SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 */
+
+/**
+ * @file libical_sentinel.h
+ * Defines the LIBICAL_SENTINEL macro.
+ */
 
 #ifndef LIBICAL_SENTINEL_H
 #define LIBICAL_SENTINEL_H
