@@ -63,6 +63,7 @@ if(DOXYGEN_FOUND)
     ${PROJECT_BINARY_DIR}/src/libical/*_p.h
     ${PROJECT_BINARY_DIR}/src/libical/icalderived*.c
     ${PROJECT_BINARY_DIR}/src/libical/icalderived*.h
+    ${PROJECT_BINARY_DIR}/src/libical/icalrestriction.c
     ${PROJECT_SOURCE_DIR}/src/libicalss/icalssyacc.*
     ${PROJECT_SOURCE_DIR}/src/libicalss/*impl.h
     ${PROJECT_SOURCE_DIR}/src/libicalss/*_export.h
@@ -74,6 +75,7 @@ if(DOXYGEN_FOUND)
     ${PROJECT_SOURCE_DIR}/src/libicalvcard/*_p.h
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderived*.c
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderived*.h
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardrestriction.c
   )
   list(REMOVE_ITEM _all_hdrs ${_no_hdrs})
   _join_list(DOXYGEN_INPUT " " ${_all_hdrs})
