@@ -23,24 +23,34 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <stdbool.h>
 
 /* To mute a ThreadSanitizer claim */
 #if (ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD) && defined(THREAD_SANITIZER)
+#include "icalerror.h"
 #include <pthread.h>
 static pthread_mutex_t icalpvl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-static void icalpvl_global_lock(void)
+static bool icalpvl_global_lock(void)
 {
-    pthread_mutex_lock(&icalpvl_mutex);
+    if (pthread_mutex_lock(&icalpvl_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return false;
+    }
+    return true;
 }
 
-static void icalpvl_global_unlock(void)
+static bool icalpvl_global_unlock(void)
 {
-    pthread_mutex_unlock(&icalpvl_mutex);
+    if (pthread_mutex_unlock(&icalpvl_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return false;
+    }
+    return true;
 }
 #else
-#define icalpvl_global_lock()
-#define icalpvl_global_unlock()
+#define icalpvl_global_lock() true
+#define icalpvl_global_unlock() true
 #endif
 
 /**
@@ -95,9 +105,13 @@ icalpvl_list icalpvl_newlist(void)
         return 0;
     }
 
-    icalpvl_global_lock();
+    if (!icalpvl_global_lock()) {
+        return 0;
+    }
     L->MAGIC = icalpvl_list_count++;
-    icalpvl_global_unlock();
+    if (!icalpvl_global_unlock()) {
+        return 0;
+    }
     L->head = 0;
     L->tail = 0;
     L->count = 0;
@@ -139,9 +153,13 @@ icalpvl_elem icalpvl_new_element(void *d, icalpvl_elem next, icalpvl_elem prior)
         return 0;
     }
 
-    icalpvl_global_lock();
+    if (!icalpvl_global_lock()) {
+        return 0;
+    }
     E->MAGIC = icalpvl_elem_count++;
-    icalpvl_global_unlock();
+    if (!icalpvl_global_unlock()) {
+        return 0;
+    }
     E->d = d;
     E->next = next;
     E->prior = prior;
