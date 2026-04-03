@@ -1,0 +1,59 @@
+{
+    "version": 2,
+    "configurePresets": [
+        {
+            "name": "base",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-${presetName}",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            },
+            "warnings": {
+                "uninitialized": true
+            },
+            "errors": {
+                "dev": true
+            }
+        },
+        {
+            "name": "dev",
+            "description": "Development preset",
+            "inherits": [
+                "base"
+            ],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "LIBICAL_DEVMODE": "ON"
+            }
+        },
+        {
+            "name": "cppcheck",
+            "inherits": "dev"
+        },
+        {
+            "name": "clang-tidy",
+            "inherits": "dev",
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
+            }
+        },
+        {
+            "name": "release",
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "cppcheck",
+            "configurePreset": "cppcheck"
+        },
+        {
+            "name": "clang-tidy",
+            "configurePreset": "clang-tidy"
+        }
+    ]
+}
