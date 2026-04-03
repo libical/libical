@@ -28,7 +28,7 @@ STABLE_VERS=$STABLE_VERS_MAJ.0.0
 STABLE_TAG="v$STABLE_VERS"
 #ensure there is a tag for the reference version
 cd "$TOP"
-if (test -z $(git tag -l | grep "$STABLE_TAG")); then
+if (test -z "$(git tag -l | grep "$STABLE_TAG")"); then
   echo "Sorry, there is no tag $STABLE_TAG yet for the reference version"
   exit 1
 fi
@@ -66,9 +66,7 @@ if (test -z "$VERS"); then
   rm -rf $builddir
   exit 1
 fi
-VERS_MAJ=$(echo "$VERS" | cut -d. -f1)
-VERS_MIN=$(echo "$VERS" | cut -d. -f2)
-VERS_PATCH=$(echo "$VERS" | cut -d. -f3)
+VERS_MAJ="$(echo "$VERS" | cut -d. -f1)"
 if (test "$VERS_MAJ" != "$STABLE_VERS_MAJ"); then
   echo "Sorry, this script currently supports version $STABLE_VERS_MAJ only. The computed current version is $VERS."
   rm -rf $builddir
@@ -105,9 +103,9 @@ for l in $libs; do
 done
 rm -rf $builddir
 
-cd $STORE_PATH
+cd "$STORE_PATH"
 for l in $libs; do
-  abi-compliance-checker -l $l \
-    -old $STABLE_VERS/$l-$STABLE_VERS.dump \
-    -new $VERS/$l-$VERS.dump
+  abi-compliance-checker -l "$l" \
+    -old "$STABLE_VERS/$l-$STABLE_VERS.dump" \
+    -new "$VERS/$l-$VERS.dump"
 done
