@@ -54,6 +54,8 @@ for details about API changes since libical 3.x.
   are parsed as X kind.
 - The `icalproperty_remove_parameter_by_(kind|name)` functions now remove all matching parameters.
   Before, they only removed the first matching parameter contrary to their documentation.
+- `icalrecurrencetype_new_from_string()` is more strict against overflows and empty rule parts.
+  E.g. it now rejects RRULE parts like `BYDAY=255SU` (which used to be interpreted as `BYDAY=-1SU`).
 
 ### Deprecated
 
