@@ -651,8 +651,7 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
 
     while (n != 0) {
         int sign = 1;
-        signed char weekno; /* note: Novell/Groupwise sends BYDAY=255SU,
-                                so we fit in a signed char to get -1 SU for last Sun */
+        signed char weekno;
         icalrecurrencetype_weekday wd;
 
         if (idx >= by->size) {
@@ -670,7 +669,15 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
         }
 
         /* Get Optional weekno */
-        weekno = (signed char)strtol(t, &t, 10);
+        long tmpl = strtol(t, &t, 10);
+        weekno = (signed char)tmpl;
+
+        // overflow?
+        /* cppcheck-suppress knownConditionTrueFalse */
+        if (weekno != tmpl) {
+            icalmemory_free_buffer(vals_copy);
+            return -1;
+        }
         if (weekno < 0) {
             weekno = -weekno;
             sign = -1;
