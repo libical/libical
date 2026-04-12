@@ -183,7 +183,7 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
 
     rrule = icalrecurrencetype_new_from_string(r->rrule);
     if (!rrule) {
-        return test_error;
+        return -1;
     }
     if (has_skip) {
         *has_skip = (rrule->skip == ICAL_SKIP_FORWARD) || (rrule->skip == ICAL_SKIP_BACKWARD);
