@@ -625,7 +625,7 @@ replace_variables_in_string(const char *str,
                     end[1] = last;
                     g_string_erase(tmp, ii, end - tmp->str - ii + 1);
                     g_string_insert(tmp, ii, value);
-                    ii += strlen(value) - 1;
+                    ii += (guint)strlen(value) - 1;
                 } else {
                     g_warning("Cannot find variable '%s'", tmp->str + ii);
                     end[1] = last;
