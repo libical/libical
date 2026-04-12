@@ -39,6 +39,19 @@
             }
         },
         {
+            "name": "dev-windows",
+            "description": "Development on Windows/MSVC toolchain",
+            "inherits": "dev",
+            "cacheVariables": {
+                "LIBICAL_GLIB_BUILD_DOCS": "False",
+                "LIBICAL_GLIB": "False",
+                "LIBICAL_GOBJECT_INTROSPECTION": "False",
+                "LIBICAL_GLIB_VAPI": "False",
+                "LIBICAL_JAVA_BINDINGS": "False",
+                "LIBICAL_STATIC": "True"
+            }
+        },
+        {
             "name": "release",
             "inherits": "base",
             "cacheVariables": {
