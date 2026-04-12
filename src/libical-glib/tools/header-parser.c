@@ -89,7 +89,7 @@ parse_header_file(GHashTable *symbols, /* caller allocates, char * ~> itself */
 {
     gchar *content = NULL, *start, *ptr;
     gboolean is_new_line = TRUE, read_func_name = FALSE;
-    guint export_token_len = export_token ? strlen(export_token) : 0;
+    guint export_token_len = export_token ? (guint)strlen(export_token) : 0;
 
     if (!g_file_get_contents(filename, &content, NULL, error)) {
         return FALSE;

@@ -1986,10 +1986,10 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
             write_str(out, ",");
         }
         if (g_str_has_prefix(use_name, ENUM_HEADER_ICAL)) {
-            prefix_len = strlen(ENUM_HEADER_ICAL);
+            prefix_len = (int)strlen(ENUM_HEADER_ICAL);
             use_prefix = "I_CAL_";
         } else if (g_str_has_prefix(use_name, ENUM_HEADER_VCARD)) {
-            prefix_len = strlen(ENUM_HEADER_VCARD);
+            prefix_len = (int)strlen(ENUM_HEADER_VCARD);
             use_prefix = "I_CAL_VCARD_";
         } else {
             g_warning("The enum name '%s' in '%s' cannot be processed, it has no known prefix", use_name, enumeration->name);
@@ -2310,7 +2310,7 @@ parse_api_files(const gchar *apis_dir,
         guint len;
 
         filename = iter_filenames->data;
-        len = strlen(filename);
+        len = (guint)strlen(filename);
 
         if (len <= 4 || g_ascii_strncasecmp(filename + len - 4, ".xml", 4) != 0) {
             continue;
