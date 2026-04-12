@@ -547,7 +547,20 @@ static int icalrecur_add_byrules(const struct icalrecur_parser *parser, icalrecu
             n++;
         }
 
-        int v = strtol(t, &t, 10);
+        // empty string is not allowed here
+        if (!*t) {
+            return -1;
+        }
+
+        char *t_end;
+        int v = strtol(t, &t_end, 10);
+
+        // We check for parsing errors later, but not if the string ends with 'L',
+        // so explicitly check the value here.
+        if (t == t_end) {
+            return -1;
+        }
+        t = t_end;
 
         /* Sanity check value */
         if (v < 0) {
@@ -668,8 +681,15 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
             n++;
         }
 
+        // empty string is not allowed here
+        if (!t[0]) {
+            icalmemory_free_buffer(vals_copy);
+            return -1;
+        }
+
         /* Get Optional weekno */
-        long tmpl = strtol(t, &t, 10);
+        char *t_end;
+        long tmpl = strtol(t, &t_end, 10);
         weekno = (signed char)tmpl;
 
         // overflow?
@@ -678,6 +698,14 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
             icalmemory_free_buffer(vals_copy);
             return -1;
         }
+
+        // WeekNo 0 doesn't exist
+        if ((weekno == 0) && (t != t_end)) {
+            icalmemory_free_buffer(vals_copy);
+            return -1;
+        }
+        t = t_end;
+
         if (weekno < 0) {
             weekno = -weekno;
             sign = -1;
@@ -933,7 +961,15 @@ struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
                 /* Don't allow multiple INTERVALs */
                 r = -1;
             } else {
-                parser.rt->interval = (short)atoi(value);
+                int tmp = atoi(value);
+                parser.rt->interval = (short)tmp;
+
+                // overflow?
+                /* cppcheck-suppress knownConditionTrueFalse */
+                if (parser.rt->interval != tmp) {
+                    r = -1;
+                }
+
                 /* don't allow an interval to be less than 1
                    (RFC specifies an interval must be a positive integer) */
                 if (parser.rt->interval < 1) {
