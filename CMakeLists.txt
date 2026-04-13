@@ -683,9 +683,12 @@ if(LIBICAL_GLIB)
     )
   endif()
 
-  find_package(GLib ${MIN_GLIB})
+  pkg_search_module(
+    GLIB
+    glib-2.0>=${MIN_GLIB}
+  )
   set_package_properties(
-    GLib
+    GLIB
     PROPERTIES
       TYPE
         OPTIONAL
