@@ -31,7 +31,8 @@ target_compile_options(
 )
 target_link_libraries(
   ical-glib-src-generator
-  ${GLIB_LIBRARIES}
+  ${GLIB_LDFLAGS}
+  ${GOBJECT_LDFLAGS}
   ${LIBXML2_LIBRARIES}
 )
 
@@ -191,6 +192,8 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src/libical
   ${PROJECT_BINARY_DIR}/src/libicalvcard
   ${PROJECT_SOURCE_DIR}/src/libicalvcard
+  ${GLIB_INCLUDE_DIRS}
+  ${GOBJECT_INCLUDE_DIRS}
   ${LIBXML2_INCLUDE_DIRS}
 )
 
@@ -216,7 +219,8 @@ target_link_libraries(
   PRIVATE
     ical
     icalvcard
-    ${GLIB_LIBRARIES}
+    ${GLIB_LDFLAGS}
+    ${GOBJECT_LDFLAGS}
 )
 
 if(LIBICAL_GLIB_CHECK_API_FILES)
@@ -251,7 +255,8 @@ else()
       ical-glib-build-check
       PRIVATE
         ical-glib
-        ${GLIB_LIBRARIES}
+        ${GLIB_LDFLAGS}
+        ${GOBJECT_LDFLAGS}
     )
     target_compile_options(
       ical-glib-build-check
