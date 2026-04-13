@@ -350,7 +350,7 @@ if(DEFINED ENV{ICU_BASE}) # keep backwards compatibility for ICU_BASE
 endif()
 if(NOT DEFINED ENV{ICU_ROOT} AND APPLE)
   #Use the homebrew version. MacOS provided ICU doesn't provide development files
-  set(ICU_ROOT "/usr/local/opt/icu4c")
+  set(ICU_ROOT "/opt/homebrew/icu4c")
 endif()
 find_package(
   ICU
