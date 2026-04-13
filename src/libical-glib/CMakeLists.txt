@@ -18,17 +18,21 @@ add_executable(
   tools/xml-parser.h
 )
 
+#sometimes findxml2 doesn't set LIBXML2_DEFINITIONS
+if(NOT DEFINED LIBXML2_DEFINITIONS)
+  set(LIBXML2_DEFINITIONS)
+endif()
 target_compile_options(
   ical-glib-src-generator
   PUBLIC
     ${GLIB_CFLAGS}
-    ${LIBXML_CFLAGS}
+    ${LIBXML2_DEFINITIONS}
     -DG_LOG_DOMAIN=\"src-generator\"
 )
 target_link_libraries(
   ical-glib-src-generator
   ${GLIB_LIBRARIES}
-  ${LIBXML_LIBRARIES}
+  ${LIBXML2_LIBRARIES}
 )
 
 install(
@@ -187,6 +191,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src/libical
   ${PROJECT_BINARY_DIR}/src/libicalvcard
   ${PROJECT_SOURCE_DIR}/src/libicalvcard
+  ${LIBXML2_INCLUDE_DIRS}
 )
 
 add_library(

@@ -692,7 +692,7 @@ if(LIBICAL_GLIB)
       PURPOSE
         "For the optional libical-glib interface"
   )
-  find_package(LibXML ${MIN_LIBXML})
+  find_package(LibXml2 ${MIN_LIBXML})
   set_package_properties(
     LibXML
     PROPERTIES
@@ -705,7 +705,7 @@ if(LIBICAL_GLIB)
       PURPOSE
         "For the optional libical-glib interface"
   )
-  if(GLIB_FOUND AND LIBXML_FOUND)
+  if(GLIB_FOUND AND LibXml2_FOUND)
     set(HAVE_GLIB TRUE)
   elseif(GLIB_FOUND)
     message(
@@ -714,7 +714,7 @@ if(LIBICAL_GLIB)
       "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
       "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
     )
-  elseif(LIBXML_FOUND)
+  elseif(LibXml2_FOUND)
     message(
       FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
