@@ -12,12 +12,22 @@ This is a major release and is **not** source or binary compatible with version 
 Please see [Version 4 Migration Guide](MigrationGuide_to_4.md)
 for details about API changes since libical 3.x.
 
+Included in this release is a **Technical Preview (TP)** of our new library libicalvcard
+for handling VCARD formatted data.  We encourage users to try-out this new library
+and provide feedback to our issue tracker at <https://github.com/libical/libical/issues>.
+Note that the libicalvcard API is not finalized and no source or binary compatibility
+is guaranteed until sometime later in 4.x release cycle. Additionally, there are currently
+no C++ bindings available for libicalvcard (volunteers wanted).
+
+Please **do not** use for libicalvcard for production or other non-experimental purposes
+until the Technical Preview phase is completed.
+
 ### Added
 
 - REUSE compliant licensing
 - Supports multi-valued parameters (DELEGATED-FROM, DELEGATED-TO, MEMBER, DISPLAY, FEATURE, etc)
 - Adds java bindings
-- Brand new icalvcard library that follows the libical API.
+- (TP) Brand new icalvcard library that follows the libical API.
 - draft-ietf-calext-eventpub-extensions-19 (RFC 9073) support added
 - draft-ietf-calext-valarm-extensions-07 (RFC 9074) support added
 - Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions
@@ -58,9 +68,6 @@ for details about API changes since libical 3.x.
   E.g. it now rejects RRULE parts like `BYDAY=255SU` (which used to be interpreted as `BYDAY=-1SU`).
 
 ### Deprecated
-
-- The icalvcal library is deprecated and will be removed sometime in the 4.x series.
-   Please port your icalvcal code to use icalvcard instead.
 
 - Several CMake options are renamed in favor of a "namespaced" equivalent.
   Please port your buildscripts to the new CMake option names.
