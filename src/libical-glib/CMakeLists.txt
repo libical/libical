@@ -192,6 +192,8 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src/libical
   ${PROJECT_BINARY_DIR}/src/libicalvcard
   ${PROJECT_SOURCE_DIR}/src/libicalvcard
+  ${GLIB_INCLUDE_DIRS}
+  ${GOBJECT_INCLUDE_DIRS}
   ${LIBXML2_INCLUDE_DIRS}
 )
 
