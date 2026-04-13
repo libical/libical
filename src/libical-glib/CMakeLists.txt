@@ -226,36 +226,40 @@ if(LIBICAL_GLIB_CHECK_API_FILES)
   )
 endif()
 
-include(CheckCCompilerFlag)
-
-check_c_compiler_flag(
-  -Wswitch-enum
-  c_flag_Wswitch_enum_supported
-)
-check_c_compiler_flag(
-  -Wswitch
-  c_flag_Wswitch_supported
-)
-if(c_flag_Wswitch_enum_supported AND c_flag_Wswitch_supported)
-  add_executable(ical-glib-build-check ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c)
-  add_dependencies(ical-glib-build-check ical-glib)
-  target_link_libraries(
-    ical-glib-build-check
-    PRIVATE
-      ical-glib
-      ${GLIB_LIBRARIES}
-  )
-  target_compile_options(
-    ical-glib-build-check
-    PRIVATE
-      ${GLIB_CFLAGS}
-      -DLIBICAL_GLIB_UNSTABLE_API=1
-      -DLIBICAL_GLIB_COMPILATION
-      -Wswitch-enum
-      -Wswitch
-  )
+if(MSVC)
+  message(WARNING "skipping libical-glib-build-check when building with MSVC")
 else()
-  message(WARNING "compiler does not support both -Wswitch-enum and -Wswitch, skipping libical-glib-build-check")
+  include(CheckCCompilerFlag)
+
+  check_c_compiler_flag(
+    -Wswitch-enum
+    c_flag_Wswitch_enum_supported
+  )
+  check_c_compiler_flag(
+    -Wswitch
+    c_flag_Wswitch_supported
+  )
+  if(c_flag_Wswitch_enum_supported AND c_flag_Wswitch_supported)
+    add_executable(ical-glib-build-check ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c)
+    add_dependencies(ical-glib-build-check ical-glib)
+    target_link_libraries(
+      ical-glib-build-check
+      PRIVATE
+        ical-glib
+        ${GLIB_LIBRARIES}
+    )
+    target_compile_options(
+      ical-glib-build-check
+      PRIVATE
+        ${GLIB_CFLAGS}
+        -DLIBICAL_GLIB_UNSTABLE_API=1
+        -DLIBICAL_GLIB_COMPILATION
+        -Wswitch-enum
+        -Wswitch
+    )
+  else()
+    message(WARNING "compiler does not support both -Wswitch-enum and -Wswitch, skipping libical-glib-build-check")
+  endif()
 endif()
 
 # GObject Introspection
