@@ -31,12 +31,25 @@ target_compile_options(
 )
 target_link_libraries(
   ical-glib-src-generator
-<<<<<<< HEAD
+  <<<<<<<
+  HEAD
   ${GLIB_LDFLAGS}
   ${GOBJECT_LDFLAGS}
-=======
-  ${GLIB_LDFLAGS} ${GOBJECT_LDFLAGS}
->>>>>>> aed5eae1 (CMake - no longer use our hand-built FindGLIb)
+  =======
+  ${GLIB_LDFLAGS}
+  ${GOBJECT_LDFLAGS}
+  >>>>>>>
+  aed5eae1
+  (
+    CMake
+    -
+    no
+    longer
+    use
+    our
+    hand-built
+    FindGLIb
+  )
   ${LIBXML2_LIBRARIES}
 )
 
@@ -257,12 +270,25 @@ else()
       ical-glib-build-check
       PRIVATE
         ical-glib
-<<<<<<< HEAD
+        <<<<<<<
+        HEAD
         ${GLIB_LDFLAGS}
         ${GOBJECT_LDFLAGS}
-=======
-        ${GLIB_LDFLAGS} ${GOBJECT_LDFLAGS}
->>>>>>> aed5eae1 (CMake - no longer use our hand-built FindGLIb)
+        =======
+        ${GLIB_LDFLAGS}
+        ${GOBJECT_LDFLAGS}
+        >>>>>>>
+        aed5eae1
+        (
+          CMake
+          -
+          no
+          longer
+          use
+          our
+          hand-built
+          FindGLIb
+        )
     )
     target_compile_options(
       ical-glib-build-check
