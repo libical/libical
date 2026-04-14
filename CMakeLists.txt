@@ -1084,13 +1084,6 @@ libical_option(
   False
 )
 if(LIBICAL_BUILD_VZIC)
-  if(NOT GLIB_FOUND)
-    message(
-      FATAL_ERROR
-      "You requested to build the vzic tool, but the necessary development package "
-      "is missing or too low a version (glib ${MIN_GLIB} or higher is required)."
-    )
-  endif()
   add_subdirectory(vzic)
 endif()
 
