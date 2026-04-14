@@ -673,13 +673,14 @@ libical_deprecated_option(
   Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher."
   True
 )
-if(LIBICAL_GLIB)
+if(LIBICAL_GLIB OR LIBICAL_BUILD_VZIC)
   if(NOT PKG_CONFIG_FOUND)
     message(
       FATAL_ERROR
-      "You requested to build libical-glib, however that option is not supported "
+      "You requested to build libical-glib and/or vzic, however those options are not supported "
       "unless pkg-config can be found. Please install pkg-config and try again. "
-      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib and vzic builds "
+      "(by passing -DLIBICAL_GLIB=False -DLIBICAL_BUILD_VZIC to cmake)."
     )
   endif()
 
@@ -717,9 +718,10 @@ if(LIBICAL_GLIB)
   elseif(GLIB_FOUND)
     message(
       FATAL_ERROR
-      "You requested to build libical-glib, but the necessary development package "
+      "You requested to build libical-glib and/or vzic, but the necessary development package "
       "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
-      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib and vzic builds "
+      "(by passing -DLIBICAL_GLIB=False -DLIBICAL_BUILD_VZIC to cmake)."
     )
   elseif(LibXml2_FOUND)
     message(
