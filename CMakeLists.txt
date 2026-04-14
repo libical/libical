@@ -76,6 +76,10 @@
 # # # DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!! # # #
 ## Special CMake Options for Developers
 #
+# -DLIBICAL_BUILD_LIBVCARD=[true|false]
+#  Set to build the libicalvcard library. For developers interested in using the Technical Preview libicalvcard library.
+#  Default=false
+#
 # -DLIBICAL_DEVMODE=[true|false]
 #  Configure the build for a developer setup. Enables some features that are not geared towards end-users.
 #  Developer mode builds the code in Debug mode (use CMAKE_BUILD_TYPE to override).
@@ -187,6 +191,11 @@ libical_removed_option(SHARED_ONLY)
 libical_removed_option(ICAL_ALLOW_EMPTY_PROPERTIES)
 libical_removed_option(ICAL_ERRORS_ARE_FATAL)
 ########################################################
+
+libical_option(LIBICAL_BUILD_LIBVCARD "Build the libicalvcard Technical Preview" False)
+if(LIBICAL_BUILD_LIBVCARD)
+  add_definitions(-DLIBICAL_BUILD_LIBVCARD)
+endif()
 
 libical_option(LIBICAL_DEVMODE "Developer mode" False)
 if(LIBICAL_DEVMODE)

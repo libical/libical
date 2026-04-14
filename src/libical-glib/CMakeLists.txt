@@ -84,24 +84,26 @@ list(
 )
 
 # vCard files
-list(
-  APPEND API_FILES
-  api/i-cal-vcard-component.xml
-  api/i-cal-vcard-derived-parameter.xml
-  api/i-cal-vcard-derived-property.xml
-  api/i-cal-vcard-derived-value.xml
-  api/i-cal-vcard-enum-array.xml
-  api/i-cal-vcard-geo.xml
-  api/i-cal-vcard-parameter.xml
-  api/i-cal-vcard-parser.xml
-  api/i-cal-vcard-property.xml
-  api/i-cal-vcard-restriction.xml
-  api/i-cal-vcard-str-array.xml
-  api/i-cal-vcard-structured.xml
-  api/i-cal-vcard-time.xml
-  api/i-cal-vcard-tz.xml
-  api/i-cal-vcard-value.xml
-)
+if(LIBICAL_BUILD_LIBVCARD)
+  list(
+    APPEND API_FILES
+    api/i-cal-vcard-component.xml
+    api/i-cal-vcard-derived-parameter.xml
+    api/i-cal-vcard-derived-property.xml
+    api/i-cal-vcard-derived-value.xml
+    api/i-cal-vcard-enum-array.xml
+    api/i-cal-vcard-geo.xml
+    api/i-cal-vcard-parameter.xml
+    api/i-cal-vcard-parser.xml
+    api/i-cal-vcard-property.xml
+    api/i-cal-vcard-restriction.xml
+    api/i-cal-vcard-str-array.xml
+    api/i-cal-vcard-structured.xml
+    api/i-cal-vcard-time.xml
+    api/i-cal-vcard-tz.xml
+    api/i-cal-vcard-value.xml
+  )
+endif()
 
 list(
   APPEND LIBICAL_GLIB_HEADERS
@@ -190,23 +192,26 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_BINARY_DIR}/src/libical
   ${PROJECT_SOURCE_DIR}/src/libical
-  ${PROJECT_BINARY_DIR}/src/libicalvcard
-  ${PROJECT_SOURCE_DIR}/src/libicalvcard
   ${GLIB_INCLUDE_DIRS}
   ${GOBJECT_INCLUDE_DIRS}
   ${LIBXML2_INCLUDE_DIRS}
 )
+if(LIBICAL_BUILD_LIBVCARD)
+  include_directories(
+    ${PROJECT_BINARY_DIR}/src/libicalvcard
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard
+  )
+endif()
 
 add_library(
   ical-glib
   ${LIBRARY_TYPE}
   ${LIBICAL_GLIB_SOURCES}
 )
-add_dependencies(
-  ical-glib
-  ical-header
-  icalvcard-header
-)
+add_dependencies(ical-glib ical-header)
+if(LIBICAL_BUILD_LIBVCARD)
+  add_dependencies(icalvcard-header)
+endif()
 target_compile_options(ical-glib PRIVATE ${GLIB_CFLAGS})
 target_compile_definitions(
   ical-glib
@@ -218,21 +223,34 @@ target_link_libraries(
   ical-glib
   PRIVATE
     ical
-    icalvcard
     ${GLIB_LDFLAGS}
     ${GOBJECT_LDFLAGS}
 )
+if(LIBICAL_BUILD_LIBVCARD)
+  target_link_libraries(ical-glib PRIVATE icalvcard)
+endif()
 
 if(LIBICAL_GLIB_CHECK_API_FILES)
-  add_custom_command(
-    TARGET ical-glib
-    POST_BUILD
-    COMMAND
-      ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
-      "--check-api-files" "${CMAKE_CURRENT_BINARY_DIR}/../libical/ical.h" "LIBICAL_ICAL_EXPORT"
-      "${CMAKE_CURRENT_BINARY_DIR}/../libicalvcard/vcard.h" "LIBICAL_VCARD_EXPORT"
-    COMMENT "Check the libical-glib API files for completeness"
-  )
+  if(LIBICAL_BUILD_LIBVCARD)
+    add_custom_command(
+      TARGET ical-glib
+      POST_BUILD
+      COMMAND
+        ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
+        "--check-api-files" "${CMAKE_CURRENT_BINARY_DIR}/../libical/ical.h" "LIBICAL_ICAL_EXPORT"
+        "${CMAKE_CURRENT_BINARY_DIR}/../libicalvcard/vcard.h" "LIBICAL_VCARD_EXPORT"
+      COMMENT "Check the libical-glib API files for completeness"
+    )
+  else()
+    add_custom_command(
+      TARGET ical-glib
+      POST_BUILD
+      COMMAND
+        ${ical-glib-src-generator_EXE} "${CMAKE_CURRENT_SOURCE_DIR}/tools" "${CMAKE_CURRENT_SOURCE_DIR}/api"
+        "--check-api-files" "${CMAKE_CURRENT_BINARY_DIR}/../libical/ical.h" "LIBICAL_ICAL_EXPORT"
+      COMMENT "Check the libical-glib API files for completeness"
+    )
+  endif()
 endif()
 
 if(MSVC)

@@ -125,7 +125,9 @@ if(LIBICAL_GLIB AND LIBICAL_GOBJECT_INTROSPECTION)
 endif()
 
 ########## libicalvcard tests #########
-add_subdirectory(libicalvcard)
+if(LIBICAL_BUILD_LIBVCARD)
+  add_subdirectory(libicalvcard)
+endif()
 
 ########### next target ###############
 
