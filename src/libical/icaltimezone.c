@@ -278,12 +278,22 @@ icaltimezone *icaltimezone_copy(const icaltimezone *originalzone)
     }
 
     if (!icaltimezone_changes_lock()) {
+        icalmemory_free_buffer(zone->tzid);
+        icalmemory_free_buffer(zone->location);
+        icalmemory_free_buffer(zone->tznames);
+        icalmemory_free_buffer(zone);
         return NULL;
     }
     if (zone->changes != NULL) {
         zone->changes = icalarray_copy(zone->changes);
     }
     if (!icaltimezone_changes_unlock()) {
+        if (zone->changes) {
+            icalarray_free(zone->changes);
+        }
+        icalmemory_free_buffer(zone->tzid);
+        icalmemory_free_buffer(zone->location);
+        icalmemory_free_buffer(zone->tznames);
         icalmemory_free_buffer(zone);
         return NULL;
     }
