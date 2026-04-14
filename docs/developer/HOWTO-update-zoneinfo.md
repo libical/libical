@@ -9,7 +9,7 @@ Please use that script (update as needed).
 
 1. Retrieve the most recent tzdata from IANA from <https://www.iana.org/time-zones>
 
-   Look for a gzip-compressed tar file (a "tarball") named tzdata2025c.tar.gz, for example.
+   Look for a gzip-compressed tar file (a "tarball") named tzdata2026a.tar.gz, for example.
 
    Save the tarball into your Downloads folder.
 
@@ -17,8 +17,8 @@ Please use that script (update as needed).
 
      ```shell
      cd ./vzic
-     mkdir tzdata2025c
-     cd tzdata2025c; tar xfz ~/Downloads/tzdata2025c.tar.gz; cd ..
+     mkdir tzdata2026a
+     cd tzdata2026a; tar xfz ~/Downloads/tzdata2026a.tar.gz; cd ..
      ```
 
 ## Building vzic
@@ -36,7 +36,7 @@ Please use that script (update as needed).
 
 ```shell
      # inside the vzic/build-update-zoneinfo subdir
-     ./vzic --pure --olson-dir ../tzdata2025c --output-dir ./zoneinfo
+     ./vzic --pure --olson-dir ../tzdata2026a --output-dir ./zoneinfo
 ```
 
 You'll might see some warning messages but not sure what to do about those.
@@ -51,8 +51,7 @@ those changes into the official zoneinfo one level-up.
 1. Run
 
      ```shell
-     # inside the vzic/build-update-zoneinfo subdir
-     cd ..
+     # inside the vzic subdir
      perl vzic-merge.pl --master-zoneinfo-dir=../zoneinfo --new-zoneinfo-dir=build-update-zoneinfo/zoneinfo
      ```
 
@@ -73,10 +72,24 @@ those changes into the official zoneinfo one level-up.
 
 1. run the libical test-suite (`./scripts/buildtests.sh`)
 
+## Last Steps
+
+1. Update the CHANGELOG.md accordingly
+
+2. Commit the changes
+
+     ```shell
+     git switch -c work/winterz/tzdata2026a #make the changes in a work branch
+     git add zoneinfo; git commit zoneinfo CHANGELOG.md -m "Update zoneinfo for tzdata2026a"
+     ```
+
+3. Make a pull request with the changes and if all goes well go ahead and merge.
+
 ## Clean-up
 
 You can remove:
 
-* the tzdata tarball (eg. ~/Downloads/tzdata2025c.tar.gz)
-* the exploded tzdata (eg. vzic/tzdata2025c)
+* the tzdata tarball (eg. ~/Downloads/tzdata2026a.tar.gz)
+* the exploded tzdata (eg. vzic/tzdata2026a)
 * the vzic builddir (vzic/build-update-zoneinfo)
+* the work branch work/winterz/tzdata2026a
