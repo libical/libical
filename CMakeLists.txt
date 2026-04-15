@@ -138,7 +138,7 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(
   libical
-  VERSION 3.99.99
+  VERSION 4.0.99
   DESCRIPTION "An implementation of basic iCAL protocols"
   HOMEPAGE_URL "https://libical.github.io/libical/"
   LANGUAGES
@@ -175,9 +175,8 @@ if(WINCE)
 endif()
 
 set(LIBICAL_LIB_MAJOR_SOVERSION "4")
-set(LIBICAL_LIB_SOVERSION_STRING "${LIBICAL_LIB_MAJOR_SOVERSION}.0")
-
-set(PROJECT_VERSION "4.0")
+set(LIBICAL_LIB_SOVERSION_STRING "${LIBICAL_LIB_MAJOR_SOVERSION}.1")
+set(PROJECT_VERSION "4.1")
 
 # library build types
 set(LIBRARY_TYPE SHARED)
