@@ -3,6 +3,8 @@
 [![Github workflow](https://github.com/libical/libical/actions/workflows/build.yml/badge.svg)](https://github.com/libical/libical/actions)
 [![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
 
+[Become a libical sponsor](https://github.com/sponsors/libical)
+
 ## About
 
 Libical — an implementation of iCalendar protocols and data formats
