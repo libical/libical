@@ -23,7 +23,7 @@ Note that the libicalvcard API is not finalized and no source or binary compatib
 is guaranteed until sometime later in 4.x release cycle. Additionally, there are currently
 no C++ bindings available for libicalvcard (volunteers wanted).
 
-Please **do not** use for libicalvcard for production or other non-experimental purposes
+Please **do not** use libicalvcard for production or other non-experimental purposes
 until the Technical Preview phase is completed.
 
 ### Added
