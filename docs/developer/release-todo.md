@@ -89,3 +89,6 @@ Here's a sample announcement
 * Increase the project() VERSION patch version by 1. ie, X.Y.Z becomes X.Y.Z+1
 * Add a new stanza to the top of CHANGELOG.md for "[X.Y.Z+1] - Unreleased"
 * Merge to the "master" branch
+
+* Review <https://github/libical/libical/issues> for issues that should
+  move to a new milestone. Create the new milestone as necessary.
