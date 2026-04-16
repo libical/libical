@@ -43,7 +43,7 @@ For a new major version X.0.0:
 
 * In the top-level `CMakeLists.txt` set the project() `VERSION` to X-1.99.99
 * In the top-level `CMakeLists.txt` set `LIBICAL_LIB_MAJOR_SOVERSION` to the new major version X
-* In the top-level `CMakeLists.txt` set the `LIBICAL_LIB_SOVERSION_STRING` minor value to 0
+* In the top-level `CMakeLists.txt` set the `LIBICAL_LIB_MINOR_SOVERSION` to 0
 * Change the `PROJECT_VERSION` to X.0
 * In the `CHANGELOG.md` add a empty section at the top for the new "[X.0.0] - Unreleased"
 
@@ -51,14 +51,14 @@ For a new major version X.0.0:
 
   * The project() `VERSION` becomes 4.99.99
   * The `LIBICAL_LIB_MAJOR_SOVERSION` becomes 5
-  * The `LIBICAL_LIB_SOVERSION_STRING` minor version becomes 0
+  * The `LIBICAL_LIB_MINOR_SOVERSION` becomes 0
   * The `PROJECT_VERSION` becomes 5.0
 
 For a new minor version X.Y.0:
 
 * In the top-level `CMakeLists.txt` set the project() `VERSION` to X.Y.0
 * Do NOT change the `LIBICAL_LIB_MAJOR_SOVERSION`
-* Increment the `LIBICAL_LIB_SOVERSION_STRING` minor value to Y
+* Increment the `LIBICAL_LIB_MINOR_SOVERSION` minor value to Y
 * Change the `PROJECT_VERSION` to X.Y
 * In the `CHANGELOG.md` add a empty section at the top for the new "[X.Y.0] - Unreleased"
 
@@ -66,7 +66,7 @@ For a new minor version X.Y.0:
 
   * The project() `VERSION` becomes 4.2.0
   * The `LIBICAL_LIB_MAJOR_SOVERSION` is still 4
-  * The `LIBICAL_LIB_SOVERSION_STRING` minor value becomes 2
+  * The `LIBICAL_LIB_MINOR_SOVERSION` becomes 2
   * The `PROJECT_VERSION` becomes 4.2
 
 Make all the above changes and then git commit and push the new branch.
