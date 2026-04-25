@@ -349,3 +349,17 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     setprops(fuzz2test${fuzztest})
   endforeach()
 endif()
+
+########### next target ###############
+
+buildme(icalmerge_fuzz1 icalmerge_fuzz1.c)
+if(LIBICAL_BUILD_TESTING_BIGFUZZ)
+  foreach(mergetest merge1 merge3)
+    add_test(
+      NAME mergetest${mergetest}
+      COMMAND
+        icalmerge_fuzz1 "${PROJECT_SOURCE_DIR}/test-data/fuzz${mergetest}"
+    )
+    setprops(mergetest${mergetest})
+  endforeach()
+endif()

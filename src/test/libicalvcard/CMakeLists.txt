@@ -43,6 +43,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     488194780 # UBSAN cpu timeout exceeds 60s
     487903131 # ASAN Stack-overflow _parse_vcard
     488416219 # ASAN Stack-overflow
+    505903588 # MSAN Use-of-uninitialized value
   )
     add_test(
       NAME vcfuzz1test${fuzztest}

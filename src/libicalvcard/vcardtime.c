@@ -453,7 +453,7 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
             t->second = 0;
         } else if (ndig == 2) {
             if (str[2] == ':') {
-                if (str[8] == '.') {
+                if (strlen(str) > 8 && str[8] == '.') {
                     sscanf(str, "%2u:%2u:%2u.%u%n",
                            (unsigned *)&t->hour, (unsigned *)&t->minute,
                            (unsigned *)&t->second, (unsigned *)&secfrac, &nchar);
