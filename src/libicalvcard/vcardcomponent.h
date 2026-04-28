@@ -26,7 +26,6 @@ typedef enum vcardcomponent_kind
     VCARD_ANY_COMPONENT,   /* Used to select all components */
     VCARD_XROOT_COMPONENT, /* Used as container for multiple vCards */
     VCARD_VCARD_COMPONENT,
-    VCARD_X_COMPONENT,
     VCARD_NUM_COMPONENT_TYPES /* MUST be last (unless we can put NO_COMP last) */
 } vcardcomponent_kind;
 
