@@ -34,7 +34,6 @@ struct vcardcomponent_impl {
     char id[5];
     vcardcomponent_kind kind;
     vcardproperty *versionp;
-    char *x_name;
     icalpvl_list properties;
     icalpvl_elem property_iterator;
     icalpvl_list components;
@@ -159,16 +158,11 @@ void vcardcomponent_free(vcardcomponent *c)
 
     icalpvl_free(c->components);
 
-    if (c->x_name != 0) {
-        icalmemory_free_buffer(c->x_name);
-    }
-
     c->kind = VCARD_NO_COMPONENT;
     c->properties = 0;
     c->property_iterator = 0;
     c->components = 0;
     c->component_iterator = 0;
-    c->x_name = 0;
     c->id[0] = 'X';
 
     icalmemory_free_buffer(c);
@@ -206,11 +200,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *comp)
     icalerror_check_arg_rz((kind != VCARD_NO_COMPONENT),
                            "component kind is VCARD_NO_COMPONENT");
 
-    if (kind != VCARD_X_COMPONENT) {
-        kind_string = vcardcomponent_kind_to_string(kind);
-    } else {
-        kind_string = comp->x_name;
-    }
+    kind_string = vcardcomponent_kind_to_string(kind);
 
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
 
@@ -706,8 +696,6 @@ static int comp_compare(void *a, void *b)
             for (int i = 0; r == 0 && prop_kinds[i] != VCARD_NO_PROPERTY; i++) {
                 r = prop_kind_compare(prop_kinds[i], c1, c2);
             }
-        } else {
-            r = strcmp(c1->x_name, c2->x_name);
         }
 
         if (r == 0) {

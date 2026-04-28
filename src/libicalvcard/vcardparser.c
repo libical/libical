@@ -76,8 +76,8 @@ struct vcardparser_state {
     vcardproperty *version;
 
     /* current items */
-    vcardcomponent *root;
-    vcardcomponent *comp;
+    vcardcomponent *xroot;
+    vcardcomponent *vcard;
     vcardproperty *prop;
     vcardparameter *param;
     vcardvalue_kind value_kind;
@@ -838,10 +838,8 @@ static void _parse_prop(struct vcardparser_state *state)
     }
 }
 
-static int _parse_vcard(struct vcardparser_state *state,
-                        vcardcomponent *comp, int only_one)
+static int _parse_vcard(struct vcardparser_state *state, int only_one)
 {
-    vcardcomponent *sub;
     const char *cardstart = state->p;
     int r = 0;
 
@@ -856,6 +854,13 @@ static int _parse_vcard(struct vcardparser_state *state,
         _parse_prop(state);
 
         if (vcardproperty_isa(state->prop) == VCARD_BEGIN_PROPERTY) {
+            if (state->vcard) {
+                // Reject nested VCARD.
+                state->itemstart = cardstart;
+                r = PE_MISMATCHED_CARD;
+                break;
+            }
+
             if (vcardvalue_isa(vcardproperty_get_value(state->prop)) !=
                 VCARD_TEXT_VALUE) {
                 r = PE_VALUE_INVALID;
@@ -864,25 +869,20 @@ static int _parse_vcard(struct vcardparser_state *state,
 
             const char *val =
                 vcardvalue_get_text(vcardproperty_get_value(state->prop));
-            vcardcomponent_kind kind = vcardcomponent_string_to_kind(val);
 
-            if (kind == VCARD_NO_COMPONENT) {
+            if (!val || strcasecmp(val, "VCARD") != 0) {
                 state->itemstart = cardstart;
-                r = PE_MISMATCHED_CARD;
+                r = PE_NAME_INVALID;
                 break;
             }
 
             vcardproperty_free(state->prop);
             state->prop = NULL;
+            state->vcard = vcardcomponent_new(VCARD_VCARD_COMPONENT);
+            vcardcomponent_add_component(state->xroot, state->vcard);
 
-            sub = vcardcomponent_new(kind);
-            vcardcomponent_add_component(comp, sub);
-            r = _parse_vcard(state, sub, /*only_one*/ 0);
-            if (r || only_one) {
-                break;
-            }
-        } else if (!comp) {
-            /* no comp means we're at the top level, haven't seen a BEGIN! */
+        } else if (!state->vcard) {
+            /* this means we're at the top level, haven't seen a BEGIN! */
             state->itemstart = cardstart;
             r = PE_MISMATCHED_CARD;
             break;
@@ -895,18 +895,23 @@ static int _parse_vcard(struct vcardparser_state *state,
 
             const char *val =
                 vcardvalue_get_text(vcardproperty_get_value(state->prop));
-            vcardcomponent_kind kind = vcardcomponent_string_to_kind(val);
 
-            if (kind != vcardcomponent_isa(comp)) {
-                /* special case mismatched card, the "start" was the start of
-                 * the card */
+            if (!val || strcasecmp(val, "VCARD") != 0) {
                 state->itemstart = cardstart;
-                r = PE_MISMATCHED_CARD;
+                r = PE_NAME_INVALID;
+                break;
             }
 
-            break;
+            vcardproperty_free(state->prop);
+            state->vcard = NULL;
+            state->prop = NULL;
+
+            if (only_one) {
+                break;
+            }
+
         } else {
-            vcardcomponent_add_property(comp, state->prop);
+            vcardcomponent_add_property(state->vcard, state->prop);
             state->prop = NULL;
         }
     }
@@ -925,7 +930,7 @@ static int _parse_vcard(struct vcardparser_state *state,
 
 static int vcardparser_parse(struct vcardparser_state *state, int only_one)
 {
-    state->root = vcardcomponent_new(VCARD_XROOT_COMPONENT);
+    state->xroot = vcardcomponent_new(VCARD_XROOT_COMPONENT);
 
     state->p = state->base;
 
@@ -933,7 +938,7 @@ static int vcardparser_parse(struct vcardparser_state *state, int only_one)
     buf_init(&state->errbuf, BUF_GROW);
 
     /* don't parse trailing non-whitespace */
-    return _parse_vcard(state, state->root, only_one);
+    return _parse_vcard(state, only_one);
 }
 
 /* FREE MEMORY */
@@ -943,8 +948,8 @@ static void _free_state(struct vcardparser_state *state)
     buf_free(&state->buf);
     buf_free(&state->errbuf);
 
-    if (state->root) {
-        vcardcomponent_free(state->root);
+    if (state->xroot) {
+        vcardcomponent_free(state->xroot);
     }
 
     memset(state, 0, sizeof(struct vcardparser_state));
@@ -1011,14 +1016,14 @@ vcardcomponent *vcardparser_parse_string(const char *str)
     parser.base = str;
     r = vcardparser_parse(&parser, 0);
     if (!r) {
-        if (vcardcomponent_count_components(parser.root,
+        if (vcardcomponent_count_components(parser.xroot,
                                             VCARD_VCARD_COMPONENT) == 1) {
-            vcard = vcardcomponent_get_first_component(parser.root,
+            vcard = vcardcomponent_get_first_component(parser.xroot,
                                                        VCARD_VCARD_COMPONENT);
-            vcardcomponent_remove_component(parser.root, vcard);
+            vcardcomponent_remove_component(parser.xroot, vcard);
         } else {
-            vcard = parser.root;
-            parser.root = NULL;
+            vcard = parser.xroot;
+            parser.xroot = NULL;
         }
     }
 

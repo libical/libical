@@ -425,6 +425,51 @@ static void test_ignore_backslash_at_eol(void)
     vcardcomponent_free(vcard);
 }
 
+static void test_parse_no_nested(void)
+{
+    const char *str =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:foo\r\n"
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:bar\r\n"
+        "END:VCARD\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *vcard = vcardparser_parse_string(str);
+    assert(!vcard);
+}
+
+static void test_parse_multi(void)
+{
+    const char *str =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:foo\r\n"
+        "END:VCARD\r\n"
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:bar\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *xroot = vcardparser_parse_string(str);
+    assert(VCARD_XROOT_COMPONENT == vcardcomponent_isa(xroot));
+
+    vcardcomponent *comp;
+
+    comp = vcardcomponent_get_first_component(xroot, VCARD_ANY_COMPONENT);
+    assert(VCARD_VCARD_COMPONENT == vcardcomponent_isa(comp));
+
+    comp = vcardcomponent_get_next_component(xroot, VCARD_ANY_COMPONENT);
+    assert(VCARD_VCARD_COMPONENT == vcardcomponent_isa(comp));
+
+    comp = vcardcomponent_get_next_component(xroot, VCARD_ANY_COMPONENT);
+    assert(NULL == comp);
+
+    vcardcomponent_free(xroot);
+}
+
 int main(int argc, const char **argv)
 {
     vcardcomponent *card;
@@ -447,6 +492,8 @@ int main(int argc, const char **argv)
     test_n_restriction(card);
     test_v3_to_v4(card);
     test_ignore_backslash_at_eol();
+    test_parse_no_nested();
+    test_parse_multi();
 
     vcardcomponent_free(card);
 
