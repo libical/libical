@@ -437,7 +437,7 @@ static void test_parse_no_nested(void)
         "END:VCARD\r\n"
         "END:VCARD\r\n";
 
-    vcardcomponent *vcard = vcardparser_parse_string(str);
+    const vcardcomponent *vcard = vcardparser_parse_string(str);
     assert(!vcard);
 }
 
