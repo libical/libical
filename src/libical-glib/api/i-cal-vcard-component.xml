@@ -10,7 +10,6 @@
     <element name="VCARD_ANY_COMPONENT"/>
     <element name="VCARD_XROOT_COMPONENT"/>
     <element name="VCARD_VCARD_COMPONENT"/>
-    <element name="VCARD_X_COMPONENT"/>
     <element name="VCARD_NUM_COMPONENT_TYPES"/>
   </enum>
   <method name="i_cal_vcard_component_new" corresponds="vcardcomponent_new" kind="constructor" since="4.0">
