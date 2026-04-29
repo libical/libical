@@ -134,7 +134,7 @@ vcardparameter_kind vcardparameter_string_to_kind(const char *string)
     key.kind = VCARD_ANY_PARAMETER;
     key.name = string;
     result =
-        bsearch(&key, parameter_map, sizeof(parameter_map) / sizeof(struct vcardparameter_kind_map),
+        (struct vcardparameter_kind_map *)bsearch(&key, parameter_map, sizeof(parameter_map) / sizeof(struct vcardparameter_kind_map),
                 sizeof(struct vcardparameter_kind_map),
                 (int (*)(const void *, const void *))vcardparameter_compare_kind_map);
 
