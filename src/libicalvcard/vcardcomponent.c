@@ -1057,7 +1057,7 @@ static void comp_to_v3(vcardcomponent *impl)
                                                   VCARD_MEDIATYPE_PARAMETER);
         if (param) {
             mediatype = vcardparameter_get_mediatype(param);
-            subtype = strchr(mediatype, '/');
+            subtype = (char *)strchr(mediatype, '/');
             if (subtype) {
                 /* Copy and uppercase the subtype */
                 char *c;
@@ -1148,7 +1148,7 @@ static void comp_to_v3(vcardcomponent *impl)
 
                 char *buf = icalmemory_strdup(uri);
                 mediatype = buf + 5;
-                base64 = strstr(mediatype, ";base64,");
+                base64 = (char *)strstr(mediatype, ";base64,");
 
                 if (base64) {
                     param = vcardparameter_new_encoding(VCARD_ENCODING_B);
@@ -1157,13 +1157,13 @@ static void comp_to_v3(vcardcomponent *impl)
                     *base64 = '\0';
                     data = base64 + 8;
                 } else {
-                    data = strchr(mediatype, ',');
+                    data = (char *)strchr(mediatype, ',');
                     if (data) {
                         *data++ = '\0';
                     }
                 }
 
-                subtype = strchr(mediatype, '/');
+                subtype = (char *)strchr(mediatype, '/');
                 if (subtype) {
                     /* Copy and uppercase the subtype */
                     char *c;
