@@ -1,13 +1,13 @@
 <map id="/home/winterz/projects/libical/libical/src" name="/home/winterz/projects/libical/libical/src">
 <area shape="rect" id="node2" href="dir_b7a0ea939f6e83384f3c571d31a84be9.html" title="libical" alt="" coords="157,101,211,128"/>
 <area shape="rect" id="node3" href="dir_e5788c73bf8d77f47d4a3002d26bfd20.html" title="libicalss" alt="" coords="200,27,269,53"/>
-<area shape="poly" id="edge2" href="dir_000003_000002.html" alt="" coords="228,55,203,90,199,87,224,52"/>
+<area shape="poly" id="edge2" href="dir_000003_000002.html" alt="" coords="228,52,203,91,200,87,224,55"/>
 <area shape="rect" id="edge2-headlabel" href="dir_000003_000002.html" title="21" alt="" coords="203,83,217,99"/>
 <area shape="rect" id="node5" href="dir_5330c68354327086ecc8df050e51eedc.html" title="src" alt="" coords="291,101,330,128"/>
-<area shape="poly" id="edge1" href="dir_000003_000005.html" alt="" coords="250,52,289,89,285,93,246,56"/>
+<area shape="poly" id="edge1" href="dir_000003_000005.html" alt="" coords="249,51,289,91,284,90,247,56"/>
 <area shape="rect" id="edge1-headlabel" href="dir_000003_000005.html" title="1" alt="" coords="287,74,294,90"/>
 <area shape="rect" id="node4" href="dir_68322ee060f2af82afa3b2a12eaf5585.html" title="libicalvcard" alt="" coords="90,27,176,53"/>
-<area shape="poly" id="edge3" href="dir_000004_000002.html" alt="" coords="144,52,169,87,165,90,140,55"/>
+<area shape="poly" id="edge3" href="dir_000004_000002.html" alt="" coords="143,51,169,89,164,89,141,56"/>
 <area shape="rect" id="edge3-headlabel" href="dir_000004_000002.html" title="14" alt="" coords="165,73,179,89"/>
 <area shape="rect" id="clust1" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html" alt="" coords="16,16,280,139"/>
 </map>

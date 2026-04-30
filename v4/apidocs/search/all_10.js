@@ -1,17 +1,17 @@
 var searchData=
 [
-  ['files_0',['5.1.3 Parsing Text Files',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md132',1,'']]],
-  ['finally_1',['Finally',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2HOWTO-update-apidocs.html#autotoc_md46',1,'']]],
-  ['finding_20and_20removing_20components_2',['5.4.2 Adding, Finding and Removing Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md147',1,'']]],
-  ['finding_20components_3',['5.2.1 Finding Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md134',1,'']]],
-  ['fixed_4',['Fixed',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md10',1,'']]],
+  ['files_0',['5.1.3 Parsing Text Files',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md131',1,'']]],
+  ['finally_1',['Finally',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2HOWTO-update-apidocs.html#autotoc_md45',1,'']]],
+  ['finding_20and_20removing_20components_2',['5.4.2 Adding, Finding and Removing Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md146',1,'']]],
+  ['finding_20components_3',['5.2.1 Finding Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md133',1,'']]],
+  ['fixed_4',['Fixed',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md9',1,'']]],
   ['flags_5',['flags',['../structicaldirset__options.html#a0198ec47b0288039a835e8fd5cfd2df0',1,'icaldirset_options::flags'],['../structicalfileset__options.html#ad19cc9176412d8a16b2a6ac45c8f3bd1',1,'icalfileset_options::flags']]],
-  ['for_20android_6',['Building for Android',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html#autotoc_md51',1,'']]],
-  ['for_20osx_20mac_7',['Building for OSX (Mac)',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html#autotoc_md49',1,'']]],
+  ['for_20android_6',['Building for Android',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html#autotoc_md50',1,'']]],
+  ['for_20osx_20mac_7',['Building for OSX (Mac)',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html#autotoc_md48',1,'']]],
   ['formats_8',['Libical — an implementation of iCalendar protocols and data formats',['../index.html',1,'']]],
-  ['free_20busy_20component_20section_203_206_201_204_9',['Event/To-Do/Journal/Free-Busy Component section 3.6.[1-4]',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2KnownExceptions.html#autotoc_md63',1,'']]],
+  ['free_20busy_20component_20section_203_206_201_204_9',['Event/To-Do/Journal/Free-Busy Component section 3.6.[1-4]',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2KnownExceptions.html#autotoc_md62',1,'']]],
   ['freq_10',['freq',['../structicalrecurrencetype.html#a4dfb35662209ee3ade1ce4960d9abb1c',1,'icalrecurrencetype']]],
-  ['from_203_200_20to_204_200_11',['from 3 0 to 4 0',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md96',1,'Migrating <span class="tt">ICalGLib.Recurrence.*_by_*</span> methods from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md94',1,'Migrating <span class="tt">icalrecurrencetype.by_xxx</span> static arrays usage from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md81',1,'Migrating from 3.0 to 4.0']]],
-  ['from_20rfcs_12',['4 Differences From RFCs',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md124',1,'']]],
-  ['functions_13',['functions',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md84',1,'Clone functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md75',1,'Modified functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md76',1,'New functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md77',1,'Removed functions']]]
+  ['from_203_200_20to_204_200_11',['from 3 0 to 4 0',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md95',1,'Migrating &lt;span class=&quot;tt&quot;&gt;ICalGLib.Recurrence.*_by_*&lt;/span&gt; methods from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md93',1,'Migrating &lt;span class=&quot;tt&quot;&gt;icalrecurrencetype.by_xxx&lt;/span&gt; static arrays usage from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md80',1,'Migrating from 3.0 to 4.0']]],
+  ['from_20rfcs_12',['4 Differences From RFCs',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md123',1,'']]],
+  ['functions_13',['functions',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md83',1,'Clone functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md74',1,'Modified functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md75',1,'New functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md76',1,'Removed functions']]]
 ];
