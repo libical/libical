@@ -22,42 +22,62 @@ set_package_properties(
     DESCRIPTION
       "API Documentation system"
     URL
-      "http://www.doxygen.org"
+      "https://www.doxygen.org"
     PURPOSE
       "Needed to build the API documentation."
 )
 if(DOXYGEN_FOUND)
-  file(
-    GLOB _dox_deps
-    *.dox
-    *.html
-    *.md
-    ${PROJECT_SOURCE_DIR}/*.md
-  )
+  file(GLOB _dox_deps *.md)
   file(
     GLOB _all_hdrs
     ${PROJECT_SOURCE_DIR}/src/libical/*.h
     ${PROJECT_SOURCE_DIR}/src/libical/*.c
-    ${PROJECT_SOURCE_DIR}/src/libical/*.cxx
+    ${PROJECT_SOURCE_DIR}/src/libical/*.cpp
+    ${PROJECT_SOURCE_DIR}/src/libical/*.hpp
     ${PROJECT_BINARY_DIR}/src/libical/*.c
     ${PROJECT_BINARY_DIR}/src/libical/*.h
     ${PROJECT_SOURCE_DIR}/src/libicalss/*.h
     ${PROJECT_SOURCE_DIR}/src/libicalss/*.c
-    ${PROJECT_SOURCE_DIR}/src/libicalss/*.cxx
+    ${PROJECT_SOURCE_DIR}/src/libicalss/*.cpp
+    ${PROJECT_SOURCE_DIR}/src/libicalss/*.hpp
     ${PROJECT_BINARY_DIR}/src/libicalss/*.c
     ${PROJECT_BINARY_DIR}/src/libicalss/*.h
-    ${PROJECT_SOURCE_DIR}/src/libicalvcal/*.h
-    ${PROJECT_SOURCE_DIR}/src/libicalvcal/*.c
-    ${PROJECT_SOURCE_DIR}/src/libicalvcal/*.cxx
-    ${PROJECT_BINARY_DIR}/src/libicalvcal/*.c
-    ${PROJECT_BINARY_DIR}/src/libicalvcal/*.h
     ${PROJECT_SOURCE_DIR}/src/libicalvcard/*.h
     ${PROJECT_SOURCE_DIR}/src/libicalvcard/*.c
-    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*.cxx
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*.cpp
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*.hpp
     ${PROJECT_BINARY_DIR}/src/libicalvcard/*.c
     ${PROJECT_BINARY_DIR}/src/libicalvcard/*.h
   )
   list(APPEND _all_hdrs ${_dox_deps})
+  file(
+    GLOB _no_hdrs
+    ${PROJECT_SOURCE_DIR}/src/libical/*impl.h
+    ${PROJECT_SOURCE_DIR}/src/libical/*_export.h
+    ${PROJECT_SOURCE_DIR}/src/libical/libical_deprecated.h
+    ${PROJECT_SOURCE_DIR}/src/libical/libical_sentinel.h
+    ${PROJECT_SOURCE_DIR}/src/libical/icalpvl.c
+    ${PROJECT_SOURCE_DIR}/src/libical/icalpvl.h
+    ${PROJECT_SOURCE_DIR}/src/libical/*_p.c
+    ${PROJECT_SOURCE_DIR}/src/libical/*_p.h
+    ${PROJECT_BINARY_DIR}/src/libical/*_p.h
+    ${PROJECT_BINARY_DIR}/src/libical/icalderived*.c
+    ${PROJECT_BINARY_DIR}/src/libical/icalderived*.h
+    ${PROJECT_BINARY_DIR}/src/libical/icalrestriction.c
+    ${PROJECT_SOURCE_DIR}/src/libicalss/icalssyacc.*
+    ${PROJECT_SOURCE_DIR}/src/libicalss/*impl.h
+    ${PROJECT_SOURCE_DIR}/src/libicalss/*_export.h
+    ${PROJECT_SOURCE_DIR}/src/libicalss/*_p.c
+    ${PROJECT_SOURCE_DIR}/src/libicalss/*_p.h
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*impl.h
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*_export.h
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*_p.c
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*_p.h
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderived*.c
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderived*.h
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardrestriction.c
+  )
+  list(REMOVE_ITEM _all_hdrs ${_no_hdrs})
   _join_list(DOXYGEN_INPUT " " ${_all_hdrs})
 
   #apidox generation using doxygen

@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ea1c8da4.js";
+            window.path_to_searchindex_js = "searchindex-4fe1e7cd.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-efbb6a9c.js"></script>
@@ -178,16 +178,26 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="410---unreleased"><a class="header" href="#410---unreleased">[4.1.0] - Unreleased</a></h2>
+<p>WIP</p>
 <h2 id="400---unreleased"><a class="header" href="#400---unreleased">[4.0.0] - Unreleased</a></h2>
 <p>This is a major release and is <strong>not</strong> source or binary compatible with version 3.x.</p>
-<p>Please see <a href="docs/MigrationGuide_to_4.html">Version 4 Migration Guide</a>
+<p>Please see <a href="MigrationGuide_to_4.html">Version 4 Migration Guide</a>
 for details about API changes since libical 3.x.</p>
+<p>Included in this release is a <strong>Technical Preview (TP)</strong> of our new library libicalvcard
+for handling VCARD formatted data.  We encourage users to try-out this new library
+and provide feedback to our issue tracker at <a href="https://github.com/libical/libical/issues">https://github.com/libical/libical/issues</a>.
+Note that the libicalvcard API is not finalized and no source or binary compatibility
+is guaranteed until sometime later in 4.x release cycle. Additionally, there are currently
+no C++ bindings available for libicalvcard (volunteers wanted).</p>
+<p>Please <strong>do not</strong> use libicalvcard for production or other non-experimental purposes
+until the Technical Preview phase is completed.</p>
 <h3 id="added"><a class="header" href="#added">Added</a></h3>
 <ul>
 <li>REUSE compliant licensing</li>
 <li>Supports multi-valued parameters (DELEGATED-FROM, DELEGATED-TO, MEMBER, DISPLAY, FEATURE, etc)</li>
 <li>Adds java bindings</li>
-<li>Brand new icalvcard library that follows the libical API.</li>
+<li>(TP) Brand new icalvcard library that follows the libical API.</li>
 <li>draft-ietf-calext-eventpub-extensions-19 (RFC 9073) support added</li>
 <li>draft-ietf-calext-valarm-extensions-07 (RFC 9074) support added</li>
 <li>Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions</li>
@@ -201,7 +211,7 @@ on 32-bit systems (where available and supported.  Windows-only so far)</li>
 </ul>
 <h3 id="changed"><a class="header" href="#changed">Changed</a></h3>
 <ul>
-<li>Built-in timezones updated to tzdata2025c to include historical data</li>
+<li>Built-in timezones updated to tzdata2026a to include historical data</li>
 <li>Requires MSVC 2013 or higher (when building on Windows with MSVC)</li>
 <li>Requires CMake v3.20.0 or higher</li>
 <li>For the C++ bindings, requires a C++11 compliant C++ compiler</li>
@@ -224,19 +234,15 @@ setting is ICAL_ASSUME_IANA_TOKEN. Otherwise, they are handled as error.</li>
 are parsed as X kind.</li>
 <li>The <code>icalproperty_remove_parameter_by_(kind|name)</code> functions now remove all matching parameters.
 Before, they only removed the first matching parameter contrary to their documentation.</li>
+<li><code>icalrecurrencetype_new_from_string()</code> is more strict against overflows and empty rule parts.
+E.g. it now rejects RRULE parts like <code>BYDAY=255SU</code> (which used to be interpreted as <code>BYDAY=-1SU</code>).</li>
 </ul>
 <h3 id="deprecated"><a class="header" href="#deprecated">Deprecated</a></h3>
 <ul>
-<li>
-<p>The icalvcal library is deprecated and will be removed sometime in the 4.x series.
-Please port your icalvcal code to use icalvcard instead.</p>
-</li>
-<li>
-<p>Several CMake options are renamed in favor of a “namespaced” equivalent.
+<li>Several CMake options are renamed in favor of a “namespaced” equivalent.
 Please port your buildscripts to the new CMake option names.
 A complete list is provided in this “CMake options” section of the
-<a href="docs/MigrationGuide_to_4.html">Version 4 Migration Guide</a></p>
-</li>
+<a href="MigrationGuide_to_4.html">Version 4 Migration Guide</a></li>
 </ul>
 <h3 id="removed"><a class="header" href="#removed">Removed</a></h3>
 <ul>
@@ -514,7 +520,7 @@ including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
 <li>WARNING: Version 2 IS NOT Binary Compatible with Older Versions</li>
 <li>Version 2 is Source Compatible with Older Versions</li>
 <li>Lots of source code scrubbing</li>
-<li>[New] RSCALE support (requires libicu from <a href="http://www.icu-project.org">http://www.icu-project.org</a>)</li>
+<li>[New] RSCALE support (requires libicu from <a href="https://icu.unicode.org">https://icu.unicode.org</a>)</li>
 <li>[New] CalDAV attachment support (draft-ietf-calext-caldav-attachments)</li>
 <li>[New] Resurrect the Berkeley DB storage support</li>
 <li>[Bug] issue83: Incorrect recurrence generation for weekly pattern</li>

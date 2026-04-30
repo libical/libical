@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ea1c8da4.js";
+            window.path_to_searchindex_js = "searchindex-4fe1e7cd.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-efbb6a9c.js"></script>
@@ -178,6 +178,7 @@
                         <h1 id="libical--an-implementation-of-icalendar-protocols-and-data-formats"><a class="header" href="#libical--an-implementation-of-icalendar-protocols-and-data-formats">Libical — an implementation of iCalendar protocols and data formats</a></h1>
 <p><a href="https://github.com/libical/libical/actions"><img src="https://github.com/libical/libical/actions/workflows/build.yml/badge.svg" alt="Github workflow"></a>
 <a href="https://repology.org/metapackage/libical"><img src="https://repology.org/badge/tiny-repos/libical.svg" alt="Packaging status"></a></p>
+<p><a href="https://github.com/sponsors/libical">Become a libical sponsor</a></p>
 <h2 id="about"><a class="header" href="#about">About</a></h2>
 <p>Libical — an implementation of iCalendar protocols and data formats</p>
 <p>Most of the code in here was written by Eric Busboom at the end
@@ -190,7 +191,7 @@ calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.</p>
 <p>Thanks to our <a href="#contributors">contributors</a>.</p>
 <h2 id="rfcs"><a class="header" href="#rfcs">RFCs</a></h2>
-<p>See <a href="docs/rfcs.html">RFC calendar standards</a> for list of RFCs supported by this library.</p>
+<p>See <a href="#libical-rfc-calendar-standards-support">RFC calendar standards</a> for list of RFCs supported by this library.</p>
 <h2 id="license"><a class="header" href="#license">License</a></h2>
 <p>The code and datafiles in this distribution are licensed under the
 Mozilla Public License (MPL) v2.0. See <a href="https://www.mozilla.org/MPL">https://www.mozilla.org/MPL</a>
@@ -212,11 +213,11 @@ included, along with their respective licenses.</p>
 overview of changes since the previous version.</p>
 <p>See the <a href="https://libical.github.io/libical/v4/apidocs/">C API documentation</a> and
 <a href="https://libical.github.io/libical/v4/libical-glib/">glibc API documentation</a>.</p>
-<p>For a conceptual overview of the library, see <a href="docs/UsingLibical.html">Using Libical</a>.
+<p>For a conceptual overview of the library, see <a href="#using-libical">Using Libical</a>.
 There is other rudimentary, unfinished documentation in the <code>docs/</code> directory of the
 source distribution, annotated examples in <code>examples/</code> and the test code in <code>src/test/</code>.</p>
 <p>For developers porting their code to libical version 4, please visit the
-<a href="docs/MigrationGuide_to_4.html">Version 4 Migration Guide</a>.</p>
+<a href="#migrating-to-version-4">Version 4 Migration Guide</a>.</p>
 <h2 id="acknowledgments"><a class="header" href="#acknowledgments">Acknowledgments</a></h2>
 <p>Portions of this distribution are (C) Copyright 1996 Apple Computer,Inc., AT&amp;T Corp.,
 International Business Machines Corporation and Siemens Rolm Communications Inc.
@@ -350,7 +351,7 @@ same name.  This is known to be the case with libffi and libxml2</p>
 <li>
 <p>libicu “International Components for Unicode” development libraries.
 Highly recommended for RSCALE support.
-libicu can be found at <a href="http://www.icu-project.org">http://www.icu-project.org</a></p>
+libicu can be found at <a href="https://icu.unicode.org">https://icu.unicode.org</a></p>
 <p>If CMake doesn’t locate your libicu installation try setting the
 ICU_ROOT or ICU_BASE environment variables to the top folder where
 libicu is installed and run cmake again.</p>
@@ -373,7 +374,7 @@ installed beforehand.</p>
 <li>Ubuntu: apt-get install gobject-introspection</li>
 <li>Fedora: dnf install gobject-introspection</li>
 <li>Mac: brew install gobject-introspection pygobject3</li>
-<li>Windows: vcpkg install gobject-introspection (see [using vcpkg](#Using vcpkg to install dependencies).</li>
+<li>Windows: vcpkg install gobject-introspection (see <a href="#vcpkg">using vcpkg</a>).</li>
 </ul>
 </li>
 </ul>
@@ -433,7 +434,9 @@ ALWAYS true on Windows systems</p>
 <p>Run <code>make docs</code> to build the API documentation and reference.</p>
 <p>Disable the docs make target by running cmake with -DLIBICAL_BUILD_DOCS=False option.
 Disable the libical-glib developer documentation by running cmake with -DLIBICAL_GLIB_BUILD_DOCS=False.</p>
-<h2 id="using-vcpkg-to-install-dependencies"><a class="header" href="#using-vcpkg-to-install-dependencies">Using vcpkg to install dependencies</a></h2>
+<a name="vcpkg">
+## Using vcpkg to install dependencies
+</a>
 <p>If you want to use vcpkg (%VCPKG_ROOT% on Windows or $VCPKG_ROOT on non-Windows) to build
 the dependencies as part of the project you can also tell CMake the vcpkg toolchain file
 with the CMake “CMAKE_TOOLCHAIN_FILE” setting.</p>
@@ -1917,6 +1920,24 @@ Replace <code>icalrecurrencetype_rscale_is_supported()</code> calls with a true 
 <li><code>icaltimezone_array_new()</code></li>
 <li><code>icaltimezone_array_append_from_vtimezone()</code></li>
 <li><code>icaltimezone_array_free()</code></li>
+<li><code>icalpvl_*()</code></li>
+<li><code>icalerror_check_arg_rx()</code></li>
+<li><code>icalerror_check_arg_re()</code></li>
+<li><code>icalerror_check_arg_rz()</code></li>
+<li><code>icalerror_check_arg_rv()</code></li>
+<li><code>icalerror_check_arg()</code></li>
+<li><code>icalerror_assert()</code></li>
+<li><code>icalerrprintf()</code></li>
+<li><code>icalerror_warn()</code></li>
+<li><code>icalerror_crash_here()</code></li>
+<li><code>icalerror_stop_here()</code></li>
+<li><code>icalerror_check_value_type()</code></li>
+<li><code>icalerror_check_property_type()</code></li>
+<li><code>icalerror_check_parameter_type()</code></li>
+<li><code>icalerror_check_component_type()</code></li>
+<li><code>icaltime_span_new()</code></li>
+<li><code>icaltime_span_overlaps()</code></li>
+<li><code>icaltime_span_contains()</code></li>
 </ul>
 </li>
 </ul>
@@ -2267,10 +2288,7 @@ the <a href="LICENSES/BSD-3-Clause.txt">BSD-3-Clause</a> license.</p>
 <h2 id="build-time"><a class="header" href="#build-time">Build-time</a></h2>
 <p>These dependencies are only used during build or other purposes like
 generating documentation.</p>
-<h3 id="doxygen-awesome"><a class="header" href="#doxygen-awesome">Doxygen Awesome</a></h3>
-<p><a href="https://github.com/jothepro/doxygen-awesome-css">Doxygen Awesome</a>
-is a custom CSS theme for Doxygen HTML documentation.</p>
-<p><a href="docs/doxygen-awesome.css">code</a> - <a href="LICENSES/MIT.txt">MIT licensed</a></p>
+<p>N/A</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
 <p>The Libical project was founded in 1999 (or perhaps earlier) by Eric Busboom <a href="mailto:eric@clarinova.com">eric@clarinova.com</a>.</p>
@@ -2377,16 +2395,26 @@ thread safe memory allocator, and a lot of documentation.</p>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="410---unreleased"><a class="header" href="#410---unreleased">[4.1.0] - Unreleased</a></h2>
+<p>WIP</p>
 <h2 id="400---unreleased"><a class="header" href="#400---unreleased">[4.0.0] - Unreleased</a></h2>
 <p>This is a major release and is <strong>not</strong> source or binary compatible with version 3.x.</p>
-<p>Please see <a href="docs/MigrationGuide_to_4.html">Version 4 Migration Guide</a>
+<p>Please see <a href="#migrating-to-version-4">Version 4 Migration Guide</a>
 for details about API changes since libical 3.x.</p>
+<p>Included in this release is a <strong>Technical Preview (TP)</strong> of our new library libicalvcard
+for handling VCARD formatted data.  We encourage users to try-out this new library
+and provide feedback to our issue tracker at <a href="https://github.com/libical/libical/issues">https://github.com/libical/libical/issues</a>.
+Note that the libicalvcard API is not finalized and no source or binary compatibility
+is guaranteed until sometime later in 4.x release cycle. Additionally, there are currently
+no C++ bindings available for libicalvcard (volunteers wanted).</p>
+<p>Please <strong>do not</strong> use libicalvcard for production or other non-experimental purposes
+until the Technical Preview phase is completed.</p>
 <h3 id="added"><a class="header" href="#added">Added</a></h3>
 <ul>
 <li>REUSE compliant licensing</li>
 <li>Supports multi-valued parameters (DELEGATED-FROM, DELEGATED-TO, MEMBER, DISPLAY, FEATURE, etc)</li>
 <li>Adds java bindings</li>
-<li>Brand new icalvcard library that follows the libical API.</li>
+<li>(TP) Brand new icalvcard library that follows the libical API.</li>
 <li>draft-ietf-calext-eventpub-extensions-19 (RFC 9073) support added</li>
 <li>draft-ietf-calext-valarm-extensions-07 (RFC 9074) support added</li>
 <li>Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions</li>
@@ -2400,7 +2428,7 @@ on 32-bit systems (where available and supported.  Windows-only so far)</li>
 </ul>
 <h3 id="changed"><a class="header" href="#changed">Changed</a></h3>
 <ul>
-<li>Built-in timezones updated to tzdata2025c to include historical data</li>
+<li>Built-in timezones updated to tzdata2026a to include historical data</li>
 <li>Requires MSVC 2013 or higher (when building on Windows with MSVC)</li>
 <li>Requires CMake v3.20.0 or higher</li>
 <li>For the C++ bindings, requires a C++11 compliant C++ compiler</li>
@@ -2423,19 +2451,15 @@ setting is ICAL_ASSUME_IANA_TOKEN. Otherwise, they are handled as error.</li>
 are parsed as X kind.</li>
 <li>The <code>icalproperty_remove_parameter_by_(kind|name)</code> functions now remove all matching parameters.
 Before, they only removed the first matching parameter contrary to their documentation.</li>
+<li><code>icalrecurrencetype_new_from_string()</code> is more strict against overflows and empty rule parts.
+E.g. it now rejects RRULE parts like <code>BYDAY=255SU</code> (which used to be interpreted as <code>BYDAY=-1SU</code>).</li>
 </ul>
 <h3 id="deprecated"><a class="header" href="#deprecated">Deprecated</a></h3>
 <ul>
-<li>
-<p>The icalvcal library is deprecated and will be removed sometime in the 4.x series.
-Please port your icalvcal code to use icalvcard instead.</p>
-</li>
-<li>
-<p>Several CMake options are renamed in favor of a “namespaced” equivalent.
+<li>Several CMake options are renamed in favor of a “namespaced” equivalent.
 Please port your buildscripts to the new CMake option names.
 A complete list is provided in this “CMake options” section of the
-<a href="docs/MigrationGuide_to_4.html">Version 4 Migration Guide</a></p>
-</li>
+<a href="#migrating-to-version-4">Version 4 Migration Guide</a></li>
 </ul>
 <h3 id="removed"><a class="header" href="#removed">Removed</a></h3>
 <ul>
@@ -2713,7 +2737,7 @@ including &lt;libical-glib/libical-glib.h&gt; to be able to use it.</li>
 <li>WARNING: Version 2 IS NOT Binary Compatible with Older Versions</li>
 <li>Version 2 is Source Compatible with Older Versions</li>
 <li>Lots of source code scrubbing</li>
-<li>[New] RSCALE support (requires libicu from <a href="http://www.icu-project.org">http://www.icu-project.org</a>)</li>
+<li>[New] RSCALE support (requires libicu from <a href="https://icu.unicode.org">https://icu.unicode.org</a>)</li>
 <li>[New] CalDAV attachment support (draft-ietf-calext-caldav-attachments)</li>
 <li>[New] Resurrect the Berkeley DB storage support</li>
 <li>[Bug] issue83: Incorrect recurrence generation for weekly pattern</li>

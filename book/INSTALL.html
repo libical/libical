@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ea1c8da4.js";
+            window.path_to_searchindex_js = "searchindex-4fe1e7cd.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-efbb6a9c.js"></script>
@@ -273,7 +273,7 @@ same name.  This is known to be the case with libffi and libxml2</p>
 <li>
 <p>libicu “International Components for Unicode” development libraries.
 Highly recommended for RSCALE support.
-libicu can be found at <a href="http://www.icu-project.org">http://www.icu-project.org</a></p>
+libicu can be found at <a href="https://icu.unicode.org">https://icu.unicode.org</a></p>
 <p>If CMake doesn’t locate your libicu installation try setting the
 ICU_ROOT or ICU_BASE environment variables to the top folder where
 libicu is installed and run cmake again.</p>
@@ -296,7 +296,7 @@ installed beforehand.</p>
 <li>Ubuntu: apt-get install gobject-introspection</li>
 <li>Fedora: dnf install gobject-introspection</li>
 <li>Mac: brew install gobject-introspection pygobject3</li>
-<li>Windows: vcpkg install gobject-introspection (see [using vcpkg](#Using vcpkg to install dependencies).</li>
+<li>Windows: vcpkg install gobject-introspection (see <a href="#vcpkg">using vcpkg</a>).</li>
 </ul>
 </li>
 </ul>
@@ -356,7 +356,9 @@ ALWAYS true on Windows systems</p>
 <p>Run <code>make docs</code> to build the API documentation and reference.</p>
 <p>Disable the docs make target by running cmake with -DLIBICAL_BUILD_DOCS=False option.
 Disable the libical-glib developer documentation by running cmake with -DLIBICAL_GLIB_BUILD_DOCS=False.</p>
-<h2 id="using-vcpkg-to-install-dependencies"><a class="header" href="#using-vcpkg-to-install-dependencies">Using vcpkg to install dependencies</a></h2>
+<a name="vcpkg">
+## Using vcpkg to install dependencies
+</a>
 <p>If you want to use vcpkg (%VCPKG_ROOT% on Windows or $VCPKG_ROOT on non-Windows) to build
 the dependencies as part of the project you can also tell CMake the vcpkg toolchain file
 with the CMake “CMAKE_TOOLCHAIN_FILE” setting.</p>
