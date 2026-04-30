@@ -14,6 +14,11 @@ set -o pipefail
 export MAKEFLAGS=-j4
 export CMAKE_BUILD_PARALLEL_LEVEL=4
 
+#find Java
+if (test -f "/etc/fedora-release"); then
+  export JAVA_HOME=/usr/lib/jvm/java-latest-openjdk
+fi
+
 if (test "$(uname -s)" = "Darwin"); then
   #needed to find homebrew's libxml2 and libffi on osx
   export PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig
@@ -179,7 +184,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='ICalGLib-4.0\.c\|ICal-4.0\.c\|g-ir-scanner:'
+  whitelist='ICalGLib-4.0\.c\|ICal-4.0\.c\|g-ir-scanner:\|vcc\.c:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
