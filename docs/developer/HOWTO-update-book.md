@@ -22,7 +22,7 @@ Checkout the branch corresponding to the version you want to update:
 ```shell
      mkdir build-book
      cd build-book
-     cmake -G Ninja .. && ninja build-book
+     cmake -G Ninja -DLIBICAL_JAVA_BINDINGS=False .. && ninja build-book
      cd ..
 ```
 

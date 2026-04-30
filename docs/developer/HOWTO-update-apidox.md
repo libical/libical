@@ -11,7 +11,7 @@ Checkout the branch corresponding to the version you want to update:
 ```shell
      git checkout 3.0 # for version 3.x
        OR
-     git checkout master # for version 4.x
+     git checkout 4.0 # for version 4.x
 ```
 
 ## Building the documentation
@@ -19,7 +19,7 @@ Checkout the branch corresponding to the version you want to update:
 ```shell
      mkdir build-apidox
      cd build-apidox
-     cmake -G Ninja .. && ninja && ninja docs
+     cmake -G Ninja -DLIBICAL_JAVA_BINDINGS=False .. && ninja && ninja docs
      cd ..
 ```
 

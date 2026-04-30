@@ -4,7 +4,7 @@
 
 This is a major release and is **not** source or binary compatible with version 3.x.
 
-Please see [Version 4 Migration Guide](MigrationGuide_to_4.md)
+Please see [Version 4 Migration Guide](https://github.com/libical/libical/blob/4.0/docs/MigrationGuide_to_4.md)
 for details about API changes since libical 3.x.
 
 Note that the libical-glib library is considered stable as of this release.
