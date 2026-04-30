@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 WIP
 
-## [4.0.0] - Unreleased
+## [4.0.1] - Unreleased
+
+TBD
+
+## [4.0.0] - 2026-04-30
 
 This is a major release and is **not** source or binary compatible with version 3.x.
 

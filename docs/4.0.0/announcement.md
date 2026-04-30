@@ -38,4 +38,4 @@ Libical implements
 * iCalendar Message-Based Interoperability Protocol (iMIP) (RFC6047)
 * Scheduling Extensions to CalDAV (RFC6638)
 
-For more information about Libical, please visit <http://libical.github.io/libical/>
+For more information about Libical, please visit <http://libical.github.io/libical/book>

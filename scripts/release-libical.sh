@@ -25,7 +25,7 @@ HELP() {
   echo
   echo "Usage: $(basename "$0") [-f] X.Y.Z"
   echo
-  echo "Create the tars/zips and sign for project release X.Y.Z"
+  echo "Create the tars/zips for libical release X.Y.Z"
   echo " Options:"
   echo "  -f  Force everything to run, even if the tag for X.Y.Z has already been pushed."
   echo
@@ -125,7 +125,7 @@ fi
 rm -rf build-docs "$PROJECT-$release-doc.zip"
 mkdir build-docs
 cd build-docs || exit 1
-cmake -G "Ninja" --warn-uninitialized -Werror=dev -DLIBICAL_BUILD_DOCS=True ..
+cmake -G "Ninja" --warn-uninitialized -Werror=dev -DLIBICAL_BUILD_DOCS=True -DLIBICAL_JAVA_BINDINGS=False ..
 ninja docs
 cp libical.tag "$TOP"
 cd apidocs/html || exit 1
