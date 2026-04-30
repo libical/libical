@@ -138,7 +138,7 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(
   libical
-  VERSION 4.0.0
+  VERSION 4.0.1
   DESCRIPTION "An implementation of basic iCAL protocols"
   HOMEPAGE_URL "https://libical.github.io/libical/"
   LANGUAGES
