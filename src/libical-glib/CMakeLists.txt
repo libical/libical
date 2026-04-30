@@ -24,16 +24,17 @@ if(NOT DEFINED LIBXML2_DEFINITIONS)
 endif()
 target_compile_options(
   ical-glib-src-generator
-  PUBLIC
+  PRIVATE
     ${GLIB_CFLAGS}
     ${LIBXML2_DEFINITIONS}
     -DG_LOG_DOMAIN=\"src-generator\"
 )
 target_link_libraries(
   ical-glib-src-generator
-  ${GLIB_LDFLAGS}
-  ${GOBJECT_LDFLAGS}
-  ${LIBXML2_LIBRARIES}
+  PRIVATE
+    ${GLIB_LDFLAGS}
+    ${GOBJECT_LDFLAGS}
+    ${LIBXML2_LIBRARIES}
 )
 
 install(
