@@ -45,11 +45,6 @@ file(APPEND ${ICAL_FILE_H_FILE} "#ifdef __cplusplus\n")
 file(APPEND ${ICAL_FILE_H_FILE} "extern \"C\" {\n")
 file(APPEND ${ICAL_FILE_H_FILE} "#endif\n")
 
-libical_removed_macros(ICAL_ENABLE_ERRORS_ARE_FATAL)
-libical_removed_macros(ICAL_ALLOW_EMPTY_PROPERTIES)
-libical_removed_macros(PVL_USE_MACROS)
-libical_removed_macros(ICAL_SETERROR_ISFUNC)
-
 foreach(_current_FILE ${COMBINEDHEADERSICAL})
   file(STRINGS ${_current_FILE} _lines NEWLINE_CONSUME)
   foreach(_currentLINE ${_lines})
