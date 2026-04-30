@@ -83,11 +83,12 @@ run `make test` (or `nmake test` or `mingw32-make test`)
 To run the test suite in verbose mode, pass ARGS="-V" to the make command
 For example: `nmake test ARGS="-V"`
 
-By default, the buildsystem creates shared(dynamic) and static versions
-of the libraries, but that behavior can be modified at CMake time:
+By default, the buildsystem creates shared(dynamic) versions of the libraries.
+Static libraries can be built by configuring at CMake time with:
 
-- To build the static libraries only, pass -DSTATIC_ONLY=True to cmake.
-- To build the shared libraries only, pass -DSHARED_ONLY=True to cmake.
+```shell
+% cmake -DLIBICAL_STATIC=True <more_cmake_options>
+```
 
 ## Building with Different Compilers
 
@@ -193,10 +194,6 @@ This C library can be built with bindings for these other languages:
 ## Tweaking the Library Behavior
 
 Use these CMake options to adjust the library behavior as follows:
-
-- LIBICAL_ENABLE_ERRORS_ARE_FATAL=[true|false]
-  Set to make icalerror_* calls abort instead of internally signaling an error.
-  Default=false
 
 - LIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
   Set to build using our own (instead of the system's) timezone data.
