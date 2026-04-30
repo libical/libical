@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['libical_20an_20implementation_20of_20icalendar_20protocols_20and_20data_20formats_0',['Libical - an implementation of iCalendar protocols and data formats',['../index.html',1,'']]]
+  ['libical_20an_20implementation_20of_20icalendar_20protocols_20and_20data_20formats_0',['Libical - an implementation of iCalendar protocols and data formats',['../index.html',1,'']]],
+  ['license_1',['License',['../index.html#license',1,'']]]
 ];

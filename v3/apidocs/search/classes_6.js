@@ -45,5 +45,8 @@ var searchData=
   ['icaltriggertype_42',['icaltriggertype',['../structicaltriggertype.html',1,'']]],
   ['icalvalue_43',['ICalValue',['../classLibICal_1_1ICalValue.html',1,'LibICal']]],
   ['icalvalue_5fimpl_44',['icalvalue_impl',['../structicalvalue__impl.html',1,'']]],
-  ['icpointerholder_45',['ICPointerHolder',['../classICPointerHolder.html',1,'']]]
+  ['icpointerholder_45',['ICPointerHolder',['../classICPointerHolder.html',1,'']]],
+  ['icpointerholder_3c_20libical_3a_3aicalproperty_20_3e_46',['ICPointerHolder&lt; LibICal::ICalProperty &gt;',['../classICPointerHolder.html',1,'']]],
+  ['icpointerholder_3c_20libical_3a_3aicalvalue_20_3e_47',['ICPointerHolder&lt; LibICal::ICalValue &gt;',['../classICPointerHolder.html',1,'']]],
+  ['icpointerholder_3c_20libical_3a_3avcomponent_20_3e_48',['ICPointerHolder&lt; LibICal::VComponent &gt;',['../classICPointerHolder.html',1,'']]]
 ];

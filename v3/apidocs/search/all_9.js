@@ -355,9 +355,12 @@ var searchData=
   ['icalvalue_5fkind_5fis_5fvalid_352',['icalvalue_kind_is_valid',['../icalvalue_8h.html#ada00c51fccf5a71ec7e43fb6207b634a',1,'icalvalue.h']]],
   ['icalvalue_5fset_5fparent_353',['icalvalue_set_parent',['../icalproperty_8h.html#a810f13ffbf32703b6f1e71ad3e0189c7',1,'icalvalue.c']]],
   ['icpointerholder_354',['ICPointerHolder',['../classICPointerHolder.html',1,'']]],
-  ['icptrholder_5fcxx_2eh_355',['icptrholder_cxx.h',['../icptrholder__cxx_8h.html',1,'']]],
-  ['implementation_20of_20icalendar_20protocols_20and_20data_20formats_356',['Libical - an implementation of iCalendar protocols and data formats',['../index.html',1,'']]],
-  ['is_5fbusy_357',['is_busy',['../structicaltime__span.html#a8e328dae6c1e17b38a099071a4badbcf',1,'icaltime_span']]],
-  ['is_5fdate_358',['is_date',['../structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96',1,'icaltimetype']]],
-  ['is_5fdaylight_359',['is_daylight',['../structicaltimetype.html#a8b90b6a7979294823e98a2dd3d7edd50',1,'icaltimetype::is_daylight'],['../struct__icaltimezonechange.html#a37d811204cf5d7129767b12de5302e37',1,'_icaltimezonechange::is_daylight']]]
+  ['icpointerholder_3c_20libical_3a_3aicalproperty_20_3e_355',['ICPointerHolder&lt; LibICal::ICalProperty &gt;',['../classICPointerHolder.html',1,'']]],
+  ['icpointerholder_3c_20libical_3a_3aicalvalue_20_3e_356',['ICPointerHolder&lt; LibICal::ICalValue &gt;',['../classICPointerHolder.html',1,'']]],
+  ['icpointerholder_3c_20libical_3a_3avcomponent_20_3e_357',['ICPointerHolder&lt; LibICal::VComponent &gt;',['../classICPointerHolder.html',1,'']]],
+  ['icptrholder_5fcxx_2eh_358',['icptrholder_cxx.h',['../icptrholder__cxx_8h.html',1,'']]],
+  ['implementation_20of_20icalendar_20protocols_20and_20data_20formats_359',['Libical - an implementation of iCalendar protocols and data formats',['../index.html',1,'']]],
+  ['is_5fbusy_360',['is_busy',['../structicaltime__span.html#a8e328dae6c1e17b38a099071a4badbcf',1,'icaltime_span']]],
+  ['is_5fdate_361',['is_date',['../structicaltimetype.html#a48d5ac850b2675cd80bbcefe00d7ae96',1,'icaltimetype']]],
+  ['is_5fdaylight_362',['is_daylight',['../structicaltimetype.html#a8b90b6a7979294823e98a2dd3d7edd50',1,'icaltimetype::is_daylight'],['../struct__icaltimezonechange.html#a37d811204cf5d7129767b12de5302e37',1,'_icaltimezonechange::is_daylight']]]
 ];
