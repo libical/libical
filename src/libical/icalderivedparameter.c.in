@@ -137,7 +137,7 @@ icalparameter_kind icalparameter_string_to_kind(const char *string)
     key.value_kind = ICAL_NO_VALUE;
     key.flags = 0;
     result =
-        bsearch(&key, parameter_map, sizeof(parameter_map) / sizeof(struct icalparameter_kind_map),
+        (struct icalparameter_kind_map *)bsearch(&key, parameter_map, sizeof(parameter_map) / sizeof(struct icalparameter_kind_map),
                 sizeof(struct icalparameter_kind_map),
                 (int (*)(const void *, const void *))icalparameter_compare_kind_map);
 

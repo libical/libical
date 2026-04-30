@@ -371,7 +371,7 @@ VObject* addGroup(VObject *o, const char *g)
             prop(VCGrouping=b)
                 prop(VCGrouping=a)
      */
-    char *dot = strrchr(g,'.');
+    char *dot = (char *)strrchr(g,'.');
     if (dot) {
         VObject *p, *t;
         char *gs;
