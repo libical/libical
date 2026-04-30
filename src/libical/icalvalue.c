@@ -92,6 +92,7 @@ icalvalue *icalvalue_clone(const icalvalue *old)
         break;
     }
     case ICAL_QUERY_VALUE:
+    case ICAL_COLOR_VALUE:
     case ICAL_STRING_VALUE:
     case ICAL_TEXT_VALUE:
     case ICAL_CALADDRESS_VALUE:
@@ -595,6 +596,10 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         value = icalvalue_new_string(str);
         break;
 
+    case ICAL_COLOR_VALUE:
+        value = icalvalue_new_color(str);
+        break;
+
     case ICAL_CALADDRESS_VALUE:
         value = icalvalue_new_caladdress(str);
         break;
@@ -822,6 +827,9 @@ void icalvalue_free(icalvalue *v)
         _fallthrough();
 
     case ICAL_STRING_VALUE:
+        _fallthrough();
+
+    case ICAL_COLOR_VALUE:
         _fallthrough();
 
     case ICAL_QUERY_VALUE: {
@@ -1247,6 +1255,7 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
         return icalvalue_string_as_ical_string_r(value);
 
     case ICAL_STRING_VALUE:
+    case ICAL_COLOR_VALUE:
     case ICAL_URI_VALUE:
     case ICAL_CALADDRESS_VALUE:
     case ICAL_XMLREFERENCE_VALUE:
