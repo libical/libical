@@ -66,6 +66,9 @@
 "LINK","5042","(m)const char*","string","UID;URI;XML-REFERENCE",
 "RELATED-TO","5043","(m)const char*","string","TEXT;UID;URI",
 
+"#New Properties for iCalendar value types","RFC 7986 Section 5",
+"COLOR","5044","(m)const char*","string","unitary",
+
 "#NOTE for updaters.  Preserve the icalvalue_kind Enum values and property Enum values to aid forward compatibility"
 "# New Enum values for an existing icalvalue_kind should be inserted before the corresponding NONE value"
 "# New icalvalue_kind types should start their Enum value after the highest NONE value (currently 11599)"

@@ -17,6 +17,7 @@
     <element name="ICAL_BUSYTYPE_VALUE"/>
     <element name="ICAL_CALADDRESS_VALUE"/>
     <element name="ICAL_CARLEVEL_VALUE"/>
+    <element name="ICAL_COLOR_VALUE"/>
     <element name="ICAL_CLASS_VALUE"/>
     <element name="ICAL_CMD_VALUE"/>
     <element name="ICAL_DATE_VALUE"/>
@@ -256,6 +257,7 @@
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="STATUS" since="1.0" value-get-type="ICalPropertyStatus" value-set-type="ICalPropertyStatus" value-set-type-ref="#ICalPropertyStatus" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="status"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="BINARY" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="binary"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="TEXT" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="text"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="COLOR" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="color"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="DURATION" since="1.0" value-get-type="ICalDuration *" value-set-type="const ICalDuration *" value-set-type-ref="#ICalDuration" value-get-annotation="transfer full" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="duration"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="INTEGER" since="1.0" value-get-type="gint" value-set-type="gint" value-set-type-ref="integer" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="integer"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalValue" value-name="UID" since="4.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_value" native-prefix="icalvalue" suffix="uid"/>

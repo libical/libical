@@ -217,6 +217,18 @@ void test_values(void)
     icalvalue_free(v);
     icalvalue_free(copy);
 
+    v = icalvalue_new_color("#ff0000");
+    str_is("icalvalue_new_color(#ff0000)", icalvalue_get_color(v), "#ff0000");
+    icalvalue_set_color(v, "Blue");
+    str_is("icalvalue_set_color(Blue)", icalvalue_get_color(v), "Blue");
+    str_is("icalvalue_as_ical_string()", icalvalue_as_ical_string(v), "Blue");
+
+    copy = icalvalue_clone(v);
+    str_is("icalvalue_clone()", icalvalue_as_ical_string(copy), "Blue");
+
+    icalvalue_free(v);
+    icalvalue_free(copy);
+
     v = icalvalue_new_datetime(icaltime_from_timet_with_zone(1023404802, 0, NULL));
     str_is("icalvalue_new_datetime()", icalvalue_as_ical_string(v), "20020606T230642");
     icalvalue_set_datetime(v, icaltime_from_timet_with_zone(1023404802 - 3600, 0, NULL));
@@ -277,6 +289,15 @@ void test_values(void)
 
     v = icalvalue_new_from_string(ICAL_REQUESTSTATUS_VALUE, "Gonk");
     ok("illegal requeststatus value", (v == 0));
+
+    v = icalvalue_new_from_string(ICAL_COLOR_VALUE, "Gonk");
+    ok("illegal color value", (v == 0));
+
+    v = icalvalue_new_from_string(ICAL_COLOR_VALUE, "#0");
+    ok("illegal color value", (v == 0));
+
+    v = icalvalue_new_from_string(ICAL_COLOR_VALUE, "#FFFFFFF");
+    ok("illegal color value", (v == 0));
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_DEFAULT);
 }

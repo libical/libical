@@ -145,7 +145,7 @@
 #"NAME","115","TEXT","TEXT" (conflicts with NAME from rfc4324#section-2.1.2)
 "REFRESH-INTERVAL","116","DURATION","NO"
 "SOURCE","117","URI","NO"
-"COLOR","118","TEXT","TEXT"
+"COLOR","118","COLOR","COLOR"
 "IMAGE","119","ATTACH","NO",is_structured
 "CONFERENCE","120","URI","NO"
 

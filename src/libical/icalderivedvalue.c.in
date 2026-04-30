@@ -584,6 +584,232 @@ struct icalreqstattype icalvalue_get_requeststatus(const icalvalue *value)
     return ((struct icalvalue_impl *)value)->data.v_requeststatus;
 }
 
+/* https://www.w3.org/TR/css-color-4/#named-colors */
+static const char* css_colors[] = {
+    /* MUST be sorted by name */
+    "aliceblue",
+    "antiquewhite",
+    "aqua",
+    "aquamarine",
+    "azure",
+    "beige",
+    "bisque",
+    "black",
+    "blanchedalmond",
+    "blue",
+    "blueviolet",
+    "brown",
+    "burlywood",
+    "cadetblue",
+    "chartreuse",
+    "chocolate",
+    "coral",
+    "cornflowerblue",
+    "cornsilk",
+    "crimson",
+    "cyan",
+    "darkblue",
+    "darkcyan",
+    "darkgoldenrod",
+    "darkgray",
+    "darkgreen",
+    "darkgrey",
+    "darkkhaki",
+    "darkmagenta",
+    "darkolivegreen",
+    "darkorange",
+    "darkorchid",
+    "darkred",
+    "darksalmon",
+    "darkseagreen",
+    "darkslateblue",
+    "darkslategray",
+    "darkslategrey",
+    "darkturquoise",
+    "darkviolet",
+    "deeppink",
+    "deepskyblue",
+    "dimgray",
+    "dimgrey",
+    "dodgerblue",
+    "firebrick",
+    "floralwhite",
+    "forestgreen",
+    "fuchsia",
+    "gainsboro",
+    "ghostwhite",
+    "gold",
+    "goldenrod",
+    "gray",
+    "green",
+    "greenyellow",
+    "grey",
+    "honeydew",
+    "hotpink",
+    "indianred",
+    "indigo",
+    "ivory",
+    "khaki",
+    "lavender",
+    "lavenderblush",
+    "lawngreen",
+    "lemonchiffon",
+    "lightblue",
+    "lightcoral",
+    "lightcyan",
+    "lightgoldenrodyellow",
+    "lightgray",
+    "lightgreen",
+    "lightgrey",
+    "lightpink",
+    "lightsalmon",
+    "lightseagreen",
+    "lightskyblue",
+    "lightslategray",
+    "lightslategrey",
+    "lightsteelblue",
+    "lightyellow",
+    "lime",
+    "limegreen",
+    "linen",
+    "magenta",
+    "maroon",
+    "mediumaquamarine",
+    "mediumblue",
+    "mediumorchid",
+    "mediumpurple",
+    "mediumseagreen",
+    "mediumslateblue",
+    "mediumspringgreen",
+    "mediumturquoise",
+    "mediumvioletred",
+    "midnightblue",
+    "mintcream",
+    "mistyrose",
+    "moccasin",
+    "navajowhite",
+    "navy",
+    "oldlace",
+    "olive",
+    "olivedrab",
+    "orange",
+    "orangered",
+    "orchid",
+    "palegoldenrod",
+    "palegreen",
+    "paleturquoise",
+    "palevioletred",
+    "papayawhip",
+    "peachpuff",
+    "peru",
+    "pink",
+    "plum",
+    "powderblue",
+    "purple",
+    "rebeccapurple",
+    "red",
+    "rosybrown",
+    "royalblue",
+    "saddlebrown",
+    "salmon",
+    "sandybrown",
+    "seagreen",
+    "seashell",
+    "sienna",
+    "silver",
+    "skyblue",
+    "slateblue",
+    "slategray",
+    "slategrey",
+    "snow",
+    "springgreen",
+    "steelblue",
+    "tan",
+    "teal",
+    "thistle",
+    "tomato",
+    "turquoise",
+    "violet",
+    "wheat",
+    "white",
+    "whitesmoke",
+    "yellow",
+    "yellowgreen",
+};
+
+#define NUM_CSS_COLORS (sizeof(css_colors) / sizeof(const char *))
+
+static int strpcasecmp(const void *a, const void *b)
+{
+    return strcasecmp(*(const char **)a, *(const char **)b);
+}
+
+/* Validate color value
+ * per draft-ietf-calext-icalendar-jscalendar-extensions-05#name-color-property)
+ */
+static bool is_valid_color(const char *v)
+{
+    /* 6-digit hex */
+    if (v[0] == '#' &&
+        strspn(v+1, "0123456789abcdefABCDEF") == 6 &&
+        v[7] == '\0') {
+        return true;
+    }
+
+    /* CSS named color */
+    if (bsearch(&v, css_colors, NUM_CSS_COLORS, sizeof(char *), &strpcasecmp)) {
+        return true;
+    }
+
+    return false;
+}
+
+icalvalue *icalvalue_new_color(const char * v)
+{
+    struct icalvalue_impl *impl;
+    icalerror_check_arg_rz((v != 0), "v");
+
+    if (!is_valid_color(v)) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return NULL;
+    }
+    impl = icalvalue_new_impl(ICAL_COLOR_VALUE);
+    icalvalue_set_string((icalvalue *)impl, v);
+    return (icalvalue*)impl;
+}
+
+void icalvalue_set_color(icalvalue *value, const char * v)
+{
+    struct icalvalue_impl *impl;
+    icalerror_check_arg_rv((value != 0), "value");
+    icalerror_check_arg_rv((v != 0), "v");
+
+    icalerror_check_value_type(value, ICAL_COLOR_VALUE);
+    if (!is_valid_color(v)) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return;
+    }
+    impl = (struct icalvalue_impl *)value;
+    if (impl->data.v_string != 0) {
+        icalmemory_free_buffer((void *)impl->data.v_string);
+    }
+
+    impl->data.v_string = icalmemory_strdup(v);
+
+    if (impl->data.v_string == 0) {
+        errno = ENOMEM;
+    }
+
+    icalvalue_reset_kind(impl);
+}
+
+const char * icalvalue_get_color(const icalvalue *value)
+{
+    icalerror_check_arg_rz((value != 0), "value");
+    icalerror_check_value_type(value, ICAL_COLOR_VALUE);
+    return (((struct icalvalue_impl *)value)->data.v_string);
+}
+
 /* The remaining interfaces are 'new', 'set' and 'get' for each of the value
 types */
 
