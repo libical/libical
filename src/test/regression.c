@@ -6901,7 +6901,7 @@ static void test_internal_limits(void)
     int_is("max prop values", (int)icallimit_get(ICAL_LIMIT_PROPERTY_VALUES), 500);
     int_is("max recurrence search", (int)icallimit_get(ICAL_LIMIT_RECURRENCE_SEARCH), 100000);
     int_is("time standing still", (int)icallimit_get(ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL), 50);
-    int_is("max rrule search", (int)icallimit_get(ICAL_LIMIT_RRULE_SEARCH), 100);
+    int_is("max rrule search", (int)icallimit_get(ICAL_LIMIT_RRULE_SEARCH), 500);
 
     icallimit_set(ICAL_LIMIT_PROPERTIES, 10);
     int_is("properties limit", (int)icallimit_get(ICAL_LIMIT_PROPERTIES), 10);
