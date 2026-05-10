@@ -44,7 +44,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        run: sudo apt-get -y install python3-pip xml-core libdb-dev gobject-introspection libgirepository1.0-dev valac cmake ninja-build && pip3 install --user gi-docgen
+        run: |
+          sudo apt update
+          sudo apt-get -y install python3-pip xml-core libdb-dev gobject-introspection libgirepository1.0-dev valac cmake ninja-build && pip3 install --user gi-docgen
       - name: Configure project
         run: |
           mkdir build
@@ -63,7 +65,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        run: sudo apt-get -y install python3-pip xml-core libdb-dev gobject-introspection libgirepository1.0-dev valac cmake ninja-build && pip3 install --user gi-docgen
+        run: |
+          sudo apt update
+          sudo apt-get -y install python3-pip xml-core libdb-dev gobject-introspection libgirepository1.0-dev valac cmake ninja-build && pip3 install --user gi-docgen
       - name: Configure project
         run: |
           mkdir build
