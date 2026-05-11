@@ -996,6 +996,9 @@ bool vcardvalue_isa_value(void *value)
 
 void vcardvalue_reset_kind(vcardvalue *value)
 {
+    if (!value) {
+        return;
+    }
     switch (value->kind) {
     case VCARD_DATE_VALUE:
     case VCARD_TIME_VALUE:
