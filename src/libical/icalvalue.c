@@ -73,7 +73,7 @@ icalvalue *icalvalue_clone(const icalvalue *old)
     }
     // id is a LIBICAL_ICALVALUE_ID_LENGTH-char string (see icalvalue_impl def)
     memset(clone->id, 0, LIBICAL_ICALVALUE_ID_LENGTH);
-    strncpy(clone->id, old->id, LIBICAL_ICALVALUE_ID_LENGTH);
+    strncpy(clone->id, old->id, LIBICAL_ICALVALUE_ID_LENGTH - 1);
     clone->kind = old->kind;
     clone->size = old->size;
 

@@ -70,7 +70,7 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
 
     // id is a LIBICAL_VCARDVALUE_ID_LENGTH-char string (see vcardvalue_impl def)
     memset(clone->id, 0, LIBICAL_VCARDVALUE_ID_LENGTH);
-    strncpy(clone->id, old->id, LIBICAL_VCARDVALUE_ID_LENGTH);
+    strncpy(clone->id, old->id, LIBICAL_VCARDVALUE_ID_LENGTH - 1);
     clone->kind = old->kind;
     clone->size = old->size;
 
