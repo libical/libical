@@ -304,8 +304,6 @@ extern "C"
 #define VCVT_VOBJECT    6
     /* if the VObject has value set by setVObjectVObjectValue. */
 
-    extern const char **fieldedProp;
-
 /* NOTE regarding printVObject and writeVObject
 
 The functions below are not exported from the DLL because they

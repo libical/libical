@@ -1,3 +1,4 @@
+%pure-parser
 %{
 
 /***************************************************************************
@@ -102,13 +103,14 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 
 
 /****  Global Variables  ****/
-int mime_lineNum, mime_numErrors; /* yyerror() can use these */
-static VObject* vObjList;
-static VObject *curProp;
-static VObject *curObj;
-static VObject* ObjStack[MAXLEVEL];
-static int ObjStackTop;
+ICAL_GLOBAL_VAR int mime_lineNum, mime_numErrors; /* yyerror() can use these */
+static ICAL_GLOBAL_VAR VObject* vObjList;
+static ICAL_GLOBAL_VAR VObject *curProp;
+static ICAL_GLOBAL_VAR VObject *curObj;
+static ICAL_GLOBAL_VAR VObject* ObjStack[MAXLEVEL];
+static ICAL_GLOBAL_VAR int ObjStackTop;
 
+extern ICAL_GLOBAL_VAR const char **fieldedProp;
 
 /* A helpful utility for the rest of the app. */
 #if defined(__CPLUSPLUS__)
@@ -121,8 +123,6 @@ extern "C" {
 #if defined(__CPLUSPLUS__)
     };
 #endif
-
-int yylex(void);
 
 enum LexMode {
         L_NORMAL,
@@ -486,7 +486,9 @@ struct LexBuf {
     unsigned long maxToken;
     char *strs;
     unsigned long strsLen;
-    } lexBuf;
+    };
+
+static ICAL_GLOBAL_VAR struct LexBuf lexBuf;
 
 static void lexPushMode(enum LexMode mode)
     {
@@ -899,7 +901,7 @@ static char * lexGetDataFromBase64()
     return 0;
     }
 
-static int match_begin_end_name(int end) {
+static int match_begin_end_name(YYSTYPE *yylval, int end) {
     int token;
     lexSkipWhite();
     if (lexLookahead() != ':') return ID;
@@ -908,12 +910,12 @@ static int match_begin_end_name(int end) {
     token = match_begin_name(end);
     if (token == ID) {
         lexPushLookaheadc(':');
-        DBG_(("db: ID '%s'\n", yylval.str));
+        DBG_(("db: ID '%s'\n", yylval->str));
         return ID;
         }
     else if (token != 0) {
         lexSkipLookaheadWord();
-        deleteStr(yylval.str);
+        deleteStr(yylval->str);
         DBG_(("db: begin/end %d\n", token));
         return token;
         }
@@ -977,8 +979,7 @@ EndString:
     return lexStr();
     } /* LexQuotedPrintable */
 
-int yylex() {
-
+int YYLEX_DECL() {
     int lexmode = LEXMODE();
     if (lexmode == L_VALUES) {
         int c = lexGetc();
@@ -1009,7 +1010,7 @@ int yylex() {
             if (lexWithinMode(L_BASE64)) {
                 /* get each char and convert to bin on the fly... */
                 p = lexGetDataFromBase64();
-                yylval.str = p;
+                yylval->str = p;
                 return STRING;
                 }
             else if (lexWithinMode(L_QUOTED_PRINTABLE)) {
@@ -1024,7 +1025,7 @@ int yylex() {
                 }
             if (p) {
                 DBG_(("db: STRING: '%s'\n", p));
-                yylval.str = p;
+                yylval->str = p;
                 return STRING;
                 }
             else return 0;
@@ -1066,12 +1067,12 @@ int yylex() {
                     lexPushLookaheadc(c);
                     if (isalpha(c)) {
                         char *t = lexGetWord();
-                        yylval.str = t;
+                        yylval->str = t;
                         if (!strcasecmp(t, "begin")) {
-                            return match_begin_end_name(0);
+                            return match_begin_end_name(yylval, 0);
                             }
                         else if (!strcasecmp(t,"end")) {
-                            return match_begin_end_name(1);
+                            return match_begin_end_name(yylval, 1);
                             }
                         else {
                             DBG_(("db: ID '%s'\n", t));
