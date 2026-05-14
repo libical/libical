@@ -503,6 +503,10 @@ static void free_icalvalue_attach_data(char *data, void *user_data)
     free(data);
 }
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
+#endif
 void icalvalue_set_binary(icalvalue *value, const char * v)
 {
     struct icalvalue_impl *impl;
@@ -517,10 +521,6 @@ void icalvalue_set_binary(icalvalue *value, const char * v)
     if (impl->data.v_attach) {
         icalattach_unref(impl->data.v_attach);
     }
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
-#endif
     dupStr = strdup(v); /* will be freed later in unref */
     impl->data.v_attach = NULL;
     if (dupStr) {
@@ -529,10 +529,10 @@ void icalvalue_set_binary(icalvalue *value, const char * v)
             free(dupStr);
         }
     }
+}
 #if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
-}
 
 const char *icalvalue_get_binary(const icalvalue *value)
 {

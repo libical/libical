@@ -9,9 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 WIP
 
-## [4.0.1] - Unreleased
+## [4.0.2] - Unreleased
 
 TBD
+
+## [4.0.1] - 2026-05-14
+
+- Increase the ICAL_LIMIT_RRULE_SEARCH limit from 100 to 500.
+- Fix an unsafe exec() in the `vzic` tool when compiled with the CREATE_SYMLINK option.
 
 ## [4.0.0] - 2026-04-30
 

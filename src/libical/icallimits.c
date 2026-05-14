@@ -24,7 +24,7 @@ static ICAL_GLOBAL_VAR size_t _MAX_VALUE_CHARS = 10485760;
 static ICAL_GLOBAL_VAR size_t _MAX_PROPERTY_VALUES = 500;
 static ICAL_GLOBAL_VAR size_t _MAX_RECURRENCE_SEARCH = 100000;
 static ICAL_GLOBAL_VAR size_t _MAX_RECURRENCE_TIME_STANDING_STILL = 50;
-static ICAL_GLOBAL_VAR size_t _MAX_RRULE_SEARCH = 100;
+static ICAL_GLOBAL_VAR size_t _MAX_RRULE_SEARCH = 500;
 
 size_t icallimit_get(icallimits_kind kind)
 {

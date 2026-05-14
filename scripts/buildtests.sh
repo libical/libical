@@ -160,7 +160,7 @@ CHECK_WARNINGS() {
 # print warnings found in the compile-step output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='g-ir-scanner:\|better[[:space:]]use[[:space:]]'
+  whitelist='g-ir-scanner:\|better[[:space:]]use[[:space:]]\|/usr/include'
   CHECK_WARNINGS "$1" "\(warning:\|CRITICAL\)" "$whitelist"
 }
 
@@ -963,7 +963,7 @@ UNSET_NINJA
 
 STRICT="--warn-uninitialized -Werror=dev"
 DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DNDEBUG=1"
-CMAKEOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+CMAKEOPTS="$STRICT -DLIBICAL_BUILD_VZIC=True -DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DLIBICAL_ENABLE_BUILTIN_TZDATA=True"
 LTOCMAKEOPTS="$CMAKEOPTS -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=True"
