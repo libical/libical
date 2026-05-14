@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4fe1e7cd.js";
+            window.path_to_searchindex_js = "searchindex-b1f29d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-efbb6a9c.js"></script>
@@ -314,12 +314,10 @@ Make sure you have the path to the MinGW programs in %PATH% first, for example:<
 run <code>make test</code> (or <code>nmake test</code> or <code>mingw32-make test</code>)</p>
 <p>To run the test suite in verbose mode, pass ARGS=“-V” to the make command
 For example: <code>nmake test ARGS="-V"</code></p>
-<p>By default, the buildsystem creates shared(dynamic) and static versions
-of the libraries, but that behavior can be modified at CMake time:</p>
-<ul>
-<li>To build the static libraries only, pass -DSTATIC_ONLY=True to cmake.</li>
-<li>To build the shared libraries only, pass -DSHARED_ONLY=True to cmake.</li>
-</ul>
+<p>By default, the buildsystem creates shared(dynamic) versions of the libraries.
+Static libraries can be built by configuring at CMake time with:</p>
+<pre><code class="language-shell">% cmake -DLIBICAL_STATIC=True &lt;more_cmake_options&gt;
+</code></pre>
 <h2 id="building-with-different-compilers"><a class="header" href="#building-with-different-compilers">Building with Different Compilers</a></h2>
 <p>For example, say you want to use Clang to build on Linux.
 Then you can set the C and C++ compilers at CMake time, like so:</p>
@@ -408,17 +406,10 @@ buildsystem will create and install the Java bindings.</p>
 <h2 id="tweaking-the-library-behavior"><a class="header" href="#tweaking-the-library-behavior">Tweaking the Library Behavior</a></h2>
 <p>Use these CMake options to adjust the library behavior as follows:</p>
 <ul>
-<li>
-<p>LIBICAL_ENABLE_ERRORS_ARE_FATAL=[true|false]
-Set to make icalerror_* calls abort instead of internally signaling an error.
-Default=false</p>
-</li>
-<li>
-<p>LIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
+<li>LIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
 Set to build using our own (instead of the system’s) timezone data.
 Default=false (use the system timezone data on non-Windows systems)
-ALWAYS true on Windows systems</p>
-</li>
+ALWAYS true on Windows systems</li>
 </ul>
 <h2 id="tweaking-the-installation-directories"><a class="header" href="#tweaking-the-installation-directories">Tweaking the Installation Directories</a></h2>
 <p>By default, the installation layout is according to the
@@ -714,8 +705,8 @@ handling rules. These are detailed in section <a href="#memory">Memory Managemen
 <p>If any of the constructors fail, they will return 0. If you try to
 insert 0 into a property or component, or use a zero-valued object
 reference, libical will either silently ignore the error or will abort
-with an error message. This behavior is controlled by a compile time
-flag (<code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code>), and will abort by default.</p>
+with an error message.  To abort whenever an error is encountered call
+<code>icalerror_set_errors_are_fatal(true)</code>. (see also <code>icalerror_get_errors_are_fatal()</code>)</p>
 <h4 id="512-varargs-constructors"><a class="header" href="#512-varargs-constructors">5.1.2 varargs Constructors</a></h4>
 <p>There is another way to create complex components, which is arguably
 more elegant, if you are not horrified by varargs. The varargs constructor
@@ -1630,17 +1621,14 @@ in a component into <code>REQUEST-STATUS</code> properties that indicate a failu
 As of libical version 0.18, this routine only converts <code>PARSEERROR</code> errors
 and it always generates a 3.x (failure) code. This makes it more
 of a good idea than a really useful bit of code.</p>
-<h4 id="564-libical_enable_errors_are_fatal-and-icalerror_errors_are_fatal"><a class="header" href="#564-libical_enable_errors_are_fatal-and-icalerror_errors_are_fatal">5.6.4 <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code> and <code>icalerror_errors_are_fatal</code></a></h4>
+<h4 id="564-icalerror_errors_are_fatal"><a class="header" href="#564-icalerror_errors_are_fatal">5.6.4 <code>icalerror_errors_are_fatal</code></a></h4>
 <p>If <code>icalerror_get_errors_are_fatal()</code> returns true, then any error
 condition will cause the program to abort. The abort occurs
 in <code>icalerror_set_errno()</code>, and is done with an assert(0) if NDEBUG
 is undefined, and with <code>icalerror_crash_here()</code> if NDEBUG is defined.
-Initially, <code>icalerror_get_errors_are_fatal()</code> is true when <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code>
-is defined, and false otherwise. Since <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code> is defined
-by default, <code>icalerror_get_errors_are_fatal()</code> is also set to true by default.</p>
-<p>You can change the compiled-in <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code> behavior at runtime
-by calling <code>icalerror_set_errors_are_fatal(false)</code> (i.e, errors are not fatal)
-or <code>icalerror_set_errors_are_fatal(true)</code> (i.e, errors are fatal).</p>
+<code>icalerror_get_errors_are_fatal()</code> is false by default; to change
+that behavior, call <code>icalerror_set_errors_are_fatal(true)</code> beforehand
+(eg. at the initialization of your application).</p>
 <h3 id="57-naming-standard"><a class="header" href="#57-naming-standard">5.7 Naming Standard</a></h3>
 <p>Structures that you access with the “struct” keyword, such as <code>struct icaltimetype</code> are things that you are allowed to see inside and poke
 at.</p>
@@ -2251,7 +2239,7 @@ Default = 50 (fifty)
 <li>
 <p>Maximum number of times to search vtimezone rrules for an occurrence before the specified end year</p>
 <pre><code>Kind = ICAL_LIMIT_RRULE_SEARCH
-Default = 100 (one hundred)
+Default = 500 (five hundred)
 </code></pre>
 </li>
 </ul>
@@ -2285,10 +2273,6 @@ Scheduling Core Object Specification (iCalendar)</li>
 <p>The internal <code>ical_caldat</code> and <code>ical_juldat</code> functions in
 ical_date_p.[c,h] are copyright 1986-2000, Hiram Clawson with
 the <a href="LICENSES/BSD-3-Clause.txt">BSD-3-Clause</a> license.</p>
-<h2 id="build-time"><a class="header" href="#build-time">Build-time</a></h2>
-<p>These dependencies are only used during build or other purposes like
-generating documentation.</p>
-<p>N/A</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
 <p>The Libical project was founded in 1999 (or perhaps earlier) by Eric Busboom <a href="mailto:eric@clarinova.com">eric@clarinova.com</a>.</p>
@@ -2395,9 +2379,12 @@ thread safe memory allocator, and a lot of documentation.</p>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<h2 id="410---unreleased"><a class="header" href="#410---unreleased">[4.1.0] - Unreleased</a></h2>
-<p>WIP</p>
-<h2 id="400---unreleased"><a class="header" href="#400---unreleased">[4.0.0] - Unreleased</a></h2>
+<h2 id="401---2026-05-14"><a class="header" href="#401---2026-05-14">[4.0.1] - 2026-05-14</a></h2>
+<ul>
+<li>Increase the ICAL_LIMIT_RRULE_SEARCH limit from 100 to 500.</li>
+<li>Fix an unsafe exec() in the <code>vzic</code> tool when compiled with the CREATE_SYMLINK option.</li>
+</ul>
+<h2 id="400---2026-04-30"><a class="header" href="#400---2026-04-30">[4.0.0] - 2026-04-30</a></h2>
 <p>This is a major release and is <strong>not</strong> source or binary compatible with version 3.x.</p>
 <p>Please see <a href="#migrating-to-version-4">Version 4 Migration Guide</a>
 for details about API changes since libical 3.x.</p>

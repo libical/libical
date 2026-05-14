@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4fe1e7cd.js";
+            window.path_to_searchindex_js = "searchindex-b1f29d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-efbb6a9c.js"></script>
@@ -236,12 +236,10 @@ Make sure you have the path to the MinGW programs in %PATH% first, for example:<
 run <code>make test</code> (or <code>nmake test</code> or <code>mingw32-make test</code>)</p>
 <p>To run the test suite in verbose mode, pass ARGS=“-V” to the make command
 For example: <code>nmake test ARGS="-V"</code></p>
-<p>By default, the buildsystem creates shared(dynamic) and static versions
-of the libraries, but that behavior can be modified at CMake time:</p>
-<ul>
-<li>To build the static libraries only, pass -DSTATIC_ONLY=True to cmake.</li>
-<li>To build the shared libraries only, pass -DSHARED_ONLY=True to cmake.</li>
-</ul>
+<p>By default, the buildsystem creates shared(dynamic) versions of the libraries.
+Static libraries can be built by configuring at CMake time with:</p>
+<pre><code class="language-shell">% cmake -DLIBICAL_STATIC=True &lt;more_cmake_options&gt;
+</code></pre>
 <h2 id="building-with-different-compilers"><a class="header" href="#building-with-different-compilers">Building with Different Compilers</a></h2>
 <p>For example, say you want to use Clang to build on Linux.
 Then you can set the C and C++ compilers at CMake time, like so:</p>
@@ -330,17 +328,10 @@ buildsystem will create and install the Java bindings.</p>
 <h2 id="tweaking-the-library-behavior"><a class="header" href="#tweaking-the-library-behavior">Tweaking the Library Behavior</a></h2>
 <p>Use these CMake options to adjust the library behavior as follows:</p>
 <ul>
-<li>
-<p>LIBICAL_ENABLE_ERRORS_ARE_FATAL=[true|false]
-Set to make icalerror_* calls abort instead of internally signaling an error.
-Default=false</p>
-</li>
-<li>
-<p>LIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
+<li>LIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
 Set to build using our own (instead of the system’s) timezone data.
 Default=false (use the system timezone data on non-Windows systems)
-ALWAYS true on Windows systems</p>
-</li>
+ALWAYS true on Windows systems</li>
 </ul>
 <h2 id="tweaking-the-installation-directories"><a class="header" href="#tweaking-the-installation-directories">Tweaking the Installation Directories</a></h2>
 <p>By default, the installation layout is according to the

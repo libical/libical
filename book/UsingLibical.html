@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4fe1e7cd.js";
+            window.path_to_searchindex_js = "searchindex-b1f29d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-efbb6a9c.js"></script>
@@ -396,8 +396,8 @@ handling rules. These are detailed in section <a href="#memory">Memory Managemen
 <p>If any of the constructors fail, they will return 0. If you try to
 insert 0 into a property or component, or use a zero-valued object
 reference, libical will either silently ignore the error or will abort
-with an error message. This behavior is controlled by a compile time
-flag (<code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code>), and will abort by default.</p>
+with an error message.  To abort whenever an error is encountered call
+<code>icalerror_set_errors_are_fatal(true)</code>. (see also <code>icalerror_get_errors_are_fatal()</code>)</p>
 <h4 id="512-varargs-constructors"><a class="header" href="#512-varargs-constructors">5.1.2 varargs Constructors</a></h4>
 <p>There is another way to create complex components, which is arguably
 more elegant, if you are not horrified by varargs. The varargs constructor
@@ -1312,17 +1312,14 @@ in a component into <code>REQUEST-STATUS</code> properties that indicate a failu
 As of libical version 0.18, this routine only converts <code>PARSEERROR</code> errors
 and it always generates a 3.x (failure) code. This makes it more
 of a good idea than a really useful bit of code.</p>
-<h4 id="564-libical_enable_errors_are_fatal-and-icalerror_errors_are_fatal"><a class="header" href="#564-libical_enable_errors_are_fatal-and-icalerror_errors_are_fatal">5.6.4 <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code> and <code>icalerror_errors_are_fatal</code></a></h4>
+<h4 id="564-icalerror_errors_are_fatal"><a class="header" href="#564-icalerror_errors_are_fatal">5.6.4 <code>icalerror_errors_are_fatal</code></a></h4>
 <p>If <code>icalerror_get_errors_are_fatal()</code> returns true, then any error
 condition will cause the program to abort. The abort occurs
 in <code>icalerror_set_errno()</code>, and is done with an assert(0) if NDEBUG
 is undefined, and with <code>icalerror_crash_here()</code> if NDEBUG is defined.
-Initially, <code>icalerror_get_errors_are_fatal()</code> is true when <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code>
-is defined, and false otherwise. Since <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code> is defined
-by default, <code>icalerror_get_errors_are_fatal()</code> is also set to true by default.</p>
-<p>You can change the compiled-in <code>LIBICAL_ENABLE_ERRORS_ARE_FATAL</code> behavior at runtime
-by calling <code>icalerror_set_errors_are_fatal(false)</code> (i.e, errors are not fatal)
-or <code>icalerror_set_errors_are_fatal(true)</code> (i.e, errors are fatal).</p>
+<code>icalerror_get_errors_are_fatal()</code> is false by default; to change
+that behavior, call <code>icalerror_set_errors_are_fatal(true)</code> beforehand
+(eg. at the initialization of your application).</p>
 <h3 id="57-naming-standard"><a class="header" href="#57-naming-standard">5.7 Naming Standard</a></h3>
 <p>Structures that you access with the “struct” keyword, such as <code>struct icaltimetype</code> are things that you are allowed to see inside and poke
 at.</p>
