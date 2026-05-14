@@ -160,7 +160,7 @@ void parse_olson_file(char *filename,
         }
 
         memset(data.buffer, 0, MAX_LINE_LEN);
-        strncpy(data.buffer, data.line, MAX_LINE_LEN);
+        snprintf(data.buffer, MAX_LINE_LEN, "%s", data.line);
 
         parse_fields(&data);
         if (data.num_fields == 0) {
@@ -490,16 +490,16 @@ parse_link_line(ParsingData *data)
         char to_dir[255];
         char to_path[255];
         if (dirs == 0) {
-            sprintf(rel_from, "%s.ics", from);
+            snprintf(rel_from, sizeof(rel_from), "%s.ics", from);
         } else if (dirs == 1) {
-            sprintf(rel_from, "../%s.ics", from);
+            snprintf(rel_from, sizeof(rel_from), "../%s.ics", from);
         } else if (dirs == 2) {
-            sprintf(rel_from, "../../%s.ics", from);
+            snprintf(rel_from, sizeof(rel_from), "../../%s.ics", from);
         } else {
             return;
         }
-        sprintf(to_path, "%s/%s.ics", VzicOutputDir, to);
-        strncpy(to_dir, to_path, 255);
+        snprintf(to_path, sizeof(to_path), "%s/%s.ics", VzicOutputDir, to);
+        snprintf(to_dir, sizeof(to_dir), "%s", to_path);
         ensure_directory_exists(dirname(to_dir));
         //printf("Creating symlink from %s to %s\n", rel_from, to_path);
         if (symlink(rel_from, to_path) != 0) {
