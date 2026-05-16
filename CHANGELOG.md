@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.2] - Unreleased
 
-TBD
+- Remove "-Wl,-z,nodlopen" from gcc/clang compile options.
 
 ## [4.0.1] - 2026-05-14
 
