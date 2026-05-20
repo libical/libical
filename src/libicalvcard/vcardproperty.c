@@ -23,11 +23,12 @@
 #include "icalmemory.h"
 #include "icalproperty.h"
 #include "icalpvl_p.h"
+#include "icaltypes_p.h"
 
 #include <stdlib.h>
 
 struct vcardproperty_impl {
-    char id[5];
+    icalstructuretype id;
     vcardproperty_kind kind;
     char *x_name;
     char *group;
@@ -52,8 +53,7 @@ LIBICAL_VCARD_EXPORT struct vcardproperty_impl *vcardproperty_new_impl(vcardprop
 
     memset(prop, 0, sizeof(vcardproperty));
 
-    strcpy(prop->id, "prop");
-
+    prop->id = ICAL_STRUCTURE_TYPE_PROPERTY;
     prop->kind = kind;
     prop->parameters = icalpvl_newlist();
 
@@ -202,7 +202,7 @@ void vcardproperty_free(vcardproperty *p)
     p->parameter_iterator = 0;
     p->value = 0;
     p->x_name = 0;
-    p->id[0] = 'X';
+    p->id = ICAL_STRUCTURE_TYPE_PROPERTY_EMPTY;
 
     icalmemory_free_buffer(p);
 }
@@ -541,11 +541,7 @@ bool vcardproperty_isa_property(void *property)
     const vcardproperty *impl = (vcardproperty *)property;
 
     icalerror_check_arg_rz((property != 0), "property");
-    if (strcmp(impl->id, "prop") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_PROPERTY);
 }
 
 void vcardproperty_add_parameter(vcardproperty *p, vcardparameter *parameter)

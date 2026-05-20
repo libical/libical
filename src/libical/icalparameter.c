@@ -40,8 +40,7 @@ LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparame
 
     memset(v, 0, sizeof(struct icalparameter_impl));
 
-    strcpy(v->id, "para");
-
+    v->id = ICAL_STRUCTURE_TYPE_PARAMETER;
     v->kind = kind;
     v->value_kind = icalparameter_kind_value_kind(kind, &v->is_multivalued);
 
@@ -80,7 +79,7 @@ void icalparameter_free(icalparameter *param)
     memset(param, 0, sizeof(icalparameter));
 
     param->parent = 0;
-    param->id[0] = 'X';
+    param->id = ICAL_STRUCTURE_TYPE_PARAMETER_EMPTY;
     icalmemory_free_buffer(param);
 }
 
@@ -294,11 +293,7 @@ bool icalparameter_isa_parameter(void *parameter)
         return false;
     }
 
-    if (strcmp(impl->id, "para") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_PARAMETER);
 }
 
 void icalparameter_set_xname(icalparameter *param, const char *v)

@@ -249,6 +249,7 @@ set(
   icalduration.c
   icalperiod.h
   icalperiod.c
+  icaltypes_p.h
   icaltypes.c
   icaltypes.h
   icalvalue.c

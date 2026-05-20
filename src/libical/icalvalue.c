@@ -45,7 +45,7 @@ LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kin
         return 0;
     }
 
-    strcpy(v->id, "val");
+    v->id = ICAL_STRUCTURE_TYPE_VALUE;
 
     v->kind = kind;
     v->size = 0;
@@ -71,9 +71,7 @@ icalvalue *icalvalue_clone(const icalvalue *old)
     if (clone == 0) {
         return 0;
     }
-    // id is a LIBICAL_ICALVALUE_ID_LENGTH-char string (see icalvalue_impl def)
-    memset(clone->id, 0, LIBICAL_ICALVALUE_ID_LENGTH);
-    strncpy(clone->id, old->id, LIBICAL_ICALVALUE_ID_LENGTH);
+    clone->id = old->id;
     clone->kind = old->kind;
     clone->size = old->size;
 
@@ -868,7 +866,7 @@ void icalvalue_free(icalvalue *v)
     v->size = 0;
     v->parent = 0;
     memset(&(v->data), 0, sizeof(v->data));
-    v->id[0] = 'X';
+    v->id = ICAL_STRUCTURE_TYPE_VALUE_EMPTY;
     icalmemory_free_buffer(v);
 }
 
@@ -1341,11 +1339,7 @@ bool icalvalue_isa_value(void *value)
 
     icalerror_check_arg_rz((value != 0), "value");
 
-    if (strcmp(impl->id, "val") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_VALUE);
 }
 
 static bool icalvalue_is_time(const icalvalue *a)
