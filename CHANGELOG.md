@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix a heap-buffer-overflow in `icalcomponent_merge_component`.
 - Remove "-Wl,-z,nodlopen" from gcc/clang compile options.
+- icaltime: Prefer passed-in time's timezone in icaltime_compare_date_only().
 
 ## [4.0.1] - 2026-05-14
 
