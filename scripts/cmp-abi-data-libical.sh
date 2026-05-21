@@ -104,8 +104,13 @@ done
 rm -rf $builddir
 
 cd "$STORE_PATH"
+set +e
 for l in $libs; do
   abi-compliance-checker -l "$l" \
     -old "$STABLE_VERS/$l-$STABLE_VERS.dump" \
     -new "$VERS/$l-$VERS.dump"
 done
+git switch -
+
+echo
+echo See the compat reports in "$STORE_PATH"/compat_reports
