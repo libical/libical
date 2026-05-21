@@ -42,8 +42,7 @@ LIBICAL_VCARD_EXPORT struct vcardvalue_impl *vcardvalue_new_impl(vcardvalue_kind
         return 0;
     }
 
-    strcpy(v->id, "val");
-
+    v->id = ICAL_STRUCTURE_TYPE_VALUE;
     v->kind = kind;
     v->size = 0;
     v->parent = 0;
@@ -68,9 +67,7 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
         return 0;
     }
 
-    // id is a LIBICAL_VCARDVALUE_ID_LENGTH-char string (see vcardvalue_impl def)
-    memset(clone->id, 0, LIBICAL_VCARDVALUE_ID_LENGTH);
-    strncpy(clone->id, old->id, LIBICAL_VCARDVALUE_ID_LENGTH);
+    clone->id = old->id;
     clone->kind = old->kind;
     clone->size = old->size;
 
@@ -624,7 +621,7 @@ void vcardvalue_free(vcardvalue *v)
     v->size = 0;
     v->parent = 0;
     memset(&(v->data), 0, sizeof(v->data));
-    v->id[0] = 'X';
+    v->id = ICAL_STRUCTURE_TYPE_VALUE_EMPTY;
     icalmemory_free_buffer(v);
 }
 
@@ -983,11 +980,7 @@ bool vcardvalue_isa_value(void *value)
 
     icalerror_check_arg_rz((value != 0), "value");
 
-    if (strcmp(impl->id, "val") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_VALUE);
 }
 
 /** Examine the value and possibly change the kind to agree with the

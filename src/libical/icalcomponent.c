@@ -25,13 +25,14 @@
 #include "icalrestriction.h"
 #include "icaltime_p.h"
 #include "icaltimezone.h"
+#include "icaltypes_p.h"
 
 #include <assert.h>
 #include <stdlib.h>
 #include <limits.h>
 
 struct icalcomponent_impl {
-    char id[5];
+    icalstructuretype id;
     icalcomponent_kind kind;
     char *x_name; /* also used for ICAL_IANA_COMPONENT */
     icalpvl_list properties;
@@ -95,8 +96,7 @@ static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind)
 
     memset(comp, 0, sizeof(icalcomponent));
 
-    strcpy(comp->id, "comp");
-
+    comp->id = ICAL_STRUCTURE_TYPE_COMPONENT;
     comp->kind = kind;
     comp->properties = icalpvl_newlist();
     comp->components = icalpvl_newlist();
@@ -225,7 +225,7 @@ void icalcomponent_free(icalcomponent *c)
     c->components = 0;
     c->component_iterator = 0;
     c->x_name = 0;
-    c->id[0] = 'X';
+    c->id = ICAL_STRUCTURE_TYPE_COMPONENT_EMPTY;
     c->timezones = NULL;
 
     icalmemory_free_buffer(c);
@@ -314,7 +314,7 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *component)
 bool icalcomponent_is_valid(const icalcomponent *component)
 {
     if (component) {
-        if ((strcmp(component->id, "comp") == 0) && component->kind != ICAL_NO_COMPONENT) {
+        if ((component->id == ICAL_STRUCTURE_TYPE_COMPONENT) && component->kind != ICAL_NO_COMPONENT) {
             return true;
         }
     }
@@ -334,11 +334,7 @@ bool icalcomponent_isa_component(const void *component)
 
     icalerror_check_arg_rz((component != 0), "component");
 
-    if (strcmp(impl->id, "comp") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_COMPONENT);
 }
 
 void icalcomponent_set_x_name(icalcomponent *comp, const char *name)

@@ -34,8 +34,7 @@ LIBICAL_VCARD_EXPORT struct vcardparameter_impl *vcardparameter_new_impl(vcardpa
 
     memset(v, 0, sizeof(struct vcardparameter_impl));
 
-    strcpy(v->id, "para");
-
+    v->id = ICAL_STRUCTURE_TYPE_PARAMETER;
     v->kind = kind;
     v->value_kind = vcardparameter_kind_value_kind(kind, &v->is_multivalued);
 
@@ -74,7 +73,7 @@ void vcardparameter_free(vcardparameter *param)
     memset(param, 0, sizeof(vcardparameter));
 
     param->parent = 0;
-    param->id[0] = 'X';
+    param->id = ICAL_STRUCTURE_TYPE_PARAMETER_EMPTY;
     icalmemory_free_buffer(param);
 }
 
@@ -307,11 +306,7 @@ bool vcardparameter_isa_parameter(void *parameter)
         return false;
     }
 
-    if (strcmp(impl->id, "para") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_PARAMETER);
 }
 
 void vcardparameter_set_xname(vcardparameter *param, const char *v)

@@ -24,6 +24,7 @@
 #include "icalerror_p.h"
 #include "icalerror.h"
 #include "icalmemory.h"
+#include "icaltypes_p.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -31,7 +32,7 @@
 #include <ctype.h>
 
 struct vcardcomponent_impl {
-    char id[5];
+    icalstructuretype id;
     vcardcomponent_kind kind;
     vcardproperty *versionp;
     icalpvl_list properties;
@@ -67,8 +68,7 @@ static vcardcomponent *vcardcomponent_new_impl(vcardcomponent_kind kind)
 
     memset(comp, 0, sizeof(vcardcomponent));
 
-    strcpy(comp->id, "comp");
-
+    comp->id = ICAL_STRUCTURE_TYPE_COMPONENT;
     comp->kind = kind;
     comp->properties = icalpvl_newlist();
     comp->components = icalpvl_newlist();
@@ -163,7 +163,7 @@ void vcardcomponent_free(vcardcomponent *c)
     c->property_iterator = 0;
     c->components = 0;
     c->component_iterator = 0;
-    c->id[0] = 'X';
+    c->id = ICAL_STRUCTURE_TYPE_COMPONENT_EMPTY;
 
     icalmemory_free_buffer(c);
 }
@@ -249,7 +249,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *comp)
 bool vcardcomponent_is_valid(const vcardcomponent *component)
 {
     if (component) {
-        if ((strcmp(component->id, "comp") == 0) && (component->kind != VCARD_NO_COMPONENT)) {
+        if ((component->id == ICAL_STRUCTURE_TYPE_COMPONENT) && (component->kind != VCARD_NO_COMPONENT)) {
             return true;
         }
     }
@@ -269,7 +269,7 @@ bool vcardcomponent_isa_component(const void *component)
 
     icalerror_check_arg_rz((component != 0), "component");
 
-    return (strcmp(impl->id, "comp") == 0);
+    return (impl->id == ICAL_STRUCTURE_TYPE_COMPONENT);
 }
 
 void vcardcomponent_add_property(vcardcomponent *comp, vcardproperty *property)
