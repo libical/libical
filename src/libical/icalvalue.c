@@ -936,7 +936,7 @@ static char *icalvalue_utcoffset_as_ical_string_r(const icalvalue *value)
     str = (char *)icalmemory_new_buffer(9);
     data = icalvalue_get_utcoffset(value);
 
-    if (abs(data) == data) {
+    if (data >= 0) {
         sign = '+';
     } else {
         sign = '-';
