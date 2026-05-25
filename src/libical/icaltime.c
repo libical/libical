@@ -534,6 +534,10 @@ int icaltime_day_of_year(const struct icaltimetype t)
 {
     unsigned int is_leap = (icaltime_is_leap_year(t.year) ? 1 : 0);
 
+    if (t.month < 1 || t.month > 12) {
+        return 0;
+    }
+
     return days_in_year_passed_month[is_leap][t.month - 1] + t.day;
 }
 
