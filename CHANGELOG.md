@@ -5,12 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.2] - Unreleased
+## [4.0.2] - 2026-05-30
 
-- Fix a heap-buffer-overflow in `icalcomponent_merge_component`.
+- Fix a heap-buffer-overflow in `icalcomponent_merge_component()`.
 - Remove "-Wl,-z,nodlopen" from gcc/clang compile options.
-- icaltime: Prefer passed-in time's timezone in icaltime_compare_date_only().
-- icaltime: Check for month out-of-range in icaltime_day_of_year().
+- icaltime: Prefer passed-in time's timezone in `icaltime_compare_date_only()`.
+- icaltime: Check for month out-of-range in `icaltime_day_of_year()`.
 
 ## [4.0.1] - 2026-05-14
 
