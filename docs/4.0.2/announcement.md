@@ -10,7 +10,7 @@ Highlights of this Release:
 - Fix a heap-buffer-overflow in `icalcomponent_merge_component()`.
 - Remove "-Wl,-z,nodlopen" from gcc/clang compile options.
 - icaltime: Prefer passed-in time's timezone in `icaltime_compare_date_only()`.
-- icaltime: Check for month out-of-range in 1icaltime_day_of_year()1.
+- icaltime: Check for month out-of-range in `icaltime_day_of_year()`.
 
 The source code can be found on GitHub at: <https://github.com/libical/libical>
 
