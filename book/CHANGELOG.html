@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b1f29d7f.js";
+            window.path_to_searchindex_js = "searchindex-75b23c23.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-efbb6a9c.js"></script>
@@ -178,6 +178,13 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="402---2026-05-30"><a class="header" href="#402---2026-05-30">[4.0.2] - 2026-05-30</a></h2>
+<ul>
+<li>Fix a heap-buffer-overflow in <code>icalcomponent_merge_component()</code>.</li>
+<li>Remove “-Wl,-z,nodlopen” from gcc/clang compile options.</li>
+<li>icaltime: Prefer passed-in time’s timezone in <code>icaltime_compare_date_only()</code>.</li>
+<li>icaltime: Check for month out-of-range in <code>icaltime_day_of_year()</code>.</li>
+</ul>
 <h2 id="401---2026-05-14"><a class="header" href="#401---2026-05-14">[4.0.1] - 2026-05-14</a></h2>
 <ul>
 <li>Increase the ICAL_LIMIT_RRULE_SEARCH limit from 100 to 500.</li>
