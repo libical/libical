@@ -7,11 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.1.0] - Unreleased
 
-WIP
+- WIP
 
-## [4.0.2] - Unreleased
+## [4.0.3] - Unreleased
 
-TBD
+- TBD
+
+## [4.0.2] - 2026-05-30
+
+- Fix a heap-buffer-overflow in `icalcomponent_merge_component()`.
+- Remove "-Wl,-z,nodlopen" from gcc/clang compile options.
+- icaltime: Prefer passed-in time's timezone in `icaltime_compare_date_only()`.
+- icaltime: Check for month out-of-range in `icaltime_day_of_year()`.
 
 ## [4.0.1] - 2026-05-14
 

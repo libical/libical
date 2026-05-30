@@ -306,7 +306,8 @@ LIBICAL_ICAL_EXPORT struct icaltimetype icaltime_set_timezone(struct icaltimetyp
  *
  * @param t is the icaltimetype
  *
- * @return the day of the year for @p t (1-366).
+ * @return the day of the year for @p t (1-366). Returns 0 if the specified
+ * icaltimetype is invalid (eg. month less than 1 or greater than 12).
  */
 LIBICAL_ICAL_EXPORT int icaltime_day_of_year(const struct icaltimetype t);
 

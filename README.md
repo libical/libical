@@ -57,8 +57,8 @@ See the [C API documentation](https://libical.github.io/libical/v4/apidocs/) and
 [glibc API documentation](https://libical.github.io/libical/v4/libical-glib/).
 
 For a conceptual overview of the library, see [Using Libical](UsingLibical.md).
-There is other rudimentary, unfinished documentation in the `docs/` directory of the
-source distribution, annotated examples in `examples/` and the test code in `src/test/`.
+In the source distribution, you'll find more documentation in `docs/`, annotated
+examples in `examples/` and test code in `src/test/` directories.
 
 For developers porting their code to libical version 4, please visit the
 [Version 4 Migration Guide](MigrationGuide_to_4.md).

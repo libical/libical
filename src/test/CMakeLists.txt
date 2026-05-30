@@ -354,7 +354,7 @@ endif()
 
 buildme(icalmerge_fuzz1 icalmerge_fuzz1.c)
 if(LIBICAL_BUILD_TESTING_BIGFUZZ)
-  foreach(mergetest merge1 merge3)
+  foreach(mergetest merge1 merge3 merge4)
     add_test(
       NAME mergetest${mergetest}
       COMMAND

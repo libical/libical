@@ -15,10 +15,11 @@
 #define ICALPARAMETERIMPL_H
 
 #include "icalproperty.h"
+#include "icaltypes_p.h"
 
 struct icalparameter_impl {
     icalparameter_kind kind;
-    char id[5];
+    icalstructuretype id;
     int size;
     const char *string;
     const char *x_name;

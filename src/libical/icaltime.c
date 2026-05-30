@@ -534,6 +534,10 @@ int icaltime_day_of_year(const struct icaltimetype t)
 {
     unsigned int is_leap = (icaltime_is_leap_year(t.year) ? 1 : 0);
 
+    if (t.month < 1 || t.month > 12) {
+        return 0;
+    }
+
     return days_in_year_passed_month[is_leap][t.month - 1] + t.day;
 }
 
@@ -704,31 +708,18 @@ int icaltime_compare(const struct icaltimetype a_in, const struct icaltimetype b
 int icaltime_compare_date_only(const struct icaltimetype a_in,
                                const struct icaltimetype b_in)
 {
-    struct icaltimetype a, b;
-    icaltimezone *tz = icaltimezone_get_utc_timezone();
+    icaltimezone *tz;
 
-    a = icaltime_convert_to_zone(a_in, tz);
-    b = icaltime_convert_to_zone(b_in, tz);
-
-    if (a.year > b.year) {
-        return 1;
-    } else if (a.year < b.year) {
-        return -1;
+    /* prefer timezone of one of the times, because the UTC can change days in some cases */
+    if (a_in.zone != NULL) {
+        tz = (icaltimezone *)a_in.zone;
+    } else if (b_in.zone != NULL) {
+        tz = (icaltimezone *)b_in.zone;
+    } else {
+        tz = icaltimezone_get_utc_timezone();
     }
 
-    if (a.month > b.month) {
-        return 1;
-    } else if (a.month < b.month) {
-        return -1;
-    }
-
-    if (a.day > b.day) {
-        return 1;
-    } else if (a.day < b.day) {
-        return -1;
-    }
-
-    return 0;
+    return icaltime_compare_date_only_tz(a_in, b_in, tz);
 }
 
 int icaltime_compare_date_only_tz(const struct icaltimetype a_in,

@@ -24,11 +24,12 @@
 #include "icaltimezone.h"
 #include "icalvalue.h"
 #include "icalpvl_p.h"
+#include "icaltypes_p.h"
 
 #include <stdlib.h>
 
 struct icalproperty_impl {
-    char id[5];
+    icalstructuretype id;
     icalproperty_kind kind;
     char *x_name;
     icalpvl_list parameters;
@@ -53,8 +54,7 @@ LIBICAL_ICAL_EXPORT struct icalproperty_impl *icalproperty_new_impl(icalproperty
 
     memset(prop, 0, sizeof(icalproperty));
 
-    strcpy(prop->id, "prop");
-
+    prop->id = ICAL_STRUCTURE_TYPE_PROPERTY;
     prop->kind = kind;
     prop->parameters = icalpvl_newlist();
 
@@ -208,7 +208,7 @@ void icalproperty_free(icalproperty *p)
     p->parameter_iterator = 0;
     p->value = 0;
     p->x_name = 0;
-    p->id[0] = 'X';
+    p->id = ICAL_STRUCTURE_TYPE_PROPERTY_EMPTY;
 
     icalmemory_free_buffer(p);
 }
@@ -478,11 +478,7 @@ bool icalproperty_isa_property(void *property)
     const icalproperty *impl = (icalproperty *)property;
 
     icalerror_check_arg_rz((property != 0), "property");
-    if (strcmp(impl->id, "prop") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_PROPERTY);
 }
 
 void icalproperty_add_parameter(icalproperty *p, icalparameter *parameter)

@@ -25,13 +25,14 @@
 #include "icalrestriction.h"
 #include "icaltime_p.h"
 #include "icaltimezone.h"
+#include "icaltypes_p.h"
 
 #include <assert.h>
 #include <stdlib.h>
 #include <limits.h>
 
 struct icalcomponent_impl {
-    char id[5];
+    icalstructuretype id;
     icalcomponent_kind kind;
     char *x_name; /* also used for ICAL_IANA_COMPONENT */
     icalpvl_list properties;
@@ -52,12 +53,12 @@ static void icalcomponent_add_children(icalcomponent *impl, va_list args);
 static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind);
 
 static bool icalcomponent_merge_vtimezone(icalcomponent *comp,
-                                          icalcomponent *vtimezone, icalarray *tzids_to_rename);
+                                          icalcomponent *vtimezone, icalstrarray *tzids_to_rename);
 static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
                                                         icalcomponent *vtimezone,
                                                         icalproperty *tzid_prop,
                                                         const char *tzid,
-                                                        icalarray *tzids_to_rename);
+                                                        icalstrarray *tzids_to_rename);
 static size_t icalcomponent_get_tzid_prefix_len(const char *tzid);
 static void icalcomponent_rename_tzids(icalcomponent *comp, icalarray *rename_table);
 static void icalcomponent_rename_tzids_callback(icalparameter *param, void *data);
@@ -95,8 +96,7 @@ static icalcomponent *icalcomponent_new_impl(icalcomponent_kind kind)
 
     memset(comp, 0, sizeof(icalcomponent));
 
-    strcpy(comp->id, "comp");
-
+    comp->id = ICAL_STRUCTURE_TYPE_COMPONENT;
     comp->kind = kind;
     comp->properties = icalpvl_newlist();
     comp->components = icalpvl_newlist();
@@ -225,7 +225,7 @@ void icalcomponent_free(icalcomponent *c)
     c->components = 0;
     c->component_iterator = 0;
     c->x_name = 0;
-    c->id[0] = 'X';
+    c->id = ICAL_STRUCTURE_TYPE_COMPONENT_EMPTY;
     c->timezones = NULL;
 
     icalmemory_free_buffer(c);
@@ -314,7 +314,7 @@ char *icalcomponent_as_ical_string_r(const icalcomponent *component)
 bool icalcomponent_is_valid(const icalcomponent *component)
 {
     if (component) {
-        if ((strcmp(component->id, "comp") == 0) && component->kind != ICAL_NO_COMPONENT) {
+        if ((component->id == ICAL_STRUCTURE_TYPE_COMPONENT) && component->kind != ICAL_NO_COMPONENT) {
             return true;
         }
     }
@@ -334,11 +334,7 @@ bool icalcomponent_isa_component(const void *component)
 
     icalerror_check_arg_rz((component != 0), "component");
 
-    if (strcmp(impl->id, "comp") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_COMPONENT);
 }
 
 void icalcomponent_set_x_name(icalcomponent *comp, const char *name)
@@ -2203,7 +2199,7 @@ icalcomponent *icalcomponent_new_vresource(void)
 void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_merge)
 {
     icalcomponent *subcomp, *next_subcomp;
-    icalarray *tzids_to_rename;
+    icalstrarray *tzids_to_rename;
 
     /* Check that both components are VCALENDAR components. */
     icalassert(icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT);
@@ -2212,7 +2208,7 @@ void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_m
     /* Step through each subcomponent of comp_to_merge, looking for VTIMEZONEs.
        For each VTIMEZONE found, check if we need to add it to comp and if we
        need to rename it and all TZID references to it. */
-    tzids_to_rename = icalarray_new(sizeof(char *), 16);
+    tzids_to_rename = icalstrarray_new(16);
     if (!tzids_to_rename) {
         return;
     }
@@ -2232,7 +2228,7 @@ void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_m
     if (tzids_to_rename->num_elements != 0) {
         icalcomponent_rename_tzids(comp_to_merge, tzids_to_rename);
     }
-    icalarray_free(tzids_to_rename);
+    icalstrarray_free(tzids_to_rename);
     tzids_to_rename = 0;
     /* Now move all the components from comp_to_merge to comp, excluding
        VTIMEZONE components. */
@@ -2252,7 +2248,7 @@ void icalcomponent_merge_component(icalcomponent *comp, icalcomponent *comp_to_m
 }
 
 static bool icalcomponent_merge_vtimezone(icalcomponent *comp,
-                                          icalcomponent *vtimezone, icalarray *tzids_to_rename)
+                                          icalcomponent *vtimezone, icalstrarray *tzids_to_rename)
 {
     icalproperty *tzid_prop;
     const char *tzid;
@@ -2305,7 +2301,7 @@ static bool icalcomponent_merge_vtimezone(icalcomponent *comp,
     }
     icalmemory_free_buffer(tzid_copy);
     if (match == -1) {
-        icalarray_free(tzids_to_rename);
+        icalstrarray_free(tzids_to_rename);
         return false;
     }
     return true;
@@ -2315,7 +2311,7 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
                                                         icalcomponent *vtimezone,
                                                         icalproperty *tzid_prop,
                                                         const char *tzid,
-                                                        icalarray *tzids_to_rename)
+                                                        icalstrarray *tzids_to_rename)
 {
     int max_suffix = 0;
     size_t i, num_elements, tzid_len;
@@ -2361,9 +2357,9 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
                     icalerror_set_errno(ICAL_NEWFAILED_ERROR);
                     icalmemory_free_buffer(tzid_copy);
                 } else {
-                    icalarray_append(tzids_to_rename, tzid_copy);
+                    icalstrarray_append(tzids_to_rename, tzid_copy);
                     icalmemory_free_buffer(tzid_copy);
-                    icalarray_append(tzids_to_rename, existing_tzid_copy);
+                    icalstrarray_append(tzids_to_rename, existing_tzid_copy);
                     icalmemory_free_buffer(existing_tzid_copy);
                 }
                 return;
@@ -2400,8 +2396,8 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
     new_tzid[tzid_len] = '\0';
     strncat(new_tzid, suffix_buf, len_new_tzid);
     new_tzid[len_new_tzid - 1] = '\0';
-    icalarray_append(tzids_to_rename, tzid_copy);
-    icalarray_append(tzids_to_rename, new_tzid);
+    icalstrarray_append(tzids_to_rename, tzid_copy);
+    icalstrarray_append(tzids_to_rename, new_tzid);
     icalmemory_free_buffer(tzid_copy);
     icalmemory_free_buffer(new_tzid);
 }

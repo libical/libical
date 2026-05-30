@@ -7054,6 +7054,134 @@ static void test_icalproperty_remove_parameter_by_kind(void)
     icalproperty_free(prop);
 }
 
+static void test_icaltime_compare_date_only_case(icaltimezone *zone1, icaltimezone *zone2, icaltimezone *zone3)
+{
+    icaltimetype now, midnight;
+
+    now = icaltime_current_time_with_zone(zone1);
+    midnight = now;
+
+    ok("same times are same",
+       icaltime_compare_date_only(now, midnight) == 0);
+    ok("same times are same (tz)",
+       icaltime_compare_date_only_tz(now, midnight, zone3) == 0);
+    ok("same times are same (b)",
+       icaltime_compare_date_only(midnight, now) == 0);
+    ok("same times are same (tz) (b)",
+       icaltime_compare_date_only_tz(midnight, now, zone3) == 0);
+
+    now.zone = zone1;
+    midnight.zone = zone2;
+    ok("same times with zone are same",
+       icaltime_compare_date_only(now, midnight) == 0);
+    ok("same times with zone are same (tz)",
+       icaltime_compare_date_only_tz(now, midnight, zone3) == 0);
+    ok("same times with zone are same (b)",
+       icaltime_compare_date_only(midnight, now) == 0);
+    ok("same times with zone are same (tz) (b)",
+       icaltime_compare_date_only_tz(midnight, now, zone3) == 0);
+
+    /* ensure they are not both midnight */
+    if (now.hour == 0 && now.minute == 0 && now.second == 0) {
+        now.minute = 1;
+    }
+
+    midnight.hour = 0;
+    midnight.minute = 0;
+    midnight.second = 0;
+    midnight.zone = NULL;
+    now.zone = NULL;
+
+    ok("no zone times and midnight are same",
+       icaltime_compare_date_only(now, midnight) == 0);
+    ok("no zone times and midnight are same (tz)",
+       icaltime_compare_date_only_tz(now, midnight, zone3) == 0);
+    ok("no zone times and midnight are same (b)",
+       icaltime_compare_date_only(midnight, now) == 0);
+    ok("no zone times and midnight are same (tz) (b)",
+       icaltime_compare_date_only_tz(midnight, now, zone3) == 0);
+
+    midnight.zone = zone1;
+    now.zone = zone2;
+
+    ok("with zone times and midnight are same",
+       icaltime_compare_date_only(now, midnight) == 0);
+    ok("with zone times and midnight are same (tz)",
+       icaltime_compare_date_only_tz(now, midnight, zone3) == 0);
+    ok("with zone times and midnight are same (b)",
+       icaltime_compare_date_only(midnight, now) == 0);
+    ok("with zone times and midnight are same (tz) (b)",
+       icaltime_compare_date_only_tz(midnight, now, zone3) == 0);
+
+    icaltime_adjust(&midnight, -1, 0, 0, 0);
+
+    midnight.zone = NULL;
+    now.zone = NULL;
+
+    ok("no zone times and midnight -1 is before",
+       icaltime_compare_date_only(now, midnight) > 0);
+    ok("no zone times and midnight -1 is before (tz)",
+       icaltime_compare_date_only_tz(now, midnight, zone3) > 0);
+    ok("no zone times and midnight -1 is before (b)",
+       icaltime_compare_date_only(midnight, now) < 0);
+    ok("no zone times and midnight -1 is before (tz) (b)",
+       icaltime_compare_date_only_tz(midnight, now, zone3) < 0);
+
+    midnight.zone = zone1;
+    now.zone = zone2;
+
+    ok("with zone times and midnight -1 is before",
+       icaltime_compare_date_only(now, midnight) > 0);
+    ok("with zone times and midnight -1 is before (tz)",
+       icaltime_compare_date_only_tz(now, midnight, zone3) > 0);
+    ok("with zone times and midnight -1 is before (b)",
+       icaltime_compare_date_only(midnight, now) < 0);
+    ok("with zone times and midnight -1 is before (tz) (b)",
+       icaltime_compare_date_only_tz(midnight, now, zone3) < 0);
+
+    icaltime_adjust(&midnight, 2, 0, 0, 0);
+
+    midnight.zone = NULL;
+    now.zone = NULL;
+
+    ok("no zone times and midnight +1 is after",
+       icaltime_compare_date_only(now, midnight) < 0);
+    ok("no zone times and midnight +1 is aftere (tz)",
+       icaltime_compare_date_only_tz(now, midnight, zone3) < 0);
+    ok("no zone times and midnight +1 is after (b)",
+       icaltime_compare_date_only(midnight, now) > 0);
+    ok("no zone times and midnight +1 is after (tz) (b)",
+       icaltime_compare_date_only_tz(midnight, now, zone3) > 0);
+
+    midnight.zone = zone1;
+    now.zone = zone2;
+
+    ok("with zone times and midnight +1 is after",
+       icaltime_compare_date_only(now, midnight) < 0);
+    ok("with zone times and midnight +1 is after (tz)",
+       icaltime_compare_date_only_tz(now, midnight, zone3) < 0);
+    ok("with zone times and midnight +1 is after (b)",
+       icaltime_compare_date_only(midnight, now) > 0);
+    ok("with zone times and midnight +1 is after (tz) (b)",
+       icaltime_compare_date_only_tz(midnight, now, zone3) > 0);
+}
+
+static void test_icaltime_compare_date_only(void)
+{
+    icaltimezone *zone1, *zone2, *zone3;
+
+    zone1 = icaltimezone_get_builtin_timezone("Europe/Berlin");
+    ok("the first zone is found", zone1 != NULL);
+    zone2 = icaltimezone_get_builtin_timezone("Europe/Bratislava");
+    ok("the second zone is found", zone2 != NULL);
+    zone3 = icaltimezone_get_builtin_timezone("Europe/Prague");
+    ok("the third zone is found", zone3 != NULL);
+
+    test_icaltime_compare_date_only_case(zone1, zone1, zone1);
+    test_icaltime_compare_date_only_case(zone1, zone2, zone1);
+    test_icaltime_compare_date_only_case(zone1, zone2, zone3);
+}
+
 static void test_icalcomponent_get_duration(void)
 {
 #define assert_icalcomponent_get_duration(desc, want, ctlines)                           \
@@ -7596,6 +7724,7 @@ int main(int argc, const char *argv[])
     test_run("Test creating IANA parameter enum values", test_create_iana_parameter_value, do_test, do_header);
     test_run("Test removing parameter by name", test_icalproperty_remove_parameter_by_name, do_test, do_header);
     test_run("Test removing parameter by kind", test_icalproperty_remove_parameter_by_kind, do_test, do_header);
+    test_run("Test compare date only", test_icaltime_compare_date_only, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
