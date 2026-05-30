@@ -189,7 +189,7 @@ Functions</h2></td></tr>
 <div class="line">rrule = <a class="code hl_function" href="icalcomponent_8c.html#a2537651ca1a768a86b6a7ad90964320c">icalcomponent_get_first_property</a>(comp,ICAL_RRULE_PROPERTY);</div>
 <div class="line">recur = icalproperty_get_rrule(rrule);</div>
 <div class="line">start = icalproperty_get_dtstart(dtstart);</div>
-<div class="ttc" id="aicalcomponent_8c_html_a2537651ca1a768a86b6a7ad90964320c"><div class="ttname"><a href="icalcomponent_8c.html#a2537651ca1a768a86b6a7ad90964320c">icalcomponent_get_first_property</a></div><div class="ttdeci">icalproperty * icalcomponent_get_first_property(icalcomponent *c, icalproperty_kind kind)</div><div class="ttdef"><b>Definition</b> <a href="icalcomponent_8c_source.html#l00517">icalcomponent.c:517</a></div></div>
+<div class="ttc" id="aicalcomponent_8c_html_a2537651ca1a768a86b6a7ad90964320c"><div class="ttname"><a href="icalcomponent_8c.html#a2537651ca1a768a86b6a7ad90964320c">icalcomponent_get_first_property</a></div><div class="ttdeci">icalproperty * icalcomponent_get_first_property(icalcomponent *c, icalproperty_kind kind)</div><div class="ttdef"><b>Definition</b> <a href="icalcomponent_8c_source.html#l00513">icalcomponent.c:513</a></div></div>
 <div class="ttc" id="astructicalrecurrencetype_html"><div class="ttname"><a href="structicalrecurrencetype.html">icalrecurrencetype</a></div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8h_source.html#l00250">icalrecur.h:250</a></div></div>
 <div class="ttc" id="astructicaltimetype_html"><div class="ttname"><a href="structicaltimetype.html">icaltimetype</a></div><div class="ttdef"><b>Definition</b> <a href="icaltime_8h_source.html#l00090">icaltime.h:90</a></div></div>
 </div><!-- fragment --><p>Or, just make them up:</p>
@@ -209,7 +209,7 @@ Functions</h2></td></tr>
 <div class="line">        next = <a class="code hl_function" href="icalrecur_8c.html#ad2d6bef31a3a7bbfb803df53ed895544">icalrecur_iterator_next</a>(ritr);</div>
 <div class="line">}</div>
 <div class="ttc" id="aicalrecur_8c_html_ad2d6bef31a3a7bbfb803df53ed895544"><div class="ttname"><a href="icalrecur_8c.html#ad2d6bef31a3a7bbfb803df53ed895544">icalrecur_iterator_next</a></div><div class="ttdeci">struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l03694">icalrecur.c:3694</a></div></div>
-<div class="ttc" id="aicaltime_8c_html_ada6621230dc10c2cb16228935ee311b5"><div class="ttname"><a href="icaltime_8c.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a></div><div class="ttdeci">bool icaltime_is_null_time(const struct icaltimetype t)</div><div class="ttdef"><b>Definition</b> <a href="icaltime_8c_source.html#l00626">icaltime.c:626</a></div></div>
+<div class="ttc" id="aicaltime_8c_html_ada6621230dc10c2cb16228935ee311b5"><div class="ttname"><a href="icaltime_8c.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a></div><div class="ttdeci">bool icaltime_is_null_time(const struct icaltimetype t)</div><div class="ttdef"><b>Definition</b> <a href="icaltime_8c_source.html#l00630">icaltime.c:630</a></div></div>
 </div><!-- fragment --><p>Note that the time returned by icalrecur_iterator_next is in whatever timezone that dtstart is in.</p>
 <p>4) Deallocate a rule</p>
 <div class="fragment"><div class="line"><a class="code hl_function" href="icalrecur_8c.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a>(recur);</div>

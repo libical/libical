@@ -101,51 +101,51 @@ $(function() {
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;icalerror_p.h&quot;</span></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &quot;<a class="code" href="icalerror_8h.html">icalerror.h</a>&quot;</span></div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;<a class="code" href="icalmemory_8h.html">icalmemory.h</a>&quot;</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;assert.h&gt;</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &lt;limits.h&gt;</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;ctype.h&gt;</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">struct </span>vcardcomponent_impl {</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">char</span> <span class="keywordtype">id</span>[5];</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    vcardcomponent_kind kind;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    vcardproperty *versionp;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    icalpvl_list properties;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    icalpvl_elem property_iterator;</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    icalpvl_list components;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    icalpvl_elem component_iterator;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keyword">struct </span>vcardcomponent_impl *parent;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>};</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keyword">static</span> <span class="keywordtype">void</span> vcardcomponent_add_children(vcardcomponent *impl, va_list args)</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>{</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">void</span> *vp;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordflow">while</span> ((vp = va_arg(args, <span class="keywordtype">void</span> *)) != 0) {</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        icalassert(vcardproperty_isa_property(vp) != 0);</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        vcardcomponent_add_property(impl, (vcardproperty *)vp);</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    }</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>}</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keyword">static</span> vcardcomponent *vcardcomponent_new_impl(vcardcomponent_kind kind)</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>{</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    vcardcomponent *comp;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordflow">if</span> (!vcardcomponent_kind_is_valid(kind)) {</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    }</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordflow">if</span> ((comp = (vcardcomponent *)<a class="code hl_function" href="icalmemory_8c.html#a9b645edbcc1a05dbb64df5d86adbc367">icalmemory_new_buffer</a>(<span class="keyword">sizeof</span>(vcardcomponent))) == 0) {</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <a class="code hl_function" href="icalerror_8c.html#a8266eaa216926b6703a0ef31cd99f0b2">icalerror_set_errno</a>(<a class="code hl_enumvalue" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a055394ffaf6701aa12491dc10767f07d">ICAL_NEWFAILED_ERROR</a>);</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    }</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    memset(comp, 0, <span class="keyword">sizeof</span>(vcardcomponent));</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    strcpy(comp-&gt;id, <span class="stringliteral">&quot;comp&quot;</span>);</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &quot;icaltypes_p.h&quot;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;assert.h&gt;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;limits.h&gt;</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;ctype.h&gt;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">struct </span>vcardcomponent_impl {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    icalstructuretype id;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    vcardcomponent_kind kind;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    vcardproperty *versionp;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    icalpvl_list properties;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    icalpvl_elem property_iterator;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    icalpvl_list components;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    icalpvl_elem component_iterator;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">struct </span>vcardcomponent_impl *parent;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>};</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">static</span> <span class="keywordtype">void</span> vcardcomponent_add_children(vcardcomponent *impl, va_list args)</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>{</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordtype">void</span> *vp;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordflow">while</span> ((vp = va_arg(args, <span class="keywordtype">void</span> *)) != 0) {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        icalassert(vcardproperty_isa_property(vp) != 0);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        vcardcomponent_add_property(impl, (vcardproperty *)vp);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    }</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>}</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">static</span> vcardcomponent *vcardcomponent_new_impl(vcardcomponent_kind kind)</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>{</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    vcardcomponent *comp;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordflow">if</span> (!vcardcomponent_kind_is_valid(kind)) {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    }</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordflow">if</span> ((comp = (vcardcomponent *)<a class="code hl_function" href="icalmemory_8c.html#a9b645edbcc1a05dbb64df5d86adbc367">icalmemory_new_buffer</a>(<span class="keyword">sizeof</span>(vcardcomponent))) == 0) {</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <a class="code hl_function" href="icalerror_8c.html#a8266eaa216926b6703a0ef31cd99f0b2">icalerror_set_errno</a>(<a class="code hl_enumvalue" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a055394ffaf6701aa12491dc10767f07d">ICAL_NEWFAILED_ERROR</a>);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    }</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    memset(comp, 0, <span class="keyword">sizeof</span>(vcardcomponent));</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    comp-&gt;id = ICAL_STRUCTURE_TYPE_COMPONENT;</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    comp-&gt;kind = kind;</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    comp-&gt;properties = icalpvl_newlist();</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    comp-&gt;components = icalpvl_newlist();</div>
@@ -248,7 +248,7 @@ $(function() {
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    c-&gt;property_iterator = 0;</div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    c-&gt;components = 0;</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    c-&gt;component_iterator = 0;</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    c-&gt;id[0] = <span class="charliteral">&#39;X&#39;</span>;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    c-&gt;id = ICAL_STRUCTURE_TYPE_COMPONENT_EMPTY;</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(c);</div>
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>}</div>
@@ -334,7 +334,7 @@ $(function() {
 <div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="keywordtype">bool</span> vcardcomponent_is_valid(<span class="keyword">const</span> vcardcomponent *component)</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>{</div>
 <div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    <span class="keywordflow">if</span> (component) {</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        <span class="keywordflow">if</span> ((strcmp(component-&gt;id, <span class="stringliteral">&quot;comp&quot;</span>) == 0) &amp;&amp; (component-&gt;kind != VCARD_NO_COMPONENT)) {</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        <span class="keywordflow">if</span> ((component-&gt;id == ICAL_STRUCTURE_TYPE_COMPONENT) &amp;&amp; (component-&gt;kind != VCARD_NO_COMPONENT)) {</div>
 <div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        }</div>
 <div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    }</div>
@@ -354,7 +354,7 @@ $(function() {
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span> </div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    icalerror_check_arg_rz((component != 0), <span class="stringliteral">&quot;component&quot;</span>);</div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> </div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>    <span class="keywordflow">return</span> (strcmp(impl-&gt;id, <span class="stringliteral">&quot;comp&quot;</span>) == 0);</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>    <span class="keywordflow">return</span> (impl-&gt;id == ICAL_STRUCTURE_TYPE_COMPONENT);</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>}</div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span> </div>
 <div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span><span class="keywordtype">void</span> vcardcomponent_add_property(vcardcomponent *comp, vcardproperty *property)</div>
@@ -1446,14 +1446,14 @@ $(function() {
 <div class="ttc" id="avcardcomponent_8c_html_ae6a5b18f406c063d4d01c3431967d998"><div class="ttname"><a href="vcardcomponent_8c.html#ae6a5b18f406c063d4d01c3431967d998">vcardcomponent_new_from_string</a></div><div class="ttdeci">vcardcomponent * vcardcomponent_new_from_string(const char *str)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition</b> <a href="#l00108">vcardcomponent.c:108</a></div></div>
 <div class="ttc" id="avcardcomponent_8c_html_ae97e75e241ed1fa01e515b9bcc8faa66"><div class="ttname"><a href="vcardcomponent_8c.html#ae97e75e241ed1fa01e515b9bcc8faa66">vcardcomponent_normalize</a></div><div class="ttdeci">void vcardcomponent_normalize(vcardcomponent *comp)</div><div class="ttdoc">Normalizes (reorders and sorts the properties) the specified vcard comp.</div><div class="ttdef"><b>Definition</b> <a href="#l00713">vcardcomponent.c:713</a></div></div>
 <div class="ttc" id="avcardcomponent_8h_html"><div class="ttname"><a href="vcardcomponent_8h.html">vcardcomponent.h</a></div><div class="ttdoc">Defines the data structure representing vCard components.</div></div>
-<div class="ttc" id="avcardcomponent_8h_html_a9cdf113e0c479d84add2f2a4da58edc4"><div class="ttname"><a href="vcardcomponent_8h.html#a9cdf113e0c479d84add2f2a4da58edc4">vcardproperty_get_parent</a></div><div class="ttdeci">vcardcomponent * vcardproperty_get_parent(const vcardproperty *property)</div><div class="ttdoc">Returns the parent vcard for the specified property.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l01004">vcardproperty.c:1004</a></div></div>
-<div class="ttc" id="avcardcomponent_8h_html_ab6d25934f4197abca43c7a7caeee1a06"><div class="ttname"><a href="vcardcomponent_8h.html#ab6d25934f4197abca43c7a7caeee1a06">vcardproperty_set_parent</a></div><div class="ttdeci">void vcardproperty_set_parent(vcardproperty *property, vcardcomponent *comp)</div><div class="ttdoc">Sets the parent vcard for the specified vcardproperty property.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00997">vcardproperty.c:997</a></div></div>
-<div class="ttc" id="avcardparameter_8c_html_ad83086f8fb01f999f518f29fb52e2887"><div class="ttname"><a href="vcardparameter_8c.html#ad83086f8fb01f999f518f29fb52e2887">vcardparameter_get_xname</a></div><div class="ttdeci">const char * vcardparameter_get_xname(const vcardparameter *param)</div><div class="ttdoc">Returns the X-name of param.</div><div class="ttdef"><b>Definition</b> <a href="vcardparameter_8c_source.html#l00333">vcardparameter.c:333</a></div></div>
+<div class="ttc" id="avcardcomponent_8h_html_a9cdf113e0c479d84add2f2a4da58edc4"><div class="ttname"><a href="vcardcomponent_8h.html#a9cdf113e0c479d84add2f2a4da58edc4">vcardproperty_get_parent</a></div><div class="ttdeci">vcardcomponent * vcardproperty_get_parent(const vcardproperty *property)</div><div class="ttdoc">Returns the parent vcard for the specified property.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l01000">vcardproperty.c:1000</a></div></div>
+<div class="ttc" id="avcardcomponent_8h_html_ab6d25934f4197abca43c7a7caeee1a06"><div class="ttname"><a href="vcardcomponent_8h.html#ab6d25934f4197abca43c7a7caeee1a06">vcardproperty_set_parent</a></div><div class="ttdeci">void vcardproperty_set_parent(vcardproperty *property, vcardcomponent *comp)</div><div class="ttdoc">Sets the parent vcard for the specified vcardproperty property.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00993">vcardproperty.c:993</a></div></div>
+<div class="ttc" id="avcardparameter_8c_html_ad83086f8fb01f999f518f29fb52e2887"><div class="ttname"><a href="vcardparameter_8c.html#ad83086f8fb01f999f518f29fb52e2887">vcardparameter_get_xname</a></div><div class="ttdeci">const char * vcardparameter_get_xname(const vcardparameter *param)</div><div class="ttdoc">Returns the X-name of param.</div><div class="ttdef"><b>Definition</b> <a href="vcardparameter_8c_source.html#l00328">vcardparameter.c:328</a></div></div>
 <div class="ttc" id="avcardparser_8h_html"><div class="ttname"><a href="vcardparser_8h.html">vcardparser.h</a></div><div class="ttdoc">Line-oriented parsing vCard format.</div></div>
-<div class="ttc" id="avcardproperty_8c_html_a3c656d31e2b783dda959c0dccccf4c5e"><div class="ttname"><a href="vcardproperty_8c.html#a3c656d31e2b783dda959c0dccccf4c5e">vcardproperty_normalize</a></div><div class="ttdeci">void vcardproperty_normalize(vcardproperty *prop)</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l01017">vcardproperty.c:1017</a></div></div>
-<div class="ttc" id="avcardproperty_8c_html_a515f3b0a390500f4c606d22e5704dbf9"><div class="ttname"><a href="vcardproperty_8c.html#a515f3b0a390500f4c606d22e5704dbf9">vcardproperty_remove_parameter_by_ref</a></div><div class="ttdeci">void vcardproperty_remove_parameter_by_ref(vcardproperty *prop, vcardparameter *parameter)</div><div class="ttdoc">Removes the specified parameter reference from the property.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00741">vcardproperty.c:741</a></div></div>
+<div class="ttc" id="avcardproperty_8c_html_a3c656d31e2b783dda959c0dccccf4c5e"><div class="ttname"><a href="vcardproperty_8c.html#a3c656d31e2b783dda959c0dccccf4c5e">vcardproperty_normalize</a></div><div class="ttdeci">void vcardproperty_normalize(vcardproperty *prop)</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l01013">vcardproperty.c:1013</a></div></div>
+<div class="ttc" id="avcardproperty_8c_html_a515f3b0a390500f4c606d22e5704dbf9"><div class="ttname"><a href="vcardproperty_8c.html#a515f3b0a390500f4c606d22e5704dbf9">vcardproperty_remove_parameter_by_ref</a></div><div class="ttdeci">void vcardproperty_remove_parameter_by_ref(vcardproperty *prop, vcardparameter *parameter)</div><div class="ttdoc">Removes the specified parameter reference from the property.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00737">vcardproperty.c:737</a></div></div>
 <div class="ttc" id="avcardproperty_8c_html_abc42d87518f3b777711d799759cc0b47"><div class="ttname"><a href="vcardproperty_8c.html#abc42d87518f3b777711d799759cc0b47">vcardproperty_clone</a></div><div class="ttdeci">vcardproperty * vcardproperty_clone(const vcardproperty *old)</div><div class="ttdoc">Deeply clones an vcardproperty.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00087">vcardproperty.c:87</a></div></div>
-<div class="ttc" id="avcardproperty_8c_html_ac2adb2654ee641b6ba15042f2ffce565"><div class="ttname"><a href="vcardproperty_8c.html#ac2adb2654ee641b6ba15042f2ffce565">vcardproperty_remove_parameter_by_kind</a></div><div class="ttdeci">void vcardproperty_remove_parameter_by_kind(vcardproperty *prop, vcardparameter_kind kind)</div><div class="ttdoc">Removes all parameters with the specified kind.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00694">vcardproperty.c:694</a></div></div>
+<div class="ttc" id="avcardproperty_8c_html_ac2adb2654ee641b6ba15042f2ffce565"><div class="ttname"><a href="vcardproperty_8c.html#ac2adb2654ee641b6ba15042f2ffce565">vcardproperty_remove_parameter_by_kind</a></div><div class="ttdeci">void vcardproperty_remove_parameter_by_kind(vcardproperty *prop, vcardparameter_kind kind)</div><div class="ttdoc">Removes all parameters with the specified kind.</div><div class="ttdef"><b>Definition</b> <a href="vcardproperty_8c_source.html#l00690">vcardproperty.c:690</a></div></div>
 <div class="ttc" id="avcardrestriction_8h_html"><div class="ttname"><a href="vcardrestriction_8h.html">vcardrestriction.h</a></div><div class="ttdoc">Functions to check if a vcardcomponent meets the restrictions imposed by the standard.</div></div>
 <div class="ttc" id="avcardrestriction_8h_html_a442545a4458b4615a9688ef94b4cbff3"><div class="ttname"><a href="vcardrestriction_8h.html#a442545a4458b4615a9688ef94b4cbff3">vcardrestriction_check</a></div><div class="ttdeci">bool vcardrestriction_check(vcardcomponent *comp)</div><div class="ttdoc">Checks if a given VCARD meets all the restrictions imposed by the standard.</div></div>
 <div class="ttc" id="avcardvalue_8h_html"><div class="ttname"><a href="vcardvalue_8h.html">vcardvalue.h</a></div><div class="ttdoc">Defines the data structure representing vCard values.</div></div>

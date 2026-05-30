@@ -223,7 +223,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>This function is identical to the static icaltimezone_adjust_change() except for the type of the first parameter. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00764">764</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00755">755</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -381,7 +381,7 @@ No sanity or error checking is performed on the input time <code class="param">t
 <dl class="section return"><dt>Returns</dt><dd>-1, 0, or 1 to indicate that a is less than b, a equals b, or a is greater than b, respectively.</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="#a178f667071ea4e8f22140ee8e2f4cdae">icaltime_compare_date_only</a>, <a class="el" href="#abfa31574ddedeaf5e5b783b29ce0346d">icaltime_compare_date_only_tz</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00635">635</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00639">639</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -414,7 +414,7 @@ No sanity or error checking is performed on the input time <code class="param">t
 <dl class="section return"><dt>Returns</dt><dd>-1, 0, or 1 to indicate that a is less than b, a equals b, or a is greater than b, respectively.</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="#a123759194c6e8c44e1b05193cb61196a">icaltime_compare</a>, <a class="el" href="#abfa31574ddedeaf5e5b783b29ce0346d">icaltime_compare_date_only_tz</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00704">704</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00708">708</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -453,7 +453,7 @@ No sanity or error checking is performed on the input time <code class="param">t
 <dl class="section return"><dt>Returns</dt><dd>-1, 0, or 1 to indicate that a is less than b, a equals b, or a is greater than b, respectively.</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="#a123759194c6e8c44e1b05193cb61196a">icaltime_compare</a>, <a class="el" href="#a178f667071ea4e8f22140ee8e2f4cdae">icaltime_compare_date_only</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00734">734</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00725">725</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -489,7 +489,7 @@ No sanity or error checking is performed on the input time <code class="param">t
 <p>For example, July 20 1969, 8:17 PM UTC would be converted to July 20 1969, 4:17 PM EDT.</p>
 <dl class="section return"><dt>Returns</dt><dd>an icaltimetype containing the timezone shifted <code class="param">tt</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00855">855</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00846">846</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -568,7 +568,7 @@ No sanity or error checking is performed on the input time <code class="param">t
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the day of the year for <code class="param">t</code> (1-366). </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the day of the year for <code class="param">t</code> (1-366). Returns 0 if the specified icaltimetype is invalid (eg. month less than 1 or greater than 12). </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00533">533</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
@@ -664,7 +664,7 @@ No sanity or error checking is performed on the input time <code class="param">t
 no sanity or error checking is done for the inputs; it's up to the caller to provide reasonable values.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>a new time, given the day of year and a year. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00540">540</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00544">544</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -765,7 +765,7 @@ no sanity or error checking is done for the inputs; it's up to the caller to pro
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the <code class="param">t</code> timezone. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00878">878</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00869">869</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -792,7 +792,7 @@ no sanity or error checking is done for the inputs; it's up to the caller to pro
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a string containing the tzid, or NULL for a floating time. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00883">883</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00874">874</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -819,7 +819,7 @@ no sanity or error checking is done for the inputs; it's up to the caller to pro
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the <code class="param">t</code> is a DATE (rather than a DATE-TIME); false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00616">616</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00620">620</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -873,7 +873,7 @@ no sanity or error checking is done for the inputs; it's up to the caller to pro
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if <code class="param">t</code> represents "null" time; false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00626">626</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00630">630</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -900,7 +900,7 @@ no sanity or error checking is done for the inputs; it's up to the caller to pro
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if <code class="param">t</code> is relative to UTC zone; false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00621">621</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00625">625</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -928,7 +928,7 @@ no sanity or error checking is done for the inputs; it's up to the caller to pro
 <p>This is usually the result of creating a new time type but not clearing it, or setting one of the flags to an illegal value.</p>
 <dl class="section return"><dt>Returns</dt><dd>true if contents of <code class="param">t</code> are valid; false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00603">603</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00607">607</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -977,7 +977,7 @@ no sanity or error checking is done for the inputs; it's up to the caller to pro
 <p>Construct an icaltimetype with null date.</p>
 <dl class="section return"><dt>Returns</dt><dd>A null date icaltimetype, which indicates no time has been set. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00584">584</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00588">588</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -998,7 +998,7 @@ no sanity or error checking is done for the inputs; it's up to the caller to pro
 <p>Construct an icaltimetype with null time.</p>
 <dl class="section return"><dt>Returns</dt><dd>A null time icaltimetype, which indicates no time has been set. This time represents the beginning of the epoch. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00575">575</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00579">579</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
@@ -1034,7 +1034,7 @@ no sanity or error checking is done for the inputs; it's up to the caller to pro
 <p>If <code class="param">t</code> is of type <span class="tt">DATE</span>, its timezone is not modified and the returned time is an exact copy of <code class="param">t</code>.</p>
 <dl class="section return"><dt>Returns</dt><dd>a icaltimetype computed from <code class="param">t</code> with the timezone <code class="param">zone</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00892">892</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icaltime_8c_source.html#l00883">883</a> of file <a class="el" href="icaltime_8c_source.html">icaltime.c</a>.</p>
 
 </div>
 </div>
