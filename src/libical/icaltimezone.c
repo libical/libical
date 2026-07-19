@@ -1669,24 +1669,40 @@ static bool icaltimezone_init_builtin_timezones(void)
 
 static bool parse_coord(const char *coord, int len, int *degrees, int *minutes, int *seconds)
 {
-    if (len == 5) {
-        sscanf(coord + 1, "%2d%2d", degrees, minutes);
-    } else if (len == 6) {
-        sscanf(coord + 1, "%3d%2d", degrees, minutes);
-    } else if (len == 7) {
-        sscanf(coord + 1, "%2d%2d%2d", degrees, minutes, seconds);
-    } else if (len == 8) {
-        sscanf(coord + 1, "%3d%2d%2d", degrees, minutes, seconds);
-    } else {
+    *degrees = 0;
+    *minutes = 0;
+    *seconds = 0;
+
+    bool fail = true;
+    if (coord) {
+        if (len == 5) {
+            if (sscanf(coord + 1, "%2d%2d", degrees, minutes) == 2) {
+                fail = false;
+            }
+        } else if (len == 6) {
+            if (sscanf(coord + 1, "%3d%2d", degrees, minutes) == 2) {
+                fail = false;
+            }
+        } else if (len == 7) {
+            if (sscanf(coord + 1, "%2d%2d%2d", degrees, minutes, seconds) == 3) {
+                fail = false;
+            }
+        } else if (len == 8) {
+            if (sscanf(coord + 1, "%3d%2d%2d", degrees, minutes, seconds) == 3) {
+                fail = false;
+            }
+        }
+    }
+
+    if (fail) {
         icalerrprintf("Invalid coordinate: %s\n", coord);
-        return true;
+    } else {
+        if (coord[0] == '-') {
+            *degrees = -*degrees;
+        }
     }
 
-    if (coord[0] == '-') {
-        *degrees = -*degrees;
-    }
-
-    return false;
+    return fail;
 }
 
 static bool fetch_lat_long_from_string(const char *str,
@@ -1836,8 +1852,12 @@ static void icaltimezone_parse_zone_tab(void)
     char buf[1024];
     while (!feof(fp) && !ferror(fp) && fgets(buf, (int)sizeof(buf), fp)) {
         char location[1024] = {0}; /* Stores the city name when parsing buf. */
-        int longitude_degrees, longitude_minutes, longitude_seconds;
-        int latitude_degrees, latitude_minutes, latitude_seconds;
+        int latitude_degrees = 360;
+        int longitude_degrees = 360;
+        int latitude_minutes = 0;
+        int longitude_minutes = 0;
+        int latitude_seconds = 0;
+        int longitude_seconds = 0;
 
         if (buf[0] == '\0') {
             break;
@@ -1849,9 +1869,6 @@ static void icaltimezone_parse_zone_tab(void)
         if (use_builtin_tzdata) {
             /* The format of each line is: "[ latitude longitude ] location". */
             if (buf[0] != '+' && buf[0] != '-') {
-                latitude_degrees = longitude_degrees = 360;
-                latitude_minutes = longitude_minutes = 0;
-                latitude_seconds = longitude_seconds = 0;
                 if (sscanf(buf, "%1000s", location) != 1) { /*limit location to 1000chars */
                     /*increase as needed */
                     /*see location and buf declarations */

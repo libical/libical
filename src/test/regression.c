@@ -7596,6 +7596,24 @@ static void test_line_folding(void)
 #undef TEST_LINE_FOLDING_PREAMBLE
 }
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-truncation"
+#endif
+static void test_geo_zoneinfo_coordinates(void)
+{
+    char str[13];
+    icaltimezone *zone = icaltimezone_get_builtin_timezone("Europe/Andorra");
+    ok("get icaltimezone", (zone != NULL));
+    snprintf(str, 12, "%.12f", icaltimezone_get_latitude(zone));
+    str_is("test latititude", str, "42.50000000");
+    snprintf(str, 12, "%.12f", icaltimezone_get_longitude(zone));
+    str_is("test longitude", str, "1.516666666");
+}
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
+
 int main(int argc, const char *argv[])
 {
 #if !defined(HAVE_UNISTD_H)
@@ -7796,6 +7814,7 @@ int main(int argc, const char *argv[])
     test_run("Test removing parameter by kind", test_icalproperty_remove_parameter_by_kind, do_test, do_header);
     test_run("Test compare date only", test_icaltime_compare_date_only, do_test, do_header);
     test_run("Test folding", test_line_folding, do_test, do_header);
+    test_run("Test zoneinfo geo coordinates", test_geo_zoneinfo_coordinates, do_test, do_header);
     /** OPTIONAL TESTS go here... **/
 
 #if defined(LIBICAL_CXX_BINDINGS)
