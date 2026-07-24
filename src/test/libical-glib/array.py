@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./array.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./array.py
 
 ###############################################################################
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
@@ -14,7 +13,7 @@ import sys
 import gi
 
 gi.require_version('ICalGLib', '4.0')
-from gi.repository import ICalGLib  # noqa E402
+from gi.repository import ICalGLib
 
 try:
     zoneinfodir = os.environ['ZONEINFO_DIRECTORY']

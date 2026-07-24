@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./component.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./component.py
 
 ###############################################################################
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
@@ -14,7 +13,7 @@ import sys
 import gi
 
 gi.require_version('ICalGLib', '4.0')
-from gi.repository import ICalGLib  # noqa E402
+from gi.repository import ICalGLib
 
 try:
     zoneinfodir = os.environ['ZONEINFO_DIRECTORY']
@@ -188,7 +187,7 @@ def main():
     # Traverse with internal API.
     count = parent.count_components(ICalGLib.ComponentKind.VEVENT_COMPONENT)
     childComponent = parent.get_first_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
-    for i in range(0, count):
+    for i in range(count):
         prefix = 'test'
         index = i + 2
         assert childComponent.get_summary() == prefix + str(index)
@@ -199,7 +198,7 @@ def main():
     iterator = parent.begin_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
     assert iterator.is_valid()
     childComponent = iterator.deref()
-    for i in range(0, count):
+    for i in range(count):
         prefix = 'test'
         index = i + 2
         assert childComponent.get_summary() == prefix + str(index)
@@ -208,7 +207,7 @@ def main():
 
     iterator = parent.end_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
     childComponent = iterator.prior()
-    for i in range(0, count):
+    for i in range(count):
         prefix = 'test'
         index = count + 1 - i
         assert childComponent.get_summary() == prefix + str(index)
@@ -218,7 +217,7 @@ def main():
     # Traverse and remove with external API.
     iterator = parent.begin_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
     childComponent = iterator.deref()
-    for i in range(0, count):
+    for i in range(count):
         if i != count - 1:
             iterator.next()
         parent.remove_component(childComponent)

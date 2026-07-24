@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./attach.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./attach.py
 
 ###############################################################################
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
@@ -11,7 +10,7 @@
 import gi
 
 gi.require_version('ICalGLib', '4.0')
-from gi.repository import ICalGLib  # noqa E402
+from gi.repository import ICalGLib
 
 dummyUrl = 'https://people.gnome.org/~engagement/logos/GnomeLogoVertical.svg'
 dummyData = "It's a super large attachment"

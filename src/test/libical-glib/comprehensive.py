@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./comprehensive.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./comprehensive.py
 
 ###############################################################################
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
@@ -11,7 +10,7 @@
 import gi
 
 gi.require_version('ICalGLib', '4.0')
-from gi.repository import ICalGLib  # noqa E402
+from gi.repository import ICalGLib
 
 eventStr1 = (
     'BEGIN:VEVENT\n'
@@ -179,7 +178,7 @@ def main():
 
     count = parent.count_components(ICalGLib.ComponentKind.VEVENT_COMPONENT)
     childComponent = parent.get_first_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
-    for i in range(0, count):
+    for i in range(count):
         if childComponent.get_summary() == 'childEvent2':
             childComponent.set_summary('childEventTwo')
 
@@ -203,7 +202,7 @@ def main():
 
     count = parent.count_components(ICalGLib.ComponentKind.VEVENT_COMPONENT)
     childComponent = parent.get_first_component(ICalGLib.ComponentKind.VEVENT_COMPONENT)
-    for i in range(0, count):
+    for i in range(count):
         if childComponent.get_summary() == 'childEventTwo':
             childComponent.set_summary('childEventTwo')
 
