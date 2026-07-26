@@ -104,14 +104,19 @@ static bool make_time(const struct tm *tm, int tzm, icaltime_t *out_time_t)
         return false;
     }
 
-    /* check for upper bound of Jan 17, 2038 (to avoid possibility of 32-bit arithmetic overflow) */
-    if (tm->tm_year == 138) {
-        if (tm->tm_mon > 0) {
-            return false;
-        } else if (tm->tm_mday > 17) {
-            return false;
-        }
+    /* 32-bit time_t cannot represent any instant after
+       2038-01-19T03:14:07 UTC (INT32_MAX seconds since the epoch). */
+    if (tm->tm_year == 138 &&
+        (tm->tm_mon > 0 ||
+         tm->tm_mday > 19 ||
+         (tm->tm_mday == 19 &&
+          (tm->tm_hour > 3 ||
+           (tm->tm_hour == 3 &&
+            (tm->tm_min > 14 ||
+             (tm->tm_min == 14 && tm->tm_sec > 7))))))) {
+        return false;
     }
+
 #else
     /* We don't support years >= 10000, because the function has not been tested at this range. */
     if (tm->tm_year >= 8100) {
