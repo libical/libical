@@ -5253,7 +5253,8 @@ void test_icaltime_as_timet(void)
     icaltime_adjust(&tt, 0, 0, 0, 1);
     ok("icaltime_from_string translates 100000101T000000Z to -1", icaltime_as_timet(tt) == -1);
 #else
-    ok("icaltime_from_string translates 20380118T000000Z to -1", icaltime_as_timet(icaltime_from_string("20380118T000000Z")) == -1);
+    ok("icaltime_from_string translates 20380119T031407Z to 2147483647", icaltime_as_timet(icaltime_from_string("20380119T031407Z")) == 2147483647);
+    ok("icaltime_from_string translates 20380119T031408Z to -1", icaltime_as_timet(icaltime_from_string("20380119T031408Z")) == -1);
 #endif
 
     tt = icaltime_from_string("19020101T000000Z");
@@ -5263,7 +5264,7 @@ void test_icaltime_as_timet(void)
     // Going through each day until 10000 takes ~250ms on a reasonably powered year 2020 business laptop.
     while (tt.year < 10000)
 #else
-    while ((tt.year < 2038) || ((tt.year == 2038) && (tt.month == 1) && (tt.day <= 17)))
+    while ((tt.year < 2038) || ((tt.year == 2038) && (tt.month == 1) && (tt.day <= 19)))
 #endif
     {
         time_t actualTimeT = icaltime_as_timet(tt);
