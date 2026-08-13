@@ -406,7 +406,8 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
     }
     snprintf(full_path, size, "%s/%s", zonedir, location);
     if ((f = fopen(full_path, "rb")) == 0) {
-        icalerror_set_errno(ICAL_FILE_ERROR);
+        /* Don't error. Return a NULL pointer to indicate a bad TZID */
+        //icalerror_set_errno(ICAL_FILE_ERROR);
         goto error;
     }
 

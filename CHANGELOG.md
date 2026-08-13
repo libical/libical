@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix 32-bit time_t upper bound off by two days
 - Buildsystem: fix libical_deprecated_option() writing the wrong cache value
+- Bogus TZIDs no longer cause an error
 
 ## [4.0.4] - 2026-07-25
 
