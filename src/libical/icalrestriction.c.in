@@ -205,6 +205,7 @@ const char *icalrestriction_must_if_tz_ref(const icalrestriction_record * rec,
 
 static const char *_validate_duration(icalcomponent *comp, icalproperty *prop)
 {
+    struct icaldurationtype duration;
 
     if (!icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY)) {
         return
@@ -212,7 +213,7 @@ static const char *_validate_duration(icalcomponent *comp, icalproperty *prop)
             "The component must have DTSTART";
     }
 
-    struct icaldurationtype duration = icalproperty_get_duration(prop);
+    duration = icalproperty_get_duration(prop);
 
     if (icaldurationtype_as_utc_seconds(duration) < 0) {
         /* NOTE: Per RFC 5545, Section 3.8.2.5, DURATION > 0,
@@ -269,12 +270,18 @@ static const char *icalrestriction_no_due(const icalrestriction_record * rec,
 static const char *icalrestriction_no_duration(const icalrestriction_record * rec,
                                                icalcomponent *comp, icalproperty *prop)
 {
+    const char *pkind;
+    icalproperty *dtstartp;
+    icaltimetype dtstart;
+    icaltimetype dtend_due;
+    bool dtstart_islocal;
+    bool dtend_due_islocal;
     _unused(rec);
 
     if (prop == NULL)
         return 0;
 
-    const char *pkind = icalproperty_kind_to_string(icalproperty_isa(prop));
+    pkind = icalproperty_kind_to_string(icalproperty_isa(prop));
 
     if (icalcomponent_get_first_property(comp, ICAL_DURATION_PROPERTY)) {
         char *temp = (char*) icalmemory_tmp_buffer(TMP_BUF_SIZE);
@@ -293,8 +300,7 @@ static const char *icalrestriction_no_duration(const icalrestriction_record * re
        with local time if and only if the DTSTART property is also
        specified as a date with local time.
     */
-    icalproperty *dtstartp =
-        icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+    dtstartp = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
 
     if (!dtstartp) {
         /* DTSTART is optional in VTODO */
@@ -303,10 +309,8 @@ static const char *icalrestriction_no_duration(const icalrestriction_record * re
             "The component must have DTSTART";
     }
 
-    icaltimetype dtstart =
-        icalproperty_get_datetime_with_component(dtstartp, comp);
-    icaltimetype dtend_due =
-        icalproperty_get_datetime_with_component(prop, comp);
+    dtstart = icalproperty_get_datetime_with_component(dtstartp, comp);
+    dtend_due = icalproperty_get_datetime_with_component(prop, comp);
 
     if (icaltime_is_date(dtend_due) != icaltime_is_date(dtstart)) {
         char *temp = (char*) icalmemory_tmp_buffer(TMP_BUF_SIZE);
@@ -317,9 +321,9 @@ static const char *icalrestriction_no_duration(const icalrestriction_record * re
         return temp;
     }
 
-    bool dtstart_islocal = !dtstart.zone &&
+    dtstart_islocal = !dtstart.zone &&
         !icalproperty_get_first_parameter(dtstartp, ICAL_TZID_PARAMETER);
-    bool dtend_due_islocal = !dtend_due.zone &&
+    dtend_due_islocal = !dtend_due.zone &&
         !icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER);
 
     if (dtend_due_islocal != dtstart_islocal) {
@@ -371,6 +375,7 @@ static bool _check_restriction(icalcomponent *comp,
         icalproperty *errProp;
         icalparameter *errParam;
         const char *type, *kind;
+        char *temp;
 
         if (record->subcomponent != ICAL_NO_COMPONENT) {
             type = "component";
@@ -381,7 +386,7 @@ static bool _check_restriction(icalcomponent *comp,
         }
 
         /* Don't worry if the error message is truncated at TMP_BUF_SIZE chars */
-        char *temp = (char*) icalmemory_tmp_buffer(TMP_BUF_SIZE);
+        temp = (char*) icalmemory_tmp_buffer(TMP_BUF_SIZE);
         (void)snprintf(temp, TMP_BUF_SIZE,
                        "Failed iTIP restrictions for %s %s. "
                        "Expected %s instances of the %s and got %d",

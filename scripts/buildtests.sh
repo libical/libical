@@ -559,6 +559,7 @@ SPLINT() {
     -preproc \
     -standard -warnposix \
     -linelen 1000 \
+    -boolcompare \
     -exportlocal \
     -nullassign \
     -nullret \
