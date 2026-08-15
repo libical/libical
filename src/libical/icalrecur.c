@@ -2140,6 +2140,7 @@ static int get_day_of_week_adjusted(icalrecur_iterator *impl,
     return icaltime_day_of_week(get_dtstart_adjusted(impl, year, month, day));
 }
 
+/* cppcheck-suppress constParameterPointer */
 static struct icaltimetype occurrence_as_icaltime(icalrecur_iterator *impl,
                                                   int normalize)
 {
@@ -2547,6 +2548,7 @@ static int next_unit(icalrecur_iterator *impl,
 
     icalassert(has_by_unit || this_frequency);
 
+    /* cppcheck-suppress nullPointer */
     if (next_sub_unit && next_sub_unit(impl) == 0) {
         return 0;
     }
@@ -2644,6 +2646,7 @@ static int prev_unit(icalrecur_iterator *impl,
 
     icalassert(has_by_unit || this_frequency);
 
+    /* cppcheck-suppress nullPointer */
     if (prev_sub_unit && prev_sub_unit(impl) == 0) {
         return 0;
     }

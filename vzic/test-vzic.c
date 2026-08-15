@@ -73,7 +73,7 @@
 #endif
 
 /* We output beneath the current directory for now. */
-const char *directory = "test-output";
+static const char *topDirectory = "test-output";
 
 static void usage(void);
 static int parse_zone_name(char *name,
@@ -115,7 +115,7 @@ int main(int argc, const char *argv[])
 
     zones = icaltimezone_get_builtin_timezones();
 
-    ensure_directory_exists(directory);
+    ensure_directory_exists(topDirectory);
 
     for (size_t j = 0; j < zones->num_elements; j++) {
         zone = icalarray_element_at(zones, j);
@@ -158,7 +158,7 @@ int main(int argc, const char *argv[])
             exit(1);
         }
 
-        strncpy(output_directory, directory, PATHNAME_BUFFER_SIZE - 1);
+        strncpy(output_directory, topDirectory, PATHNAME_BUFFER_SIZE - 1);
         strncat(output_directory, "/", PATHNAME_BUFFER_SIZE - 1);
         strncat(output_directory, zone_directory, PATHNAME_BUFFER_SIZE - 1);
         ensure_directory_exists(output_directory);
@@ -167,7 +167,7 @@ int main(int argc, const char *argv[])
         strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
 
         if (zone_subdirectory) {
-            strncpy(output_directory, directory, PATHNAME_BUFFER_SIZE - 1);
+            strncpy(output_directory, topDirectory, PATHNAME_BUFFER_SIZE - 1);
             strncat(output_directory, "/", PATHNAME_BUFFER_SIZE - 1);
             strncat(output_directory, zone_directory, PATHNAME_BUFFER_SIZE - 1);
             strncat(output_directory, "/", PATHNAME_BUFFER_SIZE - 1);

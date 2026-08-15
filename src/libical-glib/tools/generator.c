@@ -1056,7 +1056,7 @@ void generate_source_includes(FILE *out, Structure *structure)
     g_hash_table_destroy(includeNames);
 }
 
-void generate_forward_declarations_header_file(GList *structures)
+static void generate_forward_declarations_header_file(GList *structures)
 {
     FILE *in, *out;
     gint c;
@@ -2275,7 +2275,9 @@ parse_api_templates(void)
 
 static GList * /* Structure * */
 parse_api_files(const gchar *apis_dir,
-                GHashTable *type2kind,      /* nullable */
+                /* cppcheck-suppress shadowVariable */
+                GHashTable *type2kind, /* nullable */
+                /* cppcheck-suppress shadowVariable */
                 GHashTable *type2structure) /* nullable */
 {
     GDir *dir;
