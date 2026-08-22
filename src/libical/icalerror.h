@@ -25,7 +25,7 @@
 
 #include <stdbool.h>
 
-#ifndef _MSC_VER
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC visibility push(default)
 #endif
 /**
@@ -76,7 +76,7 @@ typedef enum icalerrorenum
     /** An unknown error occurred. */
     ICAL_UNKNOWN_ERROR /* Used for problems in input to icalerror_strerror() */
 } icalerrorenum;
-#ifndef _MSC_VER
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC visibility pop
 #endif
 
