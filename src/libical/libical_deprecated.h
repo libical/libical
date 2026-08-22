@@ -16,9 +16,10 @@
 #define LIBICAL_DEPRECATED(x) x
 #else
 #if !defined(LIBICAL_DEPRECATED)
+/* the C++ deprecated attribute is not standardized until C23, C++14 */
 #ifdef __GNUC__
 #define LIBICAL_DEPRECATED(x) x __attribute__((deprecated))
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) // krazy:exclude=cpp
 #define LIBICAL_DEPRECATED(x) __declspec(deprecated) x
 #else
 #define LIBICAL_DEPRECATED(x) x
