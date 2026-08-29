@@ -863,7 +863,6 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
     endif()
-    set(LIBRARY_TYPE SHARED)
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -877,7 +876,6 @@ if(LIBICAL_DEVMODE_LEAK_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
     endif()
-    set(LIBRARY_TYPE SHARED)
     message(
       NOTICE
       "Currently unable to build leak sanitizer for glib-based configurations."
@@ -906,7 +904,6 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
         "${CMAKE_CXX_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
       )
     endif()
-    set(LIBRARY_TYPE SHARED)
     #currently unavailable for glib-based code
     message(
       NOTICE
@@ -935,7 +932,6 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     endif()
-    set(LIBRARY_TYPE SHARED)
     message(
       NOTICE
       "Currently unable to build thread sanitizer for glib-based configurations."
@@ -963,7 +959,6 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
     endif()
-    set(LIBRARY_TYPE SHARED)
   else()
     message(FATAL_ERROR "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
   endif()
