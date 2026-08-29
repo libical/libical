@@ -117,10 +117,18 @@ const char *icalparameter_kind_to_string(icalparameter_kind kind)
     return 0;
 }
 
+/** DO NOT USE. RETAINED FOR BC in 4.0. Remove in 4.1 and above */
 int icalparameter_compare_kind_map(const struct icalparameter_kind_map *a,
                                    const struct icalparameter_kind_map *b)
 {
     return strcasecmp(a->name, b->name);
+}
+
+static int s_icalparameter_compare_kind_map(const void *a, const void *b)
+{
+    const struct icalparameter_kind_map *amap = (struct icalparameter_kind_map *)a;
+    const struct icalparameter_kind_map *bmap = (struct icalparameter_kind_map *)b;
+    return strcasecmp(amap->name, bmap->name);
 }
 
 icalparameter_kind icalparameter_string_to_kind(const char *string)
@@ -139,7 +147,7 @@ icalparameter_kind icalparameter_string_to_kind(const char *string)
     result =
         (struct icalparameter_kind_map *)bsearch(&key, parameter_map, sizeof(parameter_map) / sizeof(struct icalparameter_kind_map),
                 sizeof(struct icalparameter_kind_map),
-                (int (*)(const void *, const void *))icalparameter_compare_kind_map);
+                s_icalparameter_compare_kind_map);
 
     if (result) {
         return result->kind;
