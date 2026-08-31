@@ -328,11 +328,11 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     476187660 # ASAN cpu timeout exceeds 60s
     479865113 # ASAN cpu timeout exceeds 60s
     492956874 # UBSAN cpu timeout exceeds 60s
-    usban
-    usban2
-    usban3
-    usban4 # integer overflow in icalpvl_newlist
-    usban5 # integer overflow in icalpvl_new_element
+    ubsan
+    ubsan2
+    ubsan3
+    ubsan4 # integer overflow in icalpvl_newlist
+    ubsan5 # integer overflow in icalpvl_new_element
   )
     add_test(
       NAME fuzz1test${fuzztest}
