@@ -33,7 +33,7 @@ target_link_libraries(
   ical-glib-src-generator
   ${GLIB_LDFLAGS}
   ${GOBJECT_LDFLAGS}
-  ${LIBXML2_LIBRARIES}
+  LibXml2::LibXml2
 )
 
 install(
