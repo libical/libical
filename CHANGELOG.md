@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.6] - Unreleased
 
-- TBD
+- Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
+- Improve build paths in installed .cmake files (esp. for cross-compiling)
 
 ## [4.0.5] - 2026-08-15
 
