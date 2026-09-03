@@ -40,6 +40,7 @@ Checks: -*,
         -readability-use-std-min-max,
         -readability-use-concise-preprocessor-directives,
 
+HeaderFilterRegex: '/libical/src/\|libical/vzic/'
 CheckOptions:
     - key: bugprone-reserved-identifier.AllowedIdentifiers
       value: '__ICalTriggerType_;__ICalTimeType_;__ICalRecurrenceType_;__ICalPeriodType_;__ICalDurationType_'

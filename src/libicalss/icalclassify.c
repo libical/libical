@@ -108,7 +108,7 @@ icalproperty *icalclassify_find_attendee(const icalcomponent *c, const char *att
     char *lattendee;
     const char *upn;
 
-    if (attendee == 0) {
+    if (!c || !attendee) {
         return 0;
     }
 
@@ -187,12 +187,11 @@ void icalssutil_get_parts(icalcomponent *c, struct icalclassify_parts *parts)
     parts->method = ICAL_METHOD_NONE;
     parts->sequence = 0;
     parts->reply_partstat = ICAL_PARTSTAT_NONE;
+    parts->c = c;
 
     if (c == 0) {
         return;
     }
-
-    parts->c = c;
 
     p = icalcomponent_get_first_property(c, ICAL_METHOD_PROPERTY);
     if (p != 0) {

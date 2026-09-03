@@ -15,11 +15,6 @@
 
 #include <assert.h>
 
-void send_message(icalcomponent *reply, const char *this_user)
-{
-    printf("From: %s\n\n%s\n", this_user, icalcomponent_as_ical_string(reply));
-}
-
 int main(int argc, char *argv[])
 {
     icalcomponent *c, *next_c = NULL;

@@ -80,17 +80,12 @@ static struct failed_tests {
     int test;
 } failed_tests[1024];
 
-void die_on_errors_set(int val)
-{
-    die_on_errors = val;
-}
-
-void _ok(const char *test_name, int success, const char *file, int linenum, const char *test)
+void _ok(const char *test_name, bool success, const char *file, int linenum, const char *test)
 {
     testnumber++;
 
     if (!QUIET || !success) {
-        printf("%sok %d - %s\n", (success) ? "" : "not ", testnumber, test_name);
+        printf("%sok %d - %s\n", (int)success ? "" : "not ", testnumber, test_name);
     }
 
     if (!success) {
@@ -102,6 +97,7 @@ void _ok(const char *test_name, int success, const char *file, int linenum, cons
         printf("#          at: %s:%-d\n", file, linenum);
     }
 
+    /* cppcheck-suppress knownConditionTrueFalse */
     if (die_on_errors == 1 && !success) {
         abort();
     }
@@ -137,11 +133,6 @@ void _int_is(const char *test_name, int i1, int i2, const char *file, int linenu
         printf("#      got: %d\n", i1);
         printf("# expected: %d\n", i2);
     }
-}
-
-void verbose(int newval)
-{
-    VERBOSE = newval;
 }
 
 void test_start(int numtests)

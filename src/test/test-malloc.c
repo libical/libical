@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct testmalloc_statistics global_testmalloc_statistics;
+static struct testmalloc_statistics global_testmalloc_statistics;
 static int global_testmalloc_remaining_attempts = -1;
 
 #define TESTMALLOC_MAGIC_NO 0x1234abcd
