@@ -62,8 +62,7 @@ int main(void)
         v1,
     }; // dtend
 
-    i32 v4 = 40;                         // is_busy
-    (void)icaltime_span_new(v0, v3, v4); // $target
+    (void)icaltime_span_new(v0, v3, true); // $target
 
     icaltimezone_free(v1, 1);
     return 0;

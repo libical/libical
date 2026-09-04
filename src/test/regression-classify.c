@@ -9,13 +9,11 @@
 #include <config.h>
 #endif
 
-#include <assert.h>
-#include <stdio.h>  /* for printf */
-#include <string.h> /* For strerror */
-
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
 #include "regression.h"
+
+#include <assert.h>
 
 /* Gets a note about the purpose of the property*/
 static const char *get_note(icalcomponent *c)

@@ -39,7 +39,7 @@
         }                                                                                        \
     }
 
-void strip_errors(vcardcomponent *comp)
+static void strip_errors(vcardcomponent *comp)
 {
     vcardproperty *prop, *next;
 

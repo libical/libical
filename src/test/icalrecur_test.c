@@ -14,8 +14,7 @@
 #include <config.h>
 #endif
 
-#include <libical/ical.h>
-#include <stdlib.h>
+#include "libical/ical.h"
 
 struct recur {
     int line_no;
@@ -25,7 +24,7 @@ struct recur {
     char instances[2000];
 };
 
-int check_and_copy_field(const char *line, const char *pref, char *field, size_t field_size)
+static int check_and_copy_field(const char *line, const char *pref, char *field, size_t field_size)
 {
     size_t l = strlen(pref);
     if (strncmp(line, pref, l) != 0) {
@@ -236,14 +235,14 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
                 icalrecur_iterator_set_range(ritr, start, dtstart);
             }
 
-            instances = skip_until(instances, start, forward ? 1 : -1);
+            instances = skip_until(instances, start, (int)forward ? 1 : -1);
         } else if (!forward) {
             while (!icaltime_is_null_time(icalrecur_iterator_next(ritr))) {
                 // skip to the end
             }
         }
 
-        struct icaltimetype (*iterator_proceed)(icalrecur_iterator *impl) = forward ? icalrecur_iterator_next : icalrecur_iterator_prev;
+        struct icaltimetype (*iterator_proceed)(icalrecur_iterator *impl) = (int)forward ? icalrecur_iterator_next : icalrecur_iterator_prev;
 
         const char *sep = "";
         for (struct icaltimetype next = iterator_proceed(ritr);
@@ -272,7 +271,7 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
             fprintf(stderr, "\n");
         }
 
-        const char *msg_prefix = forward ? "" : "PREV-";
+        const char *msg_prefix = (int)forward ? "" : "PREV-";
         fprintf(stderr, "Expected %sINSTANCES:%s\n", msg_prefix, (instances == NULL) ? "" : instances);
         fprintf(stderr, "Actual   %sINSTANCES:%s\n", msg_prefix, actual_instances);
         fprintf(stderr, "\n");
@@ -293,7 +292,7 @@ int main(int argc, const char *argv[])
 {
     /* Default to RFC 5545 tests */
     const char *file_name = "icalrecur_test.txt";
-    int verbose = 0;
+    bool verbose = false;
 
     /* Do not use getopt for command line parsing -- for portability on Windows */
     for (int i = 1; i < argc; ++i) {
@@ -303,19 +302,19 @@ int main(int argc, const char *argv[])
         }
 
         if (strncmp(argv[i], "-v", 2) == 0) { /* Verbose output to stdout */
-            verbose = 1;
+            verbose = true;
             continue;
         }
 
         fprintf(stderr, "usage: %s [-f <input file>]\n", argv[0]);
-        return (1);
+        return 1;
     }
 
     FILE *fp = fopen(file_name, "r");
 
     if (fp == NULL) {
         fprintf(stderr, "unable to open the input file '%s'\n", file_name);
-        return (1);
+        return 1;
     }
 
     if (verbose) {
@@ -379,10 +378,10 @@ int main(int argc, const char *argv[])
 
             nof_tests++;
 
-            if (run_testcase(&r, verbose, 1, -1, &has_skip)) {
+            if (run_testcase(&r, verbose, true, -1, &has_skip)) {
                 test_error = 1;
                 nof_errors++;
-            } else if (run_testcase(&r, verbose, 0, -1, 0)) {
+            } else if (run_testcase(&r, verbose, false, -1, 0)) {
                 test_error = 1;
                 nof_errors++;
             }
@@ -390,7 +389,7 @@ int main(int argc, const char *argv[])
             if ((test_error == 0) && *r.instances && !r.start_at[0] && !has_skip) {
                 int instance_count = get_instance_count(r.instances);
                 for (int instance_idx = 0; instance_idx < instance_count; instance_idx++) {
-                    if (run_testcase(&r, verbose, 1, instance_idx, 0)) {
+                    if (run_testcase(&r, verbose, true, instance_idx, 0)) {
                         test_error = 1;
                         nof_errors++;
                     }
