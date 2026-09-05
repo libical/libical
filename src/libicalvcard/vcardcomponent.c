@@ -528,7 +528,7 @@ vcardcomponent *vcardcomponent_get_next_component(vcardcomponent *c,
 int vcardcomponent_check_restrictions(vcardcomponent *comp)
 {
     icalerror_check_arg_rz(comp != 0, "comp");
-    return vcardrestriction_check(comp);
+    return (int)vcardrestriction_check(comp);
 }
 
 int vcardcomponent_count_errors(vcardcomponent *comp)

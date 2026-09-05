@@ -665,7 +665,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         return 0;
     }
 
-    if (line_is_blank(line) == 1) {
+    if (line_is_blank(line)) {
         return 0;
     }
 

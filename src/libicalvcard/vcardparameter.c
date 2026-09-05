@@ -271,7 +271,7 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
             sep = ",";
         }
     } else if (vcardparameter_is_structured(param)) {
-        char *str = vcardstructured_as_vcard_string_r(param->structured, 1);
+        char *str = vcardstructured_as_vcard_string_r(param->structured, true);
 
         icalmemory_append_encoded_string(&buf, &buf_ptr, &buf_size, str);
         icalmemory_free_buffer(str);
@@ -426,7 +426,7 @@ bool vcardparameter_is_multivalued(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
-    return param->is_multivalued;
+    return param->is_multivalued != 0;
 }
 
 bool vcardparameter_is_structured(const vcardparameter *param)

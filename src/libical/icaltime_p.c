@@ -20,7 +20,7 @@ icaltime_span icaltime_span_new(struct icaltimetype dtstart, struct icaltimetype
 {
     icaltime_span span;
 
-    span.is_busy = is_busy;
+    span.is_busy = (int)is_busy;
 
     span.start = icaltime_as_timet_with_zone(dtstart,
                                              dtstart.zone ? dtstart.zone : icaltimezone_get_utc_timezone());

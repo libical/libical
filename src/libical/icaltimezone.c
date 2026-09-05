@@ -147,9 +147,9 @@ static ICAL_GLOBAL_VAR icaltimezone utc_timezone = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 static ICAL_GLOBAL_VAR char *zone_files_directory = NULL;
 
 #if defined(USE_BUILTIN_TZDATA)
-static ICAL_GLOBAL_VAR int use_builtin_tzdata = true;
+static ICAL_GLOBAL_VAR bool use_builtin_tzdata = true;
 #else
-static ICAL_GLOBAL_VAR int use_builtin_tzdata = false;
+static ICAL_GLOBAL_VAR bool use_builtin_tzdata = false;
 #endif
 
 static void icaltimezone_reset(icaltimezone *zone);
@@ -1769,9 +1769,9 @@ static bool fetch_lat_long_from_string(const char *str,
     if (parse_coord(lat, (int)(lon - lat),
                     latitude_degrees,
                     latitude_minutes,
-                    latitude_seconds) == 1 ||
+                    latitude_seconds) ||
         parse_coord(lon, (int)strlen(lon),
-                    longitude_degrees, longitude_minutes, longitude_seconds) == 1) {
+                    longitude_degrees, longitude_minutes, longitude_seconds)) {
         icalmemory_free_buffer(lat);
         return true;
     }
