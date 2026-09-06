@@ -181,10 +181,14 @@ static void test_prop_x(void)
     vcardcomponent_free(card);
 }
 
+/* cppcheck-suppress constParameterCallback */
 static vcardvalue_kind my_xprop_value_kind_func(const char *name, void *data)
 {
-    (void)(data); // make CI happy, reporting unused parameter otherwise
+#if defined(NDEBUG)
+    _unused(data);
+#else
     assert(data == (void *)0x1234);
+#endif
     return !strcasecmp(name, "X-PROP-A") ? VCARD_TEXT_VALUE : VCARD_X_VALUE;
 }
 

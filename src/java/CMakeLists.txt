@@ -133,4 +133,4 @@ install(TARGETS ical_jni EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAUL
 
 ########### install files ###############
 
-install(FILES ${PROJECT_BINARY_DIR}/src/java/libical.jar DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
+install(FILES ${PROJECT_BINARY_DIR}/src/java/libical.jar DESTINATION ${SHARE_INSTALL_DIR})

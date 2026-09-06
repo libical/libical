@@ -168,7 +168,9 @@ icalset *icaldirset_init(icalset *set, const char *dir, void *options_in)
     icaldirset_lock(dir);
 
     dset->dir = (char *)strdup(dir);
-    dset->options = *options;
+    if (options) {
+        dset->options = *options;
+    }
     dset->directory = icalpvl_newlist();
     dset->directory_iterator = 0;
     dset->gauge = 0;

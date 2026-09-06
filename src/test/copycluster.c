@@ -38,7 +38,7 @@ static void sig_alrm(int i)
 
 /* This program copies a file that holds iCal components to an other file. */
 
-void usage(const char *arg0)
+static void usage(const char *arg0)
 {
     printf("usage: %s cluster-file1 cluster-file2\n", arg0);
 }
