@@ -17,7 +17,7 @@
 /**
  * The library project name as a string.
  */
-#define ICAL_PACKAGE "@CMAKE_PROJECT_NAME@"
+#define ICAL_PACKAGE "@PROJECT_NAME@"
 /**
  * The full library version as a string.
  */
@@ -26,15 +26,15 @@
 /**
  * Return the library major version number.
  */
-#define ICAL_MAJOR_VERSION (@CMAKE_PROJECT_VERSION_MAJOR@)
+#define ICAL_MAJOR_VERSION (@libical_VERSION_MAJOR@)
 /**
  * Return the library minor version number.
  */
-#define ICAL_MINOR_VERSION (@CMAKE_PROJECT_VERSION_MINOR@)
+#define ICAL_MINOR_VERSION (@libical_VERSION_MINOR@)
 /**
  * Return the library patch version number.
  */
-#define ICAL_PATCH_VERSION (@CMAKE_PROJECT_VERSION_PATCH@)
+#define ICAL_PATCH_VERSION (@libical_VERSION_PATCH@)
 /**
  * Return the library micro version number.
  */

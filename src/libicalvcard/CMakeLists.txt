@@ -231,7 +231,7 @@ if(NOT ANDROID)
     icalvcard
     PROPERTIES
       VERSION
-        ${CMAKE_PROJECT_VERSION}
+        ${libical_VERSION}
       SOVERSION
         ${LIBICAL_LIB_SOVERSION_STRING}
   )
