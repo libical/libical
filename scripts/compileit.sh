@@ -11,21 +11,44 @@ set -e
 set -o pipefail
 
 USAGE() {
-  echo "Usage: $(basename "$0") [-s]"
-  echo "where, the -s means to build statically"
+  echo
+  echo "$(basename "$0"): Build the current branch"
+  echo
+  echo "Usage: $(basename "$0") [OPTIONS]"
+  echo "where OPTIONS are:"
+  echo " -h, --help    print this help message"
+  echo " -s, --static  build statically"
+  echo " -n, --nowipe  don't wipe the installation"
   exit 1
 }
 
+options=$(getopt -o "hsn" --long "help,static,nowipe" -- "$@")
+eval set -- "$options"
 staticBuild=0
-if (test $# -gt 1); then
-  USAGE
-elif (test $# -eq 1); then
-  if (test "$1" == "-s"); then
-    staticBuild=1
-  else
+wipeBuild=1
+while true; do
+  case "$1" in
+  -h | --help)
     USAGE
-  fi
-fi
+    ;;
+  -s | --static)
+    staticBuild=1
+    shift
+    ;;
+  -n | --nowipe)
+    wipeBuild=0
+    shift
+    ;;
+  --)
+    shift
+    break
+    ;;
+  *)
+    echo "Internal error!"
+    exit 1
+    ;;
+  esac
+done
 
 TOP=$(readlink -nf "$0")
 TOP=$(dirname "$TOP")
@@ -86,7 +109,9 @@ if (test $staticBuild -eq 0); then
     ninja docs &&
     ninja build-book
   if (test $? -ne 0); then exit; fi
-  ninja uninstall && rm -rf "$INSTALLDIR"
+  if (test $wipeBuild -eq 1); then
+    ninja uninstall && rm -rf "$INSTALLDIR"
+  fi
 
 else #static build
   BDIR="$BDIR-static"
@@ -118,5 +143,7 @@ else #static build
     ninja docs &&
     ninja build-book
   if (test $? -ne 0); then exit; fi
-  ninja uninstall && rm -rf "$INSTALLDIR"
+  if (test $wipeBuild -eq 1); then
+    ninja uninstall && rm -rf "$INSTALLDIR"
+  fi
 fi
