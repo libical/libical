@@ -148,11 +148,29 @@ icalstrarray *icalstrarray_clone(icalstrarray *array)
         return NULL;
     }
 
-    icalstrarray *clone = icalstrarray_new(array->increment_size);
+    icalstrarray *clone = icalarray_copy(array);
     size_t i;
+    int err = 0;
+
+    if (!clone) {
+        return NULL;
+    }
 
     for (i = 0; i < array->num_elements; i++) {
-        icalstrarray_append(clone, icalstrarray_element_at(array, i));
+        char **p = (char **)icalarray_element_at(clone, i);
+
+        if (p && *p) {
+            // In case of a previous error we don't clone any further but instead set the
+            // remaining pointers to NULL. NULL is required so we don't free the original
+            // strings on cleanup.
+            *p = err ? NULL : icalmemory_strdup(*p);
+            err |= !*p;
+        }
+    }
+
+    if (err) {
+        icalstrarray_free(clone);
+        return NULL;
     }
 
     return clone;
