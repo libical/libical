@@ -174,16 +174,16 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 #cmakedefine HAVE_WCTYPE_H 1
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "${CMAKE_PROJECT_HOMEPAGE_URL}"
+#define PACKAGE_BUGREPORT "${libical_HOMEPAGE_URL}"
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "${CMAKE_PROJECT_NAME}"
+#define PACKAGE_NAME "${PROJECT_NAME}"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "${CMAKE_PROJECT_NAME} ${PROJECT_VERSION}"
+#define PACKAGE_STRING "${PROJECT_NAME} ${PROJECT_VERSION}"
 
 /* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME "${CMAKE_PROJECT_NAME}"
+#define PACKAGE_TARNAME "${PROJECT_NAME}"
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "${PROJECT_VERSION}"

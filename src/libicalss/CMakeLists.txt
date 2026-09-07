@@ -117,7 +117,7 @@ if(NOT ANDROID)
     icalss
     PROPERTIES
       VERSION
-        ${CMAKE_PROJECT_VERSION}
+        ${libical_VERSION}
       SOVERSION
         ${LIBICAL_LIB_SOVERSION_STRING}
   )
@@ -176,7 +176,7 @@ if(LIBICAL_CXX_BINDINGS)
       icalss_cxx
       PROPERTIES
         VERSION
-          ${CMAKE_PROJECT_VERSION}
+          ${libical_VERSION}
         SOVERSION
           ${LIBICAL_LIB_SOVERSION_STRING}
     )
