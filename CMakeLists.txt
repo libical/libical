@@ -961,7 +961,7 @@ libical_option(LIBICAL_BUILD_EXAMPLES "Build examples." True)
 
 ########### Configure pkg-config variables #########
 
-set(VERSION "${CMAKE_PROJECT_VERSION}")
+set(VERSION "${libical_VERSION}")
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 set(exec_prefix "\${prefix}")
 if(IS_ABSOLUTE ${LIB_INSTALL_DIR})
@@ -1065,7 +1065,7 @@ configure_package_config_file(
 # Create a version file
 write_basic_package_version_file(
   ${libical_BINARY_DIR}/LibIcalConfigVersion.cmake
-  VERSION ${CMAKE_PROJECT_VERSION}
+  VERSION ${libical_VERSION}
   COMPATIBILITY SameMajorVersion
 )
 

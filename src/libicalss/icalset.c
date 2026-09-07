@@ -426,7 +426,7 @@ icalcomponent *icalsetiter_next(icalsetiter *itr)
 
     do {
         c = icalcompiter_next(&(itr->iter));
-        if (c != 0 && (itr->gauge == 0 || icalgauge_compare(itr->gauge, c) == 1)) {
+        if (c != 0 && (itr->gauge == 0 || icalgauge_compare(itr->gauge, c))) {
             return c;
         }
     } while (c != 0);
@@ -442,7 +442,7 @@ icalcomponent *icalsetiter_prior(icalsetiter *i)
 
     do {
         c = icalcompiter_prior(&(i->iter));
-        if (c != 0 && (i->gauge == 0 || icalgauge_compare(i->gauge, c) == 1)) {
+        if (c != 0 && (i->gauge == 0 || icalgauge_compare(i->gauge, c))) {
             return c;
         }
     } while (c != 0);

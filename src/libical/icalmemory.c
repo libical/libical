@@ -513,7 +513,7 @@ void icalmemory_append_encoded_string(char **buf, char **pos,
         }
     }
 
-    if (quoted == true) {
+    if (quoted) {
         icalmemory_append_char(buf, pos, buf_size, '"');
     }
 }

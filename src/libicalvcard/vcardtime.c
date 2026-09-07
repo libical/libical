@@ -129,7 +129,7 @@ bool vcardtime_is_valid_time(const struct vcardtimetype t)
         break;
 
     case 2:
-        days = 28 + vcardtime_is_leap_year(t.year);
+        days = 28 + (int)vcardtime_is_leap_year(t.year);
         break;
 
     default:

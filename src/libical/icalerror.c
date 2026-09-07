@@ -91,7 +91,7 @@ void icalerror_set_errno(icalerrorenum x)
 {
     icalerrno = x;
     if (icalerror_get_error_state(x) == ICAL_ERROR_FATAL ||
-        (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && icalerror_errors_are_fatal == 1)) {
+        (icalerror_get_error_state(x) == ICAL_ERROR_DEFAULT && icalerror_errors_are_fatal)) {
         icalerror_warn(icalerror_strerror(x));
         icalerror_backtrace();
         icalassert(0);

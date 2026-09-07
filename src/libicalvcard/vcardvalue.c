@@ -723,7 +723,7 @@ static char *vcardvalue_text_as_vcard_string_r(const vcardvalue *value)
     size_t buf_sz;
 
     return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
-                                        value->data.v_string, 0);
+                                        value->data.v_string, false);
 }
 
 static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
@@ -772,7 +772,7 @@ char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array, const char sep
     size_t buf_size;
 
     _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size,
-                                     (vcardstrarray *)array, sep, 0);
+                                     (vcardstrarray *)array, sep, false);
 
     return buf;
 }
@@ -819,7 +819,7 @@ static char *vcardvalue_structured_as_vcard_string_r(const vcardvalue *value)
 {
     icalerror_check_arg_rz((value != 0), "value");
 
-    return vcardstructured_as_vcard_string_r(value->data.v_structured, 0);
+    return vcardstructured_as_vcard_string_r(value->data.v_structured, false);
 }
 
 static char *vcardvalue_float_as_vcard_string_r(const vcardvalue *value)

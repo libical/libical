@@ -241,9 +241,9 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
         period.start = t;
 
         if (s->is_busy == 1) {
-            period.end = icaltime_from_timet_with_zone(s->start, 0, NULL);
+            period.end = icaltime_from_timet_with_zone(s->start, false, NULL);
         } else {
-            period.end = icaltime_from_timet_with_zone(s->end, 0, NULL);
+            period.end = icaltime_from_timet_with_zone(s->end, false, NULL);
         }
 
         return period;
@@ -260,12 +260,12 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
 
         if (s->is_busy == 0 && s->start >= rangett && (rangett < s->end || s->end == s->start)) {
             if (rangett < s->start) {
-                period.start = icaltime_from_timet_with_zone(s->start, 0, NULL);
+                period.start = icaltime_from_timet_with_zone(s->start, false, NULL);
             } else {
-                period.start = icaltime_from_timet_with_zone(rangett, 0, NULL);
+                period.start = icaltime_from_timet_with_zone(rangett, false, NULL);
             }
 
-            period.end = icaltime_from_timet_with_zone(s->end, 0, NULL);
+            period.end = icaltime_from_timet_with_zone(s->end, false, NULL);
 
             return period;
         }
@@ -344,7 +344,7 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
                                          const char *organizer, const char *attendee)
 {
     icalcomponent *comp;
-    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), false, NULL);
     icalpvl_elem itr;
     icaltimezone *utc_zone;
 
@@ -373,8 +373,8 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 
         if (s && s->is_busy == 1) {
             struct icalperiodtype period;
-            period.start = icaltime_from_timet_with_zone(s->start, 0, utc_zone);
-            period.end = icaltime_from_timet_with_zone(s->end, 0, utc_zone);
+            period.start = icaltime_from_timet_with_zone(s->start, false, utc_zone);
+            period.end = icaltime_from_timet_with_zone(s->end, false, utc_zone);
             period.duration = icaldurationtype_null_duration();
 
             icalproperty *p = icalproperty_new_freebusy(period);

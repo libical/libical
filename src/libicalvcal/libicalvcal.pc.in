@@ -6,9 +6,9 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: libicalvcal
-Description: @CMAKE_PROJECT_DESCRIPTION@ (VCal)
-URL: @CMAKE_PROJECT_HOMEPAGE_URL@
-Version: @CMAKE_PROJECT_VERSION@
+Description: @libical_DESCRIPTION@ (VCal)
+URL: @libical_HOMEPAGE_URL@
+Version: @libical_VERSION@
 Libs: -L${libdir} -licalvcal
 Requires: libical
 Cflags: -I${includedir}

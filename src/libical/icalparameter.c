@@ -407,7 +407,7 @@ bool icalparameter_is_multivalued(const icalparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
-    return param->is_multivalued;
+    return param->is_multivalued != 0;
 }
 
 void icalparameter_decode_value(char *value)

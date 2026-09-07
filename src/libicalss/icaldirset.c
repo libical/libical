@@ -613,7 +613,7 @@ icalcomponent *icaldirset_get_next_component(icalset *set)
             /* If there is a gauge defined and the component does not
                pass the gauge, skip the rest of the loop */
 
-            if (dset->gauge != 0 && icalgauge_compare(dset->gauge, c) == 0) {
+            if (dset->gauge != 0 && !icalgauge_compare(dset->gauge, c)) {
                 continue;
             }
 
