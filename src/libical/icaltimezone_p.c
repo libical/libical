@@ -631,7 +631,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
                 } else {
                     struct icaltimetype last_trans =
                         icaltime_from_timet_with_zone(transitions[num_trans - 1],
-                                                      0, NULL);
+                                                      false, NULL);
                     icalrecur_iterator *iter;
 
                     if (types[trans_idx[num_trans - 1]].isdst) {
@@ -697,7 +697,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
             goto error;
         }
         start = transitions[i] + types[prev_idx].gmtoff;
-        icaltime = icaltime_from_timet_with_zone(start, 0, NULL);
+        icaltime = icaltime_from_timet_with_zone(start, false, NULL);
 
         if (types[idx].isdst) {
             zone = &daylight;

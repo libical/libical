@@ -680,7 +680,7 @@ icalcomponent *icalfileset_get_first_component(icalset *set)
             c = icalcomponent_get_next_component(fset->cluster, ICAL_ANY_COMPONENT);
         }
 
-        if (c != 0 && (fset->gauge == 0 || icalgauge_compare(fset->gauge, c) == 1)) {
+        if (c != 0 && (fset->gauge == 0 || icalgauge_compare(fset->gauge, c))) {
             return c;
         }
 
@@ -700,7 +700,7 @@ icalcomponent *icalfileset_get_next_component(icalset *set)
     do {
         c = icalcomponent_get_next_component(fset->cluster, ICAL_ANY_COMPONENT);
 
-        if (c != 0 && (fset->gauge == 0 || icalgauge_compare(fset->gauge, c) == 1)) {
+        if (c != 0 && (fset->gauge == 0 || icalgauge_compare(fset->gauge, c))) {
             return c;
         }
 
@@ -752,7 +752,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
 
     icalerror_check_arg_re((set != 0), "set", icalsetiter_null);
 
-    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    start = icaltime_from_timet_with_zone(time(0), false, NULL);
     itr.gauge = gauge;
 
     fset = (icalfileset *)set;
@@ -808,7 +808,7 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
             icalcomponent_add_property(comp, icalproperty_new_recurrenceid(next));
         }
 
-        if (icalgauge_compare(itr.gauge, comp) == 1) {
+        if (icalgauge_compare(itr.gauge, comp)) {
             /* matches and returns */
             itr.iter = citr;
             return itr;
@@ -830,7 +830,7 @@ icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *itr)
     icalproperty *rrule, *prop;
     struct icalrecurrencetype *recur;
 
-    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    start = icaltime_from_timet_with_zone(time(0), false, NULL);
     comp = itr->last_component;
 
     if (comp == NULL || itr->gauge == NULL) {
@@ -881,7 +881,7 @@ icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *itr)
     }
     icalcomponent_add_property(comp, icalproperty_new_recurrenceid(next));
 
-    if (itr->gauge == 0 || icalgauge_compare(itr->gauge, comp) == 1) {
+    if (itr->gauge == 0 || icalgauge_compare(itr->gauge, comp)) {
         /* matches and returns */
         return comp;
     }
@@ -899,8 +899,8 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
 
     _unused(set);
 
-    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
-    next = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    start = icaltime_from_timet_with_zone(time(0), false, NULL);
+    next = icaltime_from_timet_with_zone(time(0), false, NULL);
 
     do {
         c = icalcompiter_next(&(i->iter));
@@ -956,7 +956,7 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
         }
         icalcomponent_add_property(c, icalproperty_new_recurrenceid(next));
 
-        if ((i->gauge == 0 || icalgauge_compare(i->gauge, c) == 1)) {
+        if ((i->gauge == 0 || icalgauge_compare(i->gauge, c))) {
             return c;
         }
     } while (true);

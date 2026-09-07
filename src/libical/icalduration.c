@@ -270,7 +270,7 @@ struct icaldurationtype icaldurationtype_null_duration(void)
 bool icaldurationtype_is_null_duration(struct icaldurationtype d)
 {
     struct icaldurationtype n = icaldurationtype_null_duration();
-    return memcmp(&d, &n, sizeof(struct icaldurationtype)) ? false : true;
+    return memcmp(&d, &n, sizeof(struct icaldurationtype)) == 0;
 }
 
 /* In icalvalue_new_from_string_with_error, we should not call

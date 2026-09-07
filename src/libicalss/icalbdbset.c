@@ -1225,7 +1225,7 @@ icalcomponent *icalbdbset_get_first_component(icalset *set)
             c = icalcomponent_get_next_component(bset->cluster, ICAL_ANY_COMPONENT);
         }
 
-        if (c != 0 && (bset->gauge == 0 || icalgauge_compare(bset->gauge, c) == 1)) {
+        if (c != 0 && (bset->gauge == 0 || icalgauge_compare(bset->gauge, c))) {
             return c;
         }
 
@@ -1280,7 +1280,7 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
                 u_zone = icaltimezone_get_utc_timezone();
             }
 
-            start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+            start = icaltime_from_timet_with_zone(time(0), false, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
                 dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
@@ -1339,7 +1339,7 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
             }
         }
         /* end of a recurring event */
-        if (gauge == 0 || icalgauge_compare(itr.gauge, comp) == 1) {
+        if (gauge == 0 || icalgauge_compare(itr.gauge, comp)) {
             /* find a matched and return it */
             itr.iter = citr;
             return itr;
@@ -1388,7 +1388,7 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
         u_zone = icaltimezone_get_utc_timezone();
     }
 
-    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    start = icaltime_from_timet_with_zone(time(0), false, NULL);
 
     if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
         icalproperty *dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
@@ -1447,7 +1447,7 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
         next = icaltime_convert_to_zone(next, icaltimezone_get_utc_timezone());
     }
 
-    if (itr->gauge == 0 || icalgauge_compare(itr->gauge, comp) == 1) {
+    if (itr->gauge == 0 || icalgauge_compare(itr->gauge, comp)) {
         /* find a matched and return it */
         return comp;
     }
@@ -1497,7 +1497,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
                 u_zone = icaltimezone_get_utc_timezone();
             }
 
-            start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+            start = icaltime_from_timet_with_zone(time(0), false, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
                 icalproperty *dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
@@ -1555,7 +1555,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
             }
         }
         /* end of recurring event with expand query */
-        if ((i->gauge == 0 || icalgauge_compare(i->gauge, comp) == 1)) {
+        if ((i->gauge == 0 || icalgauge_compare(i->gauge, comp))) {
             /* found a matched, return it */
             return comp;
         }
@@ -1574,7 +1574,7 @@ icalcomponent *icalbdbset_get_next_component(icalset *set)
 
     do {
         c = icalcomponent_get_next_component(bset->cluster, ICAL_ANY_COMPONENT);
-        if (c != 0 && (bset->gauge == 0 || icalgauge_compare(bset->gauge, c) == 1)) {
+        if (c != 0 && (bset->gauge == 0 || icalgauge_compare(bset->gauge, c))) {
             return c;
         }
 

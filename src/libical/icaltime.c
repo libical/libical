@@ -239,7 +239,7 @@ struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const boo
     /* Use our timezone functions to convert to the required timezone. */
     icaltimezone_convert_time(&tt, utc_zone, (icaltimezone *)zone);
 
-    tt.is_date = is_date;
+    tt.is_date = (int)is_date;
 
     /* If it is a DATE value, make sure hour, minute & second are 0. */
     if (is_date) {
@@ -253,12 +253,12 @@ struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const boo
 
 struct icaltimetype icaltime_current_time_with_zone(const icaltimezone *zone)
 {
-    return icaltime_from_timet_with_zone(icaltime(NULL), 0, zone);
+    return icaltime_from_timet_with_zone(icaltime(NULL), false, zone);
 }
 
 struct icaltimetype icaltime_today(void)
 {
-    return icaltime_from_timet_with_zone(icaltime(NULL), 1, NULL);
+    return icaltime_from_timet_with_zone(icaltime(NULL), true, NULL);
 }
 
 icaltime_t icaltime_as_timet(const struct icaltimetype tt)
@@ -492,7 +492,7 @@ int icaltime_days_in_month(const int month, const int year)
     days = _days_in_month[month];
 
     if (month == 2) {
-        days += (icaltime_is_leap_year(year) ? 1 : 0);
+        days += (int)icaltime_is_leap_year(year);
     }
 
     return days;
@@ -537,33 +537,31 @@ int icaltime_start_doy_week(const struct icaltimetype t, int fdow)
 
 int icaltime_day_of_year(const struct icaltimetype t)
 {
-    unsigned int is_leap = (icaltime_is_leap_year(t.year) ? 1 : 0);
-
     if (t.month < 1 || t.month > 12) {
         return 0;
     }
 
-    return days_in_year_passed_month[is_leap][t.month - 1] + t.day;
+    return days_in_year_passed_month[icaltime_is_leap_year(t.year)][t.month - 1] + t.day;
 }
 
 struct icaltimetype icaltime_from_day_of_year(const int _doy, const int _year)
 {
     struct icaltimetype tt = icaltime_null_date();
-    unsigned int is_leap;
+    bool is_leap;
     int month;
     int doy = _doy;
     int year = _year;
 
-    is_leap = (icaltime_is_leap_year(year) ? 1 : 0);
+    is_leap = icaltime_is_leap_year(year);
 
     /* Zero and neg numbers represent days  of the previous year */
     if (doy < 1) {
         year--;
-        is_leap = (icaltime_is_leap_year(year) ? 1 : 0);
+        is_leap = icaltime_is_leap_year(year);
         doy += days_in_year_passed_month[is_leap][12];
     } else if (doy > days_in_year_passed_month[is_leap][12]) {
         /* Move on to the next year */
-        is_leap = (icaltime_is_leap_year(year) ? 1 : 0);
+        is_leap = icaltime_is_leap_year(year);
         doy -= days_in_year_passed_month[is_leap][12];
         year++;
     }

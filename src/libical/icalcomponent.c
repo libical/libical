@@ -70,12 +70,12 @@ void icalcomponent_add_children(icalcomponent *impl, va_list args)
     void *vp;
 
     while ((vp = va_arg(args, void *)) != 0) {
-        icalassert(icalcomponent_isa_component(vp) != 0 || icalproperty_isa_property(vp) != 0);
+        icalassert(icalcomponent_isa_component(vp) || icalproperty_isa_property(vp));
 
         if (icalcomponent_isa_component(vp)) {
             icalcomponent_add_component(impl, (icalcomponent *)vp);
 
-        } else if (icalproperty_isa_property(vp) != 0) {
+        } else if (icalproperty_isa_property(vp)) {
             icalcomponent_add_property(impl, (icalproperty *)vp);
         }
     }
@@ -1007,9 +1007,9 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 
     /* Now set up the base span for this item, corresponding to the
        base DTSTART and DTEND */
-    basespan = icaltime_span_new(dtstart, dtend, 1);
+    basespan = icaltime_span_new(dtstart, dtend, true);
 
-    basespan.is_busy = icalcomponent_is_busy(comp);
+    basespan.is_busy = (int)icalcomponent_is_busy(comp);
 
     if (start.is_date) {
         /* We always treat start as date-time, because we do arithmetic calculations later
@@ -1391,7 +1391,10 @@ bool icalcompiter_is_valid(const icalcompiter *i)
         return false;
     }
     /* compare to icalcompiter_null */
-    return !((i->kind == ICAL_NO_COMPONENT) && (i->iter == 0));
+    if (i->kind == ICAL_NO_COMPONENT && i->iter == 0) {
+        return false;
+    }
+    return true;
 }
 
 icalcompiter icalcomponent_begin_component(icalcomponent *component, icalcomponent_kind kind)
@@ -1512,7 +1515,10 @@ bool icalpropiter_is_valid(const icalpropiter *i)
         return false;
     }
     /* compare to icalpropiter_null */
-    return !((i->kind == ICAL_NO_PROPERTY) && (i->iter == 0));
+    if ((i->kind == ICAL_NO_PROPERTY) && (i->iter == 0)) {
+        return false;
+    }
+    return true;
 }
 
 icalproperty *icalpropiter_next(icalpropiter *i)
@@ -2528,14 +2534,24 @@ icaltimezone *icalcomponent_get_timezone(icalcomponent *comp, const char *tzid)
  */
 static int icalcomponent_compare_timezone_fn(const void *elem1, const void *elem2)
 {
-    icaltimezone *zone1, *zone2;
+    bool zone1_is_valid = false, zone2_is_valid = false;
     const char *zone1_tzid = 0, *zone2_tzid = 0;
 
-    zone1 = (icaltimezone *)elem1;
-    zone2 = (icaltimezone *)elem2;
+    icaltimezone *zone1 = (icaltimezone *)elem1;
+    icaltimezone *zone2 = (icaltimezone *)elem2;
 
-    const bool zone1_is_valid = (zone1 && (zone1_tzid = icaltimezone_get_tzid(zone1)));
-    const bool zone2_is_valid = (zone2 && (zone2_tzid = icaltimezone_get_tzid(zone2)));
+    if (zone1) {
+        zone1_tzid = icaltimezone_get_tzid(zone1);
+        if (zone1_tzid) {
+            zone1_is_valid = true;
+        }
+    }
+    if (zone2) {
+        zone2_tzid = icaltimezone_get_tzid(zone2);
+        if (zone2_tzid) {
+            zone2_is_valid = true;
+        }
+    }
 
     if (zone1_is_valid && !zone2_is_valid) {
         return 1;

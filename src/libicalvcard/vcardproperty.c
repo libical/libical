@@ -65,8 +65,8 @@ void vcardproperty_add_parameters(vcardproperty *prop, va_list args)
     void *vp;
 
     while ((vp = va_arg(args, void *)) != 0) {
-        if (vcardvalue_isa_value(vp) != 0) {
-        } else if (vcardparameter_isa_parameter(vp) != 0) {
+        if (vcardvalue_isa_value(vp)) {
+        } else if (vcardparameter_isa_parameter(vp)) {
             vcardproperty_add_parameter((vcardproperty *)prop,
                                         (vcardparameter *)vp);
         } else {
