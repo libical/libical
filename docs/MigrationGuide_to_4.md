@@ -504,13 +504,11 @@ type (day, month, ...) as a parameter.
 Code like this in libical 3.0:
 
 ```python
-    recurrence.set_by_second(0,
-    recurrence.get_by_second(0) + 1)
+recurrence.set_by_second(0, recurrence.get_by_second(0) + 1)
 ```
 
 changes to something like this in libical 4.0:
 
 ```python
-    recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0,
-    recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) + 1)
+recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0, recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) + 1)
 ```
