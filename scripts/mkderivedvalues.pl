@@ -269,11 +269,11 @@ sub insert_code
 
     # Fail the build rather than emit accessors whose type check would always pass
     if ($opt_v and $autogen and $union_type eq 'NONE') {
-      die "No ${lcprefix}value_impl union member is registered for value type " .
-        "$value (union data '$union_data'): the generated accessors would " .
-        "carry a vacuous type check.  Add '$union_data' to %union_type_map " .
-        "(and the member to struct ${lcprefix}value_impl), or mark $value as " .
-        "(m) in $ARGV[0] and write its accessors by hand.\n";
+      die "No ${lcprefix}value_impl union member is registered for value type "
+        . "$value (union data '$union_data'): the generated accessors would "
+        . "carry a vacuous type check.  Add '$union_data' to %union_type_map "
+        . "(and the member to struct ${lcprefix}value_impl), or mark $value as "
+        . "(m) in $ARGV[0] and write its accessors by hand.\n";
     }
 
     # Zero value a getter returns for a NULL or wrongly-typed argument
@@ -300,11 +300,11 @@ sub insert_code
 
     # Likewise for a non-pointer getter with no zero value to return
     if ($opt_v and $autogen and !$has_null_ret and $type !~ /\*/) {
-      die "No zero value is registered for value type $value (union data " .
-        "'$union_data'): the generated getter would return the literal 0 for " .
-        "its non-pointer return type '$type'.  Add a zero value for " .
-        "'$union_data' above, or mark $value as (m) in $ARGV[0] and write " .
-        "its accessors by hand.\n";
+      die "No zero value is registered for value type $value (union data "
+        . "'$union_data'): the generated getter would return the literal 0 for "
+        . "its non-pointer return type '$type'.  Add a zero value for "
+        . "'$union_data' above, or mark $value as (m) in $ARGV[0] and write "
+        . "its accessors by hand.\n";
     }
 
     # Setter guard: vCard compares union tags, iCal keeps the exact-kind assertion
@@ -356,8 +356,7 @@ $set_kind_check\
 
       # vCard getters return the zero value on a kind mismatch; iCal aborts via icalerror
       if ($opt_v) {
-        print
-"    if (!value) {\
+        print "    if (!value) {\
         icalerror_set_errno(ICAL_BADARG_ERROR);\
         return $null_ret;\
     }\
