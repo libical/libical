@@ -10,6 +10,10 @@
 #include <config.h>
 #endif
 
+#if defined(NDEBUG)
+#undef NDEBUG
+#endif
+
 #include "vcard.h"
 
 #include <assert.h>
@@ -184,11 +188,7 @@ static void test_prop_x(void)
 /* cppcheck-suppress constParameterCallback */
 static vcardvalue_kind my_xprop_value_kind_func(const char *name, void *data)
 {
-#if defined(NDEBUG)
-    _unused(data);
-#else
     assert(data == (void *)0x1234);
-#endif
     return !strcasecmp(name, "X-PROP-A") ? VCARD_TEXT_VALUE : VCARD_X_VALUE;
 }
 
@@ -546,6 +546,366 @@ static void test_line_folding(void)
 #undef TEST_LINE_FOLDING_PREAMBLE
 }
 
+static void assert_null_str(const char *str)
+{
+    if (str) {
+        fprintf(stderr, "expected NULL, got string of length %zu: %s\n",
+                strlen(str), str);
+        assert(0);
+    }
+}
+
+static void test_value_kind_mismatch_structured(void)
+{
+    /* The N and ADR values mimic a 32-byte vcardstructuredtype_impl, one byte
+       short, so a mismatched getter reads its field pointer out of bounds. */
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:x\r\n"
+        "N;VALUE=URI:AAAAAAAABBBBBBBBCCCCCCCCBBBBBB\r\n"
+        "ADR;VALUE=TEXT:AAAAAAAABBBBBBBBCCCCCCCCBBBBBB\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+    vcardproperty *prop;
+    vcardstructuredtype *st;
+
+    prop = vcardcomponent_get_first_property(card, VCARD_N_PROPERTY);
+    assert(VCARD_URI_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    st = vcardproperty_get_n(prop);
+    assert(NULL == vcardstructured_field_at(st, 0));
+    assert(0 == vcardstructured_num_fields(st));
+    assert(NULL == st);
+
+    prop = vcardcomponent_get_first_property(card, VCARD_ADR_PROPERTY);
+    assert(VCARD_TEXT_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    st = vcardproperty_get_adr(prop);
+    vcardstructured_set_num_fields(st, 5);
+    assert(0 == vcardstructured_num_fields(st));
+    assert(NULL == st);
+
+    vcardcomponent_transform(card, VCARD_VERSION_30);
+    assert(NULL != vcardcomponent_as_vcard_string(card));
+
+    vcardcomponent_free(card);
+}
+
+static void test_value_kind_mismatch_textlist(void)
+{
+    /* The CATEGORIES and NICKNAME values mimic a 40-byte struct _icalarray,
+       stopping before its chunks pointer. */
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:x\r\n"
+        "CATEGORIES;VALUE=URI:AAAAAAAABBBBBBBBCCCCCCCCDDDDDD\r\n"
+        "NICKNAME;VALUE=URI:AAAAAAAABBBBBBBBCCCCCCCCDDDDDD\r\n"
+        "ORG;VALUE=DATE:19700101\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+    vcardproperty *prop;
+
+    vcardcomponent_normalize(card);
+
+    prop = vcardcomponent_get_first_property(card, VCARD_CATEGORIES_PROPERTY);
+    assert(NULL == vcardproperty_get_categories(prop));
+    prop = vcardcomponent_get_first_property(card, VCARD_NICKNAME_PROPERTY);
+    assert(NULL == vcardproperty_get_nickname(prop));
+    prop = vcardcomponent_get_first_property(card, VCARD_ORG_PROPERTY);
+    assert(NULL == vcardproperty_get_org(prop));
+
+    vcardcomponent_free(card);
+}
+
+static void test_value_kind_mismatch_time(void)
+{
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:x\r\n"
+        "BDAY;VALUE=URI:urn:x:1\r\n"
+        "REV;VALUE=URI:urn:x:2\r\n"
+        "CREATED;VALUE=TEXT:not-a-timestamp\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+    vcardproperty *prop;
+
+    vcardcomponent_transform(card, VCARD_VERSION_30);
+    assert(NULL != vcardcomponent_as_vcard_string(card));
+    vcardcomponent_free(card);
+
+    card = vcardparser_parse_string(input);
+    prop = vcardcomponent_get_first_property(card, VCARD_BDAY_PROPERTY);
+    assert(vcardtime_is_null_datetime(vcardproperty_get_bday(prop)));
+    prop = vcardcomponent_get_first_property(card, VCARD_REV_PROPERTY);
+    assert(vcardtime_is_null_datetime(vcardproperty_get_rev(prop)));
+    prop = vcardcomponent_get_first_property(card, VCARD_CREATED_PROPERTY);
+    assert(vcardtime_is_null_datetime(vcardproperty_get_created(prop)));
+
+    assert(1 == vcardrestriction_check(card));
+
+    vcardcomponent_free(card);
+}
+
+static void test_value_kind_mismatch_string(void)
+{
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN;VALUE=DATE:19700101\r\n"
+        "UID;VALUE=DATE:19700101\r\n"
+        "LANG;VALUE=DATE:19700101\r\n"
+        "NOTE;VALUE=BOOLEAN:TRUE\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+    vcardproperty *prop;
+
+    prop = vcardcomponent_get_first_property(card, VCARD_FN_PROPERTY);
+    assert_null_str(vcardproperty_get_fn(prop));
+    prop = vcardcomponent_get_first_property(card, VCARD_UID_PROPERTY);
+    assert_null_str(vcardproperty_get_uid(prop));
+    prop = vcardcomponent_get_first_property(card, VCARD_LANG_PROPERTY);
+    assert_null_str(vcardproperty_get_lang(prop));
+    prop = vcardcomponent_get_first_property(card, VCARD_NOTE_PROPERTY);
+    assert_null_str(vcardproperty_get_note(prop));
+
+    assert_null_str(vcardcomponent_get_uid(card));
+    assert_null_str(vcardcomponent_get_fn(card));
+
+    vcardcomponent_free(card);
+
+    card = vcardparser_parse_string(
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:x\r\n"
+        "UID:probe-uid\r\n"
+        "UID;VALUE=DATE:19700101\r\n"
+        "END:VCARD\r\n");
+
+    vcardcomponent_transform(card, VCARD_VERSION_30);
+    assert(NULL != vcardcomponent_as_vcard_string(card));
+    vcardcomponent_transform(card, VCARD_VERSION_40);
+    assert(NULL != vcardcomponent_as_vcard_string(card));
+
+    vcardcomponent_free(card);
+}
+
+static void test_value_kind_mismatch_scalar(void)
+{
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:x\r\n"
+        "KIND;VALUE=URI:urn:x:1\r\n"
+        "GRAMGENDER;VALUE=URI:urn:x:2\r\n"
+        "GEO;VALUE=BOOLEAN:TRUE\r\n"
+        "TZ;VALUE=DATE:19700101\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+    vcardproperty *prop;
+
+    prop = vcardcomponent_get_first_property(card, VCARD_KIND_PROPERTY);
+    assert(VCARD_KIND_NONE == vcardproperty_get_kind(prop));
+    prop = vcardcomponent_get_first_property(card, VCARD_GRAMGENDER_PROPERTY);
+    assert(VCARD_GRAMGENDER_NONE == vcardproperty_get_gramgender(prop));
+
+    prop = vcardcomponent_get_first_property(card, VCARD_GEO_PROPERTY);
+    vcardgeotype geo = vcardproperty_get_geo(prop);
+    assert(NULL == geo.uri && '\0' == geo.coords.lat[0]);
+
+    prop = vcardcomponent_get_first_property(card, VCARD_TZ_PROPERTY);
+    vcardtztype tz = vcardproperty_get_tz(prop);
+    assert(NULL == tz.tzid && NULL == tz.uri && 0 == tz.utcoffset);
+
+    vcardcomponent_free(card);
+
+    card = vcardparser_parse_string(
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:x\r\n"
+        "GEO;VALUE=BOOLEAN:TRUE\r\n"
+        "TZ;VALUE=INTEGER:12345\r\n"
+        "END:VCARD\r\n");
+
+    vcardcomponent_transform(card, VCARD_VERSION_40);
+    assert(NULL != vcardcomponent_as_vcard_string(card));
+
+    vcardcomponent_free(card);
+}
+
+static void test_value_kind_mismatch_x(void)
+{
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:x\r\n"
+        "X-PROP;VALUE=DATE:19700101\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(input);
+    vcardproperty *prop =
+        vcardcomponent_get_first_property(card, VCARD_X_PROPERTY);
+    vcardvalue *val = vcardproperty_get_value(prop);
+
+    assert(VCARD_DATE_VALUE == vcardvalue_isa(val));
+    assert_null_str(vcardvalue_get_x(val));
+    assert_null_str(vcardvalue_get_text(val));
+    assert(NULL == vcardvalue_get_textlist(val));
+
+    vcardcomponent_free(card);
+}
+
+static void test_value_kind_enum_x(void)
+{
+    static const char *input =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:x\r\n"
+        "KIND:x-my-kind\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card;
+    vcardproperty *prop;
+    vcardvalue *val;
+
+    /* An unrecognized KIND value keeps the token verbatim in x_value */
+    card = vcardparser_parse_string(input);
+    prop = vcardcomponent_get_first_property(card, VCARD_KIND_PROPERTY);
+    val = vcardproperty_get_value(prop);
+
+    assert(VCARD_KIND_VALUE == vcardvalue_isa(val));
+    assert(VCARD_KIND_X == vcardvalue_get_kind(val));
+    assert(VCARD_KIND_X == vcardproperty_get_kind(prop));
+    assert(NULL != vcardvalue_get_x(val));
+    assert_str_equals("x-my-kind", vcardvalue_get_x(val));
+    assert_str_equals("KIND:x-my-kind\r\n", vcardproperty_as_vcard_string(prop));
+    assert_str_equals(input, vcardcomponent_as_vcard_string(card));
+
+    vcardcomponent_free(card);
+
+    /* A recognized KIND value does not use x_value */
+    val = vcardvalue_new_from_string(VCARD_KIND_VALUE, "individual");
+    assert(VCARD_KIND_VALUE == vcardvalue_isa(val));
+    assert(VCARD_KIND_INDIVIDUAL == vcardvalue_get_kind(val));
+    assert_null_str(vcardvalue_get_x(val));
+    assert_str_equals("INDIVIDUAL", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+
+    /* vcardvalue_set_x() and _get_x() also apply to enum-kind values */
+    val = vcardvalue_new_from_string(VCARD_KIND_VALUE, "x-my-kind");
+    assert(NULL != vcardvalue_get_x(val));
+    assert_str_equals("x-my-kind", vcardvalue_get_x(val));
+    vcardvalue_set_x(val, "x-other-kind");
+    assert_str_equals("x-other-kind", vcardvalue_get_x(val));
+    assert_str_equals("x-other-kind", vcardvalue_as_vcard_string(val));
+    vcardvalue_free(val);
+}
+
+static void test_value_kind_no_value(void)
+{
+    vcardproperty *prop = vcardproperty_new(VCARD_N_PROPERTY);
+
+    assert(NULL == vcardproperty_get_value(prop));
+    assert(NULL == vcardproperty_get_n(prop));
+    assert(vcardtime_is_null_datetime(vcardproperty_get_bday(prop)));
+    assert_null_str(vcardproperty_get_fn(prop));
+
+    vcardproperty_free(prop);
+}
+
+static void test_value_kind_compatible(void)
+{
+    static const char *v3 =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:x\r\n"
+        "UID:foo-bar\r\n"
+        "PHOTO;ENCODING=b:QUFB\r\n"
+        "TZ:-0500\r\n"
+        "GEO:1.5;2.5\r\n"
+        "BDAY:19700101\r\n"
+        "REV:19700101T000000Z\r\n"
+        "END:VCARD\r\n";
+    static const char *v4 =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:x\r\n"
+        "UID:urn:uuid:1\r\n"
+        "TEL;VALUE=URI:tel:+1-418-656-9254\r\n"
+        "ANNIVERSARY;VALUE=TIMESTAMP:20090808T143000-0500\r\n"
+        "BDAY:19700101\r\n"
+        "TZ:Europe/Berlin\r\n"
+        "GEO:geo:1.5,2.5\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card;
+    vcardproperty *prop;
+    vcardtimetype t;
+
+    card = vcardparser_parse_string(v3);
+
+    prop = vcardcomponent_get_first_property(card, VCARD_UID_PROPERTY);
+    assert(VCARD_TEXT_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    assert_str_equals("foo-bar", vcardproperty_get_uid(prop));
+
+    prop = vcardcomponent_get_first_property(card, VCARD_PHOTO_PROPERTY);
+    assert(VCARD_TEXT_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    assert_str_equals("QUFB", vcardproperty_get_photo(prop));
+
+    prop = vcardcomponent_get_first_property(card, VCARD_TZ_PROPERTY);
+    assert(VCARD_UTCOFFSET_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    assert(-18000 == vcardproperty_get_tz(prop).utcoffset);
+
+    prop = vcardcomponent_get_first_property(card, VCARD_GEO_PROPERTY);
+    assert(VCARD_GEO_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    vcardgeotype geo = vcardproperty_get_geo(prop);
+    assert_str_equals("1.5", geo.coords.lat);
+
+    prop = vcardcomponent_get_first_property(card, VCARD_BDAY_PROPERTY);
+    assert(VCARD_DATE_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    t = vcardproperty_get_bday(prop);
+    assert(1970 == t.year && 1 == t.month && 1 == t.day);
+
+    prop = vcardcomponent_get_first_property(card, VCARD_REV_PROPERTY);
+    assert(VCARD_TIMESTAMP_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    assert(1970 == vcardproperty_get_rev(prop).year);
+
+    assert_str_equals("foo-bar", vcardcomponent_get_uid(card));
+    assert_str_equals("x", vcardcomponent_get_fn(card));
+
+    vcardcomponent_free(card);
+
+    card = vcardparser_parse_string(v4);
+
+    prop = vcardcomponent_get_first_property(card, VCARD_UID_PROPERTY);
+    assert(VCARD_URI_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    assert_str_equals("urn:uuid:1", vcardproperty_get_uid(prop));
+
+    prop = vcardcomponent_get_first_property(card, VCARD_TEL_PROPERTY);
+    assert(VCARD_URI_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    assert_str_equals("tel:+1-418-656-9254", vcardproperty_get_tel(prop));
+
+    prop = vcardcomponent_get_first_property(card, VCARD_ANNIVERSARY_PROPERTY);
+    assert(VCARD_TIMESTAMP_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    t = vcardproperty_get_anniversary(prop);
+    assert(2009 == t.year && 8 == t.month && 8 == t.day);
+
+    prop = vcardcomponent_get_first_property(card, VCARD_TZ_PROPERTY);
+    assert(VCARD_TEXT_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    assert_str_equals("Europe/Berlin", vcardproperty_get_tz(prop).tzid);
+
+    prop = vcardcomponent_get_first_property(card, VCARD_GEO_PROPERTY);
+    assert(VCARD_URI_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    assert_str_equals("geo:1.5,2.5", vcardproperty_get_geo(prop).uri);
+
+    vcardcomponent_free(card);
+}
+
 int main(int argc, char **argv)
 {
     _unused(argc);
@@ -568,6 +928,16 @@ int main(int argc, char **argv)
     test_value_structured_from_string_escaped();
 
     test_line_folding();
+
+    test_value_kind_mismatch_structured();
+    test_value_kind_mismatch_textlist();
+    test_value_kind_mismatch_time();
+    test_value_kind_mismatch_string();
+    test_value_kind_mismatch_scalar();
+    test_value_kind_mismatch_x();
+    test_value_kind_enum_x();
+    test_value_kind_no_value();
+    test_value_kind_compatible();
 
     return 0;
 }

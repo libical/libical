@@ -49,6 +49,21 @@ if ($opt_i) {
 
 }
 
+# Return which ${lcprefix}value_impl union member a value type reads from, as a UNION_* tag.
+sub value_union_type
+{
+  my $value = shift;
+
+  my $uc = uc(join("", map {lc($_);} split(/-/, $value)));
+
+  return 'X'    if $opt_v and $uc eq 'X';
+  return 'ENUM' if @{$h{$value}->{'enums'}};
+
+  my $union_data = exists $union_map{$uc} ? $union_map{$uc} : lc($uc);
+
+  return exists $union_type_map{$union_data} ? $union_type_map{$union_data} : 'NONE';
+}
+
 sub insert_code
 {
   # Map type names to the value in the icalvalue_impl data union */
@@ -75,6 +90,19 @@ sub insert_code
     QUERY          => 'string',
     XMLREFERENCE   => 'string',
     X              => 'string'
+  );
+
+  # Map an icalvalue_impl union member name to its ${lcprefix}value_union tag
+
+  %union_type_map = (
+    'enum'       => 'ENUM',
+    'float'      => 'FLOAT',
+    'geo'        => 'GEO',
+    'int'        => 'INT',
+    'string'     => 'STRING',
+    'structured' => 'STRUCTURED',
+    'textlist'   => 'TEXTLIST',
+    'time'       => 'TIME'
   );
 
   if ($opt_h) {
@@ -172,6 +200,32 @@ sub insert_code
 
     print "    {${ucprefix}_NO_VALUE,\"\"}\n};";
 
+    # vCard only: emit the value_union enum and the kind -> union lookup the accessors call
+    if ($opt_v) {
+      print "\n\n";
+      print "typedef enum ${lcprefix}value_union {\n";
+      print "    ${ucprefix}_UNION_NONE = 0,\n";
+      foreach $ut (sort values %union_type_map) {
+        print "    ${ucprefix}_UNION_${ut},\n";
+      }
+      print "    ${ucprefix}_UNION_X\n} ${lcprefix}value_union;\n\n";
+
+      print
+"static ${lcprefix}value_union ${lcprefix}value_kind_to_union(${lcprefix}value_kind kind)\n{\n    switch (kind) {\n";
+
+      # No 'default' label: the switch must stay exhaustive over
+      # ${lcprefix}value_kind so that -Wswitch catches a newly added value type.
+      foreach $value (sort keys %h) {
+
+        my $ucv        = join("", map {uc(lc($_));} split(/-/, $value));
+        my $union_type = value_union_type($value);
+
+        print "    case ${ucprefix}_${ucv}_VALUE:\n";
+        print "        return ${ucprefix}_UNION_${union_type};\n";
+      }
+
+      print "    }\n\n    return ${ucprefix}_UNION_NONE;\n}\n";
+    }
   }
 
   foreach $value (sort keys %h) {
@@ -211,6 +265,54 @@ sub insert_code
       $union_data = $lc;
     }
 
+    my $union_type = value_union_type($value);
+
+    # Fail the build rather than emit accessors whose type check would always pass
+    if ($opt_v and $autogen and $union_type eq 'NONE') {
+      die "No ${lcprefix}value_impl union member is registered for value type " .
+        "$value (union data '$union_data'): the generated accessors would " .
+        "carry a vacuous type check.  Add '$union_data' to %union_type_map " .
+        "(and the member to struct ${lcprefix}value_impl), or mark $value as " .
+        "(m) in $ARGV[0] and write its accessors by hand.\n";
+    }
+
+    # Zero value a getter returns for a NULL or wrongly-typed argument
+    my $null_ret     = "0";
+    my $has_null_ret = 1;
+
+    if ($union_data eq 'enum') {
+      $null_ret = "${ucprefix}_${uc}_NONE";
+    } elsif ($union_data eq 'int') {
+      $null_ret = "0";
+    } elsif ($union_data eq 'float') {
+      $null_ret = "0.0";
+    } elsif ($union_data eq 'time') {
+      $null_ret = $opt_v ? "vcardtime_null_datetime()" : "icaltime_null_time()";
+    } elsif ($union_data eq 'duration') {
+      $null_ret = "icaldurationtype_null_duration()";
+    } elsif ($union_data eq 'period') {
+      $null_ret = "icalperiodtype_null_period()";
+    } elsif ($union_data eq 'requeststatus') {
+      $null_ret = "icalreqstattype_from_string(\"0.0\")";
+    } else {
+      $has_null_ret = 0;
+    }
+
+    # Likewise for a non-pointer getter with no zero value to return
+    if ($opt_v and $autogen and !$has_null_ret and $type !~ /\*/) {
+      die "No zero value is registered for value type $value (union data " .
+        "'$union_data'): the generated getter would return the literal 0 for " .
+        "its non-pointer return type '$type'.  Add a zero value for " .
+        "'$union_data' above, or mark $value as (m) in $ARGV[0] and write " .
+        "its accessors by hand.\n";
+    }
+
+    # Setter guard: vCard compares union tags, iCal keeps the exact-kind assertion
+    my $set_kind_check =
+      $opt_v
+      ? "    if (${lcprefix}value_kind_to_union(value->kind) != ${ucprefix}_UNION_${union_type}) {\n        icalerror_set_errno(ICAL_BADARG_ERROR);\n        return;\n    }"
+      : "    icalerror_check_value_type(value, ${ucprefix}_${uc}_VALUE);";
+
     if ($opt_c && $autogen) {
 
       print "\
@@ -228,7 +330,7 @@ void ${lcprefix}value_set_${lc}(${lcprefix}value *value, $type v)\
     struct ${lcprefix}value_impl *impl;\
     icalerror_check_arg_rv((value != 0), \"value\");\
 $pointer_check_rv\
-    icalerror_check_value_type(value, ${ucprefix}_${uc}_VALUE);\
+$set_kind_check\
     impl = (struct ${lcprefix}value_impl *)value;\n";
 
       if ($union_data eq 'string') {
@@ -248,33 +350,31 @@ $pointer_check_rv\
 
       print "$type\ ${lcprefix}value_get_${lc}(const ${lcprefix}value *value)\n{\n";
       $retString = "";
-      if ($union_data eq 'string' or $union_data eq 'textlist') {
-        print "    icalerror_check_arg_rz((value != 0), \"value\");\n";
-      } else {
-        print "    icalerror_check_arg((value != 0), \"value\");\n";
-        if ($union_data eq 'enum') {
-          print "    if (!value) {\n        return ${ucprefix}_${uc}_NONE;\n    }\n";
-          $retString = "(${type})";
-        } elsif ($union_data eq 'int') {
-          print "    if (!value) {\n        return 0;\n    }\n";
-        } elsif ($union_data eq 'float') {
-          print "    if (!value) {\n        return 0.0;\n     }\n";
-        } elsif ($union_data eq 'time') {
-          if ($opt_v) {
-            print "    if (!value) {\n        return vcardtime_null_datetime();\n    }\n";
-          } else {
-            print "    if (!value) {\n        return icaltime_null_time();\n    }\n";
-          }
-        } elsif ($union_data eq 'duration') {
-          print "    if (!value) {\n        return icaldurationtype_null_duration();\n    }\n";
-        } elsif ($union_data eq 'period') {
-          print "    if (!value) {\n        return icalperiodtype_null_period();\n    }\n";
-        } elsif ($union_data eq 'requeststatus') {
-          print "    if (!value) {\n        return icalreqstattype_from_string(\"0.0\");\n    }\n";
-        }
+      if ($union_data eq 'enum') {
+        $retString = "(${type})";
       }
-      print "    icalerror_check_value_type(value, ${ucprefix}_${uc}_VALUE);\
-    return ${retString}(((struct ${lcprefix}value_impl *)value)->data.v_${union_data});\n}\n";
+
+      # vCard getters return the zero value on a kind mismatch; iCal aborts via icalerror
+      if ($opt_v) {
+        print
+"    if (!value) {\
+        icalerror_set_errno(ICAL_BADARG_ERROR);\
+        return $null_ret;\
+    }\
+    if (${lcprefix}value_kind_to_union(value->kind) != ${ucprefix}_UNION_${union_type}) {\
+        return $null_ret;\
+    }\n";
+      } else {
+        if ($union_data eq 'string' or $union_data eq 'textlist') {
+          print "    icalerror_check_arg_rz((value != 0), \"value\");\n";
+        } else {
+          print "    icalerror_check_arg((value != 0), \"value\");\n";
+          print "    if (!value) {\n        return $null_ret;\n    }\n" if $has_null_ret;
+        }
+        print "    icalerror_check_value_type(value, ${ucprefix}_${uc}_VALUE);\n";
+      }
+      print
+"    return ${retString}(((struct ${lcprefix}value_impl *)value)->data.v_${union_data});\n}\n";
 
     } elsif ($opt_h && $autogen) {
 

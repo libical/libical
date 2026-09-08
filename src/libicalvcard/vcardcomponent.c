@@ -945,6 +945,9 @@ static void comp_to_v4(vcardcomponent *impl)
         case VCARD_UID_PROPERTY: {
             /* Does it look like a URI (the default)? */
             const char *data = vcardvalue_get_text(value);
+            if (!data) {
+                break;
+            }
             if (!strncasecmp(data, "urn:uuid:", 9) ||
                 !strncasecmp(data, "mailto:", 7) ||
                 !strncasecmp(data, "http://", 7) ||
@@ -1233,6 +1236,9 @@ static void comp_to_v3(vcardcomponent *impl)
 
         case VCARD_UID_PROPERTY:
             /* Treat all values as TEXT (the default) */
+            if (!vcardvalue_get_text(value)) {
+                break;
+            }
             value->kind = VCARD_TEXT_VALUE;
 
             if (val_param) {
