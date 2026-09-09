@@ -1690,6 +1690,40 @@ static void test_recur_parameter_bug(void)
     icalcomponent_free(icalcomp);
 }
 
+static void test_component_parser_roundtrip(void)
+{
+    static const char *test_icalcomp_strs[] = {
+        "BEGIN:X\r\n"
+        "RESOURCES;TZID=x:A;TZID=:B;TZID=:abc\r\n"
+        "END:X\r\n",
+    };
+
+    static const int test_icalcomp_strs_size = sizeof(test_icalcomp_strs) / sizeof(test_icalcomp_strs[0]);
+
+    for (int case_idx = 0; case_idx < test_icalcomp_strs_size; case_idx++) {
+        icalcomponent *icalcomp;
+        int n_errors;
+        const char *str;
+
+        const char *test_icalcomp_str = test_icalcomp_strs[case_idx];
+
+        icalcomp = icalparser_parse_string((char *)test_icalcomp_str);
+        ok("icalparser_parse_string()", (icalcomp != NULL));
+        assert(icalcomp != NULL);
+
+        str = icalcomponent_as_ical_string(icalcomp);
+        str_is("parsed matches original", str, (char *)test_icalcomp_str);
+        if (VERBOSE) {
+            printf("%s\n\n", str);
+        }
+
+        n_errors = icalcomponent_count_errors(icalcomp);
+        int_is("no parse errors", n_errors, 0);
+
+        icalcomponent_free(icalcomp);
+    }
+}
+
 static void test_duration(void)
 {
     struct icaldurationtype d;
@@ -7867,6 +7901,8 @@ int main(int argc, const char *argv[])
     test_run("Test recur encode by[ICAL_BY_MONTH]", test_recur_encode_by_month, do_test, do_header);
     test_run("Test Recurring Events File", test_recur_file, do_test, do_header);
     test_run("Test parameter bug", test_recur_parameter_bug, do_test, do_header);
+    test_run("Test component parser roundtrip", test_component_parser_roundtrip, do_test, do_header);
+
     test_run("Test Array Expansion", test_expand_recurrence, do_test, do_header);
     test_run("Test Free/Busy lists", test_fblist, do_test, do_header);
     test_run("Test Overlaps", test_overlaps, do_test, do_header);
