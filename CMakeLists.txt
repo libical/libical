@@ -893,7 +893,7 @@ endif()
 libical_option(LIBICAL_DEVMODE_MEMORY_SANITIZER "(Developer-only) Build with the memory sanitizer." False)
 mark_as_advanced(LIBICAL_DEVMODE_MEMORY_SANITIZER)
 if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
-  if(CMAKE_C_COMPILER_IS_CLANG)
+  if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
     set(
       CMAKE_C_FLAGS
       "${CMAKE_C_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
@@ -915,7 +915,7 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
     set(LIBICAL_GLIB_BUILD_DOCS False)
     set(LIBICAL_GLIB_VAPI False)
   else()
-    message(FATAL_ERROR "You are trying to build with the memory sanitizer using a non-Clang compiler.")
+    message(FATAL_ERROR "You are trying to build with the memory sanitizer using a non-GCC or Clang compiler.")
   endif()
 endif()
 
