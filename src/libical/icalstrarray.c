@@ -142,6 +142,7 @@ void icalstrarray_sort(icalstrarray *array)
     icalarray_sort(array, (int (*)(const void *, const void *))&strpcmp);
 }
 
+/* cppcheck-suppress constParameterPointer */ /* TODO 5.0 */
 icalstrarray *icalstrarray_clone(icalstrarray *array)
 {
     if (!array) {
