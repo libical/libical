@@ -54,7 +54,10 @@ void vcardvalue_set_structured(vcardvalue *value, vcardstructuredtype *v)
     icalerror_check_arg_rv((value != 0), "value");
     icalerror_check_arg_rv((v != 0), "v");
 
-    icalerror_check_value_type(value, VCARD_STRUCTURED_VALUE);
+    if (vcardvalue_kind_to_union(value->kind) != VCARD_UNION_STRUCTURED) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
     impl = (struct vcardvalue_impl *)value;
 
     vcardstructured_ref(v);
@@ -65,8 +68,13 @@ void vcardvalue_set_structured(vcardvalue *value, vcardstructuredtype *v)
 
 vcardstructuredtype *vcardvalue_get_structured(const vcardvalue *value)
 {
-    icalerror_check_arg((value != 0), "value");
-    icalerror_check_value_type(value, VCARD_STRUCTURED_VALUE);
+    if (!value) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return 0;
+    }
+    if (vcardvalue_kind_to_union(value->kind) != VCARD_UNION_STRUCTURED) {
+        return 0;
+    }
     return ((struct vcardvalue_impl *)value)->data.v_structured;
 }
 
@@ -84,6 +92,16 @@ void vcardvalue_set_geo(vcardvalue *value, struct vcardgeotype v)
     struct vcardvalue_impl *impl;
 
     icalerror_check_arg_rv((value != 0), "value");
+
+    switch (value->kind) {
+    case VCARD_GEO_VALUE:
+    case VCARD_URI_VALUE:
+        break;
+
+    default:
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
 
     impl = (struct vcardvalue_impl *)value;
 
@@ -119,8 +137,6 @@ struct vcardgeotype vcardvalue_get_geo(const vcardvalue *impl)
     } else if (impl->kind == VCARD_GEO_VALUE) {
         geo = impl->data.v_geo;
         geo.uri = NULL;
-    } else {
-        icalerror_set_errno(ICAL_BADARG_ERROR);
     }
 
     return geo;
@@ -138,6 +154,25 @@ vcardvalue *vcardvalue_new_tz(struct vcardtztype v)
 void vcardvalue_set_tz(vcardvalue *value, struct vcardtztype v)
 {
     icalerror_check_arg_rv((value != 0), "value");
+
+    switch (value->kind) {
+    case VCARD_TZ_VALUE:
+    case VCARD_UTCOFFSET_VALUE:
+        value->data.v_string = NULL;
+        break;
+
+    case VCARD_TEXT_VALUE:
+    case VCARD_URI_VALUE:
+        if (!v.tzid && !v.uri) {
+            icalmemory_free_buffer((void *)value->data.v_string);
+            value->data.v_string = NULL;
+        }
+        break;
+
+    default:
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
 
     if (v.tzid) {
         value->kind = VCARD_TEXT_VALUE;
@@ -163,8 +198,6 @@ struct vcardtztype vcardvalue_get_tz(const vcardvalue *impl)
         tz.uri = impl->data.v_string;
     } else if (impl->kind == VCARD_UTCOFFSET_VALUE) {
         tz.utcoffset = impl->data.v_int;
-    } else {
-        icalerror_set_errno(ICAL_BADARG_ERROR);
     }
 
     return tz;
@@ -251,8 +284,10 @@ void vcardvalue_set_x(vcardvalue *impl, const char *v)
 
 const char *vcardvalue_get_x(const vcardvalue *value)
 {
-    icalerror_check_arg_rz((value != 0), "value");
-    icalerror_check_value_type(value, VCARD_X_VALUE);
+    if (!value) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return 0;
+    }
     return value->x_value;
 }
 

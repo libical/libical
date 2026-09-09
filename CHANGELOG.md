@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.6] - Unreleased
 
+- libicalvcard: the typed vcardvalue getters now check that the value type of
+  the property uses the same union member as the expected value type of the
+  getter. If the type mismatches, then they return the zero value for the
+  expected value type. The typed setters error with ICAL_BADARG_ERROR
+  instead of overwriting a value held in another union member.
 - Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
 - Improve build paths in installed .cmake files (esp. for cross-compiling)
 
