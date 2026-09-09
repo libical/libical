@@ -1,4 +1,11 @@
+#if defined(__clang__) && (__clang_major__ >= 23)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-but-set-global"
+#endif
 G_DEFINE_TYPE (${upperCamel}, ${lowerSnake}, I_CAL_TYPE_OBJECT)
+#if defined(__clang__) && (__clang_major__ >= 23)
+#pragma clang diagnostic pop
+#endif
 
 static void ${lowerSnake}_class_init (G_GNUC_UNUSED ${upperCamel}Class *klass)
 {
