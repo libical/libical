@@ -902,8 +902,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         if (str != 0) {
             char *name_heap = 0;
             char *pvalue_heap = 0;
-            char name_stack[TMP_BUF_SIZE];
-            char pvalue_stack[TMP_BUF_SIZE];
+            char name_stack[TMP_BUF_SIZE] = {};
+            char pvalue_stack[TMP_BUF_SIZE] = {};
             char *name = name_stack;
             char *pvalue = pvalue_stack;
 
