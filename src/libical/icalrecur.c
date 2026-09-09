@@ -1256,7 +1256,7 @@ static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilD
         if (lowerBitIdxIncl > 0) {
             mask &= ((unsigned long)-1) << lowerBitIdxIncl;
         }
-        if (upperBitIdxExcl < (int)BITS_PER_LONG) {
+        if ((upperBitIdxExcl > 0) && (upperBitIdxExcl < (int)BITS_PER_LONG)) {
             mask &= ((unsigned long)-1) >> (BITS_PER_LONG - upperBitIdxExcl);
         }
 
