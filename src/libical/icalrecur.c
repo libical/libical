@@ -3781,7 +3781,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         if (hasSetPos) {
             int new_ccr = check_contracting_rules(impl) ? 1 : 0;
             if (new_ccr == 1) {
-                if(checkContractingRules == 0 || period_change) {
+                if (checkContractingRules == 0 || period_change) {
                     setup_setpos(impl, 1);
                 } else {
                     impl->set_pos++;
@@ -3872,7 +3872,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
         if (hasSetPos) {
             int new_ccr = check_contracting_rules(impl) ? 1 : 0;
             if (new_ccr == 1) {
-                if(checkContractingRules == 0 || period_change) {
+                if (checkContractingRules == 0 || period_change) {
                     setup_setpos(impl, 0);
                 } else {
                     impl->set_pos--;
