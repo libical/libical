@@ -1051,6 +1051,7 @@ stuff:
 #else
 static void appendcOFile_(OFile *fp, char c)
 {
+    char *tmpMem;
     if (fp->fail) return;
     if (fp->fp) {
         fputc(c,fp->fp);
@@ -1064,10 +1065,13 @@ stuff:
             }
         else if (fp->alloc) {
             fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-            fp->s = realloc(fp->s,(size_t)fp->limit);
-            if (fp->s) goto stuff;
+            tmpMem = (char *)realloc(fp->s,(size_t)fp->limit);
+            if (tmpMem != NULL) {
+                fp->s = tmpMem;
+                goto stuff;
             }
-        if (fp->alloc)
+        }
+        if (fp->s)
             free(fp->s);
         fp->s = 0;
         fp->fail = 1;
