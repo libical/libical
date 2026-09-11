@@ -237,9 +237,9 @@ bool icalproperty_value_kind_is_default(icalproperty_kind pkind,
         const struct icalproperty_map *map = &property_map[i];
 
         if (map->kind == pkind) {
-            return ((vkind == map->default_value) ||
-                    ((map->flags & ICAL_PROPERTY_IS_STRUCTURED) &&
-                     (vkind == map->libical_value)));
+            const bool is_structured = (bool)(map->flags & ICAL_PROPERTY_IS_STRUCTURED);
+            return ((vkind == map->default_value) || //NOLINT(readability-implicit-bool-conversion)
+                    (is_structured && (vkind == map->libical_value)));
         }
     }
 

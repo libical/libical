@@ -58,34 +58,34 @@ vcardtimetype vcardtime_current_utc_time(void)
 
 bool vcardtime_is_time(const vcardtimetype t)
 {
-    return (t.year == -1 && t.month == -1 && t.day == -1);
+    return (t.year == -1 && t.month == -1 && t.day == -1); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool vcardtime_is_date(const vcardtimetype t)
 {
-    return (t.hour == -1 && t.minute == -1 && t.second == -1);
+    return (t.hour == -1 && t.minute == -1 && t.second == -1); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool vcardtime_is_null_datetime(const vcardtimetype t)
 {
-    return (vcardtime_is_time(t) && vcardtime_is_date(t));
+    return (vcardtime_is_time(t) && vcardtime_is_date(t)); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool vcardtime_is_datetime(const vcardtimetype t)
 {
-    return (t.day != -1 && t.hour != -1);
+    return (t.day != -1 && t.hour != -1); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool vcardtime_is_timestamp(const vcardtimetype t)
 {
-    return (t.year != -1 && t.month != -1 && t.day != -1 &&
+    return (t.year != -1 && t.month != -1 && t.day != -1 && //NOLINT(readability-implicit-bool-conversion)
             t.hour != -1 && t.minute != -1 && t.second != -1 &&
             t.utcoffset != -1);
 }
 
 bool vcardtime_is_utc(const vcardtimetype t)
 {
-    return (t.utcoffset == 0 && !vcardtime_is_date(t));
+    return (t.utcoffset == 0 && !vcardtime_is_date(t)); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool vcardtime_is_leap_year(const int year)
@@ -95,7 +95,7 @@ bool vcardtime_is_leap_year(const int year)
     } else if (year <= 1752) {
         return (year % 4 == 0);
     } else {
-        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0); //NOLINT(readability-implicit-bool-conversion)
     }
 }
 

@@ -223,7 +223,7 @@ struct icaltimetype icaltime_from_timet_with_zone(const icaltime_t tm, const boo
     /* Convert the icaltime_t to a struct tm in UTC time. We can trust gmtime for this. */
     memset(&t, 0, sizeof(struct tm));
     if (!icalgmtime_r(&tm, &t)) {
-        return is_date ? icaltime_null_date() : icaltime_null_time();
+        return is_date ? icaltime_null_date() : icaltime_null_time(); //NOLINT(readability-implicit-bool-conversion)
     }
 
     tt.year = t.tm_year + 1900;
@@ -458,7 +458,7 @@ bool icaltime_is_leap_year(const int year)
     if (year <= 1752) {
         return (year % 4 == 0);
     } else {
-        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0); //NOLINT(readability-implicit-bool-conversion)
     }
 }
 

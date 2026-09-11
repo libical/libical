@@ -365,9 +365,9 @@ bool icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
            the value should be merge with the previous clause */
 
         if (w->logic == ICALGAUGELOGIC_AND) {
-            last_clause = this_clause && last_clause;
+            last_clause = this_clause && last_clause; //NOLINT(readability-implicit-bool-conversion)
         } else if (w->logic == ICALGAUGELOGIC_OR) {
-            last_clause = this_clause || last_clause;
+            last_clause = this_clause || last_clause; //NOLINT(readability-implicit-bool-conversion)
         } else {
             last_clause = this_clause;
         }
