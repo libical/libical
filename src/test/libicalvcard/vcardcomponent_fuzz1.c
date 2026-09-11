@@ -18,6 +18,7 @@
 #include <stdlib.h>
 
 #include "libicalvcard/vcard.h"
+#include "../../src/test/test-malloc.h"
 
 int main(int argc, const char *argv[])
 {
@@ -76,5 +77,12 @@ int main(int argc, const char *argv[])
     vcardcomponent_free(card);
 
     free(data);
+
+#if defined(MEMORY_CONSISTENCY)
+    struct testmalloc_statistics memstat;
+    testmalloc_get_statistics(&memstat);
+    printf("max memory allocation level: %zu", memstat.mem_allocated_max);
+#endif
+
     return 0;
 }
