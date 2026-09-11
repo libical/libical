@@ -240,7 +240,7 @@ static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_
         case '\n':
             /* If encoding a parameter value, embed literally
                (parameter encoding is done elsewhere), otherwise escape */
-            icalmemory_append_string(str, str_p, buf_sz, is_param ? "\n" : "\\n");
+            icalmemory_append_string(str, str_p, buf_sz, is_param ? "\n" : "\\n"); //NOLINT
             break;
 
         default:
@@ -906,7 +906,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     case VCARD_TEXTLIST_VALUE:
         return vcardvalue_textlist_as_vcard_string_r(value,
-                                                     is_structured ? ';' : ',');
+                                                     is_structured ? ';' : ','); //NOLINT
 
     case VCARD_STRUCTURED_VALUE:
         return vcardvalue_structured_as_vcard_string_r(value);

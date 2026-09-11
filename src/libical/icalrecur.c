@@ -2859,7 +2859,7 @@ static void expand_by_day(icalrecur_iterator *impl, int year,
 
             if (valid) {
                 const unsigned long daysmask = daysmask_getbit(bydays, day + doy_offset);
-                int new_val = is_limiting
+                int new_val = is_limiting //NOLINT(readability-implicit-bool-conversion)
                                   /* "Filter" the year days bitmask with the bydays bitmask */
                                   ? (int)daysmask
                                   /* Add each BYDAY to the year days bitmask */
@@ -3185,7 +3185,7 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
     if (has_by_data(impl, ICAL_BY_DAY)) {
         /* Apply each BYDAY to the year days bitmask */
         bool limiting =
-            has_by_data(impl, ICAL_BY_YEAR_DAY) || has_by_data(impl, ICAL_BY_MONTH_DAY);
+            has_by_data(impl, ICAL_BY_YEAR_DAY) || has_by_data(impl, ICAL_BY_MONTH_DAY); //NOLINT(readability-implicit-bool-conversion)
         int first_dow, last_dow;
 
         impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
@@ -3724,7 +3724,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     const size_t max_recurrence_time_count = icallimit_get(ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL);
     int lastTimeCompare = 0;
     bool hasSetPos = has_by_data(impl, ICAL_BY_SET_POS);
-    int checkContractingRules = check_contracting_rules(impl) ? 1 : 0;
+    int checkContractingRules = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
     size_t cntRecurrences = 0;
     const size_t max_recurrences = icallimit_get(ICAL_LIMIT_RECURRENCE_SEARCH);
     do {
@@ -3779,7 +3779,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         }
 
         if (hasSetPos) {
-            int new_ccr = check_contracting_rules(impl) ? 1 : 0;
+            int new_ccr = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
             if (new_ccr == 1) {
                 if (checkContractingRules == 0 || period_change) {
                     setup_setpos(impl, 1);
@@ -3820,7 +3820,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
     int period_change = 1;
     icalrecur_iterator impl_last = *impl;
     bool hasSetPos = has_by_data(impl, ICAL_BY_SET_POS);
-    int checkContractingRules = check_contracting_rules(impl) ? 1 : 0;
+    int checkContractingRules = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
 
     /* Iterate until we get the next valid time */
     do {
@@ -3870,7 +3870,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
         }
 
         if (hasSetPos) {
-            int new_ccr = check_contracting_rules(impl) ? 1 : 0;
+            int new_ccr = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
             if (new_ccr == 1) {
                 if (checkContractingRules == 0 || period_change) {
                     setup_setpos(impl, 0);
@@ -4261,7 +4261,7 @@ int icalrecurrencetype_month_month(short month)
 
 short icalrecurrencetype_encode_month(int month, bool is_leap)
 {
-    return (short)month | (is_leap ? LEAP_MONTH : 0);
+    return (short)month | (is_leap ? LEAP_MONTH : 0); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool icalrecur_expand_recurrence(const char *rule,
