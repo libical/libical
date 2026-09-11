@@ -62,7 +62,9 @@ struct vcardparameter_map
     const char *str;
 };
 
+//NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
 <insert_code_here>
+//NOLINTEND(bugprone-invalid-enum-default-initialization)
 
 vcardvalue_kind vcardparameter_kind_value_kind(const vcardparameter_kind kind,
                                                int *is_multivalued)
@@ -132,7 +134,9 @@ static int s_vcardparameter_compare_kind_map(const void *a, const void *b)
 
 vcardparameter_kind vcardparameter_string_to_kind(const char *string)
 {
+//NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
     struct vcardparameter_kind_map key = {0};
+//NOLINTEND(bugprone-invalid-enum-default-initialization)
     struct vcardparameter_kind_map *result;
 
     if (string == 0) {

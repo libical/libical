@@ -61,6 +61,7 @@ struct vcardproperty_enum_map {
     const char *str;
 };
 
+//NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wvarargs"
@@ -69,6 +70,7 @@ struct vcardproperty_enum_map {
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
+//NOLINTEND(bugprone-invalid-enum-default-initialization)
 
     bool vcardproperty_kind_is_valid(const vcardproperty_kind kind)
 {

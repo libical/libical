@@ -62,7 +62,9 @@ struct icalproperty_enum_map {
     const char *str;
 };
 
+//NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
 <insert_code_here>
+//NOLINTEND(bugprone-invalid-enum-default-initialization)
 
     bool icalproperty_kind_is_valid(const icalproperty_kind kind)
 {
