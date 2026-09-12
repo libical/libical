@@ -667,7 +667,7 @@ char *vcardproperty_get_parameter_as_string_r(vcardproperty *prop, const char *n
     /* Is the string quoted? */
     pvql = strchr(pv, '"');
     if (pvql == 0) {
-        return (pv); /* No quotes?  Return it immediately. */
+        return pv; /* No quotes?  Return it immediately. */
     }
 
     /* Strip everything up to the first quote */

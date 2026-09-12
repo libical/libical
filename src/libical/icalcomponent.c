@@ -888,7 +888,7 @@ static bool icalcomponent_is_busy(icalcomponent *comp)
             break;
         }
     }
-    return (ret);
+    return ret;
 }
 
 static struct icaltimetype icaltime_with_time(const struct icaltimetype t, int hour, int minutes, int seconds)

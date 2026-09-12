@@ -102,7 +102,7 @@ static buffer_ring *buffer_ring_new(void)
         br->ring[i] = 0;
     }
     br->pos = 0;
-    return (br);
+    return br;
 }
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
@@ -123,7 +123,7 @@ static buffer_ring *get_buffer_ring_pthread(void)
             pthread_setspecific(ring_key, br);
         }
     }
-    return (br);
+    return br;
 }
 
 #else
