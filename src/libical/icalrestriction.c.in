@@ -233,8 +233,9 @@ static const char *icalrestriction_no_dtend(const icalrestriction_record * rec,
 {
     _unused(rec);
 
-    if (prop == NULL)
+    if (prop == NULL) {
         return 0;
+    }
 
     if (icalcomponent_get_first_property(comp, ICAL_DTEND_PROPERTY)) {
         return
@@ -251,8 +252,9 @@ static const char *icalrestriction_no_due(const icalrestriction_record * rec,
 {
     _unused(rec);
 
-    if (prop == NULL)
+    if (prop == NULL) {
         return 0;
+    }
 
     if (icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY)) {
         return
@@ -278,8 +280,9 @@ static const char *icalrestriction_no_duration(const icalrestriction_record * re
     bool dtend_due_islocal;
     _unused(rec);
 
-    if (prop == NULL)
+    if (prop == NULL) {
         return 0;
+    }
 
     pkind = icalproperty_kind_to_string(icalproperty_isa(prop));
 
