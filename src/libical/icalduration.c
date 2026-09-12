@@ -383,8 +383,8 @@ struct icaldurationtype icaldurationtype_normalize(struct icaldurationtype dur)
     unsigned used = 0;
     newdur.hours = (ut - used) / (60 * 60);
     used += newdur.hours * (60 * 60);
-    newdur.minutes = (ut - used) / (60);
-    used += newdur.minutes * (60);
+    newdur.minutes = (ut - used) / 60;
+    used += newdur.minutes * 60;
     newdur.seconds = (ut - used);
 
     return newdur;

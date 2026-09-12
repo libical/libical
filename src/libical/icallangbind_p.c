@@ -297,5 +297,5 @@ const char *icallangbind_quote_as_ical(const char *str)
 
     buf = icallangbind_quote_as_ical_r(str);
     icalmemory_add_tmp_buffer(buf);
-    return (buf);
+    return buf;
 }

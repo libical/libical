@@ -78,7 +78,7 @@ const void *getCObjectPtr(JNIEnv *env, jobject surrogate)
         return (NULL);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
@@ -110,7 +110,7 @@ const VComponent *getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent
         throwException(env, exceptionType);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
@@ -125,7 +125,7 @@ const ICalProperty *getSubjectAsICalProperty(JNIEnv *env, jobject surrogatePrope
         throwException(env, exceptionType);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
@@ -140,7 +140,7 @@ const ICalValue *getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int 
         throwException(env, exceptionType);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
@@ -155,7 +155,7 @@ const ICalParameter *getSubjectAsICalParameter(JNIEnv *env, jobject surrogatePar
         throwException(env, exceptionType);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
@@ -176,7 +176,7 @@ bool copyObjToicaltimetype(JNIEnv *env, jobject src, icaltimetype *dest)
         throwException(env, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
@@ -197,7 +197,7 @@ bool copyObjToicaltriggertype(JNIEnv *env, jobject src, icaltriggertype *dest)
         throwException(env, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
@@ -218,7 +218,7 @@ bool copyObjToicaldurationtype(JNIEnv *env, jobject src, icaldurationtype *dest)
         throwException(env, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
@@ -239,7 +239,7 @@ bool copyObjToicalrecurrencetype(JNIEnv *env, jobject src, icalrecurrencetype *d
         throwException(env, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
@@ -260,7 +260,7 @@ bool copyObjToicalperiodtype(JNIEnv *env, jobject src, icalperiodtype *dest)
         throwException(env, JLIBICAL_ERR_ILLEGAL_ARGUMENT);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
@@ -386,7 +386,7 @@ jobject doCreateNewSurrogate(JNIEnv *env, jclass surrogateClass, jlong subject)
         result = env->NewObject(surrogateClass, jconstructorID, subject);
     }
 
-    return (result);
+    return result;
 }
 
 //-------------------------------------------------------
