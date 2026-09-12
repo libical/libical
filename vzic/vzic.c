@@ -37,13 +37,12 @@ gboolean VzicNoRRules = FALSE;
 gboolean VzicNoRDates = FALSE;
 const char *VzicOutputDir = "zoneinfo";
 char *VzicUrlPrefix = NULL;
-char *VzicOlsonDir = NULL;
 
 GList *VzicTimeZoneNames = NULL;
 
 #if !defined(VZIC_LIBRARY)
 static void
-convert_olson_files(GPtrArray *olson_filenames);
+convert_olson_files(const char *olson_dir, GPtrArray *olson_filenames);
 
 static void free_zone_data(GArray *zone_data);
 static void free_rule_array(gpointer key,
@@ -65,6 +64,7 @@ int main(int argc,
          char *argv[])
 {
     int i;
+    const char *VzicOlsonDir = NULL;
     char directory[PATHNAME_BUFFER_SIZE];
     char filename[PATHNAME_BUFFER_SIZE];
     GHashTable *zones_hash;
@@ -197,7 +197,7 @@ int main(int argc,
     */
 
     /* Convert the Olson timezone files. */
-    convert_olson_files(olson_filenames);
+    convert_olson_files(VzicOlsonDir, olson_filenames);
 
     /* Output the timezone names and coordinates in a zone.tab file,
      * and the translatable strings to feed to gettext.
@@ -216,7 +216,7 @@ int main(int argc,
 }
 
 static void
-convert_olson_files(GPtrArray *olson_filenames)
+convert_olson_files(const char *olson_dir, GPtrArray *olson_filenames)
 {
     int max_until_year = 0;
 
@@ -229,7 +229,7 @@ convert_olson_files(GPtrArray *olson_filenames)
         char input_filename[PATHNAME_BUFFER_SIZE];
         int file_max_until_year;
 
-        sprintf(input_filename, "%s/%s", VzicOlsonDir, olson_filename);
+        sprintf(input_filename, "%s/%s", olson_dir, olson_filename);
         parse_olson_file(input_filename, zone_data, rule_data, link_data,
                          &file_max_until_year);
         if (file_max_until_year > max_until_year) {
