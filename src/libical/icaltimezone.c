@@ -1675,6 +1675,7 @@ static bool parse_coord(const char *coord, int len, int *degrees, int *minutes, 
     *minutes = 0;
     *seconds = 0;
 
+    //NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
     bool fail = true;
     if (len == 5) {
         if (sscanf(coord + 1, "%2d%2d", degrees, minutes) == 2) {
@@ -1693,6 +1694,7 @@ static bool parse_coord(const char *coord, int len, int *degrees, int *minutes, 
             fail = false;
         }
     }
+    //NOLINTEND(bugprone-unchecked-string-to-number-conversion)
 
     if (fail) {
         icalerrprintf("Invalid coordinate: %s\n", coord);

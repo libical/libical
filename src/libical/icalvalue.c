@@ -420,7 +420,7 @@ static bool simple_str_to_doublestr(const char *from, char *result, int result_l
     }
 
     /* now try to convert to a floating point number, to check for validity only */
-    if (sscanf(result, "%lf", &dtest) != 1) {
+    if (sscanf(result, "%lf", &dtest) != 1) { //NOLINT(bugprone-unchecked-string-to-number-conversion)
         return true;
     }
     return false;
@@ -554,20 +554,28 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         value = icalvalue_new_enum(kind, ICAL_RESOURCETYPE_X, str);
         break;
 
-    case ICAL_INTEGER_VALUE:
-        value = icalvalue_new_integer(atoi(str));
+    case ICAL_INTEGER_VALUE: {
+        char *t_end;
+        const long tmpl = strtol(str, &t_end, 10);
+        if (str != t_end) {
+            value = icalvalue_new_integer(tmpl);
+        }
         break;
-
-    case ICAL_FLOAT_VALUE:
-        value = icalvalue_new_float((float)atof(str));
+    }
+    case ICAL_FLOAT_VALUE: {
+        char *t_end;
+        const float tmpf = strtof(str, &t_end);
+        if (str != t_end) {
+            value = icalvalue_new_float(tmpf);
+        }
         break;
-
+    }
     case ICAL_UTCOFFSET_VALUE: {
-        int t, utcoffset, hours, minutes, seconds;
+        int utcoffset, hours, minutes, seconds;
 
-        /* treat the UTCOFSET string as a decimal number, disassemble its digits
+        /* treat the UTCOFFSET string as a decimal number, disassemble its digits
                and reconstruct it as sections */
-        t = strtol(str, 0, 10);
+        long t = strtol(str, 0, 10);
         /* add phantom seconds field */
         if (strlen(str) < 7) {
             t *= 100;

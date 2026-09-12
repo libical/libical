@@ -121,7 +121,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
 
     /* Get the status numbers */
 
-    sscanf(str, "%hd.%hd", &major, &minor);
+    sscanf(str, "%hd.%hd", &major, &minor); //NOLINT(bugprone-unchecked-string-to-number-conversion)
 
     if (major <= 0 || minor < 0) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);

@@ -306,12 +306,12 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
     int nchar = 0;
     char *newstr;
 
+    // NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
     if (!str || !*str) {
         /* empty string */
         return NULL;
     } else if (!strncmp(str, "--", 2)) {
         month = str + 2;
-
         if (*month == '-') {
             ndig = num_digits(month + 1);
 
@@ -357,6 +357,7 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
             }
         }
     }
+    // NOLINTEND(bugprone-unchecked-string-to-number-conversion)
 
     if (!nchar) {
         /* invalid time */
@@ -378,6 +379,7 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
     char *newstr;
     int nchar = 0;
 
+    // NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
     if (!str || !*str) {
         /* empty string */
         return NULL;
@@ -392,6 +394,7 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
             sscanf(str, "%1[+-]%2u%n", sign, &offset_h, &nchar);
         }
     }
+    // NOLINTEND(bugprone-unchecked-string-to-number-conversion)
 
     if (!nchar) {
         /* invalid zone */
@@ -419,6 +422,7 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
     size_t ndig;
     int nchar = 0;
 
+    // NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
     if (!str || !*str) {
         /* empty string */
         return NULL;
@@ -467,6 +471,7 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
             }
         }
     }
+    // NOLINTEND(bugprone-unchecked-string-to-number-conversion)
 
     if (!nchar) {
         /* invalid time */
