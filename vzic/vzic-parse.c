@@ -11,6 +11,7 @@
  */
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <limits.h>
@@ -903,15 +904,28 @@ parse_coord(const char *coord,
 {
     int degrees = 0, minutes = 0, seconds = 0;
 
+    //NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
+    bool status = false;
     if (len == 5) {
-        sscanf(coord + 1, "%2d%2d", &degrees, &minutes);
+        if (sscanf(coord + 1, "%2d%2d", &degrees, &minutes) == 2) {
+            status = true;
+        }
     } else if (len == 6) {
-        sscanf(coord + 1, "%3d%2d", &degrees, &minutes);
+        if (sscanf(coord + 1, "%3d%2d", &degrees, &minutes) == 2) {
+            status = true;
+        }
     } else if (len == 7) {
-        sscanf(coord + 1, "%2d%2d%2d", &degrees, &minutes, &seconds);
+        if (sscanf(coord + 1, "%2d%2d%2d", &degrees, &minutes, &seconds) == 3) {
+            status = true;
+        }
     } else if (len == 8) {
-        sscanf(coord + 1, "%3d%2d%2d", &degrees, &minutes, &seconds);
-    } else {
+        if (sscanf(coord + 1, "%3d%2d%2d", &degrees, &minutes, &seconds) == 3) {
+            status = true;
+        }
+    }
+    //NOLINTEND(bugprone-unchecked-string-to-number-conversion)
+
+    if (!status) {
         fprintf(stderr, "Invalid coordinate: %s\n", coord);
         exit(1);
     }
