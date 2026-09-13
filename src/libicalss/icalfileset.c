@@ -378,7 +378,10 @@ icalerrorenum icalfileset_commit(icalset *set)
         IO_SSIZE_T sz;
 
         str = icalcomponent_as_ical_string_r(c);
-
+        if (!str) {
+            icalerror_set_errno(ICAL_ALLOCATION_ERROR);
+            return ICAL_ALLOCATION_ERROR;
+        }
         sz = write(fset->fd, str, (IO_SIZE_T)strlen(str));
         if (sz != (IO_SSIZE_T)strlen(str)) {
             perror("write");
