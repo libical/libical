@@ -97,6 +97,10 @@ void deleteVObject(VObject *p)
 
 char* dupStr(const char *s, size_t size)
 {
+    if(!s) {
+        return (char *)0;
+    }
+
     char *t;
     if  (size == 0) {
         size = strlen(s);
@@ -1005,11 +1009,13 @@ static void appendcOFile(OFile *fp, char c)
 
 static void appendsOFile(OFile *fp, const char *s)
 {
-    size_t i, slen;
-    slen  = strlen(s);
-    for (i=0; i<slen; i++) {
-        appendcOFile(fp,s[i]);
-        }
+    if (s) {
+        size_t i, slen;
+        slen  = strlen(s);
+        for (i=0; i<slen; i++) {
+            appendcOFile(fp,s[i]);
+            }
+    }
 }
 
 static void initOFile(OFile *fp, FILE *ofp)
@@ -1338,8 +1344,12 @@ char* writeMemVObjects(char *s, int *len, VObject *list)
 wchar_t* fakeUnicode(const char *ps, size_t *bytes)
 {
     wchar_t *r, *pw;
-    size_t len = strlen(ps)+1;
 
+    if (!ps) {
+        return (wchar_t *)0;
+    }
+
+    size_t len = strlen(ps)+1;
     pw = r = (wchar_t*)malloc(sizeof(wchar_t)*len);
     if(!r)
         return (wchar_t *)0;
