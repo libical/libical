@@ -400,6 +400,7 @@ struct icaltimetype icaltime_from_string(const char *str)
         goto FAIL;
     }
 
+    // NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
     if (tt.is_date == 1) {
         if (size == 10) {
             char dsep1, dsep2;
@@ -445,6 +446,7 @@ struct icaltimetype icaltime_from_string(const char *str)
             }
         }
     }
+    // NOLINTEND(bugprone-unchecked-string-to-number-conversion)
 
     return tt;
 

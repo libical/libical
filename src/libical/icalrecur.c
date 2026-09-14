@@ -553,7 +553,7 @@ static int icalrecur_add_byrules(const struct icalrecur_parser *parser, icalrecu
         }
 
         char *t_end;
-        int v = strtol(t, &t_end, 10);
+        long v = strtol(t, &t_end, 10);
 
         // We check for parsing errors later, but not if the string ends with 'L',
         // so explicitly check the value here.
@@ -689,7 +689,7 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
 
         /* Get Optional weekno */
         char *t_end;
-        long tmpl = strtol(t, &t_end, 10);
+        const long tmpl = strtol(t, &t_end, 10);
         weekno = (signed char)tmpl;
 
         // overflow?
@@ -940,8 +940,13 @@ struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
                 /* Don't allow multiple COUNTs, or both COUNT and UNTIL */
                 r = -1;
             } else {
-                parser.rt->count = atoi(value);
-                /* don't allow count to be less than 1 */
+                parser.rt->count = 0;
+                char *v_end;
+                const long v = strtol(value, &v_end, 10);
+                if (value != v_end) {
+                    parser.rt->count = v;
+                    /* don't allow count to be less than 1 */
+                }
                 if (parser.rt->count < 1) {
                     r = -1;
                 }
@@ -961,15 +966,18 @@ struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
                 /* Don't allow multiple INTERVALs */
                 r = -1;
             } else {
-                int tmp = atoi(value);
-                parser.rt->interval = (short)tmp;
+                parser.rt->interval = 0;
+                char *v_temp;
+                const long tmp = strtol(value, &v_temp, 10);
+                if (value != v_temp) {
+                    parser.rt->interval = (short)tmp;
 
-                // overflow?
-                /* cppcheck-suppress knownConditionTrueFalse */
-                if (parser.rt->interval != tmp) {
-                    r = -1;
+                    // overflow?
+                    /* cppcheck-suppress knownConditionTrueFalse */
+                    if (parser.rt->interval != tmp) {
+                        parser.rt->interval = 0;
+                    }
                 }
-
                 /* don't allow an interval to be less than 1
                    (RFC specifies an interval must be a positive integer) */
                 if (parser.rt->interval < 1) {

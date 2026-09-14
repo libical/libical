@@ -2376,11 +2376,15 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
             } else {
                 /* FIXME: Handle possible NEWFAILED error. */
 
-                /* Convert the suffix to an integer and remember the maximum numeric
-                   suffix found. */
-                int suffix = atoi(existing_tzid + existing_tzid_len);
-                if (max_suffix < suffix) {
-                    max_suffix = suffix;
+                /* Convert the suffix to an integer and remember the maximum numeric suffix found. */
+                char *t_end;
+                const char *t = existing_tzid + existing_tzid_len;
+                const long tmpl = strtol(t, &t_end, 10);
+                if (t != t_end) {
+                    const int suffix = tmpl;
+                    if (max_suffix < suffix) {
+                        max_suffix = suffix;
+                    }
                 }
             }
         }

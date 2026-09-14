@@ -227,8 +227,11 @@ void vcardparameter_set_value_from_string(vcardparameter *param,
     icalerror_check_arg_rv((val != 0), "val");
 
     if (param->value_kind == VCARD_INTEGER_VALUE) {
-        param->data = atoi(val);
-
+        char *v_end;
+        const long tmpl = strtol(val, &v_end, 10);
+        if (val != v_end) {
+            param->data = tmpl;
+        }
     } else if (param->value_kind == VCARD_DATEANDORTIME_VALUE) {
         ((struct vcardparameter_impl *)param)->date = vcardtime_from_string(val, 0);
 
