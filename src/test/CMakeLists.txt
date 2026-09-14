@@ -345,6 +345,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     479865113 # ASAN cpu timeout exceeds 60s
     492956874 # UBSAN cpu timeout exceeds 60s
     549393074 # out of memory
+    560953111 # out of memory
     ubsan
     ubsan2
     ubsan3
