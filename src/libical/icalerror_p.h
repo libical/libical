@@ -33,7 +33,7 @@
  * This routine can be used while debugging by setting
  * a breakpoint here.
  */
-LIBICAL_ICAL_EXPORT void icalerror_stop_here(void);
+LIBICAL_ICAL_EXPORT void icalerror_stop_here(void); /* TODO: 5.0 remove */
 
 /**
  * @brief Triggered to abort the process
@@ -90,14 +90,12 @@ LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
 #define icalerror_assert(test, message)                                                \
     if (icalerror_get_errors_are_fatal() && !(test)) {                                 \
         icalerrprintf("%s(), %s:%d: %s\n", __FUNCTION__, __FILE__, __LINE__, message); \
-        icalerror_stop_here();                                                         \
         abort();                                                                       \
     }
 #else /*__GNUC__*/
 #define icalerror_assert(test, message)                            \
     if (icalerror_get_errors_are_fatal() && !(test)) {             \
         icalerrprintf("%s:%d: %s\n", __FILE__, __LINE__, message); \
-        icalerror_stop_here();                                     \
         abort();                                                   \
     }
 #endif /*__GNUC__*/
@@ -199,7 +197,6 @@ LIBICAL_ICAL_EXPORT void icalerror_crash_here(void);
  */
 #define icalerror_check_arg_re(test, arg, error) \
     if (!(test)) {                               \
-        icalerror_stop_here();                   \
         icalassert(0);                           \
         return error;                            \
     }

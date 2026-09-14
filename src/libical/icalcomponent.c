@@ -888,7 +888,7 @@ static bool icalcomponent_is_busy(icalcomponent *comp)
             break;
         }
     }
-    return (ret);
+    return ret;
 }
 
 static struct icaltimetype icaltime_with_time(const struct icaltimetype t, int hour, int minutes, int seconds)
@@ -1085,68 +1085,72 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
 
     struct icaldatetimeperiodtype rdate_period;
     rdates = icalarray_new(sizeof(struct icaldatetimeperiodtype), 16);
-    for (rdate = icalcomponent_get_first_property(comp, ICAL_RDATE_PROPERTY);
-         rdate != NULL;
-         rdate = icalcomponent_get_next_property(comp, ICAL_RDATE_PROPERTY)) {
-        rdate_period = icalproperty_get_rdate(rdate);
-        icalarray_append(rdates, &rdate_period);
+    if (!rdates) {
+        icalerror_set_errno(ICAL_ALLOCATION_ERROR);
+    } else {
+        for (rdate = icalcomponent_get_first_property(comp, ICAL_RDATE_PROPERTY);
+             rdate != NULL;
+             rdate = icalcomponent_get_next_property(comp, ICAL_RDATE_PROPERTY)) {
+            rdate_period = icalproperty_get_rdate(rdate);
+            icalarray_append(rdates, &rdate_period);
+        }
+        if (rdates->num_elements > 0) {
+            icalarray_sort(rdates, icaldatetimeperiod_start_compare);
+            rdate_period = *((struct icaldatetimeperiodtype *)icalarray_element_at(rdates, rdate_idx));
+            rdate_span = icaltime_span_from_datetimeperiod(rdate_period, dtduration);
+        }
+
+        while (rdate_idx < rdates->num_elements || !icaltime_is_null_time(rrule_time)) {
+            if (rdate_idx >= rdates->num_elements ||
+                (!icaltime_is_null_time(rrule_time) &&
+                 rrule_span.start < rdate_span.start)) {
+                /* use rrule time */
+                recurspan = rrule_span;
+                recur_time = rrule_time;
+
+                rrule_time = icalrecur_iterator_next(rrule_itr);
+                if (!icaltime_is_null_time(rrule_time)) {
+                    rrule_span = icaltime_span_from_time(rrule_time, dtduration);
+                }
+            } else {
+                /* use rdate time */
+                recurspan = rdate_span;
+                recur_time = rdate_period.time;
+                if (icaltime_is_null_time(recur_time)) {
+                    recur_time = rdate_period.period.start;
+                }
+
+                rdate_idx++;
+                if (rdate_idx < rdates->num_elements) {
+                    rdate_period = *((struct icaldatetimeperiodtype *)icalarray_element_at(rdates, rdate_idx));
+                    rdate_span = icaltime_span_from_datetimeperiod(rdate_period, dtduration);
+                }
+            }
+
+            if (recurspan.start > end_timet) {
+                break;
+            }
+
+            if (last_start == recurspan.start) {
+                continue;
+            }
+            last_start = recurspan.start;
+
+            /* save the iterator ICK! */
+            property_iterator = comp->property_iterator;
+
+            if (!icalproperty_recurrence_is_excluded(comp,
+                                                     &dtstart, &recur_time)) {
+                /* call callback action */
+                if (icaltime_span_overlaps(&recurspan, &limit_span)) {
+                    (*callback)(comp, &recurspan, callback_data);
+                }
+            }
+            comp->property_iterator = property_iterator;
+        }
+
+        icalarray_free(rdates);
     }
-    if (rdates->num_elements > 0) {
-        icalarray_sort(rdates, icaldatetimeperiod_start_compare);
-        rdate_period = *((struct icaldatetimeperiodtype *)icalarray_element_at(rdates, rdate_idx));
-        rdate_span = icaltime_span_from_datetimeperiod(rdate_period, dtduration);
-    }
-
-    while (rdate_idx < rdates->num_elements || !icaltime_is_null_time(rrule_time)) {
-        if (rdate_idx >= rdates->num_elements ||
-            (!icaltime_is_null_time(rrule_time) &&
-             rrule_span.start < rdate_span.start)) {
-            /* use rrule time */
-            recurspan = rrule_span;
-            recur_time = rrule_time;
-
-            rrule_time = icalrecur_iterator_next(rrule_itr);
-            if (!icaltime_is_null_time(rrule_time)) {
-                rrule_span = icaltime_span_from_time(rrule_time, dtduration);
-            }
-        } else {
-            /* use rdate time */
-            recurspan = rdate_span;
-            recur_time = rdate_period.time;
-            if (icaltime_is_null_time(recur_time)) {
-                recur_time = rdate_period.period.start;
-            }
-
-            rdate_idx++;
-            if (rdate_idx < rdates->num_elements) {
-                rdate_period = *((struct icaldatetimeperiodtype *)icalarray_element_at(rdates, rdate_idx));
-                rdate_span = icaltime_span_from_datetimeperiod(rdate_period, dtduration);
-            }
-        }
-
-        if (recurspan.start > end_timet) {
-            break;
-        }
-
-        if (last_start == recurspan.start) {
-            continue;
-        }
-        last_start = recurspan.start;
-
-        /* save the iterator ICK! */
-        property_iterator = comp->property_iterator;
-
-        if (!icalproperty_recurrence_is_excluded(comp,
-                                                 &dtstart, &recur_time)) {
-            /* call callback action */
-            if (icaltime_span_overlaps(&recurspan, &limit_span)) {
-                (*callback)(comp, &recurspan, callback_data);
-            }
-        }
-        comp->property_iterator = property_iterator;
-    }
-
-    icalarray_free(rdates);
 
     if (rrule_itr != NULL) {
         icalrecur_iterator_free(rrule_itr);
@@ -2372,11 +2376,15 @@ static void icalcomponent_handle_conflicting_vtimezones(icalcomponent *comp,
             } else {
                 /* FIXME: Handle possible NEWFAILED error. */
 
-                /* Convert the suffix to an integer and remember the maximum numeric
-                   suffix found. */
-                int suffix = atoi(existing_tzid + existing_tzid_len);
-                if (max_suffix < suffix) {
-                    max_suffix = suffix;
+                /* Convert the suffix to an integer and remember the maximum numeric suffix found. */
+                char *t_end;
+                const char *t = existing_tzid + existing_tzid_len;
+                const long tmpl = strtol(t, &t_end, 10);
+                if (t != t_end) {
+                    const int suffix = tmpl;
+                    if (max_suffix < suffix) {
+                        max_suffix = suffix;
+                    }
                 }
             }
         }

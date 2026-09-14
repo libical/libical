@@ -44,6 +44,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     487903131 # ASAN Stack-overflow _parse_vcard
     488416219 # ASAN Stack-overflow
     505903588 # MSAN Use-of-uninitialized value
+    523004109 # out-of-memory
   )
     add_test(
       NAME vcfuzz1test${fuzztest}

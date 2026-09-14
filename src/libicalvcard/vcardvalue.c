@@ -240,7 +240,7 @@ static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_
         case '\n':
             /* If encoding a parameter value, embed literally
                (parameter encoding is done elsewhere), otherwise escape */
-            icalmemory_append_string(str, str_p, buf_sz, is_param ? "\n" : "\\n");
+            icalmemory_append_string(str, str_p, buf_sz, is_param ? "\n" : "\\n"); //NOLINT
             break;
 
         default:
@@ -338,10 +338,12 @@ static bool simple_str_to_doublestr(const char *from, char *result, int result_l
         *to = end;
     }
 
+    //NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
     /* now try to convert to a floating point number, to check for validity only */
     if (sscanf(result, "%lf", &dtest) != 1) {
         return true;
     }
+    //NOLINTEND(bugprone-unchecked-string-to-number-conversion)
     return false;
 }
 
@@ -388,17 +390,28 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         value = vcardvalue_new_enum(kind, (int)VCARD_GRAMGENDER_X, str);
         break;
 
-    case VCARD_INTEGER_VALUE:
-        value = vcardvalue_new_integer(atoi(str));
+    case VCARD_INTEGER_VALUE: {
+        char *s_end;
+        const int v = strtol(str, &s_end, 10);
+        if (str != s_end) {
+            value = vcardvalue_new_integer(v);
+        }
         break;
+    }
 
-    case VCARD_FLOAT_VALUE:
-        value = vcardvalue_new_float((float)atof(str));
+    case VCARD_FLOAT_VALUE: {
+        char *s_end;
+        const float v = strtof(str, &s_end);
+        if (str != s_end) {
+            value = vcardvalue_new_float(v);
+        }
         break;
+    }
 
     case VCARD_UTCOFFSET_VALUE: {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
+        // NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
         /* "+" / "-" hh [ [":"] mm ] */
         char sign[2] = "";
         unsigned hour, min = 0;
@@ -419,6 +432,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         } else if (2 != sscanf(str, "%1[+-]%02u%n", sign, &hour, &nchar)) {
             nchar = 0;
         }
+// NOLINTEND(bugprone-unchecked-string-to-number-conversion)
 #pragma GCC diagnostic pop
 
         if (len && (len == nchar)) {
@@ -906,7 +920,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     case VCARD_TEXTLIST_VALUE:
         return vcardvalue_textlist_as_vcard_string_r(value,
-                                                     is_structured ? ';' : ',');
+                                                     is_structured ? ';' : ','); //NOLINT
 
     case VCARD_STRUCTURED_VALUE:
         return vcardvalue_structured_as_vcard_string_r(value);

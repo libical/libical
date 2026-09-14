@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
+// NOLINTBEGIN(readability-inconsistent-ifelse-braces)
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -2729,3 +2731,5 @@ int main(int argc, char *argv[])
 
     return res;
 }
+
+// NOLINTEND(readability-inconsistent-ifelse-braces)

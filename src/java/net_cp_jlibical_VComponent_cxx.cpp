@@ -45,7 +45,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_as_1ical_1string(JNIEn
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -63,7 +63,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_VComponent_isa(JNIEnv *env, jobject 
         result = cObj->isa();
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -89,7 +89,7 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_VComponent_isa_1component(JNIEnv
         result = (jboolean)cObj->isa_component(candidateValue);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -145,7 +145,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_VComponent_count_1properties(JNIEnv 
         result = cObj->count_properties((icalproperty_kind)kind);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -167,7 +167,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1current_1property
         result = createNewICalPropertySurrogate(env, aProperty);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -189,7 +189,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1first_1property(J
         result = createNewICalPropertySurrogate(env, aProperty);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -210,7 +210,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1next_1property(JN
         result = createNewICalPropertySurrogate(env, aProperty);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -231,7 +231,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1inner(JNIEnv *env
         result = createNewVComponentSurrogate(env, inner);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -287,7 +287,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_VComponent_count_1components(JNIEnv 
         result = cObj->count_components((icalcomponent_kind)kind);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -308,7 +308,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1current_1componen
         result = createNewVComponentSurrogate(env, aComponent);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -330,7 +330,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1first_1component(
         result = createNewVComponentSurrogate(env, aComponent);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -352,7 +352,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1next_1component(J
         result = createNewVComponentSurrogate(env, aComponent);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -374,7 +374,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtstart(JNIEnv *e
         result = createNewICalTimeType(env, &aTime);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -415,7 +415,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtend(JNIEnv *env
         result = createNewICalTimeType(env, &aTime);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -456,7 +456,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1duration(JNIEnv *
         result = createNewICalDurationType(env, &aDuration);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -492,7 +492,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_VComponent_get_1method(JNIEnv *env, 
         result = cObj->get_method();
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -524,7 +524,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1summary(JNIEnv *e
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -563,7 +563,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1dtstamp(JNIEnv *e
         result = createNewICalTimeType(env, &aDTStamp);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -600,7 +600,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1location(JNIEnv *
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -635,7 +635,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1description(JNIEn
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -669,7 +669,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1uid(JNIEnv *env, 
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -708,7 +708,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1first_1real_1comp
         result = createNewVComponentSurrogate(env, aComponent);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -780,7 +780,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_VComponent_get_1relcalid(JNIEnv *
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -802,7 +802,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_VComponent_get_1recurrenceid(JNIE
         result = createNewICalTimeType(env, &aRecurrenceId);
     }
 
-    return (result);
+    return result;
 }
 
 /*

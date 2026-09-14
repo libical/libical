@@ -20,11 +20,8 @@
 
 #include <stdlib.h>
 
-static ICAL_GLOBAL_VAR int foo;
-
 void icalerror_stop_here(void)
 {
-    foo++; /* Keep optimizers from removing routine */
 }
 
 void icalerror_crash_here(void)

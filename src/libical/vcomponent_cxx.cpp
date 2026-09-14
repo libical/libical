@@ -110,7 +110,7 @@ std::string VComponent::as_ical_string()
         throw icalerrno;
     }
 
-    return (str);
+    return str;
 }
 
 bool VComponent::is_valid()
@@ -239,7 +239,7 @@ VComponent *VComponent::get_first_component(const icalcomponent_kind &kind)
         }
     }
 
-    return (result);
+    return result;
 }
 
 VComponent *VComponent::get_next_component(const icalcomponent_kind &kind)
@@ -271,7 +271,7 @@ VComponent *VComponent::get_next_component(const icalcomponent_kind &kind)
         }
     }
 
-    return (result);
+    return result;
 }
 
 /* Using external iterators */

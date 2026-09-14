@@ -561,7 +561,9 @@ static int _parse_prop_name(struct vcardparser_state *state)
 
     NOTESTART();
 
-    while (*state->p) {
+    size_t cnt = 0;
+    const size_t max_chars = 100; // plenty long enough for any property name
+    while (*state->p && cnt++ < max_chars) {
         /* Handle control characters and break for NUL char */
         HANDLECTRL(state);
 
@@ -731,7 +733,7 @@ out:
     }
 
     if (state->value_kind == VCARD_TEXTLIST_VALUE) {
-        char sep = vcardproperty_is_structured(prop_kind) ? ';' : ',';
+        char sep = vcardproperty_is_structured(prop_kind) ? ';' : ','; //NOLINT(readability-implicit-bool-conversion)
         vcardstrarray *textlist =
             vcardtextlist_new_from_string(buf_cstring(&state->buf), sep);
         if (textlist) {

@@ -233,8 +233,9 @@ static const char *icalrestriction_no_dtend(const icalrestriction_record * rec,
 {
     _unused(rec);
 
-    if (prop == NULL)
+    if (prop == NULL) {
         return 0;
+    }
 
     if (icalcomponent_get_first_property(comp, ICAL_DTEND_PROPERTY)) {
         return
@@ -251,8 +252,9 @@ static const char *icalrestriction_no_due(const icalrestriction_record * rec,
 {
     _unused(rec);
 
-    if (prop == NULL)
+    if (prop == NULL) {
         return 0;
+    }
 
     if (icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY)) {
         return
@@ -278,8 +280,9 @@ static const char *icalrestriction_no_duration(const icalrestriction_record * re
     bool dtend_due_islocal;
     _unused(rec);
 
-    if (prop == NULL)
+    if (prop == NULL) {
         return 0;
+    }
 
     pkind = icalproperty_kind_to_string(icalproperty_isa(prop));
 
@@ -321,9 +324,9 @@ static const char *icalrestriction_no_duration(const icalrestriction_record * re
         return temp;
     }
 
-    dtstart_islocal = !dtstart.zone &&
+    dtstart_islocal = !dtstart.zone && //NOLINT(readability-implicit-bool-conversion)
         !icalproperty_get_first_parameter(dtstartp, ICAL_TZID_PARAMETER);
-    dtend_due_islocal = !dtend_due.zone &&
+    dtend_due_islocal = !dtend_due.zone &&//NOLINT(readability-implicit-bool-conversion)
         !icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER);
 
     if (dtend_due_islocal != dtstart_islocal) {
@@ -494,7 +497,7 @@ static bool icalrestriction_check_component(icalproperty_method method,
 
             compare = _check_restriction(comp, record, count, prop);
 
-            valid = valid && compare;
+            valid = valid && compare; //NOLINT(readability-implicit-bool-conversion)
         }
     }
 
@@ -517,7 +520,7 @@ static bool icalrestriction_check_component(icalproperty_method method,
 
             compare = _check_restriction(comp, record, count, NULL);
 
-            valid = valid && compare;
+            valid = valid && compare; //NOLINT(readability-implicit-bool-conversion)
         }
     }
 
@@ -533,7 +536,7 @@ static bool icalrestriction_check_component(icalproperty_method method,
 
         compare = icalrestriction_check_component(method, inner_comp);
 
-        valid = valid && compare;
+        valid = valid && compare; //NOLINT(readability-implicit-bool-conversion)
     }
 
     return valid;
@@ -550,7 +553,7 @@ bool icalrestriction_check(icalcomponent *outer_comp)
 
     if (comp_kind != ICAL_VCALENDAR_COMPONENT) {
         icalerror_set_errno(ICAL_BADARG_ERROR);
-        return 0;
+        return false;
     }
 
     /* Check the VCALENDAR wrapper */

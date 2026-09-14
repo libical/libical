@@ -73,7 +73,7 @@ icalset *icalfileset_new_writer(const char *path)
 
 icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
 {
-    const icalfileset_options *options = (options_in) ? options_in : &icalfileset_options_default;
+    const icalfileset_options *options = options_in ? options_in : &icalfileset_options_default;
     icalfileset *fset = (icalfileset *)set;
     int flags;
     int mode;
@@ -378,7 +378,10 @@ icalerrorenum icalfileset_commit(icalset *set)
         IO_SSIZE_T sz;
 
         str = icalcomponent_as_ical_string_r(c);
-
+        if (!str) {
+            icalerror_set_errno(ICAL_ALLOCATION_ERROR);
+            return ICAL_ALLOCATION_ERROR;
+        }
         sz = write(fset->fd, str, (IO_SIZE_T)strlen(str));
         if (sz != (IO_SSIZE_T)strlen(str)) {
             perror("write");

@@ -104,9 +104,12 @@ struct icaldurationtype icaldurationtype_from_string(const char *str)
             if (begin_flag == 0) {
                 goto error;
             }
+            //NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
             /* Get all of the digits, not one at a time */
             scan_size = sscanf(&str[i], "%10d", &digits); /*limit to 10digits.
                                                                   increase as needed */
+            //NOLINTEND(bugprone-unchecked-string-to-number-conversion)
+
             if (scan_size != 1) {
                 goto error;
             }
@@ -383,8 +386,8 @@ struct icaldurationtype icaldurationtype_normalize(struct icaldurationtype dur)
     unsigned used = 0;
     newdur.hours = (ut - used) / (60 * 60);
     used += newdur.hours * (60 * 60);
-    newdur.minutes = (ut - used) / (60);
-    used += newdur.minutes * (60);
+    newdur.minutes = (ut - used) / 60;
+    used += newdur.minutes * 60;
     newdur.seconds = (ut - used);
 
     return newdur;

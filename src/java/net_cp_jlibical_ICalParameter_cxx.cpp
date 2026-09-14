@@ -40,7 +40,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalParameter_as_1ical_1string(JN
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -57,7 +57,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_isa(JNIEnv *env, jobje
         result = cObj->isa();
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -83,7 +83,7 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalParameter_isa_1parameter(JNI
         result = (jboolean)cObj->isa_parameter(argObjPtr);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -101,7 +101,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalParameter_get_1language(JNIEn
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -135,7 +135,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_get_1encoding(JNIEnv *
         result = cObj->get_encoding();
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -166,7 +166,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_get_1role(JNIEnv *env,
         result = cObj->get_role();
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -197,7 +197,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalParameter_get_1partstat(JNIEnv *
         result = cObj->get_partstat();
     }
 
-    return (result);
+    return result;
 }
 
 /*

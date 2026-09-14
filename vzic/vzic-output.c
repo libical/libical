@@ -53,11 +53,11 @@
 #include "vzic-dump.h"
 
 /* These come from the Makefile. See the comments there. */
-const char *ProductID = PRODUCT_ID;
-const char *TZIDPrefix = TZID_PREFIX;
+static const char *ProductID = PRODUCT_ID;
+static const char *TZIDPrefix = TZID_PREFIX;
 
 /* We expand the TZIDPrefix, replacing %D with the date, in here. */
-char TZIDPrefixExpanded[1024] = {0};
+static char TZIDPrefixExpanded[1024] = {0};
 
 /* We only use RRULEs if there are at least MIN_RRULE_OCCURRENCES occurrences,
    since otherwise RDATEs are more efficient. Actually, I've set this high
@@ -84,7 +84,7 @@ static int DaysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 static const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-char *CurrentZoneName;
+static char *CurrentZoneName;
 
 typedef struct _VzicTime VzicTime;
 struct _VzicTime {
@@ -1429,7 +1429,7 @@ check_for_recurrence(FILE *fp,
 
     last_match = idx;
     next_year = vzictime_start->year + 1;
-    for (size_t i = (size_t)(idx) + 1; i < changes->len; i++) {
+    for (size_t i = (size_t)idx + 1; i < changes->len; i++) {
         vzictime = &g_array_index(changes, VzicTime, i);
 
         is_daylight = (vzictime->stdoff != vzictime->walloff) ? TRUE : FALSE;
@@ -1571,7 +1571,7 @@ check_for_rdates(FILE *fp,
 
     /* We want to go backwards through the array now, for Outlook compatibility.
      (It only looks at the first DTSTART/RDATE.) */
-    for (size_t i = (size_t)(idx) + 1; i < changes->len; i++) {
+    for (size_t i = (size_t)idx + 1; i < changes->len; i++) {
         vzictime = &g_array_index(changes, VzicTime, i);
 
         is_daylight = (vzictime->stdoff != vzictime->walloff) ? TRUE : FALSE;

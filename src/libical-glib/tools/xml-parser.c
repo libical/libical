@@ -143,15 +143,17 @@ Parameter *parameter_new(void)
     Parameter *parameter;
 
     parameter = g_new0(Parameter, 1);
-    parameter->comment = NULL;
-    parameter->name = NULL;
-    parameter->type = NULL;
-    parameter->annotations = NULL;
-    parameter->autofill = NULL;
-    parameter->translator = NULL;
-    parameter->translatorArgus = NULL;
-    parameter->native_op = NULL;
-    parameter->owner_op = NULL;
+    if (parameter) {
+        parameter->comment = NULL;
+        parameter->name = NULL;
+        parameter->type = NULL;
+        parameter->annotations = NULL;
+        parameter->autofill = NULL;
+        parameter->translator = NULL;
+        parameter->translatorArgus = NULL;
+        parameter->native_op = NULL;
+        parameter->owner_op = NULL;
+    }
     return parameter;
 }
 
@@ -381,7 +383,9 @@ gboolean parse_parameters(xmlNode *node, Method *method)
 
     for (; xmlStrcmp(node->name, (xmlChar *)"parameter") == 0; node = node->next) {
         Parameter *para = parameter_new();
-
+        if (!para) {
+            return FALSE;
+        }
         for (attr = node->properties; attr != NULL; attr = attr->next) {
             if (xmlStrcmp(attr->name, (xmlChar *)"type") == 0) {
                 para->type = dup_attribute_value(attr->doc, attr->children, 1);
@@ -743,7 +747,9 @@ parse_method_from_template(xmlNode *node,
             for (link = tmp_method->parameters; link != NULL; link = g_list_next(link)) {
                 const Parameter *tmp_param = link->data;
                 Parameter *param = parameter_new();
-
+                if (!param) {
+                    break;
+                }
                 fill_str_member(param, tmp_param, type);
                 copy_str_list(param, tmp_param, annotations);
                 fill_str_member(param, tmp_param, comment);

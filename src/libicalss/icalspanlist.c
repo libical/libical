@@ -421,7 +421,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
         }
 
         param = icalproperty_get_first_parameter(prop, ICAL_FBTYPE_PARAMETER);
-        fbtype = (param) ? icalparameter_get_fbtype(param) : ICAL_FBTYPE_BUSY;
+        fbtype = param ? icalparameter_get_fbtype(param) : ICAL_FBTYPE_BUSY;
 
         switch (fbtype) {
         case ICAL_FBTYPE_FREE:

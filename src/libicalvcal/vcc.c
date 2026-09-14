@@ -584,14 +584,18 @@ static void enterValues(const char *value)
                using ';' to separate the values. */
             if (vObjectUStringZValue(curProp)) {
                 p1 = fakeCString(vObjectUStringZValue(curProp));
-                i = strlen(p1)+strlen(value)+2;
-                p2 = malloc(i);
-                snprintf(p2,i,"%s;%s",p1,value);
-                deleteStr(p1);
-                p3 = (wchar_t *) vObjectUStringZValue(curProp);
-                free(p3);
-                setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
-                free(p2);
+                if (p1) {
+                    i = strlen(p1)+strlen(value)+2;
+                    p2 = malloc(i);
+                    if (p2) {
+                        snprintf(p2,i,"%s;%s",p1,value);
+                        deleteStr(p1);
+                        p3 = (wchar_t *) vObjectUStringZValue(curProp);
+                        free(p3);
+                        setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
+                        free(p2);
+                    }
+                }
             } else {
             setVObjectUStringZValue_(curProp,fakeUnicode(value,0));
             }
@@ -1343,7 +1347,7 @@ void registerMimeErrorHandler(MimeErrorHandler me)
 static void mime_error(const char *s)
     {
     char msg[256];
-    if (mimeErrorHandler) {
+    if (s && mimeErrorHandler) {
         snprintf(msg,sizeof(msg),"%s at line %d", s, mime_lineNum);
         mimeErrorHandler(msg);
         }

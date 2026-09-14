@@ -553,7 +553,7 @@ static int icalrecur_add_byrules(const struct icalrecur_parser *parser, icalrecu
         }
 
         char *t_end;
-        int v = strtol(t, &t_end, 10);
+        long v = strtol(t, &t_end, 10);
 
         // We check for parsing errors later, but not if the string ends with 'L',
         // so explicitly check the value here.
@@ -689,7 +689,7 @@ static int icalrecur_add_bydayrules(struct icalrecur_parser *parser,
 
         /* Get Optional weekno */
         char *t_end;
-        long tmpl = strtol(t, &t_end, 10);
+        const long tmpl = strtol(t, &t_end, 10);
         weekno = (signed char)tmpl;
 
         // overflow?
@@ -940,8 +940,13 @@ struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
                 /* Don't allow multiple COUNTs, or both COUNT and UNTIL */
                 r = -1;
             } else {
-                parser.rt->count = atoi(value);
-                /* don't allow count to be less than 1 */
+                parser.rt->count = 0;
+                char *v_end;
+                const long v = strtol(value, &v_end, 10);
+                if (value != v_end) {
+                    parser.rt->count = v;
+                    /* don't allow count to be less than 1 */
+                }
                 if (parser.rt->count < 1) {
                     r = -1;
                 }
@@ -961,15 +966,18 @@ struct icalrecurrencetype *icalrecurrencetype_new_from_string(const char *str)
                 /* Don't allow multiple INTERVALs */
                 r = -1;
             } else {
-                int tmp = atoi(value);
-                parser.rt->interval = (short)tmp;
+                parser.rt->interval = 0;
+                char *v_temp;
+                const long tmp = strtol(value, &v_temp, 10);
+                if (value != v_temp) {
+                    parser.rt->interval = (short)tmp;
 
-                // overflow?
-                /* cppcheck-suppress knownConditionTrueFalse */
-                if (parser.rt->interval != tmp) {
-                    r = -1;
+                    // overflow?
+                    /* cppcheck-suppress knownConditionTrueFalse */
+                    if (parser.rt->interval != tmp) {
+                        parser.rt->interval = 0;
+                    }
                 }
-
                 /* don't allow an interval to be less than 1
                    (RFC specifies an interval must be a positive integer) */
                 if (parser.rt->interval < 1) {
@@ -1256,7 +1264,7 @@ static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilD
         if (lowerBitIdxIncl > 0) {
             mask &= ((unsigned long)-1) << lowerBitIdxIncl;
         }
-        if (upperBitIdxExcl < (int)BITS_PER_LONG) {
+        if ((upperBitIdxExcl > 0) && (upperBitIdxExcl < (int)BITS_PER_LONG)) {
             mask &= ((unsigned long)-1) >> (BITS_PER_LONG - upperBitIdxExcl);
         }
 
@@ -2859,7 +2867,7 @@ static void expand_by_day(icalrecur_iterator *impl, int year,
 
             if (valid) {
                 const unsigned long daysmask = daysmask_getbit(bydays, day + doy_offset);
-                int new_val = is_limiting
+                int new_val = is_limiting //NOLINT(readability-implicit-bool-conversion)
                                   /* "Filter" the year days bitmask with the bydays bitmask */
                                   ? (int)daysmask
                                   /* Add each BYDAY to the year days bitmask */
@@ -3185,7 +3193,7 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
     if (has_by_data(impl, ICAL_BY_DAY)) {
         /* Apply each BYDAY to the year days bitmask */
         bool limiting =
-            has_by_data(impl, ICAL_BY_YEAR_DAY) || has_by_data(impl, ICAL_BY_MONTH_DAY);
+            has_by_data(impl, ICAL_BY_YEAR_DAY) || has_by_data(impl, ICAL_BY_MONTH_DAY); //NOLINT(readability-implicit-bool-conversion)
         int first_dow, last_dow;
 
         impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
@@ -3723,8 +3731,8 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     size_t stalledCnt = 0;
     const size_t max_recurrence_time_count = icallimit_get(ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL);
     int lastTimeCompare = 0;
-    bool hasByData = false;
-    int checkContractingRules = 0;
+    bool hasSetPos = has_by_data(impl, ICAL_BY_SET_POS);
+    int checkContractingRules = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
     size_t cntRecurrences = 0;
     const size_t max_recurrences = icallimit_get(ICAL_LIMIT_RECURRENCE_SEARCH);
     do {
@@ -3778,17 +3786,16 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
             return icaltime_null_time();
         }
 
-        hasByData = has_by_data(impl, ICAL_BY_SET_POS);
-        checkContractingRules = -1;
-        if (hasByData) {
-            checkContractingRules = check_contracting_rules(impl) ? 1 : 0;
-            if (checkContractingRules == 1) {
-                if (period_change) {
+        if (hasSetPos) {
+            int new_ccr = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
+            if (new_ccr == 1) {
+                if (checkContractingRules == 0 || period_change) {
                     setup_setpos(impl, 1);
                 } else {
                     impl->set_pos++;
                 }
             }
+            checkContractingRules = new_ccr;
         }
 
         // is time standing still? if so, break out of here
@@ -3802,10 +3809,9 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         }
     } while ((cntRecurrences++ < max_recurrences) &&
              ((lastTimeCompare == 0) ||
-              (hasByData && !check_setpos(impl, 1)) ||
               icaltime_compare(impl->last, impl->istart) < 0 ||
-              (checkContractingRules == 0) ||
-              (checkContractingRules == -1 && !check_contracting_rules(impl))));
+              (!check_contracting_rules(impl)) ||
+              (hasSetPos && !check_setpos(impl, 1))));
 
     impl->occurrence_no++;
 
@@ -3821,6 +3827,8 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
 
     int period_change = 1;
     icalrecur_iterator impl_last = *impl;
+    bool hasSetPos = has_by_data(impl, ICAL_BY_SET_POS);
+    int checkContractingRules = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
 
     /* Iterate until we get the next valid time */
     do {
@@ -3869,12 +3877,16 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
             return icaltime_null_time();
         }
 
-        if (has_by_data(impl, ICAL_BY_SET_POS) && check_contracting_rules(impl)) {
-            if (period_change) {
-                setup_setpos(impl, 0);
-            } else {
-                impl->set_pos--;
+        if (hasSetPos) {
+            int new_ccr = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
+            if (new_ccr == 1) {
+                if (checkContractingRules == 0 || period_change) {
+                    setup_setpos(impl, 0);
+                } else {
+                    impl->set_pos--;
+                }
             }
+            checkContractingRules = new_ccr;
         }
 
     } while (impl->last.year > MAX_TIME_T_YEAR ||
@@ -3883,7 +3895,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
              (!icaltime_is_null_time(impl->iend) &&
               icaltime_compare(impl->last, impl->iend) > 0) ||
              icaltime_compare(impl->last, impl_last.last) == 0 ||
-             (has_by_data(impl, ICAL_BY_SET_POS) && !check_setpos(impl, 0)) ||
+             (hasSetPos && !check_setpos(impl, 0)) ||
              !check_contracting_rules(impl));
 
     impl->occurrence_no--;
@@ -4257,7 +4269,7 @@ int icalrecurrencetype_month_month(short month)
 
 short icalrecurrencetype_encode_month(int month, bool is_leap)
 {
-    return (short)month | (is_leap ? LEAP_MONTH : 0);
+    return (short)month | (is_leap ? LEAP_MONTH : 0); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool icalrecur_expand_recurrence(const char *rule,

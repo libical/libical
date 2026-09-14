@@ -757,7 +757,7 @@ static bool is_valid_color(const char *v)
     }
 
     /* CSS named color */
-    if (bsearch(&v, css_colors, NUM_CSS_COLORS, sizeof(char *), &strpcasecmp)) {
+    if (bsearch((void *)&v, (void *)css_colors, NUM_CSS_COLORS, sizeof(char *), &strpcasecmp)) {
         return true;
     }
 

@@ -62,7 +62,9 @@ struct vcardparameter_map
     const char *str;
 };
 
+//NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
 <insert_code_here>
+//NOLINTEND(bugprone-invalid-enum-default-initialization)
 
 vcardvalue_kind vcardparameter_kind_value_kind(const vcardparameter_kind kind,
                                                int *is_multivalued)
@@ -125,7 +127,9 @@ static int s_vcardparameter_compare_kind_map(const void *a, const void *b)
 
 vcardparameter_kind vcardparameter_string_to_kind(const char *string)
 {
+//NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
     struct vcardparameter_kind_map key = {0};
+//NOLINTEND(bugprone-invalid-enum-default-initialization)
     struct vcardparameter_kind_map *result;
 
     if (string == 0) {
@@ -216,8 +220,11 @@ void vcardparameter_set_value_from_string(vcardparameter *param,
     icalerror_check_arg_rv((val != 0), "val");
 
     if (param->value_kind == VCARD_INTEGER_VALUE) {
-        param->data = atoi(val);
-
+        char *v_end;
+        const long tmpl = strtol(val, &v_end, 10);
+        if (val != v_end) {
+            param->data = tmpl;
+        }
     } else if (param->value_kind == VCARD_DATEANDORTIME_VALUE) {
         ((struct vcardparameter_impl *)param)->date = vcardtime_from_string(val, 0);
 
