@@ -6887,7 +6887,7 @@ static void test_icaltime_proper_zone(void)
 static void test_internal_limits(void)
 {
     /* follow the _MAX* defaults at the top of icalllimits.c */
-    int_is("max parse failures default", (int)icallimit_get(ICAL_LIMIT_PARSE_FAILURES), 1000);
+    int_is("max parse failures default", (int)icallimit_get(ICAL_LIMIT_PARSE_FAILURES), 100);
     int_is("parse search default", (int)icallimit_get(ICAL_LIMIT_PARSE_SEARCH), 100000);
     int_is("max parse failure messages", (int)icallimit_get(ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES), 100);
     int_is("max props default", (int)icallimit_get(ICAL_LIMIT_PROPERTIES), 10000);
