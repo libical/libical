@@ -503,51 +503,51 @@ output_zone(const char *directory,
     }
 
     if (zone_subdirectory) {
-        sprintf(output_directory, "%s/%s/%s", directory, zone_directory,
-                zone_subdirectory);
+        snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s/%s/%s", directory, zone_directory,
+                 zone_subdirectory);
         ensure_directory_exists(output_directory);
         strncpy(filename, output_directory, PATHNAME_BUFFER_SIZE);
-        strncat(filename, "/", PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - 1);
+        strncat(filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
 
         if (VzicDumpChanges) {
-            sprintf(output_directory, "%s/ChangesVzic/%s/%s", directory,
-                    zone_directory, zone_subdirectory);
+            snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s/ChangesVzic/%s/%s", directory,
+                     zone_directory, zone_subdirectory);
             ensure_directory_exists(output_directory);
             strncpy(changes_filename, output_directory, PATHNAME_BUFFER_SIZE);
-            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - 1);
-            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
+            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
         }
     } else if (zone_directory) {
-        sprintf(output_directory, "%s/%s", directory, zone_directory);
+        snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s/%s", directory, zone_directory);
         ensure_directory_exists(output_directory);
         strncpy(filename, output_directory, PATHNAME_BUFFER_SIZE);
-        strncat(filename, "/", PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - 1);
+        strncat(filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
 
         if (VzicDumpChanges) {
-            sprintf(output_directory, "%s/ChangesVzic/%s", directory, zone_directory);
+            snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s/ChangesVzic/%s", directory, zone_directory);
             ensure_directory_exists(output_directory);
             strncpy(changes_filename, output_directory, PATHNAME_BUFFER_SIZE);
-            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - 1);
-            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
+            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
         }
     } else {
-        sprintf(output_directory, "%s", directory);
+        snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s", directory);
         ensure_directory_exists(output_directory);
         strncpy(filename, output_directory, PATHNAME_BUFFER_SIZE);
-        strncat(filename, "/", PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - 1);
+        strncat(filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
 
         if (VzicDumpChanges) {
-            sprintf(output_directory, "%s/ChangesVzic", directory);
+            snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s/ChangesVzic", directory);
             ensure_directory_exists(output_directory);
             strncpy(changes_filename, output_directory, PATHNAME_BUFFER_SIZE);
-            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - 1);
-            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
+            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
         }
     }
 
