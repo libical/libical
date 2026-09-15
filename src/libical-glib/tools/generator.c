@@ -1844,7 +1844,7 @@ gchar *get_true_type(const gchar *type)
     guint i;
     guint start;
     guint end;
-    gchar *res;
+    gchar *res = 0;
     const gchar *const_prefix = "const";
     const guint const_prefix_len = (guint)strlen(const_prefix);
     guint type_len;
@@ -1878,11 +1878,13 @@ gchar *get_true_type(const gchar *type)
 
     g_return_val_if_fail(start <= end, NULL);
 
+#if !defined(__clang_analyzer__) // clang-analyzer reports unix.Malloc (false positive)
     res = g_new(gchar, end - start + 2);
     for (i = start; i <= end; i++) {
         res[i - start] = type[i];
     }
     res[end - start + 1] = '\0';
+#endif
     return res;
 }
 
