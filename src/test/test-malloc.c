@@ -26,6 +26,7 @@
 
 static struct testmalloc_statistics global_testmalloc_statistics;
 static int global_testmalloc_remaining_attempts = -1;
+static size_t global_testmalloc_max_memory = SIZE_MAX;
 
 #define TESTMALLOC_MAGIC_NO 0x1234abcd
 struct testmalloc_hdr {
@@ -64,6 +65,10 @@ void *test_malloc(size_t size)
     global_testmalloc_statistics.mem_allocated_current += size;
     if (global_testmalloc_statistics.mem_allocated_current > global_testmalloc_statistics.mem_allocated_max) {
         global_testmalloc_statistics.mem_allocated_max = global_testmalloc_statistics.mem_allocated_current;
+        if (global_testmalloc_max_memory < (size_t)global_testmalloc_statistics.mem_allocated_max) {
+            fprintf(stderr, "test-malloc: MAX MEMORY EXCEEDED (%zu)\n", global_testmalloc_max_memory);
+            exit(1);
+        }
     }
 
     global_testmalloc_statistics.blocks_allocated++;
@@ -113,6 +118,10 @@ void *test_realloc(void *p, size_t size)
     global_testmalloc_statistics.mem_allocated_current += size - old_size;
     if (global_testmalloc_statistics.mem_allocated_current > global_testmalloc_statistics.mem_allocated_max) {
         global_testmalloc_statistics.mem_allocated_max = global_testmalloc_statistics.mem_allocated_current;
+        if (global_testmalloc_max_memory < (size_t)global_testmalloc_statistics.mem_allocated_max) {
+            fprintf(stderr, "test-realloc: MAX MEMORY EXCEEDED (%zu)\n", global_testmalloc_max_memory);
+            exit(1);
+        }
     }
 
     if (global_testmalloc_remaining_attempts > 0) {
@@ -166,6 +175,7 @@ void testmalloc_reset(void)
 {
     memset(&global_testmalloc_statistics, 0, sizeof(global_testmalloc_statistics));
     global_testmalloc_remaining_attempts = -1;
+    global_testmalloc_max_memory = SIZE_MAX;
 }
 
 /** Sets the maximum number of malloc or realloc attempts that will succeed. If
@@ -180,6 +190,16 @@ void testmalloc_get_statistics(struct testmalloc_statistics *statistics)
     if (statistics) {
         *statistics = global_testmalloc_statistics;
     }
+}
+
+void testmalloc_set_max_memory(const size_t max)
+{
+    global_testmalloc_max_memory = max;
+}
+
+size_t testmalloc_get_max_memory(void)
+{
+    return global_testmalloc_max_memory;
 }
 
 #if defined(__GNUC__) && !defined(__clang__)

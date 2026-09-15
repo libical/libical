@@ -18,6 +18,9 @@
 #include <stdlib.h>
 
 #include "libical/ical.h"
+#if defined(MEMORY_CONSISTENCY)
+#include "test-malloc.h"
+#endif
 
 int main(int argc, const char *argv[])
 {
@@ -32,6 +35,12 @@ int main(int argc, const char *argv[])
     size_t filesize;
     void *data = NULL;
     icalcomponent *comp;
+
+#if defined(MEMORY_CONSISTENCY)
+    size_t maxMem = TEST_MAX_MEMORY;
+    icalmemory_set_mem_alloc_funcs(&test_malloc, &test_realloc, &test_free);
+    testmalloc_set_max_memory(maxMem);
+#endif
 
     if (argc != 2) {
         fname = TEST_DATADIR "/poc-01";
@@ -75,6 +84,12 @@ int main(int argc, const char *argv[])
 
     icalcomponent_normalize(comp);
     icalcomponent_free(comp);
+
+#if defined(MEMORY_CONSISTENCY)
+    struct testmalloc_statistics memstat;
+    testmalloc_get_statistics(&memstat);
+    printf("max memory allocation level: %zu\n", memstat.mem_allocated_max);
+#endif
 
     return 0;
 }
