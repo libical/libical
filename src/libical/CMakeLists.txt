@@ -307,9 +307,10 @@ if(WINCE)
 endif()
 
 #link sanitizer library (if we're building with sanitizers)
-if(XSAN_LINKER_FLAGS)
-  target_link_libraries(ical PRIVATE ${XSAN_LINKER_FLAGS})
-endif()
+#fail github CI: Your application is linked against incompatible ASan runtimes
+#if(XSAN_LINKER_FLAGS)
+#  target_link_libraries(ical PRIVATE ${XSAN_LINKER_FLAGS})
+#endif()
 
 if(MSVC)
   set_target_properties(

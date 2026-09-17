@@ -120,7 +120,7 @@
 #  Default=false
 #
 # -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=[true|false]
-#  Build with the undefined sanitizer (requires gcc or clang)
+#  Build with the undefined sanitizer (requires clang)
 #  Default=false
 #
 # -DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=[true|false]
@@ -960,13 +960,20 @@ libical_deprecated_option(
 )
 mark_as_advanced(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
 if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
-  if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+  #currently on clang properly supports undefined or suspicious integer behavior
+  if(CMAKE_C_COMPILER_IS_CLANG)
+    set(
+      CMAKE_C_FLAGS
+      "${CMAKE_C_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER -lubsan"
+    )
     if(LIBICAL_CXX_BINDINGS)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+      set(
+        CMAKE_CXX_FLAGS
+        "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER -lubsan"
+      )
     endif()
   else()
-    message(FATAL_ERROR "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
+    message(FATAL_ERROR "Must compile with clang to build with the undefined sanitizer.")
   endif()
 endif()
 

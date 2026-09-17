@@ -327,7 +327,7 @@ ASAN_BUILD() {
   fi
   echo "===== START ASAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libasan.so" "-a"
-  SET_GCC
+  SET_CLANG
   #asan also does leak detection. do that in the specific leak sanitizer
   export ASAN_OPTIONS="detect_leaks=0:verify_asan_link_order=0" #link_order is needed with different ld on Fedora (like gold)
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
@@ -345,7 +345,7 @@ LSAN_BUILD() {
   fi
   echo "===== START LSAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/liblsan.so" "-l"
-  SET_GCC
+  SET_CLANG
   BUILD "$name" "-DLIBICAL_DEVMODE_LEAK_SANITIZER=True $2"
   echo "===== END LSAN BUILD: $1 ======"
 }
@@ -378,7 +378,7 @@ TSAN_BUILD() {
   fi
   echo "===== START TSAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libtsan.so" "-a"
-  SET_GCC
+  SET_CLANG
   BUILD "$name" "-DLIBICAL_DEVMODE_THREAD_SANITIZER=True $2"
   echo "===== END TSAN BUILD: $1 ======"
 }
@@ -395,7 +395,7 @@ UBSAN_BUILD() {
   fi
   echo "===== START UBSAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libubsan.so" "-a"
-  SET_GCC
+  SET_CLANG
   export UBSAN_OPTIONS=allocator_release_to_os_interval_ms=500:halt_on_error=1:handle_abort=2:handle_segv=2:handle_sigbus=2:handle_sigfpe=2:handle_sigill=2:print_stacktrace=1:print_summary=1:print_suppressions=0:silence_unsigned_overflow=1:symbolize=1:use_sigaltstack=1
   export CFLAGS="-g -fno-omit-frame-pointer"
   BUILD "$name" "-DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True $2"
