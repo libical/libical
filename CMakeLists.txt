@@ -843,6 +843,9 @@ if(LIBICAL_DEVMODE_ABI_DUMPER)
   endif()
 endif()
 
+# extra link flags for sanitzers
+set(XSAN_LINKER_FLAGS)
+
 libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY "(Developer-only) Build with memory consistency functions." False)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
   set(CMAKE_BUILD_TYPE "Debug")
@@ -863,6 +866,7 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
     endif()
+    list(APPEND XSAN_LINKER_FLAGS "asan")
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -876,6 +880,7 @@ if(LIBICAL_DEVMODE_LEAK_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
     endif()
+    list(APPEND XSAN_LINKER_FLAGS "lsan")
     message(
       NOTICE
       "Currently unable to build leak sanitizer for glib-based configurations."
@@ -932,6 +937,7 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     endif()
+    list(APPEND XSAN_LINKER_FLAGS "tsan")
     message(
       NOTICE
       "Currently unable to build thread sanitizer for glib-based configurations."
