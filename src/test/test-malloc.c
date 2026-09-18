@@ -62,6 +62,11 @@ void *test_malloc(size_t size)
     hdr->magic_no = TESTMALLOC_MAGIC_NO;
     hdr->size = size;
 
+    if ((SIZE_MAX - size) < global_testmalloc_statistics.mem_allocated_current) {
+        fprintf(stderr, "test-malloc: OVERFLOW\n");
+        exit(1);
+    }
+
     global_testmalloc_statistics.mem_allocated_current += size;
     if (global_testmalloc_statistics.mem_allocated_current > global_testmalloc_statistics.mem_allocated_max) {
         global_testmalloc_statistics.mem_allocated_max = global_testmalloc_statistics.mem_allocated_current;
@@ -115,6 +120,12 @@ void *test_realloc(void *p, size_t size)
     hdr->magic_no = TESTMALLOC_MAGIC_NO;
     hdr->size = size;
 
+    if ((old_size > global_testmalloc_statistics.mem_allocated_current) || ((SIZE_MAX - size) < (global_testmalloc_statistics.mem_allocated_current - old_size))) {
+        // An underflow shouldn't be possible here, so we only print 'OVERFLOW' in case of an error.
+        fprintf(stderr, "test-realloc: OVERFLOW\n");
+        exit(1);
+    }
+
     global_testmalloc_statistics.mem_allocated_current += size - old_size;
     if (global_testmalloc_statistics.mem_allocated_current > global_testmalloc_statistics.mem_allocated_max) {
         global_testmalloc_statistics.mem_allocated_max = global_testmalloc_statistics.mem_allocated_current;
@@ -166,6 +177,11 @@ void test_free(void *p)
     hdr->magic_no = 0;
 
     free(hdr);
+
+    if (old_size > global_testmalloc_statistics.mem_allocated_current) {
+        fprintf(stderr, "test-realloc: UNDERFLOW\n");
+        exit(1);
+    }
 
     global_testmalloc_statistics.mem_allocated_current -= old_size;
     global_testmalloc_statistics.blocks_allocated--;
