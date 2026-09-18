@@ -1,0 +1,43 @@
+
+FROM ubuntu
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get install -y \
+        git build-essential cmake ninja-build \
+        libicu-dev libxml2-dev libglib2.0 pkg-config \
+        gtk-doc-tools cppcheck gobject-introspection libgirepository1.0-dev \
+        gi-docgen g++ rsync zip openssh-server make \
+        gdb openjdk-11-jdk clang clang-tidy \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -f /etc/ssh/ssh_host_*
+
+RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+RUN useradd -m -d /home/user -s /bin/bash -G sudo user
+USER user
+
+WORKDIR /home/user
+
+RUN git clone https://github.com/libical/libical
+
+WORKDIR /home/user/libical
+
+RUN git checkout master
+
+RUN cmake --preset dev
+
+WORKDIR /home/user/libical/build-dev
+
+RUN cmake --build .
+
+USER root
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["bash"]
+
+# run this image like this to allow connecting to it via ssh (e.g. via tools like VSCode)
+# docker run -p 5000:22 -i -t libical
+
+# don't forget to specify a password for user 'user' like so
+# docker exec -u root -it <container-name-or-id> passwd user
