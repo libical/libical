@@ -91,6 +91,10 @@
 #  Set to build the big fuzzer tests
 #  Default=false
 #
+# -DLIBICAL_BUILD_TESTING_LONGRUNNING=[true|false]
+#  Set to build the long running tests, including any long-running fuzzer tests
+#  Default=false
+#
 # -DLIBICAL_DEVMODE_ABI_DUMPER=[true|false]
 #  Build for the abi-dumper (requires gcc)
 #  Default=false
@@ -1003,6 +1007,7 @@ if(LIBICAL_DEVMODE)
   set(LIBICAL_BUILD_TESTING True)
 endif()
 libical_option(LIBICAL_BUILD_TESTING_BIGFUZZ "Build fuzzer tests" False)
+libical_option(LIBICAL_BUILD_TESTING_LONGRUNNING "Build long running tests" False)
 libical_option(LIBICAL_BUILD_EXAMPLES "Build examples." True)
 
 ########### Configure pkg-config variables #########
