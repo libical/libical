@@ -120,7 +120,7 @@
 #  Default=false
 #
 # -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=[true|false]
-#  Build with the undefined sanitizer (requires gcc or clang)
+#  Build with the undefined sanitizer (requires clang)
 #  Default=false
 #
 # -DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=[true|false]
@@ -835,6 +835,9 @@ if(LIBICAL_DEVMODE_ABI_DUMPER)
   endif()
 endif()
 
+# extra link flags for sanitzers
+set(XSAN_LINKER_FLAGS)
+
 libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY "(Developer-only) Build with memory consistency functions." False)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
   set(CMAKE_BUILD_TYPE "Debug")
@@ -850,6 +853,7 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
     endif()
+    list(APPEND XSAN_LINKER_FLAGS "asan")
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -863,6 +867,7 @@ if(LIBICAL_DEVMODE_LEAK_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
     endif()
+    list(APPEND XSAN_LINKER_FLAGS "lsan")
     message(
       NOTICE
       "Currently unable to build leak sanitizer for glib-based configurations."
@@ -914,6 +919,7 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     endif()
+    list(APPEND XSAN_LINKER_FLAGS "tsan")
     message(
       NOTICE
       "Currently unable to build thread sanitizer for glib-based configurations."
@@ -931,13 +937,20 @@ endif()
 libical_option(LIBICAL_DEVMODE_UNDEFINED_SANITIZER "(Developer-only) Build with the undefined sanitizer." False)
 mark_as_advanced(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
 if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
-  if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+  #currently on clang properly supports undefined or suspicious integer behavior
+  if(CMAKE_C_COMPILER_IS_CLANG)
+    set(
+      CMAKE_C_FLAGS
+      "${CMAKE_C_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER -lubsan"
+    )
     if(LIBICAL_CXX_BINDINGS)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+      set(
+        CMAKE_CXX_FLAGS
+        "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER -lubsan"
+      )
     endif()
   else()
-    message(FATAL_ERROR "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
+    message(FATAL_ERROR "Must compile with clang to build with the undefined sanitizer.")
   endif()
 endif()
 

@@ -25,6 +25,7 @@ set(TEST_DATADIR "\"${PROJECT_SOURCE_DIR}/test-data\"")
 add_definitions(
   -DTEST_DATADIR=${TEST_DATADIR}
   -DTEST_ZONEDIR="${PROJECT_SOURCE_DIR}/zoneinfo"
+  -DTEST_MAX_MEMORY=1073741824 # max memory to allow when building with MEMORY_CONSISTENCY
 )
 
 # Set properties for the test
@@ -295,8 +296,23 @@ endif()
 
 ########### next target ###############
 
-buildme(icalcomponent_fuzz1 icalcomponent_fuzz1.c)
-buildme(icalcomponent_fuzz2 icalcomponent_fuzz2.c)
+set(fuzz_sources)
+if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
+  set(fuzz_sources test-malloc.c)
+endif()
+
+set(
+  fuzz1_SRCS
+  icalcomponent_fuzz1.c
+  ${fuzz_sources}
+)
+buildme(icalcomponent_fuzz1 "${fuzz1_SRCS}")
+set(
+  fuzz2_SRCS
+  icalcomponent_fuzz2.c
+  ${fuzz_sources}
+)
+buildme(icalcomponent_fuzz2 "${fuzz2_SRCS}")
 
 testme(icaltime_fuzz icaltime_fuzz.c)
 testme(icalcomponent_timefuzz icalcomponent_timefuzz.c)
@@ -329,6 +345,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     479865113 # ASAN cpu timeout exceeds 60s
     492956874 # UBSAN cpu timeout exceeds 60s
     549393074 # out of memory
+    560953111 # out of memory
     ubsan
     ubsan2
     ubsan3

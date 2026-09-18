@@ -129,9 +129,11 @@ void icalstrarray_free(icalstrarray *array)
     icalarray_free(array);
 }
 
-static int strpcmp(const char **a, const char **b)
+static int strpcmp(const void *a, const void *b)
 {
-    return strcmp(*a, *b);
+    char **aChar = (char **)a;
+    char **bChar = (char **)b;
+    return strcmp(*aChar, *bChar);
 }
 
 void icalstrarray_sort(icalstrarray *array)
@@ -139,7 +141,7 @@ void icalstrarray_sort(icalstrarray *array)
     if (!array) {
         return;
     }
-    icalarray_sort(array, (int (*)(const void *, const void *))&strpcmp);
+    icalarray_sort(array, &strpcmp);
 }
 
 /* cppcheck-suppress constParameterPointer */ /* TODO 5.0 */
