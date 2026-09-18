@@ -1245,6 +1245,15 @@ static void daysmask_clearall(unsigned long mask[])
            sizeof(unsigned long) * LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE));
 }
 
+static
+#if defined(UNDEFINED_SANITIZER) && defined(__clang__)
+    __attribute__((no_sanitize("integer")))
+#endif
+    unsigned long makeMask(unsigned long mask, int leftshift)
+{
+    return mask << leftshift;
+}
+
 static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilDayExcl, int v)
 {
     int fromBitIdx = fromDayIncl + ICAL_YEARDAYS_MASK_OFFSET;
@@ -1262,7 +1271,7 @@ static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilD
 
         unsigned long mask = (unsigned long)-1;
         if (lowerBitIdxIncl > 0) {
-            mask &= ((unsigned long)-1) << lowerBitIdxIncl;
+            mask &= makeMask(((unsigned long)-1), lowerBitIdxIncl);
         }
         if ((upperBitIdxExcl > 0) && (upperBitIdxExcl < (int)BITS_PER_LONG)) {
             mask &= ((unsigned long)-1) >> (BITS_PER_LONG - upperBitIdxExcl);
@@ -3352,7 +3361,7 @@ static short daymask_find_prev_bit(const unsigned long *days, short start_index)
     startBitIndex = days_index + ICAL_YEARDAYS_MASK_OFFSET;
     wordIdx = (int)(startBitIndex / BITS_PER_LONG);
     v = days[wordIdx];
-    v <<= BITS_PER_LONG - (startBitIndex % BITS_PER_LONG) - 1;
+    v = makeMask(v, BITS_PER_LONG - (startBitIndex % BITS_PER_LONG) - 1);
 
     if (!v) {
         // so the first word didn't contain any bits of interest.
@@ -3385,8 +3394,7 @@ static short daymask_find_prev_bit(const unsigned long *days, short start_index)
                 days_index -= maskSize;
             }
             maskSize /= 2;
-            /* coverity[integer_overflow] */
-            mask <<= maskSize;
+            mask = makeMask(mask, maskSize);
         }
     }
 
