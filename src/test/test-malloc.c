@@ -42,9 +42,6 @@ struct testmalloc_hdrlayout {
 #define TESTMALLOC_HDR_SIZE ((size_t)&((struct testmalloc_hdrlayout *)0)->data)
 
 void *test_malloc(size_t size)
-#if defined(UNDEFINED_SANITIZER) && defined(__clang__)
-    __attribute__((no_sanitize("undefined")))
-#endif
 {
     void *block;
     struct testmalloc_hdr *hdr;
@@ -84,9 +81,6 @@ void *test_malloc(size_t size)
 }
 
 void *test_realloc(void *p, size_t size)
-#if defined(UNDEFINED_SANITIZER) && defined(__clang__)
-    __attribute__((no_sanitize("undefined")))
-#endif
 {
     struct testmalloc_hdr *hdr;
     size_t old_size;
@@ -138,9 +132,6 @@ void *test_realloc(void *p, size_t size)
 }
 
 void test_free(void *p)
-#if defined(UNDEFINED_SANITIZER) && defined(__clang__)
-    __attribute__((no_sanitize("undefined")))
-#endif
 {
     struct testmalloc_hdr *hdr;
     size_t old_size;
