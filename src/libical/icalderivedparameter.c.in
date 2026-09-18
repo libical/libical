@@ -214,6 +214,9 @@ static icalarray *icalparameter_values_from_value_string(icalparameter_kind kind
     icalarray *values;
     int enum_start = 0, enum_end = 0;
 
+    size_t vcount = 0;
+    const size_t maximum_parameter_values = icallimit_get(ICAL_LIMIT_PROPERTY_VALUES); //TODO: 5.0 add separate limit for PARAMETER_VALUES
+
     if (value_kind == ICAL_TEXT_VALUE) {
         values = icalstrarray_new(5);
     } else {
@@ -232,8 +235,6 @@ static icalarray *icalparameter_values_from_value_string(icalparameter_kind kind
         }
     }
 
-    const size_t maximum_parameter_values = icallimit_get(ICAL_LIMIT_PROPERTY_VALUES); //TODO: 5.0 add separate limit for PARAMETER_VALUES
-    size_t vcount = 0;
     do {
         int i;
         size_t val_len;
