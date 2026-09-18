@@ -216,13 +216,13 @@ void test_run(const char *test_name, void (*test_fcn)(void), int do_test, int he
     }
 
     if (!headeronly && (do_test == 0 || do_test == test_set)) {
-        struct testmalloc_statistics mem_statistics;
+        struct testmalloc_statistics prev_statistics, new_statistics;
 
         // Clean up cached and other kind of non-deterministic memory.
         cleanup_nondeterministic_memory();
 
-        // Now that we are in a stable state, reset the memory statistics and start counting.
-        testmalloc_reset();
+        // Now that we are in a stable state, get the mem state *before* the test.
+        testmalloc_get_statistics(&prev_statistics);
 
         // Run the test.
         (*test_fcn)();
@@ -231,12 +231,12 @@ void test_run(const char *test_name, void (*test_fcn)(void), int do_test, int he
         // doesn't influence the statistics.
         cleanup_nondeterministic_memory();
 
-        // Now we should get clean statistics.
-        testmalloc_get_statistics(&mem_statistics);
+        // Now get the statistics *after* the test.
+        testmalloc_get_statistics(&new_statistics);
 
         ok("no memory leaked",
-           (mem_statistics.mem_allocated_current == 0) &&
-               (mem_statistics.blocks_allocated == 0));
+           (new_statistics.mem_allocated_current == prev_statistics.mem_allocated_current) &&
+               (new_statistics.blocks_allocated == prev_statistics.blocks_allocated));
 
         if (!QUIET) {
             printf("\n");
