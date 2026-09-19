@@ -59,6 +59,7 @@ HELP() {
   echo " -R, --reverse              Reverse polarity on the options"
   echo " -F, --fuzz                 For the sanitizers, only test against the fuzz data"
   echo "                            (ignored by all non-sanitizer testing)"
+  echo " -L, --longtest             Add long-running tests (set LIBICAL_BUILD_TESTING_LONGRUNNING)"
   echo
 }
 
@@ -795,9 +796,10 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hCpksbtwcignzxalmdufrRF" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-cpplint,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse,fuzz" -- "$@")
+options=$(getopt -o "hCpksbtwcignzxalmdufrRFL" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-cpplint,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse,fuzz,longtest" -- "$@")
 eval set -- "$options"
 
+CMAKE_BY_COMMANDLINE=""
 reverse=0
 fuzz=0
 cmakecompat=1
@@ -914,6 +916,10 @@ while true; do
     fuzz=1
     shift
     ;;
+  -L | --longtest)
+    CMAKE_BY_COMMANDLINE="$CMAKE_BY_COMMANDLINE -DLIBICAL_BUILD_TESTING_LONGRUNNING=True"
+    shift
+    ;;
   --)
     shift
     break
@@ -969,15 +975,20 @@ fi
 #use non-Ninja cmake generator by-default
 UNSET_NINJA
 
+# set any extra CMake options required by the command line options
 STRICT="--warn-uninitialized -Werror=dev"
-DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DNDEBUG=1"
-CMAKEOPTS="$STRICT -DLIBICAL_BUILD_VZIC=True -DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release $CMAKE_BY_COMMANDLINE -DNDEBUG=1"
+
+CMAKEOPTS="$STRICT -DLIBICAL_BUILD_VZIC=True -DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False $CMAKE_BY_COMMANDLINE"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DLIBICAL_ENABLE_BUILTIN_TZDATA=True"
 LTOCMAKEOPTS="$CMAKEOPTS -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=True"
-GLIBOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=OFF -DLIBICAL_GLIB_VAPI=ON"
-FUZZOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True"
+
+GLIBOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=OFF -DLIBICAL_GLIB_VAPI=ON $CMAKE_BY_COMMANDLINE"
+
+FUZZOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True $CMAKE_BY_COMMANDLINE"
 FUZZOPTS_NO_RSCALE="$FUZZOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
+
 TOOLCHAIN="-DCMAKE_TOOLCHAIN_FILE=\"$TOP/cmake/Toolchain-Linux-GCC-i686.cmake\""
 STATIC_OPTS="-DLIBICAL_STATIC=TRUE -DLIBICAL_JAVA_BINDINGS=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
 
