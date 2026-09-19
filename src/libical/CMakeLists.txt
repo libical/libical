@@ -306,12 +306,6 @@ if(WINCE)
   target_link_libraries(ical ${WCECOMPAT_LIBRARIES})
 endif()
 
-#link sanitizer library (if we're building with sanitizers)
-#fail github CI: Your application is linked against incompatible ASan runtimes
-#if(XSAN_LINKER_FLAGS)
-#  target_link_libraries(ical PRIVATE ${XSAN_LINKER_FLAGS})
-#endif()
-
 if(MSVC)
   set_target_properties(
     ical

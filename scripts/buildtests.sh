@@ -57,6 +57,9 @@ HELP() {
   echo " -f, --no-gcc-analyzer      Don't run any gcc analyzers tests"
   echo " -r, --no-threadlocal-build Don't run the THREADLOCAL-build tests"
   echo " -R, --reverse              Reverse polarity on the options"
+  echo " -F, --fuzz                 For the sanitizers, only test against the fuzz data"
+  echo "                            (ignored by all non-sanitizer testing)"
+  echo " -L, --longtest             Add long-running tests (set LIBICAL_BUILD_TESTING_LONGRUNNING)"
   echo
 }
 
@@ -793,10 +796,12 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hCpksbtwcignzxalmdufrR" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-cpplint,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse" -- "$@")
+options=$(getopt -o "hCpksbtwcignzxalmdufrRFL" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-cpplint,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse,fuzz,longtest" -- "$@")
 eval set -- "$options"
 
+CMAKE_BY_COMMANDLINE=""
 reverse=0
+fuzz=0
 cmakecompat=1
 runkrazy=1
 runprecommit=1
@@ -907,6 +912,14 @@ while true; do
     reverse=1
     shift
     ;;
+  -F | --fuzz)
+    fuzz=1
+    shift
+    ;;
+  -L | --longtest)
+    CMAKE_BY_COMMANDLINE="$CMAKE_BY_COMMANDLINE -DLIBICAL_BUILD_TESTING_LONGRUNNING=True"
+    shift
+    ;;
   --)
     shift
     break
@@ -962,15 +975,20 @@ fi
 #use non-Ninja cmake generator by-default
 UNSET_NINJA
 
+# set any extra CMake options required by the command line options
 STRICT="--warn-uninitialized -Werror=dev"
-DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DNDEBUG=1"
-CMAKEOPTS="$STRICT -DLIBICAL_BUILD_VZIC=True -DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release $CMAKE_BY_COMMANDLINE -DNDEBUG=1"
+
+CMAKEOPTS="$STRICT -DLIBICAL_BUILD_VZIC=True -DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False $CMAKE_BY_COMMANDLINE"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DLIBICAL_ENABLE_BUILTIN_TZDATA=True"
 LTOCMAKEOPTS="$CMAKEOPTS -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=True"
-GLIBOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=OFF -DLIBICAL_GLIB_VAPI=ON"
-FUZZOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True"
+
+GLIBOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=OFF -DLIBICAL_GLIB_VAPI=ON $CMAKE_BY_COMMANDLINE"
+
+FUZZOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True $CMAKE_BY_COMMANDLINE"
 FUZZOPTS_NO_RSCALE="$FUZZOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
+
 TOOLCHAIN="-DCMAKE_TOOLCHAIN_FILE=\"$TOP/cmake/Toolchain-Linux-GCC-i686.cmake\""
 STATIC_OPTS="-DLIBICAL_STATIC=TRUE -DLIBICAL_JAVA_BINDINGS=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
 
@@ -1055,21 +1073,25 @@ if (test "$(uname -s)" = "Linux"); then
 fi
 
 #Memory consistency check
-MEMCONSIST_BUILD test1memc ""
-MEMCONSIST_BUILD test2memc "$CMAKEOPTS"
-MEMCONSIST_BUILD test3memc "$TZCMAKEOPTS"
-MEMCONSIST_BUILD test4memc "$UUCCMAKEOPTS"
-MEMCONSIST_BUILD test5memc "$GLIBOPTS"
+if (test $fuzz -eq 0); then
+  MEMCONSIST_BUILD test1memc ""
+  MEMCONSIST_BUILD test2memc "$CMAKEOPTS"
+  MEMCONSIST_BUILD test3memc "$TZCMAKEOPTS"
+  MEMCONSIST_BUILD test4memc "$UUCCMAKEOPTS"
+  MEMCONSIST_BUILD test5memc "$GLIBOPTS"
+fi
 MEMCONSIST_BUILD test6memc "$FUZZOPTS"
 MEMCONSIST_BUILD test7memc "$FUZZOPTS_NO_RSCALE"
 
 #Address sanitizer
 ASAN_DISABLE="-DLIBICAL_JAVA_BINDINGS=OFF"
-ASAN_BUILD test1asan "$DEFCMAKEOPTS $ASAN_DISABLE"
-ASAN_BUILD test2asan "$CMAKEOPTS $ASAN_DISABLE"
-ASAN_BUILD test3asan "$TZCMAKEOPTS $ASAN_DISABLE"
-ASAN_BUILD test4asan "$UUCCMAKEOPTS $ASAN_DISABLE"
-ASAN_BUILD test5asan "$GLIBOPTS $ASAN_DISABLE"
+if (test $fuzz -eq 0); then
+  ASAN_BUILD test1asan "$DEFCMAKEOPTS $ASAN_DISABLE"
+  ASAN_BUILD test2asan "$CMAKEOPTS $ASAN_DISABLE"
+  ASAN_BUILD test3asan "$TZCMAKEOPTS $ASAN_DISABLE"
+  ASAN_BUILD test4asan "$UUCCMAKEOPTS $ASAN_DISABLE"
+  ASAN_BUILD test5asan "$GLIBOPTS $ASAN_DISABLE"
+fi
 ASAN_BUILD test6asan "$FUZZOPTS $ASAN_DISABLE"
 ASAN_BUILD test6asanstatic "$FUZZOPTS $ASAN_DISABLE $STATIC_OPTS"
 ASAN_BUILD test7asan "$FUZZOPTS_NO_RSCALE $ASAN_DISABLE"
@@ -1077,61 +1099,73 @@ ASAN_BUILD test7asan "$FUZZOPTS_NO_RSCALE $ASAN_DISABLE"
 #Leak sanitizer
 #libical-glib tests fail lsan
 LSAN_DISABLE="-DLIBICAL_JAVA_BINDINGS=OFF -DLIBICAL_GLIB_VAPI=OFF -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False -DLIBICAL_BUILD_VZIC=OFF"
-LSAN_BUILD test1lsan "$DEFCMAKEOPTS $LSAN_DISABLE"
-LSAN_BUILD test2lsan "$CMAKEOPTS $LSAN_DISABLE"
-LSAN_BUILD test3lsan "$TZCMAKEOPTS $LSAN_DISABLE"
-LSAN_BUILD test4lsan "$UUCCMAKEOPTS $LSAN_DISABLE"
-LSAN_BUILD test5lsan "$GLIBOPTS $LSAN_DISABLE"
+if (test $fuzz -eq 0); then
+  LSAN_BUILD test1lsan "$DEFCMAKEOPTS $LSAN_DISABLE"
+  LSAN_BUILD test2lsan "$CMAKEOPTS $LSAN_DISABLE"
+  LSAN_BUILD test3lsan "$TZCMAKEOPTS $LSAN_DISABLE"
+  LSAN_BUILD test4lsan "$UUCCMAKEOPTS $LSAN_DISABLE"
+  LSAN_BUILD test5lsan "$GLIBOPTS $LSAN_DISABLE"
+fi
 LSAN_BUILD test6lsan "$FUZZOPTS $LSAN_DISABLE"
 LSAN_BUILD test7lsan "$FUZZOPTS_NO_RSCALE $LSAN_DISABLE"
 
 #Memory sanitizer
 # currently MSAN fails inside libicu and also isn't working with std:stringstreams properly
 MSAN_DISABLE="-DCMAKE_DISABLE_FIND_PACKAGE_ICU=True -DLIBICAL_CXX_BINDINGS=False -DLIBICAL_JAVA_BINDINGS=OFF -DLIBICAL_GLIB_VAPI=OFF -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False -DLIBICAL_BUILD_VZIC=OFF"
-MSAN_BUILD test1msan "$DEFCMAKEOPTS $MSAN_DISABLE"
-MSAN_BUILD test2msan "$CMAKEOPTS $MSAN_DISABLE"
-MSAN_BUILD test3msan "$TZCMAKEOPTS $MSAN_DISABLE"
-MSAN_BUILD test4msan "$UUCCMAKEOPTS $MSAN_DISABLE"
-MSAN_BUILD test5msan "$GLIBOPTS $MSAN_DISABLE"
+if (test $fuzz -eq 0); then
+  MSAN_BUILD test1msan "$DEFCMAKEOPTS $MSAN_DISABLE"
+  MSAN_BUILD test2msan "$CMAKEOPTS $MSAN_DISABLE"
+  MSAN_BUILD test3msan "$TZCMAKEOPTS $MSAN_DISABLE"
+  MSAN_BUILD test4msan "$UUCCMAKEOPTS $MSAN_DISABLE"
+  MSAN_BUILD test5msan "$GLIBOPTS $MSAN_DISABLE"
+fi
 MSAN_BUILD test6msan "$FUZZOPTS $MSAN_DISABLE"
 MSAN_BUILD test7msan "$FUZZOPTS_NO_RSCALE $MSAN_DISABLE"
 
 #Thread sanitizer
 #libical-glib tests fail tsan with /lib64/libtsan.so.2: cannot allocate memory in static TLS block
 TSAN_DISABLE="-DLIBICAL_JAVA_BINDINGS=OFF -DLIBICAL_GLIB_VAPI=OFF -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
-TSAN_BUILD test1tsan "$DEFCMAKEOPTS $TSAN_DISABLE"
-TSAN_BUILD test2tsan "$CMAKEOPTS $TSAN_DISABLE"
-TSAN_BUILD test3tsan "$TZCMAKEOPTS $TSAN_DISABLE"
-TSAN_BUILD test4tsan "$UUCCMAKEOPTS $TSAN_DISABLE"
-TSAN_BUILD test5tsan "$GLIBOPTS $TSAN_DISABLE"
+if (test $fuzz -eq 0); then
+  TSAN_BUILD test1tsan "$DEFCMAKEOPTS $TSAN_DISABLE"
+  TSAN_BUILD test2tsan "$CMAKEOPTS $TSAN_DISABLE"
+  TSAN_BUILD test3tsan "$TZCMAKEOPTS $TSAN_DISABLE"
+  TSAN_BUILD test4tsan "$UUCCMAKEOPTS $TSAN_DISABLE"
+  TSAN_BUILD test5tsan "$GLIBOPTS $TSAN_DISABLE"
+fi
 TSAN_BUILD test6tsan "$FUZZOPTS $TSAN_DISABLE"
 TSAN_BUILD test7tsan "$FUZZOPTS_NO_RSCALE $TSAN_DISABLE"
 
 #Undefined sanitizer
-UBSAN_BUILD test1ubsan "$DEFCMAKEOPTS"
-UBSAN_BUILD test2ubsan "$CMAKEOPTS"
-UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
-UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
-UBSAN_BUILD test5ubsan "$GLIBOPTS"
+if (test $fuzz -eq 0); then
+  UBSAN_BUILD test1ubsan "$DEFCMAKEOPTS"
+  UBSAN_BUILD test2ubsan "$CMAKEOPTS"
+  UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
+  UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
+  UBSAN_BUILD test5ubsan "$GLIBOPTS"
+fi
 UBSAN_BUILD test6ubsan "$FUZZOPTS"
 UBSAN_BUILD test6ubsanstatic "$FUZZOPTS $STATIC_OPTS"
 UBSAN_BUILD test7ubsan "$FUZZOPTS_NO_RSCALE"
 
 #gcc analyzer
-GCC_ANALYZER_BUILD test1gccan "$DEFCMAKEOPTS"
-GCC_ANALYZER_BUILD test2gccan "$CMAKEOPTS"
-GCC_ANALYZER_BUILD test3gccan "$TZCMAKEOPTS"
-GCC_ANALYZER_BUILD test4gccan "$UUCCMAKEOPTS"
-GCC_ANALYZER_BUILD test5gccan "$GLIBOPTS"
+if (test $fuzz -eq 0); then
+  GCC_ANALYZER_BUILD test1gccan "$DEFCMAKEOPTS"
+  GCC_ANALYZER_BUILD test2gccan "$CMAKEOPTS"
+  GCC_ANALYZER_BUILD test3gccan "$TZCMAKEOPTS"
+  GCC_ANALYZER_BUILD test4gccan "$UUCCMAKEOPTS"
+  GCC_ANALYZER_BUILD test5gccan "$GLIBOPTS"
+fi
 GCC_ANALYZER_BUILD test6gccan "$FUZZOPTS"
 GCC_ANALYZER_BUILD test7gccan "$FUZZOPTS_NO_RSCALE"
 
 #Threadlocal
-THREADLOCAL_BUILD test1threadlocal "$DEFCMAKEOPTS"
-THREADLOCAL_BUILD test2threadlocal "$CMAKEOPTS"
-THREADLOCAL_BUILD test3threadlocal "$TZCMAKEOPTS"
-THREADLOCAL_BUILD test4threadlocal "$UUCCMAKEOPTS"
-THREADLOCAL_BUILD test5threadlocal "$GLIBOPTS"
+if (test $fuzz -eq 0); then
+  THREADLOCAL_BUILD test1threadlocal "$DEFCMAKEOPTS"
+  THREADLOCAL_BUILD test2threadlocal "$CMAKEOPTS"
+  THREADLOCAL_BUILD test3threadlocal "$TZCMAKEOPTS"
+  THREADLOCAL_BUILD test4threadlocal "$UUCCMAKEOPTS"
+  THREADLOCAL_BUILD test5threadlocal "$GLIBOPTS"
+fi
 THREADLOCAL_BUILD test6threadlocal "$FUZZOPTS"
 THREADLOCAL_BUILD test7threadlocal "$FUZZOPTS_NO_RSCALE"
 
