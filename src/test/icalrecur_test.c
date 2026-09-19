@@ -14,8 +14,7 @@
 #include <config.h>
 #endif
 
-#include <libical/ical.h>
-#include <stdlib.h>
+#include "libical/ical.h"
 
 struct recur {
     int line_no;
@@ -25,7 +24,7 @@ struct recur {
     char instances[2000];
 };
 
-int check_and_copy_field(const char *line, const char *pref, char *field, size_t field_size)
+static int check_and_copy_field(const char *line, const char *pref, char *field, size_t field_size)
 {
     size_t l = strlen(pref);
     if (strncmp(line, pref, l) != 0) {
@@ -93,26 +92,31 @@ static char *skip_first(char *instances)
 
 static char *skip_until(char *instances, icaltimetype t, int order)
 {
-    char *start = instances;
-    while (1) {
-        char *next = skip_first(start);
-        if (!next) {
-            return 0;
+    char *head = instances;
+    while (head) {
+        char *next = skip_first(head);
+        char tmp = 0;
+        if (next) {
+            tmp = next[-1]; // NOLINT(clang-analyzer-security.ArrayBound)
+            if (next[-1] == ',') {
+                next[-1] = 0;
+            }
         }
 
-        char tmp = next[-1]; // NOLINT(clang-analyzer-security.ArrayBound)
-        if (next[-1] == ',') {
-            next[-1] = 0;
+        icaltimetype current = icaltime_from_string(head);
+
+        if (next) {
+            next[-1] = tmp;
         }
-        icaltimetype current = icaltime_from_string(start);
-        next[-1] = tmp;
 
         if ((icaltime_compare(current, t) * order) >= 0) {
-            return start;
+            break;
         }
 
-        start = next;
+        head = next;
     }
+
+    return head;
 }
 
 static char *skip_n(char *instances, int n)
@@ -166,9 +170,8 @@ static icaltimetype get_instance_n_time(char *instances, int n)
 static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed_dtstart_offs, int *has_skip)
 {
     struct icalrecurrencetype *rrule;
-    struct icaltimetype dtstart, next;
+    struct icaltimetype dtstart;
     icalrecur_iterator *ritr;
-    const char *sep = "";
     char actual_instances[2048];
     int actual_instances_len = 0;
     int test_error = 0;
@@ -179,16 +182,10 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
 
     rrule = icalrecurrencetype_new_from_string(r->rrule);
     if (!rrule) {
-        return test_error;
+        return -1;
     }
     if (has_skip) {
         *has_skip = (rrule->skip == ICAL_SKIP_FORWARD) || (rrule->skip == ICAL_SKIP_BACKWARD);
-    }
-
-    if (r->instances[0] && !forward) {
-        // handled by the forward test
-        icalrecurrencetype_unref(rrule);
-        return test_error;
     }
 
     memset(&actual_instances[0], 0, sizeof(actual_instances));
@@ -215,17 +212,20 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
 
     ritr = icalrecur_iterator_new(rrule, dtstart);
 
-    if (!forward) {
-        // restore order at the end of the test
-        reverse_instances(r->instances);
-        instances = skip_first(instances);
-    }
+    int instances_reversed = 0;
 
     if (!ritr) {
         snprintf(&actual_instances[actual_instances_len],
                  sizeof(actual_instances) - (size_t)actual_instances_len,
                  " *** %s", icalerror_strerror(icalerrno));
     } else {
+        if (!forward) {
+            // restore order at the end of the test
+            reverse_instances(r->instances);
+            instances_reversed = 1;
+            instances = skip_first(instances);
+        }
+
         if (r->start_at[0]) {
             struct icaltimetype start = icaltime_from_string(r->start_at);
 
@@ -235,16 +235,17 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
                 icalrecur_iterator_set_range(ritr, start, dtstart);
             }
 
-            instances = skip_until(instances, start, forward ? 1 : -1);
+            instances = skip_until(instances, start, (int)forward ? 1 : -1);
         } else if (!forward) {
             while (!icaltime_is_null_time(icalrecur_iterator_next(ritr))) {
                 // skip to the end
             }
         }
 
-        struct icaltimetype (*iterator_proceed)(icalrecur_iterator *impl) = forward ? icalrecur_iterator_next : icalrecur_iterator_prev;
+        struct icaltimetype (*iterator_proceed)(icalrecur_iterator *impl) = (int)forward ? icalrecur_iterator_next : icalrecur_iterator_prev;
 
-        for (next = iterator_proceed(ritr);
+        const char *sep = "";
+        for (struct icaltimetype next = iterator_proceed(ritr);
              !icaltime_is_null_time(next);
              next = iterator_proceed(ritr)) {
             int n = snprintf(&actual_instances[actual_instances_len],
@@ -258,7 +259,7 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
         }
     }
 
-    if (strcmp(instances, actual_instances) != 0) {
+    if (strcmp((instances == NULL) ? "" : instances, actual_instances) != 0) {
         test_error = 1;
 
         print_error_hdr(r);
@@ -270,13 +271,13 @@ static int run_testcase(struct recur *r, bool verbose, bool forward, int proceed
             fprintf(stderr, "\n");
         }
 
-        const char *msg_prefix = forward ? "" : "PREV-";
-        fprintf(stderr, "Expected %sINSTANCES:%s\n", msg_prefix, instances);
+        const char *msg_prefix = (int)forward ? "" : "PREV-";
+        fprintf(stderr, "Expected %sINSTANCES:%s\n", msg_prefix, (instances == NULL) ? "" : instances);
         fprintf(stderr, "Actual   %sINSTANCES:%s\n", msg_prefix, actual_instances);
         fprintf(stderr, "\n");
     }
 
-    if (!forward) {
+    if (instances_reversed) {
         // restore order
         reverse_instances(r->instances);
     }
@@ -291,7 +292,7 @@ int main(int argc, const char *argv[])
 {
     /* Default to RFC 5545 tests */
     const char *file_name = "icalrecur_test.txt";
-    int verbose = 0;
+    bool verbose = false;
 
     /* Do not use getopt for command line parsing -- for portability on Windows */
     for (int i = 1; i < argc; ++i) {
@@ -301,19 +302,19 @@ int main(int argc, const char *argv[])
         }
 
         if (strncmp(argv[i], "-v", 2) == 0) { /* Verbose output to stdout */
-            verbose = 1;
+            verbose = true;
             continue;
         }
 
         fprintf(stderr, "usage: %s [-f <input file>]\n", argv[0]);
-        return (1);
+        return 1;
     }
 
     FILE *fp = fopen(file_name, "r");
 
     if (fp == NULL) {
         fprintf(stderr, "unable to open the input file '%s'\n", file_name);
-        return (1);
+        return 1;
     }
 
     if (verbose) {
@@ -377,10 +378,10 @@ int main(int argc, const char *argv[])
 
             nof_tests++;
 
-            if (run_testcase(&r, verbose, 1, -1, &has_skip)) {
+            if (run_testcase(&r, verbose, true, -1, &has_skip)) {
                 test_error = 1;
                 nof_errors++;
-            } else if (run_testcase(&r, verbose, 0, -1, 0)) {
+            } else if (run_testcase(&r, verbose, false, -1, 0)) {
                 test_error = 1;
                 nof_errors++;
             }
@@ -388,7 +389,7 @@ int main(int argc, const char *argv[])
             if ((test_error == 0) && *r.instances && !r.start_at[0] && !has_skip) {
                 int instance_count = get_instance_count(r.instances);
                 for (int instance_idx = 0; instance_idx < instance_count; instance_idx++) {
-                    if (run_testcase(&r, verbose, 1, instance_idx, 0)) {
+                    if (run_testcase(&r, verbose, true, instance_idx, 0)) {
                         test_error = 1;
                         nof_errors++;
                     }

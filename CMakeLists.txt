@@ -120,7 +120,7 @@
 #  Default=false
 #
 # -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=[true|false]
-#  Build with the undefined sanitizer (requires gcc or clang)
+#  Build with the undefined sanitizer (requires clang)
 #  Default=false
 #
 # -DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=[true|false]
@@ -138,7 +138,7 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(
   libical
-  VERSION 3.99.99
+  VERSION 4.0.99
   DESCRIPTION "An implementation of basic iCAL protocols"
   HOMEPAGE_URL "https://libical.github.io/libical/"
   LANGUAGES
@@ -175,17 +175,14 @@ if(WINCE)
 endif()
 
 set(LIBICAL_LIB_MAJOR_SOVERSION "4")
-set(LIBICAL_LIB_SOVERSION_STRING "${LIBICAL_LIB_MAJOR_SOVERSION}.0")
+set(LIBICAL_LIB_MINOR_SOVERSION "1")
+set(LIBICAL_LIB_SOVERSION_STRING "${LIBICAL_LIB_MAJOR_SOVERSION}.${LIBICAL_LIB_MINOR_SOVERSION}")
 
-set(PROJECT_VERSION "4.0")
+set(PROJECT_VERSION "4.1")
 
 # library build types
 set(LIBRARY_TYPE SHARED)
 
-# Print message and error exit for these options that are no longer supported
-libical_removed_option(SHARED_ONLY)
-libical_removed_option(ICAL_ALLOW_EMPTY_PROPERTIES)
-libical_removed_option(ICAL_ERRORS_ARE_FATAL)
 ########################################################
 
 libical_option(LIBICAL_DEVMODE "Developer mode" False)
@@ -221,7 +218,7 @@ if(UPPERCASE_CMAKE_BUILD_TYPE MATCHES "^REL" AND LIBICAL_DEVMODE)
   )
 endif()
 
-libical_deprecated_option(STATIC_ONLY LIBICAL_STATIC "Build static versions of the libraries." False)
+libical_option(LIBICAL_STATIC "Build static versions of the libraries." False)
 if(LIBICAL_STATIC)
   set(LIBRARY_TYPE STATIC)
 endif()
@@ -241,7 +238,7 @@ if(LIBICAL_STATIC)
   )
 endif()
 
-libical_deprecated_option(WITH_CXX_BINDINGS LIBICAL_CXX_BINDINGS "Build the C++ bindings." True)
+libical_option(LIBICAL_CXX_BINDINGS "Build the C++ bindings." True)
 if(LIBICAL_CXX_BINDINGS)
   enable_language(CXX)
   set(CMAKE_CXX_STANDARD 11)
@@ -343,8 +340,8 @@ if(CMAKE_CL_64)
 endif()
 
 # libicu is highly recommended for RSCALE support
-#  libicu can be found at http://www.icu-project.org
-#  RSCALE info at http://tools.ietf.org/html/rfc7529
+#  libicu can be found at https://icu.unicode.org
+#  RSCALE info at https://datatracker.ietf.org/doc/html/rfc7529
 if(DEFINED ENV{ICU_BASE}) # keep backwards compatibility for ICU_BASE
   set(ICU_ROOT $ENV{ICU_BASE})
 endif()
@@ -445,8 +442,7 @@ if(WIN32)
     # If you need to force the compiler to interpret time_t as the old 32-bit time_t, you can define _USE_32BIT_TIME_T.
     # We don't recommend _USE_32BIT_TIME_T, because your application may fail after January 18, 2038;
     # the use of this macro isn't allowed on 64-bit platforms.
-    libical_deprecated_option(
-      USE_32BIT_TIME_T
+    libical_option(
       LIBICAL_ENABLE_MSVC_32BIT_TIME_T
       "Build using the MSVC 32bit time_t (ignored unless building with MSVC on Windows)."
       False
@@ -525,8 +521,7 @@ if(WIN32 OR WINCE)
 else()
   set(DEF_USE_BUILTIN_TZDATA False)
 endif()
-libical_deprecated_option(
-  USE_BUILTIN_TZDATA
+libical_option(
   LIBICAL_ENABLE_BUILTIN_TZDATA
   "(Careful) Build using libical's built-in timezone data, else use the system timezone data on non-Windows systems. \
   ALWAYS true on Windows. Non-Windows users should know what they're doing if they choose not to use system provided \
@@ -575,8 +570,7 @@ find_package(PkgConfig QUIET)
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
 # LIBICAL_GOBJECT_INTROSPECTION might be disabled later by some devmode options
-libical_deprecated_option(
-  GOBJECT_INTROSPECTION
+libical_option(
   LIBICAL_GOBJECT_INTROSPECTION
   "Build GObject introspection \"typelib\" files. \
   Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher."
@@ -625,7 +619,7 @@ if(LIBICAL_GOBJECT_INTROSPECTION)
 endif()
 
 # LIBICAL_GLIB_VAPI might be disabled later by some devmode options
-libical_deprecated_option(ICAL_GLIB_VAPI LIBICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
+libical_option(LIBICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
 if(LIBICAL_GLIB_VAPI)
   if(LIBICAL_STATIC)
     message(
@@ -666,33 +660,40 @@ endif()
 
 set(MIN_GLIB "2.44")
 set(MIN_LIBXML "2.7.3")
-libical_deprecated_option(
-  ICAL_GLIB
+libical_option(
   LIBICAL_GLIB
   "Build libical-glib interface. \
   Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher."
   True
 )
-if(LIBICAL_GLIB)
+if(LIBICAL_GLIB OR LIBICAL_BUILD_VZIC)
   if(NOT PKG_CONFIG_FOUND)
     message(
       FATAL_ERROR
-      "You requested to build libical-glib, however that option is not supported "
+      "You requested to build libical-glib and/or vzic, however those options are not supported "
       "unless pkg-config can be found. Please install pkg-config and try again. "
-      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib and vzic builds "
+      "(by passing -DLIBICAL_GLIB=False -DLIBICAL_BUILD_VZIC to cmake)."
     )
   endif()
 
-  find_package(GLib ${MIN_GLIB})
+  pkg_search_module(
+    GLIB
+    glib-2.0>=${MIN_GLIB}
+  )
+  pkg_search_module(
+    GOBJECT
+    gobject-2.0>=${MIN_GLIB}
+  )
   set_package_properties(
-    GLib
+    GLIB
     PROPERTIES
       TYPE
         OPTIONAL
       PURPOSE
         "For the optional libical-glib interface"
   )
-  find_package(LibXML ${MIN_LIBXML})
+  find_package(LibXml2 ${MIN_LIBXML})
   set_package_properties(
     LibXML
     PROPERTIES
@@ -701,20 +702,21 @@ if(LIBICAL_GLIB)
       DESCRIPTION
         "a library providing XML and HTML support"
       URL
-        "http://xmlsoft.org"
+        "https://gitlab.gnome.org/GNOME/libxml2"
       PURPOSE
         "For the optional libical-glib interface"
   )
-  if(GLIB_FOUND AND LIBXML_FOUND)
+  if(GLIB_FOUND AND LibXml2_FOUND)
     set(HAVE_GLIB TRUE)
   elseif(GLIB_FOUND)
     message(
       FATAL_ERROR
-      "You requested to build libical-glib, but the necessary development package "
+      "You requested to build libical-glib and/or vzic, but the necessary development package "
       "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
-      "Alternatively, disable the libical-glib build (by passing -DLIBICAL_GLIB=False to cmake)."
+      "Alternatively, disable the libical-glib and vzic builds "
+      "(by passing -DLIBICAL_GLIB=False -DLIBICAL_BUILD_VZIC to cmake)."
     )
-  elseif(LIBXML_FOUND)
+  elseif(LibXml2_FOUND)
     message(
       FATAL_ERROR
       "You requested to build libical-glib, but the necessary development package "
@@ -737,7 +739,7 @@ if(LIBICAL_DEVMODE)
   set(LIBICAL_GLIB_CHECK_API_FILES True)
 endif()
 # LIBICAL_GLIB_BUILD_DOCS might be disabled later by some devmode options
-libical_deprecated_option(ICAL_GLIB_BUILD_DOCS LIBICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
+libical_option(LIBICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
 
 #
 # Compiler settings
@@ -822,7 +824,7 @@ if(SIZEOF_TIME_T EQUAL 4)
 endif()
 
 ################ Developer Options #####################
-libical_deprecated_option(ABI_DUMPER LIBICAL_DEVMODE_ABI_DUMPER "(Developer-only) Build for abi-dumper." False)
+libical_option(LIBICAL_DEVMODE_ABI_DUMPER "(Developer-only) Build for abi-dumper." False)
 mark_as_advanced(LIBICAL_DEVMODE_ABI_DUMPER)
 if(LIBICAL_DEVMODE_ABI_DUMPER)
   if(CMAKE_C_COMPILER_IS_GCC)
@@ -833,6 +835,9 @@ if(LIBICAL_DEVMODE_ABI_DUMPER)
   endif()
 endif()
 
+# extra link flags for sanitzers
+set(XSAN_LINKER_FLAGS)
+
 libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY "(Developer-only) Build with memory consistency functions." False)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
   set(CMAKE_BUILD_TYPE "Debug")
@@ -840,12 +845,7 @@ if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
 endif()
 mark_as_advanced(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
 
-libical_deprecated_option(
-  ADDRESS_SANITIZER
-  LIBICAL_DEVMODE_ADDRESS_SANITIZER
-  "(Developer-only) Build with the address sanitizer."
-  False
-)
+libical_option(LIBICAL_DEVMODE_ADDRESS_SANITIZER "(Developer-only) Build with the address sanitizer." False)
 mark_as_advanced(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
 if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
@@ -853,7 +853,7 @@ if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
     endif()
-    set(LIBRARY_TYPE SHARED)
+    list(APPEND XSAN_LINKER_FLAGS "asan")
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -867,7 +867,7 @@ if(LIBICAL_DEVMODE_LEAK_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
     endif()
-    set(LIBRARY_TYPE SHARED)
+    list(APPEND XSAN_LINKER_FLAGS "lsan")
     message(
       NOTICE
       "Currently unable to build leak sanitizer for glib-based configurations."
@@ -896,7 +896,6 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
         "${CMAKE_CXX_FLAGS} -fsanitize=memory -fsanitize-memory-track-origins -fPIE -pie -O1 -g -DMEMORY_SANITIZER"
       )
     endif()
-    set(LIBRARY_TYPE SHARED)
     #currently unavailable for glib-based code
     message(
       NOTICE
@@ -912,12 +911,7 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
   endif()
 endif()
 
-libical_deprecated_option(
-  THREAD_SANITIZER
-  LIBICAL_DEVMODE_THREAD_SANITIZER
-  "(Developer-only) Build with the thread sanitizer."
-  False
-)
+libical_option(LIBICAL_DEVMODE_THREAD_SANITIZER "(Developer-only) Build with the thread sanitizer." False)
 mark_as_advanced(LIBICAL_DEVMODE_THREAD_SANITIZER)
 if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
@@ -925,7 +919,7 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     endif()
-    set(LIBRARY_TYPE SHARED)
+    list(APPEND XSAN_LINKER_FLAGS "tsan")
     message(
       NOTICE
       "Currently unable to build thread sanitizer for glib-based configurations."
@@ -940,39 +934,30 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   endif()
 endif()
 
-libical_deprecated_option(
-  UNDEFINED_SANITIZER
-  LIBICAL_DEVMODE_UNDEFINED_SANITIZER
-  "(Developer-only) Build with the undefined sanitizer."
-  False
-)
+libical_option(LIBICAL_DEVMODE_UNDEFINED_SANITIZER "(Developer-only) Build with the undefined sanitizer." False)
 mark_as_advanced(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
 if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
-  if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+  #currently on clang properly supports undefined or suspicious integer behavior
+  if(CMAKE_C_COMPILER_IS_CLANG)
+    set(
+      CMAKE_C_FLAGS
+      "${CMAKE_C_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER -lubsan"
+    )
     if(LIBICAL_CXX_BINDINGS)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -O1 -g -DUNDEFINED_SANITIZER -lubsan")
+      set(
+        CMAKE_CXX_FLAGS
+        "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER -lubsan"
+      )
     endif()
-    set(LIBRARY_TYPE SHARED)
   else()
-    message(FATAL_ERROR "You are trying to build with the undefined sanitizer using a non-GCC or Clang compiler.")
+    message(FATAL_ERROR "Must compile with clang to build with the undefined sanitizer.")
   endif()
 endif()
 
 mark_as_advanced(LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL)
-libical_deprecated_option(
-  LIBICAL_SYNCMODE_THREADLOCAL
-  LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL
-  "Mark global variables as thread-local."
-  False
-)
+libical_option(LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL "Mark global variables as thread-local." False)
 
-libical_deprecated_option(
-  ENABLE_LTO_BUILD
-  CMAKE_INTERPROCEDURAL_OPTIMIZATION
-  "Build a link-time optimized version."
-  False
-)
+libical_option(CMAKE_INTERPROCEDURAL_OPTIMIZATION "Build a link-time optimized version." False)
 if(CMAKE_INTERPROCEDURAL_OPTIMIZATION)
   include(CheckIPOSupported)
   # A fatal error is issued if IPO not supported by the compiler
@@ -989,7 +974,7 @@ libical_option(LIBICAL_BUILD_EXAMPLES "Build examples." True)
 
 ########### Configure pkg-config variables #########
 
-set(VERSION "${CMAKE_PROJECT_VERSION}")
+set(VERSION "${libical_VERSION}")
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 set(exec_prefix "\${prefix}")
 if(IS_ABSOLUTE ${LIB_INSTALL_DIR})
@@ -1033,7 +1018,7 @@ if(USE_BUILTIN_TZDATA)
   add_subdirectory(zoneinfo)
 endif()
 
-libical_deprecated_option(ICAL_BUILD_DOCS LIBICAL_BUILD_DOCS "Build documentation" True)
+libical_option(LIBICAL_BUILD_DOCS "Build documentation" True)
 if(LIBICAL_BUILD_DOCS)
   if(LIBICAL_GLIB_BUILD_DOCS)
     if(LIBICAL_STATIC)
@@ -1075,13 +1060,6 @@ libical_option(
   False
 )
 if(LIBICAL_BUILD_VZIC)
-  if(NOT GLIB_FOUND)
-    message(
-      FATAL_ERROR
-      "You requested to build the vzic tool, but the necessary development package "
-      "is missing or too low a version (glib ${MIN_GLIB} or higher is required)."
-    )
-  endif()
   add_subdirectory(vzic)
 endif()
 
@@ -1100,7 +1078,7 @@ configure_package_config_file(
 # Create a version file
 write_basic_package_version_file(
   ${libical_BINARY_DIR}/LibIcalConfigVersion.cmake
-  VERSION ${CMAKE_PROJECT_VERSION}
+  VERSION ${libical_VERSION}
   COMPATIBILITY SameMajorVersion
 )
 

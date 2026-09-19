@@ -10,18 +10,25 @@
  Contributions from:
     Graham Davison <g.m.davison@computer.org>
 ======================================================================*/
+
+/**
+ * @file icalparameter.c
+ * @brief Implements the data structure representing iCalendar parameters.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalparameter.h"
 #include "icalparameterimpl.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <errno.h>
 #include <stdlib.h>
 
+/// @cond PRIVATE
 LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparameter_kind kind)
 {
     struct icalparameter_impl *v;
@@ -33,13 +40,13 @@ LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparame
 
     memset(v, 0, sizeof(struct icalparameter_impl));
 
-    strcpy(v->id, "para");
-
+    v->id = ICAL_STRUCTURE_TYPE_PARAMETER;
     v->kind = kind;
     v->value_kind = icalparameter_kind_value_kind(kind, &v->is_multivalued);
 
     return v;
 }
+/// @endcond
 
 icalparameter *icalparameter_new(icalparameter_kind kind)
 {
@@ -72,7 +79,7 @@ void icalparameter_free(icalparameter *param)
     memset(param, 0, sizeof(icalparameter));
 
     param->parent = 0;
-    param->id[0] = 'X';
+    param->id = ICAL_STRUCTURE_TYPE_PARAMETER_EMPTY;
     icalmemory_free_buffer(param);
 }
 
@@ -286,11 +293,7 @@ bool icalparameter_isa_parameter(void *parameter)
         return false;
     }
 
-    if (strcmp(impl->id, "para") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_PARAMETER);
 }
 
 void icalparameter_set_xname(icalparameter *param, const char *v)
@@ -404,10 +407,9 @@ bool icalparameter_is_multivalued(const icalparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
-    return param->is_multivalued;
+    return param->is_multivalued != 0;
 }
 
-/** Decode parameter value per RFC6868 */
 void icalparameter_decode_value(char *value)
 {
     char *in, *out;

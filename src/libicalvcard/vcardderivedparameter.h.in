@@ -7,6 +7,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardderivedparameter.h
+ * @brief vCard parameters.
+ */
+
 #ifndef VCARDDERIVEDPARAMETER_H
 #define VCARDDERIVEDPARAMETER_H
 

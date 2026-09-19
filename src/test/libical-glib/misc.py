@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./misc.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./misc.py
 
 ###############################################################################
 # SPDX-FileCopyrightText: 2019 Red Hat Inc. <www.redhat.com>
@@ -11,7 +10,7 @@
 import gi
 
 gi.require_version('ICalGLib', '4.0')
-from gi.repository import ICalGLib  # noqa E402
+from gi.repository import ICalGLib
 
 geo = ICalGLib.Geo.new(10.0, 20.0)
 assert geo.get_lat() == 10.0

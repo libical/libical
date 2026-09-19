@@ -1,10 +1,12 @@
+/*
+ * SPDX-FileCopyrightText: 2001, Critical Path
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+ */
+
 /**
  * @file    vcomponent_cxx.hpp
  * @author  fnguyen (12/10/01)
  * @brief   C++ classes for the icalcomponent wrapper (VToDo VEvent, etc..).
- *
- * SPDX-FileCopyrightText: 2001, Critical Path
- * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifndef ICAL_VCOMPONENT_CXX_H
@@ -14,7 +16,6 @@
 #include "icptrholder_cxx.hpp"
 
 extern "C" {
-#include "icalerror.h"
 #include "icalcomponent.h"
 }
 

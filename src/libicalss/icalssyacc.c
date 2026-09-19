@@ -49,6 +49,10 @@
 #include <config.h>
 #endif
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
+#endif
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
@@ -149,12 +153,14 @@ enum yytokentype
 /*                                                                         */
 /*  ====================================================================== */
 #define YYDEBUG 1
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h> /* for strdup() */
 #include <limits.h> /* for SHRT_MAX*/
 #include "icalgauge.h"
 #include "icalgaugeimpl.h"
 #include "icalerror.h"
+#include "icalpvl_p.h"
 
 extern struct icalgauge_impl *icalss_yy_gauge;
 
@@ -405,7 +411,6 @@ union yyalloc {
         yynewbytes = yystacksize * sizeof(*Stack) + YYSTACK_GAP_MAXIMUM; \
         yyptr += yynewbytes / sizeof(*yyptr);                            \
     } while (YYID(0))
-
 #endif
 
 /* YYFINAL -- State number of the termination state.  */
@@ -1751,6 +1756,9 @@ void sserror(const char *s)
 #pragma GCC diagnostic pop
 #endif
 #if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 

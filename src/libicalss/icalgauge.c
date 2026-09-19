@@ -9,23 +9,31 @@
  Code is Eric Busboom
 ======================================================================*/
 
+/**
+ * @file icalgauge.c
+ * @brief Routines implementing a filter for ical components
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalgauge.h"
 #include "icalgaugeimpl.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
+#include "icalpvl_p.h"
 #include "icalvalue.h"
 
 #include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
 
+/// @cond PRIVATE
 extern int ssparse(void);
 extern char *input_buffer;
 extern char *input_buffer_p;
 
 struct icalgauge_impl *icalss_yy_gauge;
+/// @endcond
 
 icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
 {
@@ -99,6 +107,7 @@ void icalgauge_free(icalgauge *gauge)
     free(gauge);
 }
 
+/// @cond PRIVATE
 /*non-static,recursive*/
 int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
 {
@@ -202,6 +211,7 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
 
     return pass;
 }
+/// @endcond
 
 bool icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 {
@@ -355,9 +365,9 @@ bool icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
            the value should be merge with the previous clause */
 
         if (w->logic == ICALGAUGELOGIC_AND) {
-            last_clause = this_clause && last_clause;
+            last_clause = this_clause && last_clause; //NOLINT(readability-implicit-bool-conversion)
         } else if (w->logic == ICALGAUGELOGIC_OR) {
-            last_clause = this_clause || last_clause;
+            last_clause = this_clause || last_clause; //NOLINT(readability-implicit-bool-conversion)
         } else {
             last_clause = this_clause;
         }

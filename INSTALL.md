@@ -83,11 +83,12 @@ run `make test` (or `nmake test` or `mingw32-make test`)
 To run the test suite in verbose mode, pass ARGS="-V" to the make command
 For example: `nmake test ARGS="-V"`
 
-By default, the buildsystem creates shared(dynamic) and static versions
-of the libraries, but that behavior can be modified at CMake time:
+By default, the buildsystem creates shared(dynamic) versions of the libraries.
+Static libraries can be built by configuring at CMake time with:
 
-- To build the static libraries only, pass -DSTATIC_ONLY=True to cmake.
-- To build the shared libraries only, pass -DSHARED_ONLY=True to cmake.
+```shell
+% cmake -DLIBICAL_STATIC=True <more_cmake_options>
+```
 
 ## Building with Different Compilers
 
@@ -133,7 +134,7 @@ For more information about building CMake projects on Android see
 
 - libicu "International Components for Unicode" development libraries.
   Highly recommended for RSCALE support.
-  libicu can be found at <http://www.icu-project.org>
+  libicu can be found at <https://icu.unicode.org>
 
   If CMake doesn't locate your libicu installation try setting the
   ICU_ROOT or ICU_BASE environment variables to the top folder where
@@ -157,7 +158,7 @@ For more information about building CMake projects on Android see
   - Ubuntu: apt-get install gobject-introspection
   - Fedora: dnf install gobject-introspection
   - Mac: brew install gobject-introspection pygobject3
-  - Windows: vcpkg install gobject-introspection (see [using vcpkg](#Using vcpkg to install dependencies).
+  - Windows: vcpkg install gobject-introspection (see [using vcpkg](#vcpkg)).
 
 You can also force CMake to ignore any of the optional dependencies
 by passing the option -DCMAKE_DISABLE_FIND_PACKAGE_<PACKAGE>=True.
@@ -194,10 +195,6 @@ This C library can be built with bindings for these other languages:
 
 Use these CMake options to adjust the library behavior as follows:
 
-- LIBICAL_ENABLE_ERRORS_ARE_FATAL=[true|false]
-  Set to make icalerror_* calls abort instead of internally signaling an error.
-  Default=false
-
 - LIBICAL_ENABLE_BUILTIN_TZDATA=[true|false]
   Set to build using our own (instead of the system's) timezone data.
   Default=false (use the system timezone data on non-Windows systems)
@@ -223,7 +220,9 @@ Run `make docs` to build the API documentation and reference.
 Disable the docs make target by running cmake with -DLIBICAL_BUILD_DOCS=False option.
 Disable the libical-glib developer documentation by running cmake with -DLIBICAL_GLIB_BUILD_DOCS=False.
 
+<a name="vcpkg">
 ## Using vcpkg to install dependencies
+</a>
 
 If you want to use vcpkg (%VCPKG_ROOT% on Windows or $VCPKG_ROOT on non-Windows) to build
 the dependencies as part of the project you can also tell CMake the vcpkg toolchain file

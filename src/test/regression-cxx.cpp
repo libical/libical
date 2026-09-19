@@ -1,4 +1,4 @@
-/**
+/*
  SPDX-FileCopyrightText: 2001, Critical Path
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
@@ -9,6 +9,7 @@
 
 extern "C" {
 #include "regression.h"
+#include "libical/icalerror.h"
 #include "libical/icalparser.h"
 }
 
@@ -164,7 +165,7 @@ void test_cxx(void)
         icalerrno = ICAL_NO_ERROR;
         const VComponent v = VComponent(string("HFHFHFHF"));
     }
-    catch (icalerrorenum err) {
+    catch (const icalerrorenum &err) {
         if (err == ICAL_BADARG_ERROR) {
             caughtException = 1;
         }

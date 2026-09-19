@@ -1,13 +1,19 @@
-/**
- * @file    icalparameter_cxx.cpp
- * @author  fnguyen (12/10/01)
- * @brief   Implementation of C++ Wrapper for icalparameter.c
- *
+/*
  * SPDX-FileCopyrightText: 2001, Critical Path
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
+/**
+ * @file    icalparameter_cxx.cpp
+ * @author  fnguyen (12/10/01)
+ * @brief   Implementation of C++ Wrapper for icalparameter.c
+ */
+
 #include "icalparameter_cxx.hpp"
+
+extern "C" {
+#include "icalerror_p.h"
+}
 
 #include <string>
 #include <vector>
@@ -59,7 +65,6 @@ ICalParameter::ICalParameter(icalparameter *v)
 {
 }
 
-/// Create from string of form "PARAMNAME=VALUE"
 ICalParameter::ICalParameter(const std::string &str)
     : imp(icalparameter_new_from_string(str.c_str()))
 {
@@ -68,7 +73,6 @@ ICalParameter::ICalParameter(const std::string &str)
     }
 }
 
-/// Create from just the value, the part after the "="
 ICalParameter::ICalParameter(const icalparameter_kind &kind, const std::string &str)
     : imp(icalparameter_new_from_value_string(kind, str.c_str()))
 {

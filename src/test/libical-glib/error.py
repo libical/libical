@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./error.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./error.py
 
 ###############################################################################
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
@@ -11,7 +10,7 @@
 import gi
 
 gi.require_version('ICalGLib', '4.0')
-from gi.repository import ICalGLib  # noqa E402
+from gi.repository import ICalGLib
 
 message = 'This is a stinky error!'
 
@@ -24,7 +23,6 @@ ICalGLib.error_set_error_state(ICalGLib.ErrorEnum.NEWFAILED_ERROR, ICalGLib.Erro
 state = ICalGLib.error_get_error_state(ICalGLib.ErrorEnum.NEWFAILED_ERROR)
 assert state == ICalGLib.ErrorState.FATAL
 
-ICalGLib.error_stop_here()
 enumeration = ICalGLib.error_icalerrno()
 string_rep = ICalGLib.error_strerror(enumeration)
 assert string_rep == 'NO: No error'

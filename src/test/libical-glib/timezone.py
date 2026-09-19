@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./timezone.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./timezone.py
 
 ###############################################################################
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
@@ -8,13 +7,13 @@
 
 """Test Python bindings for libical timezone"""
 
-import sys
 import os
+import sys
 
 import gi
 
 gi.require_version('ICalGLib', '4.0')
-from gi.repository import ICalGLib  # noqa E402
+from gi.repository import ICalGLib
 
 try:
     zoneinfodir = os.environ['ZONEINFO_DIRECTORY']
@@ -115,15 +114,6 @@ component = la.get_component()
 timezone = ICalGLib.Timezone.new()
 timezone.set_component(ICalGLib.Component.clone(component))
 assert timezone.get_location() == la.get_location()
-
-array = ICalGLib.Timezone.array_new()
-ICalGLib.Timezone.array_append_from_vtimezone(array, ICalGLib.Component.clone(la.get_component()))
-ICalGLib.Timezone.array_append_from_vtimezone(array, ICalGLib.Component.clone(chicago.get_component()))
-assert array.size() == 2
-timezone1 = ICalGLib.Timezone.array_element_at(array, 0)
-assert timezone1.get_display_name() == la.get_display_name()
-timezone2 = ICalGLib.Timezone.array_element_at(array, 1)
-assert timezone2.get_display_name() == chicago.get_display_name()
 
 ICalGLib.Timezone.free_builtin_timezones()
 ICalGLib.Object.free_global_objects()

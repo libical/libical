@@ -9,19 +9,25 @@
  Code is Eric Busboom
 ======================================================================*/
 
+/**
+ * @file icalperiod.c
+ * @brief Implements data structures for working with iCal periods (of time).
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalperiod.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 struct icalperiodtype icalperiodtype_from_string(const char *str)
 {
     struct icalperiodtype p, null_p;
     char *s = icalmemory_strdup(str);
-    char *start, *end;
+    const char *start;
+    char *end;
     icalerrorstate es;
 
     /* Errors are normally generated in the following code, so save

@@ -1,10 +1,12 @@
+/*
+ * SPDX-FileCopyrightText: 2001, Critical Path
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+ */
+
 /**
  * @file     icalspanlist_cxx.hpp
  * @author   Critical Path
  * @brief    C++ class wrapping the icalspanlist data structure
- *
- * SPDX-FileCopyrightText: 2001, Critical Path
- * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #ifndef ICALSPANLIST_CXX_H
@@ -39,7 +41,7 @@ public:
     ICalSpanList(const ICalSpanList &v);
 
     /** Constructs an ICalSpanList from an icalset */
-    ICalSpanList(icalset *set, icaltimetype start, icaltimetype end);
+    ICalSpanList(icalset *set, const icaltimetype &start, const icaltimetype &end);
 
     /** Constructs an ICalSpanList from the VFREEBUSY chunk of an icalcomponent */
     explicit ICalSpanList(icalcomponent *comp);

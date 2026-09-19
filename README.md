@@ -3,6 +3,8 @@
 [![Github workflow](https://github.com/libical/libical/actions/workflows/build.yml/badge.svg)](https://github.com/libical/libical/actions)
 [![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
 
+[Become a libical sponsor](https://github.com/sponsors/libical)
+
 ## About
 
 Libical — an implementation of iCalendar protocols and data formats
@@ -21,7 +23,7 @@ Thanks to our [contributors](CONTRIBUTORS.md).
 
 ## RFCs
 
-See [RFC calendar standards](docs/rfcs.md) for list of RFCs supported by this library.
+See [RFC calendar standards](rfcs.md) for list of RFCs supported by this library.
 
 ## License
 
@@ -54,12 +56,12 @@ overview of changes since the previous version.
 See the [C API documentation](https://libical.github.io/libical/v4/apidocs/) and
 [glibc API documentation](https://libical.github.io/libical/v4/libical-glib/).
 
-For a conceptual overview of the library, see [Using Libical](docs/UsingLibical.md).
-There is other rudimentary, unfinished documentation in the `docs/` directory of the
-source distribution, annotated examples in `examples/` and the test code in `src/test/`.
+For a conceptual overview of the library, see [Using Libical](UsingLibical.md).
+In the source distribution, you'll find more documentation in `docs/`, annotated
+examples in `examples/` and test code in `src/test/` directories.
 
 For developers porting their code to libical version 4, please visit the
-[Version 4 Migration Guide](docs/MigrationGuide_to_4.md).
+[Version 4 Migration Guide](MigrationGuide_to_4.md).
 
 ## Acknowledgments
 

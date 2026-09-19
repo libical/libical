@@ -6,12 +6,17 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file icalattach.c
+ * @brief Implements the data structure for iCalendar attachments.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalattachimpl.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <errno.h>

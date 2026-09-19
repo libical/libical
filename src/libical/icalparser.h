@@ -26,10 +26,6 @@
  */
 
 /**
- * @struct icalparser_impl
- * @typedef icalparser
- * @private
- *
  * Implementation of the icalparser struct, which holds the
  * state for the current parsing operation.
  */
@@ -58,7 +54,9 @@ typedef enum icalparser_state
     ICALPARSER_IN_PROGRESS
 } icalparser_state;
 
+/// @cond PRIVATE
 typedef char *(*icalparser_line_gen_func)(char *s, size_t size, void *d);
+/// @endcond
 
 /**
  * @brief Creates a new icalparser.
@@ -347,6 +345,15 @@ LIBICAL_ICAL_EXPORT void icalparser_set_ctrl(enum icalparser_ctrl ctrl);
 LIBICAL_ICAL_EXPORT char *icalparser_get_line(icalparser *parser,
                                               icalparser_line_gen_func line_gen_func);
 
+/**
+ * A callback function to use by icalparser_get_line.
+ *
+ * @param out a pointer to a char string to hold the concatenated output data
+ * @param buf_size is the length of @p out
+ * @param d is a pointer to the input data
+ *
+ * @return NULL if processing is complete; else a pointer to @p out.
+ */
 LIBICAL_ICAL_EXPORT char *icalparser_string_line_generator(char *out, size_t buf_size, void *d);
 
 #endif /* !ICALPARSE_H */

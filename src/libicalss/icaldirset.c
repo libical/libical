@@ -10,13 +10,21 @@
  Code is Eric Busboom
  ======================================================================*/
 
+/**
+ * @file icaldirset.c
+ * @brief Manages a database of ical components and offers interfaces for
+ * reading, writing and searching for components.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icaldirset.h"
 #include "icaldirsetimpl.h"
+#include "icalerror_p.h"
 #include "icalfileset.h"
+#include "icalpvl_p.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -160,7 +168,9 @@ icalset *icaldirset_init(icalset *set, const char *dir, void *options_in)
     icaldirset_lock(dir);
 
     dset->dir = (char *)strdup(dir);
-    dset->options = *options;
+    if (options) {
+        dset->options = *options;
+    }
     dset->directory = icalpvl_newlist();
     dset->directory_iterator = 0;
     dset->gauge = 0;
@@ -359,13 +369,6 @@ icalerrorenum icaldirset_add_component(icalset *set, icalcomponent *comp)
 
     return ICAL_NO_ERROR;
 }
-
-/**
-   Remove a component in the current cluster. HACK. This routine is a
-   "friend" of icalfileset, and breaks its encapsulation. It was
-   either do it this way, or add several layers of interfaces that had
-   no other use.
- */
 
 icalerrorenum icaldirset_remove_component(icalset *set, icalcomponent *comp)
 {
@@ -610,7 +613,7 @@ icalcomponent *icaldirset_get_next_component(icalset *set)
             /* If there is a gauge defined and the component does not
                pass the gauge, skip the rest of the loop */
 
-            if (dset->gauge != 0 && icalgauge_compare(dset->gauge, c) == 0) {
+            if (dset->gauge != 0 && !icalgauge_compare(dset->gauge, c)) {
                 continue;
             }
 

@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardderivedproperty.c
+ * @brief vCard properties.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -13,7 +18,7 @@
 #include "vcardderivedproperty.h"
 #include "vcardproperty.h"
 #include "vcardproperty_p.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <string.h>
@@ -56,6 +61,7 @@ struct vcardproperty_enum_map {
     const char *str;
 };
 
+//NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wvarargs"
@@ -64,6 +70,7 @@ struct vcardproperty_enum_map {
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
+//NOLINTEND(bugprone-invalid-enum-default-initialization)
 
     bool vcardproperty_kind_is_valid(const vcardproperty_kind kind)
 {
@@ -193,7 +200,7 @@ bool vcardproperty_is_structured(vcardproperty_kind pkind)
         const struct vcardproperty_map *map = &property_map[i];
 
         if (map->kind == pkind) {
-            return (map->flags & VCARD_PROPERTY_IS_STRUCTURED);
+            return (bool)(map->flags & VCARD_PROPERTY_IS_STRUCTURED);
         }
     }
 
@@ -209,7 +216,7 @@ bool vcardproperty_is_multivalued(vcardproperty_kind pkind)
         const struct vcardproperty_map *map = &property_map[i];
 
         if (map->kind == pkind) {
-            return (map->flags & VCARD_PROPERTY_IS_MULTIVALUED);
+            return (bool)(map->flags & VCARD_PROPERTY_IS_MULTIVALUED);
         }
     }
 
@@ -226,9 +233,9 @@ bool vcardproperty_value_kind_is_default(vcardproperty_kind pkind,
         const struct vcardproperty_map *map = &property_map[i];
 
         if (map->kind == pkind) {
-            return ((vkind == map->default_value) ||
-                    ((map->flags & VCARD_PROPERTY_IS_STRUCTURED) &&
-                     (vkind == map->libical_value)));
+            return (bool)((vkind == map->default_value) ||
+                          ((map->flags & VCARD_PROPERTY_IS_STRUCTURED) &&
+                           (vkind == map->libical_value)));
         }
     }
 

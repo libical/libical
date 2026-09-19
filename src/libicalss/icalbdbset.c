@@ -5,6 +5,13 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+  @file icalbdbset.c
+
+  @brief Manages a Berkeley database of ical components and offers interfaces
+  for reading, writing and searching for components.
+*/
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -12,6 +19,7 @@
 #include "icalbdbset.h"
 #include "icalbdbsetimpl.h"
 
+#include "icalerror_p.h"
 #include "icalparser.h"
 #include "icaltimezone.h"
 #include "icalvalue.h"
@@ -1008,17 +1016,16 @@ icalcomponent *icalbdbset_fetch(icalset *set, icalcomponent_kind kind, const cha
     for (i = icalcomponent_begin_component(bset->cluster, kind);
          icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
         icalcomponent *this = icalcompiter_deref(&i);
-        icalproperty *p = NULL;
-        const char *this_uid = NULL;
 
         if (this != 0) {
+            const char *this_uid = NULL;
             if (kind == ICAL_VAGENDA_COMPONENT) {
-                p = icalcomponent_get_first_property(this, ICAL_RELCALID_PROPERTY);
+                icalproperty *p = icalcomponent_get_first_property(this, ICAL_RELCALID_PROPERTY);
                 if (p != NULL) {
                     this_uid = icalproperty_get_relcalid(p);
                 }
             } else {
-                p = icalcomponent_get_first_property(this, ICAL_UID_PROPERTY);
+                icalproperty *p = icalcomponent_get_first_property(this, ICAL_UID_PROPERTY);
                 if (p != NULL) {
                     this_uid = icalproperty_get_uid(p);
                 }
@@ -1218,7 +1225,7 @@ icalcomponent *icalbdbset_get_first_component(icalset *set)
             c = icalcomponent_get_next_component(bset->cluster, ICAL_ANY_COMPONENT);
         }
 
-        if (c != 0 && (bset->gauge == 0 || icalgauge_compare(bset->gauge, c) == 1)) {
+        if (c != 0 && (bset->gauge == 0 || icalgauge_compare(bset->gauge, c))) {
             return c;
         }
 
@@ -1273,7 +1280,7 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
                 u_zone = icaltimezone_get_utc_timezone();
             }
 
-            start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+            start = icaltime_from_timet_with_zone(time(0), false, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
                 dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
@@ -1332,7 +1339,7 @@ icalsetiter icalbdbset_begin_component(icalset *set, icalcomponent_kind kind,
             }
         }
         /* end of a recurring event */
-        if (gauge == 0 || icalgauge_compare(itr.gauge, comp) == 1) {
+        if (gauge == 0 || icalgauge_compare(itr.gauge, comp)) {
             /* find a matched and return it */
             itr.iter = citr;
             return itr;
@@ -1381,7 +1388,7 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
         u_zone = icaltimezone_get_utc_timezone();
     }
 
-    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    start = icaltime_from_timet_with_zone(time(0), false, NULL);
 
     if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
         icalproperty *dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
@@ -1440,7 +1447,7 @@ icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *itr)
         next = icaltime_convert_to_zone(next, icaltimezone_get_utc_timezone());
     }
 
-    if (itr->gauge == 0 || icalgauge_compare(itr->gauge, comp) == 1) {
+    if (itr->gauge == 0 || icalgauge_compare(itr->gauge, comp)) {
         /* find a matched and return it */
         return comp;
     }
@@ -1453,8 +1460,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
 {
     icalcomponent *comp = NULL;
     struct icaltimetype start, next;
-    icalproperty *dtstart, *rrule, *prop, *due;
-    icaltimezone *u_zone;
+    icalproperty *rrule, *prop;
     int orig_time_was_utc = 0;
 
     _unused(set);
@@ -1484,22 +1490,22 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
 
         /* a recurring component with expand query */
         if (recur != 0 && g == 1) {
-            u_zone = icaltimezone_get_builtin_timezone(i->tzid);
+            icaltimezone *u_zone = icaltimezone_get_builtin_timezone(i->tzid);
 
             /* use UTC, if that's all we have. */
             if (!u_zone) {
                 u_zone = icaltimezone_get_utc_timezone();
             }
 
-            start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+            start = icaltime_from_timet_with_zone(time(0), false, NULL);
 
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
-                dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+                icalproperty *dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
                 if (dtstart) {
                     start = icalproperty_get_dtstart(dtstart);
                 }
             } else if (icalcomponent_isa(comp) == ICAL_VTODO_COMPONENT) {
-                due = icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY);
+                icalproperty *due = icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY);
                 if (due) {
                     start = icalproperty_get_due(due);
                 }
@@ -1549,7 +1555,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
             }
         }
         /* end of recurring event with expand query */
-        if ((i->gauge == 0 || icalgauge_compare(i->gauge, comp) == 1)) {
+        if ((i->gauge == 0 || icalgauge_compare(i->gauge, comp))) {
             /* found a matched, return it */
             return comp;
         }
@@ -1568,7 +1574,7 @@ icalcomponent *icalbdbset_get_next_component(icalset *set)
 
     do {
         c = icalcomponent_get_next_component(bset->cluster, ICAL_ANY_COMPONENT);
-        if (c != 0 && (bset->gauge == 0 || icalgauge_compare(bset->gauge, c) == 1)) {
+        if (c != 0 && (bset->gauge == 0 || icalgauge_compare(bset->gauge, c))) {
             return c;
         }
 

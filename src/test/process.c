@@ -13,10 +13,7 @@
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
 
-void send_message(icalcomponent *reply, const char *this_user)
-{
-    printf("From: %s\n\n%s\n", this_user, icalcomponent_as_ical_string(reply));
-}
+#include <assert.h>
 
 int main(int argc, char *argv[])
 {

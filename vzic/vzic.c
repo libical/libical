@@ -37,13 +37,12 @@ gboolean VzicNoRRules = FALSE;
 gboolean VzicNoRDates = FALSE;
 const char *VzicOutputDir = "zoneinfo";
 char *VzicUrlPrefix = NULL;
-char *VzicOlsonDir = NULL;
 
 GList *VzicTimeZoneNames = NULL;
 
 #if !defined(VZIC_LIBRARY)
 static void
-convert_olson_files(GPtrArray *olson_filenames);
+convert_olson_files(const char *olson_dir, GPtrArray *olson_filenames);
 
 static void free_zone_data(GArray *zone_data);
 static void free_rule_array(gpointer key,
@@ -65,6 +64,7 @@ int main(int argc,
          char *argv[])
 {
     int i;
+    const char *VzicOlsonDir = NULL;
     char directory[PATHNAME_BUFFER_SIZE];
     char filename[PATHNAME_BUFFER_SIZE];
     GHashTable *zones_hash;
@@ -162,15 +162,15 @@ int main(int argc,
 
     if (VzicDumpOutput) {
         /* Create the directories for the dump output, if they don't exist. */
-        sprintf(directory, "%s/ZonesVzic", VzicOutputDir);
+        snprintf(directory, PATHNAME_BUFFER_SIZE, "%s/ZonesVzic", VzicOutputDir);
         ensure_directory_exists(directory);
-        sprintf(directory, "%s/RulesVzic", VzicOutputDir);
+        snprintf(directory, PATHNAME_BUFFER_SIZE, "%s/RulesVzic", VzicOutputDir);
         ensure_directory_exists(directory);
     }
 
     if (VzicDumpChanges) {
         /* Create the directory for the changes output, if it doesn't exist. */
-        sprintf(directory, "%s/ChangesVzic", VzicOutputDir);
+        snprintf(directory, PATHNAME_BUFFER_SIZE, "%s/ChangesVzic", VzicOutputDir);
         ensure_directory_exists(directory);
     }
 
@@ -197,13 +197,13 @@ int main(int argc,
     */
 
     /* Convert the Olson timezone files. */
-    convert_olson_files(olson_filenames);
+    convert_olson_files(VzicOlsonDir, olson_filenames);
 
     /* Output the timezone names and coordinates in a zone.tab file,
      * and the translatable strings to feed to gettext.
      */
     if (VzicDumpZoneNamesAndCoords) {
-        sprintf(filename, "%s/zone.tab", VzicOlsonDir);
+        snprintf(filename, PATHNAME_BUFFER_SIZE, "%s/zone.tab", VzicOlsonDir);
         zones_hash = parse_zone_tab(filename);
 
         dump_time_zone_names(VzicTimeZoneNames, VzicOutputDir, zones_hash);
@@ -216,7 +216,7 @@ int main(int argc,
 }
 
 static void
-convert_olson_files(GPtrArray *olson_filenames)
+convert_olson_files(const char *olson_dir, GPtrArray *olson_filenames)
 {
     int max_until_year = 0;
 
@@ -229,7 +229,7 @@ convert_olson_files(GPtrArray *olson_filenames)
         char input_filename[PATHNAME_BUFFER_SIZE];
         int file_max_until_year;
 
-        sprintf(input_filename, "%s/%s", VzicOlsonDir, olson_filename);
+        snprintf(input_filename, PATHNAME_BUFFER_SIZE, "%s/%s", olson_dir, olson_filename);
         parse_olson_file(input_filename, zone_data, rule_data, link_data,
                          &file_max_until_year);
         if (file_max_until_year > max_until_year) {
@@ -238,10 +238,10 @@ convert_olson_files(GPtrArray *olson_filenames)
 
         if (VzicDumpOutput) {
             char dump_filename[PATHNAME_BUFFER_SIZE];
-            sprintf(dump_filename, "%s/ZonesVzic/%s", VzicOutputDir, olson_filename);
+            snprintf(dump_filename, PATHNAME_BUFFER_SIZE, "%s/ZonesVzic/%s", VzicOutputDir, olson_filename);
             dump_zone_data(zone_data, dump_filename);
 
-            sprintf(dump_filename, "%s/RulesVzic/%s", VzicOutputDir, olson_filename);
+            snprintf(dump_filename, PATHNAME_BUFFER_SIZE, "%s/RulesVzic/%s", VzicOutputDir, olson_filename);
             dump_rule_data(rule_data, dump_filename);
         }
     }
@@ -262,15 +262,13 @@ convert_olson_files(GPtrArray *olson_filenames)
 static void
 free_zone_data(GArray *zone_data)
 {
-    ZoneLineData *zone_line;
-
     for (unsigned int i = 0; i < zone_data->len; i++) {
         ZoneData *zone = &g_array_index(zone_data, ZoneData, i);
 
         g_free(zone->zone_name);
 
         for (unsigned int j = 0; j < zone->zone_line_data->len; j++) {
-            zone_line = &g_array_index(zone->zone_line_data, ZoneLineData, j);
+            ZoneLineData *zone_line = &g_array_index(zone->zone_line_data, ZoneLineData, j);
 
             g_free(zone_line->rules);
             g_free(zone_line->format);

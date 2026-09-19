@@ -6,9 +6,9 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: libicalss
-Description: @CMAKE_PROJECT_DESCRIPTION@ (Storage Support)
-URL: @CMAKE_PROJECT_HOMEPAGE_URL@
-Version: @CMAKE_PROJECT_VERSION@
+Description: @libical_DESCRIPTION@ (Storage Support)
+URL: @libical_HOMEPAGE_URL@
+Version: @libical_VERSION@
 Libs: -L${libdir} -licalss@PTHREAD_LIBS_PRIVATE@
 Requires: libical
 Cflags: -I${includedir}

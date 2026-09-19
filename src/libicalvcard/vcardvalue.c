@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardvalue.c
+ * @brief Implements the data structure representing vCard values.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -15,7 +20,7 @@
 #include "vcardcomponent.h"
 #include "vcardproperty.h"
 #include "vcardtextlist.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <ctype.h>
@@ -37,8 +42,7 @@ LIBICAL_VCARD_EXPORT struct vcardvalue_impl *vcardvalue_new_impl(vcardvalue_kind
         return 0;
     }
 
-    strcpy(v->id, "val");
-
+    v->id = ICAL_STRUCTURE_TYPE_VALUE;
     v->kind = kind;
     v->size = 0;
     v->parent = 0;
@@ -63,9 +67,7 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
         return 0;
     }
 
-    // id is a LIBICAL_VCARDVALUE_ID_LENGTH-char string (see vcardvalue_impl def)
-    memset(clone->id, 0, LIBICAL_VCARDVALUE_ID_LENGTH);
-    strncpy(clone->id, old->id, LIBICAL_VCARDVALUE_ID_LENGTH);
+    clone->id = old->id;
     clone->kind = old->kind;
     clone->size = old->size;
 
@@ -238,7 +240,7 @@ static char *vcardmemory_strdup_and_quote(char **str, char **str_p, size_t *buf_
         case '\n':
             /* If encoding a parameter value, embed literally
                (parameter encoding is done elsewhere), otherwise escape */
-            icalmemory_append_string(str, str_p, buf_sz, is_param ? "\n" : "\\n");
+            icalmemory_append_string(str, str_p, buf_sz, is_param ? "\n" : "\\n"); //NOLINT
             break;
 
         default:
@@ -336,10 +338,12 @@ static bool simple_str_to_doublestr(const char *from, char *result, int result_l
         *to = end;
     }
 
+    //NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
     /* now try to convert to a floating point number, to check for validity only */
     if (sscanf(result, "%lf", &dtest) != 1) {
         return true;
     }
+    //NOLINTEND(bugprone-unchecked-string-to-number-conversion)
     return false;
 }
 
@@ -386,17 +390,28 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         value = vcardvalue_new_enum(kind, (int)VCARD_GRAMGENDER_X, str);
         break;
 
-    case VCARD_INTEGER_VALUE:
-        value = vcardvalue_new_integer(atoi(str));
+    case VCARD_INTEGER_VALUE: {
+        char *s_end;
+        const int v = strtol(str, &s_end, 10);
+        if (str != s_end) {
+            value = vcardvalue_new_integer(v);
+        }
         break;
+    }
 
-    case VCARD_FLOAT_VALUE:
-        value = vcardvalue_new_float((float)atof(str));
+    case VCARD_FLOAT_VALUE: {
+        char *s_end;
+        const float v = strtof(str, &s_end);
+        if (str != s_end) {
+            value = vcardvalue_new_float(v);
+        }
         break;
+    }
 
     case VCARD_UTCOFFSET_VALUE: {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
+        // NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
         /* "+" / "-" hh [ [":"] mm ] */
         char sign[2] = "";
         unsigned hour, min = 0;
@@ -417,6 +432,7 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
         } else if (2 != sscanf(str, "%1[+-]%02u%n", sign, &hour, &nchar)) {
             nchar = 0;
         }
+// NOLINTEND(bugprone-unchecked-string-to-number-conversion)
 #pragma GCC diagnostic pop
 
         if (len && (len == nchar)) {
@@ -619,7 +635,7 @@ void vcardvalue_free(vcardvalue *v)
     v->size = 0;
     v->parent = 0;
     memset(&(v->data), 0, sizeof(v->data));
-    v->id[0] = 'X';
+    v->id = ICAL_STRUCTURE_TYPE_VALUE_EMPTY;
     icalmemory_free_buffer(v);
 }
 
@@ -721,7 +737,7 @@ static char *vcardvalue_text_as_vcard_string_r(const vcardvalue *value)
     size_t buf_sz;
 
     return vcardmemory_strdup_and_quote(&str, &str_p, &buf_sz,
-                                        value->data.v_string, 0);
+                                        value->data.v_string, false);
 }
 
 static char *vcardvalue_string_as_vcard_string_r(const vcardvalue *value)
@@ -770,7 +786,7 @@ char *vcardstrarray_as_vcard_string_r(const vcardstrarray *array, const char sep
     size_t buf_size;
 
     _vcardstrarray_as_vcard_string_r(&buf, &buf_ptr, &buf_size,
-                                     (vcardstrarray *)array, sep, 0);
+                                     (vcardstrarray *)array, sep, false);
 
     return buf;
 }
@@ -817,7 +833,7 @@ static char *vcardvalue_structured_as_vcard_string_r(const vcardvalue *value)
 {
     icalerror_check_arg_rz((value != 0), "value");
 
-    return vcardstructured_as_vcard_string_r(value->data.v_structured, 0);
+    return vcardstructured_as_vcard_string_r(value->data.v_structured, false);
 }
 
 static char *vcardvalue_float_as_vcard_string_r(const vcardvalue *value)
@@ -904,7 +920,7 @@ char *vcardvalue_as_vcard_string_r(const vcardvalue *value)
 
     case VCARD_TEXTLIST_VALUE:
         return vcardvalue_textlist_as_vcard_string_r(value,
-                                                     is_structured ? ';' : ',');
+                                                     is_structured ? ';' : ','); //NOLINT
 
     case VCARD_STRUCTURED_VALUE:
         return vcardvalue_structured_as_vcard_string_r(value);
@@ -978,11 +994,7 @@ bool vcardvalue_isa_value(void *value)
 
     icalerror_check_arg_rz((value != 0), "value");
 
-    if (strcmp(impl->id, "val") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_VALUE);
 }
 
 /** Examine the value and possibly change the kind to agree with the
@@ -991,6 +1003,9 @@ bool vcardvalue_isa_value(void *value)
 
 void vcardvalue_reset_kind(vcardvalue *value)
 {
+    if (!value) {
+        return;
+    }
     switch (value->kind) {
     case VCARD_DATE_VALUE:
     case VCARD_TIME_VALUE:

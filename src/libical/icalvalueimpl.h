@@ -13,12 +13,12 @@
 #define ICALVALUEIMPL_H
 
 #include "icalproperty.h"
+#include "icaltypes_p.h"
 
-#define LIBICAL_ICALVALUE_ID_LENGTH 5
 struct icalvalue_impl {
     icalvalue_kind kind; /*this is the kind that is visible from the outside */
 
-    char id[LIBICAL_ICALVALUE_ID_LENGTH];
+    icalstructuretype id;
     int size;
     icalproperty *parent;
     char *x_value;

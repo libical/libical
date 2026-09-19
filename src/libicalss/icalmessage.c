@@ -6,12 +6,17 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+ * @file icalmessage.c
+ * @brief Implements functions for creating component reply messages.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalmessage.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalversion.h" /* for ICAL_PACKAGE, ICAL_VERSION */
 
 #include <ctype.h>
@@ -104,7 +109,7 @@ static icalcomponent *icalmessage_new_reply_base(const icalcomponent *c,
             ICAL_VCALENDAR_COMPONENT, icalproperty_new_method(ICAL_METHOD_REPLY),
             icalcomponent_vanew(
                 ICAL_VEVENT_COMPONENT,
-                icalproperty_new_dtstamp(icaltime_from_timet_with_zone(time(0), 0, NULL)),
+                icalproperty_new_dtstamp(icaltime_from_timet_with_zone(time(0), false, NULL)),
                 (void *)0),
             (void *)0);
 
@@ -118,7 +123,7 @@ static icalcomponent *icalmessage_new_reply_base(const icalcomponent *c,
     icalmessage_copy_properties(reply, c, ICAL_SUMMARY_PROPERTY);
     icalmessage_copy_properties(reply, c, ICAL_SEQUENCE_PROPERTY);
 
-    icalcomponent_set_dtstamp(reply, icaltime_from_timet_with_zone(time(0), 0, NULL));
+    icalcomponent_set_dtstamp(reply, icaltime_from_timet_with_zone(time(0), false, NULL));
 
     if (msg != 0) {
         icalcomponent_add_property(inner, icalproperty_new_comment(msg));

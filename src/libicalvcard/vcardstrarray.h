@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardstrarray.h
+ * @brief Namespace the icalstrarray functions for vcard
+ */
+
 #ifndef VCARDSTRARRAY_H
 #define VCARDSTRARRAY_H
 

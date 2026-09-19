@@ -53,7 +53,7 @@ if(DEFINED STANDALONE)
 
   find_package(PkgConfig QUIET)
   set(MIN_GLIB "2.44")
-  find_package(GLib ${MIN_GLIB} REQUIRED)
+  pkg_search_module(GLIB REQUIRED glib-2.0>=${MIN_GLIB})
 else()
   set(STANDALONE False)
 endif()

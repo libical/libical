@@ -14,7 +14,8 @@
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
 
-#include <stdlib.h>
+#include <assert.h>
+#include <errno.h>
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
 #if defined(__GNUC__) && !defined(__clang__)
@@ -52,13 +53,18 @@ static int get_expected_numevents(icalcomponent *c)
     }
 
     if (note != 0) {
-        num_events = atoi(note);
+        char *endptr;
+        errno = 0;
+        num_events = strtol(note, &endptr, 10);
+        if (note == endptr || errno != 0) {
+            num_events = -1;
+        }
     }
 
     return num_events;
 }
 
-static void recur_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
+static void recur_callback(icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     int *num_recurs = data;
 
@@ -111,8 +117,8 @@ void test_recur_file(void)
         char msg[128];
 
         struct icaltimetype start;
-        struct icaltimetype startmin = icaltime_from_timet_with_zone(1, 0, NULL);
-        struct icaltimetype endmax = icaltime_from_timet_with_zone(1748497476, 0, NULL);
+        struct icaltimetype startmin = icaltime_from_timet_with_zone(1, false, NULL);
+        struct icaltimetype endmax = icaltime_from_timet_with_zone(1748497476, false, NULL);
         const char *desc_str = "malformed component";
 
         desc = icalcomponent_get_first_property(itr, ICAL_DESCRIPTION_PROPERTY);

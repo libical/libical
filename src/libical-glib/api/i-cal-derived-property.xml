@@ -143,6 +143,7 @@
     <element name="ICAL_XLICMIMEENCODING_PROPERTY"/>
     <element name="ICAL_XLICMIMEFILENAME_PROPERTY"/>
     <element name="ICAL_XLICMIMEOPTINFO_PROPERTY"/>
+    <element name="ICAL_IANA_PROPERTY"/>
     <element name="ICAL_NO_PROPERTY"/>
   </enum>
   <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ACCEPTRESPONSE" since="2.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="acceptresponse"/>
@@ -192,6 +193,7 @@
   <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="FREEBUSY" since="1.0" value-get-type="ICalPeriod *" value-set-type="const ICalPeriod *" value-set-type-ref="#ICalPeriod" value-get-annotation="transfer full" binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="freebusy"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="GEO" since="1.0" value-get-type="ICalGeo *" value-set-type="const ICalGeo *" value-set-type-ref="#ICalGeo" value-get-annotation="transfer full" binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="geo"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="GRANT" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="grant"/>
+  <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="IANA" since="3.1" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="iana"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="IMAGE" since="4.0" value-get-type="ICalAttach *" value-set-type="const ICalAttach *" value-set-type-ref="#ICalAttach" value-get-annotation="transfer full" value-get-translator-argus="(GObject *)self" binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="image"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="ITIPVERSION" since="1.0" value-get-type="const gchar *" value-set-type="const gchar *" value-set-type-ref="text" binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="itipversion"/>
   <method-from-template name="simple-new-get-set" obj-type="ICalProperty" value-name="LASTMODIFIED" since="1.0" value-get-type="ICalTime *" value-set-type="const ICalTime *" value-set-type-ref="#ICalTime" value-get-annotation="transfer full" binding-prefix="i_cal_property" native-prefix="icalproperty" suffix="lastmodified"/>

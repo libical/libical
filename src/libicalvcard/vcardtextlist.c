@@ -6,13 +6,18 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardtextlist.c
+ * @brief Implements functions for creating vCard text lists
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "vcardtextlist.h"
 #include "vcardvalue.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 vcardstrarray *vcardtextlist_new_from_string(const char *str, char sep)

@@ -1,3 +1,4 @@
+#TODO 5.0: re-enable misc-use-internal-linkage
 Checks: -*,
         bugprone-*,
         -bugprone-assignment-in-if-condition,
@@ -14,6 +15,7 @@ Checks: -*,
         -clang-analyzer-webkit.*,
         -google-*,
         misc-*,
+        -misc-use-internal-linkage,
         -misc-definitions-in-headers,
         -misc-include-cleaner,
         -misc-no-recursion,
@@ -40,6 +42,7 @@ Checks: -*,
         -readability-use-std-min-max,
         -readability-use-concise-preprocessor-directives,
 
+HeaderFilterRegex: '/libical/src/\|libical/vzic/'
 CheckOptions:
     - key: bugprone-reserved-identifier.AllowedIdentifiers
       value: '__ICalTriggerType_;__ICalTimeType_;__ICalRecurrenceType_;__ICalPeriodType_;__ICalDurationType_'

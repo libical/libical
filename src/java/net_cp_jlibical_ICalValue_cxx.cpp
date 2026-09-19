@@ -42,7 +42,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_as_1ical_1string(JNIEnv
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -59,7 +59,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalValue_isa(JNIEnv *env, jobject j
         result = cObj->isa();
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -85,7 +85,7 @@ JNIEXPORT jboolean JNICALL Java_net_cp_jlibical_ICalValue_isa_1value(JNIEnv *env
         result = (jboolean)cObj->isa_value(argObjPtr);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -126,7 +126,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1trigger(JNIEnv *en
         result = createNewICalTriggerType(env, &aTrigger);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -143,7 +143,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalValue_get_1method(JNIEnv *env, j
         result = cObj->get_method();
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -175,7 +175,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_get_1text(JNIEnv *env, 
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -215,7 +215,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1duration(JNIEnv *e
         result = createNewICalDurationType(env, &aDuration);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -252,7 +252,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_get_1query(JNIEnv *env,
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -289,7 +289,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1datetime(JNIEnv *e
         result = createNewICalTimeType(env, &aTime);
     }
 
-    return (result);
+    return result;
 }
 
 /*
@@ -325,7 +325,7 @@ JNIEXPORT jint JNICALL Java_net_cp_jlibical_ICalValue_get_1action(JNIEnv *env, j
         result = cObj->get_action();
     }
 
-    return (result);
+    return result;
 }
 
 /*

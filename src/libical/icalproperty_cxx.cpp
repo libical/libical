@@ -1,15 +1,21 @@
+/*
+ * SPDX-FileCopyrightText: 2001, Critical Path
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+ */
+
 /**
  * @file    icalproperty_cxx.cpp
  * @author  fnguyen (12/10/01)
  * @brief   Implementation of C++ Wrapper for icalproperty.c
- *
- * SPDX-FileCopyrightText: 2001, Critical Path
- * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
 #include "icalproperty_cxx.hpp"
 #include "icalparameter_cxx.hpp"
 #include "icalvalue_cxx.hpp"
+
+extern "C" {
+#include "icalerror_p.h"
+}
 
 #include <string>
 

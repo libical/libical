@@ -33,11 +33,35 @@ skip_after(gchar *ptr,
            const gchar *after,
            gchar *out_last_char)
 {
+    gchar last_char = 0;
     while (*ptr && !strchr(after, *ptr)) {
-        if (out_last_char) {
-            *out_last_char = *ptr;
+        if (*after != '\r') {
+            /* skip comments, when not searching for the end of the line */
+            if (*ptr == '/' && ptr[1] == '/') {
+                while (*ptr && *ptr != '\n') {
+                    last_char = *ptr;
+                    ptr++;
+                }
+                continue;
+            } else if (*ptr == '/' && ptr[1] == '*') {
+                ptr += 2;
+                while (*ptr && ptr[1] && !(*ptr == '*' && ptr[1] == '/')) {
+                    last_char = *ptr;
+                    ptr++;
+                }
+                if (*ptr == '*' && ptr[1] == '/') {
+                    last_char = ptr[1];
+                    ptr += 2;
+                }
+                continue;
+            }
         }
+        last_char = *ptr;
         ptr++;
+    }
+
+    if (out_last_char) {
+        *out_last_char = last_char;
     }
 
     while (*ptr && strchr(after, *ptr)) {
@@ -65,7 +89,7 @@ parse_header_file(GHashTable *symbols, /* caller allocates, char * ~> itself */
 {
     gchar *content = NULL, *start, *ptr;
     gboolean is_new_line = TRUE, read_func_name = FALSE;
-    guint export_token_len = export_token ? strlen(export_token) : 0;
+    guint export_token_len = export_token ? (guint)strlen(export_token) : 0;
 
     if (!g_file_get_contents(filename, &content, NULL, error)) {
         return FALSE;
@@ -164,6 +188,12 @@ parse_header_file(GHashTable *symbols, /* caller allocates, char * ~> itself */
                     ptr = skip_after(ptr, ";", NULL);
                 }
             }
+        }
+
+        if (ptr == start && *start) {
+            g_set_error(error, 1, 1, "Failed to advance after %" G_GINT64_FORMAT " bytes, near '%.80s", (gint64)(ptr - content), ptr);
+            g_free(content);
+            return FALSE;
         }
     }
 

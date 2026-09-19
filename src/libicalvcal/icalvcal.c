@@ -26,7 +26,7 @@
 #endif
 
 #include "icalvcal.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalvalue.h"
 #include "icaltimezone.h"
 #include "icalversion.h" /* for ICAL_PACKAGE */
@@ -315,7 +315,7 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
         } else if (!strcmp(name, VCRepeatCountProp)) {
             /* If it starts with a digit convert it into a REPEAT property. */
             if (*s && *s >= '0' && *s <= '9') {
-                repeat_prop = icalproperty_new_repeat(atoi(s));
+                repeat_prop = icalproperty_new_repeat(atoi(s)); //NOLINT(bugprone-unchecked-string-to-number-conversion)
                 icalcomponent_add_property(comp, repeat_prop);
             }
 
@@ -613,7 +613,12 @@ static void *sequence_prop(int icaltype, VObject *object, const icalcomponent *c
 
     /* GnomeCalendar outputs '-1' for this. I have no idea why.
        So we just check it is a valid +ve integer, and output 0 if it isn't. */
-    sequence = atoi(s);
+    char *s_end;
+    const long tmpl = strtol(s, &s_end, 10);
+    sequence = -1;
+    if (s != s_end) {
+        sequence = tmpl;
+    }
     if (sequence < 0) {
         sequence = 0;
     }

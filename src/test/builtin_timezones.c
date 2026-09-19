@@ -10,6 +10,8 @@
 #include <config.h>
 #endif
 
+#include "icaltime_p.h"
+
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 #include <assert.h>
@@ -36,13 +38,19 @@ static void *thread_func(void *user_data)
     }
 
     icalcomp = icaltimezone_get_component(zone);
-    pthread_mutex_lock(&thread_comp_mutex);
+    if (pthread_mutex_lock(&thread_comp_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return NULL;
+    }
     if (!thread_comp) {
         thread_comp = icalcomp;
     } else {
         assert(thread_comp == icalcomp);
     }
-    pthread_mutex_unlock(&thread_comp_mutex);
+    if (pthread_mutex_unlock(&thread_comp_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return NULL;
+    }
     /* Do not call the clone, it confuses the Thread Sanitizer, which
        claims data race on the internal members of the icalcomp. */
     /* icalcomp = icalcomponent_clone(icalcomp);
@@ -102,7 +110,7 @@ int main(void)
     printf("got %lu zones\n", (unsigned long)builtin_timezones->num_elements);
     if (builtin_timezones->num_elements == 0) {
         printf("YIKES. Try running from the build/bin directory\n");
-        return (1);
+        return 1;
     }
 
     for (zz = -1; zz < (int)builtin_timezones->num_elements; zz++) {

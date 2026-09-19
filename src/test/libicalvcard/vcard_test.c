@@ -39,7 +39,7 @@
         }                                                                                        \
     }
 
-void strip_errors(vcardcomponent *comp)
+static void strip_errors(vcardcomponent *comp)
 {
     vcardproperty *prop, *next;
 
@@ -74,8 +74,7 @@ static bool test_parse_file(const char *fname)
         "ANNIVERSARY;VALUE=TIMESTAMP:20090808T143000-0500\r\n"
         "GENDER:M;manly\r\n"
         "ADR;TYPE=WORK:;Suite D2-630;2875 Laurier;Quebec;QC;G1V 2M2;Canada\r\n"
-        "TEL;VALUE=URI;TYPE=WORK,TEXT,VOICE,CELL,VIDEO,bar,foo:tel:\r\n"
-        " +1-418-262-6501\r\n"
+        "TEL;VALUE=URI;TYPE=WORK,TEXT,VOICE,CELL,VIDEO,bar,foo:tel:+1-418-262-6501\r\n"
         "TEL;VALUE=URI:tel:+1-418-656-9254;ext=102\r\n"
         "EMAIL;TYPE=WORK:simon.perreault@viagenie.ca\r\n"
         "LANG;PREF=2:en\r\n"
@@ -425,6 +424,51 @@ static void test_ignore_backslash_at_eol(void)
     vcardcomponent_free(vcard);
 }
 
+static void test_parse_no_nested(void)
+{
+    const char *str =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:foo\r\n"
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:bar\r\n"
+        "END:VCARD\r\n"
+        "END:VCARD\r\n";
+
+    const vcardcomponent *vcard = vcardparser_parse_string(str);
+    assert(!vcard);
+}
+
+static void test_parse_multi(void)
+{
+    const char *str =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:foo\r\n"
+        "END:VCARD\r\n"
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:bar\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *xroot = vcardparser_parse_string(str);
+    assert(VCARD_XROOT_COMPONENT == vcardcomponent_isa(xroot));
+
+    vcardcomponent *comp;
+
+    comp = vcardcomponent_get_first_component(xroot, VCARD_ANY_COMPONENT);
+    assert(VCARD_VCARD_COMPONENT == vcardcomponent_isa(comp));
+
+    comp = vcardcomponent_get_next_component(xroot, VCARD_ANY_COMPONENT);
+    assert(VCARD_VCARD_COMPONENT == vcardcomponent_isa(comp));
+
+    comp = vcardcomponent_get_next_component(xroot, VCARD_ANY_COMPONENT);
+    assert(NULL == comp);
+
+    vcardcomponent_free(xroot);
+}
+
 int main(int argc, const char **argv)
 {
     vcardcomponent *card;
@@ -447,6 +491,8 @@ int main(int argc, const char **argv)
     test_n_restriction(card);
     test_v3_to_v4(card);
     test_ignore_backslash_at_eol();
+    test_parse_no_nested();
+    test_parse_multi();
 
     vcardcomponent_free(card);
 

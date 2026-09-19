@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./recurrence-type.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./recurrence-type.py
 
 ###############################################################################
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
@@ -11,7 +10,7 @@
 import gi
 
 gi.require_version('ICalGLib', '4.0')
-from gi.repository import ICalGLib  # noqa E402
+from gi.repository import ICalGLib
 
 weekday = ICalGLib.Recurrence.day_day_of_week(0)
 assert weekday == ICalGLib.RecurrenceWeekday.NO_WEEKDAY
@@ -233,7 +232,7 @@ assert ICalGLib.Recurrence.weekday_from_string('MO') == ICalGLib.RecurrenceWeekd
 start = 100000
 result = ICalGLib.recur_expand_recurrence(string, start, 10)
 secsPerDay = 24 * 60 * 60
-for i in range(0, 9):
+for i in range(9):
     assert result[i] == start + i * secsPerDay
 
 string = '19970101T183248Z/19970102T071625Z'

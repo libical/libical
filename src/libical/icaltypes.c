@@ -5,15 +5,23 @@
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
+
+/**
+ * @file icaltypes.c
+ * @brief Implements the functions to manipulate internal types
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icaltypes.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
+/// @cond PRIVATE
 #define TMP_BUF_SIZE 1024
+/// @endcond
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
@@ -113,7 +121,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
 
     /* Get the status numbers */
 
-    sscanf(str, "%hd.%hd", &major, &minor);
+    sscanf(str, "%hd.%hd", &major, &minor); //NOLINT(bugprone-unchecked-string-to-number-conversion)
 
     if (major <= 0 || minor < 0) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
@@ -182,13 +190,17 @@ ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
     ical_unknown_token_handling myHandling;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_lock(&unk_token_mutex);
+    if (pthread_mutex_lock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     myHandling = unknownTokenHandling;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_unlock(&unk_token_mutex);
+    if (pthread_mutex_unlock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     return myHandling;
@@ -197,12 +209,16 @@ ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
 void ical_set_unknown_token_handling_setting(ical_unknown_token_handling newSetting)
 {
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_lock(&unk_token_mutex);
+    if (pthread_mutex_lock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     unknownTokenHandling = newSetting;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_unlock(&unk_token_mutex);
+    if (pthread_mutex_unlock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 }

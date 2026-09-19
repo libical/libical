@@ -8,7 +8,7 @@
 
 /**
  * @file icalattach.h
- * @brief A set of functions to handle iCal attachments.
+ * @brief Defines the data structure for iCalendar attachments.
  *
  * With the `ATTACH` property, the iCal standard defines a way to
  * associate a document object with a calendar component.
@@ -37,11 +37,11 @@ typedef struct icalattach_impl icalattach;
 
 /**
  * @typedef icalattach_free_fn_t
- * @brief Function to be called to free the data of an ::icalattach object.
+ * Function to be called to free the data of an ::icalattach object.
  * @warning Currently not used
  *
  * This function type is used to free the data from an ::icalattach object created
- * with icalattach_new_from_data(). It is currently not used
+ * with icalattach_new_from_data().
  */
 typedef void (*icalattach_free_fn_t)(char *data, void *user_data);
 

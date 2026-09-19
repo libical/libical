@@ -14,6 +14,11 @@ set -o pipefail
 export MAKEFLAGS=-j4
 export CMAKE_BUILD_PARALLEL_LEVEL=4
 
+#find Java
+if (test -f "/etc/fedora-release"); then
+  export JAVA_HOME=/usr/lib/jvm/java-latest-openjdk
+fi
+
 if (test "$(uname -s)" = "Darwin"); then
   #needed to find homebrew's libxml2 and libffi on osx
   export PKG_CONFIG_PATH=/usr/local/opt/libffi/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig
@@ -155,7 +160,7 @@ CHECK_WARNINGS() {
 # print warnings found in the compile-step output
 # $1 = file with the compile-stage output
 COMPILE_WARNINGS() {
-  whitelist='g-ir-scanner:\|better[[:space:]]use[[:space:]]'
+  whitelist='g-ir-scanner:\|better[[:space:]]use[[:space:]]\|/usr/include'
   CHECK_WARNINGS "$1" "\(warning:\|CRITICAL\)" "$whitelist"
 }
 
@@ -179,7 +184,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='ICalGLib-4.0\.c\|ICal-4.0\.c\|g-ir-scanner:'
+  whitelist='ICalGLib-4.0\.c\|ICal-4.0\.c\|g-ir-scanner:\|vcc\.c:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
@@ -322,7 +327,7 @@ ASAN_BUILD() {
   fi
   echo "===== START ASAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libasan.so" "-a"
-  SET_GCC
+  SET_CLANG
   #asan also does leak detection. do that in the specific leak sanitizer
   export ASAN_OPTIONS="detect_leaks=0:verify_asan_link_order=0" #link_order is needed with different ld on Fedora (like gold)
   BUILD "$name" "-DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True $2"
@@ -340,7 +345,7 @@ LSAN_BUILD() {
   fi
   echo "===== START LSAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/liblsan.so" "-l"
-  SET_GCC
+  SET_CLANG
   BUILD "$name" "-DLIBICAL_DEVMODE_LEAK_SANITIZER=True $2"
   echo "===== END LSAN BUILD: $1 ======"
 }
@@ -373,7 +378,7 @@ TSAN_BUILD() {
   fi
   echo "===== START TSAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libtsan.so" "-a"
-  SET_GCC
+  SET_CLANG
   BUILD "$name" "-DLIBICAL_DEVMODE_THREAD_SANITIZER=True $2"
   echo "===== END TSAN BUILD: $1 ======"
 }
@@ -390,7 +395,7 @@ UBSAN_BUILD() {
   fi
   echo "===== START UBSAN BUILD: $1 ======"
   FILEPATTERN_EXISTS "/usr/lib64/libubsan.so" "-a"
-  SET_GCC
+  SET_CLANG
   export UBSAN_OPTIONS=allocator_release_to_os_interval_ms=500:halt_on_error=1:handle_abort=2:handle_segv=2:handle_sigbus=2:handle_sigfpe=2:handle_sigill=2:print_stacktrace=1:print_summary=1:print_suppressions=0:silence_unsigned_overflow=1:symbolize=1:use_sigaltstack=1
   export CFLAGS="-g -fno-omit-frame-pointer"
   BUILD "$name" "-DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True $2"
@@ -467,6 +472,7 @@ CPPCHECK() {
     -D HAVE_CONFIG_H=1 \
     -D PACKAGE_DATA_DIR="\"foo\"" \
     -D TEST_DATADIR="\"bar\"" \
+    -D G_GINT64_FORMAT=\"%ld\" \
     -i "$TOP/src/Net-ICal-Libical/" \
     -i "$TOP/src/java/" \
     -i "$TOP/src/libicalss/icalssyacc.c" \
@@ -553,6 +559,7 @@ SPLINT() {
     -preproc \
     -standard -warnposix \
     -linelen 1000 \
+    -boolcompare \
     -exportlocal \
     -nullassign \
     -nullret \
@@ -957,13 +964,15 @@ UNSET_NINJA
 
 STRICT="--warn-uninitialized -Werror=dev"
 DEFCMAKEOPTS="-DCMAKE_BUILD_TYPE=Release -DNDEBUG=1"
-CMAKEOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+CMAKEOPTS="$STRICT -DLIBICAL_BUILD_VZIC=True -DLIBICAL_DEVMODE=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
 UUCCMAKEOPTS="$CMAKEOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TZCMAKEOPTS="$CMAKEOPTS -DLIBICAL_ENABLE_BUILTIN_TZDATA=True"
 LTOCMAKEOPTS="$CMAKEOPTS -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=True"
 GLIBOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=OFF -DLIBICAL_GLIB_VAPI=ON"
 FUZZOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True"
+FUZZOPTS_NO_RSCALE="$FUZZOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 TOOLCHAIN="-DCMAKE_TOOLCHAIN_FILE=\"$TOP/cmake/Toolchain-Linux-GCC-i686.cmake\""
+STATIC_OPTS="-DLIBICAL_STATIC=TRUE -DLIBICAL_JAVA_BINDINGS=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
 
 #Static code checkers
 STATICCCHECKOPTS="\
@@ -1003,7 +1012,6 @@ GCC_BUILD testgcc1builtin "-DLIBICAL_ENABLE_BUILTIN_TZDATA=True"
 GCC_BUILD testgcc2builtin "$TZCMAKEOPTS"
 
 #GCC based static build tests, with non-Ninja
-STATIC_OPTS="-DLIBICAL_STATIC=TRUE -DLIBICAL_JAVA_BINDINGS=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
 GCC_BUILD testgcc1static "$DEFCMAKEOPTS $STATIC_OPTS"
 GCC_BUILD testgcc2static "$CMAKEOPTS $STATIC_OPTS"
 GCC_BUILD testgcc3static "$UUCCMAKEOPTS $STATIC_OPTS"
@@ -1053,6 +1061,7 @@ MEMCONSIST_BUILD test3memc "$TZCMAKEOPTS"
 MEMCONSIST_BUILD test4memc "$UUCCMAKEOPTS"
 MEMCONSIST_BUILD test5memc "$GLIBOPTS"
 MEMCONSIST_BUILD test6memc "$FUZZOPTS"
+MEMCONSIST_BUILD test7memc "$FUZZOPTS_NO_RSCALE"
 
 #Address sanitizer
 ASAN_DISABLE="-DLIBICAL_JAVA_BINDINGS=OFF"
@@ -1062,26 +1071,30 @@ ASAN_BUILD test3asan "$TZCMAKEOPTS $ASAN_DISABLE"
 ASAN_BUILD test4asan "$UUCCMAKEOPTS $ASAN_DISABLE"
 ASAN_BUILD test5asan "$GLIBOPTS $ASAN_DISABLE"
 ASAN_BUILD test6asan "$FUZZOPTS $ASAN_DISABLE"
+ASAN_BUILD test6asanstatic "$FUZZOPTS $ASAN_DISABLE $STATIC_OPTS"
+ASAN_BUILD test7asan "$FUZZOPTS_NO_RSCALE $ASAN_DISABLE"
 
 #Leak sanitizer
 #libical-glib tests fail lsan
-LSAN_DISABLE="-DLIBICAL_JAVA_BINDINGS=OFF -DLIBICAL_GLIB_VAPI=OFF -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+LSAN_DISABLE="-DLIBICAL_JAVA_BINDINGS=OFF -DLIBICAL_GLIB_VAPI=OFF -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False -DLIBICAL_BUILD_VZIC=OFF"
 LSAN_BUILD test1lsan "$DEFCMAKEOPTS $LSAN_DISABLE"
 LSAN_BUILD test2lsan "$CMAKEOPTS $LSAN_DISABLE"
 LSAN_BUILD test3lsan "$TZCMAKEOPTS $LSAN_DISABLE"
 LSAN_BUILD test4lsan "$UUCCMAKEOPTS $LSAN_DISABLE"
 LSAN_BUILD test5lsan "$GLIBOPTS $LSAN_DISABLE"
 LSAN_BUILD test6lsan "$FUZZOPTS $LSAN_DISABLE"
+LSAN_BUILD test7lsan "$FUZZOPTS_NO_RSCALE $LSAN_DISABLE"
 
 #Memory sanitizer
 # currently MSAN fails inside libicu and also isn't working with std:stringstreams properly
-MSAN_DISABLE="-DCMAKE_DISABLE_FIND_PACKAGE_ICU=True -DLIBICAL_CXX_BINDINGS=False -DLIBICAL_JAVA_BINDINGS=OFF -DLIBICAL_GLIB_VAPI=OFF -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
+MSAN_DISABLE="-DCMAKE_DISABLE_FIND_PACKAGE_ICU=True -DLIBICAL_CXX_BINDINGS=False -DLIBICAL_JAVA_BINDINGS=OFF -DLIBICAL_GLIB_VAPI=OFF -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False -DLIBICAL_BUILD_VZIC=OFF"
 MSAN_BUILD test1msan "$DEFCMAKEOPTS $MSAN_DISABLE"
 MSAN_BUILD test2msan "$CMAKEOPTS $MSAN_DISABLE"
 MSAN_BUILD test3msan "$TZCMAKEOPTS $MSAN_DISABLE"
 MSAN_BUILD test4msan "$UUCCMAKEOPTS $MSAN_DISABLE"
 MSAN_BUILD test5msan "$GLIBOPTS $MSAN_DISABLE"
 MSAN_BUILD test6msan "$FUZZOPTS $MSAN_DISABLE"
+MSAN_BUILD test7msan "$FUZZOPTS_NO_RSCALE $MSAN_DISABLE"
 
 #Thread sanitizer
 #libical-glib tests fail tsan with /lib64/libtsan.so.2: cannot allocate memory in static TLS block
@@ -1092,6 +1105,7 @@ TSAN_BUILD test3tsan "$TZCMAKEOPTS $TSAN_DISABLE"
 TSAN_BUILD test4tsan "$UUCCMAKEOPTS $TSAN_DISABLE"
 TSAN_BUILD test5tsan "$GLIBOPTS $TSAN_DISABLE"
 TSAN_BUILD test6tsan "$FUZZOPTS $TSAN_DISABLE"
+TSAN_BUILD test7tsan "$FUZZOPTS_NO_RSCALE $TSAN_DISABLE"
 
 #Undefined sanitizer
 UBSAN_BUILD test1ubsan "$DEFCMAKEOPTS"
@@ -1100,6 +1114,8 @@ UBSAN_BUILD test3ubsan "$TZCMAKEOPTS"
 UBSAN_BUILD test4ubsan "$UUCCMAKEOPTS"
 UBSAN_BUILD test5ubsan "$GLIBOPTS"
 UBSAN_BUILD test6ubsan "$FUZZOPTS"
+UBSAN_BUILD test6ubsanstatic "$FUZZOPTS $STATIC_OPTS"
+UBSAN_BUILD test7ubsan "$FUZZOPTS_NO_RSCALE"
 
 #gcc analyzer
 GCC_ANALYZER_BUILD test1gccan "$DEFCMAKEOPTS"
@@ -1108,6 +1124,7 @@ GCC_ANALYZER_BUILD test3gccan "$TZCMAKEOPTS"
 GCC_ANALYZER_BUILD test4gccan "$UUCCMAKEOPTS"
 GCC_ANALYZER_BUILD test5gccan "$GLIBOPTS"
 GCC_ANALYZER_BUILD test6gccan "$FUZZOPTS"
+GCC_ANALYZER_BUILD test7gccan "$FUZZOPTS_NO_RSCALE"
 
 #Threadlocal
 THREADLOCAL_BUILD test1threadlocal "$DEFCMAKEOPTS"
@@ -1116,5 +1133,6 @@ THREADLOCAL_BUILD test3threadlocal "$TZCMAKEOPTS"
 THREADLOCAL_BUILD test4threadlocal "$UUCCMAKEOPTS"
 THREADLOCAL_BUILD test5threadlocal "$GLIBOPTS"
 THREADLOCAL_BUILD test6threadlocal "$FUZZOPTS"
+THREADLOCAL_BUILD test7threadlocal "$FUZZOPTS_NO_RSCALE"
 
 echo "ALL TESTS COMPLETED SUCCESSFULLY"

@@ -1,6 +1,11 @@
-/**
+/*
  *  SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
  *  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+ */
+
+/**
+ * @file icallimits.c
+ * @brief Implements the interface for getting/setting internal library limits.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -8,7 +13,7 @@
 #endif
 
 #include "icallimits.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 
 static ICAL_GLOBAL_VAR size_t _MAX_PARSE_FAILURES = 1000;
 static ICAL_GLOBAL_VAR size_t _MAX_PARSE_SEARCH = 100000;
@@ -19,7 +24,7 @@ static ICAL_GLOBAL_VAR size_t _MAX_VALUE_CHARS = 10485760;
 static ICAL_GLOBAL_VAR size_t _MAX_PROPERTY_VALUES = 500;
 static ICAL_GLOBAL_VAR size_t _MAX_RECURRENCE_SEARCH = 100000;
 static ICAL_GLOBAL_VAR size_t _MAX_RECURRENCE_TIME_STANDING_STILL = 50;
-static ICAL_GLOBAL_VAR size_t _MAX_RRULE_SEARCH = 100;
+static ICAL_GLOBAL_VAR size_t _MAX_RRULE_SEARCH = 500;
 
 size_t icallimit_get(icallimits_kind kind)
 {

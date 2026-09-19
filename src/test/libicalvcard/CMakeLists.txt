@@ -9,6 +9,7 @@ include_directories(
   ${PROJECT_BINARY_DIR}/src
   ${PROJECT_SOURCE_DIR}/src/libicalvcard
   ${PROJECT_BINARY_DIR}/src/libicalvcard
+  ${PROJECT_SOURCE_DIR}/src/test
 )
 
 #macro to build (but do not create a test)
@@ -28,7 +29,17 @@ endmacro()
 vctestme(vcard_construct vcard_test.c)
 vctestme(vcard_encode vcard_test_encode.c)
 
-vcbuildme(vcardcomponent_fuzz1 vcardcomponent_fuzz1.c)
+set(fuzz_sources)
+if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
+  set(fuzz_sources ${PROJECT_SOURCE_DIR}/src/test/test-malloc.c)
+endif()
+set(
+  fuzz1_SRCS
+  vcardcomponent_fuzz1.c
+  ${fuzz_sources}
+)
+vcbuildme(vcardcomponent_fuzz1 "${fuzz1_SRCS}")
+
 if(LIBICAL_BUILD_TESTING_BIGFUZZ)
   foreach(
     fuzztest
@@ -41,6 +52,10 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     485932113 # ASAN Heap-use-after-free
     486715154 # ASAN Heap_buffer-overflow WRITE 8
     488194780 # UBSAN cpu timeout exceeds 60s
+    487903131 # ASAN Stack-overflow _parse_vcard
+    488416219 # ASAN Stack-overflow
+    505903588 # MSAN Use-of-uninitialized value
+    523004109 # out-of-memory
   )
     add_test(
       NAME vcfuzz1test${fuzztest}

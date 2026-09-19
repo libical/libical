@@ -9,20 +9,20 @@
  Code is Eric Busboom
 ======================================================================*/
 
-#ifndef ICALCALENDAR_H
-#define ICALCALENDAR_H
-
-#include "libical_icalss_export.h"
-#include "icalset.h"
-
-/** @file icalcalendar.h
- *
+/**
+ * @file icalcalendar.h
  * @brief Routines for storing calendar data in a file system.
  *
  * The calendar has two icaldirsets, one for incoming components and one for
  * booked components. It also has interfaces to access the free/busy list and a
  * list of calendar properties
  */
+
+#ifndef ICALCALENDAR_H
+#define ICALCALENDAR_H
+
+#include "libical_icalss_export.h"
+#include "icalset.h"
 
 typedef struct icalcalendar_impl icalcalendar;
 
@@ -42,8 +42,22 @@ LIBICAL_ICALSS_EXPORT icalset *icalcalendar_get_booked(icalcalendar *calendar);
 
 LIBICAL_ICALSS_EXPORT icalset *icalcalendar_get_incoming(icalcalendar *calendar);
 
+/**
+ * Gets the properties from the specified icalcalendar.
+ *
+ * @param calendar is a pointer to a valid icalendar
+ *
+ * @return a pointer to an icalset with the properties.
+ */
 LIBICAL_ICALSS_EXPORT icalset *icalcalendar_get_properties(icalcalendar *calendar);
 
+/**
+ * Gets the freebusy info from the specified icalcalendar.
+ *
+ * @param calendar is a pointer to a valid icalendar
+ *
+ * @return a pointer to an icalset with the freebusy info.
+ */
 LIBICAL_ICALSS_EXPORT icalset *icalcalendar_get_freebusy(icalcalendar *calendar);
 
 #endif /* !ICALCALENDAR_H */

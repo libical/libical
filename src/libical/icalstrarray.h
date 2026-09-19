@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file icalstrarray.h
+ * @brief Defines the data structure for handling string arrays.
+ */
+
 #ifndef ICALSTRARRAY_H
 #define ICALSTRARRAY_H
 
@@ -14,7 +19,10 @@
 
 #include <stdlib.h>
 
+/// @cond PRIVATE
+/* An icalstrarray is just an icalarray in disguise. */
 typedef icalarray icalstrarray;
+/// @endcond
 
 /**
  * @brief Creates a new icalstrarray object.

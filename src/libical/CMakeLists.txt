@@ -5,7 +5,7 @@ add_definitions(-Dlibical_ical_EXPORTS)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icalversion.h @ONLY)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icaltime.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icaltime.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icaltime_p.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icaltime_p.h)
 
 include_directories(
   ${PROJECT_BINARY_DIR}
@@ -215,6 +215,8 @@ set(
   icalenumarray.h
   icalenums.c
   icalenums.h
+  icalerror_p.c
+  icalerror_p.h
   icalerror.c
   icalerror.h
   icallimits.c
@@ -234,6 +236,8 @@ set(
   icalrestriction.h
   icalstrarray.c
   icalstrarray.h
+  icaltime_p.c
+  icaltime_p.h
   icaltime.c
   icaltime.h
   icaltimezone_p.c
@@ -245,17 +249,18 @@ set(
   icalduration.c
   icalperiod.h
   icalperiod.c
+  icaltypes_p.h
   icaltypes.c
   icaltypes.h
   icalvalue.c
   icalvalue.h
   icalvalueimpl.h
-  icalpvl.c
-  icalpvl.h
+  icalpvl_p.c
+  icalpvl_p.h
   qsort_gen.c
   qsort_gen.h
-  icallangbind.h
-  icallangbind.c
+  icallangbind_p.h
+  icallangbind_p.c
   icaldate_p.c
   icaldate_p.h
   byref.c
@@ -289,7 +294,7 @@ if(DEFINED CMAKE_THREAD_LIBS_INIT)
   target_link_libraries(ical ${CMAKE_THREAD_LIBS_INIT})
 endif()
 if(ICU_FOUND)
-  target_link_libraries(ical ${ICU_LIBRARIES})
+  target_link_libraries(ical PRIVATE ${ICU_LIBRARIES})
   if(VCPKG_MANIFEST_MODE)
     if(NOT APPLE AND NOT WIN32)
       target_link_libraries(ical "m;stdc++")
@@ -300,6 +305,12 @@ endif()
 if(WINCE)
   target_link_libraries(ical ${WCECOMPAT_LIBRARIES})
 endif()
+
+#link sanitizer library (if we're building with sanitizers)
+#fail github CI: Your application is linked against incompatible ASan runtimes
+#if(XSAN_LINKER_FLAGS)
+#  target_link_libraries(ical PRIVATE ${XSAN_LINKER_FLAGS})
+#endif()
 
 if(MSVC)
   set_target_properties(
@@ -314,7 +325,7 @@ if(NOT ANDROID)
     ical
     PROPERTIES
       VERSION
-        ${CMAKE_PROJECT_VERSION}
+        ${libical_VERSION}
       SOVERSION
         ${LIBICAL_LIB_SOVERSION_STRING}
   )
@@ -375,7 +386,7 @@ if(LIBICAL_CXX_BINDINGS)
       ical_cxx
       PROPERTIES
         VERSION
-          ${CMAKE_PROJECT_VERSION}
+          ${libical_VERSION}
         SOVERSION
           ${LIBICAL_LIB_SOVERSION_STRING}
     )
@@ -407,7 +418,6 @@ install(
     icalenumarray.h
     icalenums.h
     icalerror.h
-    icallangbind.h
     icallimits.h
     icalmemory.h
     icalparameter.h
@@ -417,14 +427,14 @@ install(
     icalrecur.h
     icalrestriction.h
     icalstrarray.h
-    ${PROJECT_BINARY_DIR}/src/libical/icaltime.h
+    ${PROJECT_BINARY_DIR}/src/libical/icaltime_p.h
+    icaltime.h
     icaltimezone.h
     icaltypes.h
     icalvalue.h
     libical_deprecated.h
     libical_sentinel.h
     libical_ical_export.h
-    icalpvl.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
 

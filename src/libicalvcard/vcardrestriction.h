@@ -6,6 +6,12 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardrestriction.h
+ * @brief Functions to check if a vcardcomponent meets the restrictions
+ * imposed by the standard
+ */
+
 #ifndef VCARDRESTRICTION_H
 #define VCARDRESTRICTION_H
 

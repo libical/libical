@@ -4,6 +4,13 @@
  SPDX-FileCopyrightText: 2000, Eric Busboom  <eric@civicknowledge.com>
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
+
+/**
+ * @file icalrestriction.c
+ * @brief Functions to check if an icalcomponent meets the restrictions
+ * imposed by the standard.
+ */
+
 /*#line 7 "icalrestriction.c.in"*/
 
 #ifdef HAVE_CONFIG_H
@@ -11,7 +18,8 @@
 #endif
 
 #include "icalrestriction.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
+#include "icalmemory.h"
 
 /* Define the structs for the restrictions. these data are filled out
 in machine generated code below */
@@ -195,31 +203,150 @@ const char *icalrestriction_must_if_tz_ref(const icalrestriction_record * rec,
     return 0;
 }
 
-static const char *icalrestriction_no_dtend(const icalrestriction_record * rec,
-                                            icalcomponent *comp, icalproperty *prop)
+static const char *_validate_duration(icalcomponent *comp, icalproperty *prop)
 {
-    _unused(rec);
+    struct icaldurationtype duration;
 
-    if (prop != NULL &&
-        icalcomponent_get_first_property(comp, ICAL_DTEND_PROPERTY)) {
+    if (!icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY)) {
         return
-            "Failed iTIP restrictions for DTEND property. "
-            "The component must not have both DURATION and DTEND";
+            "Failed iTIP restrictions for DURATION property. "
+            "The component must have DTSTART";
+    }
+
+    duration = icalproperty_get_duration(prop);
+
+    if (icaldurationtype_as_utc_seconds(duration) < 0) {
+        /* NOTE: Per RFC 5545, Section 3.8.2.5, DURATION > 0,
+           but DURATION == 0 occurs frequently enough in the wild
+           for us to allow it */
+        return
+            "Failed iTIP restrictions for DURATION property. "
+            "The DURATION value must be non-negative";
     }
 
     return 0;
 }
 
-static const char *icalrestriction_no_duration(const icalrestriction_record * rec,
-                                               icalcomponent *comp, icalproperty *prop)
+/* This function is called with comp=VEVENT, prop=DURATION */
+static const char *icalrestriction_no_dtend(const icalrestriction_record * rec,
+                                            icalcomponent *comp, icalproperty *prop)
 {
     _unused(rec);
 
-    if (prop != NULL &&
-        icalcomponent_get_first_property(comp, ICAL_DURATION_PROPERTY)) {
+    if (prop == NULL) {
+        return 0;
+    }
+
+    if (icalcomponent_get_first_property(comp, ICAL_DTEND_PROPERTY)) {
         return
             "Failed iTIP restrictions for DURATION property. "
-            "The component must not have both DTEND and DURATION";
+            "The component must not have both DURATION and DTEND";
+    }
+
+    return _validate_duration(comp, prop);
+}
+
+/* This function is called with comp=VTODO, prop=DURATION */
+static const char *icalrestriction_no_due(const icalrestriction_record * rec,
+                                          icalcomponent *comp, icalproperty *prop)
+{
+    _unused(rec);
+
+    if (prop == NULL) {
+        return 0;
+    }
+
+    if (icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY)) {
+        return
+            "Failed iTIP restrictions for DURATION property. "
+            "The component must not have both DURATION and DUE";
+    }
+
+    return _validate_duration(comp, prop);
+}
+
+#define TMP_BUF_SIZE 1024
+
+/* This function is called with either comp=VEVENT, prop=DTEND or
+   comp=VTODO, prop=DUE */
+static const char *icalrestriction_no_duration(const icalrestriction_record * rec,
+                                               icalcomponent *comp, icalproperty *prop)
+{
+    const char *pkind;
+    icalproperty *dtstartp;
+    icaltimetype dtstart;
+    icaltimetype dtend_due;
+    bool dtstart_islocal;
+    bool dtend_due_islocal;
+    _unused(rec);
+
+    if (prop == NULL) {
+        return 0;
+    }
+
+    pkind = icalproperty_kind_to_string(icalproperty_isa(prop));
+
+    if (icalcomponent_get_first_property(comp, ICAL_DURATION_PROPERTY)) {
+        char *temp = (char*) icalmemory_tmp_buffer(TMP_BUF_SIZE);
+        (void)snprintf(temp, TMP_BUF_SIZE,
+                       "Failed iTIP restrictions for %s property. "
+                       "The component must not have both %s and DURATION",
+                       pkind, pkind);
+        return temp;
+    }
+
+    /* Per RFC 5545, Sections 3.8.2.2 and 3.8.2.3:
+       The value type of the DTEND/DUE property MUST be the same as the
+       DTSTART property, and its value MUST be later in time than the value
+       of the DTSTART property.
+       Furthermore, the DTEND/DUE property MUST be specified as a date
+       with local time if and only if the DTSTART property is also
+       specified as a date with local time.
+    */
+    dtstartp = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+
+    if (!dtstartp) {
+        /* DTSTART is optional in VTODO */
+        return (icalcomponent_isa(comp) == ICAL_VTODO_COMPONENT) ? 0 :
+            "Failed iTIP restrictions for DTEND property. "
+            "The component must have DTSTART";
+    }
+
+    dtstart = icalproperty_get_datetime_with_component(dtstartp, comp);
+    dtend_due = icalproperty_get_datetime_with_component(prop, comp);
+
+    if (icaltime_is_date(dtend_due) != icaltime_is_date(dtstart)) {
+        char *temp = (char*) icalmemory_tmp_buffer(TMP_BUF_SIZE);
+        (void)snprintf(temp, TMP_BUF_SIZE,
+                       "Failed iTIP restrictions for %s property. "
+                       "%s must have the same value type as DTSTART",
+                       pkind, pkind);
+        return temp;
+    }
+
+    dtstart_islocal = !dtstart.zone && //NOLINT(readability-implicit-bool-conversion)
+        !icalproperty_get_first_parameter(dtstartp, ICAL_TZID_PARAMETER);
+    dtend_due_islocal = !dtend_due.zone &&//NOLINT(readability-implicit-bool-conversion)
+        !icalproperty_get_first_parameter(prop, ICAL_TZID_PARAMETER);
+
+    if (dtend_due_islocal != dtstart_islocal) {
+        char *temp = (char*) icalmemory_tmp_buffer(TMP_BUF_SIZE);
+        (void)snprintf(temp, TMP_BUF_SIZE,
+                       "Failed iTIP restrictions for %s property. "
+                       "%s must be local time if DTSTART is local time",
+                       pkind, pkind);
+        return temp;
+    }
+
+    if (icaltime_compare(dtend_due, dtstart) < 0) {
+        /* NOTE: Per RFC 5545, DTEND != DTSTART, but this occurs
+           frequently enough in the wild for us to allow it */
+        char *temp = (char*) icalmemory_tmp_buffer(TMP_BUF_SIZE);
+        (void)snprintf(temp, TMP_BUF_SIZE,
+                       "Failed iTIP restrictions for %s property. "
+                       "%s must occur after DTSTART",
+                       pkind, pkind);
+        return temp;
     }
 
     return 0;
@@ -248,11 +375,10 @@ static bool _check_restriction(icalcomponent *comp,
     compare = icalrestriction_compare(restr, count);
 
     if (!compare) {
-#define TMP_BUF_SIZE 1024
-        char temp[TMP_BUF_SIZE];
         icalproperty *errProp;
         icalparameter *errParam;
         const char *type, *kind;
+        char *temp;
 
         if (record->subcomponent != ICAL_NO_COMPONENT) {
             type = "component";
@@ -263,6 +389,7 @@ static bool _check_restriction(icalcomponent *comp,
         }
 
         /* Don't worry if the error message is truncated at TMP_BUF_SIZE chars */
+        temp = (char*) icalmemory_tmp_buffer(TMP_BUF_SIZE);
         (void)snprintf(temp, TMP_BUF_SIZE,
                        "Failed iTIP restrictions for %s %s. "
                        "Expected %s instances of the %s and got %d",
@@ -370,7 +497,7 @@ static bool icalrestriction_check_component(icalproperty_method method,
 
             compare = _check_restriction(comp, record, count, prop);
 
-            valid = valid && compare;
+            valid = valid && compare; //NOLINT(readability-implicit-bool-conversion)
         }
     }
 
@@ -393,7 +520,7 @@ static bool icalrestriction_check_component(icalproperty_method method,
 
             compare = _check_restriction(comp, record, count, NULL);
 
-            valid = valid && compare;
+            valid = valid && compare; //NOLINT(readability-implicit-bool-conversion)
         }
     }
 
@@ -409,7 +536,7 @@ static bool icalrestriction_check_component(icalproperty_method method,
 
         compare = icalrestriction_check_component(method, inner_comp);
 
-        valid = valid && compare;
+        valid = valid && compare; //NOLINT(readability-implicit-bool-conversion)
     }
 
     return valid;
@@ -426,7 +553,7 @@ bool icalrestriction_check(icalcomponent *outer_comp)
 
     if (comp_kind != ICAL_VCALENDAR_COMPONENT) {
         icalerror_set_errno(ICAL_BADARG_ERROR);
-        return 0;
+        return false;
     }
 
     /* Check the VCALENDAR wrapper */

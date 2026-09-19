@@ -58,7 +58,8 @@ else()
     "/usr/local"
     "/usr/local/opt/berkeley-db"
     "/opt"
-    "/opt/local"
+    "/opt/homebrew"
+    "/opt/homebrew/opt/berkeley-db"
   )
 endif()
 

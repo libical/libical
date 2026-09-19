@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file icalderivedproperty.c
+ * @brief ICalendar properties.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -14,7 +19,7 @@
 #include "icalproperty.h"
 #include "icalproperty_p.h"
 #include "icalcomponent.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <string.h>
@@ -57,7 +62,9 @@ struct icalproperty_enum_map {
     const char *str;
 };
 
+//NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
 <insert_code_here>
+//NOLINTEND(bugprone-invalid-enum-default-initialization)
 
     bool icalproperty_kind_is_valid(const icalproperty_kind kind)
 {
@@ -107,11 +114,11 @@ icalproperty_kind icalproperty_string_to_kind(const char *string)
         }
     }
 
-    if (strncmp(string, "X-", 2) == 0) {
+    if (strncasecmp(string, "X-", 2) == 0) {
         return ICAL_X_PROPERTY;
     }
 
-    return ICAL_NO_PROPERTY;
+    return ICAL_IANA_PROPERTY;
 }
 
 icalproperty_kind icalproperty_value_kind_to_kind(icalvalue_kind kind)
@@ -155,7 +162,7 @@ bool icalproperty_value_kind_is_valid(icalproperty_kind pkind, icalvalue_kind vk
         return false;
     }
 
-    if (pkind == ICAL_X_PROPERTY) {
+    if (pkind == ICAL_X_PROPERTY || pkind == ICAL_IANA_PROPERTY) {
         return true;
     }
 
@@ -230,9 +237,9 @@ bool icalproperty_value_kind_is_default(icalproperty_kind pkind,
         const struct icalproperty_map *map = &property_map[i];
 
         if (map->kind == pkind) {
-            return ((vkind == map->default_value) ||
-                    ((map->flags & ICAL_PROPERTY_IS_STRUCTURED) &&
-                     (vkind == map->libical_value)));
+            const bool is_structured = (bool)(map->flags & ICAL_PROPERTY_IS_STRUCTURED);
+            return ((vkind == map->default_value) || //NOLINT(readability-implicit-bool-conversion)
+                    (is_structured && (vkind == map->libical_value)));
         }
     }
 
@@ -412,12 +419,12 @@ icalproperty_transp icalproperty_string_to_transp(const char *str)
     return ICAL_TRANSP_NONE;
 }
 
-const char *icalproperty_class_to_string(icalproperty_class class)
+const char *icalproperty_class_to_string(icalproperty_class propclass)
 {
-    icalerror_check_arg_rz(class >= ICAL_CLASS_X, "class");
-    icalerror_check_arg_rz(class <= ICAL_CLASS_NONE, "class");
+    icalerror_check_arg_rz(propclass >= ICAL_CLASS_X, "class");
+    icalerror_check_arg_rz(propclass <= ICAL_CLASS_NONE, "class");
 
-    return enum_map[class - ICALPROPERTY_FIRST_ENUM].str;
+    return enum_map[propclass - ICALPROPERTY_FIRST_ENUM].str;
 }
 
 icalproperty_class icalproperty_string_to_class(const char *str)

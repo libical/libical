@@ -14,8 +14,8 @@
  * Be warned that these functions can change at any time without notice. *
  *************************************************************************/
 
-#ifndef ICAL_PVL_P_H
-#define ICAL_PVL_P_H
+#ifndef ICAL_PVL_H
+#define ICAL_PVL_H
 
 #include "libical_ical_export.h"
 
@@ -82,4 +82,4 @@ typedef void (*icalpvl_applyf)(void *a, void *b);
 
 LIBICAL_ICAL_EXPORT void icalpvl_apply(icalpvl_list l, icalpvl_applyf f, void *v);
 
-#endif /* ICAL_PVL_P_H */
+#endif /* ICAL_PVL_H */

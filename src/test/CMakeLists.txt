@@ -25,6 +25,7 @@ set(TEST_DATADIR "\"${PROJECT_SOURCE_DIR}/test-data\"")
 add_definitions(
   -DTEST_DATADIR=${TEST_DATADIR}
   -DTEST_ZONEDIR="${PROJECT_SOURCE_DIR}/zoneinfo"
+  -DTEST_MAX_MEMORY=1073741824 # max memory to allow when building with MEMORY_CONSISTENCY
 )
 
 # Set properties for the test
@@ -38,7 +39,7 @@ macro(setprops _name)
           "${PROJECT_BINARY_DIR}/bin"
     )
   endif()
-  if(WIN32)
+  if(WIN32 AND NOT MINGW)
     set(tpath "${PROJECT_BINARY_DIR}/bin;%PATH%")
     if(ICU_FOUND)
       set(tpath "${ICU_BINARY_DIR};${tpath}")
@@ -48,6 +49,14 @@ macro(setprops _name)
       PROPERTIES
         ENVIRONMENT
           "PATH=${tpath}"
+        WORKING_DIRECTORY
+          "${PROJECT_BINARY_DIR}/bin"
+    )
+  endif()
+  if(WIN32 AND MINGW)
+    set_tests_properties(
+      ${_name}
+      PROPERTIES
         WORKING_DIRECTORY
           "${PROJECT_BINARY_DIR}/bin"
     )
@@ -287,8 +296,23 @@ endif()
 
 ########### next target ###############
 
-buildme(icalcomponent_fuzz1 icalcomponent_fuzz1.c)
-buildme(icalcomponent_fuzz2 icalcomponent_fuzz2.c)
+set(fuzz_sources)
+if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
+  set(fuzz_sources test-malloc.c)
+endif()
+
+set(
+  fuzz1_SRCS
+  icalcomponent_fuzz1.c
+  ${fuzz_sources}
+)
+buildme(icalcomponent_fuzz1 "${fuzz1_SRCS}")
+set(
+  fuzz2_SRCS
+  icalcomponent_fuzz2.c
+  ${fuzz_sources}
+)
+buildme(icalcomponent_fuzz2 "${fuzz2_SRCS}")
 
 testme(icaltime_fuzz icaltime_fuzz.c)
 testme(icalcomponent_timefuzz icalcomponent_timefuzz.c)
@@ -319,11 +343,14 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     472865252 # UBSAN cpu timeout exceeds 60s
     476187660 # ASAN cpu timeout exceeds 60s
     479865113 # ASAN cpu timeout exceeds 60s
-    usban
-    usban2
-    usban3
-    usban4 # integer overflow in icalpvl_newlist
-    usban5 # integer overflow in icalpvl_new_element
+    492956874 # UBSAN cpu timeout exceeds 60s
+    549393074 # out of memory
+    560953111 # out of memory
+    ubsan
+    ubsan2
+    ubsan3
+    ubsan4 # integer overflow in icalpvl_newlist
+    ubsan5 # integer overflow in icalpvl_new_element
   )
     add_test(
       NAME fuzz1test${fuzztest}
@@ -338,5 +365,19 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
         icalcomponent_fuzz2 "${PROJECT_SOURCE_DIR}/test-data/fuzz${fuzztest}"
     )
     setprops(fuzz2test${fuzztest})
+  endforeach()
+endif()
+
+########### next target ###############
+
+buildme(icalmerge_fuzz1 icalmerge_fuzz1.c)
+if(LIBICAL_BUILD_TESTING_BIGFUZZ)
+  foreach(mergetest merge1 merge3 merge4)
+    add_test(
+      NAME mergetest${mergetest}
+      COMMAND
+        icalmerge_fuzz1 "${PROJECT_SOURCE_DIR}/test-data/fuzz${mergetest}"
+    )
+    setprops(mergetest${mergetest})
   endforeach()
 endif()

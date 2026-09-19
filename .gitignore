@@ -3,3 +3,4 @@ book
 .cache
 compile_commands.json
 precommit.out
+abi-dumps

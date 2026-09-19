@@ -5,19 +5,73 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.0] - Unreleased
+## [4.1.0] - Unreleased
+
+- WIP
+
+## [4.0.6] - Unreleased
+
+- libicalvcard: the typed vcardvalue getters now check that the value type of
+  the property uses the same union member as the expected value type of the
+  getter. If the type mismatches, then they return the zero value for the
+  expected value type. The typed setters error with ICAL_BADARG_ERROR
+  instead of overwriting a value held in another union member.
+- Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
+- Improve build paths in installed .cmake files (esp. for cross-compiling)
+
+## [4.0.5] - 2026-08-15
+
+- Fix 32-bit time_t upper bound off by two days.
+- Buildsystem: fix libical_deprecated_option() writing the wrong cache value.
+- Bogus TZIDs no longer cause an error.
+- DTEND, DURATION, DUE property types and values are now validated per
+  RFC 5545 Sections 3.8.2.2 - 3.8.2.5.
+- Built-in timezones updated to tzdata2026c.
+
+## [4.0.4] - 2026-07-25
+
+- Fix an uninitialized memory issue reading zoneinfo geo coordinates.
+
+## [4.0.3] - 2026-06-14
+
+- Built-in timezones updated to tzdata2026b.
+- Fixes line folding where a line fold could mix with a line ending.
+
+## [4.0.2] - 2026-05-30
+
+- Fix a heap-buffer-overflow in `icalcomponent_merge_component()`.
+- Remove "-Wl,-z,nodlopen" from gcc/clang compile options.
+- icaltime: Prefer passed-in time's timezone in `icaltime_compare_date_only()`.
+- icaltime: Check for month out-of-range in `icaltime_day_of_year()`.
+
+## [4.0.1] - 2026-05-14
+
+- Increase the ICAL_LIMIT_RRULE_SEARCH limit from 100 to 500.
+- Fix an unsafe exec() in the `vzic` tool when compiled with the CREATE_SYMLINK option.
+
+## [4.0.0] - 2026-04-30
 
 This is a major release and is **not** source or binary compatible with version 3.x.
 
-Please see [Version 4 Migration Guide](docs/MigrationGuide_to_4.md)
+Please see [Version 4 Migration Guide](MigrationGuide_to_4.md)
 for details about API changes since libical 3.x.
+
+Included in this release is a **Technical Preview (TP)** of our new library libicalvcard
+for handling VCARD formatted data.  We encourage users to try-out this new library
+and provide feedback to our issue tracker at <https://github.com/libical/libical/issues>.
+Note that the libicalvcard API is not finalized and no source or binary compatibility
+is guaranteed until sometime later in 4.x release cycle. Additionally, there are currently
+no C++ bindings available for libicalvcard (volunteers wanted).
+
+Please **do not** use libicalvcard for production or other non-experimental purposes
+until the Technical Preview phase is completed.
 
 ### Added
 
 - REUSE compliant licensing
 - Supports multi-valued parameters (DELEGATED-FROM, DELEGATED-TO, MEMBER, DISPLAY, FEATURE, etc)
 - Adds java bindings
-- Brand new icalvcard library that follows the libical API.
+- (TP) Brand new icalvcard library that follows the libical API.
 - draft-ietf-calext-eventpub-extensions-19 (RFC 9073) support added
 - draft-ietf-calext-valarm-extensions-07 (RFC 9074) support added
 - Added support for Event Publishing (RFC 9073) and VALARM (RFC 9074) Extensions
@@ -31,7 +85,7 @@ for details about API changes since libical 3.x.
 
 ### Changed
 
-- Built-in timezones updated to tzdata2025c to include historical data
+- Built-in timezones updated to tzdata2026a to include historical data
 - Requires MSVC 2013 or higher (when building on Windows with MSVC)
 - Requires CMake v3.20.0 or higher
 - For the C++ bindings, requires a C++11 compliant C++ compiler
@@ -47,16 +101,22 @@ for details about API changes since libical 3.x.
 - `icaltimezone_set_tzid_prefix()` now allows setting an empty tzid prefix.
 - `icaldurationtype_from_int` and `icaldurationtype_as_int` have been renamed to
     `icaldurationtype_from_seconds` and `icaldurationtype_as_seconds`, respectively.
+- Components and properties with arbitrary iana-token names now are parsed with kind
+    ICAL_IANA_COMPONENT and ICAL_IANA_PROPERTY if the `ical_unknown_token_handling`
+    setting is ICAL_ASSUME_IANA_TOKEN. Otherwise, they are handled as error.
+- Property and parameter names that start with "x-" (lowercase) now also
+  are parsed as X kind.
+- The `icalproperty_remove_parameter_by_(kind|name)` functions now remove all matching parameters.
+  Before, they only removed the first matching parameter contrary to their documentation.
+- `icalrecurrencetype_new_from_string()` is more strict against overflows and empty rule parts.
+  E.g. it now rejects RRULE parts like `BYDAY=255SU` (which used to be interpreted as `BYDAY=-1SU`).
 
 ### Deprecated
-
-- The icalvcal library is deprecated and will be removed sometime in the 4.x series.
-   Please port your icalvcal code to use icalvcard instead.
 
 - Several CMake options are renamed in favor of a "namespaced" equivalent.
   Please port your buildscripts to the new CMake option names.
   A complete list is provided in this "CMake options" section of the
-  [Version 4 Migration Guide](docs/MigrationGuide_to_4.md)
+  [Version 4 Migration Guide](MigrationGuide_to_4.md)
 
 ### Removed
 
@@ -76,6 +136,9 @@ for details about API changes since libical 3.x.
 ## [3.0.21] - Unreleased
 
 - Fix some scenarios with RRULEs and EXRULE (#754)
+- Fix 32-bit time_t upper bound off by two days
+- Fix an uninitialized memory issue reading zoneinfo geo coordinates.
+- Various minor fixes to follow modern compilers and tools
 
 ## [3.0.20] - 2025-05-10
 
@@ -310,7 +373,7 @@ for details about API changes since libical 3.x.
 - WARNING: Version 2 IS NOT Binary Compatible with Older Versions
 - Version 2 is Source Compatible with Older Versions
 - Lots of source code scrubbing
-- [New] RSCALE support (requires libicu from <http://www.icu-project.org>)
+- [New] RSCALE support (requires libicu from <https://icu.unicode.org>)
 - [New] CalDAV attachment support (draft-ietf-calext-caldav-attachments)
 - [New] Resurrect the Berkeley DB storage support
 - [Bug] issue83: Incorrect recurrence generation for weekly pattern

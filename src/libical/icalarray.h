@@ -6,10 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
-/** @file icalarray.h
+/**
+ * @file icalarray.h
  *
- *  @brief An array of arbitrarily-sized elements which grows
- *  dynamically as elements are added.
+ * @brief An array of arbitrarily-sized elements which grows
+ * dynamically as elements are added.
  */
 
 #ifndef ICALARRAY_H
@@ -19,9 +20,9 @@
 
 #include <stddef.h>
 
+/// @cond PRIVATE
 /**
- * @typedef icalarray
- * @brief A struct representing an icalarray object
+ * A struct representing an icalarray object.
  */
 typedef struct _icalarray icalarray;
 struct _icalarray {
@@ -31,9 +32,11 @@ struct _icalarray {
     size_t space_allocated;
     void **chunks;
 };
+/// @endcond
 
 /**
- * @brief Creates a new icalarray object.
+ * Creates a new icalarray object.
+ *
  * @param element_size The size of the elements to be held by the array
  * @param increment_size How many extra elements worth of space to allocate on expansion
  * @return The new icalarray object
@@ -73,7 +76,8 @@ struct _icalarray {
 LIBICAL_ICAL_EXPORT icalarray *icalarray_new(size_t element_size, size_t increment_size);
 
 /**
- * @brief Copies an existing icalarray and its elements, creating a new one.
+ * Copies an existing icalarray and its elements, creating a new one.
+ *
  * @param array The array to copy
  * @return A new array, holding all the elements of @a array
  *
@@ -111,7 +115,8 @@ LIBICAL_ICAL_EXPORT icalarray *icalarray_new(size_t element_size, size_t increme
 LIBICAL_ICAL_EXPORT icalarray *icalarray_copy(const icalarray *array);
 
 /**
- * @brief Frees an array object and everything that it contains.
+ * Frees an array object and everything that it contains.
+ *
  * @param array The array to release
  *
  * @par Example

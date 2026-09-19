@@ -6,12 +6,17 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+ * @file icalmemory.c
+ * @brief Common memory management routines.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalmemory.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #if defined(MEMORY_CONSISTENCY)
 #include "test-malloc.h"
 #endif
@@ -97,7 +102,7 @@ static buffer_ring *buffer_ring_new(void)
         br->ring[i] = 0;
     }
     br->pos = 0;
-    return (br);
+    return br;
 }
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
@@ -114,9 +119,11 @@ static buffer_ring *get_buffer_ring_pthread(void)
 
     if (!br) {
         br = buffer_ring_new();
-        pthread_setspecific(ring_key, br);
+        if (br) {
+            pthread_setspecific(ring_key, br);
+        }
     }
-    return (br);
+    return br;
 }
 
 #else
@@ -436,7 +443,7 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
     **pos = 0;
 }
 
-/*
+/**
  * Checks whether this character is allowed in a (Q)SAFE-CHAR
  *
  * QSAFE-CHAR   = WSP / %x21 / %x23-7E / NON-US-ASCII
@@ -450,7 +457,9 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
  *
  * Note that comma IS actually safe in vCard but we will quote it anyway
  */
+/// @cond PRIVATE
 #define UNSAFE_CHARS ";:,"
+/// @endcond
 
 static bool icalmemory_is_safe_char(unsigned char character, bool quoted)
 {
@@ -466,13 +475,6 @@ static bool icalmemory_is_safe_char(unsigned char character, bool quoted)
     return true;
 }
 
-/**
- * Appends the string to the buffer, encoding per RFC 6868
- * and filtering out those characters not permitted by the specifications
- *
- * paramtext    = *SAFE-CHAR
- * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
- */
 void icalmemory_append_encoded_string(char **buf, char **pos,
                                       size_t *buf_size, const char *string)
 {
@@ -511,7 +513,7 @@ void icalmemory_append_encoded_string(char **buf, char **pos,
         }
     }
 
-    if (quoted == true) {
+    if (quoted) {
         icalmemory_append_char(buf, pos, buf_size, '"');
     }
 }

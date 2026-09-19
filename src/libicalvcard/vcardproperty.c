@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardproperty.c
+ * @brief Implements the data structure representing vCard properties.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -14,15 +19,16 @@
 #include "vcardcomponent.h"
 #include "vcardparser.h"
 #include "vcardvalue.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 #include "icalproperty.h"
-#include "icalpvl.h"
+#include "icalpvl_p.h"
+#include "icaltypes_p.h"
 
 #include <stdlib.h>
 
 struct vcardproperty_impl {
-    char id[5];
+    icalstructuretype id;
     vcardproperty_kind kind;
     char *x_name;
     char *group;
@@ -47,8 +53,7 @@ LIBICAL_VCARD_EXPORT struct vcardproperty_impl *vcardproperty_new_impl(vcardprop
 
     memset(prop, 0, sizeof(vcardproperty));
 
-    strcpy(prop->id, "prop");
-
+    prop->id = ICAL_STRUCTURE_TYPE_PROPERTY;
     prop->kind = kind;
     prop->parameters = icalpvl_newlist();
 
@@ -60,8 +65,8 @@ void vcardproperty_add_parameters(vcardproperty *prop, va_list args)
     void *vp;
 
     while ((vp = va_arg(args, void *)) != 0) {
-        if (vcardvalue_isa_value(vp) != 0) {
-        } else if (vcardparameter_isa_parameter(vp) != 0) {
+        if (vcardvalue_isa_value(vp)) {
+        } else if (vcardparameter_isa_parameter(vp)) {
             vcardproperty_add_parameter((vcardproperty *)prop,
                                         (vcardparameter *)vp);
         } else {
@@ -197,7 +202,7 @@ void vcardproperty_free(vcardproperty *p)
     p->parameter_iterator = 0;
     p->value = 0;
     p->x_name = 0;
-    p->id[0] = 'X';
+    p->id = ICAL_STRUCTURE_TYPE_PROPERTY_EMPTY;
 
     icalmemory_free_buffer(p);
 }
@@ -301,6 +306,8 @@ static char *fold_property_line(char *text)
         chars_left -= (next_line_start - line_start);
         line_start = next_line_start;
     }
+
+    icalmemory_append_string(&buf, &buf_ptr, &buf_size, "\r\n");
 
     return buf;
 }
@@ -435,7 +442,6 @@ char *vcardproperty_as_vcard_string_r(vcardproperty *prop)
     const vcardvalue *value;
     char *out_buf;
     const char *kind_string = 0;
-    const char newline[] = "\r\n";
 
     icalerror_check_arg_rz((prop != 0), "prop");
 
@@ -511,8 +517,6 @@ char *vcardproperty_as_vcard_string_r(vcardproperty *prop)
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, "ERROR: No Value");
     }
 
-    icalmemory_append_string(&buf, &buf_ptr, &buf_size, newline);
-
     /* We now use a function to fold the line properly every 75 characters.
        That function also adds the newline for us. */
     out_buf = fold_property_line(buf);
@@ -522,7 +526,7 @@ char *vcardproperty_as_vcard_string_r(vcardproperty *prop)
     return out_buf;
 }
 
-vcardproperty_kind vcardproperty_isa(vcardproperty *p)
+vcardproperty_kind vcardproperty_isa(const vcardproperty *p)
 {
     if (p != 0) {
         return p->kind;
@@ -536,11 +540,7 @@ bool vcardproperty_isa_property(void *property)
     const vcardproperty *impl = (vcardproperty *)property;
 
     icalerror_check_arg_rz((property != 0), "property");
-    if (strcmp(impl->id, "prop") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_PROPERTY);
 }
 
 void vcardproperty_add_parameter(vcardproperty *p, vcardparameter *parameter)
@@ -667,7 +667,7 @@ char *vcardproperty_get_parameter_as_string_r(vcardproperty *prop, const char *n
     /* Is the string quoted? */
     pvql = strchr(pv, '"');
     if (pvql == 0) {
-        return (pv); /* No quotes?  Return it immediately. */
+        return pv; /* No quotes?  Return it immediately. */
     }
 
     /* Strip everything up to the first quote */

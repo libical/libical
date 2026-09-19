@@ -9,12 +9,20 @@
  Code is Eric Busboom
 ======================================================================*/
 //krazy:excludeall=cpp
+
+/**
+ * @file icalfileset.c
+ * @brief Manages a database of ical components and offers interfaces for
+ * reading, writing and searching for components.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalfileset.h"
 #include "icalfilesetimpl.h"
+#include "icalerror_p.h"
 #include "icalparser.h"
 #include "icalvalue.h"
 #include "icalmemory.h"
@@ -65,7 +73,7 @@ icalset *icalfileset_new_writer(const char *path)
 
 icalset *icalfileset_init(icalset *set, const char *path, void *options_in)
 {
-    const icalfileset_options *options = (options_in) ? options_in : &icalfileset_options_default;
+    const icalfileset_options *options = options_in ? options_in : &icalfileset_options_default;
     icalfileset *fset = (icalfileset *)set;
     int flags;
     int mode;
@@ -370,7 +378,10 @@ icalerrorenum icalfileset_commit(icalset *set)
         IO_SSIZE_T sz;
 
         str = icalcomponent_as_ical_string_r(c);
-
+        if (!str) {
+            icalerror_set_errno(ICAL_ALLOCATION_ERROR);
+            return ICAL_ALLOCATION_ERROR;
+        }
         sz = write(fset->fd, str, (IO_SIZE_T)strlen(str));
         if (sz != (IO_SSIZE_T)strlen(str)) {
             perror("write");
@@ -500,13 +511,12 @@ icalcomponent *icalfileset_fetch(icalset *set, icalcomponent_kind kind, const ch
          icalcompiter_deref(&i) != 0; icalcompiter_next(&i)) {
         icalcomponent *this = icalcompiter_deref(&i);
         icalcomponent *inner;
-        const char *this_uid;
 
         for (inner = icalcomponent_get_first_component(this, ICAL_ANY_COMPONENT);
              inner != 0; inner = icalcomponent_get_next_component(this, ICAL_ANY_COMPONENT)) {
             icalproperty *p = icalcomponent_get_first_property(inner, ICAL_UID_PROPERTY);
             if (p) {
-                this_uid = icalproperty_get_uid(p);
+                const char *this_uid = icalproperty_get_uid(p);
 
                 if (this_uid == 0) {
                     icalerror_warn("icalfileset_fetch found a component with no UID");
@@ -673,7 +683,7 @@ icalcomponent *icalfileset_get_first_component(icalset *set)
             c = icalcomponent_get_next_component(fset->cluster, ICAL_ANY_COMPONENT);
         }
 
-        if (c != 0 && (fset->gauge == 0 || icalgauge_compare(fset->gauge, c) == 1)) {
+        if (c != 0 && (fset->gauge == 0 || icalgauge_compare(fset->gauge, c))) {
             return c;
         }
 
@@ -693,7 +703,7 @@ icalcomponent *icalfileset_get_next_component(icalset *set)
     do {
         c = icalcomponent_get_next_component(fset->cluster, ICAL_ANY_COMPONENT);
 
-        if (c != 0 && (fset->gauge == 0 || icalgauge_compare(fset->gauge, c) == 1)) {
+        if (c != 0 && (fset->gauge == 0 || icalgauge_compare(fset->gauge, c))) {
             return c;
         }
 
@@ -739,13 +749,13 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
     icalcompiter citr;
     icalfileset *fset;
     struct icaltimetype start, next;
-    icalproperty *dtstart, *rrule, *prop, *due;
+    icalproperty *rrule;
 
     _unused(tzid);
 
     icalerror_check_arg_re((set != 0), "set", icalsetiter_null);
 
-    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    start = icaltime_from_timet_with_zone(time(0), false, NULL);
     itr.gauge = gauge;
 
     fset = (icalfileset *)set;
@@ -765,12 +775,12 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
         int g = icalgauge_get_expand(gauge);
         if (recur != 0 && g == 1) {
             if (icalcomponent_isa(comp) == ICAL_VEVENT_COMPONENT) {
-                dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
+                icalproperty *dtstart = icalcomponent_get_first_property(comp, ICAL_DTSTART_PROPERTY);
                 if (dtstart) {
                     start = icalproperty_get_dtstart(dtstart);
                 }
             } else if (icalcomponent_isa(comp) == ICAL_VTODO_COMPONENT) {
-                due = icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY);
+                icalproperty *due = icalcomponent_get_first_property(comp, ICAL_DUE_PROPERTY);
                 if (due) {
                     start = icalproperty_get_due(due);
                 }
@@ -794,14 +804,14 @@ icalsetiter icalfileset_begin_component(icalset *set, icalcomponent_kind kind, i
 
             /* add recurrence-id to the component
                if there is a recurrence-id already, remove it, then add the new one */
-            prop = icalcomponent_get_first_property(comp, ICAL_RECURRENCEID_PROPERTY);
+            icalproperty *prop = icalcomponent_get_first_property(comp, ICAL_RECURRENCEID_PROPERTY);
             if (prop) {
                 icalcomponent_remove_property(comp, prop);
             }
             icalcomponent_add_property(comp, icalproperty_new_recurrenceid(next));
         }
 
-        if (icalgauge_compare(itr.gauge, comp) == 1) {
+        if (icalgauge_compare(itr.gauge, comp)) {
             /* matches and returns */
             itr.iter = citr;
             return itr;
@@ -823,7 +833,7 @@ icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *itr)
     icalproperty *rrule, *prop;
     struct icalrecurrencetype *recur;
 
-    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    start = icaltime_from_timet_with_zone(time(0), false, NULL);
     comp = itr->last_component;
 
     if (comp == NULL || itr->gauge == NULL) {
@@ -874,7 +884,7 @@ icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *itr)
     }
     icalcomponent_add_property(comp, icalproperty_new_recurrenceid(next));
 
-    if (itr->gauge == 0 || icalgauge_compare(itr->gauge, comp) == 1) {
+    if (itr->gauge == 0 || icalgauge_compare(itr->gauge, comp)) {
         /* matches and returns */
         return comp;
     }
@@ -892,8 +902,8 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
 
     _unused(set);
 
-    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
-    next = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    start = icaltime_from_timet_with_zone(time(0), false, NULL);
+    next = icaltime_from_timet_with_zone(time(0), false, NULL);
 
     do {
         c = icalcompiter_next(&(i->iter));
@@ -949,7 +959,7 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
         }
         icalcomponent_add_property(c, icalproperty_new_recurrenceid(next));
 
-        if ((i->gauge == 0 || icalgauge_compare(i->gauge, c) == 1)) {
+        if ((i->gauge == 0 || icalgauge_compare(i->gauge, c))) {
             return c;
         }
     } while (true);

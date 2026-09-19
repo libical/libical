@@ -54,4 +54,4 @@ The internal limits and their default values are shown here:
 * Maximum number of times to search vtimezone rrules for an occurrence before the specified end year
 
       Kind = ICAL_LIMIT_RRULE_SEARCH
-      Default = 100 (one hundred)
+      Default = 500 (five hundred)

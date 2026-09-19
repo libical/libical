@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./value.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./value.py
 
 ###############################################################################
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
@@ -11,7 +10,7 @@
 import gi
 
 gi.require_version('ICalGLib', '4.0')
-from gi.repository import ICalGLib  # noqa E402
+from gi.repository import ICalGLib
 
 kind = ICalGLib.ValueKind.ATTACH_VALUE
 value = ICalGLib.Value.new(kind)

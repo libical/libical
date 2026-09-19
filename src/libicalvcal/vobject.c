@@ -97,6 +97,10 @@ void deleteVObject(VObject *p)
 
 char* dupStr(const char *s, size_t size)
 {
+    if(!s) {
+        return (char *)0;
+    }
+
     char *t;
     if  (size == 0) {
         size = strlen(s);
@@ -371,7 +375,7 @@ VObject* addGroup(VObject *o, const char *g)
             prop(VCGrouping=b)
                 prop(VCGrouping=a)
      */
-    char *dot = strrchr(g,'.');
+    char *dot = (char *)strrchr(g,'.');
     if (dot) {
         VObject *p, *t;
         char *gs;
@@ -965,6 +969,7 @@ typedef struct OFile {
 
 static void appendcOFile_(OFile *fp, char c)
 {
+    char *tmpMem;
     if (fp->fail) return;
     if (fp->fp) {
         fputc(c,fp->fp);
@@ -978,9 +983,12 @@ stuff:
             }
         else if (fp->alloc) {
             fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-            fp->s = realloc(fp->s,(size_t)fp->limit);
-            if (fp->s) goto stuff;
+            tmpMem = (char *)realloc(fp->s,(size_t)fp->limit);
+            if (tmpMem != NULL) {
+                fp->s = tmpMem;
+                goto stuff;
             }
+        }
         if (fp->s)
             free(fp->s);
         fp->s = 0;
@@ -1001,11 +1009,13 @@ static void appendcOFile(OFile *fp, char c)
 
 static void appendsOFile(OFile *fp, const char *s)
 {
-    size_t i, slen;
-    slen  = strlen(s);
-    for (i=0; i<slen; i++) {
-        appendcOFile(fp,s[i]);
-        }
+    if (s) {
+        size_t i, slen;
+        slen  = strlen(s);
+        for (i=0; i<slen; i++) {
+            appendcOFile(fp,s[i]);
+            }
+    }
 }
 
 static void initOFile(OFile *fp, FILE *ofp)
@@ -1334,8 +1344,12 @@ char* writeMemVObjects(char *s, int *len, VObject *list)
 wchar_t* fakeUnicode(const char *ps, size_t *bytes)
 {
     wchar_t *r, *pw;
-    size_t len = strlen(ps)+1;
 
+    if (!ps) {
+        return (wchar_t *)0;
+    }
+
+    size_t len = strlen(ps)+1;
     pw = r = (wchar_t*)malloc(sizeof(wchar_t)*len);
     if(!r)
         return (wchar_t *)0;

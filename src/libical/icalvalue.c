@@ -9,21 +9,28 @@
      Graham Davison <g.m.davison@computer.org>
 ======================================================================*/
 
+/**
+ * @file icalvalue.c
+ * @brief Implements the data structure representing iCalendar parameter values.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalvalue.h"
 #include "icalvalueimpl.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icallimits.h"
 #include "icalmemory.h"
 #include "icaltime.h"
 
 #include <ctype.h>
+#include <errno.h>
 #include <locale.h>
 #include <stdlib.h>
 
+/// @cond PRIVATE
 #define TMP_BUF_SIZE 1024
 
 LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kind)
@@ -39,7 +46,7 @@ LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kin
         return 0;
     }
 
-    strcpy(v->id, "val");
+    v->id = ICAL_STRUCTURE_TYPE_VALUE;
 
     v->kind = kind;
     v->size = 0;
@@ -49,6 +56,7 @@ LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kin
 
     return v;
 }
+/// @endcond
 
 icalvalue *icalvalue_new(icalvalue_kind kind)
 {
@@ -64,9 +72,7 @@ icalvalue *icalvalue_clone(const icalvalue *old)
     if (clone == 0) {
         return 0;
     }
-    // id is a LIBICAL_ICALVALUE_ID_LENGTH-char string (see icalvalue_impl def)
-    memset(clone->id, 0, LIBICAL_ICALVALUE_ID_LENGTH);
-    strncpy(clone->id, old->id, LIBICAL_ICALVALUE_ID_LENGTH);
+    clone->id = old->id;
     clone->kind = old->kind;
     clone->size = old->size;
 
@@ -85,6 +91,7 @@ icalvalue *icalvalue_clone(const icalvalue *old)
         break;
     }
     case ICAL_QUERY_VALUE:
+    case ICAL_COLOR_VALUE:
     case ICAL_STRING_VALUE:
     case ICAL_TEXT_VALUE:
     case ICAL_CALADDRESS_VALUE:
@@ -302,7 +309,8 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
                 (icalproperty_isa(value->parent) == ICAL_RESOURCES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_POLLPROPERTIES_PROPERTY) ||
                 (icalproperty_isa(value->parent) == ICAL_LOCATIONTYPE_PROPERTY) ||
-                ((icalproperty_isa(value->parent) == ICAL_X_PROPERTY) &&
+                ((icalproperty_isa(value->parent) == ICAL_X_PROPERTY ||
+                  icalproperty_isa(value->parent) == ICAL_IANA_PROPERTY) &&
                  icalvalue_isa(value) != ICAL_TEXT_VALUE)) {
                 icalmemory_append_char(&str, &str_p, &buf_sz, *p);
                 break;
@@ -413,7 +421,7 @@ static bool simple_str_to_doublestr(const char *from, char *result, int result_l
     }
 
     /* now try to convert to a floating point number, to check for validity only */
-    if (sscanf(result, "%lf", &dtest) != 1) {
+    if (sscanf(result, "%lf", &dtest) != 1) { //NOLINT(bugprone-unchecked-string-to-number-conversion)
         return true;
     }
     return false;
@@ -547,20 +555,31 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         value = icalvalue_new_enum(kind, ICAL_RESOURCETYPE_X, str);
         break;
 
-    case ICAL_INTEGER_VALUE:
-        value = icalvalue_new_integer(atoi(str));
+    case ICAL_INTEGER_VALUE: {
+        errno = 0;
+        char *t_end;
+        const long tmpl = strtol(str, &t_end, 10);
+        if (str != t_end && errno != ERANGE) {
+            value = icalvalue_new_integer(tmpl);
+        }
         break;
-
-    case ICAL_FLOAT_VALUE:
-        value = icalvalue_new_float((float)atof(str));
+    }
+    case ICAL_FLOAT_VALUE: {
+        char *t_end;
+        const float tmpf = strtof(str, &t_end);
+        if (str != t_end) {
+            value = icalvalue_new_float(tmpf);
+        }
         break;
-
+    }
     case ICAL_UTCOFFSET_VALUE: {
-        int t, utcoffset, hours, minutes, seconds;
+        int iOffset;
+        long utcoffset, hours, minutes, seconds;
 
-        /* treat the UTCOFSET string as a decimal number, disassemble its digits
+        /* treat the UTCOFFSET string as a decimal number, disassemble its digits
                and reconstruct it as sections */
-        t = strtol(str, 0, 10);
+        long t = strtol(str, 0, 10);
+
         /* add phantom seconds field */
         if (strlen(str) < 7) {
             t *= 100;
@@ -569,8 +588,14 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         minutes = (t - hours * 10000) / 100;
         seconds = (t - hours * 10000 - minutes * 100);
         utcoffset = hours * 3600 + minutes * 60 + seconds;
-
-        value = icalvalue_new_utcoffset(utcoffset);
+        if (utcoffset < INT_MIN) {
+            iOffset = INT_MIN;
+        } else if (utcoffset > INT_MAX) {
+            iOffset = INT_MAX;
+        } else {
+            iOffset = utcoffset;
+        }
+        value = icalvalue_new_utcoffset(iOffset);
 
         break;
     }
@@ -585,6 +610,10 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
 
     case ICAL_STRING_VALUE:
         value = icalvalue_new_string(str);
+        break;
+
+    case ICAL_COLOR_VALUE:
+        value = icalvalue_new_color(str);
         break;
 
     case ICAL_CALADDRESS_VALUE:
@@ -816,6 +845,9 @@ void icalvalue_free(icalvalue *v)
     case ICAL_STRING_VALUE:
         _fallthrough();
 
+    case ICAL_COLOR_VALUE:
+        _fallthrough();
+
     case ICAL_QUERY_VALUE: {
         _fallthrough();
     case ICAL_UID_VALUE:
@@ -852,7 +884,7 @@ void icalvalue_free(icalvalue *v)
     v->size = 0;
     v->parent = 0;
     memset(&(v->data), 0, sizeof(v->data));
-    v->id[0] = 'X';
+    v->id = ICAL_STRUCTURE_TYPE_VALUE_EMPTY;
     icalmemory_free_buffer(v);
 }
 
@@ -892,7 +924,9 @@ static char *icalvalue_boolean_as_ical_string_r(const icalvalue *value)
     return str;
 }
 
+/// @cond PRIVATE
 #define MAX_INT_DIGITS 12 /* Enough for 2^32 + sign */
+/// @endcond
 
 static char *icalvalue_int_as_ical_string_r(const icalvalue *value)
 {
@@ -1036,6 +1070,7 @@ static void print_time_to_string(char *str, const struct icaltimetype *data)
 #endif
 }
 
+/// @cond PRIVATE
 void print_date_to_string(char *str, const struct icaltimetype *data)
 {
 #if defined(__GNUC__) && !defined(__clang__)
@@ -1054,6 +1089,7 @@ void print_date_to_string(char *str, const struct icaltimetype *data)
 #pragma GCC diagnostic pop
 #endif
 }
+/// @endcond
 
 static char *icalvalue_date_as_ical_string_r(const icalvalue *value)
 {
@@ -1071,6 +1107,7 @@ static char *icalvalue_date_as_ical_string_r(const icalvalue *value)
     return str;
 }
 
+/// @cond PRIVATE
 void print_datetime_to_string(char *str, const struct icaltimetype *data)
 {
 #if defined(__GNUC__) && !defined(__clang__)
@@ -1093,6 +1130,7 @@ void print_datetime_to_string(char *str, const struct icaltimetype *data)
 #pragma GCC diagnostic pop
 #endif
 }
+/// @endcond
 
 static char *icalvalue_datetime_as_ical_string_r(const icalvalue *value)
 {
@@ -1233,6 +1271,7 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
         return icalvalue_string_as_ical_string_r(value);
 
     case ICAL_STRING_VALUE:
+    case ICAL_COLOR_VALUE:
     case ICAL_URI_VALUE:
     case ICAL_CALADDRESS_VALUE:
     case ICAL_XMLREFERENCE_VALUE:
@@ -1318,11 +1357,7 @@ bool icalvalue_isa_value(void *value)
 
     icalerror_check_arg_rz((value != 0), "value");
 
-    if (strcmp(impl->id, "val") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_VALUE);
 }
 
 static bool icalvalue_is_time(const icalvalue *a)
@@ -1511,10 +1546,6 @@ icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a, const icalva
     }
 }
 
-/** Examine the value and possibly change the kind to agree with the
- *  value
- */
-
 void icalvalue_reset_kind(icalvalue *value)
 {
     if (value &&
@@ -1540,7 +1571,7 @@ icalproperty *icalvalue_get_parent(const icalvalue *value)
     return value->parent;
 }
 
-bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxBufferLen)
+bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int maxBufferLen)
 {
     char *ptr;
     icalvalue *value = 0;
@@ -1560,7 +1591,7 @@ bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxB
         return false;
     }
 
-    if ((int)strlen(ptr) >= nMaxBufferLen) {
+    if ((int)strlen(ptr) >= maxBufferLen) {
         icalvalue_free(value);
         icalmemory_free_buffer(ptr);
         return false;
@@ -1574,13 +1605,13 @@ bool icalvalue_encode_ical_string(const char *szText, char *szEncText, int nMaxB
     return true;
 }
 
-bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxBufferLen)
+bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int maxBufferLen)
 {
     char *str, *str_p;
     const char *p;
     size_t buf_sz;
 
-    if ((szText == 0) || (szDecText == 0) || (nMaxBufferLen <= 0)) {
+    if ((szText == 0) || (szDecText == 0) || (maxBufferLen <= 0)) {
         return false;
     }
 
@@ -1599,14 +1630,14 @@ bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int nMaxB
             icalmemory_append_char(&str, &str_p, &buf_sz, *p);
         }
 
-        if (str_p - str > nMaxBufferLen) {
+        if (str_p - str > maxBufferLen) {
             break;
         }
     }
 
     icalmemory_append_char(&str, &str_p, &buf_sz, '\0');
 
-    if ((int)strlen(str) >= nMaxBufferLen) {
+    if ((int)strlen(str) >= maxBufferLen) {
         icalmemory_free_buffer(str);
         return false;
     }

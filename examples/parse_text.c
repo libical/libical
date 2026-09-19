@@ -5,6 +5,8 @@
 */
 
 #include <libical/ical.h>
+
+#include <assert.h>
 #include <stdlib.h>
 
 /* The icalparser_get_line routine will create a single *content* line

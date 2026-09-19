@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file icalenumarray.c
+ * @brief Implements the data structure for handling arrays of enums.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -31,23 +36,26 @@ const icalenumarray_element *icalenumarray_element_at(icalenumarray *array, size
     return icalarray_element_at(array, position);
 }
 
-static int enumcmp(const icalenumarray_element *a, const icalenumarray_element *b)
+static int enumcmp(const void *a, const void *b)
 {
+    const icalenumarray_element *aElem = (const icalenumarray_element *)a;
+    const icalenumarray_element *bElem = (const icalenumarray_element *)b;
+
     /* Sort X-values alphabetically, but last */
-    if (!a->xvalue && b->xvalue) {
+    if (!aElem->xvalue && bElem->xvalue) {
         return -1;
-    } else if (a->xvalue && !b->xvalue) {
+    } else if (aElem->xvalue && !bElem->xvalue) {
         return 1;
     }
 
-    if (a->val < b->val) {
+    if (aElem->val < bElem->val) {
         return -1;
-    } else if (a->val > b->val) {
+    } else if (aElem->val > bElem->val) {
         return 1;
     }
 
-    if (a->xvalue) {
-        return strcmp(a->xvalue, b->xvalue);
+    if (aElem->xvalue) {
+        return strcmp(aElem->xvalue, bElem->xvalue);
     } else {
         return 0;
     }

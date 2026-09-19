@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardderivedparameter.c
+ * @brief vCard parameters.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -16,7 +21,7 @@
 #include "vcardparameterimpl.h"
 #include "vcardenumarray.h"
 #include "vcardstrarray.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <stdlib.h>
@@ -57,7 +62,9 @@ struct vcardparameter_map
     const char *str;
 };
 
+//NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
 <insert_code_here>
+//NOLINTEND(bugprone-invalid-enum-default-initialization)
 
 vcardvalue_kind vcardparameter_kind_value_kind(const vcardparameter_kind kind,
                                                int *is_multivalued)
@@ -111,15 +118,25 @@ const char *vcardparameter_kind_to_string(vcardparameter_kind kind)
     return 0;
 }
 
+/** DO NOT USE. RETAINED FOR BC in 4.0. TODO: 5.0 remove */
 int vcardparameter_compare_kind_map(const struct vcardparameter_kind_map *a,
-                                   const struct vcardparameter_kind_map *b)
+                                    const struct vcardparameter_kind_map *b)
 {
     return strcasecmp(a->name, b->name);
 }
 
+static int s_vcardparameter_compare_kind_map(const void *a, const void *b)
+{
+    const struct vcardparameter_kind_map *amap = (struct vcardparameter_kind_map *)a;
+    const struct vcardparameter_kind_map *bmap = (struct vcardparameter_kind_map *)b;
+    return strcasecmp(amap->name, bmap->name);
+}
+
 vcardparameter_kind vcardparameter_string_to_kind(const char *string)
 {
+//NOLINTBEGIN(bugprone-invalid-enum-default-initialization)
     struct vcardparameter_kind_map key = {0};
+//NOLINTEND(bugprone-invalid-enum-default-initialization)
     struct vcardparameter_kind_map *result;
 
     if (string == 0) {
@@ -129,9 +146,9 @@ vcardparameter_kind vcardparameter_string_to_kind(const char *string)
     key.kind = VCARD_ANY_PARAMETER;
     key.name = string;
     result =
-        bsearch(&key, parameter_map, sizeof(parameter_map) / sizeof(struct vcardparameter_kind_map),
+        (struct vcardparameter_kind_map *)bsearch(&key, parameter_map, sizeof(parameter_map) / sizeof(struct vcardparameter_kind_map),
                 sizeof(struct vcardparameter_kind_map),
-                (int (*)(const void *, const void *))vcardparameter_compare_kind_map);
+                s_vcardparameter_compare_kind_map);
 
     if (result) {
         return result->kind;
@@ -210,8 +227,11 @@ void vcardparameter_set_value_from_string(vcardparameter *param,
     icalerror_check_arg_rv((val != 0), "val");
 
     if (param->value_kind == VCARD_INTEGER_VALUE) {
-        param->data = atoi(val);
-
+        char *v_end;
+        const long tmpl = strtol(val, &v_end, 10);
+        if (val != v_end) {
+            param->data = tmpl;
+        }
     } else if (param->value_kind == VCARD_DATEANDORTIME_VALUE) {
         ((struct vcardparameter_impl *)param)->date = vcardtime_from_string(val, 0);
 

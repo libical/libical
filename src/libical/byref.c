@@ -11,7 +11,7 @@
 
 /**
  * @file byref.c
- * @brief A set of function wrappers to handle non-structured return type interop.
+ * @brief Function wrappers to handle non-structured return type interoperability.
  *
  * Not all programming languages managed or not have support for c-structured return types.
  * To allow interop with these programming languages this file, over time, will contain wrapper functions,
@@ -24,11 +24,15 @@
 
 #include "icaltimezone.h"
 
-/** @brief Convenience constructor (ret-wrapped)
+/**
+ * Convenience constructor (ret-wrapped)
  *
- * The current time in the given timezone, as an icaltimetype, in the last parameter.
+ * @param zone the timezone to use
+ * @param ret_tt a pointer to a icaltimetype to contain the conversion result
+ *
+ * Return the current time in the given timezone, as an icaltimetype, in @p ret_tt.
  */
-LIBICAL_ICAL_EXPORT void icaltime_current_time_with_zone_ex(const icaltimezone *zone, struct icaltimetype *ret)
+LIBICAL_ICAL_EXPORT void icaltime_current_time_with_zone_ex(const icaltimezone *zone, struct icaltimetype *ret_tt)
 {
-    *ret = icaltime_current_time_with_zone(zone);
+    *ret_tt = icaltime_current_time_with_zone(zone);
 }

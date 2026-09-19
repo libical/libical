@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
+// NOLINTBEGIN(readability-inconsistent-ifelse-braces)
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -803,11 +805,8 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
 {
     gint c;
     gchar *buffer;
-    gint count;
-    gchar last;
     gint len;
     GList *iter;
-    gchar *method;
     const gchar *val;
 
     g_return_if_fail(in != NULL && out != NULL && structure != NULL && table != NULL);
@@ -824,8 +823,8 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
             }
 
             if (c == '^') {
-                count = 1;
-                last = '\0';
+                gint count = 1;
+                gchar last = '\0';
                 while (!feof(in) && !ferror(in) && !((c = fgetc(in)) == '$' && last == '^' && count == 1)) {
                     if (c == '^' && last == '$') {
                         ++count;
@@ -854,7 +853,7 @@ void generate_code_from_template(FILE *in, FILE *out, Structure *structure, GHas
                 if (g_strcmp0(buffer, "source") == 0) {
                     for (iter = g_list_first(structure->methods); iter != NULL;
                          iter = g_list_next(iter)) {
-                        method =
+                        gchar *method =
                             get_source_method_body((Method *)iter->data, structure->nameSpace);
                         write_str(out, method);
                         if (iter != g_list_last(structure->methods)) {
@@ -936,10 +935,8 @@ void generate_header_structure_boilerplate(FILE *out, Structure *structure, GHas
 
 void generate_header_includes(FILE *out, Structure *structure)
 {
-    Structure *parentStructure;
     gchar *lowerTrain;
     gchar *upperCamel;
-    gchar *ownUpperCamel;
     const gchar *includeName;
     GHashTable *includeNames;
     GHashTableIter iter_table;
@@ -970,9 +967,9 @@ void generate_header_includes(FILE *out, Structure *structure)
          g_hash_table_iter_next(&iter_table, &key, &value);) {
         gchar *typeName = (gchar *)key;
         if (g_hash_table_contains(type2structure, typeName)) {
-            parentStructure = g_hash_table_lookup(type2structure, typeName);
+            Structure *parentStructure = g_hash_table_lookup(type2structure, typeName);
             upperCamel = g_strconcat(parentStructure->nameSpace, parentStructure->name, NULL);
-            ownUpperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
+            gchar *ownUpperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
             if (g_strcmp0(upperCamel, ownUpperCamel) == 0) {
                 g_free(upperCamel);
                 g_free(ownUpperCamel);
@@ -1006,10 +1003,8 @@ void generate_header_includes(FILE *out, Structure *structure)
 
 void generate_source_includes(FILE *out, Structure *structure)
 {
-    Structure *parentStructure;
     gchar *lowerTrain;
     gchar *upperCamel;
-    gchar *ownUpperCamel;
     GHashTable *includeNames;
     GHashTableIter iter_table;
     gpointer key;
@@ -1035,9 +1030,9 @@ void generate_source_includes(FILE *out, Structure *structure)
          g_hash_table_iter_next(&iter_table, &key, &value);) {
         gchar *typeName = (gchar *)key;
         if (g_hash_table_contains(type2structure, typeName)) {
-            parentStructure = g_hash_table_lookup(type2structure, typeName);
+            Structure *parentStructure = g_hash_table_lookup(type2structure, typeName);
             upperCamel = g_strconcat(parentStructure->nameSpace, parentStructure->name, NULL);
-            ownUpperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
+            gchar *ownUpperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
             if (g_strcmp0(upperCamel, ownUpperCamel) == 0) {
                 g_free(upperCamel);
                 g_free(ownUpperCamel);
@@ -1063,10 +1058,10 @@ void generate_source_includes(FILE *out, Structure *structure)
     g_hash_table_destroy(includeNames);
 }
 
-void generate_forward_declarations_header_file(GList *structures)
+static void generate_forward_declarations_header_file(GList *structures)
 {
     FILE *in, *out;
-    gint c, len;
+    gint c;
     gchar buffer[BUFFER_SIZE];
     gchar *typeName;
     gchar *typeKind;
@@ -1125,7 +1120,7 @@ void generate_forward_declarations_header_file(GList *structures)
             }
 
             while (!feof(in) && !ferror(in) && (c = fgetc(in)) != '}') {
-                len = (gint)strlen(buffer);
+                gint len = (gint)strlen(buffer);
                 buffer[len] = c;
                 buffer[len + 1] = '\0';
             }
@@ -1849,7 +1844,7 @@ gchar *get_true_type(const gchar *type)
     guint i;
     guint start;
     guint end;
-    gchar *res;
+    gchar *res = 0;
     const gchar *const_prefix = "const";
     const guint const_prefix_len = (guint)strlen(const_prefix);
     guint type_len;
@@ -1869,15 +1864,27 @@ gchar *get_true_type(const gchar *type)
         start = 0;
     }
 
-    if (type[type_len - 1] == '*') {
-        end = type_len - 3;
+    while (start < end && g_ascii_isspace(type[start])) {
+        start++;
     }
 
+    if (type[end] == '*') {
+        end--;
+    }
+
+    while (end > start && g_ascii_isspace(type[end])) {
+        end--;
+    }
+
+    g_return_val_if_fail(start <= end, NULL);
+
+#if !defined(__clang_analyzer__) // clang-analyzer reports unix.Malloc (false positive)
     res = g_new(gchar, end - start + 2);
     for (i = start; i <= end; i++) {
         res[i - start] = type[i];
     }
     res[end - start + 1] = '\0';
+#endif
     return res;
 }
 
@@ -1993,10 +2000,10 @@ void generate_header_enum(FILE *out, Enumeration *enumeration)
             write_str(out, ",");
         }
         if (g_str_has_prefix(use_name, ENUM_HEADER_ICAL)) {
-            prefix_len = strlen(ENUM_HEADER_ICAL);
+            prefix_len = (int)strlen(ENUM_HEADER_ICAL);
             use_prefix = "I_CAL_";
         } else if (g_str_has_prefix(use_name, ENUM_HEADER_VCARD)) {
-            prefix_len = strlen(ENUM_HEADER_VCARD);
+            prefix_len = (int)strlen(ENUM_HEADER_VCARD);
             use_prefix = "I_CAL_VCARD_";
         } else {
             g_warning("The enum name '%s' in '%s' cannot be processed, it has no known prefix", use_name, enumeration->name);
@@ -2282,7 +2289,9 @@ parse_api_templates(void)
 
 static GList * /* Structure * */
 parse_api_files(const gchar *apis_dir,
-                GHashTable *type2kind,      /* nullable */
+                /* cppcheck-suppress shadowVariable */
+                GHashTable *type2kind, /* nullable */
+                /* cppcheck-suppress shadowVariable */
                 GHashTable *type2structure) /* nullable */
 {
     GDir *dir;
@@ -2317,7 +2326,7 @@ parse_api_files(const gchar *apis_dir,
         guint len;
 
         filename = iter_filenames->data;
-        len = strlen(filename);
+        len = (guint)strlen(filename);
 
         if (len <= 4 || g_ascii_strncasecmp(filename + len - 4, ".xml", 4) != 0) {
             continue;
@@ -2502,11 +2511,7 @@ void generate_header_header_file(GList *structures)
     gint c;
     gchar *buffer;
     GList *iter;
-    gint len;
-    gchar *header;
     gchar *upperCamel;
-    gchar *lowerTrain;
-    Structure *structure;
 
     g_return_if_fail(structures != NULL);
 
@@ -2536,17 +2541,17 @@ void generate_header_header_file(GList *structures)
             }
 
             while (!feof(in) && !ferror(in) && (c = fgetc(in)) != '}') {
-                len = (gint)strlen(buffer);
+                gint len = (gint)strlen(buffer);
                 buffer[len] = c;
                 buffer[len + 1] = '\0';
             }
 
             if (g_strcmp0(buffer, "allHeaders") == 0) {
                 for (iter = g_list_first(structures); iter != NULL; iter = g_list_next(iter)) {
-                    structure = (Structure *)iter->data;
+                    Structure *structure = (Structure *)iter->data;
                     upperCamel = g_strconcat(structure->nameSpace, structure->name, NULL);
-                    lowerTrain = get_lower_train_from_upper_camel(upperCamel);
-                    header = g_strconcat("#include <libical-glib/", lowerTrain, ".h>\n", NULL);
+                    gchar *lowerTrain = get_lower_train_from_upper_camel(upperCamel);
+                    gchar *header = g_strconcat("#include <libical-glib/", lowerTrain, ".h>\n", NULL);
                     write_str(out, header);
                     g_free(header);
                     g_free(upperCamel);
@@ -2738,3 +2743,5 @@ int main(int argc, char *argv[])
 
     return res;
 }
+
+// NOLINTEND(readability-inconsistent-ifelse-braces)

@@ -7,6 +7,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardparser.h
+ * @brief Line-oriented parsing vCard format.
+ */
+
 #ifndef VCARDPARSER_H
 #define VCARDPARSER_H
 

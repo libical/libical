@@ -7,9 +7,9 @@ Please use that script (update as needed).
 
 ## Preparations
 
-1. Retrieve the most recent tzdata from IANA from <http://www.iana.org/time-zones>
+1. Retrieve the most recent tzdata from IANA from <https://www.iana.org/time-zones>
 
-   Look for a gzip-compressed tar file (a "tarball") named tzdata2025c.tar.gz, for example.
+   Look for a gzip-compressed tar file (a "tarball") named tzdata2026c.tar.gz, for example.
 
    Save the tarball into your Downloads folder.
 
@@ -17,8 +17,8 @@ Please use that script (update as needed).
 
      ```shell
      cd ./vzic
-     mkdir tzdata2025c
-     cd tzdata2025c; tar xfz ~/Downloads/tzdata2025c.tar.gz; cd ..
+     mkdir tzdata2026c
+     cd tzdata2026c; tar xfz ~/Downloads/tzdata2026c.tar.gz; cd ..
      ```
 
 ## Building vzic
@@ -36,7 +36,7 @@ Please use that script (update as needed).
 
 ```shell
      # inside the vzic/build-update-zoneinfo subdir
-     ./vzic --pure --olson-dir ../tzdata2025c --output-dir ./zoneinfo
+     ./vzic --pure --olson-dir ../tzdata2026c --output-dir ./zoneinfo
 ```
 
 You'll might see some warning messages but not sure what to do about those.
@@ -45,14 +45,13 @@ The "Modifying RRULE to be compatible with Outlook" warnings are normal and can 
 
 ## Merging Changes to the Master Set of VTIMEZONES
 
-Now we have a new set of zoneinfo in the vzic folder. We need to merge
-those changes into the official zoneinfo one level-up.
+Now we have a new set of zoneinfo in the vzic/build-update-zoneinfo folder.
+We need to merge those changes into the official zoneinfo one level-up.
 
 1. Run
 
      ```shell
-     # inside the vzic/build-update-zoneinfo subdir
-     cd ..
+     # inside the vzic subdir
      perl vzic-merge.pl --master-zoneinfo-dir=../zoneinfo --new-zoneinfo-dir=build-update-zoneinfo/zoneinfo
      ```
 
@@ -73,10 +72,25 @@ those changes into the official zoneinfo one level-up.
 
 1. run the libical test-suite (`./scripts/buildtests.sh`)
 
+## Last Steps
+
+1. Update the CHANGELOG.md accordingly
+
+2. Commit the changes
+
+     ```shell
+     # inside the libical top-level
+     git switch -c work/winterz/tzdata2026c #make the changes in a work branch
+     git add zoneinfo; git commit zoneinfo CHANGELOG.md -m "Update zoneinfo for tzdata2026c"
+     ```
+
+3. Make a pull request with the changes and if all goes well go ahead and merge.
+
 ## Clean-up
 
 You can remove:
 
-* the tzdata tarball (eg. ~/Downloads/tzdata2025c.tar.gz)
-* the exploded tzdata (eg. vzic/tzdata2025c)
+* the tzdata tarball (eg. ~/Downloads/tzdata2026c.tar.gz)
+* the exploded tzdata (eg. vzic/tzdata2026c)
 * the vzic builddir (vzic/build-update-zoneinfo)
+* the work branch work/winterz/tzdata2026c

@@ -12,10 +12,11 @@
 #include "vcardproperty.h"
 #include "vcardderivedvalue.h"
 #include "icalarray.h"
+#include "icaltypes_p.h"
 
 struct vcardparameter_impl {
     vcardparameter_kind kind;
-    char id[5];
+    icalstructuretype id;
     int size;
     const char *x_name;
     vcardproperty *parent;

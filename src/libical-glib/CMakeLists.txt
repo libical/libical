@@ -18,17 +18,23 @@ add_executable(
   tools/xml-parser.h
 )
 
+#sometimes findxml2 doesn't set LIBXML2_DEFINITIONS
+if(NOT DEFINED LIBXML2_DEFINITIONS)
+  set(LIBXML2_DEFINITIONS)
+endif()
 target_compile_options(
   ical-glib-src-generator
-  PUBLIC
+  PRIVATE
     ${GLIB_CFLAGS}
-    ${LIBXML_CFLAGS}
+    ${LIBXML2_DEFINITIONS}
     -DG_LOG_DOMAIN=\"src-generator\"
 )
 target_link_libraries(
   ical-glib-src-generator
-  ${GLIB_LIBRARIES}
-  ${LIBXML_LIBRARIES}
+  PRIVATE
+    ${GLIB_LDFLAGS}
+    ${GOBJECT_LDFLAGS}
+    ${LIBXML2_LIBRARIES}
 )
 
 install(
@@ -187,6 +193,9 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src/libical
   ${PROJECT_BINARY_DIR}/src/libicalvcard
   ${PROJECT_SOURCE_DIR}/src/libicalvcard
+  ${GLIB_INCLUDE_DIRS}
+  ${GOBJECT_INCLUDE_DIRS}
+  ${LIBXML2_INCLUDE_DIRS}
 )
 
 add_library(
@@ -211,7 +220,8 @@ target_link_libraries(
   PRIVATE
     ical
     icalvcard
-    ${GLIB_LIBRARIES}
+    ${GLIB_LDFLAGS}
+    ${GOBJECT_LDFLAGS}
 )
 
 if(LIBICAL_GLIB_CHECK_API_FILES)
@@ -226,36 +236,41 @@ if(LIBICAL_GLIB_CHECK_API_FILES)
   )
 endif()
 
-include(CheckCCompilerFlag)
-
-check_c_compiler_flag(
-  -Wswitch-enum
-  c_flag_Wswitch_enum_supported
-)
-check_c_compiler_flag(
-  -Wswitch
-  c_flag_Wswitch_supported
-)
-if(c_flag_Wswitch_enum_supported AND c_flag_Wswitch_supported)
-  add_executable(ical-glib-build-check ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c)
-  add_dependencies(ical-glib-build-check ical-glib)
-  target_link_libraries(
-    ical-glib-build-check
-    PRIVATE
-      ical-glib
-      ${GLIB_LIBRARIES}
-  )
-  target_compile_options(
-    ical-glib-build-check
-    PRIVATE
-      ${GLIB_CFLAGS}
-      -DLIBICAL_GLIB_UNSTABLE_API=1
-      -DLIBICAL_GLIB_COMPILATION
-      -Wswitch-enum
-      -Wswitch
-  )
+if(MSVC)
+  message(WARNING "skipping libical-glib-build-check when building with MSVC")
 else()
-  message(NOTICE "compiler does not support both -Wswitch-enum and -Wswitch, skipping libical-glib-build-check")
+  include(CheckCCompilerFlag)
+
+  check_c_compiler_flag(
+    -Wswitch-enum
+    c_flag_Wswitch_enum_supported
+  )
+  check_c_compiler_flag(
+    -Wswitch
+    c_flag_Wswitch_supported
+  )
+  if(c_flag_Wswitch_enum_supported AND c_flag_Wswitch_supported)
+    add_executable(ical-glib-build-check ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c)
+    add_dependencies(ical-glib-build-check ical-glib)
+    target_link_libraries(
+      ical-glib-build-check
+      PRIVATE
+        ical-glib
+        ${GLIB_LDFLAGS}
+        ${GOBJECT_LDFLAGS}
+    )
+    target_compile_options(
+      ical-glib-build-check
+      PRIVATE
+        ${GLIB_CFLAGS}
+        -DLIBICAL_GLIB_UNSTABLE_API=1
+        -DLIBICAL_GLIB_COMPILATION
+        -Wswitch-enum
+        -Wswitch
+    )
+  else()
+    message(WARNING "compiler does not support both -Wswitch-enum and -Wswitch, skipping libical-glib-build-check")
+  endif()
 endif()
 
 # GObject Introspection
@@ -383,7 +398,7 @@ if(NOT ANDROID)
     ical-glib
     PROPERTIES
       VERSION
-        ${CMAKE_PROJECT_VERSION}
+        ${libical_VERSION}
       SOVERSION
         ${LIBICAL_LIB_SOVERSION_STRING}
   )

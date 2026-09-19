@@ -95,7 +95,7 @@
   </method>
   <method name="i_cal_time_day_of_year" corresponds="icaltime_day_of_year" since="1.0">
     <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be queried"/>
-    <returns type="gint" comment="The day of the year of the given time"/>
+    <returns type="gint" comment="The day of the year of the given time. Returns 0 if the specified time is invalid (eg. month less than 1 or greater than 12)."/>
     <comment xml:space="preserve">Returns the day of the year of the given time.</comment>
   </method>
   <method name="i_cal_time_day_of_week" corresponds="icaltime_day_of_week" since="1.0">

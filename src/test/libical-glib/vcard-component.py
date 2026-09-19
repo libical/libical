@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./vcard-component.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./vcard-component.py
 
 ###############################################################################
 # SPDX-FileCopyrightText: 2025 Red Hat <www.redhat.com>
@@ -11,7 +10,7 @@
 import gi
 
 gi.require_version('ICalGLib', '4.0')
-from gi.repository import ICalGLib  # noqa E402
+from gi.repository import ICalGLib
 
 
 def test_creation():

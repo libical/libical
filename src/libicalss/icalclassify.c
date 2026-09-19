@@ -6,13 +6,20 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
 
+/**
+ * @file icalclassify.c
+ * @brief Implements functions for classification.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalclassify.h"
+#include "icalerror.h"
 #include "icalmemory.h"
 
+#include <assert.h>
 #include <ctype.h>
 #include <stdlib.h>
 
@@ -101,7 +108,7 @@ icalproperty *icalclassify_find_attendee(const icalcomponent *c, const char *att
     char *lattendee;
     const char *upn;
 
-    if (attendee == 0) {
+    if (!c || !attendee) {
         return 0;
     }
 
@@ -180,12 +187,11 @@ void icalssutil_get_parts(icalcomponent *c, struct icalclassify_parts *parts)
     parts->method = ICAL_METHOD_NONE;
     parts->sequence = 0;
     parts->reply_partstat = ICAL_PARTSTAT_NONE;
+    parts->c = c;
 
     if (c == 0) {
         return;
     }
-
-    parts->c = c;
 
     p = icalcomponent_get_first_property(c, ICAL_METHOD_PROPERTY);
     if (p != 0) {

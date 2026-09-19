@@ -53,11 +53,11 @@
 #include "vzic-dump.h"
 
 /* These come from the Makefile. See the comments there. */
-const char *ProductID = PRODUCT_ID;
-const char *TZIDPrefix = TZID_PREFIX;
+static const char *ProductID = PRODUCT_ID;
+static const char *TZIDPrefix = TZID_PREFIX;
 
 /* We expand the TZIDPrefix, replacing %D with the date, in here. */
-char TZIDPrefixExpanded[1024] = {0};
+static char TZIDPrefixExpanded[1024] = {0};
 
 /* We only use RRULEs if there are at least MIN_RRULE_OCCURRENCES occurrences,
    since otherwise RDATEs are more efficient. Actually, I've set this high
@@ -84,7 +84,7 @@ static int DaysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 static const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-char *CurrentZoneName;
+static char *CurrentZoneName;
 
 typedef struct _VzicTime VzicTime;
 struct _VzicTime {
@@ -503,51 +503,51 @@ output_zone(const char *directory,
     }
 
     if (zone_subdirectory) {
-        sprintf(output_directory, "%s/%s/%s", directory, zone_directory,
-                zone_subdirectory);
+        snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s/%s/%s", directory, zone_directory,
+                 zone_subdirectory);
         ensure_directory_exists(output_directory);
         strncpy(filename, output_directory, PATHNAME_BUFFER_SIZE);
-        strncat(filename, "/", PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - 1);
+        strncat(filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
 
         if (VzicDumpChanges) {
-            sprintf(output_directory, "%s/ChangesVzic/%s/%s", directory,
-                    zone_directory, zone_subdirectory);
+            snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s/ChangesVzic/%s/%s", directory,
+                     zone_directory, zone_subdirectory);
             ensure_directory_exists(output_directory);
             strncpy(changes_filename, output_directory, PATHNAME_BUFFER_SIZE);
-            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - 1);
-            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
+            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
         }
     } else if (zone_directory) {
-        sprintf(output_directory, "%s/%s", directory, zone_directory);
+        snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s/%s", directory, zone_directory);
         ensure_directory_exists(output_directory);
         strncpy(filename, output_directory, PATHNAME_BUFFER_SIZE);
-        strncat(filename, "/", PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - 1);
+        strncat(filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
 
         if (VzicDumpChanges) {
-            sprintf(output_directory, "%s/ChangesVzic/%s", directory, zone_directory);
+            snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s/ChangesVzic/%s", directory, zone_directory);
             ensure_directory_exists(output_directory);
             strncpy(changes_filename, output_directory, PATHNAME_BUFFER_SIZE);
-            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - 1);
-            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
+            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
         }
     } else {
-        sprintf(output_directory, "%s", directory);
+        snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s", directory);
         ensure_directory_exists(output_directory);
         strncpy(filename, output_directory, PATHNAME_BUFFER_SIZE);
-        strncat(filename, "/", PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
-        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - 1);
+        strncat(filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+        strncat(filename, ".ics", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
 
         if (VzicDumpChanges) {
-            sprintf(output_directory, "%s/ChangesVzic", directory);
+            snprintf(output_directory, PATHNAME_BUFFER_SIZE, "%s/ChangesVzic", directory);
             ensure_directory_exists(output_directory);
             strncpy(changes_filename, output_directory, PATHNAME_BUFFER_SIZE);
-            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - 1);
-            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - 1);
+            strncat(changes_filename, "/", PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
+            strncat(changes_filename, zone_filename, PATHNAME_BUFFER_SIZE - strlen(filename) - 1);
         }
     }
 
@@ -1429,7 +1429,7 @@ check_for_recurrence(FILE *fp,
 
     last_match = idx;
     next_year = vzictime_start->year + 1;
-    for (size_t i = (size_t)(idx) + 1; i < changes->len; i++) {
+    for (size_t i = (size_t)idx + 1; i < changes->len; i++) {
         vzictime = &g_array_index(changes, VzicTime, i);
 
         is_daylight = (vzictime->stdoff != vzictime->walloff) ? TRUE : FALSE;
@@ -1571,7 +1571,7 @@ check_for_rdates(FILE *fp,
 
     /* We want to go backwards through the array now, for Outlook compatibility.
      (It only looks at the first DTSTART/RDATE.) */
-    for (size_t i = (size_t)(idx) + 1; i < changes->len; i++) {
+    for (size_t i = (size_t)idx + 1; i < changes->len; i++) {
         vzictime = &g_array_index(changes, VzicTime, i);
 
         is_daylight = (vzictime->stdoff != vzictime->walloff) ? TRUE : FALSE;

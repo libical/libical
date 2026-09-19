@@ -97,23 +97,23 @@ The C library is C99 standards compliant and uses bool types.
 
 * The following functions now take arguments of type `struct icalrecurrencetype *` rather than
   `struct icalrecurrencetype`:
-  * `icalproperty_new_rrule()`
-  * `icalproperty_get_rrule()`
-  * `icalproperty_set_rrule()`
-  * `icalproperty_vanew_rrule()`
-  * `icalproperty_new_exrule()`
-  * `icalproperty_set_exrule()`
   * `icalproperty_get_exrule()`
+  * `icalproperty_get_rrule()`
+  * `icalproperty_new_exrule()`
+  * `icalproperty_new_rrule()`
+  * `icalproperty_set_exrule()`
+  * `icalproperty_set_rrule()`
   * `icalproperty_vanew_exrule()`
+  * `icalproperty_vanew_rrule()`
   * `icalrecur_iterator_new()`
+  * `icalvalue_get_recur()`
   * `icalvalue_new_recur()`
   * `icalvalue_set_recur()`
-  * `icalvalue_get_recur()`
 
 * The following functions now return a value of type `struct icalrecurrencetype *` rather than
   `struct icalrecurrencetype`:
-  * `icalproperty_get_rrule()`
   * `icalproperty_get_exrule()`
+  * `icalproperty_get_rrule()`
   * `icalvalue_get_recur()`
 
 * `icaltimezone_convert_time()` now populates the icaltimetype zone member on conversion;
@@ -149,44 +149,49 @@ The C library is C99 standards compliant and uses bool types.
 
 The following functions have been added:
 
-* `icallimit_set()`
-* `icallimit_get()`
+* `ical_get_invalid_rrule_handling_setting()`
+* `ical_set_invalid_rrule_handling_setting()`
 * `icalarray_set_element_at()`
-* `icalrecurrencetype_new()`
-* `icalrecurrencetype_ref()`
-* `icalrecurrencetype_unref()`
+* `icalcluster_clone()`
+* `icalcompiter_is_valid()`
+* `icalcomponent_clone()`
+* `icalcomponent_get_component_name()`
+* `icalcomponent_get_component_name_r()`
+* `icalcomponent_get_iana_name()`
+* `icalcomponent_get_x_name()`
+* `icalcomponent_new_iana()`
+* `icalcomponent_set_iana_name()`
+* `icalcomponent_set_x_name()`
+* `icallimit_get()`
+* `icallimit_set()`
+* `icalparameter_clone()`
+* `icalparameter_decode_value()`
+* `icalparameter_is_multivalued()`
+* `icalparameter_kind_value_kind()`
+* `icalparser_get_ctrl()`
+* `icalparser_set_ctrl()`
+* `icalproperty_clone()`
+* `icalproperty_get_allow_empty_properties()`
+* `icalproperty_get_iana_name()`
+* `icalproperty_new_iana()`
+* `icalproperty_set_allow_empty_properties()`
+* `icalproperty_set_iana_name()`
+* `icalpropiter_is_valid()`
+* `icalrecur_iterator_prev()`
+* `icalrecur_resize_by()`
+* `icalrecurrencetype_clone()`
 * `icalrecurrencetype_clone()`
 * `icalrecurrencetype_encode_day()`
 * `icalrecurrencetype_encode_month()`
-* `icalcomponent_clone()`
-* `icalproperty_clone()`
-* `icalproperty_set_allow_empty_properties()`
-* `icalproperty_get_allow_empty_properties()`
-* `icalparameter_clone()`
-* `icalparameter_kind_value_kind()`
-* `icalparameter_is_multivalued()`
-* `icalparameter_decode_value()`
-* `icalvalue_clone()`
-* `icalcluster_clone()`
-* `icalrecur_iterator_prev()`
-* `icalrecur_resize_by()`
 * `icalrecurrencetype_new()`
+* `icalrecurrencetype_new_from_string()`
+* `icalrecurrencetype_ref()`
 * `icalrecurrencetype_ref()`
 * `icalrecurrencetype_unref()`
-* `icalrecurrencetype_clone()`
-* `icalrecurrencetype_from_string()`
-* `icalcomponent_set_x_name()`
-* `icalcomponent_get_x_name()`
-* `icalcomponent_get_component_name()`
-* `icalcomponent_get_component_name_r()`
-* `ical_set_invalid_rrule_handling_setting()`
-* `ical_get_invalid_rrule_handling_setting()`
-* `icalparser_get_ctrl()`
-* `icalparser_set_ctrl()`
-* `icaltimezone_tzid_prefix()`
+* `icalrecurrencetype_unref()`
 * `icaltimezone_set_system_zone_directory()`
-* `icalcompiter_is_valid()`
-* `icalpropiter_is_valid()`
+* `icaltimezone_tzid_prefix()`
+* `icalvalue_clone()`
 * and the new functions for the `icalstrarray` and `icalenumarray` data types
 
 ### Removed functions
@@ -207,17 +212,38 @@ The following functions have been added:
 
 * These deprecated functions have been removed:
   * `caldat()`
-  * `juldat()`
+  * `icalcluster_new_clone()`
   * `icalcomponent_new_clone()`
   * `icalparameter_new_clone()`
   * `icalproperty_new_clone()`
   * `icalvalue_new_clone()`
-  * `icalcluster_new_clone()`
+  * `juldat()`
 
 * No longer publicly visible functions:
-  * `icaltzutil_fetch_timezone()`
-  * `icalrecurrencetype_clear()`
+  * `icalerror_assert()`
+  * `icalerror_check_arg()`
+  * `icalerror_check_arg_re()`
+  * `icalerror_check_arg_rv()`
+  * `icalerror_check_arg_rx()`
+  * `icalerror_check_arg_rz()`
+  * `icalerror_check_component_type()`
+  * `icalerror_check_parameter_type()`
+  * `icalerror_check_property_type()`
+  * `icalerror_check_value_type()`
+  * `icalerror_crash_here()`
+  * `icalerror_stop_here()`
+  * `icalerror_warn()`
+  * `icalerrprintf()`
   * `icalproperty_new_impl()`
+  * `icalpvl_*()`
+  * `icalrecurrencetype_clear()`
+  * `icaltime_span_contains()`
+  * `icaltime_span_new()`
+  * `icaltime_span_overlaps()`
+  * `icaltimezone_array_append_from_vtimezone()`
+  * `icaltimezone_array_free()`
+  * `icaltimezone_array_new()`
+  * `icaltzutil_fetch_timezone()`
 
 ### Removed macros
 
@@ -409,15 +435,15 @@ fewer than 256 characters long.
 
 * The following methods now take arguments of type `struct icalrecurrencetype *` rather than `const
   struct icalrecurrencetype &`:
-  * `ICalValue.set_recur()`
   * `ICalProperty.set_exrule()`
   * `ICalProperty.set_rrule()`
+  * `ICalValue.set_recur()`
 
 * The following methods now returns a value of type `struct icalrecurrencetype *` rather than
   `struct icalrecurrencetype`:
-  * `ICalValue.get_recur()`
   * `ICalProperty.get_exrule()`
   * `ICalProperty.get_rrule()`
+  * `ICalValue.get_recur()`
 
 ### `icalrecurrencetype.by_xxx` static arrays replaced by dynamically allocated ones
 
@@ -478,13 +504,11 @@ type (day, month, ...) as a parameter.
 Code like this in libical 3.0:
 
 ```python
-    recurrence.set_by_second(0,
-    recurrence.get_by_second(0) + 1)
+recurrence.set_by_second(0, recurrence.get_by_second(0) + 1)
 ```
 
 changes to something like this in libical 4.0:
 
 ```python
-    recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0,
-    recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) + 1)
+recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0, recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) + 1)
 ```

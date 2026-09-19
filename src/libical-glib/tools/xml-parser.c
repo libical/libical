@@ -143,15 +143,17 @@ Parameter *parameter_new(void)
     Parameter *parameter;
 
     parameter = g_new0(Parameter, 1);
-    parameter->comment = NULL;
-    parameter->name = NULL;
-    parameter->type = NULL;
-    parameter->annotations = NULL;
-    parameter->autofill = NULL;
-    parameter->translator = NULL;
-    parameter->translatorArgus = NULL;
-    parameter->native_op = NULL;
-    parameter->owner_op = NULL;
+    if (parameter) {
+        parameter->comment = NULL;
+        parameter->name = NULL;
+        parameter->type = NULL;
+        parameter->annotations = NULL;
+        parameter->autofill = NULL;
+        parameter->translator = NULL;
+        parameter->translatorArgus = NULL;
+        parameter->native_op = NULL;
+        parameter->owner_op = NULL;
+    }
     return parameter;
 }
 
@@ -381,7 +383,9 @@ gboolean parse_parameters(xmlNode *node, Method *method)
 
     for (; xmlStrcmp(node->name, (xmlChar *)"parameter") == 0; node = node->next) {
         Parameter *para = parameter_new();
-
+        if (!para) {
+            return FALSE;
+        }
         for (attr = node->properties; attr != NULL; attr = attr->next) {
             if (xmlStrcmp(attr->name, (xmlChar *)"type") == 0) {
                 para->type = dup_attribute_value(attr->doc, attr->children, 1);
@@ -625,7 +629,7 @@ replace_variables_in_string(const char *str,
                     end[1] = last;
                     g_string_erase(tmp, ii, end - tmp->str - ii + 1);
                     g_string_insert(tmp, ii, value);
-                    ii += strlen(value) - 1;
+                    ii += (guint)strlen(value) - 1;
                 } else {
                     g_warning("Cannot find variable '%s'", tmp->str + ii);
                     end[1] = last;
@@ -743,7 +747,9 @@ parse_method_from_template(xmlNode *node,
             for (link = tmp_method->parameters; link != NULL; link = g_list_next(link)) {
                 const Parameter *tmp_param = link->data;
                 Parameter *param = parameter_new();
-
+                if (!param) {
+                    break;
+                }
                 fill_str_member(param, tmp_param, type);
                 copy_str_list(param, tmp_param, annotations);
                 fill_str_member(param, tmp_param, comment);
@@ -783,9 +789,6 @@ gboolean parse_structure(xmlNode *node, Structure *structure, GHashTable *api_te
 {
     xmlAttr *attr;
     xmlNode *child;
-    Method *method;
-    Enumeration *enumeration;
-    Declaration *declaration;
 
     if (xmlStrcmp(node->name, (xmlChar *)"structure") != 0) {
         return FALSE;
@@ -836,7 +839,7 @@ gboolean parse_structure(xmlNode *node, Structure *structure, GHashTable *api_te
 
     for (child = xmlFirstElementChild(node); child != NULL; child = xmlNextElementSibling(child)) {
         if (g_strcmp0((gchar *)child->name, "method") == 0) {
-            method = method_new();
+            Method *method = method_new();
             if (!parse_method(child, method)) {
                 method_free(method);
             } else {
@@ -847,7 +850,7 @@ gboolean parse_structure(xmlNode *node, Structure *structure, GHashTable *api_te
             parse_method_from_template(child, api_templates, structure);
         }
         if (g_strcmp0((gchar *)child->name, "declaration") == 0) {
-            declaration = declaration_new();
+            Declaration *declaration = declaration_new();
             if (!parse_declaration(child, declaration)) {
                 declaration_free(declaration);
             } else {
@@ -855,7 +858,7 @@ gboolean parse_structure(xmlNode *node, Structure *structure, GHashTable *api_te
             }
             declaration = NULL;
         } else if (g_strcmp0((gchar *)child->name, "enum") == 0) {
-            enumeration = enumeration_new();
+            Enumeration *enumeration = enumeration_new();
             if (!parse_enumeration(child, enumeration)) {
                 enumeration_free(enumeration);
             } else {

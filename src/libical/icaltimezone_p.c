@@ -11,7 +11,7 @@
 #endif
 
 #include "icaltimezone_p.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icaltimezone.h"
 #include "icalmemory.h"
 
@@ -49,7 +49,6 @@
         }                                                                \
     }
 
-//@cond PRIVATE
 typedef struct
 {
     char magic[4];
@@ -79,7 +78,6 @@ typedef struct
     icaltime_t transition;
     long int change;
 } leap;
-//@endcond
 
 static int decode(const void *ptr)
 {
@@ -408,7 +406,8 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
     }
     snprintf(full_path, size, "%s/%s", zonedir, location);
     if ((f = fopen(full_path, "rb")) == 0) {
-        icalerror_set_errno(ICAL_FILE_ERROR);
+        /* Don't error. Return a NULL pointer to indicate a bad TZID */
+        //icalerror_set_errno(ICAL_FILE_ERROR);
         goto error;
     }
 
@@ -632,7 +631,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
                 } else {
                     struct icaltimetype last_trans =
                         icaltime_from_timet_with_zone(transitions[num_trans - 1],
-                                                      0, NULL);
+                                                      false, NULL);
                     icalrecur_iterator *iter;
 
                     if (types[trans_idx[num_trans - 1]].isdst) {
@@ -698,7 +697,7 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
             goto error;
         }
         start = transitions[i] + types[prev_idx].gmtoff;
-        icaltime = icaltime_from_timet_with_zone(start, 0, NULL);
+        icaltime = icaltime_from_timet_with_zone(start, false, NULL);
 
         if (types[idx].isdst) {
             zone = &daylight;

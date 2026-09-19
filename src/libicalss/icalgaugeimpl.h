@@ -40,10 +40,11 @@ struct icalgauge_where {
     char *value;
 };
 
+struct icalpvl_list_t;
 struct icalgauge_impl {
-    icalpvl_list select; /**< Of icalgaugecompare, using only prop and comp fields*/
-    icalpvl_list from;   /**< List of component_kinds, as integers */
-    icalpvl_list where;  /**< List of icalgaugecompare */
+    struct icalpvl_list_t *select; /**< Of icalgaugecompare, using only prop and comp fields*/
+    struct icalpvl_list_t *from;   /**< List of component_kinds, as integers */
+    struct icalpvl_list_t *where;  /**< List of icalgaugecompare */
     int expand;
 };
 

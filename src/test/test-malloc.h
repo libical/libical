@@ -29,6 +29,8 @@ struct testmalloc_statistics {
   * Memory allocated using this function must be freed using test_free().
   * The number of allocations that can be made using this function can be limited via
   * testmalloc_set_max_successful_allocs().
+  * The number of bytes that can be allocated using this function can be limited via
+  * testmalloc_set_max_memory().
   */
 void *test_malloc(size_t size);
 
@@ -54,5 +56,14 @@ void testmalloc_set_max_successful_allocs(int n);
 
 /** Gets current memory allocation statistics. */
 void testmalloc_get_statistics(struct testmalloc_statistics *statistics);
+
+/** Sets the maximum memory available to allocate.
+ *  Exit with code=1 if the maximum is exceeded.
+ */
+void testmalloc_set_max_memory(const size_t max);
+
+/** Gets the current maximum available memory setting.
+ */
+size_t testmalloc_get_max_memory(void);
 
 #endif /* !TESTMALLOC_H */

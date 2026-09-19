@@ -6,18 +6,25 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardcomponent.c
+ * @brief Implements the data structure representing vCard components.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "vcardcomponent.h"
-#include "icalpvl.h"
+#include "icalpvl_p.h"
 #include "vcardparser.h"
 #include "vcardproperty_p.h"
 #include "vcardrestriction.h"
 #include "vcardvalue.h"
+#include "icalerror_p.h"
 #include "icalerror.h"
 #include "icalmemory.h"
+#include "icaltypes_p.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -25,10 +32,9 @@
 #include <ctype.h>
 
 struct vcardcomponent_impl {
-    char id[5];
+    icalstructuretype id;
     vcardcomponent_kind kind;
     vcardproperty *versionp;
-    char *x_name;
     icalpvl_list properties;
     icalpvl_elem property_iterator;
     icalpvl_list components;
@@ -62,8 +68,7 @@ static vcardcomponent *vcardcomponent_new_impl(vcardcomponent_kind kind)
 
     memset(comp, 0, sizeof(vcardcomponent));
 
-    strcpy(comp->id, "comp");
-
+    comp->id = ICAL_STRUCTURE_TYPE_COMPONENT;
     comp->kind = kind;
     comp->properties = icalpvl_newlist();
     comp->components = icalpvl_newlist();
@@ -153,17 +158,12 @@ void vcardcomponent_free(vcardcomponent *c)
 
     icalpvl_free(c->components);
 
-    if (c->x_name != 0) {
-        icalmemory_free_buffer(c->x_name);
-    }
-
     c->kind = VCARD_NO_COMPONENT;
     c->properties = 0;
     c->property_iterator = 0;
     c->components = 0;
     c->component_iterator = 0;
-    c->x_name = 0;
-    c->id[0] = 'X';
+    c->id = ICAL_STRUCTURE_TYPE_COMPONENT_EMPTY;
 
     icalmemory_free_buffer(c);
 }
@@ -200,11 +200,7 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *comp)
     icalerror_check_arg_rz((kind != VCARD_NO_COMPONENT),
                            "component kind is VCARD_NO_COMPONENT");
 
-    if (kind != VCARD_X_COMPONENT) {
-        kind_string = vcardcomponent_kind_to_string(kind);
-    } else {
-        kind_string = comp->x_name;
-    }
+    kind_string = vcardcomponent_kind_to_string(kind);
 
     icalerror_check_arg_rz((kind_string != 0), "Unknown kind of component");
 
@@ -252,8 +248,12 @@ char *vcardcomponent_as_vcard_string_r(vcardcomponent *comp)
 
 bool vcardcomponent_is_valid(const vcardcomponent *component)
 {
-    return ((strcmp(component->id, "comp") == 0) &&
-            (component->kind != VCARD_NO_COMPONENT));
+    if (component) {
+        if ((component->id == ICAL_STRUCTURE_TYPE_COMPONENT) && (component->kind != VCARD_NO_COMPONENT)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 vcardcomponent_kind vcardcomponent_isa(const vcardcomponent *component)
@@ -269,7 +269,7 @@ bool vcardcomponent_isa_component(const void *component)
 
     icalerror_check_arg_rz((component != 0), "component");
 
-    return (strcmp(impl->id, "comp") == 0);
+    return (impl->id == ICAL_STRUCTURE_TYPE_COMPONENT);
 }
 
 void vcardcomponent_add_property(vcardcomponent *comp, vcardproperty *property)
@@ -528,7 +528,7 @@ vcardcomponent *vcardcomponent_get_next_component(vcardcomponent *c,
 int vcardcomponent_check_restrictions(vcardcomponent *comp)
 {
     icalerror_check_arg_rz(comp != 0, "comp");
-    return vcardrestriction_check(comp);
+    return (int)vcardrestriction_check(comp);
 }
 
 int vcardcomponent_count_errors(vcardcomponent *comp)
@@ -539,7 +539,7 @@ int vcardcomponent_count_errors(vcardcomponent *comp)
     icalerror_check_arg_rz((comp != 0), "card");
 
     for (itr = icalpvl_head(comp->properties); itr != 0; itr = icalpvl_next(itr)) {
-        vcardproperty *p = (vcardproperty *)icalpvl_data(itr);
+        const vcardproperty *p = (vcardproperty *)icalpvl_data(itr);
         if (vcardproperty_isa(p) == VCARD_XLICERROR_PROPERTY) {
             errors++;
         }
@@ -629,8 +629,8 @@ static int strcmpsafe(const char *a, const char *b)
 
 static int prop_compare(void *a, void *b)
 {
-    vcardproperty *p1 = (vcardproperty *)a;
-    vcardproperty *p2 = (vcardproperty *)b;
+    const vcardproperty *p1 = (vcardproperty *)a;
+    const vcardproperty *p2 = (vcardproperty *)b;
     vcardproperty_kind k1 = vcardproperty_isa(p1);
     vcardproperty_kind k2 = vcardproperty_isa(p2);
     int r = (int)(k1 - k2);
@@ -696,8 +696,6 @@ static int comp_compare(void *a, void *b)
             for (int i = 0; r == 0 && prop_kinds[i] != VCARD_NO_PROPERTY; i++) {
                 r = prop_kind_compare(prop_kinds[i], c1, c2);
             }
-        } else {
-            r = strcmp(c1->x_name, c2->x_name);
         }
 
         if (r == 0) {
@@ -947,6 +945,9 @@ static void comp_to_v4(vcardcomponent *impl)
         case VCARD_UID_PROPERTY: {
             /* Does it look like a URI (the default)? */
             const char *data = vcardvalue_get_text(value);
+            if (!data) {
+                break;
+            }
             if (!strncasecmp(data, "urn:uuid:", 9) ||
                 !strncasecmp(data, "mailto:", 7) ||
                 !strncasecmp(data, "http://", 7) ||
@@ -1032,7 +1033,7 @@ static void comp_to_v3(vcardcomponent *impl)
         vcardvalue_kind vkind = vcardvalue_isa(value);
         vcardparameter *param;
         char *subtype = NULL;
-        const char *mediatype, *uri, *xname = NULL, *xval = NULL;
+        const char *mediatype, *uri, *xname = NULL;
 
         next = icalpvl_next(itr);
 
@@ -1059,7 +1060,7 @@ static void comp_to_v3(vcardcomponent *impl)
                                                   VCARD_MEDIATYPE_PARAMETER);
         if (param) {
             mediatype = vcardparameter_get_mediatype(param);
-            subtype = strchr(mediatype, '/');
+            subtype = (char *)strchr(mediatype, '/');
             if (subtype) {
                 /* Copy and uppercase the subtype */
                 char *c;
@@ -1150,7 +1151,7 @@ static void comp_to_v3(vcardcomponent *impl)
 
                 char *buf = icalmemory_strdup(uri);
                 mediatype = buf + 5;
-                base64 = strstr(mediatype, ";base64,");
+                base64 = (char *)strstr(mediatype, ";base64,");
 
                 if (base64) {
                     param = vcardparameter_new_encoding(VCARD_ENCODING_B);
@@ -1159,13 +1160,13 @@ static void comp_to_v3(vcardcomponent *impl)
                     *base64 = '\0';
                     data = base64 + 8;
                 } else {
-                    data = strchr(mediatype, ',');
+                    data = (char *)strchr(mediatype, ',');
                     if (data) {
                         *data++ = '\0';
                     }
                 }
 
-                subtype = strchr(mediatype, '/');
+                subtype = (char *)strchr(mediatype, '/');
                 if (subtype) {
                     /* Copy and uppercase the subtype */
                     char *c;
@@ -1195,7 +1196,7 @@ static void comp_to_v3(vcardcomponent *impl)
         case VCARD_MEMBER_PROPERTY: {
             char *buf = NULL;
 
-            xval = vcardvalue_as_vcard_string(value);
+            const char *xval = vcardvalue_as_vcard_string(value);
             if (!xname) {
                 size_t buf_size = strlen(UUID_PREFIX) + strlen(xval) + 1;
                 char *buf_ptr = buf = icalmemory_new_buffer(buf_size);
@@ -1235,6 +1236,9 @@ static void comp_to_v3(vcardcomponent *impl)
 
         case VCARD_UID_PROPERTY:
             /* Treat all values as TEXT (the default) */
+            if (!vcardvalue_get_text(value)) {
+                break;
+            }
             value->kind = VCARD_TEXT_VALUE;
 
             if (val_param) {

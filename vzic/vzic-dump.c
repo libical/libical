@@ -37,7 +37,6 @@ void dump_zone_data(GArray *zone_data,
                                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     FILE *fp;
     ZoneLineData *zone_line;
-    gboolean output_month, output_day, output_time;
 
     fp = fopen(filename, "w");
     if (!fp) {
@@ -72,7 +71,9 @@ void dump_zone_data(GArray *zone_data,
             if (zone_line->until_set) {
                 fprintf(fp, "%s\t", dump_year(zone_line->until_year));
 
-                output_month = output_day = output_time = FALSE;
+                gboolean output_month = FALSE;
+                gboolean output_day = FALSE;
+                gboolean output_time = FALSE;
 
                 if (zone_line->until_time_code != TIME_WALL || zone_line->until_time_seconds != 0) {
                     output_month = output_day = output_time = TRUE;

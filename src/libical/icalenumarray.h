@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file icalenumarray.h
+ * @brief Defines the data structure for handling arrays of enums.
+ */
+
 #ifndef ICALENUMARRAY_H
 #define ICALENUMARRAY_H
 
@@ -14,15 +19,22 @@
 
 #include <stdlib.h>
 
+/// @cond PRIVATE
+/* An icalenumarray is just an icalarray in disguise. */
 typedef icalarray icalenumarray;
+/// @endcond
 
+/**
+ * A data structure to hold an enum array element
+ */
 typedef struct {
-    int val;
-    const char *xvalue;
+    int val;            /**< the enum value */
+    const char *xvalue; /**< pointer to the associated optional X value */
 } icalenumarray_element;
 
 /**
- * @brief Creates a new icalenumarray object.
+ * Creates a new icalenumarray object.
+ *
  * @param increment_size How many slots to allocate on array expansion
  * @return The new icalenumarray object
  * @sa icalenumarray_free()

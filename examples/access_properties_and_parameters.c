@@ -5,6 +5,8 @@
 */
 
 #include <libical/ical.h>
+
+#include <assert.h>
 #include <stdlib.h>
 
 /* Gets a particular parameter out of a component. This routine will

@@ -6,6 +6,11 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardtime.c
+ * @brief Implements the data structure representing vCard date-times.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -53,34 +58,34 @@ vcardtimetype vcardtime_current_utc_time(void)
 
 bool vcardtime_is_time(const vcardtimetype t)
 {
-    return (t.year == -1 && t.month == -1 && t.day == -1);
+    return (t.year == -1 && t.month == -1 && t.day == -1); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool vcardtime_is_date(const vcardtimetype t)
 {
-    return (t.hour == -1 && t.minute == -1 && t.second == -1);
+    return (t.hour == -1 && t.minute == -1 && t.second == -1); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool vcardtime_is_null_datetime(const vcardtimetype t)
 {
-    return (vcardtime_is_time(t) && vcardtime_is_date(t));
+    return (vcardtime_is_time(t) && vcardtime_is_date(t)); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool vcardtime_is_datetime(const vcardtimetype t)
 {
-    return (t.day != -1 && t.hour != -1);
+    return (t.day != -1 && t.hour != -1); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool vcardtime_is_timestamp(const vcardtimetype t)
 {
-    return (t.year != -1 && t.month != -1 && t.day != -1 &&
+    return (t.year != -1 && t.month != -1 && t.day != -1 && //NOLINT(readability-implicit-bool-conversion)
             t.hour != -1 && t.minute != -1 && t.second != -1 &&
             t.utcoffset != -1);
 }
 
 bool vcardtime_is_utc(const vcardtimetype t)
 {
-    return (t.utcoffset == 0 && !vcardtime_is_date(t));
+    return (t.utcoffset == 0 && !vcardtime_is_date(t)); //NOLINT(readability-implicit-bool-conversion)
 }
 
 bool vcardtime_is_leap_year(const int year)
@@ -90,7 +95,7 @@ bool vcardtime_is_leap_year(const int year)
     } else if (year <= 1752) {
         return (year % 4 == 0);
     } else {
-        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0); //NOLINT(readability-implicit-bool-conversion)
     }
 }
 
@@ -124,7 +129,7 @@ bool vcardtime_is_valid_time(const struct vcardtimetype t)
         break;
 
     case 2:
-        days = 28 + vcardtime_is_leap_year(t.year);
+        days = 28 + (int)vcardtime_is_leap_year(t.year);
         break;
 
     default:
@@ -301,12 +306,12 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
     int nchar = 0;
     char *newstr;
 
+    // NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
     if (!str || !*str) {
         /* empty string */
         return NULL;
     } else if (!strncmp(str, "--", 2)) {
         month = str + 2;
-
         if (*month == '-') {
             ndig = num_digits(month + 1);
 
@@ -352,6 +357,7 @@ static const char *sscanf_date(const char *str, vcardtimetype *t)
             }
         }
     }
+    // NOLINTEND(bugprone-unchecked-string-to-number-conversion)
 
     if (!nchar) {
         /* invalid time */
@@ -373,6 +379,7 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
     char *newstr;
     int nchar = 0;
 
+    // NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
     if (!str || !*str) {
         /* empty string */
         return NULL;
@@ -387,6 +394,7 @@ static const char *sscanf_zone(const char *str, vcardtimetype *t)
             sscanf(str, "%1[+-]%2u%n", sign, &offset_h, &nchar);
         }
     }
+    // NOLINTEND(bugprone-unchecked-string-to-number-conversion)
 
     if (!nchar) {
         /* invalid zone */
@@ -414,6 +422,7 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
     size_t ndig;
     int nchar = 0;
 
+    // NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
     if (!str || !*str) {
         /* empty string */
         return NULL;
@@ -448,7 +457,7 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
             t->second = 0;
         } else if (ndig == 2) {
             if (str[2] == ':') {
-                if (str[8] == '.') {
+                if (strlen(str) > 8 && str[8] == '.') {
                     sscanf(str, "%2u:%2u:%2u.%u%n",
                            (unsigned *)&t->hour, (unsigned *)&t->minute,
                            (unsigned *)&t->second, (unsigned *)&secfrac, &nchar);
@@ -462,6 +471,7 @@ static const char *sscanf_time(const char *str, vcardtimetype *t)
             }
         }
     }
+    // NOLINTEND(bugprone-unchecked-string-to-number-conversion)
 
     if (!nchar) {
         /* invalid time */

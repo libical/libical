@@ -6,11 +6,18 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file icalspanlist.c
+ * @brief Code that supports collections of free/busy spans of time
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalspanlist.h"
+#include "icalpvl_p.h"
+#include "icalerror_p.h"
 #include "icaltimezone.h"
 
 #include <stdlib.h>
@@ -50,7 +57,7 @@ static int compare_span(void *a, void *b)
  *  to build up a spanlist.
  */
 
-static void icalspanlist_new_callback(const icalcomponent *comp, const struct icaltime_span *span, void *data)
+static void icalspanlist_new_callback(icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     icaltime_span *s;
     icalspanlist *sl = (icalspanlist *)data;
@@ -234,9 +241,9 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
         period.start = t;
 
         if (s->is_busy == 1) {
-            period.end = icaltime_from_timet_with_zone(s->start, 0, NULL);
+            period.end = icaltime_from_timet_with_zone(s->start, false, NULL);
         } else {
-            period.end = icaltime_from_timet_with_zone(s->end, 0, NULL);
+            period.end = icaltime_from_timet_with_zone(s->end, false, NULL);
         }
 
         return period;
@@ -253,12 +260,12 @@ struct icalperiodtype icalspanlist_next_free_time(icalspanlist *sl, struct icalt
 
         if (s->is_busy == 0 && s->start >= rangett && (rangett < s->end || s->end == s->start)) {
             if (rangett < s->start) {
-                period.start = icaltime_from_timet_with_zone(s->start, 0, NULL);
+                period.start = icaltime_from_timet_with_zone(s->start, false, NULL);
             } else {
-                period.start = icaltime_from_timet_with_zone(rangett, 0, NULL);
+                period.start = icaltime_from_timet_with_zone(rangett, false, NULL);
             }
 
-            period.end = icaltime_from_timet_with_zone(s->end, 0, NULL);
+            period.end = icaltime_from_timet_with_zone(s->end, false, NULL);
 
             return period;
         }
@@ -337,11 +344,9 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
                                          const char *organizer, const char *attendee)
 {
     icalcomponent *comp;
-    icalproperty *p;
-    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), false, NULL);
     icalpvl_elem itr;
     icaltimezone *utc_zone;
-    icalparameter *param;
 
     if (!attendee) {
         icalerror_set_errno(ICAL_USAGE_ERROR);
@@ -368,14 +373,12 @@ icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
 
         if (s && s->is_busy == 1) {
             struct icalperiodtype period;
-            period.start = icaltime_from_timet_with_zone(s->start, 0, utc_zone);
-            period.end = icaltime_from_timet_with_zone(s->end, 0, utc_zone);
+            period.start = icaltime_from_timet_with_zone(s->start, false, utc_zone);
+            period.end = icaltime_from_timet_with_zone(s->end, false, utc_zone);
             period.duration = icaldurationtype_null_duration();
 
-            p = icalproperty_new_freebusy(period);
-            param = icalparameter_new_fbtype(ICAL_FBTYPE_BUSY);
-            icalproperty_add_parameter(p, param);
-
+            icalproperty *p = icalproperty_new_freebusy(period);
+            icalproperty_add_parameter(p, icalparameter_new_fbtype(ICAL_FBTYPE_BUSY));
             icalcomponent_add_property(comp, p);
         }
     }
@@ -418,7 +421,7 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
         }
 
         param = icalproperty_get_first_parameter(prop, ICAL_FBTYPE_PARAMETER);
-        fbtype = (param) ? icalparameter_get_fbtype(param) : ICAL_FBTYPE_BUSY;
+        fbtype = param ? icalparameter_get_fbtype(param) : ICAL_FBTYPE_BUSY;
 
         switch (fbtype) {
         case ICAL_FBTYPE_FREE:

@@ -21,6 +21,9 @@
  * @param location is a string containing the name of a location with a timezone file
  *        found under the zoneinfo data.
  *
+ * @return A NULL pointer if there is no zoneinfo file associated with the
+ * specified location; otherwise a pointer to a valid timezone icalcomponent.
+ *
  * @since 4.0 no longer publicly accessible
  */
 LIBICAL_ICAL_NO_EXPORT icalcomponent *icaltimezone_fetch_timezone(const char *location);

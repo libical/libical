@@ -19,6 +19,7 @@
 #endif
 
 #include "libical/ical.h"
+#include <assert.h>
 
 static void assert_ctrl(enum icalparser_ctrl ctrl,
                         const char *data,

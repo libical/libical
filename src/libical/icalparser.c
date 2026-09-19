@@ -8,24 +8,33 @@
  The Initial Developer of the Original Code is Eric Busboom
  ======================================================================*/
 
+/**
+ * @file  icalparser.c
+ * @brief Line-oriented parsing.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalparser.h"
+#include "icalerror_p.h"
 #include "icalerror.h"
 #include "icallimits.h"
 #include "icalmemory.h"
 #include "icalvalue.h"
 #include "icalparameter.h"
 #include "icalproperty_p.h"
+#include "icalpvl_p.h"
 
 #include <ctype.h>
 #include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
 #include <string.h>
 
+/// @cond PRIVATE
 #define TMP_BUF_SIZE 80
+/// @endcond
 
 static enum icalparser_ctrl icalparser_ctrl_g = ICALPARSER_CTRL_KEEP;
 
@@ -528,7 +537,7 @@ char *icalparser_get_line(icalparser *parser,
         }
 
     } else {
-        *(line_p) = '\0';
+        *line_p = '\0';
     }
 
     while ((*line_p == '\0' || iswspace((wint_t)*line_p)) && line_p > line) {
@@ -656,7 +665,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         return 0;
     }
 
-    if (line_is_blank(line) == 1) {
+    if (line_is_blank(line)) {
         return 0;
     }
 
@@ -731,7 +740,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
        starting or ending a new component */
 
     if (strcasecmp(str, "BEGIN") == 0) {
-        icalcomponent *c;
+        icalcomponent *c = NULL;
         icalcomponent_kind comp_kind;
 
         parser->level++;
@@ -742,6 +751,13 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
         if (comp_kind == ICAL_X_COMPONENT) {
             c = icalcomponent_new_x(str);
+        } else if (comp_kind == ICAL_IANA_COMPONENT) {
+            ical_unknown_token_handling tokHandlingSetting =
+                ical_get_unknown_token_handling_setting();
+            if (tokHandlingSetting == ICAL_ASSUME_IANA_TOKEN) {
+                c = icalcomponent_new_iana(str);
+            }
+            /* ICAL_DISCARD_TOKEN / ICAL_TREAT_AS_ERROR: treat as error */
         } else {
             c = icalcomponent_new(comp_kind);
         }
@@ -829,6 +845,11 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
     prop_kind = icalproperty_string_to_kind(str);
 
+    if (prop_kind == ICAL_IANA_PROPERTY &&
+        ical_get_unknown_token_handling_setting() != ICAL_ASSUME_IANA_TOKEN) {
+        prop_kind = ICAL_NO_PROPERTY;
+    }
+
     prop = icalproperty_new(prop_kind);
 
     if (prop != 0) {
@@ -836,6 +857,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
         if (prop_kind == ICAL_X_PROPERTY) {
             icalproperty_set_x_name(prop, str);
+        } else if (prop_kind == ICAL_IANA_PROPERTY) {
+            icalproperty_set_iana_name(prop, str);
         }
 
         icalcomponent_add_property(tail, prop);
@@ -879,8 +902,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         if (str != 0) {
             char *name_heap = 0;
             char *pvalue_heap = 0;
-            char name_stack[TMP_BUF_SIZE];
-            char pvalue_stack[TMP_BUF_SIZE];
+            char name_stack[TMP_BUF_SIZE] = {};
+            char pvalue_stack[TMP_BUF_SIZE] = {};
             char *name = name_stack;
             char *pvalue = pvalue_stack;
 
@@ -930,68 +953,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     icalparameter_set_xname(param, name);
                     icalparameter_set_xvalue(param, pvalue);
                 }
-            } else if (kind == ICAL_TZID_PARAMETER && *(end - 1) != ';') {
-                /*
-                   Special case handling for TZID to work around invalid incoming data.
-                   For example, Google Calendar will send back stuff like this:
-                   DTSTART;TZID=GMT+05:30:20120904T020000
-
-                   In this case we read to the next semicolon or the last colon rather
-                   than the first colon.  This way the TZID will become GMT+05:30 rather
-                   than trying to parse the date-time as 30:20120904T020000.
-
-                   This also handles properties that look like this:
-                   DTSTART;TZID=GMT+05:30;VALUE=DATE-TIME:20120904T020000
-                 */
-                char *lastColon = 0;
-                char *nextColon = end;
-                char *nextSemicolon = parser_get_next_char(';', end, 1);
-
-                /* Find the last colon in the line */
-                do {
-                    nextColon = parser_get_next_char(':', nextColon, 1);
-
-                    if (nextColon) {
-                        lastColon = nextColon;
-                    }
-                } while (nextColon);
-
-                if (lastColon && nextSemicolon && nextSemicolon < lastColon) {
-                    /*
-                       Ensures that we don't read past a semicolon
-
-                       Handles the following line:
-                       DTSTART;TZID=GMT+05:30;VALUE=DATE-TIME:20120904T020000
-                     */
-                    lastColon = nextSemicolon;
-                }
-
-                /*
-                   Rebuild str so that it includes everything up to the next semicolon
-                   or the last colon. So given the above example, str will go from
-                   "TZID=GMT+05" to "TZID=GMT+05:30"
-                 */
-                if (lastColon && *(lastColon + 1) != 0) {
-                    const char *strStart = line + strlen(name) + 2;
-
-                    end = lastColon + 1;
-
-                    icalmemory_free_buffer(str);
-                    str = make_segment(strStart, end - 1);
-                }
-
-                /* Reparse the parameter name and value with the new segment */
-                if (!parser_get_param_name_stack(str, name_stack, sizeof(name_stack),
-                                                 pvalue_stack, sizeof(pvalue_stack))) {
-                    icalmemory_free_buffer(pvalue_heap);
-                    pvalue_heap = 0;
-
-                    icalmemory_free_buffer(name_heap);
-                    name = 0;
-                    name_heap = parser_get_param_name_heap(str, &pvalue_heap);
-                    pvalue = pvalue_heap;
-                }
-                param = icalparameter_new_from_value_string(kind, pvalue);
             } else if (kind != ICAL_NO_PARAMETER) {
                 param = icalparameter_new_from_value_string(kind, pvalue);
             } else {

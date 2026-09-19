@@ -3,7 +3,7 @@
 ci:
   autoupdate_schedule: monthly
 
-exclude: ^(test-data/|zoneinfo/|cmake/modules/openssf-c.cmake|cmake/modules/openssf-cpp.cmake)
+exclude: ^(test-data/|zoneinfo/|cmake/modules/openssf-c.cmake|cmake/modules/openssf-cpp.cmake|docs/doxygen-awesome.css)
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v6.0.0
@@ -21,44 +21,44 @@ repos:
   - id: destroyed-symlinks
   - id: check-executables-have-shebangs
 - repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v21.1.8
+  rev: v23.1.0
   hooks:
   - id: clang-format
     exclude: ^(src/Net-ICal-Libical|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
-  rev: v0.15.2
+  rev: v0.16.6
   hooks:
     # Run the linter.
     - id: ruff
     # Run the formatter.
     - id: ruff-format
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.4.1
+  rev: v2.4.3
   hooks:
   - id: codespell
     exclude: ^(CONTRIBUTORS.md)
 - repo: https://github.com/BlankSpruce/gersemi
-  rev: 0.26.0
+  rev: 0.26.1
   hooks:
   - id: gersemi
     exclude: (cmake/Toolchain-|.h.cmake|/Doxyfile.cmake)
 - repo: https://github.com/perltidy/perltidy
-  rev: "20260204.01"
+  rev: "20260826"
   hooks:
   - id: perltidy
     exclude: ^(src/Net-ICal-Libical)
 - repo: https://github.com/DavidAnson/markdownlint-cli2
-  rev: v0.21.0
+  rev: v0.23.2
   hooks:
   - id: markdownlint-cli2
     files: \.(md|mdown|markdown)$
 - repo: https://github.com/scop/pre-commit-shfmt
-  rev: v3.12.0-2
+  rev: v3.13.1-1
   hooks:
   - id: shfmt
 - repo: https://github.com/shellcheck-py/shellcheck-py
-  rev: v0.11.0.1
+  rev: v0.11.0.1-1
   hooks:
   - id: shellcheck
 - repo: https://github.com/efrecon/pre-commit-hook-lxml

@@ -3,4 +3,7 @@
   <suppress>
     <id>unusedStructMember</id>
   </suppress>
+  <suppress>
+    <id>shadowFunction</id>
+  </suppress>
 </suppressions>

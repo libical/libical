@@ -6,13 +6,18 @@
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 
+/**
+ * @file vcardparameter.c
+ * @brief Implements the data structure representing vCard parameters.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "vcardparameter.h"
 #include "vcardparameterimpl.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <errno.h>
@@ -29,8 +34,7 @@ LIBICAL_VCARD_EXPORT struct vcardparameter_impl *vcardparameter_new_impl(vcardpa
 
     memset(v, 0, sizeof(struct vcardparameter_impl));
 
-    strcpy(v->id, "para");
-
+    v->id = ICAL_STRUCTURE_TYPE_PARAMETER;
     v->kind = kind;
     v->value_kind = vcardparameter_kind_value_kind(kind, &v->is_multivalued);
 
@@ -69,7 +73,7 @@ void vcardparameter_free(vcardparameter *param)
     memset(param, 0, sizeof(vcardparameter));
 
     param->parent = 0;
-    param->id[0] = 'X';
+    param->id = ICAL_STRUCTURE_TYPE_PARAMETER_EMPTY;
     icalmemory_free_buffer(param);
 }
 
@@ -267,7 +271,7 @@ char *vcardparameter_as_vcard_string_r(vcardparameter *param)
             sep = ",";
         }
     } else if (vcardparameter_is_structured(param)) {
-        char *str = vcardstructured_as_vcard_string_r(param->structured, 1);
+        char *str = vcardstructured_as_vcard_string_r(param->structured, true);
 
         icalmemory_append_encoded_string(&buf, &buf_ptr, &buf_size, str);
         icalmemory_free_buffer(str);
@@ -302,11 +306,7 @@ bool vcardparameter_isa_parameter(void *parameter)
         return false;
     }
 
-    if (strcmp(impl->id, "para") == 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_PARAMETER);
 }
 
 void vcardparameter_set_xname(vcardparameter *param, const char *v)
@@ -426,7 +426,7 @@ bool vcardparameter_is_multivalued(const vcardparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
-    return param->is_multivalued;
+    return param->is_multivalued != 0;
 }
 
 bool vcardparameter_is_structured(const vcardparameter *param)
