@@ -3740,7 +3740,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     const size_t max_recurrence_time_count = icallimit_get(ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL);
     int lastTimeCompare = 0;
     bool hasSetPos = has_by_data(impl, ICAL_BY_SET_POS);
-    int checkContractingRules = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
+    int checkContractingRules = (int)check_contracting_rules(impl);
     size_t cntRecurrences = 0;
     const size_t max_recurrences = icallimit_get(ICAL_LIMIT_RECURRENCE_SEARCH);
     do {
@@ -3795,7 +3795,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
         }
 
         if (hasSetPos) {
-            int new_ccr = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
+            int new_ccr = (int)check_contracting_rules(impl);
             if (new_ccr == 1) {
                 if (checkContractingRules == 0 || period_change) {
                     setup_setpos(impl, 1);
@@ -3836,7 +3836,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
     int period_change = 1;
     icalrecur_iterator impl_last = *impl;
     bool hasSetPos = has_by_data(impl, ICAL_BY_SET_POS);
-    int checkContractingRules = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
+    int checkContractingRules = (int)check_contracting_rules(impl);
 
     /* Iterate until we get the next valid time */
     do {
@@ -3886,7 +3886,7 @@ struct icaltimetype icalrecur_iterator_prev(icalrecur_iterator *impl)
         }
 
         if (hasSetPos) {
-            int new_ccr = check_contracting_rules(impl) ? 1 : 0; //NOLINT(readability-implicit-bool-conversion)
+            int new_ccr = (int)check_contracting_rules(impl);
             if (new_ccr == 1) {
                 if (checkContractingRules == 0 || period_change) {
                     setup_setpos(impl, 0);
