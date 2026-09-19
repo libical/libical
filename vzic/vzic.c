@@ -162,15 +162,15 @@ int main(int argc,
 
     if (VzicDumpOutput) {
         /* Create the directories for the dump output, if they don't exist. */
-        sprintf(directory, "%s/ZonesVzic", VzicOutputDir);
+        snprintf(directory, PATHNAME_BUFFER_SIZE, "%s/ZonesVzic", VzicOutputDir);
         ensure_directory_exists(directory);
-        sprintf(directory, "%s/RulesVzic", VzicOutputDir);
+        snprintf(directory, PATHNAME_BUFFER_SIZE, "%s/RulesVzic", VzicOutputDir);
         ensure_directory_exists(directory);
     }
 
     if (VzicDumpChanges) {
         /* Create the directory for the changes output, if it doesn't exist. */
-        sprintf(directory, "%s/ChangesVzic", VzicOutputDir);
+        snprintf(directory, PATHNAME_BUFFER_SIZE, "%s/ChangesVzic", VzicOutputDir);
         ensure_directory_exists(directory);
     }
 
@@ -203,7 +203,7 @@ int main(int argc,
      * and the translatable strings to feed to gettext.
      */
     if (VzicDumpZoneNamesAndCoords) {
-        sprintf(filename, "%s/zone.tab", VzicOlsonDir);
+        snprintf(filename, PATHNAME_BUFFER_SIZE, "%s/zone.tab", VzicOlsonDir);
         zones_hash = parse_zone_tab(filename);
 
         dump_time_zone_names(VzicTimeZoneNames, VzicOutputDir, zones_hash);
@@ -229,7 +229,7 @@ convert_olson_files(const char *olson_dir, GPtrArray *olson_filenames)
         char input_filename[PATHNAME_BUFFER_SIZE];
         int file_max_until_year;
 
-        sprintf(input_filename, "%s/%s", olson_dir, olson_filename);
+        snprintf(input_filename, PATHNAME_BUFFER_SIZE, "%s/%s", olson_dir, olson_filename);
         parse_olson_file(input_filename, zone_data, rule_data, link_data,
                          &file_max_until_year);
         if (file_max_until_year > max_until_year) {
@@ -238,10 +238,10 @@ convert_olson_files(const char *olson_dir, GPtrArray *olson_filenames)
 
         if (VzicDumpOutput) {
             char dump_filename[PATHNAME_BUFFER_SIZE];
-            sprintf(dump_filename, "%s/ZonesVzic/%s", VzicOutputDir, olson_filename);
+            snprintf(dump_filename, PATHNAME_BUFFER_SIZE, "%s/ZonesVzic/%s", VzicOutputDir, olson_filename);
             dump_zone_data(zone_data, dump_filename);
 
-            sprintf(dump_filename, "%s/RulesVzic/%s", VzicOutputDir, olson_filename);
+            snprintf(dump_filename, PATHNAME_BUFFER_SIZE, "%s/RulesVzic/%s", VzicOutputDir, olson_filename);
             dump_rule_data(rule_data, dump_filename);
         }
     }

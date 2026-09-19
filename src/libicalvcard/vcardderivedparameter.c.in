@@ -118,7 +118,7 @@ const char *vcardparameter_kind_to_string(vcardparameter_kind kind)
     return 0;
 }
 
-/** DO NOT USE. RETAINED FOR BC in 4.0. Remove in 4.1 and above */
+/** DO NOT USE. RETAINED FOR BC in 4.0. TODO: 5.0 remove */
 int vcardparameter_compare_kind_map(const struct vcardparameter_kind_map *a,
                                     const struct vcardparameter_kind_map *b)
 {

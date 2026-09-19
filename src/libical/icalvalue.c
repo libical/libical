@@ -26,6 +26,7 @@
 #include "icaltime.h"
 
 #include <ctype.h>
+#include <errno.h>
 #include <locale.h>
 #include <stdlib.h>
 
@@ -555,9 +556,10 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         break;
 
     case ICAL_INTEGER_VALUE: {
+        errno = 0;
         char *t_end;
         const long tmpl = strtol(str, &t_end, 10);
-        if (str != t_end) {
+        if (str != t_end && errno != ERANGE) {
             value = icalvalue_new_integer(tmpl);
         }
         break;
@@ -571,11 +573,13 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         break;
     }
     case ICAL_UTCOFFSET_VALUE: {
-        int utcoffset, hours, minutes, seconds;
+        int iOffset;
+        long utcoffset, hours, minutes, seconds;
 
         /* treat the UTCOFFSET string as a decimal number, disassemble its digits
                and reconstruct it as sections */
         long t = strtol(str, 0, 10);
+
         /* add phantom seconds field */
         if (strlen(str) < 7) {
             t *= 100;
@@ -584,8 +588,14 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         minutes = (t - hours * 10000) / 100;
         seconds = (t - hours * 10000 - minutes * 100);
         utcoffset = hours * 3600 + minutes * 60 + seconds;
-
-        value = icalvalue_new_utcoffset(utcoffset);
+        if (utcoffset < INT_MIN) {
+            iOffset = INT_MIN;
+        } else if (utcoffset > INT_MAX) {
+            iOffset = INT_MAX;
+        } else {
+            iOffset = utcoffset;
+        }
+        value = icalvalue_new_utcoffset(iOffset);
 
         break;
     }
