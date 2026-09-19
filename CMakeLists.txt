@@ -971,13 +971,19 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   if(CMAKE_C_COMPILER_IS_CLANG)
     set(
       CMAKE_C_FLAGS
-      "${CMAKE_C_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER -lubsan"
+      "${CMAKE_C_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER"
     )
+    if(NOT APPLE)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lubsan")
+    endif()
     if(LIBICAL_CXX_BINDINGS)
       set(
         CMAKE_CXX_FLAGS
-        "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER -lubsan"
+        "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER"
       )
+      if(NOT APPLE)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lubsan")
+      endif()
     endif()
   else()
     message(FATAL_ERROR "Must compile with clang to build with the undefined sanitizer.")

@@ -79,7 +79,7 @@ jobs:
       - name: Test project
         run: cd build && (ctest --test-dir . || ctest --rerun-failed --output-on-failure)
 
-  build-macos:
+  build-macos-no-sanitizer:
     strategy:
       matrix:
         configuration:
@@ -98,6 +98,31 @@ jobs:
           export BerkeleyDB_ROOT_DIR=/opt/homebrew/opt/berkeley-db
           mkdir build
           cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=False -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_TESTING_LONGRUNNING=True -DLIBICAL_BUILD_VZIC=True
+      - name: Build project
+        run: cmake --build build
+      - name: Test project
+        run: cd build && (ctest --test-dir . || ctest --rerun-failed --output-on-failure)
+
+  build-macos:
+    strategy:
+      matrix:
+        configuration:
+          - Debug
+    runs-on: macos-15-intel
+    env:
+      XML_CATALOG_FILES: /usr/local/etc/xml/catalog
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: brew install pkg-config ninja glib libxml2 icu4c berkeley-db
+      - name: Configure project
+        run: |
+          export PKG_CONFIG_PATH=/opt/homebrew/opt/libxml2/lib/pkgconfig:/opt/homebrew/opt/lib/pkgconfig
+          export ICU_ROOT=/opt/homebrew/opt/icu4c
+          export BerkeleyDB_ROOT_DIR=/opt/homebrew/opt/berkeley-db
+          mkdir build
+          #no MSAN available with apple clang
+          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_VZIC=True
       - name: Build project
         run: cmake --build build
       - name: Test project
