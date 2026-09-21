@@ -56,6 +56,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     488416219 # ASAN Stack-overflow
     505903588 # MSAN Use-of-uninitialized value
     523004109 # out-of-memory
+    564162771 # UBSAN cpu time-out exceeds 60s
   )
   foreach(fuzztest ${FUZZ_FILES})
     add_test(
