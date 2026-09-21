@@ -116,8 +116,8 @@
   </method>
   <method name="i_cal_time_is_valid_time" corresponds="icaltime_is_valid_time" since="1.0">
     <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
-    <returns type="gboolean" comment="Whether @tt is null_time. true if yes, false if not."/>
-    <comment xml:space="preserve">Returns true if the time is null.</comment>
+    <returns type="gboolean" comment="Whether @tt is valid true if yes, false if not."/>
+    <comment xml:space="preserve">Returns true if the time is invalid.</comment>
   </method>
   <method name="i_cal_time_is_date" corresponds="icaltime_is_date" since="1.0">
     <parameter type="const ICalTime *" name="tt" annotation="in, transfer none" comment="The #ICalTime to be checked"/>
