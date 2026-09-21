@@ -21,6 +21,9 @@ jobs:
       - name: Configure project
         run: |
           mkdir build
+          # the vcpkg build is very slow. we keep it here as a comment for future reference
+          # cmake -B build --warn-uninitialized -G Ninja "-DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake" -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_GLIB_CHECK_API_FILES=False -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_BUILD_TESTING_LONGRUNNING=True
+          # the non-vcpkg build is fast
           cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=True  -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_TESTING_LONGRUNNING=True
         shell: cmd
       - name: Build project

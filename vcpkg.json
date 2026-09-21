@@ -1,5 +1,9 @@
 {
     "dependencies": [
+        {
+            "name": "pkgconf",
+            "platform": "windows"
+        },
         "icu",
         "libxml2",
         "glib",
