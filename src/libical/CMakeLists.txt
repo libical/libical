@@ -3,10 +3,6 @@
 
 add_definitions(-Dlibical_ical_EXPORTS)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icalversion.h @ONLY)
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icaltime_p.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icaltime_p.h)
-
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
@@ -27,6 +23,11 @@ add_definitions(-DPACKAGE_DATA_DIR="${PACKAGE_DATA_DIR}")
 set(ICALSCRIPTS ${PROJECT_SOURCE_DIR}/scripts/)
 set(BUILT_HEADERS) #list of derived headers we build
 set(BUILD_SOURCES) #list of derived implementations we build
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icalversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icalversion.h @ONLY)
+list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libical/icalversion.h)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icaltime_p.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/icaltime_p.h)
 
 set(
   PROPERTYDEPS

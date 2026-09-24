@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   expected value type. The typed setters error with ICAL_BADARG_ERROR
   instead of overwriting a value held in another union member.
 - Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
-- Improve build paths in installed .cmake files (esp. for cross-compiling)
+- Improve build paths in installed cmake files (esp. for cross-compiling)
+- Install the libicalversion.h header
 
 ## [4.0.5] - 2026-08-15
 
