@@ -345,7 +345,7 @@ LIBICAL_ICAL_EXPORT int icaltime_start_doy_week(const struct icaltimetype t, int
 LIBICAL_ICAL_EXPORT bool icaltime_is_null_time(const struct icaltimetype t);
 
 /**
- * Determine if the specified icaltimetype is a valid DATE.
+ * Determine if the specified icaltimetype is a valid DATE or DATETIME.
  *
  * @param t is the icaltimetype
  *
