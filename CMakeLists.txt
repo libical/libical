@@ -91,6 +91,10 @@
 #  Set to build the big fuzzer tests
 #  Default=false
 #
+# -DLIBICAL_BUILD_TESTING_LONGRUNNING=[true|false]
+#  Set to build the long running tests, including any long-running fuzzer tests
+#  Default=false
+#
 # -DLIBICAL_DEVMODE_ABI_DUMPER=[true|false]
 #  Build for the abi-dumper (requires gcc)
 #  Default=false
@@ -835,9 +839,6 @@ if(LIBICAL_DEVMODE_ABI_DUMPER)
   endif()
 endif()
 
-# extra link flags for sanitzers
-set(XSAN_LINKER_FLAGS)
-
 libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY "(Developer-only) Build with memory consistency functions." False)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
   set(CMAKE_BUILD_TYPE "Debug")
@@ -849,11 +850,19 @@ libical_option(LIBICAL_DEVMODE_ADDRESS_SANITIZER "(Developer-only) Build with th
 mark_as_advanced(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
 if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer -O1 -g -DADDRESS_SANITIZER")
     if(LIBICAL_CXX_BINDINGS)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -DADDRESS_SANITIZER")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -O1 -g -DADDRESS_SANITIZER")
     endif()
-    list(APPEND XSAN_LINKER_FLAGS "asan")
+    message(
+      NOTICE
+      "Currently unable to build the address sanitizer for glib-based configurations."
+      "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
+    )
+    set(LIBICAL_GLIB False)
+    set(LIBICAL_GOBJECT_INTROSPECTION False)
+    set(LIBICAL_GLIB_BUILD_DOCS False)
+    set(LIBICAL_GLIB_VAPI False)
   else()
     message(FATAL_ERROR "You are trying to build with the address sanitizer using a non-GCC or Clang compiler.")
   endif()
@@ -863,14 +872,13 @@ libical_option(LIBICAL_DEVMODE_LEAK_SANITIZER "(Developer-only) Build with the l
 mark_as_advanced(LIBICAL_DEVMODE_LEAK_SANITIZER)
 if(LIBICAL_DEVMODE_LEAK_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=leak -O1 -g -DLEAK_SANITIZER")
     if(LIBICAL_CXX_BINDINGS)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak -g -DLEAK_SANITIZER")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak -O1 -g -DLEAK_SANITIZER")
     endif()
-    list(APPEND XSAN_LINKER_FLAGS "lsan")
     message(
       NOTICE
-      "Currently unable to build leak sanitizer for glib-based configurations."
+      "Currently unable to build the leak sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
     set(LIBICAL_GLIB False)
@@ -899,7 +907,7 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
     #currently unavailable for glib-based code
     message(
       NOTICE
-      "Currently unable to build memory sanitizer for glib-based configurations."
+      "Currently unable to build the memory sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
     set(LIBICAL_GLIB False)
@@ -919,10 +927,9 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
     if(LIBICAL_CXX_BINDINGS)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -O1 -g -DTHREAD_SANITIZER")
     endif()
-    list(APPEND XSAN_LINKER_FLAGS "tsan")
     message(
       NOTICE
-      "Currently unable to build thread sanitizer for glib-based configurations."
+      "Currently unable to build the thread sanitizer for glib-based configurations."
       "Disabling GLib and GLib docs, GObject_Introspection and VALA support."
     )
     set(LIBICAL_GLIB False)
@@ -941,13 +948,19 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   if(CMAKE_C_COMPILER_IS_CLANG)
     set(
       CMAKE_C_FLAGS
-      "${CMAKE_C_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER -lubsan"
+      "${CMAKE_C_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER"
     )
+    if(NOT APPLE)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lubsan")
+    endif()
     if(LIBICAL_CXX_BINDINGS)
       set(
         CMAKE_CXX_FLAGS
-        "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER -lubsan"
+        "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=integer -fsanitize=nullability -O1 -g -DUNDEFINED_SANITIZER"
       )
+      if(NOT APPLE)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lubsan")
+      endif()
     endif()
   else()
     message(FATAL_ERROR "Must compile with clang to build with the undefined sanitizer.")
@@ -970,6 +983,7 @@ if(LIBICAL_DEVMODE)
   set(LIBICAL_BUILD_TESTING True)
 endif()
 libical_option(LIBICAL_BUILD_TESTING_BIGFUZZ "Build fuzzer tests" False)
+libical_option(LIBICAL_BUILD_TESTING_LONGRUNNING "Build long running tests" False)
 libical_option(LIBICAL_BUILD_EXAMPLES "Build examples." True)
 
 ########### Configure pkg-config variables #########

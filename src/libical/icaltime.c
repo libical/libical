@@ -617,9 +617,18 @@ bool icaltime_is_valid_time(const struct icaltimetype t)
         t.day < 0 || t.day > 31 ||
         t.is_date > 1 || t.is_date < 0) {
         return false;
-    } else {
-        return true;
     }
+
+    // If this is a datetime also validate the time members
+    if (!t.is_date &&
+        (t.second < 0 ||
+         t.second > 59 ||
+         t.minute < 0 || t.minute > 59 ||
+         t.hour < 0 || t.hour > 23)) {
+        return false;
+    }
+
+    return true;
 }
 
 bool icaltime_is_date(const struct icaltimetype t)

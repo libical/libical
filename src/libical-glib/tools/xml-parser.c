@@ -628,8 +628,10 @@ replace_variables_in_string(const char *str,
                 if (value) {
                     end[1] = last;
                     g_string_erase(tmp, ii, end - tmp->str - ii + 1);
-                    g_string_insert(tmp, ii, value);
-                    ii += (guint)strlen(value) - 1;
+                    if (*value) {
+                        g_string_insert(tmp, ii, value);
+                        ii += (guint)strlen(value) - 1;
+                    }
                 } else {
                     g_warning("Cannot find variable '%s'", tmp->str + ii);
                     end[1] = last;

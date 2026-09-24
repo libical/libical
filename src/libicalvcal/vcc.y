@@ -518,7 +518,7 @@ static char lexGetc_()
     {
     /* get next char from input, no buffering. */
     if (lexBuf.curPos == lexBuf.inputLen)
-        return EOF;
+        return (char)EOF;
     else if (lexBuf.inputString)
         return *(lexBuf.inputString + lexBuf.curPos++);
     else {

@@ -319,8 +319,8 @@ testme(icalcomponent_timefuzz icalcomponent_timefuzz.c)
 testme(icaltimezone_fuzz icaltimezone_fuzz.c)
 
 if(LIBICAL_BUILD_TESTING_BIGFUZZ)
-  foreach(
-    fuzztest
+  list(
+    APPEND FUZZ_FILES
     52787 # cpu timeout fails beyond 60s
     56171
     56539 # memory usage exceeds 2560mb
@@ -342,16 +342,26 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     466309165 # ASAN cpu timeout exceeds 60s
     472865252 # UBSAN cpu timeout exceeds 60s
     476187660 # ASAN cpu timeout exceeds 60s
-    479865113 # ASAN cpu timeout exceeds 60s
     492956874 # UBSAN cpu timeout exceeds 60s
     549393074 # out of memory
     560953111 # out of memory
+    563849777 # integer-overflow icaltimezone_adjust_change
+    565490012 # integer-overflow icaltimezone_expand_timezone
     ubsan
     ubsan2
     ubsan3
     ubsan4 # integer overflow in icalpvl_newlist
     ubsan5 # integer overflow in icalpvl_new_element
   )
+  # any test that runs longer than 1 minute (approx)
+  if(LIBICAL_BUILD_TESTING_LONGRUNNING)
+    list(
+      APPEND FUZZ_FILES
+      479865113 # ASAN cpu timeout exceeds 60s
+    )
+  endif()
+
+  foreach(fuzztest ${FUZZ_FILES})
     add_test(
       NAME fuzz1test${fuzztest}
       COMMAND

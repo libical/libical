@@ -21,7 +21,10 @@ jobs:
       - name: Configure project
         run: |
           mkdir build
-          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=True  -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True
+          # the vcpkg build is very slow. we keep it here as a comment for future reference
+          # cmake -B build --warn-uninitialized -G Ninja "-DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake" -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_GLIB_CHECK_API_FILES=False -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_BUILD_TESTING_LONGRUNNING=True
+          # the non-vcpkg build is fast
+          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_ENABLE_BUILTIN_TZDATA=True  -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_TESTING_LONGRUNNING=True
         shell: cmd
       - name: Build project
         run: cmake --build build
@@ -52,7 +55,7 @@ jobs:
       - name: Configure project
         run: |
           mkdir build
-          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True -DLIBICAL_DEVMODE_LEAK_SANITIZER=True -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_GLIB_CHECK_API_FILES=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_VZIC=False -DLIBICAL_JAVA_BINDINGS=False
+          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DLIBICAL_DEVMODE_ADDRESS_SANITIZER=True -DLIBICAL_DEVMODE_LEAK_SANITIZER=True -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_GLIB_CHECK_API_FILES=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_TESTING_LONGRUNNING=True -DLIBICAL_BUILD_VZIC=False -DLIBICAL_JAVA_BINDINGS=False
       - name: Build project
         run: cmake --build build
       - name: Test project
@@ -73,13 +76,13 @@ jobs:
       - name: Configure project
         run: |
           mkdir build
-          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_GLIB_VAPI=True -DLIBICAL_GLIB_CHECK_API_FILES=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_VZIC=True -DLIBICAL_JAVA_BINDINGS=False
+          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=True -DLIBICAL_GLIB_VAPI=True -DLIBICAL_GLIB_CHECK_API_FILES=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True  -DLIBICAL_BUILD_TESTING_LONGRUNNING=True -DLIBICAL_BUILD_VZIC=True -DLIBICAL_JAVA_BINDINGS=False
       - name: Build project
         run: cmake --build build
       - name: Test project
         run: cd build && (ctest --test-dir . || ctest --rerun-failed --output-on-failure)
 
-  build-macos:
+  build-macos-no-sanitizer:
     strategy:
       matrix:
         configuration:
@@ -97,7 +100,32 @@ jobs:
           export ICU_ROOT=/opt/homebrew/opt/icu4c
           export BerkeleyDB_ROOT_DIR=/opt/homebrew/opt/berkeley-db
           mkdir build
-          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=False -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_VZIC=True
+          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=False -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_TESTING_LONGRUNNING=True -DLIBICAL_BUILD_VZIC=True
+      - name: Build project
+        run: cmake --build build
+      - name: Test project
+        run: cd build && (ctest --test-dir . || ctest --rerun-failed --output-on-failure)
+
+  build-macos:
+    strategy:
+      matrix:
+        configuration:
+          - Debug
+    runs-on: macos-15-intel
+    env:
+      XML_CATALOG_FILES: /usr/local/etc/xml/catalog
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: brew install pkg-config ninja glib libxml2 icu4c berkeley-db
+      - name: Configure project
+        run: |
+          export PKG_CONFIG_PATH=/opt/homebrew/opt/libxml2/lib/pkgconfig:/opt/homebrew/opt/lib/pkgconfig
+          export ICU_ROOT=/opt/homebrew/opt/icu4c
+          export BerkeleyDB_ROOT_DIR=/opt/homebrew/opt/berkeley-db
+          mkdir build
+          #no MSAN available with apple clang
+          cmake -B build --warn-uninitialized -Werror=dev -G Ninja -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=True -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DLIBICAL_DEVMODE=True -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=True -DLIBICAL_GLIB_BUILD_DOCS=False -DLIBICAL_GLIB=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB_VAPI=False -DLIBICAL_BUILD_TESTING_BIGFUZZ=True -DLIBICAL_BUILD_VZIC=True
       - name: Build project
         run: cmake --build build
       - name: Test project

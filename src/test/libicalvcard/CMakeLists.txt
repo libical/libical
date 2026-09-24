@@ -41,8 +41,8 @@ set(
 vcbuildme(vcardcomponent_fuzz1 "${fuzz1_SRCS}")
 
 if(LIBICAL_BUILD_TESTING_BIGFUZZ)
-  foreach(
-    fuzztest
+  list(
+    APPEND FUZZ_FILES
     479882034 # MSAN abrt
     479882034a # ASAN unknown read
     479881583 # ASAN cpu timeout exceeds 60s
@@ -57,6 +57,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     505903588 # MSAN Use-of-uninitialized value
     523004109 # out-of-memory
   )
+  foreach(fuzztest ${FUZZ_FILES})
     add_test(
       NAME vcfuzz1test${fuzztest}
       COMMAND
