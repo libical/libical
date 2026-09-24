@@ -327,7 +327,6 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     69341
     69344
     69527
-    69888 # cpu timeout fails beyond 60s
     42517512 # UBSAN cpu timeout exceeds 60s
     42521679 # out-of-memory
     42536507 # cpu timeout fails beyond 60s
@@ -357,6 +356,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
   if(LIBICAL_BUILD_TESTING_LONGRUNNING)
     list(
       APPEND FUZZ_FILES
+      69888 # cpu timeout fails beyond 60s
       479865113 # ASAN cpu timeout exceeds 60s
     )
   endif()
