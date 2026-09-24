@@ -609,8 +609,8 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
     struct icalrecurrencetype *rrule;
     icalrecur_iterator *rrule_iterator;
     struct icaldatetimeperiodtype rdate;
-    int found_dtstart = 0, found_tzoffsetto = 0, found_tzoffsetfrom = 0;
-    int has_rdate = 0, has_rrule = 0;
+    bool found_dtstart = false, found_tzoffsetto = false, found_tzoffsetfrom = false;
+    int has_rdate = false, has_rrule = false;
 
     /* First we check if it is a STANDARD or DAYLIGHT component, and
        just return if it isn't. */
@@ -622,6 +622,9 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
         return;
     }
 
+    change.utc_offset = 0;
+    change.prev_utc_offset = 0;
+
     /* Step through each of the properties to find the DTSTART,
        TZOFFSETFROM and TZOFFSETTO. We can't expand recurrences here
        since we need these properties before we can do that. */
@@ -630,23 +633,31 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
         switch (icalproperty_isa(prop)) {
         case ICAL_DTSTART_PROPERTY:
             dtstart = icalproperty_get_dtstart(prop);
-            found_dtstart = 1;
+            found_dtstart = true;
             break;
-        case ICAL_TZOFFSETTO_PROPERTY:
-            change.utc_offset = icalproperty_get_tzoffsetto(prop);
-            /*printf ("Found TZOFFSETTO: %i\n", change.utc_offset); */
-            found_tzoffsetto = 1;
+        case ICAL_TZOFFSETTO_PROPERTY: {
+            /* handle overflow */
+            const long tmpl = (long)icalproperty_get_tzoffsetto(prop);
+            if ((tmpl > -INT_MAX) && (tmpl < INT_MAX)) {
+                change.utc_offset = (int)tmpl;
+            }
+            found_tzoffsetto = true;
             break;
-        case ICAL_TZOFFSETFROM_PROPERTY:
-            change.prev_utc_offset = icalproperty_get_tzoffsetfrom(prop);
-            /*printf ("Found TZOFFSETFROM: %i\n", change.prev_utc_offset); */
-            found_tzoffsetfrom = 1;
+        }
+        case ICAL_TZOFFSETFROM_PROPERTY: {
+            /* handle overflow */
+            const long tmpl = (long)icalproperty_get_tzoffsetfrom(prop);
+            if ((tmpl > -INT_MAX) && (tmpl < INT_MAX)) {
+                change.prev_utc_offset = (int)tmpl;
+                found_tzoffsetfrom = true;
+            }
             break;
+        }
         case ICAL_RDATE_PROPERTY:
-            has_rdate = 1;
+            has_rdate = true;
             break;
         case ICAL_RRULE_PROPERTY:
-            has_rrule = 1;
+            has_rrule = true;
             break;
         default:
             /* Just ignore any other properties. */
@@ -661,7 +672,7 @@ void icaltimezone_expand_vtimezone(icalcomponent *comp, int end_year, icalarray 
        doesn't change for DST. */
     if (found_tzoffsetto && !found_tzoffsetfrom) {
         change.prev_utc_offset = change.utc_offset;
-        found_tzoffsetfrom = 1;
+        found_tzoffsetfrom = true;
     }
 
     /* If we didn't find a DTSTART, TZOFFSETTO and TZOFFSETFROM we have to
