@@ -5236,6 +5236,53 @@ static void test_set_date_datetime_value(void)
     icalproperty_free(prop);
 }
 
+static void test_timezone_forward_gap(void)
+{
+    const struct {
+        const char *zone;
+        const char *local;
+        const char *utc;
+        int offset;
+        int is_daylight;
+    } cases[] = {
+        {"America/New_York", "20070311T015959", "20070311T065959Z", -18000, 0},
+        {"America/New_York", "20070311T020000", "20070311T070000Z", -18000, 0},
+        {"America/New_York", "20070311T023000", "20070311T073000Z", -18000, 0},
+        {"America/New_York", "20070311T025959", "20070311T075959Z", -18000, 0},
+        {"America/New_York", "20070311T030000", "20070311T070000Z", -14400, 1},
+        {"America/New_York", "20070311T033000", "20070311T073000Z", -14400, 1},
+        {"Australia/Lord_Howe", "20241006T015959", "20241005T152959Z", 37800, 0},
+        {"Australia/Lord_Howe", "20241006T020000", "20241005T153000Z", 37800, 0},
+        {"Australia/Lord_Howe", "20241006T021500", "20241005T154500Z", 37800, 0},
+        {"Australia/Lord_Howe", "20241006T023000", "20241005T153000Z", 39600, 1},
+        {"Pacific/Apia", "20111229T235959", "20111230T095959Z", -36000, 1},
+        {"Pacific/Apia", "20111230T000000", "20111230T100000Z", -36000, 1},
+        {"Pacific/Apia", "20111230T120000", "20111230T220000Z", -36000, 1},
+        {"Pacific/Apia", "20111231T000000", "20111230T100000Z", 50400, 1},
+    };
+    icaltimezone *utc = icaltimezone_get_utc_timezone();
+
+    for (size_t i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+        icaltimezone *zone = icaltimezone_get_builtin_timezone(cases[i].zone);
+        struct icaltimetype local = icaltime_from_string(cases[i].local);
+        struct icaltimetype expected = icaltime_from_string(cases[i].utc);
+        int is_daylight = -1;
+
+        ok(cases[i].zone, zone != NULL);
+        if (!zone) {
+            continue;
+        }
+
+        int offset = icaltimezone_get_utc_offset(zone, &local, &is_daylight);
+        int_is(cases[i].local, offset, cases[i].offset);
+        int_is("daylight flag before or after the gap", is_daylight, cases[i].is_daylight);
+        ok("explicit local time as time_t",
+           icaltime_as_timet_with_zone(local, zone) == icaltime_as_timet(expected));
+        icaltimezone_convert_time(&local, zone, utc);
+        str_is(cases[i].local, icaltime_as_ical_string(local), cases[i].utc);
+    }
+}
+
 static void test_timezone_from_builtin(void)
 {
     const char *strcomp_fmt =
@@ -7982,6 +8029,7 @@ int main(int argc, const char *argv[])
     test_run("Test string_to_kind", test_string_to_kind, do_test, do_header);
     test_run("Test set DATE/DATE-TIME VALUE", test_set_date_datetime_value, do_test, do_header);
     test_run("Test timezone from builtin", test_timezone_from_builtin, do_test, do_header);
+    test_run("Test explicit local times in forward gaps", test_timezone_forward_gap, do_test, do_header);
     test_run("Test icalvalue_decode_ical_string", test_icalvalue_decode_ical_string, do_test, do_header);
 
     test_run("Test icalarray_sort", test_icalarray_sort, do_test, do_header);
