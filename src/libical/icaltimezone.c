@@ -960,17 +960,10 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
         /* Copy the change, so we can adjust it. */
         tmp_change = *zone_change;
 
-        /* If the clock is going backward, check if it is in the region of time
-           that is used twice. If it is, use the change with the daylight
-           setting which matches tt, or use standard if we don't know. */
-        if (tmp_change.utc_offset < tmp_change.prev_utc_offset) {
-            /* If the time change is at 2:00AM local time and the clock is
-               going back to 1:00AM we adjust the change to 1:00AM. We may
-               have the wrong change but we'll figure that out later. */
-            icaltimezone_adjust_change(&tmp_change, 0, 0, 0, tmp_change.utc_offset);
-        } else {
-            icaltimezone_adjust_change(&tmp_change, 0, 0, 0, tmp_change.prev_utc_offset);
-        }
+        /* Compare against the local time after the transition. Forward gaps
+           use the previous offset, as required by RFC 5545 section 3.3.5.
+           Backward overlaps are resolved below using the daylight setting. */
+        icaltimezone_adjust_change(&tmp_change, 0, 0, 0, tmp_change.utc_offset);
 
         cmp = icaltimezone_compare_change_fn(&tt_change, &tmp_change);
 
