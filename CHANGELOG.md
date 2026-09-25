@@ -7,14 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.6] - Unreleased
 
+- Fix explicit local time in a DST gap resolves using the post-transition offset (#1402)
 - libicalvcard: the typed vcardvalue getters now check that the value type of
   the property uses the same union member as the expected value type of the
   getter. If the type mismatches, then they return the zero value for the
   expected value type. The typed setters error with ICAL_BADARG_ERROR
   instead of overwriting a value held in another union member.
-- Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
-- Improve build paths in installed cmake files (esp. for cross-compiling)
-- Install the libicalversion.h header
+- CVE: Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
+- Buildsystem: Improve build paths in installed cmake files (esp. for cross-compiling)
+- Buildsystem: Install the libicalversion.h header
 
 ## [4.0.5] - 2026-08-15
 
