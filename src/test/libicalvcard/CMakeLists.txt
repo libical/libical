@@ -51,12 +51,18 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     485387226 # Null-dereference READ
     # TODO: 485932113 # ASAN Heap-use-after-free
     486715154 # ASAN Heap_buffer-overflow WRITE 8
-    488194780 # UBSAN cpu timeout exceeds 60s
     487903131 # ASAN Stack-overflow _parse_vcard
     488416219 # ASAN Stack-overflow
     505903588 # MSAN Use-of-uninitialized value
     523004109 # out-of-memory
   )
+  if(LIBICAL_BUILD_TESTING_LONGRUNNING)
+    list(
+      APPEND FUZZ_FILES
+      488194780 # UBSAN cpu timeout exceeds 60s
+    )
+  endif()
+
   foreach(fuzztest ${FUZZ_FILES})
     add_test(
       NAME vcfuzz1test${fuzztest}
