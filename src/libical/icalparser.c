@@ -48,7 +48,8 @@ struct icalparser_impl {
     int version;
     int level;
     int lineno;
-    size_t error_count;
+    size_t insert_errors; /* counts all parse errors replaced with an X-LIC insert_error() */
+    size_t parse_errors;  /* counts all parse encounters */
     icalparser_state state;
     icalpvl_list components;
 
@@ -103,7 +104,8 @@ icalparser *icalparser_new(void)
     impl->buffer_full = 0;
     impl->continuation_line = 0;
     impl->lineno = 0;
-    impl->error_count = 0;
+    impl->insert_errors = 0;
+    impl->parse_errors = 0;
     memset(impl->temp, 0, TMP_BUF_SIZE);
 
     return (icalparser *)impl;
@@ -553,7 +555,7 @@ static void insert_error(icalparser *parser, icalcomponent *comp, const char *te
 {
     char temp[1024];
 
-    if (parser->error_count > icallimit_get(ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES)) {
+    if (parser->insert_errors > icallimit_get(ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES)) {
         return;
     }
 
@@ -567,7 +569,7 @@ static void insert_error(icalparser *parser, icalcomponent *comp, const char *te
     icalproperty *errProp = icalproperty_vanew_xlicerror(temp, icalparameter_new_xlicerrortype(type), (void *)0);
     icalcomponent_add_property(comp, errProp);
 
-    parser->error_count++;
+    parser->insert_errors++;
 }
 
 static bool line_is_blank(const char *line)
@@ -600,7 +602,6 @@ icalcomponent *icalparser_parse(icalparser *parser,
 
     /* Maximum number of bad parsed lines allowed */
     const size_t max_parse_failures = icallimit_get(ICAL_LIMIT_PARSE_FAILURES);
-    size_t parse_failures = 0;
     do {
         line = icalparser_get_line(parser, line_gen_func);
 
@@ -632,15 +633,13 @@ icalcomponent *icalparser_parse(icalparser *parser,
                 /* Badness */
                 icalassert(0);
             }
-        } else if (parser->state == ICALPARSER_ERROR) {
-            parse_failures++; // track the number of un-parsable data lines
         }
         cont = false;
         if (line != 0) {
             icalmemory_free_buffer(line);
             cont = true;
         }
-    } while (cont && parse_failures < max_parse_failures); // limit the number of un-parsable data lines
+    } while (cont && parser->parse_errors < max_parse_failures); // limit the number of un-parsable data lines
 
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 
@@ -661,6 +660,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
     icalerror_check_arg_rz((parser != 0), "parser");
 
     if (line == 0) {
+        parser->parse_errors++;
         parser->state = ICALPARSER_ERROR;
         return 0;
     }
@@ -702,6 +702,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                         "Content line contains invalid CONTROL characters",
                         ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
                 }
+                parser->parse_errors++;
                 parser->state = ICALPARSER_ERROR;
                 return 0;
             }
@@ -727,6 +728,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 "Got a data line, but could not find a property name or component begin tag",
                 ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
         }
+        parser->parse_errors++;
         parser->state = ICALPARSER_ERROR;
         icalmemory_free_buffer(str);
         str = NULL;
@@ -766,6 +768,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             c = icalcomponent_new(ICAL_XLICINVALID_COMPONENT);
             insert_error(parser, c, str, "Parse error in component name",
                          ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
+            parser->parse_errors++;
         }
 
         icalpvl_push(parser->components, c);
@@ -798,6 +801,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         if (parser->level < 0) {
             // Encountered an END before any BEGIN, this must be invalid data
             icalerror_warn("Encountered END before BEGIN");
+            parser->parse_errors++;
             parser->state = ICALPARSER_ERROR;
             parser->level = 0;
             return 0;
@@ -829,6 +833,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
        component yet */
 
     if (icalpvl_data(icalpvl_tail(parser->components)) == 0) {
+        parser->parse_errors++;
         parser->state = ICALPARSER_ERROR;
         icalmemory_free_buffer(str);
         str = NULL;
@@ -873,6 +878,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         insert_error(parser, tail, str, "Parse error in property name",
                      ICAL_XLICERRORTYPE_PROPERTYPARSEERROR);
 
+        parser->parse_errors++;
         parser->state = ICALPARSER_ERROR;
         icalmemory_free_buffer(str);
         str = NULL;
@@ -887,8 +893,9 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
      **********************************************************************/
 
     /* Now, add any parameters to the last property */
+    const size_t max_parse_failures = icallimit_get(ICAL_LIMIT_PARSE_FAILURES);
     const size_t maximum_allowed_parameters = icallimit_get(ICAL_LIMIT_PARAMETERS);
-    while (pcount < maximum_allowed_parameters) {
+    while ((pcount < maximum_allowed_parameters) && (parser->parse_errors < max_parse_failures)) {
         if (*(end - 1) == ':') {
             /* if the last separator was a ":" and the value is a
                URL, icalparser_get_next_parameter will find the
@@ -922,6 +929,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     /* 'tail' defined above */
                     insert_error(parser, tail, str, "Can't parse parameter name",
                                  ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
+                    parser->parse_errors++;
                     break;
                 }
             }
@@ -964,6 +972,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 if (icalerror_get_errors_are_fatal()) {
                     insert_error(parser, tail, str, "Can't parse parameter name",
                                  ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
+                    parser->parse_errors++;
                     parser->state = ICALPARSER_ERROR;
 
                     icalmemory_free_buffer(pvalue_heap);
@@ -994,6 +1003,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                              ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR);
 
                 tail = 0;
+                parser->parse_errors++;
                 parser->state = ICALPARSER_ERROR;
 
                 icalmemory_free_buffer(str);
@@ -1024,6 +1034,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
                     icalparameter_free(param);
                     tail = 0;
+                    parser->parse_errors++;
                     parser->state = ICALPARSER_ERROR;
 
                     icalmemory_free_buffer(str);
@@ -1044,7 +1055,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             break;
         }
 
-    } /* while(1) */
+    } /* while(pcount < maximum_allowed_parameters) */
 
     /**********************************************************************
      * Handle values
@@ -1053,10 +1064,9 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
     /* Look for values. If there are ',' characters in the values,
        then there are multiple values, so clone the current
        parameter and add one part of the value to each clone */
-
     vcount = 0;
     const size_t maximum_property_values = icallimit_get(ICAL_LIMIT_PROPERTY_VALUES);
-    while (vcount < maximum_property_values) {
+    while ((vcount < maximum_property_values) && (parser->parse_errors < max_parse_failures)) {
         /* Only some properties can have multiple values. This list was taken
            from rfc5545. Also added the x-properties, because the spec actually
            says that commas should be escaped. For x-properties, other apps may
@@ -1101,6 +1111,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                 /* Remove the troublesome property */
                 icalcomponent_remove_property(tail, prop);
                 icalproperty_free(prop);
+                parser->parse_errors++;
                 parser->state = ICALPARSER_ERROR;
 
                 icalmemory_free_buffer(str);
@@ -1137,6 +1148,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     /* Remove the troublesome property */
                     icalcomponent_remove_property(tail, prop);
                     icalproperty_free(prop);
+                    parser->parse_errors++;
                     parser->state = ICALPARSER_ERROR;
                     return 0;
                 } else {
@@ -1179,7 +1191,7 @@ icalcomponent *icalparser_clean(icalparser *parser)
         insert_error(parser, tail, " ",
                      "Missing END tag for this component. Closing component at end of input.",
                      ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
-
+        parser->parse_errors++;
         parser->root_component = icalpvl_pop(parser->components);
         tail = icalpvl_data(icalpvl_tail(parser->components));
 
