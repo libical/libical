@@ -126,7 +126,7 @@ void *test_realloc(void *p, size_t size)
         exit(1);
     }
 
-    global_testmalloc_statistics.mem_allocated_current += size - old_size;
+    global_testmalloc_statistics.mem_allocated_current = global_testmalloc_statistics.mem_allocated_current - old_size + size;
     if (global_testmalloc_statistics.mem_allocated_current > global_testmalloc_statistics.mem_allocated_max) {
         global_testmalloc_statistics.mem_allocated_max = global_testmalloc_statistics.mem_allocated_current;
         if (global_testmalloc_max_memory < (size_t)global_testmalloc_statistics.mem_allocated_max) {
