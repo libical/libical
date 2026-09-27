@@ -1000,7 +1000,11 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
             return tmp_change.prev_utc_offset;
         }
 
-        change_num += (size_t)step;
+        if (step < 0) {
+            --change_num;
+        } else {
+            ++change_num;
+        }
 
         if (change_num >= zone->changes->num_elements) {
             break;
@@ -1154,7 +1158,11 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
             return tmp_change.prev_utc_offset;
         }
 
-        change_num += (size_t)step;
+        if (step < 0) {
+            --change_num;
+        } else {
+            ++change_num;
+        }
 
         if (change_num >= zone->changes->num_elements) {
             break;
