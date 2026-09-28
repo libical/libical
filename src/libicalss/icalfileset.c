@@ -327,11 +327,9 @@ static int file_copy(const char *fileSource, const char *fileDestination)
         return -1;
     }
 
-    while (!feof(stream_R) && !ferror(stream_R)) {
-        size_t bytes = fread(c, 1, sizeof(c), stream_R);
-        if (bytes) {
-            (void)fwrite(c, 1, bytes, stream_W);
-        }
+    size_t bytes;
+    while (!feof(stream_R) && !ferror(stream_R) && (bytes = fread(c, 1, sizeof(c), stream_R)) != 0) {
+        (void)fwrite(c, 1, bytes, stream_W);
     }
 
     //close streams
