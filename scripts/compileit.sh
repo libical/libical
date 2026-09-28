@@ -58,8 +58,14 @@ BRANCH=$(git branch --show-current | awk -F/ '{print $NF}')
 BDIR="$TOP/build-$BRANCH-gcc"
 INSTALLDIR="$HOME/tmp/libical-$BRANCH"
 
+#use Clang
+export CC=clang
+export CXX=clang++
+
 #find Java
+# (for now we no longer build the java bindings because the sanitizers will fail on java code)
 if (test -f "/etc/fedora-release"); then
+  WITH_JAVA=0
   export JAVA_HOME=/usr/lib/jvm/java-latest-openjdk
 fi
 export ASAN_OPTIONS="detect_leaks=0:verify_asan_link_order=0" #link_order is needed with different ld on Fedora (like gold)
@@ -71,6 +77,8 @@ if (test "$BRANCH" != "3.0"); then
   CMAKE_VERSION4_OPTIONS="\
     -DLIBICAL_DEVMODE=ON \
     -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=ON \
+    -DLIBICAL_DEVMODE_ADDRESS_SANITIZER=ON \
+    -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=ON \
     -DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=ON \
     -DLIBICAL_BUILD_VZIC=ON \
   "
@@ -95,7 +103,7 @@ if (test $staticBuild -eq 0); then
     -DLIBICAL_BUILD_DOCS=ON \
     -DLIBICAL_BUILD_EXAMPLES=ON \
     -DLIBICAL_CXX_BINDINGS=ON \
-    -DLIBICAL_JAVA_BINDINGS=ON \
+    -DLIBICAL_JAVA_BINDINGS=$WITH_JAVA \
     -DLIBICAL_GOBJECT_INTROSPECTION=ON \
     -DLIBICAL_GLIB_VAPI=ON \
     -DLIBICAL_GLIB_BUILD_DOCS=ON \
@@ -112,7 +120,20 @@ if (test $staticBuild -eq 0); then
   if (test $wipeBuild -eq 1); then
     ninja uninstall && rm -rf "$INSTALLDIR"
   fi
-
+  # check for runtime sanitizer issues
+  declare -i issues
+  issues=0
+  logFile="$BDIR/Testing/Temporary/LastTest.log"
+  if (test -e "$logFile"); then
+    issues=$(grep -ic Sanitizer "$logFile")
+  else
+    echo "The LastTest.log file is missing"
+    exit 1
+  fi
+  if (test $issues -gt 0); then
+    echo "Runtime sanitizer issues were encountered.  See $logFile"
+    exit 1
+  fi
 else #static build
   BDIR="$BDIR-static"
   INSTALLDIR="$INSTALLDIR-static"
@@ -129,7 +150,7 @@ else #static build
     -DLIBICAL_BUILD_DOCS=ON \
     -DLIBICAL_BUILD_EXAMPLES=ON \
     -DLIBICAL_CXX_BINDINGS=ON \
-    -DLIBICAL_JAVA_BINDINGS=ON \
+    -DLIBICAL_JAVA_BINDINGS=$WITH_JAVA \
     -DLIBICAL_GOBJECT_INTROSPECTION=OFF \
     -DLIBICAL_GLIB_VAPI=OFF \
     -DLIBICAL_GLIB_BUILD_DOCS=OFF \
