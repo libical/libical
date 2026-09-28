@@ -904,8 +904,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             char *pvalue_heap = 0;
             char name_stack[TMP_BUF_SIZE] = {};
             char pvalue_stack[TMP_BUF_SIZE] = {};
-            char *name = name_stack;
-            char *pvalue = pvalue_stack;
+            const char *name = name_stack;
+            const char *pvalue = pvalue_stack;
 
             icalparameter *param = 0;
             icalparameter_kind kind;
