@@ -1,7 +1,7 @@
 name: Build tests
 permissions:
   contents: read
-on:
+on: # yamllint disable-line rule:truthy
   - push
   - pull_request
 env:

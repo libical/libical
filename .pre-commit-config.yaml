@@ -5,68 +5,74 @@ ci:
 
 exclude: ^(test-data/|zoneinfo/|cmake/modules/openssf-c.cmake|cmake/modules/openssf-cpp.cmake|docs/doxygen-awesome.css)
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v6.0.0
-  hooks:
-  - id: trailing-whitespace
-  - id: end-of-file-fixer
-  - id: check-added-large-files
-  - id: check-case-conflict
-  - id: check-xml
-  - id: check-yaml
-    args: [--allow-multiple-documents]
-    exclude: ^(.clang-tidy)
-  - id: check-json
-  - id: check-symlinks
-  - id: destroyed-symlinks
-  - id: check-executables-have-shebangs
-- repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v23.1.0
-  hooks:
-  - id: clang-format
-    exclude: ^(src/Net-ICal-Libical|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  # Ruff version.
-  rev: v0.16.6
-  hooks:
-    # Run the linter.
-    - id: ruff
-    # Run the formatter.
-    - id: ruff-format
-- repo: https://github.com/codespell-project/codespell
-  rev: v2.4.3
-  hooks:
-  - id: codespell
-    exclude: ^(CONTRIBUTORS.md)
-- repo: https://github.com/BlankSpruce/gersemi
-  rev: 0.26.1
-  hooks:
-  - id: gersemi
-    exclude: (cmake/Toolchain-|.h.cmake|/Doxyfile.cmake)
-- repo: https://github.com/perltidy/perltidy
-  rev: "20260826"
-  hooks:
-  - id: perltidy
-    exclude: ^(src/Net-ICal-Libical)
-- repo: https://github.com/DavidAnson/markdownlint-cli2
-  rev: v0.23.2
-  hooks:
-  - id: markdownlint-cli2
-    files: \.(md|mdown|markdown)$
-- repo: https://github.com/scop/pre-commit-shfmt
-  rev: v3.13.1-1
-  hooks:
-  - id: shfmt
-- repo: https://github.com/shellcheck-py/shellcheck-py
-  rev: v0.11.0.1-1
-  hooks:
-  - id: shellcheck
-- repo: https://github.com/efrecon/pre-commit-hook-lxml
-  rev: v0.1.4
-  hooks:
-  - id: format-xml
-    args: [--self-closing=nospace,--indent=2,--write]
-- repo: https://github.com/fsfe/reuse-tool
-  rev: v6.2.0
-  hooks:
-  - id: reuse
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-xml
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+        exclude: ^(.clang-tidy)
+      - id: check-json
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: check-executables-have-shebangs
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v23.1.0
+    hooks:
+      - id: clang-format
+        exclude: ^(src/Net-ICal-Libical|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.16.6
+    hooks:
+      # Run the linter.
+      - id: ruff
+      # Run the formatter.
+      - id: ruff-format
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.3
+    hooks:
+      - id: codespell
+        exclude: ^(CONTRIBUTORS.md)
+  - repo: https://github.com/BlankSpruce/gersemi
+    rev: 0.26.1
+    hooks:
+      - id: gersemi
+        exclude: (cmake/Toolchain-|.h.cmake|/Doxyfile.cmake)
+  - repo: https://github.com/perltidy/perltidy
+    rev: "20260826"
+    hooks:
+      - id: perltidy
+        exclude: ^(src/Net-ICal-Libical)
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.23.2
+    hooks:
+      - id: markdownlint-cli2
+        files: \.(md|mdown|markdown)$
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.13.1-1
+    hooks:
+      - id: shfmt
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1-1
+    hooks:
+      - id: shellcheck
+  - repo: https://github.com/efrecon/pre-commit-hook-lxml
+    rev: v0.1.4
+    hooks:
+      - id: format-xml
+        args: [--self-closing=nospace, --indent=2, --write]
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+        args: [--strict]
+        exclude: ^(.clang-format)
+  - repo: https://github.com/fsfe/reuse-tool
+    rev: v6.2.0
+    hooks:
+      - id: reuse
