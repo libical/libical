@@ -236,16 +236,33 @@ BUILD() {
     export LD_LIBRARY_PATH=$BDIR/lib
   fi
 
-  # The builtin_timezones test takes longer in thread-sanitizer mode (that's the whole point of the test)
+  # Test
   cpu_secs=60
   if [[ "$2" == *"THREAD_SANITIZER"* ]]; then
+    # The builtin_timezones test takes longer in thread-sanitizer mode (that's the whole point of the test)
     cpu_secs=90
   fi
   ulimit -S -t $cpu_secs
-  ulimit -S -m 2621440 # oss-fuzz uses 2560Mb (many systems do not honor this limit)
   ctest . 2>&1 | tee make-test.out || exit 1
   ulimit -S -t unlimited
-  ulimit -S -m unlimited
+
+  # Check for run-time sanitizer issues
+  declare -i numSanitizers
+  numSanitizers=0
+  logFile="$BDIR/Testing/Temporary/LastTest.log"
+  if (test -e "$logFile"); then
+    set +e
+    numSanitizers=$(grep -ic Sanitizer "$logFile")
+    set -e
+  else
+    echo "The LastTest.log file is missing"
+    exit 1
+  fi
+  if (test $numSanitizers -gt 0); then
+    echo "Runtime sanitizer issues were encountered.  See $logFile"
+    exit 1
+  fi
+
   CLEAN
 }
 
