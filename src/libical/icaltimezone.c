@@ -1029,13 +1029,10 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
             /* The time is in the overlapped region, so we may need to use
                either the current zone_change or the previous one. If the
                time has the is_daylight field set we use the matching change,
-               else we use the change with standard time. */
+               else we use the first occurrence, as required by RFC 5545
+               section 3.3.5. */
             prev_zone_change = icalarray_element_at(zone->changes, change_num_to_use - 1);
 
-            /* I was going to add an is_daylight flag to struct icaltimetype,
-               but iCalendar doesn't let us distinguish between standard and
-               daylight time anyway, so there's no point. So we just use the
-               standard time instead. */
             want_daylight = (tt->is_daylight == 1) ? 1 : 0;
 
 #ifdef ICALTIMEZONE_DEBUG_PRINT
@@ -1044,8 +1041,9 @@ int icaltimezone_get_utc_offset(icaltimezone *zone, const struct icaltimetype *t
             }
 #endif
 
-            if (zone_change->is_daylight != want_daylight &&
-                prev_zone_change->is_daylight == want_daylight) {
+            if (!want_daylight ||
+                (zone_change->is_daylight != want_daylight &&
+                 prev_zone_change->is_daylight == want_daylight)) {
                 zone_change = prev_zone_change;
             }
         }
