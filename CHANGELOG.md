@@ -11,14 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.6] - Unreleased
 
+- CVE: Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
+- RFC5545 section 3.3.5 fixes:
+  - Resolve local times in a fall-back overlap to the first occurrence
+  - Explicit local time in a DST gap resolves using the post-transition offset
 - libicalvcard: the typed vcardvalue getters now check that the value type of
   the property uses the same union member as the expected value type of the
   getter. If the type mismatches, then they return the zero value for the
   expected value type. The typed setters error with ICAL_BADARG_ERROR
   instead of overwriting a value held in another union member.
-- Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
-- Improve build paths in installed cmake files (esp. for cross-compiling)
-- Install the libicalversion.h header
+- libicalvcal: Fixed a memory leak in vobject.c
+- Buildsystem changes:
+  - Improve build paths in installed cmake files (esp. for cross-compiling)
+  - Install the libicalversion.h header
+- Build and test validated with clang 23.1.1
+- Build and test validated with gcc (GCC) 17.0.0 20260920 (experimental)
 
 ## [4.0.5] - 2026-08-15
 

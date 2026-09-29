@@ -633,7 +633,7 @@ static int prop_compare(void *a, void *b)
     const vcardproperty *p2 = (vcardproperty *)b;
     vcardproperty_kind k1 = vcardproperty_isa(p1);
     vcardproperty_kind k2 = vcardproperty_isa(p2);
-    int r = (int)(k1 - k2);
+    int r = (int)k1 - (int)k2;
 
     if (r == 0) {
         if (k1 == VCARD_X_PROPERTY) {
@@ -680,7 +680,7 @@ static int comp_compare(void *a, void *b)
     vcardcomponent *c2 = (vcardcomponent *)b;
     vcardcomponent_kind k1 = vcardcomponent_isa(c1);
     vcardcomponent_kind k2 = vcardcomponent_isa(c2);
-    int r = (int)(k1 - k2);
+    int r = (int)k1 - (int)k2;
 
     if (r == 0) {
         if (k1 == VCARD_VCARD_COMPONENT) {
