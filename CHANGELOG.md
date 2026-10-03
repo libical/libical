@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.6] - Unreleased
 
+- Built-in timezones updated to tzdata2026e.
 - CVE: Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
 - RFC5545 section 3.3.5 fixes:
   - Resolve local times in a fall-back overlap to the first occurrence
