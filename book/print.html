@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-c241c551.js";
+            window.path_to_searchindex_js = "searchindex-f7a46a38.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-d19dfbfe.js"></script>
@@ -263,7 +263,6 @@ passing -DCMAKE_INSTALL_PREFIX=/install/path to cmake.</p>
 <p>To build libical you will need:</p>
 <ul>
 <li>a C99-compliant C compiler (let us know if the build fails with your C compiler)</li>
-<li>a C11-compliant C compiler for libical-glib</li>
 <li>a C++11 compliant compiler for C++ bindings</li>
 <li>CMake version 3.20.0 or higher</li>
 <li>Perl</li>
@@ -439,7 +438,8 @@ with the CMake “CMAKE_TOOLCHAIN_FILE” setting.</p>
 <pre><code class="language-shell">     set VCPKG_ROOT=%HOMEPATH%\projects\vcpkg
      cmake -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake &lt;OPTIONS&gt; ..
 </code></pre>
-<h3 id="windows-notes"><a class="header" href="#windows-notes">Windows Notes</a></h3>
+<h2 id="using-vcpkg"><a class="header" href="#using-vcpkg">Using vcpkg</a></h2>
+<h3 id="windows"><a class="header" href="#windows">Windows</a></h3>
 <p>MSVC comes with vcpkg pre-installed and sets <code>%VCPKG_ROOT%</code> for you.
 However, the only way to update that vcpkg version is by upgrading
 MSVC itself; which may not be what you want and may be too old.
@@ -447,7 +447,7 @@ Consider installing your own vcpkg instead of relying on the MSVC vcpkg.</p>
 <p>Either way (using Microsoft-provided or your own vcpkg):</p>
 <pre><code class="language-shell">     cmake "-DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake &lt;OPTIONS&gt; ..
 </code></pre>
-<h3 id="non-windows-notes"><a class="header" href="#non-windows-notes">Non-Windows Notes</a></h3>
+<h3 id="non-windows"><a class="header" href="#non-windows">Non-Windows</a></h3>
 <p>You’ll need to pre-install autoconf, automake and autoconf-archive for icu.
 See <code>%VCPKG_ROOT%/ports/icu/portfile.cmake</code> for more info.</p>
 <div style="break-before: page; page-break-before: always;"></div>
