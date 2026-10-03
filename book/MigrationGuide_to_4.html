@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4fc6f66a.js";
+            window.path_to_searchindex_js = "searchindex-c241c551.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-d19dfbfe.js"></script>
@@ -641,12 +641,10 @@ type (day, month, …) as a parameter.</p>
 <code>i_cal_errno_return</code>, respectively.</p>
 <h3 id="migrating-icalglibrecurrence_by_-methods-from-30-to-40"><a class="header" href="#migrating-icalglibrecurrence_by_-methods-from-30-to-40">Migrating <code>ICalGLib.Recurrence.*_by_*</code> methods from 3.0 to 4.0</a></h3>
 <p>Code like this in libical 3.0:</p>
-<pre><code class="language-python">    recurrence.set_by_second(0,
-    recurrence.get_by_second(0) + 1)
+<pre><code class="language-python">recurrence.set_by_second(0, recurrence.get_by_second(0) + 1)
 </code></pre>
 <p>changes to something like this in libical 4.0:</p>
-<pre><code class="language-python">    recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0,
-    recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) + 1)
+<pre><code class="language-python">recurrence.set_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0, recurrence.get_by(ICalGLib.RecurrenceByRule.BY_SECOND, 0) + 1)
 </code></pre>
 
                     </main>

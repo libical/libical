@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4fc6f66a.js";
+            window.path_to_searchindex_js = "searchindex-c241c551.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-d19dfbfe.js"></script>
@@ -178,6 +178,40 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="406---2026-10-03"><a class="header" href="#406---2026-10-03">[4.0.6] - 2026-10-03</a></h2>
+<ul>
+<li>CVE: Fix UBSAN issue “bsearch comparator through an incompatible function pointer”</li>
+<li>RFC5545 section 3.3.5 Date-Time fixes:
+<ul>
+<li>Resolve local times in a fall-back overlap to the first occurrence</li>
+<li>Fix explicit local time in a DST gap resolves using the post-transition offset</li>
+</ul>
+</li>
+<li>RFC5545 section 3.3.10 Recurrence Rule fixes:
+<ul>
+<li>FREQ=WEEKLY with BYMONTH and BYSETPOS loses occurrences in the week straddling month boundary</li>
+</ul>
+</li>
+<li>libicalvcard: the typed vcardvalue getters now check that the value type of the property
+uses the same union member as the expected value type of the getter. If the type mismatches,
+then they return the zero value for the expected value type. The typed setters error with
+ICAL_BADARG_ERROR instead of overwriting a value held in another union member.</li>
+<li>libicalvcal: Fixed a memory leak in vobject.c</li>
+<li>Buildsystem changes:
+<ul>
+<li>Fix build paths in installed cmake files (esp. for cross-compiling)</li>
+<li>Install the libicalversion.h header</li>
+<li>Fix building libical as a submodule in a larger CMake project</li>
+<li>Fix “now” linker support check in the hardening compiler options</li>
+<li>Fix the DESTINATION path for libical.jar</li>
+<li>Use private linkage for 3rdparty libraries (icu, glib, ..)</li>
+</ul>
+</li>
+<li>Built-in timezones updated to tzdata2026e.</li>
+<li>Remove ancient hack (since 2012) to support malformed TZID parameters</li>
+<li>Build and test validated with clang 23.1.1</li>
+<li>Build and test validated with gcc (GCC) 17.0.0 20260920 (experimental)</li>
+</ul>
 <h2 id="405---2026-08-15"><a class="header" href="#405---2026-08-15">[4.0.5] - 2026-08-15</a></h2>
 <ul>
 <li>Fix 32-bit time_t upper bound off by two days.</li>
