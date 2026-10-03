@@ -613,7 +613,7 @@ $(function() {
 <div class="line"><a id="l00537" name="l00537"></a><span class="lineno">  537</span>        }</div>
 <div class="line"><a id="l00538" name="l00538"></a><span class="lineno">  538</span> </div>
 <div class="line"><a id="l00539" name="l00539"></a><span class="lineno">  539</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00540" name="l00540"></a><span class="lineno">  540</span>        *(line_p) = <span class="charliteral">&#39;\0&#39;</span>;</div>
+<div class="line"><a id="l00540" name="l00540"></a><span class="lineno">  540</span>        *line_p = <span class="charliteral">&#39;\0&#39;</span>;</div>
 <div class="line"><a id="l00541" name="l00541"></a><span class="lineno">  541</span>    }</div>
 <div class="line"><a id="l00542" name="l00542"></a><span class="lineno">  542</span> </div>
 <div class="line"><a id="l00543" name="l00543"></a><span class="lineno">  543</span>    <span class="keywordflow">while</span> ((*line_p == <span class="charliteral">&#39;\0&#39;</span> || iswspace((wint_t)*line_p)) &amp;&amp; line_p &gt; line) {</div>
@@ -745,7 +745,7 @@ $(function() {
 <div class="line"><a id="l00665" name="l00665"></a><span class="lineno">  665</span>        <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span>    }</div>
 <div class="line"><a id="l00667" name="l00667"></a><span class="lineno">  667</span> </div>
-<div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span>    <span class="keywordflow">if</span> (line_is_blank(line) == 1) {</div>
+<div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span>    <span class="keywordflow">if</span> (line_is_blank(line)) {</div>
 <div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span>        <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span>    }</div>
 <div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span> </div>
@@ -982,10 +982,10 @@ $(function() {
 <div class="line"><a id="l00902" name="l00902"></a><span class="lineno">  902</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> != 0) {</div>
 <div class="line"><a id="l00903" name="l00903"></a><span class="lineno">  903</span>            <span class="keywordtype">char</span> *name_heap = 0;</div>
 <div class="line"><a id="l00904" name="l00904"></a><span class="lineno">  904</span>            <span class="keywordtype">char</span> *pvalue_heap = 0;</div>
-<div class="line"><a id="l00905" name="l00905"></a><span class="lineno">  905</span>            <span class="keywordtype">char</span> name_stack[<a class="code hl_define" href="vcardvalue_8c.html#a2e6c4948edc7d28d77ca47f0d6403d2b">TMP_BUF_SIZE</a>];</div>
-<div class="line"><a id="l00906" name="l00906"></a><span class="lineno">  906</span>            <span class="keywordtype">char</span> pvalue_stack[<a class="code hl_define" href="vcardvalue_8c.html#a2e6c4948edc7d28d77ca47f0d6403d2b">TMP_BUF_SIZE</a>];</div>
-<div class="line"><a id="l00907" name="l00907"></a><span class="lineno">  907</span>            <span class="keywordtype">char</span> *name = name_stack;</div>
-<div class="line"><a id="l00908" name="l00908"></a><span class="lineno">  908</span>            <span class="keywordtype">char</span> *pvalue = pvalue_stack;</div>
+<div class="line"><a id="l00905" name="l00905"></a><span class="lineno">  905</span>            <span class="keywordtype">char</span> name_stack[<a class="code hl_define" href="vcardvalue_8c.html#a2e6c4948edc7d28d77ca47f0d6403d2b">TMP_BUF_SIZE</a>] = {};</div>
+<div class="line"><a id="l00906" name="l00906"></a><span class="lineno">  906</span>            <span class="keywordtype">char</span> pvalue_stack[<a class="code hl_define" href="vcardvalue_8c.html#a2e6c4948edc7d28d77ca47f0d6403d2b">TMP_BUF_SIZE</a>] = {};</div>
+<div class="line"><a id="l00907" name="l00907"></a><span class="lineno">  907</span>            <span class="keyword">const</span> <span class="keywordtype">char</span> *name = name_stack;</div>
+<div class="line"><a id="l00908" name="l00908"></a><span class="lineno">  908</span>            <span class="keyword">const</span> <span class="keywordtype">char</span> *pvalue = pvalue_stack;</div>
 <div class="line"><a id="l00909" name="l00909"></a><span class="lineno">  909</span> </div>
 <div class="line"><a id="l00910" name="l00910"></a><span class="lineno">  910</span>            <a class="code hl_typedef" href="icalderivedparameter_8h.html#aba2ebcd0ca673c44a23122f490e62fca">icalparameter</a> *param = 0;</div>
 <div class="line"><a id="l00911" name="l00911"></a><span class="lineno">  911</span>            <a class="code hl_enumeration" href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffa">icalparameter_kind</a> <a class="code hl_variable" href="icalenums_8c.html#abade7ac5ffe8f10ef43222e35a6fe22b">kind</a>;</div>
@@ -1033,433 +1033,371 @@ $(function() {
 <div class="line"><a id="l00953" name="l00953"></a><span class="lineno">  953</span>                    <a class="code hl_function" href="icalparameter_8c.html#a2e77cb0c365e67a65487f916ece223da">icalparameter_set_xname</a>(param, name);</div>
 <div class="line"><a id="l00954" name="l00954"></a><span class="lineno">  954</span>                    <a class="code hl_function" href="icalparameter_8c.html#aaf0fbf906d011f5af3ce38b626906691">icalparameter_set_xvalue</a>(param, pvalue);</div>
 <div class="line"><a id="l00955" name="l00955"></a><span class="lineno">  955</span>                }</div>
-<div class="line"><a id="l00956" name="l00956"></a><span class="lineno">  956</span>            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_variable" href="icalenums_8c.html#abade7ac5ffe8f10ef43222e35a6fe22b">kind</a> == <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffaa81c0723d693e4997e87de6c25f927c2f">ICAL_TZID_PARAMETER</a> &amp;&amp; *(end - 1) != <span class="charliteral">&#39;;&#39;</span>) {</div>
-<div class="line"><a id="l00957" name="l00957"></a><span class="lineno">  957</span>                <span class="comment">/*</span></div>
-<div class="line"><a id="l00958" name="l00958"></a><span class="lineno">  958</span><span class="comment">                   Special case handling for TZID to work around invalid incoming data.</span></div>
-<div class="line"><a id="l00959" name="l00959"></a><span class="lineno">  959</span><span class="comment">                   For example, Google Calendar will send back stuff like this:</span></div>
-<div class="line"><a id="l00960" name="l00960"></a><span class="lineno">  960</span><span class="comment">                   DTSTART;TZID=GMT+05:30:20120904T020000</span></div>
-<div class="line"><a id="l00961" name="l00961"></a><span class="lineno">  961</span><span class="comment"></span> </div>
-<div class="line"><a id="l00962" name="l00962"></a><span class="lineno">  962</span><span class="comment">                   In this case we read to the next semicolon or the last colon rather</span></div>
-<div class="line"><a id="l00963" name="l00963"></a><span class="lineno">  963</span><span class="comment">                   than the first colon.  This way the TZID will become GMT+05:30 rather</span></div>
-<div class="line"><a id="l00964" name="l00964"></a><span class="lineno">  964</span><span class="comment">                   than trying to parse the date-time as 30:20120904T020000.</span></div>
-<div class="line"><a id="l00965" name="l00965"></a><span class="lineno">  965</span><span class="comment"></span> </div>
-<div class="line"><a id="l00966" name="l00966"></a><span class="lineno">  966</span><span class="comment">                   This also handles properties that look like this:</span></div>
-<div class="line"><a id="l00967" name="l00967"></a><span class="lineno">  967</span><span class="comment">                   DTSTART;TZID=GMT+05:30;VALUE=DATE-TIME:20120904T020000</span></div>
-<div class="line"><a id="l00968" name="l00968"></a><span class="lineno">  968</span><span class="comment">                 */</span></div>
-<div class="line"><a id="l00969" name="l00969"></a><span class="lineno">  969</span>                <span class="keywordtype">char</span> *lastColon = 0;</div>
-<div class="line"><a id="l00970" name="l00970"></a><span class="lineno">  970</span>                <span class="keywordtype">char</span> *nextColon = end;</div>
-<div class="line"><a id="l00971" name="l00971"></a><span class="lineno">  971</span>                <span class="keywordtype">char</span> *nextSemicolon = parser_get_next_char(<span class="charliteral">&#39;;&#39;</span>, end, 1);</div>
-<div class="line"><a id="l00972" name="l00972"></a><span class="lineno">  972</span> </div>
-<div class="line"><a id="l00973" name="l00973"></a><span class="lineno">  973</span>                <span class="comment">/* Find the last colon in the line */</span></div>
-<div class="line"><a id="l00974" name="l00974"></a><span class="lineno">  974</span>                <span class="keywordflow">do</span> {</div>
-<div class="line"><a id="l00975" name="l00975"></a><span class="lineno">  975</span>                    nextColon = parser_get_next_char(<span class="charliteral">&#39;:&#39;</span>, nextColon, 1);</div>
-<div class="line"><a id="l00976" name="l00976"></a><span class="lineno">  976</span> </div>
-<div class="line"><a id="l00977" name="l00977"></a><span class="lineno">  977</span>                    <span class="keywordflow">if</span> (nextColon) {</div>
-<div class="line"><a id="l00978" name="l00978"></a><span class="lineno">  978</span>                        lastColon = nextColon;</div>
-<div class="line"><a id="l00979" name="l00979"></a><span class="lineno">  979</span>                    }</div>
-<div class="line"><a id="l00980" name="l00980"></a><span class="lineno">  980</span>                } <span class="keywordflow">while</span> (nextColon);</div>
-<div class="line"><a id="l00981" name="l00981"></a><span class="lineno">  981</span> </div>
-<div class="line"><a id="l00982" name="l00982"></a><span class="lineno">  982</span>                <span class="keywordflow">if</span> (lastColon &amp;&amp; nextSemicolon &amp;&amp; nextSemicolon &lt; lastColon) {</div>
-<div class="line"><a id="l00983" name="l00983"></a><span class="lineno">  983</span>                    <span class="comment">/*</span></div>
-<div class="line"><a id="l00984" name="l00984"></a><span class="lineno">  984</span><span class="comment">                       Ensures that we don&#39;t read past a semicolon</span></div>
-<div class="line"><a id="l00985" name="l00985"></a><span class="lineno">  985</span><span class="comment"></span> </div>
-<div class="line"><a id="l00986" name="l00986"></a><span class="lineno">  986</span><span class="comment">                       Handles the following line:</span></div>
-<div class="line"><a id="l00987" name="l00987"></a><span class="lineno">  987</span><span class="comment">                       DTSTART;TZID=GMT+05:30;VALUE=DATE-TIME:20120904T020000</span></div>
-<div class="line"><a id="l00988" name="l00988"></a><span class="lineno">  988</span><span class="comment">                     */</span></div>
-<div class="line"><a id="l00989" name="l00989"></a><span class="lineno">  989</span>                    lastColon = nextSemicolon;</div>
-<div class="line"><a id="l00990" name="l00990"></a><span class="lineno">  990</span>                }</div>
-<div class="line"><a id="l00991" name="l00991"></a><span class="lineno">  991</span> </div>
-<div class="line"><a id="l00992" name="l00992"></a><span class="lineno">  992</span>                <span class="comment">/*</span></div>
-<div class="line"><a id="l00993" name="l00993"></a><span class="lineno">  993</span><span class="comment">                   Rebuild str so that it includes everything up to the next semicolon</span></div>
-<div class="line"><a id="l00994" name="l00994"></a><span class="lineno">  994</span><span class="comment">                   or the last colon. So given the above example, str will go from</span></div>
-<div class="line"><a id="l00995" name="l00995"></a><span class="lineno">  995</span><span class="comment">                   &quot;TZID=GMT+05&quot; to &quot;TZID=GMT+05:30&quot;</span></div>
-<div class="line"><a id="l00996" name="l00996"></a><span class="lineno">  996</span><span class="comment">                 */</span></div>
-<div class="line"><a id="l00997" name="l00997"></a><span class="lineno">  997</span>                <span class="keywordflow">if</span> (lastColon &amp;&amp; *(lastColon + 1) != 0) {</div>
-<div class="line"><a id="l00998" name="l00998"></a><span class="lineno">  998</span>                    <span class="keyword">const</span> <span class="keywordtype">char</span> *strStart = line + strlen(name) + 2;</div>
-<div class="line"><a id="l00999" name="l00999"></a><span class="lineno">  999</span> </div>
-<div class="line"><a id="l01000" name="l01000"></a><span class="lineno"> 1000</span>                    end = lastColon + 1;</div>
+<div class="line"><a id="l00956" name="l00956"></a><span class="lineno">  956</span>            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_variable" href="icalenums_8c.html#abade7ac5ffe8f10ef43222e35a6fe22b">kind</a> != <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffaa168577df5f3fa4755a1293be15ad138e">ICAL_NO_PARAMETER</a>) {</div>
+<div class="line"><a id="l00957" name="l00957"></a><span class="lineno">  957</span>                param = <a class="code hl_function" href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f">icalparameter_new_from_value_string</a>(<a class="code hl_variable" href="icalenums_8c.html#abade7ac5ffe8f10ef43222e35a6fe22b">kind</a>, pvalue);</div>
+<div class="line"><a id="l00958" name="l00958"></a><span class="lineno">  958</span>            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00959" name="l00959"></a><span class="lineno">  959</span>                <span class="comment">/* Error. Failed to parse the parameter */</span></div>
+<div class="line"><a id="l00960" name="l00960"></a><span class="lineno">  960</span>                <span class="comment">/* &#39;tail&#39; defined above */</span></div>
+<div class="line"><a id="l00961" name="l00961"></a><span class="lineno">  961</span> </div>
+<div class="line"><a id="l00962" name="l00962"></a><span class="lineno">  962</span>                <span class="comment">/* Change for mozilla */</span></div>
+<div class="line"><a id="l00963" name="l00963"></a><span class="lineno">  963</span>                <span class="comment">/* have the option of being flexible towards unsupported parameters */</span></div>
+<div class="line"><a id="l00964" name="l00964"></a><span class="lineno">  964</span>                <span class="keywordflow">if</span> (<a class="code hl_function" href="icalerror_8c.html#a3acf93364a96aed62d078f429f45c08a">icalerror_get_errors_are_fatal</a>()) {</div>
+<div class="line"><a id="l00965" name="l00965"></a><span class="lineno">  965</span>                    insert_error(parser, tail, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, <span class="stringliteral">&quot;Can&#39;t parse parameter name&quot;</span>,</div>
+<div class="line"><a id="l00966" name="l00966"></a><span class="lineno">  966</span>                                 <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891a6639e943e4f1f94a23c3f128d653666d">ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR</a>);</div>
+<div class="line"><a id="l00967" name="l00967"></a><span class="lineno">  967</span>                    parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>;</div>
+<div class="line"><a id="l00968" name="l00968"></a><span class="lineno">  968</span> </div>
+<div class="line"><a id="l00969" name="l00969"></a><span class="lineno">  969</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(pvalue_heap);</div>
+<div class="line"><a id="l00970" name="l00970"></a><span class="lineno">  970</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(name_heap);</div>
+<div class="line"><a id="l00971" name="l00971"></a><span class="lineno">  971</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l00972" name="l00972"></a><span class="lineno">  972</span>                    <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
+<div class="line"><a id="l00973" name="l00973"></a><span class="lineno">  973</span>                    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00974" name="l00974"></a><span class="lineno">  974</span>                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00975" name="l00975"></a><span class="lineno">  975</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(name_heap);</div>
+<div class="line"><a id="l00976" name="l00976"></a><span class="lineno">  976</span>                    name_heap = 0;</div>
+<div class="line"><a id="l00977" name="l00977"></a><span class="lineno">  977</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(pvalue_heap);</div>
+<div class="line"><a id="l00978" name="l00978"></a><span class="lineno">  978</span>                    pvalue_heap = 0;</div>
+<div class="line"><a id="l00979" name="l00979"></a><span class="lineno">  979</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l00980" name="l00980"></a><span class="lineno">  980</span>                    <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
+<div class="line"><a id="l00981" name="l00981"></a><span class="lineno">  981</span>                    <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00982" name="l00982"></a><span class="lineno">  982</span>                }</div>
+<div class="line"><a id="l00983" name="l00983"></a><span class="lineno">  983</span>            }</div>
+<div class="line"><a id="l00984" name="l00984"></a><span class="lineno">  984</span> </div>
+<div class="line"><a id="l00985" name="l00985"></a><span class="lineno">  985</span>            <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(pvalue_heap);</div>
+<div class="line"><a id="l00986" name="l00986"></a><span class="lineno">  986</span>            pvalue_heap = 0;</div>
+<div class="line"><a id="l00987" name="l00987"></a><span class="lineno">  987</span> </div>
+<div class="line"><a id="l00988" name="l00988"></a><span class="lineno">  988</span>            <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(name_heap);</div>
+<div class="line"><a id="l00989" name="l00989"></a><span class="lineno">  989</span>            name_heap = 0;</div>
+<div class="line"><a id="l00990" name="l00990"></a><span class="lineno">  990</span> </div>
+<div class="line"><a id="l00991" name="l00991"></a><span class="lineno">  991</span>            <span class="keywordflow">if</span> (param == 0) {</div>
+<div class="line"><a id="l00992" name="l00992"></a><span class="lineno">  992</span>                <span class="comment">/* &#39;tail&#39; defined above */</span></div>
+<div class="line"><a id="l00993" name="l00993"></a><span class="lineno">  993</span>                insert_error(parser, tail, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, <span class="stringliteral">&quot;Can&#39;t parse parameter value&quot;</span>,</div>
+<div class="line"><a id="l00994" name="l00994"></a><span class="lineno">  994</span>                             <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891a701062f5155f26d2c57e075637401ff2">ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR</a>);</div>
+<div class="line"><a id="l00995" name="l00995"></a><span class="lineno">  995</span> </div>
+<div class="line"><a id="l00996" name="l00996"></a><span class="lineno">  996</span>                tail = 0;</div>
+<div class="line"><a id="l00997" name="l00997"></a><span class="lineno">  997</span>                parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>;</div>
+<div class="line"><a id="l00998" name="l00998"></a><span class="lineno">  998</span> </div>
+<div class="line"><a id="l00999" name="l00999"></a><span class="lineno">  999</span>                <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l01000" name="l01000"></a><span class="lineno"> 1000</span>                <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
 <div class="line"><a id="l01001" name="l01001"></a><span class="lineno"> 1001</span> </div>
-<div class="line"><a id="l01002" name="l01002"></a><span class="lineno"> 1002</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
-<div class="line"><a id="l01003" name="l01003"></a><span class="lineno"> 1003</span>                    <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = make_segment(strStart, end - 1);</div>
-<div class="line"><a id="l01004" name="l01004"></a><span class="lineno"> 1004</span>                }</div>
-<div class="line"><a id="l01005" name="l01005"></a><span class="lineno"> 1005</span> </div>
-<div class="line"><a id="l01006" name="l01006"></a><span class="lineno"> 1006</span>                <span class="comment">/* Reparse the parameter name and value with the new segment */</span></div>
-<div class="line"><a id="l01007" name="l01007"></a><span class="lineno"> 1007</span>                <span class="keywordflow">if</span> (!parser_get_param_name_stack(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, name_stack, <span class="keyword">sizeof</span>(name_stack),</div>
-<div class="line"><a id="l01008" name="l01008"></a><span class="lineno"> 1008</span>                                                 pvalue_stack, <span class="keyword">sizeof</span>(pvalue_stack))) {</div>
-<div class="line"><a id="l01009" name="l01009"></a><span class="lineno"> 1009</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(pvalue_heap);</div>
-<div class="line"><a id="l01010" name="l01010"></a><span class="lineno"> 1010</span>                    pvalue_heap = 0;</div>
-<div class="line"><a id="l01011" name="l01011"></a><span class="lineno"> 1011</span> </div>
-<div class="line"><a id="l01012" name="l01012"></a><span class="lineno"> 1012</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(name_heap);</div>
-<div class="line"><a id="l01013" name="l01013"></a><span class="lineno"> 1013</span>                    name = 0;</div>
-<div class="line"><a id="l01014" name="l01014"></a><span class="lineno"> 1014</span>                    name_heap = parser_get_param_name_heap(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, &amp;pvalue_heap);</div>
-<div class="line"><a id="l01015" name="l01015"></a><span class="lineno"> 1015</span>                    pvalue = pvalue_heap;</div>
-<div class="line"><a id="l01016" name="l01016"></a><span class="lineno"> 1016</span>                }</div>
-<div class="line"><a id="l01017" name="l01017"></a><span class="lineno"> 1017</span>                param = <a class="code hl_function" href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f">icalparameter_new_from_value_string</a>(<a class="code hl_variable" href="icalenums_8c.html#abade7ac5ffe8f10ef43222e35a6fe22b">kind</a>, pvalue);</div>
-<div class="line"><a id="l01018" name="l01018"></a><span class="lineno"> 1018</span>            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_variable" href="icalenums_8c.html#abade7ac5ffe8f10ef43222e35a6fe22b">kind</a> != <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffaa168577df5f3fa4755a1293be15ad138e">ICAL_NO_PARAMETER</a>) {</div>
-<div class="line"><a id="l01019" name="l01019"></a><span class="lineno"> 1019</span>                param = <a class="code hl_function" href="icalparameter_8h.html#abe33daa839d72261aab283d0f44f711f">icalparameter_new_from_value_string</a>(<a class="code hl_variable" href="icalenums_8c.html#abade7ac5ffe8f10ef43222e35a6fe22b">kind</a>, pvalue);</div>
-<div class="line"><a id="l01020" name="l01020"></a><span class="lineno"> 1020</span>            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01021" name="l01021"></a><span class="lineno"> 1021</span>                <span class="comment">/* Error. Failed to parse the parameter */</span></div>
-<div class="line"><a id="l01022" name="l01022"></a><span class="lineno"> 1022</span>                <span class="comment">/* &#39;tail&#39; defined above */</span></div>
-<div class="line"><a id="l01023" name="l01023"></a><span class="lineno"> 1023</span> </div>
-<div class="line"><a id="l01024" name="l01024"></a><span class="lineno"> 1024</span>                <span class="comment">/* Change for mozilla */</span></div>
-<div class="line"><a id="l01025" name="l01025"></a><span class="lineno"> 1025</span>                <span class="comment">/* have the option of being flexible towards unsupported parameters */</span></div>
-<div class="line"><a id="l01026" name="l01026"></a><span class="lineno"> 1026</span>                <span class="keywordflow">if</span> (<a class="code hl_function" href="icalerror_8c.html#a3acf93364a96aed62d078f429f45c08a">icalerror_get_errors_are_fatal</a>()) {</div>
-<div class="line"><a id="l01027" name="l01027"></a><span class="lineno"> 1027</span>                    insert_error(parser, tail, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, <span class="stringliteral">&quot;Can&#39;t parse parameter name&quot;</span>,</div>
-<div class="line"><a id="l01028" name="l01028"></a><span class="lineno"> 1028</span>                                 <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891a6639e943e4f1f94a23c3f128d653666d">ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR</a>);</div>
-<div class="line"><a id="l01029" name="l01029"></a><span class="lineno"> 1029</span>                    parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>;</div>
-<div class="line"><a id="l01030" name="l01030"></a><span class="lineno"> 1030</span> </div>
-<div class="line"><a id="l01031" name="l01031"></a><span class="lineno"> 1031</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(pvalue_heap);</div>
-<div class="line"><a id="l01032" name="l01032"></a><span class="lineno"> 1032</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(name_heap);</div>
-<div class="line"><a id="l01033" name="l01033"></a><span class="lineno"> 1033</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
-<div class="line"><a id="l01034" name="l01034"></a><span class="lineno"> 1034</span>                    <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
-<div class="line"><a id="l01035" name="l01035"></a><span class="lineno"> 1035</span>                    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l01036" name="l01036"></a><span class="lineno"> 1036</span>                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01037" name="l01037"></a><span class="lineno"> 1037</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(name_heap);</div>
-<div class="line"><a id="l01038" name="l01038"></a><span class="lineno"> 1038</span>                    name_heap = 0;</div>
-<div class="line"><a id="l01039" name="l01039"></a><span class="lineno"> 1039</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(pvalue_heap);</div>
-<div class="line"><a id="l01040" name="l01040"></a><span class="lineno"> 1040</span>                    pvalue_heap = 0;</div>
-<div class="line"><a id="l01041" name="l01041"></a><span class="lineno"> 1041</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
-<div class="line"><a id="l01042" name="l01042"></a><span class="lineno"> 1042</span>                    <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
-<div class="line"><a id="l01043" name="l01043"></a><span class="lineno"> 1043</span>                    <span class="keywordflow">continue</span>;</div>
-<div class="line"><a id="l01044" name="l01044"></a><span class="lineno"> 1044</span>                }</div>
-<div class="line"><a id="l01045" name="l01045"></a><span class="lineno"> 1045</span>            }</div>
+<div class="line"><a id="l01002" name="l01002"></a><span class="lineno"> 1002</span>                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l01003" name="l01003"></a><span class="lineno"> 1003</span>            }</div>
+<div class="line"><a id="l01004" name="l01004"></a><span class="lineno"> 1004</span> </div>
+<div class="line"><a id="l01005" name="l01005"></a><span class="lineno"> 1005</span>            <span class="comment">/* If it is a VALUE parameter, set the kind of value */</span></div>
+<div class="line"><a id="l01006" name="l01006"></a><span class="lineno"> 1006</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="icalparameter_8c.html#a6813f8106b81d0f123ba921682b49e79">icalparameter_isa</a>(param) == <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffaaf5723bb78164002e62f5e305e4b86774">ICAL_VALUE_PARAMETER</a>) {</div>
+<div class="line"><a id="l01007" name="l01007"></a><span class="lineno"> 1007</span>                value_kind =</div>
+<div class="line"><a id="l01008" name="l01008"></a><span class="lineno"> 1008</span>                    (<a class="code hl_enumeration" href="icalderivedvalue_8h.html#a9fa1d7e6a332c72b2cf85339361d39d2">icalvalue_kind</a>)<a class="code hl_function" href="icalproperty_8h.html#a5500f052153336e1d386e36be790abd3">icalparameter_value_to_value_kind</a>(</div>
+<div class="line"><a id="l01009" name="l01009"></a><span class="lineno"> 1009</span>                        <a class="code hl_function" href="icalderivedparameter_8h.html#a663a282e29909b6a66fa47ea0146eca9">icalparameter_get_value</a>(param));</div>
+<div class="line"><a id="l01010" name="l01010"></a><span class="lineno"> 1010</span> </div>
+<div class="line"><a id="l01011" name="l01011"></a><span class="lineno"> 1011</span>                <span class="keywordflow">if</span> (!icalproperty_value_kind_is_valid(prop_kind, value_kind)) {</div>
+<div class="line"><a id="l01012" name="l01012"></a><span class="lineno"> 1012</span>                    <span class="comment">/* Ooops, invalid VALUE parameter, so reset the value_kind */</span></div>
+<div class="line"><a id="l01013" name="l01013"></a><span class="lineno"> 1013</span> </div>
+<div class="line"><a id="l01014" name="l01014"></a><span class="lineno"> 1014</span>                    <span class="keyword">const</span> <span class="keywordtype">char</span> *err_str = <span class="stringliteral">&quot;Invalid VALUE type for property&quot;</span>;</div>
+<div class="line"><a id="l01015" name="l01015"></a><span class="lineno"> 1015</span>                    <span class="keyword">const</span> <span class="keywordtype">char</span> *prop_str = <a class="code hl_function" href="icalproperty_8h.html#afcd683d080a344213a2c69283a63fe3a">icalproperty_kind_to_string</a>(prop_kind);</div>
+<div class="line"><a id="l01016" name="l01016"></a><span class="lineno"> 1016</span>                    <span class="keywordtype">size_t</span> tmp_buf_len = strlen(err_str) + strlen(prop_str) + 2;</div>
+<div class="line"><a id="l01017" name="l01017"></a><span class="lineno"> 1017</span>                    <span class="keywordtype">char</span> *tmp_buf = <a class="code hl_function" href="icalmemory_8c.html#aeaf6a28b3908f695bb0a7e35d1dfc8f7">icalmemory_tmp_buffer</a>(tmp_buf_len);</div>
+<div class="line"><a id="l01018" name="l01018"></a><span class="lineno"> 1018</span>                    snprintf(tmp_buf, tmp_buf_len, <span class="stringliteral">&quot;%s %s&quot;</span>, err_str, prop_str);</div>
+<div class="line"><a id="l01019" name="l01019"></a><span class="lineno"> 1019</span> </div>
+<div class="line"><a id="l01020" name="l01020"></a><span class="lineno"> 1020</span>                    insert_error(parser, tail, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, tmp_buf,</div>
+<div class="line"><a id="l01021" name="l01021"></a><span class="lineno"> 1021</span>                                 <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891a701062f5155f26d2c57e075637401ff2">ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR</a>);</div>
+<div class="line"><a id="l01022" name="l01022"></a><span class="lineno"> 1022</span> </div>
+<div class="line"><a id="l01023" name="l01023"></a><span class="lineno"> 1023</span>                    value_kind = <a class="code hl_function" href="icalproperty_8h.html#adc024f08eee28934f5a1bc22efcc4ee3">icalproperty_kind_to_value_kind</a>(prop_kind);</div>
+<div class="line"><a id="l01024" name="l01024"></a><span class="lineno"> 1024</span> </div>
+<div class="line"><a id="l01025" name="l01025"></a><span class="lineno"> 1025</span>                    <a class="code hl_function" href="icalparameter_8c.html#a11574fe4a015966a0e19533ae868228b">icalparameter_free</a>(param);</div>
+<div class="line"><a id="l01026" name="l01026"></a><span class="lineno"> 1026</span>                    tail = 0;</div>
+<div class="line"><a id="l01027" name="l01027"></a><span class="lineno"> 1027</span>                    parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>;</div>
+<div class="line"><a id="l01028" name="l01028"></a><span class="lineno"> 1028</span> </div>
+<div class="line"><a id="l01029" name="l01029"></a><span class="lineno"> 1029</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l01030" name="l01030"></a><span class="lineno"> 1030</span>                    <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
+<div class="line"><a id="l01031" name="l01031"></a><span class="lineno"> 1031</span>                    pcount++;</div>
+<div class="line"><a id="l01032" name="l01032"></a><span class="lineno"> 1032</span>                    <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l01033" name="l01033"></a><span class="lineno"> 1033</span>                }</div>
+<div class="line"><a id="l01034" name="l01034"></a><span class="lineno"> 1034</span>            }</div>
+<div class="line"><a id="l01035" name="l01035"></a><span class="lineno"> 1035</span> </div>
+<div class="line"><a id="l01036" name="l01036"></a><span class="lineno"> 1036</span>            <span class="comment">/* Everything is OK, so add the parameter */</span></div>
+<div class="line"><a id="l01037" name="l01037"></a><span class="lineno"> 1037</span>            <a class="code hl_function" href="icalproperty_8c.html#a7a47bfa2a1f5dfca2a13817743c16050">icalproperty_add_parameter</a>(prop, param);</div>
+<div class="line"><a id="l01038" name="l01038"></a><span class="lineno"> 1038</span>            <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l01039" name="l01039"></a><span class="lineno"> 1039</span>            <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
+<div class="line"><a id="l01040" name="l01040"></a><span class="lineno"> 1040</span>            pcount++;</div>
+<div class="line"><a id="l01041" name="l01041"></a><span class="lineno"> 1041</span> </div>
+<div class="line"><a id="l01042" name="l01042"></a><span class="lineno"> 1042</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01043" name="l01043"></a><span class="lineno"> 1043</span>            <span class="comment">/* str is NULL */</span></div>
+<div class="line"><a id="l01044" name="l01044"></a><span class="lineno"> 1044</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01045" name="l01045"></a><span class="lineno"> 1045</span>        }</div>
 <div class="line"><a id="l01046" name="l01046"></a><span class="lineno"> 1046</span> </div>
-<div class="line"><a id="l01047" name="l01047"></a><span class="lineno"> 1047</span>            <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(pvalue_heap);</div>
-<div class="line"><a id="l01048" name="l01048"></a><span class="lineno"> 1048</span>            pvalue_heap = 0;</div>
-<div class="line"><a id="l01049" name="l01049"></a><span class="lineno"> 1049</span> </div>
-<div class="line"><a id="l01050" name="l01050"></a><span class="lineno"> 1050</span>            <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(name_heap);</div>
-<div class="line"><a id="l01051" name="l01051"></a><span class="lineno"> 1051</span>            name_heap = 0;</div>
+<div class="line"><a id="l01047" name="l01047"></a><span class="lineno"> 1047</span>    } <span class="comment">/* while(1) */</span></div>
+<div class="line"><a id="l01048" name="l01048"></a><span class="lineno"> 1048</span> </div>
+<div class="line"><a id="l01049" name="l01049"></a><span class="lineno"> 1049</span><span class="comment">    /**********************************************************************</span></div>
+<div class="line"><a id="l01050" name="l01050"></a><span class="lineno"> 1050</span><span class="comment">     * Handle values</span></div>
+<div class="line"><a id="l01051" name="l01051"></a><span class="lineno"> 1051</span><span class="comment">     **********************************************************************/</span></div>
 <div class="line"><a id="l01052" name="l01052"></a><span class="lineno"> 1052</span> </div>
-<div class="line"><a id="l01053" name="l01053"></a><span class="lineno"> 1053</span>            <span class="keywordflow">if</span> (param == 0) {</div>
-<div class="line"><a id="l01054" name="l01054"></a><span class="lineno"> 1054</span>                <span class="comment">/* &#39;tail&#39; defined above */</span></div>
-<div class="line"><a id="l01055" name="l01055"></a><span class="lineno"> 1055</span>                insert_error(parser, tail, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, <span class="stringliteral">&quot;Can&#39;t parse parameter value&quot;</span>,</div>
-<div class="line"><a id="l01056" name="l01056"></a><span class="lineno"> 1056</span>                             <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891a701062f5155f26d2c57e075637401ff2">ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR</a>);</div>
-<div class="line"><a id="l01057" name="l01057"></a><span class="lineno"> 1057</span> </div>
-<div class="line"><a id="l01058" name="l01058"></a><span class="lineno"> 1058</span>                tail = 0;</div>
-<div class="line"><a id="l01059" name="l01059"></a><span class="lineno"> 1059</span>                parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>;</div>
-<div class="line"><a id="l01060" name="l01060"></a><span class="lineno"> 1060</span> </div>
-<div class="line"><a id="l01061" name="l01061"></a><span class="lineno"> 1061</span>                <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
-<div class="line"><a id="l01062" name="l01062"></a><span class="lineno"> 1062</span>                <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
-<div class="line"><a id="l01063" name="l01063"></a><span class="lineno"> 1063</span> </div>
-<div class="line"><a id="l01064" name="l01064"></a><span class="lineno"> 1064</span>                <span class="keywordflow">continue</span>;</div>
-<div class="line"><a id="l01065" name="l01065"></a><span class="lineno"> 1065</span>            }</div>
-<div class="line"><a id="l01066" name="l01066"></a><span class="lineno"> 1066</span> </div>
-<div class="line"><a id="l01067" name="l01067"></a><span class="lineno"> 1067</span>            <span class="comment">/* If it is a VALUE parameter, set the kind of value */</span></div>
-<div class="line"><a id="l01068" name="l01068"></a><span class="lineno"> 1068</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="icalparameter_8c.html#a6813f8106b81d0f123ba921682b49e79">icalparameter_isa</a>(param) == <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffaaf5723bb78164002e62f5e305e4b86774">ICAL_VALUE_PARAMETER</a>) {</div>
-<div class="line"><a id="l01069" name="l01069"></a><span class="lineno"> 1069</span>                value_kind =</div>
-<div class="line"><a id="l01070" name="l01070"></a><span class="lineno"> 1070</span>                    (<a class="code hl_enumeration" href="icalderivedvalue_8h.html#a9fa1d7e6a332c72b2cf85339361d39d2">icalvalue_kind</a>)<a class="code hl_function" href="icalproperty_8h.html#a5500f052153336e1d386e36be790abd3">icalparameter_value_to_value_kind</a>(</div>
-<div class="line"><a id="l01071" name="l01071"></a><span class="lineno"> 1071</span>                        <a class="code hl_function" href="icalderivedparameter_8h.html#a663a282e29909b6a66fa47ea0146eca9">icalparameter_get_value</a>(param));</div>
-<div class="line"><a id="l01072" name="l01072"></a><span class="lineno"> 1072</span> </div>
-<div class="line"><a id="l01073" name="l01073"></a><span class="lineno"> 1073</span>                <span class="keywordflow">if</span> (!icalproperty_value_kind_is_valid(prop_kind, value_kind)) {</div>
-<div class="line"><a id="l01074" name="l01074"></a><span class="lineno"> 1074</span>                    <span class="comment">/* Ooops, invalid VALUE parameter, so reset the value_kind */</span></div>
-<div class="line"><a id="l01075" name="l01075"></a><span class="lineno"> 1075</span> </div>
-<div class="line"><a id="l01076" name="l01076"></a><span class="lineno"> 1076</span>                    <span class="keyword">const</span> <span class="keywordtype">char</span> *err_str = <span class="stringliteral">&quot;Invalid VALUE type for property&quot;</span>;</div>
-<div class="line"><a id="l01077" name="l01077"></a><span class="lineno"> 1077</span>                    <span class="keyword">const</span> <span class="keywordtype">char</span> *prop_str = <a class="code hl_function" href="icalproperty_8h.html#afcd683d080a344213a2c69283a63fe3a">icalproperty_kind_to_string</a>(prop_kind);</div>
-<div class="line"><a id="l01078" name="l01078"></a><span class="lineno"> 1078</span>                    <span class="keywordtype">size_t</span> tmp_buf_len = strlen(err_str) + strlen(prop_str) + 2;</div>
-<div class="line"><a id="l01079" name="l01079"></a><span class="lineno"> 1079</span>                    <span class="keywordtype">char</span> *tmp_buf = <a class="code hl_function" href="icalmemory_8c.html#aeaf6a28b3908f695bb0a7e35d1dfc8f7">icalmemory_tmp_buffer</a>(tmp_buf_len);</div>
-<div class="line"><a id="l01080" name="l01080"></a><span class="lineno"> 1080</span>                    snprintf(tmp_buf, tmp_buf_len, <span class="stringliteral">&quot;%s %s&quot;</span>, err_str, prop_str);</div>
-<div class="line"><a id="l01081" name="l01081"></a><span class="lineno"> 1081</span> </div>
-<div class="line"><a id="l01082" name="l01082"></a><span class="lineno"> 1082</span>                    insert_error(parser, tail, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, tmp_buf,</div>
-<div class="line"><a id="l01083" name="l01083"></a><span class="lineno"> 1083</span>                                 <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891a701062f5155f26d2c57e075637401ff2">ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR</a>);</div>
+<div class="line"><a id="l01053" name="l01053"></a><span class="lineno"> 1053</span>    <span class="comment">/* Look for values. If there are &#39;,&#39; characters in the values,</span></div>
+<div class="line"><a id="l01054" name="l01054"></a><span class="lineno"> 1054</span><span class="comment">       then there are multiple values, so clone the current</span></div>
+<div class="line"><a id="l01055" name="l01055"></a><span class="lineno"> 1055</span><span class="comment">       parameter and add one part of the value to each clone */</span></div>
+<div class="line"><a id="l01056" name="l01056"></a><span class="lineno"> 1056</span> </div>
+<div class="line"><a id="l01057" name="l01057"></a><span class="lineno"> 1057</span>    vcount = 0;</div>
+<div class="line"><a id="l01058" name="l01058"></a><span class="lineno"> 1058</span>    <span class="keyword">const</span> <span class="keywordtype">size_t</span> maximum_property_values = <a class="code hl_function" href="icallimits_8c.html#a6fe30f14976e32a0b10cdb8f13d9a616">icallimit_get</a>(<a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a92f9c49f487f287ac1c0f22e40a84aa3">ICAL_LIMIT_PROPERTY_VALUES</a>);</div>
+<div class="line"><a id="l01059" name="l01059"></a><span class="lineno"> 1059</span>    <span class="keywordflow">while</span> (vcount &lt; maximum_property_values) {</div>
+<div class="line"><a id="l01060" name="l01060"></a><span class="lineno"> 1060</span>        <span class="comment">/* Only some properties can have multiple values. This list was taken</span></div>
+<div class="line"><a id="l01061" name="l01061"></a><span class="lineno"> 1061</span><span class="comment">           from rfc5545. Also added the x-properties, because the spec actually</span></div>
+<div class="line"><a id="l01062" name="l01062"></a><span class="lineno"> 1062</span><span class="comment">           says that commas should be escaped. For x-properties, other apps may</span></div>
+<div class="line"><a id="l01063" name="l01063"></a><span class="lineno"> 1063</span><span class="comment">           depend on that behaviour</span></div>
+<div class="line"><a id="l01064" name="l01064"></a><span class="lineno"> 1064</span><span class="comment">         */</span></div>
+<div class="line"><a id="l01065" name="l01065"></a><span class="lineno"> 1065</span>        <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l01066" name="l01066"></a><span class="lineno"> 1066</span>        <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
+<div class="line"><a id="l01067" name="l01067"></a><span class="lineno"> 1067</span> </div>
+<div class="line"><a id="l01068" name="l01068"></a><span class="lineno"> 1068</span>        <span class="keywordflow">if</span> (icalproperty_value_kind_is_multivalued(prop_kind, &amp;value_kind)) {</div>
+<div class="line"><a id="l01069" name="l01069"></a><span class="lineno"> 1069</span>            <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = parser_get_next_value(end, &amp;end, value_kind);</div>
+<div class="line"><a id="l01070" name="l01070"></a><span class="lineno"> 1070</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01071" name="l01071"></a><span class="lineno"> 1071</span>            <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = icalparser_get_value(end, &amp;end, value_kind);</div>
+<div class="line"><a id="l01072" name="l01072"></a><span class="lineno"> 1072</span>        }</div>
+<div class="line"><a id="l01073" name="l01073"></a><span class="lineno"> 1073</span>        strstriplt(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l01074" name="l01074"></a><span class="lineno"> 1074</span> </div>
+<div class="line"><a id="l01075" name="l01075"></a><span class="lineno"> 1075</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> != 0) {</div>
+<div class="line"><a id="l01076" name="l01076"></a><span class="lineno"> 1076</span>            <span class="keywordflow">if</span> (vcount &gt; 0) {</div>
+<div class="line"><a id="l01077" name="l01077"></a><span class="lineno"> 1077</span>                <span class="comment">/* Actually, only clone after the second value */</span></div>
+<div class="line"><a id="l01078" name="l01078"></a><span class="lineno"> 1078</span>                icalproperty *clone = <a class="code hl_function" href="icalproperty_8c.html#a8b8c40e7c85a984df3c67e8ae8bd7549">icalproperty_clone</a>(prop);</div>
+<div class="line"><a id="l01079" name="l01079"></a><span class="lineno"> 1079</span>                icalcomponent *tail = icalpvl_data(icalpvl_tail(parser-&gt;components));</div>
+<div class="line"><a id="l01080" name="l01080"></a><span class="lineno"> 1080</span> </div>
+<div class="line"><a id="l01081" name="l01081"></a><span class="lineno"> 1081</span>                <a class="code hl_function" href="icalcomponent_8c.html#ad0f618a40a7b03ab8a7c4f1a36d05168">icalcomponent_add_property</a>(tail, clone);</div>
+<div class="line"><a id="l01082" name="l01082"></a><span class="lineno"> 1082</span>                prop = clone;</div>
+<div class="line"><a id="l01083" name="l01083"></a><span class="lineno"> 1083</span>            }</div>
 <div class="line"><a id="l01084" name="l01084"></a><span class="lineno"> 1084</span> </div>
-<div class="line"><a id="l01085" name="l01085"></a><span class="lineno"> 1085</span>                    value_kind = <a class="code hl_function" href="icalproperty_8h.html#adc024f08eee28934f5a1bc22efcc4ee3">icalproperty_kind_to_value_kind</a>(prop_kind);</div>
+<div class="line"><a id="l01085" name="l01085"></a><span class="lineno"> 1085</span>            value = <a class="code hl_function" href="icalvalue_8c.html#a7beb7ae1bd33f608a279448e892fd675">icalvalue_new_from_string</a>(value_kind, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
 <div class="line"><a id="l01086" name="l01086"></a><span class="lineno"> 1086</span> </div>
-<div class="line"><a id="l01087" name="l01087"></a><span class="lineno"> 1087</span>                    <a class="code hl_function" href="icalparameter_8c.html#a11574fe4a015966a0e19533ae868228b">icalparameter_free</a>(param);</div>
-<div class="line"><a id="l01088" name="l01088"></a><span class="lineno"> 1088</span>                    tail = 0;</div>
-<div class="line"><a id="l01089" name="l01089"></a><span class="lineno"> 1089</span>                    parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>;</div>
+<div class="line"><a id="l01087" name="l01087"></a><span class="lineno"> 1087</span>            <span class="comment">/* Don&#39;t add properties without value */</span></div>
+<div class="line"><a id="l01088" name="l01088"></a><span class="lineno"> 1088</span>            <span class="keywordflow">if</span> (value == 0) {</div>
+<div class="line"><a id="l01089" name="l01089"></a><span class="lineno"> 1089</span>                <span class="keywordtype">char</span> temp[200]; <span class="comment">/* HACK */</span></div>
 <div class="line"><a id="l01090" name="l01090"></a><span class="lineno"> 1090</span> </div>
-<div class="line"><a id="l01091" name="l01091"></a><span class="lineno"> 1091</span>                    <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
-<div class="line"><a id="l01092" name="l01092"></a><span class="lineno"> 1092</span>                    <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
-<div class="line"><a id="l01093" name="l01093"></a><span class="lineno"> 1093</span>                    pcount++;</div>
-<div class="line"><a id="l01094" name="l01094"></a><span class="lineno"> 1094</span>                    <span class="keywordflow">continue</span>;</div>
-<div class="line"><a id="l01095" name="l01095"></a><span class="lineno"> 1095</span>                }</div>
-<div class="line"><a id="l01096" name="l01096"></a><span class="lineno"> 1096</span>            }</div>
-<div class="line"><a id="l01097" name="l01097"></a><span class="lineno"> 1097</span> </div>
-<div class="line"><a id="l01098" name="l01098"></a><span class="lineno"> 1098</span>            <span class="comment">/* Everything is OK, so add the parameter */</span></div>
-<div class="line"><a id="l01099" name="l01099"></a><span class="lineno"> 1099</span>            <a class="code hl_function" href="icalproperty_8c.html#a7a47bfa2a1f5dfca2a13817743c16050">icalproperty_add_parameter</a>(prop, param);</div>
-<div class="line"><a id="l01100" name="l01100"></a><span class="lineno"> 1100</span>            <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
-<div class="line"><a id="l01101" name="l01101"></a><span class="lineno"> 1101</span>            <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
-<div class="line"><a id="l01102" name="l01102"></a><span class="lineno"> 1102</span>            pcount++;</div>
-<div class="line"><a id="l01103" name="l01103"></a><span class="lineno"> 1103</span> </div>
-<div class="line"><a id="l01104" name="l01104"></a><span class="lineno"> 1104</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01105" name="l01105"></a><span class="lineno"> 1105</span>            <span class="comment">/* str is NULL */</span></div>
-<div class="line"><a id="l01106" name="l01106"></a><span class="lineno"> 1106</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01107" name="l01107"></a><span class="lineno"> 1107</span>        }</div>
-<div class="line"><a id="l01108" name="l01108"></a><span class="lineno"> 1108</span> </div>
-<div class="line"><a id="l01109" name="l01109"></a><span class="lineno"> 1109</span>    } <span class="comment">/* while(1) */</span></div>
-<div class="line"><a id="l01110" name="l01110"></a><span class="lineno"> 1110</span> </div>
-<div class="line"><a id="l01111" name="l01111"></a><span class="lineno"> 1111</span><span class="comment">    /**********************************************************************</span></div>
-<div class="line"><a id="l01112" name="l01112"></a><span class="lineno"> 1112</span><span class="comment">     * Handle values</span></div>
-<div class="line"><a id="l01113" name="l01113"></a><span class="lineno"> 1113</span><span class="comment">     **********************************************************************/</span></div>
-<div class="line"><a id="l01114" name="l01114"></a><span class="lineno"> 1114</span> </div>
-<div class="line"><a id="l01115" name="l01115"></a><span class="lineno"> 1115</span>    <span class="comment">/* Look for values. If there are &#39;,&#39; characters in the values,</span></div>
-<div class="line"><a id="l01116" name="l01116"></a><span class="lineno"> 1116</span><span class="comment">       then there are multiple values, so clone the current</span></div>
-<div class="line"><a id="l01117" name="l01117"></a><span class="lineno"> 1117</span><span class="comment">       parameter and add one part of the value to each clone */</span></div>
-<div class="line"><a id="l01118" name="l01118"></a><span class="lineno"> 1118</span> </div>
-<div class="line"><a id="l01119" name="l01119"></a><span class="lineno"> 1119</span>    vcount = 0;</div>
-<div class="line"><a id="l01120" name="l01120"></a><span class="lineno"> 1120</span>    <span class="keyword">const</span> <span class="keywordtype">size_t</span> maximum_property_values = <a class="code hl_function" href="icallimits_8c.html#a6fe30f14976e32a0b10cdb8f13d9a616">icallimit_get</a>(<a class="code hl_enumvalue" href="icallimits_8h.html#a7f04744f9dbe82728bebb95122538658a92f9c49f487f287ac1c0f22e40a84aa3">ICAL_LIMIT_PROPERTY_VALUES</a>);</div>
-<div class="line"><a id="l01121" name="l01121"></a><span class="lineno"> 1121</span>    <span class="keywordflow">while</span> (vcount &lt; maximum_property_values) {</div>
-<div class="line"><a id="l01122" name="l01122"></a><span class="lineno"> 1122</span>        <span class="comment">/* Only some properties can have multiple values. This list was taken</span></div>
-<div class="line"><a id="l01123" name="l01123"></a><span class="lineno"> 1123</span><span class="comment">           from rfc5545. Also added the x-properties, because the spec actually</span></div>
-<div class="line"><a id="l01124" name="l01124"></a><span class="lineno"> 1124</span><span class="comment">           says that commas should be escaped. For x-properties, other apps may</span></div>
-<div class="line"><a id="l01125" name="l01125"></a><span class="lineno"> 1125</span><span class="comment">           depend on that behaviour</span></div>
-<div class="line"><a id="l01126" name="l01126"></a><span class="lineno"> 1126</span><span class="comment">         */</span></div>
-<div class="line"><a id="l01127" name="l01127"></a><span class="lineno"> 1127</span>        <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
-<div class="line"><a id="l01128" name="l01128"></a><span class="lineno"> 1128</span>        <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
-<div class="line"><a id="l01129" name="l01129"></a><span class="lineno"> 1129</span> </div>
-<div class="line"><a id="l01130" name="l01130"></a><span class="lineno"> 1130</span>        <span class="keywordflow">if</span> (icalproperty_value_kind_is_multivalued(prop_kind, &amp;value_kind)) {</div>
-<div class="line"><a id="l01131" name="l01131"></a><span class="lineno"> 1131</span>            <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = parser_get_next_value(end, &amp;end, value_kind);</div>
-<div class="line"><a id="l01132" name="l01132"></a><span class="lineno"> 1132</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01133" name="l01133"></a><span class="lineno"> 1133</span>            <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = icalparser_get_value(end, &amp;end, value_kind);</div>
-<div class="line"><a id="l01134" name="l01134"></a><span class="lineno"> 1134</span>        }</div>
-<div class="line"><a id="l01135" name="l01135"></a><span class="lineno"> 1135</span>        strstriplt(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l01091" name="l01091"></a><span class="lineno"> 1091</span>                <a class="code hl_enumeration" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7c">icalproperty_kind</a> isa_prop_kind = <a class="code hl_function" href="icalproperty_8c.html#a4a0ebeca55cad31e9386a3d7925591e3">icalproperty_isa</a>(prop);</div>
+<div class="line"><a id="l01092" name="l01092"></a><span class="lineno"> 1092</span>                icalcomponent *tail = icalpvl_data(icalpvl_tail(parser-&gt;components));</div>
+<div class="line"><a id="l01093" name="l01093"></a><span class="lineno"> 1093</span> </div>
+<div class="line"><a id="l01094" name="l01094"></a><span class="lineno"> 1094</span>                snprintf(temp, <span class="keyword">sizeof</span>(temp),</div>
+<div class="line"><a id="l01095" name="l01095"></a><span class="lineno"> 1095</span>                         <span class="stringliteral">&quot;Can&#39;t parse as %s value in %s property. Removing entire property&quot;</span>,</div>
+<div class="line"><a id="l01096" name="l01096"></a><span class="lineno"> 1096</span>                         <a class="code hl_function" href="icalvalue_8h.html#afcccc542744366eb285409b280610045">icalvalue_kind_to_string</a>(value_kind),</div>
+<div class="line"><a id="l01097" name="l01097"></a><span class="lineno"> 1097</span>                         <a class="code hl_function" href="icalproperty_8h.html#afcd683d080a344213a2c69283a63fe3a">icalproperty_kind_to_string</a>(isa_prop_kind));</div>
+<div class="line"><a id="l01098" name="l01098"></a><span class="lineno"> 1098</span> </div>
+<div class="line"><a id="l01099" name="l01099"></a><span class="lineno"> 1099</span>                insert_error(parser, tail, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, temp, <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891a950fa6efec8ece7edf718046320e89e8">ICAL_XLICERRORTYPE_VALUEPARSEERROR</a>);</div>
+<div class="line"><a id="l01100" name="l01100"></a><span class="lineno"> 1100</span> </div>
+<div class="line"><a id="l01101" name="l01101"></a><span class="lineno"> 1101</span>                <span class="comment">/* Remove the troublesome property */</span></div>
+<div class="line"><a id="l01102" name="l01102"></a><span class="lineno"> 1102</span>                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(tail, prop);</div>
+<div class="line"><a id="l01103" name="l01103"></a><span class="lineno"> 1103</span>                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(prop);</div>
+<div class="line"><a id="l01104" name="l01104"></a><span class="lineno"> 1104</span>                parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>;</div>
+<div class="line"><a id="l01105" name="l01105"></a><span class="lineno"> 1105</span> </div>
+<div class="line"><a id="l01106" name="l01106"></a><span class="lineno"> 1106</span>                <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l01107" name="l01107"></a><span class="lineno"> 1107</span>                <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
+<div class="line"><a id="l01108" name="l01108"></a><span class="lineno"> 1108</span>                <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l01109" name="l01109"></a><span class="lineno"> 1109</span> </div>
+<div class="line"><a id="l01110" name="l01110"></a><span class="lineno"> 1110</span>            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01111" name="l01111"></a><span class="lineno"> 1111</span>                vcount++;</div>
+<div class="line"><a id="l01112" name="l01112"></a><span class="lineno"> 1112</span>                <a class="code hl_function" href="icalproperty_8c.html#a2ec9afbd548b2ab3088d55f9f54438ef">icalproperty_set_value</a>(prop, value);</div>
+<div class="line"><a id="l01113" name="l01113"></a><span class="lineno"> 1113</span>            }</div>
+<div class="line"><a id="l01114" name="l01114"></a><span class="lineno"> 1114</span>            <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l01115" name="l01115"></a><span class="lineno"> 1115</span>            <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
+<div class="line"><a id="l01116" name="l01116"></a><span class="lineno"> 1116</span> </div>
+<div class="line"><a id="l01117" name="l01117"></a><span class="lineno"> 1117</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01118" name="l01118"></a><span class="lineno"> 1118</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="icalproperty_8c.html#a6a58eebb7a987d6f286097753126dfbd">icalproperty_get_allow_empty_properties</a>()) {</div>
+<div class="line"><a id="l01119" name="l01119"></a><span class="lineno"> 1119</span>                <span class="comment">/* Don&#39;t replace empty properties with an error.</span></div>
+<div class="line"><a id="l01120" name="l01120"></a><span class="lineno"> 1120</span><span class="comment">                   Set an empty length string (not null) as the value instead */</span></div>
+<div class="line"><a id="l01121" name="l01121"></a><span class="lineno"> 1121</span>                <span class="keywordflow">if</span> (vcount == 0) {</div>
+<div class="line"><a id="l01122" name="l01122"></a><span class="lineno"> 1122</span>                    <a class="code hl_function" href="icalproperty_8c.html#a2ec9afbd548b2ab3088d55f9f54438ef">icalproperty_set_value</a>(prop, <a class="code hl_function" href="icalvalue_8c.html#aa51a22037f2382474c2403623a1d03ce">icalvalue_new</a>(<a class="code hl_enumvalue" href="icalderivedvalue_8h.html#a9fa1d7e6a332c72b2cf85339361d39d2aab2d7a6c638342fb01fb95ff4a788ed8">ICAL_NO_VALUE</a>));</div>
+<div class="line"><a id="l01123" name="l01123"></a><span class="lineno"> 1123</span>                }</div>
+<div class="line"><a id="l01124" name="l01124"></a><span class="lineno"> 1124</span>                <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01125" name="l01125"></a><span class="lineno"> 1125</span>            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01126" name="l01126"></a><span class="lineno"> 1126</span>                <span class="keywordflow">if</span> (vcount == 0) {</div>
+<div class="line"><a id="l01127" name="l01127"></a><span class="lineno"> 1127</span>                    <span class="keywordtype">char</span> temp[200]; <span class="comment">/* HACK */</span></div>
+<div class="line"><a id="l01128" name="l01128"></a><span class="lineno"> 1128</span> </div>
+<div class="line"><a id="l01129" name="l01129"></a><span class="lineno"> 1129</span>                    <a class="code hl_enumeration" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7c">icalproperty_kind</a> isa_prop_kind = <a class="code hl_function" href="icalproperty_8c.html#a4a0ebeca55cad31e9386a3d7925591e3">icalproperty_isa</a>(prop);</div>
+<div class="line"><a id="l01130" name="l01130"></a><span class="lineno"> 1130</span>                    icalcomponent *tail = icalpvl_data(icalpvl_tail(parser-&gt;components));</div>
+<div class="line"><a id="l01131" name="l01131"></a><span class="lineno"> 1131</span> </div>
+<div class="line"><a id="l01132" name="l01132"></a><span class="lineno"> 1132</span>                    snprintf(temp, <span class="keyword">sizeof</span>(temp), <span class="stringliteral">&quot;No value for %s property. Removing entire property&quot;</span>,</div>
+<div class="line"><a id="l01133" name="l01133"></a><span class="lineno"> 1133</span>                             <a class="code hl_function" href="icalproperty_8h.html#afcd683d080a344213a2c69283a63fe3a">icalproperty_kind_to_string</a>(isa_prop_kind));</div>
+<div class="line"><a id="l01134" name="l01134"></a><span class="lineno"> 1134</span> </div>
+<div class="line"><a id="l01135" name="l01135"></a><span class="lineno"> 1135</span>                    insert_error(parser, tail, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, temp, <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891a950fa6efec8ece7edf718046320e89e8">ICAL_XLICERRORTYPE_VALUEPARSEERROR</a>);</div>
 <div class="line"><a id="l01136" name="l01136"></a><span class="lineno"> 1136</span> </div>
-<div class="line"><a id="l01137" name="l01137"></a><span class="lineno"> 1137</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> != 0) {</div>
-<div class="line"><a id="l01138" name="l01138"></a><span class="lineno"> 1138</span>            <span class="keywordflow">if</span> (vcount &gt; 0) {</div>
-<div class="line"><a id="l01139" name="l01139"></a><span class="lineno"> 1139</span>                <span class="comment">/* Actually, only clone after the second value */</span></div>
-<div class="line"><a id="l01140" name="l01140"></a><span class="lineno"> 1140</span>                icalproperty *clone = <a class="code hl_function" href="icalproperty_8c.html#a8b8c40e7c85a984df3c67e8ae8bd7549">icalproperty_clone</a>(prop);</div>
-<div class="line"><a id="l01141" name="l01141"></a><span class="lineno"> 1141</span>                icalcomponent *tail = icalpvl_data(icalpvl_tail(parser-&gt;components));</div>
-<div class="line"><a id="l01142" name="l01142"></a><span class="lineno"> 1142</span> </div>
-<div class="line"><a id="l01143" name="l01143"></a><span class="lineno"> 1143</span>                <a class="code hl_function" href="icalcomponent_8c.html#ad0f618a40a7b03ab8a7c4f1a36d05168">icalcomponent_add_property</a>(tail, clone);</div>
-<div class="line"><a id="l01144" name="l01144"></a><span class="lineno"> 1144</span>                prop = clone;</div>
+<div class="line"><a id="l01137" name="l01137"></a><span class="lineno"> 1137</span>                    <span class="comment">/* Remove the troublesome property */</span></div>
+<div class="line"><a id="l01138" name="l01138"></a><span class="lineno"> 1138</span>                    <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(tail, prop);</div>
+<div class="line"><a id="l01139" name="l01139"></a><span class="lineno"> 1139</span>                    <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(prop);</div>
+<div class="line"><a id="l01140" name="l01140"></a><span class="lineno"> 1140</span>                    parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>;</div>
+<div class="line"><a id="l01141" name="l01141"></a><span class="lineno"> 1141</span>                    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l01142" name="l01142"></a><span class="lineno"> 1142</span>                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01143" name="l01143"></a><span class="lineno"> 1143</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01144" name="l01144"></a><span class="lineno"> 1144</span>                }</div>
 <div class="line"><a id="l01145" name="l01145"></a><span class="lineno"> 1145</span>            }</div>
-<div class="line"><a id="l01146" name="l01146"></a><span class="lineno"> 1146</span> </div>
-<div class="line"><a id="l01147" name="l01147"></a><span class="lineno"> 1147</span>            value = <a class="code hl_function" href="icalvalue_8c.html#a7beb7ae1bd33f608a279448e892fd675">icalvalue_new_from_string</a>(value_kind, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
+<div class="line"><a id="l01146" name="l01146"></a><span class="lineno"> 1146</span>        }</div>
+<div class="line"><a id="l01147" name="l01147"></a><span class="lineno"> 1147</span>    }</div>
 <div class="line"><a id="l01148" name="l01148"></a><span class="lineno"> 1148</span> </div>
-<div class="line"><a id="l01149" name="l01149"></a><span class="lineno"> 1149</span>            <span class="comment">/* Don&#39;t add properties without value */</span></div>
-<div class="line"><a id="l01150" name="l01150"></a><span class="lineno"> 1150</span>            <span class="keywordflow">if</span> (value == 0) {</div>
-<div class="line"><a id="l01151" name="l01151"></a><span class="lineno"> 1151</span>                <span class="keywordtype">char</span> temp[200]; <span class="comment">/* HACK */</span></div>
+<div class="line"><a id="l01149" name="l01149"></a><span class="lineno"> 1149</span><span class="comment">    /****************************************************************</span></div>
+<div class="line"><a id="l01150" name="l01150"></a><span class="lineno"> 1150</span><span class="comment">     * End of component parsing.</span></div>
+<div class="line"><a id="l01151" name="l01151"></a><span class="lineno"> 1151</span><span class="comment">     *****************************************************************/</span></div>
 <div class="line"><a id="l01152" name="l01152"></a><span class="lineno"> 1152</span> </div>
-<div class="line"><a id="l01153" name="l01153"></a><span class="lineno"> 1153</span>                <a class="code hl_enumeration" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7c">icalproperty_kind</a> isa_prop_kind = <a class="code hl_function" href="icalproperty_8c.html#a4a0ebeca55cad31e9386a3d7925591e3">icalproperty_isa</a>(prop);</div>
-<div class="line"><a id="l01154" name="l01154"></a><span class="lineno"> 1154</span>                icalcomponent *tail = icalpvl_data(icalpvl_tail(parser-&gt;components));</div>
-<div class="line"><a id="l01155" name="l01155"></a><span class="lineno"> 1155</span> </div>
-<div class="line"><a id="l01156" name="l01156"></a><span class="lineno"> 1156</span>                snprintf(temp, <span class="keyword">sizeof</span>(temp),</div>
-<div class="line"><a id="l01157" name="l01157"></a><span class="lineno"> 1157</span>                         <span class="stringliteral">&quot;Can&#39;t parse as %s value in %s property. Removing entire property&quot;</span>,</div>
-<div class="line"><a id="l01158" name="l01158"></a><span class="lineno"> 1158</span>                         <a class="code hl_function" href="icalvalue_8h.html#afcccc542744366eb285409b280610045">icalvalue_kind_to_string</a>(value_kind),</div>
-<div class="line"><a id="l01159" name="l01159"></a><span class="lineno"> 1159</span>                         <a class="code hl_function" href="icalproperty_8h.html#afcd683d080a344213a2c69283a63fe3a">icalproperty_kind_to_string</a>(isa_prop_kind));</div>
-<div class="line"><a id="l01160" name="l01160"></a><span class="lineno"> 1160</span> </div>
-<div class="line"><a id="l01161" name="l01161"></a><span class="lineno"> 1161</span>                insert_error(parser, tail, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, temp, <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891a950fa6efec8ece7edf718046320e89e8">ICAL_XLICERRORTYPE_VALUEPARSEERROR</a>);</div>
-<div class="line"><a id="l01162" name="l01162"></a><span class="lineno"> 1162</span> </div>
-<div class="line"><a id="l01163" name="l01163"></a><span class="lineno"> 1163</span>                <span class="comment">/* Remove the troublesome property */</span></div>
-<div class="line"><a id="l01164" name="l01164"></a><span class="lineno"> 1164</span>                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(tail, prop);</div>
-<div class="line"><a id="l01165" name="l01165"></a><span class="lineno"> 1165</span>                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(prop);</div>
-<div class="line"><a id="l01166" name="l01166"></a><span class="lineno"> 1166</span>                parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>;</div>
-<div class="line"><a id="l01167" name="l01167"></a><span class="lineno"> 1167</span> </div>
-<div class="line"><a id="l01168" name="l01168"></a><span class="lineno"> 1168</span>                <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
-<div class="line"><a id="l01169" name="l01169"></a><span class="lineno"> 1169</span>                <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
-<div class="line"><a id="l01170" name="l01170"></a><span class="lineno"> 1170</span>                <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l01171" name="l01171"></a><span class="lineno"> 1171</span> </div>
-<div class="line"><a id="l01172" name="l01172"></a><span class="lineno"> 1172</span>            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01173" name="l01173"></a><span class="lineno"> 1173</span>                vcount++;</div>
-<div class="line"><a id="l01174" name="l01174"></a><span class="lineno"> 1174</span>                <a class="code hl_function" href="icalproperty_8c.html#a2ec9afbd548b2ab3088d55f9f54438ef">icalproperty_set_value</a>(prop, value);</div>
-<div class="line"><a id="l01175" name="l01175"></a><span class="lineno"> 1175</span>            }</div>
-<div class="line"><a id="l01176" name="l01176"></a><span class="lineno"> 1176</span>            <a class="code hl_function" href="icalmemory_8c.html#a2f164cb87c67f06b5dc04a5f21384879">icalmemory_free_buffer</a>(<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>);</div>
-<div class="line"><a id="l01177" name="l01177"></a><span class="lineno"> 1177</span>            <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a> = NULL;</div>
-<div class="line"><a id="l01178" name="l01178"></a><span class="lineno"> 1178</span> </div>
-<div class="line"><a id="l01179" name="l01179"></a><span class="lineno"> 1179</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01180" name="l01180"></a><span class="lineno"> 1180</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="icalproperty_8c.html#a6a58eebb7a987d6f286097753126dfbd">icalproperty_get_allow_empty_properties</a>()) {</div>
-<div class="line"><a id="l01181" name="l01181"></a><span class="lineno"> 1181</span>                <span class="comment">/* Don&#39;t replace empty properties with an error.</span></div>
-<div class="line"><a id="l01182" name="l01182"></a><span class="lineno"> 1182</span><span class="comment">                   Set an empty length string (not null) as the value instead */</span></div>
-<div class="line"><a id="l01183" name="l01183"></a><span class="lineno"> 1183</span>                <span class="keywordflow">if</span> (vcount == 0) {</div>
-<div class="line"><a id="l01184" name="l01184"></a><span class="lineno"> 1184</span>                    <a class="code hl_function" href="icalproperty_8c.html#a2ec9afbd548b2ab3088d55f9f54438ef">icalproperty_set_value</a>(prop, <a class="code hl_function" href="icalvalue_8c.html#aa51a22037f2382474c2403623a1d03ce">icalvalue_new</a>(<a class="code hl_enumvalue" href="icalderivedvalue_8h.html#a9fa1d7e6a332c72b2cf85339361d39d2aab2d7a6c638342fb01fb95ff4a788ed8">ICAL_NO_VALUE</a>));</div>
-<div class="line"><a id="l01185" name="l01185"></a><span class="lineno"> 1185</span>                }</div>
-<div class="line"><a id="l01186" name="l01186"></a><span class="lineno"> 1186</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01187" name="l01187"></a><span class="lineno"> 1187</span>            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01188" name="l01188"></a><span class="lineno"> 1188</span>                <span class="keywordflow">if</span> (vcount == 0) {</div>
-<div class="line"><a id="l01189" name="l01189"></a><span class="lineno"> 1189</span>                    <span class="keywordtype">char</span> temp[200]; <span class="comment">/* HACK */</span></div>
-<div class="line"><a id="l01190" name="l01190"></a><span class="lineno"> 1190</span> </div>
-<div class="line"><a id="l01191" name="l01191"></a><span class="lineno"> 1191</span>                    <a class="code hl_enumeration" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7c">icalproperty_kind</a> isa_prop_kind = <a class="code hl_function" href="icalproperty_8c.html#a4a0ebeca55cad31e9386a3d7925591e3">icalproperty_isa</a>(prop);</div>
-<div class="line"><a id="l01192" name="l01192"></a><span class="lineno"> 1192</span>                    icalcomponent *tail = icalpvl_data(icalpvl_tail(parser-&gt;components));</div>
-<div class="line"><a id="l01193" name="l01193"></a><span class="lineno"> 1193</span> </div>
-<div class="line"><a id="l01194" name="l01194"></a><span class="lineno"> 1194</span>                    snprintf(temp, <span class="keyword">sizeof</span>(temp), <span class="stringliteral">&quot;No value for %s property. Removing entire property&quot;</span>,</div>
-<div class="line"><a id="l01195" name="l01195"></a><span class="lineno"> 1195</span>                             <a class="code hl_function" href="icalproperty_8h.html#afcd683d080a344213a2c69283a63fe3a">icalproperty_kind_to_string</a>(isa_prop_kind));</div>
-<div class="line"><a id="l01196" name="l01196"></a><span class="lineno"> 1196</span> </div>
-<div class="line"><a id="l01197" name="l01197"></a><span class="lineno"> 1197</span>                    insert_error(parser, tail, <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>, temp, <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891a950fa6efec8ece7edf718046320e89e8">ICAL_XLICERRORTYPE_VALUEPARSEERROR</a>);</div>
+<div class="line"><a id="l01153" name="l01153"></a><span class="lineno"> 1153</span>    <span class="keywordflow">if</span> (icalpvl_data(icalpvl_tail(parser-&gt;components)) == 0 &amp;&amp; parser-&gt;level == 0) {</div>
+<div class="line"><a id="l01154" name="l01154"></a><span class="lineno"> 1154</span>        <span class="comment">/* HACK. Does this clause ever get executed? */</span></div>
+<div class="line"><a id="l01155" name="l01155"></a><span class="lineno"> 1155</span>        parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7a2dc67ce9b2811c477a462025a9ed9090">ICALPARSER_SUCCESS</a>;</div>
+<div class="line"><a id="l01156" name="l01156"></a><span class="lineno"> 1156</span>        icalassert(0);</div>
+<div class="line"><a id="l01157" name="l01157"></a><span class="lineno"> 1157</span>        <span class="keywordflow">return</span> parser-&gt;root_component;</div>
+<div class="line"><a id="l01158" name="l01158"></a><span class="lineno"> 1158</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01159" name="l01159"></a><span class="lineno"> 1159</span>        parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7a927206f107dfdc62cfd33a9115a997b2">ICALPARSER_IN_PROGRESS</a>;</div>
+<div class="line"><a id="l01160" name="l01160"></a><span class="lineno"> 1160</span>        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l01161" name="l01161"></a><span class="lineno"> 1161</span>    }</div>
+<div class="line"><a id="l01162" name="l01162"></a><span class="lineno"> 1162</span>}</div>
+</div>
+<div class="line"><a id="l01163" name="l01163"></a><span class="lineno"> 1163</span> </div>
+<div class="foldopen" id="foldopen01164" data-start="{" data-end="}">
+<div class="line"><a id="l01164" name="l01164"></a><span class="lineno"><a class="line" href="icalparser_8c.html#aff615b34398b3dd438e4b842c2bda70f"> 1164</a></span><a class="code hl_enumeration" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7">icalparser_state</a> <a class="code hl_function" href="icalparser_8c.html#aff615b34398b3dd438e4b842c2bda70f">icalparser_get_state</a>(<span class="keyword">const</span> icalparser *parser)</div>
+<div class="line"><a id="l01165" name="l01165"></a><span class="lineno"> 1165</span>{</div>
+<div class="line"><a id="l01166" name="l01166"></a><span class="lineno"> 1166</span>    <span class="keywordflow">return</span> parser-&gt;state;</div>
+<div class="line"><a id="l01167" name="l01167"></a><span class="lineno"> 1167</span>}</div>
+</div>
+<div class="line"><a id="l01168" name="l01168"></a><span class="lineno"> 1168</span> </div>
+<div class="foldopen" id="foldopen01169" data-start="{" data-end="}">
+<div class="line"><a id="l01169" name="l01169"></a><span class="lineno"><a class="line" href="icalparser_8c.html#aa6e4c9c494345c51adf49a7e30255fb7"> 1169</a></span>icalcomponent *<a class="code hl_function" href="icalparser_8c.html#aa6e4c9c494345c51adf49a7e30255fb7">icalparser_clean</a>(icalparser *parser)</div>
+<div class="line"><a id="l01170" name="l01170"></a><span class="lineno"> 1170</span>{</div>
+<div class="line"><a id="l01171" name="l01171"></a><span class="lineno"> 1171</span>    icalcomponent *tail;</div>
+<div class="line"><a id="l01172" name="l01172"></a><span class="lineno"> 1172</span> </div>
+<div class="line"><a id="l01173" name="l01173"></a><span class="lineno"> 1173</span>    icalerror_check_arg_rz((parser != 0), <span class="stringliteral">&quot;parser&quot;</span>);</div>
+<div class="line"><a id="l01174" name="l01174"></a><span class="lineno"> 1174</span> </div>
+<div class="line"><a id="l01175" name="l01175"></a><span class="lineno"> 1175</span>    <span class="comment">/* We won&#39;t get a clean exit if some components did not have an</span></div>
+<div class="line"><a id="l01176" name="l01176"></a><span class="lineno"> 1176</span><span class="comment">       &quot;END&quot; tag. Clear off any component that may be left in the list */</span></div>
+<div class="line"><a id="l01177" name="l01177"></a><span class="lineno"> 1177</span> </div>
+<div class="line"><a id="l01178" name="l01178"></a><span class="lineno"> 1178</span>    <span class="keywordflow">while</span> ((tail = icalpvl_data(icalpvl_tail(parser-&gt;components))) != 0) {</div>
+<div class="line"><a id="l01179" name="l01179"></a><span class="lineno"> 1179</span>        insert_error(parser, tail, <span class="stringliteral">&quot; &quot;</span>,</div>
+<div class="line"><a id="l01180" name="l01180"></a><span class="lineno"> 1180</span>                     <span class="stringliteral">&quot;Missing END tag for this component. Closing component at end of input.&quot;</span>,</div>
+<div class="line"><a id="l01181" name="l01181"></a><span class="lineno"> 1181</span>                     <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891ad3661e41ee25121ac40cc4ce4b8204f8">ICAL_XLICERRORTYPE_COMPONENTPARSEERROR</a>);</div>
+<div class="line"><a id="l01182" name="l01182"></a><span class="lineno"> 1182</span> </div>
+<div class="line"><a id="l01183" name="l01183"></a><span class="lineno"> 1183</span>        parser-&gt;root_component = icalpvl_pop(parser-&gt;components);</div>
+<div class="line"><a id="l01184" name="l01184"></a><span class="lineno"> 1184</span>        tail = icalpvl_data(icalpvl_tail(parser-&gt;components));</div>
+<div class="line"><a id="l01185" name="l01185"></a><span class="lineno"> 1185</span> </div>
+<div class="line"><a id="l01186" name="l01186"></a><span class="lineno"> 1186</span>        <span class="keywordflow">if</span> (tail != 0 &amp;&amp; parser-&gt;root_component != NULL) {</div>
+<div class="line"><a id="l01187" name="l01187"></a><span class="lineno"> 1187</span>            <span class="keywordflow">if</span> (icalcomponent_get_parent(parser-&gt;root_component) != 0) {</div>
+<div class="line"><a id="l01188" name="l01188"></a><span class="lineno"> 1188</span>                icalerror_warn(</div>
+<div class="line"><a id="l01189" name="l01189"></a><span class="lineno"> 1189</span>                    <span class="stringliteral">&quot;icalparser_clean is trying to attach a component for the second time&quot;</span>);</div>
+<div class="line"><a id="l01190" name="l01190"></a><span class="lineno"> 1190</span>            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01191" name="l01191"></a><span class="lineno"> 1191</span>                <a class="code hl_function" href="icalcomponent_8c.html#aefd9be4fd39138cb42fd1f46fa833b69">icalcomponent_add_component</a>(tail, parser-&gt;root_component);</div>
+<div class="line"><a id="l01192" name="l01192"></a><span class="lineno"> 1192</span>            }</div>
+<div class="line"><a id="l01193" name="l01193"></a><span class="lineno"> 1193</span>        }</div>
+<div class="line"><a id="l01194" name="l01194"></a><span class="lineno"> 1194</span>    }</div>
+<div class="line"><a id="l01195" name="l01195"></a><span class="lineno"> 1195</span> </div>
+<div class="line"><a id="l01196" name="l01196"></a><span class="lineno"> 1196</span>    <span class="keywordflow">return</span> parser-&gt;root_component;</div>
+<div class="line"><a id="l01197" name="l01197"></a><span class="lineno"> 1197</span>}</div>
+</div>
 <div class="line"><a id="l01198" name="l01198"></a><span class="lineno"> 1198</span> </div>
-<div class="line"><a id="l01199" name="l01199"></a><span class="lineno"> 1199</span>                    <span class="comment">/* Remove the troublesome property */</span></div>
-<div class="line"><a id="l01200" name="l01200"></a><span class="lineno"> 1200</span>                    <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(tail, prop);</div>
-<div class="line"><a id="l01201" name="l01201"></a><span class="lineno"> 1201</span>                    <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(prop);</div>
-<div class="line"><a id="l01202" name="l01202"></a><span class="lineno"> 1202</span>                    parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7adc8fd0c6d697007e6b3fa12bd118a9c8">ICALPARSER_ERROR</a>;</div>
-<div class="line"><a id="l01203" name="l01203"></a><span class="lineno"> 1203</span>                    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l01204" name="l01204"></a><span class="lineno"> 1204</span>                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01205" name="l01205"></a><span class="lineno"> 1205</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01206" name="l01206"></a><span class="lineno"> 1206</span>                }</div>
-<div class="line"><a id="l01207" name="l01207"></a><span class="lineno"> 1207</span>            }</div>
-<div class="line"><a id="l01208" name="l01208"></a><span class="lineno"> 1208</span>        }</div>
-<div class="line"><a id="l01209" name="l01209"></a><span class="lineno"> 1209</span>    }</div>
+<div class="line"><a id="l01199" name="l01199"></a><span class="lineno"> 1199</span><span class="keyword">struct </span>slg_data {</div>
+<div class="line"><a id="l01200" name="l01200"></a><span class="lineno"> 1200</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *pos;</div>
+<div class="line"><a id="l01201" name="l01201"></a><span class="lineno"> 1201</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *str;</div>
+<div class="line"><a id="l01202" name="l01202"></a><span class="lineno"> 1202</span>};</div>
+<div class="line"><a id="l01203" name="l01203"></a><span class="lineno"> 1203</span> </div>
+<div class="foldopen" id="foldopen01204" data-start="{" data-end="}">
+<div class="line"><a id="l01204" name="l01204"></a><span class="lineno"><a class="line" href="icalparser_8c.html#a6429fdd3d61babc95a3851d78c16ae66"> 1204</a></span><span class="keywordtype">char</span> *<a class="code hl_function" href="icalparser_8c.html#a6429fdd3d61babc95a3851d78c16ae66">icalparser_string_line_generator</a>(<span class="keywordtype">char</span> *out, <span class="keywordtype">size_t</span> buf_size, <span class="keywordtype">void</span> *d)</div>
+<div class="line"><a id="l01205" name="l01205"></a><span class="lineno"> 1205</span>{</div>
+<div class="line"><a id="l01206" name="l01206"></a><span class="lineno"> 1206</span>    <span class="keywordtype">int</span> replace_cr = 0;</div>
+<div class="line"><a id="l01207" name="l01207"></a><span class="lineno"> 1207</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *n;</div>
+<div class="line"><a id="l01208" name="l01208"></a><span class="lineno"> 1208</span>    <span class="keywordtype">size_t</span> size;</div>
+<div class="line"><a id="l01209" name="l01209"></a><span class="lineno"> 1209</span>    <span class="keyword">struct </span>slg_data *data = (<span class="keyword">struct </span>slg_data *)d;</div>
 <div class="line"><a id="l01210" name="l01210"></a><span class="lineno"> 1210</span> </div>
-<div class="line"><a id="l01211" name="l01211"></a><span class="lineno"> 1211</span><span class="comment">    /****************************************************************</span></div>
-<div class="line"><a id="l01212" name="l01212"></a><span class="lineno"> 1212</span><span class="comment">     * End of component parsing.</span></div>
-<div class="line"><a id="l01213" name="l01213"></a><span class="lineno"> 1213</span><span class="comment">     *****************************************************************/</span></div>
-<div class="line"><a id="l01214" name="l01214"></a><span class="lineno"> 1214</span> </div>
-<div class="line"><a id="l01215" name="l01215"></a><span class="lineno"> 1215</span>    <span class="keywordflow">if</span> (icalpvl_data(icalpvl_tail(parser-&gt;components)) == 0 &amp;&amp; parser-&gt;level == 0) {</div>
-<div class="line"><a id="l01216" name="l01216"></a><span class="lineno"> 1216</span>        <span class="comment">/* HACK. Does this clause ever get executed? */</span></div>
-<div class="line"><a id="l01217" name="l01217"></a><span class="lineno"> 1217</span>        parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7a2dc67ce9b2811c477a462025a9ed9090">ICALPARSER_SUCCESS</a>;</div>
-<div class="line"><a id="l01218" name="l01218"></a><span class="lineno"> 1218</span>        icalassert(0);</div>
-<div class="line"><a id="l01219" name="l01219"></a><span class="lineno"> 1219</span>        <span class="keywordflow">return</span> parser-&gt;root_component;</div>
-<div class="line"><a id="l01220" name="l01220"></a><span class="lineno"> 1220</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01221" name="l01221"></a><span class="lineno"> 1221</span>        parser-&gt;state = <a class="code hl_enumvalue" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7a927206f107dfdc62cfd33a9115a997b2">ICALPARSER_IN_PROGRESS</a>;</div>
-<div class="line"><a id="l01222" name="l01222"></a><span class="lineno"> 1222</span>        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l01223" name="l01223"></a><span class="lineno"> 1223</span>    }</div>
-<div class="line"><a id="l01224" name="l01224"></a><span class="lineno"> 1224</span>}</div>
-</div>
-<div class="line"><a id="l01225" name="l01225"></a><span class="lineno"> 1225</span> </div>
-<div class="foldopen" id="foldopen01226" data-start="{" data-end="}">
-<div class="line"><a id="l01226" name="l01226"></a><span class="lineno"><a class="line" href="icalparser_8c.html#aff615b34398b3dd438e4b842c2bda70f"> 1226</a></span><a class="code hl_enumeration" href="icalparser_8h.html#aeec42cd09dd789c699d7b6741cbec3e7">icalparser_state</a> <a class="code hl_function" href="icalparser_8c.html#aff615b34398b3dd438e4b842c2bda70f">icalparser_get_state</a>(<span class="keyword">const</span> icalparser *parser)</div>
-<div class="line"><a id="l01227" name="l01227"></a><span class="lineno"> 1227</span>{</div>
-<div class="line"><a id="l01228" name="l01228"></a><span class="lineno"> 1228</span>    <span class="keywordflow">return</span> parser-&gt;state;</div>
-<div class="line"><a id="l01229" name="l01229"></a><span class="lineno"> 1229</span>}</div>
-</div>
-<div class="line"><a id="l01230" name="l01230"></a><span class="lineno"> 1230</span> </div>
-<div class="foldopen" id="foldopen01231" data-start="{" data-end="}">
-<div class="line"><a id="l01231" name="l01231"></a><span class="lineno"><a class="line" href="icalparser_8c.html#aa6e4c9c494345c51adf49a7e30255fb7"> 1231</a></span>icalcomponent *<a class="code hl_function" href="icalparser_8c.html#aa6e4c9c494345c51adf49a7e30255fb7">icalparser_clean</a>(icalparser *parser)</div>
-<div class="line"><a id="l01232" name="l01232"></a><span class="lineno"> 1232</span>{</div>
-<div class="line"><a id="l01233" name="l01233"></a><span class="lineno"> 1233</span>    icalcomponent *tail;</div>
-<div class="line"><a id="l01234" name="l01234"></a><span class="lineno"> 1234</span> </div>
-<div class="line"><a id="l01235" name="l01235"></a><span class="lineno"> 1235</span>    icalerror_check_arg_rz((parser != 0), <span class="stringliteral">&quot;parser&quot;</span>);</div>
-<div class="line"><a id="l01236" name="l01236"></a><span class="lineno"> 1236</span> </div>
-<div class="line"><a id="l01237" name="l01237"></a><span class="lineno"> 1237</span>    <span class="comment">/* We won&#39;t get a clean exit if some components did not have an</span></div>
-<div class="line"><a id="l01238" name="l01238"></a><span class="lineno"> 1238</span><span class="comment">       &quot;END&quot; tag. Clear off any component that may be left in the list */</span></div>
-<div class="line"><a id="l01239" name="l01239"></a><span class="lineno"> 1239</span> </div>
-<div class="line"><a id="l01240" name="l01240"></a><span class="lineno"> 1240</span>    <span class="keywordflow">while</span> ((tail = icalpvl_data(icalpvl_tail(parser-&gt;components))) != 0) {</div>
-<div class="line"><a id="l01241" name="l01241"></a><span class="lineno"> 1241</span>        insert_error(parser, tail, <span class="stringliteral">&quot; &quot;</span>,</div>
-<div class="line"><a id="l01242" name="l01242"></a><span class="lineno"> 1242</span>                     <span class="stringliteral">&quot;Missing END tag for this component. Closing component at end of input.&quot;</span>,</div>
-<div class="line"><a id="l01243" name="l01243"></a><span class="lineno"> 1243</span>                     <a class="code hl_enumvalue" href="icalderivedparameter_8h.html#af524ad17822c235b89221676fd50a891ad3661e41ee25121ac40cc4ce4b8204f8">ICAL_XLICERRORTYPE_COMPONENTPARSEERROR</a>);</div>
+<div class="line"><a id="l01211" name="l01211"></a><span class="lineno"> 1211</span>    <span class="keywordflow">if</span> (data-&gt;pos == 0) {</div>
+<div class="line"><a id="l01212" name="l01212"></a><span class="lineno"> 1212</span>        data-&gt;pos = data-&gt;str;</div>
+<div class="line"><a id="l01213" name="l01213"></a><span class="lineno"> 1213</span>        <span class="keywordflow">if</span> (data-&gt;pos &amp;&amp; strlen(data-&gt;pos) &gt; 2) {</div>
+<div class="line"><a id="l01214" name="l01214"></a><span class="lineno"> 1214</span>            <span class="comment">/* Skip the UTF-8 marker at the beginning of the string */</span></div>
+<div class="line"><a id="l01215" name="l01215"></a><span class="lineno"> 1215</span>            <span class="keywordflow">if</span> (((<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)data-&gt;pos[0]) == 0xEF &amp;&amp;</div>
+<div class="line"><a id="l01216" name="l01216"></a><span class="lineno"> 1216</span>                ((<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)data-&gt;pos[1]) == 0xBB &amp;&amp;</div>
+<div class="line"><a id="l01217" name="l01217"></a><span class="lineno"> 1217</span>                ((<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)data-&gt;pos[2]) == 0xBF) {</div>
+<div class="line"><a id="l01218" name="l01218"></a><span class="lineno"> 1218</span>                data-&gt;pos += 3;</div>
+<div class="line"><a id="l01219" name="l01219"></a><span class="lineno"> 1219</span>            }</div>
+<div class="line"><a id="l01220" name="l01220"></a><span class="lineno"> 1220</span>        }</div>
+<div class="line"><a id="l01221" name="l01221"></a><span class="lineno"> 1221</span>    }</div>
+<div class="line"><a id="l01222" name="l01222"></a><span class="lineno"> 1222</span> </div>
+<div class="line"><a id="l01223" name="l01223"></a><span class="lineno"> 1223</span>    <span class="comment">/* If the pointer is at the end of the string, we are done */</span></div>
+<div class="line"><a id="l01224" name="l01224"></a><span class="lineno"> 1224</span>    <span class="keywordflow">if</span> (!data-&gt;pos || *(data-&gt;pos) == 0) {</div>
+<div class="line"><a id="l01225" name="l01225"></a><span class="lineno"> 1225</span>        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l01226" name="l01226"></a><span class="lineno"> 1226</span>    }</div>
+<div class="line"><a id="l01227" name="l01227"></a><span class="lineno"> 1227</span> </div>
+<div class="line"><a id="l01228" name="l01228"></a><span class="lineno"> 1228</span>    n = strchr(data-&gt;pos, <span class="charliteral">&#39;\n&#39;</span>);</div>
+<div class="line"><a id="l01229" name="l01229"></a><span class="lineno"> 1229</span> </div>
+<div class="line"><a id="l01230" name="l01230"></a><span class="lineno"> 1230</span>    <span class="keywordflow">if</span> (n == 0) {</div>
+<div class="line"><a id="l01231" name="l01231"></a><span class="lineno"> 1231</span>        n = strchr(data-&gt;pos, <span class="charliteral">&#39;\r&#39;</span>); <span class="comment">/* support malformed input with only CR and no LF</span></div>
+<div class="line"><a id="l01232" name="l01232"></a><span class="lineno"> 1232</span><span class="comment">                                        (e.g. from Kerio Connect Server) */</span></div>
+<div class="line"><a id="l01233" name="l01233"></a><span class="lineno"> 1233</span>        <span class="keywordflow">if</span> (n == 0) {</div>
+<div class="line"><a id="l01234" name="l01234"></a><span class="lineno"> 1234</span>            size = strlen(data-&gt;pos);</div>
+<div class="line"><a id="l01235" name="l01235"></a><span class="lineno"> 1235</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01236" name="l01236"></a><span class="lineno"> 1236</span>            n++; <span class="comment">/* include CR in output - will be replaced by LF later on */</span></div>
+<div class="line"><a id="l01237" name="l01237"></a><span class="lineno"> 1237</span>            replace_cr = 1;</div>
+<div class="line"><a id="l01238" name="l01238"></a><span class="lineno"> 1238</span>            size = (size_t)(ptrdiff_t)(n - data-&gt;pos);</div>
+<div class="line"><a id="l01239" name="l01239"></a><span class="lineno"> 1239</span>        }</div>
+<div class="line"><a id="l01240" name="l01240"></a><span class="lineno"> 1240</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01241" name="l01241"></a><span class="lineno"> 1241</span>        n++; <span class="comment">/* include newline in output */</span></div>
+<div class="line"><a id="l01242" name="l01242"></a><span class="lineno"> 1242</span>        size = (size_t)(ptrdiff_t)(n - data-&gt;pos);</div>
+<div class="line"><a id="l01243" name="l01243"></a><span class="lineno"> 1243</span>    }</div>
 <div class="line"><a id="l01244" name="l01244"></a><span class="lineno"> 1244</span> </div>
-<div class="line"><a id="l01245" name="l01245"></a><span class="lineno"> 1245</span>        parser-&gt;root_component = icalpvl_pop(parser-&gt;components);</div>
-<div class="line"><a id="l01246" name="l01246"></a><span class="lineno"> 1246</span>        tail = icalpvl_data(icalpvl_tail(parser-&gt;components));</div>
-<div class="line"><a id="l01247" name="l01247"></a><span class="lineno"> 1247</span> </div>
-<div class="line"><a id="l01248" name="l01248"></a><span class="lineno"> 1248</span>        <span class="keywordflow">if</span> (tail != 0 &amp;&amp; parser-&gt;root_component != NULL) {</div>
-<div class="line"><a id="l01249" name="l01249"></a><span class="lineno"> 1249</span>            <span class="keywordflow">if</span> (icalcomponent_get_parent(parser-&gt;root_component) != 0) {</div>
-<div class="line"><a id="l01250" name="l01250"></a><span class="lineno"> 1250</span>                icalerror_warn(</div>
-<div class="line"><a id="l01251" name="l01251"></a><span class="lineno"> 1251</span>                    <span class="stringliteral">&quot;icalparser_clean is trying to attach a component for the second time&quot;</span>);</div>
-<div class="line"><a id="l01252" name="l01252"></a><span class="lineno"> 1252</span>            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01253" name="l01253"></a><span class="lineno"> 1253</span>                <a class="code hl_function" href="icalcomponent_8c.html#aefd9be4fd39138cb42fd1f46fa833b69">icalcomponent_add_component</a>(tail, parser-&gt;root_component);</div>
-<div class="line"><a id="l01254" name="l01254"></a><span class="lineno"> 1254</span>            }</div>
-<div class="line"><a id="l01255" name="l01255"></a><span class="lineno"> 1255</span>        }</div>
-<div class="line"><a id="l01256" name="l01256"></a><span class="lineno"> 1256</span>    }</div>
-<div class="line"><a id="l01257" name="l01257"></a><span class="lineno"> 1257</span> </div>
-<div class="line"><a id="l01258" name="l01258"></a><span class="lineno"> 1258</span>    <span class="keywordflow">return</span> parser-&gt;root_component;</div>
-<div class="line"><a id="l01259" name="l01259"></a><span class="lineno"> 1259</span>}</div>
-</div>
-<div class="line"><a id="l01260" name="l01260"></a><span class="lineno"> 1260</span> </div>
-<div class="line"><a id="l01261" name="l01261"></a><span class="lineno"> 1261</span><span class="keyword">struct </span>slg_data {</div>
-<div class="line"><a id="l01262" name="l01262"></a><span class="lineno"> 1262</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *pos;</div>
-<div class="line"><a id="l01263" name="l01263"></a><span class="lineno"> 1263</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *str;</div>
-<div class="line"><a id="l01264" name="l01264"></a><span class="lineno"> 1264</span>};</div>
+<div class="line"><a id="l01245" name="l01245"></a><span class="lineno"> 1245</span>    <span class="keywordflow">if</span> (size &gt; buf_size - 1) {</div>
+<div class="line"><a id="l01246" name="l01246"></a><span class="lineno"> 1246</span>        size = buf_size - 1;</div>
+<div class="line"><a id="l01247" name="l01247"></a><span class="lineno"> 1247</span>    }</div>
+<div class="line"><a id="l01248" name="l01248"></a><span class="lineno"> 1248</span> </div>
+<div class="line"><a id="l01249" name="l01249"></a><span class="lineno"> 1249</span><span class="preprocessor">#if defined(__GNUC__) &amp;&amp; !defined(__clang__)</span></div>
+<div class="line"><a id="l01250" name="l01250"></a><span class="lineno"> 1250</span><span class="preprocessor">#pragma GCC diagnostic push</span></div>
+<div class="line"><a id="l01251" name="l01251"></a><span class="lineno"> 1251</span><span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wstringop-truncation&quot;</span></div>
+<div class="line"><a id="l01252" name="l01252"></a><span class="lineno"> 1252</span><span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wstringop-overflow&quot;</span></div>
+<div class="line"><a id="l01253" name="l01253"></a><span class="lineno"> 1253</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l01254" name="l01254"></a><span class="lineno"> 1254</span>    strncpy(out, data-&gt;pos, size);</div>
+<div class="line"><a id="l01255" name="l01255"></a><span class="lineno"> 1255</span><span class="preprocessor">#if defined(__GNUC__) &amp;&amp; !defined(__clang__)</span></div>
+<div class="line"><a id="l01256" name="l01256"></a><span class="lineno"> 1256</span><span class="preprocessor">#pragma GCC diagnostic pop</span></div>
+<div class="line"><a id="l01257" name="l01257"></a><span class="lineno"> 1257</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l01258" name="l01258"></a><span class="lineno"> 1258</span> </div>
+<div class="line"><a id="l01259" name="l01259"></a><span class="lineno"> 1259</span>    <span class="keywordflow">if</span> (replace_cr) {</div>
+<div class="line"><a id="l01260" name="l01260"></a><span class="lineno"> 1260</span>        *(out + size - 1) = <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a id="l01261" name="l01261"></a><span class="lineno"> 1261</span>    }</div>
+<div class="line"><a id="l01262" name="l01262"></a><span class="lineno"> 1262</span>    *(out + size) = <span class="charliteral">&#39;\0&#39;</span>;</div>
+<div class="line"><a id="l01263" name="l01263"></a><span class="lineno"> 1263</span> </div>
+<div class="line"><a id="l01264" name="l01264"></a><span class="lineno"> 1264</span>    data-&gt;pos += size;</div>
 <div class="line"><a id="l01265" name="l01265"></a><span class="lineno"> 1265</span> </div>
-<div class="foldopen" id="foldopen01266" data-start="{" data-end="}">
-<div class="line"><a id="l01266" name="l01266"></a><span class="lineno"><a class="line" href="icalparser_8c.html#a6429fdd3d61babc95a3851d78c16ae66"> 1266</a></span><span class="keywordtype">char</span> *<a class="code hl_function" href="icalparser_8c.html#a6429fdd3d61babc95a3851d78c16ae66">icalparser_string_line_generator</a>(<span class="keywordtype">char</span> *out, <span class="keywordtype">size_t</span> buf_size, <span class="keywordtype">void</span> *d)</div>
-<div class="line"><a id="l01267" name="l01267"></a><span class="lineno"> 1267</span>{</div>
-<div class="line"><a id="l01268" name="l01268"></a><span class="lineno"> 1268</span>    <span class="keywordtype">int</span> replace_cr = 0;</div>
-<div class="line"><a id="l01269" name="l01269"></a><span class="lineno"> 1269</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *n;</div>
-<div class="line"><a id="l01270" name="l01270"></a><span class="lineno"> 1270</span>    <span class="keywordtype">size_t</span> size;</div>
-<div class="line"><a id="l01271" name="l01271"></a><span class="lineno"> 1271</span>    <span class="keyword">struct </span>slg_data *data = (<span class="keyword">struct </span>slg_data *)d;</div>
-<div class="line"><a id="l01272" name="l01272"></a><span class="lineno"> 1272</span> </div>
-<div class="line"><a id="l01273" name="l01273"></a><span class="lineno"> 1273</span>    <span class="keywordflow">if</span> (data-&gt;pos == 0) {</div>
-<div class="line"><a id="l01274" name="l01274"></a><span class="lineno"> 1274</span>        data-&gt;pos = data-&gt;str;</div>
-<div class="line"><a id="l01275" name="l01275"></a><span class="lineno"> 1275</span>        <span class="keywordflow">if</span> (data-&gt;pos &amp;&amp; strlen(data-&gt;pos) &gt; 2) {</div>
-<div class="line"><a id="l01276" name="l01276"></a><span class="lineno"> 1276</span>            <span class="comment">/* Skip the UTF-8 marker at the beginning of the string */</span></div>
-<div class="line"><a id="l01277" name="l01277"></a><span class="lineno"> 1277</span>            <span class="keywordflow">if</span> (((<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)data-&gt;pos[0]) == 0xEF &amp;&amp;</div>
-<div class="line"><a id="l01278" name="l01278"></a><span class="lineno"> 1278</span>                ((<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)data-&gt;pos[1]) == 0xBB &amp;&amp;</div>
-<div class="line"><a id="l01279" name="l01279"></a><span class="lineno"> 1279</span>                ((<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)data-&gt;pos[2]) == 0xBF) {</div>
-<div class="line"><a id="l01280" name="l01280"></a><span class="lineno"> 1280</span>                data-&gt;pos += 3;</div>
-<div class="line"><a id="l01281" name="l01281"></a><span class="lineno"> 1281</span>            }</div>
-<div class="line"><a id="l01282" name="l01282"></a><span class="lineno"> 1282</span>        }</div>
+<div class="line"><a id="l01266" name="l01266"></a><span class="lineno"> 1266</span>    <span class="keywordflow">return</span> out;</div>
+<div class="line"><a id="l01267" name="l01267"></a><span class="lineno"> 1267</span>}</div>
+</div>
+<div class="line"><a id="l01268" name="l01268"></a><span class="lineno"> 1268</span> </div>
+<div class="foldopen" id="foldopen01269" data-start="{" data-end="}">
+<div class="line"><a id="l01269" name="l01269"></a><span class="lineno"><a class="line" href="icalparser_8c.html#a5e1268344c61e44a0ec18085688f07fd"> 1269</a></span>icalcomponent *<a class="code hl_function" href="icalparser_8c.html#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>)</div>
+<div class="line"><a id="l01270" name="l01270"></a><span class="lineno"> 1270</span>{</div>
+<div class="line"><a id="l01271" name="l01271"></a><span class="lineno"> 1271</span>    icalcomponent *c;</div>
+<div class="line"><a id="l01272" name="l01272"></a><span class="lineno"> 1272</span>    <span class="keyword">struct </span>slg_data d;</div>
+<div class="line"><a id="l01273" name="l01273"></a><span class="lineno"> 1273</span>    icalparser *p;</div>
+<div class="line"><a id="l01274" name="l01274"></a><span class="lineno"> 1274</span> </div>
+<div class="line"><a id="l01275" name="l01275"></a><span class="lineno"> 1275</span>    <a class="code hl_enumeration" href="icalerror_8h.html#a3cb9a92508be773fbb4dba7c658443d3">icalerrorstate</a> es = <a class="code hl_function" href="icalerror_8h.html#a5fe3cbc229f74250b59c077e21abf82d">icalerror_get_error_state</a>(<a class="code hl_enumvalue" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>);</div>
+<div class="line"><a id="l01276" name="l01276"></a><span class="lineno"> 1276</span> </div>
+<div class="line"><a id="l01277" name="l01277"></a><span class="lineno"> 1277</span>    d.pos = 0;</div>
+<div class="line"><a id="l01278" name="l01278"></a><span class="lineno"> 1278</span>    d.str = <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>;</div>
+<div class="line"><a id="l01279" name="l01279"></a><span class="lineno"> 1279</span> </div>
+<div class="line"><a id="l01280" name="l01280"></a><span class="lineno"> 1280</span>    p = <a class="code hl_function" href="icalparser_8c.html#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
+<div class="line"><a id="l01281" name="l01281"></a><span class="lineno"> 1281</span>    <span class="keywordflow">if</span> (!p) {</div>
+<div class="line"><a id="l01282" name="l01282"></a><span class="lineno"> 1282</span>        <span class="keywordflow">return</span> NULL;</div>
 <div class="line"><a id="l01283" name="l01283"></a><span class="lineno"> 1283</span>    }</div>
 <div class="line"><a id="l01284" name="l01284"></a><span class="lineno"> 1284</span> </div>
-<div class="line"><a id="l01285" name="l01285"></a><span class="lineno"> 1285</span>    <span class="comment">/* If the pointer is at the end of the string, we are done */</span></div>
-<div class="line"><a id="l01286" name="l01286"></a><span class="lineno"> 1286</span>    <span class="keywordflow">if</span> (!data-&gt;pos || *(data-&gt;pos) == 0) {</div>
-<div class="line"><a id="l01287" name="l01287"></a><span class="lineno"> 1287</span>        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l01288" name="l01288"></a><span class="lineno"> 1288</span>    }</div>
-<div class="line"><a id="l01289" name="l01289"></a><span class="lineno"> 1289</span> </div>
-<div class="line"><a id="l01290" name="l01290"></a><span class="lineno"> 1290</span>    n = strchr(data-&gt;pos, <span class="charliteral">&#39;\n&#39;</span>);</div>
-<div class="line"><a id="l01291" name="l01291"></a><span class="lineno"> 1291</span> </div>
-<div class="line"><a id="l01292" name="l01292"></a><span class="lineno"> 1292</span>    <span class="keywordflow">if</span> (n == 0) {</div>
-<div class="line"><a id="l01293" name="l01293"></a><span class="lineno"> 1293</span>        n = strchr(data-&gt;pos, <span class="charliteral">&#39;\r&#39;</span>); <span class="comment">/* support malformed input with only CR and no LF</span></div>
-<div class="line"><a id="l01294" name="l01294"></a><span class="lineno"> 1294</span><span class="comment">                                        (e.g. from Kerio Connect Server) */</span></div>
-<div class="line"><a id="l01295" name="l01295"></a><span class="lineno"> 1295</span>        <span class="keywordflow">if</span> (n == 0) {</div>
-<div class="line"><a id="l01296" name="l01296"></a><span class="lineno"> 1296</span>            size = strlen(data-&gt;pos);</div>
-<div class="line"><a id="l01297" name="l01297"></a><span class="lineno"> 1297</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01298" name="l01298"></a><span class="lineno"> 1298</span>            n++; <span class="comment">/* include CR in output - will be replaced by LF later on */</span></div>
-<div class="line"><a id="l01299" name="l01299"></a><span class="lineno"> 1299</span>            replace_cr = 1;</div>
-<div class="line"><a id="l01300" name="l01300"></a><span class="lineno"> 1300</span>            size = (size_t)(ptrdiff_t)(n - data-&gt;pos);</div>
-<div class="line"><a id="l01301" name="l01301"></a><span class="lineno"> 1301</span>        }</div>
-<div class="line"><a id="l01302" name="l01302"></a><span class="lineno"> 1302</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01303" name="l01303"></a><span class="lineno"> 1303</span>        n++; <span class="comment">/* include newline in output */</span></div>
-<div class="line"><a id="l01304" name="l01304"></a><span class="lineno"> 1304</span>        size = (size_t)(ptrdiff_t)(n - data-&gt;pos);</div>
-<div class="line"><a id="l01305" name="l01305"></a><span class="lineno"> 1305</span>    }</div>
-<div class="line"><a id="l01306" name="l01306"></a><span class="lineno"> 1306</span> </div>
-<div class="line"><a id="l01307" name="l01307"></a><span class="lineno"> 1307</span>    <span class="keywordflow">if</span> (size &gt; buf_size - 1) {</div>
-<div class="line"><a id="l01308" name="l01308"></a><span class="lineno"> 1308</span>        size = buf_size - 1;</div>
-<div class="line"><a id="l01309" name="l01309"></a><span class="lineno"> 1309</span>    }</div>
-<div class="line"><a id="l01310" name="l01310"></a><span class="lineno"> 1310</span> </div>
-<div class="line"><a id="l01311" name="l01311"></a><span class="lineno"> 1311</span><span class="preprocessor">#if defined(__GNUC__) &amp;&amp; !defined(__clang__)</span></div>
-<div class="line"><a id="l01312" name="l01312"></a><span class="lineno"> 1312</span><span class="preprocessor">#pragma GCC diagnostic push</span></div>
-<div class="line"><a id="l01313" name="l01313"></a><span class="lineno"> 1313</span><span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wstringop-truncation&quot;</span></div>
-<div class="line"><a id="l01314" name="l01314"></a><span class="lineno"> 1314</span><span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wstringop-overflow&quot;</span></div>
-<div class="line"><a id="l01315" name="l01315"></a><span class="lineno"> 1315</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l01316" name="l01316"></a><span class="lineno"> 1316</span>    strncpy(out, data-&gt;pos, size);</div>
-<div class="line"><a id="l01317" name="l01317"></a><span class="lineno"> 1317</span><span class="preprocessor">#if defined(__GNUC__) &amp;&amp; !defined(__clang__)</span></div>
-<div class="line"><a id="l01318" name="l01318"></a><span class="lineno"> 1318</span><span class="preprocessor">#pragma GCC diagnostic pop</span></div>
-<div class="line"><a id="l01319" name="l01319"></a><span class="lineno"> 1319</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l01320" name="l01320"></a><span class="lineno"> 1320</span> </div>
-<div class="line"><a id="l01321" name="l01321"></a><span class="lineno"> 1321</span>    <span class="keywordflow">if</span> (replace_cr) {</div>
-<div class="line"><a id="l01322" name="l01322"></a><span class="lineno"> 1322</span>        *(out + size - 1) = <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><a id="l01323" name="l01323"></a><span class="lineno"> 1323</span>    }</div>
-<div class="line"><a id="l01324" name="l01324"></a><span class="lineno"> 1324</span>    *(out + size) = <span class="charliteral">&#39;\0&#39;</span>;</div>
-<div class="line"><a id="l01325" name="l01325"></a><span class="lineno"> 1325</span> </div>
-<div class="line"><a id="l01326" name="l01326"></a><span class="lineno"> 1326</span>    data-&gt;pos += size;</div>
-<div class="line"><a id="l01327" name="l01327"></a><span class="lineno"> 1327</span> </div>
-<div class="line"><a id="l01328" name="l01328"></a><span class="lineno"> 1328</span>    <span class="keywordflow">return</span> out;</div>
-<div class="line"><a id="l01329" name="l01329"></a><span class="lineno"> 1329</span>}</div>
+<div class="line"><a id="l01285" name="l01285"></a><span class="lineno"> 1285</span>    <a class="code hl_function" href="icalparser_8c.html#aae6d08b4084610e225621a25dddd7689">icalparser_set_gen_data</a>(p, &amp;d);</div>
+<div class="line"><a id="l01286" name="l01286"></a><span class="lineno"> 1286</span> </div>
+<div class="line"><a id="l01287" name="l01287"></a><span class="lineno"> 1287</span>    <a class="code hl_function" href="icalerror_8h.html#a777a41722836b68ffb27ae5a746a14b4">icalerror_set_error_state</a>(<a class="code hl_enumvalue" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>, <a class="code hl_enumvalue" href="icalerror_8h.html#a3cb9a92508be773fbb4dba7c658443d3aee5a5c75923a46b30105a272b75339b6">ICAL_ERROR_NONFATAL</a>);</div>
+<div class="line"><a id="l01288" name="l01288"></a><span class="lineno"> 1288</span> </div>
+<div class="line"><a id="l01289" name="l01289"></a><span class="lineno"> 1289</span>    c = <a class="code hl_function" href="icalparser_8c.html#a00330df647417bb017a7daaaffafddec">icalparser_parse</a>(p, <a class="code hl_function" href="icalparser_8c.html#a6429fdd3d61babc95a3851d78c16ae66">icalparser_string_line_generator</a>);</div>
+<div class="line"><a id="l01290" name="l01290"></a><span class="lineno"> 1290</span> </div>
+<div class="line"><a id="l01291" name="l01291"></a><span class="lineno"> 1291</span>    <a class="code hl_function" href="icalerror_8h.html#a777a41722836b68ffb27ae5a746a14b4">icalerror_set_error_state</a>(<a class="code hl_enumvalue" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>, es);</div>
+<div class="line"><a id="l01292" name="l01292"></a><span class="lineno"> 1292</span> </div>
+<div class="line"><a id="l01293" name="l01293"></a><span class="lineno"> 1293</span>    <a class="code hl_function" href="icalparser_8c.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a>(p);</div>
+<div class="line"><a id="l01294" name="l01294"></a><span class="lineno"> 1294</span> </div>
+<div class="line"><a id="l01295" name="l01295"></a><span class="lineno"> 1295</span>    <span class="keywordflow">return</span> c;</div>
+<div class="line"><a id="l01296" name="l01296"></a><span class="lineno"> 1296</span>}</div>
 </div>
-<div class="line"><a id="l01330" name="l01330"></a><span class="lineno"> 1330</span> </div>
-<div class="foldopen" id="foldopen01331" data-start="{" data-end="}">
-<div class="line"><a id="l01331" name="l01331"></a><span class="lineno"><a class="line" href="icalparser_8c.html#a5e1268344c61e44a0ec18085688f07fd"> 1331</a></span>icalcomponent *<a class="code hl_function" href="icalparser_8c.html#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>)</div>
-<div class="line"><a id="l01332" name="l01332"></a><span class="lineno"> 1332</span>{</div>
-<div class="line"><a id="l01333" name="l01333"></a><span class="lineno"> 1333</span>    icalcomponent *c;</div>
-<div class="line"><a id="l01334" name="l01334"></a><span class="lineno"> 1334</span>    <span class="keyword">struct </span>slg_data d;</div>
-<div class="line"><a id="l01335" name="l01335"></a><span class="lineno"> 1335</span>    icalparser *p;</div>
-<div class="line"><a id="l01336" name="l01336"></a><span class="lineno"> 1336</span> </div>
-<div class="line"><a id="l01337" name="l01337"></a><span class="lineno"> 1337</span>    <a class="code hl_enumeration" href="icalerror_8h.html#a3cb9a92508be773fbb4dba7c658443d3">icalerrorstate</a> es = <a class="code hl_function" href="icalerror_8h.html#a5fe3cbc229f74250b59c077e21abf82d">icalerror_get_error_state</a>(<a class="code hl_enumvalue" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>);</div>
-<div class="line"><a id="l01338" name="l01338"></a><span class="lineno"> 1338</span> </div>
-<div class="line"><a id="l01339" name="l01339"></a><span class="lineno"> 1339</span>    d.pos = 0;</div>
-<div class="line"><a id="l01340" name="l01340"></a><span class="lineno"> 1340</span>    d.str = <a class="code hl_variable" href="icalenums_8c.html#af25d6dc49269fa2003ac7c7fa6f13915">str</a>;</div>
-<div class="line"><a id="l01341" name="l01341"></a><span class="lineno"> 1341</span> </div>
-<div class="line"><a id="l01342" name="l01342"></a><span class="lineno"> 1342</span>    p = <a class="code hl_function" href="icalparser_8c.html#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a>();</div>
-<div class="line"><a id="l01343" name="l01343"></a><span class="lineno"> 1343</span>    <span class="keywordflow">if</span> (!p) {</div>
-<div class="line"><a id="l01344" name="l01344"></a><span class="lineno"> 1344</span>        <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a id="l01345" name="l01345"></a><span class="lineno"> 1345</span>    }</div>
-<div class="line"><a id="l01346" name="l01346"></a><span class="lineno"> 1346</span> </div>
-<div class="line"><a id="l01347" name="l01347"></a><span class="lineno"> 1347</span>    <a class="code hl_function" href="icalparser_8c.html#aae6d08b4084610e225621a25dddd7689">icalparser_set_gen_data</a>(p, &amp;d);</div>
-<div class="line"><a id="l01348" name="l01348"></a><span class="lineno"> 1348</span> </div>
-<div class="line"><a id="l01349" name="l01349"></a><span class="lineno"> 1349</span>    <a class="code hl_function" href="icalerror_8h.html#a777a41722836b68ffb27ae5a746a14b4">icalerror_set_error_state</a>(<a class="code hl_enumvalue" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>, <a class="code hl_enumvalue" href="icalerror_8h.html#a3cb9a92508be773fbb4dba7c658443d3aee5a5c75923a46b30105a272b75339b6">ICAL_ERROR_NONFATAL</a>);</div>
-<div class="line"><a id="l01350" name="l01350"></a><span class="lineno"> 1350</span> </div>
-<div class="line"><a id="l01351" name="l01351"></a><span class="lineno"> 1351</span>    c = <a class="code hl_function" href="icalparser_8c.html#a00330df647417bb017a7daaaffafddec">icalparser_parse</a>(p, <a class="code hl_function" href="icalparser_8c.html#a6429fdd3d61babc95a3851d78c16ae66">icalparser_string_line_generator</a>);</div>
-<div class="line"><a id="l01352" name="l01352"></a><span class="lineno"> 1352</span> </div>
-<div class="line"><a id="l01353" name="l01353"></a><span class="lineno"> 1353</span>    <a class="code hl_function" href="icalerror_8h.html#a777a41722836b68ffb27ae5a746a14b4">icalerror_set_error_state</a>(<a class="code hl_enumvalue" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>, es);</div>
-<div class="line"><a id="l01354" name="l01354"></a><span class="lineno"> 1354</span> </div>
-<div class="line"><a id="l01355" name="l01355"></a><span class="lineno"> 1355</span>    <a class="code hl_function" href="icalparser_8c.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a>(p);</div>
-<div class="line"><a id="l01356" name="l01356"></a><span class="lineno"> 1356</span> </div>
-<div class="line"><a id="l01357" name="l01357"></a><span class="lineno"> 1357</span>    <span class="keywordflow">return</span> c;</div>
-<div class="line"><a id="l01358" name="l01358"></a><span class="lineno"> 1358</span>}</div>
+<div class="line"><a id="l01297" name="l01297"></a><span class="lineno"> 1297</span> </div>
+<div class="foldopen" id="foldopen01298" data-start="{" data-end="}">
+<div class="line"><a id="l01298" name="l01298"></a><span class="lineno"><a class="line" href="icalparser_8c.html#a2d34db956d3cc609f2804bcadd0deee6"> 1298</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="icalparser_8h.html#a6fcc054fab27a4491f52b0e1aba899c3">icalparser_ctrl</a> <a class="code hl_function" href="icalparser_8c.html#a2d34db956d3cc609f2804bcadd0deee6">icalparser_get_ctrl</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a id="l01299" name="l01299"></a><span class="lineno"> 1299</span>{</div>
+<div class="line"><a id="l01300" name="l01300"></a><span class="lineno"> 1300</span>    <span class="keywordflow">return</span> icalparser_ctrl_g;</div>
+<div class="line"><a id="l01301" name="l01301"></a><span class="lineno"> 1301</span>}</div>
 </div>
-<div class="line"><a id="l01359" name="l01359"></a><span class="lineno"> 1359</span> </div>
-<div class="foldopen" id="foldopen01360" data-start="{" data-end="}">
-<div class="line"><a id="l01360" name="l01360"></a><span class="lineno"><a class="line" href="icalparser_8c.html#a2d34db956d3cc609f2804bcadd0deee6"> 1360</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="icalparser_8h.html#a6fcc054fab27a4491f52b0e1aba899c3">icalparser_ctrl</a> <a class="code hl_function" href="icalparser_8c.html#a2d34db956d3cc609f2804bcadd0deee6">icalparser_get_ctrl</a>(<span class="keywordtype">void</span>)</div>
-<div class="line"><a id="l01361" name="l01361"></a><span class="lineno"> 1361</span>{</div>
-<div class="line"><a id="l01362" name="l01362"></a><span class="lineno"> 1362</span>    <span class="keywordflow">return</span> icalparser_ctrl_g;</div>
-<div class="line"><a id="l01363" name="l01363"></a><span class="lineno"> 1363</span>}</div>
+<div class="line"><a id="l01302" name="l01302"></a><span class="lineno"> 1302</span> </div>
+<div class="foldopen" id="foldopen01303" data-start="{" data-end="}">
+<div class="line"><a id="l01303" name="l01303"></a><span class="lineno"><a class="line" href="icalparser_8c.html#a24ad1a0d37a10aa31a8dbd9977660281"> 1303</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="icalparser_8c.html#a24ad1a0d37a10aa31a8dbd9977660281">icalparser_set_ctrl</a>(<span class="keyword">enum</span> <a class="code hl_enumeration" href="icalparser_8h.html#a6fcc054fab27a4491f52b0e1aba899c3">icalparser_ctrl</a> ctrl)</div>
+<div class="line"><a id="l01304" name="l01304"></a><span class="lineno"> 1304</span>{</div>
+<div class="line"><a id="l01305" name="l01305"></a><span class="lineno"> 1305</span>    icalparser_ctrl_g = ctrl;</div>
+<div class="line"><a id="l01306" name="l01306"></a><span class="lineno"> 1306</span>}</div>
 </div>
-<div class="line"><a id="l01364" name="l01364"></a><span class="lineno"> 1364</span> </div>
-<div class="foldopen" id="foldopen01365" data-start="{" data-end="}">
-<div class="line"><a id="l01365" name="l01365"></a><span class="lineno"><a class="line" href="icalparser_8c.html#a24ad1a0d37a10aa31a8dbd9977660281"> 1365</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="icalparser_8c.html#a24ad1a0d37a10aa31a8dbd9977660281">icalparser_set_ctrl</a>(<span class="keyword">enum</span> <a class="code hl_enumeration" href="icalparser_8h.html#a6fcc054fab27a4491f52b0e1aba899c3">icalparser_ctrl</a> ctrl)</div>
-<div class="line"><a id="l01366" name="l01366"></a><span class="lineno"> 1366</span>{</div>
-<div class="line"><a id="l01367" name="l01367"></a><span class="lineno"> 1367</span>    icalparser_ctrl_g = ctrl;</div>
-<div class="line"><a id="l01368" name="l01368"></a><span class="lineno"> 1368</span>}</div>
-</div>
-<div class="ttc" id="aicalcomponent_8c_html_a11b2f85e23fab379b129f0c3a08b1d04"><div class="ttname"><a href="icalcomponent_8c.html#a11b2f85e23fab379b129f0c3a08b1d04">icalcomponent_string_to_kind</a></div><div class="ttdeci">icalcomponent_kind icalcomponent_string_to_kind(const char *string)</div><div class="ttdef"><b>Definition</b> <a href="icalcomponent_8c_source.html#l01363">icalcomponent.c:1363</a></div></div>
+<div class="ttc" id="aicalcomponent_8c_html_a11b2f85e23fab379b129f0c3a08b1d04"><div class="ttname"><a href="icalcomponent_8c.html#a11b2f85e23fab379b129f0c3a08b1d04">icalcomponent_string_to_kind</a></div><div class="ttdeci">icalcomponent_kind icalcomponent_string_to_kind(const char *string)</div><div class="ttdef"><b>Definition</b> <a href="icalcomponent_8c_source.html#l01367">icalcomponent.c:1367</a></div></div>
 <div class="ttc" id="aicalcomponent_8c_html_a588b15eb0425b007e1daec4a6a1885fe"><div class="ttname"><a href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a></div><div class="ttdeci">void icalcomponent_remove_property(icalcomponent *component, icalproperty *property)</div><div class="ttdef"><b>Definition</b> <a href="icalcomponent_8c_source.html#l00439">icalcomponent.c:439</a></div></div>
 <div class="ttc" id="aicalcomponent_8c_html_a727a14d0c14c66b4dbf1b58b2cb6ac2e"><div class="ttname"><a href="icalcomponent_8c.html#a727a14d0c14c66b4dbf1b58b2cb6ac2e">icalcomponent_new</a></div><div class="ttdeci">icalcomponent * icalcomponent_new(icalcomponent_kind kind)</div><div class="ttdef"><b>Definition</b> <a href="icalcomponent_8c_source.html#l00108">icalcomponent.c:108</a></div></div>
 <div class="ttc" id="aicalcomponent_8c_html_aaabb437d019b6a402e275fa430a6c52d"><div class="ttname"><a href="icalcomponent_8c.html#aaabb437d019b6a402e275fa430a6c52d">icalcomponent_new_iana</a></div><div class="ttdeci">icalcomponent * icalcomponent_new_iana(const char *iana_name)</div><div class="ttdef"><b>Definition</b> <a href="icalcomponent_8c_source.html#l00180">icalcomponent.c:180</a></div></div>
@@ -1471,7 +1409,6 @@ $(function() {
 <div class="ttc" id="aicalderivedparameter_8h_html_a25f2dcd3aa70a27372bdb1fcaa1b7ffa"><div class="ttname"><a href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffa">icalparameter_kind</a></div><div class="ttdeci">icalparameter_kind</div><div class="ttdef"><b>Definition</b> <a href="icalderivedparameter_8h_source.html#l00030">icalderivedparameter.h:30</a></div></div>
 <div class="ttc" id="aicalderivedparameter_8h_html_a25f2dcd3aa70a27372bdb1fcaa1b7ffaa168577df5f3fa4755a1293be15ad138e"><div class="ttname"><a href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffaa168577df5f3fa4755a1293be15ad138e">ICAL_NO_PARAMETER</a></div><div class="ttdeci">@ ICAL_NO_PARAMETER</div><div class="ttdef"><b>Definition</b> <a href="icalderivedparameter_8h_source.html#l00087">icalderivedparameter.h:87</a></div></div>
 <div class="ttc" id="aicalderivedparameter_8h_html_a25f2dcd3aa70a27372bdb1fcaa1b7ffaa57a6a9baba17ec561bac24da176c1393"><div class="ttname"><a href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffaa57a6a9baba17ec561bac24da176c1393">ICAL_IANA_PARAMETER</a></div><div class="ttdeci">@ ICAL_IANA_PARAMETER</div><div class="ttdef"><b>Definition</b> <a href="icalderivedparameter_8h_source.html#l00050">icalderivedparameter.h:50</a></div></div>
-<div class="ttc" id="aicalderivedparameter_8h_html_a25f2dcd3aa70a27372bdb1fcaa1b7ffaa81c0723d693e4997e87de6c25f927c2f"><div class="ttname"><a href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffaa81c0723d693e4997e87de6c25f927c2f">ICAL_TZID_PARAMETER</a></div><div class="ttdeci">@ ICAL_TZID_PARAMETER</div><div class="ttdef"><b>Definition</b> <a href="icalderivedparameter_8h_source.html#l00082">icalderivedparameter.h:82</a></div></div>
 <div class="ttc" id="aicalderivedparameter_8h_html_a25f2dcd3aa70a27372bdb1fcaa1b7ffaaa9e778a5fc0c67a491f6d3dbf2071cc4"><div class="ttname"><a href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffaaa9e778a5fc0c67a491f6d3dbf2071cc4">ICAL_X_PARAMETER</a></div><div class="ttdeci">@ ICAL_X_PARAMETER</div><div class="ttdef"><b>Definition</b> <a href="icalderivedparameter_8h_source.html#l00084">icalderivedparameter.h:84</a></div></div>
 <div class="ttc" id="aicalderivedparameter_8h_html_a25f2dcd3aa70a27372bdb1fcaa1b7ffaaf5723bb78164002e62f5e305e4b86774"><div class="ttname"><a href="icalderivedparameter_8h.html#a25f2dcd3aa70a27372bdb1fcaa1b7ffaaf5723bb78164002e62f5e305e4b86774">ICAL_VALUE_PARAMETER</a></div><div class="ttdeci">@ ICAL_VALUE_PARAMETER</div><div class="ttdef"><b>Definition</b> <a href="icalderivedparameter_8h_source.html#l00083">icalderivedparameter.h:83</a></div></div>
 <div class="ttc" id="aicalderivedparameter_8h_html_a663a282e29909b6a66fa47ea0146eca9"><div class="ttname"><a href="icalderivedparameter_8h.html#a663a282e29909b6a66fa47ea0146eca9">icalparameter_get_value</a></div><div class="ttdeci">icalparameter_value icalparameter_get_value(const icalparameter *value)</div></div>
@@ -1535,15 +1472,15 @@ $(function() {
 <div class="ttc" id="aicalparser_8c_html_a00330df647417bb017a7daaaffafddec"><div class="ttname"><a href="icalparser_8c.html#a00330df647417bb017a7daaaffafddec">icalparser_parse</a></div><div class="ttdeci">icalcomponent * icalparser_parse(icalparser *parser, icalparser_line_gen_func line_gen_func)</div><div class="ttdoc">Message oriented parsing.</div><div class="ttdef"><b>Definition</b> <a href="#l00588">icalparser.c:588</a></div></div>
 <div class="ttc" id="aicalparser_8c_html_a02ed734ea9f8f1c2f22716d1838f56ab"><div class="ttname"><a href="icalparser_8c.html#a02ed734ea9f8f1c2f22716d1838f56ab">icalparser_add_line</a></div><div class="ttdeci">icalcomponent * icalparser_add_line(icalparser *parser, char *line)</div><div class="ttdoc">Adds a single line to be parsed by the icalparser.</div><div class="ttdef"><b>Definition</b> <a href="#l00650">icalparser.c:650</a></div></div>
 <div class="ttc" id="aicalparser_8c_html_a1cb8b8678b781d3d2ede0fbce613b90d"><div class="ttname"><a href="icalparser_8c.html#a1cb8b8678b781d3d2ede0fbce613b90d">icalparser_free</a></div><div class="ttdeci">void icalparser_free(icalparser *parser)</div><div class="ttdoc">Frees an icalparser object.</div><div class="ttdef"><b>Definition</b> <a href="#l00112">icalparser.c:112</a></div></div>
-<div class="ttc" id="aicalparser_8c_html_a24ad1a0d37a10aa31a8dbd9977660281"><div class="ttname"><a href="icalparser_8c.html#a24ad1a0d37a10aa31a8dbd9977660281">icalparser_set_ctrl</a></div><div class="ttdeci">void icalparser_set_ctrl(enum icalparser_ctrl ctrl)</div><div class="ttdoc">Set the parser setting how to handle CONTROL characters.</div><div class="ttdef"><b>Definition</b> <a href="#l01365">icalparser.c:1365</a></div></div>
-<div class="ttc" id="aicalparser_8c_html_a2d34db956d3cc609f2804bcadd0deee6"><div class="ttname"><a href="icalparser_8c.html#a2d34db956d3cc609f2804bcadd0deee6">icalparser_get_ctrl</a></div><div class="ttdeci">enum icalparser_ctrl icalparser_get_ctrl(void)</div><div class="ttdoc">Get the current parser setting how to handle CONTROL characters.</div><div class="ttdef"><b>Definition</b> <a href="#l01360">icalparser.c:1360</a></div></div>
-<div class="ttc" id="aicalparser_8c_html_a5e1268344c61e44a0ec18085688f07fd"><div class="ttname"><a href="icalparser_8c.html#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a></div><div class="ttdeci">icalcomponent * icalparser_parse_string(const char *str)</div><div class="ttdoc">Parses a string and returns the parsed icalcomponent.</div><div class="ttdef"><b>Definition</b> <a href="#l01331">icalparser.c:1331</a></div></div>
-<div class="ttc" id="aicalparser_8c_html_a6429fdd3d61babc95a3851d78c16ae66"><div class="ttname"><a href="icalparser_8c.html#a6429fdd3d61babc95a3851d78c16ae66">icalparser_string_line_generator</a></div><div class="ttdeci">char * icalparser_string_line_generator(char *out, size_t buf_size, void *d)</div><div class="ttdef"><b>Definition</b> <a href="#l01266">icalparser.c:1266</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_a24ad1a0d37a10aa31a8dbd9977660281"><div class="ttname"><a href="icalparser_8c.html#a24ad1a0d37a10aa31a8dbd9977660281">icalparser_set_ctrl</a></div><div class="ttdeci">void icalparser_set_ctrl(enum icalparser_ctrl ctrl)</div><div class="ttdoc">Set the parser setting how to handle CONTROL characters.</div><div class="ttdef"><b>Definition</b> <a href="#l01303">icalparser.c:1303</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_a2d34db956d3cc609f2804bcadd0deee6"><div class="ttname"><a href="icalparser_8c.html#a2d34db956d3cc609f2804bcadd0deee6">icalparser_get_ctrl</a></div><div class="ttdeci">enum icalparser_ctrl icalparser_get_ctrl(void)</div><div class="ttdoc">Get the current parser setting how to handle CONTROL characters.</div><div class="ttdef"><b>Definition</b> <a href="#l01298">icalparser.c:1298</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_a5e1268344c61e44a0ec18085688f07fd"><div class="ttname"><a href="icalparser_8c.html#a5e1268344c61e44a0ec18085688f07fd">icalparser_parse_string</a></div><div class="ttdeci">icalcomponent * icalparser_parse_string(const char *str)</div><div class="ttdoc">Parses a string and returns the parsed icalcomponent.</div><div class="ttdef"><b>Definition</b> <a href="#l01269">icalparser.c:1269</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_a6429fdd3d61babc95a3851d78c16ae66"><div class="ttname"><a href="icalparser_8c.html#a6429fdd3d61babc95a3851d78c16ae66">icalparser_string_line_generator</a></div><div class="ttdeci">char * icalparser_string_line_generator(char *out, size_t buf_size, void *d)</div><div class="ttdef"><b>Definition</b> <a href="#l01204">icalparser.c:1204</a></div></div>
 <div class="ttc" id="aicalparser_8c_html_a9848e4dc69f814f49a5ece028c43be57"><div class="ttname"><a href="icalparser_8c.html#a9848e4dc69f814f49a5ece028c43be57">icalparser_new</a></div><div class="ttdeci">icalparser * icalparser_new(void)</div><div class="ttdoc">Creates a new icalparser.</div><div class="ttdef"><b>Definition</b> <a href="#l00089">icalparser.c:89</a></div></div>
-<div class="ttc" id="aicalparser_8c_html_aa6e4c9c494345c51adf49a7e30255fb7"><div class="ttname"><a href="icalparser_8c.html#aa6e4c9c494345c51adf49a7e30255fb7">icalparser_clean</a></div><div class="ttdeci">icalcomponent * icalparser_clean(icalparser *parser)</div><div class="ttdoc">Cleans out an icalparser and returns whatever it has parsed so far.</div><div class="ttdef"><b>Definition</b> <a href="#l01231">icalparser.c:1231</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_aa6e4c9c494345c51adf49a7e30255fb7"><div class="ttname"><a href="icalparser_8c.html#aa6e4c9c494345c51adf49a7e30255fb7">icalparser_clean</a></div><div class="ttdeci">icalcomponent * icalparser_clean(icalparser *parser)</div><div class="ttdoc">Cleans out an icalparser and returns whatever it has parsed so far.</div><div class="ttdef"><b>Definition</b> <a href="#l01169">icalparser.c:1169</a></div></div>
 <div class="ttc" id="aicalparser_8c_html_aae6d08b4084610e225621a25dddd7689"><div class="ttname"><a href="icalparser_8c.html#aae6d08b4084610e225621a25dddd7689">icalparser_set_gen_data</a></div><div class="ttdeci">void icalparser_set_gen_data(icalparser *parser, void *data)</div><div class="ttdoc">Sets the data that icalparser_parse will give to the line_gen_func as the parameter &#39;d&#39;.</div><div class="ttdef"><b>Definition</b> <a href="#l00129">icalparser.c:129</a></div></div>
 <div class="ttc" id="aicalparser_8c_html_ada2de638b68de5146ae860631709f4a3"><div class="ttname"><a href="icalparser_8c.html#ada2de638b68de5146ae860631709f4a3">icalparser_get_line</a></div><div class="ttdeci">char * icalparser_get_line(icalparser *parser, icalparser_line_gen_func line_gen_func)</div><div class="ttdoc">Given a line generator function, returns a single iCal content line.</div><div class="ttdef"><b>Definition</b> <a href="#l00437">icalparser.c:437</a></div></div>
-<div class="ttc" id="aicalparser_8c_html_aff615b34398b3dd438e4b842c2bda70f"><div class="ttname"><a href="icalparser_8c.html#aff615b34398b3dd438e4b842c2bda70f">icalparser_get_state</a></div><div class="ttdeci">icalparser_state icalparser_get_state(const icalparser *parser)</div><div class="ttdoc">Returns current state of the icalparser.</div><div class="ttdef"><b>Definition</b> <a href="#l01226">icalparser.c:1226</a></div></div>
+<div class="ttc" id="aicalparser_8c_html_aff615b34398b3dd438e4b842c2bda70f"><div class="ttname"><a href="icalparser_8c.html#aff615b34398b3dd438e4b842c2bda70f">icalparser_get_state</a></div><div class="ttdeci">icalparser_state icalparser_get_state(const icalparser *parser)</div><div class="ttdoc">Returns current state of the icalparser.</div><div class="ttdef"><b>Definition</b> <a href="#l01164">icalparser.c:1164</a></div></div>
 <div class="ttc" id="aicalparser_8h_html"><div class="ttname"><a href="icalparser_8h.html">icalparser.h</a></div><div class="ttdoc">Line-oriented parsing.</div></div>
 <div class="ttc" id="aicalparser_8h_html_a6fcc054fab27a4491f52b0e1aba899c3"><div class="ttname"><a href="icalparser_8h.html#a6fcc054fab27a4491f52b0e1aba899c3">icalparser_ctrl</a></div><div class="ttdeci">icalparser_ctrl</div><div class="ttdoc">Defines how to handle invalid CONTROL characters in content lines.</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8h_source.html#l00305">icalparser.h:306</a></div></div>
 <div class="ttc" id="aicalparser_8h_html_a6fcc054fab27a4491f52b0e1aba899c3a42056b68e7c47a6bc7c8cb1ffb52cdb1"><div class="ttname"><a href="icalparser_8h.html#a6fcc054fab27a4491f52b0e1aba899c3a42056b68e7c47a6bc7c8cb1ffb52cdb1">ICALPARSER_CTRL_OMIT</a></div><div class="ttdeci">@ ICALPARSER_CTRL_OMIT</div><div class="ttdef"><b>Definition</b> <a href="icalparser_8h_source.html#l00310">icalparser.h:310</a></div></div>
@@ -1571,8 +1508,8 @@ $(function() {
 <div class="ttc" id="aicaltypes_8h_html_a5f7c027ba58d0676bce826b6d9e6440c"><div class="ttname"><a href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440c">ical_unknown_token_handling</a></div><div class="ttdeci">ical_unknown_token_handling</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8h_source.html#l00154">icaltypes.h:155</a></div></div>
 <div class="ttc" id="aicaltypes_8h_html_a5f7c027ba58d0676bce826b6d9e6440ca3e63d3bae24a681655b2e98ead52dc56"><div class="ttname"><a href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca3e63d3bae24a681655b2e98ead52dc56">ICAL_DISCARD_TOKEN</a></div><div class="ttdeci">@ ICAL_DISCARD_TOKEN</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8h_source.html#l00159">icaltypes.h:159</a></div></div>
 <div class="ttc" id="aicaltypes_8h_html_a5f7c027ba58d0676bce826b6d9e6440ca9ff47a00e3b503d1bd67bb82a5cee30d"><div class="ttname"><a href="icaltypes_8h.html#a5f7c027ba58d0676bce826b6d9e6440ca9ff47a00e3b503d1bd67bb82a5cee30d">ICAL_ASSUME_IANA_TOKEN</a></div><div class="ttdeci">@ ICAL_ASSUME_IANA_TOKEN</div><div class="ttdef"><b>Definition</b> <a href="icaltypes_8h_source.html#l00157">icaltypes.h:157</a></div></div>
-<div class="ttc" id="aicalvalue_8c_html_a7beb7ae1bd33f608a279448e892fd675"><div class="ttname"><a href="icalvalue_8c.html#a7beb7ae1bd33f608a279448e892fd675">icalvalue_new_from_string</a></div><div class="ttdeci">icalvalue * icalvalue_new_from_string(icalvalue_kind kind, const char *str)</div><div class="ttdef"><b>Definition</b> <a href="icalvalue_8c_source.html#l00791">icalvalue.c:791</a></div></div>
-<div class="ttc" id="aicalvalue_8c_html_aa51a22037f2382474c2403623a1d03ce"><div class="ttname"><a href="icalvalue_8c.html#aa51a22037f2382474c2403623a1d03ce">icalvalue_new</a></div><div class="ttdeci">icalvalue * icalvalue_new(icalvalue_kind kind)</div><div class="ttdef"><b>Definition</b> <a href="icalvalue_8c_source.html#l00060">icalvalue.c:60</a></div></div>
+<div class="ttc" id="aicalvalue_8c_html_a7beb7ae1bd33f608a279448e892fd675"><div class="ttname"><a href="icalvalue_8c.html#a7beb7ae1bd33f608a279448e892fd675">icalvalue_new_from_string</a></div><div class="ttdeci">icalvalue * icalvalue_new_from_string(icalvalue_kind kind, const char *str)</div><div class="ttdef"><b>Definition</b> <a href="icalvalue_8c_source.html#l00809">icalvalue.c:809</a></div></div>
+<div class="ttc" id="aicalvalue_8c_html_aa51a22037f2382474c2403623a1d03ce"><div class="ttname"><a href="icalvalue_8c.html#aa51a22037f2382474c2403623a1d03ce">icalvalue_new</a></div><div class="ttdeci">icalvalue * icalvalue_new(icalvalue_kind kind)</div><div class="ttdef"><b>Definition</b> <a href="icalvalue_8c_source.html#l00061">icalvalue.c:61</a></div></div>
 <div class="ttc" id="aicalvalue_8h_html"><div class="ttname"><a href="icalvalue_8h.html">icalvalue.h</a></div><div class="ttdoc">Defines the data structure representing iCalendar parameter values.</div></div>
 <div class="ttc" id="aicalvalue_8h_html_afcccc542744366eb285409b280610045"><div class="ttname"><a href="icalvalue_8h.html#afcccc542744366eb285409b280610045">icalvalue_kind_to_string</a></div><div class="ttdeci">const char * icalvalue_kind_to_string(const icalvalue_kind kind)</div></div>
 <div class="ttc" id="avcardvalue_8c_html_a2e6c4948edc7d28d77ca47f0d6403d2b"><div class="ttname"><a href="vcardvalue_8c.html#a2e6c4948edc7d28d77ca47f0d6403d2b">TMP_BUF_SIZE</a></div><div class="ttdeci">#define TMP_BUF_SIZE</div><div class="ttdef"><b>Definition</b> <a href="vcardvalue_8c_source.html#l00030">vcardvalue.c:30</a></div></div>

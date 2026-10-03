@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['objects_0',['5.4 Storing Objects',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md145',1,'']]],
-  ['objects_1',['3.2.3 Error objects',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md121',1,'']]],
+  ['objects_0',['5.4 Storing Objects',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md146',1,'']]],
+  ['objects_1',['3.2.3 Error objects',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md122',1,'']]],
   ['of_20icalendar_20protocols_20and_20data_20formats_2',['Libical — an implementation of iCalendar protocols and data formats',['../index.html',1,'']]],
-  ['of_20libical_3',['3.2 Other elements of libical',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md118',1,'']]],
-  ['ones_4',['&lt;span class=&quot;tt&quot;&gt;icalrecurrencetype.by_xxx&lt;/span&gt; static arrays replaced by dynamically allocated ones',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md93',1,'']]],
+  ['of_20libical_3',['3.2 Other elements of libical',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md119',1,'']]],
+  ['ones_4',['&lt;span class=&quot;tt&quot;&gt;icalrecurrencetype.by_xxx&lt;/span&gt; static arrays replaced by dynamically allocated ones',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md94',1,'']]],
   ['operator_20icalcomponent_20_2a_5',['operator icalcomponent *',['../classLibICal_1_1VComponent.html#ac07da1fd1163645b5457ff7243edd4c9',1,'LibICal::VComponent']]],
   ['operator_20icalparameter_20_2a_6',['operator icalparameter *',['../classLibICal_1_1ICalParameter.html#a4ca898fb1c92e4a159a07f06de986a8c',1,'LibICal::ICalParameter']]],
   ['operator_20icalproperty_20_2a_7',['operator icalproperty *',['../classLibICal_1_1ICalProperty.html#a98b9093ddf19e25eeadad54c560dbbb9',1,'LibICal::ICalProperty']]],
@@ -16,10 +16,10 @@ var searchData=
   ['operator_2d_3e_13',['operator-&gt;',['../classICPointerHolder.html#a8249043cd80fa776faa152bdb76cb972',1,'ICPointerHolder']]],
   ['operator_3d_14',['operator=',['../classLibICal_1_1ICalParameter.html#ae1e10ebd66d1550e2f96ba37b369f500',1,'LibICal::ICalParameter::operator=()'],['../classLibICal_1_1ICalProperty.html#a9ad6124a199ae0219db550c8b01eb0da',1,'LibICal::ICalProperty::operator=()'],['../classLibICal_1_1ICalValue.html#a3e39d0ba8da7dec7eb94f0381fb4db97',1,'LibICal::ICalValue::operator=()'],['../classICPointerHolder.html#a90a83898ac0c3b0ed8a854210cc42da1',1,'ICPointerHolder::operator=(T *p)'],['../classICPointerHolder.html#aad182c49b4e25fa82abaa0645e1ed7ac',1,'ICPointerHolder::operator=(ICPointerHolder &amp;p)'],['../classLibICal_1_1VComponent.html#aa417fe1a0917266eed507a2319d1a961',1,'LibICal::VComponent::operator=()'],['../classLibICal_1_1VCalendar.html#aa003462bac0d0ea1ab62707e50d19b81',1,'LibICal::VCalendar::operator=()'],['../classLibICal_1_1VEvent.html#ad44312f90bb00c66da641f9bc3213865',1,'LibICal::VEvent::operator=()'],['../classLibICal_1_1VToDo.html#a1bdde691d2b6fc147710ecdf12be9596',1,'LibICal::VToDo::operator=()'],['../classLibICal_1_1VAgenda.html#afcb1a5d945c211e83f957e7c14bb330b',1,'LibICal::VAgenda::operator=()'],['../classLibICal_1_1VQuery.html#aa0cdf6829c1e1000e8d8acf60453415b',1,'LibICal::VQuery::operator=()'],['../classLibICal_1_1VJournal.html#a72472a8709d5ff2bb088f05f9e8e9864',1,'LibICal::VJournal::operator=()'],['../classLibICal_1_1VAlarm.html#a97c67b0e4c5996274c5e64cbbb8c528a',1,'LibICal::VAlarm::operator=()'],['../classLibICal_1_1VFreeBusy.html#ad7e4b3e3e99dd44703f9f25783e1e07c',1,'LibICal::VFreeBusy::operator=()'],['../classLibICal_1_1VTimezone.html#a970754bc598def4ce74a87203923ffe4',1,'LibICal::VTimezone::operator=()'],['../classLibICal_1_1XStandard.html#a398a843df29628ad9eb3386b43194268',1,'LibICal::XStandard::operator=()'],['../classLibICal_1_1XDaylight.html#aa49cc04e5da257cbed998ae99c3c6303',1,'LibICal::XDaylight::operator=()'],['../classLibICal_1_1ICalSpanList.html#a41c1241782253d7d37c41c574fb22373',1,'LibICal::ICalSpanList::operator=()']]],
   ['operator_3d_3d_15',['operator==',['../classLibICal_1_1ICalProperty.html#a87f767dae412eb01fa023fcda80fa5ee',1,'LibICal::ICalProperty::operator==()'],['../classICPointerHolder.html#a138451059cb722698c4367e3f66de908',1,'ICPointerHolder::operator==()']]],
-  ['optional_20dependencies_16',['Optional Dependencies',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html#autotoc_md52',1,'']]],
-  ['optional_20dependencies_17',['Optional dependencies',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2Dependencies.html#autotoc_md46',1,'']]],
-  ['options_18',['CMake options',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md67',1,'']]],
-  ['osx_20mac_19',['Building for OSX (Mac)',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html#autotoc_md49',1,'']]],
-  ['other_20elements_20of_20libical_20',['3.2 Other elements of libical',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md118',1,'']]],
-  ['other_20routines_21',['5.4.3 Other routines',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md148',1,'']]]
+  ['optional_20dependencies_16',['Optional Dependencies',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html#autotoc_md53',1,'']]],
+  ['optional_20dependencies_17',['Optional dependencies',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2Dependencies.html#autotoc_md47',1,'']]],
+  ['options_18',['CMake options',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md68',1,'']]],
+  ['osx_20mac_19',['Building for OSX (Mac)',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html#autotoc_md50',1,'']]],
+  ['other_20elements_20of_20libical_20',['3.2 Other elements of libical',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md119',1,'']]],
+  ['other_20routines_21',['5.4.3 Other routines',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md149',1,'']]]
 ];

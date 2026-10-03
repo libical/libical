@@ -160,7 +160,7 @@ $(function() {
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        br-&gt;ring[i] = 0;</div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    }</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    br-&gt;pos = 0;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordflow">return</span> (br);</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordflow">return</span> br;</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>}</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="preprocessor">#if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD</span><span class="preprocessor"></span></div>
@@ -178,7 +178,7 @@ $(function() {
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>            pthread_setspecific(ring_key, br);</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        }</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    }</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <span class="keywordflow">return</span> (br);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <span class="keywordflow">return</span> br;</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>}</div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="preprocessor">#else</span><span class="preprocessor"></span></div>
@@ -569,7 +569,7 @@ $(function() {
 <div class="line"><a id="l00513" name="l00513"></a><span class="lineno">  513</span>        }</div>
 <div class="line"><a id="l00514" name="l00514"></a><span class="lineno">  514</span>    }</div>
 <div class="line"><a id="l00515" name="l00515"></a><span class="lineno">  515</span> </div>
-<div class="line"><a id="l00516" name="l00516"></a><span class="lineno">  516</span>    <span class="keywordflow">if</span> (quoted == <span class="keyword">true</span>) {</div>
+<div class="line"><a id="l00516" name="l00516"></a><span class="lineno">  516</span>    <span class="keywordflow">if</span> (quoted) {</div>
 <div class="line"><a id="l00517" name="l00517"></a><span class="lineno">  517</span>        <a class="code hl_function" href="icalmemory_8c.html#addac122edb16bc41a193895c86bd5ff5">icalmemory_append_char</a>(buf, pos, buf_size, <span class="charliteral">&#39;&quot;&#39;</span>);</div>
 <div class="line"><a id="l00518" name="l00518"></a><span class="lineno">  518</span>    }</div>
 <div class="line"><a id="l00519" name="l00519"></a><span class="lineno">  519</span>}</div>

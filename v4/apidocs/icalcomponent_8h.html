@@ -231,7 +231,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the icalcomponent associated to <code class="param">i</code> or NULL if <code class="param">i</code> is invalid. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01480">1480</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01487">1487</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -259,7 +259,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>true if <code class="param">i</code> points to a valid icalcompiter; false otherwise.</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01388">1388</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01392">1392</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -286,7 +286,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the next icalcomponent with a matching <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> after the one referenced by <code class="param">i</code>. NULL is returned if <code class="param">is</code> invalid or if there are no matches found. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01442">1442</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01449">1449</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -313,7 +313,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the previous icalcomponent with a matching <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> before the one referenced by <code class="param">i</code>. NULL is returned if <code class="param">is</code> invalid or if there are no matches found. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01461">1461</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01468">1468</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -464,7 +464,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>an icalcompiter for the first component found with <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> <code class="param">kind</code>; Use <a class="el" href="#a383d192090ae83d49499aef88b1a5d87">icalcompiter_is_valid()</a> to determine if the return value is valid. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01397">1397</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01404">1404</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -496,7 +496,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>an icalpropiter for the first property found with <a class="el" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7c">icalproperty_kind</a> <code class="param">kind</code>; Use <a class="el" href="#a9c2880a276e79ab74714ed92c7075ed8">icalpropiter_is_valid()</a> to determine if the return value is valid. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01491">1491</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01498">1498</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -523,7 +523,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if <code class="param">comp</code> is a VCALENDAR component and it has restrictions; other false is returned. If a non-VCALENDER component is encountered the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a2cc8bbcd8c07fc9a16e36f7aae5757b1">ICAL_BADARG_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01156">1156</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01160">1160</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -578,7 +578,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01207">1207</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01211">1211</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -637,7 +637,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the number of X-LIC-ERROR instances in the specified icalcomponent. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01162">1162</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01166">1166</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -701,7 +701,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>an icalcompiter for the last component found with <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> <code class="param">kind</code>; if no matches are found ::icalcompiter_null is returned. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01420">1420</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01427">1427</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -789,7 +789,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02452">2452</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02466">2466</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -843,7 +843,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a char string with the COMMENT property for <code class="param">comp</code>. If there is no such property then a value of NULL is returned. If <code class="param">comp</code> is invalid then a value of NULL is returned and the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01841">1841</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01851">1851</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -982,7 +982,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a char string with the DESCRIPTION property for <code class="param">comp</code>. If there is no such property then a value of NULL is returned. If <code class="param">comp</code> is invalid then a value of NULL is returned and the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01957">1957</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01967">1967</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1014,7 +1014,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>null-time, unless called on AVAILABLE, VEVENT, VAVAILABILITY, or VFREEBUSY components.</dd></dl>
 <p>FIXME this is useless until we can flag the failure </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01626">1626</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01636">1636</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1041,7 +1041,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>an icaltimetype with the DTSTAMP property for <code class="param">comp</code>. If there is no such property then a value of <span class="tt"><a class="el" href="icaltime_8c.html#af3f088ebb60b8716131742ef16eb7ce1">icaltime_null_time()</a></span> is returned. If <code class="param">comp</code> is invalid then a value of <span class="tt"><a class="el" href="icaltime_8c.html#af3f088ebb60b8716131742ef16eb7ce1">icaltime_null_time()</a></span> is returned and the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01782">1782</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01792">1792</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1070,7 +1070,7 @@ Functions</h2></td></tr>
 <p>FIXME this is useless until we can flag the failure</p>
 <dl class="section return"><dt>Returns</dt><dd>the DTSTART as an icaltimetype of the specified icalcomponent. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01613">1613</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01623">1623</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1098,7 +1098,7 @@ Functions</h2></td></tr>
 <p>Uses the DUE property if it exists, otherwise we calculate the DUE value by adding the task's duration to the DTSTART time.</p>
 <dl class="section return"><dt>Returns</dt><dd>the DURATION as an icaltimetype of the specified icalcomponent </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02657">2657</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02681">2681</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1126,7 +1126,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the DURATION as an icalduration of the specified icalcomponent. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01724">1724</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01734">1734</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1272,7 +1272,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the first VEVENT, VTODO or VJOURNAL located in the specified icalcomponent. <code class="param">comp</code> itself returned if it is found to be a VEVENT, VTODO or VJOURNAL. NULL is returned if the search failed. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01548">1548</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01558">1558</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1299,7 +1299,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to a char string with the LOCATION property for <code class="param">comp</code>. If there is no such property then a value of NULL is returned. If <code class="param">comp</code> is invalid then a value of NULL is returned and the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01992">1992</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02002">2002</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1326,7 +1326,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>an <a class="el" href="icalderivedvalue_8h.html#a529389ef9f90bd1e6fe2bbba62459ce2">icalproperty_method</a> with the METHOD property for <code class="param">comp</code>. If there is no such property then a value of ICAL_METHOD_NONE is returned. If <code class="param">comp</code> is invalid then a value of ICAL_METHOD_NONE is returned and the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01569">1569</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01579">1579</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1417,7 +1417,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>an icaltimetype with the RECURRENCEID property for <code class="param">comp</code>. If there is no such property then a value of <span class="tt"><a class="el" href="icaltime_8c.html#af3f088ebb60b8716131742ef16eb7ce1">icaltime_null_time()</a></span> is returned. If <code class="param">comp</code> is invalid then a value of <span class="tt"><a class="el" href="icaltime_8c.html#af3f088ebb60b8716131742ef16eb7ce1">icaltime_null_time()</a></span> is returned and the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01919">1919</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01929">1929</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1444,7 +1444,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the relcalid of the specified icalcomponent. If there is no such property then a value of NULL is returned. If <code class="param">comp</code> is invalid then a value of NULL is returned and the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02635">2635</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02659">2659</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1471,7 +1471,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a integer SEQUENCE property for <code class="param">comp</code>. If there is no such property then a value of zero is returned. If <code class="param">comp</code> is invalid then a value of zero is returned and the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02027">2027</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02037">2037</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1529,7 +1529,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>in normal conditions, the status property as an <a class="el" href="icalderivedvalue_8h.html#a2f0d3e0ecda7742d435890b1e4902993">icalproperty_status</a> of the specified icalcomponent; else ICAL_STATUS_NONE if a problem parsing the status was detected. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02062">2062</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02072">2072</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1556,7 +1556,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a char string with the SUMMARY property for <code class="param">comp</code>. If there is no such property then a value of NULL is returned. If <code class="param">comp</code> is invalid then a value of NULL is returned and the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01806">1806</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01816">1816</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1588,7 +1588,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the icaltimezone in the specified icalcomponent corresponding to the TZID, or NULL if it can't be found. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02488">2488</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02502">2502</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1615,7 +1615,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to a char string with the UID property for <code class="param">comp</code>. If there is no such property then a value of NULL is returned. If <code class="param">comp</code> is invalid then a value of NULL is returned and the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01876">1876</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01886">1886</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1751,7 +1751,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> is valid; false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01337">1337</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01341">1341</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1778,7 +1778,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to a char string containing the string representation of the specified <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01350">1350</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01354">1354</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1810,7 +1810,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02199">2199</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02209">2209</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1915,7 +1915,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a4bc0ae2963fee3a196b77457b0de5e4e">ICAL_PARTICIPANT_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02180">2180</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02190">2190</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1936,7 +1936,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a8de2b039c613ba4d2dc3d5a27a2fce4b">ICAL_VAGENDA_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02130">2130</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02140">2140</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1957,7 +1957,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4afeba4a0dd90014439cff3447d20f5996">ICAL_VALARM_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02105">2105</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02115">2115</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1978,7 +1978,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a6581c15ba9e92cadb54cdadf99d05753">ICAL_VAVAILABILITY_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02145">2145</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02155">2155</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -1999,7 +1999,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a5c1e9663f16b41e1c44be1163c629876">ICAL_VCALENDAR_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02085">2085</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02095">2095</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2020,7 +2020,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a4ea85a7e7e64123a58e1d5dd726ea2ca">ICAL_VEVENT_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02090">2090</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02100">2100</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2041,7 +2041,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a3ab5be81287e84c4d8c0b3d5fc62c54f">ICAL_VFREEBUSY_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02110">2110</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02120">2120</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2062,7 +2062,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4ac21106367b06978be6a3f0008301d047">ICAL_VJOURNAL_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02100">2100</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02110">2110</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2083,7 +2083,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a2bcafcb320b9a7ace1e0358fb83adb00">ICAL_VLOCATION_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02185">2185</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02195">2195</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2104,7 +2104,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a5207e204b316e9f4ec8d2f2bdc200601">ICAL_VPATCH_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02170">2170</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02180">2180</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2125,7 +2125,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4ae2d8d67099091eade4d73283746a4e22">ICAL_VPOLL_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02155">2155</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02165">2165</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2146,7 +2146,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4ad4f116a39e169c3bbf1f6045f0778a50">ICAL_VQUERY_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02135">2135</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02145">2145</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2167,7 +2167,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a29ce71cc76a99757b39401bfe33f0008">ICAL_VREPLY_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02140">2140</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02150">2150</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2188,7 +2188,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4af6524b8186b1518ae5472d9e49b7987b">ICAL_VRESOURCE_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02190">2190</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02200">2200</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2209,7 +2209,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4ab1da738c818e177c48cba46261a6f148">ICAL_VTIMEZONE_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02115">2115</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02125">2125</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2230,7 +2230,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a3d90a3d7f47f2f2243b803c45561ef2e">ICAL_VTODO_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02095">2095</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02105">2105</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2251,7 +2251,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4ac83076f3821df7f62a436d027c6f8371">ICAL_VVOTER_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02160">2160</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02170">2170</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2300,7 +2300,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4ae5835f0031679f2831895766dd37a98f">ICAL_XAVAILABLE_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02150">2150</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02160">2160</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2321,7 +2321,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a280e9bafebc6bff38f296d80bb59773f">ICAL_XDAYLIGHT_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02125">2125</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02135">2135</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2342,7 +2342,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4ad9e1c29bb79d87a7a2c1bcec2dd03167">ICAL_XPATCH_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02175">2175</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02185">2185</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2363,7 +2363,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a3181a7bf102dce706f48d033899c9850">ICAL_XSTANDARD_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02120">2120</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02130">2130</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2384,7 +2384,7 @@ Functions</h2></td></tr>
 <p>Constructs a new <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a8895a03142e2b5ba2bf098e015c9a162">ICAL_XVOTE_COMPONENT</a> icalcomponent.</p>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the new icalcomponet. Free with icalcomponent_free </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02165">2165</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02175">2175</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2411,7 +2411,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02877">2877</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02901">2901</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2536,7 +2536,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01829">1829</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01839">1839</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2568,7 +2568,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01945">1945</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01955">1955</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2603,7 +2603,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01682">1682</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01692">1692</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2635,7 +2635,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01770">1770</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01780">1780</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2668,7 +2668,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01593">1593</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01603">1603</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2705,7 +2705,7 @@ Functions</h2></td></tr>
 </ul>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02678">2678</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02702">2702</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2740,7 +2740,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01707">1707</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01717">1717</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2804,7 +2804,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01980">1980</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01990">1990</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2836,7 +2836,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01557">1557</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01567">1567</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2868,7 +2868,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01899">1899</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01909">1909</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2900,7 +2900,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02623">2623</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02647">2647</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2932,7 +2932,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02015">2015</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02025">2025</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2964,7 +2964,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02050">2050</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l02060">2060</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -2996,7 +2996,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01794">1794</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01804">1804</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -3028,7 +3028,7 @@ Functions</h2></td></tr>
 </dl>
 <p>If <code class="param">comp</code> is invalid then the internal library <a class="el" href="icalerror_8h.html#ad2562706150f5c5a4d9b0ca149d78e37" title="Access the current icalerrno value.">icalerrno</a> is set to <a class="el" href="icalerror_8h.html#a601c122fcea522513b1b7732fa23e833a6ba07679ac440358c3090a351d27f0d8">ICAL_MALFORMEDDATA_ERROR</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01864">1864</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01874">1874</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -3086,7 +3086,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4">icalcomponent_kind</a> associated with <code class="param">string</code>. <a class="el" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a37317e19cb0684724bcd03fdf1546d22">ICAL_NO_COMPONENT</a> is returned if <code class="param">string</code> is invalid. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01363">1363</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01367">1367</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -3112,7 +3112,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01184">1184</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01188">1188</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -3315,7 +3315,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the icalproperty associated to <code class="param">i</code> or NULL if <code class="param">i</code> is invalid. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01537">1537</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01547">1547</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -3343,7 +3343,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>true if <code class="param">i</code> points to a valid icalpropiter; false otherwise.</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>4.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01509">1509</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01516">1516</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
@@ -3370,7 +3370,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the next icalproperty with a matching <a class="el" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7c">icalproperty_kind</a> after the one referenced by <code class="param">i</code>. NULL is returned if <code class="param">is</code> invalid or if there are no matches found. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01518">1518</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalcomponent_8c_source.html#l01528">1528</a> of file <a class="el" href="icalcomponent_8c_source.html">icalcomponent.c</a>.</p>
 
 </div>
 </div>
