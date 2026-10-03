@@ -14,7 +14,6 @@ To build a debug version pass -DCMAKE_BUILD_TYPE=Debug to cmake.
 To build libical you will need:
 
 - a C99-compliant C compiler (let us know if the build fails with your C compiler)
-- a C11-compliant C compiler for libical-glib
 - a C++11 compliant compiler for C++ bindings
 - CMake version 3.20.0 or higher
 - Perl
@@ -242,7 +241,9 @@ or on Windows:
      cmake -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake <OPTIONS> ..
 ```
 
-### Windows Notes
+## Using vcpkg
+
+### Windows
 
 MSVC comes with vcpkg pre-installed and sets `%VCPKG_ROOT%` for you.
 However, the only way to update that vcpkg version is by upgrading
@@ -255,7 +256,7 @@ Either way (using Microsoft-provided or your own vcpkg):
      cmake "-DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake <OPTIONS> ..
 ```
 
-### Non-Windows Notes
+### Non-Windows
 
 You'll need to pre-install autoconf, automake and autoconf-archive for icu.
 See `%VCPKG_ROOT%/ports/icu/portfile.cmake` for more info.

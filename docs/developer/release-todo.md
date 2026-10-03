@@ -62,7 +62,7 @@ To use it run:
 
 ### Push the tag
 
-Double-check anything and then when ready => push the tag:
+Double-check everything and when ready => push the tag:
 
 ```shell
 git push --tags
@@ -84,7 +84,7 @@ Go to <https://github.com/libical/libical/releases> and make an official release
 For major (X.Y.0) releases, change the default branch at
 <https://github.com/libical/libical/settings> to X.Y
 
-## Postrelease
+## Post release
 
 ### Checklist
 
