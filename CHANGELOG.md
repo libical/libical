@@ -5,22 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.6] - Unreleased
+## [4.0.6] - 2026-10-03
 
-- Built-in timezones updated to tzdata2026e.
 - CVE: Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
-- RFC5545 section 3.3.5 fixes:
+- RFC5545 section 3.3.5 Date-Time fixes:
   - Resolve local times in a fall-back overlap to the first occurrence
-  - Explicit local time in a DST gap resolves using the post-transition offset
-- libicalvcard: the typed vcardvalue getters now check that the value type of
-  the property uses the same union member as the expected value type of the
-  getter. If the type mismatches, then they return the zero value for the
-  expected value type. The typed setters error with ICAL_BADARG_ERROR
-  instead of overwriting a value held in another union member.
+  - Fix explicit local time in a DST gap resolves using the post-transition offset
+- RFC5545 section 3.3.10 Recurrence Rule fixes:
+  - FREQ=WEEKLY with BYMONTH and BYSETPOS loses occurrences in the week straddling month boundary
+- libicalvcard: the typed vcardvalue getters now check that the value type of the property
+  uses the same union member as the expected value type of the getter. If the type mismatches,
+  then they return the zero value for the expected value type. The typed setters error with
+  ICAL_BADARG_ERROR instead of overwriting a value held in another union member.
 - libicalvcal: Fixed a memory leak in vobject.c
 - Buildsystem changes:
-  - Improve build paths in installed cmake files (esp. for cross-compiling)
+  - Fix build paths in installed cmake files (esp. for cross-compiling)
   - Install the libicalversion.h header
+  - Fix building libical as a submodule in a larger CMake project
+  - Fix "now" linker support check in the hardening compiler options
+  - Fix the DESTINATION path for libical.jar
+  - Use private linkage for 3rdparty libraries (icu, glib, ..)
+- Built-in timezones updated to tzdata2026e.
+- Remove ancient hack (since 2012) to support malformed TZID parameters
 - Build and test validated with clang 23.1.1
 - Build and test validated with gcc (GCC) 17.0.0 20260920 (experimental)
 
