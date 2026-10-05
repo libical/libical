@@ -957,7 +957,7 @@ BDIR=""
 
 COMMAND_EXISTS "cmake"
 #use minimum cmake version unless the --no-cmake-compat option is specified
-if (test ! -z "$(REVERSE $cmakecompat)"); then
+if (test $cmakecompat -eq 1); then
   if (test ! -e "$TOP/CMakeLists.txt"); then
     echo "Unable to locate the project top-level CMakeLists.txt.  Fix me"
     exit 1
