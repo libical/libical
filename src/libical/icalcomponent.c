@@ -28,6 +28,7 @@
 #include "icaltypes_p.h"
 
 #include <assert.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <limits.h>
 
@@ -2898,6 +2899,13 @@ static int comp_compare(void *a, void *b)
     return r;
 }
 
+static bool string_contains_non_printing(const char *s)
+{
+    while (*s && isgraph((unsigned char)*s)) {
+        ++s;
+    }
+    return *s != '\0';
+}
 void icalcomponent_normalize(icalcomponent *comp)
 {
     icalproperty *prop;
@@ -2965,6 +2973,13 @@ void icalcomponent_normalize(icalcomponent *comp)
                 }
                 break;
 
+            case ICAL_UID_PROPERTY: {
+                const char *uid = icalproperty_get_uid(prop);
+                if (!uid || string_contains_non_printing(uid)) {
+                    remove = 1;
+                }
+                break;
+            }
             default:
                 break;
             }
