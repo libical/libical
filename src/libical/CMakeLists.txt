@@ -362,7 +362,7 @@ if(LIBICAL_CXX_BINDINGS)
     ${icalcxx_LIB_SRCS}
   )
   add_dependencies(ical_cxx ical-header)
-  target_link_libraries(ical_cxx PRIVATE ical)
+  target_link_libraries(ical_cxx PUBLIC ical)
   if(DEFINED CMAKE_THREAD_LIBS_INIT)
     target_link_libraries(ical_cxx PUBLIC ${CMAKE_THREAD_LIBS_INIT})
   endif()
