@@ -762,6 +762,7 @@ CMAKELATEST() {
     echo "Maybe you need to install it into $(dirname $latestPath) (or use the -j option)"
     exit 1
   fi
+  savePath=$PATH
   export PATH=$latestPath:$PATH
   cd "$TOP" || exit 1
   builddir="build-$name"
@@ -779,12 +780,14 @@ CMAKELATEST() {
     echo "CMake latest problems encountered.  Exiting..."
     exit 1
   fi
+  export PATH=$savePath
   declare -i numWarnings
   cd "$TOP"
   set +e
-  numWarnings=$(grep -ic "warn" "$outfile")
+  numWarnings=$(grep -ic "CMake Warning" "$outfile")
   if (test $numWarnings -gt 0); then
-    echo "warnings encountered"
+    echo "CMake warnings encountered:"
+    grep -i "CMake Warning" "$outfile"
     exit 1
   fi
   set -e
@@ -1059,7 +1062,7 @@ GLIBOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_I
 FUZZOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True $CMAKE_BY_COMMANDLINE"
 FUZZOPTS_NO_RSCALE="$FUZZOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 
-TOOLCHAIN="-DCMAKE_TOOLCHAIN_FILE=\"$TOP/cmake/Toolchain-Linux-GCC-i686.cmake\""
+TOOLCHAIN="-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake -DCMAKE_C_FLAGS= -DCMAKE_CXX_FLAGS="
 STATIC_OPTS="-DLIBICAL_STATIC=TRUE -DLIBICAL_JAVA_BINDINGS=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
 
 #Static code checkers
@@ -1077,7 +1080,9 @@ STATICCCHECKOPTS="\
 "
 PRECOMMIT
 KRAZY
-CMAKELATEST test "-Wuninitialized -Werror=author $STATICCCHECKOPTS"
+cmakelatestOptions="-Wuninitialized -Wunused_cli -Wauthor -Winstall_absolute_destination -Wdeprecated"
+CMAKELATEST test "$cmakelatestOptions $STATICCCHECKOPTS"
+CMAKELATEST testcross "$cmakelatestOptions $STATICCCHECKOPTS $TOOLCHAIN"
 CPPLINT test "$STATICCCHECKOPTS"
 SPLINT test "$STATICCCHECKOPTS"
 CLANGSCAN test "$STATICCCHECKOPTS"
