@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Buildsystem changes:
   - Fix target_link_libraries() to use all-keywords as required by CMake 4.4.
+  - When cross-compiling, don't build/install ical-glib-src-generator w/o existing binary
 
 ## [4.0.6] - 2026-10-03
 
