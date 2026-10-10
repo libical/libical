@@ -44,7 +44,7 @@ target_include_directories(
     ${JNI_INCLUDE_DIRS}
 )
 
-target_link_libraries(ical_jni ical_cxx)
+target_link_libraries(ical_jni PUBLIC ical_cxx)
 
 if(NOT ANDROID)
   set_target_properties(

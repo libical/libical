@@ -38,6 +38,7 @@ HELP() {
   echo "Options:"
   echo " -C, --no-cmake-compat      Don't require CMake version compatibility"
   echo " -p, --no-precommit         Don't run pre-commit test"
+  echo " -j, --no-cmake-latest      Don't run a test against the latest cmake"
   echo " -k, --no-krazy             Don't run any Krazy tests"
   echo " -s, --no-splint            Don't run any splint tests"
   echo " -b, --no-scan              Don't run any scan-build tests"
@@ -744,6 +745,56 @@ CLANGSCAN() {
   echo "===== END CLANG-SCAN: $1 ====="
 }
 
+#function CMAKELATEST
+# runs the latest cmake test
+# $1 = the name of the test (which will have "-cmakelatest" appended to it)
+# $2 = CMake options
+CMAKELATEST() {
+  name="$1-cmakelatest"
+  if (test -z "$(REVERSE $runcmakelatest)"); then
+    echo "===== CMAKE LATEST TEST DISABLED DUE TO COMMAND LINE OPTION ====="
+    return
+  fi
+  echo "===== START CMAKE LATEST: $1 ====="
+  latestPath="/usr/local/opt/cmake-latest/bin"
+  if (test ! -x $latestPath); then
+    echo "Not able to find your latest cmake in $latestPath"
+    echo "Maybe you need to install it into $(dirname $latestPath) (or use the -j option)"
+    exit 1
+  fi
+  savePath=$PATH
+  export PATH=$latestPath:$PATH
+  cd "$TOP" || exit 1
+  builddir="build-$name"
+  rm -rf "$builddir"
+  mkdir "$builddir" || exit 1
+  cd "$builddir"
+  outfile="$TOP/cmakelatest.out"
+  rm -rf "$outfile"
+  cmake --version
+  echo "cmake $2" >&"$outfile"
+  # shellcheck disable=SC2086
+  cmake $2 .. 2>&1 | tee -a "$outfile"
+  status=$?
+  if (test $status -gt 0); then
+    echo "CMake latest problems encountered.  Exiting..."
+    exit 1
+  fi
+  export PATH=$savePath
+  declare -i numWarnings
+  cd "$TOP"
+  set +e
+  numWarnings=$(grep -ic "CMake Warning" "$outfile")
+  if (test $numWarnings -gt 0); then
+    echo "CMake warnings encountered:"
+    grep -i "CMake Warning" "$outfile"
+    exit 1
+  fi
+  set -e
+  rm -rf "$builddir" "$outfile"
+  echo "===== END CMAKE LATEST ======"
+}
+
 #function KRAZY
 # runs a krazy2 test
 KRAZY() {
@@ -813,15 +864,16 @@ PRECOMMIT() {
 
 ##### END FUNCTIONS #####
 
-options=$(getopt -o "hCpksbtwcignzxalmdufrRFL" --long "help,no-cmake-compat,no-precommit,no-krazy,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-cpplint,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse,fuzz,longtest" -- "$@")
+options=$(getopt -o "hCpkjsbtwcignzxalmdufrRFL" --long "help,no-cmake-compat,no-precommit,no-krazy,no-cmakelatest,no-splint,no-scan,no-tidy,no-iwyu,no-cppcheck,no-cpplint,no-gcc-build,no-ninja-gcc-build,no-clang-build,no-memc-build,no-asan-build,no-lsan-build,no-msan-build,no-tsan-build,no-ubsan-build,no-gcc-analyzer,no-threadlocal-build,reverse,fuzz,longtest" -- "$@")
 eval set -- "$options"
 
 CMAKE_BY_COMMANDLINE=""
 reverse=0
 fuzz=0
 cmakecompat=1
-runkrazy=1
 runprecommit=1
+runkrazy=1
+runcmakelatest=1
 runcppcheck=1
 runcpplint=1
 runtidy=1
@@ -847,6 +899,10 @@ while true; do
     ;;
   -C | --no-cmake-compat)
     cmakecompat=0
+    shift
+    ;;
+  -j | --no-cmakelatest)
+    runcmakelatest=0
     shift
     ;;
   -k | --no-krazy)
@@ -957,7 +1013,7 @@ BDIR=""
 
 COMMAND_EXISTS "cmake"
 #use minimum cmake version unless the --no-cmake-compat option is specified
-if (test ! -z "$(REVERSE $cmakecompat)"); then
+if (test $cmakecompat -eq 1); then
   if (test ! -e "$TOP/CMakeLists.txt"); then
     echo "Unable to locate the project top-level CMakeLists.txt.  Fix me"
     exit 1
@@ -1006,7 +1062,7 @@ GLIBOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_GLIB=True -DLIBICAL_GOBJECT_I
 FUZZOPTS="$STRICT -DLIBICAL_DEVMODE=True -DLIBICAL_BUILD_TESTING_BIGFUZZ=True $CMAKE_BY_COMMANDLINE"
 FUZZOPTS_NO_RSCALE="$FUZZOPTS -DCMAKE_DISABLE_FIND_PACKAGE_ICU=True"
 
-TOOLCHAIN="-DCMAKE_TOOLCHAIN_FILE=\"$TOP/cmake/Toolchain-Linux-GCC-i686.cmake\""
+TOOLCHAIN="-DCMAKE_TOOLCHAIN_FILE=$TOP/cmake/Toolchain-Linux-GCC-i686.cmake -DCMAKE_C_FLAGS= -DCMAKE_CXX_FLAGS="
 STATIC_OPTS="-DLIBICAL_STATIC=TRUE -DLIBICAL_JAVA_BINDINGS=False -DLIBICAL_GOBJECT_INTROSPECTION=False -DLIBICAL_GLIB=False -DLIBICAL_BUILD_DOCS=False"
 
 #Static code checkers
@@ -1024,6 +1080,9 @@ STATICCCHECKOPTS="\
 "
 PRECOMMIT
 KRAZY
+cmakelatestOptions="-Wuninitialized -Wunused_cli -Wauthor -Winstall_absolute_destination -Wdeprecated"
+CMAKELATEST test "$cmakelatestOptions $STATICCCHECKOPTS"
+CMAKELATEST testcross "$cmakelatestOptions $STATICCCHECKOPTS $TOOLCHAIN"
 CPPLINT test "$STATICCCHECKOPTS"
 SPLINT test "$STATICCCHECKOPTS"
 CLANGSCAN test "$STATICCCHECKOPTS"
