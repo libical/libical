@@ -20,7 +20,7 @@ TOP=$(dirname "$TOP")
 cd "$TOP/.."
 TOP=$(pwd)
 BRANCH=$(git branch --show-current | awk -F/ '{print $NF}')
-BDIR="$TOP/build-apidox"
+BDIR="$TOP/build-docs"
 INSTALLDIR="$HOME/tmp/libical-$BRANCH"
 
 if (test "$(uname -s)" = "Darwin"); then
