@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f7a46a38.js";
+            window.path_to_searchindex_js = "searchindex-43e02dcc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-d19dfbfe.js"></script>
@@ -178,6 +178,15 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="407---unreleased"><a class="header" href="#407---unreleased">[4.0.7] - Unreleased</a></h2>
+<ul>
+<li>Buildsystem changes:
+<ul>
+<li>Fix target_link_libraries() to use all-keywords as required by CMake 4.4.</li>
+<li>When cross-compiling, don’t build/install ical-glib-src-generator w/o existing binary</li>
+</ul>
+</li>
+</ul>
 <h2 id="406---2026-10-03"><a class="header" href="#406---2026-10-03">[4.0.6] - 2026-10-03</a></h2>
 <ul>
 <li>CVE: Fix UBSAN issue “bsearch comparator through an incompatible function pointer”</li>
