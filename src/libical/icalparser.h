@@ -102,9 +102,12 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
  *     or components with properties of the type ICAL_XLICERROR_PROPERTY.
  *
  * @par Ownership
- * Ownership of the @a line is transferred to libical upon calling this
- * method. The returned icalcomponent is owned by the caller and needs
- * to be `free()`d with the appropriate method after it's no longer needed.
+ * The returned icalcomponent is owned by the caller and needs to be freed with
+ * icalcomponent_free() after it is no longer needed.
+ *
+ * Also remember the caller is responsible for freeing the @p line memory allocated
+ * for this function (typically allocated by icalparser_get_line() and freed with
+ * icalmemory_free_buffer()).
  *
  * @par Example
  * ```c
@@ -124,6 +127,7 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
  *
  *     icalparser_set_gen_data(parser, stream);
  *
+ *     bool cont;
  *     do{
  *         // get a single content line
  *         line = icalparser_get_line(parser, read_stream);
@@ -136,7 +140,12 @@ LIBICAL_ICAL_EXPORT icalparser *icalparser_new(void);
  *             printf("%s", icalcomponent_as_ical_string(c));
  *             icalcomponent_free(c);
  *         }
- *     } while (line != 0);
+ *         cont = false;
+ *         if (line != 0) {
+ *             icalmemory_free_buffer(line);
+ *             cont = true;
+ *         }
+ *     } while (cont);
  *
  *     icalparser_free(parser);
  * }
@@ -330,9 +339,13 @@ LIBICAL_ICAL_EXPORT void icalparser_set_ctrl(enum icalparser_ctrl ctrl);
 
 /**
  * @brief Given a line generator function, returns a single iCal content line.
- * @return A pointer to a single line of data or `NULL` if it reached
- *  end of file reading from the @a line_gen_func. Note that the pointer
- *  returned is owned by libical and must not be `free()`d by the user.
+ * @return A pointer to a single line of data or `NULL` if it reached end of file
+ * reading from the @a line_gen_func.
+ *
+ * @par Ownership
+ * The string returned by this function is property of the caller and needs to be
+ * free'd with icalmemory_free_buffer() after use.
+ *
  * @param parser The parser object to use
  * @param line_gen_func The function to use for reading data
  *
