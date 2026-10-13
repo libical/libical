@@ -411,13 +411,15 @@ int main(int argc, char *argv[])
     // will have access to it
     icalparser_set_gen_data(parser, stream);
 
+    bool cont;
     do {
-        // read the file, line-by-line, and parse the data
+        // Get a single content line by making one or more calls to read_stream()
         line = icalparser_get_line(parser, read_stream);
+
+        // Add the line into the parser object.
         component = icalparser_add_line(parser, line);
 
-        // if icalparser has finished parsing a component,
-        // it will return it
+        // component will be non-zero if the line completes a component.
         if (component != 0) {
             // print the parsed component
             printf("%s", icalcomponent_as_ical_string(component));
@@ -427,7 +429,12 @@ int main(int argc, char *argv[])
 
             icalcomponent_free(component);
         }
-    } while (line != 0);
+        cont = false;
+        if (line != 0) {
+            icalmemory_free_buffer(line);
+            cont = true;
+        }
+    } while (cont);
 
     return 0;
 }
