@@ -158,11 +158,11 @@ blocks of text as a string, or it can parse line-by-line.
 Libical has a substantial error reporting system for both programming
 errors and component usage errors.
 
-#### 3.2.4 Memory Management
+#### 3.2.4 Memory management system
 
-Since many of libical's interfaces return strings, the library has its
-own memory management system to eliminate the need to free every string
-returned from the library.  See [Memory Management](#memory).
+Since many of libical's interfaces return strings, the library has its own
+memory management system to eliminate the need to free every string returned
+from the library. See the [Memory Management](#memory) section for more information.
 
 #### 3.2.5 Storage classes
 
