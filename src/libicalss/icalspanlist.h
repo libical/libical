@@ -99,7 +99,10 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalspanlist_as_vfreebusy(icalspanlist *sl,
  *
  *  @return A pointer to an array of integers containing the number of
  *       busy events in each delta_t time period.  The final entry
- *       contains the value -1.
+ *       contains the value -1.  NULL if delta_t is negative, if the
+ *       spanlist ends before it starts, or on allocation failure.
+ *
+ *  Busy times outside the period of the spanlist are not counted.
  *
  *  This calculation is somewhat tricky.  This is due to the fact that
  *  the time range contains the start time, but does not contain the

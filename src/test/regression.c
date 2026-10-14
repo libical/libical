@@ -2798,6 +2798,116 @@ static void test_fblist(void)
     icalset_free(set);
 }
 
+static void test_fblist_bounds(void)
+{
+    icalspanlist *sl;
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
+    icalset *set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/spanlist.ics", &options);
+    icalcomponent *comp;
+    int *matrix;
+    int i;
+
+    ok("open spanlist.ics", (set != NULL));
+    assert(set != NULL);
+
+    /* the busy span 19980102T010000Z-19980103T020000Z starts before the range */
+    sl = icalspanlist_new(set,
+                          icaltime_from_string("19980102T120000Z"),
+                          icaltime_from_string("19980104T000000Z"));
+    ok("create spanlist starting inside a busy span", (sl != NULL));
+
+    matrix = icalspanlist_as_freebusy_matrix(sl, 3600);
+    ok("hourly matrix", (matrix != NULL));
+    if (matrix) {
+        for (i = 0; matrix[i] != -1; i++) {
+            ;
+        }
+        int_is("hourly matrix slots", i, 36);
+        int_is("first slot busy", matrix[0], 1);
+        int_is("last busy slot", matrix[13], 1);
+        int_is("first free slot", matrix[14], 0);
+        free(matrix);
+    }
+    icalspanlist_free(sl);
+    icalset_free(set);
+
+    comp = icalparser_parse_string(
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VFREEBUSY\r\n"
+        "DTSTART:19980101T000000Z\r\n"
+        "DTEND:19980102T000000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19980101T020000Z/19980101T040000Z\r\n"
+        "FREEBUSY;FBTYPE=FREE:19980101T060000Z/19980101T070000Z\r\n"
+        "FREEBUSY:19980101T080000Z/19980101T090000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19971231T220000Z/19980101T010000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19980101T230000Z/19980102T030000Z\r\n"
+        "END:VFREEBUSY\r\n"
+        "END:VCALENDAR\r\n");
+    sl = icalspanlist_from_vfreebusy(comp);
+    ok("spanlist from VFREEBUSY", (sl != NULL));
+
+    matrix = icalspanlist_as_freebusy_matrix(sl, 3600);
+    ok("hourly matrix from VFREEBUSY", (matrix != NULL));
+    if (matrix) {
+        for (i = 0; matrix[i] != -1; i++) {
+            ;
+        }
+        int_is("matrix slots follow DTSTART/DTEND", i, 24);
+        int_is("span before DTSTART clipped", matrix[0], 1);
+        int_is("free slot", matrix[1], 0);
+        int_is("FBTYPE=BUSY slot", matrix[2], 1);
+        int_is("FBTYPE=BUSY slot", matrix[3], 1);
+        int_is("FBTYPE=FREE slot", matrix[6], 0);
+        int_is("default FBTYPE is BUSY", matrix[8], 1);
+        int_is("span after DTEND clipped", matrix[23], 1);
+        free(matrix);
+    }
+    icalspanlist_free(sl);
+    icalcomponent_free(comp);
+
+    /* busy spans entirely outside the period, and a period that ends before it starts */
+    comp = icalparser_parse_string(
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VFREEBUSY\r\n"
+        "DTSTART:19980101T000000Z\r\n"
+        "DTEND:19980101T020000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19970101T000000Z/19970101T010000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19990101T000000Z/19990101T010000Z\r\n"
+        "END:VFREEBUSY\r\n"
+        "END:VCALENDAR\r\n");
+    sl = icalspanlist_from_vfreebusy(comp);
+    matrix = icalspanlist_as_freebusy_matrix(sl, 3600);
+    ok("matrix with spans outside the period", (matrix != NULL));
+    if (matrix) {
+        int_is("first slot free", matrix[0], 0);
+        int_is("second slot free", matrix[1], 0);
+        int_is("matrix end", matrix[2], -1);
+        free(matrix);
+    }
+    icalspanlist_free(sl);
+    icalcomponent_free(comp);
+
+    comp = icalparser_parse_string(
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VFREEBUSY\r\n"
+        "DTSTART:19980102T000000Z\r\n"
+        "DTEND:19980101T000000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19980101T020000Z/19980101T040000Z\r\n"
+        "END:VFREEBUSY\r\n"
+        "END:VCALENDAR\r\n");
+    sl = icalspanlist_from_vfreebusy(comp);
+    {
+        const bool estate = icalerror_get_errors_are_fatal();
+        icalerror_set_errors_are_fatal(false);
+        matrix = icalspanlist_as_freebusy_matrix(sl, 3600);
+        icalerror_set_errors_are_fatal(estate);
+    }
+    ok("no matrix for a period ending before it starts", (matrix == NULL));
+    free(matrix);
+    icalspanlist_free(sl);
+    icalcomponent_free(comp);
+}
+
 static void test_convenience(void)
 {
     icalcomponent *c;
@@ -8164,6 +8274,7 @@ int main(int argc, const char *argv[])
 
     test_run("Test Array Expansion", test_expand_recurrence, do_test, do_header);
     test_run("Test Free/Busy lists", test_fblist, do_test, do_header);
+    test_run("Test Free/Busy list bounds", test_fblist_bounds, do_test, do_header);
     test_run("Test Overlaps", test_overlaps, do_test, do_header);
 
     test_run("Test Span", test_icalcomponent_get_span, do_test, do_header);
