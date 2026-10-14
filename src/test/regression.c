@@ -4264,6 +4264,12 @@ static void test_langbind(void)
            " mary@foo.org\r\n");
 
     icalcomponent_free(c);
+
+    /* newlines are dropped from the value, including a trailing one */
+    p = icalproperty_new_url("http://a\n\nb\n");
+    ok("eval_string drops newlines",
+       strstr(icallangbind_property_eval_string(p, ":"), ", 'value':'http://ab'") != NULL);
+    icalproperty_free(p);
 }
 
 static void test_property_parse(void)
@@ -5448,6 +5454,15 @@ static void test_icalvalue_decode_ical_string(void)
     ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
     ok("Decodes into large-enough buffer", (icalvalue_decode_ical_string(value, buff, 3) != 0));
     ok("Properly decoded", (strcmp(buff, "a\\") == 0));
+
+    /* Ending escape character at the very end of an allocation must not read past it */
+    {
+        char *heap = strdup("a\\");
+
+        ok("Decodes string ending in escape character", (icalvalue_decode_ical_string(heap, buff, (int)sizeof(buff)) != 0));
+        ok("Ending escape character ignored", (strcmp(buff, "a") == 0));
+        free(heap);
+    }
 }
 
 static int test_icalarray_sort_compare_char(const void *p1, const void *p2)
