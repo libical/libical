@@ -375,7 +375,8 @@ $set_kind_check\
         print "    icalerror_check_arg((value != 0), \"value\");\n";
         print "    if (!value) {\n        return $null_ret;\n    }\n";
       }
-      print "    if (${lcprefix}value_kind_to_union(value->kind) != ${ucprefix}_UNION_${union_type}) {\
+      print
+        "    if (${lcprefix}value_kind_to_union(value->kind) != ${ucprefix}_UNION_${union_type}) {\
         return $null_ret;\
     }\n";
       print
