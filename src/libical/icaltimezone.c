@@ -2589,6 +2589,10 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                 icalrecur_iterator *ritr = NULL;
                 unsigned trunc_until = 0;
 
+                /* rrule is owned by rrule_prop, which may be removed and
+                   freed below: hold our own reference until we are done */
+                icalrecurrencetype_ref(rrule);
+
                 /* Check RRULE duration */
                 if (!eternal && icaltime_compare(rrule->until, start) < 0) {
                     /* RRULE ends prior to our window open -
@@ -2629,7 +2633,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
                 /* Process any RRULE observances within our window */
                 if (ritr) {
-                    icaltimetype recur, prev_onset;
+                    icaltimetype recur, prev_onset = icaltime_null_time();
 
                     while (!icaltime_is_null_time(recur = icalrecur_iterator_next(ritr))) {
                         unsigned ydiff;
@@ -2644,8 +2648,11 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                         if (trunc_until && icaltime_compare(obs.onset, end) >= 0) {
                             /* Observance is on/after window close */
 
-                            /* Check if DSTART is within 1yr of prev onset */
-                            ydiff = (unsigned)(prev_onset.year - dtstart.year);
+                            /* Check if DSTART is within 1yr of prev onset
+                               (no prev onset: no observance before close) */
+                            ydiff = icaltime_is_null_time(prev_onset)
+                                        ? 0
+                                        : (unsigned)(prev_onset.year - dtstart.year);
                             if (ydiff <= 1) {
                                 /* Remove RRULE */
                                 icalcomponent_remove_property(comp, rrule_prop);
@@ -2742,6 +2749,8 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
                     }
                     icalrecur_iterator_free(ritr);
                 }
+
+                icalrecurrencetype_unref(rrule);
             }
         }
 

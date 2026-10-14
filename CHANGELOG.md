@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - libicalvcard: vcardcomponent_clone() and friends now deep-copy TEXTLIST values (e.g. NICKNAME,
   CATEGORIES) and structured parameters (JSCOMPS), and keep the property group. Previously the
   clone shared them with the original, so freeing both freed the same memory twice.
+- icaltimezone_truncate_vtimezone() no longer reads the RRULE after freeing it when the new DTSTART
+  is within a year of UNTIL (RSCALE rules), and no longer uses an uninitialized onset when no RRULE
+  occurrence falls before the window close.
 - Buildsystem changes:
   - Fix target_link_libraries() to use all-keywords as required by CMake 4.4.
   - When cross-compiling, don't build/install ical-glib-src-generator w/o existing binary
