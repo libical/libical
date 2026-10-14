@@ -1257,7 +1257,7 @@ static
 /* Days of year that have a bit in the year days bitmask */
 static bool daysmask_in_range(int n)
 {
-    return n >= -ICAL_YEARDAYS_MASK_OFFSET && n < ICAL_YEARDAYS_MASK_SIZE;
+    return n >= -ICAL_YEARDAYS_MASK_OFFSET && n < ICAL_YEARDAYS_MASK_SIZE; //NOLINT(readability-implicit-bool-conversion)
 }
 
 static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilDayExcl, int v)
