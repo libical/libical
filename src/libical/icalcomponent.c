@@ -1143,6 +1143,7 @@ void icalcomponent_foreach_recurrence(icalcomponent *comp,
                                                      &dtstart, &recur_time)) {
                 /* call callback action */
                 if (icaltime_span_overlaps(&recurspan, &limit_span)) {
+                    recurspan.is_busy = basespan.is_busy;
                     (*callback)(comp, &recurspan, callback_data);
                 }
             }
