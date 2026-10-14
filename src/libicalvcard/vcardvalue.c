@@ -104,12 +104,32 @@ vcardvalue *vcardvalue_clone(const vcardvalue *old)
         if (old->data.v_structured != 0) {
             clone->data.v_structured =
                 vcardstructured_clone(old->data.v_structured);
+
+            if (clone->data.v_structured == 0) {
+                clone->parent = 0;
+                vcardvalue_free(clone);
+                return 0;
+            }
+        }
+        break;
+
+    case VCARD_TEXTLIST_VALUE:
+        if (old->data.v_textlist != 0) {
+            clone->data.v_textlist = vcardstrarray_clone(old->data.v_textlist);
+
+            if (clone->data.v_textlist == 0) {
+                clone->parent = 0;
+                vcardvalue_free(clone);
+                return 0;
+            }
         }
         break;
 
     default: {
         /* all of the other types are stored as values, not
-               pointers, so we can just copy the whole structure. */
+               pointers, so we can just copy the whole structure.
+               Every kind that vcardvalue_free() releases memory for
+               must have its own case above. */
 
         clone->data = old->data;
     }
