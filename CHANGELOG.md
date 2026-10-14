@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - libicalvcard: vcardcomponent_clone() and friends now deep-copy TEXTLIST values (e.g. NICKNAME,
   CATEGORIES) and structured parameters (JSCOMPS), and keep the property group. Previously the
   clone shared them with the original, so freeing both freed the same memory twice.
+- libicalvcal: Fixed a use-after-free and a memory leak when converting a vCalendar
+  procedure alarm (PALARM) whose attachment is a plain pathname.
 - Fix icalvalue_decode_ical_string() and icallangbind_property_eval_string() reading past the end
   of a string that ends in a backslash or a newline.
 - icaltimezone_truncate_vtimezone() no longer reads the RRULE after freeing it when the new DTSTART
