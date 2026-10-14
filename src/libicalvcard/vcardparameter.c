@@ -91,6 +91,14 @@ vcardparameter *vcardparameter_clone(const vcardparameter *old)
 
     memcpy(clone, old, sizeof(struct vcardparameter_impl));
 
+    /* Nothing owned by old may be shared with the clone:
+       every pointer below is either deep-copied or left NULL. */
+    clone->parent = 0;
+    clone->string = 0;
+    clone->x_name = 0;
+    clone->values = 0;
+    clone->structured = 0;
+
     if (old->string != 0) {
         clone->string = icalmemory_strdup(old->string);
         if (clone->string == 0) {
@@ -113,6 +121,14 @@ vcardparameter *vcardparameter_clone(const vcardparameter *old)
         clone->values = old->value_kind == VCARD_TEXT_VALUE ? vcardstrarray_clone(old->values) : vcardenumarray_clone(old->values);
         if (clone->values == 0) {
             clone->parent = 0;
+            vcardparameter_free(clone);
+            return 0;
+        }
+    }
+
+    if (old->structured != 0) {
+        clone->structured = vcardstructured_clone(old->structured);
+        if (clone->structured == 0) {
             vcardparameter_free(clone);
             return 0;
         }
