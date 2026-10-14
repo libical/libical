@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Buildsystem changes:
   - Fix target_link_libraries() to use all-keywords as required by CMake 4.4.
   - When cross-compiling, don't build/install ical-glib-src-generator w/o existing binary
+- Fix use-after-free and double free in icalcomponent_merge_component() when both calendars
+  have a VTIMEZONE with the same TZID. Every VTIMEZONE of the merged calendar is now merged,
+  and a conflicting VTIMEZONE is added under a renamed TZID (e.g. "Zone1") that its events use.
 
 ## [4.0.6] - 2026-10-03
 
