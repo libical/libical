@@ -7690,6 +7690,100 @@ static void test_geo_zoneinfo_coordinates(void)
 #pragma GCC diagnostic pop
 #endif
 
+static const char *merged_event_tzid(icalcomponent *comp, const char *uid)
+{
+    icalcomponent *event;
+
+    for (event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT); event;
+         event = icalcomponent_get_next_component(comp, ICAL_VEVENT_COMPONENT)) {
+        if (strcmp(icalcomponent_get_uid(event), uid) == 0) {
+            icalproperty *dtstart = icalcomponent_get_first_property(event, ICAL_DTSTART_PROPERTY);
+            icalparameter *param = icalproperty_get_first_parameter(dtstart, ICAL_TZID_PARAMETER);
+            return param ? icalparameter_get_tzid(param) : "";
+        }
+    }
+    return "";
+}
+
+static void test_merge_component_vtimezones(void)
+{
+#define MERGE_VTIMEZONE(tzid, offset) \
+    "BEGIN:VTIMEZONE\r\n"             \
+    "TZID:" tzid "\r\n"               \
+    "BEGIN:STANDARD\r\n"              \
+    "DTSTART:19700101T000000\r\n"     \
+    "TZOFFSETFROM:" offset "\r\n"     \
+    "TZOFFSETTO:" offset "\r\n"       \
+    "END:STANDARD\r\n"                \
+    "END:VTIMEZONE\r\n"
+#define MERGE_CALENDAR(vtimezones, uid)                \
+    "BEGIN:VCALENDAR\r\n"                              \
+    "VERSION:2.0\r\n"                                  \
+    "PRODID:-//libical//merge test//EN\r\n" vtimezones \
+    "BEGIN:VEVENT\r\n"                                 \
+    "UID:" uid "\r\n"                                  \
+    "DTSTAMP:20260101T000000Z\r\n"                     \
+    "DTSTART;TZID=Test/Zone:20260101T100000\r\n"       \
+    "END:VEVENT\r\n"                                   \
+    "END:VCALENDAR\r\n"
+
+    icalcomponent *comp, *comp_to_merge;
+    icaltimezone *zone;
+
+    /* Identical VTIMEZONEs with the same TZID: nothing is renamed. */
+    comp = icalcomponent_new_from_string(MERGE_CALENDAR(MERGE_VTIMEZONE("Test/Zone", "+0100"), "a"));
+    comp_to_merge = icalcomponent_new_from_string(MERGE_CALENDAR(MERGE_VTIMEZONE("Test/Zone", "+0100"), "b"));
+    ok("parsed calendars", comp != NULL && comp_to_merge != NULL);
+    if (!comp || !comp_to_merge) {
+        return;
+    }
+    icalcomponent_merge_component(comp, comp_to_merge);
+    int_is("one VTIMEZONE after merging identical ones",
+           icalcomponent_count_components(comp, ICAL_VTIMEZONE_COMPONENT), 1);
+    int_is("both VEVENTs merged", icalcomponent_count_components(comp, ICAL_VEVENT_COMPONENT), 2);
+    str_is("TZID kept", merged_event_tzid(comp, "a"), "Test/Zone");
+    str_is("TZID kept", merged_event_tzid(comp, "b"), "Test/Zone");
+    icalcomponent_free(comp);
+
+    /* Different VTIMEZONEs with the same TZID: the merged one is renamed,
+       and every other VTIMEZONE is merged too. */
+    comp = icalcomponent_new_from_string(MERGE_CALENDAR(MERGE_VTIMEZONE("Test/Zone", "+0100"), "a"));
+    comp_to_merge = icalcomponent_new_from_string(
+        MERGE_CALENDAR(MERGE_VTIMEZONE("Extra/Zone", "+0300") MERGE_VTIMEZONE("Test/Zone", "+0200"), "b"));
+    ok("parsed calendars", comp != NULL && comp_to_merge != NULL);
+    if (!comp || !comp_to_merge) {
+        return;
+    }
+    icalcomponent_merge_component(comp, comp_to_merge);
+    int_is("both VEVENTs merged", icalcomponent_count_components(comp, ICAL_VEVENT_COMPONENT), 2);
+    str_is("TZID kept", merged_event_tzid(comp, "a"), "Test/Zone");
+    str_is("conflicting TZID renamed", merged_event_tzid(comp, "b"), "Test/Zone1");
+    int_is("all VTIMEZONEs merged", icalcomponent_count_components(comp, ICAL_VTIMEZONE_COMPONENT), 3);
+    ok("other VTIMEZONE merged", icalcomponent_get_timezone(comp, "Extra/Zone") != NULL);
+    zone = icalcomponent_get_timezone(comp, "Test/Zone");
+    ok("existing VTIMEZONE kept",
+       zone && strstr(icalcomponent_as_ical_string(icaltimezone_get_component(zone)), "+0100"));
+    zone = icalcomponent_get_timezone(comp, "Test/Zone1");
+    ok("renamed VTIMEZONE added",
+       zone && strstr(icalcomponent_as_ical_string(icaltimezone_get_component(zone)), "+0200"));
+
+    /* The same VTIMEZONE again: references go to the already renamed one. */
+    comp_to_merge = icalcomponent_new_from_string(MERGE_CALENDAR(MERGE_VTIMEZONE("Test/Zone", "+0200"), "c"));
+    ok("parsed calendar", comp_to_merge != NULL);
+    if (!comp_to_merge) {
+        icalcomponent_free(comp);
+        return;
+    }
+    icalcomponent_merge_component(comp, comp_to_merge);
+    int_is("no VTIMEZONE added", icalcomponent_count_components(comp, ICAL_VTIMEZONE_COMPONENT), 3);
+    int_is("all VEVENTs merged", icalcomponent_count_components(comp, ICAL_VEVENT_COMPONENT), 3);
+    str_is("TZID renamed to matching VTIMEZONE", merged_event_tzid(comp, "c"), "Test/Zone1");
+    icalcomponent_free(comp);
+
+#undef MERGE_CALENDAR
+#undef MERGE_VTIMEZONE
+}
+
 static void test_dtend_duration_due_validation(void)
 {
     icalcomponent *ical;
@@ -7976,6 +8070,7 @@ int main(int argc, const char *argv[])
     test_run("Test DTSTART", test_dtstart, do_test, do_header);
     test_run("Test day of year of week start", test_start_of_week, do_test, do_header);
     test_run("Test DTEND/DURATION/DUE validation", test_dtend_duration_due_validation, do_test, do_header);
+    test_run("Test merging VTIMEZONEs", test_merge_component_vtimezones, do_test, do_header);
     test_run("Test recur parser", test_recur_parser, do_test, do_header);
     test_run("Test recur", test_recur, do_test, do_header);
     test_run("Test recur encode by[ICAL_BY_DAY]", test_recur_encode_by_day, do_test, do_header);

@@ -379,6 +379,37 @@ static void test_v3_to_v4(vcardcomponent *card)
     assert_str_equals(want, vcardcomponent_as_vcard_string(card));
 }
 
+static void test_v4_to_v3_pref_member(void)
+{
+    /* MEMBER and KIND with PREF used to cause a heap-use-after-free */
+    const char *str =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "UID:1\r\n"
+        "FN:t\r\n"
+        "KIND;PREF=1:group\r\n"
+        "MEMBER;PREF=1:urn:uuid:1234\r\n"
+        "EMAIL;PREF=2:a@example.com\r\n"
+        "EMAIL;PREF=1:b@example.com\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *vcard = vcardcomponent_new_from_string(str);
+    assert(vcard);
+
+    vcardcomponent_transform(vcard, VCARD_VERSION_30);
+
+    assert(!vcardcomponent_get_first_property(vcard, VCARD_KIND_PROPERTY));
+    assert(!vcardcomponent_get_first_property(vcard, VCARD_MEMBER_PROPERTY));
+
+    vcardproperty *prop =
+        vcardcomponent_get_first_property(vcard, VCARD_EMAIL_PROPERTY);
+    assert(!vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER));
+    prop = vcardcomponent_get_next_property(vcard, VCARD_EMAIL_PROPERTY);
+    assert(vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER));
+
+    vcardcomponent_free(vcard);
+}
+
 static void test_ignore_backslash_at_eol(void)
 {
     const char *str =
@@ -559,6 +590,7 @@ int main(int argc, const char **argv)
     test_add_props(card);
     test_n_restriction(card);
     test_v3_to_v4(card);
+    test_v4_to_v3_pref_member();
     test_ignore_backslash_at_eol();
     test_parse_no_nested();
     test_parse_multi();
