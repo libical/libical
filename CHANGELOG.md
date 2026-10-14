@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix use-after-free and double free in icalcomponent_merge_component() when both calendars
   have a VTIMEZONE with the same TZID. Every VTIMEZONE of the merged calendar is now merged,
   and a conflicting VTIMEZONE is added under a renamed TZID (e.g. "Zone1") that its events use.
+- Fix heap-buffer-overflow in icalspanlist_as_freebusy_matrix() for busy spans that start before
+  or end after the spanlist. icalspanlist_from_vfreebusy() now sets the spanlist start/end from
+  DTSTART/DTEND and marks FBTYPE=FREE periods as free (all others as busy).
 
 ## [4.0.6] - 2026-10-03
 
