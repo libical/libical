@@ -1037,10 +1037,12 @@ static void comp_to_v3(vcardcomponent *impl)
 
         next = icalpvl_next(itr);
 
-        /* Find prop with lowest PREF= for each set of like properties */
+        /* Find prop with lowest PREF= for each set of like properties.
+           Skip KIND and MEMBER since they get replaced (and freed) below */
         pkind = vcardproperty_isa(prop);
         param = vcardproperty_get_first_parameter(prop, VCARD_PREF_PARAMETER);
-        if (param && pkind != VCARD_X_PROPERTY) {
+        if (param && pkind != VCARD_X_PROPERTY &&
+            pkind != VCARD_KIND_PROPERTY && pkind != VCARD_MEMBER_PROPERTY) {
             int level = vcardparameter_get_pref(param);
             struct pref_prop *pp = pref_props[pkind];
 

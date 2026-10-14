@@ -7,8 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.7] - Unreleased
 
+- libicalvcard: vcardcomponent_clone() and friends now deep-copy TEXTLIST values (e.g. NICKNAME,
+  CATEGORIES) and structured parameters (JSCOMPS), and keep the property group. Previously the
+  clone shared them with the original, so freeing both freed the same memory twice.
+- libicalvcal: Fixed a use-after-free and a memory leak when converting a vCalendar
+  procedure alarm (PALARM) whose attachment is a plain pathname.
+- Fix icalvalue_decode_ical_string() and icallangbind_property_eval_string() reading past the end
+  of a string that ends in a backslash or a newline.
+- icaltimezone_truncate_vtimezone() no longer reads the RRULE after freeing it when the new DTSTART
+  is within a year of UNTIL (RSCALE rules), and no longer uses an uninitialized onset when no RRULE
+  occurrence falls before the window close.
 - Buildsystem changes:
   - Fix target_link_libraries() to use all-keywords as required by CMake 4.4.
+  - When cross-compiling, don't build/install ical-glib-src-generator w/o existing binary
+- Fix use-after-free and double free in icalcomponent_merge_component() when both calendars
+  have a VTIMEZONE with the same TZID. Every VTIMEZONE of the merged calendar is now merged,
+  and a conflicting VTIMEZONE is added under a renamed TZID (e.g. "Zone1") that its events use.
+- Fix heap-buffer-overflow in icalspanlist_as_freebusy_matrix() for busy spans that start before
+  or end after the spanlist. icalspanlist_from_vfreebusy() now sets the spanlist start/end from
+  DTSTART/DTEND and marks FBTYPE=FREE periods as free (all others as busy).
+- Fix out-of-bounds access to the year days bitmask in the recurrence iterator when an RSCALE
+  date falls outside the year (e.g. BYWEEKNO with a DTSTART before the calendar's epoch).
+- Fix icalrecur_iterator_set_range() for a reverse range on a rule without UNTIL, which started
+  the iteration at year 0 instead of at 'from'.
 
 ## [4.0.6] - 2026-10-03
 
