@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - icaltimezone_truncate_vtimezone() no longer reads the RRULE after freeing it when the new DTSTART
   is within a year of UNTIL (RSCALE rules), and no longer uses an uninitialized onset when no RRULE
   occurrence falls before the window close.
+- libical: the typed icalvalue getters now check that the value type of
+  the icalvalue uses the same union member as the expected value type of
+  the getter, as the vcardvalue getters do since 4.0.6. If the type
+  mismatches, then they return the zero value for the expected value type.
+  The typed setters error with ICAL_BADARG_ERROR instead of overwriting a
+  value held in another union member.
+- Fix IMAGE and STRUCTURED-DATA given by URI (with or without VALUE=URI)
+  parsing to a URI value, whose string icalproperty_get_image() and
+  icalproperty_get_structureddata() then read as an icalattach pointer.
 - Buildsystem changes:
   - Fix target_link_libraries() to use all-keywords as required by CMake 4.4.
   - When cross-compiling, don't build/install ical-glib-src-generator w/o existing binary
