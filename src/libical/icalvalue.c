@@ -1624,6 +1624,10 @@ bool icalvalue_decode_ical_string(const char *szText, char *szDecText, int maxBu
 
     for (p = szText; *p != 0; p++) {
         if (*p == '\\') {
+            if (*(p + 1) == 0) {
+                /* a trailing escape character escapes nothing; stop before the terminator */
+                break;
+            }
             icalmemory_append_char(&str, &str_p, &buf_sz, *(p + 1));
             p++;
         } else {

@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   clone shared them with the original, so freeing both freed the same memory twice.
 - libicalvcal: Fixed a use-after-free and a memory leak when converting a vCalendar
   procedure alarm (PALARM) whose attachment is a plain pathname.
+- Fix icalvalue_decode_ical_string() and icallangbind_property_eval_string() reading past the end
+  of a string that ends in a backslash or a newline.
+- icaltimezone_truncate_vtimezone() no longer reads the RRULE after freeing it when the new DTSTART
+  is within a year of UNTIL (RSCALE rules), and no longer uses an uninitialized onset when no RRULE
+  occurrence falls before the window close.
 - Buildsystem changes:
   - Fix target_link_libraries() to use all-keywords as required by CMake 4.4.
   - When cross-compiling, don't build/install ical-glib-src-generator w/o existing binary

@@ -4374,6 +4374,12 @@ static void test_langbind(void)
            " mary@foo.org\r\n");
 
     icalcomponent_free(c);
+
+    /* newlines are dropped from the value, including a trailing one */
+    p = icalproperty_new_url("http://a\n\nb\n");
+    ok("eval_string drops newlines",
+       strstr(icallangbind_property_eval_string(p, ":"), ", 'value':'http://ab'") != NULL);
+    icalproperty_free(p);
 }
 
 static void test_property_parse(void)
@@ -5599,6 +5605,15 @@ static void test_icalvalue_decode_ical_string(void)
     ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
     ok("Decodes into large-enough buffer", (icalvalue_decode_ical_string(value, buff, 3) != 0));
     ok("Properly decoded", (strcmp(buff, "a\\") == 0));
+
+    /* Ending escape character at the very end of an allocation must not read past it */
+    {
+        char *heap = strdup("a\\");
+
+        ok("Decodes string ending in escape character", (icalvalue_decode_ical_string(heap, buff, (int)sizeof(buff)) != 0));
+        ok("Ending escape character ignored", (strcmp(buff, "a") == 0));
+        free(heap);
+    }
 }
 
 static int test_icalarray_sort_compare_char(const void *p1, const void *p2)
@@ -7935,6 +7950,89 @@ static void test_merge_component_vtimezones(void)
 #undef MERGE_VTIMEZONE
 }
 
+static void test_truncate_vtimezone_rscale_until(void)
+{
+    icalarray *calendars = icalrecurrencetype_rscale_supported_calendars();
+    if (!calendars) {
+        ok("RSCALE not supported, skipped", 1);
+        return;
+    }
+    icalarray_free(calendars);
+
+    icalcomponent *vtz = icalcomponent_new_from_string(
+        "BEGIN:VTIMEZONE\r\n"
+        "TZID:Test/RScale\r\n"
+        "BEGIN:STANDARD\r\n"
+        "DTSTART:19900101T000000\r\n"
+        "TZOFFSETFROM:+0000\r\n"
+        "TZOFFSETTO:+0000\r\n"
+        "TZNAME:LMT\r\n"
+        "END:STANDARD\r\n"
+        "BEGIN:STANDARD\r\n"
+        "DTSTART:20000101T000000\r\n"
+        "TZOFFSETFROM:+0000\r\n"
+        "TZOFFSETTO:+0000\r\n"
+        "TZNAME:TST\r\n"
+        "RRULE:RSCALE=GREGORIAN;FREQ=YEARLY;UNTIL=20220101T000000Z\r\n"
+        "END:STANDARD\r\n"
+        "END:VTIMEZONE\r\n");
+    ok("parse VTIMEZONE", (vtz != NULL));
+
+    icaltimetype start = icaltime_from_string("20200601T000000Z");
+    icaltimezone_truncate_vtimezone(vtz, start, icaltime_null_time(), false);
+
+    /* the first STANDARD is now the tombstone at the window open */
+    icalcomponent *std = icalcomponent_get_first_component(vtz, ICAL_XSTANDARD_COMPONENT);
+    ok("tombstone STANDARD kept", (std != NULL));
+    icalproperty *prop = icalcomponent_get_first_property(std, ICAL_DTSTART_PROPERTY);
+    str_is("tombstone starts at the window open",
+           icaltime_as_ical_string(icalproperty_get_dtstart(prop)), "20200601T000000");
+
+    std = icalcomponent_get_next_component(vtz, ICAL_XSTANDARD_COMPONENT);
+    ok("STANDARD kept", (std != NULL));
+    ok("RRULE removed",
+       (icalcomponent_get_first_property(std, ICAL_RRULE_PROPERTY) == NULL));
+    prop = icalcomponent_get_first_property(std, ICAL_DTSTART_PROPERTY);
+    ok("DTSTART kept", (prop != NULL));
+    str_is("DTSTART moved into the window",
+           icaltime_as_ical_string(icalproperty_get_dtstart(prop)), "20210101T000000");
+    prop = icalcomponent_get_first_property(std, ICAL_RDATE_PROPERTY);
+    ok("UNTIL added as RDATE", (prop != NULL));
+    str_is("RDATE is the old UNTIL",
+           icaltime_as_ical_string(icalproperty_get_rdate(prop).time), "20220101T000000");
+
+    icalcomponent_free(vtz);
+}
+
+static void test_truncate_vtimezone_no_onset_in_window(void)
+{
+    icalcomponent *vtz = icalcomponent_new_from_string(
+        "BEGIN:VTIMEZONE\r\n"
+        "TZID:Test/Sparse\r\n"
+        "BEGIN:STANDARD\r\n"
+        "DTSTART:20000101T000000\r\n"
+        "TZOFFSETFROM:+0000\r\n"
+        "TZOFFSETTO:+0000\r\n"
+        "TZNAME:TST\r\n"
+        "RRULE:FREQ=YEARLY;INTERVAL=7\r\n"
+        "END:STANDARD\r\n"
+        "END:VTIMEZONE\r\n");
+    ok("parse VTIMEZONE", (vtz != NULL));
+
+    icaltimetype start = icaltime_from_string("20200601T000000Z");
+    icaltimetype end = icaltime_from_string("20210101T000000Z");
+    icaltimezone_truncate_vtimezone(vtz, start, end, false);
+
+    icalcomponent *std = icalcomponent_get_first_component(vtz, ICAL_XSTANDARD_COMPONENT);
+    ok("STANDARD kept", (std != NULL));
+    ok("RRULE with no onset in the window removed",
+       (icalcomponent_get_first_property(std, ICAL_RRULE_PROPERTY) == NULL));
+    ok("no RDATE added",
+       (icalcomponent_get_first_property(std, ICAL_RDATE_PROPERTY) == NULL));
+
+    icalcomponent_free(vtz);
+}
+
 static void test_dtend_duration_due_validation(void)
 {
     icalcomponent *ical;
@@ -8362,6 +8460,8 @@ int main(int argc, const char *argv[])
     test_run("Test compare date only", test_icaltime_compare_date_only, do_test, do_header);
     test_run("Test folding", test_line_folding, do_test, do_header);
     test_run("Test zoneinfo geo coordinates", test_geo_zoneinfo_coordinates, do_test, do_header);
+    test_run("Test truncate VTIMEZONE with RSCALE UNTIL", test_truncate_vtimezone_rscale_until, do_test, do_header);
+    test_run("Test truncate VTIMEZONE with no onset in window", test_truncate_vtimezone_no_onset_in_window, do_test, do_header);
 
 #if defined(LIBICAL_CXX_BINDINGS)
     test_run("Test C++ API", test_cxx, do_test, do_header);
