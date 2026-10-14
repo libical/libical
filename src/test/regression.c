@@ -970,6 +970,54 @@ static void test_recur_iterator_on_jan_1(void)
     icalrecurrencetype_unref(recurrence);
 }
 
+/* A reverse range must yield the forward occurrences in reverse order, also without UNTIL */
+static void test_recur_iterator_reverse_range_rule(const char *rule, const char *dtstart_str, const char *from_str)
+{
+    icaltimetype dtstart = icaltime_from_string(dtstart_str);
+    icaltimetype from = icaltime_from_string(from_str);
+    struct icalrecurrencetype *recurrence = icalrecurrencetype_new_from_string(rule);
+    icaltimetype forward[16];
+    int nforward = 0;
+
+    icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, dtstart);
+    for (icaltimetype next = icalrecur_iterator_next(iterator);
+         !icaltime_is_null_time(next) && icaltime_compare(next, from) <= 0 && nforward < 16;
+         next = icalrecur_iterator_next(iterator)) {
+        forward[nforward++] = next;
+    }
+    icalrecur_iterator_free(iterator);
+    ok("Forward iteration yields occurrences", nforward > 0);
+
+    iterator = icalrecur_iterator_new(recurrence, dtstart);
+    ok("Reverse range is accepted", icalrecur_iterator_set_range(iterator, from, dtstart));
+
+    int nreverse = 0;
+    bool same = true;
+    for (icaltimetype prev = icalrecur_iterator_prev(iterator);
+         !icaltime_is_null_time(prev) && nreverse < 16;
+         prev = icalrecur_iterator_prev(iterator)) {
+        nreverse++;
+        if (nreverse > nforward || icaltime_compare(prev, forward[nforward - nreverse]) != 0) {
+            same = false;
+        }
+    }
+    icalrecur_iterator_free(iterator);
+    ok("Reverse range yields the forward occurrences in reverse order", same && nreverse == nforward);
+
+    icalrecurrencetype_unref(recurrence);
+}
+
+static void test_recur_iterator_reverse_range(void)
+{
+    test_recur_iterator_reverse_range_rule("FREQ=YEARLY", "20200301T090000", "20230601T120000");
+
+    icalarray *calendars = icalrecurrencetype_rscale_supported_calendars();
+    if (calendars->num_elements > 1) {
+        test_recur_iterator_reverse_range_rule("RSCALE=INDIAN;FREQ=YEARLY", "20200301T090000", "20230601T120000");
+    }
+    icalarray_free(calendars);
+}
+
 static void test_memory(void)
 {
     size_t bufsize = 256;
@@ -8378,6 +8426,7 @@ int main(int argc, const char *argv[])
     test_run("Test icalcomponent_foreach_recurrence with exact duration", test_component_foreach_dtend_exact, do_test, do_header);
     test_run("Test icalrecur_iterator_set_start with date", test_recur_iterator_set_start, do_test, do_header);
     test_run("Test weekly icalrecur_iterator on January 1", test_recur_iterator_on_jan_1, do_test, do_header);
+    test_run("Test icalrecur_iterator reverse range without UNTIL", test_recur_iterator_reverse_range, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);

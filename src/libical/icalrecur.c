@@ -4214,7 +4214,8 @@ bool icalrecur_iterator_set_range(icalrecur_iterator *impl,
         /* Convert 'from' to same time zone as DTSTART */
         from = icaltime_convert_to_zone(from, (icaltimezone *)zone);
 
-        if (icaltime_compare(from, impl->rule->until) > 0) {
+        if (!icaltime_is_null_time(impl->rule->until) &&
+            icaltime_compare(from, impl->rule->until) > 0) {
             /* If 'from' is after UNTIL, use UNTIL */
             from = impl->rule->until;
         } else if (icaltime_compare(from, impl->dtstart) < 0) {
@@ -4231,7 +4232,10 @@ bool icalrecur_iterator_set_range(icalrecur_iterator *impl,
            Iterate forward until we are later than 'from'.
         */
         while (icaltime_compare(impl->last, from) < 0) {
-            (void)icalrecur_iterator_next(impl);
+            if (icaltime_is_null_time(icalrecur_iterator_next(impl))) {
+                /* The recurrence ends before 'from' */
+                break;
+            }
         }
 
         /* Convert 'to' to same time zone as DTSTART */
