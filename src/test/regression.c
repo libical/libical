@@ -4881,6 +4881,47 @@ static void test_vcal(void)
     }
 }
 
+static void test_vcal_procedure_alarm(void)
+{
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "DTSTART:20020101T100000\r\n"
+        "PALARM:20020101T090000;;;/usr/bin/alarm\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    VObject *vcal;
+    icalcomponent *comp, *event, *alarm;
+    icalproperty *prop;
+
+    vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with a procedure alarm", (vcal != 0));
+    if (!vcal) {
+        return;
+    }
+
+    comp = icalvcal_convert(vcal);
+    cleanVObject(vcal);
+    ok("Converting to ical component", (comp != 0));
+    if (!comp) {
+        return;
+    }
+
+    event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+    alarm = event ? icalcomponent_get_first_component(event, ICAL_VALARM_COMPONENT) : NULL;
+    prop = alarm ? icalcomponent_get_first_property(alarm, ICAL_ATTACH_PROPERTY) : NULL;
+    ok("procedure alarm has an ATTACH", (prop != 0));
+    if (prop) {
+        icalattach *attach = icalproperty_get_attach(prop);
+
+        str_is("procedure path becomes a file URL",
+               attach ? icalattach_get_url(attach) : "", "file:///usr/bin/alarm");
+    }
+
+    icalcomponent_free(comp);
+}
+
 /*
  * Test to see if recurrences are excluded in certain situations
  * See r961 for more information
@@ -8249,6 +8290,7 @@ int main(int argc, const char *argv[])
     test_run("Test icalcalendar", test_calendar, do_test, do_header);
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
+    test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
