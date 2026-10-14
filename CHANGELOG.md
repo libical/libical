@@ -26,6 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix heap-buffer-overflow in icalspanlist_as_freebusy_matrix() for busy spans that start before
   or end after the spanlist. icalspanlist_from_vfreebusy() now sets the spanlist start/end from
   DTSTART/DTEND and marks FBTYPE=FREE periods as free (all others as busy).
+- Fix out-of-bounds access to the year days bitmask in the recurrence iterator when an RSCALE
+  date falls outside the year (e.g. BYWEEKNO with a DTSTART before the calendar's epoch).
+- Fix icalrecur_iterator_set_range() for a reverse range on a rule without UNTIL, which started
+  the iteration at year 0 instead of at 'from'.
 
 ## [4.0.6] - 2026-10-03
 
