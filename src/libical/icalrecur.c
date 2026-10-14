@@ -1254,8 +1254,24 @@ static
     return mask << leftshift;
 }
 
+/* Days of year that have a bit in the year days bitmask */
+static bool daysmask_in_range(int n)
+{
+    return n >= -ICAL_YEARDAYS_MASK_OFFSET && n < ICAL_YEARDAYS_MASK_SIZE;
+}
+
 static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilDayExcl, int v)
 {
+    if (fromDayIncl < -ICAL_YEARDAYS_MASK_OFFSET) {
+        fromDayIncl = -ICAL_YEARDAYS_MASK_OFFSET;
+    }
+    if (untilDayExcl > ICAL_YEARDAYS_MASK_SIZE) {
+        untilDayExcl = ICAL_YEARDAYS_MASK_SIZE;
+    }
+    if (fromDayIncl >= untilDayExcl) {
+        return;
+    }
+
     int fromBitIdx = fromDayIncl + ICAL_YEARDAYS_MASK_OFFSET;
     int untilBitIdx = untilDayExcl + ICAL_YEARDAYS_MASK_OFFSET;
 
@@ -1285,9 +1301,14 @@ static void daysmask_set_range(unsigned long days[], int fromDayIncl, int untilD
     }
 }
 
-static int daysmask_setbit(unsigned long mask[], short n, int v)
+/* Returns the previous value of bit n, or v (no change) for a day outside the bitmask */
+static int daysmask_setbit(unsigned long mask[], int n, int v)
 {
     int prev;
+
+    if (!daysmask_in_range(n)) {
+        return v;
+    }
 
     n += ICAL_YEARDAYS_MASK_OFFSET;
 
@@ -1315,10 +1336,27 @@ static int daysmask_setbit(unsigned long mask[], short n, int v)
     return prev;
 }
 
-static unsigned long daysmask_getbit(const unsigned long mask[], short n)
+static unsigned long daysmask_getbit(const unsigned long mask[], int n)
 {
+    if (!daysmask_in_range(n)) {
+        return 0;
+    }
+
     n += ICAL_YEARDAYS_MASK_OFFSET;
     return (mask[n / BITS_PER_LONG] >> (n % BITS_PER_LONG)) & 1;
+}
+
+/* Marks day of year doy as an occurrence; days outside the bitmask are dropped */
+static void daysmask_add_day(icalrecur_iterator *impl, int doy)
+{
+    if (!daysmask_in_range(doy)) {
+        return;
+    }
+
+    daysmask_setbit(impl->days, doy, 1);
+    if (doy < impl->days_index) {
+        impl->days_index = (short)doy;
+    }
 }
 
 static bool has_by_data(icalrecur_iterator *impl, icalrecurrencetype_byrule byrule)
@@ -2787,10 +2825,7 @@ static void expand_bymonth_days(icalrecur_iterator *impl, int year, int month)
             doy = get_day_of_year(impl, year, this_month, mday);
         }
 
-        daysmask_setbit(impl->days, doy, 1);
-        if (doy < impl->days_index) {
-            impl->days_index = doy;
-        }
+        daysmask_add_day(impl, doy);
     }
 }
 
@@ -3131,10 +3166,7 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
                 doy += days_in_year + 1;
             }
 
-            daysmask_setbit(impl->days, doy, 1);
-            if (doy < impl->days_index) {
-                impl->days_index = doy;
-            }
+            daysmask_add_day(impl, doy);
         }
     } else if (has_by_data(impl, ICAL_BY_WEEK_NO)) {
         int weekno;
@@ -3182,10 +3214,7 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
 
                 doy = start_doy + 7 * (weekno - 1);
 
-                daysmask_setbit(impl->days, doy, 1);
-                if (doy < impl->days_index) {
-                    impl->days_index = doy;
-                }
+                daysmask_add_day(impl, doy);
             }
         }
     } else {
@@ -3296,6 +3325,9 @@ static short daymask_find_next_bit(const unsigned long *days, short start_index)
     if (days_index >= ICAL_YEARDAYS_MASK_SIZE) {
         return ICAL_YEARDAYS_MASK_SIZE;
     }
+    if (days_index < -ICAL_YEARDAYS_MASK_OFFSET) {
+        days_index = -ICAL_YEARDAYS_MASK_OFFSET;
+    }
 
     // Prepare the first word, where searching might not start at the beginning
     startBitIndex = days_index + ICAL_YEARDAYS_MASK_OFFSET;
@@ -3355,6 +3387,9 @@ static short daymask_find_prev_bit(const unsigned long *days, short start_index)
 
     if (days_index <= -ICAL_YEARDAYS_MASK_OFFSET) {
         return -ICAL_YEARDAYS_MASK_OFFSET;
+    }
+    if (days_index >= ICAL_YEARDAYS_MASK_SIZE) {
+        days_index = ICAL_YEARDAYS_MASK_SIZE - 1;
     }
 
     // Prepare the first word, where searching might not start at the beginning

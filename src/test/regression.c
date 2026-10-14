@@ -1641,6 +1641,54 @@ enum byrule
     BY_SET_POS = 8,
 };
 
+/* Days of year outside the year must not touch the year days bitmask.
+   ICU versions differ on years before a calendar's epoch: some reject them, others
+   return dates, so only check that each iteration ends within COUNT. */
+static void test_recur_weekno_out_of_year(void)
+{
+    static const struct {
+        const char *rule;
+        const char *dtstart;
+        bool rscale;
+    } tests[] = {
+        {"FREQ=YEARLY;BYWEEKNO=-53;COUNT=3", "20240101T090000", false},
+        {"FREQ=YEARLY;BYWEEKNO=53;COUNT=3", "20240101T090000", false},
+        {"RSCALE=INDIAN;FREQ=YEARLY;BYWEEKNO=1;COUNT=3", "00010101T090000", true},
+    };
+    icalarray *calendars = icalrecurrencetype_rscale_supported_calendars();
+    const bool have_rscale = calendars->num_elements > 1;
+
+    icalarray_free(calendars);
+
+    const bool estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(false);
+
+    for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
+        if (tests[i].rscale && !have_rscale) {
+            continue;
+        }
+
+        struct icalrecurrencetype *recurrence = icalrecurrencetype_new_from_string(tests[i].rule);
+        ok(tests[i].rule, recurrence != NULL);
+
+        icalrecur_iterator *iterator =
+            icalrecur_iterator_new(recurrence, icaltime_from_string(tests[i].dtstart));
+        int count = 0;
+        if (iterator) {
+            while (!icaltime_is_null_time(icalrecur_iterator_next(iterator)) && count <= 3) {
+                count++;
+            }
+            icalrecur_iterator_free(iterator);
+        }
+        ok("Iteration ends within COUNT", count <= 3);
+
+        icalrecurrencetype_unref(recurrence);
+        icalerror_clear_errno();
+    }
+
+    icalerror_set_errors_are_fatal(estate);
+}
+
 /* From Federico Mena Quintero <federico@ximian.com>    */
 static void test_recur_parameter_bug(void)
 {
@@ -8285,6 +8333,7 @@ int main(int argc, const char *argv[])
     test_run("Test recur encode by[ICAL_BY_MONTH]", test_recur_encode_by_month, do_test, do_header);
     test_run("Test Recurring Events File", test_recur_file, do_test, do_header);
     test_run("Test parameter bug", test_recur_parameter_bug, do_test, do_header);
+    test_run("Test BYWEEKNO days outside the year", test_recur_weekno_out_of_year, do_test, do_header);
     test_run("Test component parser roundtrip", test_component_parser_roundtrip, do_test, do_header);
 
     test_run("Test Array Expansion", test_expand_recurrence, do_test, do_header);
