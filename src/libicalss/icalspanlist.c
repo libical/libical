@@ -20,6 +20,7 @@
 #include "icalerror_p.h"
 #include "icaltimezone.h"
 
+#include <stdint.h>
 #include <stdlib.h>
 
 /** @brief Internal comparison function for two spans
@@ -286,6 +287,7 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *spanlist, int delta_t)
     icaltime_t sl_start, sl_end;
 
     icalerror_check_arg_rz((spanlist != 0), "spanlist");
+    icalerror_check_arg_rz((delta_t >= 0), "delta_t");
 
     if (!delta_t) {
         delta_t = 3600;
@@ -305,10 +307,18 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *spanlist, int delta_t)
     sl_end *= delta_t;
 
     /* find the duration of this spanlist **/
+    if (sl_end < sl_start) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return NULL;
+    }
     spanduration_secs = sl_end - sl_start;
 
     /* malloc our matrix, add one extra slot for a final -1 **/
     matrix_slots = spanduration_secs / delta_t + 1;
+    if ((uint64_t)matrix_slots > SIZE_MAX / sizeof(int)) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return NULL;
+    }
 
     matrix = (int *)malloc(sizeof(int) * (size_t)matrix_slots);
     if (matrix == NULL) {
@@ -324,13 +334,16 @@ int *icalspanlist_as_freebusy_matrix(icalspanlist *spanlist, int delta_t)
         const struct icaltime_span *s = (struct icaltime_span *)icalpvl_data(itr);
 
         if (s && s->is_busy == 1) {
-            icaltime_t offset_start = s->start / delta_t - sl_start / delta_t;
-            icaltime_t offset_end = (s->end - 1) / delta_t - sl_start / delta_t + 1;
-            icaltime_t i;
+            /* only the part of the span inside [sl_start, sl_end) has slots */
+            const icaltime_t span_start = s->start > sl_start ? s->start : sl_start;
+            const icaltime_t span_end = s->end < sl_end ? s->end : sl_end;
+            icaltime_t offset_start, offset_end, i;
 
-            if (offset_end >= matrix_slots) {
-                offset_end = matrix_slots - 1;
+            if (span_end <= span_start) {
+                continue;
             }
+            offset_start = (span_start - sl_start) / delta_t;
+            offset_end = (span_end - 1 - sl_start) / delta_t + 1;
 
             for (i = offset_start; i < offset_end; i++) {
                 matrix[i]++;
@@ -404,6 +417,8 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
         return 0;
     }
     sl->spans = icalpvl_newlist();
+    sl->start = icalcomponent_get_dtstart(inner);
+    sl->end = icalcomponent_get_dtend(inner);
 
     /* cycle through each FREEBUSY property, adding to the spanlist */
     for (prop = icalcomponent_get_first_property(inner, ICAL_FREEBUSY_PROPERTY);
@@ -423,15 +438,8 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
         param = icalproperty_get_first_parameter(prop, ICAL_FBTYPE_PARAMETER);
         fbtype = param ? icalparameter_get_fbtype(param) : ICAL_FBTYPE_BUSY;
 
-        switch (fbtype) {
-        case ICAL_FBTYPE_FREE:
-        case ICAL_FBTYPE_NONE:
-        case ICAL_FBTYPE_X:
-            s->is_busy = 1;
-            break;
-        default:
-            s->is_busy = 0;
-        }
+        /* RFC 5545: FBTYPE defaults to BUSY, and unknown values are treated as BUSY. */
+        s->is_busy = (fbtype == ICAL_FBTYPE_FREE) ? 0 : 1;
 
         period = icalproperty_get_freebusy(prop);
         s->start = icaltime_as_timet_with_zone(period.start, icaltimezone_get_utc_timezone());
@@ -439,6 +447,6 @@ icalspanlist *icalspanlist_from_vfreebusy(icalcomponent *comp)
 
         icalpvl_insert_ordered(sl->spans, compare_span, (void *)s);
     }
-    /** @todo calculate start/end limits.. fill in holes? **/
+    /** @todo fill in holes? **/
     return sl;
 }

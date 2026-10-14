@@ -95,12 +95,30 @@ vcardproperty *vcardproperty_clone(const vcardproperty *old)
 
     if (old->value != 0) {
         clone->value = vcardvalue_clone(old->value);
+
+        if (clone->value == 0) {
+            vcardproperty_free(clone);
+            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+            return 0;
+        }
+
+        vcardvalue_set_parent(clone->value, clone);
     }
 
     if (old->x_name != 0) {
         clone->x_name = icalmemory_strdup(old->x_name);
 
         if (clone->x_name == 0) {
+            vcardproperty_free(clone);
+            icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+            return 0;
+        }
+    }
+
+    if (old->group != 0) {
+        clone->group = icalmemory_strdup(old->group);
+
+        if (clone->group == 0) {
             vcardproperty_free(clone);
             icalerror_set_errno(ICAL_NEWFAILED_ERROR);
             return 0;
