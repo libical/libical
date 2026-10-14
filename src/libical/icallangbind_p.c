@@ -192,11 +192,10 @@ char *icallangbind_property_eval_string_r(icalproperty *prop, const char *sep)
             }
             /* Remove any newlines */
 
-            for (j = copy, i = str; *i != 0; j++, i++) {
-                if (*i == '\n') {
-                    i++;
+            for (j = copy, i = str; *i != 0; i++) {
+                if (*i != '\n') {
+                    *j++ = *i;
                 }
-                *j = *i;
             }
 
             *j = 0;

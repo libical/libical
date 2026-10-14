@@ -2650,7 +2650,7 @@ void icaltimezone_truncate_vtimezone(icalcomponent *vtz,
 
                             /* Check if DSTART is within 1yr of prev onset
                                (no prev onset: no observance before close) */
-                            ydiff = icaltime_is_null_time(prev_onset)
+                            ydiff = icaltime_is_null_time(prev_onset) //NOLINT(readability-implicit-bool-conversion)
                                         ? 0
                                         : (unsigned)(prev_onset.year - dtstart.year);
                             if (ydiff <= 1) {

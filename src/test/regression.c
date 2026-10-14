@@ -4374,6 +4374,12 @@ static void test_langbind(void)
            " mary@foo.org\r\n");
 
     icalcomponent_free(c);
+
+    /* newlines are dropped from the value, including a trailing one */
+    p = icalproperty_new_url("http://a\n\nb\n");
+    ok("eval_string drops newlines",
+       strstr(icallangbind_property_eval_string(p, ":"), ", 'value':'http://ab'") != NULL);
+    icalproperty_free(p);
 }
 
 static void test_property_parse(void)
@@ -5017,6 +5023,47 @@ static void test_vcal(void)
 
         cleanVObject(vcal);
     }
+}
+
+static void test_vcal_procedure_alarm(void)
+{
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "DTSTART:20020101T100000\r\n"
+        "PALARM:20020101T090000;;;/usr/bin/alarm\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    VObject *vcal;
+    icalcomponent *comp, *event, *alarm;
+    icalproperty *prop;
+
+    vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with a procedure alarm", (vcal != 0));
+    if (!vcal) {
+        return;
+    }
+
+    comp = icalvcal_convert(vcal);
+    cleanVObject(vcal);
+    ok("Converting to ical component", (comp != 0));
+    if (!comp) {
+        return;
+    }
+
+    event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+    alarm = event ? icalcomponent_get_first_component(event, ICAL_VALARM_COMPONENT) : NULL;
+    prop = alarm ? icalcomponent_get_first_property(alarm, ICAL_ATTACH_PROPERTY) : NULL;
+    ok("procedure alarm has an ATTACH", (prop != 0));
+    if (prop) {
+        icalattach *attach = icalproperty_get_attach(prop);
+
+        str_is("procedure path becomes a file URL",
+               attach ? icalattach_get_url(attach) : "", "file:///usr/bin/alarm");
+    }
+
+    icalcomponent_free(comp);
 }
 
 /*
@@ -5696,6 +5743,15 @@ static void test_icalvalue_decode_ical_string(void)
     ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
     ok("Decodes into large-enough buffer", (icalvalue_decode_ical_string(value, buff, 3) != 0));
     ok("Properly decoded", (strcmp(buff, "a\\") == 0));
+
+    /* Ending escape character at the very end of an allocation must not read past it */
+    {
+        char *heap = strdup("a\\");
+
+        ok("Decodes string ending in escape character", (icalvalue_decode_ical_string(heap, buff, (int)sizeof(buff)) != 0));
+        ok("Ending escape character ignored", (strcmp(buff, "a") == 0));
+        free(heap);
+    }
 }
 
 static int test_icalarray_sort_compare_char(const void *p1, const void *p2)
@@ -8471,6 +8527,7 @@ int main(int argc, const char *argv[])
     test_run("Test icalcalendar", test_calendar, do_test, do_header);
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
+    test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
