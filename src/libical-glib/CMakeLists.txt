@@ -147,6 +147,7 @@ foreach(file IN LISTS API_FILES)
   list(APPEND xml_files ${xml_file_fullpath})
 endforeach()
 
+set(ical-glib-src-generator_EXE)
 if(CMAKE_CROSSCOMPILING)
   # import native ical-glib-src-generator when cross-compiling
   set(
@@ -155,10 +156,16 @@ if(CMAKE_CROSSCOMPILING)
     CACHE FILEPATH
     "Path to exported ical-glib-src-generator target from native build"
   )
-  include(${IMPORT_ICAL_GLIB_SRC_GENERATOR})
-  set(ical-glib-src-generator_EXE native-ical-glib-src-generator)
+  if(IMPORT_ICAL_GLIB_SRC_GENERATOR)
+    include(${IMPORT_ICAL_GLIB_SRC_GENERATOR})
+    set(ical-glib-src-generator_EXE native-ical-glib-src-generator)
+  endif()
 else()
   set(ical-glib-src-generator_EXE ical-glib-src-generator)
+endif()
+if(NOT ical-glib-src-generator_EXE)
+  set(LIBICAL_GLIB OFF)
+  return()
 endif()
 
 list(

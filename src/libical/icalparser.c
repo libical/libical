@@ -1192,7 +1192,13 @@ icalcomponent *icalparser_clean(icalparser *parser)
             }
         }
     }
-
+    parser->level = 0;
+    parser->state = ICALPARSER_SUCCESS;
+    parser->buffer_full = 0;
+    parser->continuation_line = 0;
+    parser->lineno = 0;
+    parser->error_count = 0;
+    memset(parser->temp, 0, sizeof(parser->temp));
     return parser->root_component;
 }
 

@@ -970,6 +970,54 @@ static void test_recur_iterator_on_jan_1(void)
     icalrecurrencetype_unref(recurrence);
 }
 
+/* A reverse range must yield the forward occurrences in reverse order, also without UNTIL */
+static void test_recur_iterator_reverse_range_rule(const char *rule, const char *dtstart_str, const char *from_str)
+{
+    icaltimetype dtstart = icaltime_from_string(dtstart_str);
+    icaltimetype from = icaltime_from_string(from_str);
+    struct icalrecurrencetype *recurrence = icalrecurrencetype_new_from_string(rule);
+    icaltimetype forward[16];
+    int nforward = 0;
+
+    icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, dtstart);
+    for (icaltimetype next = icalrecur_iterator_next(iterator);
+         !icaltime_is_null_time(next) && icaltime_compare(next, from) <= 0 && nforward < 16;
+         next = icalrecur_iterator_next(iterator)) {
+        forward[nforward++] = next;
+    }
+    icalrecur_iterator_free(iterator);
+    ok("Forward iteration yields occurrences", nforward > 0);
+
+    iterator = icalrecur_iterator_new(recurrence, dtstart);
+    ok("Reverse range is accepted", icalrecur_iterator_set_range(iterator, from, dtstart));
+
+    int nreverse = 0;
+    bool same = true;
+    for (icaltimetype prev = icalrecur_iterator_prev(iterator);
+         !icaltime_is_null_time(prev) && nreverse < 16;
+         prev = icalrecur_iterator_prev(iterator)) {
+        nreverse++;
+        if (nreverse > nforward || icaltime_compare(prev, forward[nforward - nreverse]) != 0) {
+            same = false;
+        }
+    }
+    icalrecur_iterator_free(iterator);
+    ok("Reverse range yields the forward occurrences in reverse order", same && nreverse == nforward);
+
+    icalrecurrencetype_unref(recurrence);
+}
+
+static void test_recur_iterator_reverse_range(void)
+{
+    test_recur_iterator_reverse_range_rule("FREQ=YEARLY", "20200301T090000", "20230601T120000");
+
+    icalarray *calendars = icalrecurrencetype_rscale_supported_calendars();
+    if (calendars->num_elements > 1) {
+        test_recur_iterator_reverse_range_rule("RSCALE=INDIAN;FREQ=YEARLY", "20200301T090000", "20230601T120000");
+    }
+    icalarray_free(calendars);
+}
+
 static void test_memory(void)
 {
     size_t bufsize = 256;
@@ -1640,6 +1688,54 @@ enum byrule
     BY_MONTH = 7,
     BY_SET_POS = 8,
 };
+
+/* Days of year outside the year must not touch the year days bitmask.
+   ICU versions differ on years before a calendar's epoch: some reject them, others
+   return dates, so only check that each iteration ends within COUNT. */
+static void test_recur_weekno_out_of_year(void)
+{
+    static const struct {
+        const char *rule;
+        const char *dtstart;
+        bool rscale;
+    } tests[] = {
+        {"FREQ=YEARLY;BYWEEKNO=-53;COUNT=3", "20240101T090000", false},
+        {"FREQ=YEARLY;BYWEEKNO=53;COUNT=3", "20240101T090000", false},
+        {"RSCALE=INDIAN;FREQ=YEARLY;BYWEEKNO=1;COUNT=3", "00010101T090000", true},
+    };
+    icalarray *calendars = icalrecurrencetype_rscale_supported_calendars();
+    const bool have_rscale = calendars->num_elements > 1;
+
+    icalarray_free(calendars);
+
+    const bool estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(false);
+
+    for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
+        if (tests[i].rscale && !have_rscale) {
+            continue;
+        }
+
+        struct icalrecurrencetype *recurrence = icalrecurrencetype_new_from_string(tests[i].rule);
+        ok(tests[i].rule, recurrence != NULL);
+
+        icalrecur_iterator *iterator =
+            icalrecur_iterator_new(recurrence, icaltime_from_string(tests[i].dtstart));
+        int count = 0;
+        if (iterator) {
+            while (!icaltime_is_null_time(icalrecur_iterator_next(iterator)) && count <= 3) {
+                count++;
+            }
+            icalrecur_iterator_free(iterator);
+        }
+        ok("Iteration ends within COUNT", count <= 3);
+
+        icalrecurrencetype_unref(recurrence);
+        icalerror_clear_errno();
+    }
+
+    icalerror_set_errors_are_fatal(estate);
+}
 
 /* From Federico Mena Quintero <federico@ximian.com>    */
 static void test_recur_parameter_bug(void)
@@ -2796,6 +2892,116 @@ static void test_fblist(void)
     icalcomponent_free(comp);
 
     icalset_free(set);
+}
+
+static void test_fblist_bounds(void)
+{
+    icalspanlist *sl;
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
+    icalset *set = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/spanlist.ics", &options);
+    icalcomponent *comp;
+    int *matrix;
+    int i;
+
+    ok("open spanlist.ics", (set != NULL));
+    assert(set != NULL);
+
+    /* the busy span 19980102T010000Z-19980103T020000Z starts before the range */
+    sl = icalspanlist_new(set,
+                          icaltime_from_string("19980102T120000Z"),
+                          icaltime_from_string("19980104T000000Z"));
+    ok("create spanlist starting inside a busy span", (sl != NULL));
+
+    matrix = icalspanlist_as_freebusy_matrix(sl, 3600);
+    ok("hourly matrix", (matrix != NULL));
+    if (matrix) {
+        for (i = 0; matrix[i] != -1; i++) {
+            ;
+        }
+        int_is("hourly matrix slots", i, 36);
+        int_is("first slot busy", matrix[0], 1);
+        int_is("last busy slot", matrix[13], 1);
+        int_is("first free slot", matrix[14], 0);
+        free(matrix);
+    }
+    icalspanlist_free(sl);
+    icalset_free(set);
+
+    comp = icalparser_parse_string(
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VFREEBUSY\r\n"
+        "DTSTART:19980101T000000Z\r\n"
+        "DTEND:19980102T000000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19980101T020000Z/19980101T040000Z\r\n"
+        "FREEBUSY;FBTYPE=FREE:19980101T060000Z/19980101T070000Z\r\n"
+        "FREEBUSY:19980101T080000Z/19980101T090000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19971231T220000Z/19980101T010000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19980101T230000Z/19980102T030000Z\r\n"
+        "END:VFREEBUSY\r\n"
+        "END:VCALENDAR\r\n");
+    sl = icalspanlist_from_vfreebusy(comp);
+    ok("spanlist from VFREEBUSY", (sl != NULL));
+
+    matrix = icalspanlist_as_freebusy_matrix(sl, 3600);
+    ok("hourly matrix from VFREEBUSY", (matrix != NULL));
+    if (matrix) {
+        for (i = 0; matrix[i] != -1; i++) {
+            ;
+        }
+        int_is("matrix slots follow DTSTART/DTEND", i, 24);
+        int_is("span before DTSTART clipped", matrix[0], 1);
+        int_is("free slot", matrix[1], 0);
+        int_is("FBTYPE=BUSY slot", matrix[2], 1);
+        int_is("FBTYPE=BUSY slot", matrix[3], 1);
+        int_is("FBTYPE=FREE slot", matrix[6], 0);
+        int_is("default FBTYPE is BUSY", matrix[8], 1);
+        int_is("span after DTEND clipped", matrix[23], 1);
+        free(matrix);
+    }
+    icalspanlist_free(sl);
+    icalcomponent_free(comp);
+
+    /* busy spans entirely outside the period, and a period that ends before it starts */
+    comp = icalparser_parse_string(
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VFREEBUSY\r\n"
+        "DTSTART:19980101T000000Z\r\n"
+        "DTEND:19980101T020000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19970101T000000Z/19970101T010000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19990101T000000Z/19990101T010000Z\r\n"
+        "END:VFREEBUSY\r\n"
+        "END:VCALENDAR\r\n");
+    sl = icalspanlist_from_vfreebusy(comp);
+    matrix = icalspanlist_as_freebusy_matrix(sl, 3600);
+    ok("matrix with spans outside the period", (matrix != NULL));
+    if (matrix) {
+        int_is("first slot free", matrix[0], 0);
+        int_is("second slot free", matrix[1], 0);
+        int_is("matrix end", matrix[2], -1);
+        free(matrix);
+    }
+    icalspanlist_free(sl);
+    icalcomponent_free(comp);
+
+    comp = icalparser_parse_string(
+        "BEGIN:VCALENDAR\r\n"
+        "BEGIN:VFREEBUSY\r\n"
+        "DTSTART:19980102T000000Z\r\n"
+        "DTEND:19980101T000000Z\r\n"
+        "FREEBUSY;FBTYPE=BUSY:19980101T020000Z/19980101T040000Z\r\n"
+        "END:VFREEBUSY\r\n"
+        "END:VCALENDAR\r\n");
+    sl = icalspanlist_from_vfreebusy(comp);
+    {
+        const bool estate = icalerror_get_errors_are_fatal();
+        icalerror_set_errors_are_fatal(false);
+        matrix = icalspanlist_as_freebusy_matrix(sl, 3600);
+        icalerror_set_errors_are_fatal(estate);
+    }
+    ok("no matrix for a period ending before it starts", (matrix == NULL));
+    free(matrix);
+    icalspanlist_free(sl);
+    icalcomponent_free(comp);
 }
 
 static void test_convenience(void)
@@ -4264,6 +4470,12 @@ static void test_langbind(void)
            " mary@foo.org\r\n");
 
     icalcomponent_free(c);
+
+    /* newlines are dropped from the value, including a trailing one */
+    p = icalproperty_new_url("http://a\n\nb\n");
+    ok("eval_string drops newlines",
+       strstr(icallangbind_property_eval_string(p, ":"), ", 'value':'http://ab'") != NULL);
+    icalproperty_free(p);
 }
 
 static void test_property_parse(void)
@@ -4769,6 +4981,47 @@ static void test_vcal(void)
 
         cleanVObject(vcal);
     }
+}
+
+static void test_vcal_procedure_alarm(void)
+{
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "DTSTART:20020101T100000\r\n"
+        "PALARM:20020101T090000;;;/usr/bin/alarm\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    VObject *vcal;
+    icalcomponent *comp, *event, *alarm;
+    icalproperty *prop;
+
+    vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with a procedure alarm", (vcal != 0));
+    if (!vcal) {
+        return;
+    }
+
+    comp = icalvcal_convert(vcal);
+    cleanVObject(vcal);
+    ok("Converting to ical component", (comp != 0));
+    if (!comp) {
+        return;
+    }
+
+    event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+    alarm = event ? icalcomponent_get_first_component(event, ICAL_VALARM_COMPONENT) : NULL;
+    prop = alarm ? icalcomponent_get_first_property(alarm, ICAL_ATTACH_PROPERTY) : NULL;
+    ok("procedure alarm has an ATTACH", (prop != 0));
+    if (prop) {
+        icalattach *attach = icalproperty_get_attach(prop);
+
+        str_is("procedure path becomes a file URL",
+               attach ? icalattach_get_url(attach) : "", "file:///usr/bin/alarm");
+    }
+
+    icalcomponent_free(comp);
 }
 
 /*
@@ -5448,6 +5701,15 @@ static void test_icalvalue_decode_ical_string(void)
     ok("Buffer not changed", (strcmp(buff, defvalue) == 0));
     ok("Decodes into large-enough buffer", (icalvalue_decode_ical_string(value, buff, 3) != 0));
     ok("Properly decoded", (strcmp(buff, "a\\") == 0));
+
+    /* Ending escape character at the very end of an allocation must not read past it */
+    {
+        char *heap = strdup("a\\");
+
+        ok("Decodes string ending in escape character", (icalvalue_decode_ical_string(heap, buff, (int)sizeof(buff)) != 0));
+        ok("Ending escape character ignored", (strcmp(buff, "a") == 0));
+        free(heap);
+    }
 }
 
 static int test_icalarray_sort_compare_char(const void *p1, const void *p2)
@@ -7690,6 +7952,183 @@ static void test_geo_zoneinfo_coordinates(void)
 #pragma GCC diagnostic pop
 #endif
 
+static const char *merged_event_tzid(icalcomponent *comp, const char *uid)
+{
+    icalcomponent *event;
+
+    for (event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT); event;
+         event = icalcomponent_get_next_component(comp, ICAL_VEVENT_COMPONENT)) {
+        if (strcmp(icalcomponent_get_uid(event), uid) == 0) {
+            icalproperty *dtstart = icalcomponent_get_first_property(event, ICAL_DTSTART_PROPERTY);
+            icalparameter *param = icalproperty_get_first_parameter(dtstart, ICAL_TZID_PARAMETER);
+            return param ? icalparameter_get_tzid(param) : "";
+        }
+    }
+    return "";
+}
+
+static void test_merge_component_vtimezones(void)
+{
+#define MERGE_VTIMEZONE(tzid, offset) \
+    "BEGIN:VTIMEZONE\r\n"             \
+    "TZID:" tzid "\r\n"               \
+    "BEGIN:STANDARD\r\n"              \
+    "DTSTART:19700101T000000\r\n"     \
+    "TZOFFSETFROM:" offset "\r\n"     \
+    "TZOFFSETTO:" offset "\r\n"       \
+    "END:STANDARD\r\n"                \
+    "END:VTIMEZONE\r\n"
+#define MERGE_CALENDAR(vtimezones, uid)                \
+    "BEGIN:VCALENDAR\r\n"                              \
+    "VERSION:2.0\r\n"                                  \
+    "PRODID:-//libical//merge test//EN\r\n" vtimezones \
+    "BEGIN:VEVENT\r\n"                                 \
+    "UID:" uid "\r\n"                                  \
+    "DTSTAMP:20260101T000000Z\r\n"                     \
+    "DTSTART;TZID=Test/Zone:20260101T100000\r\n"       \
+    "END:VEVENT\r\n"                                   \
+    "END:VCALENDAR\r\n"
+
+    icalcomponent *comp, *comp_to_merge;
+    icaltimezone *zone;
+
+    /* Identical VTIMEZONEs with the same TZID: nothing is renamed. */
+    comp = icalcomponent_new_from_string(MERGE_CALENDAR(MERGE_VTIMEZONE("Test/Zone", "+0100"), "a"));
+    comp_to_merge = icalcomponent_new_from_string(MERGE_CALENDAR(MERGE_VTIMEZONE("Test/Zone", "+0100"), "b"));
+    ok("parsed calendars", comp != NULL && comp_to_merge != NULL);
+    if (!comp || !comp_to_merge) {
+        return;
+    }
+    icalcomponent_merge_component(comp, comp_to_merge);
+    int_is("one VTIMEZONE after merging identical ones",
+           icalcomponent_count_components(comp, ICAL_VTIMEZONE_COMPONENT), 1);
+    int_is("both VEVENTs merged", icalcomponent_count_components(comp, ICAL_VEVENT_COMPONENT), 2);
+    str_is("TZID kept", merged_event_tzid(comp, "a"), "Test/Zone");
+    str_is("TZID kept", merged_event_tzid(comp, "b"), "Test/Zone");
+    icalcomponent_free(comp);
+
+    /* Different VTIMEZONEs with the same TZID: the merged one is renamed,
+       and every other VTIMEZONE is merged too. */
+    comp = icalcomponent_new_from_string(MERGE_CALENDAR(MERGE_VTIMEZONE("Test/Zone", "+0100"), "a"));
+    comp_to_merge = icalcomponent_new_from_string(
+        MERGE_CALENDAR(MERGE_VTIMEZONE("Extra/Zone", "+0300") MERGE_VTIMEZONE("Test/Zone", "+0200"), "b"));
+    ok("parsed calendars", comp != NULL && comp_to_merge != NULL);
+    if (!comp || !comp_to_merge) {
+        return;
+    }
+    icalcomponent_merge_component(comp, comp_to_merge);
+    int_is("both VEVENTs merged", icalcomponent_count_components(comp, ICAL_VEVENT_COMPONENT), 2);
+    str_is("TZID kept", merged_event_tzid(comp, "a"), "Test/Zone");
+    str_is("conflicting TZID renamed", merged_event_tzid(comp, "b"), "Test/Zone1");
+    int_is("all VTIMEZONEs merged", icalcomponent_count_components(comp, ICAL_VTIMEZONE_COMPONENT), 3);
+    ok("other VTIMEZONE merged", icalcomponent_get_timezone(comp, "Extra/Zone") != NULL);
+    zone = icalcomponent_get_timezone(comp, "Test/Zone");
+    ok("existing VTIMEZONE kept",
+       zone && strstr(icalcomponent_as_ical_string(icaltimezone_get_component(zone)), "+0100"));
+    zone = icalcomponent_get_timezone(comp, "Test/Zone1");
+    ok("renamed VTIMEZONE added",
+       zone && strstr(icalcomponent_as_ical_string(icaltimezone_get_component(zone)), "+0200"));
+
+    /* The same VTIMEZONE again: references go to the already renamed one. */
+    comp_to_merge = icalcomponent_new_from_string(MERGE_CALENDAR(MERGE_VTIMEZONE("Test/Zone", "+0200"), "c"));
+    ok("parsed calendar", comp_to_merge != NULL);
+    if (!comp_to_merge) {
+        icalcomponent_free(comp);
+        return;
+    }
+    icalcomponent_merge_component(comp, comp_to_merge);
+    int_is("no VTIMEZONE added", icalcomponent_count_components(comp, ICAL_VTIMEZONE_COMPONENT), 3);
+    int_is("all VEVENTs merged", icalcomponent_count_components(comp, ICAL_VEVENT_COMPONENT), 3);
+    str_is("TZID renamed to matching VTIMEZONE", merged_event_tzid(comp, "c"), "Test/Zone1");
+    icalcomponent_free(comp);
+
+#undef MERGE_CALENDAR
+#undef MERGE_VTIMEZONE
+}
+
+static void test_truncate_vtimezone_rscale_until(void)
+{
+    icalarray *calendars = icalrecurrencetype_rscale_supported_calendars();
+    if (!calendars) {
+        ok("RSCALE not supported, skipped", 1);
+        return;
+    }
+    icalarray_free(calendars);
+
+    icalcomponent *vtz = icalcomponent_new_from_string(
+        "BEGIN:VTIMEZONE\r\n"
+        "TZID:Test/RScale\r\n"
+        "BEGIN:STANDARD\r\n"
+        "DTSTART:19900101T000000\r\n"
+        "TZOFFSETFROM:+0000\r\n"
+        "TZOFFSETTO:+0000\r\n"
+        "TZNAME:LMT\r\n"
+        "END:STANDARD\r\n"
+        "BEGIN:STANDARD\r\n"
+        "DTSTART:20000101T000000\r\n"
+        "TZOFFSETFROM:+0000\r\n"
+        "TZOFFSETTO:+0000\r\n"
+        "TZNAME:TST\r\n"
+        "RRULE:RSCALE=GREGORIAN;FREQ=YEARLY;UNTIL=20220101T000000Z\r\n"
+        "END:STANDARD\r\n"
+        "END:VTIMEZONE\r\n");
+    ok("parse VTIMEZONE", (vtz != NULL));
+
+    icaltimetype start = icaltime_from_string("20200601T000000Z");
+    icaltimezone_truncate_vtimezone(vtz, start, icaltime_null_time(), false);
+
+    /* the first STANDARD is now the tombstone at the window open */
+    icalcomponent *std = icalcomponent_get_first_component(vtz, ICAL_XSTANDARD_COMPONENT);
+    ok("tombstone STANDARD kept", (std != NULL));
+    icalproperty *prop = icalcomponent_get_first_property(std, ICAL_DTSTART_PROPERTY);
+    str_is("tombstone starts at the window open",
+           icaltime_as_ical_string(icalproperty_get_dtstart(prop)), "20200601T000000");
+
+    std = icalcomponent_get_next_component(vtz, ICAL_XSTANDARD_COMPONENT);
+    ok("STANDARD kept", (std != NULL));
+    ok("RRULE removed",
+       (icalcomponent_get_first_property(std, ICAL_RRULE_PROPERTY) == NULL));
+    prop = icalcomponent_get_first_property(std, ICAL_DTSTART_PROPERTY);
+    ok("DTSTART kept", (prop != NULL));
+    str_is("DTSTART moved into the window",
+           icaltime_as_ical_string(icalproperty_get_dtstart(prop)), "20210101T000000");
+    prop = icalcomponent_get_first_property(std, ICAL_RDATE_PROPERTY);
+    ok("UNTIL added as RDATE", (prop != NULL));
+    str_is("RDATE is the old UNTIL",
+           icaltime_as_ical_string(icalproperty_get_rdate(prop).time), "20220101T000000");
+
+    icalcomponent_free(vtz);
+}
+
+static void test_truncate_vtimezone_no_onset_in_window(void)
+{
+    icalcomponent *vtz = icalcomponent_new_from_string(
+        "BEGIN:VTIMEZONE\r\n"
+        "TZID:Test/Sparse\r\n"
+        "BEGIN:STANDARD\r\n"
+        "DTSTART:20000101T000000\r\n"
+        "TZOFFSETFROM:+0000\r\n"
+        "TZOFFSETTO:+0000\r\n"
+        "TZNAME:TST\r\n"
+        "RRULE:FREQ=YEARLY;INTERVAL=7\r\n"
+        "END:STANDARD\r\n"
+        "END:VTIMEZONE\r\n");
+    ok("parse VTIMEZONE", (vtz != NULL));
+
+    icaltimetype start = icaltime_from_string("20200601T000000Z");
+    icaltimetype end = icaltime_from_string("20210101T000000Z");
+    icaltimezone_truncate_vtimezone(vtz, start, end, false);
+
+    icalcomponent *std = icalcomponent_get_first_component(vtz, ICAL_XSTANDARD_COMPONENT);
+    ok("STANDARD kept", (std != NULL));
+    ok("RRULE with no onset in the window removed",
+       (icalcomponent_get_first_property(std, ICAL_RRULE_PROPERTY) == NULL));
+    ok("no RDATE added",
+       (icalcomponent_get_first_property(std, ICAL_RDATE_PROPERTY) == NULL));
+
+    icalcomponent_free(vtz);
+}
+
 static void test_dtend_duration_due_validation(void)
 {
     icalcomponent *ical;
@@ -7976,16 +8415,19 @@ int main(int argc, const char *argv[])
     test_run("Test DTSTART", test_dtstart, do_test, do_header);
     test_run("Test day of year of week start", test_start_of_week, do_test, do_header);
     test_run("Test DTEND/DURATION/DUE validation", test_dtend_duration_due_validation, do_test, do_header);
+    test_run("Test merging VTIMEZONEs", test_merge_component_vtimezones, do_test, do_header);
     test_run("Test recur parser", test_recur_parser, do_test, do_header);
     test_run("Test recur", test_recur, do_test, do_header);
     test_run("Test recur encode by[ICAL_BY_DAY]", test_recur_encode_by_day, do_test, do_header);
     test_run("Test recur encode by[ICAL_BY_MONTH]", test_recur_encode_by_month, do_test, do_header);
     test_run("Test Recurring Events File", test_recur_file, do_test, do_header);
     test_run("Test parameter bug", test_recur_parameter_bug, do_test, do_header);
+    test_run("Test BYWEEKNO days outside the year", test_recur_weekno_out_of_year, do_test, do_header);
     test_run("Test component parser roundtrip", test_component_parser_roundtrip, do_test, do_header);
 
     test_run("Test Array Expansion", test_expand_recurrence, do_test, do_header);
     test_run("Test Free/Busy lists", test_fblist, do_test, do_header);
+    test_run("Test Free/Busy list bounds", test_fblist_bounds, do_test, do_header);
     test_run("Test Overlaps", test_overlaps, do_test, do_header);
 
     test_run("Test Span", test_icalcomponent_get_span, do_test, do_header);
@@ -8025,6 +8467,7 @@ int main(int argc, const char *argv[])
     test_run("Test icalcomponent_foreach_recurrence with exact duration", test_component_foreach_dtend_exact, do_test, do_header);
     test_run("Test icalrecur_iterator_set_start with date", test_recur_iterator_set_start, do_test, do_header);
     test_run("Test weekly icalrecur_iterator on January 1", test_recur_iterator_on_jan_1, do_test, do_header);
+    test_run("Test icalrecur_iterator reverse range without UNTIL", test_recur_iterator_reverse_range, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
@@ -8043,6 +8486,7 @@ int main(int argc, const char *argv[])
     test_run("Test icalcalendar", test_calendar, do_test, do_header);
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
+    test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
@@ -8114,6 +8558,8 @@ int main(int argc, const char *argv[])
     test_run("Test compare date only", test_icaltime_compare_date_only, do_test, do_header);
     test_run("Test folding", test_line_folding, do_test, do_header);
     test_run("Test zoneinfo geo coordinates", test_geo_zoneinfo_coordinates, do_test, do_header);
+    test_run("Test truncate VTIMEZONE with RSCALE UNTIL", test_truncate_vtimezone_rscale_until, do_test, do_header);
+    test_run("Test truncate VTIMEZONE with no onset in window", test_truncate_vtimezone_no_onset_in_window, do_test, do_header);
 
 #if defined(LIBICAL_CXX_BINDINGS)
     test_run("Test C++ API", test_cxx, do_test, do_header);

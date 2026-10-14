@@ -12,10 +12,12 @@ ie. `cargo install mdbook --root=/usr/local` # install into /usr/local
 Checkout the branch corresponding to the version you want to update:
 
 ```shell
-     git checkout 3.0 # for version 3.x
+     git checkout 4.0 # for version 4.x
        OR
-     git checkout master # for version 4.x
+     git checkout master # for the unstable version
 ```
+
+The book is not supported in the 3.0 version.
 
 ## Building the book
 

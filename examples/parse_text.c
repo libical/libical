@@ -38,15 +38,15 @@ void parse_text(char *argv[])
     /* Tell the parser what input route it should use. */
     icalparser_set_gen_data(parser, stream);
 
+    bool cont;
     do {
-        /* Get a single content line by making one or more calls to
-           read_stream()*/
+        /* Get a single content line by making one or more calls to read_stream() */
         line = icalparser_get_line(parser, read_stream);
 
-        /* Now, add that line into the parser object. If that line
-           completes a component, c will be non-zero */
+        /* Add the line into the parser object */
         c = icalparser_add_line(parser, line);
 
+        /* c will be non-zero if the line completes a component */
         if (c != 0) {
             char *temp = icalcomponent_as_ical_string_r(c);
             printf("%s", temp);
@@ -56,8 +56,12 @@ void parse_text(char *argv[])
 
             icalcomponent_free(c);
         }
-
-    } while (line != 0);
+        cont = false;
+        if (line != 0) {
+            icalmemory_free_buffer(line);
+            cont = true;
+        }
+    } while (cont);
 
     icalparser_free(parser);
 }

@@ -523,8 +523,14 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
 
                     icalattach *new_attach = icalattach_new_from_url(new_url);
                     free(new_url);
-                    icalproperty_set_attach(attach_prop, new_attach);
-                    icalattach_unref(attach);
+                    if (new_attach) {
+                        /* The property takes its own reference and drops the
+                           one it held on the old attachment. */
+                        icalproperty_set_attach(attach_prop, new_attach);
+                        icalattach_unref(new_attach);
+                    } else {
+                        is_valid_alarm = 0;
+                    }
                 } else {
                     is_valid_alarm = 0;
                 }
