@@ -235,8 +235,9 @@ sub insert_code
       print "    case ${ucprefix}_${ucv}_VALUE:\n";
       print "        return ${ucprefix}_UNION_${union_type};\n";
     }
-
-    print "    }\n\n    return ${ucprefix}_UNION_NONE;\n}\n";
+    print "    default:\n";
+    print "        return ${ucprefix}_UNION_NONE;\n";
+    print "    }\n\n    }\n";
   }
 
   foreach $value (sort keys %h) {
