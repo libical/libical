@@ -158,11 +158,11 @@ blocks of text as a string, or it can parse line-by-line.
 Libical has a substantial error reporting system for both programming
 errors and component usage errors.
 
-#### 3.2.4 Memory Management
+#### 3.2.4 Memory management system
 
-Since many of libical's interfaces return strings, the library has its
-own memory management system to eliminate the need to free every string
-returned from the library.  See [Memory Management](#memory).
+Since many of libical's interfaces return strings, the library has its own
+memory management system to eliminate the need to free every string returned
+from the library. See the [Memory Management](#memory) section for more information.
 
 #### 3.2.5 Storage classes
 
@@ -411,13 +411,15 @@ int main(int argc, char *argv[])
     // will have access to it
     icalparser_set_gen_data(parser, stream);
 
+    bool cont;
     do {
-        // read the file, line-by-line, and parse the data
+        // Get a single content line by making one or more calls to read_stream()
         line = icalparser_get_line(parser, read_stream);
+
+        // Add the line into the parser object.
         component = icalparser_add_line(parser, line);
 
-        // if icalparser has finished parsing a component,
-        // it will return it
+        // component will be non-zero if the line completes a component.
         if (component != 0) {
             // print the parsed component
             printf("%s", icalcomponent_as_ical_string(component));
@@ -427,13 +429,18 @@ int main(int argc, char *argv[])
 
             icalcomponent_free(component);
         }
-    } while (line != 0);
+        cont = false;
+        if (line != 0) {
+            icalmemory_free_buffer(line);
+            cont = true;
+        }
+    } while (cont);
 
     return 0;
 }
 ```
 
-The parser object parametrizes the routine used to get input lines
+The parser object parameterizes the routine used to get input lines
 with `icalparser_set_gen_data()`and `icalparser_get_line()`. In this
 example, the routine `read_stream()` will fetch the next line from a
 stream, with the stream passed in as the `void*` parameter d. The parser

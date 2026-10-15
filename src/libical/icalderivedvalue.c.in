@@ -120,7 +120,6 @@ void icalvalue_set_x(icalvalue *impl, const char *v)
 const char *icalvalue_get_x(const icalvalue *value)
 {
     icalerror_check_arg_rz((value != 0), "value");
-    icalerror_check_value_type(value, ICAL_X_VALUE);
     return value->x_value;
 }
 
@@ -146,12 +145,14 @@ void icalvalue_set_recur(icalvalue *value, struct icalrecurrencetype *recur)
     struct icalvalue_impl *impl;
 
     icalerror_check_arg_rv((value != NULL), "value");
-    icalerror_check_value_type(value, ICAL_RECUR_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_RECUR) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
     icalerror_check_arg_rv((recur != NULL), "recur");
     /* don't allow both count and until */
     icalerror_check_arg_rv(recur->count == 0 || icaltime_is_null_time(recur->until),
                            "recurrencetype");
-    icalerror_check_value_type(value, ICAL_RECUR_VALUE);
 
     impl = (struct icalvalue_impl *)value;
 
@@ -167,7 +168,9 @@ void icalvalue_set_recur(icalvalue *value, struct icalrecurrencetype *recur)
 struct icalrecurrencetype *icalvalue_get_recur(const icalvalue *value)
 {
     icalerror_check_arg_rz((value != NULL), "value");
-    icalerror_check_value_type(value, ICAL_RECUR_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_RECUR) {
+        return NULL;
+    }
 
     return value->data.v_recur;
 }
@@ -329,8 +332,6 @@ void icalvalue_set_datetimeperiod(icalvalue *impl, struct icaldatetimeperiodtype
 {
     icalerror_check_arg_rv((impl != 0), "value");
 
-    icalerror_check_value_type(value, ICAL_DATETIMEPERIOD_VALUE);
-
     if (!icaltime_is_null_time(v.time)) {
         impl->kind = ICAL_DATETIME_VALUE;
         icalvalue_set_datetimedate(impl, v.time);
@@ -354,7 +355,6 @@ struct icaldatetimeperiodtype icalvalue_get_datetimeperiod(const icalvalue *impl
     dtp.time = icaltime_null_time();
 
     icalerror_check_arg_rx((impl != 0), "value", dtp);
-    icalerror_check_value_type(value, ICAL_DATETIMEPERIOD_VALUE);
 
     if (impl->kind == ICAL_DATETIME_VALUE || impl->kind == ICAL_DATE_VALUE) {
         dtp.period = icalperiodtype_null_period();
@@ -385,7 +385,10 @@ void icalvalue_set_class(icalvalue *value, enum icalproperty_class v)
 
     icalerror_check_arg_rv((value != 0), "value");
 
-    icalerror_check_value_type(value, ICAL_CLASS_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_ENUM) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
     impl = (struct icalvalue_impl *)value;
 
     impl->data.v_enum = (int)v;
@@ -400,8 +403,9 @@ enum icalproperty_class icalvalue_get_class(const icalvalue *value)
     pr = ICAL_CLASS_NONE;
 
     icalerror_check_arg_rx((value != NULL), "value", pr);
-    icalerror_check_arg((value != 0), "value");
-    icalerror_check_value_type(value, ICAL_CLASS_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_ENUM) {
+        return pr;
+    }
     return (enum icalproperty_class)((struct icalvalue_impl *)value)->data.v_enum;
 }
 
@@ -419,7 +423,10 @@ void icalvalue_set_geo(icalvalue *value, struct icalgeotype v)
 
     icalerror_check_arg_rv((value != 0), "value");
 
-    icalerror_check_value_type(value, ICAL_GEO_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_GEO) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
     impl = (struct icalvalue_impl *)value;
 
     impl->data.v_geo = v;
@@ -434,7 +441,9 @@ struct icalgeotype icalvalue_get_geo(const icalvalue *value)
     strcpy(gt.lon, "255.0");
 
     icalerror_check_arg_rx((value != 0), "value", gt);
-    icalerror_check_value_type(value, ICAL_GEO_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_GEO) {
+        return gt;
+    }
     return ((struct icalvalue_impl *)value)->data.v_geo;
 }
 
@@ -459,7 +468,10 @@ void icalvalue_set_attach(icalvalue *value, icalattach *attach)
     struct icalvalue_impl *impl;
 
     icalerror_check_arg_rv((value != NULL), "value");
-    icalerror_check_value_type(value, ICAL_ATTACH_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_ATTACH) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
     icalerror_check_arg_rv((attach != NULL), "attach");
 
     impl = (struct icalvalue_impl *)value;
@@ -476,7 +488,9 @@ void icalvalue_set_attach(icalvalue *value, icalattach *attach)
 icalattach *icalvalue_get_attach(const icalvalue *value)
 {
     icalerror_check_arg_rz((value != NULL), "value");
-    icalerror_check_value_type(value, ICAL_ATTACH_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_ATTACH) {
+        return NULL;
+    }
 
     return value->data.v_attach;
 }
@@ -513,7 +527,10 @@ void icalvalue_set_binary(icalvalue *value, const char * v)
     char *dupStr;
 
     icalerror_check_arg_rv((value != NULL), "value");
-    icalerror_check_value_type(value, ICAL_BINARY_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_ATTACH) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
     icalerror_check_arg_rv((v != NULL), "v");
 
     impl = (struct icalvalue_impl *)value;
@@ -537,7 +554,9 @@ void icalvalue_set_binary(icalvalue *value, const char * v)
 const char *icalvalue_get_binary(const icalvalue *value)
 {
     icalerror_check_arg_rz((value != 0), "value");
-    icalerror_check_value_type(value, ICAL_BINARY_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_ATTACH) {
+        return NULL;
+    }
     return (const char *) icalattach_get_data(value->data.v_attach);
 }
 
@@ -547,7 +566,10 @@ void icalvalue_set_requeststatus(icalvalue *value, struct icalreqstattype v)
 
     icalerror_check_arg_rv((value != 0), "value");
 
-    icalerror_check_value_type(value, ICAL_REQUESTSTATUS_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_REQUESTSTATUS) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
     impl = (struct icalvalue_impl *)value;
 
     if (impl->data.v_requeststatus.debug != 0) {
@@ -580,7 +602,9 @@ struct icalreqstattype icalvalue_get_requeststatus(const icalvalue *value)
     rs.debug = NULL;
 
     icalerror_check_arg_rx((value != 0), "value", rs);
-    icalerror_check_value_type(value, ICAL_REQUESTSTATUS_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_REQUESTSTATUS) {
+        return rs;
+    }
     return ((struct icalvalue_impl *)value)->data.v_requeststatus;
 }
 
@@ -784,7 +808,10 @@ void icalvalue_set_color(icalvalue *value, const char * v)
     icalerror_check_arg_rv((value != 0), "value");
     icalerror_check_arg_rv((v != 0), "v");
 
-    icalerror_check_value_type(value, ICAL_COLOR_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_STRING) {
+        icalerror_set_errno(ICAL_BADARG_ERROR);
+        return;
+    }
     if (!is_valid_color(v)) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         return;
@@ -806,7 +833,9 @@ void icalvalue_set_color(icalvalue *value, const char * v)
 const char * icalvalue_get_color(const icalvalue *value)
 {
     icalerror_check_arg_rz((value != 0), "value");
-    icalerror_check_value_type(value, ICAL_COLOR_VALUE);
+    if (icalvalue_kind_to_union(value->kind) != ICAL_UNION_STRING) {
+        return NULL;
+    }
     return (((struct icalvalue_impl *)value)->data.v_string);
 }
 

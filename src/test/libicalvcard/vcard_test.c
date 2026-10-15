@@ -379,6 +379,37 @@ static void test_v3_to_v4(vcardcomponent *card)
     assert_str_equals(want, vcardcomponent_as_vcard_string(card));
 }
 
+static void test_v4_to_v3_pref_member(void)
+{
+    /* MEMBER and KIND with PREF used to cause a heap-use-after-free */
+    const char *str =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "UID:1\r\n"
+        "FN:t\r\n"
+        "KIND;PREF=1:group\r\n"
+        "MEMBER;PREF=1:urn:uuid:1234\r\n"
+        "EMAIL;PREF=2:a@example.com\r\n"
+        "EMAIL;PREF=1:b@example.com\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *vcard = vcardcomponent_new_from_string(str);
+    assert(vcard);
+
+    vcardcomponent_transform(vcard, VCARD_VERSION_30);
+
+    assert(!vcardcomponent_get_first_property(vcard, VCARD_KIND_PROPERTY));
+    assert(!vcardcomponent_get_first_property(vcard, VCARD_MEMBER_PROPERTY));
+
+    vcardproperty *prop =
+        vcardcomponent_get_first_property(vcard, VCARD_EMAIL_PROPERTY);
+    assert(!vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER));
+    prop = vcardcomponent_get_next_property(vcard, VCARD_EMAIL_PROPERTY);
+    assert(vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER));
+
+    vcardcomponent_free(vcard);
+}
+
 static void test_ignore_backslash_at_eol(void)
 {
     const char *str =
@@ -469,6 +500,75 @@ static void test_parse_multi(void)
     vcardcomponent_free(xroot);
 }
 
+static void test_clone_textlist(void)
+{
+    const char *str =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:foo\r\n"
+        "item1.NICKNAME:a,b\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(str);
+    assert(card);
+    vcardcomponent *clone = vcardcomponent_clone(card);
+    assert(clone);
+
+    vcardproperty *prop =
+        vcardcomponent_get_first_property(card, VCARD_NICKNAME_PROPERTY);
+    vcardproperty *cprop =
+        vcardcomponent_get_first_property(clone, VCARD_NICKNAME_PROPERTY);
+    vcardstrarray *list = vcardvalue_get_textlist(vcardproperty_get_value(prop));
+    vcardstrarray *clist = vcardvalue_get_textlist(vcardproperty_get_value(cprop));
+
+    /* The clone must own its own copy of the list */
+    assert(list && clist);
+    assert(list != clist);
+    assert(vcardstrarray_size(clist) == 2);
+    assert(!strcmp(vcardstrarray_element_at(clist, 1), "b"));
+
+    /* The cloned value belongs to the cloned property, which keeps its group */
+    assert(vcardvalue_get_parent(vcardproperty_get_value(cprop)) == cprop);
+    assert(!strcmp(vcardproperty_get_group(cprop), "item1"));
+
+    vcardcomponent_free(card);
+    assert(!strcmp(vcardproperty_get_value_as_string(cprop), "a,b"));
+    vcardcomponent_free(clone);
+}
+
+static void test_clone_structured_param(void)
+{
+    const char *str =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:foo\r\n"
+        "N;JSCOMPS=\";0;1\":Doe;John;;;\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card = vcardparser_parse_string(str);
+    assert(card);
+    vcardcomponent *clone = vcardcomponent_clone(card);
+    assert(clone);
+
+    vcardproperty *prop =
+        vcardcomponent_get_first_property(card, VCARD_N_PROPERTY);
+    vcardproperty *cprop =
+        vcardcomponent_get_first_property(clone, VCARD_N_PROPERTY);
+    vcardparameter *param =
+        vcardproperty_get_first_parameter(prop, VCARD_JSCOMPS_PARAMETER);
+    vcardparameter *cparam =
+        vcardproperty_get_first_parameter(cprop, VCARD_JSCOMPS_PARAMETER);
+
+    /* The clone must own its own copy of the structured value */
+    assert(vcardparameter_get_jscomps(param));
+    assert(vcardparameter_get_jscomps(cparam));
+    assert(vcardparameter_get_jscomps(param) != vcardparameter_get_jscomps(cparam));
+
+    vcardcomponent_free(card);
+    assert(vcardstructured_num_fields(vcardparameter_get_jscomps(cparam)) == 3);
+    vcardcomponent_free(clone);
+}
+
 int main(int argc, const char **argv)
 {
     vcardcomponent *card;
@@ -490,9 +590,12 @@ int main(int argc, const char **argv)
     test_add_props(card);
     test_n_restriction(card);
     test_v3_to_v4(card);
+    test_v4_to_v3_pref_member();
     test_ignore_backslash_at_eol();
     test_parse_no_nested();
     test_parse_multi();
+    test_clone_structured_param();
+    test_clone_textlist();
 
     vcardcomponent_free(card);
 

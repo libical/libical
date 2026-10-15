@@ -27,7 +27,6 @@ static char *read_stream(char *s, size_t size, void *d)
 
 int main(int argc, const char *argv[])
 {
-    char *line;
     FILE *stream;
     icalparser *parser = icalparser_new();
 
@@ -43,20 +42,23 @@ int main(int argc, const char *argv[])
 
     icalparser_set_gen_data(parser, stream);
 
+    bool cont;
     do {
-        line = icalparser_get_line(parser, read_stream);
+        char *line = icalparser_get_line(parser, read_stream);
 
         icalcomponent *c = icalparser_add_line(parser, line);
-        icalmemory_free_buffer(line);
-
         if (c != 0) {
             /*icalcomponent_convert_errors(c); */
             printf("%s", icalcomponent_as_ical_string(c));
             printf("\n---------------\n");
             icalcomponent_free(c);
         }
-
-    } while (line != 0);
+        cont = false;
+        if (line != 0) {
+            icalmemory_free_buffer(line);
+            cont = true;
+        }
+    } while (cont);
 
     icalparser_free(parser);
     fclose(stream);
