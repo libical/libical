@@ -1192,6 +1192,8 @@ icalcomponent *icalparser_clean(icalparser *parser)
             }
         }
     }
+    icalcomponent *result = parser->root_component;
+    parser->root_component = 0;
     parser->level = 0;
     parser->state = ICALPARSER_SUCCESS;
     parser->buffer_full = 0;
@@ -1199,7 +1201,7 @@ icalcomponent *icalparser_clean(icalparser *parser)
     parser->lineno = 0;
     parser->error_count = 0;
     memset(parser->temp, 0, sizeof(parser->temp));
-    return parser->root_component;
+    return result;
 }
 
 struct slg_data {
