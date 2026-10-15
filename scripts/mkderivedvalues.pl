@@ -56,7 +56,7 @@ sub value_union_type
 
   my $uc = uc(join("", map {lc($_);} split(/-/, $value)));
 
-  return 'X'    if $opt_v and $uc eq 'X';
+  return 'X'    if $uc eq 'X';
   return 'ENUM' if @{$h{$value}->{'enums'}};
 
   my $union_data = exists $union_map{$uc} ? $union_map{$uc} : lc($uc);
@@ -69,8 +69,10 @@ sub insert_code
   # Map type names to the value in the icalvalue_impl data union */
 
   %union_map = (
+    BINARY         => 'attach',
     BOOLEAN        => 'int',
     CALADDRESS     => 'string',
+    COLOR          => 'string',
     DATE           => 'time',
     DATEANDORTIME  => 'time',
     DATETIME       => 'time',
@@ -79,6 +81,8 @@ sub insert_code
     DURATION       => 'duration',
     INTEGER        => 'int',
     LANGUAGETAG    => 'string',
+    LINK           => 'string',
+    RELATEDTO      => 'string',
     TEXT           => 'string',
     STRUCTURED     => 'structured',
     TEXTLIST       => 'textlist',
@@ -104,6 +108,15 @@ sub insert_code
     'textlist'   => 'TEXTLIST',
     'time'       => 'TIME'
   );
+
+  # iCal-only union members
+  if (!$opt_v) {
+    $union_type_map{'attach'}        = 'ATTACH';
+    $union_type_map{'duration'}      = 'DURATION';
+    $union_type_map{'period'}        = 'PERIOD';
+    $union_type_map{'recur'}         = 'RECUR';
+    $union_type_map{'requeststatus'} = 'REQUESTSTATUS';
+  }
 
   if ($opt_h) {
 
@@ -200,32 +213,30 @@ sub insert_code
 
     print "    {${ucprefix}_NO_VALUE,\"\"}\n};";
 
-    # vCard only: emit the value_union enum and the kind -> union lookup the accessors call
-    if ($opt_v) {
-      print "\n\n";
-      print "typedef enum ${lcprefix}value_union {\n";
-      print "    ${ucprefix}_UNION_NONE = 0,\n";
-      foreach $ut (sort values %union_type_map) {
-        print "    ${ucprefix}_UNION_${ut},\n";
-      }
-      print "    ${ucprefix}_UNION_X\n} ${lcprefix}value_union;\n\n";
+    # Emit the value_union enum and the kind -> union lookup the accessors call
+    print "\n\n";
+    print "typedef enum ${lcprefix}value_union {\n";
+    print "    ${ucprefix}_UNION_NONE = 0,\n";
+    foreach $ut (sort values %union_type_map) {
+      print "    ${ucprefix}_UNION_${ut},\n";
+    }
+    print "    ${ucprefix}_UNION_X\n} ${lcprefix}value_union;\n\n";
 
-      print
+    print
 "static ${lcprefix}value_union ${lcprefix}value_kind_to_union(${lcprefix}value_kind kind)\n{\n    switch (kind) {\n";
 
-      # No 'default' label: the switch must stay exhaustive over
-      # ${lcprefix}value_kind so that -Wswitch catches a newly added value type.
-      foreach $value (sort keys %h) {
+    # No 'default' label: the switch must stay exhaustive over
+    # ${lcprefix}value_kind so that -Wswitch catches a newly added value type.
+    foreach $value (sort keys %h) {
 
-        my $ucv        = join("", map {uc(lc($_));} split(/-/, $value));
-        my $union_type = value_union_type($value);
+      my $ucv        = join("", map {uc(lc($_));} split(/-/, $value));
+      my $union_type = value_union_type($value);
 
-        print "    case ${ucprefix}_${ucv}_VALUE:\n";
-        print "        return ${ucprefix}_UNION_${union_type};\n";
-      }
-
-      print "    }\n\n    return ${ucprefix}_UNION_NONE;\n}\n";
+      print "    case ${ucprefix}_${ucv}_VALUE:\n";
+      print "        return ${ucprefix}_UNION_${union_type};\n";
     }
+
+    print "    }\n\n    return ${ucprefix}_UNION_NONE;\n}\n";
   }
 
   foreach $value (sort keys %h) {
@@ -268,7 +279,7 @@ sub insert_code
     my $union_type = value_union_type($value);
 
     # Fail the build rather than emit accessors whose type check would always pass
-    if ($opt_v and $autogen and $union_type eq 'NONE') {
+    if ($autogen and $union_type eq 'NONE') {
       die "No ${lcprefix}value_impl union member is registered for value type "
         . "$value (union data '$union_data'): the generated accessors would "
         . "carry a vacuous type check.  Add '$union_data' to %union_type_map "
@@ -299,7 +310,7 @@ sub insert_code
     }
 
     # Likewise for a non-pointer getter with no zero value to return
-    if ($opt_v and $autogen and !$has_null_ret and $type !~ /\*/) {
+    if ($autogen and !$has_null_ret and $type !~ /\*/) {
       die "No zero value is registered for value type $value (union data "
         . "'$union_data'): the generated getter would return the literal 0 for "
         . "its non-pointer return type '$type'.  Add a zero value for "
@@ -307,11 +318,9 @@ sub insert_code
         . "its accessors by hand.\n";
     }
 
-    # Setter guard: vCard compares union tags, iCal keeps the exact-kind assertion
+    # Setter guard: refuse to overwrite a value held in another union member
     my $set_kind_check =
-      $opt_v
-      ? "    if (${lcprefix}value_kind_to_union(value->kind) != ${ucprefix}_UNION_${union_type}) {\n        icalerror_set_errno(ICAL_BADARG_ERROR);\n        return;\n    }"
-      : "    icalerror_check_value_type(value, ${ucprefix}_${uc}_VALUE);";
+"    if (${lcprefix}value_kind_to_union(value->kind) != ${ucprefix}_UNION_${union_type}) {\n        icalerror_set_errno(ICAL_BADARG_ERROR);\n        return;\n    }";
 
     if ($opt_c && $autogen) {
 
@@ -354,24 +363,22 @@ $set_kind_check\
         $retString = "(${type})";
       }
 
-      # vCard getters return the zero value on a kind mismatch; iCal aborts via icalerror
+      # Getters return the zero value on a kind mismatch
       if ($opt_v) {
         print "    if (!value) {\
         icalerror_set_errno(ICAL_BADARG_ERROR);\
         return $null_ret;\
-    }\
-    if (${lcprefix}value_kind_to_union(value->kind) != ${ucprefix}_UNION_${union_type}) {\
+    }\n";
+      } elsif ($union_data eq 'string' or $union_data eq 'textlist') {
+        print "    icalerror_check_arg_rz((value != 0), \"value\");\n";
+      } else {
+        print "    icalerror_check_arg((value != 0), \"value\");\n";
+        print "    if (!value) {\n        return $null_ret;\n    }\n";
+      }
+      print
+        "    if (${lcprefix}value_kind_to_union(value->kind) != ${ucprefix}_UNION_${union_type}) {\
         return $null_ret;\
     }\n";
-      } else {
-        if ($union_data eq 'string' or $union_data eq 'textlist') {
-          print "    icalerror_check_arg_rz((value != 0), \"value\");\n";
-        } else {
-          print "    icalerror_check_arg((value != 0), \"value\");\n";
-          print "    if (!value) {\n        return $null_ret;\n    }\n" if $has_null_ret;
-        }
-        print "    icalerror_check_value_type(value, ${ucprefix}_${uc}_VALUE);\n";
-      }
       print
 "    return ${retString}(((struct ${lcprefix}value_impl *)value)->data.v_${union_data});\n}\n";
 

@@ -4873,6 +4873,144 @@ static void test_attach_url(void)
     icalattach_unref(attach);
     icalproperty_free(ap);
     icalcomponent_free(ac);
+
+    /* An explicit VALUE=URI must still give an attachment value */
+    ap = icalproperty_new_from_string("ATTACH;VALUE=URI:https://example.com/a");
+    ok("parsed ATTACH with VALUE=URI", (ap != NULL));
+    if (ap) {
+        attach = icalproperty_get_attach(ap);
+        ok("ATTACH with VALUE=URI is an attach value", (icalvalue_isa(icalproperty_get_value(ap)) == ICAL_ATTACH_VALUE));
+        ok("ATTACH with VALUE=URI is a url", (attach != NULL && icalattach_get_is_url(attach)));
+        if (attach != NULL && icalattach_get_is_url(attach)) {
+            str_is("ATTACH with VALUE=URI url", icalattach_get_url(attach), "https://example.com/a");
+        }
+        icalproperty_free(ap);
+    }
+
+    /* Same for the other attachment-valued properties */
+    ap = icalproperty_new_from_string("IMAGE;VALUE=URI:https://example.com/i.png");
+    ok("parsed IMAGE with VALUE=URI", (ap != NULL));
+    if (ap) {
+        ok("IMAGE with VALUE=URI is an attach value", (icalvalue_isa(icalproperty_get_value(ap)) == ICAL_ATTACH_VALUE));
+        attach = icalproperty_get_image(ap);
+        ok("IMAGE with VALUE=URI is a url", (attach != NULL && icalattach_get_is_url(attach)));
+        str_is("IMAGE with VALUE=URI round-trips", icalproperty_as_ical_string(ap),
+               "IMAGE;VALUE=URI:https://example.com/i.png\r\n");
+        icalproperty_free(ap);
+    }
+
+    /* IMAGE has no default VALUE type: a bare URI is an attachment too */
+    ap = icalproperty_new_from_string("IMAGE:https://example.com/i.png");
+    ok("parsed IMAGE without VALUE", (ap != NULL));
+    if (ap) {
+        attach = icalproperty_get_image(ap);
+        ok("IMAGE without VALUE is a url", (attach != NULL && icalattach_get_is_url(attach)));
+        icalproperty_free(ap);
+    }
+
+    ap = icalproperty_new_from_string("STRUCTURED-DATA;VALUE=URI:https://example.com/d.json");
+    ok("parsed STRUCTURED-DATA with VALUE=URI", (ap != NULL));
+    if (ap) {
+        ok("STRUCTURED-DATA with VALUE=URI is an attach value", (icalvalue_isa(icalproperty_get_value(ap)) == ICAL_ATTACH_VALUE));
+        attach = icalproperty_get_structureddata(ap);
+        ok("STRUCTURED-DATA with VALUE=URI is a url", (attach != NULL && icalattach_get_is_url(attach)));
+        icalproperty_free(ap);
+    }
+}
+
+static void test_value_typed_accessors(void)
+{
+    icalvalue *v;
+    icalproperty *p;
+    icalattach *attach;
+    struct icalrecurrencetype *recur;
+    bool estate = icalerror_get_errors_are_fatal();
+
+    icalerror_set_errors_are_fatal(false);
+
+    /* Getters of another union member return the zero value */
+    v = icalvalue_new_uri("https://example.com/a");
+    ok("uri value: get_attach is NULL", (icalvalue_get_attach(v) == NULL));
+    ok("uri value: get_binary is NULL", (icalvalue_get_binary(v) == NULL));
+    ok("uri value: get_recur is NULL", (icalvalue_get_recur(v) == NULL));
+    ok("uri value: get_integer is 0", (icalvalue_get_integer(v) == 0));
+    ok("uri value: get_duration is null",
+       icaldurationtype_is_null_duration(icalvalue_get_duration(v)));
+    ok("uri value: get_period is null", icalperiodtype_is_null_period(icalvalue_get_period(v)));
+    ok("uri value: get_requeststatus is unknown",
+       (icalvalue_get_requeststatus(v).code == ICAL_UNKNOWN_STATUS));
+    str_is("uri value: get_text reads the string", icalvalue_get_text(v), "https://example.com/a");
+
+    /* Setters of another union member leave the value alone */
+    icalerror_clear_errno();
+    icalvalue_set_integer(v, 5);
+    ok("uri value: set_integer is refused", (icalerrno == ICAL_BADARG_ERROR));
+    attach = icalattach_new_from_url("https://example.com/b");
+    icalerror_clear_errno();
+    icalvalue_set_attach(v, attach);
+    ok("uri value: set_attach is refused", (icalerrno == ICAL_BADARG_ERROR));
+    icalattach_unref(attach);
+    str_is("uri value: string unchanged", icalvalue_get_uri(v), "https://example.com/a");
+    icalvalue_free(v);
+
+    v = icalvalue_new_integer(3);
+    ok("integer value: get_text is NULL", (icalvalue_get_text(v) == NULL));
+    ok("integer value: get_attach is NULL", (icalvalue_get_attach(v) == NULL));
+    icalerror_clear_errno();
+    icalvalue_set_text(v, "x");
+    ok("integer value: set_text is refused", (icalerrno == ICAL_BADARG_ERROR));
+    int_is("integer value: integer unchanged", icalvalue_get_integer(v), 3);
+    icalvalue_free(v);
+
+    attach = icalattach_new_from_url("https://example.com/c");
+    v = icalvalue_new_attach(attach);
+    icalattach_unref(attach);
+    ok("attach value: get_text is NULL", (icalvalue_get_text(v) == NULL));
+    icalerror_clear_errno();
+    icalvalue_set_text(v, "x");
+    ok("attach value: set_text is refused", (icalerrno == ICAL_BADARG_ERROR));
+    ok("attach value: attach unchanged", icalattach_get_is_url(icalvalue_get_attach(v)));
+    icalvalue_free(v);
+
+    /* Same for the hand-written accessors */
+    v = icalvalue_new_uri("https://example.com/a");
+    ok("uri value: get_class is none", (icalvalue_get_class(v) == ICAL_CLASS_NONE));
+    str_is("uri value: get_geo is the null geo", icalvalue_get_geo(v).lat, "255.0");
+    icalerror_clear_errno();
+    icalvalue_set_class(v, ICAL_CLASS_PUBLIC);
+    ok("uri value: set_class is refused", (icalerrno == ICAL_BADARG_ERROR));
+    icalerror_clear_errno();
+    icalvalue_set_geo(v, icalvalue_get_geo(v));
+    ok("uri value: set_geo is refused", (icalerrno == ICAL_BADARG_ERROR));
+    icalerror_clear_errno();
+    icalvalue_set_requeststatus(v, icalreqstattype_from_string("2.0;Success"));
+    ok("uri value: set_requeststatus is refused", (icalerrno == ICAL_BADARG_ERROR));
+    icalerror_clear_errno();
+    icalvalue_set_binary(v, "Zm9v");
+    ok("uri value: set_binary is refused", (icalerrno == ICAL_BADARG_ERROR));
+    str_is("uri value: string still unchanged", icalvalue_get_uri(v), "https://example.com/a");
+    icalvalue_free(v);
+
+    v = icalvalue_new_integer(3);
+    ok("integer value: get_color is NULL", (icalvalue_get_color(v) == NULL));
+    icalerror_clear_errno();
+    icalvalue_set_color(v, "red");
+    ok("integer value: set_color is refused", (icalerrno == ICAL_BADARG_ERROR));
+    recur = icalrecurrencetype_new_from_string("FREQ=DAILY");
+    icalerror_clear_errno();
+    icalvalue_set_recur(v, recur);
+    ok("integer value: set_recur is refused", (icalerrno == ICAL_BADARG_ERROR));
+    icalrecurrencetype_unref(recur);
+    int_is("integer value: integer still unchanged", icalvalue_get_integer(v), 3);
+    icalvalue_free(v);
+
+    /* A property getter on a value of another union member returns the zero value */
+    p = icalproperty_new(ICAL_IMAGE_PROPERTY);
+    icalproperty_set_value(p, icalvalue_new_uri("https://example.com/i.png"));
+    ok("IMAGE with a uri value: get_image is NULL", (icalproperty_get_image(p) == NULL));
+    icalproperty_free(p);
+
+    icalerror_set_errors_are_fatal(estate);
 }
 
 static void test_free_attach_data(char *data, void *user_data)
@@ -8482,6 +8620,7 @@ int main(int argc, const char *argv[])
     test_run("Test Attachment", test_attach, do_test, do_header);
     test_run("Test CalDAV Attachment", test_attach_caldav, do_test, do_header);
     test_run("Test Attachment with URL", test_attach_url, do_test, do_header);
+    test_run("Test typed value accessors", test_value_typed_accessors, do_test, do_header);
     test_run("Test Attachment with data", test_attach_data, do_test, do_header);
     test_run("Test icalcalendar", test_calendar, do_test, do_header);
     test_run("Test Dirset", test_dirset, do_test, do_header);
