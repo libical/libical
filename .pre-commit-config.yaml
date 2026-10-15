@@ -66,12 +66,11 @@ repos:
     hooks:
       - id: format-xml
         args: [--self-closing=nospace, --indent=2, --write]
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.38.0
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.21.0
     hooks:
-      - id: yamllint
-        args: [--strict]
-        exclude: ^(.clang-format)
+      - id: yamlfmt
+        exclude: ^(.clang-format|.clang-tidy)
   - repo: https://github.com/fsfe/reuse-tool
     rev: v6.2.0
     hooks:
