@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.7] - Unreleased
 
+- Fix busy status of recurring events in icalcomponent_foreach_recurrence().
 - libicalvcard: vcardcomponent_clone() and friends now deep-copy TEXTLIST values (e.g. NICKNAME,
   CATEGORIES) and structured parameters (JSCOMPS), and keep the property group. Previously the
   clone shared them with the original, so freeing both freed the same memory twice.

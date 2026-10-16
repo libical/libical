@@ -651,7 +651,7 @@ static void test_component_foreach_busy(void)
 
         for (int busy = 0; busy <= 1; busy++) {
             foreach_busy_t a = {0, icaltime_span_new(icalcomponent_get_dtstart(event),
-                                                     icalcomponent_get_dtend(event), busy)};
+                                                     icalcomponent_get_dtend(event), (bool)busy)};
             icalproperty_set_transp(transp, busy ? ICAL_TRANSP_OPAQUE : ICAL_TRANSP_TRANSPARENT);
             icalcomponent_foreach_recurrence(event, start, end, test_component_foreach_busy_callback, &a);
             int_is("Three occurrences returned", a.found, 3);
