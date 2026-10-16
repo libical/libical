@@ -605,6 +605,62 @@ static void test_component_foreach_callback(icalcomponent *comp, const struct ic
     (*foundExpected)++;
 }
 
+typedef struct {
+    int found;
+    icaltime_span expected;
+} foreach_busy_t;
+
+static void test_component_foreach_busy_callback(icalcomponent *comp, const struct icaltime_span *span, void *data)
+{
+    foreach_busy_t *a = (foreach_busy_t *)data;
+    _unused(comp);
+
+    int_is("Occurrence busy status matches", span->is_busy, a->expected.is_busy);
+    ok("Occurrence start matches", span->start == a->expected.start);
+    ok("Occurrence end matches", span->end == a->expected.end);
+    a->found++;
+    a->expected.start += 86400;
+    a->expected.end += 86400;
+}
+
+static void test_component_foreach_busy(void)
+{
+    const char *recurrences[] = {
+        "RRULE:FREQ=DAILY;COUNT=3\r\n",
+        "RDATE:20260102T090000Z,20260103T090000Z\r\n",
+        "RDATE;VALUE=PERIOD:20260102T090000Z/20260102T100000Z,20260103T090000Z/PT1H\r\n"};
+    icaltimetype start = icaltime_from_string("20260101T000000Z");
+    icaltimetype end = icaltime_from_string("20260104T000000Z");
+
+    for (size_t i = 0; i < sizeof(recurrences) / sizeof(recurrences[0]); i++) {
+        char input[512];
+        snprintf(input, sizeof(input),
+                 "BEGIN:VEVENT\r\n"
+                 "UID:recurrence-busy\r\n"
+                 "DTSTAMP:20251201T000000Z\r\n"
+                 "DTSTART:20260101T090000Z\r\n"
+                 "DURATION:PT1H\r\n"
+                 "%s"
+                 "END:VEVENT\r\n",
+                 recurrences[i]);
+        icalcomponent *event = icalcomponent_new_from_string(input);
+        ok("Parse recurring event", event != NULL);
+        assert(event != NULL);
+        icalproperty *transp = icalproperty_new_transp(ICAL_TRANSP_TRANSPARENT);
+        icalcomponent_add_property(event, transp);
+
+        for (int busy = 0; busy <= 1; busy++) {
+            foreach_busy_t a = {0, icaltime_span_new(icalcomponent_get_dtstart(event),
+                                                     icalcomponent_get_dtend(event), (bool)busy)};
+            icalproperty_set_transp(transp, busy ? ICAL_TRANSP_OPAQUE : ICAL_TRANSP_TRANSPARENT);
+            icalcomponent_foreach_recurrence(event, start, end, test_component_foreach_busy_callback, &a);
+            int_is("Three occurrences returned", a.found, 3);
+        }
+
+        icalcomponent_free(event);
+    }
+}
+
 static int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int expectedFoundInstances)
 {
     const char *calStr =
@@ -8600,6 +8656,7 @@ int main(int argc, const char *argv[])
     test_run("Test Properties", test_properties, do_test, do_header);
     test_run("Test Components", test_components, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence", test_component_foreach, do_test, do_header);
+    test_run("Test recurrence busy status", test_component_foreach_busy, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence with start as date", test_component_foreach_start_as_date, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence with nominal duration", test_component_foreach_dtend_nominal, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence with exact duration", test_component_foreach_dtend_exact, do_test, do_header);
