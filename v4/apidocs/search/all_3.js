@@ -33,7 +33,7 @@ var searchData=
   ['3_202_201_20enumerations_20and_20types_30',['3.2.1 Enumerations and types',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md122',1,'']]],
   ['3_202_202_20the_20parser_31',['3.2.2 The parser',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md123',1,'']]],
   ['3_202_203_20error_20objects_32',['3.2.3 Error objects',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md124',1,'']]],
-  ['3_202_204_20memory_20management_33',['3.2.4 Memory Management',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md125',1,'']]],
+  ['3_202_204_20memory_20management_20system_33',['3.2.4 Memory management system',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md125',1,'']]],
   ['3_202_205_20storage_20classes_34',['3.2.5 Storage classes',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md126',1,'']]],
   ['3_202_20creating_20time_20structures_35',['5.3.2 Creating time structures',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md146',1,'']]],
   ['3_202_20other_20elements_20of_20libical_36',['3.2 Other elements of libical',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md121',1,'']]],

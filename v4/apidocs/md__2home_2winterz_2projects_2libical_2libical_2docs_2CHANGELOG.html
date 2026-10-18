@@ -79,10 +79,31 @@ $(function() {
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>, and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
-[4.0.7] - Unreleased</h1>
+[4.0.7] - 2026-10-18</h1>
 <ul>
+<li>libicalvcard:<ul>
+<li><span class="tt"><a class="el" href="vcardcomponent_8c.html#a69c8f5b2f0c0852f0c4c0244da3fa391" title="Deeply clones an vcard. Returns a pointer to the memory for the newly cloned vcard.">vcardcomponent_clone()</a></span> and friends now deep-copy TEXTLIST values (e.g. NICKNAME, CATEGORIES) and structured parameters (JSCOMPS), and keep the property group. Previously the clone shared them with the original, so freeing both freed the same memory twice.</li>
+<li>Fixed a use-after-free and a memory leak when converting a vCalendar procedure alarm (PALARM) whose attachment is a plain path name.</li>
+</ul>
+</li>
+<li>libical:<ul>
+<li>Fix busy status of recurring events in <span class="tt"><a class="el" href="icalcomponent_8c.html#aef846b1f42b96a5d209323c347a891a6">icalcomponent_foreach_recurrence()</a></span>.</li>
+<li>Fix <span class="tt"><a class="el" href="icalvalue_8c.html#aa54c47f82a414bd3d317c2fa77958b51">icalvalue_decode_ical_string()</a></span> and <span class="tt">icallangbind_property_eval_string()</span> reading past the end of a string that ends in a backslash or a newline.</li>
+<li><span class="tt"><a class="el" href="icaltimezone_8c.html#a331c0fea42b418204cfac9961421a2b7">icaltimezone_truncate_vtimezone()</a></span> no longer reads the RRULE after freeing it when the new DTSTART is within a year of UNTIL (RSCALE rules), and no longer uses an uninitialized onset when no RRULE occurrence falls before the window close.</li>
+<li>Fix IMAGE and STRUCTURED-DATA given by URI (with or without VALUE=URI) parsing to a URI value, whose string <span class="tt"><a class="el" href="icalderivedproperty_8h.html#ac4fb789747f86824400612eaaa128ae7">icalproperty_get_image()</a></span> and <span class="tt"><a class="el" href="icalderivedproperty_8h.html#a0838bf63b68d14fff546864a3f2e2d27">icalproperty_get_structureddata()</a></span> then read as an icalattach pointer.</li>
+<li>Fix use-after-free and double free in <span class="tt"><a class="el" href="icalcomponent_8c.html#a9a6e353e730464ff0f4ecf85475d648c">icalcomponent_merge_component()</a></span> when both calendars have a VTIMEZONE with the same TZID. Every VTIMEZONE of the merged calendar is now merged, and a conflicting VTIMEZONE is added under a renamed TZID (e.g. "Zone1") that its events use.</li>
+<li>Fix out-of-bounds access to the year days bitmask in the recurrence iterator when an RSCALE date falls outside the year (e.g. BYWEEKNO with a DTSTART before the calendar's epoch).</li>
+<li>Fix <span class="tt"><a class="el" href="icalrecur_8c.html#a84a74a935204885974338667eafb2f14">icalrecur_iterator_set_range()</a></span> for a reverse range on a rule without UNTIL, which started the iteration at year 0 instead of at 'from'.</li>
+<li>Fix <span class="tt"><a class="el" href="icalparser_8c.html#aa6e4c9c494345c51adf49a7e30255fb7" title="Cleans out an icalparser and returns whatever it has parsed so far.">icalparser_clean()</a></span> for proper reuse by resetting internal structure values and clearing the root component to avoid a use-after-free.</li>
+<li>Behavior change: The typed icalvalue getters now check that the value type of the icalvalue uses the same union member as the expected value type of the getter, as the vcardvalue getters have done since version 4.0.6. If the type mismatches, then they return the zero value for the expected value type. The typed setters error with ICAL_BADARG_ERROR instead of overwriting a value held in another union member.</li>
+</ul>
+</li>
+<li>libicalss:<ul>
+<li>Fix heap-buffer-overflow in <span class="tt"><a class="el" href="icalspanlist_8c.html#a9b34e9c598fb2db9869db49dc6f6f193">icalspanlist_as_freebusy_matrix()</a></span> for busy spans that start before or end after the spanlist. <span class="tt"><a class="el" href="icalspanlist_8c.html#a980cdf00f77540c74dc44f7037aa82a5">icalspanlist_from_vfreebusy()</a></span> now sets the spanlist start/end from DTSTART/DTEND and marks FBTYPE=FREE periods as free (all others as busy).</li>
+</ul>
+</li>
 <li>Buildsystem changes:<ul>
-<li>Fix target_link_libraries() to use all-keywords as required by CMake 4.4.</li>
+<li>Fix CMake command target_link_libraries() to use all-keywords as required since CMake v4.4.4.</li>
 <li>When cross-compiling, don't build/install ical-glib-src-generator w/o existing binary</li>
 </ul>
 </li>

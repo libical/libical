@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-43e02dcc.js";
+            window.path_to_searchindex_js = "searchindex-013ee05c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-d19dfbfe.js"></script>
@@ -286,10 +286,10 @@ blocks of text as a string, or it can parse line-by-line.</p>
 <h4 id="323-error-objects"><a class="header" href="#323-error-objects">3.2.3 Error objects</a></h4>
 <p>Libical has a substantial error reporting system for both programming
 errors and component usage errors.</p>
-<h4 id="324-memory-management"><a class="header" href="#324-memory-management">3.2.4 Memory Management</a></h4>
-<p>Since many of libical’s interfaces return strings, the library has its
-own memory management system to eliminate the need to free every string
-returned from the library.  See <a href="#memory">Memory Management</a>.</p>
+<h4 id="324-memory-management-system"><a class="header" href="#324-memory-management-system">3.2.4 Memory management system</a></h4>
+<p>Since many of libical’s interfaces return strings, the library has its own
+memory management system to eliminate the need to free every string returned
+from the library. See the <a href="#memory">Memory Management</a> section for more information.</p>
 <h4 id="325-storage-classes"><a class="header" href="#325-storage-classes">3.2.5 Storage classes</a></h4>
 <p>The library also offers several classes to store components to files,
 memory or databases.</p>
@@ -491,13 +491,15 @@ int main(int argc, char *argv[])
     // will have access to it
     icalparser_set_gen_data(parser, stream);
 
+    bool cont;
     do {
-        // read the file, line-by-line, and parse the data
+        // Get a single content line by making one or more calls to read_stream()
         line = icalparser_get_line(parser, read_stream);
+
+        // Add the line into the parser object.
         component = icalparser_add_line(parser, line);
 
-        // if icalparser has finished parsing a component,
-        // it will return it
+        // component will be non-zero if the line completes a component.
         if (component != 0) {
             // print the parsed component
             printf("%s", icalcomponent_as_ical_string(component));
@@ -507,12 +509,17 @@ int main(int argc, char *argv[])
 
             icalcomponent_free(component);
         }
-    } while (line != 0);
+        cont = false;
+        if (line != 0) {
+            icalmemory_free_buffer(line);
+            cont = true;
+        }
+    } while (cont);
 
     return 0;
 }
 </code></pre>
-<p>The parser object parametrizes the routine used to get input lines
+<p>The parser object parameterizes the routine used to get input lines
 with <code>icalparser_set_gen_data()</code>and <code>icalparser_get_line()</code>. In this
 example, the routine <code>read_stream()</code> will fetch the next line from a
 stream, with the stream passed in as the <code>void*</code> parameter d. The parser

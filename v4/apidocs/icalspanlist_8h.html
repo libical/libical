@@ -128,11 +128,12 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A pointer to an array of integers containing the number of busy events in each delta_t time period. The final entry contains the value -1.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to an array of integers containing the number of busy events in each delta_t time period. The final entry contains the value -1. NULL if delta_t is negative, if the spanlist ends before it starts, or on allocation failure.</dd></dl>
+<p>Busy times outside the period of the spanlist are not counted.</p>
 <p>This calculation is somewhat tricky. This is due to the fact that the time range contains the start time, but does not contain the end time. To perform a proper calculation we subtract one second off the end times to get a true containing time.</p>
 <p>Also note that if you supplying a spanlist that does not start or end on a time boundary divisible by delta_t you may get results that are not quite what you expect. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00280">280</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00281">281</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
 
 </div>
 </div>
@@ -171,7 +172,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to an icalcomponent, NULL if the conversion failed.</dd></dl>
 <p>This function returns a VFREEBUSY component for the given spanlist. The start time is mapped to DTSTART, the end time to DTEND. Each busy span is represented as a separate FREEBUSY entry. An attendee parameter is required, and organizer parameter is optional. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00343">343</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00356">356</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
 
 </div>
 </div>
@@ -197,7 +198,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00202">202</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00203">203</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
 
 </div>
 </div>
@@ -224,7 +225,7 @@ Functions</h2></td></tr>
 </dl>
 <p>Frees the memory associated with the spanlist. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00183">183</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00184">184</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
 
 </div>
 </div>
@@ -251,7 +252,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to an icalspanlist or NULL if no VFREEBUSY section. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00389">389</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00402">402</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
 
 </div>
 </div>
@@ -290,7 +291,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>a spanlist corresponding to the VEVENTS</dd></dl>
 <p>Given a set of components, a start time and an end time return a spanlist that contains the free/busy times. <code class="param">start</code> and <code class="param">end</code> should be in UTC. </p>
 
-<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00081">81</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00082">82</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
 
 </div>
 </div>
@@ -323,7 +324,7 @@ Functions</h2></td></tr>
 <p>Given a spanlist and a time, finds the next period of free time.</p>
 <dl class="section return"><dt>Returns</dt><dd>an icalperiodtype representing the free type period; if no free time is available then an invalid icalperiodtype is returned. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00216">216</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="icalspanlist_8c_source.html#l00217">217</a> of file <a class="el" href="icalspanlist_8c_source.html">icalspanlist.c</a>.</p>
 
 </div>
 </div>

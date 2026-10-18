@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['unreleased_0',['Unreleased',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md18',1,'[3.0.21] - Unreleased'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md5',1,'[4.0.7] - Unreleased']]],
+  ['unreleased_0',['[3.0.21] - Unreleased',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md18',1,'']]],
   ['usage_20from_203_200_20to_204_200_1',['Migrating &lt;span class=&quot;tt&quot;&gt;icalrecurrencetype.by_xxx&lt;/span&gt; static arrays usage from 3.0 to 4.0',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md97',1,'']]],
   ['users_2',['Libical Users',['../index.html#autotoc_md107',1,'']]],
   ['uses_20character_20strings_20rather_20than_20doubles_3',['&lt;span class=&quot;tt&quot;&gt;icalgeotype&lt;/span&gt; now uses character strings rather than doubles',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md89',1,'']]],

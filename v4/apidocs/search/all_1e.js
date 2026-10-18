@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['unreleased_0',['Unreleased',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md18',1,'[3.0.21] - Unreleased'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md5',1,'[4.0.7] - Unreleased']]],
+  ['unreleased_0',['[3.0.21] - Unreleased',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md18',1,'']]],
   ['until_1',['until',['../structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f',1,'icalrecurrencetype']]],
   ['update_2',['update',['../classLibICal_1_1VComponent.html#acb411bb9669ed4107294cd32e4cf959b',1,'LibICal::VComponent']]],
   ['uri_3',['uri',['../structvcardgeotype.html#acfeb61e883b37d21f5179dd6f1896f14',1,'vcardgeotype::uri'],['../structvcardtztype.html#a0937294942c4005efaad66d511746562',1,'vcardtztype::uri']]],

@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-43e02dcc.js";
+            window.path_to_searchindex_js = "searchindex-013ee05c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-d19dfbfe.js"></script>
@@ -178,11 +178,54 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<h2 id="407---unreleased"><a class="header" href="#407---unreleased">[4.0.7] - Unreleased</a></h2>
+<h2 id="407---2026-10-18"><a class="header" href="#407---2026-10-18">[4.0.7] - 2026-10-18</a></h2>
 <ul>
+<li>libicalvcard:
+<ul>
+<li><code>vcardcomponent_clone()</code> and friends now deep-copy TEXTLIST values (e.g. NICKNAME, CATEGORIES)
+and structured parameters (JSCOMPS), and keep the property group. Previously the clone shared
+them with the original, so freeing both freed the same memory twice.</li>
+<li>Fixed a use-after-free and a memory leak when converting a vCalendar procedure alarm (PALARM)
+whose attachment is a plain path name.</li>
+</ul>
+</li>
+<li>libical:
+<ul>
+<li>Fix busy status of recurring events in <code>icalcomponent_foreach_recurrence()</code>.</li>
+<li>Fix <code>icalvalue_decode_ical_string()</code> and <code>icallangbind_property_eval_string()</code> reading past
+the end of a string that ends in a backslash or a newline.</li>
+<li><code>icaltimezone_truncate_vtimezone()</code> no longer reads the RRULE after freeing it when the new
+DTSTART is within a year of UNTIL (RSCALE rules), and no longer uses an uninitialized onset
+when no RRULE occurrence falls before the window close.</li>
+<li>Fix IMAGE and STRUCTURED-DATA given by URI (with or without VALUE=URI) parsing to a URI value,
+whose string <code>icalproperty_get_image()</code> and <code>icalproperty_get_structureddata()</code> then read as
+an icalattach pointer.</li>
+<li>Fix use-after-free and double free in <code>icalcomponent_merge_component()</code> when both calendars
+have a VTIMEZONE with the same TZID. Every VTIMEZONE of the merged calendar is now merged,
+and a conflicting VTIMEZONE is added under a renamed TZID (e.g. “Zone1”) that its events use.</li>
+<li>Fix out-of-bounds access to the year days bitmask in the recurrence iterator when an RSCALE
+date falls outside the year (e.g. BYWEEKNO with a DTSTART before the calendar’s epoch).</li>
+<li>Fix <code>icalrecur_iterator_set_range()</code> for a reverse range on a rule without UNTIL, which
+started the iteration at year 0 instead of at ‘from’.</li>
+<li>Fix <code>icalparser_clean()</code> for proper reuse by resetting internal structure values and clearing
+the root component to avoid a use-after-free.</li>
+<li>Behavior change: The typed icalvalue getters now check that the value type of the icalvalue
+uses the same union member as the expected value type of the getter, as the vcardvalue getters
+have done since version 4.0.6. If the type mismatches, then they return the zero value for the
+expected value type. The typed setters error with ICAL_BADARG_ERROR instead of overwriting a
+value held in another union member.</li>
+</ul>
+</li>
+<li>libicalss:
+<ul>
+<li>Fix heap-buffer-overflow in <code>icalspanlist_as_freebusy_matrix()</code> for busy spans that start
+before or end after the spanlist. <code>icalspanlist_from_vfreebusy()</code> now sets the spanlist
+start/end from DTSTART/DTEND and marks FBTYPE=FREE periods as free (all others as busy).</li>
+</ul>
+</li>
 <li>Buildsystem changes:
 <ul>
-<li>Fix target_link_libraries() to use all-keywords as required by CMake 4.4.</li>
+<li>Fix CMake command target_link_libraries() to use all-keywords as required since CMake v4.4.4.</li>
 <li>When cross-compiling, don’t build/install ical-glib-src-generator w/o existing binary</li>
 </ul>
 </li>

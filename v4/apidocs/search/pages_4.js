@@ -9,7 +9,7 @@ var searchData=
   ['4_200_204_202026_2007_2025_6',['[4.0.4] - 2026-07-25',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md8',1,'']]],
   ['4_200_205_202026_2008_2015_7',['[4.0.5] - 2026-08-15',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md7',1,'']]],
   ['4_200_206_202026_2010_2003_8',['[4.0.6] - 2026-10-03',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md6',1,'']]],
-  ['4_200_207_20unreleased_9',['[4.0.7] - Unreleased',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md5',1,'']]],
+  ['4_200_207_202026_2010_2018_9',['[4.0.7] - 2026-10-18',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md5',1,'']]],
   ['4_201_20creating_20a_20new_20set_10',['5.4.1 Creating a new set',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md149',1,'']]],
   ['4_201_20pseudo_20components_11',['4.1 Pseudo Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md128',1,'']]],
   ['4_202_20adding_20finding_20and_20removing_20components_12',['5.4.2 Adding, Finding and Removing Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md150',1,'']]],
@@ -20,7 +20,7 @@ var searchData=
   ['4_203_20other_20routines_17',['5.4.3 Other routines',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md151',1,'']]],
   ['4_20differences_20from_20rfcs_18',['4 Differences From RFCs',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md127',1,'']]],
   ['4_20icalerror_5ferrors_5fare_5ffatal_19',['5.6.4 &lt;span class=&quot;tt&quot;&gt;icalerror_errors_are_fatal&lt;/span&gt;',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md157',1,'']]],
-  ['4_20memory_20management_20',['3.2.4 Memory Management',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md125',1,'']]],
+  ['4_20memory_20management_20system_20',['3.2.4 Memory management system',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md125',1,'']]],
   ['4_20parameters_21',['3.1.4 Parameters',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md120',1,'']]],
   ['4_20removing_20components_22',['5.2.4 Removing Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md140',1,'']]],
   ['4_20storing_20objects_23',['5.4 Storing Objects',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md148',1,'']]]

@@ -2637,319 +2637,328 @@ $(function() {
 <div class="line"><a id="l02589" name="l02589"></a><span class="lineno"> 2589</span>                icalrecur_iterator *ritr = NULL;</div>
 <div class="line"><a id="l02590" name="l02590"></a><span class="lineno"> 2590</span>                <span class="keywordtype">unsigned</span> trunc_until = 0;</div>
 <div class="line"><a id="l02591" name="l02591"></a><span class="lineno"> 2591</span> </div>
-<div class="line"><a id="l02592" name="l02592"></a><span class="lineno"> 2592</span>                <span class="comment">/* Check RRULE duration */</span></div>
-<div class="line"><a id="l02593" name="l02593"></a><span class="lineno"> 2593</span>                <span class="keywordflow">if</span> (!eternal &amp;&amp; <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>, start) &lt; 0) {</div>
-<div class="line"><a id="l02594" name="l02594"></a><span class="lineno"> 2594</span>                    <span class="comment">/* RRULE ends prior to our window open -</span></div>
-<div class="line"><a id="l02595" name="l02595"></a><span class="lineno"> 2595</span><span class="comment">                    check UNTIL vs tombstone */</span></div>
-<div class="line"><a id="l02596" name="l02596"></a><span class="lineno"> 2596</span>                    obs.onset = rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>;</div>
-<div class="line"><a id="l02597" name="l02597"></a><span class="lineno"> 2597</span>                    <span class="keywordflow">if</span> (need_tomb) {</div>
-<div class="line"><a id="l02598" name="l02598"></a><span class="lineno"> 2598</span>                        check_tombstone(&amp;tombstone, &amp;obs);</div>
-<div class="line"><a id="l02599" name="l02599"></a><span class="lineno"> 2599</span>                    }</div>
-<div class="line"><a id="l02600" name="l02600"></a><span class="lineno"> 2600</span> </div>
-<div class="line"><a id="l02601" name="l02601"></a><span class="lineno"> 2601</span>                    <span class="comment">/* Remove RRULE */</span></div>
-<div class="line"><a id="l02602" name="l02602"></a><span class="lineno"> 2602</span>                    <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rrule_prop);</div>
-<div class="line"><a id="l02603" name="l02603"></a><span class="lineno"> 2603</span>                    <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rrule_prop);</div>
-<div class="line"><a id="l02604" name="l02604"></a><span class="lineno"> 2604</span>                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l02605" name="l02605"></a><span class="lineno"> 2605</span>                    <span class="comment">/* RRULE ends on/after our window open */</span></div>
-<div class="line"><a id="l02606" name="l02606"></a><span class="lineno"> 2606</span>                    <span class="keywordflow">if</span> (need_tzuntil &amp;&amp;</div>
-<div class="line"><a id="l02607" name="l02607"></a><span class="lineno"> 2607</span>                        (eternal || <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>, end) &gt;= 0)) {</div>
-<div class="line"><a id="l02608" name="l02608"></a><span class="lineno"> 2608</span>                        <span class="comment">/* RRULE ends after our window close - need to adjust it */</span></div>
-<div class="line"><a id="l02609" name="l02609"></a><span class="lineno"> 2609</span>                        trunc_until = 1;</div>
-<div class="line"><a id="l02610" name="l02610"></a><span class="lineno"> 2610</span>                    }</div>
-<div class="line"><a id="l02611" name="l02611"></a><span class="lineno"> 2611</span> </div>
-<div class="line"><a id="l02612" name="l02612"></a><span class="lineno"> 2612</span>                    <span class="keywordflow">if</span> (!eternal) {</div>
-<div class="line"><a id="l02613" name="l02613"></a><span class="lineno"> 2613</span>                        <span class="comment">/* Adjust UNTIL to local time (for iterator) */</span></div>
-<div class="line"><a id="l02614" name="l02614"></a><span class="lineno"> 2614</span>                        <a class="code hl_function" href="icaltime_8c.html#aeeff97a90d535fd004d93057e49e8663">icaltime_adjust</a>(&amp;rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>, 0, 0, 0, obs.offset_from);</div>
-<div class="line"><a id="l02615" name="l02615"></a><span class="lineno"> 2615</span>                        (void)<a class="code hl_function" href="icaltime_8c.html#aea5c3a433f2919943b42d7d6400f6304">icaltime_set_timezone</a>(&amp;rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>, NULL);</div>
-<div class="line"><a id="l02616" name="l02616"></a><span class="lineno"> 2616</span>                    }</div>
-<div class="line"><a id="l02617" name="l02617"></a><span class="lineno"> 2617</span> </div>
-<div class="line"><a id="l02618" name="l02618"></a><span class="lineno"> 2618</span>                    ritr = <a class="code hl_function" href="icalrecur_8c.html#acdcfa0fbb4e40377cae80ef977d28afe">icalrecur_iterator_new</a>(rrule, dtstart);</div>
-<div class="line"><a id="l02619" name="l02619"></a><span class="lineno"> 2619</span> </div>
-<div class="line"><a id="l02620" name="l02620"></a><span class="lineno"> 2620</span>                    <span class="keywordflow">if</span> (ritr &amp;&amp; trunc_dtstart) {</div>
-<div class="line"><a id="l02621" name="l02621"></a><span class="lineno"> 2621</span>                        <span class="comment">/* Bump RRULE start to 1 year prior to our window open */</span></div>
-<div class="line"><a id="l02622" name="l02622"></a><span class="lineno"> 2622</span>                        <a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> newstart = dtstart;</div>
-<div class="line"><a id="l02623" name="l02623"></a><span class="lineno"> 2623</span>                        newstart.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> = start.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> - 1;</div>
-<div class="line"><a id="l02624" name="l02624"></a><span class="lineno"> 2624</span>                        newstart.<a class="code hl_variable" href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">month</a> = start.<a class="code hl_variable" href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">month</a>;</div>
-<div class="line"><a id="l02625" name="l02625"></a><span class="lineno"> 2625</span>                        newstart.<a class="code hl_variable" href="structicaltimetype.html#a62632fff0632efca1b404737e5034db3">day</a> = start.<a class="code hl_variable" href="structicaltimetype.html#a62632fff0632efca1b404737e5034db3">day</a>;</div>
-<div class="line"><a id="l02626" name="l02626"></a><span class="lineno"> 2626</span>                        <a class="code hl_function" href="icalrecur_8c.html#a02427aacc00bb3a9c2b68d0fca951b9a">icalrecur_iterator_set_start</a>(ritr, newstart);</div>
-<div class="line"><a id="l02627" name="l02627"></a><span class="lineno"> 2627</span>                    }</div>
-<div class="line"><a id="l02628" name="l02628"></a><span class="lineno"> 2628</span>                }</div>
-<div class="line"><a id="l02629" name="l02629"></a><span class="lineno"> 2629</span> </div>
-<div class="line"><a id="l02630" name="l02630"></a><span class="lineno"> 2630</span>                <span class="comment">/* Process any RRULE observances within our window */</span></div>
-<div class="line"><a id="l02631" name="l02631"></a><span class="lineno"> 2631</span>                <span class="keywordflow">if</span> (ritr) {</div>
-<div class="line"><a id="l02632" name="l02632"></a><span class="lineno"> 2632</span>                    <a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> recur, prev_onset;</div>
+<div class="line"><a id="l02592" name="l02592"></a><span class="lineno"> 2592</span>                <span class="comment">/* rrule is owned by rrule_prop, which may be removed and</span></div>
+<div class="line"><a id="l02593" name="l02593"></a><span class="lineno"> 2593</span><span class="comment">                   freed below: hold our own reference until we are done */</span></div>
+<div class="line"><a id="l02594" name="l02594"></a><span class="lineno"> 2594</span>                <a class="code hl_function" href="icalrecur_8c.html#a125182230627f4634f6057a620211b8a">icalrecurrencetype_ref</a>(rrule);</div>
+<div class="line"><a id="l02595" name="l02595"></a><span class="lineno"> 2595</span> </div>
+<div class="line"><a id="l02596" name="l02596"></a><span class="lineno"> 2596</span>                <span class="comment">/* Check RRULE duration */</span></div>
+<div class="line"><a id="l02597" name="l02597"></a><span class="lineno"> 2597</span>                <span class="keywordflow">if</span> (!eternal &amp;&amp; <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>, start) &lt; 0) {</div>
+<div class="line"><a id="l02598" name="l02598"></a><span class="lineno"> 2598</span>                    <span class="comment">/* RRULE ends prior to our window open -</span></div>
+<div class="line"><a id="l02599" name="l02599"></a><span class="lineno"> 2599</span><span class="comment">                    check UNTIL vs tombstone */</span></div>
+<div class="line"><a id="l02600" name="l02600"></a><span class="lineno"> 2600</span>                    obs.onset = rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>;</div>
+<div class="line"><a id="l02601" name="l02601"></a><span class="lineno"> 2601</span>                    <span class="keywordflow">if</span> (need_tomb) {</div>
+<div class="line"><a id="l02602" name="l02602"></a><span class="lineno"> 2602</span>                        check_tombstone(&amp;tombstone, &amp;obs);</div>
+<div class="line"><a id="l02603" name="l02603"></a><span class="lineno"> 2603</span>                    }</div>
+<div class="line"><a id="l02604" name="l02604"></a><span class="lineno"> 2604</span> </div>
+<div class="line"><a id="l02605" name="l02605"></a><span class="lineno"> 2605</span>                    <span class="comment">/* Remove RRULE */</span></div>
+<div class="line"><a id="l02606" name="l02606"></a><span class="lineno"> 2606</span>                    <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rrule_prop);</div>
+<div class="line"><a id="l02607" name="l02607"></a><span class="lineno"> 2607</span>                    <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rrule_prop);</div>
+<div class="line"><a id="l02608" name="l02608"></a><span class="lineno"> 2608</span>                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l02609" name="l02609"></a><span class="lineno"> 2609</span>                    <span class="comment">/* RRULE ends on/after our window open */</span></div>
+<div class="line"><a id="l02610" name="l02610"></a><span class="lineno"> 2610</span>                    <span class="keywordflow">if</span> (need_tzuntil &amp;&amp;</div>
+<div class="line"><a id="l02611" name="l02611"></a><span class="lineno"> 2611</span>                        (eternal || <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>, end) &gt;= 0)) {</div>
+<div class="line"><a id="l02612" name="l02612"></a><span class="lineno"> 2612</span>                        <span class="comment">/* RRULE ends after our window close - need to adjust it */</span></div>
+<div class="line"><a id="l02613" name="l02613"></a><span class="lineno"> 2613</span>                        trunc_until = 1;</div>
+<div class="line"><a id="l02614" name="l02614"></a><span class="lineno"> 2614</span>                    }</div>
+<div class="line"><a id="l02615" name="l02615"></a><span class="lineno"> 2615</span> </div>
+<div class="line"><a id="l02616" name="l02616"></a><span class="lineno"> 2616</span>                    <span class="keywordflow">if</span> (!eternal) {</div>
+<div class="line"><a id="l02617" name="l02617"></a><span class="lineno"> 2617</span>                        <span class="comment">/* Adjust UNTIL to local time (for iterator) */</span></div>
+<div class="line"><a id="l02618" name="l02618"></a><span class="lineno"> 2618</span>                        <a class="code hl_function" href="icaltime_8c.html#aeeff97a90d535fd004d93057e49e8663">icaltime_adjust</a>(&amp;rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>, 0, 0, 0, obs.offset_from);</div>
+<div class="line"><a id="l02619" name="l02619"></a><span class="lineno"> 2619</span>                        (void)<a class="code hl_function" href="icaltime_8c.html#aea5c3a433f2919943b42d7d6400f6304">icaltime_set_timezone</a>(&amp;rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>, NULL);</div>
+<div class="line"><a id="l02620" name="l02620"></a><span class="lineno"> 2620</span>                    }</div>
+<div class="line"><a id="l02621" name="l02621"></a><span class="lineno"> 2621</span> </div>
+<div class="line"><a id="l02622" name="l02622"></a><span class="lineno"> 2622</span>                    ritr = <a class="code hl_function" href="icalrecur_8c.html#acdcfa0fbb4e40377cae80ef977d28afe">icalrecur_iterator_new</a>(rrule, dtstart);</div>
+<div class="line"><a id="l02623" name="l02623"></a><span class="lineno"> 2623</span> </div>
+<div class="line"><a id="l02624" name="l02624"></a><span class="lineno"> 2624</span>                    <span class="keywordflow">if</span> (ritr &amp;&amp; trunc_dtstart) {</div>
+<div class="line"><a id="l02625" name="l02625"></a><span class="lineno"> 2625</span>                        <span class="comment">/* Bump RRULE start to 1 year prior to our window open */</span></div>
+<div class="line"><a id="l02626" name="l02626"></a><span class="lineno"> 2626</span>                        <a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> newstart = dtstart;</div>
+<div class="line"><a id="l02627" name="l02627"></a><span class="lineno"> 2627</span>                        newstart.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> = start.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> - 1;</div>
+<div class="line"><a id="l02628" name="l02628"></a><span class="lineno"> 2628</span>                        newstart.<a class="code hl_variable" href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">month</a> = start.<a class="code hl_variable" href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">month</a>;</div>
+<div class="line"><a id="l02629" name="l02629"></a><span class="lineno"> 2629</span>                        newstart.<a class="code hl_variable" href="structicaltimetype.html#a62632fff0632efca1b404737e5034db3">day</a> = start.<a class="code hl_variable" href="structicaltimetype.html#a62632fff0632efca1b404737e5034db3">day</a>;</div>
+<div class="line"><a id="l02630" name="l02630"></a><span class="lineno"> 2630</span>                        <a class="code hl_function" href="icalrecur_8c.html#a02427aacc00bb3a9c2b68d0fca951b9a">icalrecur_iterator_set_start</a>(ritr, newstart);</div>
+<div class="line"><a id="l02631" name="l02631"></a><span class="lineno"> 2631</span>                    }</div>
+<div class="line"><a id="l02632" name="l02632"></a><span class="lineno"> 2632</span>                }</div>
 <div class="line"><a id="l02633" name="l02633"></a><span class="lineno"> 2633</span> </div>
-<div class="line"><a id="l02634" name="l02634"></a><span class="lineno"> 2634</span>                    <span class="keywordflow">while</span> (!<a class="code hl_function" href="icaltime_8c.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a>(recur = <a class="code hl_function" href="icalrecur_8c.html#ad2d6bef31a3a7bbfb803df53ed895544">icalrecur_iterator_next</a>(ritr))) {</div>
-<div class="line"><a id="l02635" name="l02635"></a><span class="lineno"> 2635</span>                        <span class="keywordtype">unsigned</span> ydiff;</div>
-<div class="line"><a id="l02636" name="l02636"></a><span class="lineno"> 2636</span> </div>
-<div class="line"><a id="l02637" name="l02637"></a><span class="lineno"> 2637</span>                        obs.onset = recur;</div>
-<div class="line"><a id="l02638" name="l02638"></a><span class="lineno"> 2638</span> </div>
-<div class="line"><a id="l02639" name="l02639"></a><span class="lineno"> 2639</span>                        <span class="comment">/* Adjust observance to UTC */</span></div>
-<div class="line"><a id="l02640" name="l02640"></a><span class="lineno"> 2640</span>                        <a class="code hl_function" href="icaltime_8c.html#aeeff97a90d535fd004d93057e49e8663">icaltime_adjust</a>(&amp;obs.onset, 0, 0, 0, -obs.offset_from);</div>
-<div class="line"><a id="l02641" name="l02641"></a><span class="lineno"> 2641</span>                        (void)<a class="code hl_function" href="icaltime_8c.html#aea5c3a433f2919943b42d7d6400f6304">icaltime_set_timezone</a>(&amp;obs.onset,</div>
-<div class="line"><a id="l02642" name="l02642"></a><span class="lineno"> 2642</span>                                                    <a class="code hl_function" href="icaltimezone_8c.html#a8e9c520fc9a3ec85f5cc63fef1548583">icaltimezone_get_utc_timezone</a>());</div>
-<div class="line"><a id="l02643" name="l02643"></a><span class="lineno"> 2643</span> </div>
-<div class="line"><a id="l02644" name="l02644"></a><span class="lineno"> 2644</span>                        <span class="keywordflow">if</span> (trunc_until &amp;&amp; <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(obs.onset, end) &gt;= 0) {</div>
-<div class="line"><a id="l02645" name="l02645"></a><span class="lineno"> 2645</span>                            <span class="comment">/* Observance is on/after window close */</span></div>
-<div class="line"><a id="l02646" name="l02646"></a><span class="lineno"> 2646</span> </div>
-<div class="line"><a id="l02647" name="l02647"></a><span class="lineno"> 2647</span>                            <span class="comment">/* Check if DSTART is within 1yr of prev onset */</span></div>
-<div class="line"><a id="l02648" name="l02648"></a><span class="lineno"> 2648</span>                            ydiff = (unsigned)(prev_onset.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> - dtstart.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a>);</div>
-<div class="line"><a id="l02649" name="l02649"></a><span class="lineno"> 2649</span>                            <span class="keywordflow">if</span> (ydiff &lt;= 1) {</div>
-<div class="line"><a id="l02650" name="l02650"></a><span class="lineno"> 2650</span>                                <span class="comment">/* Remove RRULE */</span></div>
-<div class="line"><a id="l02651" name="l02651"></a><span class="lineno"> 2651</span>                                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rrule_prop);</div>
-<div class="line"><a id="l02652" name="l02652"></a><span class="lineno"> 2652</span>                                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rrule_prop);</div>
-<div class="line"><a id="l02653" name="l02653"></a><span class="lineno"> 2653</span> </div>
-<div class="line"><a id="l02654" name="l02654"></a><span class="lineno"> 2654</span>                                <span class="keywordflow">if</span> (ydiff) {</div>
-<div class="line"><a id="l02655" name="l02655"></a><span class="lineno"> 2655</span>                                    <span class="comment">/* Add previous onset as RDATE */</span></div>
-<div class="line"><a id="l02656" name="l02656"></a><span class="lineno"> 2656</span>                                    <span class="keyword">struct </span><a class="code hl_struct" href="structicaldatetimeperiodtype.html">icaldatetimeperiodtype</a> rdate;</div>
-<div class="line"><a id="l02657" name="l02657"></a><span class="lineno"> 2657</span>                                    rdate.<a class="code hl_variable" href="structicaldatetimeperiodtype.html#a77118543c37dc0c02d4fb170a515c322">time</a> = prev_onset;</div>
-<div class="line"><a id="l02658" name="l02658"></a><span class="lineno"> 2658</span>                                    rdate.period = <a class="code hl_function" href="icalperiod_8c.html#a60e59a9f46a1efa9885829a4d23eddfa">icalperiodtype_null_period</a>();</div>
-<div class="line"><a id="l02659" name="l02659"></a><span class="lineno"> 2659</span> </div>
-<div class="line"><a id="l02660" name="l02660"></a><span class="lineno"> 2660</span>                                    prop = <a class="code hl_function" href="icalderivedproperty_8h.html#a21a6536ea12e35f619849cbe5c2ce79a">icalproperty_new_rdate</a>(rdate);</div>
-<div class="line"><a id="l02661" name="l02661"></a><span class="lineno"> 2661</span>                                    <a class="code hl_function" href="icalcomponent_8c.html#ad0f618a40a7b03ab8a7c4f1a36d05168">icalcomponent_add_property</a>(comp, prop);</div>
-<div class="line"><a id="l02662" name="l02662"></a><span class="lineno"> 2662</span>                                }</div>
-<div class="line"><a id="l02663" name="l02663"></a><span class="lineno"> 2663</span>                            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l02664" name="l02664"></a><span class="lineno"> 2664</span>                                <span class="comment">/* Set UNTIL to previous onset */</span></div>
-<div class="line"><a id="l02665" name="l02665"></a><span class="lineno"> 2665</span>                                rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a> = prev_onset;</div>
-<div class="line"><a id="l02666" name="l02666"></a><span class="lineno"> 2666</span>                                <a class="code hl_function" href="icalderivedproperty_8h.html#a5c132ae8a4efc6cc4cb9faf30c83be62">icalproperty_set_rrule</a>(rrule_prop, rrule);</div>
-<div class="line"><a id="l02667" name="l02667"></a><span class="lineno"> 2667</span>                            }</div>
-<div class="line"><a id="l02668" name="l02668"></a><span class="lineno"> 2668</span> </div>
-<div class="line"><a id="l02669" name="l02669"></a><span class="lineno"> 2669</span>                            <span class="comment">/* We&#39;re done */</span></div>
-<div class="line"><a id="l02670" name="l02670"></a><span class="lineno"> 2670</span>                            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l02671" name="l02671"></a><span class="lineno"> 2671</span>                        }</div>
-<div class="line"><a id="l02672" name="l02672"></a><span class="lineno"> 2672</span> </div>
-<div class="line"><a id="l02673" name="l02673"></a><span class="lineno"> 2673</span>                        <span class="comment">/* Check observance vs our window open */</span></div>
-<div class="line"><a id="l02674" name="l02674"></a><span class="lineno"> 2674</span>                        r = <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(obs.onset, start);</div>
-<div class="line"><a id="l02675" name="l02675"></a><span class="lineno"> 2675</span>                        <span class="keywordflow">if</span> (r &lt; 0) {</div>
-<div class="line"><a id="l02676" name="l02676"></a><span class="lineno"> 2676</span>                            <span class="comment">/* Observance is prior to our window open -</span></div>
-<div class="line"><a id="l02677" name="l02677"></a><span class="lineno"> 2677</span><span class="comment">                            check it vs tombstone */</span></div>
-<div class="line"><a id="l02678" name="l02678"></a><span class="lineno"> 2678</span>                            <span class="keywordflow">if</span> (ms_compatible) {</div>
-<div class="line"><a id="l02679" name="l02679"></a><span class="lineno"> 2679</span>                                <span class="comment">/* XXX  We don&#39;t want to move DTSTART of the RRULE</span></div>
-<div class="line"><a id="l02680" name="l02680"></a><span class="lineno"> 2680</span><span class="comment">                                as Outlook/Exchange doesn&#39;t appear to like</span></div>
-<div class="line"><a id="l02681" name="l02681"></a><span class="lineno"> 2681</span><span class="comment">                                truncating the frontend of RRULEs */</span></div>
-<div class="line"><a id="l02682" name="l02682"></a><span class="lineno"> 2682</span>                                need_tomb = 0;</div>
-<div class="line"><a id="l02683" name="l02683"></a><span class="lineno"> 2683</span>                                trunc_dtstart = 0;</div>
-<div class="line"><a id="l02684" name="l02684"></a><span class="lineno"> 2684</span>                                <span class="keywordflow">if</span> (proleptic_prop) {</div>
-<div class="line"><a id="l02685" name="l02685"></a><span class="lineno"> 2685</span>                                    <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(vtz,</div>
-<div class="line"><a id="l02686" name="l02686"></a><span class="lineno"> 2686</span>                                                                  proleptic_prop);</div>
-<div class="line"><a id="l02687" name="l02687"></a><span class="lineno"> 2687</span>                                    <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(proleptic_prop);</div>
-<div class="line"><a id="l02688" name="l02688"></a><span class="lineno"> 2688</span>                                    proleptic_prop = NULL;</div>
-<div class="line"><a id="l02689" name="l02689"></a><span class="lineno"> 2689</span>                                }</div>
-<div class="line"><a id="l02690" name="l02690"></a><span class="lineno"> 2690</span>                            }</div>
-<div class="line"><a id="l02691" name="l02691"></a><span class="lineno"> 2691</span>                            <span class="keywordflow">if</span> (need_tomb) {</div>
-<div class="line"><a id="l02692" name="l02692"></a><span class="lineno"> 2692</span>                                check_tombstone(&amp;tombstone, &amp;obs);</div>
-<div class="line"><a id="l02693" name="l02693"></a><span class="lineno"> 2693</span>                            }</div>
-<div class="line"><a id="l02694" name="l02694"></a><span class="lineno"> 2694</span>                        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l02695" name="l02695"></a><span class="lineno"> 2695</span>                            <span class="comment">/* Observance is on/after our window open */</span></div>
-<div class="line"><a id="l02696" name="l02696"></a><span class="lineno"> 2696</span>                            <span class="keywordflow">if</span> (r == 0) {</div>
-<div class="line"><a id="l02697" name="l02697"></a><span class="lineno"> 2697</span>                                need_tomb = 0;</div>
-<div class="line"><a id="l02698" name="l02698"></a><span class="lineno"> 2698</span>                            }</div>
-<div class="line"><a id="l02699" name="l02699"></a><span class="lineno"> 2699</span> </div>
-<div class="line"><a id="l02700" name="l02700"></a><span class="lineno"> 2700</span>                            <span class="keywordflow">if</span> (trunc_dtstart) {</div>
-<div class="line"><a id="l02701" name="l02701"></a><span class="lineno"> 2701</span>                                <span class="comment">/* Make this observance the new DTSTART */</span></div>
-<div class="line"><a id="l02702" name="l02702"></a><span class="lineno"> 2702</span>                                <a class="code hl_function" href="icalderivedproperty_8h.html#a03a57ae53e945d3fcbfc7c8fa341cdce">icalproperty_set_dtstart</a>(dtstart_prop, recur);</div>
-<div class="line"><a id="l02703" name="l02703"></a><span class="lineno"> 2703</span>                                dtstart = obs.onset;</div>
-<div class="line"><a id="l02704" name="l02704"></a><span class="lineno"> 2704</span>                                trunc_dtstart = 0;</div>
-<div class="line"><a id="l02705" name="l02705"></a><span class="lineno"> 2705</span> </div>
-<div class="line"><a id="l02706" name="l02706"></a><span class="lineno"> 2706</span>                                <span class="comment">/* Check if new DSTART is within 1yr of UNTIL */</span></div>
-<div class="line"><a id="l02707" name="l02707"></a><span class="lineno"> 2707</span>                                ydiff = (unsigned)(rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> - recur.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a>);</div>
-<div class="line"><a id="l02708" name="l02708"></a><span class="lineno"> 2708</span>                                <span class="keywordflow">if</span> (!trunc_until &amp;&amp; ydiff &lt;= 1) {</div>
-<div class="line"><a id="l02709" name="l02709"></a><span class="lineno"> 2709</span>                                    <span class="comment">/* Remove RRULE */</span></div>
-<div class="line"><a id="l02710" name="l02710"></a><span class="lineno"> 2710</span>                                    <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rrule_prop);</div>
-<div class="line"><a id="l02711" name="l02711"></a><span class="lineno"> 2711</span>                                    <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rrule_prop);</div>
+<div class="line"><a id="l02634" name="l02634"></a><span class="lineno"> 2634</span>                <span class="comment">/* Process any RRULE observances within our window */</span></div>
+<div class="line"><a id="l02635" name="l02635"></a><span class="lineno"> 2635</span>                <span class="keywordflow">if</span> (ritr) {</div>
+<div class="line"><a id="l02636" name="l02636"></a><span class="lineno"> 2636</span>                    <a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> recur, prev_onset = <a class="code hl_function" href="icaltime_8c.html#af3f088ebb60b8716131742ef16eb7ce1">icaltime_null_time</a>();</div>
+<div class="line"><a id="l02637" name="l02637"></a><span class="lineno"> 2637</span> </div>
+<div class="line"><a id="l02638" name="l02638"></a><span class="lineno"> 2638</span>                    <span class="keywordflow">while</span> (!<a class="code hl_function" href="icaltime_8c.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a>(recur = <a class="code hl_function" href="icalrecur_8c.html#ad2d6bef31a3a7bbfb803df53ed895544">icalrecur_iterator_next</a>(ritr))) {</div>
+<div class="line"><a id="l02639" name="l02639"></a><span class="lineno"> 2639</span>                        <span class="keywordtype">unsigned</span> ydiff;</div>
+<div class="line"><a id="l02640" name="l02640"></a><span class="lineno"> 2640</span> </div>
+<div class="line"><a id="l02641" name="l02641"></a><span class="lineno"> 2641</span>                        obs.onset = recur;</div>
+<div class="line"><a id="l02642" name="l02642"></a><span class="lineno"> 2642</span> </div>
+<div class="line"><a id="l02643" name="l02643"></a><span class="lineno"> 2643</span>                        <span class="comment">/* Adjust observance to UTC */</span></div>
+<div class="line"><a id="l02644" name="l02644"></a><span class="lineno"> 2644</span>                        <a class="code hl_function" href="icaltime_8c.html#aeeff97a90d535fd004d93057e49e8663">icaltime_adjust</a>(&amp;obs.onset, 0, 0, 0, -obs.offset_from);</div>
+<div class="line"><a id="l02645" name="l02645"></a><span class="lineno"> 2645</span>                        (void)<a class="code hl_function" href="icaltime_8c.html#aea5c3a433f2919943b42d7d6400f6304">icaltime_set_timezone</a>(&amp;obs.onset,</div>
+<div class="line"><a id="l02646" name="l02646"></a><span class="lineno"> 2646</span>                                                    <a class="code hl_function" href="icaltimezone_8c.html#a8e9c520fc9a3ec85f5cc63fef1548583">icaltimezone_get_utc_timezone</a>());</div>
+<div class="line"><a id="l02647" name="l02647"></a><span class="lineno"> 2647</span> </div>
+<div class="line"><a id="l02648" name="l02648"></a><span class="lineno"> 2648</span>                        <span class="keywordflow">if</span> (trunc_until &amp;&amp; <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(obs.onset, end) &gt;= 0) {</div>
+<div class="line"><a id="l02649" name="l02649"></a><span class="lineno"> 2649</span>                            <span class="comment">/* Observance is on/after window close */</span></div>
+<div class="line"><a id="l02650" name="l02650"></a><span class="lineno"> 2650</span> </div>
+<div class="line"><a id="l02651" name="l02651"></a><span class="lineno"> 2651</span>                            <span class="comment">/* Check if DSTART is within 1yr of prev onset</span></div>
+<div class="line"><a id="l02652" name="l02652"></a><span class="lineno"> 2652</span><span class="comment">                               (no prev onset: no observance before close) */</span></div>
+<div class="line"><a id="l02653" name="l02653"></a><span class="lineno"> 2653</span>                            ydiff = <a class="code hl_function" href="icaltime_8c.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a>(prev_onset) <span class="comment">//NOLINT(readability-implicit-bool-conversion)</span></div>
+<div class="line"><a id="l02654" name="l02654"></a><span class="lineno"> 2654</span>                                        ? 0</div>
+<div class="line"><a id="l02655" name="l02655"></a><span class="lineno"> 2655</span>                                        : (unsigned)(prev_onset.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> - dtstart.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a>);</div>
+<div class="line"><a id="l02656" name="l02656"></a><span class="lineno"> 2656</span>                            <span class="keywordflow">if</span> (ydiff &lt;= 1) {</div>
+<div class="line"><a id="l02657" name="l02657"></a><span class="lineno"> 2657</span>                                <span class="comment">/* Remove RRULE */</span></div>
+<div class="line"><a id="l02658" name="l02658"></a><span class="lineno"> 2658</span>                                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rrule_prop);</div>
+<div class="line"><a id="l02659" name="l02659"></a><span class="lineno"> 2659</span>                                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rrule_prop);</div>
+<div class="line"><a id="l02660" name="l02660"></a><span class="lineno"> 2660</span> </div>
+<div class="line"><a id="l02661" name="l02661"></a><span class="lineno"> 2661</span>                                <span class="keywordflow">if</span> (ydiff) {</div>
+<div class="line"><a id="l02662" name="l02662"></a><span class="lineno"> 2662</span>                                    <span class="comment">/* Add previous onset as RDATE */</span></div>
+<div class="line"><a id="l02663" name="l02663"></a><span class="lineno"> 2663</span>                                    <span class="keyword">struct </span><a class="code hl_struct" href="structicaldatetimeperiodtype.html">icaldatetimeperiodtype</a> rdate;</div>
+<div class="line"><a id="l02664" name="l02664"></a><span class="lineno"> 2664</span>                                    rdate.<a class="code hl_variable" href="structicaldatetimeperiodtype.html#a77118543c37dc0c02d4fb170a515c322">time</a> = prev_onset;</div>
+<div class="line"><a id="l02665" name="l02665"></a><span class="lineno"> 2665</span>                                    rdate.period = <a class="code hl_function" href="icalperiod_8c.html#a60e59a9f46a1efa9885829a4d23eddfa">icalperiodtype_null_period</a>();</div>
+<div class="line"><a id="l02666" name="l02666"></a><span class="lineno"> 2666</span> </div>
+<div class="line"><a id="l02667" name="l02667"></a><span class="lineno"> 2667</span>                                    prop = <a class="code hl_function" href="icalderivedproperty_8h.html#a21a6536ea12e35f619849cbe5c2ce79a">icalproperty_new_rdate</a>(rdate);</div>
+<div class="line"><a id="l02668" name="l02668"></a><span class="lineno"> 2668</span>                                    <a class="code hl_function" href="icalcomponent_8c.html#ad0f618a40a7b03ab8a7c4f1a36d05168">icalcomponent_add_property</a>(comp, prop);</div>
+<div class="line"><a id="l02669" name="l02669"></a><span class="lineno"> 2669</span>                                }</div>
+<div class="line"><a id="l02670" name="l02670"></a><span class="lineno"> 2670</span>                            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l02671" name="l02671"></a><span class="lineno"> 2671</span>                                <span class="comment">/* Set UNTIL to previous onset */</span></div>
+<div class="line"><a id="l02672" name="l02672"></a><span class="lineno"> 2672</span>                                rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a> = prev_onset;</div>
+<div class="line"><a id="l02673" name="l02673"></a><span class="lineno"> 2673</span>                                <a class="code hl_function" href="icalderivedproperty_8h.html#a5c132ae8a4efc6cc4cb9faf30c83be62">icalproperty_set_rrule</a>(rrule_prop, rrule);</div>
+<div class="line"><a id="l02674" name="l02674"></a><span class="lineno"> 2674</span>                            }</div>
+<div class="line"><a id="l02675" name="l02675"></a><span class="lineno"> 2675</span> </div>
+<div class="line"><a id="l02676" name="l02676"></a><span class="lineno"> 2676</span>                            <span class="comment">/* We&#39;re done */</span></div>
+<div class="line"><a id="l02677" name="l02677"></a><span class="lineno"> 2677</span>                            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l02678" name="l02678"></a><span class="lineno"> 2678</span>                        }</div>
+<div class="line"><a id="l02679" name="l02679"></a><span class="lineno"> 2679</span> </div>
+<div class="line"><a id="l02680" name="l02680"></a><span class="lineno"> 2680</span>                        <span class="comment">/* Check observance vs our window open */</span></div>
+<div class="line"><a id="l02681" name="l02681"></a><span class="lineno"> 2681</span>                        r = <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(obs.onset, start);</div>
+<div class="line"><a id="l02682" name="l02682"></a><span class="lineno"> 2682</span>                        <span class="keywordflow">if</span> (r &lt; 0) {</div>
+<div class="line"><a id="l02683" name="l02683"></a><span class="lineno"> 2683</span>                            <span class="comment">/* Observance is prior to our window open -</span></div>
+<div class="line"><a id="l02684" name="l02684"></a><span class="lineno"> 2684</span><span class="comment">                            check it vs tombstone */</span></div>
+<div class="line"><a id="l02685" name="l02685"></a><span class="lineno"> 2685</span>                            <span class="keywordflow">if</span> (ms_compatible) {</div>
+<div class="line"><a id="l02686" name="l02686"></a><span class="lineno"> 2686</span>                                <span class="comment">/* XXX  We don&#39;t want to move DTSTART of the RRULE</span></div>
+<div class="line"><a id="l02687" name="l02687"></a><span class="lineno"> 2687</span><span class="comment">                                as Outlook/Exchange doesn&#39;t appear to like</span></div>
+<div class="line"><a id="l02688" name="l02688"></a><span class="lineno"> 2688</span><span class="comment">                                truncating the frontend of RRULEs */</span></div>
+<div class="line"><a id="l02689" name="l02689"></a><span class="lineno"> 2689</span>                                need_tomb = 0;</div>
+<div class="line"><a id="l02690" name="l02690"></a><span class="lineno"> 2690</span>                                trunc_dtstart = 0;</div>
+<div class="line"><a id="l02691" name="l02691"></a><span class="lineno"> 2691</span>                                <span class="keywordflow">if</span> (proleptic_prop) {</div>
+<div class="line"><a id="l02692" name="l02692"></a><span class="lineno"> 2692</span>                                    <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(vtz,</div>
+<div class="line"><a id="l02693" name="l02693"></a><span class="lineno"> 2693</span>                                                                  proleptic_prop);</div>
+<div class="line"><a id="l02694" name="l02694"></a><span class="lineno"> 2694</span>                                    <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(proleptic_prop);</div>
+<div class="line"><a id="l02695" name="l02695"></a><span class="lineno"> 2695</span>                                    proleptic_prop = NULL;</div>
+<div class="line"><a id="l02696" name="l02696"></a><span class="lineno"> 2696</span>                                }</div>
+<div class="line"><a id="l02697" name="l02697"></a><span class="lineno"> 2697</span>                            }</div>
+<div class="line"><a id="l02698" name="l02698"></a><span class="lineno"> 2698</span>                            <span class="keywordflow">if</span> (need_tomb) {</div>
+<div class="line"><a id="l02699" name="l02699"></a><span class="lineno"> 2699</span>                                check_tombstone(&amp;tombstone, &amp;obs);</div>
+<div class="line"><a id="l02700" name="l02700"></a><span class="lineno"> 2700</span>                            }</div>
+<div class="line"><a id="l02701" name="l02701"></a><span class="lineno"> 2701</span>                        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l02702" name="l02702"></a><span class="lineno"> 2702</span>                            <span class="comment">/* Observance is on/after our window open */</span></div>
+<div class="line"><a id="l02703" name="l02703"></a><span class="lineno"> 2703</span>                            <span class="keywordflow">if</span> (r == 0) {</div>
+<div class="line"><a id="l02704" name="l02704"></a><span class="lineno"> 2704</span>                                need_tomb = 0;</div>
+<div class="line"><a id="l02705" name="l02705"></a><span class="lineno"> 2705</span>                            }</div>
+<div class="line"><a id="l02706" name="l02706"></a><span class="lineno"> 2706</span> </div>
+<div class="line"><a id="l02707" name="l02707"></a><span class="lineno"> 2707</span>                            <span class="keywordflow">if</span> (trunc_dtstart) {</div>
+<div class="line"><a id="l02708" name="l02708"></a><span class="lineno"> 2708</span>                                <span class="comment">/* Make this observance the new DTSTART */</span></div>
+<div class="line"><a id="l02709" name="l02709"></a><span class="lineno"> 2709</span>                                <a class="code hl_function" href="icalderivedproperty_8h.html#a03a57ae53e945d3fcbfc7c8fa341cdce">icalproperty_set_dtstart</a>(dtstart_prop, recur);</div>
+<div class="line"><a id="l02710" name="l02710"></a><span class="lineno"> 2710</span>                                dtstart = obs.onset;</div>
+<div class="line"><a id="l02711" name="l02711"></a><span class="lineno"> 2711</span>                                trunc_dtstart = 0;</div>
 <div class="line"><a id="l02712" name="l02712"></a><span class="lineno"> 2712</span> </div>
-<div class="line"><a id="l02713" name="l02713"></a><span class="lineno"> 2713</span>                                    <span class="keywordflow">if</span> (ydiff) {</div>
-<div class="line"><a id="l02714" name="l02714"></a><span class="lineno"> 2714</span>                                        <span class="comment">/* Add UNTIL as RDATE */</span></div>
-<div class="line"><a id="l02715" name="l02715"></a><span class="lineno"> 2715</span>                                        <span class="keyword">struct </span><a class="code hl_struct" href="structicaldatetimeperiodtype.html">icaldatetimeperiodtype</a> rdate;</div>
-<div class="line"><a id="l02716" name="l02716"></a><span class="lineno"> 2716</span>                                        rdate.<a class="code hl_variable" href="structicaldatetimeperiodtype.html#a77118543c37dc0c02d4fb170a515c322">time</a> = rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>;</div>
-<div class="line"><a id="l02717" name="l02717"></a><span class="lineno"> 2717</span>                                        rdate.period = <a class="code hl_function" href="icalperiod_8c.html#a60e59a9f46a1efa9885829a4d23eddfa">icalperiodtype_null_period</a>();</div>
-<div class="line"><a id="l02718" name="l02718"></a><span class="lineno"> 2718</span> </div>
-<div class="line"><a id="l02719" name="l02719"></a><span class="lineno"> 2719</span>                                        prop = <a class="code hl_function" href="icalderivedproperty_8h.html#a21a6536ea12e35f619849cbe5c2ce79a">icalproperty_new_rdate</a>(rdate);</div>
-<div class="line"><a id="l02720" name="l02720"></a><span class="lineno"> 2720</span>                                        <a class="code hl_function" href="icalcomponent_8c.html#ad0f618a40a7b03ab8a7c4f1a36d05168">icalcomponent_add_property</a>(comp, prop);</div>
-<div class="line"><a id="l02721" name="l02721"></a><span class="lineno"> 2721</span>                                    }</div>
-<div class="line"><a id="l02722" name="l02722"></a><span class="lineno"> 2722</span>                                }</div>
-<div class="line"><a id="l02723" name="l02723"></a><span class="lineno"> 2723</span>                            }</div>
-<div class="line"><a id="l02724" name="l02724"></a><span class="lineno"> 2724</span> </div>
-<div class="line"><a id="l02725" name="l02725"></a><span class="lineno"> 2725</span>                            <span class="keywordflow">if</span> (!trunc_until) {</div>
-<div class="line"><a id="l02726" name="l02726"></a><span class="lineno"> 2726</span>                                <span class="comment">/* We&#39;re done */</span></div>
-<div class="line"><a id="l02727" name="l02727"></a><span class="lineno"> 2727</span>                                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l02728" name="l02728"></a><span class="lineno"> 2728</span>                            }</div>
-<div class="line"><a id="l02729" name="l02729"></a><span class="lineno"> 2729</span> </div>
-<div class="line"><a id="l02730" name="l02730"></a><span class="lineno"> 2730</span>                            <span class="comment">/* Check if observance is outside 1yr of window close */</span></div>
-<div class="line"><a id="l02731" name="l02731"></a><span class="lineno"> 2731</span>                            ydiff = (unsigned)(end.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> - recur.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a>);</div>
-<div class="line"><a id="l02732" name="l02732"></a><span class="lineno"> 2732</span>                            <span class="keywordflow">if</span> (ydiff &gt; 1) {</div>
-<div class="line"><a id="l02733" name="l02733"></a><span class="lineno"> 2733</span>                                <span class="comment">/* Bump RRULE to restart at 1 year prior to our window close */</span></div>
-<div class="line"><a id="l02734" name="l02734"></a><span class="lineno"> 2734</span>                                <a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> newstart = recur;</div>
-<div class="line"><a id="l02735" name="l02735"></a><span class="lineno"> 2735</span>                                newstart.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> = end.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> - 1;</div>
-<div class="line"><a id="l02736" name="l02736"></a><span class="lineno"> 2736</span>                                newstart.<a class="code hl_variable" href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">month</a> = end.<a class="code hl_variable" href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">month</a>;</div>
-<div class="line"><a id="l02737" name="l02737"></a><span class="lineno"> 2737</span>                                newstart.<a class="code hl_variable" href="structicaltimetype.html#a62632fff0632efca1b404737e5034db3">day</a> = end.<a class="code hl_variable" href="structicaltimetype.html#a62632fff0632efca1b404737e5034db3">day</a>;</div>
-<div class="line"><a id="l02738" name="l02738"></a><span class="lineno"> 2738</span>                                <a class="code hl_function" href="icalrecur_8c.html#a02427aacc00bb3a9c2b68d0fca951b9a">icalrecur_iterator_set_start</a>(ritr, newstart);</div>
-<div class="line"><a id="l02739" name="l02739"></a><span class="lineno"> 2739</span>                            }</div>
-<div class="line"><a id="l02740" name="l02740"></a><span class="lineno"> 2740</span>                        }</div>
-<div class="line"><a id="l02741" name="l02741"></a><span class="lineno"> 2741</span>                        prev_onset = obs.onset;</div>
-<div class="line"><a id="l02742" name="l02742"></a><span class="lineno"> 2742</span>                    }</div>
-<div class="line"><a id="l02743" name="l02743"></a><span class="lineno"> 2743</span>                    <a class="code hl_function" href="icalrecur_8c.html#a485fb0e1dd382fbfd05b6b7a618c49e0">icalrecur_iterator_free</a>(ritr);</div>
-<div class="line"><a id="l02744" name="l02744"></a><span class="lineno"> 2744</span>                }</div>
-<div class="line"><a id="l02745" name="l02745"></a><span class="lineno"> 2745</span>            }</div>
-<div class="line"><a id="l02746" name="l02746"></a><span class="lineno"> 2746</span>        }</div>
-<div class="line"><a id="l02747" name="l02747"></a><span class="lineno"> 2747</span> </div>
-<div class="line"><a id="l02748" name="l02748"></a><span class="lineno"> 2748</span>        <span class="comment">/* Sort the RDATEs by onset */</span></div>
-<div class="line"><a id="l02749" name="l02749"></a><span class="lineno"> 2749</span>        <a class="code hl_function" href="icalarray_8c.html#a7552d72058960fe92eeae36531275913">icalarray_sort</a>(rdates, &amp;rdate_compare);</div>
-<div class="line"><a id="l02750" name="l02750"></a><span class="lineno"> 2750</span> </div>
-<div class="line"><a id="l02751" name="l02751"></a><span class="lineno"> 2751</span>        <span class="comment">/* Check RDATEs */</span></div>
-<div class="line"><a id="l02752" name="l02752"></a><span class="lineno"> 2752</span>        <span class="keywordflow">for</span> (n = 0; n &lt; rdates-&gt;num_elements; n++) {</div>
-<div class="line"><a id="l02753" name="l02753"></a><span class="lineno"> 2753</span>            <span class="keyword">struct </span>rdate *rdate = <a class="code hl_function" href="icalarray_8c.html#a2f12e8a9e9d70d80ad8a621b7d52af96">icalarray_element_at</a>(rdates, n);</div>
-<div class="line"><a id="l02754" name="l02754"></a><span class="lineno"> 2754</span> </div>
-<div class="line"><a id="l02755" name="l02755"></a><span class="lineno"> 2755</span>            <span class="comment">/* RDATEs with a DATE value inherit the time from the DTSTART. */</span></div>
-<div class="line"><a id="l02756" name="l02756"></a><span class="lineno"> 2756</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="icaltime_8c.html#a180ac07f15279d949945492960cae8db">icaltime_is_date</a>(rdate-&gt;date.time)) {</div>
-<div class="line"><a id="l02757" name="l02757"></a><span class="lineno"> 2757</span>                rdate-&gt;date.time.hour = dtstart.<a class="code hl_variable" href="structicaltimetype.html#a9b19ae50103c213ca6ceed762df7df86">hour</a>;</div>
-<div class="line"><a id="l02758" name="l02758"></a><span class="lineno"> 2758</span>                rdate-&gt;date.time.minute = dtstart.<a class="code hl_variable" href="structicaltimetype.html#a1f421c7094d9375d22491bec9decde58">minute</a>;</div>
-<div class="line"><a id="l02759" name="l02759"></a><span class="lineno"> 2759</span>                rdate-&gt;date.time.second = dtstart.<a class="code hl_variable" href="structicaltimetype.html#a122d7b1ebfd80c6f608826eaf21fb990">second</a>;</div>
-<div class="line"><a id="l02760" name="l02760"></a><span class="lineno"> 2760</span>            }</div>
-<div class="line"><a id="l02761" name="l02761"></a><span class="lineno"> 2761</span> </div>
-<div class="line"><a id="l02762" name="l02762"></a><span class="lineno"> 2762</span>            <span class="keywordflow">if</span> (n == 0 &amp;&amp; <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(rdate-&gt;date.time, dtstart) == 0) {</div>
-<div class="line"><a id="l02763" name="l02763"></a><span class="lineno"> 2763</span>                <span class="comment">/* RDATE is same as DTSTART - remove it */</span></div>
-<div class="line"><a id="l02764" name="l02764"></a><span class="lineno"> 2764</span>                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rdate-&gt;prop);</div>
-<div class="line"><a id="l02765" name="l02765"></a><span class="lineno"> 2765</span>                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rdate-&gt;prop);</div>
-<div class="line"><a id="l02766" name="l02766"></a><span class="lineno"> 2766</span>                <span class="keywordflow">continue</span>;</div>
-<div class="line"><a id="l02767" name="l02767"></a><span class="lineno"> 2767</span>            }</div>
-<div class="line"><a id="l02768" name="l02768"></a><span class="lineno"> 2768</span> </div>
-<div class="line"><a id="l02769" name="l02769"></a><span class="lineno"> 2769</span>            obs.onset = rdate-&gt;date.time;</div>
+<div class="line"><a id="l02713" name="l02713"></a><span class="lineno"> 2713</span>                                <span class="comment">/* Check if new DSTART is within 1yr of UNTIL */</span></div>
+<div class="line"><a id="l02714" name="l02714"></a><span class="lineno"> 2714</span>                                ydiff = (unsigned)(rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> - recur.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a>);</div>
+<div class="line"><a id="l02715" name="l02715"></a><span class="lineno"> 2715</span>                                <span class="keywordflow">if</span> (!trunc_until &amp;&amp; ydiff &lt;= 1) {</div>
+<div class="line"><a id="l02716" name="l02716"></a><span class="lineno"> 2716</span>                                    <span class="comment">/* Remove RRULE */</span></div>
+<div class="line"><a id="l02717" name="l02717"></a><span class="lineno"> 2717</span>                                    <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rrule_prop);</div>
+<div class="line"><a id="l02718" name="l02718"></a><span class="lineno"> 2718</span>                                    <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rrule_prop);</div>
+<div class="line"><a id="l02719" name="l02719"></a><span class="lineno"> 2719</span> </div>
+<div class="line"><a id="l02720" name="l02720"></a><span class="lineno"> 2720</span>                                    <span class="keywordflow">if</span> (ydiff) {</div>
+<div class="line"><a id="l02721" name="l02721"></a><span class="lineno"> 2721</span>                                        <span class="comment">/* Add UNTIL as RDATE */</span></div>
+<div class="line"><a id="l02722" name="l02722"></a><span class="lineno"> 2722</span>                                        <span class="keyword">struct </span><a class="code hl_struct" href="structicaldatetimeperiodtype.html">icaldatetimeperiodtype</a> rdate;</div>
+<div class="line"><a id="l02723" name="l02723"></a><span class="lineno"> 2723</span>                                        rdate.<a class="code hl_variable" href="structicaldatetimeperiodtype.html#a77118543c37dc0c02d4fb170a515c322">time</a> = rrule-&gt;<a class="code hl_variable" href="structicalrecurrencetype.html#aee2f594797f65bcb278fcc325617330f">until</a>;</div>
+<div class="line"><a id="l02724" name="l02724"></a><span class="lineno"> 2724</span>                                        rdate.period = <a class="code hl_function" href="icalperiod_8c.html#a60e59a9f46a1efa9885829a4d23eddfa">icalperiodtype_null_period</a>();</div>
+<div class="line"><a id="l02725" name="l02725"></a><span class="lineno"> 2725</span> </div>
+<div class="line"><a id="l02726" name="l02726"></a><span class="lineno"> 2726</span>                                        prop = <a class="code hl_function" href="icalderivedproperty_8h.html#a21a6536ea12e35f619849cbe5c2ce79a">icalproperty_new_rdate</a>(rdate);</div>
+<div class="line"><a id="l02727" name="l02727"></a><span class="lineno"> 2727</span>                                        <a class="code hl_function" href="icalcomponent_8c.html#ad0f618a40a7b03ab8a7c4f1a36d05168">icalcomponent_add_property</a>(comp, prop);</div>
+<div class="line"><a id="l02728" name="l02728"></a><span class="lineno"> 2728</span>                                    }</div>
+<div class="line"><a id="l02729" name="l02729"></a><span class="lineno"> 2729</span>                                }</div>
+<div class="line"><a id="l02730" name="l02730"></a><span class="lineno"> 2730</span>                            }</div>
+<div class="line"><a id="l02731" name="l02731"></a><span class="lineno"> 2731</span> </div>
+<div class="line"><a id="l02732" name="l02732"></a><span class="lineno"> 2732</span>                            <span class="keywordflow">if</span> (!trunc_until) {</div>
+<div class="line"><a id="l02733" name="l02733"></a><span class="lineno"> 2733</span>                                <span class="comment">/* We&#39;re done */</span></div>
+<div class="line"><a id="l02734" name="l02734"></a><span class="lineno"> 2734</span>                                <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l02735" name="l02735"></a><span class="lineno"> 2735</span>                            }</div>
+<div class="line"><a id="l02736" name="l02736"></a><span class="lineno"> 2736</span> </div>
+<div class="line"><a id="l02737" name="l02737"></a><span class="lineno"> 2737</span>                            <span class="comment">/* Check if observance is outside 1yr of window close */</span></div>
+<div class="line"><a id="l02738" name="l02738"></a><span class="lineno"> 2738</span>                            ydiff = (unsigned)(end.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> - recur.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a>);</div>
+<div class="line"><a id="l02739" name="l02739"></a><span class="lineno"> 2739</span>                            <span class="keywordflow">if</span> (ydiff &gt; 1) {</div>
+<div class="line"><a id="l02740" name="l02740"></a><span class="lineno"> 2740</span>                                <span class="comment">/* Bump RRULE to restart at 1 year prior to our window close */</span></div>
+<div class="line"><a id="l02741" name="l02741"></a><span class="lineno"> 2741</span>                                <a class="code hl_struct" href="structicaltimetype.html">icaltimetype</a> newstart = recur;</div>
+<div class="line"><a id="l02742" name="l02742"></a><span class="lineno"> 2742</span>                                newstart.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> = end.<a class="code hl_variable" href="structicaltimetype.html#a4f64cd87ff0d4aba7bf318485b7374b8">year</a> - 1;</div>
+<div class="line"><a id="l02743" name="l02743"></a><span class="lineno"> 2743</span>                                newstart.<a class="code hl_variable" href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">month</a> = end.<a class="code hl_variable" href="structicaltimetype.html#abfb15dfde907211cafd3cd6cafa5531d">month</a>;</div>
+<div class="line"><a id="l02744" name="l02744"></a><span class="lineno"> 2744</span>                                newstart.<a class="code hl_variable" href="structicaltimetype.html#a62632fff0632efca1b404737e5034db3">day</a> = end.<a class="code hl_variable" href="structicaltimetype.html#a62632fff0632efca1b404737e5034db3">day</a>;</div>
+<div class="line"><a id="l02745" name="l02745"></a><span class="lineno"> 2745</span>                                <a class="code hl_function" href="icalrecur_8c.html#a02427aacc00bb3a9c2b68d0fca951b9a">icalrecur_iterator_set_start</a>(ritr, newstart);</div>
+<div class="line"><a id="l02746" name="l02746"></a><span class="lineno"> 2746</span>                            }</div>
+<div class="line"><a id="l02747" name="l02747"></a><span class="lineno"> 2747</span>                        }</div>
+<div class="line"><a id="l02748" name="l02748"></a><span class="lineno"> 2748</span>                        prev_onset = obs.onset;</div>
+<div class="line"><a id="l02749" name="l02749"></a><span class="lineno"> 2749</span>                    }</div>
+<div class="line"><a id="l02750" name="l02750"></a><span class="lineno"> 2750</span>                    <a class="code hl_function" href="icalrecur_8c.html#a485fb0e1dd382fbfd05b6b7a618c49e0">icalrecur_iterator_free</a>(ritr);</div>
+<div class="line"><a id="l02751" name="l02751"></a><span class="lineno"> 2751</span>                }</div>
+<div class="line"><a id="l02752" name="l02752"></a><span class="lineno"> 2752</span> </div>
+<div class="line"><a id="l02753" name="l02753"></a><span class="lineno"> 2753</span>                <a class="code hl_function" href="icalrecur_8c.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a>(rrule);</div>
+<div class="line"><a id="l02754" name="l02754"></a><span class="lineno"> 2754</span>            }</div>
+<div class="line"><a id="l02755" name="l02755"></a><span class="lineno"> 2755</span>        }</div>
+<div class="line"><a id="l02756" name="l02756"></a><span class="lineno"> 2756</span> </div>
+<div class="line"><a id="l02757" name="l02757"></a><span class="lineno"> 2757</span>        <span class="comment">/* Sort the RDATEs by onset */</span></div>
+<div class="line"><a id="l02758" name="l02758"></a><span class="lineno"> 2758</span>        <a class="code hl_function" href="icalarray_8c.html#a7552d72058960fe92eeae36531275913">icalarray_sort</a>(rdates, &amp;rdate_compare);</div>
+<div class="line"><a id="l02759" name="l02759"></a><span class="lineno"> 2759</span> </div>
+<div class="line"><a id="l02760" name="l02760"></a><span class="lineno"> 2760</span>        <span class="comment">/* Check RDATEs */</span></div>
+<div class="line"><a id="l02761" name="l02761"></a><span class="lineno"> 2761</span>        <span class="keywordflow">for</span> (n = 0; n &lt; rdates-&gt;num_elements; n++) {</div>
+<div class="line"><a id="l02762" name="l02762"></a><span class="lineno"> 2762</span>            <span class="keyword">struct </span>rdate *rdate = <a class="code hl_function" href="icalarray_8c.html#a2f12e8a9e9d70d80ad8a621b7d52af96">icalarray_element_at</a>(rdates, n);</div>
+<div class="line"><a id="l02763" name="l02763"></a><span class="lineno"> 2763</span> </div>
+<div class="line"><a id="l02764" name="l02764"></a><span class="lineno"> 2764</span>            <span class="comment">/* RDATEs with a DATE value inherit the time from the DTSTART. */</span></div>
+<div class="line"><a id="l02765" name="l02765"></a><span class="lineno"> 2765</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="icaltime_8c.html#a180ac07f15279d949945492960cae8db">icaltime_is_date</a>(rdate-&gt;date.time)) {</div>
+<div class="line"><a id="l02766" name="l02766"></a><span class="lineno"> 2766</span>                rdate-&gt;date.time.hour = dtstart.<a class="code hl_variable" href="structicaltimetype.html#a9b19ae50103c213ca6ceed762df7df86">hour</a>;</div>
+<div class="line"><a id="l02767" name="l02767"></a><span class="lineno"> 2767</span>                rdate-&gt;date.time.minute = dtstart.<a class="code hl_variable" href="structicaltimetype.html#a1f421c7094d9375d22491bec9decde58">minute</a>;</div>
+<div class="line"><a id="l02768" name="l02768"></a><span class="lineno"> 2768</span>                rdate-&gt;date.time.second = dtstart.<a class="code hl_variable" href="structicaltimetype.html#a122d7b1ebfd80c6f608826eaf21fb990">second</a>;</div>
+<div class="line"><a id="l02769" name="l02769"></a><span class="lineno"> 2769</span>            }</div>
 <div class="line"><a id="l02770" name="l02770"></a><span class="lineno"> 2770</span> </div>
-<div class="line"><a id="l02771" name="l02771"></a><span class="lineno"> 2771</span>            <span class="comment">/* Adjust observance to UTC */</span></div>
-<div class="line"><a id="l02772" name="l02772"></a><span class="lineno"> 2772</span>            <a class="code hl_function" href="icaltime_8c.html#aeeff97a90d535fd004d93057e49e8663">icaltime_adjust</a>(&amp;obs.onset, 0, 0, 0, -obs.offset_from);</div>
-<div class="line"><a id="l02773" name="l02773"></a><span class="lineno"> 2773</span>            (void)<a class="code hl_function" href="icaltime_8c.html#aea5c3a433f2919943b42d7d6400f6304">icaltime_set_timezone</a>(&amp;obs.onset, <a class="code hl_function" href="icaltimezone_8c.html#a8e9c520fc9a3ec85f5cc63fef1548583">icaltimezone_get_utc_timezone</a>());</div>
-<div class="line"><a id="l02774" name="l02774"></a><span class="lineno"> 2774</span> </div>
-<div class="line"><a id="l02775" name="l02775"></a><span class="lineno"> 2775</span>            <span class="keywordflow">if</span> (need_tzuntil &amp;&amp; <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(obs.onset, end) &gt;= 0) {</div>
-<div class="line"><a id="l02776" name="l02776"></a><span class="lineno"> 2776</span>                <span class="comment">/* RDATE is after our window close - remove it */</span></div>
-<div class="line"><a id="l02777" name="l02777"></a><span class="lineno"> 2777</span>                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rdate-&gt;prop);</div>
-<div class="line"><a id="l02778" name="l02778"></a><span class="lineno"> 2778</span>                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rdate-&gt;prop);</div>
+<div class="line"><a id="l02771" name="l02771"></a><span class="lineno"> 2771</span>            <span class="keywordflow">if</span> (n == 0 &amp;&amp; <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(rdate-&gt;date.time, dtstart) == 0) {</div>
+<div class="line"><a id="l02772" name="l02772"></a><span class="lineno"> 2772</span>                <span class="comment">/* RDATE is same as DTSTART - remove it */</span></div>
+<div class="line"><a id="l02773" name="l02773"></a><span class="lineno"> 2773</span>                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rdate-&gt;prop);</div>
+<div class="line"><a id="l02774" name="l02774"></a><span class="lineno"> 2774</span>                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rdate-&gt;prop);</div>
+<div class="line"><a id="l02775" name="l02775"></a><span class="lineno"> 2775</span>                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l02776" name="l02776"></a><span class="lineno"> 2776</span>            }</div>
+<div class="line"><a id="l02777" name="l02777"></a><span class="lineno"> 2777</span> </div>
+<div class="line"><a id="l02778" name="l02778"></a><span class="lineno"> 2778</span>            obs.onset = rdate-&gt;date.time;</div>
 <div class="line"><a id="l02779" name="l02779"></a><span class="lineno"> 2779</span> </div>
-<div class="line"><a id="l02780" name="l02780"></a><span class="lineno"> 2780</span>                <span class="keywordflow">continue</span>;</div>
-<div class="line"><a id="l02781" name="l02781"></a><span class="lineno"> 2781</span>            }</div>
-<div class="line"><a id="l02782" name="l02782"></a><span class="lineno"> 2782</span> </div>
-<div class="line"><a id="l02783" name="l02783"></a><span class="lineno"> 2783</span>            r = <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(obs.onset, start);</div>
-<div class="line"><a id="l02784" name="l02784"></a><span class="lineno"> 2784</span>            <span class="keywordflow">if</span> (r &lt; 0) {</div>
-<div class="line"><a id="l02785" name="l02785"></a><span class="lineno"> 2785</span>                <span class="comment">/* RDATE is prior to window open - check it vs tombstone */</span></div>
-<div class="line"><a id="l02786" name="l02786"></a><span class="lineno"> 2786</span>                <span class="keywordflow">if</span> (need_tomb) {</div>
-<div class="line"><a id="l02787" name="l02787"></a><span class="lineno"> 2787</span>                    check_tombstone(&amp;tombstone, &amp;obs);</div>
-<div class="line"><a id="l02788" name="l02788"></a><span class="lineno"> 2788</span>                }</div>
-<div class="line"><a id="l02789" name="l02789"></a><span class="lineno"> 2789</span> </div>
-<div class="line"><a id="l02790" name="l02790"></a><span class="lineno"> 2790</span>                <span class="comment">/* Remove it */</span></div>
-<div class="line"><a id="l02791" name="l02791"></a><span class="lineno"> 2791</span>                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rdate-&gt;prop);</div>
-<div class="line"><a id="l02792" name="l02792"></a><span class="lineno"> 2792</span>                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rdate-&gt;prop);</div>
-<div class="line"><a id="l02793" name="l02793"></a><span class="lineno"> 2793</span>            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l02794" name="l02794"></a><span class="lineno"> 2794</span>                <span class="comment">/* RDATE is on/after our window open */</span></div>
-<div class="line"><a id="l02795" name="l02795"></a><span class="lineno"> 2795</span>                <span class="keywordflow">if</span> (r == 0) {</div>
-<div class="line"><a id="l02796" name="l02796"></a><span class="lineno"> 2796</span>                    need_tomb = 0;</div>
+<div class="line"><a id="l02780" name="l02780"></a><span class="lineno"> 2780</span>            <span class="comment">/* Adjust observance to UTC */</span></div>
+<div class="line"><a id="l02781" name="l02781"></a><span class="lineno"> 2781</span>            <a class="code hl_function" href="icaltime_8c.html#aeeff97a90d535fd004d93057e49e8663">icaltime_adjust</a>(&amp;obs.onset, 0, 0, 0, -obs.offset_from);</div>
+<div class="line"><a id="l02782" name="l02782"></a><span class="lineno"> 2782</span>            (void)<a class="code hl_function" href="icaltime_8c.html#aea5c3a433f2919943b42d7d6400f6304">icaltime_set_timezone</a>(&amp;obs.onset, <a class="code hl_function" href="icaltimezone_8c.html#a8e9c520fc9a3ec85f5cc63fef1548583">icaltimezone_get_utc_timezone</a>());</div>
+<div class="line"><a id="l02783" name="l02783"></a><span class="lineno"> 2783</span> </div>
+<div class="line"><a id="l02784" name="l02784"></a><span class="lineno"> 2784</span>            <span class="keywordflow">if</span> (need_tzuntil &amp;&amp; <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(obs.onset, end) &gt;= 0) {</div>
+<div class="line"><a id="l02785" name="l02785"></a><span class="lineno"> 2785</span>                <span class="comment">/* RDATE is after our window close - remove it */</span></div>
+<div class="line"><a id="l02786" name="l02786"></a><span class="lineno"> 2786</span>                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rdate-&gt;prop);</div>
+<div class="line"><a id="l02787" name="l02787"></a><span class="lineno"> 2787</span>                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rdate-&gt;prop);</div>
+<div class="line"><a id="l02788" name="l02788"></a><span class="lineno"> 2788</span> </div>
+<div class="line"><a id="l02789" name="l02789"></a><span class="lineno"> 2789</span>                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l02790" name="l02790"></a><span class="lineno"> 2790</span>            }</div>
+<div class="line"><a id="l02791" name="l02791"></a><span class="lineno"> 2791</span> </div>
+<div class="line"><a id="l02792" name="l02792"></a><span class="lineno"> 2792</span>            r = <a class="code hl_function" href="icaltime_8c.html#ae5ca3c71d279ed92321742e0378e15a4">icaltime_compare</a>(obs.onset, start);</div>
+<div class="line"><a id="l02793" name="l02793"></a><span class="lineno"> 2793</span>            <span class="keywordflow">if</span> (r &lt; 0) {</div>
+<div class="line"><a id="l02794" name="l02794"></a><span class="lineno"> 2794</span>                <span class="comment">/* RDATE is prior to window open - check it vs tombstone */</span></div>
+<div class="line"><a id="l02795" name="l02795"></a><span class="lineno"> 2795</span>                <span class="keywordflow">if</span> (need_tomb) {</div>
+<div class="line"><a id="l02796" name="l02796"></a><span class="lineno"> 2796</span>                    check_tombstone(&amp;tombstone, &amp;obs);</div>
 <div class="line"><a id="l02797" name="l02797"></a><span class="lineno"> 2797</span>                }</div>
 <div class="line"><a id="l02798" name="l02798"></a><span class="lineno"> 2798</span> </div>
-<div class="line"><a id="l02799" name="l02799"></a><span class="lineno"> 2799</span>                <span class="keywordflow">if</span> (trunc_dtstart) {</div>
-<div class="line"><a id="l02800" name="l02800"></a><span class="lineno"> 2800</span>                    <span class="comment">/* Make this RDATE the new DTSTART */</span></div>
-<div class="line"><a id="l02801" name="l02801"></a><span class="lineno"> 2801</span>                    <a class="code hl_function" href="icalderivedproperty_8h.html#a03a57ae53e945d3fcbfc7c8fa341cdce">icalproperty_set_dtstart</a>(dtstart_prop,</div>
-<div class="line"><a id="l02802" name="l02802"></a><span class="lineno"> 2802</span>                                             rdate-&gt;date.time);</div>
-<div class="line"><a id="l02803" name="l02803"></a><span class="lineno"> 2803</span>                    trunc_dtstart = 0;</div>
-<div class="line"><a id="l02804" name="l02804"></a><span class="lineno"> 2804</span> </div>
-<div class="line"><a id="l02805" name="l02805"></a><span class="lineno"> 2805</span>                    <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rdate-&gt;prop);</div>
-<div class="line"><a id="l02806" name="l02806"></a><span class="lineno"> 2806</span>                    <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rdate-&gt;prop);</div>
-<div class="line"><a id="l02807" name="l02807"></a><span class="lineno"> 2807</span>                }</div>
-<div class="line"><a id="l02808" name="l02808"></a><span class="lineno"> 2808</span>            }</div>
-<div class="line"><a id="l02809" name="l02809"></a><span class="lineno"> 2809</span>        }</div>
-<div class="line"><a id="l02810" name="l02810"></a><span class="lineno"> 2810</span>        <a class="code hl_function" href="icalarray_8c.html#a725724cdff58a12520abc7d6bfdf5e0f">icalarray_free</a>(rdates);</div>
-<div class="line"><a id="l02811" name="l02811"></a><span class="lineno"> 2811</span> </div>
-<div class="line"><a id="l02812" name="l02812"></a><span class="lineno"> 2812</span>        <span class="comment">/* Final check */</span></div>
-<div class="line"><a id="l02813" name="l02813"></a><span class="lineno"> 2813</span>        <span class="keywordflow">if</span> (trunc_dtstart) {</div>
-<div class="line"><a id="l02814" name="l02814"></a><span class="lineno"> 2814</span>            <span class="comment">/* All observances in comp occur prior to window open, remove it</span></div>
-<div class="line"><a id="l02815" name="l02815"></a><span class="lineno"> 2815</span><span class="comment">               unless we haven&#39;t saved a tombstone comp of this type yet */</span></div>
-<div class="line"><a id="l02816" name="l02816"></a><span class="lineno"> 2816</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="icalcomponent_8c.html#ad32e4ff0fa9a2704131500595418371e">icalcomponent_isa</a>(comp) == <a class="code hl_enumvalue" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a280e9bafebc6bff38f296d80bb59773f">ICAL_XDAYLIGHT_COMPONENT</a>) {</div>
-<div class="line"><a id="l02817" name="l02817"></a><span class="lineno"> 2817</span>                <span class="keywordflow">if</span> (!tomb_day) {</div>
-<div class="line"><a id="l02818" name="l02818"></a><span class="lineno"> 2818</span>                    tomb_day = comp;</div>
-<div class="line"><a id="l02819" name="l02819"></a><span class="lineno"> 2819</span>                    comp = NULL;</div>
-<div class="line"><a id="l02820" name="l02820"></a><span class="lineno"> 2820</span>                }</div>
-<div class="line"><a id="l02821" name="l02821"></a><span class="lineno"> 2821</span>            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (!tomb_std) {</div>
-<div class="line"><a id="l02822" name="l02822"></a><span class="lineno"> 2822</span>                tomb_std = comp;</div>
-<div class="line"><a id="l02823" name="l02823"></a><span class="lineno"> 2823</span>                comp = NULL;</div>
-<div class="line"><a id="l02824" name="l02824"></a><span class="lineno"> 2824</span>            }</div>
-<div class="line"><a id="l02825" name="l02825"></a><span class="lineno"> 2825</span> </div>
-<div class="line"><a id="l02826" name="l02826"></a><span class="lineno"> 2826</span>            <span class="keywordflow">if</span> (comp) {</div>
-<div class="line"><a id="l02827" name="l02827"></a><span class="lineno"> 2827</span>                <a class="code hl_function" href="icalcomponent_8c.html#a6222aaf2d040fe425106fb651464bef0">icalcomponent_remove_component</a>(vtz, comp);</div>
-<div class="line"><a id="l02828" name="l02828"></a><span class="lineno"> 2828</span>                <a class="code hl_function" href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free</a>(comp);</div>
-<div class="line"><a id="l02829" name="l02829"></a><span class="lineno"> 2829</span>            }</div>
-<div class="line"><a id="l02830" name="l02830"></a><span class="lineno"> 2830</span>        }</div>
-<div class="line"><a id="l02831" name="l02831"></a><span class="lineno"> 2831</span>    }</div>
-<div class="line"><a id="l02832" name="l02832"></a><span class="lineno"> 2832</span> </div>
-<div class="line"><a id="l02833" name="l02833"></a><span class="lineno"> 2833</span>    <span class="keywordflow">if</span> (need_tomb &amp;&amp; !<a class="code hl_function" href="icaltime_8c.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a>(tombstone.onset)) {</div>
-<div class="line"><a id="l02834" name="l02834"></a><span class="lineno"> 2834</span>        <span class="comment">/* Need to add tombstone component/observance starting at window open</span></div>
-<div class="line"><a id="l02835" name="l02835"></a><span class="lineno"> 2835</span><span class="comment">           as long as its not prior to start of TZ data */</span></div>
-<div class="line"><a id="l02836" name="l02836"></a><span class="lineno"> 2836</span>        icalcomponent *tomb;</div>
-<div class="line"><a id="l02837" name="l02837"></a><span class="lineno"> 2837</span>        icalproperty *tomb_prop, *nextp;</div>
-<div class="line"><a id="l02838" name="l02838"></a><span class="lineno"> 2838</span> </div>
-<div class="line"><a id="l02839" name="l02839"></a><span class="lineno"> 2839</span>        <span class="comment">/* Determine which tombstone component we need */</span></div>
-<div class="line"><a id="l02840" name="l02840"></a><span class="lineno"> 2840</span>        <span class="keywordflow">if</span> (tombstone.onset.<a class="code hl_variable" href="structicaltimetype.html#a8b90b6a7979294823e98a2dd3d7edd50">is_daylight</a>) {</div>
-<div class="line"><a id="l02841" name="l02841"></a><span class="lineno"> 2841</span>            tomb = tomb_day;</div>
-<div class="line"><a id="l02842" name="l02842"></a><span class="lineno"> 2842</span>            tomb_day = NULL;</div>
-<div class="line"><a id="l02843" name="l02843"></a><span class="lineno"> 2843</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l02844" name="l02844"></a><span class="lineno"> 2844</span>            tomb = tomb_std;</div>
-<div class="line"><a id="l02845" name="l02845"></a><span class="lineno"> 2845</span>            tomb_std = NULL;</div>
-<div class="line"><a id="l02846" name="l02846"></a><span class="lineno"> 2846</span>        }</div>
+<div class="line"><a id="l02799" name="l02799"></a><span class="lineno"> 2799</span>                <span class="comment">/* Remove it */</span></div>
+<div class="line"><a id="l02800" name="l02800"></a><span class="lineno"> 2800</span>                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rdate-&gt;prop);</div>
+<div class="line"><a id="l02801" name="l02801"></a><span class="lineno"> 2801</span>                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rdate-&gt;prop);</div>
+<div class="line"><a id="l02802" name="l02802"></a><span class="lineno"> 2802</span>            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l02803" name="l02803"></a><span class="lineno"> 2803</span>                <span class="comment">/* RDATE is on/after our window open */</span></div>
+<div class="line"><a id="l02804" name="l02804"></a><span class="lineno"> 2804</span>                <span class="keywordflow">if</span> (r == 0) {</div>
+<div class="line"><a id="l02805" name="l02805"></a><span class="lineno"> 2805</span>                    need_tomb = 0;</div>
+<div class="line"><a id="l02806" name="l02806"></a><span class="lineno"> 2806</span>                }</div>
+<div class="line"><a id="l02807" name="l02807"></a><span class="lineno"> 2807</span> </div>
+<div class="line"><a id="l02808" name="l02808"></a><span class="lineno"> 2808</span>                <span class="keywordflow">if</span> (trunc_dtstart) {</div>
+<div class="line"><a id="l02809" name="l02809"></a><span class="lineno"> 2809</span>                    <span class="comment">/* Make this RDATE the new DTSTART */</span></div>
+<div class="line"><a id="l02810" name="l02810"></a><span class="lineno"> 2810</span>                    <a class="code hl_function" href="icalderivedproperty_8h.html#a03a57ae53e945d3fcbfc7c8fa341cdce">icalproperty_set_dtstart</a>(dtstart_prop,</div>
+<div class="line"><a id="l02811" name="l02811"></a><span class="lineno"> 2811</span>                                             rdate-&gt;date.time);</div>
+<div class="line"><a id="l02812" name="l02812"></a><span class="lineno"> 2812</span>                    trunc_dtstart = 0;</div>
+<div class="line"><a id="l02813" name="l02813"></a><span class="lineno"> 2813</span> </div>
+<div class="line"><a id="l02814" name="l02814"></a><span class="lineno"> 2814</span>                    <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(comp, rdate-&gt;prop);</div>
+<div class="line"><a id="l02815" name="l02815"></a><span class="lineno"> 2815</span>                    <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(rdate-&gt;prop);</div>
+<div class="line"><a id="l02816" name="l02816"></a><span class="lineno"> 2816</span>                }</div>
+<div class="line"><a id="l02817" name="l02817"></a><span class="lineno"> 2817</span>            }</div>
+<div class="line"><a id="l02818" name="l02818"></a><span class="lineno"> 2818</span>        }</div>
+<div class="line"><a id="l02819" name="l02819"></a><span class="lineno"> 2819</span>        <a class="code hl_function" href="icalarray_8c.html#a725724cdff58a12520abc7d6bfdf5e0f">icalarray_free</a>(rdates);</div>
+<div class="line"><a id="l02820" name="l02820"></a><span class="lineno"> 2820</span> </div>
+<div class="line"><a id="l02821" name="l02821"></a><span class="lineno"> 2821</span>        <span class="comment">/* Final check */</span></div>
+<div class="line"><a id="l02822" name="l02822"></a><span class="lineno"> 2822</span>        <span class="keywordflow">if</span> (trunc_dtstart) {</div>
+<div class="line"><a id="l02823" name="l02823"></a><span class="lineno"> 2823</span>            <span class="comment">/* All observances in comp occur prior to window open, remove it</span></div>
+<div class="line"><a id="l02824" name="l02824"></a><span class="lineno"> 2824</span><span class="comment">               unless we haven&#39;t saved a tombstone comp of this type yet */</span></div>
+<div class="line"><a id="l02825" name="l02825"></a><span class="lineno"> 2825</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="icalcomponent_8c.html#ad32e4ff0fa9a2704131500595418371e">icalcomponent_isa</a>(comp) == <a class="code hl_enumvalue" href="icalenums_8h.html#a7cc82bf2af2050ddf53017fd3d4f7ca4a280e9bafebc6bff38f296d80bb59773f">ICAL_XDAYLIGHT_COMPONENT</a>) {</div>
+<div class="line"><a id="l02826" name="l02826"></a><span class="lineno"> 2826</span>                <span class="keywordflow">if</span> (!tomb_day) {</div>
+<div class="line"><a id="l02827" name="l02827"></a><span class="lineno"> 2827</span>                    tomb_day = comp;</div>
+<div class="line"><a id="l02828" name="l02828"></a><span class="lineno"> 2828</span>                    comp = NULL;</div>
+<div class="line"><a id="l02829" name="l02829"></a><span class="lineno"> 2829</span>                }</div>
+<div class="line"><a id="l02830" name="l02830"></a><span class="lineno"> 2830</span>            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (!tomb_std) {</div>
+<div class="line"><a id="l02831" name="l02831"></a><span class="lineno"> 2831</span>                tomb_std = comp;</div>
+<div class="line"><a id="l02832" name="l02832"></a><span class="lineno"> 2832</span>                comp = NULL;</div>
+<div class="line"><a id="l02833" name="l02833"></a><span class="lineno"> 2833</span>            }</div>
+<div class="line"><a id="l02834" name="l02834"></a><span class="lineno"> 2834</span> </div>
+<div class="line"><a id="l02835" name="l02835"></a><span class="lineno"> 2835</span>            <span class="keywordflow">if</span> (comp) {</div>
+<div class="line"><a id="l02836" name="l02836"></a><span class="lineno"> 2836</span>                <a class="code hl_function" href="icalcomponent_8c.html#a6222aaf2d040fe425106fb651464bef0">icalcomponent_remove_component</a>(vtz, comp);</div>
+<div class="line"><a id="l02837" name="l02837"></a><span class="lineno"> 2837</span>                <a class="code hl_function" href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free</a>(comp);</div>
+<div class="line"><a id="l02838" name="l02838"></a><span class="lineno"> 2838</span>            }</div>
+<div class="line"><a id="l02839" name="l02839"></a><span class="lineno"> 2839</span>        }</div>
+<div class="line"><a id="l02840" name="l02840"></a><span class="lineno"> 2840</span>    }</div>
+<div class="line"><a id="l02841" name="l02841"></a><span class="lineno"> 2841</span> </div>
+<div class="line"><a id="l02842" name="l02842"></a><span class="lineno"> 2842</span>    <span class="keywordflow">if</span> (need_tomb &amp;&amp; !<a class="code hl_function" href="icaltime_8c.html#ada6621230dc10c2cb16228935ee311b5">icaltime_is_null_time</a>(tombstone.onset)) {</div>
+<div class="line"><a id="l02843" name="l02843"></a><span class="lineno"> 2843</span>        <span class="comment">/* Need to add tombstone component/observance starting at window open</span></div>
+<div class="line"><a id="l02844" name="l02844"></a><span class="lineno"> 2844</span><span class="comment">           as long as its not prior to start of TZ data */</span></div>
+<div class="line"><a id="l02845" name="l02845"></a><span class="lineno"> 2845</span>        icalcomponent *tomb;</div>
+<div class="line"><a id="l02846" name="l02846"></a><span class="lineno"> 2846</span>        icalproperty *tomb_prop, *nextp;</div>
 <div class="line"><a id="l02847" name="l02847"></a><span class="lineno"> 2847</span> </div>
-<div class="line"><a id="l02848" name="l02848"></a><span class="lineno"> 2848</span>        <span class="comment">/* Set property values on our tombstone */</span></div>
-<div class="line"><a id="l02849" name="l02849"></a><span class="lineno"> 2849</span>        <span class="keywordflow">for</span> (tomb_prop = <a class="code hl_function" href="icalcomponent_8c.html#a2537651ca1a768a86b6a7ad90964320c">icalcomponent_get_first_property</a>(tomb, <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7ca0d6b3c1fa0729d073df3faf9854f9d56">ICAL_ANY_PROPERTY</a>);</div>
-<div class="line"><a id="l02850" name="l02850"></a><span class="lineno"> 2850</span>             tomb_prop; tomb_prop = nextp) {</div>
-<div class="line"><a id="l02851" name="l02851"></a><span class="lineno"> 2851</span>            nextp = <a class="code hl_function" href="icalcomponent_8c.html#af12dcd1f17d4d39a4b14edbeed4b4682">icalcomponent_get_next_property</a>(tomb, <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7ca0d6b3c1fa0729d073df3faf9854f9d56">ICAL_ANY_PROPERTY</a>);</div>
-<div class="line"><a id="l02852" name="l02852"></a><span class="lineno"> 2852</span> </div>
-<div class="line"><a id="l02853" name="l02853"></a><span class="lineno"> 2853</span>            <span class="keywordflow">switch</span> (<a class="code hl_function" href="icalproperty_8c.html#a4a0ebeca55cad31e9386a3d7925591e3">icalproperty_isa</a>(tomb_prop)) {</div>
-<div class="line"><a id="l02854" name="l02854"></a><span class="lineno"> 2854</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7caedb59f7f3baff8d22dfcc3ba62d6b81b">ICAL_TZNAME_PROPERTY</a>:</div>
-<div class="line"><a id="l02855" name="l02855"></a><span class="lineno"> 2855</span>                <a class="code hl_function" href="icalderivedproperty_8h.html#a73940b1e3d8b35a3070574b489e813f9">icalproperty_set_tzname</a>(tomb_prop, tombstone.name);</div>
-<div class="line"><a id="l02856" name="l02856"></a><span class="lineno"> 2856</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l02857" name="l02857"></a><span class="lineno"> 2857</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7ca1d6c544ce33b021b0b8579db051decb4">ICAL_TZOFFSETFROM_PROPERTY</a>:</div>
-<div class="line"><a id="l02858" name="l02858"></a><span class="lineno"> 2858</span>                <a class="code hl_function" href="icalderivedproperty_8h.html#a456e42a1838fa85f924ea6e17c31f16d">icalproperty_set_tzoffsetfrom</a>(tomb_prop, tombstone.offset_from);</div>
-<div class="line"><a id="l02859" name="l02859"></a><span class="lineno"> 2859</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l02860" name="l02860"></a><span class="lineno"> 2860</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7cab8920e1d3e7c1976239f00f0ad0d2c74">ICAL_TZOFFSETTO_PROPERTY</a>:</div>
-<div class="line"><a id="l02861" name="l02861"></a><span class="lineno"> 2861</span>                <a class="code hl_function" href="icalderivedproperty_8h.html#a4d3562f84dc9b0107dd25afe2564a49b">icalproperty_set_tzoffsetto</a>(tomb_prop, tombstone.offset_to);</div>
-<div class="line"><a id="l02862" name="l02862"></a><span class="lineno"> 2862</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l02863" name="l02863"></a><span class="lineno"> 2863</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7cac8814caead70eba84eee12f35e2834e3">ICAL_DTSTART_PROPERTY</a>:</div>
-<div class="line"><a id="l02864" name="l02864"></a><span class="lineno"> 2864</span>                <span class="comment">/* Adjust window open to local time */</span></div>
-<div class="line"><a id="l02865" name="l02865"></a><span class="lineno"> 2865</span>                <a class="code hl_function" href="icaltime_8c.html#aeeff97a90d535fd004d93057e49e8663">icaltime_adjust</a>(&amp;start, 0, 0, 0, tombstone.offset_from);</div>
-<div class="line"><a id="l02866" name="l02866"></a><span class="lineno"> 2866</span>                (void)<a class="code hl_function" href="icaltime_8c.html#aea5c3a433f2919943b42d7d6400f6304">icaltime_set_timezone</a>(&amp;start, NULL);</div>
-<div class="line"><a id="l02867" name="l02867"></a><span class="lineno"> 2867</span> </div>
-<div class="line"><a id="l02868" name="l02868"></a><span class="lineno"> 2868</span>                <a class="code hl_function" href="icalderivedproperty_8h.html#a03a57ae53e945d3fcbfc7c8fa341cdce">icalproperty_set_dtstart</a>(tomb_prop, start);</div>
-<div class="line"><a id="l02869" name="l02869"></a><span class="lineno"> 2869</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l02870" name="l02870"></a><span class="lineno"> 2870</span>            <span class="keywordflow">default</span>:</div>
-<div class="line"><a id="l02871" name="l02871"></a><span class="lineno"> 2871</span>                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(tomb, tomb_prop);</div>
-<div class="line"><a id="l02872" name="l02872"></a><span class="lineno"> 2872</span>                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(tomb_prop);</div>
-<div class="line"><a id="l02873" name="l02873"></a><span class="lineno"> 2873</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l02874" name="l02874"></a><span class="lineno"> 2874</span>            }</div>
-<div class="line"><a id="l02875" name="l02875"></a><span class="lineno"> 2875</span>        }</div>
+<div class="line"><a id="l02848" name="l02848"></a><span class="lineno"> 2848</span>        <span class="comment">/* Determine which tombstone component we need */</span></div>
+<div class="line"><a id="l02849" name="l02849"></a><span class="lineno"> 2849</span>        <span class="keywordflow">if</span> (tombstone.onset.<a class="code hl_variable" href="structicaltimetype.html#a8b90b6a7979294823e98a2dd3d7edd50">is_daylight</a>) {</div>
+<div class="line"><a id="l02850" name="l02850"></a><span class="lineno"> 2850</span>            tomb = tomb_day;</div>
+<div class="line"><a id="l02851" name="l02851"></a><span class="lineno"> 2851</span>            tomb_day = NULL;</div>
+<div class="line"><a id="l02852" name="l02852"></a><span class="lineno"> 2852</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l02853" name="l02853"></a><span class="lineno"> 2853</span>            tomb = tomb_std;</div>
+<div class="line"><a id="l02854" name="l02854"></a><span class="lineno"> 2854</span>            tomb_std = NULL;</div>
+<div class="line"><a id="l02855" name="l02855"></a><span class="lineno"> 2855</span>        }</div>
+<div class="line"><a id="l02856" name="l02856"></a><span class="lineno"> 2856</span> </div>
+<div class="line"><a id="l02857" name="l02857"></a><span class="lineno"> 2857</span>        <span class="comment">/* Set property values on our tombstone */</span></div>
+<div class="line"><a id="l02858" name="l02858"></a><span class="lineno"> 2858</span>        <span class="keywordflow">for</span> (tomb_prop = <a class="code hl_function" href="icalcomponent_8c.html#a2537651ca1a768a86b6a7ad90964320c">icalcomponent_get_first_property</a>(tomb, <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7ca0d6b3c1fa0729d073df3faf9854f9d56">ICAL_ANY_PROPERTY</a>);</div>
+<div class="line"><a id="l02859" name="l02859"></a><span class="lineno"> 2859</span>             tomb_prop; tomb_prop = nextp) {</div>
+<div class="line"><a id="l02860" name="l02860"></a><span class="lineno"> 2860</span>            nextp = <a class="code hl_function" href="icalcomponent_8c.html#af12dcd1f17d4d39a4b14edbeed4b4682">icalcomponent_get_next_property</a>(tomb, <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7ca0d6b3c1fa0729d073df3faf9854f9d56">ICAL_ANY_PROPERTY</a>);</div>
+<div class="line"><a id="l02861" name="l02861"></a><span class="lineno"> 2861</span> </div>
+<div class="line"><a id="l02862" name="l02862"></a><span class="lineno"> 2862</span>            <span class="keywordflow">switch</span> (<a class="code hl_function" href="icalproperty_8c.html#a4a0ebeca55cad31e9386a3d7925591e3">icalproperty_isa</a>(tomb_prop)) {</div>
+<div class="line"><a id="l02863" name="l02863"></a><span class="lineno"> 2863</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7caedb59f7f3baff8d22dfcc3ba62d6b81b">ICAL_TZNAME_PROPERTY</a>:</div>
+<div class="line"><a id="l02864" name="l02864"></a><span class="lineno"> 2864</span>                <a class="code hl_function" href="icalderivedproperty_8h.html#a73940b1e3d8b35a3070574b489e813f9">icalproperty_set_tzname</a>(tomb_prop, tombstone.name);</div>
+<div class="line"><a id="l02865" name="l02865"></a><span class="lineno"> 2865</span>                <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l02866" name="l02866"></a><span class="lineno"> 2866</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7ca1d6c544ce33b021b0b8579db051decb4">ICAL_TZOFFSETFROM_PROPERTY</a>:</div>
+<div class="line"><a id="l02867" name="l02867"></a><span class="lineno"> 2867</span>                <a class="code hl_function" href="icalderivedproperty_8h.html#a456e42a1838fa85f924ea6e17c31f16d">icalproperty_set_tzoffsetfrom</a>(tomb_prop, tombstone.offset_from);</div>
+<div class="line"><a id="l02868" name="l02868"></a><span class="lineno"> 2868</span>                <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l02869" name="l02869"></a><span class="lineno"> 2869</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7cab8920e1d3e7c1976239f00f0ad0d2c74">ICAL_TZOFFSETTO_PROPERTY</a>:</div>
+<div class="line"><a id="l02870" name="l02870"></a><span class="lineno"> 2870</span>                <a class="code hl_function" href="icalderivedproperty_8h.html#a4d3562f84dc9b0107dd25afe2564a49b">icalproperty_set_tzoffsetto</a>(tomb_prop, tombstone.offset_to);</div>
+<div class="line"><a id="l02871" name="l02871"></a><span class="lineno"> 2871</span>                <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l02872" name="l02872"></a><span class="lineno"> 2872</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7cac8814caead70eba84eee12f35e2834e3">ICAL_DTSTART_PROPERTY</a>:</div>
+<div class="line"><a id="l02873" name="l02873"></a><span class="lineno"> 2873</span>                <span class="comment">/* Adjust window open to local time */</span></div>
+<div class="line"><a id="l02874" name="l02874"></a><span class="lineno"> 2874</span>                <a class="code hl_function" href="icaltime_8c.html#aeeff97a90d535fd004d93057e49e8663">icaltime_adjust</a>(&amp;start, 0, 0, 0, tombstone.offset_from);</div>
+<div class="line"><a id="l02875" name="l02875"></a><span class="lineno"> 2875</span>                (void)<a class="code hl_function" href="icaltime_8c.html#aea5c3a433f2919943b42d7d6400f6304">icaltime_set_timezone</a>(&amp;start, NULL);</div>
 <div class="line"><a id="l02876" name="l02876"></a><span class="lineno"> 2876</span> </div>
-<div class="line"><a id="l02877" name="l02877"></a><span class="lineno"> 2877</span>        <span class="comment">/* Remove X-PROLEPTIC-TZNAME as it no longer applies */</span></div>
-<div class="line"><a id="l02878" name="l02878"></a><span class="lineno"> 2878</span>        <span class="keywordflow">if</span> (proleptic_prop) {</div>
-<div class="line"><a id="l02879" name="l02879"></a><span class="lineno"> 2879</span>            <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(vtz, proleptic_prop);</div>
-<div class="line"><a id="l02880" name="l02880"></a><span class="lineno"> 2880</span>            <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(proleptic_prop);</div>
-<div class="line"><a id="l02881" name="l02881"></a><span class="lineno"> 2881</span>        }</div>
-<div class="line"><a id="l02882" name="l02882"></a><span class="lineno"> 2882</span>    }</div>
-<div class="line"><a id="l02883" name="l02883"></a><span class="lineno"> 2883</span> </div>
-<div class="line"><a id="l02884" name="l02884"></a><span class="lineno"> 2884</span>    <span class="comment">/* Remove any unused tombstone components */</span></div>
-<div class="line"><a id="l02885" name="l02885"></a><span class="lineno"> 2885</span>    <span class="keywordflow">if</span> (tomb_std) {</div>
-<div class="line"><a id="l02886" name="l02886"></a><span class="lineno"> 2886</span>        <a class="code hl_function" href="icalcomponent_8c.html#a6222aaf2d040fe425106fb651464bef0">icalcomponent_remove_component</a>(vtz, tomb_std);</div>
-<div class="line"><a id="l02887" name="l02887"></a><span class="lineno"> 2887</span>        <a class="code hl_function" href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free</a>(tomb_std);</div>
-<div class="line"><a id="l02888" name="l02888"></a><span class="lineno"> 2888</span>    }</div>
-<div class="line"><a id="l02889" name="l02889"></a><span class="lineno"> 2889</span>    <span class="keywordflow">if</span> (tomb_day) {</div>
-<div class="line"><a id="l02890" name="l02890"></a><span class="lineno"> 2890</span>        <a class="code hl_function" href="icalcomponent_8c.html#a6222aaf2d040fe425106fb651464bef0">icalcomponent_remove_component</a>(vtz, tomb_day);</div>
-<div class="line"><a id="l02891" name="l02891"></a><span class="lineno"> 2891</span>        <a class="code hl_function" href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free</a>(tomb_day);</div>
-<div class="line"><a id="l02892" name="l02892"></a><span class="lineno"> 2892</span>    }</div>
-<div class="line"><a id="l02893" name="l02893"></a><span class="lineno"> 2893</span> </div>
-<div class="line"><a id="l02894" name="l02894"></a><span class="lineno"> 2894</span>    <span class="keywordflow">if</span> (need_tzuntil) {</div>
-<div class="line"><a id="l02895" name="l02895"></a><span class="lineno"> 2895</span>        <span class="comment">/* Add TZUNTIL to VTIMEZONE */</span></div>
-<div class="line"><a id="l02896" name="l02896"></a><span class="lineno"> 2896</span>        prop = <a class="code hl_function" href="icalcomponent_8c.html#a2537651ca1a768a86b6a7ad90964320c">icalcomponent_get_first_property</a>(vtz, <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7caad059d668e7e1209e3a2c311b1988623">ICAL_TZUNTIL_PROPERTY</a>);</div>
-<div class="line"><a id="l02897" name="l02897"></a><span class="lineno"> 2897</span> </div>
-<div class="line"><a id="l02898" name="l02898"></a><span class="lineno"> 2898</span>        <span class="keywordflow">if</span> (prop) {</div>
-<div class="line"><a id="l02899" name="l02899"></a><span class="lineno"> 2899</span>            <a class="code hl_function" href="icalderivedproperty_8h.html#a0fd799b3fc0666bb671b8c29224b66b7">icalproperty_set_tzuntil</a>(prop, end);</div>
-<div class="line"><a id="l02900" name="l02900"></a><span class="lineno"> 2900</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l02901" name="l02901"></a><span class="lineno"> 2901</span>            <a class="code hl_function" href="icalcomponent_8c.html#ad0f618a40a7b03ab8a7c4f1a36d05168">icalcomponent_add_property</a>(vtz, <a class="code hl_function" href="icalderivedproperty_8h.html#a6274e9892057d04fa5c73c7c6827836b">icalproperty_new_tzuntil</a>(end));</div>
-<div class="line"><a id="l02902" name="l02902"></a><span class="lineno"> 2902</span>        }</div>
-<div class="line"><a id="l02903" name="l02903"></a><span class="lineno"> 2903</span>    }</div>
-<div class="line"><a id="l02904" name="l02904"></a><span class="lineno"> 2904</span>}</div>
+<div class="line"><a id="l02877" name="l02877"></a><span class="lineno"> 2877</span>                <a class="code hl_function" href="icalderivedproperty_8h.html#a03a57ae53e945d3fcbfc7c8fa341cdce">icalproperty_set_dtstart</a>(tomb_prop, start);</div>
+<div class="line"><a id="l02878" name="l02878"></a><span class="lineno"> 2878</span>                <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l02879" name="l02879"></a><span class="lineno"> 2879</span>            <span class="keywordflow">default</span>:</div>
+<div class="line"><a id="l02880" name="l02880"></a><span class="lineno"> 2880</span>                <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(tomb, tomb_prop);</div>
+<div class="line"><a id="l02881" name="l02881"></a><span class="lineno"> 2881</span>                <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(tomb_prop);</div>
+<div class="line"><a id="l02882" name="l02882"></a><span class="lineno"> 2882</span>                <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l02883" name="l02883"></a><span class="lineno"> 2883</span>            }</div>
+<div class="line"><a id="l02884" name="l02884"></a><span class="lineno"> 2884</span>        }</div>
+<div class="line"><a id="l02885" name="l02885"></a><span class="lineno"> 2885</span> </div>
+<div class="line"><a id="l02886" name="l02886"></a><span class="lineno"> 2886</span>        <span class="comment">/* Remove X-PROLEPTIC-TZNAME as it no longer applies */</span></div>
+<div class="line"><a id="l02887" name="l02887"></a><span class="lineno"> 2887</span>        <span class="keywordflow">if</span> (proleptic_prop) {</div>
+<div class="line"><a id="l02888" name="l02888"></a><span class="lineno"> 2888</span>            <a class="code hl_function" href="icalcomponent_8c.html#a588b15eb0425b007e1daec4a6a1885fe">icalcomponent_remove_property</a>(vtz, proleptic_prop);</div>
+<div class="line"><a id="l02889" name="l02889"></a><span class="lineno"> 2889</span>            <a class="code hl_function" href="icalproperty_8c.html#a2302fa8bf39bb5cd7b000a0e4613225c">icalproperty_free</a>(proleptic_prop);</div>
+<div class="line"><a id="l02890" name="l02890"></a><span class="lineno"> 2890</span>        }</div>
+<div class="line"><a id="l02891" name="l02891"></a><span class="lineno"> 2891</span>    }</div>
+<div class="line"><a id="l02892" name="l02892"></a><span class="lineno"> 2892</span> </div>
+<div class="line"><a id="l02893" name="l02893"></a><span class="lineno"> 2893</span>    <span class="comment">/* Remove any unused tombstone components */</span></div>
+<div class="line"><a id="l02894" name="l02894"></a><span class="lineno"> 2894</span>    <span class="keywordflow">if</span> (tomb_std) {</div>
+<div class="line"><a id="l02895" name="l02895"></a><span class="lineno"> 2895</span>        <a class="code hl_function" href="icalcomponent_8c.html#a6222aaf2d040fe425106fb651464bef0">icalcomponent_remove_component</a>(vtz, tomb_std);</div>
+<div class="line"><a id="l02896" name="l02896"></a><span class="lineno"> 2896</span>        <a class="code hl_function" href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free</a>(tomb_std);</div>
+<div class="line"><a id="l02897" name="l02897"></a><span class="lineno"> 2897</span>    }</div>
+<div class="line"><a id="l02898" name="l02898"></a><span class="lineno"> 2898</span>    <span class="keywordflow">if</span> (tomb_day) {</div>
+<div class="line"><a id="l02899" name="l02899"></a><span class="lineno"> 2899</span>        <a class="code hl_function" href="icalcomponent_8c.html#a6222aaf2d040fe425106fb651464bef0">icalcomponent_remove_component</a>(vtz, tomb_day);</div>
+<div class="line"><a id="l02900" name="l02900"></a><span class="lineno"> 2900</span>        <a class="code hl_function" href="icalcomponent_8c.html#ae4d5dab5e04d8def5cff81e7c75cc065">icalcomponent_free</a>(tomb_day);</div>
+<div class="line"><a id="l02901" name="l02901"></a><span class="lineno"> 2901</span>    }</div>
+<div class="line"><a id="l02902" name="l02902"></a><span class="lineno"> 2902</span> </div>
+<div class="line"><a id="l02903" name="l02903"></a><span class="lineno"> 2903</span>    <span class="keywordflow">if</span> (need_tzuntil) {</div>
+<div class="line"><a id="l02904" name="l02904"></a><span class="lineno"> 2904</span>        <span class="comment">/* Add TZUNTIL to VTIMEZONE */</span></div>
+<div class="line"><a id="l02905" name="l02905"></a><span class="lineno"> 2905</span>        prop = <a class="code hl_function" href="icalcomponent_8c.html#a2537651ca1a768a86b6a7ad90964320c">icalcomponent_get_first_property</a>(vtz, <a class="code hl_enumvalue" href="icalderivedproperty_8h.html#adfa3aabe37bc0248a7073b404506bb7caad059d668e7e1209e3a2c311b1988623">ICAL_TZUNTIL_PROPERTY</a>);</div>
+<div class="line"><a id="l02906" name="l02906"></a><span class="lineno"> 2906</span> </div>
+<div class="line"><a id="l02907" name="l02907"></a><span class="lineno"> 2907</span>        <span class="keywordflow">if</span> (prop) {</div>
+<div class="line"><a id="l02908" name="l02908"></a><span class="lineno"> 2908</span>            <a class="code hl_function" href="icalderivedproperty_8h.html#a0fd799b3fc0666bb671b8c29224b66b7">icalproperty_set_tzuntil</a>(prop, end);</div>
+<div class="line"><a id="l02909" name="l02909"></a><span class="lineno"> 2909</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l02910" name="l02910"></a><span class="lineno"> 2910</span>            <a class="code hl_function" href="icalcomponent_8c.html#ad0f618a40a7b03ab8a7c4f1a36d05168">icalcomponent_add_property</a>(vtz, <a class="code hl_function" href="icalderivedproperty_8h.html#a6274e9892057d04fa5c73c7c6827836b">icalproperty_new_tzuntil</a>(end));</div>
+<div class="line"><a id="l02911" name="l02911"></a><span class="lineno"> 2911</span>        }</div>
+<div class="line"><a id="l02912" name="l02912"></a><span class="lineno"> 2912</span>    }</div>
+<div class="line"><a id="l02913" name="l02913"></a><span class="lineno"> 2913</span>}</div>
 </div>
 <div class="ttc" id="aicalarray_8c_html_a284892a8116267c9c02368aaf527f9af"><div class="ttname"><a href="icalarray_8c.html#a284892a8116267c9c02368aaf527f9af">icalarray_copy</a></div><div class="ttdeci">icalarray * icalarray_copy(const icalarray *originalarray)</div><div class="ttdef"><b>Definition</b> <a href="icalarray_8c_source.html#l00069">icalarray.c:69</a></div></div>
 <div class="ttc" id="aicalarray_8c_html_a2f12e8a9e9d70d80ad8a621b7d52af96"><div class="ttname"><a href="icalarray_8c.html#a2f12e8a9e9d70d80ad8a621b7d52af96">icalarray_element_at</a></div><div class="ttdeci">void * icalarray_element_at(icalarray *array, size_t position)</div><div class="ttdoc">Access an array element.</div><div class="ttdef"><b>Definition</b> <a href="icalarray_8c_source.html#l00135">icalarray.c:135</a></div></div>
@@ -3029,12 +3038,13 @@ $(function() {
 <div class="ttc" id="aicalproperty_8c_html_a4a0ebeca55cad31e9386a3d7925591e3"><div class="ttname"><a href="icalproperty_8c.html#a4a0ebeca55cad31e9386a3d7925591e3">icalproperty_isa</a></div><div class="ttdeci">icalproperty_kind icalproperty_isa(const icalproperty *p)</div><div class="ttdef"><b>Definition</b> <a href="icalproperty_8c_source.html#l00466">icalproperty.c:466</a></div></div>
 <div class="ttc" id="aicalproperty_8c_html_a8ba2ceb041926ce2f066296920392192"><div class="ttname"><a href="icalproperty_8c.html#a8ba2ceb041926ce2f066296920392192">icalproperty_get_x_name</a></div><div class="ttdeci">const char * icalproperty_get_x_name(const icalproperty *prop)</div><div class="ttdef"><b>Definition</b> <a href="icalproperty_8c_source.html#l00857">icalproperty.c:857</a></div></div>
 <div class="ttc" id="aicalproperty_8c_html_ae5ea07cdaaaed1428a338fdff2665ea5"><div class="ttname"><a href="icalproperty_8c.html#ae5ea07cdaaaed1428a338fdff2665ea5">icalproperty_get_parameter_as_string</a></div><div class="ttdeci">const char * icalproperty_get_parameter_as_string(icalproperty *prop, const char *name)</div><div class="ttdef"><b>Definition</b> <a href="icalproperty_8c_source.html#l00543">icalproperty.c:543</a></div></div>
-<div class="ttc" id="aicalrecur_8c_html_a02427aacc00bb3a9c2b68d0fca951b9a"><div class="ttname"><a href="icalrecur_8c.html#a02427aacc00bb3a9c2b68d0fca951b9a">icalrecur_iterator_set_start</a></div><div class="ttdeci">bool icalrecur_iterator_set_start(icalrecur_iterator *impl, struct icaltimetype start)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l04129">icalrecur.c:4129</a></div></div>
+<div class="ttc" id="aicalrecur_8c_html_a02427aacc00bb3a9c2b68d0fca951b9a"><div class="ttname"><a href="icalrecur_8c.html#a02427aacc00bb3a9c2b68d0fca951b9a">icalrecur_iterator_set_start</a></div><div class="ttdeci">bool icalrecur_iterator_set_start(icalrecur_iterator *impl, struct icaltimetype start)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l04164">icalrecur.c:4164</a></div></div>
+<div class="ttc" id="aicalrecur_8c_html_a125182230627f4634f6057a620211b8a"><div class="ttname"><a href="icalrecur_8c.html#a125182230627f4634f6057a620211b8a">icalrecurrencetype_ref</a></div><div class="ttdeci">void icalrecurrencetype_ref(struct icalrecurrencetype *recur)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l00782">icalrecur.c:782</a></div></div>
 <div class="ttc" id="aicalrecur_8c_html_a285cf87032135c18dcaf0786afc67486"><div class="ttname"><a href="icalrecur_8c.html#a285cf87032135c18dcaf0786afc67486">icalrecurrencetype_clone</a></div><div class="ttdeci">struct icalrecurrencetype * icalrecurrencetype_clone(struct icalrecurrencetype *recur)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l00832">icalrecur.c:832</a></div></div>
-<div class="ttc" id="aicalrecur_8c_html_a485fb0e1dd382fbfd05b6b7a618c49e0"><div class="ttname"><a href="icalrecur_8c.html#a485fb0e1dd382fbfd05b6b7a618c49e0">icalrecur_iterator_free</a></div><div class="ttdeci">void icalrecur_iterator_free(icalrecur_iterator *impl)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l02469">icalrecur.c:2469</a></div></div>
+<div class="ttc" id="aicalrecur_8c_html_a485fb0e1dd382fbfd05b6b7a618c49e0"><div class="ttname"><a href="icalrecur_8c.html#a485fb0e1dd382fbfd05b6b7a618c49e0">icalrecur_iterator_free</a></div><div class="ttdeci">void icalrecur_iterator_free(icalrecur_iterator *impl)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l02507">icalrecur.c:2507</a></div></div>
 <div class="ttc" id="aicalrecur_8c_html_ab514cbb2acf2d8781490199224752a91"><div class="ttname"><a href="icalrecur_8c.html#ab514cbb2acf2d8781490199224752a91">icalrecurrencetype_unref</a></div><div class="ttdeci">void icalrecurrencetype_unref(struct icalrecurrencetype *recur)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l00790">icalrecur.c:790</a></div></div>
-<div class="ttc" id="aicalrecur_8c_html_acdcfa0fbb4e40377cae80ef977d28afe"><div class="ttname"><a href="icalrecur_8c.html#acdcfa0fbb4e40377cae80ef977d28afe">icalrecur_iterator_new</a></div><div class="ttdeci">icalrecur_iterator * icalrecur_iterator_new(struct icalrecurrencetype *rule, struct icaltimetype dtstart)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l02341">icalrecur.c:2341</a></div></div>
-<div class="ttc" id="aicalrecur_8c_html_ad2d6bef31a3a7bbfb803df53ed895544"><div class="ttname"><a href="icalrecur_8c.html#ad2d6bef31a3a7bbfb803df53ed895544">icalrecur_iterator_next</a></div><div class="ttdeci">struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l03714">icalrecur.c:3714</a></div></div>
+<div class="ttc" id="aicalrecur_8c_html_acdcfa0fbb4e40377cae80ef977d28afe"><div class="ttname"><a href="icalrecur_8c.html#acdcfa0fbb4e40377cae80ef977d28afe">icalrecur_iterator_new</a></div><div class="ttdeci">icalrecur_iterator * icalrecur_iterator_new(struct icalrecurrencetype *rule, struct icaltimetype dtstart)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l02379">icalrecur.c:2379</a></div></div>
+<div class="ttc" id="aicalrecur_8c_html_ad2d6bef31a3a7bbfb803df53ed895544"><div class="ttname"><a href="icalrecur_8c.html#ad2d6bef31a3a7bbfb803df53ed895544">icalrecur_iterator_next</a></div><div class="ttdeci">struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)</div><div class="ttdef"><b>Definition</b> <a href="icalrecur_8c_source.html#l03749">icalrecur.c:3749</a></div></div>
 <div class="ttc" id="aicaltime_8c_html_a180ac07f15279d949945492960cae8db"><div class="ttname"><a href="icaltime_8c.html#a180ac07f15279d949945492960cae8db">icaltime_is_date</a></div><div class="ttdeci">bool icaltime_is_date(const struct icaltimetype t)</div><div class="ttdef"><b>Definition</b> <a href="icaltime_8c_source.html#l00634">icaltime.c:634</a></div></div>
 <div class="ttc" id="aicaltime_8c_html_a78f4440633835d80c182488b11df9372"><div class="ttname"><a href="icaltime_8c.html#a78f4440633835d80c182488b11df9372">icaltime_today</a></div><div class="ttdeci">struct icaltimetype icaltime_today(void)</div><div class="ttdoc">Convenience constructor.</div><div class="ttdef"><b>Definition</b> <a href="icaltime_8c_source.html#l00259">icaltime.c:259</a></div></div>
 <div class="ttc" id="aicaltime_8c_html_a99e9d9e26bea0231d23eb171990a1e8f"><div class="ttname"><a href="icaltime_8c.html#a99e9d9e26bea0231d23eb171990a1e8f">icaltime_days_in_month</a></div><div class="ttdeci">int icaltime_days_in_month(const int month, const int year)</div><div class="ttdef"><b>Definition</b> <a href="icaltime_8c_source.html#l00478">icaltime.c:478</a></div></div>

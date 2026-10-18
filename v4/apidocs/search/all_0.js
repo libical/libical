@@ -35,7 +35,7 @@ var searchData=
   ['0_206_202019_2009_2014_32',['[3.0.6] - 2019-09-14',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md33',1,'']]],
   ['0_206_202026_2010_2003_33',['[4.0.6] - 2026-10-03',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md6',1,'']]],
   ['0_207_202019_2012_2015_34',['[3.0.7] - 2019-12-15',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md32',1,'']]],
-  ['0_207_20unreleased_35',['[4.0.7] - Unreleased',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md5',1,'']]],
+  ['0_207_202026_2010_2018_35',['[4.0.7] - 2026-10-18',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md5',1,'']]],
   ['0_208_202020_2003_2007_36',['[3.0.8] - 2020-03-07',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md31',1,'']]],
   ['0_209_202021_2001_2016_37',['[3.0.9] - 2021-01-16',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md30',1,'']]],
   ['0_20to_204_200_38',['0 to 4 0',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md99',1,'Migrating &lt;span class=&quot;tt&quot;&gt;ICalGLib.Recurrence.*_by_*&lt;/span&gt; methods from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md97',1,'Migrating &lt;span class=&quot;tt&quot;&gt;icalrecurrencetype.by_xxx&lt;/span&gt; static arrays usage from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md84',1,'Migrating from 3.0 to 4.0']]],

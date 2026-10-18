@@ -9,7 +9,7 @@ var searchData=
   ['2_202026_2005_2030_6',['[4.0.2] - 2026-05-30',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md10',1,'']]],
   ['2_203_20error_20objects_7',['3.2.3 Error objects',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md124',1,'']]],
   ['2_203_20using_20component_20iterators_8',['5.2.3 Using Component Iterators',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md139',1,'']]],
-  ['2_204_20memory_20management_9',['3.2.4 Memory Management',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md125',1,'']]],
+  ['2_204_20memory_20management_20system_9',['3.2.4 Memory management system',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md125',1,'']]],
   ['2_204_20removing_20components_10',['5.2.4 Removing Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md140',1,'']]],
   ['2_205_20storage_20classes_11',['3.2.5 Storage classes',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md126',1,'']]],
   ['2_205_20working_20with_20properties_20and_20parameters_12',['5.2.5 Working with properties and parameters',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md141',1,'']]],
@@ -58,10 +58,11 @@ var searchData=
   ['2026_2007_2025_55',['[4.0.4] - 2026-07-25',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md8',1,'']]],
   ['2026_2008_2015_56',['[4.0.5] - 2026-08-15',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md7',1,'']]],
   ['2026_2010_2003_57',['[4.0.6] - 2026-10-03',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md6',1,'']]],
-  ['21_20unreleased_58',['[3.0.21] - Unreleased',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md18',1,'']]],
-  ['23_59',['[3.0.19] - 2024-12-23',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md20',1,'']]],
-  ['24_60',['[3.0.18] - 2024-03-24',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md21',1,'']]],
-  ['25_61',['[4.0.4] - 2026-07-25',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md8',1,'']]],
-  ['27_62',['[3.0.3] - 2018-02-27',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md36',1,'']]],
-  ['28_63',['28',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md42',1,'[1.0.0] - 2014-06-28'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md40',1,'[2.0.0] - 2015-12-28'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md39',1,'[3.0.0] - 2017-10-28']]]
+  ['2026_2010_2018_58',['[4.0.7] - 2026-10-18',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md5',1,'']]],
+  ['21_20unreleased_59',['[3.0.21] - Unreleased',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md18',1,'']]],
+  ['23_60',['[3.0.19] - 2024-12-23',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md20',1,'']]],
+  ['24_61',['[3.0.18] - 2024-03-24',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md21',1,'']]],
+  ['25_62',['[4.0.4] - 2026-07-25',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md8',1,'']]],
+  ['27_63',['[3.0.3] - 2018-02-27',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md36',1,'']]],
+  ['28_64',['28',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md42',1,'[1.0.0] - 2014-06-28'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md40',1,'[2.0.0] - 2015-12-28'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md39',1,'[3.0.0] - 2017-10-28']]]
 ];

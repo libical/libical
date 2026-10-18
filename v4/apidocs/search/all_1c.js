@@ -138,5 +138,6 @@ var searchData=
   ['structure_135',['3 Structure',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md115',1,'']]],
   ['structure_136',['5.3.1 Time structure',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md145',1,'']]],
   ['structures_137',['5.3.2 Creating time structures',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md146',1,'']]],
-  ['support_138',['Libical RFC calendar standards support',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2rfcs.html',1,'']]]
+  ['support_138',['Libical RFC calendar standards support',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2rfcs.html',1,'']]],
+  ['system_139',['3.2.4 Memory management system',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md125',1,'']]]
 ];
