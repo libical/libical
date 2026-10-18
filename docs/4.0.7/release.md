@@ -1,4 +1,4 @@
-# Libical v4.0.6
+# Libical v4.0.7
 
 ## Overview
 
