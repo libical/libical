@@ -1,6 +1,6 @@
 # Announcing Libical 4.0.7
 
-Announcing Libical 4.0.7.
+Announcing Libical 4.0.7
 
 Version 4.0.7 is a patch release.
 This release is binary and source compatible with version 4.0.0.
