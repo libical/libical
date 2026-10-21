@@ -1032,7 +1032,11 @@ static char * lexGetDataFromBase64(void)
                     outBytes[2-i] = (unsigned char)(trip & 0xFF);
                     trip >>= 8;
                     }
-                numOut = (size_t)(3 - pad);
+                /* A base64 quad decodes to 3 bytes, less one per '=' pad
+                   char. Malformed input can contain more than two '=' chars,
+                   which would make (3 - pad) negative and wrap when cast to
+                   size_t, so clamp it. */
+                numOut = (pad < 3) ? (size_t)(3 - pad) : 0;
                 if (bytesLen + numOut > bytesMax) {
                     if (!bytes) {
                         bytesMax = 1024;

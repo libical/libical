@@ -5218,6 +5218,28 @@ static void test_vcal_procedure_alarm(void)
     icalcomponent_free(comp);
 }
 
+static void test_vcal_base64_overpadded(void)
+{
+    /* The base64 value carries more than two '=' pad chars. The decoder used
+       to compute (3 - pad) as the number of output bytes, which wrapped to a
+       huge size_t and was passed straight to memcpy. */
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "ATTACH;ENCODING=BASE64:AAAA====\r\n"
+        "\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    VObject *vcal;
+
+    vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with over-padded base64 does not overflow", (vcal != 0));
+    if (vcal) {
+        cleanVObject(vcal);
+    }
+}
+
 /*
  * Test to see if recurrences are excluded in certain situations
  * See r961 for more information
@@ -8683,6 +8705,7 @@ int main(int argc, const char *argv[])
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
     test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
+    test_run("Test vCal over-padded base64", test_vcal_base64_overpadded, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
