@@ -5240,6 +5240,73 @@ static void test_vcal_base64_overpadded(void)
     }
 }
 
+static void test_value_line_break_injection(void)
+{
+    /* A vCal quoted-printable value can decode to CR/LF. URI values used to
+       be written out verbatim, so the embedded line break started a new
+       ATTENDEE property in the generated iCalendar. */
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "URL;ENCODING=QUOTED-PRINTABLE:http://example.com/=0D=0AATTENDEE:mailto:evil@example.com\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    VObject *vcal;
+    icalcomponent *comp, *reparsed, *event;
+    icalproperty *prop;
+    icalattach *attach;
+
+    vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with a quoted-printable URL", (vcal != 0));
+    if (!vcal) {
+        return;
+    }
+
+    comp = icalvcal_convert(vcal);
+    cleanVObject(vcal);
+    ok("Converting to ical component", (comp != 0));
+    if (!comp) {
+        return;
+    }
+
+    event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+    prop = event ? icalcomponent_get_first_property(event, ICAL_URL_PROPERTY) : NULL;
+    ok("event has a URL", (prop != 0));
+    if (prop) {
+        str_is("line break is dropped from URI value",
+               icalproperty_as_ical_string(prop),
+               "URL:http://example.com/ATTENDEE:mailto:evil@example.com\r\n");
+    }
+    reparsed = icalparser_parse_string(icalcomponent_as_ical_string(comp));
+    icalcomponent_free(comp);
+    event = reparsed ? icalcomponent_get_first_component(reparsed, ICAL_VEVENT_COMPONENT) : NULL;
+    ok("no ATTENDEE is injected after a round trip",
+       (event && icalcomponent_get_first_property(event, ICAL_ATTENDEE_PROPERTY) == 0));
+    icalcomponent_free(reparsed);
+
+    prop = icalproperty_new_organizer("mailto:a@example.com\r\nATTENDEE:mailto:b@example.com");
+    str_is("line break is dropped from CAL-ADDRESS value",
+           icalproperty_as_ical_string(prop),
+           "ORGANIZER:mailto:a@example.comATTENDEE:mailto:b@example.com\r\n");
+    icalproperty_free(prop);
+
+    attach = icalattach_new_from_url("http://example.com/\nATTENDEE:mailto:b@example.com");
+    prop = icalproperty_new_attach(attach);
+    icalattach_unref(attach);
+    str_is("line break is dropped from ATTACH URL",
+           icalproperty_as_ical_string(prop),
+           "ATTACH:http://example.com/ATTENDEE:mailto:b@example.com\r\n");
+    icalproperty_free(prop);
+
+    prop = icalproperty_new_status(ICAL_STATUS_X);
+    icalvalue_set_x(icalproperty_get_value(prop), "X-FOO\r\nATTENDEE:mailto:b@example.com");
+    str_is("line break is dropped from enum x-value",
+           icalproperty_as_ical_string(prop),
+           "STATUS:X-FOOATTENDEE:mailto:b@example.com\r\n");
+    icalproperty_free(prop);
+}
+
 /*
  * Test to see if recurrences are excluded in certain situations
  * See r961 for more information
@@ -8706,6 +8773,7 @@ int main(int argc, const char *argv[])
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
     test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
     test_run("Test vCal over-padded base64", test_vcal_base64_overpadded, do_test, do_header);
+    test_run("Test line breaks in unescaped values", test_value_line_break_injection, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,

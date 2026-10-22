@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.8] - Unreleased
 
+- libical: Drop CR and LF when writing values that are output without escaping (URI, CAL-ADDRESS,
+  ATTACH URLs and enum x-values). A vCal quoted-printable value could decode to a line break that
+  was written out verbatim, ending the content line early and injecting another property.
 - libicalvcal: Fixed an out-of-bounds write when decoding a BASE64 value whose padding contains
   more than two `=` characters. The decoder computed the output length as `3 - pad`, which wrapped
   to a huge value when `pad` exceeded 3 and was then used as the size of a `memcpy`.
