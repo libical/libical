@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - libicalvcal: Fixed an out-of-bounds write when decoding a BASE64 value whose padding contains
   more than two `=` characters. The decoder computed the output length as `3 - pad`, which wrapped
   to a huge value when `pad` exceeded 3 and was then used as the size of a `memcpy`.
+- Fix heap-buffer-overflow read in icalrecur_iterator_prev() after the iteration of an HOURLY,
+  MINUTELY or SECONDLY rule with a matching BYHOUR, BYMINUTE or BYSECOND reached the last
+  supported year, which left the BY* index past the end of the BY* data.
 - TBD
 
 ## [4.0.7] - 2026-10-18
