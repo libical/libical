@@ -1824,16 +1824,24 @@ static bool initialize_rscale(icalrecur_iterator *impl)
     UErrorCode status = U_ZERO_ERROR;
     UChar *tzid = (UChar *)UCAL_UNKNOWN_ZONE_ID;
     bool is_hebrew = false;
+    char *src = NULL;
 
-    /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
-    char *src = (char *)icaltimezone_get_location((icaltimezone *)dtstart.zone);
-    if (!src) {
-        const char *prefix = icaltimezone_tzid_prefix();
-        src = (char *)icaltimezone_get_tzid((icaltimezone *)dtstart.zone);
-        /* coverity[use_after_free] */
-        if (src && !strncmp(src, prefix, strlen(prefix))) {
-            /* Skip past our prefix */
-            src += strlen(prefix);
+    /* DAILY and longer rules generate local times with the time of day of
+       DTSTART or the BYHOUR, BYMINUTE and BYSECOND values (RFC 5545 section
+       3.3.10). Calculate them without a time zone: in the zone of DTSTART,
+       ICU moves a time in a DST gap forward and keeps the moved time for
+       the following occurrences. */
+    if (rule->freq < ICAL_DAILY_RECURRENCE) {
+        /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
+        src = (char *)icaltimezone_get_location((icaltimezone *)dtstart.zone);
+        if (!src) {
+            const char *prefix = icaltimezone_tzid_prefix();
+            src = (char *)icaltimezone_get_tzid((icaltimezone *)dtstart.zone);
+            /* coverity[use_after_free] */
+            if (src && !strncmp(src, prefix, strlen(prefix))) {
+                /* Skip past our prefix */
+                src += strlen(prefix);
+            }
         }
     }
     if (src) {

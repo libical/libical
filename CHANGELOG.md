@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.8] - Unreleased
 
+- libical: In builds with ICU, recurrences with a DAILY or longer frequency no longer move to a
+  later time of day after an occurrence or DTSTART falls in a DST gap. For example, a weekly
+  02:30 Europe/Berlin event returned 03:30 for the week after the spring change too.
 - libicalvcal: Fixed an out-of-bounds write when decoding a BASE64 value whose padding contains
   more than two `=` characters. The decoder computed the output length as `3 - pad`, which wrapped
   to a huge value when `pad` exceeded 3 and was then used as the size of a `memcpy`.

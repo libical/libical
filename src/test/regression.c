@@ -5790,6 +5790,57 @@ static void test_timezone_forward_gap(void)
     }
 }
 
+static void test_recur_forward_gap_time(void)
+{
+    const struct {
+        const char *zone;
+        const char *dtstart;
+        const char *rrule;
+        const char *expected;
+    } cases[] = {
+        {"Europe/Berlin", "20260322T023000", "FREQ=WEEKLY;COUNT=4",
+         "20260322T023000,20260329T023000,20260405T023000,20260412T023000"},
+        {"Europe/Berlin", "20260329T023000", "FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU;COUNT=3",
+         "20260329T023000,20270328T023000,20280326T023000"},
+        {"America/New_York", "20260208T023000", "FREQ=MONTHLY;BYDAY=2SU;COUNT=3",
+         "20260208T023000,20260308T023000,20260412T023000"},
+        {"America/Santiago", "20180812T001500", "FREQ=DAILY;COUNT=3",
+         "20180812T001500,20180813T001500,20180814T001500"},
+    };
+
+    for (size_t i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+        icaltimezone *zone = icaltimezone_get_builtin_timezone(cases[i].zone);
+        struct icalrecurrencetype *recur = icalrecurrencetype_new_from_string(cases[i].rrule);
+        struct icaltimetype dtstart = icaltime_from_string(cases[i].dtstart);
+        char got[256] = "";
+
+        ok(cases[i].zone, zone != NULL);
+        ok(cases[i].rrule, recur != NULL);
+        if (!zone || !recur) {
+            if (recur) {
+                icalrecurrencetype_unref(recur);
+            }
+            continue;
+        }
+
+        dtstart = icaltime_set_timezone(&dtstart, zone);
+        icalrecur_iterator *ritr = icalrecur_iterator_new(recur, dtstart);
+        ok("icalrecur_iterator_new()", ritr != NULL);
+        if (ritr) {
+            for (struct icaltimetype next = icalrecur_iterator_next(ritr);
+                 !icaltime_is_null_time(next);
+                 next = icalrecur_iterator_next(ritr)) {
+                size_t len = strlen(got);
+                snprintf(got + len, sizeof(got) - len, "%s%s",
+                         len ? "," : "", icaltime_as_ical_string(next));
+            }
+            icalrecur_iterator_free(ritr);
+        }
+        str_is(cases[i].rrule, got, cases[i].expected);
+        icalrecurrencetype_unref(recur);
+    }
+}
+
 static void test_timezone_from_builtin(void)
 {
     const char *strcomp_fmt =
@@ -8728,6 +8779,7 @@ int main(int argc, const char *argv[])
     test_run("Test timezone from builtin", test_timezone_from_builtin, do_test, do_header);
     test_run("Test explicit local times in forward gaps", test_timezone_forward_gap, do_test, do_header);
     test_run("Test explicit local times in backward overlaps", test_timezone_backward_overlap, do_test, do_header);
+    test_run("Test recurrence times after forward gaps", test_recur_forward_gap_time, do_test, do_header);
     test_run("Test icalvalue_decode_ical_string", test_icalvalue_decode_ical_string, do_test, do_header);
 
     test_run("Test icalarray_sort", test_icalarray_sort, do_test, do_header);
