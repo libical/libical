@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - libicalvcal: Fixed an out-of-bounds write when decoding a BASE64 value whose padding contains
   more than two `=` characters. The decoder computed the output length as `3 - pad`, which wrapped
   to a huge value when `pad` exceeded 3 and was then used as the size of a `memcpy`.
+- libicalvcal: Fixed an endless loop with unbounded memory growth when parsing a QUOTED-PRINTABLE
+  value with an `=` that is not followed by two hex digits, or a BASE64 or QUOTED-PRINTABLE value
+  that runs to the end of the input. A bare `=` is now kept as is.
 - TBD
 
 ## [4.0.7] - 2026-10-18

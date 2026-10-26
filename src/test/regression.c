@@ -5240,6 +5240,48 @@ static void test_vcal_base64_overpadded(void)
     }
 }
 
+static void test_vcal_encoded_value_eof(void)
+{
+    /* A QUOTED-PRINTABLE '=' that is not followed by two hex digits, and a
+       BASE64 or QUOTED-PRINTABLE value cut off at the end of the input, used
+       to make the lexer return the same token forever. */
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "SUMMARY;ENCODING=QUOTED-PRINTABLE:x=y\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    const char *truncated[] = {
+        "BEGIN:VCALENDAR\r\nX;QUOTED-PRINTABLE:a=",
+        "BEGIN:VCALENDAR\r\nX;QUOTED-PRINTABLE:abc",
+        "BEGIN:VCALENDAR\r\nX;BASE64:QUJD\r\n",
+    };
+    VObject *vcal;
+    icalcomponent *comp, *event;
+    size_t i;
+
+    vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with a bare '=' in a quoted-printable value", (vcal != 0));
+    if (vcal) {
+        comp = icalvcal_convert(vcal);
+        cleanVObject(vcal);
+        event = comp ? icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT) : NULL;
+        str_is("bare '=' is kept", event ? icalcomponent_get_summary(event) : "", "x=y");
+        if (comp) {
+            icalcomponent_free(comp);
+        }
+    }
+
+    for (i = 0; i < sizeof(truncated) / sizeof(truncated[0]); i++) {
+        vcal = Parse_MIME(truncated[i], (unsigned long)strlen(truncated[i]));
+        ok("Parsing vCal with an encoded value at the end of the input returns", 1);
+        if (vcal) {
+            cleanVObject(vcal);
+        }
+    }
+}
+
 /*
  * Test to see if recurrences are excluded in certain situations
  * See r961 for more information
@@ -8706,6 +8748,7 @@ int main(int argc, const char *argv[])
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
     test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
     test_run("Test vCal over-padded base64", test_vcal_base64_overpadded, do_test, do_header);
+    test_run("Test vCal encoded value at end of input", test_vcal_encoded_value_eof, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,

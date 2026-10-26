@@ -951,8 +951,11 @@ static char* lexGetQuotedPrintable()
                         ++mime_lineNum;
                         }
                     else {
-                        lexPushLookaheadc('=');
-                        goto EndString;
+                        /* not an escape, keep the '=' as is (RFC 2045).
+                           Pushing the '=' back instead would make the next
+                           call read it again forever at the end of input */
+                        lexPushLookaheadc(next[0]);
+                        lexAppendc('=');
                         }
                     }
                 else if (i == 1) {
@@ -1006,6 +1009,11 @@ int yylex() {
                 }
             DBG_(("db: LINESEP\n"));
             return LINESEP;
+            }
+        else if (c == ((char) EOF)) {
+            /* end of input inside a value; the BASE64 and QUOTED-PRINTABLE
+               readers below would keep returning a STRING here forever */
+            return 0;
             }
         else {
             char *p = 0;
