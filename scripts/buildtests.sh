@@ -498,7 +498,6 @@ CPPCHECK() {
     -i "$TOP/src/java/" \
     -i "$TOP/src/libicalss/icalssyacc.c" \
     -i "$TOP/src/libicalss/icalsslexer.c" \
-    -i "$TOP/src/libicalvcal/vcc.c" \
     $f 2>&1 |
     tee cppcheck-c.out
 

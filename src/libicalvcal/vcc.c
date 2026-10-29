@@ -577,21 +577,17 @@ static void enterValues(const char *value)
         }
     else {
         if (value) {
-            char *p1, *p2;
-            wchar_t *p3;
-            size_t i;
-
             /* If the property already has a string value, we append this one,
                using ';' to separate the values. */
             if (vObjectUStringZValue(curProp)) {
-                p1 = fakeCString(vObjectUStringZValue(curProp));
+               char * p1 = fakeCString(vObjectUStringZValue(curProp));
                 if (p1) {
-                    i = strlen(p1)+strlen(value)+2;
-                    p2 = malloc(i);
+                    size_t i = strlen(p1)+strlen(value)+2;
+                    char *p2 = malloc(i);
                     if (p2) {
                         snprintf(p2,i,"%s;%s",p1,value);
                         deleteStr(p1);
-                        p3 = (wchar_t *) vObjectUStringZValue(curProp);
+                        wchar_t *p3 = (wchar_t *) vObjectUStringZValue(curProp);
                         free(p3);
                         setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
                         free(p2);
@@ -828,14 +824,13 @@ static char* lexLookaheadWord(void) {
      /  and thing bigger than that will stop the lookahead and return 0;
      / leading white spaces are not recoverable.
      */
-    int c;
     int len = 0;
     int curgetptr = 0;
     lexSkipWhite();
     lexClearToken();
     curgetptr = (int)lexBuf.getPtr;     /* remember! */
     while (len < (MAX_LEX_LOOKAHEAD_0)) {
-        c = lexGetc();
+        int c = lexGetc();
         len++;
         if (c == ((char) EOF) || strchr("\t\n ;:=", c)) {
             lexAppendc(0);
@@ -890,9 +885,8 @@ static void handleMoreRFC822LineBreak(int c) {
     }
 
 static char* lexGet1Value(void) {
-    int c;
     lexSkipWhite();
-    c = lexLookahead();
+    int c = lexLookahead();
     lexClearToken();
     while (c != ((char) EOF) && c != ';') {
         if (c == '\n') {
@@ -922,8 +916,8 @@ static char* lexGet1Value(void) {
 
 static int match_begin_name(int end) {
     char *n = lexLookaheadWord();
-    int token = ID;
     if (n) {
+        int token = ID;
         if (!strcasecmp(n,"vcard")) token = end?END_VCARD:BEGIN_VCARD;
         else if (!strcasecmp(n,"vcalendar")) token = end?END_VCAL:BEGIN_VCAL;
         else if (!strcasecmp(n,"vevent")) token = end?END_VEVENT:BEGIN_VEVENT;
@@ -976,13 +970,12 @@ static char * lexGetDataFromBase64(void)
     int quadIx = 0, pad = 0;
     unsigned long trip = 0;
     unsigned char b;
-    int c;
     unsigned char *bytes = NULL;
     unsigned char *oldBytes = NULL;
 
     DBG_(("db: lexGetDataFromBase64\n"));
     while (1) {
-        c = lexGetc();
+        int c = lexGetc();
         if (c == '\n') {
             ++mime_lineNum;
             if (lexLookahead() == '\n') {
@@ -1351,8 +1344,8 @@ void registerMimeErrorHandler(MimeErrorHandler me)
 
 static void mime_error(const char *s)
     {
-    char msg[256];
     if (s && mimeErrorHandler) {
+        char msg[256];
         snprintf(msg,sizeof(msg),"%s at line %d", s, mime_lineNum);
         mimeErrorHandler(msg);
         }
