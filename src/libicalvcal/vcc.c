@@ -184,6 +184,7 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #endif
 
 #include <ctype.h>
+#include <stddef.h> /* for ptrdiff_t */
 #include "vcc.h"
 
 /****  Types, Constants  ****/
@@ -1375,7 +1376,7 @@ static void mime_error_(const char *s)
 /* allocate initial stack or double stack size, up to YYMAXDEPTH */
 static int yygrowstack(YYSTACKDATA *data)
 {
-    int i;
+    int i = 0;
     unsigned newsize;
     YYINT *newss;
     YYSTYPE *newvs;
@@ -1387,7 +1388,11 @@ static int yygrowstack(YYSTACKDATA *data)
     else if ((newsize *= 2) > YYMAXDEPTH)
         newsize = YYMAXDEPTH;
 
-    i = (int) (data->s_mark - data->s_base);
+    if(data->s_mark && data->s_base) {
+        i = (int)(ptrdiff_t)(data->s_mark - data->s_base);
+    } else {
+        yyerror("data stack is broken");
+    }
     newss = (YYINT *)realloc(data->s_base, newsize * sizeof(*newss));
     if (newss == 0)
         return YYENOMEM;
