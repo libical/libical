@@ -13,7 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - libicalvcal: Fixed an endless loop with unbounded memory growth when parsing a QUOTED-PRINTABLE
   value with an `=` that is not followed by two hex digits, or a BASE64 or QUOTED-PRINTABLE value
   that runs to the end of the input. A bare `=` is now kept as is.
-- TBD
+- Fix heap-buffer-overflow read in icalrecur_iterator_prev() after the iteration of an HOURLY,
+  MINUTELY or SECONDLY rule with a matching BYHOUR, BYMINUTE or BYSECOND reached the last
+  supported year, which left the BY index past the end of the BY data.
 
 ## [4.0.7] - 2026-10-18
 
