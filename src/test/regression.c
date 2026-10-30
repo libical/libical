@@ -5332,6 +5332,48 @@ static void test_value_line_break_injection(void)
            icalproperty_as_ical_string(prop),
            "STATUS:X-FOOATTENDEE:mailto:b@example.com\r\n");
     icalproperty_free(prop);
+  
+static void test_vcal_rrule_bad_interval(void)
+{
+    /* A zero interval, or one that wraps when stored in the short
+       recur->interval, gave an iCalendar RRULE that never advances. */
+    static const char *rules[] = {"D0 #0", "D0 20030101", "D40000 #0", "W0 MO #0", "D65536 #5"};
+    size_t i;
+
+    for (i = 0; i < sizeof(rules) / sizeof(rules[0]); i++) {
+        char str[256];
+        VObject *vcal;
+        icalcomponent *comp, *event;
+
+        snprintf(str, sizeof(str),
+                 "BEGIN:VCALENDAR\r\n"
+                 "VERSION:1.0\r\n"
+                 "BEGIN:VEVENT\r\n"
+                 "DTSTART:20020101T100000\r\n"
+                 "RRULE:%s\r\n"
+                 "END:VEVENT\r\n"
+                 "END:VCALENDAR\r\n",
+                 rules[i]);
+
+        vcal = Parse_MIME(str, (unsigned long)strlen(str));
+        ok("Parsing vCal with a bad RRULE interval", (vcal != 0));
+        if (!vcal) {
+            continue;
+        }
+
+        comp = icalvcal_convert(vcal);
+        cleanVObject(vcal);
+        ok("Converting to ical component", (comp != 0));
+        if (!comp) {
+            continue;
+        }
+
+        event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+        ok("bad interval does not become an RRULE",
+           (event != 0 && icalcomponent_get_first_property(event, ICAL_RRULE_PROPERTY) == 0));
+
+        icalcomponent_free(comp);
+    }
 }
 
 /*
@@ -8802,6 +8844,7 @@ int main(int argc, const char *argv[])
     test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
     test_run("Test vCal over-padded base64", test_vcal_base64_overpadded, do_test, do_header);
     test_run("Test line breaks in unescaped values", test_value_line_break_injection, do_test, do_header);
+    test_run("Test vCal RRULE bad interval", test_vcal_rrule_bad_interval, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
