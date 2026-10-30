@@ -1144,6 +1144,11 @@ static char* lexGetQuotedPrintable(void)
             } /* switch */
         } while (cur != (char)EOF);
 
+    /* the value is cut off by the end of input: drop it, as lexGet1Value()
+       does, so no string is left on the parser stack for error recovery to
+       discard without freeing */
+    return 0;
+
 EndString:
     lexAppendc(0);
     return lexStr();
