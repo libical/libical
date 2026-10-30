@@ -348,14 +348,13 @@ static char *icalmemory_strdup_without_line_breaks(const char *str)
 {
     const size_t str_len = strlen(str) + 1;
     char *out = (char *)icalmemory_new_buffer(str_len);
-    char *pout = out;
-    const char *p;
 
     if (out == 0) {
         return 0;
     }
 
-    for (p = str; *p != 0; p++) {
+    char *pout = out;
+    for (const char *p = str; *p != 0; p++) {
         if (*p != '\r' && *p != '\n') {
             *pout++ = *p;
         }
