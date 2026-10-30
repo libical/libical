@@ -2365,17 +2365,17 @@ static void adjust_to_byday(icalrecur_iterator *impl)
     /* This depends on impl->bydata[ICAL_BY_DAY].by.data being correctly sorted by
      * day. This should probably be abstracted to make such assumption
      * more explicit. */
-    short this_dow = (short)get_day_of_week(impl);
-    short dow = (short)(impl->bydata[ICAL_BY_DAY].by.data[0] - this_dow);
+    int week_start = (int)impl->rule->week_start;
+    int this_dow = get_day_of_week(impl);
+    int first_dow = (int)icalrecurrencetype_day_day_of_week(impl->bydata[ICAL_BY_DAY].by.data[0]);
 
-    /* Normalize day of week around week start */
-    if (dow != 0 && this_dow < (short)impl->rule->week_start) {
-        dow -= 7;
-    }
+    /* Positions within the week that begins on WKST, from 0 to 6, so that
+       the move stays within the week of the start time */
+    int this_pos = (this_dow - week_start + 7) % 7;
+    int first_pos = (first_dow - week_start + 7) % 7;
 
-    if ((this_dow < impl->bydata[ICAL_BY_DAY].by.data[0] && dow >= 0) || dow < 0) {
-        /* initial time is after first day of ICAL_BY_DAY data */
-        increment_monthday(impl, dow);
+    if (first_pos != this_pos) {
+        increment_monthday(impl, first_pos - this_pos);
     }
 }
 
@@ -2641,6 +2641,9 @@ static int next_unit(icalrecur_iterator *impl,
                 }
                 increment_unit(impl, multiplier * impl->rule->interval);
             }
+            /* The iteration ended without finding a BY* value,
+               don't leave the index past the end of the BY* data */
+            bydata->index = 0;
         } else {
             bydata->index++;
 

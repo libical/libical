@@ -1074,6 +1074,33 @@ static void test_recur_iterator_reverse_range(void)
     icalarray_free(calendars);
 }
 
+/* Going back after the iteration reached the last supported year must not
+   read past the end of the BYHOUR data. */
+static void test_recur_iterator_prev_after_end(void)
+{
+    struct icalrecurrencetype *recurrence =
+        icalrecurrencetype_new_from_string("FREQ=HOURLY;INTERVAL=2;BYHOUR=1,15");
+    ok("FREQ=HOURLY;INTERVAL=2;BYHOUR=1,15", recurrence != NULL);
+
+    const bool estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(false);
+
+    icalrecur_iterator *iterator =
+        icalrecur_iterator_new(recurrence, icaltime_from_string("25811231T230000"));
+    if (iterator) {
+        for (int i = 0; i < 3; i++) {
+            (void)icalrecur_iterator_next(iterator);
+        }
+        (void)icalrecur_iterator_prev(iterator);
+        icalrecur_iterator_free(iterator);
+    }
+    ok("icalrecur_iterator_prev after the end of the iteration", true);
+
+    icalerror_clear_errno();
+    icalerror_set_errors_are_fatal(estate);
+    icalrecurrencetype_unref(recurrence);
+}
+
 static void test_memory(void)
 {
     size_t bufsize = 256;
@@ -5240,6 +5267,49 @@ static void test_vcal_base64_overpadded(void)
     }
 }
 
+static void test_vcal_rrule_bad_interval(void)
+{
+    /* A zero interval, or one that wraps when stored in the short
+       recur->interval, gave an iCalendar RRULE that never advances. */
+    static const char *rules[] = {"D0 #0", "D0 20030101", "D40000 #0", "W0 MO #0", "D65536 #5"};
+    size_t i;
+
+    for (i = 0; i < sizeof(rules) / sizeof(rules[0]); i++) {
+        char str[256];
+        VObject *vcal;
+        icalcomponent *comp, *event;
+
+        snprintf(str, sizeof(str),
+                 "BEGIN:VCALENDAR\r\n"
+                 "VERSION:1.0\r\n"
+                 "BEGIN:VEVENT\r\n"
+                 "DTSTART:20020101T100000\r\n"
+                 "RRULE:%s\r\n"
+                 "END:VEVENT\r\n"
+                 "END:VCALENDAR\r\n",
+                 rules[i]);
+
+        vcal = Parse_MIME(str, (unsigned long)strlen(str));
+        ok("Parsing vCal with a bad RRULE interval", (vcal != 0));
+        if (!vcal) {
+            continue;
+        }
+
+        comp = icalvcal_convert(vcal);
+        cleanVObject(vcal);
+        ok("Converting to ical component", (comp != 0));
+        if (!comp) {
+            continue;
+        }
+
+        event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+        ok("bad interval does not become an RRULE",
+           (event != 0 && icalcomponent_get_first_property(event, ICAL_RRULE_PROPERTY) == 0));
+
+        icalcomponent_free(comp);
+    }
+}
+
 /*
  * Test to see if recurrences are excluded in certain situations
  * See r961 for more information
@@ -8685,6 +8755,7 @@ int main(int argc, const char *argv[])
     test_run("Test icalrecur_iterator_set_start with date", test_recur_iterator_set_start, do_test, do_header);
     test_run("Test weekly icalrecur_iterator on January 1", test_recur_iterator_on_jan_1, do_test, do_header);
     test_run("Test icalrecur_iterator reverse range without UNTIL", test_recur_iterator_reverse_range, do_test, do_header);
+    test_run("Test icalrecur_iterator_prev after the end", test_recur_iterator_prev_after_end, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
@@ -8706,6 +8777,7 @@ int main(int argc, const char *argv[])
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
     test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
     test_run("Test vCal over-padded base64", test_vcal_base64_overpadded, do_test, do_header);
+    test_run("Test vCal RRULE bad interval", test_vcal_rrule_bad_interval, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
