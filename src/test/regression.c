@@ -5284,27 +5284,25 @@ static void test_vcal_encoded_value_eof(void)
         "BEGIN:VCALENDAR\r\nX;QUOTED-PRINTABLE:abc",
         "BEGIN:VCALENDAR\r\nX;BASE64:QUJD\r\n",
     };
-    VObject *vcal;
-    icalcomponent *comp, *event;
-    size_t i;
 
-    vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    VObject *vcal = Parse_MIME(str, (unsigned long)strlen(str));
     ok("Parsing vCal with a bare '=' in a quoted-printable value", (vcal != 0));
     if (vcal) {
-        comp = icalvcal_convert(vcal);
+        icalcomponent *const comp = icalvcal_convert(vcal);
+        icalcomponent *const event =
+            comp ? icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT) : NULL;
         cleanVObject(vcal);
-        event = comp ? icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT) : NULL;
         str_is("bare '=' is kept", event ? icalcomponent_get_summary(event) : "", "x=y");
         if (comp) {
             icalcomponent_free(comp);
         }
     }
 
-    for (i = 0; i < sizeof(truncated) / sizeof(truncated[0]); i++) {
-        vcal = Parse_MIME(truncated[i], (unsigned long)strlen(truncated[i]));
+    for (size_t i = 0; i < sizeof(truncated) / sizeof(truncated[0]); i++) {
+        VObject *trunc = Parse_MIME(truncated[i], (unsigned long)strlen(truncated[i]));
         ok("Parsing vCal with an encoded value at the end of the input returns", 1);
-        if (vcal) {
-            cleanVObject(vcal);
+        if (trunc) {
+            cleanVObject(trunc);
         }
     }
 }
