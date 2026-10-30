@@ -1074,6 +1074,33 @@ static void test_recur_iterator_reverse_range(void)
     icalarray_free(calendars);
 }
 
+/* Going back after the iteration reached the last supported year must not
+   read past the end of the BYHOUR data. */
+static void test_recur_iterator_prev_after_end(void)
+{
+    struct icalrecurrencetype *recurrence =
+        icalrecurrencetype_new_from_string("FREQ=HOURLY;INTERVAL=2;BYHOUR=1,15");
+    ok("FREQ=HOURLY;INTERVAL=2;BYHOUR=1,15", recurrence != NULL);
+
+    const bool estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(false);
+
+    icalrecur_iterator *iterator =
+        icalrecur_iterator_new(recurrence, icaltime_from_string("25811231T230000"));
+    if (iterator) {
+        for (int i = 0; i < 3; i++) {
+            (void)icalrecur_iterator_next(iterator);
+        }
+        (void)icalrecur_iterator_prev(iterator);
+        icalrecur_iterator_free(iterator);
+    }
+    ok("icalrecur_iterator_prev after the end of the iteration", true);
+
+    icalerror_clear_errno();
+    icalerror_set_errors_are_fatal(estate);
+    icalrecurrencetype_unref(recurrence);
+}
+
 static void test_memory(void)
 {
     size_t bufsize = 256;
@@ -8752,6 +8779,7 @@ int main(int argc, const char *argv[])
     test_run("Test icalrecur_iterator_set_start with date", test_recur_iterator_set_start, do_test, do_header);
     test_run("Test weekly icalrecur_iterator on January 1", test_recur_iterator_on_jan_1, do_test, do_header);
     test_run("Test icalrecur_iterator reverse range without UNTIL", test_recur_iterator_reverse_range, do_test, do_header);
+    test_run("Test icalrecur_iterator_prev after the end", test_recur_iterator_prev_after_end, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
