@@ -2638,6 +2638,9 @@ static int next_unit(icalrecur_iterator *impl,
                 }
                 increment_unit(impl, multiplier * impl->rule->interval);
             }
+            /* The iteration ended without finding a BY* value,
+               don't leave the index past the end of the BY* data */
+            bydata->index = 0;
         } else {
             bydata->index++;
 
