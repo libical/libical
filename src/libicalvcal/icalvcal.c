@@ -31,6 +31,7 @@
 #include "icaltimezone.h"
 #include "icalversion.h" /* for ICAL_PACKAGE */
 
+#include <limits.h>
 #include <stddef.h> /* for ptrdiff_t */
 
 enum datatype
@@ -784,6 +785,19 @@ static const char *rrule_parse_interval(const char *s, struct icalrecurrencetype
 
     while (*s >= '0' && *s <= '9') {
         interval = (interval * 10) + (*s++ - '0');
+
+        /* recur->interval is a short. */
+        if (interval > SHRT_MAX) {
+            *error_message = "Invalid Interval";
+            return NULL;
+        }
+    }
+
+    /* As in iCalendar, the interval must be a positive integer. A zero
+       interval never advances the recurrence iterator. */
+    if (interval < 1) {
+        *error_message = "Invalid Interval";
+        return NULL;
     }
 
     /* It must be followed by whitespace. I'm not sure if anything else is
