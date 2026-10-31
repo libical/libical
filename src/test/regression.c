@@ -5267,6 +5267,46 @@ static void test_vcal_base64_overpadded(void)
     }
 }
 
+static void test_vcal_encoded_value_eof(void)
+{
+    /* A QUOTED-PRINTABLE '=' that is not followed by two hex digits, and a
+     *      BASE64 or QUOTED-PRINTABLE value cut off at the end of the input, used
+     *      to make the lexer return the same token forever. */
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "SUMMARY;ENCODING=QUOTED-PRINTABLE:x=y\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    const char *truncated[] = {
+        "BEGIN:VCALENDAR\r\nX;QUOTED-PRINTABLE:a=",
+        "BEGIN:VCALENDAR\r\nX;QUOTED-PRINTABLE:abc",
+        "BEGIN:VCALENDAR\r\nX;BASE64:QUJD\r\n",
+    };
+
+    VObject *vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with a bare '=' in a quoted-printable value", (vcal != 0));
+    if (vcal) {
+        icalcomponent *const comp = icalvcal_convert(vcal);
+        icalcomponent *const event =
+            comp ? icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT) : NULL;
+        cleanVObject(vcal);
+        str_is("bare '=' is kept", event ? icalcomponent_get_summary(event) : "", "x=y");
+        if (comp) {
+            icalcomponent_free(comp);
+        }
+    }
+
+    for (size_t i = 0; i < sizeof(truncated) / sizeof(truncated[0]); i++) {
+        VObject *trunc = Parse_MIME(truncated[i], (unsigned long)strlen(truncated[i]));
+        ok("Parsing vCal with an encoded value at the end of the input returns", 1);
+        if (trunc) {
+            cleanVObject(trunc);
+        }
+    }
+}
+
 static void test_value_line_break_injection(void)
 {
     /* A vCal quoted-printable value can decode to CR/LF. URI values used to
@@ -8895,6 +8935,7 @@ int main(int argc, const char *argv[])
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
     test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
     test_run("Test vCal over-padded base64", test_vcal_base64_overpadded, do_test, do_header);
+    test_run("Test vCal encoded value at end of input", test_vcal_encoded_value_eof, do_test, do_header);
     test_run("Test vCal RRULE bad interval", test_vcal_rrule_bad_interval, do_test, do_header);
     test_run("Test line breaks in unescaped values", test_value_line_break_injection, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);

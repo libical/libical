@@ -1116,8 +1116,11 @@ static char* lexGetQuotedPrintable(void)
                         ++mime_lineNum;
                         }
                     else {
-                        lexPushLookaheadc('=');
-                        goto EndString;
+                        /* not an escape, keep the '=' as is (RFC 2045).
+                           Pushing the '=' back instead would make the next
+                           call read it again forever at the end of input */
+                        lexPushLookaheadc(next[0]);
+                        lexAppendc('=');
                         }
                     }
                 else if (i == 1) {
@@ -1140,6 +1143,11 @@ static char* lexGetQuotedPrintable(void)
                 break;
             } /* switch */
         } while (cur != (char)EOF);
+
+    /* the value is cut off by the end of input: drop it, as lexGet1Value()
+       does, so no string is left on the parser stack for error recovery to
+       discard without freeing */
+    return 0;
 
 EndString:
     lexAppendc(0);
@@ -1171,6 +1179,11 @@ int yylex(void) {
                 }
             DBG_(("db: LINESEP\n"));
             return LINESEP;
+            }
+        else if (c == ((char) EOF)) {
+            /* end of input inside a value; the BASE64 and QUOTED-PRINTABLE
+               readers below would keep returning a STRING here forever */
+            return 0;
             }
         else {
             char *p = 0;

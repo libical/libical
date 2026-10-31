@@ -34,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   newline at the last slot of the lookahead ring buffer, `lexLookahead()` peeked at the next
   character with `lexBuf.buf[lexBuf.getPtr+1]` without wrapping the index, reading one element
   past the buffer. The sibling carriage-return branch already wrapped with `% MAX_LEX_LOOKAHEAD`.
+- libicalvcal: Fixed an endless loop with unbounded memory growth when parsing a QUOTED-PRINTABLE
+  value with an `=` that is not followed by two hex digits, or a BASE64 or QUOTED-PRINTABLE value
+  that runs to the end of the input. A bare `=` is now kept as is.
 
 ## [4.0.7] - 2026-10-18
 
