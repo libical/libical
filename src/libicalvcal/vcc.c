@@ -1258,7 +1258,6 @@ int YYLEX_DECL() {
                             }
                         else {
                             DBG_(("db: ID '%s'\n", t));
-                            deleteStr(t);
                             return ID;
                             }
                         }
