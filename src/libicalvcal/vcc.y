@@ -567,7 +567,7 @@ static int lexLookahead() {
         }
     else if (c == '\n') {
         int a = (lexBuf.len>1)?
-            lexBuf.buf[lexBuf.getPtr+1]:
+            lexBuf.buf[(lexBuf.getPtr+1)%MAX_LEX_LOOKAHEAD]:
             lexGeta_(1);
         if (a == '\r') {
             lexSkipLookahead();

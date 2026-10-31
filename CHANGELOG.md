@@ -30,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (including the default Monday) now count weeks from the week that contains DTSTART when DTSTART
   is not the first BYDAY day of its week. For example, `FREQ=WEEKLY;INTERVAL=2;BYDAY=SU` with a
   Tuesday DTSTART used to skip the first Sunday and put every occurrence in the other weeks.
+- libicalvcal: Fixed an out-of-bounds read in the lexer. When a value folded across lines put a
+  newline at the last slot of the lookahead ring buffer, `lexLookahead()` peeked at the next
+  character with `lexBuf.buf[lexBuf.getPtr+1]` without wrapping the index, reading one element
+  past the buffer. The sibling carriage-return branch already wrapped with `% MAX_LEX_LOOKAHEAD`.
 
 ## [4.0.7] - 2026-10-18
 
