@@ -1394,13 +1394,16 @@ static void setup_defaults(icalrecur_iterator *impl,
     }
 }
 
-/** Calculate ISO weeks per year
+/** Calculate weeks per year, for weeks that begin on week_start and a first
+   week with at least 4 days in the year, as for ISO weeks
    https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year */
-static int weeks_in_year(int year)
+static int weeks_in_year(int year, icalrecurrencetype_weekday week_start)
 {
-    /* Long years occur when year starts on Thu or leap year starts on Wed */
+    /* Long years start on the 4th day of the week, or leap years on the 3rd
+       (Thu or Wed for ISO weeks, which begin on Monday) */
     int dow = icaltime_day_of_week(icaltime_from_day_of_year(1, year));
-    int is_long = (dow == 5 || (dow == 4 && icaltime_is_leap_year(year)));
+    int pos = (dow - (int)week_start + 7) % 7;
+    int is_long = (pos == 3 || (pos == 2 && icaltime_is_leap_year(year)));
 
     return (52 + is_long);
 }
@@ -1824,16 +1827,24 @@ static bool initialize_rscale(icalrecur_iterator *impl)
     UErrorCode status = U_ZERO_ERROR;
     UChar *tzid = (UChar *)UCAL_UNKNOWN_ZONE_ID;
     bool is_hebrew = false;
+    char *src = NULL;
 
-    /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
-    char *src = (char *)icaltimezone_get_location((icaltimezone *)dtstart.zone);
-    if (!src) {
-        const char *prefix = icaltimezone_tzid_prefix();
-        src = (char *)icaltimezone_get_tzid((icaltimezone *)dtstart.zone);
-        /* coverity[use_after_free] */
-        if (src && !strncmp(src, prefix, strlen(prefix))) {
-            /* Skip past our prefix */
-            src += strlen(prefix);
+    /* DAILY and longer rules generate local times with the time of day of
+       DTSTART or the BYHOUR, BYMINUTE and BYSECOND values (RFC 5545 section
+       3.3.10). Calculate them without a time zone: in the zone of DTSTART,
+       ICU moves a time in a DST gap forward and keeps the moved time for
+       the following occurrences. */
+    if (rule->freq < ICAL_DAILY_RECURRENCE) {
+        /* Convert the UTF8 timezoneid of dstart to ICU UChar. */
+        src = (char *)icaltimezone_get_location((icaltimezone *)dtstart.zone);
+        if (!src) {
+            const char *prefix = icaltimezone_tzid_prefix();
+            src = (char *)icaltimezone_get_tzid((icaltimezone *)dtstart.zone);
+            /* coverity[use_after_free] */
+            if (src && !strncmp(src, prefix, strlen(prefix))) {
+                /* Skip past our prefix */
+                src += strlen(prefix);
+            }
         }
     }
     if (src) {
@@ -2144,8 +2155,8 @@ static int get_week_number(icalrecur_iterator *impl, struct icaltimetype tt)
     week = (icaltime_day_of_year(tt) - dow + 10) / 7;
     if (week < 1) {
         /* Last week of preceding year */
-        week = weeks_in_year(tt.year - 1);
-    } else if (week > weeks_in_year(tt.year)) {
+        week = weeks_in_year(tt.year - 1, impl->rule->week_start);
+    } else if (week > weeks_in_year(tt.year, impl->rule->week_start)) {
         /* First week of following year */
         week = 1;
     }
@@ -2362,17 +2373,17 @@ static void adjust_to_byday(icalrecur_iterator *impl)
     /* This depends on impl->bydata[ICAL_BY_DAY].by.data being correctly sorted by
      * day. This should probably be abstracted to make such assumption
      * more explicit. */
-    short this_dow = (short)get_day_of_week(impl);
-    short dow = (short)(impl->bydata[ICAL_BY_DAY].by.data[0] - this_dow);
+    int week_start = (int)impl->rule->week_start;
+    int this_dow = get_day_of_week(impl);
+    int first_dow = (int)icalrecurrencetype_day_day_of_week(impl->bydata[ICAL_BY_DAY].by.data[0]);
 
-    /* Normalize day of week around week start */
-    if (dow != 0 && this_dow < (short)impl->rule->week_start) {
-        dow -= 7;
-    }
+    /* Positions within the week that begins on WKST, from 0 to 6, so that
+       the move stays within the week of the start time */
+    int this_pos = (this_dow - week_start + 7) % 7;
+    int first_pos = (first_dow - week_start + 7) % 7;
 
-    if ((this_dow < impl->bydata[ICAL_BY_DAY].by.data[0] && dow >= 0) || dow < 0) {
-        /* initial time is after first day of ICAL_BY_DAY data */
-        increment_monthday(impl, dow);
+    if (first_pos != this_pos) {
+        increment_monthday(impl, first_pos - this_pos);
     }
 }
 
@@ -2893,7 +2904,7 @@ static void expand_by_day(icalrecur_iterator *impl, int year,
 
             if (has_by_data(impl, ICAL_BY_WEEK_NO)) {
                 /* Make sure our day falls in one of the BYWEEKNO */
-                int nweeks = weeks_in_year(year);
+                int nweeks = weeks_in_year(year, impl->rule->week_start);
                 int j;
 
                 for (j = 0; j < impl->bydata[ICAL_BY_WEEK_NO].by.size; j++) {
@@ -3184,7 +3195,7 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
 
         /* BYWEEKNO + BYDAY handled below */
         if (!has_by_data(impl, ICAL_BY_DAY)) {
-            int nweeks = weeks_in_year(year);
+            int nweeks = weeks_in_year(year, impl->rule->week_start);
 
             int start_doy = 1;
             /* See which week contains Jan 1 */
@@ -3278,7 +3289,7 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
                 /* Set start and end of ISO week-numbering year */
                 set_day_of_year(impl, 1);
                 doy_offset += get_start_of_week(impl) - 1;
-                last_day = (7 * weeks_in_year(year)) - doy_offset - 1;
+                last_day = 7 * weeks_in_year(year, impl->rule->week_start);
 
                 first_dow = (int)impl->rule->week_start;
                 last_dow = (first_dow + 6) % 7;
