@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.8] - Unreleased
 
+- libical: In builds with ICU, recurrences with a DAILY or longer frequency no longer move to a
+  later time of day after an occurrence or DTSTART falls in a DST gap. For example, a weekly
+  02:30 Europe/Berlin event returned 03:30 for the week after the spring change too.
 - libical: Fixed `BYWEEKNO` with `BYDAY` at the ends of the week-numbering year. The last days of
   the last week were dropped when week 1 starts after January 1, days of the next year's week 1
   were added (e.g. a 53rd week in a 52-week year), and with a WKST other than Monday the number of
