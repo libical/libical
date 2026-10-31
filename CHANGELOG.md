@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.8] - Unreleased
 
+- libical: Drop CR and LF when writing values that are output without escaping (URI, CAL-ADDRESS,
+  ATTACH URLs and enum x-values). A vCal quoted-printable value could decode to a line break that
+  was written out verbatim, ending the content line early and injecting another property.
+- libical: In builds with ICU, recurrences with a DAILY or longer frequency no longer move to a
+  later time of day after an occurrence or DTSTART falls in a DST gap. For example, a weekly
+  02:30 Europe/Berlin event returned 03:30 for the week after the spring change too.
+- libical: Fixed `BYWEEKNO` with `BYDAY` at the ends of the week-numbering year. The last days of
+  the last week were dropped when week 1 starts after January 1, days of the next year's week 1
+  were added (e.g. a 53rd week in a 52-week year), and with a WKST other than Monday the number of
+  weeks in the year, and so negative `BYWEEKNO` values, followed ISO weeks.
 - libicalvcal: Fixed an out-of-bounds write when decoding a BASE64 value whose padding contains
   more than two `=` characters. The decoder computed the output length as `3 - pad`, which wrapped
   to a huge value when `pad` exceeded 3 and was then used as the size of a `memcpy`.

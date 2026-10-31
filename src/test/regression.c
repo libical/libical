@@ -5267,6 +5267,73 @@ static void test_vcal_base64_overpadded(void)
     }
 }
 
+static void test_value_line_break_injection(void)
+{
+    /* A vCal quoted-printable value can decode to CR/LF. URI values used to
+       be written out verbatim, so the embedded line break started a new
+       ATTENDEE property in the generated iCalendar. */
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "URL;ENCODING=QUOTED-PRINTABLE:http://example.com/=0D=0AATTENDEE:mailto:evil@example.com\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    VObject *vcal;
+    icalcomponent *comp, *reparsed, *event;
+    icalproperty *prop;
+    icalattach *attach;
+
+    vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with a quoted-printable URL", (vcal != 0));
+    if (!vcal) {
+        return;
+    }
+
+    comp = icalvcal_convert(vcal);
+    cleanVObject(vcal);
+    ok("Converting to ical component", (comp != 0));
+    if (!comp) {
+        return;
+    }
+
+    event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+    prop = event ? icalcomponent_get_first_property(event, ICAL_URL_PROPERTY) : NULL;
+    ok("event has a URL", (prop != 0));
+    if (prop) {
+        str_is("line break is dropped from URI value",
+               icalproperty_as_ical_string(prop),
+               "URL:http://example.com/ATTENDEE:mailto:evil@example.com\r\n");
+    }
+    reparsed = icalparser_parse_string(icalcomponent_as_ical_string(comp));
+    icalcomponent_free(comp);
+    event = reparsed ? icalcomponent_get_first_component(reparsed, ICAL_VEVENT_COMPONENT) : NULL;
+    ok("no ATTENDEE is injected after a round trip",
+       (event && icalcomponent_get_first_property(event, ICAL_ATTENDEE_PROPERTY) == 0));
+    icalcomponent_free(reparsed);
+
+    prop = icalproperty_new_organizer("mailto:a@example.com\r\nATTENDEE:mailto:b@example.com");
+    str_is("line break is dropped from CAL-ADDRESS value",
+           icalproperty_as_ical_string(prop),
+           "ORGANIZER:mailto:a@example.comATTENDEE:mailto:b@example.com\r\n");
+    icalproperty_free(prop);
+
+    attach = icalattach_new_from_url("http://example.com/\nATTENDEE:mailto:b@example.com");
+    prop = icalproperty_new_attach(attach);
+    icalattach_unref(attach);
+    str_is("line break is dropped from ATTACH URL",
+           icalproperty_as_ical_string(prop),
+           "ATTACH:http://example.com/ATTENDEE:mailto:b@example.com\r\n");
+    icalproperty_free(prop);
+
+    prop = icalproperty_new_status(ICAL_STATUS_X);
+    icalvalue_set_x(icalproperty_get_value(prop), "X-FOO\r\nATTENDEE:mailto:b@example.com");
+    str_is("line break is dropped from enum x-value",
+           icalproperty_as_ical_string(prop),
+           "STATUS:X-FOOATTENDEE:mailto:b@example.com\r\n");
+    icalproperty_free(prop);
+}
+
 static void test_vcal_rrule_bad_interval(void)
 {
     /* A zero interval, or one that wraps when stored in the short
@@ -5857,6 +5924,57 @@ static void test_timezone_forward_gap(void)
            icaltime_as_timet_with_zone(local, zone) == icaltime_as_timet(expected));
         icaltimezone_convert_time(&local, zone, utc);
         str_is(cases[i].local, icaltime_as_ical_string(local), cases[i].utc);
+    }
+}
+
+static void test_recur_forward_gap_time(void)
+{
+    const struct {
+        const char *zone;
+        const char *dtstart;
+        const char *rrule;
+        const char *expected;
+    } cases[] = {
+        {"Europe/Berlin", "20260322T023000", "FREQ=WEEKLY;COUNT=4",
+         "20260322T023000,20260329T023000,20260405T023000,20260412T023000"},
+        {"Europe/Berlin", "20260329T023000", "FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU;COUNT=3",
+         "20260329T023000,20270328T023000,20280326T023000"},
+        {"America/New_York", "20260208T023000", "FREQ=MONTHLY;BYDAY=2SU;COUNT=3",
+         "20260208T023000,20260308T023000,20260412T023000"},
+        {"America/Santiago", "20180812T001500", "FREQ=DAILY;COUNT=3",
+         "20180812T001500,20180813T001500,20180814T001500"},
+    };
+
+    for (size_t i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+        icaltimezone *zone = icaltimezone_get_builtin_timezone(cases[i].zone);
+        struct icalrecurrencetype *recur = icalrecurrencetype_new_from_string(cases[i].rrule);
+        struct icaltimetype dtstart = icaltime_from_string(cases[i].dtstart);
+        char got[256] = "";
+
+        ok(cases[i].zone, zone != NULL);
+        ok(cases[i].rrule, recur != NULL);
+        if (!zone || !recur) {
+            if (recur) {
+                icalrecurrencetype_unref(recur);
+            }
+            continue;
+        }
+
+        dtstart = icaltime_set_timezone(&dtstart, zone);
+        icalrecur_iterator *ritr = icalrecur_iterator_new(recur, dtstart);
+        ok("icalrecur_iterator_new()", ritr != NULL);
+        if (ritr) {
+            for (struct icaltimetype next = icalrecur_iterator_next(ritr);
+                 !icaltime_is_null_time(next);
+                 next = icalrecur_iterator_next(ritr)) {
+                size_t len = strlen(got);
+                snprintf(got + len, sizeof(got) - len, "%s%s",
+                         len ? "," : "", icaltime_as_ical_string(next));
+            }
+            icalrecur_iterator_free(ritr);
+        }
+        str_is(cases[i].rrule, got, cases[i].expected);
+        icalrecurrencetype_unref(recur);
     }
 }
 
@@ -8778,6 +8896,7 @@ int main(int argc, const char *argv[])
     test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
     test_run("Test vCal over-padded base64", test_vcal_base64_overpadded, do_test, do_header);
     test_run("Test vCal RRULE bad interval", test_vcal_rrule_bad_interval, do_test, do_header);
+    test_run("Test line breaks in unescaped values", test_value_line_break_injection, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
@@ -8800,6 +8919,7 @@ int main(int argc, const char *argv[])
     test_run("Test timezone from builtin", test_timezone_from_builtin, do_test, do_header);
     test_run("Test explicit local times in forward gaps", test_timezone_forward_gap, do_test, do_header);
     test_run("Test explicit local times in backward overlaps", test_timezone_backward_overlap, do_test, do_header);
+    test_run("Test recurrence times after forward gaps", test_recur_forward_gap_time, do_test, do_header);
     test_run("Test icalvalue_decode_ical_string", test_icalvalue_decode_ical_string, do_test, do_header);
 
     test_run("Test icalarray_sort", test_icalarray_sort, do_test, do_header);

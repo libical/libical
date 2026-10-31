@@ -340,6 +340,32 @@ static char *icalmemory_strdup_and_quote(const icalvalue *value, const char *unq
 }
 
 /*
+ * Returns a copy of a string that is written out without escaping.
+ * CR and LF are dropped so that an embedded line break cannot end the
+ * content line early and inject another property.
+ */
+static char *icalmemory_strdup_without_line_breaks(const char *str)
+{
+    const size_t str_len = strlen(str) + 1;
+    char *out = (char *)icalmemory_new_buffer(str_len);
+
+    if (out == 0) {
+        return 0;
+    }
+
+    char *pout = out;
+    for (const char *p = str; *p != 0; p++) {
+        if (*p != '\r' && *p != '\n') {
+            *pout++ = *p;
+        }
+    }
+
+    *pout = '\0';
+
+    return out;
+}
+
+/*
  * FIXME
  *
  * This is a bad API, as it forces callers to specify their own X type.
@@ -978,19 +1004,9 @@ static char *icalvalue_utcoffset_as_ical_string_r(const icalvalue *value)
 
 static char *icalvalue_string_as_ical_string_r(const icalvalue *value)
 {
-    const char *data;
-    char *str = 0;
-
     icalerror_check_arg_rz((value != 0), "value");
-    data = value->data.v_string;
 
-    const size_t str_len = strlen(data) + 1;
-    str = (char *)icalmemory_new_buffer(str_len);
-
-    strncpy(str, data, str_len);
-    str[str_len - 1] = '\0';
-
-    return str;
+    return icalmemory_strdup_without_line_breaks(value->data.v_string);
 }
 
 static char *icalvalue_recur_as_ical_string_r(const icalvalue *value)
@@ -1018,11 +1034,7 @@ static char *icalvalue_attach_as_ical_string_r(const icalvalue *value)
         const char *url;
 
         url = icalattach_get_url(a);
-        const size_t len_url = strlen(url) + 1;
-        str = icalmemory_new_buffer(len_url);
-        strncpy(str, url, len_url);
-        str[len_url - 1] = '\0';
-        return str;
+        return icalmemory_strdup_without_line_breaks(url);
     } else {
         const char *data = 0;
 
@@ -1319,7 +1331,7 @@ char *icalvalue_as_ical_string_r(const icalvalue *value)
     case ICAL_PARTICIPANTTYPE_VALUE:
     case ICAL_RESOURCETYPE_VALUE:
         if (value->x_value != 0) {
-            return icalmemory_strdup(value->x_value);
+            return icalmemory_strdup_without_line_breaks(value->x_value);
         }
 
         return icalproperty_enum_to_string_r(value->data.v_enum);
