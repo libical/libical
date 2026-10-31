@@ -1394,13 +1394,16 @@ static void setup_defaults(icalrecur_iterator *impl,
     }
 }
 
-/** Calculate ISO weeks per year
+/** Calculate weeks per year, for weeks that begin on week_start and a first
+   week with at least 4 days in the year, as for ISO weeks
    https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year */
-static int weeks_in_year(int year)
+static int weeks_in_year(int year, icalrecurrencetype_weekday week_start)
 {
-    /* Long years occur when year starts on Thu or leap year starts on Wed */
+    /* Long years start on the 4th day of the week, or leap years on the 3rd
+       (Thu or Wed for ISO weeks, which begin on Monday) */
     int dow = icaltime_day_of_week(icaltime_from_day_of_year(1, year));
-    int is_long = (dow == 5 || (dow == 4 && icaltime_is_leap_year(year)));
+    int pos = (dow - (int)week_start + 7) % 7;
+    int is_long = (pos == 3 || (pos == 2 && icaltime_is_leap_year(year)));
 
     return (52 + is_long);
 }
@@ -2144,8 +2147,8 @@ static int get_week_number(icalrecur_iterator *impl, struct icaltimetype tt)
     week = (icaltime_day_of_year(tt) - dow + 10) / 7;
     if (week < 1) {
         /* Last week of preceding year */
-        week = weeks_in_year(tt.year - 1);
-    } else if (week > weeks_in_year(tt.year)) {
+        week = weeks_in_year(tt.year - 1, impl->rule->week_start);
+    } else if (week > weeks_in_year(tt.year, impl->rule->week_start)) {
         /* First week of following year */
         week = 1;
     }
@@ -2893,7 +2896,7 @@ static void expand_by_day(icalrecur_iterator *impl, int year,
 
             if (has_by_data(impl, ICAL_BY_WEEK_NO)) {
                 /* Make sure our day falls in one of the BYWEEKNO */
-                int nweeks = weeks_in_year(year);
+                int nweeks = weeks_in_year(year, impl->rule->week_start);
                 int j;
 
                 for (j = 0; j < impl->bydata[ICAL_BY_WEEK_NO].by.size; j++) {
@@ -3184,7 +3187,7 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
 
         /* BYWEEKNO + BYDAY handled below */
         if (!has_by_data(impl, ICAL_BY_DAY)) {
-            int nweeks = weeks_in_year(year);
+            int nweeks = weeks_in_year(year, impl->rule->week_start);
 
             int start_doy = 1;
             /* See which week contains Jan 1 */
@@ -3278,7 +3281,7 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
                 /* Set start and end of ISO week-numbering year */
                 set_day_of_year(impl, 1);
                 doy_offset += get_start_of_week(impl) - 1;
-                last_day = (7 * weeks_in_year(year)) - doy_offset - 1;
+                last_day = 7 * weeks_in_year(year, impl->rule->week_start);
 
                 first_dow = (int)impl->rule->week_start;
                 last_dow = (first_dow + 6) % 7;

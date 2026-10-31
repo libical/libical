@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.8] - Unreleased
 
+- libical: Fixed `BYWEEKNO` with `BYDAY` at the ends of the week-numbering year. The last days of
+  the last week were dropped when week 1 starts after January 1, days of the next year's week 1
+  were added (e.g. a 53rd week in a 52-week year), and with a WKST other than Monday the number of
+  weeks in the year, and so negative `BYWEEKNO` values, followed ISO weeks.
 - libicalvcal: Fixed an out-of-bounds write when decoding a BASE64 value whose padding contains
   more than two `=` characters. The decoder computed the output length as `3 - pad`, which wrapped
   to a huge value when `pad` exceeded 3 and was then used as the size of a `memcpy`.
