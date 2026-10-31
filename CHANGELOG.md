@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.8] - Unreleased
 
+- libical: Drop CR and LF when writing values that are output without escaping (URI, CAL-ADDRESS,
+  ATTACH URLs and enum x-values). A vCal quoted-printable value could decode to a line break that
+  was written out verbatim, ending the content line early and injecting another property.
 - libical: In builds with ICU, recurrences with a DAILY or longer frequency no longer move to a
   later time of day after an occurrence or DTSTART falls in a DST gap. For example, a weekly
   02:30 Europe/Berlin event returned 03:30 for the week after the spring change too.
