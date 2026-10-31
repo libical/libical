@@ -3,12 +3,17 @@
  CREATOR: eric 23 December 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
 ======================================================================*/
+
+/**
+ * @file icalfileset.h
+ * @brief Manages a database of ical components and offers interfaces for
+ * reading, writing and searching for components.
+ */
 
 #ifndef ICALFILESET_H
 #define ICALFILESET_H
@@ -25,13 +30,13 @@ LIBICAL_ICALSS_EXPORT icalset *icalfileset_new_reader(const char *path);
 
 LIBICAL_ICALSS_EXPORT icalset *icalfileset_new_writer(const char *path);
 
-LIBICAL_ICALSS_EXPORT icalset *icalfileset_init(icalset *set, const char *dsn, void *options);
+LIBICAL_ICALSS_EXPORT icalset *icalfileset_init(icalset *set, const char *path, void *options_in);
 
 LIBICAL_ICALSS_EXPORT icalcluster *icalfileset_produce_icalcluster(const char *path);
 
-LIBICAL_ICALSS_EXPORT void icalfileset_free(icalset *cluster);
+LIBICAL_ICALSS_EXPORT void icalfileset_free(icalset *set);
 
-LIBICAL_ICALSS_EXPORT const char *icalfileset_path(icalset *cluster);
+LIBICAL_ICALSS_EXPORT const char *icalfileset_path(icalset *set);
 
 /* Mark the cluster as changed, so it will be written to disk when it
    is freed. Commit writes to disk immediately. */
@@ -61,7 +66,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch(icalset *set,
 
 LIBICAL_ICALSS_EXPORT int icalfileset_has_uid(icalset *set, const char *uid);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch_match(icalset *set, icalcomponent *c);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_fetch_match(icalset *set, const icalcomponent *c);
 
 /**
  *  @brief Modifies components according to the MODIFY method of CAP.
@@ -75,11 +80,11 @@ LIBICAL_ICALSS_EXPORT icalerrorenum icalfileset_modify(icalset *set,
 /* Iterates through components. If a gauge has been defined, these
    will skip over components that do not pass the gauge */
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_current_component(icalset *cluster);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_current_component(icalset *set);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_first_component(icalset *cluster);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_first_component(icalset *set);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_next_component(icalset *cluster);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_next_component(icalset *set);
 
 /* External iterator for thread safety */
 LIBICAL_ICALSS_EXPORT icalsetiter icalfileset_begin_component(icalset *set,
@@ -89,12 +94,12 @@ LIBICAL_ICALSS_EXPORT icalsetiter icalfileset_begin_component(icalset *set,
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *iter);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_form_a_matched_recurrence_component(icalsetiter *
-                                                                                     itr);
+                                                                                         itr);
 
 /** Returns a reference to the internal component. **You probably should
    not be using this.** */
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_component(icalset *cluster);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_component(icalset *set);
 
 /**
  * @brief Options for opening an icalfileset.
@@ -102,12 +107,11 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalfileset_get_component(icalset *cluster)
  * These options should be passed to the icalset_new() function
  */
 
-typedef struct icalfileset_options
-{
-    int flags;                /**< flags for open() O_RDONLY, etc  */
-    int mode;                 /**< file mode */
-    int safe_saves;           /**< to lock or not */
-    icalcluster *cluster;     /**< use this cluster to initialize data */
+typedef struct icalfileset_options {
+    int flags;            /**< flags for open() O_RDONLY, etc  */
+    int mode;             /**< file mode */
+    int safe_saves;       /**< to lock or not */
+    icalcluster *cluster; /**< use this cluster to initialize data */
 } icalfileset_options;
 
 extern icalfileset_options icalfileset_options_default;

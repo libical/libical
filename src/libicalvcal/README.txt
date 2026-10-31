@@ -1,6 +1,5 @@
 SPDX-FileCopyrightText: 1996 Apple Computer, Inc., AT&T Corp., International
 Business Machines Corporation and Siemens Rolm Communications Inc.
-
 SPDX-License-Identifier: LicenseRef-APPLEMIT
 
 The software is provided with RESTRICTED RIGHTS.  Use, duplication, or
@@ -486,7 +485,7 @@ d. properties name (id) are case insensitive.
 	    -- set an integer value of a VObject.
 
 	void setVObjectLongValue(VObject *o, unsigned long l);
-	    -- set an long integer value of a VObject.
+	    -- set a long integer value of a VObject.
 
 	void setVObjectAnyValue(VObject *o, void *t);
 	    -- set any value of a VObject. The value type is

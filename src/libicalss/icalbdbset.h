@@ -2,10 +2,15 @@
  FILE: icalbdbset.h
 
  SPDX-FileCopyrightText: 2001, Critical Path
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
+
+/**
+  @file icalbdbset.h
+
+  @brief Manages a Berkeley database of ical components and offers interfaces
+  for reading, writing and searching for components.
+*/
 
 #ifndef ICALBDBSET_H
 #define ICALBDBSET_H
@@ -18,13 +23,18 @@
 typedef struct icalbdbset_impl icalbdbset;
 
 enum icalbdbset_subdb_type
-{ ICALBDB_CALENDARS, ICALBDB_EVENTS, ICALBDB_TODOS, ICALBDB_REMINDERS };
+{
+    ICALBDB_CALENDARS,
+    ICALBDB_EVENTS,
+    ICALBDB_TODOS,
+    ICALBDB_REMINDERS
+};
 typedef enum icalbdbset_subdb_type icalbdbset_subdb_type;
 
 /** sets up the db environment, should be done in parent thread.. */
 LIBICAL_ICALSS_EXPORT int icalbdbset_init_dbenv(char *db_env_dir,
-                                                void (*logDbFunc) (const DB_ENV *,
-                                                                   const char *, const char *));
+                                                void (*logDbFunc)(const DB_ENV *,
+                                                                  const char *, const char *));
 
 LIBICAL_ICALSS_EXPORT icalset *icalbdbset_init(icalset *set, const char *dsn, void *options);
 
@@ -41,19 +51,20 @@ LIBICAL_ICALSS_EXPORT icalset *icalbdbset_new(const char *database_filename,
                                               int dbtype, u_int32_t flag);
 
 LIBICAL_ICALSS_EXPORT DB *icalbdbset_bdb_open_secondary(DB *dbp,
-                                                        const char *subdb,
-                                                        const char *sindex,
-                                                        int (*callback) (DB *db,
-                                                                         const DBT *dbt1,
-                                                                         const DBT *dbt2,
-                                                                         DBT *dbt3), int type);
+                                                        const char *database,
+                                                        const char *sub_database,
+                                                        int (*callback)(DB *db,
+                                                                        const DBT *dbt1,
+                                                                        const DBT *dbt2,
+                                                                        DBT *dbt3),
+                                                        int type);
 
-LIBICAL_ICALSS_EXPORT char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc) (const DBT *dbt));
+LIBICAL_ICALSS_EXPORT char *icalbdbset_parse_data(DBT *dbt, char *(*pfunc)(const DBT *dbt));
 
 LIBICAL_ICALSS_EXPORT void icalbdbset_free(icalset *set);
 
 /* cursor operations */
-LIBICAL_ICALSS_EXPORT int icalbdbset_acquire_cursor(DB *dbp, DB_TXN *tid, DBC ** rdbcp);
+LIBICAL_ICALSS_EXPORT int icalbdbset_acquire_cursor(DB *dbp, DB_TXN *tid, DBC **rdbcp);
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_cget(DBC *dbcp, DBT *key, DBT *data,
                                           u_int32_t access_method);
@@ -95,9 +106,9 @@ LIBICAL_ICALSS_EXPORT int icalbdbset_count_components(icalset *set, icalcomponen
 
 /* Restrict the component returned by icalbdbset_first, _next to those
    that pass the gauge. _clear removes the gauge */
-LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_select(icalset *store, icalgauge *gauge);
+LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_select(icalset *set, icalgauge *gauge);
 
-LIBICAL_ICALSS_EXPORT void icalbdbset_clear(icalset *store);
+LIBICAL_ICALSS_EXPORT void icalbdbset_clear(icalset *set);
 
 /* Gets and searches for a component by uid */
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch(icalset *set,
@@ -105,7 +116,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch(icalset *set,
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_has_uid(icalset *set, const char *uid);
 
-LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch_match(icalset *set, icalcomponent *c);
+LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_fetch_match(icalset *set, const icalcomponent *c);
 
 LIBICAL_ICALSS_EXPORT icalerrorenum icalbdbset_modify(icalset *set, icalcomponent *old,
                                                       icalcomponent *newc);
@@ -132,7 +143,7 @@ LIBICAL_ICALSS_EXPORT icalsetiter icalbdbset_begin_component(icalset *set,
                                                              icalgauge *gauge, const char *tzid);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_form_a_matched_recurrence_component(icalsetiter *
-                                                                                    itr);
+                                                                                        itr);
 
 LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i);
 
@@ -145,7 +156,7 @@ LIBICAL_ICALSS_EXPORT icalcomponent *icalbdbset_get_component(icalset *set);
 
 LIBICAL_ICALSS_EXPORT DB_ENV *icalbdbset_get_env(void);
 
-LIBICAL_ICALSS_EXPORT int icalbdbset_begin_transaction(DB_TXN *parent_id, DB_TXN ** txnid);
+LIBICAL_ICALSS_EXPORT int icalbdbset_begin_transaction(DB_TXN *parent_id, DB_TXN **txnid);
 
 LIBICAL_ICALSS_EXPORT int icalbdbset_commit_transaction(DB_TXN *txnid);
 
@@ -153,17 +164,18 @@ LIBICAL_ICALSS_EXPORT DB *icalbdbset_bdb_open(const char *path,
                                               const char *subdb,
                                               int type, int mode, u_int32_t flag);
 
-typedef struct icalbdbset_options
-{
-    icalbdbset_subdb_type subdb;     /**< the subdatabase to open */
-    int dbtype;                      /**< db_open type: DB_HASH | DB_BTREE */
-    int mode;                        /**< file mode */
-    u_int32_t flag;                  /**< DB->set_flags(): DB_DUP | DB_DUPSORT */
-    char *(*pfunc) (const DBT *dbt);
-                                    /**< parsing function */
-    int (*callback) (DB *db,
-                            /**< callback for secondary db open */
-                     const DBT *dbt1, const DBT *dbt2, DBT *dbt3);
+/// @cond PRIVATE
+typedef struct icalbdbset_options {
+    icalbdbset_subdb_type subdb; /**< the subdatabase to open */
+    int dbtype;                  /**< db_open type: DB_HASH | DB_BTREE */
+    int mode;                    /**< file mode */
+    u_int32_t flag;              /**< DB->set_flags(): DB_DUP | DB_DUPSORT */
+    char *(*pfunc)(const DBT *dbt);
+    /**< parsing function */
+    int (*callback)(DB *db,
+                    /**< callback for secondary db open */
+                    const DBT *dbt1, const DBT *dbt2, DBT *dbt3);
 } icalbdbset_options;
+/// @endcond
 
 #endif /* !ICALBDBSET_H */

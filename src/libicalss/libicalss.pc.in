@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright Contributors to the libical project
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+prefix=@prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libicalss
+Description: @libical_DESCRIPTION@ (Storage Support)
+URL: @libical_HOMEPAGE_URL@
+Version: @libical_VERSION@
+Libs: -L${libdir} -licalss@PTHREAD_LIBS_PRIVATE@
+Requires: libical
+Cflags: -I${includedir}

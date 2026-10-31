@@ -3,61 +3,132 @@
  CREATOR: eric 20 March 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
+
+/**
+ * @file icalvalue.h
+ * @brief Defines the data structure representing iCalendar parameter values.
+ */
 
 #ifndef ICALVALUE_H
 #define ICALVALUE_H
 
-#include "libical_deprecated.h"
 #include "libical_ical_export.h"
 #include "icalvalueimpl.h"
 
-/** @file icalvalue.h */
-
-#define ICAL_BOOLEAN_TRUE  1
-#define ICAL_BOOLEAN_FALSE 0
-
-LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);
-
-/** @brief Deeply clones an icalvalue.
- *
- * Returns a pointer to the memory for the newly cloned icalvalue.
- * @since 3.1.0
- */
-LIBICAL_ICAL_EXPORT icalvalue *icalvalue_clone(const icalvalue *value);
-
-LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_from_string(icalvalue_kind kind, const char *str);
-
-LIBICAL_ICAL_EXPORT void icalvalue_free(icalvalue *value);
-
-LIBICAL_ICAL_EXPORT int icalvalue_is_valid(const icalvalue *value);
-
-LIBICAL_ICAL_EXPORT const char *icalvalue_as_ical_string(const icalvalue *value);
-
-LIBICAL_ICAL_EXPORT char *icalvalue_as_ical_string_r(const icalvalue *value);
-
-LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_isa(const icalvalue *value);
-
-LIBICAL_ICAL_EXPORT int icalvalue_isa_value(void *);
-
-LIBICAL_ICAL_EXPORT icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a,
-                                                                    const icalvalue *b);
+#include <stdbool.h>
 
 /**
- * @copydoc icalvalue_clone()
- * @deprecated Use icalvalue_clone() instead
+ * Construct a new icalvalue of the specified icalvalue_kind.
+ *
+ * @param kind is the icalvalue_kind to use
+ *
+ * @return a pointer to the newly allocated icalvalue. The data structure
+ * contains all null values and is essentially invalid.
+ * Free the resulting memory with icalvalue_free.
  */
-LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalvalue *icalvalue_new_clone(const icalvalue *value));
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new(icalvalue_kind kind);
+
+/**
+ * Deeply clone an icalvalue.
+ *
+ * @param old is a pointer to a valid icalvalue from which to clone
+ *
+ * @return a pointer to the memory for the newly cloned icalvalue.
+ * Free the resulting memory using icalvalue_free.
+ * @since 4.0
+ */
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_clone(const icalvalue *old);
+
+/**
+ * Construct and populate a new icalvalue of the specified icalvalue_kind.
+ *
+ * @param kind the icalvalue_kind to use
+ * @param str is a non-NULL pointer to the data used to populate the new icalvalue
+ *
+ * @return a pointer to the newly allocated icalvalue. Free the resulting
+ * memory with icalvalue_free.
+ */
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_from_string(icalvalue_kind kind, const char *str);
+
+/**
+ * Free the memory for an icalvalue.
+ *
+ * @param value a pointer to a valid icalvalue
+ */
+LIBICAL_ICAL_EXPORT void icalvalue_free(icalvalue *value);
+
+/**
+ * Determine if the specified icalvalue is valid.
+ *
+ * @param value a pointer to a icalvalue
+ *
+ * @return true if @p value is valid; false otherwise.
+ */
+LIBICAL_ICAL_EXPORT bool icalvalue_is_valid(const icalvalue *value);
+
+/**
+ * Create a string representation of an icalvalue.
+ *
+ * @param value a pointer to a valid icalvalue
+ *
+ * @return a pointer to a char string containing the string representatin of @p v
+value.
+ * NULL is returned is @p value is invalid.
+ *
+ * @see icalvalue_as_ical_string_r
+ */
+LIBICAL_ICAL_EXPORT const char *icalvalue_as_ical_string(const icalvalue *value);
+
+/**
+ * Create a string representation of an icalvalue.
+ *
+ * @param value a pointer to a valid icalvalue
+ *
+ * @return a pointer to a char string containing the string representatin of @p value. NULL is returned is @p value is invalid.
+ *
+ * @see icalvalue_as_ical_string
+ */
+LIBICAL_ICAL_EXPORT char *icalvalue_as_ical_string_r(const icalvalue *value);
+
+/**
+ * Get the icalvalue_kind of an icalvalue.
+ *
+ * @param value a pointer to a valid icalvalue
+ *
+ * @return the icalvalue_kind of @p value. ICAL_NO_VALUE is returned if value is null.
+ */
+LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_isa(const icalvalue *value);
+
+/**
+ * Determine if the specified address points to an icalvalue.
+ *
+ * @param value a pointer to a possible icalvalue.
+ *
+ * @return true if the address points to an icalvalue; false otherwise.
+ */
+LIBICAL_ICAL_EXPORT bool icalvalue_isa_value(void *value);
+
+/**
+ * Compares two icalvalues.
+ *
+ * @param a an icalvalue to compare
+ * @param b an icalvalue to compare
+ *
+ * @return an icalparameter_xliccomparetype representing how @p a and @p b compare;
+ * if the values do not have the same type ICAL_XLICCOMPARETYPE_NOTEQUAL is returned;
+ * ICAL_XLICCOMPARETYPE_NONE is returned if the values type is unknown or one of the values is null.
+ */
+LIBICAL_ICAL_EXPORT icalparameter_xliccomparetype icalvalue_compare(const icalvalue *a,
+                                                                    const icalvalue *b);
 
 /* Special, non autogenerated value accessors */
 
 /* Defined in icalderivedvalue.h */
-/* icalvalue* icalvalue_new_recur (struct icalrecurrencetype v); */
-/* void icalvalue_set_recur(icalvalue* value, struct icalrecurrencetype v); */
-/* struct icalrecurrencetype icalvalue_get_recur(const icalvalue* value); */
+/* icalvalue* icalvalue_new_recur (struct icalrecurrencetype *v); */
+/* void icalvalue_set_recur(icalvalue* value, struct icalrecurrencetype *v); */
+/* struct icalrecurrencetype *icalvalue_get_recur(const icalvalue* value); */
 
 /* icalvalue* icalvalue_new_trigger (struct icaltriggertype v); */
 /* void icalvalue_set_trigger(icalvalue* value, struct icaltriggertype v); */
@@ -70,23 +141,75 @@ LIBICAL_ICAL_EXPORT LIBICAL_DEPRECATED(icalvalue *icalvalue_new_clone(const ical
 
 /* Convert enumerations */
 
+/**
+ * Converts a char string into an icalvalue_kind.
+ *
+ * @param str a pointer to a char string containing the character representation
+ * of an icalvalue_kind
+ *
+ * @return the icalvalue_kind associated with @p str. ICAL_NO_VALUE is returned
+ * if @p str is invalid.
+ */
 LIBICAL_ICAL_EXPORT icalvalue_kind icalvalue_string_to_kind(const char *str);
 
+/**
+ * Converts an icalvalue_kind to its string representation.
+ *
+ * @param kind is the icalvalue_kind to use
+ *
+ * @return a pointer to a char string containing the string representation
+ * of the specified icalvalue_kind.
+ */
 LIBICAL_ICAL_EXPORT const char *icalvalue_kind_to_string(const icalvalue_kind kind);
 
-/** Check validity of a specific icalvalue_kind **/
-LIBICAL_ICAL_EXPORT int icalvalue_kind_is_valid(const icalvalue_kind kind);
+/**
+ * Check the validity of the specified icalvalue_kind.
+ *
+ * @param kind is the icalvalue_kind to use
+ *
+ * @return true if the icalvalue_kind is valid; false otherwise.
+ */
+LIBICAL_ICAL_EXPORT bool icalvalue_kind_is_valid(const icalvalue_kind kind);
 
-/** Encode a character string in ical format, escape certain characters, etc. */
-LIBICAL_ICAL_EXPORT int icalvalue_encode_ical_string(const char *szText,
-                                                     char *szEncText, int MaxBufferLen);
+/**
+ * Resets the icalvalue_kind of the specified icalvalue.
+ *
+ * @param value a pointer to a valid icalvalue
+ */
+LIBICAL_ICAL_EXPORT void icalvalue_reset_kind(icalvalue *value);
 
-/** Extract the original character string encoded by the above function **/
-LIBICAL_ICAL_EXPORT int icalvalue_decode_ical_string(const char *szText,
-                                                     char *szDecText, int nMaxBufferLen);
+/**
+ * Encode a character string in ical format, escape certain characters, etc.
+ *
+ * @param szText is a pointer to a char string to be encoded
+ * @param szEncText is a pointer to a char string to contain the encoded
+ * input string upon return.
+ * @param maxBufferLen is the maximum number of characters to encode
+ *
+ * @return true if the encoding was successful; false otherwise.
+ *
+ * @see icalvalue_decode_ical_string
+ */
+LIBICAL_ICAL_EXPORT bool icalvalue_encode_ical_string(const char *szText,
+                                                      char *szEncText, int maxBufferLen);
+
+/**
+ * Decode the string that has been encoded by icalvalue_encode_ical_string().
+ *
+ * @param szText is a pointer to a char string to be decoded
+ * @param szDecText is a pointer to a char string to contain the decoded
+ * input string upon return.
+ * @param maxBufferLen is the maximum number of characters to encode
+ *
+ * @return true if the decoding was successful; false otherwise.
+ *
+ * @see icalvalue_encode_ical_string
+ */
+LIBICAL_ICAL_EXPORT bool icalvalue_decode_ical_string(const char *szText,
+                                                      char *szDecText, int maxBufferLen);
 
 /* For the library only -- do not make visible */
-/// @cond
+/// @cond PRIVATE
 extern void print_date_to_string(char *str, const struct icaltimetype *data);
 extern void print_datetime_to_string(char *str, const struct icaltimetype *data);
 /// @endcond

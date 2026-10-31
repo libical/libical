@@ -2,7 +2,6 @@
  FILE: regression-component.c
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original author is Eric Busboom
@@ -17,7 +16,7 @@
 void create_simple_component(void)
 {
     icalcomponent *calendar;
-    icalproperty *version, *bogus;
+    const icalproperty *version, *bogus;
 
     /* Create calendar and add properties */
     calendar = icalcomponent_new(ICAL_VCALENDAR_COMPONENT);
@@ -32,8 +31,9 @@ void create_simple_component(void)
     bogus = icalcomponent_get_first_property(calendar, ICAL_DTSTART_PROPERTY);
     ok("bogus dtstart not found", (bogus == NULL));
 
-    if (VERBOSE && calendar)
+    if (VERBOSE && calendar) {
         printf("%s\n", icalcomponent_as_ical_string(calendar));
+    }
 
     icalcomponent_free(calendar);
 }
@@ -71,7 +71,9 @@ static const char *create_new_component_str =
     "SUMMARY:XYZ Project Review\r\n"
     "DTSTART;TZID=America/New_York:20020606T212449\r\n"
     "DTEND;TZID=America/New_York:20020606T212449\r\n"
-    "LOCATION:1CP Conference Room 4350\r\n" "END:VEVENT\r\n" "END:VCALENDAR\r\n";
+    "LOCATION:1CP Conference Room 4350\r\n"
+    "END:VEVENT\r\n"
+    "END:VCALENDAR\r\n";
 
 /* Create a new component */
 void create_new_component(void)
@@ -80,13 +82,13 @@ void create_new_component(void)
     icalcomponent *timezone;
     icalcomponent *tzc;
     icalcomponent *event;
-    struct icaltimetype atime = icaltime_from_timet_with_zone(1023398689, 0, NULL);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(1023398689, false, NULL);
     struct icaldatetimeperiodtype rtime;
     icalproperty *property;
-    char *calendar_as_string;
+    const char *calendar_as_string;
 
-    rtime.period.start = icaltime_from_timet_with_zone(1023398689, 0, NULL);
-    rtime.period.end = icaltime_from_timet_with_zone(1023409689, 0, NULL);
+    rtime.period.start = icaltime_from_timet_with_zone(1023398689, false, NULL);
+    rtime.period.end = icaltime_from_timet_with_zone(1023409689, false, NULL);
     rtime.period.end.hour++;
     rtime.period.duration = icaldurationtype_null_duration();
     rtime.time = icaltime_null_time();
@@ -195,11 +197,13 @@ void create_new_component(void)
 
     str_is("build large, complex component", calendar_as_string, create_new_component_str);
 
-    if (VERBOSE && calendar)
+    if (VERBOSE && calendar) {
         printf("%s\n", icalcomponent_as_ical_string(calendar));
+    }
 
-    if (calendar)
+    if (calendar) {
         icalcomponent_free(calendar);
+    }
 }
 
 /* Create a new component, using the va_args list */
@@ -207,11 +211,11 @@ void create_new_component(void)
 void create_new_component_with_va_args(void)
 {
     icalcomponent *calendar;
-    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    struct icaltimetype atime = icaltime_from_timet_with_zone(time(0), false, NULL);
     struct icaldatetimeperiodtype rtime;
 
-    rtime.period.start = icaltime_from_timet_with_zone(time(0), 0, NULL);
-    rtime.period.end = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    rtime.period.start = icaltime_from_timet_with_zone(time(0), false, NULL);
+    rtime.period.end = icaltime_from_timet_with_zone(time(0), false, NULL);
     rtime.period.end.hour++;
     rtime.period.duration = icaldurationtype_null_duration();
     rtime.time = icaltime_null_time();
@@ -236,7 +240,8 @@ void create_new_component_with_va_args(void)
                                                     icalproperty_new_tzoffsetfrom(-5),
                                                     icalproperty_new_tzoffsetto(-4),
                                                     icalproperty_new_tzname("EST"),
-                                                    (void *)0), (void *)0),
+                                                    (void *)0),
+                                (void *)0),
             icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
                                 icalproperty_new_dtstamp(atime),
                                 icalproperty_new_uid("guid-1.host1.com"),
@@ -246,15 +251,11 @@ void create_new_component_with_va_args(void)
                                     (void *)0),
                                 icalproperty_vanew_attendee(
                                     "employee-A@host.com",
-                                    icalparameter_new_role
-                                    (ICAL_ROLE_REQPARTICIPANT),
-                                    icalparameter_new_rsvp
-                                    (ICAL_RSVP_TRUE),
-                                    icalparameter_new_cutype
-                                    (ICAL_CUTYPE_GROUP),
+                                    icalparameter_new_role(ICAL_ROLE_REQPARTICIPANT),
+                                    icalparameter_new_rsvp(ICAL_RSVP_TRUE),
+                                    icalparameter_new_cutype(ICAL_CUTYPE_GROUP),
                                     (void *)0),
-                                icalproperty_new_description
-                                ("Project XYZ Review Meeting"),
+                                icalproperty_new_description("Project XYZ Review Meeting"),
                                 icalproperty_new_categories("MEETING"),
                                 icalproperty_new_class(ICAL_CLASS_PUBLIC),
                                 icalproperty_new_created(atime),
@@ -265,16 +266,16 @@ void create_new_component_with_va_args(void)
                                     (void *)0),
                                 icalproperty_vanew_dtend(
                                     atime,
-                                    icalparameter_new_tzid
-                                    ("America/New_York"),
+                                    icalparameter_new_tzid("America/New_York"),
                                     (void *)0),
                                 icalproperty_new_location(
                                     "1CP Conference Room 4350"),
                                 (void *)0),
             (void *)0);
 
-    if (VERBOSE && calendar)
+    if (VERBOSE && calendar) {
         printf("%s\n", icalcomponent_as_ical_string(calendar));
+    }
 
     icalcomponent_free(calendar);
     ok("creating a complex vcalendar", (calendar != NULL));
@@ -301,9 +302,9 @@ static void print_span(int c, struct icaltime_span span)
  */
 void test_icalcomponent_get_span(void)
 {
-    icaltime_t tm1 = 973378800;     /*Sat Nov  4 23:00:00 UTC 2000,
+    icaltime_t tm1 = 973378800; /*Sat Nov  4 23:00:00 UTC 2000,
                                    Sat Nov  4 15:00:00 PST 2000 */
-    icaltime_t tm2 = 973382400;     /*Sat Nov  5 00:00:00 UTC 2000
+    icaltime_t tm2 = 973382400; /*Sat Nov  5 00:00:00 UTC 2000
                                    Sat Nov  4 16:00:00 PST 2000 */
     struct icaldurationtype dur;
     struct icaltime_span span;
@@ -317,27 +318,29 @@ void test_icalcomponent_get_span(void)
     span.start = tm1;
     span.end = tm2;
     span.is_busy = 0;
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     /** test 1
      *  We specify times in a timezone, the returned span is in UTC
      */
     azone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
     c = icalcomponent_vanew(
-            ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
-            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
-                                     icalparameter_new_tzid("America/Los_Angeles"), 0),
-            (void *)0);
+        ICAL_VEVENT_COMPONENT,
+        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, false, azone),
+                                   icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
+        icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, false, azone),
+                                 icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
+        (void *)0);
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     int_is("America/Los_Angeles", span.start, 973350000);
 #endif
 
@@ -346,14 +349,15 @@ void test_icalcomponent_get_span(void)
      *  with no conversion applied - so result should be as test 0
      */
     c = icalcomponent_vanew(
-            ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL), (void *)0),
-            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, NULL), (void *)0),
-            (void *)0);
+        ICAL_VEVENT_COMPONENT,
+        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, false, NULL), (void *)0),
+        icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, false, NULL), (void *)0),
+        (void *)0);
 
     span = icalcomponent_get_span(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     int_is("floating time", (int)(long)span.start, (int)(long)tm1);
 
@@ -364,19 +368,20 @@ void test_icalcomponent_get_span(void)
      */
     azone = icaltimezone_get_builtin_timezone("America/New_York");
     c = icalcomponent_vanew(
-            ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/New_York"), (void *)0),
-            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, azone),
-                                     icalparameter_new_tzid("America/New_York"), (void *)0),
-            (void *)0);
+        ICAL_VEVENT_COMPONENT,
+        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, false, azone),
+                                   icalparameter_new_tzid("America/New_York"), (void *)0),
+        icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, false, azone),
+                                 icalparameter_new_tzid("America/New_York"), (void *)0),
+        (void *)0);
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     int_is("America/New_York", span.start, 973360800);
 #endif
 
@@ -387,19 +392,20 @@ void test_icalcomponent_get_span(void)
     azone = icaltimezone_get_builtin_timezone("America/New_York");
     bzone = icaltimezone_get_builtin_timezone("America/Los_Angeles");
     c = icalcomponent_vanew(
-            ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/New_York"), (void *)0),
-            icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, 0, bzone),
-                                     icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
+        ICAL_VEVENT_COMPONENT,
+        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, false, azone),
+                                   icalparameter_new_tzid("America/New_York"), (void *)0),
+        icalproperty_vanew_dtend(icaltime_from_timet_with_zone(tm2, false, bzone),
+                                 icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
         (void *)0);
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     int_is("America/New_York", span.start, 973360800);
 #endif
 
@@ -411,33 +417,35 @@ void test_icalcomponent_get_span(void)
     memset(&dur, 0, sizeof(dur));
     dur.minutes = 30;
     c = icalcomponent_vanew(
-            ICAL_VEVENT_COMPONENT,
-            icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, 0, azone),
-                                       icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
-            icalproperty_new_duration(dur),
-            (void *)0);
+        ICAL_VEVENT_COMPONENT,
+        icalproperty_vanew_dtstart(icaltime_from_timet_with_zone(tm1, false, azone),
+                                   icalparameter_new_tzid("America/Los_Angeles"), (void *)0),
+        icalproperty_new_duration(dur),
+        (void *)0);
 
     span = icalcomponent_get_span(c);
     icalcomponent_free(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
-#if ADD_TESTS_BROKEN_BUILTIN_TZDATA
+#if !defined(USE_BUILTIN_TZDATA)
     int_is("America/Los_Angeles w/ duration", span.end, 973351800);
 #endif
 
-    icalerror_set_errors_are_fatal(0);
+    icalerror_set_errors_are_fatal(false);
     /** test 6
      *  We specify only start time, should return a null span with no error
      */
     c = icalcomponent_vanew(
-            ICAL_VEVENT_COMPONENT,
-            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 0, NULL)),
-            (void *)0);
+        ICAL_VEVENT_COMPONENT,
+        icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, false, NULL)),
+        (void *)0);
 
     span = icalcomponent_get_span(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     int_is("start == end", (int)(long)span.start, (int)(long)span.end);
     icalcomponent_free(c);
@@ -446,14 +454,15 @@ void test_icalcomponent_get_span(void)
      *  We specify start and end date
      */
     c = icalcomponent_vanew(
-            ICAL_VEVENT_COMPONENT,
-            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
-            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm1, 1, NULL)),
-            (void *)0);
+        ICAL_VEVENT_COMPONENT,
+        icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, true, NULL)),
+        icalproperty_new_dtend(icaltime_from_timet_with_zone(tm1, true, NULL)),
+        (void *)0);
 
     span = icalcomponent_get_span(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     int_is("UTC", (int)(long)span.start, 973296000);
     icalcomponent_free(c);
@@ -462,14 +471,15 @@ void test_icalcomponent_get_span(void)
      *  We specify start and end date
      */
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
-                            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm2, 1, NULL)),
+                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, true, NULL)),
+                            icalproperty_new_dtend(icaltime_from_timet_with_zone(tm2, true, NULL)),
                             (void *)0);
 
     span = icalcomponent_get_span(c);
     int_is("UTC #2", (int)(long)span.start, 973296000);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     icalcomponent_free(c);
 
@@ -477,17 +487,18 @@ void test_icalcomponent_get_span(void)
      *  We specify start date
      */
     c = icalcomponent_vanew(ICAL_VEVENT_COMPONENT,
-                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, 1, NULL)),
+                            icalproperty_new_dtstart(icaltime_from_timet_with_zone(tm1, true, NULL)),
                             (void *)0);
 
     span = icalcomponent_get_span(c);
-    if (VERBOSE)
+    if (VERBOSE) {
         print_span(tnum++, span);
+    }
 
     int_is("start date only", (int)(long)span.end, 973382399);
 
     icalcomponent_free(c);
 
     /* assert(icalerrno == ICAL_MALFORMEDDATA_ERROR); */
-    icalerror_set_errors_are_fatal(1);
+    icalerror_set_errors_are_fatal(true);
 }

@@ -2,7 +2,6 @@
  FILE: regression-utils.c
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original author is Eric Busboom
@@ -44,7 +43,7 @@ const char *ical_timet_string(const icaltime_t t)
 
 const char *ictt_as_string(struct icaltimetype t)
 {
-    const char *zone = icaltimezone_get_tzid((icaltimezone *) t.zone);
+    const char *zone = icaltimezone_get_tzid((icaltimezone *)t.zone);
 
     if (icaltime_is_utc(t)) {
         snprintf(ictt_str, sizeof(ictt_str),
@@ -76,23 +75,18 @@ static int testnumber = 0;
 static int failed = 0;
 static int current_set = 0;
 
-static struct failed_tests
-{
+static struct failed_tests {
     int set;
     int test;
 } failed_tests[1024];
 
-void die_on_errors_set(int val)
-{
-    die_on_errors = val;
-}
-
-void _ok(const char *test_name, int success, const char *file, int linenum, const char *test)
+void _ok(const char *test_name, bool success, const char *file, int linenum, const char *test)
 {
     testnumber++;
 
-    if (!QUIET || (QUIET && !success))
-        printf("%sok %d - %s\n", (success) ? "" : "not ", testnumber, test_name);
+    if (!QUIET || !success) {
+        printf("%sok %d - %s\n", (int)success ? "" : "not ", testnumber, test_name);
+    }
 
     if (!success) {
         failed_tests[failed].set = current_set;
@@ -103,6 +97,7 @@ void _ok(const char *test_name, int success, const char *file, int linenum, cons
         printf("#          at: %s:%-d\n", file, linenum);
     }
 
+    /* cppcheck-suppress knownConditionTrueFalse */
     if (die_on_errors == 1 && !success) {
         abort();
     }
@@ -118,8 +113,9 @@ void _is(const char *test_name, const char *str1, const char *str2, const char *
         diff = strcmp(str1, str2);
     }
 
-    if (!test_name)
+    if (!test_name) {
         test_name = "()";
+    }
 
     _ok(test_name, (diff == 0), file, linenum, "");
 
@@ -139,34 +135,30 @@ void _int_is(const char *test_name, int i1, int i2, const char *file, int linenu
     }
 }
 
-void verbose(int newval)
-{
-    VERBOSE = newval;
-}
-
 void test_start(int numtests)
 {
     if (numtests) {
-        if (!QUIET)
+        if (!QUIET) {
             printf("1..%-d\n", numtests);
+        }
     } else {
-        if (!QUIET)
+        if (!QUIET) {
             printf("1..\n");
+        }
     }
 }
 
-void test_header(const char *header, int set)
+void test_header(const char *title, int test_set)
 {
-    if (!QUIET)
-        printf("########## %-40s (%d) ##########\n", header, set);
+    if (!QUIET) {
+        printf("########## %-40s (%d) ##########\n", title, test_set);
+    }
 
-    current_set = set;
+    current_set = test_set;
 }
 
 int test_end(void)
 {
-    int pct;
-
     if (testnumber < 1) {
         printf("\n        No Tests Run.\n");
         return 0;
@@ -175,7 +167,7 @@ int test_end(void)
     if (failed) {
         int i, oldset = 0;
 
-        pct = ((testnumber - failed) * 100) / testnumber;
+        int pct = ((testnumber - failed) * 100) / testnumber;
         printf("\n        Failed %d/%d tests, %2d%% okay\n", failed, testnumber, pct);
         printf("\n        Failed tests:\n          ");
         for (i = 0; i < failed; i++) {
@@ -203,9 +195,9 @@ int test_end(void)
   */
 static void cleanup_nondeterministic_memory(void)
 {
-    // icalerrno_return() allocates a buffer on it's first use per thread. Let's allocate it
+    // icalerror_icalerrno() allocates a buffer on it's first use per thread. Let's allocate it
     // now, so it doesn't disturb our test statistics.
-    icalerrno_return();
+    icalerror_icalerrno();
 
     // Built-in timezones are cached by libical. By freeing them, they don't influence our statistics.
     icaltimezone_free_builtin_timezones();
@@ -215,39 +207,40 @@ static void cleanup_nondeterministic_memory(void)
     icalmemory_free_ring();
 }
 
-void test_run(const char *test_name, void (*test_fcn) (void), int do_test, int headeronly)
+void test_run(const char *test_name, void (*test_fcn)(void), int do_test, int headeronly)
 {
     static int test_set = 1;
 
-    if (headeronly || do_test == 0 || do_test == test_set)
+    if (headeronly || do_test == 0 || do_test == test_set) {
         test_header(test_name, test_set);
+    }
 
     if (!headeronly && (do_test == 0 || do_test == test_set)) {
-
-        struct testmalloc_statistics mem_statistics;
+        struct testmalloc_statistics prev_statistics, new_statistics;
 
         // Clean up cached and other kind of non-deterministic memory.
         cleanup_nondeterministic_memory();
 
-        // Now that we are in a stable state, reset the memory statistics and start counting.
-        testmalloc_reset();
+        // Now that we are in a stable state, get the mem state *before* the test.
+        testmalloc_get_statistics(&prev_statistics);
 
         // Run the test.
-        (*test_fcn) ();
+        (*test_fcn)();
 
         // Before getting the statistics, clean up any non-deterministic memory again, so it
         // doesn't influence the statistics.
         cleanup_nondeterministic_memory();
 
-        // Now we should get clean statistics.
-        testmalloc_get_statistics(&mem_statistics);
+        // Now get the statistics *after* the test.
+        testmalloc_get_statistics(&new_statistics);
 
         ok("no memory leaked",
-            (mem_statistics.mem_allocated_current == 0) &&
-            (mem_statistics.blocks_allocated == 0));
+           (new_statistics.mem_allocated_current == prev_statistics.mem_allocated_current) &&
+               (new_statistics.blocks_allocated == prev_statistics.blocks_allocated));
 
-        if (!QUIET)
+        if (!QUIET) {
             printf("\n");
+        }
     }
     test_set++;
 }

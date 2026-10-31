@@ -1,0 +1,57 @@
+version = 1
+SPDX-PackageName = "libical"
+SPDX-PackageSupplier = "Allen Winter <winter@kde.org>"
+SPDX-PackageDownloadLocation = "https://github.com/libical/libical"
+
+#misc documentation
+[[annotations]]
+path = ["INSTALL.md", "README.md", "CHANGELOG.md", "CONTRIBUTORS.md", "3RDPARTY.md", "rfcs.md", "book.toml", "docs/**.md", "examples/access-usecases.txt", "docs/header.html", "vzic/README.md", "vzic/ChangeLog", "src/Net-ICal-Libical/README.txt", "src/php/README.txt", "src/Net-ICal-Libical/MANIFEST", "src/Net-ICal-Libical/netical_wrap.doc"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
+SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
+
+#tool configuration files
+[[annotations]]
+path = ["REUSE.toml", "cppcheck-suppressions.xml", ".clangd", ".clang-format", ".clang-tidy", ".codespellrc", ".editorconfig", ".dir-locals.el", ".gersemirc", ".gitattributes", ".gitignore", ".krazy", ".markdownlint.json", ".perltidyrc", ".pre-commit-config.yaml", ".ruff.toml", ".github/workflows/*.yml", ".shellcheckrc", "vcpkg.json", "docs/reference/libical-glib/libical-glib.toml.in", "docs/Doxyfile.cmake", "CPPLINT.cfg", "setup.cfg", "CMakePresets.json", ".yamlfmt"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
+SPDX-License-Identifier = "BSD-3-Clause"
+
+#other not-easy-to-comment source files
+[[annotations]]
+path = ["src/libical-glib/ICalGLib.metadata.in", "src/libical-glib/tools/header-structure-boilerplate-template", "src/libical-glib/tools/source-structure-boilerplate-template", "docs/reference/libical-glib/libical-glib-docs.sgml.in", "src/Net-ICal-Libical/netical_wrap.c", "src/libical/qsort_gen.c"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
+SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
+
+#timezones
+[[annotations]]
+path = "zoneinfo/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
+SPDX-License-Identifier = "CC0-1.0"
+
+#design data
+[[annotations]]
+path = "design-data/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
+SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
+
+#testing data
+[[annotations]]
+path = ["test-data/**", "src/test/**.out", "src/test/**.ics", "src/test/**.txt", "src/Net-ICal-Libical/test-data/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "1999 Contributors to the Libical project"
+SPDX-License-Identifier = "LGPL-2.1-only OR MPL-2.0"
+
+### 3rdparty
+
+# Hiram Clawson BSD-3-Clause (see src/libical/icaldate_p.[c,h])
+
+# doxygen awesome
+[[annotations]]
+path = "docs/doxygen-awesome.css"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021 - 2023 jothepro"
+SPDX-License-Identifier = "MIT"

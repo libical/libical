@@ -1,26 +1,23 @@
-#!/usr/bin/env python3
-# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ ./parameter.py
+# GI_TYPELIB_PATH=$PREFIX/lib/girepository-1.0/ python3 ./parameter.py
 
 ###############################################################################
-#
 # SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
 ###############################################################################
 
-''' Test Python bindings for Libical parameter '''
+"""Test Python bindings for Libical parameter"""
 
 import gi
-gi.require_version('ICalGLib', '3.0')
-from gi.repository import ICalGLib  # nopep8 # pylint: disable=wrong-import-position
+
+gi.require_version('ICalGLib', '4.0')
+from gi.repository import ICalGLib
 
 # Test interaction with gchar
-altrep = "This is an altrep"
+altrep = 'This is an altrep'
 parameter = ICalGLib.Parameter.new_altrep(altrep)
 retrievedAltrep = parameter.get_altrep()
 assert retrievedAltrep == altrep
-anotherAltrep = "This is an another altrep"
+anotherAltrep = 'This is an another altrep'
 parameter.set_altrep(anotherAltrep)
 retrievedAltrep = parameter.get_altrep()
 assert retrievedAltrep == anotherAltrep
@@ -49,11 +46,11 @@ string = clone.as_ical_string()
 assert string is None
 
 string = ICalGLib.Parameter.kind_to_string(kind)
-assert string == "ACTIONPARAM"
+assert string == 'ACTIONPARAM'
 assert ICalGLib.Parameter.kind_from_string(string) == kind
 
-value = "This is a value"
-typevalue = string + "=" + value
+value = 'This is a value'
+typevalue = string + '=' + value
 parameter = ICalGLib.Parameter.new_from_string(typevalue)
 assert parameter.as_ical_string() == typevalue
 assert parameter.isa() == kind

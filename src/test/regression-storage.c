@@ -3,9 +3,6 @@
  CREATOR: eric 03 April 1999
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
- DESCRIPTION:
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The original author is Eric Busboom
@@ -20,13 +17,13 @@
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
 
+#include <assert.h>
 #include <stdlib.h>
 
 #define OUTPUT_FILE "filesetout.ics"
 
 /* define sample calendar struct */
-struct calendar
-{
+struct calendar {
     int ID;
     size_t total_size;
 
@@ -43,21 +40,12 @@ struct calendar
 
     size_t title_size;
     char *title;
-
 };
-
-int vcalendar_init(struct calendar **cal, const char *vcalendar, const char *title);
 
 #if defined(HAVE_BDB)
 #include <db.h>
-
-int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey);
-char *parse_vcalendar(const DBT *dbt);
-char *pack_calendar(struct calendar *cal, size_t size);
-struct calendar *unpack_calendar(char *str, size_t size);
 #endif
 
-//krazy:cond=style
 /*
 static char str[] = "BEGIN:VCALENDAR\n\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\n\
@@ -101,7 +89,7 @@ UID:guid-1.host1.com\n\
 END:BOOGA\n\
 END:VCALENDAR";
 */
-char str2[] = "BEGIN:VCALENDAR\n\
+static char str2[] = "BEGIN:VCALENDAR\n\
 PRODID:\"-//RDU Software//NONSGML HandCal//EN\"\n\
 VERSION:2.0\n\
 BEGIN:VEVENT\n\
@@ -120,7 +108,6 @@ LOCATION:1CP Conference Room 4350\n\
 END:VEVENT\n\
 END:VCALENDAR\n\
 ";
-//krazy:endcond=style
 
 void test_fileset_extended(void)
 {
@@ -128,10 +115,10 @@ void test_fileset_extended(void)
     int month = 0;
     int count = 0;
     struct icaltimetype start, end;
-    icalcomponent *c, *clone, *itr;
+    icalcomponent *c, *itr;
     icalsetiter iter;
 
-    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    start = icaltime_from_timet_with_zone(time(0), false, NULL);
     end = start;
     end.hour++;
 
@@ -158,7 +145,7 @@ void test_fileset_extended(void)
         start.month = month;
         end.month = month;
 
-        clone = icalcomponent_clone(c);
+        icalcomponent *clone = icalcomponent_clone(c);
         ok("Making clone of output file", (clone != 0));
         assert(clone != 0);
 
@@ -244,7 +231,6 @@ void test_fileset_extended(void)
 
     for (itr = icalfileset_get_first_component(cout);
          itr != 0; itr = icalfileset_get_next_component(cout)) {
-
         icalcomponent *event;
         icalproperty *dtstart, *dtend;
 
@@ -277,28 +263,30 @@ void test_fileset_extended(void)
 void test_bdbset(void)
 {
     icalset *cout;
-    int month = 0;
-    int count = 0;
+    int month;
+    int count;
 
-/*    int num_components=0;*/
-/*    int szdata_len=0;*/
-/*    int ret=0;*/
-/*    char *subdb, *szdata, *szpacked_data;*/
-/*    char uid[255];*/
+    /*    int num_components=0;*/
+    /*    int szdata_len=0;*/
+    /*    int ret=0;*/
+    /*    char *subdb, *szdata, *szpacked_data;*/
+    /*    char uid[255];*/
     struct icaltimetype start, end;
     icalcomponent *c, *clone, *itr;
     DBT key, data;
 
-/*    DBC *dbcp;*/
+    /*    DBC *dbcp;*/
 
-/*    struct calendar *cal;*/
-/*    int cal_size;*/
+    /*    struct calendar *cal;*/
+    /*    int cal_size;*/
 
-    return;     // for now... TODO fix these broken tests..
+    return; // for now... TODO fix these broken tests..
 
+#if defined(__clang__)
 #pragma clang diagnostic push /* remove when/if we remove the proceeding return statement */
 #pragma clang diagnostic ignored "-Wunreachable-code"
-    start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+#endif
+    start = icaltime_from_timet_with_zone(time(0), false, NULL);
     end = start;
     end.hour++;
 
@@ -356,12 +344,6 @@ void test_bdbset(void)
 
         assert(icalcomponent_get_first_property(event, ICAL_LOCATION_PROPERTY) != 0);
 
-#if 0
-        /* change the uid to include the month */
-        sprintf(uid, "%s_%d", icalcomponent_get_uid(clone), month);
-        icalcomponent_set_uid(clone, uid);
-#endif
-
         (void)icalbdbset_add_component(cout, clone);
 
         /* commit changes */
@@ -376,18 +358,11 @@ void test_bdbset(void)
     memset(&key, 0, sizeof(DBT));
     memset(&data, 0, sizeof(DBT));
 
-#if 0
-    ret = icalbdbset_acquire_cursor(dbp, &dbcp);
-    ret = icalbdbset_get_first(dbcp, &key, &data);
-    ret = icalbdbset_get_next(dbcp, &key, &data);
-    ret = icalbdbset_get_last(dbcp, &key, &data);
-#endif
     /* Print them out */
 
     for (month = 1, count = 0; month < 10; month++) {
         for (itr = icalbdbset_get_first_component(cout);
              itr != 0; itr = icalbdbset_get_next_component(cout)) {
-
             icalcomponent *event;
             icalproperty *dtstart, *dtend;
 
@@ -416,7 +391,6 @@ void test_bdbset(void)
     for (month = 1; month < 10; month++) {
         for (itr = icalbdbset_get_first_component(cout);
              itr != 0; itr = icalbdbset_get_next_component(cout)) {
-
             (void)icalbdbset_remove_component(cout, itr);
         }
 
@@ -429,7 +403,6 @@ void test_bdbset(void)
     for (month = 1, count = 0; month < 10; month++) {
         for (itr = icalbdbset_get_first_component(cout);
              itr != 0; itr = icalbdbset_get_next_component(cout)) {
-
             icalcomponent *event;
             icalproperty *dtstart, *dtend;
 
@@ -445,172 +418,9 @@ void test_bdbset(void)
         }
         icalset_free(cout);
     }
+#if defined(__clang__)
 #pragma clang diagnostic pop
-}
-
 #endif
-
-int vcalendar_init(struct calendar **rcal, const char *vcalendar, const char *title)
-{
-    size_t vcalendar_size, title_size, total_size;
-    struct calendar *cal;
-
-    if (vcalendar) {
-        vcalendar_size = strlen(vcalendar);
-    } else {
-        vcalendar = "";
-        vcalendar_size = strlen(vcalendar);
-    }
-
-    if (title) {
-        title_size = strlen(title);
-    } else {
-        title = "";
-        title_size = strlen(title);
-    }
-
-    total_size = sizeof(struct calendar) + vcalendar_size + title_size;
-
-    if ((cal = (struct calendar *)malloc(total_size)) == NULL) {
-        return 0;
-    }
-    memset(cal, 0, total_size);
-
-    /* offsets */
-    cal->total_size_offset = sizeof(int);
-    cal->vcalendar_size_offset = (sizeof(int) * 7);
-    cal->vcalendar_offset = cal->vcalendar_size_offset + sizeof(int);
-    cal->title_size_offset = cal->vcalendar_offset + vcalendar_size;
-    cal->title_offset = cal->title_size_offset + sizeof(int);
-
-    /* sizes */
-    cal->total_size = total_size;
-    cal->vcalendar_size = vcalendar_size;
-    cal->title_size = title_size;
-
-    if (*vcalendar) /* we know that vcalendar is not NULL here */
-        cal->vcalendar = strdup(vcalendar);
-
-    if (*title) /* we know that title is not NULL here */
-        cal->title = strdup(title);
-
-    *rcal = cal;
-
-    return 0;
-}
-
-/* get_title -- extracts a secondary key (the vcalendar)
- * from a primary key/data pair */
-
-/* just create a random title for now */
-#if defined(HAVE_BDB)
-
-int get_title(DB *dbp, const DBT *pkey, const DBT *pdata, DBT *skey)
-{
-    icalcomponent *cl;
-    static char title[255];
-
-    _unused(dbp);
-    _unused(pkey);
-
-    memset(skey, 0, sizeof(DBT));
-
-    cl = icalparser_parse_string((char *)pdata->data);
-    snprintf(title, sizeof(title), "title_%s", icalcomponent_get_uid(cl));
-
-    skey->data = strdup(title);
-    skey->size = (u_int32_t) strlen(skey->data);
-    return (0);
-}
-
-char *pack_calendar(struct calendar *cal, size_t size)
-{
-    char *str;
-
-    if ((str = (char *)malloc(sizeof(char) * size)) == NULL)
-        return 0;
-
-    /* ID */
-    memcpy(str, &cal->ID, sizeof(cal->ID));
-
-    /* total_size */
-    memcpy(str + cal->total_size_offset, &cal->total_size, sizeof(cal->total_size));
-
-    /* vcalendar_size */
-    memcpy(str + cal->vcalendar_size_offset, &cal->vcalendar_size, sizeof(cal->vcalendar_size));
-
-    /* vcalendar */
-    memcpy(str + cal->vcalendar_offset, cal->vcalendar, cal->vcalendar_size);
-
-    /* title_size */
-    memcpy(str + cal->title_size_offset, &cal->title_size, sizeof(cal->title_size));
-
-    /* title */
-    memcpy(str + cal->title_offset, cal->title, cal->title_size);
-
-    return str;
-}
-
-struct calendar *unpack_calendar(char *str, size_t size)
-{
-    struct calendar *cal;
-
-    if ((cal = (struct calendar *)malloc(size)) == NULL) {
-        return 0;
-    }
-    memset(cal, 0, size);
-
-    /* offsets */
-    cal->total_size_offset = sizeof(int);
-    cal->vcalendar_size_offset = (sizeof(int) * 7);
-    cal->vcalendar_offset = cal->vcalendar_size_offset + sizeof(int);
-
-    /* ID */
-    memcpy(&cal->ID, str, sizeof(cal->ID));
-
-    /* total_size */
-    memcpy(&cal->total_size, str + cal->total_size_offset, sizeof(cal->total_size));
-
-    /* vcalendar_size */
-    memcpy(&cal->vcalendar_size, str + cal->vcalendar_size_offset, sizeof(cal->vcalendar_size));
-
-    if ((cal->vcalendar = (char *)malloc(sizeof(char) * cal->vcalendar_size)) == NULL) {
-        free(cal);
-        return 0;
-    }
-
-    /* vcalendar */
-    memcpy(cal->vcalendar, (char *)(str + cal->vcalendar_offset), cal->vcalendar_size);
-
-    cal->title_size_offset = cal->vcalendar_offset + cal->vcalendar_size;
-    cal->title_offset = cal->title_size_offset + sizeof(int);
-
-    /* title_size */
-    memcpy(&cal->title_size, str + cal->title_size_offset, sizeof(cal->title_size));
-
-    if ((cal->title = (char *)malloc(sizeof(char) * cal->title_size)) == NULL) {
-        free(cal->vcalendar);
-        free(cal);
-        return 0;
-    }
-
-    /* title */
-    memcpy(cal->title, (char *)(str + cal->title_offset), cal->title_size);
-
-    return cal;
-}
-
-char *parse_vcalendar(const DBT *dbt)
-{
-    char *str;
-    struct calendar *cal;
-
-    str = (char *)dbt->data;
-    cal = unpack_calendar(str, dbt->size);
-
-    str = cal->vcalendar;
-    free(cal);
-    return str;
 }
 
 #endif
@@ -630,7 +440,7 @@ void test_dirset_extended(void)
     ok("Open dirset 'store'", (s != 0));
     assert(s != 0);
 
-    rtime.start = icaltime_from_timet_with_zone(time(0), 0, NULL);
+    rtime.start = icaltime_from_timet_with_zone(time(0), false, NULL);
 
     cluster = icalfileset_new(OUTPUT_FILE);
 
@@ -644,7 +454,6 @@ void test_dirset_extended(void)
     icalerror_clear_errno();
 
     for (i = 1; i < NUMCOMP + 1; i++) {
-
         /*rtime.start.month = i%12; */
         rtime.start.month = i;
         rtime.end = rtime.start;
@@ -700,8 +509,9 @@ void test_dirset_extended(void)
             ok("Setting DTEND property", (icalerrno == ICAL_NO_ERROR));
             assert(icalerrno == ICAL_NO_ERROR);
 
-            if (VERBOSE)
+            if (VERBOSE) {
                 printf("\n----------\n%s\n---------\n", icalcomponent_as_ical_string(inner));
+            }
 
             error = icaldirset_add_component(s, icalcomponent_clone(itr));
 
@@ -712,17 +522,16 @@ void test_dirset_extended(void)
     }
 
     gauge = icalgauge_new_from_sql(
-                "SELECT * FROM VEVENT WHERE "
-                "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
-                "VEVENT.SUMMARY = 'Bastille Day Party'",
-                0);
+        "SELECT * FROM VEVENT WHERE "
+        "VEVENT.SUMMARY = 'Submit Income Taxes' OR "
+        "VEVENT.SUMMARY = 'Bastille Day Party'",
+        0);
 
     ok("Creating complex Gauge", (gauge != 0));
 
     (void)icaldirset_select(s, gauge);
 
     for (c = icaldirset_get_first_component(s); c != 0; c = icaldirset_get_next_component(s)) {
-
         printf("Got one! (%d)\n", count++);
 
         printf("%s", icalcomponent_as_ical_string(c));
@@ -737,7 +546,6 @@ void test_dirset_extended(void)
     for (c = icaldirset_get_first_component(s);
          c != 0;
          c = icaldirset_get_next_component(s)) {
-
         printf("%s", icalcomponent_as_ical_string(c));
     }
 

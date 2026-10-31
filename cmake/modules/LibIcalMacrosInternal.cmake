@@ -10,15 +10,32 @@ include(CheckCXXCompilerFlag)
 function(libical_option option description)
   set(extra_option_arguments ${ARGN})
   option(${option} "${description}" ${extra_option_arguments})
-  add_feature_info("Option ${option}" ${option} "${description}")
+  add_feature_info(
+    "Option ${option}"
+    ${option}
+    "${description}"
+  )
+endfunction()
+
+# Warn and exit if old cmake options are encountered
+function(libical_removed_option option)
+  if(DEFINED ${option})
+    if(${PROJECT_VERSION} VERSION_LESS "4.1.0")
+      message(
+        FATAL_ERROR
+        "The CMake option ${option} has been removed. "
+        "Please refer to docs/MigrationGuide_to_4.md for more information."
+      )
+    endif()
+  endif()
 endfunction()
 
 # Warn about deprecated cmake options then call libical_option
 function(libical_deprecated_option deprecated_option option description)
   set(extra_option_arguments ${ARGN})
-  if(${deprecated_option})
+  if(DEFINED ${deprecated_option})
     message(WARNING "${deprecated_option} is deprecated. Use ${option} instead")
-    set(${option} ${deprecated_option} CACHE BOOL "${description}")
+    set(${option} ${${deprecated_option}} CACHE BOOL "${description}")
   endif()
   libical_option(${option} "${description}" ${extra_option_arguments})
 endfunction()
@@ -36,7 +53,10 @@ endfunction()
 # if the C compiler supports that flag; if so, append the flag
 # to the global CMAKE_C_FLAGS variable.
 macro(libical_add_cflag flag name)
-  check_c_compiler_flag("${flag}" "C_SUPPORTS_${name}")
+  check_c_compiler_flag(
+    "${flag}"
+    "C_SUPPORTS_${name}"
+  )
   libical_append_if("C_SUPPORTS_${name}" "${flag}" CMAKE_C_FLAGS)
 endmacro()
 
@@ -44,6 +64,9 @@ endmacro()
 # if the C++ compiler supports that flag; if so, append the flag
 # to the global CMAKE_CXX_FLAGS variable.
 macro(libical_add_cxxflag flag name)
-  check_cxx_compiler_flag("${flag}" "CXX_SUPPORTS_${name}")
+  check_cxx_compiler_flag(
+    "${flag}"
+    "CXX_SUPPORTS_${name}"
+  )
   libical_append_if("CXX_SUPPORTS_${name}" "${flag}" CMAKE_CXX_FLAGS)
 endmacro()

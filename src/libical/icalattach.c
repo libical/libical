@@ -3,17 +3,20 @@
  CREATOR: acampi 28 May 02
 
  SPDX-FileCopyrightText: 2002, Andrea Campi <a.campi@inet.it>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
+
+/**
+ * @file icalattach.c
+ * @brief Implements the data structure for iCalendar attachments.
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalattachimpl.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <errno.h>
@@ -74,7 +77,7 @@ icalattach *icalattach_new_from_data(const char *data, icalattach_free_fn_t free
 
     attach->refcount = 1;
     attach->is_url = 0;
-    attach->u.data.data = (char *) data;
+    attach->u.data.data = (char *)data;
     attach->u.data.free_fn = free_fn;
     attach->u.data.free_fn_data = free_fn_data;
 
@@ -96,23 +99,24 @@ void icalattach_unref(icalattach *attach)
 
     attach->refcount--;
 
-    if (attach->refcount != 0)
+    if (attach->refcount != 0) {
         return;
+    }
 
     if (attach->is_url) {
         icalmemory_free_buffer(attach->u.url.url);
     } else if (attach->u.data.free_fn) {
-        (* attach->u.data.free_fn) (attach->u.data.data, attach->u.data.free_fn_data);
+        (*attach->u.data.free_fn)(attach->u.data.data, attach->u.data.free_fn_data);
     }
 
     icalmemory_free_buffer(attach);
 }
 
-int icalattach_get_is_url(icalattach *attach)
+bool icalattach_get_is_url(const icalattach *attach)
 {
     icalerror_check_arg_rz((attach != NULL), "attach");
 
-    return attach->is_url ? 1 : 0;
+    return attach->is_url;
 }
 
 const char *icalattach_get_url(icalattach *attach)

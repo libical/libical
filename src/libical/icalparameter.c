@@ -1,9 +1,8 @@
 /*======================================================================
- FILE: icalderivedparameters.{c,h}
+ FILE: icalparameter.c
  CREATOR: eric 09 May 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
   The original code is icalderivedparameters.{c,h}
@@ -11,18 +10,25 @@
  Contributions from:
     Graham Davison <g.m.davison@computer.org>
 ======================================================================*/
+
+/**
+ * @file icalparameter.c
+ * @brief Implements the data structure representing iCalendar parameters.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalparameter.h"
 #include "icalparameterimpl.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 #include <errno.h>
 #include <stdlib.h>
 
+/// @cond PRIVATE
 LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparameter_kind kind)
 {
     struct icalparameter_impl *v;
@@ -34,23 +40,24 @@ LIBICAL_ICAL_EXPORT struct icalparameter_impl *icalparameter_new_impl(icalparame
 
     memset(v, 0, sizeof(struct icalparameter_impl));
 
-    strcpy(v->id, "para");
-
+    v->id = ICAL_STRUCTURE_TYPE_PARAMETER;
     v->kind = kind;
+    v->value_kind = icalparameter_kind_value_kind(kind, &v->is_multivalued);
 
     return v;
 }
+/// @endcond
 
 icalparameter *icalparameter_new(icalparameter_kind kind)
 {
     struct icalparameter_impl *v = icalparameter_new_impl(kind);
 
-    return (icalparameter *) v;
+    return (icalparameter *)v;
 }
 
 void icalparameter_free(icalparameter *param)
 {
-/*  Comment out the following as it always triggers, even when parameter is non-zero
+    /*  Comment out the following as it always triggers, even when parameter is non-zero
     icalerror_check_arg_rv((parameter==0),"parameter");*/
 
     if (param->parent != 0) {
@@ -59,57 +66,65 @@ void icalparameter_free(icalparameter *param)
 
     if (param->string != 0) {
         icalmemory_free_buffer((void *)param->string);
+    } else if (param->values != 0) {
+        if (param->value_kind == ICAL_TEXT_VALUE) {
+            icalstrarray_free(param->values);
+        } else {
+            icalenumarray_free(param->values);
+        }
     }
 
-    if (param->x_name != 0) {
-        icalmemory_free_buffer((void *)param->x_name);
-    }
+    icalmemory_free_buffer((void *)param->x_name);
 
     memset(param, 0, sizeof(icalparameter));
 
     param->parent = 0;
-    param->id[0] = 'X';
+    param->id = ICAL_STRUCTURE_TYPE_PARAMETER_EMPTY;
     icalmemory_free_buffer(param);
 }
 
 icalparameter *icalparameter_clone(const icalparameter *old)
 {
-    struct icalparameter_impl *new;
+    struct icalparameter_impl *clone;
 
     icalerror_check_arg_rz((old != 0), "param");
 
-    new = icalparameter_new_impl(old->kind);
+    clone = icalparameter_new_impl(old->kind);
 
-    if (new == 0) {
+    if (clone == 0) {
         return 0;
     }
 
-    memcpy(new, old, sizeof(struct icalparameter_impl));
+    memcpy(clone, old, sizeof(struct icalparameter_impl));
 
     if (old->string != 0) {
-        new->string = icalmemory_strdup(old->string);
-        if (new->string == 0) {
-            new->parent = 0;
-            icalparameter_free(new);
+        clone->string = icalmemory_strdup(old->string);
+        if (clone->string == 0) {
+            clone->parent = 0;
+            icalparameter_free(clone);
             return 0;
         }
     }
 
     if (old->x_name != 0) {
-        new->x_name = icalmemory_strdup(old->x_name);
-        if (new->x_name == 0) {
-            new->parent = 0;
-            icalparameter_free(new);
+        clone->x_name = icalmemory_strdup(old->x_name);
+        if (clone->x_name == 0) {
+            clone->parent = 0;
+            icalparameter_free(clone);
             return 0;
         }
     }
 
-    return new;
-}
+    if (old->values != 0) {
+        clone->values = old->value_kind == ICAL_TEXT_VALUE ? icalstrarray_clone(old->values) : icalenumarray_clone(old->values);
+        if (clone->values == 0) {
+            clone->parent = 0;
+            icalparameter_free(clone);
+            return 0;
+        }
+    }
 
-icalparameter *icalparameter_new_clone(icalparameter *old)
-{
-    return icalparameter_clone(old);
+    return clone;
 }
 
 icalparameter *icalparameter_new_from_string(const char *str)
@@ -171,88 +186,6 @@ char *icalparameter_as_ical_string(icalparameter *param)
 }
 
 /*
- * Checks whether this character is allowed in a (Q)SAFE-CHAR
- *
- * QSAFE-CHAR   = WSP / %x21 / %x23-7E / NON-US-ASCII
- * ; any character except CTLs and DQUOTE
- * SAFE-CHAR    = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E / NON-US-ASCII
- * ; any character except CTLs, DQUOTE. ";", ":", ","
- * WSP      = SPACE / HTAB
- * NON-US-ASCII       = %x80-F8
- * ; Use restricted by charset parameter
- * ; on outer MIME object (UTF-8 preferred)
- */
-static int icalparameter_is_safe_char(unsigned char character, int quoted)
-{
-    if (character == ' ' || character == '\t' || character == '!' ||
-        (character >= 0x80 && character <= 0xF8)) {
-        return 1;
-    }
-
-    if (quoted && character >= 0x23 && character <= 0x7e) {
-        return 1;
-    }
-    else if (!quoted &&
-             ((character >= 0x23 && character <= 0x2b) ||
-              (character >= 0x2d && character <= 0x39) ||
-              (character >= 0x3c && character <= 0x7e))) {
-        return 1;
-    }
-
-    return 0;
-}
-
- /**
- * Appends the parameter value to the buffer, encoding per RFC 6868
- * and filtering out those characters not permitted by the specifications
- *
- * paramtext    = *SAFE-CHAR
- * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
- */
-static void icalparameter_append_encoded_value(char **buf, char **buf_ptr,
-                                               size_t *buf_size, const char *value)
-{
-    int qm = 0;
-    const char *p;
-
-    /* Encapsulate the property in quotes if necessary */
-    if (!*value || strpbrk(value, ";:,") != 0) {
-        icalmemory_append_char(buf, buf_ptr, buf_size, '"');
-        qm = 1;
-    }
-
-    /* Copy the parameter value */
-    for (p = value; *p; p++) {
-        if (icalparameter_is_safe_char((unsigned char)*p, qm)) {
-            icalmemory_append_char(buf, buf_ptr, buf_size, *p);
-        } else {
-            /* Encode unsafe characters per RFC6868, otherwise replace with SP */
-            switch (*p) {
-            case '\n':
-                icalmemory_append_string(buf, buf_ptr, buf_size, "^n");
-                break;
-
-            case '^':
-                icalmemory_append_string(buf, buf_ptr, buf_size, "^^");
-                break;
-
-            case '"':
-                icalmemory_append_string(buf, buf_ptr, buf_size, "^'");
-                break;
-
-            default:
-                icalmemory_append_char(buf, buf_ptr, buf_size, ' ');
-                break;
-            }
-        }
-    }
-
-    if (qm == 1) {
-        icalmemory_append_char(buf, buf_ptr, buf_size, '"');
-    }
-}
-
-/*
  * - param        = param-name "=" param-value
  * - param-name   = iana-token / x-token
  * - param-value  = paramtext /quoted-string
@@ -282,7 +215,6 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
     } else if (param->kind == ICAL_IANA_PARAMETER) {
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, icalparameter_get_iana_name(param));
     } else {
-
         kind_string = icalparameter_kind_to_string(param->kind);
 
         if (param->kind == ICAL_NO_PARAMETER ||
@@ -298,12 +230,43 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
 
     icalmemory_append_string(&buf, &buf_ptr, &buf_size, "=");
 
-    if (param->string != 0) {
-        icalparameter_append_encoded_value(&buf, &buf_ptr, &buf_size, param->string);
+    if (param->kind == ICAL_GAP_PARAMETER) {
+        char *str = icaldurationtype_as_ical_string_r(param->duration);
+
+        icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+        icalmemory_free_buffer(str);
+    } else if (param->string != 0) {
+        icalmemory_append_encoded_string(&buf, &buf_ptr, &buf_size, param->string);
     } else if (param->data != 0) {
         const char *str = icalparameter_enum_to_string(param->data);
 
         icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+    } else if (param->values != 0) {
+        size_t i;
+        const char *sep = "";
+
+        for (i = 0; i < param->values->num_elements; i++) {
+            icalmemory_append_string(&buf, &buf_ptr, &buf_size, sep);
+
+            if (param->value_kind == ICAL_TEXT_VALUE) {
+                const char *str = icalstrarray_element_at(param->values, i);
+
+                icalmemory_append_encoded_string(&buf, &buf_ptr,
+                                                 &buf_size, str);
+            } else {
+                const icalenumarray_element *elem =
+                    icalenumarray_element_at(param->values, i);
+                if (elem->xvalue != 0) {
+                    icalmemory_append_encoded_string(&buf, &buf_ptr,
+                                                     &buf_size, elem->xvalue);
+                } else {
+                    const char *str = icalparameter_enum_to_string(elem->val);
+
+                    icalmemory_append_string(&buf, &buf_ptr, &buf_size, str);
+                }
+            }
+            sep = ",";
+        }
     } else {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         icalmemory_free_buffer(buf);
@@ -313,7 +276,7 @@ char *icalparameter_as_ical_string_r(icalparameter *param)
     return buf;
 }
 
-icalparameter_kind icalparameter_isa(icalparameter *parameter)
+icalparameter_kind icalparameter_isa(const icalparameter *parameter)
 {
     if (parameter == 0) {
         return ICAL_NO_PARAMETER;
@@ -322,19 +285,15 @@ icalparameter_kind icalparameter_isa(icalparameter *parameter)
     return parameter->kind;
 }
 
-int icalparameter_isa_parameter(void *parameter)
+bool icalparameter_isa_parameter(void *parameter)
 {
-    struct icalparameter_impl *impl = (struct icalparameter_impl *)parameter;
+    const struct icalparameter_impl *impl = (struct icalparameter_impl *)parameter;
 
     if (parameter == 0) {
-        return 0;
+        return false;
     }
 
-    if (strcmp(impl->id, "para") == 0) {
-        return 1;
-    } else {
-        return 0;
-    }
+    return (impl->id == ICAL_STRUCTURE_TYPE_PARAMETER);
 }
 
 void icalparameter_set_xname(icalparameter *param, const char *v)
@@ -342,10 +301,7 @@ void icalparameter_set_xname(icalparameter *param, const char *v)
     icalerror_check_arg_rv((param != 0), "param");
     icalerror_check_arg_rv((v != 0), "v");
 
-    if (param->x_name != 0) {
-        icalmemory_free_buffer((void *)param->x_name);
-    }
-
+    icalmemory_free_buffer((void *)param->x_name);
     param->x_name = icalmemory_strdup(v);
 
     if (param->x_name == 0) {
@@ -353,7 +309,7 @@ void icalparameter_set_xname(icalparameter *param, const char *v)
     }
 }
 
-const char *icalparameter_get_xname(icalparameter *param)
+const char *icalparameter_get_xname(const icalparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
@@ -365,10 +321,7 @@ void icalparameter_set_xvalue(icalparameter *param, const char *v)
     icalerror_check_arg_rv((param != 0), "param");
     icalerror_check_arg_rv((v != 0), "v");
 
-    if (param->string != 0) {
-        icalmemory_free_buffer((void *)param->string);
-    }
-
+    icalmemory_free_buffer((void *)param->string);
     param->string = icalmemory_strdup(v);
 
     if (param->string == 0) {
@@ -376,7 +329,7 @@ void icalparameter_set_xvalue(icalparameter *param, const char *v)
     }
 }
 
-const char *icalparameter_get_xvalue(icalparameter *param)
+const char *icalparameter_get_xvalue(const icalparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
@@ -388,7 +341,7 @@ void icalparameter_set_iana_value(icalparameter *param, const char *v)
     icalparameter_set_xvalue(param, v);
 }
 
-const char *icalparameter_get_iana_value(icalparameter *param)
+const char *icalparameter_get_iana_value(const icalparameter *param)
 {
     return icalparameter_get_xvalue(param);
 }
@@ -398,7 +351,7 @@ void icalparameter_set_iana_name(icalparameter *param, const char *v)
     icalparameter_set_xname(param, v);
 }
 
-const char *icalparameter_get_iana_name(icalparameter *param)
+const char *icalparameter_get_iana_name(const icalparameter *param)
 {
     return icalparameter_get_xname(param);
 }
@@ -410,14 +363,14 @@ void icalparameter_set_parent(icalparameter *param, icalproperty *property)
     param->parent = property;
 }
 
-icalproperty *icalparameter_get_parent(icalparameter *param)
+icalproperty *icalparameter_get_parent(const icalparameter *param)
 {
     icalerror_check_arg_rz((param != 0), "param");
 
     return param->parent;
 }
 
-int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
+bool icalparameter_has_same_name(const icalparameter *param1, const icalparameter *param2)
 {
     icalparameter_kind kind1;
     icalparameter_kind kind2;
@@ -430,23 +383,70 @@ int icalparameter_has_same_name(icalparameter *param1, icalparameter *param2)
     kind1 = icalparameter_isa(param1);
     kind2 = icalparameter_isa(param2);
 
-    if (kind1 != kind2)
-        return 0;
+    if (kind1 != kind2) {
+        return false;
+    }
 
     if (kind1 == ICAL_X_PARAMETER) {
         name1 = icalparameter_get_xname(param1);
         name2 = icalparameter_get_xname(param2);
         if (strcasecmp(name1, name2) != 0) {
-            return 0;
+            return false;
         }
     } else if (kind1 == ICAL_IANA_PARAMETER) {
         name1 = icalparameter_get_iana_name(param1);
         name2 = icalparameter_get_iana_name(param2);
         if (strcasecmp(name1, name2) != 0) {
-            return 0;
+            return false;
         }
     }
-    return 1;
+    return true;
+}
+
+bool icalparameter_is_multivalued(const icalparameter *param)
+{
+    icalerror_check_arg_rz((param != 0), "param");
+
+    return param->is_multivalued != 0;
+}
+
+void icalparameter_decode_value(char *value)
+{
+    char *in, *out;
+
+    for (in = out = value; *in; in++, out++) {
+        int found_escaped_char = 0;
+
+        if (*in == '^') {
+            switch (*(in + 1)) {
+            case 'n':
+                *out = '\n';
+                found_escaped_char = 1;
+                break;
+            case '^':
+                *out = '^';
+                found_escaped_char = 1;
+                break;
+
+            case '\'':
+                *out = '"';
+                found_escaped_char = 1;
+                break;
+            default:
+                break;
+            }
+        }
+
+        if (found_escaped_char) {
+            ++in;
+        } else {
+            *out = *in;
+        }
+    }
+
+    while (*out) {
+        *out++ = '\0';
+    }
 }
 
 /* Everything below this line is machine generated. Do not edit. */

@@ -2,31 +2,26 @@
  FILE: regression-classify.c
 
  SPDX-FileCopyrightText: 2002 Paul Lindner <lindner@users.sf.net>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include <stdio.h>      /* for printf */
-#include <errno.h>
-#include <string.h>     /* For strerror */
-
-#include <libical/ical.h>
-#include <libicalss/icalss.h>
+#include "libical/ical.h"
+#include "libicalss/icalss.h"
 #include "regression.h"
+
+#include <assert.h>
 
 /* Gets a note about the purpose of the property*/
 static const char *get_note(icalcomponent *c)
 {
-    icalproperty *p;
     const char *note = 0;
 
     if (c != 0) {
-        for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
+        for (icalproperty *p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
              p != 0; p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
             if (strcmp(icalproperty_get_x_name(p), "X-LIC-NOTE") == 0) {
                 note = icalproperty_get_x(p);
@@ -45,11 +40,10 @@ static const char *get_note(icalcomponent *c)
 
 static const char *get_expect(icalcomponent *c)
 {
-    icalproperty *p;
     const char *note = 0;
 
     if (c != 0) {
-        for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
+        for (icalproperty *p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
              p != 0; p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
             if (strcmp(icalproperty_get_x_name(p), "X-LIC-EXPECT") == 0) {
                 note = icalproperty_get_x(p);
@@ -68,11 +62,10 @@ void test_classify(void)
 {
     icalcomponent *c, *match;
     int i = 0;
-    int error_count = 0;
 
     /* Open up the two storage files, one for the incoming components,
        one for the calendar */
-    icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
     icalset *incoming = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/incoming.ics", &options);
     icalset *cal = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/calendar.ics", &options);
     icalset *f = icalset_new(ICAL_FILE_SET, TEST_DATADIR "/classify.ics", &options);
@@ -98,9 +91,8 @@ void test_classify(void)
     /* Iterate through all of the incoming components */
     for (c = icalset_get_first_component(incoming); c != 0;
          c = icalset_get_next_component(incoming)) {
-
         icalproperty_xlicclass class;
-        icalcomponent *match = 0;
+        match = 0;
         const char *this_uid;
         const char *this_note = get_note(c);
         const char *expected_result = get_expect(c);
@@ -117,7 +109,7 @@ void test_classify(void)
 
         /* If there are any errors, print out the component */
 
-        error_count = icalcomponent_count_errors(c);
+        int error_count = icalcomponent_count_errors(c);
         snprintf(msg, sizeof(msg), "%s - parsing", this_note);
         int_is(msg, error_count, 0);
 
@@ -152,7 +144,7 @@ void test_classify(void)
         class = icalclassify(c, match, "A@example.com");
         /** eventually test this too.. **/
         (void)get_note(match);
-        actual_result = icalproperty_enum_to_string(class);
+        actual_result = icalproperty_enum_to_string((int)class);
         snprintf(msg, sizeof(msg), "expecting %s", expected_result);
         str_is(msg, expected_result, actual_result);
 
@@ -161,7 +153,7 @@ void test_classify(void)
                    "Incoming:      %s\n"
                    "Matched:       %s\n"
                    "Classification: %s\n\n",
-            i, this_note, get_note(match), icalproperty_enum_to_string(class));
+                   i, this_note, get_note(match), icalproperty_enum_to_string((int)class));
         }
     }
 

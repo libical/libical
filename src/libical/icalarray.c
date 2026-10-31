@@ -3,22 +3,33 @@
  CREATOR: Damon Chaplin 07 March 2001
 
  SPDX-FileCopyrightText: 2001, Ximian, Inc.
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
+
+/**
+ * @file icalarray.c
+ *
+ * @brief An array of arbitrarily-sized elements which grows
+ * dynamically as elements are added.
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalarray.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 #include "qsort_gen.h"
 
 #include <stdlib.h>
 #include <string.h>
+
+/// @cond PRIVATE
+#ifndef ICALARRAY_DEFAULT_INCREMENT_SIZE
+#define ICALARRAY_DEFAULT_INCREMENT_SIZE 4
+#endif
+/// @endcond
 
 static void icalarray_expand(icalarray *array, size_t space_needed);
 
@@ -26,10 +37,14 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
 {
     icalarray *array;
 
-    array = (icalarray *) icalmemory_new_buffer(sizeof(icalarray));
+    array = (icalarray *)icalmemory_new_buffer(sizeof(icalarray));
     if (!array) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return NULL;
+    }
+
+    if (!increment_size) {
+        increment_size = ICALARRAY_DEFAULT_INCREMENT_SIZE;
     }
 
     array->element_size = element_size;
@@ -41,7 +56,7 @@ icalarray *icalarray_new(size_t element_size, size_t increment_size)
     return array;
 }
 
-static void *icalarray_alloc_chunk(icalarray *array)
+static void *icalarray_alloc_chunk(const icalarray *array)
 {
     void *chunk = icalmemory_new_buffer(array->element_size * array->increment_size);
 
@@ -51,19 +66,17 @@ static void *icalarray_alloc_chunk(icalarray *array)
     return chunk;
 }
 
-icalarray *icalarray_copy(icalarray *originalarray)
+icalarray *icalarray_copy(const icalarray *originalarray)
 {
     icalarray *array = icalarray_new(originalarray->element_size, originalarray->increment_size);
     size_t chunks = originalarray->space_allocated / originalarray->increment_size;
-    size_t chunk;
-
     if (!array) {
         return NULL;
     }
 
-    array->chunks = icalmemory_new_buffer(chunks * sizeof(void *));
+    array->chunks = (void **)icalmemory_new_buffer(chunks * sizeof(void *));
     if (array->chunks) {
-        for (chunk = 0; chunk < chunks; chunk++) {
+        for (size_t chunk = 0; chunk < chunks; chunk++) {
             array->chunks[chunk] = icalarray_alloc_chunk(array);
             if (array->chunks[chunk]) {
                 memcpy(array->chunks[chunk], originalarray->chunks[chunk],
@@ -97,7 +110,7 @@ void icalarray_free(icalarray *array)
         for (chunk = 0; chunk < chunks; chunk++) {
             icalmemory_free_buffer(array->chunks[chunk]);
         }
-        icalmemory_free_buffer(array->chunks);
+        icalmemory_free_buffer((void *)array->chunks);
         array->chunks = 0;
     }
     icalmemory_free_buffer(array);
@@ -127,6 +140,11 @@ void *icalarray_element_at(icalarray *array, size_t position)
     return (char *)(array->chunks[chunk]) + (offset * array->element_size);
 }
 
+void icalarray_set_element_at(icalarray *array, const void *element, size_t position)
+{
+    memcpy(icalarray_element_at(array, position), element, array->element_size);
+}
+
 void icalarray_remove_element_at(icalarray *array, size_t position)
 {
     while (position < array->num_elements - 1) {
@@ -143,7 +161,8 @@ struct _icalarray_sort_context {
     int (*compare)(const void *, const void *);
 };
 
-static int icalarray_fcompare(const void *context, size_t i, size_t j) {
+static int icalarray_fcompare(const void *context, size_t i, size_t j)
+{
     struct _icalarray_sort_context *sort_context = (struct _icalarray_sort_context *)context;
     void *pI = icalarray_element_at(sort_context->array, i);
     void *pJ = icalarray_element_at(sort_context->array, j);
@@ -151,7 +170,8 @@ static int icalarray_fcompare(const void *context, size_t i, size_t j) {
     return sort_context->compare(pI, pJ);
 }
 
-static void icalarray_fswap(void *context, size_t i, size_t j) {
+static void icalarray_fswap(void *context, size_t i, size_t j)
+{
     struct _icalarray_sort_context *sort_context = (struct _icalarray_sort_context *)context;
     void *pI = icalarray_element_at(sort_context->array, i);
     void *pJ = icalarray_element_at(sort_context->array, j);
@@ -159,7 +179,7 @@ static void icalarray_fswap(void *context, size_t i, size_t j) {
     qsort_gen_memswap(pI, pJ, sort_context->array->element_size);
 }
 
-void icalarray_sort(icalarray *array, int (*compare) (const void *, const void *))
+void icalarray_sort(icalarray *array, int (*compare)(const void *, const void *))
 {
     struct _icalarray_sort_context sort_context;
     sort_context.array = array;
@@ -176,7 +196,6 @@ static void icalarray_expand(icalarray *array, size_t space_needed)
 {
     size_t num_chunks = array->space_allocated / array->increment_size;
     size_t num_new_chunks;
-    size_t c;
     void **new_chunks;
 
     num_new_chunks = (space_needed + array->increment_size - 1) / array->increment_size;
@@ -184,13 +203,13 @@ static void icalarray_expand(icalarray *array, size_t space_needed)
         num_new_chunks = 1;
     }
 
-    new_chunks = icalmemory_new_buffer((num_chunks + num_new_chunks) * sizeof(void *));
+    new_chunks = (void **)icalmemory_new_buffer((num_chunks + num_new_chunks) * sizeof(void *));
 
     if (new_chunks) {
         if (array->chunks && num_chunks) {
-            memcpy(new_chunks, array->chunks, num_chunks * sizeof(void *));
+            memcpy((void *)new_chunks, (void *)array->chunks, num_chunks * sizeof(void *));
         }
-        for (c = 0; c < num_new_chunks; c++) {
+        for (size_t c = 0; c < num_new_chunks; c++) {
             new_chunks[c + num_chunks] = icalarray_alloc_chunk(array);
             if (!new_chunks[c + num_chunks]) {
                 num_new_chunks = c;
@@ -198,7 +217,7 @@ static void icalarray_expand(icalarray *array, size_t space_needed)
             }
         }
         if (array->chunks) {
-            icalmemory_free_buffer(array->chunks);
+            icalmemory_free_buffer((void *)array->chunks);
         }
         array->chunks = new_chunks;
         array->space_allocated = array->space_allocated + num_new_chunks * array->increment_size;

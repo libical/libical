@@ -2,6 +2,8 @@
 /* yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93" */
 /* (use YYMAJOR/YYMINOR for ifdefs dependent on parser version) */
 
+// NOLINTBEGIN
+
 #define YYBYACC 1
 #define YYMAJOR 1
 #define YYMINOR 9
@@ -579,14 +581,18 @@ static void enterValues(const char *value)
                using ';' to separate the values. */
             if (vObjectUStringZValue(curProp)) {
                 p1 = fakeCString(vObjectUStringZValue(curProp));
-                i = strlen(p1)+strlen(value)+2;
-                p2 = malloc(i);
-                snprintf(p2,i,"%s;%s",p1,value);
-                deleteStr(p1);
-                p3 = (wchar_t *) vObjectUStringZValue(curProp);
-                free(p3);
-                setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
-                free(p2);
+                if (p1) {
+                    i = strlen(p1)+strlen(value)+2;
+                    p2 = malloc(i);
+                    if (p2) {
+                        snprintf(p2,i,"%s;%s",p1,value);
+                        deleteStr(p1);
+                        p3 = (wchar_t *) vObjectUStringZValue(curProp);
+                        free(p3);
+                        setVObjectUStringZValue_(curProp,fakeUnicode(p2,0));
+                        free(p2);
+                    }
+                }
             } else {
             setVObjectUStringZValue_(curProp,fakeUnicode(value,0));
             }
@@ -641,7 +647,7 @@ struct LexBuf {
          /      can be represented correctly.
         */
     unsigned long len;
-    short buf[MAX_LEX_LOOKAHEAD];
+    short buf[MAX_LEX_LOOKAHEAD+1];
     unsigned long getPtr;
         /* context stack */
     unsigned long lexModeStackTop;
@@ -684,7 +690,7 @@ static char lexGetc_(void)
     {
     /* get next char from input, no buffering. */
     if (lexBuf.curPos == lexBuf.inputLen)
-        return EOF;
+        return (char)EOF;
     else if (lexBuf.inputString)
         return *(lexBuf.inputString + lexBuf.curPos++);
     else {
@@ -1342,7 +1348,7 @@ void registerMimeErrorHandler(MimeErrorHandler me)
 static void mime_error(const char *s)
     {
     char msg[256];
-    if (mimeErrorHandler) {
+    if (s && mimeErrorHandler) {
         snprintf(msg,sizeof(msg),"%s at line %d", s, mime_lineNum);
         mimeErrorHandler(msg);
         }
@@ -1782,3 +1788,5 @@ yyaccept:
     yyfreestack(&yystack);
     return (0);
 }
+
+// NOLINTEND

@@ -1,14 +1,14 @@
 /***************************************************************************
 SPDX-FileCopyrightText: 1996 Apple Computer, Inc., AT&T Corp., International
 Business Machines Corporation and Siemens Rolm Communications Inc.
-
 SPDX-License-Identifier: LicenseRef-APPLEMIT
 
 The software is provided with RESTRICTED RIGHTS.  Use, duplication, or
 disclosure by the government are subject to restrictions set forth in
 DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
-
 ***************************************************************************/
+
+// NOLINTBEGIN
 
 /*
  * src: vobject.c
@@ -71,11 +71,13 @@ ICAL_GLOBAL_VAR const char** fieldedProp;
 static VObject* newVObject_(const char *id)
 {
     VObject *p = (VObject*)malloc(sizeof(VObject));
-    p->next = 0;
-    p->id = id;
-    p->prop = 0;
-    VALUE_TYPE(p) = 0;
-    ANY_VALUE_OF(p) = 0;
+    if (p) {
+        p->next = 0;
+        p->id = id;
+        p->prop = 0;
+        VALUE_TYPE(p) = 0;
+        ANY_VALUE_OF(p) = 0;
+    }
     return p;
 }
 
@@ -95,12 +97,17 @@ void deleteVObject(VObject *p)
 
 char* dupStr(const char *s, size_t size)
 {
+    if(!s) {
+        return (char *)0;
+    }
+
     char *t;
     if  (size == 0) {
         size = strlen(s);
         }
     t = (char*)malloc(size+1);
     if (t) {
+        memset(t,0,size+1);
         memcpy(t,s,size);
         t[size] = 0;
         return t;
@@ -119,9 +126,11 @@ void deleteStr(const char *p)
 static StrItem* newStrItem(const char *s, StrItem *next)
 {
     StrItem *p = (StrItem*)malloc(sizeof(StrItem));
-    p->next = next;
-    p->s = s;
-    p->refCnt = 1;
+    if (p) {
+        p->next = next;
+        p->s = s;
+        p->refCnt = 1;
+    }
     return p;
 }
 
@@ -135,7 +144,7 @@ static void deleteStrItem(StrItem *p)
   The following function provide accesses to VObject's value.
   ----------------------------------------------------------------------*/
 
-const char* vObjectName(VObject *o)
+const char* vObjectName(const VObject *o)
 {
     return NAME_OF(o);
 }
@@ -224,7 +233,7 @@ void setVObjectVObjectValue(VObject *o, VObject *p)
     VALUE_TYPE(o) = VCVT_VOBJECT;
 }
 
-int vObjectValueType(VObject *o)
+int vObjectValueType(const VObject *o)
 {
     return (int)VALUE_TYPE(o);
 }
@@ -293,7 +302,7 @@ void addList(VObject **o, VObject *p)
         }
 }
 
-VObject* nextVObjectInList(VObject *o)
+VObject* nextVObjectInList(const VObject *o)
 {
     return o->next;
 }
@@ -325,7 +334,7 @@ void initVObjectIterator(VObjectIterator *i, VObject *o)
     i->next = 0;
 }
 
-int moreIteration(VObjectIterator *i)
+int moreIteration(const VObjectIterator *i)
 {
     return (i->start && (i->next==0 || i->next!=i->start));
 }
@@ -366,10 +375,11 @@ VObject* addGroup(VObject *o, const char *g)
             prop(VCGrouping=b)
                 prop(VCGrouping=a)
      */
-    char *dot = strrchr(g,'.');
+    char *dot = (char *)strrchr(g,'.');
     if (dot) {
         VObject *p, *t;
-        char *gs, *n = dot+1;
+        char *gs;
+        const char *n = dot+1;
         gs = dupStr(g,0);       /* so we can write to it. */
         /* used to be
         * t = p = addProp_(o,lookupProp_(n));
@@ -445,7 +455,7 @@ static void printValue(FILE *fp, VObject *o, int level)
     switch (VALUE_TYPE(o)) {
         case VCVT_USTRINGZ: {
             char c;
-            char *t,*s;
+            const char *t,*s;
             s = t = fakeCString(USTRINGZ_VALUE_OF(o));
             fputc('"',fp);
             while (c=*t,c) {
@@ -519,7 +529,7 @@ void printVObject(FILE *fp,VObject *o)
     printVObject_(fp,o,0);
 }
 
-void printVObjectToFile(char *fname,VObject *o)
+void printVObjectToFile(const char *fname, VObject *o)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -528,7 +538,7 @@ void printVObjectToFile(char *fname,VObject *o)
         }
 }
 
-void printVObjectsToFile(char *fname,VObject *list)
+void printVObjectsToFile(const char *fname, VObject *list)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -957,62 +967,9 @@ typedef struct OFile {
     unsigned int fail:1;
     } OFile;
 
-#if 0
-static void appendsOFile(OFile *fp, const char *s)
-{
-    int slen;
-    if (fp->fail) return;
-    slen  = strlen(s);
-    if (fp->fp) {
-        fwrite(s,1,slen,fp->fp);
-        }
-    else {
-stuff:
-        if (fp->len + slen < fp->limit) {
-            memcpy(fp->s+fp->len,s,slen);
-            fp->len += slen;
-            return;
-            }
-        else if (fp->alloc) {
-            fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-            if (OFILE_REALLOC_SIZE <= slen) fp->limit += slen;
-            fp->s = (char *) realloc(fp->s,(size_t)fp->limit);
-            if (fp->s) goto stuff;
-            }
-        if (fp->alloc)
-            free(fp->s);
-        fp->s = 0;
-        fp->fail = 1;
-        }
-}
-
-static void appendcOFile(OFile *fp, char c)
-{
-    if (fp->fail) return;
-    if (fp->fp) {
-        fputc(c,fp->fp);
-        }
-    else {
-stuff:
-        if (fp->len+1 < fp->limit) {
-            fp->s[fp->len] = c;
-            fp->len++;
-            return;
-            }
-        else if (fp->alloc) {
-            fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-            fp->s = (char *) realloc(fp->s,fp->limit);
-            if (fp->s) goto stuff;
-            }
-        if (fp->alloc)
-            free(fp->s);
-        fp->s = 0;
-        fp->fail = 1;
-        }
-}
-#else
 static void appendcOFile_(OFile *fp, char c)
 {
+    char *tmpMem;
     if (fp->fail) return;
     if (fp->fp) {
         fputc(c,fp->fp);
@@ -1026,10 +983,13 @@ stuff:
             }
         else if (fp->alloc) {
             fp->limit = fp->limit + OFILE_REALLOC_SIZE;
-            fp->s = realloc(fp->s,(size_t)fp->limit);
-            if (fp->s) goto stuff;
+            tmpMem = (char *)realloc(fp->s,(size_t)fp->limit);
+            if (tmpMem != NULL) {
+                fp->s = tmpMem;
+                goto stuff;
             }
-        if (fp->alloc)
+        }
+        if (fp->s)
             free(fp->s);
         fp->s = 0;
         fp->fail = 1;
@@ -1049,14 +1009,14 @@ static void appendcOFile(OFile *fp, char c)
 
 static void appendsOFile(OFile *fp, const char *s)
 {
-    size_t i, slen;
-    slen  = strlen(s);
-    for (i=0; i<slen; i++) {
-        appendcOFile(fp,s[i]);
-        }
+    if (s) {
+        size_t i, slen;
+        slen  = strlen(s);
+        for (i=0; i<slen; i++) {
+            appendcOFile(fp,s[i]);
+            }
+    }
 }
-
-#endif
 
 static void initOFile(OFile *fp, FILE *ofp)
 {
@@ -1082,7 +1042,6 @@ static int writeBase64(OFile *fp, unsigned char *s, long len)
 {
     long cur = 0;
     int i, numQuads = 0;
-    unsigned long trip;
     unsigned char b;
     char quad[5];
 #define MAXQUADS 16
@@ -1091,7 +1050,7 @@ static int writeBase64(OFile *fp, unsigned char *s, long len)
 
     while (cur < len) {
             /* collect the triplet of bytes into 'trip' */
-        trip = 0;
+        unsigned long trip = 0;
         for (i = 0; i < 3; i++) {
             b = (cur < len) ? *(s + cur) : 0;
             cur++;
@@ -1158,7 +1117,7 @@ static void writeValue(OFile *fp, VObject *o, unsigned long size,int quote)
     if (o == 0) return;
     switch (VALUE_TYPE(o)) {
         case VCVT_USTRINGZ: {
-            char *s = fakeCString(USTRINGZ_VALUE_OF(o));
+            const char *s = fakeCString(USTRINGZ_VALUE_OF(o));
             if(quote) writeQPString(fp, s);
             else writeString(fp,s);
             deleteStr(s);
@@ -1212,6 +1171,11 @@ static void writeAttrValue(OFile *fp, VObject *o)
 
 static void writeGroup(OFile *fp, VObject *o)
 {
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+
     char buf1[256];
     char buf2[256];
     strncpy(buf1,NAME_OF(o),sizeof(buf1)-1);
@@ -1225,6 +1189,10 @@ static void writeGroup(OFile *fp, VObject *o)
         strcpy(buf1,buf2);
         }
     appendsOFile(fp,buf1);
+
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 static int inList(const char **list, const char *s)
@@ -1270,7 +1238,7 @@ static void writeProp(OFile *fp, VObject *o)
             /* output prop as fields */
             appendcOFile(fp,':');
             while (*fields) {
-                VObject *tl = isAPropertyOf(o,*fields);
+                const VObject *tl = isAPropertyOf(o,*fields);
                 i++;
                 if (tl) n = i;
                 fields++;
@@ -1326,7 +1294,7 @@ void writeVObject(FILE *fp, VObject *o)
     writeVObject_(&ofp,o);
 }
 
-void writeVObjectToFile(char *fname, VObject *o)
+void writeVObjectToFile(const char *fname, VObject *o)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -1335,7 +1303,7 @@ void writeVObjectToFile(char *fname, VObject *o)
         }
 }
 
-void writeVObjectsToFile(char *fname, VObject *list)
+void writeVObjectsToFile(const char *fname, VObject *list)
 {
     FILE *fp = fopen(fname,"w");
     if (fp) {
@@ -1376,9 +1344,15 @@ char* writeMemVObjects(char *s, int *len, VObject *list)
 wchar_t* fakeUnicode(const char *ps, size_t *bytes)
 {
     wchar_t *r, *pw;
-    size_t len = strlen(ps)+1;
 
+    if (!ps) {
+        return (wchar_t *)0;
+    }
+
+    size_t len = strlen(ps)+1;
     pw = r = (wchar_t*)malloc(sizeof(wchar_t)*len);
+    if(!r)
+        return (wchar_t *)0;
     if (bytes)
         *bytes = len * sizeof(wchar_t);
 
@@ -1418,6 +1392,8 @@ char* fakeCString(const wchar_t *u)
 
     len = (size_t)(uStrLen(u) + 1);
     t = s = (char*)malloc(len);
+    if(!s)
+        return (char *)0;
     while (*u) {
         if (*u == (wchar_t)0x2028)
             *t = '\n';
@@ -1430,5 +1406,7 @@ char* fakeCString(const wchar_t *u)
     *t = 0;
     return s;
 }
+
+// NOLINTEND
 
 /* end of source file vobject.c */

@@ -3,26 +3,31 @@
  CREATOR: eric 02 June 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
 ======================================================================*/
 
+/**
+ * @file icalperiod.c
+ * @brief Implements data structures for working with iCal periods (of time).
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalperiod.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
 struct icalperiodtype icalperiodtype_from_string(const char *str)
 {
     struct icalperiodtype p, null_p;
     char *s = icalmemory_strdup(str);
-    char *start, *end;
+    const char *start;
+    char *end;
     icalerrorstate es;
 
     /* Errors are normally generated in the following code, so save
@@ -31,26 +36,29 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
     icalerrorenum e = icalerrno;
 
     p.start = p.end = icaltime_null_time();
-    p.duration = icaldurationtype_from_int(0);
+    p.duration = icaldurationtype_null_duration();
 
     null_p = p;
 
-    if (s == 0)
+    if (s == 0) {
         goto error;
+    }
 
     start = s;
     end = strchr(s, '/');
 
-    if (end == 0)
+    if (end == 0) {
         goto error;
+    }
 
     *end = 0;
     end++;
 
     p.start = icaltime_from_string(start);
 
-    if (icaltime_is_null_time(p.start))
+    if (icaltime_is_null_time(p.start)) {
         goto error;
+    }
 
     es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, ICAL_ERROR_NONFATAL);
@@ -60,25 +68,20 @@ struct icalperiodtype icalperiodtype_from_string(const char *str)
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
 
     if (icaltime_is_null_time(p.end)) {
-
         p.duration = icaldurationtype_from_string(end);
 
-        if (icaldurationtype_as_int(p.duration) == 0)
+        if (icaldurationtype_is_null_duration(p.duration)) {
             goto error;
+        }
     }
 
     icalerrno = e;
-
     icalmemory_free_buffer(s);
-
     return p;
 
-  error:
+error:
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-
-    if (s) {
-        icalmemory_free_buffer(s);
-    }
+    icalmemory_free_buffer(s);
     return null_p;
 }
 
@@ -132,22 +135,22 @@ struct icalperiodtype icalperiodtype_null_period(void)
     return p;
 }
 
-int icalperiodtype_is_null_period(struct icalperiodtype p)
+bool icalperiodtype_is_null_period(struct icalperiodtype p)
 {
     if (icaltime_is_null_time(p.start) &&
         icaltime_is_null_time(p.end) && icaldurationtype_is_null_duration(p.duration)) {
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
-int icalperiodtype_is_valid_period(struct icalperiodtype p)
+bool icalperiodtype_is_valid_period(struct icalperiodtype p)
 {
     if (icaltime_is_valid_time(p.start) &&
         (icaltime_is_valid_time(p.end) || icaltime_is_null_time(p.end))) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }

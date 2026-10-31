@@ -1,7 +1,9 @@
 # Libical — an implementation of iCalendar protocols and data formats
 
-[![Appveyor status](https://ci.appveyor.com/api/projects/status/github/libical/libical?branch=master?svg=true)](https://ci.appveyor.com/api/projects/status/github/libical/libical)
+[![Github workflow](https://github.com/libical/libical/actions/workflows/build.yml/badge.svg)](https://github.com/libical/libical/actions)
 [![Packaging status](https://repology.org/badge/tiny-repos/libical.svg)](https://repology.org/metapackage/libical)
+
+[Become a libical sponsor](https://github.com/sponsors/libical)
 
 ## About
 
@@ -10,28 +12,18 @@ Libical — an implementation of iCalendar protocols and data formats
 Most of the code in here was written by Eric Busboom at the end
 of the last millennium with help from dozens of contributors.
 It is currently maintained by Allen Winter and the libical team
-at <https://github.com/libical/libical>.
+at <https://libical.github.io/libical>.
 
 Libical is an Open Source implementation of the iCalendar protocols
 and protocol data units. The iCalendar specification describes how
 calendar clients can communicate with calendar servers so users can
 store their calendar data and arrange meetings with other users.
 
-## RFCs {#rfcs}
+Thanks to our [contributors](CONTRIBUTORS.md).
 
-Libical implements [RFC5545][], [RFC5546][], [RFC7529][];
-the CalDav scheduling extensions in [RFC6638][];
-iCalendar extensions in [RFC7986][], [RFC9073][], [RFC9074][];
-plus the iCalendar iMIP protocol in [RFC6047][].
+## RFCs
 
-[RFC5545]: https://tools.ietf.org/html/rfc5545
-[RFC5546]: https://tools.ietf.org/html/rfc5546
-[RFC7529]: https://tools.ietf.org/html/rfc7529
-[RFC6638]: https://tools.ietf.org/html/rfc6638
-[RFC6047]: https://tools.ietf.org/html/rfc6047
-[RFC7986]: https://tools.ietf.org/html/rfc7986
-[RFC9073]: https://tools.ietf.org/html/rfc9073
-[RFC9074]: https://tools.ietf.org/html/rfc9074
+See [RFC calendar standards](rfcs.md) for list of RFCs supported by this library.
 
 ## License
 
@@ -48,17 +40,28 @@ both proprietary code and GPL'd programs, and will benefit from improvements
 made by programmers in both realms. We (the libical developers) will only
 accept changes to this library if they are similarly dual-licensed.
 
+Some 3rdparty software with compatible licensing may be bundled with libcal.
+Please refer to our [3rdparty list](3RDPARTY.md) to see the projects
+included, along with their respective licenses.
+
 ## Building
 
-See the top-level [Install.txt](Install.txt) file.
+See the [Building Libical](INSTALL.md) instructions.
 
 ## Documentation
 
-Documentation is hosted at <https://libical.github.io/libical/apidocs/>.
+For new releases please refer to our [Change Log](CHANGELOG.md) for a high-level
+overview of changes since the previous version.
 
-For a conceptual overview of the library, see [Using Libical](doc/UsingLibical.md).
-There is other rudimentary, unfinished documentation in the `doc/` directory of the
-source distribution, annotated examples in `examples/` and the test code in `src/test/`.
+See the [C API documentation](https://libical.github.io/libical/v4/apidocs/) and
+[glibc API documentation](https://libical.github.io/libical/v4/libical-glib/).
+
+For a conceptual overview of the library, see [Using Libical](UsingLibical.md).
+In the source distribution, you'll find more documentation in `docs/`, annotated
+examples in `examples/` and test code in `src/test/` directories.
+
+For developers porting their code to libical version 4, please visit the
+[Version 4 Migration Guide](MigrationGuide_to_4.md).
 
 ## Acknowledgments
 
@@ -86,13 +89,10 @@ In no particular order:
 
 ## Get Involved
 
-Subscribe to our mailing lists:
+Watch the github project at <https://github.com/libical/libical>
 
-For developer discussions
-  <https://lists.infradead.org/mailman/listinfo/libical-devel>
-
-For general discussions about libical and related projects
-  <https://lists.infradead.org/mailman/listinfo/libical-interest>
+Follow discussions and announcements at
+  <https://github.com/libical/libical/discussions>
 
 Report bugs to our issue tracker at
   <https://github.com/libical/libical/issues>

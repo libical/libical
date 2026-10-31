@@ -2,17 +2,18 @@
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
 include_directories(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_BINARY_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src/libical
-  ${CMAKE_BINARY_DIR}/src/libical
-  ${CMAKE_SOURCE_DIR}/src/libicalss
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_BINARY_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}/src/libical
+  ${PROJECT_SOURCE_DIR}/src/libicalss
 )
 
 ########### doesnothing target ###############
 
-set(doesnothing_SRCS
+set(
+  doesnothing_SRCS
   access_components.c
   access_properties_and_parameters.c
   errors.c
@@ -21,23 +22,36 @@ set(doesnothing_SRCS
 )
 
 add_executable(doesnothing ${doesnothing_SRCS})
-add_dependencies(doesnothing ical icalss icalvcal)
-
-if(NOT STATIC_ONLY)
-  target_link_libraries(doesnothing ical icalss icalvcal)
-else()
-  target_link_libraries(doesnothing
-    ical-static
-    icalss-static
-    icalvcal-static
+add_dependencies(
+  doesnothing
+  ical
+  icalss
+  icalvcal
+)
+if(LIBICAL_CXX_BINDINGS)
+  # https://github.com/libical/libical/pull/656
+  set_property(
+    TARGET
+      doesnothing
+    PROPERTY
+      LINKER_LANGUAGE
+        CXX
   )
-  if(DEFINED CMAKE_THREAD_LIBS_INIT)
-    target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
-  endif()
-  if(ICU_FOUND)
-    target_link_libraries(doesnothing ${ICU_LIBRARIES})
-  endif()
-  if(BDB_FOUND)
-    target_link_libraries(doesnothing ${BDB_LIBRARY})
-  endif()
+endif()
+
+target_link_libraries(
+  doesnothing
+  ical
+  icalss
+  icalvcal
+)
+
+if(DEFINED CMAKE_THREAD_LIBS_INIT)
+  target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
+endif()
+if(ICU_FOUND)
+  target_link_libraries(doesnothing ${ICU_LIBRARIES})
+endif()
+if(BDB_FOUND)
+  target_link_libraries(doesnothing ${BDB_LIBRARY})
 endif()

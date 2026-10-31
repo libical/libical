@@ -1,16 +1,24 @@
 #!/usr/bin/env perl
 ################################################################################
 # SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
-#
-#
 ################################################################################
 require "readvaluesfile.pl";
 
 use Getopt::Std;
-getopts('chspmi:');
+getopts('chvi:');
+
+#Options
+# c -> generate c code file
+# h -> generate header file
+# v -> generate VCARD values
+# i -> .c/.h "in" file (template)
+
+my $ucprefix = "ICAL";
+if ($opt_v) {
+  $ucprefix = "VCARD";
+}
+my $lcprefix = lc($ucprefix);
 
 # ARG 0 is properties.csv
 %propmap = read_properties_file($ARGV[0]);
@@ -70,10 +78,11 @@ sub insert_code
   # Create the property map data
   if ($opt_c) {
 
-    my @props = sort {$propmap{$a}->{"kindEnum"} <=> $propmap{$b}->{"kindEnum"}} keys %propmap;
-    my $count = scalar(@props);
+    my @props     = sort {$propmap{$a}->{"kindEnum"} <=> $propmap{$b}->{"kindEnum"}} keys %propmap;
+    my $count     = scalar(@props);
+    my $map_count = $count - 2;
 
-    print "static const struct icalproperty_map property_map[$count] = {\n";
+    print "static const struct ${lcprefix}property_map property_map[$map_count] = {\n";
 
     foreach $prop (@props) {
 
@@ -87,33 +96,33 @@ sub insert_code
 
       my @flags = @{$propmap{$prop}->{'flags'}};
 
-      print "    { ICAL_${uc}_PROPERTY, \"$prop\",\n";
-      print "      ICAL_${ucvalue}_VALUE, ICAL_${defvalue}_VALUE,\n";
+      print "    { ${ucprefix}_${uc}_PROPERTY, \"$prop\",\n";
+      print "      ${ucprefix}_${ucvalue}_VALUE, ${ucprefix}_${defvalue}_VALUE,\n";
       print "      { ";
 
       if (@comp_types) {
-          foreach $comp (@comp_types) {
-              $comp =~ s/-//g;
-              print "ICAL_${comp}_VALUE, ";
-          }
+        foreach $comp (@comp_types) {
+          $comp =~ s/-//g;
+          print "${ucprefix}_${comp}_VALUE, ";
+        }
       } elsif ($defvalue ne "NO") {
-          print "ICAL_${defvalue}_VALUE, ";
+        print "${ucprefix}_${defvalue}_VALUE, ";
       } else {
-          print "ICAL_${ucvalue}_VALUE, ";
+        print "${ucprefix}_${ucvalue}_VALUE, ";
       }
 
-      print "ICAL_NO_VALUE }, ";
+      print "${ucprefix}_NO_VALUE }, ";
 
       if (@flags) {
-          my $sep = "\n      ";
-          foreach $flag (@flags) {
-              $flag =~ s/-//g;
-              $flag  = uc($flag);
-              print "${sep}ICAL_PROPERTY_${flag}";
-              $sep = " | ";
-          }
+        my $sep = "\n      ";
+        foreach $flag (@flags) {
+          $flag =~ s/-//g;
+          $flag = uc($flag);
+          print "${sep}${ucprefix}_PROPERTY_${flag}";
+          $sep = " | ";
+        }
       } else {
-          print "0";
+        print "0";
       }
 
       print " },\n";
@@ -123,9 +132,9 @@ sub insert_code
 
     my ($uc, $lc, $lcvalue, $ucvalue, $type) = fudge_data($prop);
 
-    print "    { ICAL_${uc}_PROPERTY, \"\",";
-    print "      ICAL_NO_VALUE, ICAL_NO_VALUE,\n";
-    print "      { ICAL_NO_VALUE }, 0 }\n}";
+    print "    { ${ucprefix}_${uc}_PROPERTY, \"\",";
+    print "      ${ucprefix}_NO_VALUE, ${ucprefix}_NO_VALUE,\n";
+    print "      { ${ucprefix}_NO_VALUE }, 0 }\n}";
     print ";\n\n";
 
     $count    = 1;
@@ -137,7 +146,7 @@ sub insert_code
       next if !$value;
       next if $value eq 'NO' or $prop eq 'ANY';
 
-      my $ucv = join("", map {uc(lc($_));} split(/-/, $value));
+      my $ucv   = join("", map {uc(lc($_));} split(/-/, $value));
       my @enums = @{$valuemap{$value}->{'enums'}};
 
       if (@enums) {
@@ -146,7 +155,7 @@ sub insert_code
 
         foreach $e (@enums) {
 
-          $e =~ /([a-zA-Z0-9\-]+)=?([0-9]+)?/;
+          $e =~ /([a-zA-Z0-9\-\._]+)=?([0-9]+)?/;
           $e = $1;
           if ($2) {
             $idx = $2;
@@ -154,7 +163,7 @@ sub insert_code
             $idx++;
           }
 
-          my $uce = join("", map {uc(lc($_));} split(/-/, $e));
+          my $uce = join("", map {uc(lc($_));} split(/[\-\.]/, $e));
 
           if ($e ne "X" and $e ne "NONE") {
             $str = $e;
@@ -169,15 +178,16 @@ sub insert_code
           if ($e eq "NONE") {
             my ($tbd) = 1;
             $saveidx++;
-            for (; $saveidx < $idx; $saveidx++, $tbd++) {
+            for (; $saveidx < $idx ; $saveidx++, $tbd++) {
               $lines{$saveidx} =
-                "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_NONE, \"\" }, /*$saveidx*/\n";
+                "    {${ucprefix}_${ucv}_PROPERTY,${ucprefix}_${ucv}_NONE, \"\" }, /*$saveidx*/\n";
             }
           }
 
           # Place each property into a hash based on the index specified in value-types.csv
           # The lines are printed so they're in the same order as the indices
-          $lines{$idx} = "    {ICAL_${ucv}_PROPERTY,ICAL_${ucv}_${uce}, \"$str\" }, /*$idx*/\n";
+          $lines{$idx} =
+            "    {${ucprefix}_${ucv}_PROPERTY,${ucprefix}_${ucv}_${uce}, \"$str\" }, /*$idx*/\n";
           $saveidx = $idx;
           $count++;
         }
@@ -186,11 +196,11 @@ sub insert_code
 
     $bigcount++;
 
-    print "static const struct icalproperty_enum_map enum_map[$bigcount] = {\n";
+    print "static const struct ${lcprefix}property_enum_map enum_map[$bigcount] = {\n";
     foreach $line (sort keys %lines) {
       print $lines{$line};
     }
-    print "    {ICAL_NO_PROPERTY, 0, \"\"}\n};\n\n";
+    print "    {${ucprefix}_NO_PROPERTY, 0, \"\"}\n};\n\n";
 
   }
 
@@ -198,7 +208,8 @@ sub insert_code
 
     # Create the property enumerations list
     my $enumConst = $propmap{'ANY'}->{"kindEnum"};
-    print "typedef enum icalproperty_kind {\n    ICAL_ANY_PROPERTY = " . $enumConst . ",\n";
+    print "typedef enum ${lcprefix}property_kind {\n    ${ucprefix}_ANY_PROPERTY = "
+      . $enumConst . ",\n";
     foreach $prop (sort keys %propmap) {
 
       next if !$prop;
@@ -209,11 +220,11 @@ sub insert_code
 
       $enumConst = $propmap{$prop}->{"kindEnum"};
 
-      print "    ICAL_${uc}_PROPERTY = " . $enumConst . ",\n";
+      print "    ${ucprefix}_${uc}_PROPERTY = " . $enumConst . ",\n";
 
     }
     $enumConst = $propmap{'NO'}->{"kindEnum"};
-    print "    ICAL_NO_PROPERTY = " . $enumConst . "\n} icalproperty_kind;\n";
+    print "    ${ucprefix}_NO_PROPERTY = " . $enumConst . "\n} ${lcprefix}property_kind;\n";
 
   }
 
@@ -221,7 +232,11 @@ sub insert_code
 
     next if !$prop;
 
-    next if $prop eq 'NO' or $prop eq 'ANY';
+    next
+      if $prop eq 'NO'
+      or $prop eq 'ANY'
+      or $prop eq 'BEGIN'
+      or $prop eq 'END';
 
     my ($uc, $lc, $lcvalue, $ucvalue, $type) = fudge_data($prop);
 
@@ -239,36 +254,36 @@ sub insert_code
 
       if ($include_vanew) {
         print <<EOM;
-icalproperty *icalproperty_vanew_${lc}($type v, ...)
+${lcprefix}property *${lcprefix}property_vanew_${lc}($type v, ...)
 {
     va_list args;
-    struct icalproperty_impl *impl;
+    struct ${lcprefix}property_impl *impl;
 $pointer_check
-    impl = icalproperty_new_impl(ICAL_${uc}_PROPERTY);
-    icalproperty_set_${lc}((icalproperty*)impl, v);
+    impl = ${lcprefix}property_new_impl(${ucprefix}_${uc}_PROPERTY);
+    ${lcprefix}property_set_${lc}((${lcprefix}property*)impl, v);
     va_start(args, v);
-    icalproperty_add_parameters(impl, args);
+    ${lcprefix}property_add_parameters(impl, args);
     va_end(args);
-    return (icalproperty*)impl;
+    return (${lcprefix}property*)impl;
 }
 EOM
       }
       print <<EOM;
 
 /* $prop */
-icalproperty *icalproperty_new_${lc}($type v)
+${lcprefix}property *${lcprefix}property_new_${lc}($type v)
 {
-    struct icalproperty_impl *impl;
+    struct ${lcprefix}property_impl *impl;
 $pointer_check
-    impl = icalproperty_new_impl(ICAL_${uc}_PROPERTY);
-    icalproperty_set_${lc}((icalproperty*)impl, v);
-    return (icalproperty*)impl;
+    impl = ${lcprefix}property_new_impl(${ucprefix}_${uc}_PROPERTY);
+    ${lcprefix}property_set_${lc}((${lcprefix}property*)impl, v);
+    return (${lcprefix}property*)impl;
 }
 
-void icalproperty_set_${lc}(icalproperty *prop, $type v)
+void ${lcprefix}property_set_${lc}(${lcprefix}property *prop, $type v)
 {$set_pointer_check
     icalerror_check_arg_rv((prop != 0), "prop");
-    icalproperty_set_value(prop, icalvalue_new_${lcvalue}(v));
+    ${lcprefix}property_set_value(prop, ${lcprefix}value_new_${lcvalue}(v));
 }
 
 EOM
@@ -276,19 +291,19 @@ EOM
       # Dirk Theisen pointed out, exdate needs to match TZID parameters in EXDATE
       if ($lc eq "exdate") {
         print <<EOM;
-$type icalproperty_get_${lc}(const icalproperty *prop)
+$type ${lcprefix}property_get_${lc}(const ${lcprefix}property *prop)
 {
     icalerror_check_arg((prop != 0), "prop");
-    return icalproperty_get_datetime_with_component((icalproperty *)prop, NULL);
+    return ${lcprefix}property_get_datetime_with_component((${lcprefix}property *)prop, NULL);
 }
 
 EOM
       } else {
         print <<EOM;
-$type icalproperty_get_${lc}(const icalproperty *prop)
+$type ${lcprefix}property_get_${lc}(const ${lcprefix}property *prop)
 {
     icalerror_check_arg((prop != 0), "prop");
-    return icalvalue_get_${lcvalue}(icalproperty_get_value(prop));
+    return ${lcprefix}value_get_${lcvalue}(${lcprefix}property_get_value(prop));
 }
 
 EOM
@@ -297,12 +312,13 @@ EOM
 
       print "\
 /* $prop */\
-LIBICAL_ICAL_EXPORT icalproperty *icalproperty_new_${lc}($type v);\
-LIBICAL_ICAL_EXPORT void icalproperty_set_${lc}(icalproperty *prop, $type v);\
-LIBICAL_ICAL_EXPORT $type icalproperty_get_${lc}(const icalproperty *prop);";
+LIBICAL_${ucprefix}_EXPORT ${lcprefix}property *${lcprefix}property_new_${lc}($type v);\
+LIBICAL_${ucprefix}_EXPORT void ${lcprefix}property_set_${lc}(${lcprefix}property *prop, $type v);\
+LIBICAL_${ucprefix}_EXPORT $type ${lcprefix}property_get_${lc}(const ${lcprefix}property *prop);";
 
       if ($include_vanew) {
-        print "\nLIBICAL_ICAL_EXPORT icalproperty *icalproperty_vanew_${lc}($type v, ...);\n";
+        print
+"\nLIBICAL_${ucprefix}_EXPORT LIBICAL_SENTINEL ${lcprefix}property *${lcprefix}property_vanew_${lc}($type v, ...);\n";
       }
 
     }
@@ -311,7 +327,7 @@ LIBICAL_ICAL_EXPORT $type icalproperty_get_${lc}(const icalproperty *prop);";
 
   if ($opt_h) {
 
-    print "\n#endif /*ICALPROPERTY_H*/\n";
+    print "\n#endif /*${ucprefix}PROPERTY_H*/\n";
   }
 
 }

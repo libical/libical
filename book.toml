@@ -1,0 +1,5 @@
+[book]
+authors = ["Allen Winter"]
+language = "en"
+src = "docs/"
+title = "Libical Manual"

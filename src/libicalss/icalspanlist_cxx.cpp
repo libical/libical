@@ -1,28 +1,31 @@
+/*
+ * SPDX-FileCopyrightText: 2001, Critical Path
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+*/
+
 /**
  * @file     icalspanlist_cxx.cpp
  * @author   Critical Path
  * @brief    C++ class wrapping the icalspanlist data structure
- *
+ */
 
- SPDX-FileCopyrightText: 2001, Critical Path
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
-*/
-
-#include "icalspanlist_cxx.h"
-#include "vcomponent_cxx.h"
+#include "icalspanlist_cxx.hpp"
+#include "icalerror.h"
+#include "vcomponent_cxx.hpp"
 
 #include <cstdlib> // for free()
+#include <vector>
 
 using namespace LibICal;
 
-ICalSpanList::ICalSpanList() : data(0)
+ICalSpanList::ICalSpanList()
+    : data(0)
 {
     throw icalerrno;
 }
 
-ICalSpanList::ICalSpanList(const ICalSpanList &v) : data(v.data)
+ICalSpanList::ICalSpanList(const ICalSpanList &v)
+    : data(v.data)
 {
     if (data == NULL) {
         throw icalerrno;
@@ -34,7 +37,7 @@ ICalSpanList::ICalSpanList(const ICalSpanList &v) : data(v.data)
     @param start   Designated start of the spanlist
     @param end     Designated end of the spanlist
 */
-ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end)
+ICalSpanList::ICalSpanList(icalset *set, const icaltimetype &start, const icaltimetype &end)
     : data(icalspanlist_new(set, start, end))
 {
     if (data == NULL) {
@@ -46,7 +49,8 @@ ICalSpanList::ICalSpanList(icalset *set, icaltimetype start, icaltimetype end)
     @param comp  A valid icalcomponent with a VFREEBUSY section
 */
 
-ICalSpanList::ICalSpanList(icalcomponent *comp) : data(icalspanlist_from_vfreebusy(comp))
+ICalSpanList::ICalSpanList(icalcomponent *comp)
+    : data(icalspanlist_from_vfreebusy(comp))
 {
     if (data == NULL) {
         throw icalerrno;
@@ -86,7 +90,7 @@ ICalSpanList::~ICalSpanList()
 VComponent *ICalSpanList::get_vfreebusy(const char *organizer, const char *attendee)
 {
     icalcomponent *comp;
-    VComponent    *vcomp;
+    VComponent *vcomp;
 
     comp = icalspanlist_as_vfreebusy(data, organizer, attendee);
     if (comp == NULL) {
@@ -116,7 +120,7 @@ VComponent *ICalSpanList::get_vfreebusy(const char *organizer, const char *atten
 std::vector<int> ICalSpanList::as_vector(int delta_t)
 {
     int *matrix;
-    int i = 0;
+    const int i = 0;
     std::vector<int> event_vec;
 
     matrix = icalspanlist_as_freebusy_matrix(data, delta_t);

@@ -3,11 +3,7 @@
  CREATOR: ebusboom 8jun00
 
  SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
- DESCRIPTION:
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
@@ -18,15 +14,25 @@
 #include "libical/ical.h"
 #include "libicalss/icalss.h"
 
-#include <stdlib.h>
+#include <assert.h>
+#include <errno.h>
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-unsafe-call-within-signal-handler"
+#endif
 static void sig_alrm(int i)
 {
     _unused(i);
+    // NOLINTBEGIN(bugprone-signal-handler)
     fprintf(stderr, "Could not get lock on file\n");
     exit(1);
+    // NOLINTEND(bugprone-signal-handler)
 }
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif
 
@@ -34,12 +40,11 @@ static void sig_alrm(int i)
 
 static int get_expected_numevents(icalcomponent *c)
 {
-    icalproperty *p;
     const char *note = 0;
     int num_events = 0;
 
     if (c != 0) {
-        for (p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
+        for (icalproperty *p = icalcomponent_get_first_property(c, ICAL_X_PROPERTY);
              p != 0; p = icalcomponent_get_next_property(c, ICAL_X_PROPERTY)) {
             if (strcmp(icalproperty_get_x_name(p), "X-EXPECT-NUMEVENTS") == 0) {
                 note = icalproperty_get_x(p);
@@ -48,13 +53,18 @@ static int get_expected_numevents(icalcomponent *c)
     }
 
     if (note != 0) {
-        num_events = atoi(note);
+        char *endptr;
+        errno = 0;
+        num_events = strtol(note, &endptr, 10);
+        if (note == endptr || errno != 0) {
+            num_events = -1;
+        }
     }
 
     return num_events;
 }
 
-static void recur_callback(icalcomponent *comp, struct icaltime_span *span, void *data)
+static void recur_callback(icalcomponent *comp, const struct icaltime_span *span, void *data)
 {
     int *num_recurs = data;
 
@@ -73,12 +83,12 @@ void test_recur_file(void)
     struct icaltimetype next;
     icalcomponent *itr;
     icalproperty *desc, *dtstart, *rrule;
-    struct icalrecurrencetype recur;
+    struct icalrecurrencetype *recur;
     icalrecur_iterator *ritr;
     icaltime_t tt;
     const char *file;
     int num_recurs_found = 0;
-    icalfileset_options options = { O_RDONLY, 0644, 0, NULL };
+    icalfileset_options options = {O_RDONLY, 0644, 0, NULL};
 
     icalerror_set_error_state(ICAL_PARSE_ERROR, ICAL_ERROR_NONFATAL);
 
@@ -86,11 +96,12 @@ void test_recur_file(void)
     (void)signal(SIGALRM, sig_alrm);
 #endif
     file = getenv("ICAL_RECUR_FILE");
-    if (!file)
+    if (!file) {
         file = TEST_DATADIR "/recur.txt";
+    }
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
-    alarm(15);  /* to get file lock */
+    alarm(15); /* to get file lock */
 #endif
     cin = icalset_new(ICAL_FILE_SET, file, &options);
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
@@ -106,8 +117,8 @@ void test_recur_file(void)
         char msg[128];
 
         struct icaltimetype start;
-        struct icaltimetype startmin = icaltime_from_timet_with_zone(1, 0, NULL);
-        struct icaltimetype endmax = icaltime_null_time();
+        struct icaltimetype startmin = icaltime_from_timet_with_zone(1, false, NULL);
+        struct icaltimetype endmax = icaltime_from_timet_with_zone(1748497476, false, NULL);
         const char *desc_str = "malformed component";
 
         desc = icalcomponent_get_first_property(itr, ICAL_DESCRIPTION_PROPERTY);
@@ -138,8 +149,9 @@ void test_recur_file(void)
 
         tt = icaltime_as_timet(start);
 
-        if (VERBOSE)
+        if (VERBOSE) {
             printf("#### %s\n", icalctime(&tt));
+        }
 
         icalrecur_iterator_free(ritr);
 
@@ -148,8 +160,9 @@ void test_recur_file(void)
              !icaltime_is_null_time(next);
              next = icalrecur_iterator_next(ritr)) {
             tt = icaltime_as_timet(next);
-            if (VERBOSE)
+            if (VERBOSE) {
                 printf("  %s", icalctime(&tt));
+            }
         }
 
         icalrecur_iterator_free(ritr);
@@ -159,9 +172,7 @@ void test_recur_file(void)
         icalcomponent_foreach_recurrence(itr, startmin, endmax, recur_callback, &num_recurs_found);
 
         snprintf(msg, sizeof(msg), "   expecting total of %d events", expected_events);
-#if ADD_TESTS_REQUIRING_INVESTIGATION
         int_is(msg, num_recurs_found, expected_events);
-#endif
     }
 
     icalset_free(cin);

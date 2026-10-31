@@ -3,12 +3,16 @@
  CREATOR: eric 23 December 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
 ======================================================================*/
+
+/**
+ * @file icalgauge.c
+ * @brief Routines implementing a filter for ical components
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -16,17 +20,20 @@
 
 #include "icalgauge.h"
 #include "icalgaugeimpl.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
+#include "icalpvl_p.h"
 #include "icalvalue.h"
 
-#include <stddef.h>     /* for ptrdiff_t */
+#include <stddef.h> /* for ptrdiff_t */
 #include <stdlib.h>
 
+/// @cond PRIVATE
 extern int ssparse(void);
 extern char *input_buffer;
 extern char *input_buffer_p;
 
 struct icalgauge_impl *icalss_yy_gauge;
+/// @endcond
 
 icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
 {
@@ -38,9 +45,9 @@ icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
         return 0;
     }
 
-    impl->select = pvl_newlist();
-    impl->from = pvl_newlist();
-    impl->where = pvl_newlist();
+    impl->select = icalpvl_newlist();
+    impl->from = icalpvl_newlist();
+    impl->where = icalpvl_newlist();
     impl->expand = expand;
 
     icalss_yy_gauge = impl;
@@ -56,7 +63,7 @@ icalgauge *icalgauge_new_from_sql(const char *sql, int expand)
     }
 }
 
-int icalgauge_get_expand(icalgauge *gauge)
+int icalgauge_get_expand(const icalgauge *gauge)
 {
     icalerror_check_arg_rz((gauge != 0), "gauge");
     return gauge->expand;
@@ -71,74 +78,36 @@ void icalgauge_free(icalgauge *gauge)
     assert(gauge->from != 0);
 
     if (gauge->select) {
-        while ((w = pvl_pop(gauge->select)) != 0) {
+        while ((w = icalpvl_pop(gauge->select)) != 0) {
             if (w->value != 0) {
                 free(w->value);
             }
             free(w);
         }
-        pvl_free(gauge->select);
+        icalpvl_free(gauge->select);
         gauge->select = 0;
     }
 
     if (gauge->where) {
-        while ((w = pvl_pop(gauge->where)) != 0) {
-
+        while ((w = icalpvl_pop(gauge->where)) != 0) {
             if (w->value != 0) {
                 free(w->value);
             }
             free(w);
         }
-        pvl_free(gauge->where);
+        icalpvl_free(gauge->where);
         gauge->where = 0;
     }
 
     if (gauge->from) {
-        pvl_free(gauge->from);
+        icalpvl_free(gauge->from);
         gauge->from = 0;
     }
 
     free(gauge);
 }
 
-/** Converts a VQUERY component into a gauge */
-icalcomponent *icalgauge_make_gauge(icalcomponent *query);
-
-/**
-   icaldirset_test compares a component against a gauge, and returns
-   true if the component passes the test
-
-   The gauge is a VCALENDAR component that specifies how to test the
-   target components. The gauge holds a collection of VEVENT, VTODO or
-   VJOURNAL sub-components. Each of the sub-components has a
-   collection of properties that are compared to corresponding
-   properties in the target component, according to the
-   X-LIC-COMPARETYPE parameters to the gauge's properties.
-
-   When a gauge has several sub-components, the results of testing the
-   target against each of them is ORed together - the target
-   component will pass if it matches any of the sub-components in the
-   gauge. However, the results of matching the properties in a
-   sub-component are ANDed -- the target must match every property in
-   a gauge sub-component to match the sub-component.
-
-   Here is an example:
-
-   BEGIN:XROOT
-   DTSTART;X-LIC-COMPARETYPE=LESS:19981025T020000
-   ORGANIZER;X-LIC-COMPARETYPE=EQUAL:mrbig@host.com
-   END:XROOT
-   BEGIN:XROOT
-   LOCATION;X-LIC-COMPARETYPE=EQUAL:McNary's Pub
-   END:XROOT
-
-   This gauge has two sub-components; one which will match a VEVENT
-   based on start time, and organizer, and another that matches based
-   on LOCATION. A target component will pass the test if it matched
-   either of the sub-components.
-
-  */
-
+/// @cond PRIVATE
 /*non-static,recursive*/
 int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
 {
@@ -165,12 +134,9 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
     for (p = icalcomponent_get_first_property(gauge, ICAL_ANY_PROPERTY);
          p != 0;
          p = icalcomponent_get_next_property(gauge, ICAL_ANY_PROPERTY)) {
-
         icalproperty *targetprop;
         icalparameter *compareparam;
         icalparameter_xliccomparetype compare;
-        icalparameter_xliccomparetype rel;   /* The relationship between the gauge
-                                                and target values. */
 
         /* Extract the comparison type from the gauge. If there is no
            comparison type, assume that it is "EQUAL" */
@@ -191,16 +157,18 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
         targetprop = icalcomponent_get_first_property(comp, icalproperty_isa(p));
 
         if (targetprop != 0) {
-
             /* Compare the values of the gauge property and the target
                property */
 
-            rel = icalvalue_compare(icalproperty_get_value(p), icalproperty_get_value(targetprop));
+            /* The relationship between the gauge and target values */
+            icalparameter_xliccomparetype rel = icalvalue_compare(icalproperty_get_value(p), icalproperty_get_value(targetprop));
 
-            /* Now see if the comparison is equavalent to the comparison
+            /* Now see if the comparison is equivalent to the comparison
                specified in the gauge */
 
-            if (rel == compare) {
+            if (rel == ICAL_XLICCOMPARETYPE_NONE || compare == ICAL_XLICCOMPARETYPE_NONE) {
+                localpass = 0;
+            } else if (rel == compare) {
                 localpass++;
             } else if (compare == ICAL_XLICCOMPARETYPE_LESSEQUAL &&
                        (rel == ICAL_XLICCOMPARETYPE_LESS || rel == ICAL_XLICCOMPARETYPE_EQUAL)) {
@@ -220,13 +188,11 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
     }
 
     /* Test subcomponents. Look for a child component that has a
-       counterpart in the gauge. If one is found, recursively call
-       icaldirset_test */
+       counterpart in the gauge. */
 
     for (subgauge = icalcomponent_get_first_component(gauge, ICAL_ANY_COMPONENT);
          subgauge != 0;
          subgauge = icalcomponent_get_next_component(gauge, ICAL_ANY_COMPONENT)) {
-
         gaugekind = icalcomponent_isa(subgauge);
 
         if (gaugekind == ICAL_ANY_COMPONENT) {
@@ -245,15 +211,14 @@ int icalgauge_compare_recurse(icalcomponent *comp, icalcomponent *gauge)
 
     return pass;
 }
+/// @endcond
 
-int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
+bool icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 {
     icalcomponent *inner;
     int local_pass = 0;
-    int last_clause = 1, this_clause = 1;
-    pvl_elem e;
-    icalcomponent_kind kind;
-    icalproperty *rrule;
+    bool last_clause = true;
+    icalpvl_elem e;
     int compare_recur = 0;
 
     icalerror_check_arg_rz((comp != 0), "comp");
@@ -265,8 +230,8 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
         /* Wally Yau: our component is not always wrapped with
          * a <VCALENDAR>. It's not an error.
          * icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-         * return 0; */
-        kind = icalcomponent_isa(comp);
+         * return false; */
+        icalcomponent_kind kind = icalcomponent_isa(comp);
         if (kind == ICAL_VEVENT_COMPONENT ||
             kind == ICAL_VTODO_COMPONENT ||
             kind == ICAL_VJOURNAL_COMPONENT ||
@@ -274,14 +239,14 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
             inner = comp;
         } else {
             icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
-            return 0;
+            return false;
         }
     }
 
     /* Check that this component is one of the FROM types */
     local_pass = 0;
-    for (e = pvl_head(gauge->from); e != 0; e = pvl_next(e)) {
-        icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)pvl_data(e);
+    for (e = icalpvl_head(gauge->from); e != 0; e = icalpvl_next(e)) {
+        icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)icalpvl_data(e);
 
         if (k == icalcomponent_isa(inner)) {
             local_pass = 1;
@@ -289,12 +254,12 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
     }
 
     if (local_pass == 0) {
-        return 0;
+        return false;
     }
 
     /**** Check each where clause against the component ****/
-    for (e = pvl_head(gauge->where); e != 0; e = pvl_next(e)) {
-        struct icalgauge_where *w = pvl_data(e);
+    for (e = icalpvl_head(gauge->where); e != 0; e = icalpvl_next(e)) {
+        struct icalgauge_where *w = icalpvl_data(e);
         icalcomponent *sub_comp;
         icalvalue *v;
         icalproperty *prop;
@@ -302,15 +267,15 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 
         if (!w || w->prop == ICAL_NO_PROPERTY || w->value == 0) {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
-            return 0;
+            return false;
         }
 
         /* First, create a value from the gauge */
-        vk = icalenum_property_kind_to_value_kind(w->prop);
+        vk = icalproperty_kind_to_value_kind(w->prop);
 
         if (vk == ICAL_NO_VALUE) {
             icalerror_set_errno(ICAL_INTERNAL_ERROR);
-            return 0;
+            return false;
         }
 
         if (w->compare == ICALGAUGECOMPARE_ISNULL || w->compare == ICALGAUGECOMPARE_ISNOTNULL) {
@@ -321,7 +286,7 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
 
         if (v == 0) {
             /* Keep error set by icalvalue_from-string */
-            return 0;
+            return false;
         }
 
         /* Now find the corresponding property in the component,
@@ -333,15 +298,14 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
             sub_comp = icalcomponent_get_first_component(inner, w->comp);
             if (sub_comp == 0) {
                 icalvalue_free(v);
-                return 0;
+                return false;
             }
         }
 
         /* check if it is a recurring */
-        rrule = icalcomponent_get_first_property(sub_comp, ICAL_RRULE_PROPERTY);
+        const icalproperty *rrule = icalcomponent_get_first_property(sub_comp, ICAL_RRULE_PROPERTY);
 
         if (gauge->expand && rrule) {
-
             if (w->prop == ICAL_DTSTART_PROPERTY ||
                 w->prop == ICAL_DTEND_PROPERTY || w->prop == ICAL_DUE_PROPERTY) {
                 /** needs to use recurrence-id to do comparison */
@@ -371,12 +335,11 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
                 icalproperty *p =
                     icalcomponent_get_first_property(sub_comp, ICAL_RECURRENCEID_PROPERTY);
                 prop_value = icalproperty_get_value(p);
-            } else {  /* prop value from this component */
+            } else { /* prop value from this component */
                 prop_value = icalproperty_get_value(prop);
             }
 
-            /* coverity[mixed_enums] */
-            relation = (icalgaugecompare) icalvalue_compare(prop_value, v);
+            relation = (icalgaugecompare)icalvalue_compare(prop_value, v);
 
             if (relation == w->compare) {
                 local_pass++;
@@ -396,43 +359,44 @@ int icalgauge_compare(icalgauge *gauge, icalcomponent *comp)
             }
         }
 
-        this_clause = local_pass > 0 ? 1 : 0;
+        bool this_clause = (local_pass > 0);
 
         /* Now look at the logic operator for this clause to see how
            the value should be merge with the previous clause */
 
         if (w->logic == ICALGAUGELOGIC_AND) {
-            last_clause = this_clause && last_clause;
+            last_clause = this_clause && last_clause; //NOLINT(readability-implicit-bool-conversion)
         } else if (w->logic == ICALGAUGELOGIC_OR) {
-            last_clause = this_clause || last_clause;
+            last_clause = this_clause || last_clause; //NOLINT(readability-implicit-bool-conversion)
         } else {
             last_clause = this_clause;
         }
 
         icalvalue_free(v);
 
-    }/**** check next one in where clause ****/
+    } /**** check next one in where clause ****/
 
     return last_clause;
 }
 
 void icalgauge_dump(icalgauge *gauge)
 {
-    pvl_elem p;
+    icalpvl_elem p;
 
     printf("--- Select ---\n");
-    for (p = pvl_head(gauge->select); p != 0; p = pvl_next(p)) {
-        struct icalgauge_where *w = pvl_data(p);
+    for (p = icalpvl_head(gauge->select); p != 0; p = icalpvl_next(p)) {
+        struct icalgauge_where *w = icalpvl_data(p);
 
-        if (!w)
+        if (!w) {
             continue;
+        }
 
         if (w->comp != ICAL_NO_COMPONENT) {
-            printf("%s ", icalenum_component_kind_to_string(w->comp));
+            printf("%s ", icalcomponent_kind_to_string(w->comp));
         }
 
         if (w->prop != ICAL_NO_PROPERTY) {
-            printf("%s ", icalenum_property_kind_to_string(w->prop));
+            printf("%s ", icalproperty_kind_to_string(w->prop));
         }
 
         if (w->compare != ICALGAUGECOMPARE_NONE) {
@@ -447,29 +411,30 @@ void icalgauge_dump(icalgauge *gauge)
     }
 
     printf("--- From ---\n");
-    for (p = pvl_head(gauge->from); p != 0; p = pvl_next(p)) {
-        icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)pvl_data(p);
+    for (p = icalpvl_head(gauge->from); p != 0; p = icalpvl_next(p)) {
+        icalcomponent_kind k = (icalcomponent_kind)(ptrdiff_t)icalpvl_data(p);
 
-        printf("%s\n", icalenum_component_kind_to_string(k));
+        printf("%s\n", icalcomponent_kind_to_string(k));
     }
 
     printf("--- Where ---\n");
-    for (p = pvl_head(gauge->where); p != 0; p = pvl_next(p)) {
-        struct icalgauge_where *w = pvl_data(p);
+    for (p = icalpvl_head(gauge->where); p != 0; p = icalpvl_next(p)) {
+        struct icalgauge_where *w = icalpvl_data(p);
 
-        if (!w)
+        if (!w) {
             continue;
+        }
 
         if (w->logic != ICALGAUGELOGIC_NONE) {
             printf("%d ", w->logic);
         }
 
         if (w->comp != ICAL_NO_COMPONENT) {
-            printf("%s ", icalenum_component_kind_to_string(w->comp));
+            printf("%s ", icalcomponent_kind_to_string(w->comp));
         }
 
         if (w->prop != ICAL_NO_PROPERTY) {
-            printf("%s ", icalenum_property_kind_to_string(w->prop));
+            printf("%s ", icalproperty_kind_to_string(w->prop));
         }
 
         if (w->compare != ICALGAUGECOMPARE_NONE) {

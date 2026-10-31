@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
+SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+-->
+<structure namespace="ICal" name="Limits">
+  <enum name="ICalLimitsKind" native_name="icallimits_kind" default_native="ICAL_LIMIT_PARSE_FAILURES" comment="The types of limits">
+    <element name="ICAL_LIMIT_PARSE_FAILURES" comment="Maximum number of parse failures allowed in a calendar file before processing halts"/>
+    <element name="ICAL_LIMIT_PARSE_SEARCH" comment="Maximum number of parse characters to search in a calendar component for the next parameter or property"/>
+    <element name="ICAL_LIMIT_PARSE_FAILURE_ERROR_MESSAGES" comment="Maximum number of parse failure messages inserted into the output"/>
+    <element name="ICAL_LIMIT_PROPERTIES" comment="Maximum number of properties allowed in a calendar component"/>
+    <element name="ICAL_LIMIT_PARAMETERS" comment="Maximum number of parameters allowed for a property"/>
+    <element name="ICAL_LIMIT_VALUE_CHARS" comment="Maximum number of characters for a value"/>
+    <element name="ICAL_LIMIT_PROPERTY_VALUES" comment="Maximum number of values allowed for multi-valued properties"/>
+    <element name="ICAL_LIMIT_RECURRENCE_SEARCH" comment="Maximum number of times to search for the next recurrence before giving up"/>
+    <element name="ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL" comment="Maximum number of times to search for the next recurrence before time is considered standing still"/>
+    <element name="ICAL_LIMIT_RRULE_SEARCH" comment="Maximum number of times to search vtimezone rrules for an occurrence before the specified end year"/>
+  </enum>
+  <method name="i_cal_limit_set" corresponds="icallimit_set" kind="set" since="4.0">
+    <parameter type="ICalLimitsKind" name="kind" comment="The kind of limit to set"/>
+    <parameter type="size_t" name="limit" comment="The limit value. Use SIZE_MAX (i.e. maximum value of size_t) to set an unlimited value."/>
+    <comment>Sets the value for the corresponding internal library limit.</comment>
+  </method>
+  <method name="i_cal_limit_get" corresponds="icallimit_get" kind="get" since="4.0">
+    <parameter type="ICalLimitsKind" name="kind" comment="The kind of limit to set"/>
+    <returns type="size_t" comment="The current value of the specified #ICalLimitsKind"/>
+    <comment>Gets the value for the corresponding internal library limit.</comment>
+  </method>
+</structure>

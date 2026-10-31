@@ -35,30 +35,31 @@
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
+#define YYTOKENTYPE
+/* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
-   enum yytokentype {
-     STRING = 258,
-     SELECT = 259,
-     FROM = 260,
-     WHERE = 261,
-     COMMA = 262,
-     QUOTE = 263,
-     EQUALS = 264,
-     NOTEQUALS = 265,
-     LESS = 266,
-     GREATER = 267,
-     LESSEQUALS = 268,
-     GREATEREQUALS = 269,
-     AND = 270,
-     OR = 271,
-     EOL = 272,
-     END = 273,
-     IS = 274,
-     NOT = 275,
-     SQLNULL = 276
-   };
+enum yytokentype
+{
+    STRING = 258,
+    SELECT = 259,
+    FROM = 260,
+    WHERE = 261,
+    COMMA = 262,
+    QUOTE = 263,
+    EQUALS = 264,
+    NOTEQUALS = 265,
+    LESS = 266,
+    GREATER = 267,
+    LESSEQUALS = 268,
+    GREATEREQUALS = 269,
+    AND = 270,
+    OR = 271,
+    EOL = 272,
+    END = 273,
+    IS = 274,
+    NOT = 275,
+    SQLNULL = 276
+};
 #endif
 /* Tokens.  */
 #define STRING 258
@@ -81,19 +82,15 @@
 #define NOT 275
 #define SQLNULL 276
 
-
-
-
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
-{
-	char* v_string;
+#if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
+typedef union YYSTYPE {
+    char *v_string;
 }
 /* Line 1489 of yacc.c.  */
-	YYSTYPE;
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
-# define YYSTYPE_IS_DECLARED 1
-# define YYSTYPE_IS_TRIVIAL 1
+YYSTYPE;
+#define yystype YYSTYPE /* obsolescent; will be withdrawn */
+#define YYSTYPE_IS_DECLARED 1
+#define YYSTYPE_IS_TRIVIAL 1
 #endif
 
 extern YYSTYPE sslval;

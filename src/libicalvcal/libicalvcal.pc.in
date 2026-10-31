@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright Contributors to the libical project
+# SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+
+prefix=@prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libicalvcal
+Description: @libical_DESCRIPTION@ (VCal)
+URL: @libical_HOMEPAGE_URL@
+Version: @libical_VERSION@
+Libs: -L${libdir} -licalvcal
+Requires: libical
+Cflags: -I${includedir}

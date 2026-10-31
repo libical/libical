@@ -3,14 +3,12 @@
  CREATOR: acampi 28 May 02
 
  SPDX-FileCopyrightText: 2002, Andrea Campi <a.campi@inet.it>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 /**
  * @file icalattach.h
- * @brief A set of functions to handle iCal attachments.
+ * @brief Defines the data structure for iCalendar attachments.
  *
  * With the `ATTACH` property, the iCal standard defines a way to
  * associate a document object with a calendar component.
@@ -25,6 +23,8 @@
 
 #include "libical_ical_export.h"
 
+#include <stdbool.h>
+
 /**
  * @typedef icalattach
  * @brief An iCal attach object representing a link to a document object.
@@ -37,13 +37,13 @@ typedef struct icalattach_impl icalattach;
 
 /**
  * @typedef icalattach_free_fn_t
- * @brief Function to be called to free the data of an ::icalattach object.
+ * Function to be called to free the data of an ::icalattach object.
  * @warning Currently not used
  *
  * This function type is used to free the data from an ::icalattach object created
- * with icalattach_new_from_data(). It is currently not used
+ * with icalattach_new_from_data().
  */
-typedef void (*icalattach_free_fn_t) (char *data, void *user_data);
+typedef void (*icalattach_free_fn_t)(char *data, void *user_data);
 
 /**
  * @brief Creates new icalattach object from a URL.
@@ -146,12 +146,9 @@ LIBICAL_ICAL_EXPORT void icalattach_unref(icalattach *attach);
 /**
  * @brief Determines if @a attach is an URL.
  * @param attach the icalattach object to check
- * @return 1 if it is a URL, otherwise 0.
  * @sa icalattach_get_url()
  *
- * @par Error handling
- * Returns `NULL` and sets ::icalerrno to ::ICAL_BADARG_ERROR if
- * @a attach is `NULL`.
+ * Errors if @p attach is `NULL`.
  *
  * @par Usage
  * ```c
@@ -164,8 +161,10 @@ LIBICAL_ICAL_EXPORT void icalattach_unref(icalattach *attach);
  * // release it
  * icalattach_unref(attach);
  * ```
+ *
+ * @return true if the specified icalattach is a URL; false otherwise.
  */
-LIBICAL_ICAL_EXPORT int icalattach_get_is_url(icalattach *attach);
+LIBICAL_ICAL_EXPORT bool icalattach_get_is_url(const icalattach *attach);
 
 /**
  * @brief Returns the URL of the icalattach object.

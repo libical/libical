@@ -2,9 +2,7 @@
  FILE: icalbdbsetimpl.h
 
  SPDX-FileCopyrightText: 2001, Critical Path
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifndef ICALBDBSETIMPL_H
@@ -16,9 +14,8 @@
 /* This definition is in its own file so it can be kept out of the
    main header file, but used by "friend classes" like icaldirset*/
 
-struct icalbdbset_impl
-{
-    icalset super;        /**< parent class */
+struct icalbdbset_impl {
+    icalset super; /**< parent class */
     const char *path;
     const char *subdb;
     const char *sindex;

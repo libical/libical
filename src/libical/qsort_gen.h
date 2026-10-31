@@ -2,7 +2,6 @@
  FILE: qsort_gen.h
 
  SPDX-FileCopyrightText: 2018, Markus Minichmayr <markus@tapkey.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Initial Developer of the Original Code is Markus Minichmayr.
@@ -10,6 +9,8 @@
 
 #ifndef QSORT_GEN_H
 #define QSORT_GEN_H
+
+#include <stddef.h>
 
 /**
  * @file qsort_gen.h
@@ -31,8 +32,8 @@
  * the elements to be compared.
  */
 void qsort_gen(void *list, size_t nitems,
-               int(*compar)(const void *, size_t, size_t),
-               void(*swapr)(void *, size_t, size_t));
+               int (*compar)(const void *, size_t, size_t),
+               void (*swapr)(void *, size_t, size_t));
 
 /**
  * @brief Swaps two arbitrary blocks of memory.

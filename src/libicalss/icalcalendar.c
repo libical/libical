@@ -3,10 +3,17 @@
  CREATOR: eric 23 December 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
+
+/**
+ * @file icalcalendar.c
+ * @brief Routines for storing calendar data in a file system.
+ *
+ * The calendar has two icaldirsets, one for incoming components and one for
+ * booked components. It also has interfaces to access the free/busy list and a
+ * list of calendar properties
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -14,6 +21,7 @@
 
 #include "icalcalendar.h"
 #include "icaldirset.h"
+#include "icalerror_p.h"
 #include "icalfileset.h"
 
 #include <errno.h>
@@ -26,8 +34,7 @@
 #define PROP_FILE "properties.ics"
 #define FBLIST_FILE "freebusy.ics"
 
-struct icalcalendar_impl
-{
+struct icalcalendar_impl {
     char *dir;
     icalset *freebusy;
     icalset *properties;
@@ -47,7 +54,7 @@ struct icalcalendar_impl *icalcalendar_new_impl(void)
     return impl;
 }
 
-static icalerrorenum icalcalendar_create(struct icalcalendar_impl *impl)
+static icalerrorenum icalcalendar_create(const struct icalcalendar_impl *impl)
 {
     char path[MAXPATHLEN];
     struct stat sbuf;
@@ -65,7 +72,6 @@ static icalerrorenum icalcalendar_create(struct icalcalendar_impl *impl)
     r = stat(path, &sbuf);
 
     if (r != 0 && errno == ENOENT) {
-
         if (mkdir(path, 0777) != 0) {
             icalerror_set_errno(ICAL_FILE_ERROR);
             return ICAL_FILE_ERROR;
@@ -102,135 +108,135 @@ icalcalendar *icalcalendar_new(const char *dir)
     return impl;
 }
 
-void icalcalendar_free(icalcalendar *impl)
+void icalcalendar_free(icalcalendar *calendar)
 {
-    if (impl->dir != 0) {
-        free(impl->dir);
+    if (calendar->dir != 0) {
+        free(calendar->dir);
     }
 
-    if (impl->freebusy != 0) {
-        icalset_free(impl->freebusy);
+    if (calendar->freebusy != 0) {
+        icalset_free(calendar->freebusy);
     }
 
-    if (impl->properties != 0) {
-        icalset_free(impl->properties);
+    if (calendar->properties != 0) {
+        icalset_free(calendar->properties);
     }
 
-    if (impl->booked != 0) {
-        icalset_free(impl->booked);
+    if (calendar->booked != 0) {
+        icalset_free(calendar->booked);
     }
 
-    if (impl->incoming != 0) {
-        icalset_free(impl->incoming);
+    if (calendar->incoming != 0) {
+        icalset_free(calendar->incoming);
     }
 
-    impl->dir = 0;
-    impl->freebusy = 0;
-    impl->properties = 0;
-    impl->booked = 0;
-    impl->incoming = 0;
+    calendar->dir = 0;
+    calendar->freebusy = 0;
+    calendar->properties = 0;
+    calendar->booked = 0;
+    calendar->incoming = 0;
 
-    free(impl);
+    free(calendar);
 }
 
-int icalcalendar_lock(icalcalendar *impl)
+int icalcalendar_lock(const icalcalendar *calendar)
 {
-    icalerror_check_arg_rz((impl != 0), "impl");
+    icalerror_check_arg_rz((calendar != 0), "calendar");
     return 0;
 }
 
-int icalcalendar_unlock(icalcalendar *impl)
+int icalcalendar_unlock(const icalcalendar *calendar)
 {
-    icalerror_check_arg_rz((impl != 0), "impl");
+    icalerror_check_arg_rz((calendar != 0), "calendar");
     return 0;
 }
 
-int icalcalendar_islocked(icalcalendar *impl)
+int icalcalendar_islocked(const icalcalendar *calendar)
 {
-    icalerror_check_arg_rz((impl != 0), "impl");
+    icalerror_check_arg_rz((calendar != 0), "calendar");
     return 0;
 }
 
-int icalcalendar_ownlock(icalcalendar *impl)
+int icalcalendar_ownlock(const icalcalendar *calendar)
 {
-    icalerror_check_arg_rz((impl != 0), "impl");
+    icalerror_check_arg_rz((calendar != 0), "calendar");
     return 0;
 }
 
-icalset *icalcalendar_get_booked(icalcalendar *impl)
+icalset *icalcalendar_get_booked(icalcalendar *calendar)
 {
     char dir[MAXPATHLEN];
 
-    icalerror_check_arg_rz((impl != 0), "impl");
+    icalerror_check_arg_rz((calendar != 0), "calendar");
 
     dir[0] = '\0';
-    strncpy(dir, impl->dir, MAXPATHLEN - 1);
+    strncpy(dir, calendar->dir, MAXPATHLEN - 1);
     strncat(dir, "/", MAXPATHLEN - strlen(dir) - 1);
     strncat(dir, BOOKED_DIR, MAXPATHLEN - strlen(dir) - 1);
     dir[MAXPATHLEN - 1] = '\0';
 
-    if (impl->booked == 0) {
+    if (calendar->booked == 0) {
         icalerror_clear_errno();
-        impl->booked = icaldirset_new(dir);
+        calendar->booked = icaldirset_new(dir);
         assert(icalerrno == ICAL_NO_ERROR);
     }
 
-    return impl->booked;
+    return calendar->booked;
 }
 
-icalset *icalcalendar_get_incoming(icalcalendar *impl)
+icalset *icalcalendar_get_incoming(icalcalendar *calendar)
 {
     char path[MAXPATHLEN];
 
-    icalerror_check_arg_rz((impl != 0), "impl");
+    icalerror_check_arg_rz((calendar != 0), "calendar");
 
     path[0] = '\0';
-    strncpy(path, impl->dir, MAXPATHLEN - 1);
+    strncpy(path, calendar->dir, MAXPATHLEN - 1);
     strncat(path, "/", MAXPATHLEN - strlen(path) - 1);
     strncat(path, INCOMING_FILE, MAXPATHLEN - strlen(path) - 1);
     path[MAXPATHLEN - 1] = '\0';
 
-    if (impl->properties == 0) {
-        impl->properties = icalfileset_new(path);
+    if (calendar->properties == 0) {
+        calendar->properties = icalfileset_new(path);
     }
 
-    return impl->properties;
+    return calendar->properties;
 }
 
-icalset *icalcalendar_get_properties(icalcalendar *impl)
+icalset *icalcalendar_get_properties(icalcalendar *calendar)
 {
     char path[MAXPATHLEN];
 
-    icalerror_check_arg_rz((impl != 0), "impl");
+    icalerror_check_arg_rz((calendar != 0), "calendar");
 
     path[0] = '\0';
-    strncpy(path, impl->dir, MAXPATHLEN - 1);
+    strncpy(path, calendar->dir, MAXPATHLEN - 1);
     strncat(path, "/", MAXPATHLEN - strlen(path) - 1);
     strncat(path, PROP_FILE, MAXPATHLEN - strlen(path) - 1);
     path[MAXPATHLEN - 1] = '\0';
 
-    if (impl->properties == 0) {
-        impl->properties = icalfileset_new(path);
+    if (calendar->properties == 0) {
+        calendar->properties = icalfileset_new(path);
     }
 
-    return impl->properties;
+    return calendar->properties;
 }
 
-icalset *icalcalendar_get_freebusy(icalcalendar *impl)
+icalset *icalcalendar_get_freebusy(icalcalendar *calendar)
 {
     char path[MAXPATHLEN];
 
-    icalerror_check_arg_rz((impl != 0), "impl");
+    icalerror_check_arg_rz((calendar != 0), "calendar");
 
     path[0] = '\0';
-    strncpy(path, impl->dir, MAXPATHLEN - 1);
+    strncpy(path, calendar->dir, MAXPATHLEN - 1);
     strncat(path, "/", MAXPATHLEN - strlen(path) - 1);
     strncat(path, FBLIST_FILE, MAXPATHLEN - strlen(path) - 1);
     path[MAXPATHLEN - 1] = '\0';
 
-    if (impl->freebusy == 0) {
-        impl->freebusy = icalfileset_new(path);
+    if (calendar->freebusy == 0) {
+        calendar->freebusy = icalfileset_new(path);
     }
 
-    return impl->freebusy;
+    return calendar->freebusy;
 }

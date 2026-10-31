@@ -3,6 +3,7 @@
  CREATOR: eric 17 Jul 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  Icalset is the "base class" for representations of a collection of
  iCal components. Derived classes (actually delegates) include:
@@ -12,11 +13,14 @@
     icalheapset   Store components on the heap
     icalmysqlset  Store components in a mysql database.
 
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
 ======================================================================*/
+
+/**
+ * @file icalset.c
+ * @brief Icalset is the "base class" for representations of a collection of iCal components.
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -25,6 +29,7 @@
 #include "icalset.h"
 #include "icaldirset.h"
 #include "icaldirsetimpl.h"
+#include "icalerror_p.h"
 #include "icalfileset.h"
 #include "icalfilesetimpl.h"
 
@@ -66,8 +71,7 @@ static icalset icalset_dirset_init = {
     icaldirset_get_next_component,
     icaldirset_begin_component,
     icaldirsetiter_to_next,
-    icaldirsetiter_to_prior
-};
+    icaldirsetiter_to_prior};
 
 static icalset icalset_fileset_init = {
     ICAL_FILE_SET,
@@ -92,8 +96,7 @@ static icalset icalset_fileset_init = {
     icalfileset_get_next_component,
     icalfileset_begin_component,
     icalfilesetiter_to_next,
-    NULL
-};
+    NULL};
 
 #if defined(HAVE_BDB)
 static icalset icalset_bdbset_init = {
@@ -119,29 +122,28 @@ static icalset icalset_bdbset_init = {
     icalbdbset_get_next_component,
     icalbdbset_begin_component,
     icalbdbsetiter_to_next,
-    NULL
-};
+    NULL};
 #endif
 
 #if defined(_DLOPEN_TEST)
 static int icalset_init_done = 0;
-static pvl_list icalset_kinds = 0;
+static icalpvl_list icalset_kinds = 0;
 
-typedef icalset *(*fptr) (void);
+typedef icalset *(*fptr)(void);
 
 /**
  * Try to load the file and register any icalset found within.
  */
-static int load(const char *file)
+static bool load(const char *file)
 {
     void *modh;
     fptr inith;
-    char *dlerr;
+    const char *dlerr;
     icalset *icalset_init_ptr;
 
     if ((modh = dlopen(file, RTLD_NOW)) == 0) {
         perror("dlopen");
-        return 0;
+        return false;
     }
 
     (void)dlerror(); /* clear */
@@ -150,80 +152,40 @@ static int load(const char *file)
     if (dlerr != NULL) {
         fprintf(stderr, "dlsym error: %s\n", dlerr);
         dlclose(modh);
-        return 0;
+        return false;
     }
 
-    while ((icalset_init_ptr = ((inith) ())) != 0) {
-        pvl_push(icalset_kinds, &icalset_init_ptr);
+    while ((icalset_init_ptr = ((inith)())) != 0) {
+        icalpvl_push(icalset_kinds, &icalset_init_ptr);
     }
 
     (void)dlerror(); /* clear */
     dlclose(modh);
-    return 1;
+    return true;
 }
-
-/**
- * Look in the given directory for files called mod_*.o and try to
- * load them.
- */
-int icalset_loaddir(const char *path)
-{
-    DIR *d;
-    struct dirent *dp;
-    char buf[PATH_MAX], *bufptr;
-    int tot = 0;
-
-    strcpy(buf, path);
-    bufptr = buf + strlen(buf);
-
-    if (*(bufptr - 1) != '/') {
-        *bufptr++ = '/';
-    }
-
-    if ((d = opendir(path)) == 0) {
-        perror("opendir");
-        return 0;
-    }
-
-    while ((dp = readdir(d)) != 0) {
-        if (strncmp(dp->d_name, "mod_", 4)) {
-            continue;
-        }
-
-        strcpy(bufptr, dp->d_name);
-
-        load(buf);
-        tot++;
-    }
-    (void)closedir(d);
-
-    return 1;
-}
-
-int icalset_register_class(icalset *set);
 
 static void icalset_init(void)
 {
     assert(icalset_kinds == 0);
-    icalset_kinds = pvl_newlist();
+    icalset_kinds = icalpvl_newlist();
 
-    pvl_push(icalset_kinds, &icalset_fileset_init);
-    pvl_push(icalset_kinds, &icalset_dirset_init);
+    icalpvl_push(icalset_kinds, &icalset_fileset_init);
+    icalpvl_push(icalset_kinds, &icalset_dirset_init);
 #if defined(HAVE_BDB)
-    pvl_push(icalset_kinds, &icalset_bdb4set_init);
+    icalpvl_push(icalset_kinds, &icalset_bdb4set_init);
 #endif
 
     icalset_init_done++;
 }
 
-int icalset_register_class(icalset *set)
+bool icalset_register_class(icalset *set)
 {
     if (!icalset_init_done) {
         icalset_init();
     }
 
-    pvl_push(icalset_kinds, set);
-    return 1;
+    icalpvl_push(icalset_kinds, set);
+    return true;
 }
 
 #endif
@@ -234,15 +196,15 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
     icalset *ret = NULL;
 
 #if defined(_DLOPEN_TEST)
-    pvl_elem e;
-    icalset *impl;
+    icalpvl_elem e;
+    const icalset *impl;
 
     if (!icalset_init_done) {
         icalset_init();
     }
 
-    for (e = pvl_head(icalset_kinds); e != 0; e = pvl_next(e)) {
-        impl = (icalset *)pvl_data(e);
+    for (e = icalpvl_head(icalset_kinds); e != 0; e = icalpvl_next(e)) {
+        impl = (icalset *)icalpvl_data(e);
         if (impl->kind == kind) {
             break;
         }
@@ -321,6 +283,7 @@ icalset *icalset_new(icalset_kind kind, const char *dsn, void *options)
 
     /** call the implementation specific initializer **/
     if ((ret = data->init(data, dsn, options)) == NULL) {
+        /* coverity[alloc_free_mismatch] */
         icalset_free(data);
     }
 
@@ -417,7 +380,7 @@ icalcomponent *icalset_fetch(icalset *set, const char *uid)
     return set->fetch(set, 0, uid);
 }
 
-icalcomponent *icalset_fetch_match(icalset *set, icalcomponent *comp)
+icalcomponent *icalset_fetch_match(icalset *set, const icalcomponent *comp)
 {
     return set->fetch_match(set, comp);
 }
@@ -447,8 +410,7 @@ icalcomponent *icalset_get_next_component(icalset *set)
     return set->get_next_component(set);
 }
 
-icalsetiter icalsetiter_null = { {ICAL_NO_COMPONENT, 0}
-, 0, 0, 0, 0 };
+icalsetiter icalsetiter_null = {{ICAL_NO_COMPONENT, 0}, 0, 0, 0, 0};
 
 icalsetiter icalset_begin_component(icalset *set,
                                     icalcomponent_kind kind, icalgauge *gauge, const char *tzid)
@@ -464,7 +426,7 @@ icalcomponent *icalsetiter_next(icalsetiter *itr)
 
     do {
         c = icalcompiter_next(&(itr->iter));
-        if (c != 0 && (itr->gauge == 0 || icalgauge_compare(itr->gauge, c) == 1)) {
+        if (c != 0 && (itr->gauge == 0 || icalgauge_compare(itr->gauge, c))) {
             return c;
         }
     } while (c != 0);
@@ -480,7 +442,7 @@ icalcomponent *icalsetiter_prior(icalsetiter *i)
 
     do {
         c = icalcompiter_prior(&(i->iter));
-        if (c != 0 && (i->gauge == 0 || icalgauge_compare(i->gauge, c) == 1)) {
+        if (c != 0 && (i->gauge == 0 || icalgauge_compare(i->gauge, c))) {
             return c;
         }
     } while (c != 0);

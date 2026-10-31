@@ -3,10 +3,13 @@
  CREATOR: eric 21 Aug 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  =========================================================================*/
+
+/**
+ * @file icalclassify.h
+ * @brief Defines functions for classification.
+ */
 
 #ifndef ICALCLASSIFY_H
 #define ICALCLASSIFY_H

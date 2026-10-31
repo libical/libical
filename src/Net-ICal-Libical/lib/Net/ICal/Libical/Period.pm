@@ -1,14 +1,10 @@
 #!/usr/bin/perl -w
 #======================================================================
-# FILE: Component.pm
+# FILE: Period.pm
 # CREATOR: eric
 #
 # SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
-#
-#
 #======================================================================
 
 =pod
@@ -182,7 +178,7 @@ sub start{
 
 Accessor for the end time. Takes a I<Time> object, a valid time string,
 or an integer and returns a time object. This routine is coupled to
-the I<duration> accessor. See I<duration> below for more imformation.
+the I<duration> accessor. See I<duration> below for more information.
 
 =cut
 

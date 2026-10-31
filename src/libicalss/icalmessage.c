@@ -3,28 +3,31 @@
  CREATOR: ebusboom 07 Nov 2000
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
+
+/**
+ * @file icalmessage.c
+ * @brief Implements functions for creating component reply messages.
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalmessage.h"
-#include "icalerror.h"
-#include "icalversion.h"        /* for ICAL_PACKAGE, ICAL_VERSION */
+#include "icalerror_p.h"
+#include "icalversion.h" /* for ICAL_PACKAGE, ICAL_VERSION */
 
 #include <ctype.h>
 #include <stdlib.h>
 
-static icalcomponent *icalmessage_get_inner(icalcomponent *comp)
+static icalcomponent *icalmessage_get_inner(const icalcomponent *comp)
 {
     if (icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT) {
         return icalcomponent_get_first_real_component(comp);
     } else {
-        return comp;
+        return (icalcomponent *)comp;
     }
 }
 
@@ -38,6 +41,10 @@ static char *lowercase(const char *str)
     }
 
     n = strdup(str);
+    if (!n) {
+        icalerror_set_errno(ICAL_NEWFAILED_ERROR);
+        return 0;
+    }
 
     for (p = n; *p != 0; p++) {
         *p = tolower((int)*p);
@@ -46,35 +53,32 @@ static char *lowercase(const char *str)
     return n;
 }
 
-static icalproperty *icalmessage_find_attendee(icalcomponent *comp, const char *user)
+static icalproperty *icalmessage_find_attendee(const icalcomponent *comp, const char *user)
 {
     icalcomponent *inner = icalmessage_get_inner(comp);
     icalproperty *p, *attendee = 0;
-    char *luser = lowercase(user);
 
     for (p = icalcomponent_get_first_property(inner, ICAL_ATTENDEE_PROPERTY);
          p != 0;
          p = icalcomponent_get_next_property(inner, ICAL_ATTENDEE_PROPERTY)) {
-
         char *lattendee;
 
         lattendee = lowercase(icalproperty_get_attendee(p));
+        if (lattendee) {
+            if (strstr(lattendee, user) != 0) {
+                free(lattendee);
+                attendee = p;
+                break;
+            }
 
-        if (strstr(lattendee, user) != 0) {
             free(lattendee);
-            attendee = p;
-            break;
         }
-
-        free(lattendee);
     }
-
-    free(luser);
 
     return attendee;
 }
 
-static void icalmessage_copy_properties(icalcomponent *to, icalcomponent *from,
+static void icalmessage_copy_properties(const icalcomponent *to, const icalcomponent *from,
                                         icalproperty_kind kind)
 {
     icalcomponent *to_inner = icalmessage_get_inner(to);
@@ -94,7 +98,7 @@ static void icalmessage_copy_properties(icalcomponent *to, icalcomponent *from,
         icalproperty_clone(icalcomponent_get_first_property(from_inner, kind)));
 }
 
-static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
+static icalcomponent *icalmessage_new_reply_base(const icalcomponent *c,
                                                  const char *user, const char *msg)
 {
     icalproperty *attendee;
@@ -105,9 +109,9 @@ static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
             ICAL_VCALENDAR_COMPONENT, icalproperty_new_method(ICAL_METHOD_REPLY),
             icalcomponent_vanew(
                 ICAL_VEVENT_COMPONENT,
-                icalproperty_new_dtstamp(icaltime_from_timet_with_zone(time(0), 0, NULL)),
-                0),
-            0);
+                icalproperty_new_dtstamp(icaltime_from_timet_with_zone(time(0), false, NULL)),
+                (void *)0),
+            (void *)0);
 
     icalcomponent *inner = icalmessage_get_inner(reply);
 
@@ -119,7 +123,7 @@ static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
     icalmessage_copy_properties(reply, c, ICAL_SUMMARY_PROPERTY);
     icalmessage_copy_properties(reply, c, ICAL_SEQUENCE_PROPERTY);
 
-    icalcomponent_set_dtstamp(reply, icaltime_from_timet_with_zone(time(0), 0, NULL));
+    icalcomponent_set_dtstamp(reply, icaltime_from_timet_with_zone(time(0), false, NULL));
 
     if (msg != 0) {
         icalcomponent_add_property(inner, icalproperty_new_comment(msg));
@@ -148,7 +152,7 @@ static icalcomponent *icalmessage_new_reply_base(icalcomponent *c,
     return reply;
 }
 
-icalcomponent *icalmessage_new_accept_reply(icalcomponent *c, const char *user, const char *msg)
+icalcomponent *icalmessage_new_accept_reply(const icalcomponent *c, const char *user, const char *msg)
 {
     icalcomponent *reply;
     icalproperty *attendee;
@@ -171,7 +175,7 @@ icalcomponent *icalmessage_new_accept_reply(icalcomponent *c, const char *user, 
     return reply;
 }
 
-icalcomponent *icalmessage_new_decline_reply(icalcomponent *c, const char *user, const char *msg)
+icalcomponent *icalmessage_new_decline_reply(const icalcomponent *c, const char *user, const char *msg)
 {
     icalcomponent *reply;
     icalproperty *attendee;
@@ -193,8 +197,8 @@ icalcomponent *icalmessage_new_decline_reply(icalcomponent *c, const char *user,
 }
 
 /* New is modified version of old */
-icalcomponent *icalmessage_new_counterpropose_reply(icalcomponent *oldc,
-                                                    icalcomponent *newc,
+icalcomponent *icalmessage_new_counterpropose_reply(const icalcomponent *oldc,
+                                                    const icalcomponent *newc,
                                                     const char *user, const char *msg)
 {
     icalcomponent *reply;
@@ -209,7 +213,7 @@ icalcomponent *icalmessage_new_counterpropose_reply(icalcomponent *oldc,
     return reply;
 }
 
-icalcomponent *icalmessage_new_delegate_reply(icalcomponent *c,
+icalcomponent *icalmessage_new_delegate_reply(const icalcomponent *c,
                                               const char *user,
                                               const char *delegatee, const char *msg)
 {
@@ -234,7 +238,7 @@ icalcomponent *icalmessage_new_delegate_reply(icalcomponent *c,
     return reply;
 }
 
-icalcomponent *icalmessage_new_delegate_request(icalcomponent *c,
+icalcomponent *icalmessage_new_delegate_request(const icalcomponent *c,
                                                 const char *user,
                                                 const char *delegatee, const char *msg)
 {
@@ -268,7 +272,7 @@ icalcomponent *icalmessage_new_delegate_request(icalcomponent *c,
     return reply;
 }
 
-icalcomponent *icalmessage_new_error_reply(icalcomponent *c,
+icalcomponent *icalmessage_new_error_reply(const icalcomponent *c,
                                            const char *user,
                                            const char *msg,
                                            const char *debug, icalrequeststatus code)
@@ -292,7 +296,7 @@ icalcomponent *icalmessage_new_error_reply(icalcomponent *c,
         rs.debug = debug;
 
         icalcomponent_add_property(inner, icalproperty_new_requeststatus(rs));
-    } else {    /*  code == ICAL_UNKNOWN_STATUS */
+    } else { /*  code == ICAL_UNKNOWN_STATUS */
 
         /* Copy all of the request status properties */
         icalproperty *p;

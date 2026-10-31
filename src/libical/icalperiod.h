@@ -3,40 +3,46 @@
  CREATOR: eric 26 Jan 2001
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
  Code is Eric Busboom
 ======================================================================*/
 
-#ifndef ICALPERIOD_H
-#define ICALPERIOD_H
-
 /**
  * @file icalperiod.h
- * @brief Functions for working with iCal periods (of time).
+ * @brief Defines data structures for working with iCal periods (of time).
  */
+
+#ifndef ICALPERIOD_H
+#define ICALPERIOD_H
 
 #include "libical_ical_export.h"
 #include "icalduration.h"
 #include "icaltime.h"
 
+#include <stdbool.h>
+
 /**
- * @brief Struct to represent a period in time.
+ * Structure to represent a period in time.
  */
-struct icalperiodtype
-{
+struct icalperiodtype {
+    /** the start of the time period */
     struct icaltimetype start;
+    /** the end of the time period.
+        may be computed from duration if unspecified or invalid */
     struct icaltimetype end;
+    /** the time period duration */
     struct icaldurationtype duration;
 };
 
-#define ICALPERIODTYPE_INITIALIZER { \
-    ICALTIMETYPE_INITIALIZER,        \
-    ICALTIMETYPE_INITIALIZER,        \
-    ICALDURATIONTYPE_INITIALIZER     \
-}
+/// @cond PRIVATE
+#define ICALPERIODTYPE_INITIALIZER \
+    {                              \
+        ICALTIMETYPE_INITIALIZER,  \
+        ICALTIMETYPE_INITIALIZER,  \
+        ICALDURATIONTYPE_INITIALIZER}
+/// @endcond
 
 /**
  * @brief Constructs a new ::icalperiodtype from @a str
@@ -146,7 +152,7 @@ LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_null_period(void);
 /**
  * Checks if a given ::icalperiodtype is a null period.
  * @param p The time period to check
- * @return 1 if @a p is a null period, 0 otherwise
+ * @return true if @a p is a null period, false otherwise
  * @sa icalperiodtype_null_period()
  *
  * @par Usage
@@ -158,12 +164,12 @@ LIBICAL_ICAL_EXPORT struct icalperiodtype icalperiodtype_null_period(void);
  * assert(icalperiodtype_is_null_period(period));
  * ```
  */
-LIBICAL_ICAL_EXPORT int icalperiodtype_is_null_period(struct icalperiodtype p);
+LIBICAL_ICAL_EXPORT bool icalperiodtype_is_null_period(struct icalperiodtype p);
 
 /**
  * Checks if a given ::icalperiodtype is a valid period.
  * @param p The time period to check
- * @return 1 if @a p is a valid period, 0 otherwise
+ * @return true if @a p is a valid period, false otherwise
  *
  * @par Usage
  * ```c
@@ -171,9 +177,9 @@ LIBICAL_ICAL_EXPORT int icalperiodtype_is_null_period(struct icalperiodtype p);
  * struct icalperiodtype period = icalperiodtype_null_period();
  *
  * // a null period isn't a valid period
- * assert(icalperiodtype_is_valid_period(period) == 0);
+ * assert(icalperiodtype_is_valid_period(period));
  * ```
  */
-LIBICAL_ICAL_EXPORT int icalperiodtype_is_valid_period(struct icalperiodtype p);
+LIBICAL_ICAL_EXPORT bool icalperiodtype_is_valid_period(struct icalperiodtype p);
 
 #endif /* !ICALTIME_H */

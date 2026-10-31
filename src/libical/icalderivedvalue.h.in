@@ -1,12 +1,15 @@
 /*======================================================================
- FILE: icalvalue.h
+ FILE: icalderivedvalue.h
  CREATOR: eric 20 March 1999
 
  SPDX-FileCopyrightText: 1999, Eric Busboom  <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
+
+/**
+ * @file icalderivedvalue.h
+ * @brief ICalendar values.
+ */
 
 #ifndef ICALDERIVEDVALUE_H
 #define ICALDERIVEDVALUE_H
@@ -22,9 +25,9 @@ LIBICAL_ICAL_EXPORT void icalvalue_set_x(icalvalue *value, const char *v);
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_x(const char *v);
 LIBICAL_ICAL_EXPORT const char *icalvalue_get_x(const icalvalue *value);
 
-LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_recur(struct icalrecurrencetype v);
-LIBICAL_ICAL_EXPORT void icalvalue_set_recur(icalvalue *value, struct icalrecurrencetype v);
-LIBICAL_ICAL_EXPORT struct icalrecurrencetype icalvalue_get_recur(const icalvalue *value);
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_recur(struct icalrecurrencetype *recur);
+LIBICAL_ICAL_EXPORT void icalvalue_set_recur(icalvalue *value, struct icalrecurrencetype *recur);
+LIBICAL_ICAL_EXPORT struct icalrecurrencetype *icalvalue_get_recur(const icalvalue *value);
 
 LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_trigger(struct icaltriggertype v);
 LIBICAL_ICAL_EXPORT void icalvalue_set_trigger(icalvalue *value, struct icaltriggertype v);
@@ -43,7 +46,7 @@ LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_datetime(struct icaltimetype v);
 
 /**
  * Returns the icaltimetype corresponding to the specified icalvalue.
- * @param a pointer to an icalvalue.
+ * @param value pointer to an icalvalue.
  * @returns the icaltimetype as datetime.
  * @since 3.0
  */
@@ -79,7 +82,21 @@ LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_binary(const char *v);
 LIBICAL_ICAL_EXPORT void icalvalue_set_binary(icalvalue *value, const char *v);
 LIBICAL_ICAL_EXPORT const char *icalvalue_get_binary(const icalvalue *value);
 
-LIBICAL_ICAL_EXPORT void icalvalue_reset_kind(icalvalue *value);
+#define icalvalue_new_link icalvalue_new_uri
+#define icalvalue_set_link icalvalue_set_uri
+#define icalvalue_get_link icalvalue_get_uri
+
+#define icalvalue_new_relatedto icalvalue_new_text
+#define icalvalue_set_relatedto icalvalue_set_text
+#define icalvalue_get_relatedto icalvalue_get_text
+
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_requeststatus(struct icalreqstattype v);
+LIBICAL_ICAL_EXPORT struct icalreqstattype icalvalue_get_requeststatus(const icalvalue *value);
+LIBICAL_ICAL_EXPORT void icalvalue_set_requeststatus(icalvalue *value, struct icalreqstattype v);
+
+LIBICAL_ICAL_EXPORT icalvalue *icalvalue_new_color(const char *v);
+LIBICAL_ICAL_EXPORT void icalvalue_set_color(icalvalue *value, const char *v);
+LIBICAL_ICAL_EXPORT const char *icalvalue_get_color(const icalvalue *value);
 
 <insert_code_here>
 

@@ -1,24 +1,33 @@
+/*
+ * SPDX-FileCopyrightText: 2001, Critical Path
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+ */
+
 /**
  * @file    icalproperty_cxx.cpp
  * @author  fnguyen (12/10/01)
  * @brief   Implementation of C++ Wrapper for icalproperty.c
- *
- * SPDX-FileCopyrightText: 2001, Critical Path
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  */
 
-#include "icalproperty_cxx.h"
-#include "icalparameter_cxx.h"
-#include "icalvalue_cxx.h"
+#include "icalproperty_cxx.hpp"
+#include "icalparameter_cxx.hpp"
+#include "icalvalue_cxx.hpp"
+
+extern "C" {
+#include "icalerror_p.h"
+}
+
+#include <string>
+
 using namespace LibICal;
 
-ICalProperty::ICalProperty() : imp(icalproperty_new(ICAL_ANY_PROPERTY))
+ICalProperty::ICalProperty()
+    : imp(icalproperty_new(ICAL_ANY_PROPERTY))
 {
 }
 
-ICalProperty::ICalProperty(const ICalProperty &v) : imp(icalproperty_clone(v.imp))
+ICalProperty::ICalProperty(const ICalProperty &v)
+    : imp(icalproperty_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -31,12 +40,12 @@ ICalProperty &ICalProperty::operator=(const ICalProperty &v)
         return *this;
     }
 
-    if (imp != NULL) {
-        icalproperty_free(imp);
-        imp = icalproperty_clone(v.imp);
-        if (imp == NULL) {
-            throw icalerrno;
-        }
+    icalproperty_free(imp);
+    imp = NULL;
+
+    imp = icalproperty_clone(v.imp);
+    if (imp == NULL) {
+        throw icalerrno;
     }
 
     return *this;
@@ -49,16 +58,15 @@ void ICalProperty::detach()
 
 ICalProperty::~ICalProperty()
 {
-    if (imp != NULL) {
-        icalproperty_free(imp);
-    }
+    icalproperty_free(imp);
 }
 
-ICalProperty::ICalProperty(icalproperty *v) : imp(v)
+ICalProperty::ICalProperty(icalproperty *v)
+    : imp(v)
 {
 }
 
-ICalProperty::ICalProperty(std::string str) //NOLINT TODO:V3.1:pass const ref
+ICalProperty::ICalProperty(const std::string &str)
     : imp(icalproperty_new_from_string(str.c_str()))
 {
 }
@@ -78,7 +86,8 @@ icalproperty_kind ICalProperty::isa()
     return icalproperty_isa(imp);
 }
 
-int ICalProperty::isa_property(void *property)
+/* cppcheck-suppress functionStatic */
+bool ICalProperty::isa_property(void *property) //NOLINT(readability-convert-member-functions-to-static)
 {
     return icalproperty_isa_property(property);
 }
@@ -86,8 +95,8 @@ int ICalProperty::isa_property(void *property)
 int ICalProperty::operator==(ICalProperty &rhs)
 {
     icalparameter_xliccomparetype result;
-    ICalValue  *thisPropValue = this->get_value();
-    ICalValue  *rhsPropValue  = rhs.get_value();
+    ICalValue *thisPropValue = this->get_value();
+    ICalValue *rhsPropValue = rhs.get_value();
     result = icalvalue_compare(static_cast<icalvalue *>(*thisPropValue),
                                static_cast<icalvalue *>(*rhsPropValue));
     delete thisPropValue;
@@ -95,11 +104,13 @@ int ICalProperty::operator==(ICalProperty &rhs)
     return (result == ICAL_XLICCOMPARETYPE_EQUAL) ? 1 : 0;
 }
 
+/* cppcheck-suppress constParameterReference */
 void ICalProperty::add_parameter(ICalParameter &parameter)
 {
     icalproperty_add_parameter(imp, parameter);
 }
 
+/* cppcheck-suppress constParameterReference */
 void ICalProperty::set_parameter(ICalParameter &parameter)
 {
     icalproperty_set_parameter(imp, parameter);
@@ -168,11 +179,13 @@ std::string ICalProperty::get_name() const
 }
 
 /* Deal with X properties */
+/* cppcheck-suppress constParameterReference */
 void ICalProperty::set_x_name(ICalProperty &prop, const std::string &name)
 {
     icalproperty_set_x_name(prop, name.c_str());
 }
 
+/* cppcheck-suppress constParameterReference */
 std::string ICalProperty::get_x_name(ICalProperty &prop)
 {
     return static_cast<std::string>(icalproperty_get_x_name(prop));
@@ -234,7 +247,7 @@ icalproperty_status ICalProperty::string_to_status(const std::string &str)
     return icalproperty_string_to_status(str.c_str());
 }
 
-int ICalProperty::enum_belongs_to_property(const icalproperty_kind &kind, const int &e)
+bool ICalProperty::enum_belongs_to_property(const icalproperty_kind &kind, const int &e)
 {
     return icalproperty_enum_belongs_to_property(kind, e);
 }
@@ -322,7 +335,8 @@ void ICalProperty::set_completed(const struct icaltimetype &val)
     icalproperty_set_completed(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_completed() const {
+struct icaltimetype ICalProperty::get_completed() const
+{
     return icalproperty_get_completed(imp);
 }
 
@@ -343,7 +357,8 @@ void ICalProperty::set_created(const struct icaltimetype &val)
     icalproperty_set_created(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_created() const {
+struct icaltimetype ICalProperty::get_created() const
+{
     return icalproperty_get_created(imp);
 }
 
@@ -364,7 +379,8 @@ void ICalProperty::set_dtend(const struct icaltimetype &val)
     icalproperty_set_dtend(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_dtend() const {
+struct icaltimetype ICalProperty::get_dtend() const
+{
     return icalproperty_get_dtend(imp);
 }
 
@@ -374,7 +390,8 @@ void ICalProperty::set_dtstamp(const struct icaltimetype &val)
     icalproperty_set_dtstamp(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_dtstamp() const {
+struct icaltimetype ICalProperty::get_dtstamp() const
+{
     return icalproperty_get_dtstamp(imp);
 }
 
@@ -384,7 +401,8 @@ void ICalProperty::set_dtstart(const struct icaltimetype &val)
     icalproperty_set_dtstart(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_dtstart() const {
+struct icaltimetype ICalProperty::get_dtstart() const
+{
     return icalproperty_get_dtstart(imp);
 }
 
@@ -394,7 +412,8 @@ void ICalProperty::set_due(const struct icaltimetype &val)
     icalproperty_set_due(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_due() const {
+struct icaltimetype ICalProperty::get_due() const
+{
     return icalproperty_get_due(imp);
 }
 
@@ -404,7 +423,8 @@ void ICalProperty::set_duration(const struct icaldurationtype &val)
     icalproperty_set_duration(imp, val);
 }
 
-struct icaldurationtype ICalProperty::get_duration() const {
+struct icaldurationtype ICalProperty::get_duration() const
+{
     return icalproperty_get_duration(imp);
 }
 
@@ -414,7 +434,8 @@ void ICalProperty::set_exdate(const struct icaltimetype &val)
     icalproperty_set_exdate(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_exdate() const {
+struct icaltimetype ICalProperty::get_exdate() const
+{
     return icalproperty_get_exdate(imp);
 }
 
@@ -430,12 +451,13 @@ int ICalProperty::get_expand() const
 }
 
 /* EXRULE */
-void ICalProperty::set_exrule(const struct icalrecurrencetype &val)
+void ICalProperty::set_exrule(struct icalrecurrencetype *val)
 {
     icalproperty_set_exrule(imp, val);
 }
 
-struct icalrecurrencetype ICalProperty::get_exrule() const {
+struct icalrecurrencetype *ICalProperty::get_exrule() const
+{
     return icalproperty_get_exrule(imp);
 }
 
@@ -445,7 +467,8 @@ void ICalProperty::set_freebusy(const struct icalperiodtype &val)
     icalproperty_set_freebusy(imp, val);
 }
 
-struct icalperiodtype ICalProperty::get_freebusy() const {
+struct icalperiodtype ICalProperty::get_freebusy() const
+{
     return icalproperty_get_freebusy(imp);
 }
 
@@ -455,7 +478,8 @@ void ICalProperty::set_geo(const struct icalgeotype &val)
     icalproperty_set_geo(imp, val);
 }
 
-struct icalgeotype ICalProperty::get_geo() const {
+struct icalgeotype ICalProperty::get_geo() const
+{
     return icalproperty_get_geo(imp);
 }
 
@@ -465,7 +489,8 @@ void ICalProperty::set_lastmodified(const struct icaltimetype &val)
     icalproperty_set_lastmodified(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_lastmodified() const {
+struct icaltimetype ICalProperty::get_lastmodified() const
+{
     return icalproperty_get_lastmodified(imp);
 }
 
@@ -596,7 +621,8 @@ void ICalProperty::set_rdate(const struct icaldatetimeperiodtype &val)
     icalproperty_set_rdate(imp, val);
 }
 
-struct icaldatetimeperiodtype ICalProperty::get_rdate() const {
+struct icaldatetimeperiodtype ICalProperty::get_rdate() const
+{
     return icalproperty_get_rdate(imp);
 }
 
@@ -606,7 +632,8 @@ void ICalProperty::set_recurrenceid(const struct icaltimetype &val)
     icalproperty_set_recurrenceid(imp, val);
 }
 
-struct icaltimetype ICalProperty::get_recurrenceid() const {
+struct icaltimetype ICalProperty::get_recurrenceid() const
+{
     return icalproperty_get_recurrenceid(imp);
 }
 
@@ -646,14 +673,15 @@ int ICalProperty::get_repeat() const
 /* REQUEST-STATUS */
 void ICalProperty::set_requeststatus(const std::string &val)
 {
-    icalreqstattype v = icalreqstattype_from_string(val.c_str());
+    const icalreqstattype v = icalreqstattype_from_string(val.c_str());
 
     icalproperty_set_requeststatus(imp, v);
 }
 
 std::string ICalProperty::get_requeststatus() const
 {
-    icalreqstattype v = icalproperty_get_requeststatus(imp);
+    const icalreqstattype v = icalproperty_get_requeststatus(imp);
+    /* coverity[resource_leak] */
     return static_cast<std::string>(icalreqstattype_as_string(v));
 }
 
@@ -669,12 +697,13 @@ std::string ICalProperty::get_resources() const
 }
 
 /* RRULE */
-void ICalProperty::set_rrule(const struct icalrecurrencetype &val)
+void ICalProperty::set_rrule(struct icalrecurrencetype *val)
 {
     icalproperty_set_rrule(imp, val);
 }
 
-struct icalrecurrencetype ICalProperty::get_rrule() const {
+struct icalrecurrencetype *ICalProperty::get_rrule() const
+{
     return icalproperty_get_rrule(imp);
 }
 
@@ -750,7 +779,8 @@ void ICalProperty::set_trigger(const struct icaltriggertype &val)
     icalproperty_set_trigger(imp, val);
 }
 
-struct icaltriggertype ICalProperty::get_trigger() const {
+struct icaltriggertype ICalProperty::get_trigger() const
+{
     return icalproperty_get_trigger(imp);
 }
 

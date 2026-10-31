@@ -3,14 +3,14 @@
  CREATOR: Milan Crha 26 November 2014
 
  SPDX-FileCopyrightText: 2014 Milan Crha <mcrha@redhat.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#include "icaltime_p.h"
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
@@ -31,23 +31,29 @@ static const void *thread_comp = NULL;
 static void *thread_func(void *user_data)
 {
     icaltimezone *zone = user_data;
-    icalcomponent *icalcomp;
+    const icalcomponent *icalcomp;
 
     if (!zone) {
         return NULL;
     }
 
     icalcomp = icaltimezone_get_component(zone);
-    pthread_mutex_lock(&thread_comp_mutex);
+    if (pthread_mutex_lock(&thread_comp_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return NULL;
+    }
     if (!thread_comp) {
         thread_comp = icalcomp;
     } else {
         assert(thread_comp == icalcomp);
     }
-    pthread_mutex_unlock(&thread_comp_mutex);
+    if (pthread_mutex_unlock(&thread_comp_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+        return NULL;
+    }
     /* Do not call the clone, it confuses the Thread Sanitizer, which
        claims data race on the internal members of the icalcomp. */
-    /* icalcomp = icalcomponent_new_clone(icalcomp);
+    /* icalcomp = icalcomponent_clone(icalcomp);
        icalcomponent_free(icalcomp);
     */
 
@@ -79,7 +85,7 @@ int main(void)
     int dd, hh, zz, tried = 0;
     long zz2 = -1;
 
-    set_zone_directory("../../zoneinfo");
+    icaltimezone_set_zone_directory("../../zoneinfo");
     icaltimezone_set_tzid_prefix("/softwarestudio.org/");
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
@@ -103,8 +109,8 @@ int main(void)
     builtin_timezones = icaltimezone_get_builtin_timezones();
     printf("got %lu zones\n", (unsigned long)builtin_timezones->num_elements);
     if (builtin_timezones->num_elements == 0) {
-      printf("YIKES. Try running from the build/bin directory\n");
-      return(1);
+        printf("YIKES. Try running from the build/bin directory\n");
+        return 1;
     }
 
     for (zz = -1; zz < (int)builtin_timezones->num_elements; zz++) {
@@ -137,14 +143,15 @@ int main(void)
                     tried++;
 
                     zz2++;
-                    if (zz2 >= (long)builtin_timezones->num_elements)
+                    if (zz2 >= (long)builtin_timezones->num_elements) {
                         zz2 = -1;
+                    }
                 }
             }
         }
 
         printf("\r%lu %% done",
-               (zz >= 0 ? zz : 0) * 100 / (unsigned long)builtin_timezones->num_elements);
+               (zz >= 0 ? (unsigned long)zz : 0) * 100 / (unsigned long)builtin_timezones->num_elements);
         fflush(stdout);
     }
 

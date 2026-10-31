@@ -3,7 +3,6 @@
  CREATOR: eric 30 June 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Initial Developer of the Original Code is Eric Busboom
@@ -34,6 +33,8 @@
  */
 
 #include "libical_ical_export.h"
+
+#include <stddef.h>
 
 /**
  * @brief Creates a new temporary buffer on the ring and returns it.
@@ -136,9 +137,11 @@ LIBICAL_ICAL_EXPORT void icalmemory_add_tmp_buffer(void *buf);
  */
 LIBICAL_ICAL_EXPORT void icalmemory_free_ring(void);
 
+/// @cond PRIVATE
 typedef void *(*icalmemory_malloc_f)(size_t);
 typedef void *(*icalmemory_realloc_f)(void *, size_t);
 typedef void (*icalmemory_free_f)(void *);
+/// @endcond
 
 /**
  * @brief Configures the functions to use for memory management.
@@ -154,7 +157,7 @@ typedef void (*icalmemory_free_f)(void *);
  * Note: The memory management functions configured via this
  * functions are used throughout the core libical component but not within
  * other components like libicalvcal.
- * @since 3.1.0
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc,
                                                         icalmemory_realloc_f f_realloc,
@@ -168,7 +171,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_ma
  * @param f_free A pointer to the function to use for memory deallocation.
  *
  * Retrieves the functions used by the library for memory management.
- * @since 3.1.0
+ * @since 4.0
  */
 LIBICAL_ICAL_EXPORT void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f *f_malloc,
                                                         icalmemory_realloc_f *f_realloc, icalmemory_free_f *f_free);
@@ -264,7 +267,7 @@ LIBICAL_ICAL_EXPORT void icalmemory_free_buffer(void *buf);
    normally allocated memory, or on buffers created from
    icalmemory_new_buffer, never with buffers created by
    icalmemory_tmp_buffer. If icalmemory_append_string has to resize a
-   buffer on the ring, the ring will loose track of it an you will
+   buffer on the ring, the ring will loose track of it and you will
    have memory problems. */
 
 /**
@@ -376,5 +379,42 @@ LIBICAL_ICAL_EXPORT void icalmemory_append_char(char **buf, char **pos, size_t *
  * ```
  */
 LIBICAL_ICAL_EXPORT char *icalmemory_strdup(const char *s);
+
+/**
+ * Encodes a string per RFC 6868 and then appends it to the specified char string buffer.
+ *
+ * This function filters out the characters not permitted by the RFC.
+ * paramtext    = *SAFE-CHAR
+ * quoted-string= DQUOTE *QSAFE-CHAR DQUOTE
+ *
+ * Only use on normally allocated memory, or on buffers created from icalmemory_new_buffer,
+ * never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_encoded_string has
+ * to resize a buffer on the ring, the ring will loose track of it and you will have memory problems.
+ *
+ * @param buf a pointer to a char string buffer to be appended. The associated memory should not
+ * be part of the temporary memory managed by the library.
+ * @param pos the position in @b buf in which the new string to be appended
+ * @param buf_size the size of the buffer before appended
+ * @param string a pointer to char string to be allocated
+ */
+LIBICAL_ICAL_EXPORT void icalmemory_append_encoded_string(char **buf, char **pos,
+                                                          size_t *buf_size,
+                                                          const char *string);
+/**
+ * Decodes a string as TEXT value and then appends it to the buffer.
+ *
+ * Only use on normally allocated memory, or on buffers created from icalmemory_new_buffer,
+ * never with buffers created by icalmemory_tmp_buffer. If icalmemory_append_decoded_string has
+ * to resize a buffer on the ring, the ring will loose track of it and you will have memory problems
+ *
+ * @param buf a pointer to a char string buffer to be appended. The associated memory should not
+ * be part of the temporary memory managed by the library.
+ * @param pos the position in @b buf in which the new string to be appended
+ * @param buf_size the size of the buffer before appended
+ * @param string a pointer to char string to be allocated
+ */
+LIBICAL_ICAL_EXPORT void icalmemory_append_decoded_string(char **buf, char **pos,
+                                                          size_t *buf_size,
+                                                          const char *string);
 
 #endif /* !ICALMEMORY_H */

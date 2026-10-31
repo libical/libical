@@ -1,4 +1,6 @@
-*.kdev4
-*~
-*.rej
-*.orig
+book
+/src/java/build/
+.cache
+compile_commands.json
+precommit.out
+abi-dumps

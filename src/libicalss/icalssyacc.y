@@ -4,7 +4,6 @@
 /*  CREATOR: eric 08 Aug 2000                                              */
 /*                                                                         */
 /* SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>    */
-/*                                                                         */
 /* SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0                       */
 /*                                                                         */
 /* The Original Code is eric. The Initial Developer of the Original        */
@@ -139,12 +138,12 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
 
     /* Handle the case where a component was specified */
     if(compstr != 0){
-    where->comp = icalenum_string_to_component_kind(compstr);
+    where->comp = icalcomponent_string_to_kind(compstr);
     } else {
     where->comp = ICAL_NO_COMPONENT;
     }
 
-    where->prop = icalenum_string_to_property_kind(propstr);
+    where->prop = icalproperty_string_to_kind(propstr);
 
     where->compare = compare;
 
@@ -154,13 +153,13 @@ static void ssyacc_add_where(struct icalgauge_impl* impl, char* str1,
     return;
     }
 
-    pvl_push(impl->where,where);
+    icalpvl_push(impl->where,where);
 }
 
 static void set_logic(struct icalgauge_impl* impl,icalgaugelogic l)
 {
-    pvl_elem e = pvl_tail(impl->where);
-    struct icalgauge_where *where = pvl_data(e);
+    icalpvl_elem e = icalpvl_tail(impl->where);
+    struct icalgauge_where *where = icalpvl_data(e);
 
     where->logic = l;
 
@@ -199,7 +198,7 @@ static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
 
     /* Handle the case where a component was specified */
     if(compstr != 0){
-    where->comp = icalenum_string_to_component_kind(compstr);
+    where->comp = icalcomponent_string_to_kind(compstr);
     } else {
     where->comp = ICAL_NO_COMPONENT;
     }
@@ -209,7 +208,7 @@ static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
     if(strcmp("*",propstr) == 0) {
     where->prop = ICAL_ANY_PROPERTY;
     } else {
-    where->prop = icalenum_string_to_property_kind(propstr);
+    where->prop = icalproperty_string_to_kind(propstr);
     }
 
 
@@ -219,20 +218,20 @@ static void ssyacc_add_select(struct icalgauge_impl* impl, char* str1)
       return;
     }
 
-    pvl_push(impl->select,where);
+    icalpvl_push(impl->select,where);
 }
 
 static void ssyacc_add_from(struct icalgauge_impl* impl, char* str1)
 {
     icalcomponent_kind ckind;
 
-    ckind = icalenum_string_to_component_kind(str1);
+    ckind = icalcomponent_string_to_kind(str1);
 
     if(ckind == ICAL_NO_COMPONENT){
     assert(0);
     }
 
-    pvl_push(impl->from,(void *)ckind);
+    icalpvl_push(impl->from,(void *)ckind);
 
 }
 

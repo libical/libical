@@ -1,0 +1,26 @@
+BEGIN:VCARD
+BDAY;VALUE=DATE:1963-09-21
+VERSION:3.0
+N:Stenerson;Derik
+FN:Derik Stenerson
+ORG:Microsoft Corporation
+ADR;TYPE=WORK,POSTAL,PARCEL:;;One Microsoft Way;Redmond;WA;98052-6399;USA
+TEL;TYPE=WORK,MSG:+1-425-936-5522
+TEL;TYPE=WORK,FAX:+1-425-936-7329
+EMAIL;TYPE=INTERNET:deriks@Microsoft.com
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Ganguly;Anik
+FN:Anik Ganguly
+ORG: Open Text Inc.
+ADR;TYPE=WORK,POSTAL,PARCEL:;Suite 101;38777 West Six Mile Road;Livonia;MI;48152;USA
+TEL;TYPE=WORK,MSG:+1-734-542-5955
+EMAIL;TYPE=INTERNET:ganguly@acm.org
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Moskowitz;Robert
+FN:Robert Moskowitz
+EMAIL;TYPE=INTERNET:rgm-ietf@htt-consult.com
+END:VCARD

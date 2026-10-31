@@ -1,6 +1,5 @@
 /*
  * SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
- *
  * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  */
 
@@ -50,7 +49,7 @@ static void global_data_object_freed_cb(gpointer user_data, G_GNUC_UNUSED GObjec
         }
 
         if (!g_hash_table_size(global_objects)) {
-             g_hash_table_destroy(global_objects);
+            g_hash_table_destroy(global_objects);
             global_objects = NULL;
         }
     }
@@ -86,28 +85,28 @@ void i_cal_object_free_global_objects(void)
             g_object_weak_unref(value, global_data_object_freed_cb, key);
         }
 
-        g_hash_table_destroy (objects);
+        g_hash_table_destroy(objects);
     }
 }
 
 typedef struct
 {
-    GMutex props_lock;  /* to guard all the below members */
+    GMutex props_lock; /* to guard all the below members */
 
     gpointer native;
     GDestroyNotify native_destroy_func;
     gboolean is_global_memory;
     gboolean always_destroy;
     GObject *owner;
-    GSList *dependers;  /* referenced GObject-s */
+    GSList *dependers; /* referenced GObject-s */
 } ICalObjectPrivate;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(ICalObject, i_cal_object, G_TYPE_OBJECT)
 
-#define LOCK_PROPS(x) g_mutex_lock (&((x)->props_lock))
-#define UNLOCK_PROPS(x) g_mutex_unlock (&((x)->props_lock))
+#define LOCK_PROPS(x) g_mutex_lock(&((x)->props_lock))
+#define UNLOCK_PROPS(x) g_mutex_unlock(&((x)->props_lock))
 
-enum
+enum PropID
 {
     PROP_0,
     PROP_NATIVE,
@@ -118,14 +117,14 @@ enum
 };
 
 static void i_cal_object_set_property(GObject *object, guint property_id,
-                                      const GValue * value, GParamSpec * pspec)
+                                      const GValue *value, GParamSpec *pspec)
 {
     ICalObject *iobject = I_CAL_OBJECT(object);
     ICalObjectPrivate *priv = i_cal_object_get_instance_private(iobject);
 
     g_return_if_fail(I_CAL_IS_OBJECT(object));
 
-    switch (property_id) {
+    switch ((enum PropID)property_id) {
     case PROP_NATIVE:
         /* no need for LOCK_PROPS() here, these can be set only during construction time */
         g_return_if_fail(priv->native == NULL);
@@ -148,19 +147,21 @@ static void i_cal_object_set_property(GObject *object, guint property_id,
     case PROP_OWNER:
         i_cal_object_set_owner(iobject, g_value_get_object(value));
         return;
+    case PROP_0:
+        break;
     }
 
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
 }
 
 static void i_cal_object_get_property(GObject *object, guint property_id,
-                                      GValue * value, GParamSpec * pspec)
+                                      GValue *value, GParamSpec *pspec)
 {
     ICalObject *iobject = I_CAL_OBJECT(object);
 
     g_return_if_fail(I_CAL_IS_OBJECT(object));
 
-    switch (property_id) {
+    switch ((enum PropID)property_id) {
     case PROP_NATIVE:
         g_value_set_pointer(value, i_cal_object_get_native(iobject));
         return;
@@ -180,12 +181,17 @@ static void i_cal_object_get_property(GObject *object, guint property_id,
     case PROP_OWNER:
         g_value_take_object(value, i_cal_object_ref_owner(iobject));
         return;
+    case PROP_0:
+        break;
     }
 
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
 }
 
 static void i_cal_object_finalize(GObject *object)
+#if defined(UNDEFINED_SANITIZER) && defined(__clang__)
+    __attribute__((no_sanitize("undefined")))
+#endif
 {
     ICalObject *iobject = I_CAL_OBJECT(object);
     ICalObjectPrivate *priv = i_cal_object_get_instance_private(iobject);
@@ -193,7 +199,7 @@ static void i_cal_object_finalize(GObject *object)
     if ((priv->always_destroy || !priv->owner) &&
         !priv->is_global_memory &&
         priv->native && priv->native_destroy_func) {
-        g_clear_pointer(&priv->native, priv->native_destroy_func);
+        g_clear_pointer(&priv->native, priv->native_destroy_func); // <- ubsan issue here
     }
 
     g_clear_object(&priv->owner);
@@ -206,7 +212,7 @@ static void i_cal_object_finalize(GObject *object)
     G_OBJECT_CLASS(i_cal_object_parent_class)->finalize(object);
 }
 
-static void i_cal_object_class_init(ICalObjectClass * class)
+static void i_cal_object_class_init(ICalObjectClass *class)
 {
     GObjectClass *object_class;
 
@@ -227,9 +233,9 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             "native",
             "Native",
             "Native libical structure",
-            G_PARAM_READWRITE |
-            G_PARAM_CONSTRUCT_ONLY |
-            G_PARAM_STATIC_STRINGS));
+            G_PARAM_READWRITE | //NOLINT(clang-analyzer-optin.core.EnumCastOutOfRange)
+                G_PARAM_CONSTRUCT_ONLY |
+                G_PARAM_STATIC_STRINGS));
 
     /**
      * ICalObject:native-destroy-func:
@@ -243,8 +249,8 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             "native-destroy-func",
             "Native-Destroy-Func",
             "GDestroyNotify function to use to destroy the native libical structure",
-            G_PARAM_READWRITE |
-            G_PARAM_STATIC_STRINGS));
+            G_PARAM_READWRITE | //NOLINT(clang-analyzer-optin.core.EnumCastOutOfRange)
+                G_PARAM_STATIC_STRINGS));
 
     /**
      * ICalObject:is-global-memory:
@@ -260,9 +266,9 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             "Is-Global-Memory",
             "Whether the native libical structure is from a global shared memory",
             FALSE,
-            G_PARAM_READWRITE |
-            G_PARAM_CONSTRUCT_ONLY |
-            G_PARAM_STATIC_STRINGS));
+            G_PARAM_READWRITE | //NOLINT(clang-analyzer-optin.core.EnumCastOutOfRange)
+                G_PARAM_CONSTRUCT_ONLY |
+                G_PARAM_STATIC_STRINGS));
 
     /**
      * ICalObject:always-destroy:
@@ -280,8 +286,8 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             "Always-Destroy",
             "Whether the native libical structure is freed even when the owner is set",
             FALSE,
-            G_PARAM_READWRITE |
-            G_PARAM_STATIC_STRINGS));
+            G_PARAM_READWRITE | //NOLINT(clang-analyzer-optin.core.EnumCastOutOfRange)
+                G_PARAM_STATIC_STRINGS));
 
     /**
      * ICalObject:owner:
@@ -297,8 +303,8 @@ static void i_cal_object_class_init(ICalObjectClass * class)
             "Owner",
             "The native libical structure owner",
             G_TYPE_OBJECT,
-            G_PARAM_READWRITE |
-            G_PARAM_STATIC_STRINGS));
+            G_PARAM_READWRITE | //NOLINT(clang-analyzer-optin.core.EnumCastOutOfRange)
+                G_PARAM_STATIC_STRINGS));
 }
 
 static void i_cal_object_init(ICalObject *iobject)
@@ -310,7 +316,7 @@ static void i_cal_object_init(ICalObject *iobject)
 
 /**
  * i_cal_object_construct: (skip)
- * @object_type: a GType of an #ICalObject descendat to construct
+ * @object_type: a GType of an #ICalObject descendant to construct
  * @native: a native libical structure
  * @native_destroy_func: a function to be called on @native when it should be freed
  * @is_global_memory: whether @native is a global shared memory structure
@@ -342,8 +348,9 @@ i_cal_object_construct(GType object_type,
 
     g_return_val_if_fail(object_type != G_TYPE_INVALID, NULL);
     g_return_val_if_fail(native != NULL, NULL);
-    if (owner)
+    if (owner) {
         g_return_val_if_fail(G_IS_OBJECT(owner), NULL);
+    }
 
     if (is_global_memory) {
         G_LOCK(global_objects);
@@ -446,7 +453,7 @@ gpointer i_cal_object_steal_native(ICalObject *iobject)
 
     LOCK_PROPS(priv);
 
-    native = g_steal_pointer(&priv->native);
+    native = g_steal_pointer(&priv->native); //NOLINT(bugprone-multi-level-implicit-pointer-conversion)
 
     UNLOCK_PROPS(priv);
 
@@ -551,8 +558,9 @@ void i_cal_object_set_owner(ICalObject *iobject, GObject *owner)
     ICalObjectPrivate *priv = i_cal_object_get_instance_private(iobject);
 
     g_return_if_fail(I_CAL_IS_OBJECT(iobject));
-    if (owner)
+    if (owner) {
         g_return_if_fail(G_IS_OBJECT(owner));
+    }
 
     LOCK_PROPS(priv);
 
@@ -561,7 +569,7 @@ void i_cal_object_set_owner(ICalObject *iobject, GObject *owner)
         return;
     }
 
-    g_set_object(&priv->owner, owner);
+    g_set_object(&priv->owner, owner); //NOLINT(bugprone-sizeof-expression)
 
     UNLOCK_PROPS(priv);
 
@@ -591,8 +599,9 @@ GObject *i_cal_object_ref_owner(ICalObject *iobject)
     LOCK_PROPS(priv);
 
     owner = priv->owner;
-    if (owner)
+    if (owner) {
         g_object_ref(owner);
+    }
 
     UNLOCK_PROPS(priv);
 
@@ -704,13 +713,15 @@ void i_cal_object_set_always_destroy(ICalObject *iobject, gboolean value)
     LOCK_PROPS(priv);
 
     changed = (value ? 1 : 0) != (priv->always_destroy ? 1 : 0);
-    if (changed)
+    if (changed) {
         priv->always_destroy = value;
+    }
 
     UNLOCK_PROPS(priv);
 
-    if (changed)
+    if (changed) {
         g_object_notify(G_OBJECT(iobject), "always-destroy");
+    }
 }
 
 /**

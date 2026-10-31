@@ -5,6 +5,8 @@
 */
 
 #include <libical/ical.h>
+
+#include <assert.h>
 #include <stdlib.h>
 
 /* Gets a particular parameter out of a component. This routine will
@@ -12,10 +14,10 @@
    that this routine assumes that the component that we pass in is a
    VEVENT.  */
 
-void get_required_attendees(icalcomponent* event)
+void get_required_attendees(icalcomponent *event)
 {
-    icalproperty* p;
-    icalparameter* parameter;
+    icalproperty *p;
+    icalparameter *parameter;
 
     assert(event != 0);
     assert(icalcomponent_isa(event) == ICAL_VEVENT_COMPONENT);
@@ -27,28 +29,25 @@ void get_required_attendees(icalcomponent* event)
        struct, so the are not thread safe unless you lock the whole
        component. */
 
-    for(
-        p = icalcomponent_get_first_property(event,ICAL_ATTENDEE_PROPERTY);
+    for (
+        p = icalcomponent_get_first_property(event, ICAL_ATTENDEE_PROPERTY);
         p != 0;
-        p = icalcomponent_get_next_property(event,ICAL_ATTENDEE_PROPERTY)
-        ) {
-
+        p = icalcomponent_get_next_property(event, ICAL_ATTENDEE_PROPERTY)) {
         /* Get the first ROLE parameter in the property. There should
            only be one, so we won't bother to iterate over them. But,
            you can iterate over parameters just like with properties */
 
-        parameter = icalproperty_get_first_parameter(p,ICAL_ROLE_PARAMETER);
+        parameter = icalproperty_get_first_parameter(p, ICAL_ROLE_PARAMETER);
 
         /* If the parameter indicates the participant is required, get
            the attendees name and stick a copy of it into the output
            array */
 
-        if ( icalparameter_get_role(parameter) == ICAL_ROLE_REQPARTICIPANT)
-        {
+        if (icalparameter_get_role(parameter) == ICAL_ROLE_REQPARTICIPANT) {
             /* Remember, the caller does not own this string, so you
                should strdup it if you want to change it. */
             const char *attendee = icalproperty_get_attendee(p);
-            printf("%s",attendee);
+            printf("%s", attendee);
         }
     }
 }
@@ -57,35 +56,31 @@ void get_required_attendees(icalcomponent* event)
    NEEDSACTION or has no PARTSTAT parameter, change it to
    TENTATIVE. */
 
-void update_attendees(icalcomponent* event)
+void update_attendees(icalcomponent *event)
 {
-    icalproperty* p;
-    icalparameter* parameter;
+    icalproperty *p;
+    icalparameter *parameter;
 
     assert(event != 0);
-        assert(icalcomponent_isa(event) == ICAL_VEVENT_COMPONENT);
+    assert(icalcomponent_isa(event) == ICAL_VEVENT_COMPONENT);
 
-    for(
-        p = icalcomponent_get_first_property(event,ICAL_ATTENDEE_PROPERTY);
+    for (
+        p = icalcomponent_get_first_property(event, ICAL_ATTENDEE_PROPERTY);
         p != 0;
-        p = icalcomponent_get_next_property(event,ICAL_ATTENDEE_PROPERTY)
-        ) {
-
-        parameter = icalproperty_get_first_parameter(p,ICAL_PARTSTAT_PARAMETER);
+        p = icalcomponent_get_next_property(event, ICAL_ATTENDEE_PROPERTY)) {
+        parameter = icalproperty_get_first_parameter(p, ICAL_PARTSTAT_PARAMETER);
 
         if (parameter == 0) {
-
             /* There was no PARTSTAT parameter, so add one.  */
             icalproperty_add_parameter(
                 p,
-                icalparameter_new_partstat(ICAL_PARTSTAT_TENTATIVE)
-                );
+                icalparameter_new_partstat(ICAL_PARTSTAT_TENTATIVE));
 
         } else if (icalparameter_get_partstat(parameter) == ICAL_PARTSTAT_NEEDSACTION) {
             /* Remove the NEEDSACTION parameter and replace it with
                TENTATIVE */
 
-            icalproperty_remove_parameter_by_kind(p,ICAL_PARTSTAT_PARAMETER);
+            icalproperty_remove_parameter_by_kind(p, ICAL_PARTSTAT_PARAMETER);
 
             /* Don't forget to free it */
             icalparameter_free(parameter);
@@ -93,8 +88,7 @@ void update_attendees(icalcomponent* event)
             /* Add a new one */
             icalproperty_add_parameter(
                 p,
-                icalparameter_new_partstat(ICAL_PARTSTAT_TENTATIVE)
-                );
+                icalparameter_new_partstat(ICAL_PARTSTAT_TENTATIVE));
         }
     }
 }
@@ -106,7 +100,7 @@ void test_properties(void)
     icalproperty *prop;
     icalparameter *param;
     icalvalue *value;
-    char *str;
+    const char *str;
 
     icalproperty *clone;
 
@@ -120,20 +114,19 @@ void test_properties(void)
         (void *)0);
 
     /* Iterate through all of the parameters in the property */
-    for(param = icalproperty_get_first_parameter(prop,ICAL_ANY_PARAMETER);
-        param != 0;
-        param = icalproperty_get_next_parameter(prop,ICAL_ANY_PARAMETER)) {
-
-        printf("Prop parameter: %s\n",icalparameter_get_cn(param));
+    for (param = icalproperty_get_first_parameter(prop, ICAL_ANY_PARAMETER);
+         param != 0;
+         param = icalproperty_get_next_parameter(prop, ICAL_ANY_PARAMETER)) {
+        printf("Prop parameter: %s\n", icalparameter_get_cn(param));
     }
 
     /* Get a string representation of the property's value */
-    printf("Prop value: %s\n",icalproperty_get_comment(prop));
+    printf("Prop value: %s\n", icalproperty_get_comment(prop));
 
     /* Spit out the property in its RFC 5545 representation */
     str = icalproperty_as_ical_string_r(prop);
     printf("As iCAL string:\n %s\n", str);
-    free(str);
+    free((void *)str);
 
     /* Make a copy of the property. Caller owns the memory */
     clone = icalproperty_clone(prop);
@@ -143,7 +136,7 @@ void test_properties(void)
 
     str = icalvalue_as_ical_string_r(value);
     printf("Value: %s", str);
-    free(str);
+    free((void *)str);
 
     /* Frees the original and the clone */
     icalproperty_free(clone);

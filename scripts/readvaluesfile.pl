@@ -1,10 +1,6 @@
 ################################################################################
 # SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
-#
-#
 ################################################################################
 
 sub read_values_file
@@ -170,16 +166,25 @@ sub read_parameters_file
     }
     my $data_type   = $column[2];
     my $enum_string = $column[3];
+    my $flags       = $column[4];
 
     my @enums;
     if ($enum_string) {
       @enums = split(/;/, $enum_string);
     }
 
+    my @flags;
+    if ($flags ne "") {
+      @flags = split(/;/, $flags);
+    } else {
+      @flags = ();
+    }
+
     $h{$parameter_name} = {
       C        => $data_type,
       kindEnum => $enumConst,
-      enums    => [@enums]
+      enums    => [@enums],
+      flags    => [@flags]
     };
   }
 

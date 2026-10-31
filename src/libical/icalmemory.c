@@ -3,21 +3,26 @@
  CREATOR: eric 30 June 1999
 
  SPDX-FileCopyrightText: 2000 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ======================================================================*/
+
+/**
+ * @file icalmemory.c
+ * @brief Common memory management routines.
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icalmemory.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #if defined(MEMORY_CONSISTENCY)
 #include "test-malloc.h"
 #endif
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 /**
  * @brief Determines the size of the ring buffer used for keeping track of
@@ -51,14 +56,12 @@ static ICAL_GLOBAL_VAR buffer_ring *global_buffer_ring = 0;
  *
  * Get rid of this buffer ring.
  */
-static void icalmemory_free_ring_byval(buffer_ring * br)
+static void icalmemory_free_ring_byval(buffer_ring *br)
 {
     int i;
 
     for (i = 0; i < BUFFER_RING_SIZE; i++) {
-        if (br->ring[i] != 0) {
-            icalmemory_free_buffer(br->ring[i]);
-        }
+        icalmemory_free_buffer(br->ring[i]);
     }
     icalmemory_free_buffer(br);
 }
@@ -71,28 +74,13 @@ static pthread_once_t ring_key_once = PTHREAD_ONCE_INIT;
 
 static void ring_destroy(void *buf)
 {
-    if (buf)
-        icalmemory_free_ring_byval((buffer_ring *) buf);
-
+    icalmemory_free_ring_byval((buffer_ring *)buf);
     pthread_setspecific(ring_key, NULL);
 }
 
 static void ring_key_alloc(void)
 {
     pthread_key_create(&ring_key, ring_destroy);
-}
-
-#endif
-
-#if 0
-/*keep for historical sake*/
-static void icalmemory_free_tmp_buffer(void *buf)
-{
-    if (buf == 0) {
-        return;
-    }
-
-    icalmemory_free_buffer(buf);
 }
 
 #endif
@@ -105,15 +93,16 @@ static buffer_ring *buffer_ring_new(void)
     buffer_ring *br;
     int i;
 
-    br = (buffer_ring *) icalmemory_new_buffer(sizeof(buffer_ring));
-    if (!br)
+    br = (buffer_ring *)icalmemory_new_buffer(sizeof(buffer_ring));
+    if (!br) {
         return NULL;
+    }
 
     for (i = 0; i < BUFFER_RING_SIZE; i++) {
         br->ring[i] = 0;
     }
     br->pos = 0;
-    return (br);
+    return br;
 }
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
@@ -130,9 +119,11 @@ static buffer_ring *get_buffer_ring_pthread(void)
 
     if (!br) {
         br = buffer_ring_new();
-        pthread_setspecific(ring_key, br);
+        if (br) {
+            pthread_setspecific(ring_key, br);
+        }
     }
-    return (br);
+    return br;
 }
 
 #else
@@ -177,9 +168,7 @@ void icalmemory_add_tmp_buffer(void *buf)
     }
 
     /* Free buffers as their slots are overwritten */
-    if (br->ring[br->pos] != 0) {
-        icalmemory_free_buffer(br->ring[br->pos]);
-    }
+    icalmemory_free_buffer(br->ring[br->pos]);
 
     /* Assign the buffer to a slot */
     br->ring[br->pos] = buf;
@@ -217,8 +206,9 @@ void icalmemory_free_ring(void)
     buffer_ring *br;
 
     br = get_buffer_ring();
-    if (!br)
+    if (!br) {
         return;
+    }
 
     icalmemory_free_ring_byval(br);
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
@@ -233,15 +223,18 @@ char *icalmemory_tmp_copy(const char *str)
 {
     char *b;
 
-    if (!str)
+    if (!str || str[0] == '\0') {
         return NULL;
+    }
 
-    b = icalmemory_tmp_buffer(strlen(str) + 1);
+    const size_t len_b = strlen(str) + 1;
+    b = icalmemory_tmp_buffer(len_b);
 
-    if (!b)
+    if (!b) {
         return NULL;
+    }
 
-    strcpy(b, str);
+    strncpy(b, str, len_b);
 
     return b;
 }
@@ -251,13 +244,15 @@ char *icalmemory_strdup(const char *s)
     size_t l;
     char *res;
 
-    if (!s)
+    if (!s) {
         return NULL;
+    }
 
     l = (strlen(s) + 1) * sizeof(char);
-    res = (char *) icalmemory_new_buffer(l);
-    if (res == NULL)
+    res = (char *)icalmemory_new_buffer(l);
+    if (res == NULL) {
         return NULL;
+    }
 
     memcpy(res, s, l);
 
@@ -299,7 +294,8 @@ void icalmemory_set_mem_alloc_funcs(icalmemory_malloc_f f_malloc,
 
 void icalmemory_get_mem_alloc_funcs(icalmemory_malloc_f *f_malloc,
                                     icalmemory_realloc_f *f_realloc,
-                                    icalmemory_free_f *f_free) {
+                                    icalmemory_free_f *f_free)
+{
     if (f_malloc) {
         *f_malloc = global_icalmem_malloc;
     }
@@ -384,11 +380,10 @@ void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const ch
 #endif
 
     string_length = strlen(string);
-    data_length = (size_t) * pos - (size_t) * buf;
+    data_length = (size_t)*pos - (size_t)*buf;
     final_length = data_length + string_length;
 
-    if (final_length >= (size_t) * buf_size) {
-
+    if (final_length >= (size_t)*buf_size) {
         *buf_size = (*buf_size) * 2 + final_length;
 
         new_buf = icalmemory_resize_buffer(*buf, *buf_size);
@@ -397,13 +392,13 @@ void icalmemory_append_string(char **buf, char **pos, size_t *buf_size, const ch
             return;
         }
 
-        new_pos = (void *)((size_t) new_buf + data_length);
+        new_pos = (void *)((size_t)new_buf + data_length);
 
         *pos = new_pos;
         *buf = new_buf;
     }
 
-    strcpy(*pos, string);
+    strcpy(*pos, string); //NOLINT(clang-analyzer-security.insecureAPI.strcpy)
 
     *pos += string_length;
 }
@@ -424,12 +419,11 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
     icalerror_check_arg_rv((*buf_size != 0), "*buf_size");
 #endif
 
-    data_length = (size_t) * pos - (size_t) * buf;
+    data_length = (size_t)*pos - (size_t)*buf;
 
     final_length = data_length + 2;
 
-    if (final_length > (size_t) * buf_size) {
-
+    if (final_length > (size_t)*buf_size) {
         *buf_size = (*buf_size) * 2 + final_length + 1;
 
         new_buf = icalmemory_resize_buffer(*buf, *buf_size);
@@ -438,7 +432,7 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
             return;
         }
 
-        new_pos = (void *)((size_t) new_buf + data_length);
+        new_pos = (void *)((size_t)new_buf + data_length);
 
         *pos = new_pos;
         *buf = new_buf;
@@ -447,4 +441,114 @@ void icalmemory_append_char(char **buf, char **pos, size_t *buf_size, char ch)
     **pos = ch;
     *pos += 1;
     **pos = 0;
+}
+
+/**
+ * Checks whether this character is allowed in a (Q)SAFE-CHAR
+ *
+ * QSAFE-CHAR   = WSP / %x21 / %x23-7E / NON-US-ASCII
+ * ; any character except CTLs and DQUOTE
+ * SAFE-CHAR    = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E / NON-US-ASCII
+ * ; any character except CTLs, DQUOTE. ";", ":", and ","
+ * WSP      = SPACE / HTAB
+ * NON-US-ASCII       = %x80-F8
+ * ; Use restricted by charset parameter
+ * ; on outer MIME object (UTF-8 preferred)
+ *
+ * Note that comma IS actually safe in vCard but we will quote it anyway
+ */
+/// @cond PRIVATE
+#define UNSAFE_CHARS ";:,"
+/// @endcond
+
+static bool icalmemory_is_safe_char(unsigned char character, bool quoted)
+{
+    if (character == ' ' || character == '\t' || character == '!') {
+        return true;
+    }
+
+    if (character < 0x23 || character == 0x7f || character > 0xf8 ||
+        (!quoted && strchr(UNSAFE_CHARS, character))) {
+        return false;
+    }
+
+    return true;
+}
+
+void icalmemory_append_encoded_string(char **buf, char **pos,
+                                      size_t *buf_size, const char *string)
+{
+    bool quoted = false;
+    const char *p;
+
+    /* Encapsulate the string in quotes if necessary */
+    if (!*string || strpbrk(string, UNSAFE_CHARS) != 0) {
+        icalmemory_append_char(buf, pos, buf_size, '"');
+        quoted = true;
+    }
+
+    /* Copy the string */
+    for (p = string; *p; p++) {
+        /* Encode unsafe characters per RFC6868, otherwise replace with SP */
+        switch (*p) {
+        case '\n':
+            icalmemory_append_string(buf, pos, buf_size, "^n");
+            break;
+
+        case '^':
+            icalmemory_append_string(buf, pos, buf_size, "^^");
+            break;
+
+        case '"':
+            icalmemory_append_string(buf, pos, buf_size, "^'");
+            break;
+
+        default:
+            if (icalmemory_is_safe_char((unsigned char)*p, quoted)) {
+                icalmemory_append_char(buf, pos, buf_size, *p);
+            } else {
+                icalmemory_append_char(buf, pos, buf_size, ' ');
+            }
+            break;
+        }
+    }
+
+    if (quoted) {
+        icalmemory_append_char(buf, pos, buf_size, '"');
+    }
+}
+
+void icalmemory_append_decoded_string(char **buf, char **pos,
+                                      size_t *buf_size, const char *string)
+{
+    const char *p;
+
+    /* Copy the string */
+    for (p = string; *p; p++) {
+        switch (*p) {
+        case '"':
+            /* Remove encapsulating quotes if necessary */
+            break;
+
+        case '^':
+            /* Decode unsafe characters per RFC6868 */
+            if (p[1] == 'n') {
+                icalmemory_append_char(buf, pos, buf_size, '\n');
+                p++;
+            } else if (p[1] == '^') {
+                icalmemory_append_char(buf, pos, buf_size, '^');
+                p++;
+            } else if (p[1] == '\'') {
+                icalmemory_append_char(buf, pos, buf_size, '"');
+                p++;
+            } else {
+                // Unknown escape sequence, copy verbatim.
+                icalmemory_append_char(buf, pos, buf_size, *p);
+            }
+            break;
+
+        default:
+            icalmemory_append_char(buf, pos, buf_size, *p);
+        }
+    }
 }

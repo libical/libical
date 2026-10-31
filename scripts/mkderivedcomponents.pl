@@ -1,7 +1,6 @@
 #!/usr/bin/env perl
 ################################################################################
 # SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 ################################################################################
 
@@ -61,7 +60,6 @@ if ($opt_c or $opt_h and !$opt_i) {
   \044Id:\044
 
   SPDX-FileCopyrightText: 1999 Eric Busboom <eric@civicknowledge.com>
-
   SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
  ======================================================================*/
 

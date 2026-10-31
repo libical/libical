@@ -1,17 +1,21 @@
 /*======================================================================
-FILE: test-malloc.c
+ FILE: test-malloc.c
 
-SPDX-FileCopyrightText: 2018-2022, Markus Minichmayr <markus@tapkey.com>
-
+ SPDX-FileCopyrightText: 2018-2022, Markus Minichmayr <markus@tapkey.com>
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
 ======================================================================*/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
+#endif
+
 #include "test-malloc.h"
+#include "icalerror_p.h"
 #include "icalerror.h"
 #if !defined(MEMORY_CONSISTENCY)
 #include "regression.h"
@@ -20,8 +24,9 @@ SPDX-FileCopyrightText: 2018-2022, Markus Minichmayr <markus@tapkey.com>
 #include <stdlib.h>
 #include <string.h>
 
-struct testmalloc_statistics global_testmalloc_statistics;
+static struct testmalloc_statistics global_testmalloc_statistics;
 static int global_testmalloc_remaining_attempts = -1;
+static size_t global_testmalloc_max_memory = SIZE_MAX;
 
 #define TESTMALLOC_MAGIC_NO 0x1234abcd
 struct testmalloc_hdr {
@@ -34,10 +39,10 @@ struct testmalloc_hdrlayout {
     int data;
 };
 
-#define TESTMALLOC_HDR_SIZE ((size_t) &((struct testmalloc_hdrlayout*) 0)->data)
+#define TESTMALLOC_HDR_SIZE offsetof(struct testmalloc_hdrlayout, data)
 
-void *test_malloc(size_t size) {
-
+void *test_malloc(size_t size)
+{
     void *block;
     struct testmalloc_hdr *hdr;
 
@@ -57,9 +62,18 @@ void *test_malloc(size_t size) {
     hdr->magic_no = TESTMALLOC_MAGIC_NO;
     hdr->size = size;
 
+    if ((SIZE_MAX - size) < global_testmalloc_statistics.mem_allocated_current) {
+        fprintf(stderr, "test-malloc: OVERFLOW\n");
+        exit(1);
+    }
+
     global_testmalloc_statistics.mem_allocated_current += size;
     if (global_testmalloc_statistics.mem_allocated_current > global_testmalloc_statistics.mem_allocated_max) {
         global_testmalloc_statistics.mem_allocated_max = global_testmalloc_statistics.mem_allocated_current;
+        if (global_testmalloc_max_memory < (size_t)global_testmalloc_statistics.mem_allocated_max) {
+            fprintf(stderr, "test-malloc: MAX MEMORY EXCEEDED (%zu)\n", global_testmalloc_max_memory);
+            exit(1);
+        }
     }
 
     global_testmalloc_statistics.blocks_allocated++;
@@ -68,11 +82,11 @@ void *test_malloc(size_t size) {
         global_testmalloc_remaining_attempts--;
     }
 
-    return (void*) &((struct testmalloc_hdrlayout *) hdr)->data;
+    return (void *)&((struct testmalloc_hdrlayout *)hdr)->data;
 }
 
-void *test_realloc(void *p, size_t size) {
-
+void *test_realloc(void *p, size_t size)
+{
     struct testmalloc_hdr *hdr;
     size_t old_size;
 
@@ -87,7 +101,7 @@ void *test_realloc(void *p, size_t size) {
         return NULL;
     }
 
-    hdr = (struct testmalloc_hdr *) (((uint8_t *) p) - TESTMALLOC_HDR_SIZE);
+    hdr = (struct testmalloc_hdr *)(((uint8_t *)p) - TESTMALLOC_HDR_SIZE);
     if (hdr->magic_no != TESTMALLOC_MAGIC_NO) {
         global_testmalloc_statistics.realloc_failed_cnt++;
         return NULL;
@@ -97,7 +111,7 @@ void *test_realloc(void *p, size_t size) {
     hdr->magic_no = 0;
 
     // cppcheck-suppress memleakOnRealloc; the mem block p passed to this function stays valid.
-    hdr = (struct testmalloc_hdr *)realloc(hdr, size + TESTMALLOC_HDR_SIZE);
+    hdr = (struct testmalloc_hdr *)realloc(hdr, size + TESTMALLOC_HDR_SIZE); //NOLINT(bugprone-suspicious-realloc-usage)
     if (hdr == NULL) {
         global_testmalloc_statistics.realloc_failed_cnt++;
         return NULL;
@@ -106,20 +120,30 @@ void *test_realloc(void *p, size_t size) {
     hdr->magic_no = TESTMALLOC_MAGIC_NO;
     hdr->size = size;
 
-    global_testmalloc_statistics.mem_allocated_current += size - old_size;
+    if ((old_size > global_testmalloc_statistics.mem_allocated_current) || ((SIZE_MAX - size) < (global_testmalloc_statistics.mem_allocated_current - old_size))) {
+        // An underflow shouldn't be possible here, so we only print 'OVERFLOW' in case of an error.
+        fprintf(stderr, "test-realloc: OVERFLOW\n");
+        exit(1);
+    }
+
+    global_testmalloc_statistics.mem_allocated_current = global_testmalloc_statistics.mem_allocated_current - old_size + size;
     if (global_testmalloc_statistics.mem_allocated_current > global_testmalloc_statistics.mem_allocated_max) {
         global_testmalloc_statistics.mem_allocated_max = global_testmalloc_statistics.mem_allocated_current;
+        if (global_testmalloc_max_memory < (size_t)global_testmalloc_statistics.mem_allocated_max) {
+            fprintf(stderr, "test-realloc: MAX MEMORY EXCEEDED (%zu)\n", global_testmalloc_max_memory);
+            exit(1);
+        }
     }
 
     if (global_testmalloc_remaining_attempts > 0) {
         global_testmalloc_remaining_attempts--;
     }
 
-    return (void *) &((struct testmalloc_hdrlayout *)hdr)->data;
+    return (void *)&((struct testmalloc_hdrlayout *)hdr)->data;
 }
 
-void test_free(void *p) {
-
+void test_free(void *p)
+{
     struct testmalloc_hdr *hdr;
     size_t old_size;
 
@@ -129,12 +153,11 @@ void test_free(void *p) {
 
     global_testmalloc_statistics.free_cnt++;
 
-    hdr = (struct testmalloc_hdr *) (((uint8_t *) p) - TESTMALLOC_HDR_SIZE);
+    hdr = (struct testmalloc_hdr *)(((uint8_t *)p) - TESTMALLOC_HDR_SIZE);
 
     // The main objective of this check is to ensure, that only memory, that has been allocated via icalmemory is freed
     // via icalmemory_free(). A side objective is to make sure, the block of memory hasn't been corrupted.
     if (hdr->magic_no != TESTMALLOC_MAGIC_NO) {
-
         // If we end up here, then probably either of the following happened:
         // * The calling code tries to free a block of memory via icalmemory_free() that has been allocated outside of
         //   icalmemory, e.g. via malloc().
@@ -155,24 +178,46 @@ void test_free(void *p) {
 
     free(hdr);
 
+    if (old_size > global_testmalloc_statistics.mem_allocated_current) {
+        fprintf(stderr, "test-realloc: UNDERFLOW\n");
+        exit(1);
+    }
+
     global_testmalloc_statistics.mem_allocated_current -= old_size;
     global_testmalloc_statistics.blocks_allocated--;
 }
 
-void testmalloc_reset(void) {
+void testmalloc_reset(void)
+{
     memset(&global_testmalloc_statistics, 0, sizeof(global_testmalloc_statistics));
     global_testmalloc_remaining_attempts = -1;
+    global_testmalloc_max_memory = SIZE_MAX;
 }
 
 /** Sets the maximum number of malloc or realloc attempts that will succeed. If
 * the number is negative, no limit will be applied. */
-void testmalloc_set_max_successful_allocs(int n) {
+void testmalloc_set_max_successful_allocs(int n)
+{
     global_testmalloc_remaining_attempts = n;
 }
 
-void testmalloc_get_statistics(struct testmalloc_statistics *statistics) {
-
+void testmalloc_get_statistics(struct testmalloc_statistics *statistics)
+{
     if (statistics) {
         *statistics = global_testmalloc_statistics;
     }
 }
+
+void testmalloc_set_max_memory(const size_t max)
+{
+    global_testmalloc_max_memory = max;
+}
+
+size_t testmalloc_get_max_memory(void)
+{
+    return global_testmalloc_max_memory;
+}
+
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif

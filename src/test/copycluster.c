@@ -3,7 +3,6 @@
  CREATOR: eric 15 January 2000
 
  SPDX-FileCopyrightText: 2000 Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
  The Original Code is eric. The Initial Developer of the Original
@@ -20,18 +19,26 @@
 #include <stdlib.h>
 
 #if defined(HAVE_SIGNAL) && defined(HAVE_ALARM)
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wanalyzer-unsafe-call-within-signal-handler"
+#endif
 static void sig_alrm(int i)
 {
     _unused(i);
+    // NOLINTBEGIN(bugprone-signal-handler)
     fprintf(stderr, "Could not get lock on file\n");
     exit(1);
+    // NOLINTEND(bugprone-signal-handler)
 }
-
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 /* This program copies a file that holds iCal components to an other file. */
 
-void usage(char *arg0)
+static void usage(const char *arg0)
 {
     printf("usage: %s cluster-file1 cluster-file2\n", arg0);
 }
@@ -86,7 +93,6 @@ int main(int c, char *argv[])
 
     for (itr = icalset_get_first_component(clusterin);
          itr != 0; itr = icalset_get_next_component(clusterin)) {
-
         icalerror_set_error_state(ICAL_BADARG_ERROR, ICAL_ERROR_NONFATAL);
         icalrestriction_check(itr);
         icalerror_set_error_state(ICAL_BADARG_ERROR, ICAL_ERROR_DEFAULT);

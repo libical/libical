@@ -20,9 +20,6 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 /* Define to 1 if you have the <endian.h> header file. */
 #cmakedefine HAVE_ENDIAN_H 1
 
-/* Define to 1 if you have the `GetNumberFormat' function. */
-#cmakedefine HAVE_GETNUMBERFORMAT 1
-
 /* Define to 1 if you have the `gmtime_r' function. */
 #cmakedefine HAVE_GMTIME_R 1
 
@@ -40,9 +37,6 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
 /* Define to 1 if you have the <dirent.h> header file. */
 #cmakedefine HAVE_DIRENT_H 1
-
-/* Define to 1 if you have the <stdbool.h> header file. */
-#cmakedefine HAVE_STDBOOL_H 1
 
 /* Define if we have pthread. */
 #cmakedefine HAVE_PTHREAD_ATTR_GET_NP 1
@@ -73,6 +67,12 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
 /* Define to 1 if you have the `_stat' function. */
 #cmakedefine HAVE__STAT 1
+
+/* Define to 1 if you have the `_fstat64' function. */
+#cmakedefine HAVE__FSTAT64 1
+
+/* Define to 1 if you have the `fstat' function. */
+#cmakedefine HAVE_FSTAT 1
 
 /* Define to 1 if you have the `strcasecmp' function. */
 #cmakedefine HAVE_STRCASECMP 1
@@ -173,30 +173,26 @@ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 /* Define to 1 if you have the <wctype.h> header file. */
 #cmakedefine HAVE_WCTYPE_H 1
 
-/* Define to make icalerror_* calls abort instead of internally signalling an
-   error */
-#define ICAL_ERRORS_ARE_FATAL ${ICAL_ERRORS_ARE_FATAL}
-
-/* Define to prevent empty properties from being replaced with X-LIC-ERROR properties */
-#define ICAL_ALLOW_EMPTY_PROPERTIES ${ICAL_ALLOW_EMPTY_PROPERTIES}
-
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "${PROJECT_URL}"
+#define PACKAGE_BUGREPORT "${libical_HOMEPAGE_URL}"
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "${CMAKE_PROJECT_NAME}"
+#define PACKAGE_NAME "${PROJECT_NAME}"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "${CMAKE_PROJECT_NAME} ${PROJECT_VERSION}"
+#define PACKAGE_STRING "${PROJECT_NAME} ${PROJECT_VERSION}"
 
 /* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME "${CMAKE_PROJECT_NAME}"
+#define PACKAGE_TARNAME "${PROJECT_NAME}"
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "${PROJECT_VERSION}"
 
 /* whether we should bring our own TZ-Data */
 #cmakedefine USE_BUILTIN_TZDATA
+
+/* whether this is a big-endian system. */
+#cmakedefine HAVE_WORDS_BIGENDIAN
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #cmakedefine const
@@ -210,15 +206,15 @@ typedef unsigned int inptr_t;
 /* Typedef size_t if needed */
 #cmakedefine HAVE_SIZEOF_SIZE_T
 #if !defined(HAVE_SIZEOF_SIZE_T)
-typedef unsigned long size_t;
+#include <stdint.h>
+typedef uint64_t size_t;
 #endif
 
 /* Typedef ssize_t if needed */
 #cmakedefine HAVE_SIZEOF_SSIZE_T
 #if !defined(HAVE_SIZEOF_SSIZE_T)
-#if !defined(HAVE_BDB) && !defined(_WIN32)
-typedef long ssize_t;
-#endif
+#include <stdint.h>
+typedef int64_t ssize_t;
 #endif
 
 /* Typedef pid_t if needed */
@@ -237,6 +233,7 @@ typedef unsigned int wint_t;
 #endif
 #endif
 
+#cmakedefine SIZEOF_INT ${SIZEOF_INT}
 #cmakedefine SIZEOF_TIME_T ${SIZEOF_TIME_T}
 #cmakedefine SIZEOF_ICALTIME_T ${SIZEOF_ICALTIME_T}
 
@@ -316,6 +313,17 @@ typedef unsigned int wint_t;
 #else
 #if !defined(HAVE_STAT)
 #error "No function to get status info on a file available"
+#endif
+#endif
+#include <sys/types.h>
+#include <sys/stat.h>
+
+/* fstat: function to get status info on a file descriptor */
+#if defined(HAVE__FSTAT64)
+#define fstat _fstat64
+#else
+#if !defined(HAVE_FSTAT)
+#error "No function to get status info on a file descriptor available"
 #endif
 #endif
 #include <sys/types.h>
@@ -414,7 +422,11 @@ typedef unsigned int wint_t;
 /* read - system function to read from a file descriptor */
 #if defined(HAVE__READ)
 #include <io.h>
+#if defined(__cplusplus)
 #define read _read
+#else
+#define read(a, b, c) _read((a), (b), (unsigned)(c))
+#endif
 #else
 #if !defined(HAVE_READ)
 #error "No read from file descriptor system function available"
@@ -428,7 +440,11 @@ typedef unsigned int wint_t;
 /* write - system function to write to a file descriptor */
 #if defined(HAVE__WRITE)
 #include <io.h>
+#if defined(__cplusplus)
 #define write _write
+#else
+#define write(a, b, c) _write((a), (b), (unsigned int)(c))
+#endif
 #else
 #if !defined(HAVE_WRITE)
 #error "No write to file descriptor system function available"
@@ -576,21 +592,29 @@ typedef ssize_t IO_SSIZE_T;
 #endif
 #endif
 
+/* fallthrough macro */
+#if !defined(_fallthrough)
+#if defined(__GNUC__) || defined(__clang__)
+#define _fallthrough() __attribute__((fallthrough))
+#else
+#define _fallthrough() (void)0
+#endif
+#endif
+
 #define icalassert(...) assert(__VA_ARGS__)
-#define icalerrprintf(...) fprintf(stderr, __VA_ARGS__)
 
 #define ICALMEMORY_DEFAULT_MALLOC malloc
 #define ICALMEMORY_DEFAULT_REALLOC realloc
 #define ICALMEMORY_DEFAULT_FREE free
 
 
-#cmakedefine LIBICAL_SYNCMODE_THREADLOCAL 1
+#cmakedefine LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL 1
 
 #define ICAL_SYNC_MODE_NONE 1
 #define ICAL_SYNC_MODE_PTHREAD 2
 #define ICAL_SYNC_MODE_THREADLOCAL 3
 
-#ifdef LIBICAL_SYNCMODE_THREADLOCAL
+#ifdef LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL
 #define ICAL_SYNC_MODE ICAL_SYNC_MODE_THREADLOCAL
 #elif HAVE_PTHREAD == 1
 #define ICAL_SYNC_MODE ICAL_SYNC_MODE_PTHREAD
@@ -613,4 +637,8 @@ typedef ssize_t IO_SSIZE_T;
 #endif
 #else
 #define ICAL_GLOBAL_VAR
+#endif
+
+#if defined(__GNUC__)
+#define ICAL_GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #endif

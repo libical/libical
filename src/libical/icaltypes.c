@@ -3,51 +3,57 @@
  CREATOR: eric 16 May 1999
 
  SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-
  SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  ======================================================================*/
+
+/**
+ * @file icaltypes.c
+ * @brief Implements the functions to manipulate internal types
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include "icaltypes.h"
-#include "icalerror.h"
+#include "icalerror_p.h"
 #include "icalmemory.h"
 
+/// @cond PRIVATE
 #define TMP_BUF_SIZE 1024
+/// @endcond
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
 #include <pthread.h>
 static pthread_mutex_t unk_token_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
-
+#include <ctype.h>
 static ICAL_GLOBAL_VAR ical_unknown_token_handling unknownTokenHandling = ICAL_TREAT_AS_ERROR;
 
-int icaltriggertype_is_null_trigger(struct icaltriggertype tr)
+bool icaltriggertype_is_null_trigger(struct icaltriggertype tr)
 {
     if (icaltime_is_null_time(tr.time) && icaldurationtype_is_null_duration(tr.duration)) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-int icaltriggertype_is_bad_trigger(struct icaltriggertype tr)
+bool icaltriggertype_is_bad_trigger(struct icaltriggertype tr)
 {
     if (icaldurationtype_is_bad_duration(tr.duration)) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-struct icaltriggertype icaltriggertype_from_int(const int reltime)
+struct icaltriggertype icaltriggertype_from_seconds(const int reltime)
 {
     struct icaltriggertype tr;
 
     tr.time = icaltime_null_time();
-    tr.duration = icaldurationtype_from_int(reltime);
+    tr.duration = icaldurationtype_from_seconds(reltime);
 
     return tr;
 }
@@ -59,7 +65,7 @@ struct icaltriggertype icaltriggertype_from_string(const char *str)
     icalerrorenum e;
 
     tr.time = icaltime_null_time();
-    tr.duration = icaldurationtype_from_int(0);
+    tr.duration = icaldurationtype_from_seconds(0);
 
     /* Suppress errors so a failure in icaltime_from_string() does not cause an abort */
     es = icalerror_get_error_state(ICAL_MALFORMEDDATA_ERROR);
@@ -73,7 +79,6 @@ struct icaltriggertype icaltriggertype_from_string(const char *str)
     tr.time = icaltime_from_string(str);
 
     if (icaltime_is_null_time(tr.time)) {
-
         tr.duration = icaldurationtype_from_string(str);
 
         if (icaldurationtype_is_bad_duration(tr.duration)) {
@@ -85,7 +90,7 @@ struct icaltriggertype icaltriggertype_from_string(const char *str)
     icalerror_set_errno(e);
     return tr;
 
-  error:
+error:
     icalerror_set_error_state(ICAL_MALFORMEDDATA_ERROR, es);
     icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
     return tr;
@@ -93,7 +98,7 @@ struct icaltriggertype icaltriggertype_from_string(const char *str)
 
 struct icalreqstattype icalreqstattype_from_string(const char *str)
 {
-    const char *p1, *p2;
+    const char *s, *p1, *p2;
     struct icalreqstattype stat;
     short major = 0, minor = 0;
 
@@ -103,9 +108,20 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
     stat.debug = 0;
     stat.desc = 0;
 
+    // Don't allow (fuzzer) garbage chars anywhere in the reqstat string
+    s = str;
+    /* cppcheck-suppress nullPointerRedundantCheck */
+    while (*s && isprint((unsigned char)*s)) {
+        ++s;
+    }
+    if (*s != '\0') {
+        // garbage encountered. return the empty stat
+        return stat;
+    }
+
     /* Get the status numbers */
 
-    sscanf(str, "%hd.%hd", &major, &minor);
+    sscanf(str, "%hd.%hd", &major, &minor); //NOLINT(bugprone-unchecked-string-to-number-conversion)
 
     if (major <= 0 || minor < 0) {
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
@@ -122,7 +138,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
     p1 = strchr(str, ';');
 
     if (p1 == 0) {
-/*    icalerror_set_errno(ICAL_BADARG_ERROR);*/
+        /*    icalerror_set_errno(ICAL_BADARG_ERROR);*/
         return stat;
     }
 
@@ -130,7 +146,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
      */
 
     p2 = strchr(p1 + 1, ';');
-    if (p2 != 0 && *p2 != 0) {
+    if (p2 != 0 && *(p2 + 1) != 0) { // skipping empty debug strings
         stat.debug = icalmemory_tmp_copy(p2 + 1);
     }
 
@@ -161,7 +177,6 @@ char *icalreqstattype_as_string_r(struct icalreqstattype stat)
     if (stat.debug != 0) {
         snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s;%s", icalenum_reqstat_major(stat.code),
                  icalenum_reqstat_minor(stat.code), stat.desc, stat.debug);
-
     } else {
         snprintf(temp, TMP_BUF_SIZE, "%d.%d;%s", icalenum_reqstat_major(stat.code),
                  icalenum_reqstat_minor(stat.code), stat.desc);
@@ -175,13 +190,17 @@ ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
     ical_unknown_token_handling myHandling;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_lock(&unk_token_mutex);
+    if (pthread_mutex_lock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     myHandling = unknownTokenHandling;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_unlock(&unk_token_mutex);
+    if (pthread_mutex_unlock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     return myHandling;
@@ -190,12 +209,16 @@ ical_unknown_token_handling ical_get_unknown_token_handling_setting(void)
 void ical_set_unknown_token_handling_setting(ical_unknown_token_handling newSetting)
 {
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_lock(&unk_token_mutex);
+    if (pthread_mutex_lock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 
     unknownTokenHandling = newSetting;
 
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    pthread_mutex_unlock(&unk_token_mutex);
+    if (pthread_mutex_unlock(&unk_token_mutex) != 0) {
+        icalerror_set_errno(ICAL_THREADING_ERROR);
+    }
 #endif
 }

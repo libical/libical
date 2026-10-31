@@ -1,0 +1,180 @@
+/*======================================================================
+ FILE: icalstrarray.c
+ CREATOR: Ken Murchison 24 Aug 2022
+
+ SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
+ SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+ ======================================================================*/
+
+/**
+ * @file icalstrarray.c
+ * @brief Implements the data structure for handling string arrays.
+ */
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "icalstrarray.h"
+#include "icalmemory.h"
+
+#include <string.h>
+#include <stdint.h>
+
+size_t icalstrarray_size(const icalstrarray *array)
+{
+    if (!array) {
+        return 0;
+    }
+    return array->num_elements;
+}
+
+const char *icalstrarray_element_at(icalstrarray *array, size_t position)
+{
+    if (position >= icalstrarray_size(array)) {
+        return NULL;
+    }
+    return *((const char **)icalarray_element_at(array, position));
+}
+
+size_t icalstrarray_find(icalstrarray *array,
+                         const char *needle)
+{
+    if (!array || !needle) {
+        return icalstrarray_size(array);
+    }
+
+    size_t i;
+
+    for (i = 0; i < array->num_elements; i++) {
+        const char *s = icalstrarray_element_at(array, i);
+        if (s && !strcmp(needle, s)) {
+            return i;
+        }
+    }
+
+    return array->num_elements;
+}
+
+void icalstrarray_append(icalstrarray *array, const char *elem)
+{
+    if (!array || !elem) {
+        return;
+    }
+
+    /* coverity[resource_leak] */
+    char *copy = icalmemory_strdup(elem);
+
+    icalarray_append(array, (const void *)&copy);
+}
+
+void icalstrarray_add(icalstrarray *array, const char *elem)
+{
+    if (!array || !elem) {
+        return;
+    }
+
+    if (icalstrarray_find(array, elem) >= icalstrarray_size(array)) {
+        icalstrarray_append(array, elem);
+    }
+}
+
+void icalstrarray_remove_element_at(icalstrarray *array, size_t position)
+{
+    if (position >= icalstrarray_size(array)) {
+        return;
+    }
+
+    char **del = (char **)icalarray_element_at(array, position);
+
+    if (del && *del) {
+        icalmemory_free_buffer(*del);
+    }
+    icalarray_remove_element_at(array, position);
+}
+
+void icalstrarray_remove(icalstrarray *array, const char *del)
+{
+    if (!array || !del) {
+        return;
+    }
+
+    size_t j = 0;
+
+    for (size_t i = 0; i < array->num_elements; i++) {
+        char **elem = (char **)icalarray_element_at(array, i);
+        if (strcmp(*elem, del) != 0) {
+            (void)icalarray_set_element_at(array, (const void *)elem, j++);
+        } else {
+            icalmemory_free_buffer(*elem);
+        }
+    }
+
+    array->num_elements = j;
+}
+
+void icalstrarray_free(icalstrarray *array)
+{
+    if (!array) {
+        return;
+    }
+
+    for (size_t i = 0; i < array->num_elements; i++) {
+        char **del = (char **)icalarray_element_at(array, i);
+        if (del && *del) {
+            icalmemory_free_buffer(*del);
+        }
+    }
+
+    icalarray_free(array);
+}
+
+static int strpcmp(const void *a, const void *b)
+{
+    char **aChar = (char **)a;
+    char **bChar = (char **)b;
+    return strcmp(*aChar, *bChar);
+}
+
+void icalstrarray_sort(icalstrarray *array)
+{
+    if (!array) {
+        return;
+    }
+    icalarray_sort(array, &strpcmp);
+}
+
+/* cppcheck-suppress constParameterPointer */ /* TODO 5.0 */
+icalstrarray *icalstrarray_clone(icalstrarray *array)
+{
+    if (!array) {
+        return NULL;
+    }
+
+    icalstrarray *clone = icalarray_copy(array);
+    size_t i;
+    int err = 0;
+
+    if (!clone) {
+        return NULL;
+    }
+
+    for (i = 0; i < array->num_elements; i++) {
+        char **p = (char **)icalarray_element_at(clone, i);
+
+        if (p && *p) {
+            // In case of a previous error we don't clone any further but instead set the
+            // remaining pointers to NULL. NULL is required so we don't free the original
+            // strings on cleanup.
+            *p = err ? NULL : icalmemory_strdup(*p);
+            err |= !*p;
+        }
+    }
+
+    if (err) {
+        icalstrarray_free(clone);
+        return NULL;
+    }
+
+    return clone;
+}

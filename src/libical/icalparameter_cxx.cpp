@@ -1,22 +1,32 @@
+/*
+ * SPDX-FileCopyrightText: 2001, Critical Path
+ * SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
+ */
+
 /**
  * @file    icalparameter_cxx.cpp
  * @author  fnguyen (12/10/01)
  * @brief   Implementation of C++ Wrapper for icalparameter.c
- *
- * SPDX-FileCopyrightText: 2001, Critical Path
-
- SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-
  */
 
-#include "icalparameter_cxx.h"
+#include "icalparameter_cxx.hpp"
+
+extern "C" {
+#include "icalerror_p.h"
+}
+
+#include <string>
+#include <vector>
+
 using namespace LibICal;
 
-ICalParameter::ICalParameter() : imp(icalparameter_new(ICAL_ANY_PARAMETER))
+ICalParameter::ICalParameter()
+    : imp(icalparameter_new(ICAL_ANY_PARAMETER))
 {
 }
 
-ICalParameter::ICalParameter(const ICalParameter &v) : imp(icalparameter_clone(v.imp))
+ICalParameter::ICalParameter(const ICalParameter &v)
+    : imp(icalparameter_clone(v.imp))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -29,12 +39,12 @@ ICalParameter &ICalParameter::operator=(const ICalParameter &v)
         return *this;
     }
 
-    if (imp != NULL) {
-        icalparameter_free(imp);
-        imp = icalparameter_clone(v.imp);
-        if (imp == NULL) {
-            throw icalerrno;
-        }
+    icalparameter_free(imp);
+    imp = NULL;
+
+    imp = icalparameter_clone(v.imp);
+    if (imp == NULL) {
+        throw icalerrno;
     }
 
     return *this;
@@ -47,16 +57,14 @@ void ICalParameter::detach()
 
 ICalParameter::~ICalParameter()
 {
-    if (imp != NULL) {
-        icalparameter_free(imp);
-    }
+    icalparameter_free(imp);
 }
 
-ICalParameter::ICalParameter(icalparameter *v) : imp(v)
+ICalParameter::ICalParameter(icalparameter *v)
+    : imp(v)
 {
 }
 
-/// Create from string of form "PARAMNAME=VALUE"
 ICalParameter::ICalParameter(const std::string &str)
     : imp(icalparameter_new_from_string(str.c_str()))
 {
@@ -65,7 +73,6 @@ ICalParameter::ICalParameter(const std::string &str)
     }
 }
 
-/// Create from just the value, the part after the "="
 ICalParameter::ICalParameter(const icalparameter_kind &kind, const std::string &str)
     : imp(icalparameter_new_from_value_string(kind, str.c_str()))
 {
@@ -74,7 +81,8 @@ ICalParameter::ICalParameter(const icalparameter_kind &kind, const std::string &
     }
 }
 
-ICalParameter::ICalParameter(const icalparameter_kind &kind) : imp(icalparameter_new(kind))
+ICalParameter::ICalParameter(const icalparameter_kind &kind)
+    : imp(icalparameter_new(kind))
 {
     if (imp == NULL) {
         throw icalerrno;
@@ -83,7 +91,7 @@ ICalParameter::ICalParameter(const icalparameter_kind &kind) : imp(icalparameter
 
 std::string ICalParameter::as_ical_string()
 {
-    char *str = icalparameter_as_ical_string(imp);
+    const char *str = icalparameter_as_ical_string(imp);
 
     if (str == NULL) {
         throw icalerrno;
@@ -97,7 +105,7 @@ bool ICalParameter::is_valid()
     if (imp == NULL) {
         return false;
     }
-    return (icalparameter_isa_parameter(static_cast<void *>(imp)) != 0);
+    return icalparameter_isa_parameter(static_cast<void *>(imp));
 }
 
 icalparameter_kind ICalParameter::isa()
@@ -105,27 +113,32 @@ icalparameter_kind ICalParameter::isa()
     return icalparameter_isa(imp);
 }
 
-int ICalParameter::isa_parameter(void *param)
+/* cppcheck-suppress functionStatic */
+bool ICalParameter::isa_parameter(void *param) //NOLINT(readability-convert-member-functions-to-static)
 {
     return icalparameter_isa_parameter(param);
 }
 
 /* Access the name of an X parameter */
+/* cppcheck-suppress constParameterReference */
 void ICalParameter::set_xname(ICalParameter &param, const std::string &v)
 {
     icalparameter_set_xname(param, v.c_str());
 }
 
+/* cppcheck-suppress constParameterReference */
 std::string ICalParameter::get_xname(ICalParameter &param)
 {
     return static_cast<std::string>(icalparameter_get_xname(param));
 }
 
+/* cppcheck-suppress constParameterReference */
 void ICalParameter::set_xvalue(ICalParameter &param, const std::string &v)
 {
     icalparameter_set_xvalue(param, v.c_str());
 }
 
+/* cppcheck-suppress constParameterReference */
 std::string ICalParameter::get_xvalue(ICalParameter &param)
 {
     return static_cast<std::string>(icalparameter_get_xvalue(param));
@@ -143,14 +156,25 @@ icalparameter_kind ICalParameter::string_to_kind(const std::string &str)
 }
 
 /* DELEGATED-FROM */
-std::string ICalParameter::get_delegatedfrom() const
+std::vector<std::string> ICalParameter::get_delegatedfrom() const
 {
-    return static_cast<std::string>(icalparameter_get_delegatedfrom(imp));
+    std::vector<std::string> vals;
+    icalstrarray *c_vals = icalparameter_get_delegatedfrom(imp);
+    if (c_vals != NULL) {
+        for (size_t i = 0; i < icalstrarray_size(c_vals); ++i) {
+            vals.push_back(std::string(icalstrarray_element_at(c_vals, i)));
+        }
+    }
+    return vals;
 }
 
-void ICalParameter::set_delegatedfrom(const std::string &v)
+void ICalParameter::set_delegatedfrom(const std::vector<std::string> &v)
 {
-    icalparameter_set_delegatedfrom(imp, v.c_str());
+    icalstrarray *c_vals = icalstrarray_new(v.size());
+    for (size_t i = 0; i < v.size(); i++) {
+        icalstrarray_append(c_vals, v[i].c_str());
+    }
+    icalparameter_set_delegatedfrom(imp, c_vals);
 }
 
 /* RELATED */
@@ -264,14 +288,25 @@ void ICalParameter::set_range(const icalparameter_range &v)
 }
 
 /* DELEGATED-TO */
-std::string ICalParameter::get_delegatedto() const
+std::vector<std::string> ICalParameter::get_delegatedto() const
 {
-    return static_cast<std::string>(icalparameter_get_delegatedto(imp));
+    std::vector<std::string> vals;
+    icalstrarray *c_vals = icalparameter_get_delegatedto(imp);
+    if (c_vals != NULL) {
+        for (size_t i = 0; i < icalstrarray_size(c_vals); ++i) {
+            vals.push_back(std::string(icalstrarray_element_at(c_vals, i)));
+        }
+    }
+    return vals;
 }
 
-void ICalParameter::set_delegatedto(const std::string &v)
+void ICalParameter::set_delegatedto(const std::vector<std::string> &v)
 {
-    icalparameter_set_delegatedto(imp, v.c_str());
+    icalstrarray *c_vals = icalstrarray_new(v.size());
+    for (size_t i = 0; i < v.size(); i++) {
+        icalstrarray_append(c_vals, v[i].c_str());
+    }
+    icalparameter_set_delegatedto(imp, c_vals);
 }
 
 /* CN */
@@ -330,14 +365,25 @@ void ICalParameter::set_xlicerrortype(const icalparameter_xlicerrortype &v)
 }
 
 /* MEMBER */
-std::string ICalParameter::get_member() const
+std::vector<std::string> ICalParameter::get_member() const
 {
-    return static_cast<std::string>(icalparameter_get_member(imp));
+    std::vector<std::string> vals;
+    icalstrarray *c_vals = icalparameter_get_member(imp);
+    if (c_vals != NULL) {
+        for (size_t i = 0; i < icalstrarray_size(c_vals); ++i) {
+            vals.push_back(std::string(icalstrarray_element_at(c_vals, i)));
+        }
+    }
+    return vals;
 }
 
-void ICalParameter::set_member(const std::string &v)
+void ICalParameter::set_member(const std::vector<std::string> &v)
 {
-    icalparameter_set_member(imp, v.c_str());
+    icalstrarray *c_vals = icalstrarray_new(v.size());
+    for (size_t i = 0; i < v.size(); i++) {
+        icalstrarray_append(c_vals, v[i].c_str());
+    }
+    icalparameter_set_member(imp, c_vals);
 }
 
 /* X */

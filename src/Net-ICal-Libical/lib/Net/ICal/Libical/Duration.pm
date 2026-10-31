@@ -3,11 +3,7 @@
 # CREATOR: eric
 #
 # SPDX-FileCopyrightText: 2000, Eric Busboom <eric@civicknowledge.com>
-#
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
-#
-#
-#
 #=============================================================================
 
 =head1 NAME
@@ -67,7 +63,7 @@ sub new {
   } elsif ($arg =~ /^[-+]?\d+$/){
     # Seconds
     $self = Net::ICal::Libical::Property::new($package,'DURATION');
-    $self->{'dur'} = Net::ICal::Libical::icaldurationtype_new_from_int($arg);
+    $self->{'dur'} = Net::ICal::Libical::icaldurationtype_new_from_seconds($arg);
   } elsif ($arg) {
     # iCalendar string
     $self = Net::ICal::Libical::Property::new($package,'DURATION');
@@ -125,11 +121,11 @@ sub seconds {
 
   if($seconds){
     $self->{'dur'} =
-    Net::ICal::Libical::icaldurationtype_from_int($seconds);
+    Net::ICal::Libical::icaldurationtype_from_seconds($seconds);
     $self->_update_value();
   }
 
-  return Net::ICal::Libical::icaldurationtype_as_int($self->{'dur'});
+  return Net::ICal::Libical::icaldurationtype_as_seconds($self->{'dur'});
 
 }
 

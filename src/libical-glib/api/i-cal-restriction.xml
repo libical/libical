@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   SPDX-FileCopyrightText: 2015 William Yu <williamyu@gnome.org>
 
@@ -6,26 +7,26 @@
 
 -->
 <structure namespace="ICal" name="Restriction">
-    <enum name="ICalRestrictionKind" native_name="icalrestriction_kind" default_native="I_CAL_RESTRICTION_UNKNOWN">
-        <element name="ICAL_RESTRICTION_NONE"/>
-        <element name="ICAL_RESTRICTION_ZERO"/>
-        <element name="ICAL_RESTRICTION_ONE"/>
-        <element name="ICAL_RESTRICTION_ZEROPLUS"/>
-        <element name="ICAL_RESTRICTION_ONEPLUS"/>
-        <element name="ICAL_RESTRICTION_ZEROORONE"/>
-        <element name="ICAL_RESTRICTION_ONEEXCLUSIVE"/>
-        <element name="ICAL_RESTRICTION_ONEMUTUAL"/>
-        <element name="ICAL_RESTRICTION_UNKNOWN"/>
-    </enum>
-    <method name="i_cal_restriction_compare" corresponds="icalrestriction_compare" kind="" since="1.0">
-        <parameter type="ICalRestrictionKind" name="restr" comment="The restriction kind"/>
-        <parameter type="gint" name="count" comment="The number of restrictions"/>
-        <returns type="gint" comment="Whether it is valid or not. -1 indicates invalid or more analysis. 1 indicates pass and 0 or 2+ indicates fail."/>
-        <comment xml:space="preserve">Compares the kind of restriction and the count to determine whether it is valid.</comment>
-    </method>
-    <method name="i_cal_restriction_check" corresponds="icalrestriction_check" since="1.0">
-        <parameter type="ICalComponent *" name="comp" comment="The component to be checked"/>
-        <returns type="gint" comment="Whether the @comp is valid."/>
-        <comment xml:space="preserve">Checks whether the #ICalComponent is valid.</comment>
-    </method>
+  <enum name="ICalRestrictionKind" native_name="icalrestriction_kind" default_native="I_CAL_RESTRICTION_UNKNOWN">
+    <element name="ICAL_RESTRICTION_NONE"/>
+    <element name="ICAL_RESTRICTION_ZERO"/>
+    <element name="ICAL_RESTRICTION_ONE"/>
+    <element name="ICAL_RESTRICTION_ZEROPLUS"/>
+    <element name="ICAL_RESTRICTION_ONEPLUS"/>
+    <element name="ICAL_RESTRICTION_ZEROORONE"/>
+    <element name="ICAL_RESTRICTION_ONEEXCLUSIVE"/>
+    <element name="ICAL_RESTRICTION_ONEMUTUAL"/>
+    <element name="ICAL_RESTRICTION_UNKNOWN"/>
+  </enum>
+  <method name="i_cal_restriction_compare" corresponds="icalrestriction_compare" kind="" since="1.0">
+    <parameter type="ICalRestrictionKind" name="restr" comment="The restriction kind"/>
+    <parameter type="gint" name="count" comment="The number of restrictions"/>
+    <returns type="gint" comment="Whether it is valid or not. -1 indicates invalid or more analysis. 1 indicates pass and 0 or 2+ indicates fail."/>
+    <comment xml:space="preserve">Compares the kind of restriction and the count to determine whether it is valid.</comment>
+  </method>
+  <method name="i_cal_restriction_check" corresponds="icalrestriction_check" since="1.0">
+    <parameter type="ICalComponent *" name="comp" comment="The component to be checked"/>
+    <returns type="gint" comment="Whether the @comp is valid."/>
+    <comment xml:space="preserve">Checks whether the #ICalComponent is valid.</comment>
+  </method>
 </structure>
