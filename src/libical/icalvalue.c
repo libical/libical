@@ -1024,7 +1024,6 @@ static char *icalvalue_text_as_ical_string_r(const icalvalue *value)
 static char *icalvalue_attach_as_ical_string_r(const icalvalue *value)
 {
     icalattach *a;
-    char *str;
 
     icalerror_check_arg_rz((value != 0), "value");
 
@@ -1040,7 +1039,7 @@ static char *icalvalue_attach_as_ical_string_r(const icalvalue *value)
 
         data = (const char *)icalattach_get_data(a);
         const size_t len_data = strlen(data) + 1;
-        str = icalmemory_new_buffer(len_data);
+        char *str = icalmemory_new_buffer(len_data);
         strncpy(str, data, len_data);
         str[len_data - 1] = '\0';
         return str;
