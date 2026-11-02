@@ -27,7 +27,7 @@ repos:
         exclude: ^(src/Net-ICal-Libical|src/libicalvcal/vcaltmp|src/libicalvcal/vcc|src/libicalvcal/vobject)
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.17.1
+    rev: v0.17.3
     hooks:
       # Run the linter.
       - id: ruff
@@ -49,7 +49,7 @@ repos:
       - id: perltidy
         exclude: ^(src/Net-ICal-Libical)
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.23.3
+    rev: v0.24.0
     hooks:
       - id: markdownlint-cli2
         files: \.(md|mdown|markdown)$
@@ -72,6 +72,6 @@ repos:
       - id: yamlfmt
         exclude: ^(.clang-format|.clang-tidy)
   - repo: https://github.com/fsfe/reuse-tool
-    rev: v6.2.0
+    rev: v6.3.0
     hooks:
       - id: reuse
