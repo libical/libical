@@ -1211,7 +1211,7 @@ icalcomponent *icalparser_clean(icalparser *parser)
     parser->buffer_full = 0;
     parser->continuation_line = 0;
     parser->lineno = 0;
-    parser->error_count = 0;
+    parser->parse_errors = 0;
     memset(parser->temp, 0, sizeof(parser->temp));
     return result;
 }
