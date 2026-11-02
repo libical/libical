@@ -605,6 +605,62 @@ static void test_component_foreach_callback(icalcomponent *comp, const struct ic
     (*foundExpected)++;
 }
 
+typedef struct {
+    int found;
+    icaltime_span expected;
+} foreach_busy_t;
+
+static void test_component_foreach_busy_callback(icalcomponent *comp, const struct icaltime_span *span, void *data)
+{
+    foreach_busy_t *a = (foreach_busy_t *)data;
+    _unused(comp);
+
+    int_is("Occurrence busy status matches", span->is_busy, a->expected.is_busy);
+    ok("Occurrence start matches", span->start == a->expected.start);
+    ok("Occurrence end matches", span->end == a->expected.end);
+    a->found++;
+    a->expected.start += 86400;
+    a->expected.end += 86400;
+}
+
+static void test_component_foreach_busy(void)
+{
+    const char *recurrences[] = {
+        "RRULE:FREQ=DAILY;COUNT=3\r\n",
+        "RDATE:20260102T090000Z,20260103T090000Z\r\n",
+        "RDATE;VALUE=PERIOD:20260102T090000Z/20260102T100000Z,20260103T090000Z/PT1H\r\n"};
+    icaltimetype start = icaltime_from_string("20260101T000000Z");
+    icaltimetype end = icaltime_from_string("20260104T000000Z");
+
+    for (size_t i = 0; i < sizeof(recurrences) / sizeof(recurrences[0]); i++) {
+        char input[512];
+        snprintf(input, sizeof(input),
+                 "BEGIN:VEVENT\r\n"
+                 "UID:recurrence-busy\r\n"
+                 "DTSTAMP:20251201T000000Z\r\n"
+                 "DTSTART:20260101T090000Z\r\n"
+                 "DURATION:PT1H\r\n"
+                 "%s"
+                 "END:VEVENT\r\n",
+                 recurrences[i]);
+        icalcomponent *event = icalcomponent_new_from_string(input);
+        ok("Parse recurring event", event != NULL);
+        assert(event != NULL);
+        icalproperty *transp = icalproperty_new_transp(ICAL_TRANSP_TRANSPARENT);
+        icalcomponent_add_property(event, transp);
+
+        for (int busy = 0; busy <= 1; busy++) {
+            foreach_busy_t a = {0, icaltime_span_new(icalcomponent_get_dtstart(event),
+                                                     icalcomponent_get_dtend(event), (bool)busy)};
+            icalproperty_set_transp(transp, busy ? ICAL_TRANSP_OPAQUE : ICAL_TRANSP_TRANSPARENT);
+            icalcomponent_foreach_recurrence(event, start, end, test_component_foreach_busy_callback, &a);
+            int_is("Three occurrences returned", a.found, 3);
+        }
+
+        icalcomponent_free(event);
+    }
+}
+
 static int test_component_foreach_parameterized(int startOffsSec, int endOffsSec, int expectedFoundInstances)
 {
     const char *calStr =
@@ -1016,6 +1072,33 @@ static void test_recur_iterator_reverse_range(void)
         test_recur_iterator_reverse_range_rule("RSCALE=INDIAN;FREQ=YEARLY", "20200301T090000", "20230601T120000");
     }
     icalarray_free(calendars);
+}
+
+/* Going back after the iteration reached the last supported year must not
+   read past the end of the BYHOUR data. */
+static void test_recur_iterator_prev_after_end(void)
+{
+    struct icalrecurrencetype *recurrence =
+        icalrecurrencetype_new_from_string("FREQ=HOURLY;INTERVAL=2;BYHOUR=1,15");
+    ok("FREQ=HOURLY;INTERVAL=2;BYHOUR=1,15", recurrence != NULL);
+
+    const bool estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(false);
+
+    icalrecur_iterator *iterator =
+        icalrecur_iterator_new(recurrence, icaltime_from_string("25811231T230000"));
+    if (iterator) {
+        for (int i = 0; i < 3; i++) {
+            (void)icalrecur_iterator_next(iterator);
+        }
+        (void)icalrecur_iterator_prev(iterator);
+        icalrecur_iterator_free(iterator);
+    }
+    ok("icalrecur_iterator_prev after the end of the iteration", true);
+
+    icalerror_clear_errno();
+    icalerror_set_errors_are_fatal(estate);
+    icalrecurrencetype_unref(recurrence);
 }
 
 static void test_memory(void)
@@ -4873,6 +4956,144 @@ static void test_attach_url(void)
     icalattach_unref(attach);
     icalproperty_free(ap);
     icalcomponent_free(ac);
+
+    /* An explicit VALUE=URI must still give an attachment value */
+    ap = icalproperty_new_from_string("ATTACH;VALUE=URI:https://example.com/a");
+    ok("parsed ATTACH with VALUE=URI", (ap != NULL));
+    if (ap) {
+        attach = icalproperty_get_attach(ap);
+        ok("ATTACH with VALUE=URI is an attach value", (icalvalue_isa(icalproperty_get_value(ap)) == ICAL_ATTACH_VALUE));
+        ok("ATTACH with VALUE=URI is a url", (attach != NULL && icalattach_get_is_url(attach)));
+        if (attach != NULL && icalattach_get_is_url(attach)) {
+            str_is("ATTACH with VALUE=URI url", icalattach_get_url(attach), "https://example.com/a");
+        }
+        icalproperty_free(ap);
+    }
+
+    /* Same for the other attachment-valued properties */
+    ap = icalproperty_new_from_string("IMAGE;VALUE=URI:https://example.com/i.png");
+    ok("parsed IMAGE with VALUE=URI", (ap != NULL));
+    if (ap) {
+        ok("IMAGE with VALUE=URI is an attach value", (icalvalue_isa(icalproperty_get_value(ap)) == ICAL_ATTACH_VALUE));
+        attach = icalproperty_get_image(ap);
+        ok("IMAGE with VALUE=URI is a url", (attach != NULL && icalattach_get_is_url(attach)));
+        str_is("IMAGE with VALUE=URI round-trips", icalproperty_as_ical_string(ap),
+               "IMAGE;VALUE=URI:https://example.com/i.png\r\n");
+        icalproperty_free(ap);
+    }
+
+    /* IMAGE has no default VALUE type: a bare URI is an attachment too */
+    ap = icalproperty_new_from_string("IMAGE:https://example.com/i.png");
+    ok("parsed IMAGE without VALUE", (ap != NULL));
+    if (ap) {
+        attach = icalproperty_get_image(ap);
+        ok("IMAGE without VALUE is a url", (attach != NULL && icalattach_get_is_url(attach)));
+        icalproperty_free(ap);
+    }
+
+    ap = icalproperty_new_from_string("STRUCTURED-DATA;VALUE=URI:https://example.com/d.json");
+    ok("parsed STRUCTURED-DATA with VALUE=URI", (ap != NULL));
+    if (ap) {
+        ok("STRUCTURED-DATA with VALUE=URI is an attach value", (icalvalue_isa(icalproperty_get_value(ap)) == ICAL_ATTACH_VALUE));
+        attach = icalproperty_get_structureddata(ap);
+        ok("STRUCTURED-DATA with VALUE=URI is a url", (attach != NULL && icalattach_get_is_url(attach)));
+        icalproperty_free(ap);
+    }
+}
+
+static void test_value_typed_accessors(void)
+{
+    icalvalue *v;
+    icalproperty *p;
+    icalattach *attach;
+    struct icalrecurrencetype *recur;
+    bool estate = icalerror_get_errors_are_fatal();
+
+    icalerror_set_errors_are_fatal(false);
+
+    /* Getters of another union member return the zero value */
+    v = icalvalue_new_uri("https://example.com/a");
+    ok("uri value: get_attach is NULL", (icalvalue_get_attach(v) == NULL));
+    ok("uri value: get_binary is NULL", (icalvalue_get_binary(v) == NULL));
+    ok("uri value: get_recur is NULL", (icalvalue_get_recur(v) == NULL));
+    ok("uri value: get_integer is 0", (icalvalue_get_integer(v) == 0));
+    ok("uri value: get_duration is null",
+       icaldurationtype_is_null_duration(icalvalue_get_duration(v)));
+    ok("uri value: get_period is null", icalperiodtype_is_null_period(icalvalue_get_period(v)));
+    ok("uri value: get_requeststatus is unknown",
+       (icalvalue_get_requeststatus(v).code == ICAL_UNKNOWN_STATUS));
+    str_is("uri value: get_text reads the string", icalvalue_get_text(v), "https://example.com/a");
+
+    /* Setters of another union member leave the value alone */
+    icalerror_clear_errno();
+    icalvalue_set_integer(v, 5);
+    ok("uri value: set_integer is refused", (icalerrno == ICAL_BADARG_ERROR));
+    attach = icalattach_new_from_url("https://example.com/b");
+    icalerror_clear_errno();
+    icalvalue_set_attach(v, attach);
+    ok("uri value: set_attach is refused", (icalerrno == ICAL_BADARG_ERROR));
+    icalattach_unref(attach);
+    str_is("uri value: string unchanged", icalvalue_get_uri(v), "https://example.com/a");
+    icalvalue_free(v);
+
+    v = icalvalue_new_integer(3);
+    ok("integer value: get_text is NULL", (icalvalue_get_text(v) == NULL));
+    ok("integer value: get_attach is NULL", (icalvalue_get_attach(v) == NULL));
+    icalerror_clear_errno();
+    icalvalue_set_text(v, "x");
+    ok("integer value: set_text is refused", (icalerrno == ICAL_BADARG_ERROR));
+    int_is("integer value: integer unchanged", icalvalue_get_integer(v), 3);
+    icalvalue_free(v);
+
+    attach = icalattach_new_from_url("https://example.com/c");
+    v = icalvalue_new_attach(attach);
+    icalattach_unref(attach);
+    ok("attach value: get_text is NULL", (icalvalue_get_text(v) == NULL));
+    icalerror_clear_errno();
+    icalvalue_set_text(v, "x");
+    ok("attach value: set_text is refused", (icalerrno == ICAL_BADARG_ERROR));
+    ok("attach value: attach unchanged", icalattach_get_is_url(icalvalue_get_attach(v)));
+    icalvalue_free(v);
+
+    /* Same for the hand-written accessors */
+    v = icalvalue_new_uri("https://example.com/a");
+    ok("uri value: get_class is none", (icalvalue_get_class(v) == ICAL_CLASS_NONE));
+    str_is("uri value: get_geo is the null geo", icalvalue_get_geo(v).lat, "255.0");
+    icalerror_clear_errno();
+    icalvalue_set_class(v, ICAL_CLASS_PUBLIC);
+    ok("uri value: set_class is refused", (icalerrno == ICAL_BADARG_ERROR));
+    icalerror_clear_errno();
+    icalvalue_set_geo(v, icalvalue_get_geo(v));
+    ok("uri value: set_geo is refused", (icalerrno == ICAL_BADARG_ERROR));
+    icalerror_clear_errno();
+    icalvalue_set_requeststatus(v, icalreqstattype_from_string("2.0;Success"));
+    ok("uri value: set_requeststatus is refused", (icalerrno == ICAL_BADARG_ERROR));
+    icalerror_clear_errno();
+    icalvalue_set_binary(v, "Zm9v");
+    ok("uri value: set_binary is refused", (icalerrno == ICAL_BADARG_ERROR));
+    str_is("uri value: string still unchanged", icalvalue_get_uri(v), "https://example.com/a");
+    icalvalue_free(v);
+
+    v = icalvalue_new_integer(3);
+    ok("integer value: get_color is NULL", (icalvalue_get_color(v) == NULL));
+    icalerror_clear_errno();
+    icalvalue_set_color(v, "red");
+    ok("integer value: set_color is refused", (icalerrno == ICAL_BADARG_ERROR));
+    recur = icalrecurrencetype_new_from_string("FREQ=DAILY");
+    icalerror_clear_errno();
+    icalvalue_set_recur(v, recur);
+    ok("integer value: set_recur is refused", (icalerrno == ICAL_BADARG_ERROR));
+    icalrecurrencetype_unref(recur);
+    int_is("integer value: integer still unchanged", icalvalue_get_integer(v), 3);
+    icalvalue_free(v);
+
+    /* A property getter on a value of another union member returns the zero value */
+    p = icalproperty_new(ICAL_IMAGE_PROPERTY);
+    icalproperty_set_value(p, icalvalue_new_uri("https://example.com/i.png"));
+    ok("IMAGE with a uri value: get_image is NULL", (icalproperty_get_image(p) == NULL));
+    icalproperty_free(p);
+
+    icalerror_set_errors_are_fatal(estate);
 }
 
 static void test_free_attach_data(char *data, void *user_data)
@@ -5022,6 +5243,178 @@ static void test_vcal_procedure_alarm(void)
     }
 
     icalcomponent_free(comp);
+}
+
+static void test_vcal_base64_overpadded(void)
+{
+    /* The base64 value carries more than two '=' pad chars. The decoder used
+       to compute (3 - pad) as the number of output bytes, which wrapped to a
+       huge size_t and was passed straight to memcpy. */
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "ATTACH;ENCODING=BASE64:AAAA====\r\n"
+        "\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    VObject *vcal;
+
+    vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with over-padded base64 does not overflow", (vcal != 0));
+    if (vcal) {
+        cleanVObject(vcal);
+    }
+}
+
+static void test_vcal_encoded_value_eof(void)
+{
+    /* A QUOTED-PRINTABLE '=' that is not followed by two hex digits, and a
+     *      BASE64 or QUOTED-PRINTABLE value cut off at the end of the input, used
+     *      to make the lexer return the same token forever. */
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "SUMMARY;ENCODING=QUOTED-PRINTABLE:x=y\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    const char *truncated[] = {
+        "BEGIN:VCALENDAR\r\nX;QUOTED-PRINTABLE:a=",
+        "BEGIN:VCALENDAR\r\nX;QUOTED-PRINTABLE:abc",
+        "BEGIN:VCALENDAR\r\nX;BASE64:QUJD\r\n",
+    };
+
+    VObject *vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with a bare '=' in a quoted-printable value", (vcal != 0));
+    if (vcal) {
+        icalcomponent *const comp = icalvcal_convert(vcal);
+        icalcomponent *const event =
+            comp ? icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT) : NULL;
+        cleanVObject(vcal);
+        str_is("bare '=' is kept", event ? icalcomponent_get_summary(event) : "", "x=y");
+        if (comp) {
+            icalcomponent_free(comp);
+        }
+    }
+
+    for (size_t i = 0; i < sizeof(truncated) / sizeof(truncated[0]); i++) {
+        VObject *trunc = Parse_MIME(truncated[i], (unsigned long)strlen(truncated[i]));
+        ok("Parsing vCal with an encoded value at the end of the input returns", 1);
+        if (trunc) {
+            cleanVObject(trunc);
+        }
+    }
+}
+
+static void test_value_line_break_injection(void)
+{
+    /* A vCal quoted-printable value can decode to CR/LF. URI values used to
+       be written out verbatim, so the embedded line break started a new
+       ATTENDEE property in the generated iCalendar. */
+    const char *str =
+        "BEGIN:VCALENDAR\r\n"
+        "VERSION:1.0\r\n"
+        "BEGIN:VEVENT\r\n"
+        "URL;ENCODING=QUOTED-PRINTABLE:http://example.com/=0D=0AATTENDEE:mailto:evil@example.com\r\n"
+        "END:VEVENT\r\n"
+        "END:VCALENDAR\r\n";
+    VObject *vcal;
+    icalcomponent *comp, *reparsed, *event;
+    icalproperty *prop;
+    icalattach *attach;
+
+    vcal = Parse_MIME(str, (unsigned long)strlen(str));
+    ok("Parsing vCal with a quoted-printable URL", (vcal != 0));
+    if (!vcal) {
+        return;
+    }
+
+    comp = icalvcal_convert(vcal);
+    cleanVObject(vcal);
+    ok("Converting to ical component", (comp != 0));
+    if (!comp) {
+        return;
+    }
+
+    event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+    prop = event ? icalcomponent_get_first_property(event, ICAL_URL_PROPERTY) : NULL;
+    ok("event has a URL", (prop != 0));
+    if (prop) {
+        str_is("line break is dropped from URI value",
+               icalproperty_as_ical_string(prop),
+               "URL:http://example.com/ATTENDEE:mailto:evil@example.com\r\n");
+    }
+    reparsed = icalparser_parse_string(icalcomponent_as_ical_string(comp));
+    icalcomponent_free(comp);
+    event = reparsed ? icalcomponent_get_first_component(reparsed, ICAL_VEVENT_COMPONENT) : NULL;
+    ok("no ATTENDEE is injected after a round trip",
+       (event && icalcomponent_get_first_property(event, ICAL_ATTENDEE_PROPERTY) == 0));
+    icalcomponent_free(reparsed);
+
+    prop = icalproperty_new_organizer("mailto:a@example.com\r\nATTENDEE:mailto:b@example.com");
+    str_is("line break is dropped from CAL-ADDRESS value",
+           icalproperty_as_ical_string(prop),
+           "ORGANIZER:mailto:a@example.comATTENDEE:mailto:b@example.com\r\n");
+    icalproperty_free(prop);
+
+    attach = icalattach_new_from_url("http://example.com/\nATTENDEE:mailto:b@example.com");
+    prop = icalproperty_new_attach(attach);
+    icalattach_unref(attach);
+    str_is("line break is dropped from ATTACH URL",
+           icalproperty_as_ical_string(prop),
+           "ATTACH:http://example.com/ATTENDEE:mailto:b@example.com\r\n");
+    icalproperty_free(prop);
+
+    prop = icalproperty_new_status(ICAL_STATUS_X);
+    icalvalue_set_x(icalproperty_get_value(prop), "X-FOO\r\nATTENDEE:mailto:b@example.com");
+    str_is("line break is dropped from enum x-value",
+           icalproperty_as_ical_string(prop),
+           "STATUS:X-FOOATTENDEE:mailto:b@example.com\r\n");
+    icalproperty_free(prop);
+}
+
+static void test_vcal_rrule_bad_interval(void)
+{
+    /* A zero interval, or one that wraps when stored in the short
+       recur->interval, gave an iCalendar RRULE that never advances. */
+    static const char *rules[] = {"D0 #0", "D0 20030101", "D40000 #0", "W0 MO #0", "D65536 #5"};
+    size_t i;
+
+    for (i = 0; i < sizeof(rules) / sizeof(rules[0]); i++) {
+        char str[256];
+        VObject *vcal;
+        icalcomponent *comp, *event;
+
+        snprintf(str, sizeof(str),
+                 "BEGIN:VCALENDAR\r\n"
+                 "VERSION:1.0\r\n"
+                 "BEGIN:VEVENT\r\n"
+                 "DTSTART:20020101T100000\r\n"
+                 "RRULE:%s\r\n"
+                 "END:VEVENT\r\n"
+                 "END:VCALENDAR\r\n",
+                 rules[i]);
+
+        vcal = Parse_MIME(str, (unsigned long)strlen(str));
+        ok("Parsing vCal with a bad RRULE interval", (vcal != 0));
+        if (!vcal) {
+            continue;
+        }
+
+        comp = icalvcal_convert(vcal);
+        cleanVObject(vcal);
+        ok("Converting to ical component", (comp != 0));
+        if (!comp) {
+            continue;
+        }
+
+        event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+        ok("bad interval does not become an RRULE",
+           (event != 0 && icalcomponent_get_first_property(event, ICAL_RRULE_PROPERTY) == 0));
+
+        icalcomponent_free(comp);
+    }
 }
 
 /*
@@ -5571,6 +5964,57 @@ static void test_timezone_forward_gap(void)
            icaltime_as_timet_with_zone(local, zone) == icaltime_as_timet(expected));
         icaltimezone_convert_time(&local, zone, utc);
         str_is(cases[i].local, icaltime_as_ical_string(local), cases[i].utc);
+    }
+}
+
+static void test_recur_forward_gap_time(void)
+{
+    const struct {
+        const char *zone;
+        const char *dtstart;
+        const char *rrule;
+        const char *expected;
+    } cases[] = {
+        {"Europe/Berlin", "20260322T023000", "FREQ=WEEKLY;COUNT=4",
+         "20260322T023000,20260329T023000,20260405T023000,20260412T023000"},
+        {"Europe/Berlin", "20260329T023000", "FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU;COUNT=3",
+         "20260329T023000,20270328T023000,20280326T023000"},
+        {"America/New_York", "20260208T023000", "FREQ=MONTHLY;BYDAY=2SU;COUNT=3",
+         "20260208T023000,20260308T023000,20260412T023000"},
+        {"America/Santiago", "20180812T001500", "FREQ=DAILY;COUNT=3",
+         "20180812T001500,20180813T001500,20180814T001500"},
+    };
+
+    for (size_t i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+        icaltimezone *zone = icaltimezone_get_builtin_timezone(cases[i].zone);
+        struct icalrecurrencetype *recur = icalrecurrencetype_new_from_string(cases[i].rrule);
+        struct icaltimetype dtstart = icaltime_from_string(cases[i].dtstart);
+        char got[256] = "";
+
+        ok(cases[i].zone, zone != NULL);
+        ok(cases[i].rrule, recur != NULL);
+        if (!zone || !recur) {
+            if (recur) {
+                icalrecurrencetype_unref(recur);
+            }
+            continue;
+        }
+
+        dtstart = icaltime_set_timezone(&dtstart, zone);
+        icalrecur_iterator *ritr = icalrecur_iterator_new(recur, dtstart);
+        ok("icalrecur_iterator_new()", ritr != NULL);
+        if (ritr) {
+            for (struct icaltimetype next = icalrecur_iterator_next(ritr);
+                 !icaltime_is_null_time(next);
+                 next = icalrecur_iterator_next(ritr)) {
+                size_t len = strlen(got);
+                snprintf(got + len, sizeof(got) - len, "%s%s",
+                         len ? "," : "", icaltime_as_ical_string(next));
+            }
+            icalrecur_iterator_free(ritr);
+        }
+        str_is(cases[i].rrule, got, cases[i].expected);
+        icalrecurrencetype_unref(recur);
     }
 }
 
@@ -8462,12 +8906,14 @@ int main(int argc, const char *argv[])
     test_run("Test Properties", test_properties, do_test, do_header);
     test_run("Test Components", test_components, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence", test_component_foreach, do_test, do_header);
+    test_run("Test recurrence busy status", test_component_foreach_busy, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence with start as date", test_component_foreach_start_as_date, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence with nominal duration", test_component_foreach_dtend_nominal, do_test, do_header);
     test_run("Test icalcomponent_foreach_recurrence with exact duration", test_component_foreach_dtend_exact, do_test, do_header);
     test_run("Test icalrecur_iterator_set_start with date", test_recur_iterator_set_start, do_test, do_header);
     test_run("Test weekly icalrecur_iterator on January 1", test_recur_iterator_on_jan_1, do_test, do_header);
     test_run("Test icalrecur_iterator reverse range without UNTIL", test_recur_iterator_reverse_range, do_test, do_header);
+    test_run("Test icalrecur_iterator_prev after the end", test_recur_iterator_prev_after_end, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
@@ -8482,11 +8928,16 @@ int main(int argc, const char *argv[])
     test_run("Test Attachment", test_attach, do_test, do_header);
     test_run("Test CalDAV Attachment", test_attach_caldav, do_test, do_header);
     test_run("Test Attachment with URL", test_attach_url, do_test, do_header);
+    test_run("Test typed value accessors", test_value_typed_accessors, do_test, do_header);
     test_run("Test Attachment with data", test_attach_data, do_test, do_header);
     test_run("Test icalcalendar", test_calendar, do_test, do_header);
     test_run("Test Dirset", test_dirset, do_test, do_header);
     test_run("Test vCal to iCal conversion", test_vcal, do_test, do_header);
     test_run("Test vCal procedure alarm", test_vcal_procedure_alarm, do_test, do_header);
+    test_run("Test vCal over-padded base64", test_vcal_base64_overpadded, do_test, do_header);
+    test_run("Test vCal encoded value at end of input", test_vcal_encoded_value_eof, do_test, do_header);
+    test_run("Test vCal RRULE bad interval", test_vcal_rrule_bad_interval, do_test, do_header);
+    test_run("Test line breaks in unescaped values", test_value_line_break_injection, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
@@ -8509,6 +8960,7 @@ int main(int argc, const char *argv[])
     test_run("Test timezone from builtin", test_timezone_from_builtin, do_test, do_header);
     test_run("Test explicit local times in forward gaps", test_timezone_forward_gap, do_test, do_header);
     test_run("Test explicit local times in backward overlaps", test_timezone_backward_overlap, do_test, do_header);
+    test_run("Test recurrence times after forward gaps", test_recur_forward_gap_time, do_test, do_header);
     test_run("Test icalvalue_decode_ical_string", test_icalvalue_decode_ical_string, do_test, do_header);
 
     test_run("Test icalarray_sort", test_icalarray_sort, do_test, do_header);

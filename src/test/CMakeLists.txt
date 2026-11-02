@@ -347,6 +347,7 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     563849777 # integer-overflow icaltimezone_adjust_change
     565490012 # integer-overflow icaltimezone_expand_timezone
     565995846 # UBSAN cpu timeout exceeds 60s
+    565927836 # out of memory
     ubsan
     ubsan2
     ubsan3

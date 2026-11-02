@@ -1,6 +1,6 @@
 # Release Checklist
 
-## Prerelease Source Checking
+## Pre-release Source Checking
 
 * Update `CHANGELOG.md` to include any highlights for this release
 * Write an announcement message for Github discussions and add it to `docs/X.Y.Z/announcement.md`
@@ -12,6 +12,8 @@
   * no test failures
   * no compile warnings
   * no static checking issues
+  * build against minimum cmake version (cmake_minimum_required() in top-level CMakeLists.txt)
+  * build against most recent cmake version <https://github.com/Kitware/CMake/releases>
 * Review the `README.md`
 * Verify the project() `VERSION` and `LIBICAL_LIB_MAJOR_SOVERSION` values in the top-level `CMakeLists.txt`
 * Add the real release date (YYYY-MM-DD) to the `CHANGELOG.md` section header "[X.Y.Z] - Unreleased"
@@ -28,9 +30,9 @@
     ```
 
 * Merge any changes made during the review
-* Check that the [github CI](https://github.com/libical/libical/actions) is green for the X.Y branch
+* Check that the [Github CI](https://github.com/libical/libical/actions) is green for the X.Y branch
 
-## Prerelease Build Checking
+## Pre-release Build Checking
 
 Any last changes before pushing the tag? Any CI failures?
 
@@ -51,8 +53,8 @@ and then create  the source tar/zip balls for hanging on the Github release page
 
 (NOTE: that this script does **not** push the tag.  Pushing the tag must be done by-hand).
 
-Additionally, `scripts/release-libical.sh` does a build of the documentation
-plus creates a zip of the documentation.
+Additionally, `scripts/release-libical.sh` builds the API documentation and zips it up
+for adding to the release page.
 
 To use it run:
 
@@ -100,7 +102,7 @@ Paste `docs/X.Y.Z/announcement.md`
 
 ### Prepare for Next Release
 
-* Increase the project() VERSION patch version by 1. ie, X.Y.Z becomes X.Y.Z+1
+* Increase the project() VERSION patch version by 1. i.e, X.Y.Z becomes X.Y.Z+1
 * Add a new stanza to the top of CHANGELOG.md for "[X.Y.Z+1] - Unreleased"
 * Merge to the "master" branch
 

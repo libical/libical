@@ -193,8 +193,11 @@ bool icalproperty_value_kind_is_multivalued(icalproperty_kind pkind, icalvalue_k
         const struct icalproperty_map *map = &property_map[i];
 
         if (map->kind == pkind) {
+            /* An attachment property given as a URI holds a url attachment,
+               also when the property has no default VALUE type */
             if ((map->flags & ICAL_PROPERTY_IS_STRUCTURED) &&
-                *vkind == map->default_value) {
+                (*vkind == map->default_value ||
+                 (map->libical_value == ICAL_ATTACH_VALUE && *vkind == ICAL_URI_VALUE))) {
                 /* Normalize structured property VALUE type for proper parsing */
                 *vkind = map->libical_value;
             }

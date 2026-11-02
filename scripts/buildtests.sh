@@ -188,7 +188,7 @@ TIDY_WARNINGS() {
 # print warnings found in the scan-build output
 # $1 = file with the scan-build output
 SCAN_WARNINGS() {
-  whitelist='ICalGLib-4.0\.c\|ICal-4.0\.c\|g-ir-scanner:\|vcc\.c:'
+  whitelist='ICalGLib-4.0\.c\|ICal-4.0\.c\|g-ir-scanner:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
@@ -498,7 +498,6 @@ CPPCHECK() {
     -i "$TOP/src/java/" \
     -i "$TOP/src/libicalss/icalssyacc.c" \
     -i "$TOP/src/libicalss/icalsslexer.c" \
-    -i "$TOP/src/libicalvcal/vcc.c" \
     $f 2>&1 |
     tee cppcheck-c.out
 
