@@ -346,6 +346,37 @@ static void terminate_rrule(struct zone_context *zone)
     }
 }
 
+/* A VTIMEZONE's TZID comes from untrusted calendar data, and its tail is
+   used below as a path under the zone directory. Reject an absolute path or
+   any ".." path component so a crafted TZID cannot escape that directory
+   (CWE-22). Legitimate locations such as "America/New_York" contain '/',
+   so only ".." segments and a leading separator are refused. */
+static int icaltimezone_location_is_unsafe(const char *location)
+{
+    const char *p = location;
+
+    if (*p == '/' || *p == '\\') {
+        return 1;
+    }
+
+    while (*p) {
+        if (p[0] == '.' && p[1] == '.' &&
+            (p[2] == '\0' || p[2] == '/' || p[2] == '\\')) {
+            return 1;
+        }
+
+        /* skip to the start of the next path component */
+        while (*p && *p != '/' && *p != '\\') {
+            p++;
+        }
+        while (*p == '/' || *p == '\\') {
+            p++;
+        }
+    }
+
+    return 0;
+}
+
 icalcomponent *icaltimezone_fetch_timezone(const char *location)
 {
     tzinfo header = {0};
@@ -395,6 +426,11 @@ icalcomponent *icaltimezone_fetch_timezone(const char *location)
     zonedir = icaltimezone_get_system_zone_directory();
     if (!zonedir) {
         icalerror_set_errno(ICAL_FILE_ERROR);
+        goto error;
+    }
+
+    if (icaltimezone_location_is_unsafe(location)) {
+        /* Don't error; a NULL return just indicates a bad TZID. */
         goto error;
     }
 
