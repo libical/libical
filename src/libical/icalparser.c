@@ -1157,6 +1157,11 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
             }
         }
     }
+    if (parser->parse_errors == max_parse_failures) {
+        icalmemory_free_buffer(str);
+        parser->state = ICALPARSER_ERROR;
+        return 0;
+    }
 
     /****************************************************************
      * End of component parsing.
