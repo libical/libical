@@ -906,6 +906,54 @@ static void test_value_kind_compatible(void)
     vcardcomponent_free(card);
 }
 
+static void test_value_kind_timestamp_date(void)
+{
+    /* TIMESTAMP is not a valid value type of BDAY, ANNIVERSARY and
+     * DEATHDATE, but a timestamp is a valid date-time value. */
+    static const char *v3 =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:x\r\n"
+        "BDAY:19531015T231000Z\r\n"
+        "END:VCARD\r\n";
+    static const char *v4 =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:x\r\n"
+        "BDAY:19531015T231000Z\r\n"
+        "ANNIVERSARY:20090808T143000-0500\r\n"
+        "DEATHDATE:20200102T030405Z\r\n"
+        "END:VCARD\r\n";
+
+    vcardcomponent *card;
+    vcardproperty *prop;
+
+    /* Parsed */
+    card = vcardparser_parse_string(v3);
+    prop = vcardcomponent_get_first_property(card, VCARD_BDAY_PROPERTY);
+    assert(VCARD_TIMESTAMP_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    assert_str_equals(v3, vcardcomponent_as_vcard_string(card));
+    vcardcomponent_free(card);
+
+    card = vcardparser_parse_string(v4);
+    prop = vcardcomponent_get_first_property(card, VCARD_BDAY_PROPERTY);
+    assert(VCARD_TIMESTAMP_VALUE == vcardvalue_isa(vcardproperty_get_value(prop)));
+    assert_str_equals(v4, vcardcomponent_as_vcard_string(card));
+    vcardcomponent_free(card);
+
+    /* Constructed */
+    card = vcardcomponent_vanew(VCARD_VCARD_COMPONENT,
+                                vcardproperty_new_version(VCARD_VERSION_40),
+                                vcardproperty_new_fn("x"),
+                                (void *)0);
+    prop = vcardproperty_new(VCARD_BDAY_PROPERTY);
+    vcardproperty_set_value(prop,
+                            vcardvalue_new_timestamp(vcardtime_from_string("1953-10-15T23:10:00Z", 0)));
+    vcardcomponent_add_property(card, prop);
+    assert_str_equals("BDAY:19531015T231000Z\r\n", vcardproperty_as_vcard_string(prop));
+    vcardcomponent_free(card);
+}
+
 int main(int argc, char **argv)
 {
     _unused(argc);
@@ -938,6 +986,7 @@ int main(int argc, char **argv)
     test_value_kind_enum_x();
     test_value_kind_no_value();
     test_value_kind_compatible();
+    test_value_kind_timestamp_date();
 
     return 0;
 }
