@@ -717,7 +717,7 @@ void generate_header_method_proto(FILE *out, Method *method, gboolean isPrivate)
     if (isPrivate) {
         write_str(out, "\n");
     } else {
-        write_str(out, "\nLIBICAL_ICAL_EXPORT\n");
+        write_str(out, "\nLIBICAL_GLIB_EXPORT\n");
     }
 
     /* Generate the method return */

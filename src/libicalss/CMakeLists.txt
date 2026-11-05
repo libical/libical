@@ -1,14 +1,13 @@
 # SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-add_definitions(-Dlibical_icalss_EXPORTS)
-
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_BINARY_DIR}/src/libical
   ${PROJECT_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}/src/libicalss
 )
 if(BDB_FOUND)
   include_directories(${BDB_INCLUDE_DIR})
@@ -41,7 +40,6 @@ set(
 
 set(
   icalss_LIB_SRCS
-  libical_icalss_export.h
   icalcalendar.c
   icalcalendar.h
   icalclassify.c
@@ -94,6 +92,10 @@ add_library(
   ${LIBRARY_TYPE}
   ${icalss_LIB_SRCS}
 )
+
+generate_export_header(icalss BASE_NAME libical_icalss)
+target_sources(icalss PRIVATE ${PROJECT_BINARY_DIR}/src/libicalss/libical_icalss_export.h)
+
 add_dependencies(
   icalss
   ical-header
@@ -148,6 +150,10 @@ if(LIBICAL_CXX_BINDINGS)
     ${LIBRARY_TYPE}
     ${icalsscxx_LIB_SRCS}
   )
+
+  generate_export_header(icalss_cxx BASE_NAME libical_icalss_cxx)
+  target_sources(icalss_cxx PRIVATE ${PROJECT_BINARY_DIR}/src/libicalss/libical_icalss_cxx_export.h)
+
   add_dependencies(
     icalss_cxx
     ical-header
@@ -209,10 +215,15 @@ install(
     icalset.h
     icalspanlist.h
     icalssyacc.h
-    libical_icalss_export.h
+    ${PROJECT_BINARY_DIR}/src/libicalss/libical_icalss_export.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
 
 if(LIBICAL_CXX_BINDINGS)
-  install(FILES icalspanlist_cxx.hpp DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
+  install(
+    FILES
+      icalspanlist_cxx.hpp
+      ${PROJECT_BINARY_DIR}/src/libicalss/libical_icalss_cxx_export.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/libical
+  )
 endif()

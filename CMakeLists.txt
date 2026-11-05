@@ -237,14 +237,7 @@ add_feature_info(
   "build static libraries"
 )
 
-if(LIBICAL_STATIC)
-  add_definitions(
-    -DLIBICAL_ICAL_STATIC_DEFINE
-    -DLIBICAL_ICALSS_STATIC_DEFINE
-    -DLIBICAL_VCAL_STATIC_DEFINE
-    -DLIBICAL_VCARD_STATIC_DEFINE
-  )
-endif()
+include(GenerateExportHeader)
 
 libical_deprecated_option(WITH_CXX_BINDINGS LIBICAL_CXX_BINDINGS "Build the C++ bindings." True)
 if(LIBICAL_CXX_BINDINGS)

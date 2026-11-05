@@ -53,7 +53,7 @@ if(DOXYGEN_FOUND)
   file(
     GLOB _no_hdrs
     ${PROJECT_SOURCE_DIR}/src/libical/*impl.h
-    ${PROJECT_SOURCE_DIR}/src/libical/*_export.h
+    ${PROJECT_BINARY_DIR}/src/libical/*_export.h
     ${PROJECT_SOURCE_DIR}/src/libical/libical_deprecated.h
     ${PROJECT_SOURCE_DIR}/src/libical/libical_sentinel.h
     ${PROJECT_SOURCE_DIR}/src/libical/icalpvl.c
@@ -66,11 +66,11 @@ if(DOXYGEN_FOUND)
     ${PROJECT_BINARY_DIR}/src/libical/icalrestriction.c
     ${PROJECT_SOURCE_DIR}/src/libicalss/icalssyacc.*
     ${PROJECT_SOURCE_DIR}/src/libicalss/*impl.h
-    ${PROJECT_SOURCE_DIR}/src/libicalss/*_export.h
+    ${PROJECT_BINARY_DIR}/src/libicalss/*_export.h
     ${PROJECT_SOURCE_DIR}/src/libicalss/*_p.c
     ${PROJECT_SOURCE_DIR}/src/libicalss/*_p.h
     ${PROJECT_SOURCE_DIR}/src/libicalvcard/*impl.h
-    ${PROJECT_SOURCE_DIR}/src/libicalvcard/*_export.h
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/*_export.h
     ${PROJECT_SOURCE_DIR}/src/libicalvcard/*_p.c
     ${PROJECT_SOURCE_DIR}/src/libicalvcard/*_p.h
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderived*.c

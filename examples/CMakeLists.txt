@@ -8,6 +8,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src/libical
   ${PROJECT_BINARY_DIR}/src/libical
   ${PROJECT_SOURCE_DIR}/src/libicalss
+  ${PROJECT_BINARY_DIR}/src/libicalss
 )
 
 ########### doesnothing target ###############

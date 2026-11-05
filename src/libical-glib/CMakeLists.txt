@@ -5,8 +5,6 @@ if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-conversion -Wno-sign-conversion")
 endif()
 
-add_definitions(-Dlibical_ical_EXPORTS)
-
 # build ical-glib-src-generator
 add_executable(
   ical-glib-src-generator
@@ -210,6 +208,11 @@ add_library(
   ${LIBRARY_TYPE}
   ${LIBICAL_GLIB_SOURCES}
 )
+
+generate_export_header(ical-glib BASE_NAME libical_glib)
+target_sources(ical-glib PRIVATE ${PROJECT_BINARY_DIR}/src/libical/libical_ical_export.h)
+list(APPEND LIBICAL_GLIB_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/libical_glib_export.h)
+
 add_dependencies(
   ical-glib
   ical-header
