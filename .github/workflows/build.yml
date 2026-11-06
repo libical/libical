@@ -43,7 +43,7 @@ jobs:
           - Debug
     runs-on: ubuntu-22.04
     env:
-      ASAN_OPTIONS: detect_leaks=0
+      #ASAN_OPTIONS: detect_leaks=0 # breaks LEAK_SANITIZE
       CC: clang
       CXX: clang++
     steps:
