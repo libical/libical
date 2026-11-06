@@ -8,7 +8,9 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src/libical
   ${PROJECT_BINARY_DIR}/src/libical
   ${PROJECT_SOURCE_DIR}/src/libicalss
+  ${PROJECT_BINARY_DIR}/src/libicalss
   ${PROJECT_SOURCE_DIR}/src/libicalvcal
+  ${PROJECT_BINARY_DIR}/src/libicalvcal
 )
 
 if(ICU_FOUND)
@@ -346,7 +348,9 @@ if(LIBICAL_BUILD_TESTING_BIGFUZZ)
     560953111 # out of memory
     563849777 # integer-overflow icaltimezone_adjust_change
     565490012 # integer-overflow icaltimezone_expand_timezone
+    565995846 # UBSAN cpu timeout exceeds 60s
     565927836 # out of memory
+    581365607 # LSAN direct-leak
     ubsan
     ubsan2
     ubsan3

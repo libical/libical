@@ -1,8 +1,6 @@
 # SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-add_definitions(-Dlibical_ical_EXPORTS)
-
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
@@ -204,7 +202,6 @@ set(
   ical_LIB_SRCS
   ${BUILT_SOURCES}
   ${BUILT_HEADERS}
-  libical_ical_export.h
   icalarray.c
   icalarray.h
   icalattach.h
@@ -287,6 +284,10 @@ add_library(
   ${LIBRARY_TYPE}
   ${ical_LIB_SRCS}
 )
+
+generate_export_header(ical BASE_NAME libical_ical)
+target_sources(ical PRIVATE ${PROJECT_BINARY_DIR}/src/libical/libical_ical_export.h)
+
 add_dependencies(ical ical-header)
 
 target_include_directories(ical INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
@@ -354,13 +355,15 @@ if(LIBICAL_CXX_BINDINGS)
     vcomponent_cxx.hpp
   )
 
-  add_definitions(-DBUILD_LIBICALDLL)
-
   add_library(
     ical_cxx
     ${LIBRARY_TYPE}
     ${icalcxx_LIB_SRCS}
   )
+
+  generate_export_header(ical_cxx BASE_NAME libical_ical_cxx)
+  target_sources(ical_cxx PRIVATE ${PROJECT_BINARY_DIR}/src/libical/libical_ical_cxx_export.h)
+
   add_dependencies(ical_cxx ical-header)
   target_link_libraries(ical_cxx PUBLIC ical)
   if(DEFINED CMAKE_THREAD_LIBS_INIT)
@@ -394,10 +397,6 @@ if(LIBICAL_CXX_BINDINGS)
   )
 
   install(TARGETS ical_cxx EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-  if(MSVC)
-    remove_definitions(-DBUILD_LIBICALDLL)
-  endif()
 endif()
 
 ########### install files ###############
@@ -429,7 +428,7 @@ install(
     icalvalue.h
     libical_deprecated.h
     libical_sentinel.h
-    libical_ical_export.h
+    ${PROJECT_BINARY_DIR}/src/libical/libical_ical_export.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
 
@@ -441,6 +440,7 @@ if(LIBICAL_CXX_BINDINGS)
       icalvalue_cxx.hpp
       icptrholder_cxx.hpp
       vcomponent_cxx.hpp
+      ${PROJECT_BINARY_DIR}/src/libical/libical_ical_cxx_export.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/libical
   )
 endif()

@@ -5,14 +5,13 @@ if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-conversion -Wno-sign-conversion")
 endif()
 
-add_definitions(-Dlibical_vcal_EXPORTS)
-
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_BINARY_DIR}/src/libical
   ${PROJECT_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}/src/libicalvcal
 )
 
 #these are generated sources, but we keep them in the repo
@@ -22,7 +21,6 @@ set(icalvcal_LIB_DEVSRCS vcc.c)
 
 set(
   icalvcal_LIB_SRCS
-  libical_vcal_export.h
   icalvcal.h
   icalvcal.c
   vcc.h
@@ -38,6 +36,10 @@ add_library(
   ${LIBRARY_TYPE}
   ${icalvcal_LIB_SRCS}
 )
+
+generate_export_header(icalvcal BASE_NAME libical_vcal)
+target_sources(icalvcal PRIVATE ${PROJECT_BINARY_DIR}/src/libicalvcal/libical_vcal_export.h)
+
 add_dependencies(icalvcal ical-header)
 target_link_libraries(icalvcal ical)
 
@@ -80,6 +82,6 @@ install(
     vcaltmp.h
     vcc.h
     vobject.h
-    libical_vcal_export.h
+    ${PROJECT_BINARY_DIR}/src/libicalvcal/libical_vcal_export.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/libical
 )
