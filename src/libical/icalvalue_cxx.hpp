@@ -14,7 +14,7 @@
 #ifndef ICALVALUE_CXX_H
 #define ICALVALUE_CXX_H
 
-#include "libical_ical_export.h"
+#include "libical_ical_cxx_export.h"
 #include "icptrholder_cxx.hpp"
 
 extern "C" {
@@ -26,7 +26,7 @@ extern "C" {
 namespace LibICal
 {
 
-class LIBICAL_ICAL_EXPORT ICalValue
+class LIBICAL_ICAL_CXX_EXPORT ICalValue
 {
 public:
     ICalValue();

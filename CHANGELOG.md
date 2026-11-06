@@ -37,6 +37,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - libicalvcal: Fixed an endless loop with unbounded memory growth when parsing a QUOTED-PRINTABLE
   value with an `=` that is not followed by two hex digits, or a BASE64 or QUOTED-PRINTABLE value
   that runs to the end of the input. A bare `=` is now kept as is.
+- Buildsystem changes:
+  - Generate export headers with CMake, fixing Windows static linking without requiring consumers
+    to define `LIBICAL_*_STATIC_DEFINE`.
+  - Give ical_cxx and ical_glib and icalss_cxx their own export macros to distinguish their symbols
+    from those imported from the underlying libraries.
 
 ## [4.0.7] - 2026-10-18
 

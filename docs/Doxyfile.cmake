@@ -2571,10 +2571,14 @@ PREDEFINED             = "LIBICAL_ICAL_EXPORT=" \
                          "LIBICAL_ICALSS_EXPORT=" \
                          "LIBICAL_VCAL_EXPORT=" \
                          "LIBICAL_VCARD_EXPORT=" \
+                         "LIBICAL_ICAL_CXX_EXPORT=" \
+                         "LIBICAL_ICALSS_CXX_EXPORT=" \
                          "LIBICAL_ICAL_NO_EXPORT=" \
-                         "LIBICAL_ICALS_NO_EXPORT=" \
+                         "LIBICAL_ICALSS_NO_EXPORT=" \
                          "LIBICAL_VCAL_NO_EXPORT=" \
                          "LIBICAL_VCARD_NO_EXPORT=" \
+                         "LIBICAL_ICAL_CXX_NO_EXPORT=" \
+                         "LIBICAL_ICALSS_CXX_NO_EXPORT=" \
                          "LIBICAL_SENTINEL=" \
                          LIBICAL_DEPRECATED=
 

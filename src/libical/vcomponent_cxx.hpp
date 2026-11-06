@@ -12,7 +12,7 @@
 #ifndef ICAL_VCOMPONENT_CXX_H
 #define ICAL_VCOMPONENT_CXX_H
 
-#include "libical_ical_export.h"
+#include "libical_ical_cxx_export.h"
 #include "icptrholder_cxx.hpp"
 
 extern "C" {
@@ -34,7 +34,7 @@ class ICalProperty;
  *                            propagated via this exception type.
  */
 
-class LIBICAL_ICAL_EXPORT VComponent
+class LIBICAL_ICAL_CXX_EXPORT VComponent
 {
 public:
     VComponent();
@@ -205,7 +205,7 @@ private:
     icalcomponent *imp;
 };
 
-class LIBICAL_ICAL_EXPORT VCalendar : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT VCalendar : public VComponent
 {
 public:
     VCalendar();
@@ -217,7 +217,7 @@ public:
     explicit VCalendar(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VEvent : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT VEvent : public VComponent
 {
 public:
     VEvent();
@@ -229,7 +229,7 @@ public:
     explicit VEvent(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VToDo : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT VToDo : public VComponent
 {
 public:
     VToDo();
@@ -241,7 +241,7 @@ public:
     explicit VToDo(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VAgenda : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT VAgenda : public VComponent
 {
 public:
     VAgenda();
@@ -253,7 +253,7 @@ public:
     explicit VAgenda(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VQuery : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT VQuery : public VComponent
 {
 public:
     VQuery();
@@ -265,7 +265,7 @@ public:
     explicit VQuery(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VJournal : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT VJournal : public VComponent
 {
 public:
     VJournal();
@@ -277,7 +277,7 @@ public:
     explicit VJournal(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VAlarm : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT VAlarm : public VComponent
 {
 public:
     VAlarm();
@@ -296,7 +296,7 @@ public:
     icalrequeststatus getTriggerTime(VComponent &c, struct icaltriggertype *tr);
 };
 
-class LIBICAL_ICAL_EXPORT VFreeBusy : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT VFreeBusy : public VComponent
 {
 public:
     VFreeBusy();
@@ -308,7 +308,7 @@ public:
     explicit VFreeBusy(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT VTimezone : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT VTimezone : public VComponent
 {
 public:
     VTimezone();
@@ -320,7 +320,7 @@ public:
     explicit VTimezone(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT XStandard : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT XStandard : public VComponent
 {
 public:
     XStandard();
@@ -332,7 +332,7 @@ public:
     explicit XStandard(const std::string &str);
 };
 
-class LIBICAL_ICAL_EXPORT XDaylight : public VComponent
+class LIBICAL_ICAL_CXX_EXPORT XDaylight : public VComponent
 {
 public:
     XDaylight();

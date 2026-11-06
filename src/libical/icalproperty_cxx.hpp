@@ -12,7 +12,7 @@
 #ifndef ICALPROPERTY_CXX_H
 #define ICALPROPERTY_CXX_H
 
-#include "libical_ical_export.h"
+#include "libical_ical_cxx_export.h"
 #include "icptrholder_cxx.hpp"
 
 extern "C" {
@@ -27,7 +27,7 @@ namespace LibICal
 class ICalParameter;
 class ICalValue;
 
-class LIBICAL_ICAL_EXPORT ICalProperty
+class LIBICAL_ICAL_CXX_EXPORT ICalProperty
 {
 public:
     ICalProperty();

@@ -1,8 +1,6 @@
 # SPDX-FileCopyrightText: 2022, Fastmail Pty. Ltd. (https://fastmail.com)
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-add_definitions(-Dlibical_vcard_EXPORTS)
-
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
@@ -168,7 +166,6 @@ set(
   icalvcard_LIB_SRCS
   ${BUILT_SOURCES}
   ${BUILT_HEADERS}
-  libical_vcard_export.h
   vcardcomponent.c
   vcardcomponent.h
   vcardenumarray.h
@@ -211,6 +208,10 @@ add_library(
   ${LIBRARY_TYPE}
   ${icalvcard_LIB_SRCS}
 )
+
+generate_export_header(icalvcard BASE_NAME libical_vcard)
+target_sources(icalvcard PRIVATE ${PROJECT_BINARY_DIR}/src/libicalvcard/libical_vcard_export.h)
+
 add_dependencies(
   icalvcard
   ical-header
@@ -255,7 +256,7 @@ install(
   FILES
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcard.h
     ${BUILT_HEADERS}
-    libical_vcard_export.h
+    ${PROJECT_BINARY_DIR}/src/libicalvcard/libical_vcard_export.h
     vcardtime.h
     vcardtypes.h
     vcardcomponent.h
