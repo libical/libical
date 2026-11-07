@@ -12,7 +12,7 @@
 #ifndef ICALPARAMETER_CXX_H
 #define ICALPARAMETER_CXX_H
 
-#include "libical_ical_export.h"
+#include "libical_ical_cxx_export.h"
 #include "icptrholder_cxx.hpp"
 
 extern "C" {
@@ -28,7 +28,7 @@ namespace LibICal
 /**
  * Class representing an icalparameter
  */
-class LIBICAL_ICAL_EXPORT ICalParameter
+class LIBICAL_ICAL_CXX_EXPORT ICalParameter
 {
 public:
     /**

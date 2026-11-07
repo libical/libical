@@ -68,7 +68,7 @@ if (test -f "/etc/fedora-release"); then
   WITH_JAVA=0
   export JAVA_HOME=/usr/lib/jvm/java-latest-openjdk
 fi
-export ASAN_OPTIONS="detect_leaks=0:verify_asan_link_order=0" #link_order is needed with different ld on Fedora (like gold)
+export ASAN_OPTIONS="verify_asan_link_order=0" #link_order is needed with different ld on Fedora (like gold)
 
 CMAKE_STRICT=""
 CMAKE_VERSION4_OPTIONS=""
@@ -78,9 +78,10 @@ if (test "$BRANCH" != "3.0"); then
     -DLIBICAL_DEVMODE=ON \
     -DLIBICAL_DEVMODE_MEMORY_CONSISTENCY=ON \
     -DLIBICAL_DEVMODE_ADDRESS_SANITIZER=ON \
+    -DLIBICAL_DEVMODE_LEAK_SANITIZER=ON \
     -DLIBICAL_DEVMODE_UNDEFINED_SANITIZER=ON \
     -DLIBICAL_DEVMODE_SYNCMODE_THREADLOCAL=ON \
-    -DLIBICAL_BUILD_VZIC=ON \
+    -DLIBICAL_BUILD_VZIC=OFF \
   "
 fi
 

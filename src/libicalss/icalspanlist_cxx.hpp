@@ -12,7 +12,7 @@
 #ifndef ICALSPANLIST_CXX_H
 #define ICALSPANLIST_CXX_H
 
-#include "libical_icalss_export.h"
+#include "libical_icalss_cxx_export.h"
 
 extern "C" {
 #include "icalcomponent.h"
@@ -34,7 +34,7 @@ class VComponent;
  * icalerrorenum.  See icalerror.h for the complete list of exceptions
  * that might be thrown.
  */
-class LIBICAL_ICALSS_EXPORT ICalSpanList
+class LIBICAL_ICALSS_CXX_EXPORT ICalSpanList
 {
 public:
     ICalSpanList();

@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the last week were dropped when week 1 starts after January 1, days of the next year's week 1
   were added (e.g. a 53rd week in a 52-week year), and with a WKST other than Monday the number of
   weeks in the year, and so negative `BYWEEKNO` values, followed ISO weeks.
+- libical: Fixed: RSCALE SKIP: dates moved into another month are dropped when
+  BYDAY is present. Also covers dates moved backward across a month boundary.
+- libical: Fixed unbounded recursion when parsing too many nested components
 - libicalvcal: Fixed an out-of-bounds write when decoding a BASE64 value whose padding contains
   more than two `=` characters. The decoder computed the output length as `3 - pad`, which wrapped
   to a huge value when `pad` exceeded 3 and was then used as the size of a `memcpy`.
@@ -41,6 +44,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - libicalvcal: Fixed an endless loop with unbounded memory growth when parsing a QUOTED-PRINTABLE
   value with an `=` that is not followed by two hex digits, or a BASE64 or QUOTED-PRINTABLE value
   that runs to the end of the input. A bare `=` is now kept as is.
+- Buildsystem changes:
+  - Generate export headers with CMake, fixing Windows static linking without requiring consumers
+    to define `LIBICAL_*_STATIC_DEFINE`.
+  - Give ical_cxx and ical_glib and icalss_cxx their own export macros to distinguish their symbols
+    from those imported from the underlying libraries.
 
 ## [4.0.7] - 2026-10-18
 
