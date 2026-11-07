@@ -2942,6 +2942,64 @@ static void expand_by_day(icalrecur_iterator *impl, int year,
     }
 }
 
+/** Limit already selected (and SKIP-adjusted) dates to the BYDAY rule part. */
+static void limit_by_day(icalrecur_iterator *impl, int year)
+{
+    unsigned long bydays[LONGS_PER_BITS(ICAL_YEARDAYS_MASK_SIZE)];
+    int doy;
+
+    memcpy(bydays, impl->days, sizeof(bydays));
+    daysmask_clearall(impl->days);
+    impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
+
+    /* BYMONTHDAY and BYYEARDAY can also select day 0 or the first day of the
+       following year through SKIP.  Filter those dates in their actual period,
+       rather than expanding weekdays only in the original month or year. */
+    for (doy = 0; doy < ICAL_YEARDAYS_MASK_SIZE; doy++) {
+        struct icaltimetype date;
+        int dow, i;
+
+        if (!daysmask_getbit(bydays, doy)) {
+            continue;
+        }
+
+        date = __icaltime_from_day_of_year(impl, doy, year, NULL);
+        dow = get_day_of_week_adjusted(impl, date.year, date.month, date.day);
+
+        for (i = 0; i < impl->bydata[ICAL_BY_DAY].by.size; i++) {
+            short byday = impl->bydata[ICAL_BY_DAY].by.data[i];
+            int pos = icalrecurrencetype_day_position(byday);
+
+            if ((int)icalrecurrencetype_day_day_of_week(byday) != dow) {
+                continue;
+            }
+
+            if (pos) {
+                int day, last_day;
+
+                if (impl->rule->freq == ICAL_MONTHLY_RECURRENCE || has_by_data(impl, ICAL_BY_MONTH)) {
+                    day = date.day;
+                    last_day = get_days_in_month(impl, date.month, date.year);
+                } else {
+                    day = get_day_of_year(impl, date.year, date.month, date.day);
+                    last_day = get_days_in_year(impl, date.year);
+                }
+
+                if (pos != (pos > 0 ? (day - 1) / 7 + 1 : -((last_day - day) / 7 + 1))) {
+                    continue;
+                }
+            }
+
+            daysmask_add_day(impl, doy);
+            break;
+        }
+    }
+
+    /* Date helpers can move the calendar across a month or year boundary.
+       Restore the period, including when no date survived the filter. */
+    reset_period_start(impl);
+}
+
 /** For INTERVAL=MONTHLY, set up the year days bitmask in the iterator to
    list all of the days of the current month that are specified in this
    rule. */
@@ -2965,6 +3023,11 @@ static void expand_month_days(icalrecur_iterator *impl, int year, int month)
     if (has_by_data(impl, ICAL_BY_DAY)) {
         /* Apply each BYDAY to the year days bitmask */
         int last_dow;
+
+        if (has_by_data(impl, ICAL_BY_MONTH_DAY) && impl->rule->skip != ICAL_SKIP_OMIT) {
+            limit_by_day(impl, year);
+            return;
+        }
 
         impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
@@ -3247,6 +3310,11 @@ static void expand_year_days(icalrecur_iterator *impl, int year)
         bool limiting =
             has_by_data(impl, ICAL_BY_YEAR_DAY) || has_by_data(impl, ICAL_BY_MONTH_DAY); //NOLINT(readability-implicit-bool-conversion)
         int first_dow, last_dow;
+
+        if (limiting && impl->rule->skip != ICAL_SKIP_OMIT) {
+            limit_by_day(impl, year);
+            return;
+        }
 
         impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
@@ -3591,6 +3659,15 @@ static bool check_contract_restriction(icalrecur_iterator *impl,
 static bool check_contracting_rules(icalrecur_iterator *impl)
 {
     struct icaltimetype last = occurrence_as_icaltime(impl, 0);
+    int month = last.month;
+
+    /* For monthly SKIP, BYMONTH limits the originating period before an
+       invalid day can move into a neighboring month (RFC 7529 section 4.1). */
+    if (impl->rule->freq == ICAL_MONTHLY_RECURRENCE && impl->rule->skip != ICAL_SKIP_OMIT &&
+        (!has_by_data(impl, ICAL_BY_DAY) || has_by_data(impl, ICAL_BY_MONTH_DAY)) &&
+        (last.year != impl->period_start.year || last.month != impl->period_start.month)) {
+        month = impl->period_start.month;
+    }
 
 /// @cond PRIVATE
 // Check `has_contract_restriction` before calling `check_contract_restriction` to avoid
@@ -3603,7 +3680,7 @@ static bool check_contracting_rules(icalrecur_iterator *impl)
         CHECK_CONTRACT_RESTRICTION(ICAL_BY_MINUTE, last.minute, NULL) &&
         CHECK_CONTRACT_RESTRICTION(ICAL_BY_HOUR, last.hour, NULL) &&
         CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH_DAY, last.day, days_in_current_month) &&
-        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH, last.month, NULL) &&
+        CHECK_CONTRACT_RESTRICTION(ICAL_BY_MONTH, month, NULL) &&
         CHECK_CONTRACT_RESTRICTION(ICAL_BY_WEEK_NO, get_week_number(impl, last), NULL) &&
         CHECK_CONTRACT_RESTRICTION(
             ICAL_BY_DAY, get_day_of_week_adjusted(impl, last.year, last.month, last.day), NULL) &&
