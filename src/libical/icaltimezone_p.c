@@ -351,18 +351,18 @@ static void terminate_rrule(struct zone_context *zone)
    any ".." path component so a crafted TZID cannot escape that directory
    (CWE-22). Legitimate locations such as "America/New_York" contain '/',
    so only ".." segments and a leading separator are refused. */
-static int icaltimezone_location_is_unsafe(const char *location)
+static bool icaltimezone_location_is_unsafe(const char *location)
 {
     const char *p = location;
 
     if (*p == '/' || *p == '\\') {
-        return 1;
+        return true;
     }
 
     while (*p) {
         if (p[0] == '.' && p[1] == '.' &&
             (p[2] == '\0' || p[2] == '/' || p[2] == '\\')) {
-            return 1;
+            return true;
         }
 
         /* skip to the start of the next path component */
@@ -374,7 +374,7 @@ static int icaltimezone_location_is_unsafe(const char *location)
         }
     }
 
-    return 0;
+    return false;
 }
 
 icalcomponent *icaltimezone_fetch_timezone(const char *location)
