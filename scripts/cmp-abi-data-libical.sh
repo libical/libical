@@ -84,6 +84,7 @@ for l in $libs; do
 done
 
 # Checkout the reference branch
+currentBranch=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)
 git checkout $STABLE_TAG
 
 # Now configure and build the reference branch
@@ -110,7 +111,7 @@ for l in $libs; do
     -old "$STABLE_VERS/$l-$STABLE_VERS.dump" \
     -new "$VERS/$l-$VERS.dump"
 done
-git switch -
+git checkout "$currentBranch"
 
 echo
 echo See the compat reports in "$STORE_PATH"/compat_reports
