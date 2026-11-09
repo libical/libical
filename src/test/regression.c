@@ -5644,6 +5644,42 @@ static void test_zoneinfo_stuff(void)
     icaltimezone_set_system_zone_directory(NULL);
 }
 
+static void test_tzid_path_traversal(void)
+{
+    const bool estate = icalerror_get_errors_are_fatal();
+    const bool builtin = icaltimezone_get_builtin_tzdata();
+
+    icalerror_set_errors_are_fatal(false);
+
+    /* Use the on-disk zoneinfo path (not the builtin data) and point it at
+       our test zone directory, which holds a minimal "tzif-min" TZif file
+       both at the top level and under "tzif-dir". */
+    icaltimezone_set_builtin_tzdata(false);
+    icaltimezone_free_builtin_timezones();
+    icaltimezone_set_system_zone_directory(TEST_DATADIR);
+
+    /* A plain TZID resolves to a file under the zone directory. */
+    ok("plain location loads",
+       (icaltimezone_get_builtin_timezone("tzif-min") != NULL));
+
+    /* A nested TZID keeps working - '/' is legal in a location. */
+    ok("nested location loads",
+       (icaltimezone_get_builtin_timezone("tzif-dir/tzif-min") != NULL));
+
+    /* A ".." component must not escape the zone directory. */
+    ok("'..' in location is rejected",
+       (icaltimezone_get_builtin_timezone("tzif-dir/../tzif-min") == NULL));
+
+    /* Neither may an absolute location. */
+    ok("absolute location is rejected",
+       (icaltimezone_get_builtin_timezone("/tzif-min") == NULL));
+
+    icaltimezone_free_builtin_timezones();
+    icaltimezone_set_system_zone_directory(NULL);
+    icaltimezone_set_builtin_tzdata(builtin);
+    icalerror_set_errors_are_fatal(estate);
+}
+
 static void test_tzid_with_utc_time(void)
 {
     const char *strcomp =
@@ -8952,6 +8988,7 @@ int main(int argc, const char *argv[])
     test_run("Test comma in quoted value of x property", test_comma_in_quoted_value, do_test,
              do_header);
     test_run("Test setting/unsetting zoneinfo dir", test_zoneinfo_stuff, do_test, do_header);
+    test_run("Test TZID path traversal is rejected", test_tzid_path_traversal, do_test, do_header);
     test_run("Test TZID with UTC time", test_tzid_with_utc_time, do_test, do_header);
     test_run("Test RECURRENCE-ID TZID", test_recur_tzid, do_test, do_header);
     test_run("Test kind_to_string", test_kind_to_string, do_test, do_header);

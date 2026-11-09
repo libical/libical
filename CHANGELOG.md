@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.8] - Unreleased
 
+- libical: Reject a timezone location containing a `..` path component or an absolute path when
+  resolving a VTIMEZONE TZID to a file under the zone directory (builds that read on-disk zoneinfo
+  rather than the builtin data). A crafted TZID such as `../../some/file` could otherwise make
+  `icaltimezone_fetch_timezone()` open a file outside the configured zone directory.
 - libical: Drop CR and LF when writing values that are output without escaping (URI, CAL-ADDRESS,
   ATTACH URLs and enum x-values). A vCal quoted-printable value could decode to a line break that
   was written out verbatim, ending the content line early and injecting another property.
