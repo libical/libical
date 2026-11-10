@@ -54,6 +54,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     to define `LIBICAL_*_STATIC_DEFINE`.
   - Give ical_cxx and ical_glib and icalss_cxx their own export macros to distinguish their symbols
     from those imported from the underlying libraries.
+- libicalvcard: BDAY, ANNIVERSARY and DEATHDATE with a timestamp value, such as
+  `19531015T231000Z`, were written with `VALUE=TIMESTAMP`. RFC 6350 does not allow TIMESTAMP for
+  these properties, but a TIMESTAMP is a valid DATE-TIME value. The VALUE parameter is now omitted.
 
 ## [4.0.7] - 2026-10-18
 

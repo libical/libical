@@ -54,7 +54,7 @@ TOP=$(readlink -nf "$0")
 TOP=$(dirname "$TOP")
 cd "$TOP/.."
 TOP=$(pwd)
-BRANCH=$(git branch --show-current | awk -F/ '{print $NF}')
+BRANCH=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match | awk -F/ '{print $NF}')
 BDIR="$TOP/build-$BRANCH-gcc"
 INSTALLDIR="$HOME/tmp/libical-$BRANCH"
 

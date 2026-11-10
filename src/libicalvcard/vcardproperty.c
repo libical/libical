@@ -386,11 +386,14 @@ static const char *vcardproperty_get_value_kind(vcardproperty *prop,
     case VCARD_DEATHDATE_PROPERTY:
         /* TIME is v4 specific.
          * All other types are self-evident.
+         * TIMESTAMP is not a valid value type of these properties,
+         * but a timestamp is a valid date-time.
          */
         if (version == VCARD_VERSION_40 &&
             (kind == VCARD_TIME_VALUE || kind == VCARD_DATEANDORTIME_VALUE)) {
             kind = VCARD_NO_VALUE;
-        } else if (kind == VCARD_DATE_VALUE || kind == VCARD_DATETIME_VALUE) {
+        } else if (kind == VCARD_DATE_VALUE || kind == VCARD_DATETIME_VALUE ||
+                   kind == VCARD_TIMESTAMP_VALUE) {
             kind = VCARD_NO_VALUE;
         }
         break;
