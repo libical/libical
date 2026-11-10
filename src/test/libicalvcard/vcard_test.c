@@ -71,7 +71,7 @@ static bool test_parse_file(const char *fname)
         "N:Perreault;Simon;;;ing. jr,M.Sc.\r\n"
         "BDAY:--0203\r\n"
         "BDAY:0000\r\n"
-        "ANNIVERSARY;VALUE=TIMESTAMP:20090808T143000-0500\r\n"
+        "ANNIVERSARY:20090808T143000-0500\r\n"
         "GENDER:M;manly\r\n"
         "ADR;TYPE=WORK:;Suite D2-630;2875 Laurier;Quebec;QC;G1V 2M2;Canada\r\n"
         "TEL;VALUE=URI;TYPE=WORK,TEXT,VOICE,CELL,VIDEO,bar,foo:tel:+1-418-262-6501\r\n"
