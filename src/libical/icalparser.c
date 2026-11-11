@@ -1163,7 +1163,6 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         }
     }
     if (parser->parse_errors == max_parse_failures) {
-        icalmemory_free_buffer(str);
         parser->state = ICALPARSER_ERROR;
         return 0;
     }
@@ -1222,6 +1221,7 @@ icalcomponent *icalparser_clean(icalparser *parser)
     parser->continuation_line = 0;
     parser->lineno = 0;
     parser->parse_errors = 0;
+    parser->insert_errors = 0;
     memset(parser->temp, 0, sizeof(parser->temp));
     return result;
 }
