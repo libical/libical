@@ -1157,9 +1157,9 @@ char *icalrecurrencetype_as_string_r(struct icalrecurrencetype *recur)
     if (recur->until.year != 0) {
         temp[0] = 0;
         if (recur->until.is_date) {
-            print_date_to_string(temp, &(recur->until));
+            print_date_to_string(temp, &recur->until);
         } else {
-            print_datetime_to_string(temp, &(recur->until));
+            print_datetime_to_string(temp, &recur->until);
         }
 
         icalmemory_append_string(&str, &str_p, &buf_sz, ";UNTIL=");
@@ -3796,7 +3796,7 @@ static bool check_setpos(icalrecur_iterator *impl, int next)
     if (!has_by_data(impl, ICAL_BY_SET_POS)) {
         return true;
     }
-    icalrecurrence_by_data *by = &(impl->bydata[ICAL_BY_SET_POS].by);
+    icalrecurrence_by_data *by = &impl->bydata[ICAL_BY_SET_POS].by;
     int32_t set_pos;
 
     /* If we have positive BYSETPOS data */

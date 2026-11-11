@@ -47,7 +47,7 @@ LIBICAL_VCARD_EXPORT struct vcardvalue_impl *vcardvalue_new_impl(vcardvalue_kind
     v->size = 0;
     v->parent = 0;
     v->x_value = 0;
-    memset(&(v->data), 0, sizeof(v->data));
+    memset(&v->data, 0, sizeof(v->data));
 
     return v;
 }
@@ -654,7 +654,7 @@ void vcardvalue_free(vcardvalue *v)
     v->kind = VCARD_NO_VALUE;
     v->size = 0;
     v->parent = 0;
-    memset(&(v->data), 0, sizeof(v->data));
+    memset(&v->data, 0, sizeof(v->data));
     v->id = ICAL_STRUCTURE_TYPE_VALUE_EMPTY;
     icalmemory_free_buffer(v);
 }

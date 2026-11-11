@@ -85,7 +85,7 @@ const void *getCObjectPtr(JNIEnv *env, jobject surrogate)
 // Set the subject (a c++ object) for the given surrogate (a java object).
 // Throws exception if the m_Obj field can not be found.
 //-------------------------------------------------------
-void setCObjectPtr(JNIEnv *env, jobject surrogate, void *subject)
+void setCObjectPtr(JNIEnv *env, jobject surrogate, void const *subject)
 {
     jclass jcls = env->GetObjectClass(surrogate);
     jfieldID fid = env->GetFieldID(jcls, "m_Obj", "J");
@@ -104,7 +104,7 @@ void setCObjectPtr(JNIEnv *env, jobject surrogate, void *subject)
 //-------------------------------------------------------
 const VComponent *getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType)
 {
-    const VComponent *result = (VComponent *)(getCObjectPtr(env, surrogateComponent));
+    const VComponent *result = (VComponent *)getCObjectPtr(env, surrogateComponent);
 
     if (result == NULL) {
         throwException(env, exceptionType);
@@ -119,7 +119,7 @@ const VComponent *getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent
 //-------------------------------------------------------
 const ICalProperty *getSubjectAsICalProperty(JNIEnv *env, jobject surrogateProperty, int exceptionType)
 {
-    const ICalProperty *result = (ICalProperty *)(getCObjectPtr(env, surrogateProperty));
+    const ICalProperty *result = (ICalProperty *)getCObjectPtr(env, surrogateProperty);
 
     if (result == NULL) {
         throwException(env, exceptionType);
@@ -134,7 +134,7 @@ const ICalProperty *getSubjectAsICalProperty(JNIEnv *env, jobject surrogatePrope
 //-------------------------------------------------------
 const ICalValue *getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int exceptionType)
 {
-    const ICalValue *result = (ICalValue *)(getCObjectPtr(env, surrogateValue));
+    const ICalValue *result = (ICalValue *)getCObjectPtr(env, surrogateValue);
 
     if (result == NULL) {
         throwException(env, exceptionType);
@@ -149,7 +149,7 @@ const ICalValue *getSubjectAsICalValue(JNIEnv *env, jobject surrogateValue, int 
 //-------------------------------------------------------
 const ICalParameter *getSubjectAsICalParameter(JNIEnv *env, jobject surrogateParameter, int exceptionType)
 {
-    const ICalParameter *result = (ICalParameter *)(getCObjectPtr(env, surrogateParameter));
+    const ICalParameter *result = (ICalParameter *)getCObjectPtr(env, surrogateParameter);
 
     if (result == NULL) {
         throwException(env, exceptionType);
@@ -285,7 +285,7 @@ jobject createNewVComponentSurrogate(JNIEnv *env, VComponent *subject)
         classname = JLIBICAL_CLASS_VAGENDA;
     }
 
-    return (doCreateNewSurrogate(env, env->FindClass(classname), (jlong)subject));
+    return doCreateNewSurrogate(env, env->FindClass(classname), (jlong)subject);
 }
 
 //-------------------------------------------------------
@@ -293,9 +293,9 @@ jobject createNewVComponentSurrogate(JNIEnv *env, VComponent *subject)
 // If subject is NULL, then returns NULL (will not create a
 // surrogate to a NULL subject);
 //-------------------------------------------------------
-jobject createNewICalPropertySurrogate(JNIEnv *env, ICalProperty *subject)
+jobject createNewICalPropertySurrogate(JNIEnv *env, ICalProperty const *subject)
 {
-    return (doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALPROPERTY), (jlong)subject));
+    return doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALPROPERTY), (jlong)subject);
 }
 
 //-------------------------------------------------------
@@ -303,9 +303,9 @@ jobject createNewICalPropertySurrogate(JNIEnv *env, ICalProperty *subject)
 // If subject is NULL, then returns NULL (will not create a
 // surrogate to a NULL subject);
 //-------------------------------------------------------
-jobject createNewICalValueSurrogate(JNIEnv *env, ICalValue *subject)
+jobject createNewICalValueSurrogate(JNIEnv *env, ICalValue const *subject)
 {
-    return (doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALVALUE), (jlong)subject));
+    return doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALVALUE), (jlong)subject);
 }
 
 //-------------------------------------------------------
@@ -313,9 +313,9 @@ jobject createNewICalValueSurrogate(JNIEnv *env, ICalValue *subject)
 // If subject is NULL, then returns NULL (will not create a
 // surrogate to a NULL subject);
 //-------------------------------------------------------
-jobject createNewICalParameterSurrogate(JNIEnv *env, ICalParameter *subject)
+jobject createNewICalParameterSurrogate(JNIEnv *env, ICalParameter const *subject)
 {
-    return (doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALPARAMETER), (jlong)subject));
+    return doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALPARAMETER), (jlong)subject);
 }
 
 //-------------------------------------------------------
@@ -324,9 +324,9 @@ jobject createNewICalParameterSurrogate(JNIEnv *env, ICalParameter *subject)
 // If source is NULL, then returns NULL (will not create an
 // object to a NULL source);
 //-------------------------------------------------------
-jobject createNewICalTimeType(JNIEnv *env, icaltimetype *source)
+jobject createNewICalTimeType(JNIEnv *env, icaltimetype const *source)
 {
-    return (doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALTIMETYPE), (jlong)source));
+    return doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALTIMETYPE), (jlong)source);
 }
 
 //-------------------------------------------------------
@@ -335,9 +335,9 @@ jobject createNewICalTimeType(JNIEnv *env, icaltimetype *source)
 // If source is NULL, then returns NULL (will not create an
 // object to a NULL source);
 //-------------------------------------------------------
-jobject createNewICalTriggerType(JNIEnv *env, icaltriggertype *source)
+jobject createNewICalTriggerType(JNIEnv *env, icaltriggertype const *source)
 {
-    return (doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALTRIGGERTYPE), (jlong)source));
+    return doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALTRIGGERTYPE), (jlong)source);
 }
 
 //-------------------------------------------------------
@@ -346,9 +346,9 @@ jobject createNewICalTriggerType(JNIEnv *env, icaltriggertype *source)
 // If source is NULL, then returns NULL (will not create an
 // object to a NULL source);
 //-------------------------------------------------------
-jobject createNewICalDurationType(JNIEnv *env, icaldurationtype *source)
+jobject createNewICalDurationType(JNIEnv *env, icaldurationtype const *source)
 {
-    return (doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALDURATIONTYPE), (jlong)source));
+    return doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALDURATIONTYPE), (jlong)source);
 }
 
 //-------------------------------------------------------
@@ -357,9 +357,9 @@ jobject createNewICalDurationType(JNIEnv *env, icaldurationtype *source)
 // If source is NULL, then returns NULL (will not create an
 // object to a NULL source);
 //-------------------------------------------------------
-jobject createNewICalRecurrenceType(JNIEnv *env, icalrecurrencetype *source)
+jobject createNewICalRecurrenceType(JNIEnv *env, icalrecurrencetype const *source)
 {
-    return (doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALRECURRENCETYPE), (jlong)source));
+    return doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALRECURRENCETYPE), (jlong)source);
 }
 
 //-------------------------------------------------------
@@ -368,9 +368,9 @@ jobject createNewICalRecurrenceType(JNIEnv *env, icalrecurrencetype *source)
 // If source is NULL, then returns NULL (will not create an
 // object to a NULL source);
 //-------------------------------------------------------
-jobject createNewICalPeriodType(JNIEnv *env, icalperiodtype *source)
+jobject createNewICalPeriodType(JNIEnv *env, icalperiodtype const *source)
 {
-    return (doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALPERIODTYPE), (jlong)source));
+    return doCreateNewSurrogate(env, env->FindClass(JLIBICAL_CLASS_ICALPERIODTYPE), (jlong)source);
 }
 
 //-------------------------------------------------------

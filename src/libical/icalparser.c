@@ -1251,7 +1251,7 @@ char *icalparser_string_line_generator(char *out, size_t buf_size, void *d)
     }
 
     /* If the pointer is at the end of the string, we are done */
-    if (!data->pos || *(data->pos) == 0) {
+    if (!data->pos || *data->pos == 0) {
         return 0;
     }
 

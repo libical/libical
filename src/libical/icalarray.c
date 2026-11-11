@@ -137,7 +137,7 @@ void *icalarray_element_at(icalarray *array, size_t position)
     size_t chunk = position / array->increment_size;
     size_t offset = position % array->increment_size;
 
-    return (char *)(array->chunks[chunk]) + (offset * array->element_size);
+    return (char *)array->chunks[chunk] + (offset * array->element_size);
 }
 
 void icalarray_set_element_at(icalarray *array, const void *element, size_t position)

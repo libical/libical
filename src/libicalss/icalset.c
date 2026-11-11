@@ -425,7 +425,7 @@ icalcomponent *icalsetiter_next(icalsetiter *itr)
     icalerror_check_arg_rz((itr != NULL), "i");
 
     do {
-        c = icalcompiter_next(&(itr->iter));
+        c = icalcompiter_next(&itr->iter);
         if (c != 0 && (itr->gauge == 0 || icalgauge_compare(itr->gauge, c))) {
             return c;
         }
@@ -441,7 +441,7 @@ icalcomponent *icalsetiter_prior(icalsetiter *i)
     icalerror_check_arg_rz((i != NULL), "i");
 
     do {
-        c = icalcompiter_prior(&(i->iter));
+        c = icalcompiter_prior(&i->iter);
         if (c != 0 && (i->gauge == 0 || icalgauge_compare(i->gauge, c))) {
             return c;
         }
@@ -453,7 +453,7 @@ icalcomponent *icalsetiter_prior(icalsetiter *i)
 icalcomponent *icalsetiter_deref(icalsetiter *i)
 {
     icalerror_check_arg_rz((i != NULL), "i");
-    return (icalcompiter_deref(&(i->iter)));
+    return icalcompiter_deref(&i->iter);
 }
 
 /* For subclasses that use multiple clusters that require specialized cluster traversal */

@@ -52,7 +52,7 @@ LIBICAL_ICAL_EXPORT struct icalvalue_impl *icalvalue_new_impl(icalvalue_kind kin
     v->size = 0;
     v->parent = 0;
     v->x_value = 0;
-    memset(&(v->data), 0, sizeof(v->data));
+    memset(&v->data, 0, sizeof(v->data));
 
     return v;
 }
@@ -909,7 +909,7 @@ void icalvalue_free(icalvalue *v)
     v->kind = ICAL_NO_VALUE;
     v->size = 0;
     v->parent = 0;
-    memset(&(v->data), 0, sizeof(v->data));
+    memset(&v->data, 0, sizeof(v->data));
     v->id = ICAL_STRUCTURE_TYPE_VALUE_EMPTY;
     icalmemory_free_buffer(v);
 }

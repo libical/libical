@@ -21,11 +21,11 @@ extern "C" {
 
 #include "ical.h"
 
-void jni_SetTime_in_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
+void jni_SetTime_in_ICalTriggerType(struct ICalTriggerType const *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
 void jni_GetTime_from_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
-void jni_SetDuration_in_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
+void jni_SetDuration_in_ICalTriggerType(struct ICalTriggerType const *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
 void jni_GetDuration_from_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
-void jni_SetAll_in_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
+void jni_SetAll_in_ICalTriggerType(struct ICalTriggerType const *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
 
 void jni_GetAll_from_ICalTriggerType(struct ICalTriggerType *__ICalTriggerType_, JNIEnv *env, jobject thisICalTriggerType);
 JNIEXPORT void JNICALL Java_net_cp_jlibical_ICalTriggerType_init__J(JNIEnv *env, jobject thisICalTriggerType, jlong data);
