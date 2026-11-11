@@ -120,7 +120,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1trigger(JNIEnv *en
 
     if (cObj != NULL) {
         // get the trigger from CObj
-        icaltriggertype aTrigger = cObj->get_trigger();
+        icaltriggertype const aTrigger = cObj->get_trigger();
 
         // create a new surrogate, using aTrigger as the subject.
         result = createNewICalTriggerType(env, &aTrigger);
@@ -171,7 +171,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_get_1text(JNIEnv *env, 
     const ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_text();
+        auto const icalStr = cObj->get_text();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -209,7 +209,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1duration(JNIEnv *e
 
     if (cObj != NULL) {
         // get the duration from CObj
-        icaldurationtype aDuration = cObj->get_duration();
+        icaldurationtype const aDuration = cObj->get_duration();
 
         // create a new surrogate, using aDuration as the subject.
         result = createNewICalDurationType(env, &aDuration);
@@ -248,7 +248,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalValue_get_1query(JNIEnv *env,
     const ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_query();
+        auto const icalStr = cObj->get_query();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -285,7 +285,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalValue_get_1datetime(JNIEnv *e
     const ICalValue *cObj = getSubjectAsICalValue(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        icaltimetype aTime = cObj->get_datetime();
+        icaltimetype const aTime = cObj->get_datetime();
         result = createNewICalTimeType(env, &aTime);
     }
 

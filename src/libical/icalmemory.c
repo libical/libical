@@ -148,7 +148,7 @@ static buffer_ring *get_buffer_ring_global(void)
 static buffer_ring *get_buffer_ring(void)
 {
 #if ICAL_SYNC_MODE == ICAL_SYNC_MODE_PTHREAD
-    return (get_buffer_ring_pthread());
+    return get_buffer_ring_pthread();
 #else
     return get_buffer_ring_global();
 #endif
@@ -163,7 +163,7 @@ void icalmemory_add_tmp_buffer(void *buf)
     }
 
     /* Wrap around the ring */
-    if (++(br->pos) == BUFFER_RING_SIZE) {
+    if (++br->pos == BUFFER_RING_SIZE) {
         br->pos = 0;
     }
 

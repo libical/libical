@@ -36,7 +36,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalParameter_as_1ical_1string(JN
     ICalParameter *cObj = (ICalParameter *)getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->as_ical_string();
+        auto const icalStr = cObj->as_ical_string();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -97,7 +97,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalParameter_get_1language(JNIEn
     const ICalParameter *cObj = getSubjectAsICalParameter(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_language();
+        auto const icalStr = cObj->get_language();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 

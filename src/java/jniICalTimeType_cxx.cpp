@@ -34,7 +34,7 @@ static void initICalTimeTypeFieldIDs(JNIEnv *env, jclass clazz)
     ICalTimeType_Zone_FID = env->GetFieldID(clazz, "zone", "Ljava/lang/String;");
 }
 
-void jni_SetYear_in_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
+void jni_SetYear_in_ICalTimeType(struct ICalTimeType const *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
 {
     env->SetIntField(thisICalTimeType, ICalTimeType_Year_FID, (jint)__ICalTimeType_->year);
 }
@@ -44,7 +44,7 @@ void jni_GetYear_from_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv 
     __ICalTimeType_->year = env->GetIntField(thisICalTimeType, ICalTimeType_Year_FID);
 }
 
-void jni_SetMonth_in_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
+void jni_SetMonth_in_ICalTimeType(struct ICalTimeType const *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
 {
     env->SetIntField(thisICalTimeType, ICalTimeType_Month_FID, (jint)__ICalTimeType_->month);
 }
@@ -54,7 +54,7 @@ void jni_GetMonth_from_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv
     __ICalTimeType_->month = env->GetIntField(thisICalTimeType, ICalTimeType_Month_FID);
 }
 
-void jni_SetDay_in_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
+void jni_SetDay_in_ICalTimeType(struct ICalTimeType const *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
 {
     env->SetIntField(thisICalTimeType, ICalTimeType_Day_FID, (jint)__ICalTimeType_->day);
 }
@@ -64,7 +64,7 @@ void jni_GetDay_from_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv *
     __ICalTimeType_->day = env->GetIntField(thisICalTimeType, ICalTimeType_Day_FID);
 }
 
-void jni_SetHour_in_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
+void jni_SetHour_in_ICalTimeType(struct ICalTimeType const *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
 {
     env->SetIntField(thisICalTimeType, ICalTimeType_Hour_FID, (jint)__ICalTimeType_->hour);
 }
@@ -74,7 +74,7 @@ void jni_GetHour_from_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv 
     __ICalTimeType_->hour = env->GetIntField(thisICalTimeType, ICalTimeType_Hour_FID);
 }
 
-void jni_SetMinute_in_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
+void jni_SetMinute_in_ICalTimeType(struct ICalTimeType const *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
 {
     env->SetIntField(thisICalTimeType, ICalTimeType_Minute_FID, (jint)__ICalTimeType_->minute);
 }
@@ -84,7 +84,7 @@ void jni_GetMinute_from_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEn
     __ICalTimeType_->minute = env->GetIntField(thisICalTimeType, ICalTimeType_Minute_FID);
 }
 
-void jni_SetSecond_in_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
+void jni_SetSecond_in_ICalTimeType(struct ICalTimeType const *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
 {
     env->SetIntField(thisICalTimeType, ICalTimeType_Second_FID, (jint)__ICalTimeType_->second);
 }
@@ -94,7 +94,7 @@ void jni_GetSecond_from_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEn
     __ICalTimeType_->second = env->GetIntField(thisICalTimeType, ICalTimeType_Second_FID);
 }
 
-void jni_SetIs_date_in_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
+void jni_SetIs_date_in_ICalTimeType(struct ICalTimeType const *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
 {
     env->SetIntField(thisICalTimeType, ICalTimeType_Is_date_FID, (jint)__ICalTimeType_->is_date);
 }
@@ -104,7 +104,7 @@ void jni_GetIs_date_from_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIE
     __ICalTimeType_->is_date = env->GetIntField(thisICalTimeType, ICalTimeType_Is_date_FID);
 }
 
-void jni_SetZone_in_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
+void jni_SetZone_in_ICalTimeType(const struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
 {
     env->SetObjectField(thisICalTimeType, ICalTimeType_Zone_FID, env->NewStringUTF(icaltime_get_tzid(*__ICalTimeType_)));
 }
@@ -115,7 +115,7 @@ void jni_GetZone_from_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv 
 }
 
 // copy all fields from the c struct (__ICalTimeType_) to the java object (thisICalTimeType).
-void jni_SetAll_in_ICalTimeType(struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
+void jni_SetAll_in_ICalTimeType(const struct ICalTimeType *__ICalTimeType_, JNIEnv *env, jobject thisICalTimeType)
 {
     jni_SetYear_in_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
     jni_SetMonth_in_ICalTimeType(__ICalTimeType_, env, thisICalTimeType);
