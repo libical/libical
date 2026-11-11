@@ -180,7 +180,7 @@ CPPCHECK_WARNINGS() {
 # print warnings find in the clang-tidy output
 # $1 = file with the clang-tidy output
 TIDY_WARNINGS() {
-  whitelist='g-ir-scanner:'
+  whitelist='/build-test-tidy\|g-ir-scanner:'
   CHECK_WARNINGS "$1" "warning:" "$whitelist"
 }
 
