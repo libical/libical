@@ -112,6 +112,3 @@ for l in $libs; do
     -new "$VERS/$l-$VERS.dump"
 done
 git checkout "$currentBranch"
-
-echo
-echo See the compat reports in "$STORE_PATH"/compat_reports
