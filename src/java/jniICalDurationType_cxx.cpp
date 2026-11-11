@@ -28,7 +28,7 @@ static void initICalDurationTypeFieldIDs(JNIEnv *env, jclass clazz)
     ICalDurationType_Seconds_FID = env->GetFieldID(clazz, "seconds", "J");
 }
 
-void jni_SetIs_neg_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
+void jni_SetIs_neg_in_ICalDurationType(struct ICalDurationType const *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
     env->SetIntField(thisICalDurationType, ICalDurationType_Is_neg_FID, (jint)__ICalDurationType_->is_neg);
 }
@@ -38,7 +38,7 @@ void jni_GetIs_neg_from_ICalDurationType(struct ICalDurationType *__ICalDuration
     __ICalDurationType_->is_neg = env->GetIntField(thisICalDurationType, ICalDurationType_Is_neg_FID);
 }
 
-void jni_SetDays_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
+void jni_SetDays_in_ICalDurationType(struct ICalDurationType const *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
     env->SetLongField(thisICalDurationType, ICalDurationType_Days_FID, (jlong)__ICalDurationType_->days);
 }
@@ -48,7 +48,7 @@ void jni_GetDays_from_ICalDurationType(struct ICalDurationType *__ICalDurationTy
     __ICalDurationType_->days = static_cast<unsigned int>(env->GetLongField(thisICalDurationType, ICalDurationType_Days_FID));
 }
 
-void jni_SetWeeks_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
+void jni_SetWeeks_in_ICalDurationType(struct ICalDurationType const *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
     env->SetLongField(thisICalDurationType, ICalDurationType_Weeks_FID, (jlong)__ICalDurationType_->weeks);
 }
@@ -58,7 +58,7 @@ void jni_GetWeeks_from_ICalDurationType(struct ICalDurationType *__ICalDurationT
     __ICalDurationType_->weeks = static_cast<unsigned int>(env->GetLongField(thisICalDurationType, ICalDurationType_Weeks_FID));
 }
 
-void jni_SetHours_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
+void jni_SetHours_in_ICalDurationType(struct ICalDurationType const *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
     env->SetLongField(thisICalDurationType, ICalDurationType_Hours_FID, (jlong)__ICalDurationType_->hours);
 }
@@ -68,7 +68,7 @@ void jni_GetHours_from_ICalDurationType(struct ICalDurationType *__ICalDurationT
     __ICalDurationType_->hours = static_cast<unsigned int>(env->GetLongField(thisICalDurationType, ICalDurationType_Hours_FID));
 }
 
-void jni_SetMinutes_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
+void jni_SetMinutes_in_ICalDurationType(struct ICalDurationType const *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
     env->SetLongField(thisICalDurationType, ICalDurationType_Minutes_FID, (jlong)__ICalDurationType_->minutes);
 }
@@ -78,7 +78,7 @@ void jni_GetMinutes_from_ICalDurationType(struct ICalDurationType *__ICalDuratio
     __ICalDurationType_->minutes = static_cast<unsigned int>(env->GetLongField(thisICalDurationType, ICalDurationType_Minutes_FID));
 }
 
-void jni_SetSeconds_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
+void jni_SetSeconds_in_ICalDurationType(struct ICalDurationType const *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
     env->SetLongField(thisICalDurationType, ICalDurationType_Seconds_FID, (jlong)__ICalDurationType_->seconds);
 }
@@ -89,7 +89,7 @@ void jni_GetSeconds_from_ICalDurationType(struct ICalDurationType *__ICalDuratio
 }
 
 // copy all fields from the c struct (ICalDurationType) to the java object (thisICalDurationType).
-void jni_SetAll_in_ICalDurationType(struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
+void jni_SetAll_in_ICalDurationType(const struct ICalDurationType *__ICalDurationType_, JNIEnv *env, jobject thisICalDurationType)
 {
     jni_SetIs_neg_in_ICalDurationType(__ICalDurationType_, env, thisICalDurationType);
     jni_SetDays_in_ICalDurationType(__ICalDurationType_, env, thisICalDurationType);

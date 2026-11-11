@@ -1604,8 +1604,8 @@ static void icalvcal_traverse_objects(VObject *object,
         switch (conversion_table[i].type) {
         case DT_COMPONENT: {
             subc =
-                (icalcomponent *)(conversion_table[i].conversion_func(
-                    conversion_table[i].icaltype, object, last_comp, defaults));
+                (icalcomponent *)conversion_table[i].conversion_func(
+                    conversion_table[i].icaltype, object, last_comp, defaults);
 
             if (subc) {
                 icalcomponent_add_component(last_comp, subc);
@@ -1616,8 +1616,8 @@ static void icalvcal_traverse_objects(VObject *object,
         case DT_PROPERTY: {
             if (vObjectValueType(object) && conversion_table[i].conversion_func != NULL) {
                 icalproperty *prop =
-                    (icalproperty *)(conversion_table[i].conversion_func(
-                        conversion_table[i].icaltype, object, last_comp, defaults));
+                    (icalproperty *)conversion_table[i].conversion_func(
+                        conversion_table[i].icaltype, object, last_comp, defaults);
 
                 if (prop) {
                     icalcomponent_add_property(last_comp, prop);

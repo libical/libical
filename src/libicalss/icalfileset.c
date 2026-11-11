@@ -306,7 +306,7 @@ int icalfileset_unlock(icalfileset *set)
     lock.l_whence = SEEK_SET; /* SEEK_SET, SEEK_CUR, SEEK_END */
     lock.l_len = 0;           /* #bytes (0 means to EOF) */
 
-    return (fcntl(set->fd, F_UNLCK, &lock));
+    return fcntl(set->fd, F_UNLCK, &lock);
 #else
     _unused(set);
     return 0;
@@ -904,7 +904,7 @@ icalcomponent *icalfilesetiter_to_next(icalset *set, icalsetiter *i)
     next = icaltime_from_timet_with_zone(time(0), false, NULL);
 
     do {
-        c = icalcompiter_next(&(i->iter));
+        c = icalcompiter_next(&i->iter);
 
         if (c == 0) {
             continue;

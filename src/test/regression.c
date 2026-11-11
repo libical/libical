@@ -5740,7 +5740,7 @@ static void test_tzid_with_utc_time(void)
         ok("EXDATE is not null-time", (!icaltime_is_null_time(exdate)));
         ok("expected EXDATE not NULL", (exdate_expected[idx].tzid != NULL));
 
-        if (*(exdate_expected[idx].tzid)) {
+        if (*exdate_expected[idx].tzid) {
             ok("EXDATE zone is not NULL", (exdate.zone != NULL));
             ok("EXDATE matches timezone", (strcmp(exdate_expected[idx].tzid, icaltimezone_get_tzid((icaltimezone *)exdate.zone)) == 0));
         } else {
@@ -8876,7 +8876,7 @@ int main(int argc, const char *argv[])
     }
 
     if (optind < argc) {
-        do_test = atoi(argv[argc - 1]); //NOLINT(bugprone-unchecked-string-to-number-conversion)
+        do_test = atoi(argv[optind]); //NOLINT(bugprone-unchecked-string-to-number-conversion)
     }
 #else
     if (argc > 1) {

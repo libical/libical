@@ -38,7 +38,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_as_1ical_1string(JNI
     ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->as_ical_string();
+        auto const icalStr = cObj->as_ical_string();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -206,7 +206,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1first_1paramete
 
     if (cObj != NULL) {
         // get the first parameter from CObj
-        ICalParameter *aParameter = cObj->get_first_parameter((icalparameter_kind)kind);
+        ICalParameter const *aParameter = cObj->get_first_parameter((icalparameter_kind)kind);
 
         // create a new surrogate, using aParameter as the subject (returns NULL if subject is NULL).
         result = createNewICalParameterSurrogate(env, aParameter);
@@ -227,7 +227,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1next_1parameter
 
     if (cObj != NULL) {
         // get the first parameter from CObj
-        ICalParameter *aParameter = cObj->get_next_parameter((icalparameter_kind)kind);
+        ICalParameter const *aParameter = cObj->get_next_parameter((icalparameter_kind)kind);
 
         // create a new surrogate, using aParameter as the subject (returns NULL if subject is NULL).
         result = createNewICalParameterSurrogate(env, aParameter);
@@ -282,7 +282,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1value(JNIEnv *e
 
     if (cObj != NULL) {
         // get the first value from CObj
-        ICalValue *aValue = cObj->get_value();
+        ICalValue const *aValue = cObj->get_value();
 
         // create a new surrogate, using aValue as the subject (returns NULL if subject is NULL).
         result = createNewICalValueSurrogate(env, aValue);
@@ -302,7 +302,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1value_1as_1stri
     ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_value_as_string();
+        auto const icalStr = cObj->get_value_as_string();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -320,7 +320,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1name(JNIEnv *en
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_name();
+        auto const icalStr = cObj->get_name();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -386,7 +386,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1attendee(JNIEnv
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_attendee();
+        auto const icalStr = cObj->get_attendee();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -455,7 +455,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1description(JNI
     const ICalProperty *cObj = (ICalProperty *)getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_description();
+        auto const icalStr = cObj->get_description();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -492,7 +492,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1dtend(JNIEnv *e
 
     if (cObj != NULL) {
         // get the dtend time from CObj
-        icaltimetype aTime = cObj->get_dtend();
+        icaltimetype const aTime = cObj->get_dtend();
 
         // create a new surrogate, using aTime as the subject.
         result = createNewICalTimeType(env, &aTime);
@@ -531,7 +531,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1dtstamp(JNIEnv 
 
     if (cObj != NULL) {
         // get the dtstamp time from CObj
-        icaltimetype aDTStamp = cObj->get_dtstamp();
+        icaltimetype const aDTStamp = cObj->get_dtstamp();
 
         // create a new surrogate, using aDTStamp as the subject.
         result = createNewICalTimeType(env, &aDTStamp);
@@ -570,7 +570,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1dtstart(JNIEnv 
 
     if (cObj != NULL) {
         // get the dtend time from CObj
-        icaltimetype aTime = cObj->get_dtstart();
+        icaltimetype const aTime = cObj->get_dtstart();
 
         // create a new surrogate, using aTime as the subject.
         result = createNewICalTimeType(env, &aTime);
@@ -609,7 +609,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1due(JNIEnv *env
 
     if (cObj != NULL) {
         // get the dtend time from CObj
-        icaltimetype aTime = cObj->get_due();
+        icaltimetype const aTime = cObj->get_due();
 
         // create a new surrogate, using aTime as the subject.
         result = createNewICalTimeType(env, &aTime);
@@ -648,7 +648,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1duration(JNIEnv
 
     if (cObj != NULL) {
         // get the dtend time from CObj
-        icaldurationtype aDuration = cObj->get_duration();
+        icaldurationtype const aDuration = cObj->get_duration();
 
         // create a new surrogate, using aTime as the subject.
         result = createNewICalDurationType(env, &aDuration);
@@ -685,7 +685,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1location(JNIEnv
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_location();
+        auto const icalStr = cObj->get_location();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -785,7 +785,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1owner(JNIEnv *e
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_owner();
+        auto const icalStr = cObj->get_owner();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -820,7 +820,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1prodid(JNIEnv *
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_prodid();
+        auto const icalStr = cObj->get_prodid();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -855,7 +855,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1query(JNIEnv *e
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_query();
+        auto const icalStr = cObj->get_query();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -890,7 +890,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1queryname(JNIEn
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_queryname();
+        auto const icalStr = cObj->get_queryname();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -956,7 +956,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1summary(JNIEnv 
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_summary();
+        auto const icalStr = cObj->get_summary();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -991,7 +991,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1target(JNIEnv *
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_target();
+        auto const icalStr = cObj->get_target();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -1028,7 +1028,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1trigger(JNIEnv 
 
     if (cObj != NULL) {
         // get the dtend time from CObj
-        icaltriggertype aTrigger = cObj->get_trigger();
+        icaltriggertype const aTrigger = cObj->get_trigger();
 
         // create a new surrogate, using aTime as the subject.
         result = createNewICalTriggerType(env, &aTrigger);
@@ -1065,7 +1065,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1tzid(JNIEnv *en
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_tzid();
+        auto const icalStr = cObj->get_tzid();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -1100,7 +1100,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1uid(JNIEnv *env
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_uid();
+        auto const icalStr = cObj->get_uid();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -1205,7 +1205,7 @@ JNIEXPORT jstring JNICALL Java_net_cp_jlibical_ICalProperty_get_1relcalid(JNIEnv
     const ICalProperty *cObj = getSubjectAsICalProperty(env, jobj, JLIBICAL_ERR_CLIENT_INTERNAL);
 
     if (cObj != NULL) {
-        auto icalStr = cObj->get_relcalid();
+        auto const icalStr = cObj->get_relcalid();
         result = env->NewStringUTF(icalStr.empty() ? "" : icalStr.c_str());
     }
 
@@ -1244,7 +1244,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1exdate(JNIEnv *
 
     if (cObj != NULL) {
         // get the exdate from CObj
-        icaltimetype aExDate = cObj->get_exdate();
+        icaltimetype const aExDate = cObj->get_exdate();
 
         // create a new surrogate, using aRecurrenceId as the subject.
         result = createNewICalTimeType(env, &aExDate);
@@ -1283,7 +1283,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1exrule(JNIEnv *
 
     if (cObj != NULL) {
         // get the exrule from CObj
-        icalrecurrencetype *aExRule = cObj->get_exrule();
+        icalrecurrencetype const *aExRule = cObj->get_exrule();
 
         // create a new surrogate, using aExRule as the subject.
         result = createNewICalRecurrenceType(env, aExRule);
@@ -1324,7 +1324,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1freebusy(JNIEnv
 
     if (cObj != NULL) {
         // get the period from CObj
-        icalperiodtype aPeriod = cObj->get_freebusy();
+        icalperiodtype const aPeriod = cObj->get_freebusy();
 
         // create a new surrogate, using aPeriod as the subject.
         result = createNewICalPeriodType(env, &aPeriod);
@@ -1365,7 +1365,7 @@ JNIEXPORT jobject JNICALL Java_net_cp_jlibical_ICalProperty_get_1recurrenceid(JN
 
     if (cObj != NULL) {
         // get the exdate from CObj
-        icaltimetype aRecurrenceId = cObj->get_recurrenceid();
+        icaltimetype const aRecurrenceId = cObj->get_recurrenceid();
 
         // create a new surrogate, using aRecurrenceId as the subject.
         result = createNewICalTimeType(env, &aRecurrenceId);

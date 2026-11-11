@@ -281,7 +281,7 @@ void icalpvl_insert_ordered(icalpvl_list L, icalpvl_comparef f, void *d)
 
     /* smaller than head, add to head */
 
-    if (((*f)(d, L->head->d)) <= 0) {
+    if ((*f)(d, L->head->d) <= 0) {
         icalpvl_unshift(L, d);
         return;
     }

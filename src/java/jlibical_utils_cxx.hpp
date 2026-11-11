@@ -31,7 +31,7 @@ struct icalperiodtype;
 
 // get & set
 const void *getCObjectPtr(JNIEnv *env, jobject surrogate);
-void setCObjectPtr(JNIEnv *env, jobject surrogate, void *subject);
+void setCObjectPtr(JNIEnv *env, jobject surrogate, void const *subject);
 
 // type-safe getters
 const LibICal::VComponent *getSubjectAsVComponent(JNIEnv *env, jobject surrogateComponent, int exceptionType);
@@ -50,15 +50,15 @@ void throwException(JNIEnv *env, int cpErr);
 
 // create objects
 jobject createNewVComponentSurrogate(JNIEnv *env, LibICal::VComponent *subject);
-jobject createNewICalPropertySurrogate(JNIEnv *env, LibICal::ICalProperty *subject);
-jobject createNewICalValueSurrogate(JNIEnv *env, LibICal::ICalValue *subject);
-jobject createNewICalParameterSurrogate(JNIEnv *env, LibICal::ICalParameter *subject);
+jobject createNewICalPropertySurrogate(JNIEnv *env, LibICal::ICalProperty const *subject);
+jobject createNewICalValueSurrogate(JNIEnv *env, LibICal::ICalValue const *subject);
+jobject createNewICalParameterSurrogate(JNIEnv *env, LibICal::ICalParameter const *subject);
 
-jobject createNewICalTimeType(JNIEnv *env, icaltimetype *source);
-jobject createNewICalTriggerType(JNIEnv *env, icaltriggertype *source);
-jobject createNewICalDurationType(JNIEnv *env, icaldurationtype *source);
-jobject createNewICalRecurrenceType(JNIEnv *env, icalrecurrencetype *source);
-jobject createNewICalPeriodType(JNIEnv *env, icalperiodtype *source);
+jobject createNewICalTimeType(JNIEnv *env, icaltimetype const *source);
+jobject createNewICalTriggerType(JNIEnv *env, icaltriggertype const *source);
+jobject createNewICalDurationType(JNIEnv *env, icaldurationtype const *source);
+jobject createNewICalRecurrenceType(JNIEnv *env, icalrecurrencetype const *source);
+jobject createNewICalPeriodType(JNIEnv *env, icalperiodtype const *source);
 
 jobject doCreateNewSurrogate(JNIEnv *env, jclass surrogateClass, jlong subject);
 

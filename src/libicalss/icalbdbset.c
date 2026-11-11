@@ -1468,7 +1468,7 @@ icalcomponent *icalbdbsetiter_to_next(icalset *set, icalsetiter *i)
     do {
         /* no pending occurrence, read the next component */
         if (i->last_component == NULL) {
-            comp = icalcompiter_next(&(i->iter));
+            comp = icalcompiter_next(&i->iter);
         } else {
             comp = i->last_component;
         }

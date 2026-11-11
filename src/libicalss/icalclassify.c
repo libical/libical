@@ -705,7 +705,7 @@ icalproperty_xlicclass icalclassify(icalcomponent *c, icalcomponent *match, cons
 
     for (i = 0; icalclassify_map[i].method != ICAL_METHOD_NONE; i++) {
         if (icalclassify_map[i].method == method) {
-            if ((*(icalclassify_map[i].fn))(&comp_parts, &match_parts, user) == 1) {
+            if ((*icalclassify_map[i].fn)(&comp_parts, &match_parts, user) == 1) {
                 class = icalclassify_map[i].class;
                 break;
             }
