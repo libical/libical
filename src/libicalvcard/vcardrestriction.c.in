@@ -78,7 +78,7 @@ static const char restr_string_map[VCARD_RESTRICTION_UNKNOWN + 1][60] = {
     "unknown number"    /*VCARD_RESTRICTION_UNKNOWN */
 };
 
-int vcardrestriction_compare(vcardrestriction_kind restr, int count) //TODO: 5.0 return bool
+bool vcardrestriction_compare(vcardrestriction_kind restr, int count)
 {
     /* restr is an unsigned int and VCARD_RESTRICTION_NONE == 0,
        so no need to check if restr < VCARD_RESTRICTION_NONE */
@@ -174,7 +174,7 @@ static bool _check_restriction(vcardcomponent *comp,
         restr = VCARD_RESTRICTION_ZEROORONE;
     }
 
-    compare = (bool)vcardrestriction_compare(restr, count);
+    compare = vcardrestriction_compare(restr, count);
 
     if (!compare) {
         char temp[TMP_BUF_SIZE];
