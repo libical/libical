@@ -18,7 +18,7 @@
   <method name="i_cal_vcard_restriction_compare" corresponds="vcardrestriction_compare" kind="" since="1.0">
     <parameter type="ICalVcardRestrictionKind" name="restr" comment="The restriction kind"/>
     <parameter type="gint" name="count" comment="The number of restrictions"/>
-    <returns type="gint" comment="1 if the restriction is met, 0 if not."/>
+    <returns type="gboolean" comment="true if the restriction is met, false if not."/>
     <comment xml:space="preserve">Checks if the given @count is in accordance with the given restriction, @restr.</comment>
   </method>
   <method name="i_cal_vcard_restriction_check" corresponds="vcardrestriction_check" since="1.0">
