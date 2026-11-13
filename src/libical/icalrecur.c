@@ -2422,6 +2422,13 @@ icalrecur_iterator *icalrecur_iterator_new(struct icalrecurrencetype *rule,
         return 0;
     }
 
+    /* A DATE value has no time of day to step, so a SECONDLY, MINUTELY or
+       HOURLY rule would never advance past DTSTART. */
+    if (dtstart.is_date && freq < ICAL_DAILY_RECURRENCE) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+
     if (!(impl = (icalrecur_iterator *)icalmemory_new_buffer(sizeof(icalrecur_iterator)))) {
         icalerror_set_errno(ICAL_NEWFAILED_ERROR);
         return 0;
