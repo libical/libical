@@ -935,6 +935,8 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
                     insert_error(parser, tail, str, "Can't parse parameter name",
                                  ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
                     parser->parse_errors++;
+                    icalmemory_free_buffer(str);
+                    str = NULL;
                     break;
                 }
             }
