@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - BDAY, ANNIVERSARY and DEATHDATE with a timestamp value, such as `19531015T231000Z`, were written
     with `VALUE=TIMESTAMP`. RFC 6350 does not allow TIMESTAMP for these properties, but a TIMESTAMP
     is a valid DATE-TIME value. The VALUE parameter is now omitted.
+  - Various fixes for fuzzer issues (OOM and cpu time).
 
 - libicalvcal:
   - Fix an out-of-bounds write when decoding a BASE64 value whose padding contains more than
@@ -31,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     end of the input. A bare `=` is now kept as is.
 
 - libical:
+  - A UID can no longer contain non-printable characters.
+  - Fix unbounded recursion when parsing too many (100 or more) nested components
   - Reject a timezone location containing a `..` path component or an absolute path when resolving
     a VTIMEZONE TZID to a file under the zone directory (builds that read on-disk zoneinfo rather
     than the builtin data). A crafted TZID such as `../../some/file` could otherwise make
@@ -47,7 +50,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     year, and so negative `BYWEEKNO` values, followed ISO weeks.
   - Fix `RSCALE SKIP:` dates moved into another month are dropped when BYDAY is present. Also covers
     dates moved backward across a month boundary.
-  - Fix unbounded recursion when parsing too many nested components
   - Fix heap-buffer-overflow read in `icalrecur_iterator_prev()` after the iteration of an HOURLY,
     MINUTELY or SECONDLY rule with a matching BYHOUR, BYMINUTE or BYSECOND reached the last supported
     year, which left the BY index past the end of the BY data.
@@ -55,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     the default Monday) now count weeks from the week that contains DTSTART when DTSTART is not the
     first BYDAY day of its week. For example, `FREQ=WEEKLY;INTERVAL=2;BYDAY=SU` with a Tuesday DTSTART
     used to skip the first Sunday and put every occurrence in the other weeks.
+  - Various fixes for fuzzer issues (OOM and cputime).
 
 - Buildsystem changes:
   - Generate export headers with CMake, fixing Windows static linking without requiring consumers
