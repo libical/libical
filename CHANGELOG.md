@@ -59,6 +59,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     used to skip the first Sunday and put every occurrence in the other weeks.
   - Various fixes for fuzzer issues (OOM and cputime).
 
+- libicalss:
+  - `icaldirset_fetch()` and `icaldirset_has_uid()` no longer match an unrelated component. The UID
+    was put in a double-quoted icalgauge query that never parsed, so the lookup ran without a filter
+    and returned the first stored component for any UID (and a crafted UID could change the query).
+    The UID is now compared directly.
+
 - Buildsystem changes:
   - Generate export headers with CMake, fixing Windows static linking without requiring consumers
     to define `LIBICAL_*_STATIC_DEFINE`.

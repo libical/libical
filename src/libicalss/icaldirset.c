@@ -445,30 +445,31 @@ icalcomponent *icaldirset_fetch_match(icalset *set, const icalcomponent *c)
 icalcomponent *icaldirset_fetch(icalset *set, icalcomponent_kind kind, const char *uid)
 {
     icaldirset *dset;
-    icalgauge *gauge;
     icalgauge *old_gauge;
     icalcomponent *c;
-    char sql[256];
 
     _unused(kind);
 
     icalerror_check_arg_rz((set != 0), "set");
     icalerror_check_arg_rz((uid != 0), "uid");
 
-    snprintf(sql, 256, "SELECT * FROM VEVENT WHERE UID = \"%s\"", uid);
-
-    gauge = icalgauge_new_from_sql(sql, 0);
+    /* Compare the UID directly instead of building an icalgauge query
+       from it, so an unparsable or crafted UID cannot match an
+       unrelated component */
     dset = (icaldirset *)set;
     old_gauge = dset->gauge;
-    dset->gauge = gauge;
+    dset->gauge = 0;
 
-    c = icaldirset_get_first_component(set);
+    for (c = icaldirset_get_first_component(set); c != 0;
+         c = icaldirset_get_next_component(set)) {
+        const char *this_uid = icalcomponent_get_uid(c);
+
+        if (this_uid != 0 && strcmp(uid, this_uid) == 0) {
+            break;
+        }
+    }
 
     dset->gauge = old_gauge;
-
-    if (gauge) {
-        icalgauge_free(gauge);
-    }
 
     return c;
 }
