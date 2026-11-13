@@ -11,52 +11,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.8] - Unreleased
 
-- libical: Reject a timezone location containing a `..` path component or an absolute path when
-  resolving a VTIMEZONE TZID to a file under the zone directory (builds that read on-disk zoneinfo
-  rather than the builtin data). A crafted TZID such as `../../some/file` could otherwise make
-  `icaltimezone_fetch_timezone()` open a file outside the configured zone directory.
-- libical: Drop CR and LF when writing values that are output without escaping (URI, CAL-ADDRESS,
-  ATTACH URLs and enum x-values). A vCal quoted-printable value could decode to a line break that
-  was written out verbatim, ending the content line early and injecting another property.
-- libical: In builds with ICU, recurrences with a DAILY or longer frequency no longer move to a
-  later time of day after an occurrence or DTSTART falls in a DST gap. For example, a weekly
-  02:30 Europe/Berlin event returned 03:30 for the week after the spring change too.
-- libical: Fixed `BYWEEKNO` with `BYDAY` at the ends of the week-numbering year. The last days of
-  the last week were dropped when week 1 starts after January 1, days of the next year's week 1
-  were added (e.g. a 53rd week in a 52-week year), and with a WKST other than Monday the number of
-  weeks in the year, and so negative `BYWEEKNO` values, followed ISO weeks.
-- libical: Fixed: RSCALE SKIP: dates moved into another month are dropped when
-  BYDAY is present. Also covers dates moved backward across a month boundary.
-- libical: Fixed unbounded recursion when parsing too many nested components
-- libicalvcal: Fixed an out-of-bounds write when decoding a BASE64 value whose padding contains
-  more than two `=` characters. The decoder computed the output length as `3 - pad`, which wrapped
-  to a huge value when `pad` exceeded 3 and was then used as the size of a `memcpy`.
-- libicalvcal: Reject a vCalendar RRULE/EXRULE interval of 0 or one that does not fit in a short.
-  Such an interval was converted into an iCalendar RRULE that never advances, so expanding it
-  (e.g. with `icalcomponent_foreach_recurrence`) looped forever.
-- Fix heap-buffer-overflow read in icalrecur_iterator_prev() after the iteration of an HOURLY,
-  MINUTELY or SECONDLY rule with a matching BYHOUR, BYMINUTE or BYSECOND reached the last
-  supported year, which left the BY index past the end of the BY data.
-- libical: `FREQ=WEEKLY` recurrences with `INTERVAL` greater than 1 and a WKST other than Sunday
-  (including the default Monday) now count weeks from the week that contains DTSTART when DTSTART
-  is not the first BYDAY day of its week. For example, `FREQ=WEEKLY;INTERVAL=2;BYDAY=SU` with a
-  Tuesday DTSTART used to skip the first Sunday and put every occurrence in the other weeks.
-- libicalvcal: Fixed an out-of-bounds read in the lexer. When a value folded across lines put a
-  newline at the last slot of the lookahead ring buffer, `lexLookahead()` peeked at the next
-  character with `lexBuf.buf[lexBuf.getPtr+1]` without wrapping the index, reading one element
-  past the buffer. The sibling carriage-return branch already wrapped with `% MAX_LEX_LOOKAHEAD`.
-- libicalvcal: Fixed an endless loop with unbounded memory growth when parsing a QUOTED-PRINTABLE
-  value with an `=` that is not followed by two hex digits, or a BASE64 or QUOTED-PRINTABLE value
-  that runs to the end of the input. A bare `=` is now kept as is.
-- Built-in timezones updated to tzdata2026f
+- Built-in timezones updated to tzdata2026f.
+
+- libicalvcard:
+  - `vcardrestriction_compare()` returns a bool rather than in int.
+  - BDAY, ANNIVERSARY and DEATHDATE with a timestamp value, such as `19531015T231000Z`, were written
+    with `VALUE=TIMESTAMP`. RFC 6350 does not allow TIMESTAMP for these properties, but a TIMESTAMP
+    is a valid DATE-TIME value. The VALUE parameter is now omitted.
+  - Various fixes for fuzzer issues (OOM and cpu time).
+
+- libicalvcal:
+  - Fix an out-of-bounds write when decoding a BASE64 value whose padding contains more than
+    two `=` characters. The decoder computed the output length as `3 - pad`, which wrapped
+    to a huge value when `pad` exceeded 3 and was then used as the size of a `memcpy`.
+  - Reject a vCalendar RRULE/EXRULE interval of 0 or one that does not fit in a short.
+    Such an interval was converted into an iCalendar RRULE that never advances, so expanding it
+    (e.g. with `icalcomponent_foreach_recurrence()`) looped forever.
+  - Fix an out-of-bounds read in the lexer. When a value folded across lines put a newline at the
+    last slot of the lookahead ring buffer, `lexLookahead()` peeked at the next character with
+    `lexBuf.buf[lexBuf.getPtr+1]` without wrapping the index, reading one element
+    past the buffer. The sibling carriage-return branch already wrapped with `% MAX_LEX_LOOKAHEAD`.
+  - Fix an endless loop with unbounded memory growth when parsing a QUOTED-PRINTABLE value with an `=`
+    that is not followed by two hex digits, or a BASE64 or QUOTED-PRINTABLE value that runs to the
+    end of the input. A bare `=` is now kept as is.
+
+- libical:
+  - A UID can no longer contain non-printable characters.
+  - Fix unbounded recursion when parsing too many (100 or more) nested components
+  - Reject a timezone location containing a `..` path component or an absolute path when resolving
+    a VTIMEZONE TZID to a file under the zone directory (builds that read on-disk zoneinfo rather
+    than the builtin data). A crafted TZID such as `../../some/file` could otherwise make
+    `icaltimezone_fetch_timezone()` open a file outside the configured zone directory.
+  - Drop CR and LF when writing values that are output without escaping (URI, CAL-ADDRESS, ATTACH URLs
+    and enum x-values). A vCal quoted-printable value could decode to a line break that
+    was written out verbatim, ending the content line early and injecting another property.
+  - In builds with ICU, recurrences with a DAILY or longer frequency no longer move to a later time
+    of day after an occurrence or DTSTART falls in a DST gap. For example, a weekly 02:30 Europe/Berlin
+    event returned 03:30 for the week after the spring change too.
+  - Fix `BYWEEKNO` with `BYDAY` at the ends of the week-numbering year. The last days of the last
+    week were dropped when week 1 starts after January 1, days of the next year's week 1 were added
+    (e.g. a 53rd week in a 52-week year), and with a WKST other than Monday the number of weeks in the
+    year, and so negative `BYWEEKNO` values, followed ISO weeks.
+  - Fix `RSCALE SKIP:` dates moved into another month are dropped when BYDAY is present. Also covers
+    dates moved backward across a month boundary.
+  - Fix heap-buffer-overflow read in `icalrecur_iterator_prev()` after the iteration of an HOURLY,
+    MINUTELY or SECONDLY rule with a matching BYHOUR, BYMINUTE or BYSECOND reached the last supported
+    year, which left the BY index past the end of the BY data.
+  - `FREQ=WEEKLY` recurrences with `INTERVAL` greater than 1 and a WKST other than Sunday (including
+    the default Monday) now count weeks from the week that contains DTSTART when DTSTART is not the
+    first BYDAY day of its week. For example, `FREQ=WEEKLY;INTERVAL=2;BYDAY=SU` with a Tuesday DTSTART
+    used to skip the first Sunday and put every occurrence in the other weeks.
+  - Various fixes for fuzzer issues (OOM and cputime).
+
 - Buildsystem changes:
   - Generate export headers with CMake, fixing Windows static linking without requiring consumers
     to define `LIBICAL_*_STATIC_DEFINE`.
   - Give ical_cxx and ical_glib and icalss_cxx their own export macros to distinguish their symbols
     from those imported from the underlying libraries.
-- libicalvcard: BDAY, ANNIVERSARY and DEATHDATE with a timestamp value, such as
-  `19531015T231000Z`, were written with `VALUE=TIMESTAMP`. RFC 6350 does not allow TIMESTAMP for
-  these properties, but a TIMESTAMP is a valid DATE-TIME value. The VALUE parameter is now omitted.
 
 ## [4.0.7] - 2026-10-18
 
@@ -66,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     them with the original, so freeing both freed the same memory twice.
   - Fixed a use-after-free and a memory leak when converting a vCalendar procedure alarm (PALARM)
     whose attachment is a plain path name.
+
 - libical:
   - Fix busy status of recurring events in `icalcomponent_foreach_recurrence()`.
   - Fix `icalvalue_decode_ical_string()` and `icallangbind_property_eval_string()` reading past
@@ -90,27 +102,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     have done since version 4.0.6. If the type mismatches, then they return the zero value for the
     expected value type. The typed setters error with ICAL_BADARG_ERROR instead of overwriting a
     value held in another union member.
+
 - libicalss:
   - Fix heap-buffer-overflow in `icalspanlist_as_freebusy_matrix()` for busy spans that start
     before or end after the spanlist. `icalspanlist_from_vfreebusy()` now sets the spanlist
     start/end from DTSTART/DTEND and marks FBTYPE=FREE periods as free (all others as busy).
+
 - Buildsystem changes:
   - Fix CMake command target_link_libraries() to use all-keywords as required since CMake v4.4.4.
   - When cross-compiling, don't build/install ical-glib-src-generator w/o existing binary
 
 ## [4.0.6] - 2026-10-03
 
-- CVE: Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
-- RFC5545 section 3.3.5 Date-Time fixes:
-  - Resolve local times in a fall-back overlap to the first occurrence
-  - Fix explicit local time in a DST gap resolves using the post-transition offset
-- RFC5545 section 3.3.10 Recurrence Rule fixes:
-  - FREQ=WEEKLY with BYMONTH and BYSETPOS loses occurrences in the week straddling month boundary
+- Built-in timezones updated to tzdata2026e.
+
+- libical:
+  - CVE: Fix UBSAN issue "bsearch comparator through an incompatible function pointer"
+  - RFC5545 section 3.3.5 Date-Time fixes:
+    - Resolve local times in a fall-back overlap to the first occurrence
+    - Fix explicit local time in a DST gap resolves using the post-transition offset
+  - RFC5545 section 3.3.10 Recurrence Rule fixes:
+    - FREQ=WEEKLY with BYMONTH and BYSETPOS loses occurrences in the week straddling month boundary
+  - Remove ancient hack (since 2012) to support malformed TZID parameters
+
 - libicalvcard: the typed vcardvalue getters now check that the value type of the property
   uses the same union member as the expected value type of the getter. If the type mismatches,
   then they return the zero value for the expected value type. The typed setters error with
   ICAL_BADARG_ERROR instead of overwriting a value held in another union member.
+
 - libicalvcal: Fixed a memory leak in vobject.c
+
 - Buildsystem changes:
   - Fix build paths in installed cmake files (esp. for cross-compiling)
   - Install the libicalversion.h header
@@ -118,8 +139,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fix "now" linker support check in the hardening compiler options
   - Fix the DESTINATION path for libical.jar
   - Use private linkage for 3rdparty libraries (icu, glib, ..)
-- Built-in timezones updated to tzdata2026e.
-- Remove ancient hack (since 2012) to support malformed TZID parameters
 - Build and test validated with clang 23.1.1
 - Build and test validated with gcc (GCC) 17.0.0 20260920 (experimental)
 
