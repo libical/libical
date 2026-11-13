@@ -1415,6 +1415,56 @@ static void test_dirset(void)
     icalset_free(cluster);
 }
 
+static void test_dirset_fetch(void)
+{
+    const bool estate = icalerror_get_errors_are_fatal();
+    const char *uids[] = {"alice@example.com", "bob@example.com"};
+    icalcomponent *c;
+    icalset *s;
+    int i;
+
+    icalerror_set_errors_are_fatal(false);
+
+    (void)mkdir("store-fetch", 0755);
+    (void)unlink("store-fetch/202601");
+
+    s = icaldirset_new("store-fetch");
+    ok("opening 'store-fetch' dirset", s != NULL);
+
+    for (i = 0; i < 2; i++) {
+        char str[512];
+
+        snprintf(str, sizeof(str),
+                 "BEGIN:VCALENDAR\r\n"
+                 "VERSION:2.0\r\n"
+                 "PRODID:-//libical//regression//EN\r\n"
+                 "BEGIN:VEVENT\r\n"
+                 "UID:%s\r\n"
+                 "DTSTAMP:20260101T000000Z\r\n"
+                 "DTSTART:20260105T100000Z\r\n"
+                 "END:VEVENT\r\n"
+                 "END:VCALENDAR\r\n",
+                 uids[i]);
+        ok("adding component to dirset",
+           icaldirset_add_component(s, icalcomponent_new_from_string(str)) == ICAL_NO_ERROR);
+    }
+    (void)icaldirset_commit(s);
+
+    c = icaldirset_fetch(s, ICAL_VEVENT_COMPONENT, "bob@example.com");
+    ok("fetch finds the matching UID",
+       c != NULL && strcmp(icalcomponent_get_uid(c), "bob@example.com") == 0);
+
+    ok("fetch of an unknown UID finds nothing",
+       icaldirset_fetch(s, ICAL_VEVENT_COMPONENT, "nobody@example.com") == NULL);
+    ok("fetch of a UID with a quote finds nothing",
+       icaldirset_fetch(s, ICAL_VEVENT_COMPONENT, "nobody\" OR UID != \"x") == NULL);
+    ok("has_uid of an unknown UID is false",
+       icaldirset_has_uid(s, "nobody@example.com") == 0);
+
+    icalset_free(s);
+    icalerror_set_errors_are_fatal(estate);
+}
+
 static void test_compare(void)
 {
     icalvalue *v1, *v2;
@@ -8918,6 +8968,7 @@ int main(int argc, const char *argv[])
     test_run("Test File Set (Extended)", test_fileset_extended, do_test, do_header);
     test_run("Test Dir Set", test_dirset, do_test, do_header);
     test_run("Test Dir Set (Extended)", test_dirset_extended, do_test, do_header);
+    test_run("Test Dir Set fetch by UID", test_dirset_fetch, do_test, do_header);
 
 #if defined(LIBICAL_BUILD_TESTING_LONGRUNNING)
     /* test_file_locks is slow but should work ok */
