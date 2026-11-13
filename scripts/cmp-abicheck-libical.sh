@@ -112,6 +112,3 @@ for l in $libs; do
     -o markdown="$l-abi-report.md" -o json="$l-abi-report.json"
 done
 git checkout "$currentBranch"
-
-echo
-echo See the compat reports in "$STORE_PATH"/compat_reports
