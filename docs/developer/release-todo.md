@@ -90,8 +90,7 @@ For major (X.Y.0) releases, change the default branch at
 
 ### Checklist
 
-* [Update the API documentation](HOWTO-update-apidox.md)
-* [Update the Book](HOWTO-update-book.md)
+* [Update the documentation](HOWTO-update-documentation.md)
 * [Ask vcpkg to update the libical port](https://github.com/microsoft/vcpkg/issues/new?assignees=&labels=port+feature&template=request-an-update-to-an-existing-port.md&title=%5B%3Cport+name%3E%5D+update+to+%3Cversion%3E)
 
 ### Announcing
