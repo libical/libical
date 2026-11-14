@@ -5,12 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.8] - Unreleased
+## [4.0.8] - 2026-11-14
 
 - Built-in timezones updated to tzdata2026f.
 
 - libicalvcard:
-  - `vcardrestriction_compare()` returns a bool rather than in int.
   - BDAY, ANNIVERSARY and DEATHDATE with a timestamp value, such as `19531015T231000Z`, were written
     with `VALUE=TIMESTAMP`. RFC 6350 does not allow TIMESTAMP for these properties, but a TIMESTAMP
     is a valid DATE-TIME value. The VALUE parameter is now omitted.
@@ -27,9 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     last slot of the lookahead ring buffer, `lexLookahead()` peeked at the next character with
     `lexBuf.buf[lexBuf.getPtr+1]` without wrapping the index, reading one element
     past the buffer. The sibling carriage-return branch already wrapped with `% MAX_LEX_LOOKAHEAD`.
-  - Fix an endless loop with unbounded memory growth when parsing a QUOTED-PRINTABLE value with an `=`
-    that is not followed by two hex digits, or a BASE64 or QUOTED-PRINTABLE value that runs to the
-    end of the input. A bare `=` is now kept as is.
+  - Fix an endless loop with unbounded memory growth when parsing a QUOTED-PRINTABLE value with
+    an `=` that is not followed by two hex digits, or a BASE64 or QUOTED-PRINTABLE value that runs
+    to the end of the input. A bare `=` is now kept as is.
 
 - libical:
   - A UID can no longer contain non-printable characters.
