@@ -1101,6 +1101,40 @@ static void test_recur_iterator_prev_after_end(void)
     icalrecurrencetype_unref(recurrence);
 }
 
+/* A DATE DTSTART has no time of day to step, so a SECONDLY, MINUTELY or
+   HOURLY rule never advanced and expanding it looped forever. */
+static void test_recur_iterator_date_subdaily(void)
+{
+    static const char *rules[] = {"FREQ=SECONDLY", "FREQ=MINUTELY", "FREQ=HOURLY"};
+    struct icaltimetype dtstart = icaltime_from_string("20260101");
+
+    const bool estate = icalerror_get_errors_are_fatal();
+    icalerror_set_errors_are_fatal(false);
+
+    for (size_t i = 0; i < sizeof(rules) / sizeof(rules[0]); i++) {
+        struct icalrecurrencetype *recurrence = icalrecurrencetype_new_from_string(rules[i]);
+        icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, dtstart);
+        ok(rules[i], iterator == NULL);
+        if (iterator) {
+            icalrecur_iterator_free(iterator);
+        }
+        icalrecurrencetype_unref(recurrence);
+    }
+
+    struct icalrecurrencetype *recurrence = icalrecurrencetype_new_from_string("FREQ=DAILY;COUNT=2");
+    icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, dtstart);
+    ok("FREQ=DAILY with a DATE DTSTART", iterator != NULL);
+    if (iterator) {
+        (void)icalrecur_iterator_next(iterator);
+        str_is("second DAILY occurrence", icaltime_as_ical_string(icalrecur_iterator_next(iterator)), "20260102");
+        icalrecur_iterator_free(iterator);
+    }
+    icalrecurrencetype_unref(recurrence);
+
+    icalerror_clear_errno();
+    icalerror_set_errors_are_fatal(estate);
+}
+
 static void test_memory(void)
 {
     size_t bufsize = 256;
@@ -8950,6 +8984,7 @@ int main(int argc, const char *argv[])
     test_run("Test weekly icalrecur_iterator on January 1", test_recur_iterator_on_jan_1, do_test, do_header);
     test_run("Test icalrecur_iterator reverse range without UNTIL", test_recur_iterator_reverse_range, do_test, do_header);
     test_run("Test icalrecur_iterator_prev after the end", test_recur_iterator_prev_after_end, do_test, do_header);
+    test_run("Test icalrecur_iterator with a DATE DTSTART and sub-daily frequency", test_recur_iterator_date_subdaily, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
