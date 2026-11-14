@@ -30,7 +30,7 @@ vcardstrarray *vcardtextlist_new_from_string(const char *str, char sep)
     const char sep_str[2] = {sep, 0};
 
     size_t cnt = 0;
-    const size_t max_list_length = icallimit_get(ICAL_LIMIT_PROPERTIES); //TODO 5.0 add separate limit for vCard text list length
+    const size_t max_list_length = icallimit_get(ICAL_LIMIT_PROPERTIES); //TODO 4.1 add separate limit for vCard text list length
     do {
         char *dequoted_str = vcardvalue_strdup_and_dequote_text(&str, sep_str);
         vcardstrarray_append(array, dequoted_str);

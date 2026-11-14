@@ -57,6 +57,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fix heap-buffer-overflow read in `icalrecur_iterator_prev()` after the iteration of an HOURLY,
     MINUTELY or SECONDLY rule with a matching BYHOUR, BYMINUTE or BYSECOND reached the last supported
     year, which left the BY index past the end of the BY data.
+  - `icalrecur_iterator_new()` rejects a SECONDLY, MINUTELY or HOURLY rule with a DATE DTSTART.
+    Such a rule never advanced past DTSTART, so `icalcomponent_foreach_recurrence()` looped
+    forever on e.g. `DTSTART;VALUE=DATE:20260101` with `RRULE:FREQ=HOURLY`, and
+    `icalrecur_iterator_prev()` hung.
   - `FREQ=WEEKLY` recurrences with `INTERVAL` greater than 1 and a WKST other than Sunday (including
     the default Monday) now count weeks from the week that contains DTSTART when DTSTART is not the
     first BYDAY day of its week. For example, `FREQ=WEEKLY;INTERVAL=2;BYDAY=SU` with a Tuesday DTSTART
