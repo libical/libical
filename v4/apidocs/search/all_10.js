@@ -1,20 +1,15 @@
 var searchData=
 [
-  ['fblist_5ffile_0',['FBLIST_FILE',['../icalcalendar_8c.html#ab46d39657d1f942ccf807d8413eadf32',1,'icalcalendar.c']]],
-  ['fetch_1',['fetch',['../structicalset__impl.html#a8a4822fa12d83fd3d387449677e3539d',1,'icalset_impl']]],
-  ['fetch_5fmatch_2',['fetch_match',['../structicalset__impl.html#a626ed611e60df20ebe875ac9281ebe4a',1,'icalset_impl']]],
-  ['files_3',['5.1.3 Parsing Text Files',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md135',1,'']]],
-  ['finding_20and_20removing_20components_4',['5.4.2 Adding, Finding and Removing Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md150',1,'']]],
-  ['finding_20components_5',['5.2.1 Finding Components',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md137',1,'']]],
-  ['fixed_6',['Fixed',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2CHANGELOG.html#autotoc_md17',1,'']]],
-  ['flags_7',['flags',['../structicaldirset__options.html#a0198ec47b0288039a835e8fd5cfd2df0',1,'icaldirset_options::flags'],['../structicalfileset__options.html#ad19cc9176412d8a16b2a6ac45c8f3bd1',1,'icalfileset_options::flags']]],
-  ['for_20android_8',['Building for Android',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html#autotoc_md53',1,'']]],
-  ['for_20osx_20mac_9',['Building for OSX (Mac)',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2INSTALL.html#autotoc_md51',1,'']]],
-  ['formats_10',['Libical — an implementation of iCalendar protocols and data formats',['../index.html',1,'']]],
-  ['free_11',['free',['../structicalset__impl.html#acdc25c55ec834c658f4595e75038138b',1,'icalset_impl']]],
-  ['free_20busy_20component_20section_203_206_201_204_12',['Event/To-Do/Journal/Free-Busy Component section 3.6.[1-4]',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2KnownExceptions.html#autotoc_md66',1,'']]],
-  ['freq_13',['freq',['../structicalrecurrencetype.html#a4dfb35662209ee3ade1ce4960d9abb1c',1,'icalrecurrencetype']]],
-  ['from_203_200_20to_204_200_14',['from 3 0 to 4 0',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md99',1,'Migrating &lt;span class=&quot;tt&quot;&gt;ICalGLib.Recurrence.*_by_*&lt;/span&gt; methods from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md97',1,'Migrating &lt;span class=&quot;tt&quot;&gt;icalrecurrencetype.by_xxx&lt;/span&gt; static arrays usage from 3.0 to 4.0'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md84',1,'Migrating from 3.0 to 4.0']]],
-  ['from_20rfcs_15',['4 Differences From RFCs',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md127',1,'']]],
-  ['functions_16',['functions',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md87',1,'Clone functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md78',1,'Modified functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md79',1,'New functions'],['../md__2home_2winterz_2projects_2libical_2libical_2docs_2MigrationGuide__to__4.html#autotoc_md80',1,'Removed functions']]]
+  ['elements_20of_20libical_0',['3.2 Other elements of libical',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md122',1,'']]],
+  ['end_1',['end',['../structicalperiodtype.html#abf3e0f91d54e3f89e3058cbefcf9be51',1,'icalperiodtype']]],
+  ['end_5fcomponent_2',['end_component',['../classLibICal_1_1VComponent.html#a312301099b8e4251ab1a798796ea00d7',1,'LibICal::VComponent']]],
+  ['enum_5fbelongs_5fto_5fproperty_3',['enum_belongs_to_property',['../classLibICal_1_1ICalProperty.html#aea4cacf3ba693dfb76a492796fa701fc',1,'LibICal::ICalProperty']]],
+  ['enum_5fto_5fstring_4',['enum_to_string',['../classLibICal_1_1ICalProperty.html#a71246a1fdad77ed25da0c11fc4acca96',1,'LibICal::ICalProperty']]],
+  ['enumerations_20and_20types_5',['3.2.1 Enumerations and types',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md123',1,'']]],
+  ['error_20and_20x_20lic_20invalid_20component_6',['5.6.3 &lt;span class=&quot;tt&quot;&gt;X-LIC-ERROR&lt;/span&gt; and &lt;span class=&quot;tt&quot;&gt;X-LIC-INVALID-COMPONENT&lt;/span&gt;',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md157',1,'']]],
+  ['error_20handling_7',['5.6 Error Handling',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md155',1,'']]],
+  ['error_20objects_8',['3.2.3 Error objects',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md125',1,'']]],
+  ['event_20to_20do_20journal_20free_20busy_20component_20section_203_206_201_204_9',['Event/To-Do/Journal/Free-Busy Component section 3.6.[1-4]',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2KnownExceptions.html#autotoc_md67',1,'']]],
+  ['example_20code_10',['1.3 Example Code',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2UsingLibical.html#autotoc_md114',1,'']]],
+  ['exceptions_11',['Known RFC Exceptions',['../md__2home_2winterz_2projects_2libical_2libical_2docs_2KnownExceptions.html',1,'']]]
 ];

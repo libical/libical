@@ -1,20 +1,6 @@
 var searchData=
 [
-  ['_7eicalparameter_0',['~ICalParameter',['../classLibICal_1_1ICalParameter.html#a15e7438c355b7c2253213fb8737addc5',1,'LibICal::ICalParameter']]],
-  ['_7eicalproperty_1',['~ICalProperty',['../classLibICal_1_1ICalProperty.html#af7127051b77a99c1fdb2fac9118635f0',1,'LibICal::ICalProperty']]],
-  ['_7eicalspanlist_2',['~ICalSpanList',['../classLibICal_1_1ICalSpanList.html#a7c5813db349645d1148a3a4123fe4d1b',1,'LibICal::ICalSpanList']]],
-  ['_7eicalvalue_3',['~ICalValue',['../classLibICal_1_1ICalValue.html#a2d0f161dadc42d9c52d5056202a03e39',1,'LibICal::ICalValue']]],
-  ['_7eicpointerholder_4',['~ICPointerHolder',['../classICPointerHolder.html#ac28ef9e9e2b4bae72a3b6a905a0d8ec0',1,'ICPointerHolder']]],
-  ['_7evagenda_5',['~VAgenda',['../classLibICal_1_1VAgenda.html#ab983465195ca99a0dfee867c6941e970',1,'LibICal::VAgenda']]],
-  ['_7evalarm_6',['~VAlarm',['../classLibICal_1_1VAlarm.html#ac1ddcd9670a6bf1ea596d824f2508873',1,'LibICal::VAlarm']]],
-  ['_7evcalendar_7',['~VCalendar',['../classLibICal_1_1VCalendar.html#a43c5bfbb378eb9c62d1f092c9176028f',1,'LibICal::VCalendar']]],
-  ['_7evcomponent_8',['~VComponent',['../classLibICal_1_1VComponent.html#af76ddc2a365408176b7d38867184520b',1,'LibICal::VComponent']]],
-  ['_7evevent_9',['~VEvent',['../classLibICal_1_1VEvent.html#a08c51a165ff332629d9e29486d092a73',1,'LibICal::VEvent']]],
-  ['_7evfreebusy_10',['~VFreeBusy',['../classLibICal_1_1VFreeBusy.html#a7b8b680a072cd01f08e479ed560d7e28',1,'LibICal::VFreeBusy']]],
-  ['_7evjournal_11',['~VJournal',['../classLibICal_1_1VJournal.html#a2bc6d6faec7aab51fc3079a239a96de6',1,'LibICal::VJournal']]],
-  ['_7evquery_12',['~VQuery',['../classLibICal_1_1VQuery.html#adc81f9efbf5ff79626a0c35ca75b438f',1,'LibICal::VQuery']]],
-  ['_7evtimezone_13',['~VTimezone',['../classLibICal_1_1VTimezone.html#aa8e8acdc417b1545613b27024f1f8e07',1,'LibICal::VTimezone']]],
-  ['_7evtodo_14',['~VToDo',['../classLibICal_1_1VToDo.html#a78f89c29a893fb046dddf4cbb312fe35',1,'LibICal::VToDo']]],
-  ['_7exdaylight_15',['~XDaylight',['../classLibICal_1_1XDaylight.html#ab93e825d2fce5791f1192186a225748f',1,'LibICal::XDaylight']]],
-  ['_7exstandard_16',['~XStandard',['../classLibICal_1_1XStandard.html#a88b608c8ba25834cdcc1e2eedb9dea64',1,'LibICal::XStandard']]]
+  ['zone_0',['zone',['../structicaltimetype.html#aa60ce5ca11223d8d34702962fc7ac57c',1,'icaltimetype']]],
+  ['zoneinfo_5fdirectory_1',['ZONEINFO_DIRECTORY',['../icaltimezone_8c.html#aa8b1ce568d73c98da030590d283b950b',1,'icaltimezone.c']]],
+  ['zones_5ftab_5ffilename_2',['ZONES_TAB_FILENAME',['../icaltimezone_8c.html#a45262c0e5a1a34bc6b77da5b7b6367a6',1,'icaltimezone.c']]]
 ];

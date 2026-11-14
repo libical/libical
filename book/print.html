@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-013ee05c.js";
+            window.path_to_searchindex_js = "searchindex-0f33c972.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-d19dfbfe.js"></script>
@@ -2387,9 +2387,87 @@ thread safe memory allocator, and a lot of documentation.</p>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="408---2026-11-14"><a class="header" href="#408---2026-11-14">[4.0.8] - 2026-11-14</a></h2>
+<ul>
+<li>
+<p>Built-in timezones updated to tzdata2026f.</p>
+</li>
+<li>
+<p>libicalvcard:</p>
+<ul>
+<li>BDAY, ANNIVERSARY and DEATHDATE with a timestamp value, such as <code>19531015T231000Z</code>, were written
+with <code>VALUE=TIMESTAMP</code>. RFC 6350 does not allow TIMESTAMP for these properties, but a TIMESTAMP
+is a valid DATE-TIME value. The VALUE parameter is now omitted.</li>
+<li>Various fixes for fuzzer issues (OOM and cpu time).</li>
+</ul>
+</li>
+<li>
+<p>libicalvcal:</p>
+<ul>
+<li>Fix an out-of-bounds write when decoding a BASE64 value whose padding contains more than
+two <code>=</code> characters. The decoder computed the output length as <code>3 - pad</code>, which wrapped
+to a huge value when <code>pad</code> exceeded 3 and was then used as the size of a <code>memcpy</code>.</li>
+<li>Reject a vCalendar RRULE/EXRULE interval of 0 or one that does not fit in a short.
+Such an interval was converted into an iCalendar RRULE that never advances, so expanding it
+(e.g. with <code>icalcomponent_foreach_recurrence()</code>) looped forever.</li>
+<li>Fix an out-of-bounds read in the lexer. When a value folded across lines put a newline at the
+last slot of the lookahead ring buffer, <code>lexLookahead()</code> peeked at the next character with
+<code>lexBuf.buf[lexBuf.getPtr+1]</code> without wrapping the index, reading one element
+past the buffer. The sibling carriage-return branch already wrapped with <code>% MAX_LEX_LOOKAHEAD</code>.</li>
+<li>Fix an endless loop with unbounded memory growth when parsing a QUOTED-PRINTABLE value with
+an <code>=</code> that is not followed by two hex digits, or a BASE64 or QUOTED-PRINTABLE value that runs
+to the end of the input. A bare <code>=</code> is now kept as is.</li>
+</ul>
+</li>
+<li>
+<p>libical:</p>
+<ul>
+<li>A UID can no longer contain non-printable characters.</li>
+<li>Fix unbounded recursion when parsing too many (100 or more) nested components</li>
+<li>Reject a timezone location containing a <code>..</code> path component or an absolute path when resolving
+a VTIMEZONE TZID to a file under the zone directory (builds that read on-disk zoneinfo rather
+than the builtin data). A crafted TZID such as <code>../../some/file</code> could otherwise make
+<code>icaltimezone_fetch_timezone()</code> open a file outside the configured zone directory.</li>
+<li>Drop CR and LF when writing values that are output without escaping (URI, CAL-ADDRESS, ATTACH URLs
+and enum x-values). A vCal quoted-printable value could decode to a line break that
+was written out verbatim, ending the content line early and injecting another property.</li>
+<li>In builds with ICU, recurrences with a DAILY or longer frequency no longer move to a later time
+of day after an occurrence or DTSTART falls in a DST gap. For example, a weekly 02:30 Europe/Berlin
+event returned 03:30 for the week after the spring change too.</li>
+<li>Fix <code>BYWEEKNO</code> with <code>BYDAY</code> at the ends of the week-numbering year. The last days of the last
+week were dropped when week 1 starts after January 1, days of the next year’s week 1 were added
+(e.g. a 53rd week in a 52-week year), and with a WKST other than Monday the number of weeks in the
+year, and so negative <code>BYWEEKNO</code> values, followed ISO weeks.</li>
+<li>Fix <code>RSCALE SKIP:</code> dates moved into another month are dropped when BYDAY is present. Also covers
+dates moved backward across a month boundary.</li>
+<li>Fix heap-buffer-overflow read in <code>icalrecur_iterator_prev()</code> after the iteration of an HOURLY,
+MINUTELY or SECONDLY rule with a matching BYHOUR, BYMINUTE or BYSECOND reached the last supported
+year, which left the BY index past the end of the BY data.</li>
+<li><code>icalrecur_iterator_new()</code> rejects a SECONDLY, MINUTELY or HOURLY rule with a DATE DTSTART.
+Such a rule never advanced past DTSTART, so <code>icalcomponent_foreach_recurrence()</code> looped
+forever on e.g. <code>DTSTART;VALUE=DATE:20260101</code> with <code>RRULE:FREQ=HOURLY</code>, and
+<code>icalrecur_iterator_prev()</code> hung.</li>
+<li><code>FREQ=WEEKLY</code> recurrences with <code>INTERVAL</code> greater than 1 and a WKST other than Sunday (including
+the default Monday) now count weeks from the week that contains DTSTART when DTSTART is not the
+first BYDAY day of its week. For example, <code>FREQ=WEEKLY;INTERVAL=2;BYDAY=SU</code> with a Tuesday DTSTART
+used to skip the first Sunday and put every occurrence in the other weeks.</li>
+<li>Various fixes for fuzzer issues (OOM and cputime).</li>
+</ul>
+</li>
+<li>
+<p>Buildsystem changes:</p>
+<ul>
+<li>Generate export headers with CMake, fixing Windows static linking without requiring consumers
+to define <code>LIBICAL_*_STATIC_DEFINE</code>.</li>
+<li>Give ical_cxx and ical_glib and icalss_cxx their own export macros to distinguish their symbols
+from those imported from the underlying libraries.</li>
+</ul>
+</li>
+</ul>
 <h2 id="407---2026-10-18"><a class="header" href="#407---2026-10-18">[4.0.7] - 2026-10-18</a></h2>
 <ul>
-<li>libicalvcard:
+<li>
+<p>libicalvcard:</p>
 <ul>
 <li><code>vcardcomponent_clone()</code> and friends now deep-copy TEXTLIST values (e.g. NICKNAME, CATEGORIES)
 and structured parameters (JSCOMPS), and keep the property group. Previously the clone shared
@@ -2398,7 +2476,8 @@ them with the original, so freeing both freed the same memory twice.</li>
 whose attachment is a plain path name.</li>
 </ul>
 </li>
-<li>libical:
+<li>
+<p>libical:</p>
 <ul>
 <li>Fix busy status of recurring events in <code>icalcomponent_foreach_recurrence()</code>.</li>
 <li>Fix <code>icalvalue_decode_ical_string()</code> and <code>icallangbind_property_eval_string()</code> reading past
@@ -2425,14 +2504,16 @@ expected value type. The typed setters error with ICAL_BADARG_ERROR instead of o
 value held in another union member.</li>
 </ul>
 </li>
-<li>libicalss:
+<li>
+<p>libicalss:</p>
 <ul>
 <li>Fix heap-buffer-overflow in <code>icalspanlist_as_freebusy_matrix()</code> for busy spans that start
 before or end after the spanlist. <code>icalspanlist_from_vfreebusy()</code> now sets the spanlist
 start/end from DTSTART/DTEND and marks FBTYPE=FREE periods as free (all others as busy).</li>
 </ul>
 </li>
-<li>Buildsystem changes:
+<li>
+<p>Buildsystem changes:</p>
 <ul>
 <li>Fix CMake command target_link_libraries() to use all-keywords as required since CMake v4.4.4.</li>
 <li>When cross-compiling, don’t build/install ical-glib-src-generator w/o existing binary</li>
@@ -2440,6 +2521,12 @@ start/end from DTSTART/DTEND and marks FBTYPE=FREE periods as free (all others a
 </li>
 </ul>
 <h2 id="406---2026-10-03"><a class="header" href="#406---2026-10-03">[4.0.6] - 2026-10-03</a></h2>
+<ul>
+<li>
+<p>Built-in timezones updated to tzdata2026e.</p>
+</li>
+<li>
+<p>libical:</p>
 <ul>
 <li>CVE: Fix UBSAN issue “bsearch comparator through an incompatible function pointer”</li>
 <li>RFC5545 section 3.3.5 Date-Time fixes:
@@ -2453,12 +2540,20 @@ start/end from DTSTART/DTEND and marks FBTYPE=FREE periods as free (all others a
 <li>FREQ=WEEKLY with BYMONTH and BYSETPOS loses occurrences in the week straddling month boundary</li>
 </ul>
 </li>
-<li>libicalvcard: the typed vcardvalue getters now check that the value type of the property
+<li>Remove ancient hack (since 2012) to support malformed TZID parameters</li>
+</ul>
+</li>
+<li>
+<p>libicalvcard: the typed vcardvalue getters now check that the value type of the property
 uses the same union member as the expected value type of the getter. If the type mismatches,
 then they return the zero value for the expected value type. The typed setters error with
-ICAL_BADARG_ERROR instead of overwriting a value held in another union member.</li>
-<li>libicalvcal: Fixed a memory leak in vobject.c</li>
-<li>Buildsystem changes:
+ICAL_BADARG_ERROR instead of overwriting a value held in another union member.</p>
+</li>
+<li>
+<p>libicalvcal: Fixed a memory leak in vobject.c</p>
+</li>
+<li>
+<p>Buildsystem changes:</p>
 <ul>
 <li>Fix build paths in installed cmake files (esp. for cross-compiling)</li>
 <li>Install the libicalversion.h header</li>
@@ -2468,10 +2563,12 @@ ICAL_BADARG_ERROR instead of overwriting a value held in another union member.</
 <li>Use private linkage for 3rdparty libraries (icu, glib, ..)</li>
 </ul>
 </li>
-<li>Built-in timezones updated to tzdata2026e.</li>
-<li>Remove ancient hack (since 2012) to support malformed TZID parameters</li>
-<li>Build and test validated with clang 23.1.1</li>
-<li>Build and test validated with gcc (GCC) 17.0.0 20260920 (experimental)</li>
+<li>
+<p>Build and test validated with clang 23.1.1</p>
+</li>
+<li>
+<p>Build and test validated with gcc (GCC) 17.0.0 20260920 (experimental)</p>
+</li>
 </ul>
 <h2 id="405---2026-08-15"><a class="header" href="#405---2026-08-15">[4.0.5] - 2026-08-15</a></h2>
 <ul>
