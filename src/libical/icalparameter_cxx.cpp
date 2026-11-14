@@ -15,6 +15,7 @@ extern "C" {
 #include "icalerror_p.h"
 }
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -29,7 +30,7 @@ ICalParameter::ICalParameter(const ICalParameter &v)
     : imp(icalparameter_clone(v.imp))
 {
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -44,7 +45,7 @@ ICalParameter &ICalParameter::operator=(const ICalParameter &v)
 
     imp = icalparameter_clone(v.imp);
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 
     return *this;
@@ -69,7 +70,7 @@ ICalParameter::ICalParameter(const std::string &str)
     : imp(icalparameter_new_from_string(str.c_str()))
 {
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -77,7 +78,7 @@ ICalParameter::ICalParameter(const icalparameter_kind &kind, const std::string &
     : imp(icalparameter_new_from_value_string(kind, str.c_str()))
 {
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -85,7 +86,7 @@ ICalParameter::ICalParameter(const icalparameter_kind &kind)
     : imp(icalparameter_new(kind))
 {
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -94,7 +95,7 @@ std::string ICalParameter::as_ical_string()
     const char *str = icalparameter_as_ical_string(imp);
 
     if (str == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 
     return str;

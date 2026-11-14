@@ -158,15 +158,17 @@ void test_cxx(void)
     delete vAgenda;
     delete cal;
 
-//FIXME: causes an uncaught exception runtime error on APPLE. unknown reason.
+// FIXME: causes an uncaught exception runtime error on Mac. (!1132)
+// libc++abi: terminating due to uncaught exception of type std::runtime_error: BADARG: Bad argument to function character
+// but seems ok on Mac if built with sanitizers?
 #if !defined(__APPLE__) //krazy:exclude=cpp
     int caughtException = 0;
     try {
         icalerrno = ICAL_NO_ERROR;
         const VComponent v = VComponent(string("HFHFHFHF"));
     }
-    catch (const icalerrorenum &err) {
-        if (err == ICAL_BADARG_ERROR) {
+    catch (const exception &e) {
+        if (strcmp(e.what(), icalerror_strerror(ICAL_BADARG_ERROR)) == 0) {
             caughtException = 1;
         }
     }
