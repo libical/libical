@@ -141,7 +141,7 @@ icalcluster *icalfileset_produce_icalcluster(const char *path)
         ret = icalcluster_new(path, NULL);
     } else {
         ret = icalcluster_new(path, ((icalfileset *)fileset)->cluster);
-        icalfileset_free(fileset);
+        icalset_free(fileset);
     }
 
     icalerror_set_errors_are_fatal(errstate);

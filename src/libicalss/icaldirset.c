@@ -65,7 +65,7 @@ icalerrorenum icaldirset_commit(icalset *set)
     fileset = icalset_new(ICAL_FILE_SET, icalcluster_key(dset->cluster), &options);
 
     (void)fileset->commit(fileset);
-    fileset->free(fileset);
+    icalset_free(fileset);
 
     return ICAL_NO_ERROR;
 }
