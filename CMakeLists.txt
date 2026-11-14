@@ -187,6 +187,10 @@ set(PROJECT_VERSION "4.2")
 # library build types
 set(LIBRARY_TYPE SHARED)
 
+# Print message and error exit for these options that are no longer supported
+libical_removed_option(SHARED_ONLY)
+libical_removed_option(ICAL_ALLOW_EMPTY_PROPERTIES)
+libical_removed_option(ICAL_ERRORS_ARE_FATAL)
 ########################################################
 
 libical_option(LIBICAL_DEVMODE "Developer mode" False)
@@ -222,7 +226,7 @@ if(UPPERCASE_CMAKE_BUILD_TYPE MATCHES "^REL" AND LIBICAL_DEVMODE)
   )
 endif()
 
-libical_option(LIBICAL_STATIC "Build static versions of the libraries." False)
+libical_deprecated_option(STATIC_ONLY LIBICAL_STATIC "Build static versions of the libraries." False)
 if(LIBICAL_STATIC)
   set(LIBRARY_TYPE STATIC)
 endif()
@@ -235,7 +239,7 @@ add_feature_info(
 
 include(GenerateExportHeader)
 
-libical_option(LIBICAL_CXX_BINDINGS "Build the C++ bindings." True)
+libical_deprecated_option(WITH_CXX_BINDINGS LIBICAL_CXX_BINDINGS "Build the C++ bindings." True)
 if(LIBICAL_CXX_BINDINGS)
   enable_language(CXX)
   set(CMAKE_CXX_STANDARD 11)
@@ -439,7 +443,8 @@ if(WIN32)
     # If you need to force the compiler to interpret time_t as the old 32-bit time_t, you can define _USE_32BIT_TIME_T.
     # We don't recommend _USE_32BIT_TIME_T, because your application may fail after January 18, 2038;
     # the use of this macro isn't allowed on 64-bit platforms.
-    libical_option(
+    libical_deprecated_option(
+      USE_32BIT_TIME_T
       LIBICAL_ENABLE_MSVC_32BIT_TIME_T
       "Build using the MSVC 32bit time_t (ignored unless building with MSVC on Windows)."
       False
@@ -518,7 +523,8 @@ if(WIN32 OR WINCE)
 else()
   set(DEF_USE_BUILTIN_TZDATA False)
 endif()
-libical_option(
+libical_deprecated_option(
+  USE_BUILTIN_TZDATA
   LIBICAL_ENABLE_BUILTIN_TZDATA
   "(Careful) Build using libical's built-in timezone data, else use the system timezone data on non-Windows systems. \
   ALWAYS true on Windows. Non-Windows users should know what they're doing if they choose not to use system provided \
@@ -567,7 +573,8 @@ find_package(PkgConfig QUIET)
 
 set(MIN_GOBJECT_INTROSPECTION "0.6.7")
 # LIBICAL_GOBJECT_INTROSPECTION might be disabled later by some devmode options
-libical_option(
+libical_deprecated_option(
+  GOBJECT_INTROSPECTION
   LIBICAL_GOBJECT_INTROSPECTION
   "Build GObject introspection \"typelib\" files. \
   Requires GObject Introspection development package ${MIN_GOBJECT_INTROSPECTION} or higher."
@@ -616,7 +623,7 @@ if(LIBICAL_GOBJECT_INTROSPECTION)
 endif()
 
 # LIBICAL_GLIB_VAPI might be disabled later by some devmode options
-libical_option(LIBICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
+libical_deprecated_option(ICAL_GLIB_VAPI LIBICAL_GLIB_VAPI "Build Vala \"vapi\" files." False)
 if(LIBICAL_GLIB_VAPI)
   if(LIBICAL_STATIC)
     message(
@@ -657,7 +664,8 @@ endif()
 
 set(MIN_GLIB "2.44")
 set(MIN_LIBXML "2.7.3")
-libical_option(
+libical_deprecated_option(
+  ICAL_GLIB
   LIBICAL_GLIB
   "Build libical-glib interface. \
   Requires glib ${MIN_GLIB} and libxml ${MIN_LIBXML} development packages or higher."
@@ -736,7 +744,7 @@ if(LIBICAL_DEVMODE)
   set(LIBICAL_GLIB_CHECK_API_FILES True)
 endif()
 # LIBICAL_GLIB_BUILD_DOCS might be disabled later by some devmode options
-libical_option(LIBICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
+libical_deprecated_option(ICAL_GLIB_BUILD_DOCS LIBICAL_GLIB_BUILD_DOCS "Build libical-glib documentation" True)
 
 #
 # Compiler settings
@@ -821,7 +829,7 @@ if(SIZEOF_TIME_T EQUAL 4)
 endif()
 
 ################ Developer Options #####################
-libical_option(LIBICAL_DEVMODE_ABI_DUMPER "(Developer-only) Build for abi-dumper." False)
+libical_deprecated_option(ABI_DUMPER LIBICAL_DEVMODE_ABI_DUMPER "(Developer-only) Build for abi-dumper." False)
 mark_as_advanced(LIBICAL_DEVMODE_ABI_DUMPER)
 if(LIBICAL_DEVMODE_ABI_DUMPER)
   if(CMAKE_C_COMPILER_IS_GCC)
@@ -839,7 +847,12 @@ if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
 endif()
 mark_as_advanced(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
 
-libical_option(LIBICAL_DEVMODE_ADDRESS_SANITIZER "(Developer-only) Build with the address sanitizer." False)
+libical_deprecated_option(
+  ADDRESS_SANITIZER
+  LIBICAL_DEVMODE_ADDRESS_SANITIZER
+  "(Developer-only) Build with the address sanitizer."
+  False
+)
 mark_as_advanced(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
 if(LIBICAL_DEVMODE_ADDRESS_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
@@ -912,7 +925,12 @@ if(LIBICAL_DEVMODE_MEMORY_SANITIZER)
   endif()
 endif()
 
-libical_option(LIBICAL_DEVMODE_THREAD_SANITIZER "(Developer-only) Build with the thread sanitizer." False)
+libical_deprecated_option(
+  THREAD_SANITIZER
+  LIBICAL_DEVMODE_THREAD_SANITIZER
+  "(Developer-only) Build with the thread sanitizer."
+  False
+)
 mark_as_advanced(LIBICAL_DEVMODE_THREAD_SANITIZER)
 if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
@@ -934,7 +952,12 @@ if(LIBICAL_DEVMODE_THREAD_SANITIZER)
   endif()
 endif()
 
-libical_option(LIBICAL_DEVMODE_UNDEFINED_SANITIZER "(Developer-only) Build with the undefined sanitizer." False)
+libical_deprecated_option(
+  UNDEFINED_SANITIZER
+  LIBICAL_DEVMODE_UNDEFINED_SANITIZER
+  "(Developer-only) Build with the undefined sanitizer."
+  False
+)
 mark_as_advanced(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
 if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
   #currently on clang properly supports undefined or suspicious integer behavior
@@ -961,9 +984,19 @@ if(LIBICAL_DEVMODE_UNDEFINED_SANITIZER)
 endif()
 
 mark_as_advanced(LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL)
-libical_option(LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL "Mark global variables as thread-local." False)
+libical_deprecated_option(
+  LIBICAL_SYNCMODE_THREADLOCAL
+  LIBICAL_DEVMODE_SYNCMODE_THREADLOCAL
+  "Mark global variables as thread-local."
+  False
+)
 
-libical_option(CMAKE_INTERPROCEDURAL_OPTIMIZATION "Build a link-time optimized version." False)
+libical_deprecated_option(
+  ENABLE_LTO_BUILD
+  CMAKE_INTERPROCEDURAL_OPTIMIZATION
+  "Build a link-time optimized version."
+  False
+)
 if(CMAKE_INTERPROCEDURAL_OPTIMIZATION)
   include(CheckIPOSupported)
   # A fatal error is issued if IPO not supported by the compiler
@@ -1025,7 +1058,7 @@ if(USE_BUILTIN_TZDATA)
   add_subdirectory(zoneinfo)
 endif()
 
-libical_option(LIBICAL_BUILD_DOCS "Build documentation" True)
+libical_deprecated_option(ICAL_BUILD_DOCS LIBICAL_BUILD_DOCS "Build documentation" True)
 if(LIBICAL_BUILD_DOCS)
   if(LIBICAL_GLIB_BUILD_DOCS)
     if(LIBICAL_STATIC)
