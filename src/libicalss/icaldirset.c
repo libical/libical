@@ -115,9 +115,11 @@ static icalerrorenum icaldirset_read_directory(icaldirset *dset)
 #else
     struct _finddata_t c_file;
     intptr_t hFile;
+    char pattern[MAXPATHLEN];
 
-    /* Find first .c file in current directory */
-    if ((hFile = _findfirst("*", &c_file)) == -1L) {
+    /* Find the first file in the store directory */
+    snprintf(pattern, sizeof(pattern), "%s/*", dset->dir);
+    if ((hFile = _findfirst(pattern, &c_file)) == -1L) {
         icalerror_set_errno(ICAL_FILE_ERROR);
         return ICAL_FILE_ERROR;
     } else {
