@@ -15,8 +15,10 @@
 #endif
 
 #include "vcard.h"
+#include "icallimits.h"
 
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -569,6 +571,40 @@ static void test_clone_structured_param(void)
     vcardcomponent_free(clone);
 }
 
+static void test_independent_text_list_limit(void)
+{
+    const size_t properties = icallimit_get(ICAL_LIMIT_PROPERTIES);
+    const size_t text_list_length = icallimit_get(ICAL_LIMIT_TEXT_LIST_LENGTH);
+    vcardproperty *prop;
+    vcardstrarray *list;
+
+    icallimit_set(ICAL_LIMIT_PROPERTIES, 0);
+    prop = vcardproperty_new_from_string("NICKNAME:a,b,c");
+    assert(prop);
+    list = vcardvalue_get_textlist(vcardproperty_get_value(prop));
+    assert(vcardstrarray_size(list) == 3);
+    assert_str_equals("c", vcardstrarray_element_at(list, 2));
+    vcardproperty_free(prop);
+
+    /* Retain the existing inclusive counter behavior when lowering this limit. */
+    icallimit_set(ICAL_LIMIT_TEXT_LIST_LENGTH, 0);
+    prop = vcardproperty_new_from_string("NICKNAME:a,b,c");
+    assert(prop);
+    list = vcardvalue_get_textlist(vcardproperty_get_value(prop));
+    assert(vcardstrarray_size(list) == 1);
+    assert_str_equals("a", vcardstrarray_element_at(list, 0));
+    vcardproperty_free(prop);
+
+    icallimit_set(ICAL_LIMIT_TEXT_LIST_LENGTH, SIZE_MAX);
+    prop = vcardproperty_new_from_string("NICKNAME:a,b,c");
+    assert(prop);
+    list = vcardvalue_get_textlist(vcardproperty_get_value(prop));
+    assert(vcardstrarray_size(list) == 3);
+    vcardproperty_free(prop);
+    icallimit_set(ICAL_LIMIT_PROPERTIES, properties);
+    icallimit_set(ICAL_LIMIT_TEXT_LIST_LENGTH, text_list_length);
+}
+
 int main(int argc, const char **argv)
 {
     vcardcomponent *card;
@@ -596,6 +632,7 @@ int main(int argc, const char **argv)
     test_parse_multi();
     test_clone_structured_param();
     test_clone_textlist();
+    test_independent_text_list_limit();
 
     vcardcomponent_free(card);
 
