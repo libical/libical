@@ -412,8 +412,8 @@ static void test_utf8(void)
     /* test issue 116 */
     comp = icalcomponent_new_from_string(item);
     ok("parsed", (comp != NULL));
-    str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá");
-    str_is("summary", icalcomponent_get_summary(comp), "áó aáóaáó aáä");
+    str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá ");
+    str_is("summary", icalcomponent_get_summary(comp), "  áó aáóaáó aáä");
     icalcomponent_free(comp);
 
     /* test another report against issue 116 */
@@ -426,8 +426,8 @@ static void test_utf8(void)
     comp = icalcomponent_new_from_string(utf8_marker);
     ok("parsed", (comp != NULL));
     ok("kind", (icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT));
-    str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá");
-    str_is("summary", icalcomponent_get_summary(comp), "áó aáóaáó aáä");
+    str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá ");
+    str_is("summary", icalcomponent_get_summary(comp), "  áó aáóaáó aáä");
     icalcomponent_free(comp);
 }
 
@@ -4534,9 +4534,9 @@ static void test_langbind(void)
         "BEGIN:VEVENT\r\n"
         "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:\r\n"
         " employee-A@host.com\r\n"
-        "COMMENT:Comment that spans a line\r\n"
-        "COMMENT:Comment with \"quotable\" 'characters' and other 	 bad magic things \r\n"
-        "  Yeah.\r\n"
+        "COMMENT: Comment that spans a line\r\n"
+        "COMMENT: Comment with \"quotable\" 'characters' and other 	 bad magic \r\n"
+        " things  Yeah.\r\n"
         "DTSTART:19970101T120000\r\n"
         "DTSTART:19970101T120000Z\r\n"
         "DTSTART;VALUE=DATE:19970101\r\n"
@@ -7745,6 +7745,68 @@ static void test_icaltime_proper_zone(void)
     ok("first is the same as the second after second's convert", (icaltime_compare(first, second) == 0));
 }
 
+static void test_text_value_whitespace(void)
+{
+    const struct {
+        const char *line;
+        const char *value;
+    } cases[] = {
+        {"SUMMARY: leading and trailing \t", " leading and trailing \t"},
+        {"DESCRIPTION:\ttext\t ", "\ttext\t "},
+        {"LOCATION: ", " "},
+        {"X-TEXT;VALUE=TEXT: text ", " text "},
+        {"DESCRIPTION: first \r\n  second\t\r\n", " first  second\t"},
+    };
+    size_t i;
+
+    for (i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+        icalproperty *prop = icalproperty_new_from_string(cases[i].line);
+        ok("TEXT property parsed", prop != NULL);
+        if (!prop) {
+            continue;
+        }
+        str_is("TEXT whitespace preserved", icalvalue_get_text(icalproperty_get_value(prop)), cases[i].value);
+        char *serialized = icalproperty_as_ical_string_r(prop);
+        icalproperty *copy = icalproperty_new_from_string(serialized);
+        ok("serialized TEXT property parsed", copy != NULL);
+        if (copy) {
+            str_is("TEXT whitespace round trip", icalvalue_get_text(icalproperty_get_value(copy)), cases[i].value);
+            icalproperty_free(copy);
+        }
+        icalmemory_free_buffer(serialized);
+        icalproperty_free(prop);
+    }
+
+    char text[240];
+    memset(text, ' ', sizeof(text) - 1);
+    memcpy(text + 90, "folded", 6);
+    text[sizeof(text) - 2] = '\t';
+    text[sizeof(text) - 1] = '\0';
+    icalcomponent *comp = icalcomponent_new_vevent();
+    icalcomponent_set_description(comp, text);
+    char *serialized = icalcomponent_as_ical_string_r(comp);
+    icalcomponent *copy = icalcomponent_new_from_string(serialized);
+    ok("long folded TEXT component parsed", copy != NULL);
+    str_is("long folded whitespace round trip", icalcomponent_get_description(copy), text);
+    icalcomponent_free(copy);
+    icalmemory_free_buffer(serialized);
+    icalcomponent_free(comp);
+
+    comp = icalcomponent_new_from_string("BEGIN:VEVENT\r\nCATEGORIES: first , second \t\r\nEND:VEVENT\r\n");
+    ok("multi-valued TEXT parsed", comp != NULL);
+    int_is("both TEXT values kept", icalcomponent_count_properties(comp, ICAL_CATEGORIES_PROPERTY), 2);
+    icalproperty *prop = icalcomponent_get_first_property(comp, ICAL_CATEGORIES_PROPERTY);
+    str_is("first TEXT value whitespace", icalproperty_get_categories(prop), " first ");
+    prop = icalcomponent_get_next_property(comp, ICAL_CATEGORIES_PROPERTY);
+    str_is("second TEXT value whitespace", icalproperty_get_categories(prop), " second \t");
+    icalcomponent_free(comp);
+
+    prop = icalproperty_new_from_string("URL: https://example.com/ \t");
+    ok("non-TEXT property parsed", prop != NULL);
+    str_is("non-TEXT whitespace handling preserved", icalproperty_get_url(prop), "https://example.com/");
+    icalproperty_free(prop);
+}
+
 static void test_internal_limits(void)
 {
     /* follow the _MAX* defaults at the top of icalllimits.c */
@@ -9064,6 +9126,7 @@ int main(int argc, const char *argv[])
     test_run("Test icaltime proper zone set", test_icaltime_proper_zone, do_test, do_header);
     test_run("Test property values from string", test_value_from_string, do_test, do_header);
     test_run("Test normalizing time", test_icaltime_normalize, do_test, do_header);
+    test_run("Test whitespace in TEXT values", test_text_value_whitespace, do_test, do_header);
     test_run("Test setting/getting internal limits", test_internal_limits, do_test, do_header);
     test_run("Test normalizing duration", test_icaldurationtype_normalize, do_test, do_header);
     test_run("Test removing component properties by kind", test_icalcomponent_remove_property_by_kind, do_test, do_header);

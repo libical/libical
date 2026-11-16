@@ -162,7 +162,7 @@ static char *parser_get_next_char(char c, char *str, int qm)
 }
 
 /** Makes a new tmp buffer out of a substring. */
-static char *make_segment(const char *start, const char *end)
+static char *make_segment(const char *start, const char *end, bool trim)
 {
 #if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic push
@@ -176,10 +176,12 @@ static char *make_segment(const char *start, const char *end)
     strncpy(buf, start, size);
     *(buf + size) = 0;
 
-    tmp = (buf + size);
-    while ((tmp >= buf) && ((*tmp == '\0') || iswspace((wint_t)*tmp))) {
-        *tmp = 0;
-        tmp--;
+    if (trim) {
+        tmp = (buf + size);
+        while ((tmp >= buf) && ((*tmp == '\0') || iswspace((wint_t)*tmp))) {
+            *tmp = 0;
+            tmp--;
+        }
     }
 
     return buf;
@@ -203,10 +205,10 @@ static char *parser_get_prop_name(char *line, char **end)
     /* There is no ';' or, it is after the ';' that marks the beginning of
        the value */
     if (v != 0 && (p == 0 || p > v)) {
-        str = make_segment(line, v);
+        str = make_segment(line, v, true);
         *end = v + 1;
     } else {
-        str = make_segment(line, p);
+        str = make_segment(line, p, true);
         *end = p + 1;
     }
 
@@ -289,7 +291,7 @@ static char *parser_get_param_name_heap(char *line, char **end)
         return 0;
     }
 
-    str = make_segment(line, next);
+    str = make_segment(line, next, true);
 
     icalparameter_kind kind = icalparameter_string_to_kind(str);
     int is_multivalued = 0;
@@ -304,10 +306,10 @@ static char *parser_get_param_name_heap(char *line, char **end)
             *end = NULL;
             return 0;
         } else {
-            *end = make_segment(*end, next);
+            *end = make_segment(*end, next, true);
         }
     } else {
-        *end = make_segment(*end, *end + strlen(*end));
+        *end = make_segment(*end, *end + strlen(*end), true);
     }
 
     if (!is_multivalued) {
@@ -322,14 +324,12 @@ static char *icalparser_get_value(char *line, char **end, icalvalue_kind kind)
     char *str;
     size_t length = strlen(line);
 
-    _unused(kind);
-
     if (length == 0) {
         return 0;
     }
 
     *end = line + length;
-    str = make_segment(line, *end);
+    str = make_segment(line, *end, kind != ICAL_TEXT_VALUE);
 
     return str;
 }
@@ -407,7 +407,7 @@ static char *parser_get_next_value(char *line, char **end, icalvalue_kind kind)
         return 0;
     }
 
-    str = make_segment(line, next);
+    str = make_segment(line, next, kind != ICAL_TEXT_VALUE);
     return str;
 }
 
@@ -427,7 +427,7 @@ static char *parser_get_next_parameter(char *line, char **end)
     }
 
     if (next != 0) {
-        char *str = make_segment(line, next);
+        char *str = make_segment(line, next, true);
         *end = next + 1;
         return str;
     } else {
@@ -540,11 +540,6 @@ char *icalparser_get_line(icalparser *parser,
 
     } else {
         *line_p = '\0';
-    }
-
-    while ((*line_p == '\0' || iswspace((wint_t)*line_p)) && line_p > line) {
-        *line_p = '\0';
-        line_p--;
     }
 
     return line;
@@ -1087,7 +1082,9 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
         } else {
             str = icalparser_get_value(end, &end, value_kind);
         }
-        strstriplt(str);
+        if (value_kind != ICAL_TEXT_VALUE) {
+            strstriplt(str);
+        }
 
         if (str != 0) {
             if (vcount > 0) {
