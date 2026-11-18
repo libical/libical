@@ -17,6 +17,7 @@ extern "C" {
 #include "icalerror_p.h"
 }
 
+#include <stdexcept>
 #include <string>
 
 using namespace LibICal;
@@ -30,7 +31,7 @@ ICalProperty::ICalProperty(const ICalProperty &v)
     : imp(icalproperty_clone(v.imp))
 {
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -41,11 +42,10 @@ ICalProperty &ICalProperty::operator=(const ICalProperty &v)
     }
 
     icalproperty_free(imp);
-    imp = NULL;
 
     imp = icalproperty_clone(v.imp);
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 
     return *this;
