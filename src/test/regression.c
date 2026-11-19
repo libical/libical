@@ -1258,6 +1258,48 @@ static void test_recur_iterator_range_includes_to(void)
                                    "20260106T090000 20260107T090000 20260108T090000");
 }
 
+static void test_recur_iterator_reverse_range_reuse_case(const char *what, int before)
+{
+    struct icalrecurrencetype *recurrence =
+        icalrecurrencetype_new_from_string("FREQ=DAILY;UNTIL=20260201T000000");
+    icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, icaltime_from_string("20260105T090000"));
+    icaltimetype from = icaltime_from_string("20260110T100000");
+    icaltimetype to = icaltime_from_string("20260107T090000");
+    char got[256] = "";
+
+    if (before == 1) {
+        (void)icalrecur_iterator_set_range(iterator, from, to);
+        (void)icalrecur_iterator_prev(iterator);
+    } else if (before == 2) {
+        (void)icalrecur_iterator_set_end(iterator, icaltime_from_string("20260108T090000"));
+    } else if (before == 3) {
+        (void)icalrecur_iterator_set_range(iterator, icaltime_from_string("20260106T090000"),
+                                           icaltime_from_string("20260108T090000"));
+        (void)icalrecur_iterator_next(iterator);
+    }
+
+    ok(what, icalrecur_iterator_set_range(iterator, from, to));
+    for (icaltimetype prev = icalrecur_iterator_prev(iterator);
+         !icaltime_is_null_time(prev) && strlen(got) < 200;
+         prev = icalrecur_iterator_prev(iterator)) {
+        strcat(got, got[0] ? " " : "");
+        strcat(got, icaltime_as_ical_string(prev));
+    }
+    str_is(what, got, "20260110T090000 20260109T090000 20260108T090000 20260107T090000");
+
+    icalrecur_iterator_free(iterator);
+    icalrecurrencetype_unref(recurrence);
+}
+
+/* A reverse range must not depend on an end set earlier on the same iterator */
+static void test_recur_iterator_reverse_range_reuse(void)
+{
+    test_recur_iterator_reverse_range_reuse_case("reverse range on a new iterator", 0);
+    test_recur_iterator_reverse_range_reuse_case("reverse range set twice", 1);
+    test_recur_iterator_reverse_range_reuse_case("reverse range after icalrecur_iterator_set_end", 2);
+    test_recur_iterator_reverse_range_reuse_case("reverse range after a forward range", 3);
+}
+
 static void test_memory(void)
 {
     size_t bufsize = 256;
@@ -9331,6 +9373,7 @@ int main(int argc, const char *argv[])
     test_run("Test icalrecur_iterator_set_start with an INTERVAL", test_recur_iterator_set_start_interval, do_test, do_header);
     test_run("Test icalrecur_iterator first occurrence and the end", test_recur_iterator_first_before_end, do_test, do_header);
     test_run("Test icalrecur_iterator_set_range includes 'to'", test_recur_iterator_range_includes_to, do_test, do_header);
+    test_run("Test icalrecur_iterator reverse range after an earlier end", test_recur_iterator_reverse_range_reuse, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
