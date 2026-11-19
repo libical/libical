@@ -4058,6 +4058,27 @@ static void set_bydata_start(icalrecurrence_iterator_by_data *bydata, int tfield
     }
 }
 
+/** Number of HOURLY, MINUTELY or SECONDLY periods from DTSTART to istart,
+    counted at the time of day set_start() uses for istart */
+static long periods_from_dtstart(icalrecur_iterator *impl)
+{
+    icalrecurrencetype_frequency freq = impl->rule->freq;
+    int hour, minute, second;
+    long n = day_diff(impl, impl->rstart, impl->istart);
+
+    __get_start_time(impl, impl->istart, &hour, &minute, &second);
+
+    n = n * 24 + (hour - impl->rstart.hour);
+    if (freq == ICAL_HOURLY_RECURRENCE) {
+        return n;
+    }
+    n = n * 60 + (minute - impl->rstart.minute);
+    if (freq == ICAL_MINUTELY_RECURRENCE) {
+        return n;
+    }
+    return n * 60 + (second - impl->rstart.second);
+}
+
 static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 {
     icalrecurrencetype_frequency freq = impl->rule->freq;
@@ -4217,7 +4238,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 
     case ICAL_HOURLY_RECURRENCE:
         if ((interval > 1) &&
-            (diff = abs(impl->istart.hour - impl->rstart.hour) % interval)) {
+            (diff = (int)(periods_from_dtstart(impl) % interval))) {
             /* Specified hour doesn't match interval -
                bump start to next hour that matches interval */
             increment_hour(impl, interval - diff);
@@ -4227,7 +4248,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 
     case ICAL_MINUTELY_RECURRENCE:
         if ((interval > 1) &&
-            (diff = abs(impl->istart.minute - impl->rstart.minute) % interval)) {
+            (diff = (int)(periods_from_dtstart(impl) % interval))) {
             /* Specified minute doesn't match interval -
                bump start to next minute that matches interval */
             increment_minute(impl, interval - diff);
@@ -4237,7 +4258,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 
     case ICAL_SECONDLY_RECURRENCE:
         if ((interval > 1) &&
-            (diff = abs(impl->istart.second - impl->rstart.second) % interval)) {
+            (diff = (int)(periods_from_dtstart(impl) % interval))) {
             /* Specified second doesn't match interval -
                bump start to next second that matches interval */
             increment_second(impl, interval - diff);

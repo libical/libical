@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `icalrecur_iterator_set_start()` and `icalrecur_iterator_set_range()` start every BY* rule over
     at its first value. Moving an iterator that already returned occurrences skipped occurrences in
     the first period after the new start, and with BYSETPOS returned days at the wrong position.
+  - `icalrecur_iterator_set_start()` and `icalrecur_iterator_set_range()` count the INTERVAL of an
+    HOURLY, MINUTELY or SECONDLY rule from DTSTART. Moving to another day returned times that are
+    not occurrences when the INTERVAL does not divide a day (e.g. `FREQ=HOURLY;INTERVAL=5`).
 
 ## [4.0.9] - Unreleased
 

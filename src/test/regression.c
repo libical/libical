@@ -1183,6 +1183,16 @@ static void test_recur_iterator_set_start_after_next(void)
     test_recur_iterator_set_start_rule("FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=2", "20260106T090000", "20260107T090000", 1);
 }
 
+/* Moving to another day must keep the INTERVAL counted from DTSTART when it does not divide a day */
+static void test_recur_iterator_set_start_interval(void)
+{
+    test_recur_iterator_set_start_rule("FREQ=HOURLY;INTERVAL=5", "20260105T090000", "20260106T090000", 0);
+    test_recur_iterator_set_start_rule("FREQ=MINUTELY;INTERVAL=7", "20260105T090000", "20260106T100000", 0);
+    test_recur_iterator_set_start_rule("FREQ=MINUTELY;INTERVAL=7;BYHOUR=10", "20260105T090000", "20260106T100000", 0);
+    test_recur_iterator_set_start_rule("FREQ=SECONDLY;INTERVAL=7", "20260105T090000", "20260106T090100", 0);
+    test_recur_iterator_set_start_rule("FREQ=HOURLY;INTERVAL=6", "20260105T090000", "20260106T090000", 0);
+}
+
 static void test_memory(void)
 {
     size_t bufsize = 256;
@@ -9085,6 +9095,7 @@ int main(int argc, const char *argv[])
     test_run("Test icalrecur_iterator_prev after the end", test_recur_iterator_prev_after_end, do_test, do_header);
     test_run("Test icalrecur_iterator with a DATE DTSTART and sub-daily frequency", test_recur_iterator_date_subdaily, do_test, do_header);
     test_run("Test icalrecur_iterator_set_start after next", test_recur_iterator_set_start_after_next, do_test, do_header);
+    test_run("Test icalrecur_iterator_set_start with an INTERVAL", test_recur_iterator_set_start_interval, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
