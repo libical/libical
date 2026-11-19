@@ -1,5 +1,4 @@
 #TODO 5.0: re-enable misc-use-internal-linkage
-#TODO 4.1: re-enable bugprone-std-exception-baseclass
 Checks: -*,
         bugprone-*,
         -bugprone-assignment-in-if-condition,
@@ -11,7 +10,6 @@ Checks: -*,
         -bugprone-narrowing-conversions,
         -bugprone-reserved-identifier,
         -bugprone-signed-bitwise,
-        -bugprone-std-exception-baseclass,
         clang-analyzer-*,
         -clang-analyzer-apiModeling.*,
         -clang-analyzer-optin.osx.*,
