@@ -1505,6 +1505,7 @@ YY_BUFFER_STATE ss_create_buffer(FILE *file, int size)
 
     ss_init_buffer(b, file);
 
+    /* cppcheck-suppress deallocret */
     return b;
 }
 
