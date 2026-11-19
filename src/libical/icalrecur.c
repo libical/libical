@@ -4352,6 +4352,10 @@ bool icalrecur_iterator_set_range(icalrecur_iterator *impl,
             return false;
         }
 
+        if (!icaltime_is_null_time(to)) {
+            /* 'to' is included, the end of icalrecur_iterator_set_end() is not */
+            icaltime_adjust(&to, to.is_date ? 1 : 0, 0, 0, to.is_date ? 0 : 1);
+        }
         icalrecur_iterator_set_end(impl, to);
     }
 

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - libical:
   - C++ bindings now throw strings rather than int exceptions.
+  - A forward range set by `icalrecur_iterator_set_range()` now includes 'to', as documented.
+    An occurrence at 'to' was not returned.
 
 ## [4.0.9] - Unreleased
 
