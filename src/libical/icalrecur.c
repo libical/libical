@@ -4068,6 +4068,11 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
     impl->occurrence_no = 0;
     impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
 
+    /* Start each BY* rule over at its first value, as for a new iterator */
+    for (int byrule = 0; byrule < ICAL_BY_NUM_PARTS; byrule++) {
+        impl->bydata[byrule].index = 0;
+    }
+
     /* Set Gregorian start date */
     set_start(impl, start);
 
