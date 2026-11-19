@@ -21,6 +21,7 @@ extern "C" {
 #include "icalerror_p.h"
 }
 
+#include <stdexcept>
 #include <string>
 
 using namespace LibICal;
@@ -34,7 +35,7 @@ ICalValue::ICalValue(const ICalValue &v)
     : imp(icalvalue_clone(v.imp))
 {
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -47,7 +48,7 @@ ICalValue &ICalValue::operator=(const ICalValue &v)
     icalvalue_free(imp);
     imp = icalvalue_clone(v.imp);
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 
     return *this;
@@ -72,7 +73,7 @@ ICalValue::ICalValue(const icalvalue_kind &kind)
     : imp(icalvalue_new(kind))
 {
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -80,7 +81,7 @@ ICalValue::ICalValue(const icalvalue_kind &kind, const std::string &str)
     : imp(icalvalue_new_from_string(kind, str.c_str()))
 {
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 

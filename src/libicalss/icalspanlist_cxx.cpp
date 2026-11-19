@@ -14,6 +14,7 @@
 #include "vcomponent_cxx.hpp"
 
 #include <cstdlib> // for free()
+#include <stdexcept>
 #include <vector>
 
 using namespace LibICal;
@@ -21,14 +22,14 @@ using namespace LibICal;
 ICalSpanList::ICalSpanList()
     : data(0)
 {
-    throw icalerrno;
+    throw std::runtime_error(icalerror_strerror(icalerrno));
 }
 
 ICalSpanList::ICalSpanList(const ICalSpanList &v)
     : data(v.data)
 {
     if (data == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -41,7 +42,7 @@ ICalSpanList::ICalSpanList(icalset *set, const icaltimetype &start, const icalti
     : data(icalspanlist_new(set, start, end))
 {
     if (data == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -53,7 +54,7 @@ ICalSpanList::ICalSpanList(icalcomponent *comp)
     : data(icalspanlist_from_vfreebusy(comp))
 {
     if (data == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -64,7 +65,7 @@ ICalSpanList::ICalSpanList(VComponent &comp)
     : data(icalspanlist_from_vfreebusy(static_cast<icalcomponent *>(comp)))
 {
     if (data == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -94,12 +95,12 @@ VComponent *ICalSpanList::get_vfreebusy(const char *organizer, const char *atten
 
     comp = icalspanlist_as_vfreebusy(data, organizer, attendee);
     if (comp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 
     vcomp = new VComponent(comp);
     if (vcomp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 
     return vcomp;
@@ -126,7 +127,7 @@ std::vector<int> ICalSpanList::as_vector(int delta_t)
     matrix = icalspanlist_as_freebusy_matrix(data, delta_t);
 
     if (matrix == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 
     while (matrix[i] != -1) {

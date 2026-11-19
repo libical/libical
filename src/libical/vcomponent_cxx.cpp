@@ -25,6 +25,7 @@ extern "C" {
 }
 
 #include <cstdlib>
+#include <stdexcept>
 #include <string>
 
 VComponent::VComponent()
@@ -36,7 +37,7 @@ VComponent::VComponent(const VComponent &v)
     : imp(icalcomponent_clone(v.imp))
 {
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -51,7 +52,7 @@ VComponent &VComponent::operator=(const VComponent &v)
 
     imp = icalcomponent_clone(v.imp);
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 
     return *this;
@@ -90,7 +91,7 @@ VComponent::VComponent(const std::string &str)
         if (!icalerrno) {
             icalerrno = ICAL_BADARG_ERROR;
         }
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -98,7 +99,7 @@ VComponent::VComponent(const icalcomponent_kind &kind)
     : imp(icalcomponent_new(kind))
 {
     if (imp == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 }
 
@@ -107,7 +108,7 @@ std::string VComponent::as_ical_string()
     const char *str = icalcomponent_as_ical_string(imp);
 
     if (str == NULL) {
-        throw icalerrno;
+        throw std::runtime_error(icalerror_strerror(icalerrno));
     }
 
     return str;
