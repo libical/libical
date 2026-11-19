@@ -4322,6 +4322,10 @@ bool icalrecur_iterator_set_range(icalrecur_iterator *impl,
             return true;
         }
 
+        /* An end left by an earlier range or icalrecur_iterator_set_end()
+           would stop the iteration forward to 'from' below */
+        impl->iend = icaltime_null_time();
+
         if (!__iterator_set_start(impl, from)) {
             return false;
         }
