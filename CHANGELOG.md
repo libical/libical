@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.9] - Unreleased
 
+- libicalss: `icalfileset_commit()` with `safe_saves` wrote the `.bak` backup with `fopen()`, so a
+  calendar opened with mode 0600 got a backup readable by other users, and a symlink already at
+  the backup path was followed and its target overwritten with the calendar data. The backup now
+  gets no more permissions than the calendar file and replaces whatever was at that path.
 - TBD
 
 ## [4.0.8] - 2026-11-14

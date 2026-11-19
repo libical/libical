@@ -322,10 +322,30 @@ static int file_copy(const char *fileSource, const char *fileDestination)
     if ((stream_R = fopen(fileSource, "r")) == (FILE *)NULL) {
         return -1;
     }
+#if !defined(_WIN32)
+    /* The copy holds the same data as the source, so give it no more permissions
+       than the source and never write through a file or symlink already there. */
+    struct stat sbuf;
+    int fd = -1;
+
+    if (fstat(fileno(stream_R), &sbuf) == 0) {
+        (void)unlink(fileDestination);
+        fd = open(fileDestination, O_WRONLY | O_CREAT | O_EXCL,
+                  (mode_t)(sbuf.st_mode & (S_IRWXU | S_IRWXG | S_IRWXO)));
+    }
+    if (fd < 0 || (stream_W = fdopen(fd, "w")) == (FILE *)NULL) {
+        if (fd >= 0) {
+            close(fd);
+        }
+        fclose(stream_R);
+        return -1;
+    }
+#else
     if ((stream_W = fopen(fileDestination, "w")) == (FILE *)NULL) {
         fclose(stream_R);
         return -1;
     }
+#endif
 
     size_t bytes;
     while (!feof(stream_R) && !ferror(stream_R) && (bytes = fread(c, 1, sizeof(c), stream_R)) != 0) {
