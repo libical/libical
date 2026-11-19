@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `icalrecur_iterator_next()` no longer returns the first occurrence after creating or moving the
     iterator when it is at or after the end set by `icalrecur_iterator_set_end()` or by a forward
     range of `icalrecur_iterator_set_range()`.
+  - A forward range set by `icalrecur_iterator_set_range()` now includes 'to', as documented.
+    An occurrence at 'to' was not returned.
 
 ## [4.0.9] - Unreleased
 
