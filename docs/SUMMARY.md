@@ -21,6 +21,7 @@
 -----------
 
 - [Contributors](CONTRIBUTORS.md)
+- [Reporting Vulnerabilities](SECURITY.md)
 - [Change Log](CHANGELOG.md)
 
 <!-- markdownlint-enable MD025 -->
