@@ -25,6 +25,9 @@ static ICAL_GLOBAL_VAR size_t _MAX_PROPERTY_VALUES = 500;
 static ICAL_GLOBAL_VAR size_t _MAX_RECURRENCE_SEARCH = 100000;
 static ICAL_GLOBAL_VAR size_t _MAX_RECURRENCE_TIME_STANDING_STILL = 50;
 static ICAL_GLOBAL_VAR size_t _MAX_RRULE_SEARCH = 500;
+static ICAL_GLOBAL_VAR size_t _MAX_TEXT_LIST_LENGTH = 10000;
+static ICAL_GLOBAL_VAR size_t _MAX_COMPONENT_NESTING_LEVELS = 100;
+static ICAL_GLOBAL_VAR size_t _MAX_PARAMETER_VALUES = 500;
 
 size_t icallimit_get(icallimits_kind kind)
 {
@@ -49,6 +52,12 @@ size_t icallimit_get(icallimits_kind kind)
         return _MAX_RECURRENCE_TIME_STANDING_STILL;
     case ICAL_LIMIT_RRULE_SEARCH:
         return _MAX_RRULE_SEARCH;
+    case ICAL_LIMIT_TEXT_LIST_LENGTH:
+        return _MAX_TEXT_LIST_LENGTH;
+    case ICAL_LIMIT_COMPONENT_NESTING_LEVELS:
+        return _MAX_COMPONENT_NESTING_LEVELS;
+    case ICAL_LIMIT_PARAMETER_VALUES:
+        return _MAX_PARAMETER_VALUES;
     default:
         icalassert(0);
         return 0;
@@ -87,6 +96,15 @@ void icallimit_set(icallimits_kind kind, size_t limit)
         break;
     case ICAL_LIMIT_RRULE_SEARCH:
         _MAX_RRULE_SEARCH = limit;
+        break;
+    case ICAL_LIMIT_TEXT_LIST_LENGTH:
+        _MAX_TEXT_LIST_LENGTH = limit;
+        break;
+    case ICAL_LIMIT_COMPONENT_NESTING_LEVELS:
+        _MAX_COMPONENT_NESTING_LEVELS = limit;
+        break;
+    case ICAL_LIMIT_PARAMETER_VALUES:
+        _MAX_PARAMETER_VALUES = limit;
         break;
     default:
         icalassert(0);

@@ -747,7 +747,7 @@ icalcomponent *icalparser_add_line(icalparser *parser, char *line)
 
         parser->level++;
         icalmemory_free_buffer(str);
-        if (parser->level > 100) { // TODO 4.1 - add a limit for component nesting levels
+        if ((size_t)parser->level > icallimit_get(ICAL_LIMIT_COMPONENT_NESTING_LEVELS)) {
             icalerror_warn("Too many nesting levels");
             icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
             parser->parse_errors = icallimit_get(ICAL_LIMIT_PARSE_FAILURES); // pathological
