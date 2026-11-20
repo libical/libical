@@ -28,6 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - A reverse range set by `icalrecur_iterator_set_range()` no longer depends on an end left by an
     earlier range or `icalrecur_iterator_set_end()` on the same iterator. Before 4.0.7 such a
     reverse range never returned; since then it skipped the last occurrence before 'from'.
+  - Bytes >= 0x80 in iCalendar, vCalendar and vCard data were passed to the `<ctype.h>`
+    functions as negative values, which is undefined behavior and fails a CRT assertion in
+    MSVC debug builds. They are now converted to `unsigned char` first.
 
 ## [4.0.9] - Unreleased
 
