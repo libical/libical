@@ -1135,6 +1135,39 @@ static void test_recur_iterator_date_subdaily(void)
     icalerror_set_errors_are_fatal(estate);
 }
 
+static void test_recur_iterator_first_before_end_case(const char *what, const char *end_str,
+                                                      const char *from_str, const char *expected)
+{
+    struct icalrecurrencetype *recurrence = icalrecurrencetype_new_from_string("FREQ=DAILY;INTERVAL=3");
+    icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, icaltime_from_string("20260105T090000"));
+    char got[256] = "";
+
+    if (from_str) {
+        ok(what, icalrecur_iterator_set_range(iterator, icaltime_from_string(from_str), icaltime_from_string(end_str)));
+    } else {
+        ok(what, icalrecur_iterator_set_end(iterator, icaltime_from_string(end_str)));
+    }
+    for (icaltimetype next = icalrecur_iterator_next(iterator);
+         !icaltime_is_null_time(next) && strlen(got) < 200;
+         next = icalrecur_iterator_next(iterator)) {
+        strcat(got, got[0] ? " " : "");
+        strcat(got, icaltime_as_ical_string(next));
+    }
+    str_is(what, got, expected);
+
+    icalrecur_iterator_free(iterator);
+    icalrecurrencetype_unref(recurrence);
+}
+
+/* The first occurrence must not be returned when it is not before the end */
+static void test_recur_iterator_first_before_end(void)
+{
+    test_recur_iterator_first_before_end_case("end before DTSTART", "20260101T090000", NULL, "");
+    test_recur_iterator_first_before_end_case("end at DTSTART", "20260105T090000", NULL, "");
+    test_recur_iterator_first_before_end_case("end at the second occurrence", "20260108T090000", NULL, "20260105T090000");
+    test_recur_iterator_first_before_end_case("range without occurrences", "20260106T110000", "20260106T090000", "");
+}
+
 static void test_memory(void)
 {
     size_t bufsize = 256;
@@ -9094,6 +9127,7 @@ int main(int argc, const char *argv[])
     test_run("Test icalrecur_iterator reverse range without UNTIL", test_recur_iterator_reverse_range, do_test, do_header);
     test_run("Test icalrecur_iterator_prev after the end", test_recur_iterator_prev_after_end, do_test, do_header);
     test_run("Test icalrecur_iterator with a DATE DTSTART and sub-daily frequency", test_recur_iterator_date_subdaily, do_test, do_header);
+    test_run("Test icalrecur_iterator first occurrence and the end", test_recur_iterator_first_before_end, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);

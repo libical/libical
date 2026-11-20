@@ -3857,6 +3857,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     /* If initial time is valid, return it */
     if ((impl->occurrence_no == 0) &&
         (icaltime_compare(impl->last, impl->istart) >= 0) &&
+        (icaltime_is_null_time(impl->iend) || icaltime_compare(impl->last, impl->iend) < 0) &&
         check_setpos(impl, 1) &&
         check_contracting_rules(impl)) {
         impl->occurrence_no++;
