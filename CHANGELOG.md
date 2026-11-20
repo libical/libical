@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - libical:
   - C++ bindings now throw strings rather than int exceptions.
+  - Preserve leading and trailing whitespace in iCalendar TEXT property values,
+    including whitespace at folded-line boundaries.
   - Add independent runtime limits for vCard text lists, calendar component nesting and
     multi-valued parameters through `icallimit_get()` and `icallimit_set()`, preserving
     the existing defaults and boundary behavior.
