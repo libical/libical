@@ -7882,12 +7882,70 @@ static void test_internal_limits(void)
     int_is("max recurrence search", (int)icallimit_get(ICAL_LIMIT_RECURRENCE_SEARCH), 100000);
     int_is("time standing still", (int)icallimit_get(ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL), 50);
     int_is("max rrule search", (int)icallimit_get(ICAL_LIMIT_RRULE_SEARCH), 500);
+    int_is("max text list length", (int)icallimit_get(ICAL_LIMIT_TEXT_LIST_LENGTH), 10000);
+    int_is("max component nesting", (int)icallimit_get(ICAL_LIMIT_COMPONENT_NESTING_LEVELS), 100);
+    int_is("max parameter values", (int)icallimit_get(ICAL_LIMIT_PARAMETER_VALUES), 500);
 
     icallimit_set(ICAL_LIMIT_PROPERTIES, 10);
     int_is("properties limit", (int)icallimit_get(ICAL_LIMIT_PROPERTIES), 10);
 
     icallimit_set(ICAL_LIMIT_VALUE_CHARS, SIZE_MAX);
     ok("value chars is size_max", icallimit_get(ICAL_LIMIT_VALUE_CHARS) == SIZE_MAX);
+}
+
+static void test_independent_parser_limits(void)
+{
+    const size_t parameter_values = icallimit_get(ICAL_LIMIT_PARAMETER_VALUES);
+    const size_t property_values = icallimit_get(ICAL_LIMIT_PROPERTY_VALUES);
+    const size_t nesting_levels = icallimit_get(ICAL_LIMIT_COMPONENT_NESTING_LEVELS);
+    const char *calendar = "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:test\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n";
+    icalparameter *param;
+    icalcomponent *comp;
+
+    /* Configuring property values must not truncate a multi-valued parameter. */
+    icallimit_set(ICAL_LIMIT_PROPERTY_VALUES, 0);
+    param = icalparameter_new_from_string("MEMBER=\"mailto:a\",\"mailto:b\",\"mailto:c\"");
+    ok("multi-valued parameter parsed", param != NULL);
+    str_is("property limit does not affect parameter", icalparameter_as_ical_string(param),
+           "MEMBER=\"mailto:a\",\"mailto:b\",\"mailto:c\"");
+    icalparameter_free(param);
+
+    /* Preserve the existing inclusive counter behavior of the parameter parser. */
+    icallimit_set(ICAL_LIMIT_PARAMETER_VALUES, 0);
+    param = icalparameter_new_from_string("MEMBER=\"mailto:a\",\"mailto:b\",\"mailto:c\"");
+    str_is("parameter limit takes effect", icalparameter_as_ical_string(param), "MEMBER=\"mailto:a\"");
+    icalparameter_free(param);
+
+    icallimit_set(ICAL_LIMIT_PROPERTY_VALUES, property_values);
+    comp = icalcomponent_new_from_string("BEGIN:VEVENT\r\nRDATE:20261116T100000Z,20261117T100000Z\r\nEND:VEVENT\r\n");
+    ok("property parsed", comp != NULL);
+    int_is("parameter limit does not affect property values", icalcomponent_count_properties(comp, ICAL_RDATE_PROPERTY), 2);
+    icalcomponent_free(comp);
+    icallimit_set(ICAL_LIMIT_PARAMETER_VALUES, SIZE_MAX);
+    param = icalparameter_new_from_string("DISPLAY=BADGE,GRAPHIC,THUMBNAIL");
+    str_is("unlimited enumerated parameter", icalparameter_as_ical_string(param), "DISPLAY=BADGE,GRAPHIC,THUMBNAIL");
+    icalparameter_free(param);
+    icallimit_set(ICAL_LIMIT_PARAMETER_VALUES, parameter_values);
+
+    icallimit_set(ICAL_LIMIT_COMPONENT_NESTING_LEVELS, 1);
+    icalerror_clear_errno();
+    comp = icalparser_parse_string(calendar);
+    ok("over-limit nesting stops parsing", comp == NULL);
+    ok("over-limit nesting reports malformed data", icalerrno == ICAL_MALFORMEDDATA_ERROR);
+    if (comp) {
+        icalcomponent_free(comp);
+    }
+    icallimit_set(ICAL_LIMIT_COMPONENT_NESTING_LEVELS, 2);
+    comp = icalparser_parse_string(calendar);
+    ok("nesting at configured limit parses", comp != NULL);
+    ok("nested event preserved", icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT) != NULL);
+    icalcomponent_free(comp);
+    icallimit_set(ICAL_LIMIT_COMPONENT_NESTING_LEVELS, SIZE_MAX);
+    comp = icalparser_parse_string(calendar);
+    ok("unlimited nesting parses", comp != NULL);
+    icalcomponent_free(comp);
+    icallimit_set(ICAL_LIMIT_COMPONENT_NESTING_LEVELS, nesting_levels);
+    icalerror_clear_errno();
 }
 
 static void test_icaldurationtype_normalize(void)
@@ -9191,6 +9249,7 @@ int main(int argc, const char *argv[])
     test_run("Test icaltime proper zone set", test_icaltime_proper_zone, do_test, do_header);
     test_run("Test property values from string", test_value_from_string, do_test, do_header);
     test_run("Test normalizing time", test_icaltime_normalize, do_test, do_header);
+    test_run("Test independent parser limits", test_independent_parser_limits, do_test, do_header);
     test_run("Test setting/getting internal limits", test_internal_limits, do_test, do_header);
     test_run("Test normalizing duration", test_icaldurationtype_normalize, do_test, do_header);
     test_run("Test removing component properties by kind", test_icalcomponent_remove_property_by_kind, do_test, do_header);

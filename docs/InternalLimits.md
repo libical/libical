@@ -55,3 +55,24 @@ The internal limits and their default values are shown here:
 
       Kind = ICAL_LIMIT_RRULE_SEARCH
       Default = 500 (five hundred)
+
+* Maximum number of items in a vCard text list
+
+      Kind = ICAL_LIMIT_TEXT_LIST_LENGTH
+      Default = 10000 (ten thousand)
+
+  This retains the existing inclusive iteration counter: a limit of N allows up to
+  N + 1 items, including one item when the limit is zero.
+
+* Maximum number of nested calendar component levels (including the top-level component)
+
+      Kind = ICAL_LIMIT_COMPONENT_NESTING_LEVELS
+      Default = 100 (one hundred)
+
+* Maximum number of values for multi-valued parameters
+
+      Kind = ICAL_LIMIT_PARAMETER_VALUES
+      Default = 500
+
+  This retains the existing inclusive iteration counter: a limit of N allows up to
+  N + 1 values, including one value when the limit is zero.
