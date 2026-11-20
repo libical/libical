@@ -40,6 +40,12 @@ typedef enum icallimits_kind
     ICAL_LIMIT_RECURRENCE_TIME_STANDING_STILL,
     /** Maximum number of times to search vtimezone rrules for an occurrence before the specified end year */
     ICAL_LIMIT_RRULE_SEARCH,
+    /** Inclusive iteration limit for a vCard text list (N permits up to N + 1 items) */
+    ICAL_LIMIT_TEXT_LIST_LENGTH,
+    /** Maximum number of nested calendar component levels */
+    ICAL_LIMIT_COMPONENT_NESTING_LEVELS,
+    /** Inclusive iteration limit for multi-valued parameters (N permits up to N + 1 values) */
+    ICAL_LIMIT_PARAMETER_VALUES,
 } icallimits_kind;
 
 /**
