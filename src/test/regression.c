@@ -1135,6 +1135,64 @@ static void test_recur_iterator_date_subdaily(void)
     icalerror_set_errors_are_fatal(estate);
 }
 
+/* After icalrecur_iterator_set_start() an iterator must return the occurrences at
+   or after the new start, the same as a forward iteration from DTSTART, whatever it
+   returned before. */
+static void test_recur_iterator_set_start_rule(const char *rule, const char *dtstart_str,
+                                               const char *start_str, int nbefore)
+{
+    struct icalrecurrencetype *recurrence = icalrecurrencetype_new_from_string(rule);
+    icaltimetype dtstart = icaltime_from_string(dtstart_str);
+    icaltimetype start = icaltime_from_string(start_str);
+    icaltimetype expected[8];
+    int nexpected = 0;
+
+    icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, dtstart);
+    for (icaltimetype next = icalrecur_iterator_next(iterator);
+         !icaltime_is_null_time(next) && nexpected < 8;
+         next = icalrecur_iterator_next(iterator)) {
+        if (icaltime_compare(next, start) >= 0) {
+            expected[nexpected++] = next;
+        }
+    }
+    icalrecur_iterator_free(iterator);
+
+    iterator = icalrecur_iterator_new(recurrence, dtstart);
+    for (int i = 0; i < nbefore; i++) {
+        (void)icalrecur_iterator_next(iterator);
+    }
+    ok("icalrecur_iterator_set_start", icalrecur_iterator_set_start(iterator, start));
+    bool same = (nexpected == 8);
+    for (int i = 0; i < nexpected; i++) {
+        if (icaltime_compare(icalrecur_iterator_next(iterator), expected[i]) != 0) {
+            same = false;
+        }
+    }
+    icalrecur_iterator_free(iterator);
+    ok(rule, same);
+
+    icalrecurrencetype_unref(recurrence);
+}
+
+/* Moving an iterator that already returned occurrences must not skip any after the new start */
+static void test_recur_iterator_set_start_after_next(void)
+{
+    test_recur_iterator_set_start_rule("FREQ=DAILY;BYHOUR=9,12,15", "20260105T090000", "20260106T090000", 2);
+    test_recur_iterator_set_start_rule("FREQ=HOURLY;BYHOUR=8,10,12;BYMINUTE=0,30", "20260105T080000", "20260106T080000", 2);
+    test_recur_iterator_set_start_rule("FREQ=WEEKLY;INTERVAL=2;BYDAY=TU,TH;WKST=SU", "20260106T100000", "20260107T100000", 2);
+    test_recur_iterator_set_start_rule("FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=2", "20260106T090000", "20260107T090000", 1);
+}
+
+/* Moving to another day must keep the INTERVAL counted from DTSTART when it does not divide a day */
+static void test_recur_iterator_set_start_interval(void)
+{
+    test_recur_iterator_set_start_rule("FREQ=HOURLY;INTERVAL=5", "20260105T090000", "20260106T090000", 0);
+    test_recur_iterator_set_start_rule("FREQ=MINUTELY;INTERVAL=7", "20260105T090000", "20260106T100000", 0);
+    test_recur_iterator_set_start_rule("FREQ=MINUTELY;INTERVAL=7;BYHOUR=10", "20260105T090000", "20260106T100000", 0);
+    test_recur_iterator_set_start_rule("FREQ=SECONDLY;INTERVAL=7", "20260105T090000", "20260106T090100", 0);
+    test_recur_iterator_set_start_rule("FREQ=HOURLY;INTERVAL=6", "20260105T090000", "20260106T090000", 0);
+}
+
 static void test_memory(void)
 {
     size_t bufsize = 256;
@@ -9094,6 +9152,8 @@ int main(int argc, const char *argv[])
     test_run("Test icalrecur_iterator reverse range without UNTIL", test_recur_iterator_reverse_range, do_test, do_header);
     test_run("Test icalrecur_iterator_prev after the end", test_recur_iterator_prev_after_end, do_test, do_header);
     test_run("Test icalrecur_iterator with a DATE DTSTART and sub-daily frequency", test_recur_iterator_date_subdaily, do_test, do_header);
+    test_run("Test icalrecur_iterator_set_start after next", test_recur_iterator_set_start_after_next, do_test, do_header);
+    test_run("Test icalrecur_iterator_set_start with an INTERVAL", test_recur_iterator_set_start_interval, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
