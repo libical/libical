@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - libical:
   - C++ bindings now throw strings rather than int exceptions.
+  - A forward range set by `icalrecur_iterator_set_range()` now includes 'to', as documented.
+    An occurrence at 'to' was not returned.
+  - A reverse range set by `icalrecur_iterator_set_range()` no longer depends on an end left by an
+    earlier range or `icalrecur_iterator_set_end()` on the same iterator. Before 4.0.7 such a
+    reverse range never returned; since then it skipped the last occurrence before 'from'.
   - Add independent runtime limits for vCard text lists, calendar component nesting and
     multi-valued parameters through `icallimit_get()` and `icallimit_set()`, preserving
     the existing defaults and boundary behavior.
