@@ -15,7 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.9] - Unreleased
 
-- TBD
+- libical, libicalvcard:
+  - FLOAT values are parsed and written with a `.` decimal separator whatever the current locale.
+    Parsing used `strtof()`, so `1.5` became 1.0 under e.g. a German locale, and writing a FLOAT
+    switched the whole process to the C locale with `setlocale()`, which is not thread safe and
+    could leave other threads (or the process) formatting numbers in the wrong locale.
 
 ## [4.0.8] - 2026-11-14
 

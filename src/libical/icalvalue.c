@@ -591,9 +591,14 @@ static icalvalue *icalvalue_new_from_string_with_error(icalvalue_kind kind,
         break;
     }
     case ICAL_FLOAT_VALUE: {
+        char num[64] = {0};
         char *t_end;
-        const float tmpf = strtof(str, &t_end);
-        if (str != t_end) {
+        float tmpf;
+
+        /* strtof() expects the decimal separator of the current locale */
+        (void)simple_str_to_doublestr(str, num, (int)sizeof(num), NULL);
+        tmpf = strtof(num, &t_end);
+        if (num != t_end) {
             value = icalvalue_new_float(tmpf);
         }
         break;
@@ -1170,24 +1175,30 @@ static char *icalvalue_float_as_ical_string_r(const icalvalue *value)
 {
     float data;
     char *str;
-    char *old_locale;
+    const struct lconv *loc_data;
 
     icalerror_check_arg_rz((value != 0), "value");
     data = icalvalue_get_float(value);
-
-    /* bypass current locale in order to make
-       sure snprintf uses a '.' as a separator
-       set locate to 'C' and keep old locale */
-    old_locale = icalmemory_strdup(setlocale(LC_NUMERIC, NULL));
-    (void)setlocale(LC_NUMERIC, "C");
 
     str = (char *)icalmemory_new_buffer(40);
 
     snprintf(str, 40, "%f", data);
 
-    /* restore saved locale */
-    (void)setlocale(LC_NUMERIC, old_locale);
-    icalmemory_free_buffer(old_locale);
+    /* snprintf uses the decimal separator of the current locale; the value
+       always needs a '.'. Swap it here rather than calling setlocale(), which
+       changes the locale of the whole process and is not thread safe. */
+    loc_data = localeconv();
+    if (loc_data && loc_data->decimal_point && loc_data->decimal_point[0] &&
+        strcmp(loc_data->decimal_point, ".") != 0) {
+        char *dp = strstr(str, loc_data->decimal_point);
+
+        if (dp) {
+            const size_t dp_len = strlen(loc_data->decimal_point);
+
+            *dp = '.';
+            memmove(dp + 1, dp + dp_len, strlen(dp + dp_len) + 1);
+        }
+    }
 
     return str;
 }
