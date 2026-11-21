@@ -26,8 +26,10 @@ set(
   ${PROJECT_SOURCE_DIR}/design-data/vcard-value-types.csv
 )
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  vcardderivedpropertyH
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl -v -i
@@ -41,8 +43,10 @@ add_custom_command(
 )
 list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.h)
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  vcardderivedpropertyC
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedproperty.c
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl -v -i
@@ -62,8 +66,10 @@ set(
   ${PROJECT_SOURCE_DIR}/design-data/vcard-parameters.csv
 )
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  vcardderivedparameterH
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl -v -i
@@ -77,8 +83,10 @@ add_custom_command(
 )
 list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.h)
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  vcardderivedparameterC
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedparameter.c
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl -v -i
@@ -98,8 +106,10 @@ set(
   ${PROJECT_SOURCE_DIR}/design-data/vcard-restrictions.csv
 )
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  vcardrestrictionC
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardrestriction.c
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkrestrictiontable.pl -v -i
@@ -118,8 +128,10 @@ set(
   ${PROJECT_SOURCE_DIR}/design-data/vcard-value-types.csv
 )
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  vcardderivedvalueH
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -v -i
@@ -132,8 +144,10 @@ add_custom_command(
 )
 list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.h)
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  vcardderivedvalueC
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libicalvcard/vcardderivedvalue.c
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -v -i
@@ -252,20 +266,36 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libicalvcard.pc DESTINATION ${LIB_INST
 
 ########### install files ###############
 
-install(
-  FILES
-    ${PROJECT_BINARY_DIR}/src/libicalvcard/vcard.h
-    ${BUILT_HEADERS}
-    ${PROJECT_BINARY_DIR}/src/libicalvcard/libical_vcard_export.h
-    vcardtime.h
-    vcardtypes.h
-    vcardcomponent.h
-    vcardenumarray.h
-    vcardparameter.h
-    vcardparser.h
-    vcardproperty.h
-    vcardstrarray.h
-    vcardstructured.h
-    vcardvalue.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/libical
+set(
+  VCARD_PUBLIC_HEADERS
+  ${PROJECT_BINARY_DIR}/src/libicalvcard/vcard.h
+  ${BUILT_HEADERS}
+  ${PROJECT_BINARY_DIR}/src/libicalvcard/libical_vcard_export.h
+  vcardtime.h
+  vcardtypes.h
+  vcardcomponent.h
+  vcardenumarray.h
+  vcardparameter.h
+  vcardparser.h
+  vcardproperty.h
+  vcardstrarray.h
+  vcardstructured.h
+  vcardvalue.h
 )
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.5.0")
+  install(
+    FILES
+      ${VCARD_PUBLIC_HEADERS}
+    DESTINATION ${INCLUDE_INSTALL_DIR}/libical
+    BUILD_DEPENDS
+    vcardderivedpropertyH
+    vcardderivedpropertyC
+    vcardderivedparameterH
+    vcardderivedparameterC
+    vcardderivedvalueH
+    vcardderivedvalueC
+    vcardrestrictionC
+  )
+else()
+  install(FILES ${VCARD_PUBLIC_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
+endif()

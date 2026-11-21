@@ -1079,7 +1079,7 @@ STATICCCHECKOPTS="\
 "
 PRECOMMIT
 KRAZY
-cmakelatestOptions="-Wuninitialized -Wunused_cli -Wauthor -Winstall_absolute_destination -Wdeprecated"
+cmakelatestOptions="-Wuninitialized -Wunused_cli -Wauthor -Winstall_absolute_destination -Wdeprecated -Wno-non-target-directive"
 CMAKELATEST test "$cmakelatestOptions $STATICCCHECKOPTS"
 CMAKELATEST testcross "$cmakelatestOptions $STATICCCHECKOPTS $TOOLCHAIN"
 CPPLINT test "$STATICCCHECKOPTS"
