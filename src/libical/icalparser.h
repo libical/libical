@@ -352,6 +352,7 @@ LIBICAL_ICAL_EXPORT void icalparser_set_ctrl(enum icalparser_ctrl ctrl);
  * This function uses the supplied @a line_gen_func to read data in,
  * until it has read a full line, and returns the full line.
  * It includes any continuation lines, which start with a space after a newline.
+ * Content whitespace is retained; line endings and folding markers are removed.
  * To supply arbitrary data (as the parameter @a d) to your @a line_gen_func,
  * call icalparser_set_gen_data().
  */
