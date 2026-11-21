@@ -372,8 +372,8 @@ static void test_utf8(void)
         "VERSION:2.0\n"
         "METHOD:PUBLISH\n"
         "BEGIN:VEVENT\n"
-        "SUMMARY:  áó aáóaáó aáä\n"
-        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá \n"
+        "SUMMARY:áó aáóaáó aáä\n"
+        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá\n"
         "END:VEVENT\n"
         "END:VCALENDAR\n";
 
@@ -399,8 +399,8 @@ static void test_utf8(void)
         "VERSION:2.0\n"
         "METHOD:PUBLISH\n"
         "BEGIN:VEVENT\n"
-        "SUMMARY:  áó aáóaáó aáä\n"
-        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá \n"
+        "SUMMARY:áó aáóaáó aáä\n"
+        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá\n"
         "END:VEVENT\n"
         "END:VCALENDAR\n";
 
@@ -412,8 +412,8 @@ static void test_utf8(void)
     /* test issue 116 */
     comp = icalcomponent_new_from_string(item);
     ok("parsed", (comp != NULL));
-    str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá ");
-    str_is("summary", icalcomponent_get_summary(comp), "  áó aáóaáó aáä");
+    str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá");
+    str_is("summary", icalcomponent_get_summary(comp), "áó aáóaáó aáä");
     icalcomponent_free(comp);
 
     /* test another report against issue 116 */
@@ -426,8 +426,8 @@ static void test_utf8(void)
     comp = icalcomponent_new_from_string(utf8_marker);
     ok("parsed", (comp != NULL));
     ok("kind", (icalcomponent_isa(comp) == ICAL_VCALENDAR_COMPONENT));
-    str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá ");
-    str_is("summary", icalcomponent_get_summary(comp), "  áó aáóaáó aáä");
+    str_is("location", icalcomponent_get_location(comp), "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá");
+    str_is("summary", icalcomponent_get_summary(comp), "áó aáóaáó aáä");
     icalcomponent_free(comp);
 }
 
@@ -4570,8 +4570,8 @@ static void test_langbind(void)
     static const char test_str[] =
         "BEGIN:VEVENT\n"
         "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com\n"
-        "COMMENT: Comment that \n spans a line\n"
-        "COMMENT: Comment with \"quotable\" \'characters\' and other \t bad magic \n things \f Yeah.\n"
+        "COMMENT:Comment that \n spans a line\n"
+        "COMMENT:Comment with \"quotable\" \'characters\' and other \t bad magic \n things \f Yeah.\n"
         "DTSTART:19970101T120000\n"
         "DTSTART:19970101T120000Z\n"
         "DTSTART:19970101\n"
@@ -4584,9 +4584,9 @@ static void test_langbind(void)
         "BEGIN:VEVENT\r\n"
         "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:\r\n"
         " employee-A@host.com\r\n"
-        "COMMENT: Comment that spans a line\r\n"
-        "COMMENT: Comment with \"quotable\" 'characters' and other 	 bad magic \r\n"
-        " things  Yeah.\r\n"
+        "COMMENT:Comment that spans a line\r\n"
+        "COMMENT:Comment with \"quotable\" 'characters' and other 	 bad magic things \r\n"
+        "  Yeah.\r\n"
         "DTSTART:19970101T120000\r\n"
         "DTSTART:19970101T120000Z\r\n"
         "DTSTART;VALUE=DATE:19970101\r\n"
@@ -7807,6 +7807,26 @@ static void test_text_value_whitespace(void)
         {"X-TEXT;VALUE=TEXT: text ", " text "},
         {"DESCRIPTION: first \r\n  second\t\r\n", " first  second\t"},
     };
+    const char *utf8_calendars[] = {
+        "BEGIN:VCALENDAR\n"
+        "PRODID:-//Ximian//NONSGML Evolution Calendar//EN\n"
+        "VERSION:2.0\n"
+        "METHOD:PUBLISH\n"
+        "BEGIN:VEVENT\n"
+        "SUMMARY:  áó aáóaáó aáä\n"
+        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá \n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n",
+        "\xEF\xBB\xBF"
+        "BEGIN:VCALENDAR\n"
+        "PRODID:-//Ximian//NONSGML Evolution Calendar//EN\n"
+        "VERSION:2.0\n"
+        "METHOD:PUBLISH\n"
+        "BEGIN:VEVENT\n"
+        "SUMMARY:  áó aáóaáó aáä\n"
+        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá \n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n"};
     size_t i;
 
     for (i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
@@ -7825,6 +7845,34 @@ static void test_text_value_whitespace(void)
         }
         icalmemory_free_buffer(serialized);
         icalproperty_free(prop);
+    }
+
+    for (i = 0; i < sizeof(utf8_calendars) / sizeof(utf8_calendars[0]); i++) {
+        icalcomponent *calendar = icalcomponent_new_from_string(utf8_calendars[i]);
+        ok("whitespace-bearing UTF-8 calendar parsed", calendar != NULL);
+        if (!calendar) {
+            continue;
+        }
+        str_is("UTF-8 SUMMARY whitespace preserved", icalcomponent_get_summary(calendar), "  áó aáóaáó aáä");
+        str_is("UTF-8 LOCATION whitespace preserved", icalcomponent_get_location(calendar),
+               "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá ");
+        icalcomponent_free(calendar);
+    }
+
+    icalcomponent *comment_comp = icalcomponent_new_from_string(
+        "BEGIN:VEVENT\n"
+        "COMMENT: Comment that \n spans a line\n"
+        "COMMENT: Comment with \"quotable\" 'characters' and other \t bad magic \n things \f Yeah.\n"
+        "END:VEVENT\n");
+    ok("whitespace-bearing COMMENT fixture parsed", comment_comp != NULL);
+    if (comment_comp) {
+        str_is("folded COMMENT whitespace preserved", icalcomponent_as_ical_string(comment_comp),
+               "BEGIN:VEVENT\r\n"
+               "COMMENT: Comment that spans a line\r\n"
+               "COMMENT: Comment with \"quotable\" 'characters' and other \t bad magic \r\n"
+               " things  Yeah.\r\n"
+               "END:VEVENT\r\n");
+        icalcomponent_free(comment_comp);
     }
 
     char text[240];
