@@ -133,4 +133,14 @@ install(TARGETS ical_jni EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAUL
 
 ########### install files ###############
 
-install(FILES ${PROJECT_BINARY_DIR}/src/java/libical.jar DESTINATION ${SHARE_INSTALL_DIR})
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.5.0")
+  install(
+    FILES
+      ${PROJECT_BINARY_DIR}/src/java/libical.jar
+    DESTINATION ${SHARE_INSTALL_DIR}
+    BUILD_DEPENDS
+    libical_jar
+  )
+else()
+  install(FILES ${PROJECT_BINARY_DIR}/src/java/libical.jar DESTINATION ${SHARE_INSTALL_DIR})
+endif()

@@ -94,8 +94,10 @@ macro(gir_add_introspections introspections_girs)
     # Reuse the LIBTOOL variable from by automake if it's set
     set(_gir_libtool "--no-libtool")
 
-    add_custom_command(
-      OUTPUT
+    add_custom_target(
+      ${gir}-target
+      ALL
+      BYPRODUCTS
         ${gir}
       COMMAND
         ${GObjectIntrospection_SCANNER} ${GObjectIntrospection_SCANNER_ARGS} --namespace=${_gir_namespace}
@@ -110,16 +112,27 @@ macro(gir_add_introspections introspections_girs)
       COMMENT "Run the gobject introspection scanner"
     )
     list(APPEND _gir_girs ${CMAKE_CURRENT_BINARY_DIR}/${gir})
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${gir} DESTINATION ${SHARE_INSTALL_DIR}/gir-1.0)
-
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.5.0")
+      install(
+        FILES
+          ${CMAKE_CURRENT_BINARY_DIR}/${gir}
+        DESTINATION ${SHARE_INSTALL_DIR}/gir-1.0
+        BUILD_DEPENDS
+        ${gir}-target
+      )
+    else()
+      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${gir} DESTINATION ${SHARE_INSTALL_DIR}/gir-1.0)
+    endif()
     string(
       REPLACE ".gir"
       ".typelib"
       _typelib
       "${gir}"
     )
-    add_custom_command(
-      OUTPUT
+    add_custom_target(
+      ${_typelib}-target
+      ALL
+      BYPRODUCTS
         ${_typelib}
       COMMAND
         ${GObjectIntrospection_COMPILER} --includedir=. ${CMAKE_CURRENT_BINARY_DIR}/${gir} -o
@@ -130,7 +143,17 @@ macro(gir_add_introspections introspections_girs)
       COMMENT "Run the gobject introspection compiler"
     )
     list(APPEND _gir_typelibs ${CMAKE_CURRENT_BINARY_DIR}/${_typelib})
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${_typelib} DESTINATION ${LIB_INSTALL_DIR}/girepository-1.0)
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.5.0")
+      install(
+        FILES
+          ${CMAKE_CURRENT_BINARY_DIR}/${_typelib}
+        DESTINATION ${LIB_INSTALL_DIR}/girepository-1.0
+        BUILD_DEPENDS
+        ${_typelib}-target
+      )
+    else()
+      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${_typelib} DESTINATION ${LIB_INSTALL_DIR}/girepository-1.0)
+    endif()
   endforeach()
 
   add_custom_target(
