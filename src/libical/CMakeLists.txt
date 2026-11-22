@@ -34,8 +34,10 @@ set(
   ${PROJECT_SOURCE_DIR}/design-data/ical-value-types.csv
 )
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  icalderivedpropertyH
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.h
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl -i
@@ -48,8 +50,10 @@ add_custom_command(
 )
 list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.h)
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  icalderivedpropertyC
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libical/icalderivedproperty.c
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedproperties.pl -i
@@ -68,8 +72,10 @@ set(
   ${PROJECT_SOURCE_DIR}/design-data/ical-parameters.csv
 )
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  icalderivedparameterH
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.h
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl -i
@@ -82,8 +88,10 @@ add_custom_command(
 )
 list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.h)
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  icalderivedparameterC
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libical/icalderivedparameter.c
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedparameters.pl -i
@@ -102,8 +110,10 @@ set(
   ${PROJECT_SOURCE_DIR}/design-data/ical-restrictions.csv
 )
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  icalrestrictionC
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libical/icalrestriction.c
   COMMAND
     ${PERL_EXECUTABLE} -I ${ICALSCRIPTS} ${ICALSCRIPTS}/mkrestrictiontable.pl -i
@@ -122,8 +132,10 @@ set(
   ${PROJECT_SOURCE_DIR}/design-data/ical-value-types.csv
 )
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  icalderivedvalueH
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.h
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -i
@@ -136,8 +148,10 @@ add_custom_command(
 )
 list(APPEND BUILT_HEADERS ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.h)
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  icalderivedvalueC
+  ALL
+  BYPRODUCTS
     ${PROJECT_BINARY_DIR}/src/libical/icalderivedvalue.c
   COMMAND
     ${PERL_EXECUTABLE} -I${ICALSCRIPTS} ${ICALSCRIPTS}/mkderivedvalues.pl -i
@@ -401,46 +415,61 @@ endif()
 
 ########### install files ###############
 
-install(
-  FILES
-    ${PROJECT_BINARY_DIR}/src/libical/ical.h
-    icalarray.h
-    icalattach.h
-    icalcomponent.h
-    ${BUILT_HEADERS}
-    icalduration.h
-    icalenumarray.h
-    icalenums.h
-    icalerror.h
-    icallimits.h
-    icalmemory.h
-    icalparameter.h
-    icalparser.h
-    icalperiod.h
-    icalproperty.h
-    icalrecur.h
-    icalrestriction.h
-    icalstrarray.h
-    ${PROJECT_BINARY_DIR}/src/libical/icaltime_p.h
-    icaltime.h
-    icaltimezone.h
-    icaltypes.h
-    icalvalue.h
-    libical_deprecated.h
-    libical_sentinel.h
-    ${PROJECT_BINARY_DIR}/src/libical/libical_ical_export.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/libical
+set(
+  ICAL_PUBLIC_HEADERS
+  ${PROJECT_BINARY_DIR}/src/libical/ical.h
+  icalarray.h
+  icalattach.h
+  icalcomponent.h
+  ${BUILT_HEADERS}
+  icalduration.h
+  icalenumarray.h
+  icalenums.h
+  icalerror.h
+  icallimits.h
+  icalmemory.h
+  icalparameter.h
+  icalparser.h
+  icalperiod.h
+  icalproperty.h
+  icalrecur.h
+  icalrestriction.h
+  icalstrarray.h
+  ${PROJECT_BINARY_DIR}/src/libical/icaltime_p.h
+  icaltime.h
+  icaltimezone.h
+  icaltypes.h
+  icalvalue.h
+  libical_deprecated.h
+  libical_sentinel.h
+  ${PROJECT_BINARY_DIR}/src/libical/libical_ical_export.h
 )
-
 if(LIBICAL_CXX_BINDINGS)
+  set(
+    ICAL_PUBLIC_HEADERS
+    ${ICAL_PUBLIC_HEADERS}
+    icalparameter_cxx.hpp
+    icalproperty_cxx.hpp
+    icalvalue_cxx.hpp
+    icptrholder_cxx.hpp
+    vcomponent_cxx.hpp
+    ${PROJECT_BINARY_DIR}/src/libical/libical_ical_cxx_export.h
+  )
+endif()
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.5.0")
   install(
     FILES
-      icalparameter_cxx.hpp
-      icalproperty_cxx.hpp
-      icalvalue_cxx.hpp
-      icptrholder_cxx.hpp
-      vcomponent_cxx.hpp
-      ${PROJECT_BINARY_DIR}/src/libical/libical_ical_cxx_export.h
+      ${ICAL_PUBLIC_HEADERS}
     DESTINATION ${INCLUDE_INSTALL_DIR}/libical
+    BUILD_DEPENDS
+    icalderivedpropertyH
+    icalderivedpropertyC
+    icalderivedparameterH
+    icalderivedparameterC
+    icalderivedvalueH
+    icalderivedvalueC
+    icalrestrictionC
   )
+else()
+  install(FILES ${ICAL_PUBLIC_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/libical)
 endif()
