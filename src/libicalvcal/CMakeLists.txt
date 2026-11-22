@@ -5,7 +5,8 @@ if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-conversion -Wno-sign-conversion")
 endif()
 
-include_directories(
+set(
+  include_directories
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
   ${PROJECT_SOURCE_DIR}/src
@@ -14,13 +15,15 @@ include_directories(
   ${PROJECT_BINARY_DIR}/src/libicalvcal
 )
 
+list(APPEND add_definitions ${LIBICAL_C_DEFINITIONS})
+
 #these are generated sources, but we keep them in the repo
 set(icalvcal_LIB_DEVSRCS vcc.c)
 
 ########### next target ###############
 
-set(
-  icalvcal_LIB_SRCS
+list(
+  APPEND icalvcal_LIB_SRCS
   icalvcal.h
   icalvcal.c
   vcc.h
@@ -36,11 +39,14 @@ add_library(
   ${LIBRARY_TYPE}
   ${icalvcal_LIB_SRCS}
 )
+add_dependencies(icalvcal ical-header)
 
 generate_export_header(icalvcal BASE_NAME libical_vcal)
 target_sources(icalvcal PRIVATE ${PROJECT_BINARY_DIR}/src/libicalvcal/libical_vcal_export.h)
 
-add_dependencies(icalvcal ical-header)
+target_compile_definitions(icalvcal PRIVATE ${add_definitions})
+target_include_directories(icalvcal PRIVATE ${include_directories})
+
 target_link_libraries(icalvcal ical)
 
 if(MSVC)

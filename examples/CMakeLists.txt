@@ -1,7 +1,8 @@
 # SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-include_directories(
+set(
+  include_directories
   ${PROJECT_BINARY_DIR}
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_BINARY_DIR}/src
@@ -10,6 +11,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src/libicalss
   ${PROJECT_BINARY_DIR}/src/libicalss
 )
+set(add_definitions ${LIBICAL_C_DEFINITIONS})
 
 ########### doesnothing target ###############
 
@@ -29,6 +31,10 @@ add_dependencies(
   icalss
   icalvcal
 )
+
+target_compile_definitions(doesnothing PRIVATE ${add_definitions})
+target_include_directories(doesnothing PRIVATE ${include_directories})
+
 if(LIBICAL_CXX_BINDINGS)
   # https://github.com/libical/libical/pull/656
   set_property(

@@ -2,23 +2,25 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
+list(APPEND VZIC_C_DEFINITIONS ${LIBICAL_C_DEFINITIONS})
+
 if(NOT PRODUCT_ID)
   set(PRODUCT_ID "-//citadel.org//NONSGML Citadel calendar//EN")
 endif()
 message(STATUS "PRODUCT_ID is ${PRODUCT_ID}")
-add_definitions(-DPRODUCT_ID=\"${PRODUCT_ID}\")
+list(APPEND VZIC_C_DEFINITIONS -DPRODUCT_ID=\"${PRODUCT_ID}\")
 
 if(NOT TZID_PREFIX)
   set(TZID_PREFIX "/citadel.org/%D_1/")
 endif()
 message(STATUS "TZID_PREFIX is ${TZID_PREFIX}")
-add_definitions(-DTZID_PREFIX=\"${TZID_PREFIX}\")
+list(APPEND VZIC_C_DEFINITIONS -DTZID_PREFIX=\"${TZID_PREFIX}\")
 
 option(CREATE_SYMLINK "Symbolically link the Link zone file to its authoritative zone" False)
 if(CREATE_SYMLINK)
-  add_definitions(-DCREATE_SYMLINK=1)
+  list(APPEND VZIC_C_DEFINITIONS -DCREATE_SYMLINK=1)
 else()
-  add_definitions(-DCREATE_SYMLINK=0)
+  list(APPEND VZIC_C_DEFINITIONS -DCREATE_SYMLINK=0)
 endif()
 
 option(
@@ -27,9 +29,9 @@ option(
   False
 )
 if(IGNORE_TOP_LEVEL_LINK)
-  add_definitions(-DIGNORE_TOP_LEVEL_LINK=1)
+  list(APPEND VZIC_C_DEFINITIONS -DIGNORE_TOP_LEVEL_LINK=1)
 else()
-  add_definitions(-DIGNORE_TOP_LEVEL_LINK=0)
+  list(APPEND VZIC_C_DEFINITIONS -DIGNORE_TOP_LEVEL_LINK=0)
 endif()
 
 set(
@@ -44,7 +46,8 @@ set(
   vzic-parse.h
 )
 
-include_directories(
+set(
+  include_directories
   ${PROJECT_BINARY_DIR}
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_BINARY_DIR}/src
@@ -54,6 +57,8 @@ include_directories(
 
 add_executable(vzic ${VZIC_SRCS})
 target_compile_options(vzic PRIVATE ${GLIB_CFLAGS})
+target_compile_definitions(vzic PRIVATE ${VZIC_C_DEFINITIONS})
+target_include_directories(vzic PRIVATE ${include_directories})
 target_link_libraries(vzic PRIVATE ${GLIB_LDFLAGS})
 
 if(LIBICAL_BUILD_TESTING)
@@ -63,8 +68,15 @@ if(LIBICAL_BUILD_TESTING)
     test-vzic.c
     ${VZIC_SRCS}
   )
-  target_compile_definitions(test-vzic PRIVATE -DVZIC_LIBRARY)
   target_compile_options(test-vzic PRIVATE ${GLIB_CFLAGS})
+  target_compile_definitions(
+    test-vzic
+    PRIVATE
+      -DVZIC_LIBRARY
+      ${VZIC_C_DEFINITIONS}
+      ${LIBICAL_TESTING_C_DEFINITIONS}
+  )
+  target_include_directories(test-vzic PRIVATE ${include_directories})
   target_link_libraries(
     test-vzic
     PRIVATE

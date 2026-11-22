@@ -3,19 +3,28 @@
 
 include(CTest)
 
-include_directories(
-  ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}/src
-  ${PROJECT_BINARY_DIR}/src
-  ${PROJECT_SOURCE_DIR}/src/libicalvcard
-  ${PROJECT_BINARY_DIR}/src/libicalvcard
-  ${PROJECT_SOURCE_DIR}/src/test
-)
-
 #macro to build (but do not create a test)
 macro(vcbuildme _name _srcs)
+  set(
+    include_directories
+    ${PROJECT_BINARY_DIR}
+    ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_BINARY_DIR}/src
+    ${PROJECT_SOURCE_DIR}/src/libical
+    ${PROJECT_BINARY_DIR}/src/libical
+    ${PROJECT_SOURCE_DIR}/src/libicalvcard
+    ${PROJECT_BINARY_DIR}/src/libicalvcard
+    ${PROJECT_SOURCE_DIR}/src/test
+  )
+  list(APPEND add_definitions ${LIBICAL_C_DEFINITIONS} ${LIBICAL_TESTING_C_DEFINITIONS})
   add_executable(${_name} ${_srcs})
   add_dependencies(${_name} icalvcard)
+  target_compile_definitions(
+    ${_name}
+    PRIVATE
+      ${add_definitions}
+  )
+  target_include_directories(${_name} PRIVATE ${include_directories})
   target_link_libraries(${_name} icalvcard)
 endmacro()
 
@@ -31,7 +40,12 @@ vctestme(vcard_encode vcard_test_encode.c)
 
 set(fuzz_sources)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
-  set(fuzz_sources ${PROJECT_SOURCE_DIR}/src/test/test-malloc.c)
+  set(
+    fuzz_sources
+    ${PROJECT_SOURCE_DIR}/src/test/regression.h
+    ${PROJECT_SOURCE_DIR}/src/test/regression-utils.c
+    ${PROJECT_SOURCE_DIR}/src/test/test-malloc.c
+  )
 endif()
 set(
   fuzz1_SRCS
