@@ -3857,6 +3857,7 @@ struct icaltimetype icalrecur_iterator_next(icalrecur_iterator *impl)
     /* If initial time is valid, return it */
     if ((impl->occurrence_no == 0) &&
         (icaltime_compare(impl->last, impl->istart) >= 0) &&
+        (icaltime_is_null_time(impl->iend) || icaltime_compare(impl->last, impl->iend) < 0) &&
         check_setpos(impl, 1) &&
         check_contracting_rules(impl)) {
         impl->occurrence_no++;
@@ -4058,6 +4059,27 @@ static void set_bydata_start(icalrecurrence_iterator_by_data *bydata, int tfield
     }
 }
 
+/** Number of HOURLY, MINUTELY or SECONDLY periods from DTSTART to istart,
+    counted at the time of day set_start() uses for istart */
+static long periods_from_dtstart(icalrecur_iterator *impl)
+{
+    icalrecurrencetype_frequency freq = impl->rule->freq;
+    int hour, minute, second;
+    long n = day_diff(impl, impl->rstart, impl->istart);
+
+    __get_start_time(impl, impl->istart, &hour, &minute, &second);
+
+    n = n * 24 + (hour - impl->rstart.hour);
+    if (freq == ICAL_HOURLY_RECURRENCE) {
+        return n;
+    }
+    n = n * 60 + (minute - impl->rstart.minute);
+    if (freq == ICAL_MINUTELY_RECURRENCE) {
+        return n;
+    }
+    return n * 60 + (second - impl->rstart.second);
+}
+
 static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 {
     icalrecurrencetype_frequency freq = impl->rule->freq;
@@ -4067,6 +4089,11 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
     impl->istart = start;
     impl->occurrence_no = 0;
     impl->days_index = ICAL_YEARDAYS_MASK_SIZE;
+
+    /* Start each BY* rule over at its first value, as for a new iterator */
+    for (int byrule = 0; byrule < ICAL_BY_NUM_PARTS; byrule++) {
+        impl->bydata[byrule].index = 0;
+    }
 
     /* Set Gregorian start date */
     set_start(impl, start);
@@ -4212,7 +4239,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 
     case ICAL_HOURLY_RECURRENCE:
         if ((interval > 1) &&
-            (diff = abs(impl->istart.hour - impl->rstart.hour) % interval)) {
+            (diff = (int)(periods_from_dtstart(impl) % interval))) {
             /* Specified hour doesn't match interval -
                bump start to next hour that matches interval */
             increment_hour(impl, interval - diff);
@@ -4222,7 +4249,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 
     case ICAL_MINUTELY_RECURRENCE:
         if ((interval > 1) &&
-            (diff = abs(impl->istart.minute - impl->rstart.minute) % interval)) {
+            (diff = (int)(periods_from_dtstart(impl) % interval))) {
             /* Specified minute doesn't match interval -
                bump start to next minute that matches interval */
             increment_minute(impl, interval - diff);
@@ -4232,7 +4259,7 @@ static bool __iterator_set_start(icalrecur_iterator *impl, icaltimetype start)
 
     case ICAL_SECONDLY_RECURRENCE:
         if ((interval > 1) &&
-            (diff = abs(impl->istart.second - impl->rstart.second) % interval)) {
+            (diff = (int)(periods_from_dtstart(impl) % interval))) {
             /* Specified second doesn't match interval -
                bump start to next second that matches interval */
             increment_second(impl, interval - diff);

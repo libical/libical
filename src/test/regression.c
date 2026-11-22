@@ -373,8 +373,8 @@ static void test_utf8(void)
         "VERSION:2.0\n"
         "METHOD:PUBLISH\n"
         "BEGIN:VEVENT\n"
-        "SUMMARY:  áó aáóaáó aáä\n"
-        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá \n"
+        "SUMMARY:áó aáóaáó aáä\n"
+        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá\n"
         "END:VEVENT\n"
         "END:VCALENDAR\n";
 
@@ -400,8 +400,8 @@ static void test_utf8(void)
         "VERSION:2.0\n"
         "METHOD:PUBLISH\n"
         "BEGIN:VEVENT\n"
-        "SUMMARY:  áó aáóaáó aáä\n"
-        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá \n"
+        "SUMMARY:áó aáóaáó aáä\n"
+        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá\n"
         "END:VEVENT\n"
         "END:VCALENDAR\n";
 
@@ -1134,6 +1134,97 @@ static void test_recur_iterator_date_subdaily(void)
 
     icalerror_clear_errno();
     icalerror_set_errors_are_fatal(estate);
+}
+
+/* After icalrecur_iterator_set_start() an iterator must return the occurrences at
+   or after the new start, the same as a forward iteration from DTSTART, whatever it
+   returned before. */
+static void test_recur_iterator_set_start_rule(const char *rule, const char *dtstart_str,
+                                               const char *start_str, int nbefore)
+{
+    struct icalrecurrencetype *recurrence = icalrecurrencetype_new_from_string(rule);
+    icaltimetype dtstart = icaltime_from_string(dtstart_str);
+    icaltimetype start = icaltime_from_string(start_str);
+    icaltimetype expected[8];
+    int nexpected = 0;
+
+    icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, dtstart);
+    for (icaltimetype next = icalrecur_iterator_next(iterator);
+         !icaltime_is_null_time(next) && nexpected < 8;
+         next = icalrecur_iterator_next(iterator)) {
+        if (icaltime_compare(next, start) >= 0) {
+            expected[nexpected++] = next;
+        }
+    }
+    icalrecur_iterator_free(iterator);
+
+    iterator = icalrecur_iterator_new(recurrence, dtstart);
+    for (int i = 0; i < nbefore; i++) {
+        (void)icalrecur_iterator_next(iterator);
+    }
+    ok("icalrecur_iterator_set_start", icalrecur_iterator_set_start(iterator, start));
+    bool same = (nexpected == 8);
+    for (int i = 0; i < nexpected; i++) {
+        if (icaltime_compare(icalrecur_iterator_next(iterator), expected[i]) != 0) {
+            same = false;
+        }
+    }
+    icalrecur_iterator_free(iterator);
+    ok(rule, same);
+
+    icalrecurrencetype_unref(recurrence);
+}
+
+/* Moving an iterator that already returned occurrences must not skip any after the new start */
+static void test_recur_iterator_set_start_after_next(void)
+{
+    test_recur_iterator_set_start_rule("FREQ=DAILY;BYHOUR=9,12,15", "20260105T090000", "20260106T090000", 2);
+    test_recur_iterator_set_start_rule("FREQ=HOURLY;BYHOUR=8,10,12;BYMINUTE=0,30", "20260105T080000", "20260106T080000", 2);
+    test_recur_iterator_set_start_rule("FREQ=WEEKLY;INTERVAL=2;BYDAY=TU,TH;WKST=SU", "20260106T100000", "20260107T100000", 2);
+    test_recur_iterator_set_start_rule("FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=2", "20260106T090000", "20260107T090000", 1);
+}
+
+/* Moving to another day must keep the INTERVAL counted from DTSTART when it does not divide a day */
+static void test_recur_iterator_set_start_interval(void)
+{
+    test_recur_iterator_set_start_rule("FREQ=HOURLY;INTERVAL=5", "20260105T090000", "20260106T090000", 0);
+    test_recur_iterator_set_start_rule("FREQ=MINUTELY;INTERVAL=7", "20260105T090000", "20260106T100000", 0);
+    test_recur_iterator_set_start_rule("FREQ=MINUTELY;INTERVAL=7;BYHOUR=10", "20260105T090000", "20260106T100000", 0);
+    test_recur_iterator_set_start_rule("FREQ=SECONDLY;INTERVAL=7", "20260105T090000", "20260106T090100", 0);
+    test_recur_iterator_set_start_rule("FREQ=HOURLY;INTERVAL=6", "20260105T090000", "20260106T090000", 0);
+}
+
+static void test_recur_iterator_first_before_end_case(const char *what, const char *end_str,
+                                                      const char *from_str, const char *expected)
+{
+    struct icalrecurrencetype *recurrence = icalrecurrencetype_new_from_string("FREQ=DAILY;INTERVAL=3");
+    icalrecur_iterator *iterator = icalrecur_iterator_new(recurrence, icaltime_from_string("20260105T090000"));
+    char got[256] = "";
+
+    if (from_str) {
+        ok(what, icalrecur_iterator_set_range(iterator, icaltime_from_string(from_str), icaltime_from_string(end_str)));
+    } else {
+        ok(what, icalrecur_iterator_set_end(iterator, icaltime_from_string(end_str)));
+    }
+    for (icaltimetype next = icalrecur_iterator_next(iterator);
+         !icaltime_is_null_time(next) && strlen(got) < 200;
+         next = icalrecur_iterator_next(iterator)) {
+        strcat(got, got[0] ? " " : "");
+        strcat(got, icaltime_as_ical_string(next));
+    }
+    str_is(what, got, expected);
+
+    icalrecur_iterator_free(iterator);
+    icalrecurrencetype_unref(recurrence);
+}
+
+/* The first occurrence must not be returned when it is not before the end */
+static void test_recur_iterator_first_before_end(void)
+{
+    test_recur_iterator_first_before_end_case("end before DTSTART", "20260101T090000", NULL, "");
+    test_recur_iterator_first_before_end_case("end at DTSTART", "20260105T090000", NULL, "");
+    test_recur_iterator_first_before_end_case("end at the second occurrence", "20260108T090000", NULL, "20260105T090000");
+    test_recur_iterator_first_before_end_case("range without occurrences", "20260106T110000", "20260106T090000", "");
 }
 
 static void test_memory(void)
@@ -4571,8 +4662,8 @@ static void test_langbind(void)
     static const char test_str[] =
         "BEGIN:VEVENT\n"
         "ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP:MAILTO:employee-A@host.com\n"
-        "COMMENT: Comment that \n spans a line\n"
-        "COMMENT: Comment with \"quotable\" \'characters\' and other \t bad magic \n things \f Yeah.\n"
+        "COMMENT:Comment that \n spans a line\n"
+        "COMMENT:Comment with \"quotable\" \'characters\' and other \t bad magic \n things \f Yeah.\n"
         "DTSTART:19970101T120000\n"
         "DTSTART:19970101T120000Z\n"
         "DTSTART:19970101\n"
@@ -7796,6 +7887,116 @@ static void test_icaltime_proper_zone(void)
     ok("first is the same as the second after second's convert", (icaltime_compare(first, second) == 0));
 }
 
+static void test_text_value_whitespace(void)
+{
+    const struct {
+        const char *line;
+        const char *value;
+    } cases[] = {
+        {"SUMMARY: leading and trailing \t", " leading and trailing \t"},
+        {"DESCRIPTION:\ttext\t ", "\ttext\t "},
+        {"LOCATION: ", " "},
+        {"X-TEXT;VALUE=TEXT: text ", " text "},
+        {"DESCRIPTION: first \r\n  second\t\r\n", " first  second\t"},
+    };
+    const char *utf8_calendars[] = {
+        "BEGIN:VCALENDAR\n"
+        "PRODID:-//Ximian//NONSGML Evolution Calendar//EN\n"
+        "VERSION:2.0\n"
+        "METHOD:PUBLISH\n"
+        "BEGIN:VEVENT\n"
+        "SUMMARY:  áó aáóaáó aáä\n"
+        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá \n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n",
+        "\xEF\xBB\xBF"
+        "BEGIN:VCALENDAR\n"
+        "PRODID:-//Ximian//NONSGML Evolution Calendar//EN\n"
+        "VERSION:2.0\n"
+        "METHOD:PUBLISH\n"
+        "BEGIN:VEVENT\n"
+        "SUMMARY:  áó aáóaáó aáä\n"
+        "LOCATION:áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá \n"
+        "END:VEVENT\n"
+        "END:VCALENDAR\n"};
+    size_t i;
+
+    for (i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+        icalproperty *prop = icalproperty_new_from_string(cases[i].line);
+        ok("TEXT property parsed", prop != NULL);
+        if (!prop) {
+            continue;
+        }
+        str_is("TEXT whitespace preserved", icalvalue_get_text(icalproperty_get_value(prop)), cases[i].value);
+        char *serialized = icalproperty_as_ical_string_r(prop);
+        icalproperty *copy = icalproperty_new_from_string(serialized);
+        ok("serialized TEXT property parsed", copy != NULL);
+        if (copy) {
+            str_is("TEXT whitespace round trip", icalvalue_get_text(icalproperty_get_value(copy)), cases[i].value);
+            icalproperty_free(copy);
+        }
+        icalmemory_free_buffer(serialized);
+        icalproperty_free(prop);
+    }
+
+    for (i = 0; i < sizeof(utf8_calendars) / sizeof(utf8_calendars[0]); i++) {
+        icalcomponent *calendar = icalcomponent_new_from_string(utf8_calendars[i]);
+        ok("whitespace-bearing UTF-8 calendar parsed", calendar != NULL);
+        if (!calendar) {
+            continue;
+        }
+        str_is("UTF-8 SUMMARY whitespace preserved", icalcomponent_get_summary(calendar), "  áó aáóaáó aáä");
+        str_is("UTF-8 LOCATION whitespace preserved", icalcomponent_get_location(calendar),
+               "áóaáóaáóaä  áóaáóaáóaáóaáóaáóaáóaáóaáóaáó  aáóaáóaáóaáóaá ");
+        icalcomponent_free(calendar);
+    }
+
+    icalcomponent *comment_comp = icalcomponent_new_from_string(
+        "BEGIN:VEVENT\n"
+        "COMMENT: Comment that \n spans a line\n"
+        "COMMENT: Comment with \"quotable\" 'characters' and other \t bad magic \n things \f Yeah.\n"
+        "END:VEVENT\n");
+    ok("whitespace-bearing COMMENT fixture parsed", comment_comp != NULL);
+    if (comment_comp) {
+        str_is("folded COMMENT whitespace preserved", icalcomponent_as_ical_string(comment_comp),
+               "BEGIN:VEVENT\r\n"
+               "COMMENT: Comment that spans a line\r\n"
+               "COMMENT: Comment with \"quotable\" 'characters' and other \t bad magic \r\n"
+               " things  Yeah.\r\n"
+               "END:VEVENT\r\n");
+        icalcomponent_free(comment_comp);
+    }
+
+    char text[240];
+    memset(text, ' ', sizeof(text) - 1);
+    memcpy(text + 90, "folded", 6);
+    text[sizeof(text) - 2] = '\t';
+    text[sizeof(text) - 1] = '\0';
+    icalcomponent *comp = icalcomponent_new_vevent();
+    icalcomponent_set_description(comp, text);
+    char *serialized = icalcomponent_as_ical_string_r(comp);
+    icalcomponent *copy = icalcomponent_new_from_string(serialized);
+    ok("long folded TEXT component parsed", copy != NULL);
+    str_is("long folded whitespace round trip", icalcomponent_get_description(copy), text);
+    icalcomponent_free(copy);
+    icalmemory_free_buffer(serialized);
+    icalcomponent_free(comp);
+
+    comp = icalcomponent_new_from_string("BEGIN:VEVENT\r\nCATEGORIES: first , second \t\r\nEND:VEVENT\r\n");
+    ok("multi-valued TEXT parsed", comp != NULL);
+    int_is("both TEXT values kept", icalcomponent_count_properties(comp, ICAL_CATEGORIES_PROPERTY), 2);
+    icalproperty *prop = icalcomponent_get_first_property(comp, ICAL_CATEGORIES_PROPERTY);
+    str_is("first TEXT value whitespace", icalproperty_get_categories(prop), " first ");
+    prop = icalcomponent_get_next_property(comp, ICAL_CATEGORIES_PROPERTY);
+    str_is("second TEXT value whitespace", icalproperty_get_categories(prop), " second \t");
+    icalcomponent_free(comp);
+
+    prop = icalproperty_new_from_string("URL: https://example.com/ \t");
+    ok("non-TEXT property parsed", prop != NULL);
+    str_is("non-TEXT whitespace handling preserved", icalproperty_get_url(prop), "https://example.com/");
+    icalproperty_free(prop);
+}
+
 static void test_internal_limits(void)
 {
     /* follow the _MAX* defaults at the top of icalllimits.c */
@@ -9129,6 +9330,9 @@ int main(int argc, const char *argv[])
     test_run("Test icalrecur_iterator reverse range without UNTIL", test_recur_iterator_reverse_range, do_test, do_header);
     test_run("Test icalrecur_iterator_prev after the end", test_recur_iterator_prev_after_end, do_test, do_header);
     test_run("Test icalrecur_iterator with a DATE DTSTART and sub-daily frequency", test_recur_iterator_date_subdaily, do_test, do_header);
+    test_run("Test icalrecur_iterator_set_start after next", test_recur_iterator_set_start_after_next, do_test, do_header);
+    test_run("Test icalrecur_iterator_set_start with an INTERVAL", test_recur_iterator_set_start_interval, do_test, do_header);
+    test_run("Test icalrecur_iterator first occurrence and the end", test_recur_iterator_first_before_end, do_test, do_header);
     test_run("Test Convenience", test_convenience, do_test, do_header);
     test_run("Test classify ", test_classify, do_test, do_header);
     test_run("Test Iterators", test_iterators, do_test, do_header);
@@ -9208,6 +9412,7 @@ int main(int argc, const char *argv[])
     test_run("Test icaltime proper zone set", test_icaltime_proper_zone, do_test, do_header);
     test_run("Test property values from string", test_value_from_string, do_test, do_header);
     test_run("Test normalizing time", test_icaltime_normalize, do_test, do_header);
+    test_run("Test whitespace in TEXT values", test_text_value_whitespace, do_test, do_header);
     test_run("Test independent parser limits", test_independent_parser_limits, do_test, do_header);
     test_run("Test setting/getting internal limits", test_internal_limits, do_test, do_header);
     test_run("Test normalizing duration", test_icaldurationtype_normalize, do_test, do_header);

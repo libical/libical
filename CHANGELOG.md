@@ -9,9 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - libical:
   - C++ bindings now throw strings rather than int exceptions.
+  - Preserve leading and trailing whitespace in iCalendar TEXT property values,
+    including whitespace at folded-line boundaries.
+  - `icalrecur_iterator_set_start()` and `icalrecur_iterator_set_range()` start every BY* rule over
+    at its first value. Moving an iterator that already returned occurrences skipped occurrences in
+    the first period after the new start, and with BYSETPOS returned days at the wrong position.
+  - `icalrecur_iterator_set_start()` and `icalrecur_iterator_set_range()` count the INTERVAL of an
+    HOURLY, MINUTELY or SECONDLY rule from DTSTART. Moving to another day returned times that are
+    not occurrences when the INTERVAL does not divide a day (e.g. `FREQ=HOURLY;INTERVAL=5`).
   - Add independent runtime limits for vCard text lists, calendar component nesting and
     multi-valued parameters through `icallimit_get()` and `icallimit_set()`, preserving
     the existing defaults and boundary behavior.
+  - `icalrecur_iterator_next()` no longer returns the first occurrence after creating or moving the
+    iterator when it is at or after the end set by `icalrecur_iterator_set_end()` or by a forward
+    range of `icalrecur_iterator_set_range()`.
 
 ## [4.0.9] - Unreleased
 
