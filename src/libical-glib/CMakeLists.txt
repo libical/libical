@@ -173,8 +173,10 @@ list(
   ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.h
 )
 
-add_custom_command(
-  OUTPUT
+add_custom_target(
+  glibSources
+  ALL
+  BYPRODUCTS
     ${LIBICAL_GLIB_SOURCES}
     ${CMAKE_CURRENT_BINARY_DIR}/i-cal-forward-declarations.h
     ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c
@@ -208,6 +210,7 @@ add_library(
   ${LIBRARY_TYPE}
   ${LIBICAL_GLIB_SOURCES}
 )
+add_dependencies(ical-glib glibSources)
 
 generate_export_header(ical-glib BASE_NAME libical_glib)
 target_sources(ical-glib PRIVATE ${PROJECT_BINARY_DIR}/src/libical/libical_ical_export.h)
@@ -423,8 +426,17 @@ set_target_properties(
 install(TARGETS ical-glib EXPORT icalTargets DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
-
-install(FILES ${LIBICAL_GLIB_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/libical-glib)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.5.0")
+  install(
+    FILES
+      ${LIBICAL_GLIB_HEADERS}
+    DESTINATION ${INCLUDE_INSTALL_DIR}/libical-glib
+    BUILD_DEPENDS
+    glibSources
+  )
+else()
+  install(FILES ${LIBICAL_GLIB_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/libical-glib)
+endif()
 
 ########### create and install pkg-config file #########
 
