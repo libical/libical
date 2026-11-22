@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - libical:
   - C++ bindings now throw strings rather than int exceptions.
+  - Preserve leading and trailing whitespace in iCalendar TEXT property values,
+    including whitespace at folded-line boundaries.
   - `icalrecur_iterator_set_start()` and `icalrecur_iterator_set_range()` start every BY* rule over
     at its first value. Moving an iterator that already returned occurrences skipped occurrences in
     the first period after the new start, and with BYSETPOS returned days at the wrong position.
