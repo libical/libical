@@ -420,9 +420,14 @@ static vcardvalue *vcardvalue_new_from_string_with_error(vcardvalue_kind kind,
     }
 
     case VCARD_FLOAT_VALUE: {
+        char num[64] = {0};
         char *s_end;
-        const float v = strtof(str, &s_end);
-        if (str != s_end) {
+        float v;
+
+        /* strtof() expects the decimal separator of the current locale */
+        (void)simple_str_to_doublestr(str, num, (int)sizeof(num), NULL);
+        v = strtof(num, &s_end);
+        if (num != s_end) {
             value = vcardvalue_new_float(v);
         }
         break;
@@ -860,24 +865,30 @@ static char *vcardvalue_float_as_vcard_string_r(const vcardvalue *value)
 {
     float data;
     char *str;
-    char *old_locale;
+    const struct lconv *loc_data;
 
     icalerror_check_arg_rz((value != 0), "value");
     data = vcardvalue_get_float(value);
-
-    /* bypass current locale in order to make
-       sure snprintf uses a '.' as a separator
-       set locate to 'C' and keep old locale */
-    old_locale = icalmemory_strdup(setlocale(LC_NUMERIC, NULL));
-    (void)setlocale(LC_NUMERIC, "C");
 
     str = (char *)icalmemory_new_buffer(40);
 
     snprintf(str, 40, "%f", data);
 
-    /* restore saved locale */
-    (void)setlocale(LC_NUMERIC, old_locale);
-    icalmemory_free_buffer(old_locale);
+    /* snprintf uses the decimal separator of the current locale; the value
+       always needs a '.'. Swap it here rather than calling setlocale(), which
+       changes the locale of the whole process and is not thread safe. */
+    loc_data = localeconv();
+    if (loc_data && loc_data->decimal_point && loc_data->decimal_point[0] &&
+        strcmp(loc_data->decimal_point, ".") != 0) {
+        char *dp = strstr(str, loc_data->decimal_point);
+
+        if (dp) {
+            const size_t dp_len = strlen(loc_data->decimal_point);
+
+            *dp = '.';
+            memmove(dp + 1, dp + dp_len, strlen(dp + dp_len) + 1);
+        }
+    }
 
     return str;
 }

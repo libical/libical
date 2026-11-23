@@ -33,6 +33,7 @@
 #include "libicalvcal/vcc.h"
 
 #include <assert.h>
+#include <locale.h>
 #include <stdlib.h>
 
 #define TESTS_TZID_PREFIX "/softwarestudio.org/tests/"
@@ -9080,6 +9081,40 @@ static void test_truncate_vtimezone_no_onset_in_window(void)
     icalcomponent_free(vtz);
 }
 
+static void test_float_value_locale(void)
+{
+    /* FLOAT values must use '.' regardless of the current locale. Parsing
+       used to go through the locale-dependent strtof(), so "1.5" became 1.0
+       under a locale with a ',' decimal separator, and writing a FLOAT used
+       to switch the whole process to the C locale with setlocale(). */
+    const char *locales[] = {"de_DE.UTF-8", "de_DE.utf8", "de_DE", "fr_FR.UTF-8", "fr_FR.utf8", "fr_FR", NULL};
+    char *old_locale = strdup(setlocale(LC_NUMERIC, NULL));
+    const char *loc = NULL;
+    icalvalue *value;
+    int i;
+
+    for (i = 0; locales[i] != NULL; i++) {
+        if (setlocale(LC_NUMERIC, locales[i]) != NULL && localeconv()->decimal_point[0] == ',') {
+            loc = locales[i];
+            break;
+        }
+    }
+
+    value = icalvalue_new_from_string(ICAL_FLOAT_VALUE, "1.5");
+    ok("FLOAT value parsed", (value != 0));
+    if (value) {
+        ok("FLOAT value is 1.5", (icalvalue_get_float(value) == 1.5F));
+        str_is("FLOAT value uses '.'", icalvalue_as_ical_string(value), "1.500000");
+        icalvalue_free(value);
+    }
+    if (loc) {
+        str_is("FLOAT value leaves the locale alone", setlocale(LC_NUMERIC, NULL), loc);
+    }
+
+    (void)setlocale(LC_NUMERIC, old_locale);
+    free(old_locale);
+}
+
 static void test_dtend_duration_due_validation(void)
 {
     icalcomponent *ical;
@@ -9530,6 +9565,7 @@ int main(int argc, const char *argv[])
     test_run("Test zoneinfo geo coordinates", test_geo_zoneinfo_coordinates, do_test, do_header);
     test_run("Test truncate VTIMEZONE with RSCALE UNTIL", test_truncate_vtimezone_rscale_until, do_test, do_header);
     test_run("Test truncate VTIMEZONE with no onset in window", test_truncate_vtimezone_no_onset_in_window, do_test, do_header);
+    test_run("Test FLOAT value locale", test_float_value_locale, do_test, do_header);
 
 #if defined(LIBICAL_CXX_BINDINGS)
     test_run("Test C++ API", test_cxx, do_test, do_header);
