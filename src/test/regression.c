@@ -4329,6 +4329,60 @@ static void test_fileset(void)
     /*icalgauge_free(g); */
 #endif
 }
+
+static void test_fileset_safe_save_backup(void)
+{
+#if defined(HAVE_UNLINK) && !defined(_WIN32)
+    const char *path = "test_fileset_backup.ics";
+    const char *backup = "test_fileset_backup.ics.bak";
+    const char *other = "test_fileset_backup.other";
+    icalfileset_options options = {O_RDWR | O_CREAT, 0600, 1, NULL};
+    mode_t old_umask = umask(022);
+    struct stat sbuf;
+    char buf[32] = {0};
+    icalset *fs;
+    FILE *fp;
+
+    unlink(path);
+    unlink(backup);
+    unlink(other);
+
+    fs = icalset_new(ICAL_FILE_SET, path, &options);
+    ok("icalset_new() with safe_saves", (fs != NULL));
+    assert(fs != 0);
+
+    /* The backup must not get more permissions than the calendar file */
+    (void)icalfileset_add_component(fs, make_component(0));
+    ok("first icalfileset_commit()", (icalfileset_commit(fs) == ICAL_NO_ERROR));
+    ok("stat() the backup", (lstat(backup, &sbuf) == 0));
+    int_is("backup permissions", (int)(sbuf.st_mode & 0777), 0600);
+
+    /* A symlink at the backup path must not be followed */
+    fp = fopen(other, "w");
+    assert(fp != 0);
+    fputs("unchanged\n", fp);
+    fclose(fp);
+    unlink(backup);
+    ok("symlink() the backup path", (symlink(other, backup) == 0));
+
+    (void)icalfileset_add_component(fs, make_component(1));
+    ok("second icalfileset_commit()", (icalfileset_commit(fs) == ICAL_NO_ERROR));
+    ok("backup is a regular file", (lstat(backup, &sbuf) == 0 && S_ISREG(sbuf.st_mode)));
+    int_is("backup permissions", (int)(sbuf.st_mode & 0777), 0600);
+
+    fp = fopen(other, "r");
+    assert(fp != 0);
+    ok("read the symlink target", (fgets(buf, (int)sizeof(buf), fp) != NULL));
+    fclose(fp);
+    str_is("symlink target untouched", buf, "unchanged\n");
+
+    icalset_free(fs);
+    (void)umask(old_umask);
+    unlink(path);
+    unlink(backup);
+    unlink(other);
+#endif
+}
 #if defined(LIBICAL_BUILD_TESTING_LONGRUNNING)
 static void microsleep(int us)
 { /*us is in microseconds */
@@ -9333,6 +9387,7 @@ int main(int argc, const char *argv[])
     test_run("Test ICal Set", test_icalset, do_test, do_header);
     test_run("Test File Set", test_fileset, do_test, do_header);
     test_run("Test File Set (Extended)", test_fileset_extended, do_test, do_header);
+    test_run("Test File Set safe save backup", test_fileset_safe_save_backup, do_test, do_header);
     test_run("Test Dir Set", test_dirset, do_test, do_header);
     test_run("Test Dir Set (Extended)", test_dirset_extended, do_test, do_header);
     test_run("Test Dir Set fetch by UID", test_dirset_fetch, do_test, do_header);
