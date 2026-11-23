@@ -69,7 +69,6 @@ if (test -f "/etc/fedora-release"); then
   WITH_JAVA=0
   export JAVA_HOME=/usr/lib/jvm/java-latest-openjdk
 fi
-export ASAN_OPTIONS="verify_asan_link_order=0" #link_order is needed with different ld on Fedora (like gold)
 
 CMAKE_STRICT=""
 CMAKE_VERSION4_OPTIONS=""
