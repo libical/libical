@@ -8975,7 +8975,7 @@ static void test_float_value_locale(void)
     value = icalvalue_new_from_string(ICAL_FLOAT_VALUE, "1.5");
     ok("FLOAT value parsed", (value != 0));
     if (value) {
-        ok("FLOAT value is 1.5", (icalvalue_get_float(value) == 1.5f));
+        ok("FLOAT value is 1.5", (icalvalue_get_float(value) == 1.5F));
         str_is("FLOAT value uses '.'", icalvalue_as_ical_string(value), "1.500000");
         icalvalue_free(value);
     }
