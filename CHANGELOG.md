@@ -31,6 +31,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.9] - Unreleased
 
+- libical, libicalvcard:
+  - FLOAT values are parsed and written with a `.` decimal separator whatever the current locale.
+    Parsing used `strtof()`, so `1.5` became 1.0 under e.g. a German locale, and writing a FLOAT
+    switched the whole process to the C locale with `setlocale()`, which is not thread safe and
+    could leave other threads (or the process) formatting numbers in the wrong locale.
 - libicalss: `icalfileset_commit()` with `safe_saves` wrote the `.bak` backup with `fopen()`, so a
   calendar opened with mode 0600 got a backup readable by other users, and a symlink already at
   the backup path was followed and its target overwritten with the calendar data. The backup now
