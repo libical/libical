@@ -23,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `icalrecur_iterator_next()` no longer returns the first occurrence after creating or moving the
     iterator when it is at or after the end set by `icalrecur_iterator_set_end()` or by a forward
     range of `icalrecur_iterator_set_range()`.
+  - A forward range set by `icalrecur_iterator_set_range()` now includes 'to', as documented.
+    An occurrence at 'to' was not returned.
+  - A reverse range set by `icalrecur_iterator_set_range()` no longer depends on an end left by an
+    earlier range or `icalrecur_iterator_set_end()` on the same iterator. Before 4.0.7 such a
+    reverse range never returned; since then it skipped the last occurrence before 'from'.
 
 ## [4.0.9] - Unreleased
 
@@ -31,6 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     Parsing used `strtof()`, so `1.5` became 1.0 under e.g. a German locale, and writing a FLOAT
     switched the whole process to the C locale with `setlocale()`, which is not thread safe and
     could leave other threads (or the process) formatting numbers in the wrong locale.
+- libicalss: `icalfileset_commit()` with `safe_saves` wrote the `.bak` backup with `fopen()`, so a
+  calendar opened with mode 0600 got a backup readable by other users, and a symlink already at
+  the backup path was followed and its target overwritten with the calendar data. The backup now
+  gets no more permissions than the calendar file and replaces whatever was at that path.
+- TBD
 
 ## [4.0.8] - 2026-11-14
 
