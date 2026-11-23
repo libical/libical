@@ -4265,7 +4265,7 @@ static void test_fileset_safe_save_backup(void)
 
     fp = fopen(other, "r");
     assert(fp != 0);
-    (void)fgets(buf, (int)sizeof(buf), fp);
+    ok("read the symlink target", (fgets(buf, (int)sizeof(buf), fp) != NULL));
     fclose(fp);
     str_is("symlink target untouched", buf, "unchanged\n");
 
