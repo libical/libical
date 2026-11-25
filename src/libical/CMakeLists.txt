@@ -1,22 +1,23 @@
 # SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-include_directories(
+set(
+  include_directories
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
-  include_directories(${PROJECT_SOURCE_DIR}/src/test)
+  list(APPEND include_directories ${PROJECT_SOURCE_DIR}/src/test)
 endif()
-
 if(ICU_FOUND)
-  include_directories(${ICU_INCLUDE_DIRS})
+  list(APPEND include_directories ${ICU_INCLUDE_DIRS})
 endif()
 
 set(PACKAGE_DATA_DIR "${CMAKE_INSTALL_PREFIX}/share/libical")
-add_definitions(-DPACKAGE_DATA_DIR="${PACKAGE_DATA_DIR}")
+set(add_definitions -DPACKAGE_DATA_DIR="${PACKAGE_DATA_DIR}")
+list(APPEND add_definitions ${LIBICAL_C_DEFINITIONS})
 
 set(ICALSCRIPTS ${PROJECT_SOURCE_DIR}/scripts/)
 set(BUILT_HEADERS) #list of derived headers we build
@@ -298,12 +299,13 @@ add_library(
   ${LIBRARY_TYPE}
   ${ical_LIB_SRCS}
 )
+add_dependencies(ical ical-header)
 
 generate_export_header(ical BASE_NAME libical_ical)
 target_sources(ical PRIVATE ${PROJECT_BINARY_DIR}/src/libical/libical_ical_export.h)
 
-add_dependencies(ical ical-header)
-
+target_compile_definitions(ical PRIVATE ${add_definitions})
+target_include_directories(ical PRIVATE ${include_directories})
 target_include_directories(ical INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
 
 if(DEFINED CMAKE_THREAD_LIBS_INIT)
@@ -374,11 +376,14 @@ if(LIBICAL_CXX_BINDINGS)
     ${LIBRARY_TYPE}
     ${icalcxx_LIB_SRCS}
   )
+  add_dependencies(ical_cxx ical-header)
 
   generate_export_header(ical_cxx BASE_NAME libical_ical_cxx)
   target_sources(ical_cxx PRIVATE ${PROJECT_BINARY_DIR}/src/libical/libical_ical_cxx_export.h)
 
-  add_dependencies(ical_cxx ical-header)
+  target_compile_definitions(ical_cxx PRIVATE -DHAVE_CONFIG_H)
+  target_include_directories(ical_cxx PRIVATE ${include_directories})
+
   target_link_libraries(ical_cxx PUBLIC ical)
   if(DEFINED CMAKE_THREAD_LIBS_INIT)
     target_link_libraries(ical_cxx PUBLIC ${CMAKE_THREAD_LIBS_INIT})
@@ -445,9 +450,8 @@ set(
   ${PROJECT_BINARY_DIR}/src/libical/libical_ical_export.h
 )
 if(LIBICAL_CXX_BINDINGS)
-  set(
-    ICAL_PUBLIC_HEADERS
-    ${ICAL_PUBLIC_HEADERS}
+  list(
+    APPEND ICAL_PUBLIC_HEADERS
     icalparameter_cxx.hpp
     icalproperty_cxx.hpp
     icalvalue_cxx.hpp

@@ -162,6 +162,12 @@ endif()
 
 # Enable the test harness
 enable_testing()
+set(
+  LIBICAL_TESTING_C_DEFINITIONS
+  -DTEST_DATADIR="${PROJECT_SOURCE_DIR}/test-data"
+  -DTEST_ZONEDIR="${PROJECT_SOURCE_DIR}/zoneinfo"
+  -DTEST_MAX_MEMORY=1073741824 # max memory to allow when building with MEMORY_CONSISTENCY
+)
 
 if(WINCE)
   find_package(Wcecompat REQUIRED)
@@ -239,13 +245,15 @@ add_feature_info(
 
 include(GenerateExportHeader)
 
+set(LIBICAL_C_DEFINITIONS) # use for all C/C++ compile commands
+
 libical_deprecated_option(WITH_CXX_BINDINGS LIBICAL_CXX_BINDINGS "Build the C++ bindings." True)
 if(LIBICAL_CXX_BINDINGS)
   enable_language(CXX)
   set(CMAKE_CXX_STANDARD 11)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   if(CMAKE_CXX_COMPILER)
-    add_definitions(-DLIBICAL_CXX_BINDINGS)
+    list(APPEND LIBICAL_C_DEFINITIONS -DLIBICAL_CXX_BINDINGS)
   else()
     message(
       NOTICE
@@ -420,7 +428,7 @@ add_feature_info(
 set(BDB_FOUND False)
 if(BerkeleyDB_FOUND)
   set(HAVE_BDB True)
-  add_definitions(-DDB_DBM_HSEARCH=0) #set to 1 if hsearch support is needed
+  list(APPEND LIBICAL_C_DEFINITIONS -DDB_DBM_HSEARCH=0) #set to 1 if hsearch support is needed
   #for compatibility to our old FindBDB
   set(BDB_FOUND True)
   set(BDB_INCLUDE_DIR ${BerkeleyDB_INCLUDE_DIRS})
@@ -434,7 +442,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # MSVC specific definitions
 if(WIN32)
   if(MSVC)
-    add_definitions(
+    list(
+      APPEND LIBICAL_C_DEFINITIONS
       -D_CRT_SECURE_NO_DEPRECATE
       -D_CRT_NONSTDC_NO_DEPRECATE
       -DYY_NO_UNISTD_H
@@ -450,7 +459,7 @@ if(WIN32)
       False
     )
     if(LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
-      add_definitions(-D_USE_32BIT_TIME_T)
+      list(APPEND LIBICAL_C_DEFINITIONS -D_USE_32BIT_TIME_T)
     endif()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3")
@@ -464,7 +473,8 @@ if(WIN32)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4028") #formal parameter differs
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4068") #unknown pragma
   endif()
-  add_definitions(
+  list(
+    APPEND LIBICAL_C_DEFINITIONS
     -DBIG_ENDIAN=0
     -DLITTLE_ENDIAN=1
     -DBYTE_ORDER=BIG_ENDIAN
@@ -546,11 +556,11 @@ if(WIN32 OR WINCE)
 endif()
 
 include(ConfigureChecks.cmake)
-add_definitions(-DHAVE_CONFIG_H)
+list(APPEND LIBICAL_C_DEFINITIONS -DHAVE_CONFIG_H)
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 if(NDEBUG)
-  add_definitions(-DNDEBUG)
+  list(APPEND LIBICAL_C_DEFINITIONS -DNDEBUG)
 endif()
 
 set(
@@ -843,7 +853,7 @@ endif()
 libical_option(LIBICAL_DEVMODE_MEMORY_CONSISTENCY "(Developer-only) Build with memory consistency functions." False)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
   set(CMAKE_BUILD_TYPE "Debug")
-  add_definitions(-DMEMORY_CONSISTENCY)
+  list(APPEND LIBICAL_C_DEFINITIONS -DMEMORY_CONSISTENCY)
 endif()
 mark_as_advanced(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
 
