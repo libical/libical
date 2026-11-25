@@ -1887,7 +1887,7 @@ static bool initialize_rscale(icalrecur_iterator *impl)
 
         /* Lowercase the specified calendar */
         for (r = rule->rscale; *r; r++) {
-            *r = tolower((int)*r);
+            *r = tolower((unsigned char)*r);
         }
 
         /* Check if specified calendar is supported */

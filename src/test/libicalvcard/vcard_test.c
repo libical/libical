@@ -605,6 +605,38 @@ static void test_independent_text_list_limit(void)
     icallimit_set(ICAL_LIMIT_TEXT_LIST_LENGTH, text_list_length);
 }
 
+static void test_non_ascii_ctype(void)
+{
+    /* Bytes >= 0x80 must not reach the ctype functions as negative values */
+    const char *str =
+        "BEGIN:VCARD\r\n"
+        "VERSION:4.0\r\n"
+        "FN:J\xc3\xa9r\xc3\xb4me\r\n"
+        "PHOTO;MEDIATYPE=image/x-\xc3\xa9:http://example.com/a\r\n"
+        "END:VCARD\r\n";
+    const char *want_v3 =
+        "BEGIN:VCARD\r\n"
+        "VERSION:3.0\r\n"
+        "FN:J\xc3\xa9r\xc3\xb4me\r\n"
+        "PHOTO;VALUE=URI;TYPE=X-\xc3\xa9:http://example.com/a\r\n"
+        "END:VCARD\r\n";
+    vcardcomponent *card = vcardparser_parse_string(str);
+    vcardvalue *geo;
+
+    geo = vcardvalue_new_from_string(VCARD_GEO_VALUE, "\302\2401.5;2.5");
+    assert(geo == NULL);
+    geo = vcardvalue_new_from_string(VCARD_GEO_VALUE, "1.5; 2.5");
+    assert(geo != NULL);
+    vcardvalue_free(geo);
+
+    assert(card);
+    vcardcomponent_transform(card, VCARD_VERSION_30);
+    assert_str_equals(want_v3, vcardcomponent_as_vcard_string(card));
+    vcardcomponent_transform(card, VCARD_VERSION_40);
+    assert_str_equals(str, vcardcomponent_as_vcard_string(card));
+    vcardcomponent_free(card);
+}
+
 int main(int argc, const char **argv)
 {
     vcardcomponent *card;
@@ -633,6 +665,7 @@ int main(int argc, const char **argv)
     test_clone_structured_param();
     test_clone_textlist();
     test_independent_text_list_limit();
+    test_non_ascii_ctype();
 
     vcardcomponent_free(card);
 

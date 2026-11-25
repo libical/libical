@@ -47,7 +47,7 @@ static char *lowercase(const char *str)
     }
 
     for (p = n; *p != 0; p++) {
-        *p = tolower((int)*p);
+        *p = tolower((unsigned char)*p);
     }
 
     return n;
