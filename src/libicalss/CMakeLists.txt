@@ -1,7 +1,8 @@
 # SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-include_directories(
+set(
+  include_directories
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/src
   ${PROJECT_SOURCE_DIR}/src
@@ -10,8 +11,10 @@ include_directories(
   ${PROJECT_BINARY_DIR}/src/libicalss
 )
 if(BDB_FOUND)
-  include_directories(${BDB_INCLUDE_DIR})
+  list(APPEND include_directories ${BDB_INCLUDE_DIR})
 endif()
+
+list(APPEND add_definitions ${LIBICAL_C_DEFINITIONS})
 
 if(WIN32)
   set(TOPS "\"${PROJECT_SOURCE_DIR}\"")
@@ -92,15 +95,18 @@ add_library(
   ${LIBRARY_TYPE}
   ${icalss_LIB_SRCS}
 )
-
-generate_export_header(icalss BASE_NAME libical_icalss)
-target_sources(icalss PRIVATE ${PROJECT_BINARY_DIR}/src/libicalss/libical_icalss_export.h)
-
 add_dependencies(
   icalss
   ical-header
   icalss-header
 )
+
+generate_export_header(icalss BASE_NAME libical_icalss)
+target_sources(icalss PRIVATE ${PROJECT_BINARY_DIR}/src/libicalss/libical_icalss_export.h)
+
+target_compile_definitions(icalss PRIVATE ${add_definitions})
+target_include_directories(icalss PRIVATE ${include_directories})
+
 target_link_libraries(icalss ical)
 if(BDB_FOUND)
   target_link_libraries(icalss ${BDB_LIBRARY})
@@ -150,15 +156,17 @@ if(LIBICAL_CXX_BINDINGS)
     ${LIBRARY_TYPE}
     ${icalsscxx_LIB_SRCS}
   )
-
-  generate_export_header(icalss_cxx BASE_NAME libical_icalss_cxx)
-  target_sources(icalss_cxx PRIVATE ${PROJECT_BINARY_DIR}/src/libicalss/libical_icalss_cxx_export.h)
-
   add_dependencies(
     icalss_cxx
     ical-header
     icalss-header
   )
+
+  generate_export_header(icalss_cxx BASE_NAME libical_icalss_cxx)
+  target_sources(icalss_cxx PRIVATE ${PROJECT_BINARY_DIR}/src/libicalss/libical_icalss_cxx_export.h)
+
+  target_compile_definitions(icalss_cxx PRIVATE -DHAVE_CONFIG_H)
+  target_include_directories(icalss_cxx PRIVATE ${include_directories})
 
   target_link_libraries(
     icalss_cxx

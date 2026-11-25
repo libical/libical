@@ -1763,7 +1763,7 @@ static bool fetch_lat_long_from_string(const char *str,
         sptr++;
     }
     loc = ++sptr;
-    while (!isspace((int)(*sptr)) && (*sptr != '\0')) {
+    while (!isspace((unsigned char)*sptr) && (*sptr != '\0')) {
         sptr++;
     }
     len = (size_t)(ptrdiff_t)(sptr - loc);

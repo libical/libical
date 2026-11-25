@@ -51,7 +51,7 @@ char *icalclassify_lowercase(const char *str)
         return 0;
     }
     for (p = xnew; *p != 0; p++) {
-        *p = tolower((int)*p);
+        *p = tolower((unsigned char)*p);
     }
 
     return xnew;

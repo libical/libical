@@ -1246,7 +1246,7 @@ int yylex(void) {
                     break;
                 default: {
                     lexPushLookaheadc(c);
-                    if (isalpha(c)) {
+                    if (isalpha((unsigned char)c)) {
                         char *t = lexGetWord();
                         yylval.str = t;
                         if (!strcasecmp(t, "begin")) {

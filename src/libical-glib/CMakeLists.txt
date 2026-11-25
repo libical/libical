@@ -5,6 +5,22 @@ if(CMAKE_C_COMPILER_IS_GCC OR CMAKE_C_COMPILER_IS_CLANG)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-conversion -Wno-sign-conversion")
 endif()
 
+set(
+  include_directories
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_BINARY_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_BINARY_DIR}/src/libical
+  ${PROJECT_SOURCE_DIR}/src/libical
+  ${PROJECT_BINARY_DIR}/src/libicalvcard
+  ${PROJECT_SOURCE_DIR}/src/libicalvcard
+  ${GLIB_INCLUDE_DIRS}
+  ${GOBJECT_INCLUDE_DIRS}
+  ${LIBXML2_INCLUDE_DIRS}
+)
+
+list(APPEND add_definitions ${LIBICAL_C_DEFINITIONS})
+
 # build ical-glib-src-generator
 add_executable(
   ical-glib-src-generator
@@ -27,6 +43,8 @@ target_compile_options(
     ${LIBXML2_DEFINITIONS}
     -DG_LOG_DOMAIN=\"src-generator\"
 )
+target_compile_definitions(ical-glib-src-generator PRIVATE ${add_definitions})
+target_include_directories(ical-glib-src-generator PRIVATE ${include_directories})
 target_link_libraries(
   ical-glib-src-generator
   PRIVATE
@@ -192,42 +210,31 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/i-cal-object.c.in ${CMAKE_CURRENT_BIN
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/i-cal-object.h.in ${CMAKE_CURRENT_BINARY_DIR}/i-cal-object.h COPYONLY)
 
-include_directories(
-  ${PROJECT_BINARY_DIR}
-  ${PROJECT_BINARY_DIR}/src
-  ${PROJECT_SOURCE_DIR}/src
-  ${PROJECT_BINARY_DIR}/src/libical
-  ${PROJECT_SOURCE_DIR}/src/libical
-  ${PROJECT_BINARY_DIR}/src/libicalvcard
-  ${PROJECT_SOURCE_DIR}/src/libicalvcard
-  ${GLIB_INCLUDE_DIRS}
-  ${GOBJECT_INCLUDE_DIRS}
-  ${LIBXML2_INCLUDE_DIRS}
-)
-
 add_library(
   ical-glib
   ${LIBRARY_TYPE}
   ${LIBICAL_GLIB_SOURCES}
 )
-add_dependencies(ical-glib glibSources)
+add_dependencies(
+  ical-glib
+  glibSources
+  ical-header
+  icalvcard-header
+)
 
 generate_export_header(ical-glib BASE_NAME libical_glib)
 target_sources(ical-glib PRIVATE ${PROJECT_BINARY_DIR}/src/libical/libical_ical_export.h)
 list(APPEND LIBICAL_GLIB_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/libical_glib_export.h)
 
-add_dependencies(
-  ical-glib
-  ical-header
-  icalvcard-header
-)
 target_compile_options(ical-glib PRIVATE ${GLIB_CFLAGS})
 target_compile_definitions(
   ical-glib
   PRIVATE
+    ${add_definitions}
     -DG_LOG_DOMAIN="libical-glib"
     -DLIBICAL_GLIB_COMPILATION
 )
+target_include_directories(ical-glib PRIVATE ${include_directories})
 target_link_libraries(
   ical-glib
   PRIVATE
@@ -265,13 +272,6 @@ else()
   if(c_flag_Wswitch_enum_supported AND c_flag_Wswitch_supported)
     add_executable(ical-glib-build-check ${CMAKE_CURRENT_BINARY_DIR}/ical-glib-build-check.c)
     add_dependencies(ical-glib-build-check ical-glib)
-    target_link_libraries(
-      ical-glib-build-check
-      PRIVATE
-        ical-glib
-        ${GLIB_LDFLAGS}
-        ${GOBJECT_LDFLAGS}
-    )
     target_compile_options(
       ical-glib-build-check
       PRIVATE
@@ -280,6 +280,15 @@ else()
         -DLIBICAL_GLIB_COMPILATION
         -Wswitch-enum
         -Wswitch
+    )
+    target_compile_definitions(ical-glib-build-check PRIVATE ${add_definitions})
+    target_include_directories(ical-glib-build-check PRIVATE ${include_directories})
+    target_link_libraries(
+      ical-glib-build-check
+      PRIVATE
+        ical-glib
+        ${GLIB_LDFLAGS}
+        ${GOBJECT_LDFLAGS}
     )
   else()
     message(WARNING "compiler does not support both -Wswitch-enum and -Wswitch, skipping libical-glib-build-check")

@@ -1,34 +1,7 @@
 # SPDX-FileCopyrightText: Allen Winter <winter@kde.org>
 # SPDX-License-Identifier: LGPL-2.1-only OR MPL-2.0
 
-include_directories(
-  ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}/src
-  ${PROJECT_BINARY_DIR}/src
-  ${PROJECT_SOURCE_DIR}/src/libical
-  ${PROJECT_BINARY_DIR}/src/libical
-  ${PROJECT_SOURCE_DIR}/src/libicalss
-  ${PROJECT_BINARY_DIR}/src/libicalss
-  ${PROJECT_SOURCE_DIR}/src/libicalvcal
-  ${PROJECT_BINARY_DIR}/src/libicalvcal
-)
-
-if(ICU_FOUND)
-  include_directories(${ICU_INCLUDE_DIRS})
-endif()
-
-if(BDB_FOUND)
-  include_directories(${BDB_INCLUDE_DIR})
-endif()
-
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
-
-set(TEST_DATADIR "\"${PROJECT_SOURCE_DIR}/test-data\"")
-add_definitions(
-  -DTEST_DATADIR=${TEST_DATADIR}
-  -DTEST_ZONEDIR="${PROJECT_SOURCE_DIR}/zoneinfo"
-  -DTEST_MAX_MEMORY=1073741824 # max memory to allow when building with MEMORY_CONSISTENCY
-)
 
 # Set properties for the test
 macro(setprops _name)
@@ -77,6 +50,27 @@ endmacro()
 
 #macro to build (but do not create a test)
 macro(buildme _name _srcs)
+  set(
+    include_directories
+    ${PROJECT_BINARY_DIR}
+    ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_BINARY_DIR}/src
+    ${PROJECT_SOURCE_DIR}/src/libical
+    ${PROJECT_BINARY_DIR}/src/libical
+    ${PROJECT_SOURCE_DIR}/src/libicalss
+    ${PROJECT_BINARY_DIR}/src/libicalss
+    ${PROJECT_SOURCE_DIR}/src/libicalvcal
+    ${PROJECT_BINARY_DIR}/src/libicalvcal
+  )
+  if(ICU_FOUND)
+    list(APPEND include_directories ${ICU_INCLUDE_DIRS})
+  endif()
+
+  if(BDB_FOUND)
+    list(APPEND include_directories ${BDB_INCLUDE_DIR})
+  endif()
+
+  list(APPEND add_definitions ${LIBICAL_C_DEFINITIONS} ${LIBICAL_TESTING_C_DEFINITIONS})
   add_executable(${_name} ${_srcs})
   add_dependencies(
     ${_name}
@@ -84,6 +78,13 @@ macro(buildme _name _srcs)
     icalss
     icalvcal
   )
+
+  target_compile_definitions(
+    ${_name}
+    PRIVATE ${add_definitions}
+  )
+  target_include_directories(${_name} PRIVATE ${include_directories})
+
   target_link_libraries(
     ${_name}
     ical
@@ -212,28 +213,13 @@ testme(builtin_timezones "${builtin_timezones_SRCS}")
 
 ########### next target ###############
 if(NOT CYGWIN AND NOT LIBICAL_ENABLE_MSVC_32BIT_TIME_T)
-  set(icalrecurtest_SRCS icalrecur_test.c)
   configure_file(icalrecur_test.txt icalrecur_test.txt COPYONLY)
   configure_file(icalrecur_test_rscale.txt icalrecur_test_rscale.txt COPYONLY)
   configure_file(icalrecur_test_rscale_withicu.txt icalrecur_test_rscale_withicu.txt COPYONLY)
   configure_file(icalrecur_test_rscale_withicu_dangi.txt icalrecur_test_rscale_withicu_dangi.txt COPYONLY)
-  add_executable(icalrecurtest ${icalrecurtest_SRCS})
-  target_link_libraries(
-    icalrecurtest
-    ical
-    icalss
-    icalvcal
-  )
-  if(LIBICAL_CXX_BINDINGS)
-    # https://github.com/libical/libical/pull/656
-    set_property(
-      TARGET
-        icalrecurtest
-      PROPERTY
-        LINKER_LANGUAGE
-          CXX
-    )
-  endif()
+  set(icalrecurtest_SRCS icalrecur_test.c)
+  buildme(icalrecurtest "${icalrecurtest_SRCS}")
+
   set(test_cmd "${PROJECT_BINARY_DIR}/src/test/icalrecurtest${CMAKE_EXECUTABLE_SUFFIX}")
 
   #test non-rscale rrules
@@ -300,7 +286,12 @@ endif()
 
 set(fuzz_sources)
 if(LIBICAL_DEVMODE_MEMORY_CONSISTENCY)
-  set(fuzz_sources test-malloc.c)
+  set(
+    fuzz_sources
+    regression.h
+    regression-utils.c
+    test-malloc.c
+  )
 endif()
 
 set(
