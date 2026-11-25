@@ -890,7 +890,7 @@ static void comp_to_v4(vcardcomponent *impl)
                         icalmemory_append_string(&mediatype, &buf_ptr,
                                                  &size, type->xvalue);
                         for (c = mediatype; *c; c++) {
-                            *c = (char)tolower((int)*c);
+                            *c = (char)tolower((unsigned char)*c);
                         }
 
                         /* Remove this TYPE */
@@ -1069,7 +1069,7 @@ static void comp_to_v3(vcardcomponent *impl)
 
                 subtype = icalmemory_strdup(subtype + 1);
                 for (c = subtype; *c; c++) {
-                    *c = (char)toupper((int)*c);
+                    *c = (char)toupper((unsigned char)*c);
                 }
 
                 /* Add TYPE parameter */
@@ -1174,7 +1174,7 @@ static void comp_to_v3(vcardcomponent *impl)
                     char *c;
 
                     for (c = ++subtype; *c; c++) {
-                        *c = (char)toupper((int)*c);
+                        *c = (char)toupper((unsigned char)*c);
                     }
 
                     /* Add TYPE parameter */

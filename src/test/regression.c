@@ -5611,6 +5611,31 @@ static void test_vcal_encoded_value_eof(void)
     }
 }
 
+static void test_geo_non_ascii(void)
+{
+    /* Bytes >= 0x80 must not reach isspace()/isdigit() as negative values */
+    icalvalue *v;
+
+    v = icalvalue_new_from_string(ICAL_GEO_VALUE, "\302\2401.5;2.5");
+    ok("GEO with a leading non-ASCII byte is rejected", (v == NULL));
+    if (v) {
+        icalvalue_free(v);
+    }
+
+    v = icalvalue_new_from_string(ICAL_GEO_VALUE, "1.5;\302\2402.5");
+    ok("GEO with a non-ASCII byte after ';' is rejected", (v == NULL));
+    if (v) {
+        icalvalue_free(v);
+    }
+
+    v = icalvalue_new_from_string(ICAL_GEO_VALUE, "1.5; 2.5");
+    ok("GEO with ASCII whitespace still parses", (v != NULL));
+    if (v) {
+        str_is("GEO value", icalvalue_as_ical_string(v), "1.5;2.5");
+        icalvalue_free(v);
+    }
+}
+
 static void test_value_line_break_injection(void)
 {
     /* A vCal quoted-printable value can decode to CR/LF. URI values used to
@@ -9488,6 +9513,7 @@ int main(int argc, const char *argv[])
     test_run("Test vCal encoded value at end of input", test_vcal_encoded_value_eof, do_test, do_header);
     test_run("Test vCal RRULE bad interval", test_vcal_rrule_bad_interval, do_test, do_header);
     test_run("Test line breaks in unescaped values", test_value_line_break_injection, do_test, do_header);
+    test_run("Test non-ASCII bytes in GEO values", test_geo_non_ascii, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
     test_run("Test icaltime_compare UTC and zone handling", test_icaltime_compare_utc_zone, do_test, do_header);
     test_run("Test exclusion of recurrences as per r961", test_recurrenceexcluded, do_test,
