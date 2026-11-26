@@ -311,7 +311,12 @@ icalparameter *icalparameter_new_from_value_string(icalparameter_kind kind, cons
     }
 
     if (kind == ICAL_GAP_PARAMETER) {
-        param->duration = icaldurationtype_from_string(val);
+        const struct icaldurationtype d = icaldurationtype_from_string(val);
+        if(!icaldurationtype_is_bad_duration(d)) {
+            param->duration = d;
+        } else {
+            param->duration = icaldurationtype_null_duration();
+        }
         return param;
     } else if (icalparameter_is_multivalued(param)) {
         param->values = icalparameter_values_from_value_string(kind, val);

@@ -65,13 +65,17 @@ struct icaldurationtype {
 LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_seconds(int seconds);
 
 /**
- * @brief Creates a new ::icaldurationtype from a duration given as a string.
- * @param str The duration as a string
- * @return An ::icaldurationtype representing the duration @a str
+ * Creates a new ::icaldurationtype from a string containing an iCal formatted duration.
  *
- * @par Error handling
- * When given bad input, it sets ::icalerrno to ::ICAL_MALFORMEDDATA_ERROR and
- * returns icaldurationtype_bad_duration().
+ * @param str The duration as a properly formatted iCal string
+ *
+ * Bad input conditions:
+ * - The input character string contains an invalid representation of an iCal duration.
+ * - The resulting duration would overflow (when the number of seconds computed is larger
+ *   than a signed integer)
+ *
+ * @return An ::icaldurationtype representing the duration.  When bad input is encountered,
+ * it sets ::icalerrno to ::ICAL_MALFORMEDDATA_ERROR and returns icaldurationtype_bad_duration().
  *
  * @par Usage
  * ```c
@@ -86,19 +90,24 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_seconds(int se
 LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const char *str);
 
 /**
- * @brief Extracts the duration in integer seconds from an ::icaldurationtype.
+ * Extracts the duration in integer seconds from an ::icaldurationtype.
  *
- * Does not consider negative durations.
- * Does not support days and weeks.
+ * @param duration A valid duration type without days and weeks.
  *
- * @param duration A valid duration type.
- * @return An `int` representing the number of seconds in the duration.
+ * The number of seconds returned from the specified ::icaldurationtype can be a positive or
+ * negative integer depending if the duration points forward or backward in time.
  *
- * The number of seconds returned from the specified ::icaldurationtype can be a positive or negative integer
- * depending if the duration points forward or backward in time.
+ * Bad input conditions:
+ * - An ::icaldurationtype that has a non-zero days or weeks value is considered an error.
+ *   ie. the specified ::icaldurationtype must only have seconds, minutes and hours values.
  *
- * Additionally, a ::icaldurationtype that has a non-zero days or weeks value is considered an error.
- * ie. only the ::icaldurationtype seconds, minutes and hours structure members are converted. Also @see icaldurationtype_as_utc_seconds.
+ * - An ::icaldurationtype containing an overflow duration (when the number of seconds computed
+ *   is larger than a signed integer)
+ *
+ * @return An `int` representing the number of seconds in the duration. When bad input is
+ * encountered, it sets ::icalerrno to ::ICAL_MALFORMEDDATA_ERROR and returns zero.
+ *
+ * @see icaldurationtype_as_utc_seconds().
  *
  * @par Usage
  * ```c
@@ -115,15 +124,24 @@ LIBICAL_ICAL_EXPORT struct icaldurationtype icaldurationtype_from_string(const c
 LIBICAL_ICAL_EXPORT int icaldurationtype_as_seconds(struct icaldurationtype duration);
 
 /**
- * @brief Extracts the duration in integer seconds from an ::icaldurationtype in UTC time.
- * @param duration A valid duration type.
- * @return An `int` representing the number of seconds in the duration.
+ * Extracts the duration in integer seconds from an ::icaldurationtype in UTC time.
  *
- * The number of seconds returned from the specified ::icaldurationtype can be a positive or negative integer
- * depending if the duration points forward or backward in time.
+ * @param duration A valid duration type.
+ *
+ * The number of seconds returned from the specified ::icaldurationtype can be a positive or
+ * negative integer depending if the duration points forward or backward in time.
  *
  * Days are fixed to have 24 hours.
  *
+ * Bad input conditions:
+ * - An ::icaldurationtype containing an overflow duration (when the number of seconds computed
+ *   is larger than a signed integer)
+ *
+ * @return An `int` representing the number of seconds in the duration. When bad input is
+ * encountered, it sets ::icalerrno to ::ICAL_MALFORMEDDATA_ERROR and returns zero.
+ *
+ * @see icaldurationtype_as_seconds().
+  *
  */
 LIBICAL_ICAL_EXPORT int icaldurationtype_as_utc_seconds(struct icaldurationtype duration);
 

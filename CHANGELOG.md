@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - libical:
   - C++ bindings now throw strings rather than int exceptions.
+  - Overflow durations (the number of seconds in the duration is larger than the maximum
+    signed integer, i.e. INT_MAX) are considered errors.
   - Preserve leading and trailing whitespace in iCalendar TEXT property values,
     including whitespace at folded-line boundaries.
   - `icalrecur_iterator_set_start()` and `icalrecur_iterator_set_range()` start every BY* rule over

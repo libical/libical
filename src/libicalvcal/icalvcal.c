@@ -309,9 +309,10 @@ static int get_alarm_properties(icalcomponent *comp, VObject *object,
                which we don't handle at present. Though it is unlikely they
                will be used as a snooze time between repeated alarms! */
             d = icaldurationtype_from_string(s);
-
-            duration_prop = icalproperty_new_duration(d);
-            icalcomponent_add_property(comp, duration_prop);
+            if (!icaldurationtype_is_bad_duration(d)) {
+                duration_prop = icalproperty_new_duration(d);
+                icalcomponent_add_property(comp, duration_prop);
+            }
 
         } else if (!strcmp(name, VCRepeatCountProp)) {
             /* If it starts with a digit convert it into a REPEAT property. */
