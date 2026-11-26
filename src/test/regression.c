@@ -5746,6 +5746,62 @@ static void test_vcal_rrule_bad_interval(void)
     }
 }
 
+static void test_vcal_rrule_byday(void)
+{
+    /* Weekly rules used to fill BYDAY up to ICAL_BY_DAY_SIZE with empty
+       entries, and monthly by-position rules kept only the last pair. */
+    static const struct {
+        const char *rule;
+        const char *want;
+    } rules[] = {
+        {"W1 MO TU #3", "FREQ=WEEKLY;BYDAY=MO,TU;COUNT=3"},
+        {"W1 #3", "FREQ=WEEKLY;COUNT=3"},
+        {"MP1 1+ 2+ MO #3", "FREQ=MONTHLY;BYDAY=1MO,2MO;COUNT=3"},
+        {"MP1 1+ MO TU #3", "FREQ=MONTHLY;BYDAY=1MO,1TU;COUNT=3"},
+    };
+    size_t i;
+
+    for (i = 0; i < sizeof(rules) / sizeof(rules[0]); i++) {
+        char str[256];
+        VObject *vcal;
+        icalcomponent *comp, *event;
+        icalproperty *prop;
+
+        snprintf(str, sizeof(str),
+                 "BEGIN:VCALENDAR\r\n"
+                 "VERSION:1.0\r\n"
+                 "BEGIN:VEVENT\r\n"
+                 "DTSTART:20020101T100000\r\n"
+                 "RRULE:%s\r\n"
+                 "END:VEVENT\r\n"
+                 "END:VCALENDAR\r\n",
+                 rules[i].rule);
+
+        vcal = Parse_MIME(str, (unsigned long)strlen(str));
+        ok("Parsing vCal with a BYDAY RRULE", (vcal != 0));
+        if (!vcal) {
+            continue;
+        }
+
+        comp = icalvcal_convert(vcal);
+        cleanVObject(vcal);
+        ok("Converting to ical component", (comp != 0));
+        if (!comp) {
+            continue;
+        }
+
+        event = icalcomponent_get_first_component(comp, ICAL_VEVENT_COMPONENT);
+        prop = event ? icalcomponent_get_first_property(event, ICAL_RRULE_PROPERTY) : 0;
+        ok("vCal RRULE converted", (prop != 0));
+        if (prop) {
+            str_is("vCal RRULE BYDAY",
+                   icalrecurrencetype_as_string(icalproperty_get_rrule(prop)), rules[i].want);
+        }
+
+        icalcomponent_free(comp);
+    }
+}
+
 /*
  * Test to see if recurrences are excluded in certain situations
  * See r961 for more information
@@ -9512,6 +9568,7 @@ int main(int argc, const char *argv[])
     test_run("Test vCal over-padded base64", test_vcal_base64_overpadded, do_test, do_header);
     test_run("Test vCal encoded value at end of input", test_vcal_encoded_value_eof, do_test, do_header);
     test_run("Test vCal RRULE bad interval", test_vcal_rrule_bad_interval, do_test, do_header);
+    test_run("Test vCal RRULE BYDAY", test_vcal_rrule_byday, do_test, do_header);
     test_run("Test line breaks in unescaped values", test_value_line_break_injection, do_test, do_header);
     test_run("Test non-ASCII bytes in GEO values", test_geo_non_ascii, do_test, do_header);
     test_run("Test UTF-8 Handling", test_utf8, do_test, do_header);
