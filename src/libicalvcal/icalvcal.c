@@ -929,13 +929,15 @@ static const char *rrule_parse_weekly_days(const char *s,
             }
         }
 
-        if (day < 7) {
-            recur->by[ICAL_BY_DAY].data[i] = weekday_codes[day];
-            s = e;
-            /* Skip any whitespace. */
-            while (*s == ' ' || *s == '\t') {
-                s++;
-            }
+        if (day == 7) {
+            break;
+        }
+
+        recur->by[ICAL_BY_DAY].data[i] = weekday_codes[day];
+        s = e;
+        /* Skip any whitespace. */
+        while (*s == ' ' || *s == '\t') {
+            s++;
         }
     }
 
@@ -1130,6 +1132,7 @@ static const char *rrule_parse_monthly_positions(const char *s,
                         (abs(month_position) * 8 +
                          weekday_codes[day]) *
                         ((month_position < 0) ? -1 : 1);
+                    elems++;
 
                     if (elems == ICAL_BY_DAY_SIZE) {
                         break;

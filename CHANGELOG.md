@@ -32,6 +32,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     functions as negative values, which is undefined behavior and fails a CRT assertion in
     MSVC debug builds. They are now converted to `unsigned char` first.
 
+- libicalvcal:
+  - Fix the BYDAY list when converting a vCalendar weekly or monthly-by-position RRULE/EXRULE.
+    A weekly rule such as `W1 MO TU #3` became `BYDAY=MO,TU,,,,...` with 362 empty entries,
+    which expanded to the wrong dates and could not be parsed back, and a rule such as
+    `MP1 1+ 2+ MO #3` kept only the last position/weekday pair (`BYDAY=2MO`).
+
 ## [4.0.9] - Unreleased
 
 - libical, libicalvcard:
