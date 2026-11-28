@@ -2156,6 +2156,7 @@ static void test_component_parser_roundtrip(void)
 static void test_duration(void)
 {
     struct icaldurationtype d;
+    char msg[128];
 
     d = icaldurationtype_from_string("PT8H30M");
     if (VERBOSE) {
@@ -2237,6 +2238,48 @@ static void test_duration(void)
         printf("%s\n", icaldurationtype_as_ical_string(d));
     }
     str_is("PT4424400S", icaldurationtype_as_ical_string(d), "PT4424400S");
+
+    // overflow durations
+    // all of these tests should return 0 and set icalerrno to ICAL_MALFORMEDDATA_ERROR.
+    icalerror_set_errors_are_fatal(false);
+    static const char *tests[] = {
+        "PT2147483647H",
+        "PT2147483647M",
+        "P2147483647D",
+        "P2147483647W",
+        "PT9999999999H",
+        "PT4294967295H",
+        "PT9999999999H"};
+    for (size_t i = 0; i < sizeof(tests) / sizeof(tests[0]); i++) {
+        icalerror_set_errno(ICAL_NO_ERROR);
+        d = icaldurationtype_from_string(tests[i]);
+
+        snprintf(msg, sizeof(msg), "%s has zero seconds", tests[i]);
+        int_is(msg, icaldurationtype_as_seconds(d), 0);
+
+        snprintf(msg, sizeof(msg), "%s as utc has zero seconds", tests[i]);
+        int_is(msg, icaldurationtype_as_utc_seconds(d), 0);
+
+        snprintf(msg, sizeof(msg), "%s is malformed", tests[i]);
+        ok(msg, icalerrno == ICAL_MALFORMEDDATA_ERROR);
+    }
+
+    // illegal durations
+    // all of these tests should return 0 and set icalerrno to ICAL_MALFORMEDDATA_ERROR.
+    static const char *tests2[] = {
+        "PT214748ab3647H",
+        "PT21474836470000000000M",
+        "PT-99999999999999999999H"};
+    for (size_t i = 0; i < sizeof(tests2) / sizeof(tests2[0]); i++) {
+        icalerror_set_errno(ICAL_NO_ERROR);
+        d = icaldurationtype_from_string(tests2[i]);
+        snprintf(msg, sizeof(msg), "%s is a bad duration", tests2[i]);
+        ok(msg, icaldurationtype_is_bad_duration(d));
+        snprintf(msg, sizeof(msg), "%s is malformed", tests2[i]);
+        ok(msg, icalerrno == ICAL_MALFORMEDDATA_ERROR);
+    }
+
+    icalerror_set_errors_are_fatal(false);
 }
 
 static void test_period(void)

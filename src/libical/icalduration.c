@@ -24,6 +24,8 @@
 #include "icaltime.h"
 #include "icaltimezone.h"
 
+#include <errno.h>
+
 /* From Seth Alves, <alves@hungry.com>   */
 struct icaldurationtype icaldurationtype_from_seconds(int seconds)
 {
@@ -47,7 +49,6 @@ struct icaldurationtype icaldurationtype_from_string(const char *str)
     int time_flag = 0;
     int date_flag = 0;
     int digits = -1;
-    int scan_size = -1;
     int size = (int)strlen(str);
     char p;
     struct icaldurationtype d;
@@ -95,8 +96,7 @@ struct icaldurationtype icaldurationtype_from_string(const char *str)
         case '7':
         case '8':
         case '9': {
-            /* HACK.
-                   Skip any more digits if the last one read has not been assigned */
+            /* Skip any more digits if the last one read has not been assigned */
             if (digits != -1) {
                 break;
             }
@@ -104,13 +104,12 @@ struct icaldurationtype icaldurationtype_from_string(const char *str)
             if (begin_flag == 0) {
                 goto error;
             }
-            //NOLINTBEGIN(bugprone-unchecked-string-to-number-conversion)
-            /* Get all of the digits, not one at a time */
-            scan_size = sscanf(&str[i], "%10d", &digits); /*limit to 10digits.
-                                                                  increase as needed */
-            //NOLINTEND(bugprone-unchecked-string-to-number-conversion)
-
-            if (scan_size != 1) {
+            errno = 0;
+            char *t_end;
+            const long tmpl = strtol(&str[i], &t_end, 10);
+            if (str != t_end && errno != ERANGE && tmpl <= INT_MAX) {
+                digits = tmpl;
+            } else {
                 goto error;
             }
             break;
@@ -245,20 +244,34 @@ int icaldurationtype_as_seconds(struct icaldurationtype dur)
         icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
         return 0;
     }
-    return (int)(((int)dur.seconds +
-                  60 * ((int)dur.minutes +
-                        60 * ((int)dur.hours))) *
-                 (dur.is_neg == 1 ? -1 : 1));
+    const unsigned long ulseconds = dur.seconds + (60 * (unsigned long)dur.minutes) + (3600 * (unsigned long)dur.hours);
+    if (ulseconds > INT_MAX) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+    int iseconds = (signed int)ulseconds;
+    if (dur.is_neg == 1) {
+        iseconds *= -1;
+    }
+    return iseconds;
 }
 
 int icaldurationtype_as_utc_seconds(struct icaldurationtype dur)
 {
-    return (int)(((int)dur.seconds +
-                  60 * ((int)dur.minutes +
-                        60 * ((int)dur.hours +
-                              24 * ((int)dur.days +
-                                    7 * (int)dur.weeks)))) *
-                 (dur.is_neg == 1 ? -1 : 1));
+    const unsigned long ulseconds = (unsigned long)dur.seconds +
+                                    60 * ((unsigned long)dur.minutes +
+                                          60 * ((unsigned long)dur.hours +
+                                                24 * ((unsigned long)dur.days +
+                                                      7 * (unsigned long)dur.weeks)));
+    if (ulseconds > INT_MAX) {
+        icalerror_set_errno(ICAL_MALFORMEDDATA_ERROR);
+        return 0;
+    }
+    int iseconds = (signed int)ulseconds;
+    if (dur.is_neg == 1) {
+        iseconds *= -1;
+    }
+    return iseconds;
 }
 
 struct icaldurationtype icaldurationtype_null_duration(void)
