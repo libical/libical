@@ -16,14 +16,14 @@ macro(vcbuildme _name _srcs)
     ${PROJECT_BINARY_DIR}/src/libicalvcard
     ${PROJECT_SOURCE_DIR}/src/test
   )
-  list(APPEND add_definitions ${LIBICAL_C_DEFINITIONS} ${LIBICAL_TESTING_C_DEFINITIONS})
+  list(
+    APPEND add_definitions
+    ${LIBICAL_C_DEFINITIONS}
+    ${LIBICAL_TESTING_C_DEFINITIONS}
+  )
   add_executable(${_name} ${_srcs})
   add_dependencies(${_name} icalvcard)
-  target_compile_definitions(
-    ${_name}
-    PRIVATE
-      ${add_definitions}
-  )
+  target_compile_definitions(${_name} PRIVATE ${add_definitions})
   target_include_directories(${_name} PRIVATE ${include_directories})
   target_link_libraries(${_name} icalvcard)
 endmacro()

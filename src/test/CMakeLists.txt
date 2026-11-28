@@ -70,7 +70,11 @@ macro(buildme _name _srcs)
     list(APPEND include_directories ${BDB_INCLUDE_DIR})
   endif()
 
-  list(APPEND add_definitions ${LIBICAL_C_DEFINITIONS} ${LIBICAL_TESTING_C_DEFINITIONS})
+  list(
+    APPEND add_definitions
+    ${LIBICAL_C_DEFINITIONS}
+    ${LIBICAL_TESTING_C_DEFINITIONS}
+  )
   add_executable(${_name} ${_srcs})
   add_dependencies(
     ${_name}
@@ -79,10 +83,7 @@ macro(buildme _name _srcs)
     icalvcal
   )
 
-  target_compile_definitions(
-    ${_name}
-    PRIVATE ${add_definitions}
-  )
+  target_compile_definitions(${_name} PRIVATE ${add_definitions})
   target_include_directories(${_name} PRIVATE ${include_directories})
 
   target_link_libraries(

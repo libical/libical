@@ -1,5 +1,5 @@
-definitions: [./cmake,./src/libical/,./src/test,./docs]
+definitions: [cmake/modules/,src/libical/,src/test/, src/test/libical-glib/,src/test/libicalvcard/,docs/]
 indent: 2
 line_length: 120
 list_expansion: favour-expansion
-warn_about_unknown_commands: false
+warn_about_unknown_commands: true
